@@ -1,24 +1,27 @@
 #material-ui-propertySearchTabs{
-    background-color: transparent !important;
+  background-color: transparent !important;
   box-shadow: none !important;
   margin-top: 0px !important; 
-      div{
-          div{
-            background-color: transparent;
-          }
-      }
+    div{
+        div{
+          background-color: transparent;
+        }
+    }
 }
-
-// #material-ui-propertySearchTabs{
-//     div{
-//     padding:0px !important;
-//     }
-//   }
+#material-ui-ulbCityContainer {
+  div{
+    div{
+      background-color: white;
+    }
+}
+}
+div[class^="NavPills-root"] {
+  background-color: transparent;
+}
 
 #material-ui-popup{
     height: 100%;
-    width: 165px;
-}
+    }
 
 #material-ui-yearDetailsContainer{div{div{fieldset{div{label{span:nth-child(1){
     height:20px !important;
@@ -94,4 +97,57 @@
     width: 100% !important;
     margin: 8px 0px !important;
     }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .pt-download-button {
+      margin-left: 5px;
+      margin-right: 1px;
+    }
+    .pt-print-button {
+      margin-left: 4px;
+    }
+    div#custom-atoms-rightdiv {
+      width: 100%;
+    }
+    .public-domain-search {
+      padding-top: 65px;
+      #material-ui-searchPropertyDetails{
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+        margin-top: 10px;
+        background-color: white !important;
+       }
+    }
+  }
+  
+  @media only screen and (min-width: 768px) {
+    .pt-download-button {
+      margin-left: 10px;
+    }
+    .pt-print-button {
+      margin-left: 5px;
+    }
+    .public-domain-search {
+      padding-left: 16px;
+      padding-right: 16px;
+      #material-ui-searchPropertyDetails{
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+        margin-top: 10px;
+        background-color: white !important;
+       }
+    }
+  }
+  .autocomplete-dropdown {
+    min-width: 80%;
+    position: absolute;
+    z-index: 1900;
+    max-height: 150px;
+    overflow: hidden;
+  }
+  .autocomplete-dropdown div {
+	min-width: 80%;
+	max-height: 150px;
+    overflow: auto;
   }

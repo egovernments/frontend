@@ -12,7 +12,10 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Tooltip from "@material-ui/core/Tooltip";
 import Label from "egov-ui-kit/utils/translationNode";
-import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions"
+import { getModuleName } from "egov-ui-kit/utils/commons";
+import { localStorageSet, localStorageGet, setModule, getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const styles = {
@@ -75,6 +78,12 @@ class ActionMenuComp extends Component {
     this.wrapperRef = node;
   }
 
+  fetchLocales = ()=>{
+    setModule(getModuleName());
+    const tenantId = getTenantId();
+    this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+  }
+
   componentDidMount() {
     // for better reusability moving out
     this.initialMenuUpdate();
@@ -106,7 +115,8 @@ class ActionMenuComp extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.activeRoutePath != this.props.activeRoutePath) {
+    if (nextProps && nextProps.activeRoutePath !== "null" && nextProps.activeRoutePath != this.props.activeRoutePath) {
+      this.fetchLocales();
       this.initialMenuUpdate();
       this.setState({
         searchText: "",
@@ -247,7 +257,7 @@ class ActionMenuComp extends Component {
   render() {
     let { role, actionListArr, activeRoutePath, updateActiveRoute, toggleDrawer, menuDrawerOpen } = this.props;
     let { searchText, path, menuItems } = this.state;
-    let { changeLevel, menuChange } = this;
+    let { changeLevel, menuChange, fetchLocales } = this;
     let actionList = actionListArr;
     let menuTitle = path.split(".");
     let activeItmem = localStorageGet("menuName");
@@ -323,6 +333,9 @@ class ActionMenuComp extends Component {
                       id={item.name.toUpperCase().replace(/[\s]/g, "-") + "-" + index}
                       onClick={() => {
                         //  localStorageSet("menuPath", item.path);
+                        if ( item.navigationURL === "tradelicence/apply" ){
+                          this.props.setRequiredDocumentFlag()
+                        }
                         updateActiveRoute(item.path, item.name);
                         document.title = item.name;
                         toggleDrawer && toggleDrawer();
@@ -506,41 +519,44 @@ class ActionMenuComp extends Component {
           <div className="clearfix" />
 
           <div style={{ paddingLeft: "-24px" }}>{showMenuItem()}</div>
-          {toggleDrawer ? (
-            <div className="sideMenuItem drawer-collapse-menu-item">
-              {/* <Tooltip
-                id={"menu-toggle-tooltip"}
-                title={<Label defaultLabel={"Expand Menu"} label={menuDrawerOpen ? "" : "COMMON_ACTION_TEST_EXPAND_MENU"} />}
-                placement="right"
-              > */}
-              <MenuItem
-                innerDivStyle={styles.defaultMenuItemStyle}
-                style={{ whiteSpace: "initial" }}
-                onClick={() => {
-                  toggleDrawer && toggleDrawer(false);
-                }}
-                leftIcon={
-                  menuDrawerOpen ? (
-                    <ChevronLeftIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
-                  ) : (
-                    <ChevronRightIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
-                  )
-                }
-                primaryText={
-                  <Label
-                    className="menuStyle"
-                    defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
-                    label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
-                   //  color="rgba(255, 255, 255, 0.87)"
+          {
+          // toggleDrawer ? (
+          //   <div className="sideMenuItem drawer-collapse-menu-item">
+          //     {/* <Tooltip
+          //       id={"menu-toggle-tooltip"}
+          //       title={<Label defaultLabel={"Expand Menu"} label={menuDrawerOpen ? "" : "COMMON_ACTION_TEST_EXPAND_MENU"} />}
+          //       placement="right"
+          //     > */}
+          //     <MenuItem
+          //       innerDivStyle={styles.defaultMenuItemStyle}
+          //       style={{ whiteSpace: "initial" }}
+          //       onClick={() => {
+          //         toggleDrawer && toggleDrawer(false);
+          //       }}
+          //       leftIcon={
+          //         menuDrawerOpen ? (
+          //           <ChevronLeftIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
+          //         ) : (
+          //           <ChevronRightIcon style={styles.fibreIconStyle} className="iconClassHover material-icons whiteColor" />
+          //         )
+          //       }
+          //       primaryText={
+          //         <Label
+          //           className="menuStyle"
+          //           defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
+          //           label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
+          //          //  color="rgba(255, 255, 255, 0.87)"
 
-                  />
-                }
-              />
-              {/* </Tooltip> */}
-            </div>
-          ) : (
-            ""
-          )}
+          //         />
+          //       }
+          //     />
+          //     {/* </Tooltip> */}
+          //   </div>
+          // ) : (
+          //   ""
+          // )
+          }
+
         </Menu>
       </div>
     ) : null;
@@ -550,6 +566,8 @@ class ActionMenuComp extends Component {
 const mapDispatchToProps = (dispatch) => ({
   handleToggle: (showMenu) => dispatch({ type: "MENU_TOGGLE", showMenu }),
   setRoute: (route) => dispatch({ type: "SET_ROUTE", route }),
+  fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId)),
+  setRequiredDocumentFlag: () => dispatch(prepareFinalObject("isRequiredDocuments",true))
 });
 export default connect(
   null,

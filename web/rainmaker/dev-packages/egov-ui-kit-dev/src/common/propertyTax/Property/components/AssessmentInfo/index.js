@@ -1,10 +1,9 @@
-import React from "react";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { Card } from "components";
-import Label from "egov-ui-kit/utils/translationNode";
 // import { connect } from "react-redux";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import React from "react";
 import PropertyInfoCard from "../PropertyInfoCard";
 
 const locale = getLocale() || "en_IN";
@@ -142,26 +141,23 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //       ]
 //     );
 //   };
-const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
-  const { units=[], noOfFloors } = propertyDetails || {};
+export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properties) => {
+  const { units = [], noOfFloors } = propertyDetails || {};
 
   return (
     propertyDetails && [
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-        value: propertyDetails.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor : "NA", //noOfFloors
+        value: propertyDetails.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMajor, localizationLabelsData) : "NA", //noOfFloors
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
         value: generalMDMSDataById
           ? propertyDetails.propertySubType
-            ? generalMDMSDataById["PropertySubType"]
-              ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
-              : "NA"
-            : generalMDMSDataById["PropertyType"]
-              ? generalMDMSDataById["PropertyType"][propertyDetails.propertyType].name
-              : "NA"
-          : "NA",
+            ? generalMDMSDataById["PropertySubType"] && generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType]
+              ? get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, "NA") : 'NA'
+            : generalMDMSDataById["PropertyType"] && generalMDMSDataById["PropertyType"][propertyDetails.propertyType]
+              ? get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA") : "NA" : "NA"
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
@@ -175,31 +171,35 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
       propertyDetails.propertySubType === "SHAREDPROPERTY"
         ? {
           key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
-          value: units.length>0? `${units[0].floorNo}` : "NA",
+          value: units.length > 0 ? `${units[0].floorNo}` : "NA",
         } :
         {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
         },
+      {
+        key: getTranslatedLabel("PT_COMMONS_IS_RAINWATER_HARVESTING", localizationLabelsData),
+        value: get(properties, 'additionalDetails.isRainwaterHarvesting', false) ? getTranslatedLabel("PT_COMMON_YES", localizationLabelsData) : getTranslatedLabel("PT_COMMON_NO", localizationLabelsData)
+      },
     ]
   );
 };
 
-const getUnitInfo = (units = [], propertyDetails) => {
+export const getUnitInfo = (units = [], propertyDetails) => {
   units = units || [];
   let floors = [];
   units.map((unit, index) => {
-    if(unit){
+    if (unit) {
       let floor = [{
         key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
-        value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor : (propertyDetails.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMinor :
-          (unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA")),
+        value: unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMinor, localizationLabelsData) :
+          (unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor, localizationLabelsData) : "NA")),
       }, {
-  
+
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-        value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
+        value: unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType, localizationLabelsData) : "NA",
       }, {
-  
+
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
       }];
@@ -225,7 +225,7 @@ const getUnitInfo = (units = [], propertyDetails) => {
 
 
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
-let hideSubsectionLabel=false;
+  let hideSubsectionLabel = false;
   let assessmentItems = [];
   let subUnitItems = [];
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
@@ -233,13 +233,13 @@ let hideSubsectionLabel=false;
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
-      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
-      if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){
-        hideSubsectionLabel=true;
+      assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById, properties);
+      if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
+        hideSubsectionLabel = true;
       }
     }
   }
- 
+
   return (
     <PropertyInfoCard editIcon={editIcon} items={assessmentItems} header={header} subSection={subUnitItems} hideSubsectionLabel={hideSubsectionLabel} ></PropertyInfoCard>
   );

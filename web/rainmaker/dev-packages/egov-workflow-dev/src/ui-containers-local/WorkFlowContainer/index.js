@@ -1,27 +1,18 @@
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import find from "lodash/find";
+import get from "lodash/get";
+import orderBy from "lodash/orderBy";
+import set from "lodash/set";
 import React from "react";
 import { connect } from "react-redux";
-import TaskStatusContainer from "../TaskStatusContainer";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { Footer } from "../../ui-molecules-local";
-import {
-  getQueryArg,
-  addWflowFileUrl,
-  orderWfProcessInstances,
-  getMultiUnits
-} from "egov-ui-framework/ui-utils/commons";
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import TaskStatusContainer from "../TaskStatusContainer";
 
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import get from "lodash/get";
-import set from "lodash/set";
-import find from "lodash/find";
-import {
-  localStorageGet,
-  getUserInfo
-} from "egov-ui-kit/utils/localStorageUtils";
-import orderBy from "lodash/orderBy";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -119,6 +110,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
         return "purpose=approve&status=success";
+      case "APPROVE_CONNECTION":
+        return "purpose=approve&status=success";
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
       case "REVOCATE":
@@ -132,7 +125,9 @@ class WorkFlowContainer extends React.Component {
       preparedFinalObject,
       dataPath,
       moduleName,
-      updateUrl
+      updateUrl,
+      redirectQueryString,
+      beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
@@ -173,18 +168,17 @@ class WorkFlowContainer extends React.Component {
       }
     }
     if (dataPath === "BPA") {
-      data.assignees = [];
-      if (data.assignee) {
-        data.assignee.forEach(assigne => {
-          data.assignees.push({
-            uuid: assigne
-          });
-        });
+      data.workflow.assignes = [];
+      if (data.workflow.assignee) {
+        data.workflow.assignes = data.workflow.assignee
       }
-      if (data.wfDocuments) {
-        for (let i = 0; i < data.wfDocuments.length; i++) {
-          data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
+      if (data.workflow && data.workflow.varificationDocuments) {
+        for (let i = 0; i < data.workflow.varificationDocuments.length; i++) {
+          data.workflow.varificationDocuments[i].fileStore = data.workflow.varificationDocuments[i].fileStoreId
         }
+      }
+      if(get(data, "workflow.comment")) {
+        data.workflow.comments = get(data, "workflow.comment");
       }
     }
     if (dataPath == 'Property') {
@@ -197,30 +191,15 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
-      if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-        data = data[0];
-        data.assignees = [];
-        if (data.assignee) {
-          data.assignee.forEach(assigne => {
-            data.assignees.push({
-              uuid: assigne
-            })
-          })
-        }
-        data.processInstance = {
-          documents: data.wfDocuments,
-          assignes: data.assignees,
-          comment: data.comment,
-          action: data.action
-        }
-        data.waterSource = data.waterSource + "." + data.waterSubSource;
-      }
-
-    if (moduleName === "NewSW1") {
-      dataPath = "SewerageConnection";
-    }
 
     try {
+      if (beforeSubmitHook) {
+        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
+          data = await beforeSubmitHook(data);
+        } else {
+          data = beforeSubmitHook(data);
+        }
+      }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -252,11 +231,9 @@ class WorkFlowContainer extends React.Component {
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-
-        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+       if(redirectQueryString){
+        window.location.href = `acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`;
         }
-
       }
     } catch (e) {
       if (moduleName === "BPA") {
@@ -285,7 +262,7 @@ class WorkFlowContainer extends React.Component {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
 
-    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property") {
+    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property" || dataPath === "Noc") {
 
       data = get(preparedFinalObject, dataPath, {})
     } else {
@@ -296,7 +273,7 @@ class WorkFlowContainer extends React.Component {
     let appendToPath = ""
     if (dataPath === "FireNOCs") {
       appendToPath = "fireNOCDetails."
-    } else if (dataPath === "Assessment" || dataPath === "Property") {
+    } else if (dataPath === "Assessment" || dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       appendToPath = "workflow."
     } else {
       appendToPath = ""
@@ -306,7 +283,10 @@ class WorkFlowContainer extends React.Component {
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
-      const documents = get(data, "wfDocuments");
+      let documents = get(data, "wfDocuments");
+      if( dataPath === "BPA") {
+        documents = get(data, "workflow.varificationDocuments");
+      }
       if (documents && documents.length > 0) {
         this.wfUpdate(label);
       } else {
@@ -324,34 +304,32 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances } = this.props;
+    const { ProcessInstances,baseUrlTemp,bserviceTemp } = this.props;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
     }
-    let baseUrl = "";
-    let bservice = "";
+    // needs to remove this initialization if all other module integrated this changes.
+    let baseUrl = (baseUrlTemp)?baseUrlTemp:""
+    let bservice = (bserviceTemp)?bserviceTemp:""
+
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW") {
+      bservice = "FIRENOC";
+    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
       baseUrl = "egov-bpa";
       if (moduleName === "BPA") {
         bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+      } else if (moduleName === "BPA_OC") {
+        bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
       } else {
         bservice = "BPA.LOW_RISK_PERMIT_FEE"
-      }
-    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      baseUrl = "wns"
-      if (moduleName === "NewWS1") {
-        bservice = "WS.ONE_TIME_FEE"
-      } else {
-        bservice = "SW.ONE_TIME_FEE"
       }
     } else if (moduleName === "PT") {
       bservice = "PT"
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION"
-    } else {
+    } else if(!baseUrl && !bservice){
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
     }
@@ -442,7 +420,7 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: (this.props.editredirect)?this.props.editredirect:this.getRedirectUrl("EDIT", businessId, moduleName)
       };
     }
     return editAction;
@@ -519,24 +497,13 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
     let showFooter = true;
-    // if (moduleName === 'NewWS1' || moduleName === 'NewSW1') {
-    //   showFooter = true;
-    // } else if (moduleName == "PT.CREATE") {
-    //   showFooter = true;
-    // } else if (moduleName == "ASMT") {
-    //   showFooter = true;
-    // } else if (moduleName == "PT.MUTATION") {
-    //   showFooter = true;
-    // } else {
-    //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
-    // }
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW') {
+    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} />
+          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName}/>
         )}
         {showFooter &&
           <Footer

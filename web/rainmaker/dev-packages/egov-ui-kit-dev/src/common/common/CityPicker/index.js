@@ -55,11 +55,17 @@ class CityPickerDialog extends Component {
     }
   };
 
-  autoSuggestCallback = (results = [], searchTerm) => {
-    if (results.length === 0) {
-      results.push({ key: "", text: "No City Found" });
+  autoSuggestCallback = (results = [] ,searchTerm) => {
+    const {cities} = this.props;
+    if(searchTerm){
+      const filteredCities = cities && cities.filter(item => {
+        return item.key.includes(searchTerm.toLowerCase())
+      });
+      if (results.length === 0) {
+        results.push({ key: "", text: "No City Found" });
+      }
+    this.setState({ results : filteredCities, searchTerm });
     }
-    this.setState({ results, searchTerm });
   };
 
   render() {
@@ -113,7 +119,7 @@ class CityPickerDialog extends Component {
             dataSource={cities}
             searchInputText={<Label label="ACTION_TEST_SEARCH"  color="#727272" labelStyle={{ display:"flex", justifyContent:"left" }}/>}
             searchKey="text"
-            autoFocus={false}
+            autoFocus={true}
             callback={autoSuggestCallback}
           />
           <List

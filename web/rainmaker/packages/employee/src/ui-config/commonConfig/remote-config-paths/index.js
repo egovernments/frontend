@@ -6,6 +6,7 @@ const remoteConfigPath = (path, screenKey) => {
       config = require(`egov-tradelicence/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "pt-mutation":
+      case "pt-common-screens":
       config = require(`egov-pt/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "hrms":
@@ -18,6 +19,7 @@ const remoteConfigPath = (path, screenKey) => {
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "egov-bpa":
+    case "oc-bpa":
       config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "fire-noc":
@@ -28,9 +30,6 @@ const remoteConfigPath = (path, screenKey) => {
       break;
     case "egov-common":
       config = require(`egov-common/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-    case "egov-boilerplate":
-      config = require(`egov-boilerplate/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "wns":
     case "wns-citizen":

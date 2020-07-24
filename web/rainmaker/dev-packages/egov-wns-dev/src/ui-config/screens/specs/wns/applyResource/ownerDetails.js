@@ -6,8 +6,26 @@ import {
   getCommonHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { changeStep } from "../viewBillResource/footer";
-import { handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
+
+const getHeader = label => {
+  return {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-wns",
+    componentPath: "OwnerHeader",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label
+    },
+    type: "array"
+  };
+};
+
+export const propertyOwnerDetailsHeader = getHeader({
+  labelKey: "WS_OWNER_HEADER_LABEL"
+});
 
 export const ownerDetailsHeader = getCommonContainer({
   header: getCommonHeader({
@@ -18,11 +36,15 @@ export const ownerDetailsHeader = getCommonContainer({
 export const ownershipType = getLabelWithValue(
   {
     labelName: "Ownership Type ",
-    labelKey: "WS_OWN_DETAIL_OWNERSHIP_TYPE_LABEL"
+    labelKey: "WS_OWN_DETAIL_OWNERSHIP_TYPE_LABEL"  
   },
   {
     jsonPath: "applyScreen.property.ownershipCategory",
-    callBack: handleNA
+    callBack: handleNA,
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "OWNERSHIPCATEGORY"
+    }
   }
 )
 
@@ -64,7 +86,7 @@ export const dateOfBirth = getLabelWithValue(
   },
   {
     jsonPath: "applyScreen.property.owners[0].dob",
-    callBack: handleNA
+    callBack: convertEpochToDateAndHandleNA
   }
 )
 export const Relationship = getLabelWithValue(
@@ -160,6 +182,7 @@ export const getOwnerDetails = (isEditable = true) => {
           //   componentPath: "MultiItem",
           //   props: {
           //     scheama: getCommonGrayCard({
+          div3: propertyOwnerDetailsHeader,
           viewFive: getCommonContainer({
             ownerMobileNumber: getLabelWithValue(
               {
@@ -168,7 +191,8 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath:
-                  "applyScreen.property.owners[0].mobileNumber"
+                  "applyScreen.property.owners[0].mobileNumber",
+                  callBack: handleNA
               }),
             ownerName: getLabelWithValue(
               {
@@ -177,7 +201,7 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath: "applyScreen.property.owners[0].name",
-                // callBack: handleNA
+                callBack: handleNA
               }
             ),
             gender: getLabelWithValue(
@@ -186,7 +210,8 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
               },
               {
-                jsonPath: "applyScreen.property.owners[0].gender"
+                jsonPath: "applyScreen.property.owners[0].gender",
+                callBack: handleNA
               }
             ),
             dateOfBirth: getLabelWithValue(
@@ -195,7 +220,8 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelKey: "WS_OWN_DETAIL_DOB_LABEL"
               },
               {
-                jsonPath: "applyScreen.property.owners[0].dob"
+                jsonPath: "applyScreen.property.owners[0].dob",
+                callBack: convertEpochToDateAndHandleNA
               }
             ),
             email: getLabelWithValue(
@@ -204,7 +230,8 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
               },
               {
-                jsonPath: "applyScreen.property.owners[0].emailId"
+                jsonPath: "applyScreen.property.owners[0].emailId",
+                callBack: handleNA
               }
             ),
             fatherName: getLabelWithValue(
@@ -214,6 +241,7 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",
+                callBack: handleNA
               }
             ),
             Relationship: getLabelWithValue(
@@ -221,7 +249,8 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelName: "Relationship",
                 labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
               },
-              { jsonPath: "applyScreen.property.owners[0].relationship" }
+              { jsonPath: "applyScreen.property.owners[0].relationship",
+              callBack: handleNA }
             ),
             //   ownerCategory,
 
@@ -230,14 +259,16 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelName: "Correspondence Address",
                 labelKey: "WS_OWN_DETAIL_CROSADD"
               },
-              { jsonPath: "applyScreen.property.owners[0].correspondenceAddress" }
+              { jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
+              callBack: handleNA}
             ),
             specialApplicantCategory: getLabelWithValue(
               {
                 labelName: "Special Applicant Category",
                 labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
               },
-              { jsonPath: "applyScreen.property.owners[0].ownerType" }
+              { jsonPath: "applyScreen.property.owners[0].ownerType",
+              callBack: handleNA }
             )
           }),
         }),

@@ -1,29 +1,214 @@
-import React, { Component } from "react";
 import { Card } from "components";
-import { withRouter } from "react-router-dom";
+import commonConfig from "config/common.js";
+import { getRequiredDocuments } from "egov-pt/ui-config/screens/specs/pt-mutation/requiredDocuments/reqDocs";
+import DialogContainer from 'egov-pt/ui-containers-local/DialogContainer';
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import Label from "egov-ui-kit/utils/translationNode";
-import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import PropertyInfoCard from "../PropertyInfoCard";
+import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { TransferOwnership, ViewHistory } from "../ActionItems";
 import PendingAmountDialog from "../PendingAmountDue";
+import PropertyInfoCard from "../PropertyInfoCard";
 import ViewHistoryDialog from "../ViewHistory";
-import { ViewHistory, TransferOwnership } from "../ActionItems";
 import "./index.css";
-
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 
+
+
+const checkDocument = (owner) => {
+  if (owner) {
+    if (owner.document && owner.document.documentType && owner.document.documentUid) {
+      return owner.document;
+    } else if (owner.documents && owner.documents.length > 0 && owner.documents[0].documentType && owner.documents[0].documentUid) {
+      return owner.documents[0];
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
+  const isInstitution =
+    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  const { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
+  let owner = [];
+  if (ownerDetails && ownerDetails.length > 0) {
+    owner = ownerDetails[0];
+  }
+  return (
+    ownerDetails &&
+    ownerDetails.map((owner) => {
+      return {
+        items: [
+          isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_INSTI", localizationLabelsData),
+              value: (institution && institution.name) || "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME", localizationLabelsData),
+              value: owner.name || "NA",
+            },
+          isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_DESIGNATION", localizationLabelsData),
+              value: institution.designation || "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),
+              value: owner.fatherOrHusbandName || "NA",
+            },
+          isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
+              value:
+                (institution &&
+                  institution.type &&
+                  generalMDMSDataById &&
+                  generalMDMSDataById["SubOwnerShipCategory"] &&
+                  generalMDMSDataById["SubOwnerShipCategory"][institution.type] &&
+                  generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
+                "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_GENDER", localizationLabelsData),
+              value: owner.gender || "NA",
+            },
+          isInstitution
+            ? {
+
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData),
+              value: owner.altContactNumber ||
+                "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
+              value:subOwnershipCategory? getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`,localizationLabelsData) : getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`,localizationLabelsData)
+              // (institution &&
+              //   institution.type &&
+              //   generalMDMSDataById &&
+              //   generalMDMSDataById["SubOwnerShipCategory"] &&
+              //   generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
+              // "NA",
+            },
+          isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_OF_AUTH", localizationLabelsData),
+              value: owner.name || "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
+              value: owner.mobileNumber || "NA",
+            },
+          {
+            key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),
+            value: owner.emailId ? owner.emailId || "NA" : "",
+          },
+          isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
+              value: owner.mobileNumber || "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_USER_CATEGORY", localizationLabelsData),
+              value:
+                (owner &&
+                  owner.ownerType &&
+                  generalMDMSDataById &&
+                  generalMDMSDataById["OwnerType"] &&
+                  generalMDMSDataById["OwnerType"][owner.ownerType] &&
+                  generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
+                "NA",
+            },
+          isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
+              value: owner.correspondenceAddress || "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
+              value: owner.permanentAddress || "NA",
+            },
+          checkDocument(owner) && (isInstitution
+            ? {
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_TYPE", localizationLabelsData),
+              value: getTranslatedLabel("PT_" + (checkDocument(owner).documentType).toUpperCase(), localizationLabelsData) || "NA",
+            }),
+          checkDocument(owner) && (isInstitution
+            ? {
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
+              value: checkDocument(owner).documentUid || "NA",
+            }
+          )
+        ],
+      };
+    })
+  );
+};
 class OwnerInfo extends Component {
   // Static implementation as of now. Need to change
   state = {
     pendingAmountDue: false,
     viewHistory: false,
-    ownershipInfo: {}
+    docRequired: false,
+    ownershipInfo: {},
   };
+  openApplyDocsUI = () => {
 
+    this.props.handleField(
+      'property',
+      `components.adhocDialog`,
+      "props.open",
+      true
+    );
+    this.setState({ docRequired: true });
+  }
+  componentDidMount = async () => {
+    let requestBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "PropertyTax",
+            masterDetails: [
+              {
+                name: "MutationDocuments",
+              }
+            ],
+          },
+        ],
+      },
+    };
+
+
+    try {
+      const payload = await httpRequest(MDMS.GET.URL, MDMS.GET.ACTION, [], requestBody);
+      const mdmsMutationDocuments = get(payload, 'MdmsRes.PropertyTax.MutationDocuments', []);
+      this.props.prepareFinalObject('mdmsMutationDocuments', mdmsMutationDocuments);
+      let documentUIChildren = {}
+      if (mdmsMutationDocuments && mdmsMutationDocuments.length > 0) {
+        documentUIChildren = getRequiredDocuments(mdmsMutationDocuments)
+      }
+      this.props.prepareFinalObject('mutationDocumentUIChildren', documentUIChildren);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   transformData = (property) => {
     const { owners, institution, ownershipCategory } = property;
     let itemKey = [];
@@ -52,7 +237,7 @@ class OwnerInfo extends Component {
           "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType || "NA",
           "PT_OWNERSHIP_INFO_CORR_ADDR": item.permanentAddress || "NA",
         };
-        const document = this.checkDocument(item);
+        const document = checkDocument(item);
         if (document) {
           owner['PT_OWNERSHIP_DOCUMENT_TYPE'] = getTranslatedLabel("PT_" + (document.documentType).toUpperCase(), localizationLabelsData);
           owner['PT_OWNERSHIP_DOCUMENT_ID'] = document.documentUid;
@@ -70,7 +255,7 @@ class OwnerInfo extends Component {
         newList.push(element);
       }
     })
-    return newList&&Array.isArray(newList)&&newList.filter(element=>element.creationReason!='UPDATE');
+    return newList && Array.isArray(newList) && newList.filter(element => element.creationReason != 'UPDATE');
   }
   getPropertyResponse = async (propertyId, tenantId, dialogName) => {
     const queryObject = [
@@ -117,14 +302,16 @@ class OwnerInfo extends Component {
           "error"
         );
       } else {
-        let link = `/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
+        // this.openApplyDocsUI();
+        // this.setState({ docRequired: true });
+        let link = `/pt-mutation/apply-document?consumerCode=${propertyId}&tenantId=${tenantId}`;
 
-        let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
-        window.location.href =
-          process.env.NODE_ENV === "production"
-            ? moduleName + link
-            : link;
-        // this.props.history.push(link);
+        // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
+        // window.location.href =
+        //   process.env.NODE_ENV === "production"
+        //     ? moduleName + link
+        //     : link;
+        this.props.history.push(link);
       }
     } else if (dialogName === "viewHistory") {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
@@ -138,157 +325,22 @@ class OwnerInfo extends Component {
     this.setState({ [dialogName]: false });
   };
 
-  checkDocument = (owner) => {
-    if (owner) {
-      if (owner.document && owner.document.documentType && owner.document.documentUid) {
-        return owner.document;
-      } else if (owner.documents && owner.documents.length > 0 && owner.documents[0].documentType && owner.documents[0].documentUid) {
-        return owner.documents[0];
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-
-  getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
-    const isInstitution =
-      latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
-    const { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
-    let owner = [];
-    if (ownerDetails && ownerDetails.length > 0) {
-      owner = ownerDetails[0];
-    }
-    return (
-      ownerDetails &&
-      ownerDetails.map((owner) => {
-        return {
-          items: [
-            isInstitution
-              ? {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_INSTI", localizationLabelsData),
-                value: (institution && institution.name) || "NA",
-              }
-              : {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME", localizationLabelsData),
-                value: owner.name || "NA",
-              },
-            isInstitution
-              ? {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_DESIGNATION", localizationLabelsData),
-                value: institution.designation || "NA",
-              }
-              : {
-                key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),
-                value: owner.fatherOrHusbandName || "NA",
-              },
-            isInstitution
-              ? {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
-                value:
-                  (institution &&
-                    institution.type &&
-                    generalMDMSDataById &&
-                    generalMDMSDataById["SubOwnerShipCategory"] &&
-                    generalMDMSDataById["SubOwnerShipCategory"][institution.type] &&
-                    generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
-                  "NA",
-              }
-              : {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_GENDER", localizationLabelsData),
-                value: owner.gender || "NA",
-              },
-            isInstitution
-              ? {
-
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_TEL_NO", localizationLabelsData),
-                value: owner.altContactNumber ||
-                  "NA",
-              }
-              : {
-                key: getTranslatedLabel("PT_FORM3_OWNERSHIP_TYPE", localizationLabelsData),
-                value: getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${subOwnershipCategory}`) || getTranslatedLabel(`PROPERTYTAX_BILLING_SLAB_${ownershipCategory}`)
-                // (institution &&
-                //   institution.type &&
-                //   generalMDMSDataById &&
-                //   generalMDMSDataById["SubOwnerShipCategory"] &&
-                //   generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
-                // "NA",
-              },
-            isInstitution
-              ? {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_OF_AUTH", localizationLabelsData),
-                value: owner.name || "NA",
-              }
-              : {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
-                value: owner.mobileNumber || "NA",
-              },
-            {
-              key: getTranslatedLabel("PT_OWNERSHIP_INFO_EMAIL_ID", localizationLabelsData),
-              value: owner.emailId ? owner.emailId || "NA" : "",
-            },
-            isInstitution
-              ? {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
-                value: owner.mobileNumber || "NA",
-              }
-              : {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_USER_CATEGORY", localizationLabelsData),
-                value:
-                  (owner &&
-                    owner.ownerType &&
-                    generalMDMSDataById &&
-                    generalMDMSDataById["OwnerType"] &&
-                    generalMDMSDataById["OwnerType"][owner.ownerType] &&
-                    generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
-                  "NA",
-              },
-            isInstitution
-              ? {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
-                value: owner.correspondenceAddress || "NA",
-              }
-              : {
-                key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
-                value: owner.permanentAddress || "NA",
-              },
-            this.checkDocument(owner) && (isInstitution
-              ? {
-              }
-              : {
-                key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_TYPE", localizationLabelsData),
-                value: getTranslatedLabel("PT_" + (this.checkDocument(owner).documentType).toUpperCase(), localizationLabelsData) || "NA",
-              }),
-            this.checkDocument(owner) && (isInstitution
-              ? {
-              }
-              : {
-                key: getTranslatedLabel("PT_OWNERSHIP_DOCUMENT_ID", localizationLabelsData),
-                value: this.checkDocument(owner).documentUid || "NA",
-              }
-            )
-          ],
-        };
-      })
-    );
-  };
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, mdmsMutationDocuments } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
     if (properties) {
       const { propertyDetails } = properties;
       if (propertyDetails && propertyDetails.length > 0) {
-        ownerInfo = this.getOwnerInfo(propertyDetails[0], generalMDMSDataById);
+        ownerInfo = getOwnerInfo(propertyDetails[0], generalMDMSDataById);
         if (ownerInfo.length > 1) {
           multipleOwner = true;
         }
       }
     }
+
     return (
       <div>
         {ownerInfo && (
@@ -343,7 +395,12 @@ class OwnerInfo extends Component {
             }
           />
         )}
-
+        {this.state.docRequired && (
+          <DialogContainer open={true}
+            maxWidth={false}
+            screenKey={"property"}>{}
+          </DialogContainer>
+        )}
         {this.state.pendingAmountDue && (
           <PendingAmountDialog
             open={this.state.pendingAmountDue}
@@ -366,4 +423,28 @@ class OwnerInfo extends Component {
   }
 }
 
-export default withRouter(OwnerInfo);
+const mapStateToProps = state => {
+  const { screenConfiguration } = state;
+  const { preparedFinalObject } = screenConfiguration;
+  const mdmsMutationDocuments = get(
+    preparedFinalObject,
+    "mdmsMutationDocuments",
+    []
+  );
+
+  return { mdmsMutationDocuments };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleField: (a, b, c, d) => dispatch(handleField(a, b, c, d)), prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(OwnerInfo));
+
+

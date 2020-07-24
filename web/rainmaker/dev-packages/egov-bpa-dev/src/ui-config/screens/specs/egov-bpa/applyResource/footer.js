@@ -4,16 +4,19 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA } from "../../utils";
+import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping,setProposedBuildingData, generateBillForBPA, residentialType } from "../../utils";
 import "./index.css";
 import { getQueryArg, getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateBpaApplication,
   prepareDocumentsUploadData,
+  prepareNOCUploadData,
   submitBpaApplication,
-  updateBpaApplication
+  updateBpaApplication,
+  getNocSearchResults  
 } from "../../../../../ui-utils/commons";
+import { prepareNocFinalCards, compare } from "../../../specs/utils/index";
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -132,7 +135,7 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
     {}
   );
   jp.query(reduxDocuments, "$.*").forEach(doc => {
-    if (doc.documents && doc.documents.length > 0) {
+    if (doc.documents && doc.documents.length > 0 && doc.dropDownValues) {
       doc.documents.forEach(docDetail =>{
         let obj = {};
         obj.title = getTransformedLocale(doc.documentCode);
@@ -165,21 +168,22 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
 const getSummaryRequiredDetails = async (state, dispatch) => {
   const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.riskType");
+  const riskType = get(state.screenConfiguration.preparedFinalObject, "BPA.businessService");
   let businessService = "BPA.NC_APP_FEE"
-  if(riskType === "LOW") {
+  if(riskType === "BPA_LOW") {
     businessService = "BPA.LOW_RISK_PERMIT_FEE"
   }
   generateBillForBPA(dispatch, applicationNumber, tenantId, businessService);
   prepareDocumentsDetailsView(state, dispatch);
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.documentsSummary.children.cardContent.children.uploadedDocumentDetailsCard",            
-      "visible",
-      false
-    )
-  )
+  await residentialType(state, dispatch);
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     "components.div.children.formwizardFifthStep.children.bpaSummaryDetails.children.cardContent.children.applyDocSummary.children.cardContent.children.uploadedDocumentDetailsCard",            
+  //     "visible",
+  //     false
+  //   )
+  // )
 }
 
 const callBackForNext = async (state, dispatch) => {
@@ -219,6 +223,7 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = true;
     }
     setProposedBuildingData(state,dispatch);
+    await residentialType(state, dispatch);
   }
 
   if (activeStep === 1) {
@@ -309,7 +314,7 @@ const callBackForNext = async (state, dispatch) => {
 
     let selectedApplicantType = get(
       state,
-      "screenConfiguration.preparedFinalObject.BPA.ownershipCategory",
+      "screenConfiguration.preparedFinalObject.BPA.landInfo.ownershipCategory",
       "SINGLE"
     );
     if (selectedApplicantType.includes("INSTITUTIONAL")) {
@@ -403,17 +408,22 @@ const callBackForNext = async (state, dispatch) => {
         // dispatch(prepareFinalObject("BPA.owners[0].ownerType", "NONE"));
       }
       if (activeStep === 3) {
-        // getMdmsData(state, dispatch);
-        // prepareDocumentsUploadData(state, dispatch); 
+        let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+        if(nocData && nocData.length > 0) { 
+          nocData.map(items => {
+            if(!items.readOnly) items.readOnly = items.readOnly ? false : true;
+          })
+          dispatch(prepareFinalObject("nocForPreview", nocData));
+        }
       }
       if (activeStep === 2) {
         let checkingOwner = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.ownershipCategory"
+          "BPA.landInfo.ownershipCategory"
         );
         let ownerDetails = get(
           state.screenConfiguration.preparedFinalObject,
-          "BPA.owners"
+          "BPA.landInfo.owners"
         );
         let bpaStatus = get(
           state.screenConfiguration.preparedFinalObject,
@@ -423,7 +433,7 @@ const callBackForNext = async (state, dispatch) => {
         if (checkingOwner && checkingOwner === "INDIVIDUAL.SINGLEOWNER") {
           let primaryOwner = get(
             state.screenConfiguration.preparedFinalObject,
-            "BPA.owners[0].isPrimaryOwner"
+            "BPA.landInfo.owners[0].isPrimaryOwner"
           );
           if (primaryOwner && primaryOwner === true) {
             if (bpaStatus) {
@@ -450,7 +460,7 @@ const callBackForNext = async (state, dispatch) => {
           ownerDetails.forEach((owner, index) => {
             let primaryOwner = get(
               state.screenConfiguration.preparedFinalObject,
-              `BPA.owners[${index}].isPrimaryOwner`
+              `BPA.landInfo.owners[${index}].isPrimaryOwner`
             );
             if (primaryOwner && primaryOwner === true) {
               ownerPrimaryArray.push(primaryOwner)
@@ -485,6 +495,25 @@ const callBackForNext = async (state, dispatch) => {
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
           }
         }
+        let applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.applicationNo"
+        );
+        let tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.tenantId"
+        );
+        const payload = await getNocSearchResults([
+          {
+            key: "tenantId",
+            value: tenantId
+          },
+          { key: "sourceRefId", value: applicationNumber }
+        ], state);
+        payload.Noc.sort(compare);
+        dispatch(prepareFinalObject("Noc", payload.Noc)); 
+        await prepareNOCUploadData(state, dispatch);
+        prepareNocFinalCards(state, dispatch);   
       } else {
         if(activeStep === 0){
           const occupancytypeValid = get(
@@ -499,7 +528,8 @@ const callBackForNext = async (state, dispatch) => {
             };
             dispatch(toggleSnackbar(true, errorMessage, "warning")); 
           }else{
-            let licenceType = get(
+            responseStatus === "success" && changeStep(state, dispatch);
+            /*let licenceType = get(
               state.screenConfiguration.preparedFinalObject , 
               "applyScreenMdmsData.licenceTypes", []
               );
@@ -511,7 +541,7 @@ const callBackForNext = async (state, dispatch) => {
               showApplyLicencePicker(state, dispatch, activeStep);
             } else {
               responseStatus === "success" && changeStep(state, dispatch);
-            }
+            }*/
           }
         }else{
           responseStatus === "success" && changeStep(state, dispatch);
@@ -701,6 +731,20 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  let activeStep = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.stepper.props.activeStep",
+    0
+  );
+  if (activeStep === 4) {
+    let nocData = get(state.screenConfiguration.preparedFinalObject, "nocForPreview", []);
+    if(nocData && nocData.length > 0) { 
+      nocData.map(items => {
+        if(items.readOnly) items.readOnly = items.readOnly ? false : true;
+      })
+      dispatch(prepareFinalObject("nocForPreview", nocData));
+    }
+  }
   changeStep(state, dispatch, "previous");
 };
 
@@ -726,7 +770,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+        labelKey: "BPA_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -749,7 +793,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+        labelKey: "BPA_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",

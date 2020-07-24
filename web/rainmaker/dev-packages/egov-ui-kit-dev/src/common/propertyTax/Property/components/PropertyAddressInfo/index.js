@@ -10,7 +10,7 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 
 
-const getAddressItems = (properties) => {
+export const getAddressItems = (properties) => {
   const {address} = properties;
     return  (
      address &&    [
@@ -34,7 +34,7 @@ const getAddressItems = (properties) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: (getTranslatedLabel(('revenue.locality.'+address.locality.code), localizationLabelsData)) + (address.locality.area ? ` - ${address.locality.area}`:"") || "NA",
+        value: (getTranslatedLabel(('PB_AMRITSAR_REVENUE_'+address.locality.code), localizationLabelsData)) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),

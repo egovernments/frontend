@@ -1,22 +1,13 @@
-import {
-  dispatchMultipleFieldChangeAction,
-  getLabel
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { convertDateToEpoch, dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
+import store from "ui-redux/store";
+import { httpRequest } from "../../../../../ui-utils";
+import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter, validateFields } from "../../utils";
 import "./index.css";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "../../../../../ui-utils";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
-import {
-  createUpdateNocApplication,
-  prepareDocumentsUploadData
-} from "../../../../../ui-utils/commons";
-import store from "ui-redux/store";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -180,7 +171,9 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
-    propertyPayload.owners[0].altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.owners.map(owner => {
+      owner.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    })
     propertyPayload.institution = {};
     propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
@@ -212,21 +205,21 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
-    let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT')?document.dropdown.value.split('.')[2]:document.dropdown.value;
+    let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
     return {
-      documentType: documentValue ,
+      documentType: documentValue,
       fileStoreId: document.documents[0].fileStoreId,
       documentUid: document.documents[0].fileStoreId,
       auditDetails: null,
       status: "ACTIVE"
     }
   })
-  let oldDocuments=[];
-  oldDocuments=propertyPayload.documents&&Array.isArray(propertyPayload.documents)&&propertyPayload.documents.filter(document=>{
-    return (document.documentType.includes('USAGEPROOF')|| document.documentType.includes('OCCUPANCYPROOF')|| document.documentType.includes('CONSTRUCTIONPROOF'))
+  let oldDocuments = [];
+  oldDocuments = propertyPayload.documents && Array.isArray(propertyPayload.documents) && propertyPayload.documents.filter(document => {
+    return (document.documentType.includes('USAGEPROOF') || document.documentType.includes('OCCUPANCYPROOF') || document.documentType.includes('CONSTRUCTIONPROOF'))
   })
-  oldDocuments=oldDocuments||[];
-  propertyPayload.documents=[...newDocuments,...oldDocuments];
+  oldDocuments = oldDocuments || [];
+  propertyPayload.documents = [...newDocuments, ...oldDocuments];
 
   try {
     let queryObject = [
@@ -294,11 +287,6 @@ const validateMobileNumber = (state) => {
         return owner.mobileNumber;
       }
     })
-    // newOwners.map(owner => {
-    //   if (names.includes(owner.name)) {
-    //     err = "OWNER_NAME_SAME";
-    //   }
-    // })
     newOwners.map(owner => {
       if (mobileNumbers.includes(owner.mobileNumber)) {
         err = "OWNER_NUMBER_SAME";
@@ -306,7 +294,11 @@ const validateMobileNumber = (state) => {
     })
   } else {
 
-    const newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    let newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
+    if(newOwners&&newOwners.length&&newOwners.length>1){
+      newOwners=newOwners.filter(object=>{
+        return !(object.isDeleted===false)})
+        }
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
     const names = owners.map(owner => {
       return owner.name
@@ -321,9 +313,10 @@ const validateMobileNumber = (state) => {
         err = "OWNER_NUMBER_SAME";
       }
     })
+    if(!err&&ownershipCategoryTemp.includes('MULTIPLEOWNERS')&&newOwners.length==1){
+      err = "OWNERSHIPTYPE_CANNOT_BE_MULTIPLE";
+    }
   }
-
-
 
   return err;
 }
@@ -376,7 +369,7 @@ const callBackForNext = async (state, dispatch) => {
       "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children",
       state,
       dispatch
-    ):true;
+    ) : true;
     let isregistrationCardValid = validateFields(
       "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children",
       state,
@@ -393,14 +386,9 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-    // dispatch(
-    //   prepareFinalObject(
-    //     "documentsUploadRedux.3.dropdown.value",
-    //     `${get(state,'screenConfiguration.preparedFinalObject.documentsUploadRedux.3.documentCode','')}.${get(state,'screenConfiguration.preparedFinalObject.Property.additionalDetails.reasonForTransfer','')}`
-    //   )
-    // );
     if (isFormValid) {
       errorMsg = validateMobileNumber(state);
+
       errorMsg ? isFormValid = false : {};
     }
 
@@ -429,8 +417,8 @@ const callBackForNext = async (state, dispatch) => {
         "Property.owners",
         []
       );
-      owner=owner.filter(own=>own.status == "ACTIVE");
-      
+      owner = owner.filter(own => own.status == "ACTIVE");
+
       dispatch(
         prepareFinalObject(
           "Property.ownersInit",
@@ -444,8 +432,8 @@ const callBackForNext = async (state, dispatch) => {
         "Property.owners",
         []
       );
-      owner=owner.filter(own=>own.status == "ACTIVE");
-      
+      owner = owner.filter(own => own.status == "ACTIVE");
+
       dispatch(
         prepareFinalObject(
           "Property.ownersInit",
@@ -689,7 +677,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "NOC_COMMON_BUTTON_PREV_STEP"
+        labelKey: "PT_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {

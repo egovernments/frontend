@@ -29,10 +29,11 @@ import jsPDF from "jspdf";
 import get from "lodash/get";
 import some from "lodash/some";
 import jp from "jsonpath";
+import commonConfig from "config/common.js";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
-  const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
+  const tenantId = getTenantId();//process.env.REACT_APP_DEFAULT_TENANT_ID;
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
@@ -100,7 +101,7 @@ const prepareDocumentsDetailsView = async (state, dispatch) => {
         name: doc.documents[0].fileName,
         fileStoreId: doc.documents[0].fileStoreId,
         linkText: "View",
-        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.split(",")[0]
+        link: doc.documents[0].fileUrl && doc.documents[0].fileUrl.length > 0 && doc.documents[0].fileUrl.split(",")[0]
       });
     }
   });
@@ -130,6 +131,34 @@ const getSummaryRequiredDetails = async (state, dispatch) => {
       "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.footnoteOFLicenceValid.children.footNote",
       "props.labelKey[1]",
       getLicenceValidData
+    )
+  );
+  const tradeType = get(LicenseData, "tradeLicenseDetail.tradeUnits[0].tradeType");
+  if (tradeType.split('.')[0] == "ARCHITECT") {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+        "visible",
+        true
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+        "visible",
+        false
+      )
+    );
+  }
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewValidityPeriod",
+      "visible",
+      false
     )
   );
  
@@ -264,23 +293,11 @@ export const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
       let tenantIdInLocastorage = getTenantId();
-      if (!tenantIdInLocastorage)
-        setTenantId(process.env.REACT_APP_DEFAULT_TENANT_ID);
-        const appNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", {});
-        const LicenseData = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0]",
-          {}
-        );
-        if (appNumber && LicenseData){
-          createEstimateData(
-            LicenseData,
-            "LicensesTemp[0].estimateCardData",
-            dispatch,
-            {},
-            true
-          ); //get bill and populate estimate card
-        }
+      if (!tenantIdInLocastorage || tenantIdInLocastorage == "null"){
+        let tenantId = window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")  || process.env.REACT_APP_DEFAULT_TENANT_ID;
+        setTenantId(tenantId)
+        localStorage.setItem("Citizen.tenant-id", tenantId);
+      }
     }
   }
 
@@ -548,7 +565,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+        labelKey: "BPA_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -571,7 +588,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+        labelKey: "BPA_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -600,7 +617,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "TL_COMMON_BUTTON_SUBMIT"
+        labelKey: "BPA_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

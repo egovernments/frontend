@@ -1,4 +1,4 @@
-import { getMyConnectionResults, getSWMyConnectionResults } from "../../../../../ui-utils/commons";
+import { getWSMyResults, getSWMyResults } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -11,15 +11,11 @@ export const fetchData = async (action, state, dispatch) => {
         {
             key: "mobileNumber",
             value: JSON.parse(getUserInfo()).mobileNumber
-        }
-        // {
-        //     key: "tenantId",
-        //     value: JSON.parse(getUserInfo()).tenantId
-        // }
+        }        
     ]
 
-    const response = await getMyConnectionResults(queryObject, dispatch);
-    const swResponse = await getSWMyConnectionResults(queryObject, dispatch);
+    const response = await getWSMyResults(queryObject, "CONNECTION", dispatch);
+    const swResponse = await getSWMyResults(queryObject, "CONNECTION", dispatch);
 
     if ((response && response.WaterConnection && response.WaterConnection.length > 0) && (swResponse && swResponse.SewerageConnections && swResponse.SewerageConnections.length > 0)) {
         finalResponse = [...response.WaterConnection, ...swResponse.SewerageConnections];

@@ -1,24 +1,15 @@
+import { getCommonCaption, getCommonCard, getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import {
-  getQueryArg,
-  getTransformedLocalStorgaeLabels,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils/api";
+import set from "lodash/set";
+import isEmpty from "lodash/isEmpty";
 import isUndefined from "lodash/isUndefined";
-import {
-  getCommonCard,
-  getCommonValue,
-  getCommonCaption,
-  getPattern
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
+import { httpRequest } from "../../../../ui-utils/api";
+import commonConfig from "config/common.js";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -387,11 +378,11 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        "/user/_search?tenantId=pb",
+        `/user/_search?tenantId=${commonConfig.tenantId}`,
         "_search",
         [],
         {
-          tenantId: "pb",
+          tenantId: commonConfig.tenantId,
           userName: `${ownerNo}`
         }
       );
@@ -484,6 +475,25 @@ export const getMdmsData = async queryObject => {
   }
 };
 
+export const searchMdmsData = async mdmsBody => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+
+
+
 export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
@@ -551,7 +561,37 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
   }
 };
 
-export const createEstimateData = billObject => {
+const isApplicationPaid = (currentStatus, workflowCode) => {
+  let isPAID = false;
+  if (currentStatus === "CITIZENACTIONREQUIRED") {
+    return isPAID;
+  }
+  const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+
+  if (!isEmpty(businessServiceData)) {
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
+    const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].state === currentStatus) {
+        break;
+      }
+      if (
+        states[i].actions &&
+        states[i].actions.filter(item => item.action === "PAY").length > 0
+      ) {
+        isPAID = true;
+        break;
+      }
+    }
+  } else {
+    isPAID = false;
+  }
+
+  return isPAID;
+};
+
+export const createEstimateData = (billObject, dispatch) => {
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", [billObject]));
   const billDetails = billObject && billObject.billDetails;
   let fees =
     billDetails &&
@@ -567,7 +607,7 @@ export const createEstimateData = billObject => {
 };
 
 
-export const createBill = async (queryObject,dispatch) => {
+export const createBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
@@ -584,11 +624,11 @@ export const createBill = async (queryObject,dispatch) => {
         "error"
       )
     );
-    console.log(error,'fetxh');
+    console.log(error, 'fetxh');
   }
 };
 
-export const generateBill = async (dispatch, applicationNumber, tenantId) => {
+export const generateBill = async (dispatch, applicationNumber, tenantId, status) => {
   try {
     if (applicationNumber && tenantId) {
       const queryObj = [
@@ -600,22 +640,36 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: "FIRENOC" }
+        { key: "businessService", value: "FIRENOC" }
       ];
-      const payload = await createBill(queryObj,dispatch);
-      // let payload = sampleGetBill();
-      if (payload && payload.Bill[0]) {
-        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-        const estimateData = createEstimateData(payload.Bill[0]);
-        estimateData &&
-          estimateData.length &&
-          dispatch(
-            prepareFinalObject(
-              "applyScreenMdmsData.estimateCardData",
-              estimateData
-            )
-          );
-      }
+      const billQueryObj = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "consumerCodes",
+          value: applicationNumber
+        }
+      ];
+      const isPAID = isApplicationPaid(status, "FIRENOC");
+      const payload = isPAID ? await getReceiptData(billQueryObj) : await createBill(queryObj, dispatch);
+      let estimateData = payload ? isPAID ? payload && payload.Payments && payload.Payments.length > 0 && createEstimateData(payload.Payments[0].paymentDetails[0].bill, dispatch) : payload && createEstimateData(payload.Bill[0], dispatch) : [];
+      estimateData = estimateData || [];
+      set(estimateData, "payStatus", isPAID);
+      dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", estimateData));
+      // if (payload && payload.Bill[0]) {
+      //   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+      //   const estimateData = createEstimateData(payload.Bill[0]);
+      //   estimateData &&
+      //     estimateData.length &&
+      //     dispatch(
+      //       prepareFinalObject(
+      //         "applyScreenMdmsData.estimateCardData",
+      //         estimateData
+      //       )
+      //     );
+      // }
     }
   } catch (e) {
     console.log(e);
@@ -673,34 +727,34 @@ export const resetFields = (state, dispatch) => {
   );
 };
 
-export const getRequiredDocData = async (action, state, dispatch) => {
-  let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "FireNoc",
-          masterDetails: [{ name: "Documents" }]
-        }
-      ]
-    }
-  };
-  try {
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      mdmsBody
-    );
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-  } catch (e) {
-    console.log(e);
-  }
-};
+// export const getRequiredDocData = async (action, state, dispatch) => {
+//   let tenantId =
+//     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+//   let mdmsBody = {
+//     MdmsCriteria: {
+//       tenantId: tenantId,
+//       moduleDetails: [
+//         {
+//           moduleName: "FireNoc",
+//           masterDetails: [{ name: "Documents" }]
+//         }
+//       ]
+//     }
+//   };
+//   try {
+//     let payload = null;
+//     payload = await httpRequest(
+//       "post",
+//       "/egov-mdms-service/v1/_search",
+//       "_search",
+//       [],
+//       mdmsBody
+//     );
+//     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -794,4 +848,8 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
   }
+};
+
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
 };

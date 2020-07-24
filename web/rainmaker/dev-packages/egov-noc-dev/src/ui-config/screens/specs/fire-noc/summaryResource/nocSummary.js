@@ -6,7 +6,30 @@ import {
   getLabel,
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
+import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
+
+export const nocSummaryDetail={
+  nocType: getLabelWithValue(
+    {
+      labelName: "NOC Type",
+      labelKey: "NOC_TYPE_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
+      callBack: checkValueForNA
+    }
+  ),
+  fireNocNumber: getLabelWithValue(
+    {
+      labelName: "Provisional fire NoC number",
+      labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].provisionFireNOCNumber",
+      callBack: checkValueForNA
+    }
+  )
+}
 
 export const nocSummary = getCommonGrayCard({
   header: {
@@ -60,30 +83,5 @@ export const nocSummary = getCommonGrayCard({
       }
     }
   },
-  body: getCommonContainer({
-    nocType: getLabelWithValue(
-      {
-        labelName: "NOC Type",
-        labelKey: "NOC_TYPE_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType"
-        // callBack: value => {
-        //   return value.split(".")[0];
-        // }
-      }
-    ),
-    fireNocNumber: getLabelWithValue(
-      {
-        labelName: "Provisional fire NoC number",
-        labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
-      }
-    )
-  })
+  body: getCommonContainer(nocSummaryDetail)
 });

@@ -9,6 +9,7 @@ import {
 import { showHideAdhocPopup } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
+import { serviceConst } from "../../../../../ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { createEstimateData } from "../../utils";
 import {
@@ -45,7 +46,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   }]
 
   let serviceUrl;
-  if (WSRequestBody[0].service === "WATER") {
+  if (WSRequestBody[0].service === serviceConst.WATER) {
     serviceUrl = "ws-calculator/waterCalculator/_estimate";
     querObj[0].waterConnection = WSRequestBody[0];
   } else {
@@ -71,7 +72,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     "dataCalculation",
     dispatch,
     window.location.href,
-    showHideAdhocPopup(state, dispatch),
+    showHideAdhocPopup(state, dispatch, "search-preview"),
   );
 
 };
@@ -188,7 +189,9 @@ export const adhocPopup = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: showHideAdhocPopup
+              callBack: (state, dispatch) => {
+                showHideAdhocPopup(state, dispatch, "search-preview");
+              }
             }
           }
         }
@@ -387,7 +390,9 @@ export const adhocPopup = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: showHideAdhocPopup
+          callBack: (state, dispatch) => {
+            showHideAdhocPopup(state, dispatch, "search-preview");
+          }
         }
       },
       addButton: {

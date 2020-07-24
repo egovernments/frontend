@@ -1,7 +1,8 @@
 import React from "react";
-import { sortByEpoch, getEpochForDate, getTextToLocalMapping } from "../../utils";
+import { sortByEpoch, getEpochForDate } from "../../utils";
 import { Link } from "react-router-dom"
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import { getDomainLink } from "../../../../../ui-utils/commons";
 import "./index.css"
 
 export const searchResults = {
@@ -12,8 +13,9 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: getTextToLocalMapping("Service"),
-        options: {
+        name: "Service",
+        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL",
+	options: {
           filter: false,
           customBodyRender: value => (
             <span style={{ color: '#000000' }}>
@@ -22,30 +24,19 @@ export const searchResults = {
           )
         }
       },
-
-      // {
-      //   name: getTextToLocalMapping("Application No"),
-      //   options: {
-      //     filter: false,
-      //     customBodyRender: value => (
-      //       <Link to="connection-details">
-      //         {value}
-      //       </Link>
-      //     )
-      //   }
-      // },
-      getTextToLocalMapping("Consumer No"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Address"),
-      getTextToLocalMapping("Status"),
-      getTextToLocalMapping("Due"),
-      getTextToLocalMapping("Due Date"),
+      { name: "Consumer No",  labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL" },
+      { name : "Owner Name",  labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
+      { name : "Status", labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL" },
+      { name: "Due", labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
+      { name: "Address", labelKey: "WS_COMMON_TABLE_COL_ADDRESS"},
+      { name: "Due Date", labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL"},
       {
-        name: getTextToLocalMapping("Action"),
-        options: {
+        name: "Action",
+        labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
+	options: {
           filter: false,
           customBodyRender: (value, data) => {
-            if (data.rowData[5] > 0 && data.rowData[5] !== 0) {
+            if (data.rowData[4] !== undefined && typeof data.rowData[4] === 'number') {
               return (
                 // <Link
                 //   to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}
@@ -62,13 +53,7 @@ export const searchResults = {
                   />
                 </div>
               )
-            } else if (data.rowData[5] === 0) {
-              return (
-                <div style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}>
-                  Paid
-                </div>
-              )
-            }
+            } 
             else {
               return ("NA")
             }
@@ -76,21 +61,24 @@ export const searchResults = {
         }
       },
       {
-        name: "tenantId",
+        name: "Tenant Id",
+        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
         options: {
           display: false
         }
       },
       {
-        name: "connectionType",
+        name: "Connection Type",
+        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping(
-      "Search Results for Water & Sewerage Connections"
-    ),
+    title: {
+      labelKey:"WS_HOME_SEARCH_RESULTS_TABLE_HEADING", 
+      labelName:"Search Results for Water & Sewerage Connections"
+    },
     options: {
       filter: false,
       download: false,
@@ -118,6 +106,6 @@ export const searchResults = {
 };
 
 
-const getViewBillDetails = data => {
-  window.location.href = `/citizen/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
+const getViewBillDetails = data => {  
+  window.location.href = `${getDomainLink()}/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
 }

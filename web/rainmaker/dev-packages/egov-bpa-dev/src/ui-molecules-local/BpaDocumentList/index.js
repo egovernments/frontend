@@ -1,24 +1,18 @@
-import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import { 
-  LabelContainer, 
-  TextFieldContainer
-} from "egov-ui-framework/ui-containers";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { 
-  getFileUrlFromAPI, 
-  handleFileUpload, 
-  getTransformedLocale 
+import {
+  getFileUrlFromAPI,
+
+  getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadMultipleFile } from "../../ui-molecules-local";
-import Typography from "@material-ui/core/Typography";
-import MultiDownloadCard from "../MultiDownloadCard";
-
+import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
+import UploadCard from "../UploadCard";
+import "./index.css";
 const themeStyles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
@@ -130,16 +124,42 @@ class BpaDocumentList extends Component {
 
   componentDidMount = () => {
     const {
-      documentsList, 
-      documentDetailsUploadRedux = {}, 
-      prepareFinalObject, bpaDetails
+      documentsList,
+      documentDetailsUploadRedux = {},
+      prepareFinalObject
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
-      docType.cards.forEach(card => {
-        if (card.subCards) {
-          card.subCards.forEach(subCard => {
+        docType.cards.forEach(card => {
+          if (card.subCards) {
+            card.subCards.forEach(subCard => {
+              let oldDocType = get(
+                documentDetailsUploadRedux,
+                `[${index}].documentType`
+              );
+              let oldDocCode = get(
+                documentDetailsUploadRedux,
+                `[${index}].documentCode`
+              );
+              let oldDocSubCode = get(
+                documentDetailsUploadRedux,
+                `[${index}].documentSubCode`
+              );
+              if (
+                oldDocType != docType.code ||
+                oldDocCode != card.name ||
+                oldDocSubCode != subCard.name
+              ) {
+                documentDetailsUploadRedux[index] = {
+                  documentType: docType.code,
+                  documentCode: card.name,
+                  documentSubCode: subCard.name
+                };
+              }
+              index++;
+            });
+          } else {
             let oldDocType = get(
               documentDetailsUploadRedux,
               `[${index}].documentType`
@@ -148,50 +168,24 @@ class BpaDocumentList extends Component {
               documentDetailsUploadRedux,
               `[${index}].documentCode`
             );
-            let oldDocSubCode = get(
-              documentDetailsUploadRedux,
-              `[${index}].documentSubCode`
-            );
-            if (
-              oldDocType != docType.code ||
-              oldDocCode != card.name ||
-              oldDocSubCode != subCard.name
-            ) {
+            if (oldDocType != docType.code || oldDocCode != card.name) {
               documentDetailsUploadRedux[index] = {
                 documentType: docType.code,
                 documentCode: card.name,
-                documentSubCode: subCard.name
+                isDocumentRequired: card.required,
+                isDocumentTypeRequired: card.dropDownValues
+                  ? card.dropDownValues.required
+                  : false
               };
             }
             index++;
-          });
-        } else {
-          let oldDocType = get(
-            documentDetailsUploadRedux,
-            `[${index}].documentType`
-          );
-          let oldDocCode = get(
-            documentDetailsUploadRedux,
-            `[${index}].documentCode`
-          );
-          if (oldDocType != docType.code || oldDocCode != card.name) {
-            documentDetailsUploadRedux[index] = {
-              documentType: docType.code,
-              documentCode: card.name,
-              isDocumentRequired: card.required,
-              isDocumentTypeRequired: card.dropDownValues
-                ? card.dropDownValues.required
-                : false
-            };
           }
-          index++;
-        }
-      });
+        });
     });
     prepareFinalObject("documentDetailsUploadRedux", documentDetailsUploadRedux);
   };
 
-  prepareDocumentsInEmployee = async (appDocumentList, bpaDetails) => {
+  prepareDocumentsInEmployee = async (appDocumentList, bpaDetails, wfState) => {
     let documnts = [];
     if (appDocumentList) {
       Object.keys(appDocumentList).forEach(function (key) {
@@ -213,6 +207,11 @@ class BpaDocumentList extends Component {
             doc.fileStore = docs.fileStoreId;
             doc.fileName = docs.fileName;
             doc.fileUrl = docs.fileUrl;
+            doc.isClickable = true;
+            doc.additionalDetails = {
+              uploadedBy: getLoggedinUserRole(wfState),
+              uploadedTime: new Date().getTime()
+            }
             if (doc.id) {
               doc.id = docs.id;
             }
@@ -223,20 +222,20 @@ class BpaDocumentList extends Component {
 
       let diffDocs = [];
       bpaDetails.documents.forEach(bpaDocs => {
-        if(bpaDocs && bpaDocs.id){
+        if (bpaDocs && bpaDocs.id) {
           diffDocs.push(bpaDocs);
         }
       });
 
-      if(uploadingDocuments && uploadingDocuments.length > 0) {
+      if (uploadingDocuments && uploadingDocuments.length > 0) {
         uploadingDocuments.forEach(tDoc => {
           diffDocs.push(tDoc);
         })
       };
 
-      if(bpaDetails.documents && bpaDetails.documents.length > 0) {
+      if (bpaDetails.documents && bpaDetails.documents.length > 0) {
         bpaDetails.documents = diffDocs;
-        prepareFinalObject("BPA",  bpaDetails.documents);
+        prepareFinalObject("BPA", bpaDetails.documents);
       }
     }
   }
@@ -247,18 +246,23 @@ class BpaDocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus } = this.props;
-    // const fileUrl =  getFileUrlFromAPI(fileStoreId).then(fileUrl)
+    const { prepareFinalObject, documentDetailsUploadRedux, bpaDetails, bpaSendBackAcionStatus, wfState } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
     let appDocumentList = {};
+    let fileObj = {
+      fileName: file.name,
+      fileStoreId,
+      fileUrl: Object.values(fileUrl)[0],
+      isClickable: true,
+      additionalDetails: {
+        uploadedBy: getLoggedinUserRole(wfState),
+        uploadedTime: new Date().getTime()
+      }
+    };
     if (documentDetailsUploadRedux[uploadedDocIndex] &&
       documentDetailsUploadRedux[uploadedDocIndex].documents) {
 
-      documentDetailsUploadRedux[uploadedDocIndex].documents.push({
-        fileName: file.name,
-        fileStoreId,
-        fileUrl: Object.values(fileUrl)[0]
-      });
+      documentDetailsUploadRedux[uploadedDocIndex].documents.push(fileObj);
       appDocumentList = {
         ...documentDetailsUploadRedux
       };
@@ -269,29 +273,25 @@ class BpaDocumentList extends Component {
         [uploadedDocIndex]: {
           ...documentDetailsUploadRedux[uploadedDocIndex],
           documents: [
-            {
-              fileName: file.name,
-              fileStoreId,
-              fileUrl: Object.values(fileUrl)[0]
-            }
+            fileObj
           ]
         }
       }
     }
 
-    prepareFinalObject("documentDetailsUploadRedux", appDocumentList );
+    prepareFinalObject("documentDetailsUploadRedux", appDocumentList);
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if(isEmployee || bpaSendBackAcionStatus) {
-      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
+    if (isEmployee || bpaSendBackAcionStatus) {
+      this.prepareDocumentsInEmployee(appDocumentList, bpaDetails, wfState);
     }
   };
 
   removeDocument = (remDocIndex, docIndex) => {
     const {
-      documentDetailsUploadRedux, 
-      prepareFinalObject, 
-      bpaDetails, 
+      documentDetailsUploadRedux,
+      prepareFinalObject,
+      bpaDetails,
       documentDetailsPreview,
       bpaSendBackAcionStatus
     } = this.props;
@@ -310,7 +310,7 @@ class BpaDocumentList extends Component {
   };
 
   handleChange = (key, event) => {
-    const { documentDetailsUploadRedux, prepareFinalObject, bpaDetails,bpaSendBackAcionStatus } = this.props;
+    const { documentDetailsUploadRedux, prepareFinalObject, bpaDetails, bpaSendBackAcionStatus } = this.props;
     let appDocumentList = {
       ...documentDetailsUploadRedux,
       [key]: {
@@ -321,207 +321,130 @@ class BpaDocumentList extends Component {
     prepareFinalObject(`documentDetailsUploadRedux`, appDocumentList);
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if(isEmployee || bpaSendBackAcionStatus ) {
+    if (isEmployee || bpaSendBackAcionStatus) {
       this.prepareDocumentsInEmployee(appDocumentList, bpaDetails);
     }
   };
 
   getUploadCard = (card, key) => {
-    const { 
-      classes, 
-      documentDetailsUploadRedux, 
-      documentDetailsPreview, 
-      bpaDetails, 
-      verifierDocDetailsUpload, 
+    const {
+      classes,
+      documentDetailsUploadRedux,
+      documentDetailsPreview,
+      bpaDetails,
+      verifierDocDetailsUpload,
       applyScreenMdmsData,
       bpaSendBackAcionStatus,
-       ...rest
-      } = this.props;
+      ...rest
+    } = this.props;
     let jsonPath = `documentDetailsUploadRedux[${key}].dropDownValues.value`;
     let documents;
     let data = [];
     let verifierData = [];
     {
       documentDetailsUploadRedux[key] && documentDetailsUploadRedux && documentDetailsUploadRedux[key].previewdocuments && (
-      documentDetailsUploadRedux[key].previewdocuments.map((docs, documentIndex) => {
-        bpaDetails.documents.map(doc => {
-          if (doc && docs && doc.fileStoreId === docs.fileStoreId) {
-            if (doc.wfState === "SEND_TO_CITIZEN") {
-              docs.createdBy = "BPA Architect"
+        documentDetailsUploadRedux[key].previewdocuments.map((docs, documentIndex) => {
+          bpaDetails.documents.map(doc => {
+            if (doc && docs && doc.fileStoreId === docs.fileStoreId) {
+              if (doc.wfState === "SEND_TO_CITIZEN") {
+                docs.createdBy = "BPA Architect"
+              }
+              else if (doc.wfState === "DOC_VERIFICATION_PENDING") {
+                docs.createdBy = "BPA Document Verifier"
+              }
+              else if (doc.wfState === "FIELDINSPECTION_PENDING") {
+                docs.createdBy = "BPA Field Inspector"
+              }
+              else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
+                docs.createdBy = "BPA Noc Verifier"
+              } else {
+                docs.createdBy = "BPA Architect"
+              }
+              data.push(docs);
             }
-            else if(doc.wfState === "DOC_VERIFICATION_PENDING") {
-              docs.createdBy = "BPA Document Verifier"
-            }
-            else if (doc.wfState === "FIELDINSPECTION_PENDING") {
-              docs.createdBy = "BPA Field Inspector"   
-            }
-            else if (doc.wfState === "NOC_VERIFICATION_PENDING") {
-              docs.createdBy = "BPA Noc Verifier"    
-            } else {
-              docs.createdBy = "BPA Architect"
-            }
-            data.push(docs);
-          }
+          })
         })
-      })
       );
     }
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    if(isEmployee || bpaSendBackAcionStatus ) {
+    if (isEmployee || bpaSendBackAcionStatus) {
       let code;
       card.dropDownValues.menu.map(cards => {
         code = getTransformedLocale(cards.code);
         documentDetailsPreview.map(docs => {
-          if(code === docs.title) {
+          if (code === docs.title) {
             verifierData.push(docs)
           }
         })
       })
     }
-    
-    return (
-      <React.Fragment>      
-        <Grid>    
-          <div>     
-          {
-      data && data.length > 0 ? (
-        <div style = {{
-          display: "flex"
-        }}>
-          <MultiDownloadCard data = {data}  {...rest} />
-        </div>
-        ) : verifierData && verifierData.length > 0 && (
-          <div style = {{
-            display: "flex"
-          }}>
-            <MultiDownloadCard data = {verifierData}  {...rest} />
-          </div>
-        )
-      }
-        </div> 
-      </Grid>
-      <Grid container={true}>
-        <Grid item={true} xs={4} sm={2} md={1} className={classes.iconDiv}>
-          {documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents ? (
-        <div className={classes.documentSuccess}>
-              <Icon>
-                <i class="material-icons">done</i>
-              </Icon>
-            </div>
-        ) : (
-        <div className={classes.documentIcon}>
-              <span>{key + 1}</span>
-            </div>
-        )}
-        </Grid>
-        <Grid
-      item={true}
-      xs={10}
-      sm={5}
-      md={4}
-      align="left"
-      className={classes.descriptionDiv}
-      >
-          <LabelContainer
-      labelKey={getTransformedLocale(card.name)}
-      style={styles.documentName}
-      />
-          {card.required && requiredIcon}
-          <Typography variant="caption">
-            <LabelContainer
-      labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
-      />
-          </Typography>
-        </Grid>
-        <Grid item={true} xs={12} sm={6} md={4}>
-          {card.dropDownValues && (
-      <TextFieldContainer
-      select={true}
-      label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
-      placeholder={{ labelKey: card.dropDownValues.label }}
-      data={card.dropDownValues.menu}
-      optionValue="code"
-      optionLabel="label"
-      autoSelect={true}
-      required={card.required}
-      onChange={event => this.handleChange(key, event)}
-      jsonPath={jsonPath}
-      />
-      )}
-        </Grid>
-        <Grid
-      item={true}
-      xs={12}
-      sm={12}
-      // md={6}
-      className={classes.fileUploadDiv}
-      >
-          <UploadMultipleFile
-      classes={this.props.classes}
-      handleFileUpload={e => 
-        handleFileUpload(e, this.handleDocument, this.props)
-      }
-      uploaded={
-      documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
-        ? true
-        : false
-      }
-      removeDocument={() => this.removeDocument(key)}
-      documents={
-      documentDetailsUploadRedux[key] && documentDetailsUploadRedux[key].documents
-      }
-      onButtonClick={() => this.onUploadClick(key)}
-      inputProps={this.props.inputProps}
-      buttonLabel={this.props.buttonLabel}
-      id={`doc-${key+1}`}
-      />
-        </Grid>
-      </Grid>
-      </React.Fragment>
-      );
-  };
 
+    if (documentDetailsUploadRedux[key]) {
+      card.documents = documentDetailsUploadRedux[key].documents;
+      let mergedDropDownValue = { ...card.dropDownValues, ...documentDetailsUploadRedux[key].dropDownValues }
+      card.dropDownValues = mergedDropDownValue;
+    }
+    return (
+      <React.Fragment>
+        <UploadCard
+          docItem={card}
+          docIndex={key}
+          key={key.toString()}
+          handleDocument={this.handleDocument}
+          removeDocument={this.removeDocument}
+          onUploadClick={this.onUploadClick}
+          handleFileUpload={this.handleFileUpload}
+          handleChange={this.handleChange}
+          uploadedDocIndex={this.state.uploadedDocIndex}
+          toggleEditClick={this.toggleEditClick}
+          jsonPath={`documentDetailsUploadRedux`}
+          specificStyles="bpa_doc_upload_btn"
+          {...rest}
+        />
+      </React.Fragment>
+    );
+  };
   render() {
     const { classes, documentsList } = this.props;
     let index = 0;
     return (
       <div>
         {documentsList &&
-      documentsList.map(container => {
-        return (
-          <div>
-                <LabelContainer
-          labelKey={getTransformedLocale(container.title)}
-          style={styles.documentTitle}
-          />
-                {container.cards.map(card => {
+          documentsList.map(container => {
             return (
-              <div className={classes.documentContainer}>
+              <div>
+                <LabelContainer
+                  labelKey={getTransformedLocale(container.title)}
+                  style={styles.documentTitle}
+                />
+                {container.cards.map(card => {
+                  return (
+                    <div className={classes.documentContainer}>
                       {card.hasSubCards && (
-              <LabelContainer
-              labelKey={card.name}
-              style={styles.documentTitle}
-              />
-              )}
+                        <LabelContainer
+                          labelKey={card.name}
+                          style={styles.documentTitle}
+                        />
+                      )}
                       {card.hasSubCards &&
-              card.subCards.map(subCard => {
-                return (
-                  <div className={classes.documentSubCard}>
+                        card.subCards.map(subCard => {
+                          return (
+                            <div className={classes.documentSubCard}>
                               {this.getUploadCard(subCard, index++)}
                             </div>
-                  );
-              })}
+                          );
+                        })}
                       {!card.hasSubCards && (
-              <div>{this.getUploadCard(card, index++)}</div>
-              )}
+                        <div>{this.getUploadCard(card, index++)}</div>
+                      )}
                     </div>
-              );
-          })}
+                  );
+                })}
               </div>
-          );
-      })}
+            );
+          })}
       </div>
-      );
+    );
   }
 }
 
@@ -547,14 +470,18 @@ const mapStateToProps = state => {
     "BPA",
     {}
   );
-  let bpaSendBackAcionStatus = get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
-  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus };
+  const wfState = get(
+    screenConfiguration.preparedFinalObject.applicationProcessInstances,
+    "state"
+  );
+  let bpaSendBackAcionStatus = get(bpaDetails, "status") && get(bpaDetails, "status").includes("CITIZEN_ACTION_PENDING");
+  return { documentDetailsUploadRedux, documentDetailsPreview, moduleName, bpaDetails, bpaSendBackAcionStatus, wfState };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    prepareFinalObject: (jsonPath, value) => 
-    dispatch(prepareFinalObject(jsonPath, value))
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 

@@ -7,46 +7,98 @@ import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
+import "./index.css";
+import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils/api";
+import commonConfig from "config/common.js";
+
+const getMDMSData = (action, dispatch) => {
+  const moduleDetails = [
+    {
+      moduleName: "ws-services-masters",
+      masterDetails: [
+        { name: "Documents" }
+      ] 
+    }
+  ]
+  try {
+    getRequiredDocData(action, dispatch, moduleDetails)
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getMDMSAppType =async (dispatch) => {
+  // getMDMS data for ApplicationType
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+         {
+            moduleName: "ws-services-masters", masterDetails: [
+              { name: "ApplicationType" }
+            ]
+          }
+        ]
+      }
+    };
+    try {
+      let applicationType = [];
+      let payload = null;
+       payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);       
+        if(payload && payload.MdmsRes['ws-services-masters'] && payload.MdmsRes['ws-services-masters'].ApplicationType !== undefined){
+          payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code.replace(/_/g,' '), name: obj.name, businessService:obj.businessService}));          
+          applicationType.forEach(type=>getBusinessService(type.businessService,dispatch))
+          dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
+        }
+    } catch (e) { console.log(e); }
+  }
 
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
 
-const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("WaterConnection", []));
-  dispatch(prepareFinalObject("SewerageConnection", []));
-  dispatch(prepareFinalObject("applyScreen", {}));
-  dispatch(prepareFinalObject("searchScreen", {}));
-  window.location.href = "/employee/wns/apply";
-};
+const getBusinessService=async(businessService, dispatch)=>{
+  const queryObject = [
+    { key: "tenantId", value: getTenantId() },
+    { key: "businessServices", value:businessService } 
+  ];
+  const payload = await httpRequest(
+    "post",
+    "egov-workflow-v2/egov-wf/businessservice/_search",
+    "_search",
+    queryObject
+  );
+  if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1") {
 
-const queryObject = [
-  { key: "tenantId", value: 'pb.amritsar' },
-  { key: "businessServices", value: 'NewWS1' }
-];
+    const applicationStatus=commonGetAppStatus(payload);
+        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusNew", applicationStatus));
+    
+    }else{
+      if (payload.BusinessServices[0].businessService === "ModifyWSConnection" || payload.BusinessServices[0].businessService === "ModifySWConnection") {
+        const applicationStatus=commonGetAppStatus(payload);
+          dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatusModify", applicationStatus));
+      }
+    }
+}
 
+const commonGetAppStatus=(payload)=>{
+  const { states } = payload.BusinessServices[0] || [];
+  if (states && states.length > 0) {
+    const status = states.map((item) => { return { code: item.applicationStatus } });
+    return status.filter(item => item.code != null);
+  }
+
+}
 const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
-  beforeInitScreen:  (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch) => {
+    getMDMSData(action, dispatch);
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);
-    setBusinessServiceDataToLocalStorage(queryObject,dispatch);
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    if(businessServiceData[0].businessService==="NewWS1"||businessServiceData[0].businessService==="NewSW1" ){
-      const data = find(businessServiceData, { businessService: businessServiceData[0].businessService });
-      const { states } = data || [];  
-      if (states && states.length > 0) {
-        const status = states.map((item) => { return { code: item.state } });
-        const applicationStatus = status.filter(item => item.code != null);
-        dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationStatus", applicationStatus));
-      }
-    }
-    const applicationType = [{ code: "New Water connection", code: "New Water connection" }, { code: "New Sewerage Connection", code: "New Sewerage Connection" }]
-    dispatch(prepareFinalObject("applyScreenMdmsData.searchScreen.applicationType", applicationType));
-
+    getMDMSAppType(dispatch);
     return action;
   },
   components: {
@@ -107,9 +159,16 @@ const employeeSearchResults = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  pageResetAndChange(state, dispatch);
+                  showHideAdhocPopup(state, dispatch, "search");
+
                 }
-              }
+              },
+              // onClickDefination: {
+              //   action: "condition",
+              //   callBack: (state, dispatch) => {
+              //     pageResetAndChange(state, dispatch);
+              //   }
+              // }
             }
           }
         },
@@ -117,6 +176,19 @@ const employeeSearchResults = {
         breakAfterSearch: getBreak(),
         searchResults,
         searchApplicationResults
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-wns",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: "search"
+      },
+      children: {
+        popup: {}
       }
     }
   }

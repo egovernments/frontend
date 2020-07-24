@@ -140,6 +140,7 @@ const processDemand = async (state, dispatch) => {
 };
 
 const createDemand = async (state, dispatch) => {
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
@@ -149,7 +150,7 @@ const createDemand = async (state, dispatch) => {
 if(Object.keys(demands[0].payer).length === 0) {
   demands[0].payer = null;
 }
-  set(demands[0], "consumerType", demands[0].businessService);
+  // set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {
       if (!item.taxAmount) {

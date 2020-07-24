@@ -5,6 +5,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { formWizardConstants, getPurpose, PROPERTY_FORM_PURPOSE, routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -12,10 +14,9 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import React from "react";
 import { connect } from "react-redux";
 import store from "ui-redux/store";
-import { generatePdfFromDiv } from "../../../utils/PTCommon";
-import PTInformation from "../AssessmentList/components/PTInformation";
 import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
+import PTInformation from "../AssessmentList/components/PTInformation";
 import "./index.css";
 
 class PTAcknowledgement extends React.Component {
@@ -36,11 +37,19 @@ class PTAcknowledgement extends React.Component {
       { key: "tenantId", value: tenantId },
     ]);
     this.setState({ propertyId: propertyId });
+    loadUlbLogo(tenantId);
   };
   onGoHomeClick = () => {
     process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
   };
-
+  download() {
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
+  }
+  print() {
+    const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, 'print');
+  }
   onAssessPayClick = () => {
     const propertyId = getQueryArg(window.location.href, "propertyId");
     const tenant = getQueryArg(window.location.href, "tenantId");
@@ -120,8 +129,8 @@ class PTAcknowledgement extends React.Component {
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        generatePdfFromDiv("download", propertyId, "#property-review-form");
-
+        // generatePdfFromDiv("download", propertyId, "#property-review-form");
+        this.download();
         //this.downloadAcknowledgementForm();
         console.log("Download");
       },
@@ -131,7 +140,8 @@ class PTAcknowledgement extends React.Component {
     let tlCertificatePrintObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        generatePdfFromDiv("print", propertyId, "#property-review-form");
+        this.print();
+        // generatePdfFromDiv("print", propertyId, "#property-review-form");
         //console.log("Print");
       },
       leftIcon: "book",
@@ -156,8 +166,8 @@ class PTAcknowledgement extends React.Component {
     let ptSubMsg = {};
     let Button1 = { name: "", onClick: "", visibility: false };
     let Button2 = { name: "", onClick: "", visibility: false };
-    let downloadButton = { menu: downloadMenu, onClick: "", visibility: true };
-    let printButton = { menu: printMenu, onClick: "", visibility: true };
+    let downloadButton = { menu: downloadMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
+    let printButton = { menu: printMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let statusIcon = {};
     let ptIDLabel = {};
     if (purpose === PROPERTY_FORM_PURPOSE.CREATE && status === "success") {
@@ -563,8 +573,11 @@ const mapStateToProps = (state, ownProps) => {
   const { documentsUploaded } = selPropertyDetails || [];
   const { generalMDMSDataById } = common;
   const purpose = getQueryArg(window.location.href, "purpose");
+  const { preparedFinalObject } = screenConfiguration;
+  const { UlbLogoForPdf = '' } = preparedFinalObject;
   return {
     propertiesById,
+    selPropertyDetails,
     common,
     app,
     generalMDMSDataById,

@@ -147,39 +147,22 @@ export const citizenApplication = getCommonCard({
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
             jsonPath: "searchScreen.oldConnectionNumber"
-        }),
-        //   applicationNo: getTextField({
-        //     label: {
-        //       labelKey: "WS_MYCONNECTIONS_APPLICATION_NO"
-        //     },
-        //     placeholder: {
-        //       labelKey: "WS_SEARCH_CONNECTIONS_APPLICATION_NO_PLACEHOLDER"
-        //     },
-        //     gridDefination: {
-        //       xs: 12,
-        //       sm: 4
-        //     },
-        //     required: false,
-        //     pattern: /^[a-zA-Z0-9-]*$/i,
-        //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        //     jsonPath: "searchScreen.fireNOCNumber"
-        //   }),
+        }),        
     }),
     button: getCommonContainer({
         buttonContainer: getCommonContainer({
             resetButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 6,
+                    xs: 12,
                     sm: 6
-                    // align: "center"
                 },
                 props: {
                     variant: "outlined",
                     style: {
                         color: "rgba(0, 0, 0, 0.6000000238418579)",
                         borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
-                        width: "70%",
+                        width: "220px",
                         height: "48px",
                         margin: "8px",
                         float: "right"
@@ -198,9 +181,8 @@ export const citizenApplication = getCommonCard({
             searchButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 6,
+                    xs: 12,
                     sm: 6,
-                    // align: "center"
                 },
                 props: {
                     variant: "contained",
@@ -209,7 +191,7 @@ export const citizenApplication = getCommonCard({
                         margin: "8px",
                         backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
                         borderRadius: "2px",
-                        width: "70%",
+                        width: "220px",
                         height: "48px"
                     }
                 },

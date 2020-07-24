@@ -1,4 +1,5 @@
 import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
 import {
@@ -12,7 +13,8 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels
+  getTransformedLocalStorgaeLabels,
+  getStatusKey
 } from "egov-ui-framework/ui-utils/commons";
 
 const getLocalTextFromCode = localCode => {
@@ -106,50 +108,72 @@ export const textToLocalMapping = {
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
-    // data: [],
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("NOC No"),
-      getTextToLocalMapping("NOC Type"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
       {
-        name: getTextToLocalMapping("Status"),
+        labelName: "Application No",
+        labelKey: "TL_COMMON_TABLE_COL_APP_NO",
         options: {
           filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
+          customBodyRender: (value, tableMeta) => (
+              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
           )
         }
       },
       {
-        name: "tenantId",
+        labelName: "NOC No",
+        labelKey: "NOC_COMMON_TABLE_COL_NOC_NO_LABEL"
+      },
+      {
+        labelName: "NOC Type",
+        labelKey: "NOC_TYPE_LABEL"
+      },
+      {
+        labelName: "Owner Name",
+        labelKey: "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL"
+      },
+      {
+        labelName: "Application Date",
+        labelKey: "NOC_COMMON_TABLE_COL_APP_DATE_LABEL"
+      },
+      {
+        labelName: "Status",
+        labelKey: "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <LabelContainer
+              style={
+                value === "APPROVED" ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
+          )
+        }
+      },
+      {
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+    title: {
+      labelName: "Search Results for Fire-NOC Applications",
+      labelKey: "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING"
+    },
+    rows : "",
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        onRowClick(row);
-      }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",
@@ -183,29 +207,3 @@ const onRowClick = rowData => {
       break;
   }
 };
-
-// const onRowClick = rowData => {
-//   let appendUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//   switch (rowData[get(textToLocalMapping, "Status")]) {
-//     case get(textToLocalMapping, "APPLIED"):
-//     case get(textToLocalMapping, "PENDINGPAYMENT"):
-//     case get(textToLocalMapping, "APPROVED"):
-//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
-//     case get(textToLocalMapping, "FIELDINSPECTION"):
-//     case get(textToLocalMapping, "REJECTED"):
-//     case get(textToLocalMapping, "CANCELLED"):
-//     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/fire-noc/search-preview?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData["tenantId"]}`;
-
-//     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/fire-noc/apply?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData.tenantId}`;
-
-//     default:
-//       return `${appendUrl}/fire-noc/search`;
-//   }
-// };

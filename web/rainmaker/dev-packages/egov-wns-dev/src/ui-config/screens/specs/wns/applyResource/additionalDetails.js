@@ -21,7 +21,9 @@ import { getHeaderSideText } from "../../utils";
 import get from 'lodash/get';
 import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
-
+import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
+import { isModifyMode } from "../../../../../ui-utils/commons";
+let isMode = isModifyMode();
 
 const getPlumberRadioButton = {
   uiFramework: "custom-containers-local",
@@ -39,7 +41,41 @@ const getPlumberRadioButton = {
   },
   type: "array"
 };
-
+export const triggerUpdateByKey = (state, key, value, dispatch) => {
+  if(dispatch == "set"){
+    set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.ws-services-masters.waterSource.${key}`, value);
+  } else {
+    dispatch(prepareFinalObject( `DynamicMdms.ws-services-masters.waterSource.${key}`, value ));
+  }
+}
+export const updateWaterSource = async ( state, dispatch ) => {  
+  const waterSource = get( state, "screenConfiguration.preparedFinalObject.WaterConnection[0].waterSource", null);
+  const waterSubSource = get( state, "screenConfiguration.preparedFinalObject.WaterConnection[0].waterSubSource", null);
+  let modValue = waterSource + "." + waterSubSource;
+  triggerUpdateByKey(state, 'waterSourceType', waterSource, 'set');
+  triggerUpdateByKey(state, 'waterSubSource', modValue, 'set');
+  triggerUpdateByKey(state, 'waterSubSourceTransformed', getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.ws-services-masters.waterSource.waterSourceTransformed.${waterSource}`, [])) , dispatch);
+  triggerUpdateByKey(state, 'waterSourceType', waterSource , dispatch);
+  triggerUpdateByKey(state, 'waterSubSource', modValue , dispatch);
+} 
+const waterSourceTypeChange = (reqObj) => {
+  try {
+      let { dispatch, value } = reqObj;
+      dispatch(prepareFinalObject("WaterConnection[0].waterSource", value));
+      dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", ''));
+  } catch (e) {
+    console.log(e);
+  }
+}
+const waterSubSourceChange = (reqObj) => {
+  try {
+      let { dispatch, value } = reqObj;
+      let rowValue = value.split(".");
+      dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", rowValue[1]));
+  } catch (e) {
+    console.log(e);
+  }
+}
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
     labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
@@ -81,62 +117,26 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
-
-      waterSourceType: {
-        ...getSelectField({
-          label: { labelKey: "WS_SERV_DETAIL_WATER_SOURCE" },
-          placeholder: { labelKey: "WS_ADDN_DETAILS_WARER_SOURCE_PLACEHOLDER" },
-          required: false,
-          sourceJsonPath: "applyScreenMdmsData.ws-services-masters.waterSource",
-          gridDefination: { xs: 12, sm: 6 },
-          errorMessage: "ERR_INVALID_BILLING_PERIOD",
-          jsonPath: "applyScreen.waterSource"
-        }),
-        beforeFieldChange: async (action, state, dispatch) => {
-          if (action.value === "GROUND") {
-            dispatch(
-              prepareFinalObject(
-                "waterSubSourceForSelectedWaterSource",
-                get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "applyScreenMdmsData.ws-services-masters.GROUND"
-                )
-              )
-            )
-          } else if (action.value === "SURFACE") {
-            dispatch(
-              prepareFinalObject(
-                "waterSubSourceForSelectedWaterSource",
-                get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "applyScreenMdmsData.ws-services-masters.SURFACE"
-                )
-              )
-            )
-          } else if (action.value === "BULKSUPPLY") {
-            dispatch(
-              prepareFinalObject(
-                "waterSubSourceForSelectedWaterSource",
-                get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "applyScreenMdmsData.ws-services-masters.BULKSUPPLY"
-                )
-              )
-            )
-          }
+      dynamicMdmsWaterSource : {
+        uiFramework: "custom-containers",
+        componentPath: "DynamicMdmsContainer",
+        props: {
+          dropdownFields: [
+            {
+              key : 'waterSourceType',
+              callBack: waterSourceTypeChange 
+            },
+            {
+              key : 'waterSubSource',
+              callBack: waterSubSourceChange 
+            }
+          ],
+          moduleName: "ws-services-masters",
+          masterName: "waterSource",
+          rootBlockSub : 'waterSource',
+          callBackEdit: updateWaterSource
         }
       },
-
-      waterSubSource: getSelectField({
-        label: { labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" },
-        placeholder: { labelKey: "WS_ADDN_DETAILS_WARER_SUB_SOURCE_PLACEHOLDER" },
-        required: false,
-        sourceJsonPath: "waterSubSourceForSelectedWaterSource",
-        gridDefination: { xs: 12, sm: 6 },
-        errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "applyScreen.waterSubSource"
-      }),
-
       pipeSize: getSelectField({
         label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
@@ -327,14 +327,39 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.additionalDetails.initialMeterReading"
       })
     })
+  }),
+  modificationsEffectiveFrom : getCommonGrayCard({
+    subHeader: getCommonTitle({
+      labelKey: "WS_MODIFICATIONS_EFFECTIVE_FROM"
+    }),
+    modificationEffectiveDate: getCommonContainer({
+      connectionExecutionDate: getDateField({
+        label: { labelName: "Modifications Effective Date", labelKey: "MODIFICATIONS_EFFECTIVE_DATE" },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Date"),
+        errorMessage: "ERR_INVALID_DATE",
+        jsonPath: "applyScreen.dateEffectiveFrom",
+        props: {
+          inputProps: {
+            min: getTodaysDateInYMD()
+          }
+        }
+      }),
+      
+    })
   })
 });
 
 const showHideFeilds = (dispatch, value) => {
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading`,
       "visible",
       value
     )
@@ -342,7 +367,7 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate`,
       "visible",
       value
     )
@@ -350,7 +375,7 @@ const showHideFeilds = (dispatch, value) => {
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID",
+      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID`,
       "visible",
       value
     )

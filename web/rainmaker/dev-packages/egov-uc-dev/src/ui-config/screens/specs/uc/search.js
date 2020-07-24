@@ -12,6 +12,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -153,6 +154,7 @@ export default ucSearchAndResult;
 
 const openNewCollectionForm = (state, dispatch) => {
   dispatch(prepareFinalObject("Demands", []));
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/uc/newCollection`

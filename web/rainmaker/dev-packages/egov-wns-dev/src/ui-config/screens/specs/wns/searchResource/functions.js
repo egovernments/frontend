@@ -1,12 +1,10 @@
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, fetchBill, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch, getTextToLocalMapping, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { findAndReplace } from "../../../../../ui-utils/commons";
-
+import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
+import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
@@ -22,7 +20,7 @@ export const searchApiCall = async (state, dispatch) => {
 }
 
 const renderSearchConnectionTable = async (state, dispatch) => {
-  let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
+  let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
@@ -61,45 +59,100 @@ const renderSearchConnectionTable = async (state, dispatch) => {
       }
     }
     try {
+      let waterMeteredDemandExipryDate = 0;
+      let waterNonMeteredDemandExipryDate = 0;
+      let sewerageNonMeteredDemandExpiryDate = 0;
+      let payloadbillingPeriod="";
+      try {
+        // Get the MDMS data for billingPeriod
+        let mdmsBody = {
+          MdmsCriteria: {
+            tenantId: getTenantIdCommon(),
+            moduleDetails: [
+              { moduleName: "ws-services-masters", masterDetails: [{ name: "billingPeriod" }]},
+              { moduleName: "sw-services-calculation", masterDetails: [{ name: "billingPeriod" }]}
+            ]
+          }
+        }
+        //Read metered & non-metered demand expiry date and assign value.
+        payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);        
+        console.log(payloadbillingPeriod);
+      } catch (err) { console.log(err) }
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
       try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
-      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e }) : []
-      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e }) : [];
+      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
+      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
-        let queryObjectForWaterFetchBill;
-        if (element.service === "WATER") {
-          queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
-        } else {
-          queryObjectForWaterFetchBill = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
-        }
-        let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
         if (element.connectionNo !== "NA" && element.connectionNo !== null) {
+          let queryObjectForWaterFetchBill;
+          if (element.service === serviceConst.WATER) {
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+          } else {
+            queryObjectForWaterFetchBill = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
+          }
+
+          if (element.service === serviceConst.WATER && 
+              payloadbillingPeriod && 
+              payloadbillingPeriod.MdmsRes['ws-services-masters'] && 
+              payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod !== undefined && 
+              payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod  !== null) {
+              payloadbillingPeriod.MdmsRes['ws-services-masters'].billingPeriod.forEach(obj => {
+                if(obj.connectionType === 'Metered') {
+                  waterMeteredDemandExipryDate = obj.demandExpiryDate;
+                } else if (obj.connectionType === 'Non Metered') {
+                  waterNonMeteredDemandExipryDate = obj.demandExpiryDate;
+                }
+              }); 
+          }
+          if (element.service === serviceConst.SEWERAGE && 
+              payloadbillingPeriod && 
+              payloadbillingPeriod.MdmsRes['sw-services-calculation'] && 
+              payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== undefined && 
+              payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod  !== null) {
+              payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod.forEach(obj => {
+              if (obj.connectionType === 'Non Metered') {
+                sewerageNonMeteredDemandExpiryDate = obj.demandExpiryDate;
+              }
+            }); 
+          }
+
+          let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
           billResults ? billResults.Bill.map(bill => {
+            let updatedDueDate = 0;
+            if(element.service === serviceConst.WATER) {
+              updatedDueDate = (element.connectionType === 'Metered' ?
+              (bill.billDetails[0].toPeriod+waterMeteredDemandExipryDate) :
+              (bill.billDetails[0].toPeriod+waterNonMeteredDemandExipryDate));
+            } else if (element.service === serviceConst.SEWERAGE) {
+              updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
+            }
             finalArray.push({
               due: bill.totalAmount,
-              dueDate: bill.billDetails[0].expiryDate,
+              dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
-              name: element.property.owners[0].name,
+              name: (element.property)?element.property.owners[0].name:'',
               status: element.status,
               address: handleAddress(element),
-              connectionType: element.connectionType
+              connectionType: element.connectionType,
+              tenantId:element.tenantId
             })
           }) : finalArray.push({
             due: 'NA',
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
-            name: element.property.owners[0].name,
+            name: (element.property)?element.property.owners[0].name:'',
             status: element.status,
             address: handleAddress(element),
-            connectionType: element.connectionType
+            connectionType: element.connectionType,
+            tenantId:element.tenantId
           })
         }
 
@@ -110,7 +163,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
 }
 
 const renderSearchApplicationTable = async (state, dispatch) => {
-  let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
+  let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
@@ -143,6 +196,8 @@ const renderSearchApplicationTable = async (state, dispatch) => {
           queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "daystart") });
         } else if (key === "toDate") {
           queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "dayend") });
+        } else if (key === "applicationType") {
+          queryObject.push({ key: key, value: searchScreenObject[key].replace(/ /g,'_')});
         } else {
           queryObject.push({ key: key, value: searchScreenObject[key].trim() });
         }
@@ -150,48 +205,91 @@ const renderSearchApplicationTable = async (state, dispatch) => {
     }
     try {
       let getSearchResult, getSearchResultForSewerage;
-      if (searchScreenObject.applicationType === "New Water connection") {
+      if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('water')) {
         getSearchResult = getSearchResults(queryObject)
-      } else if (searchScreenObject.applicationType === "New Sewerage Connection") {
+      } else if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('sewerage')) {
         getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       } else {
         getSearchResult = getSearchResults(queryObject),
-          getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+        getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       }
       let finalArray = [];
       let searchWaterConnectionResults, searcSewerageConnectionResults;
       try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
       try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
-      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e }) : []
-      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e }) : [];
+      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
+      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
       let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+
+      let appNo = "";
+      let combinedWFSearchResults = [];
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = findAndReplace(combinedSearchResults[i], null, "NA");
-        if (element.property.owners &&
-          element.property.owners !== "NA" &&
-          element.property.owners !== null &&
-          element.property.owners.length > 1) {
-          let ownerName = "";
-          element.property.owners.forEach(ele => { ownerName = ownerName + ", " + ele.name })
-          finalArray.push({
-            connectionNo: element.connectionNo,
-            applicationNo: element.applicationNo,
-            name: ownerName.slice(2),
-            applicationStatus: element.applicationStatus,
-            address: handleAddress(element),
-            service: element.service,
-            connectionType: element.connectionType
-          })
-        } else {
-          finalArray.push({
-            connectionNo: element.connectionNo,
-            applicationNo: element.applicationNo,
-            name: element.property.owners[0].name,
-            applicationStatus: element.applicationStatus,
-            address: handleAddress(element),
-            service: element.service,
-            connectionType: element.connectionType
-          })
+        if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
+          appNo = appNo + element.applicationNo + ",";
+        }
+        if(i % 50 === 0 || i === (combinedSearchResults.length-1)) {
+          //We are trying to fetch 50 WF objects at a time
+          appNo = appNo.substring(0, appNo.length-1);
+          const queryObj = [
+            { key: "businessIds", value: appNo },
+            { key: "history", value: true },
+            { key: "tenantId", value: getTenantIdCommon() }
+          ];
+          let wfResponse = await getWorkFlowData(queryObj);
+          if(wfResponse !== null && wfResponse.ProcessInstances !== null) {
+            combinedWFSearchResults = combinedWFSearchResults.concat(wfResponse.ProcessInstances);
+          }
+          appNo = "";
+        }
+      }
+      /*const queryObj = [
+        { key: "businessIds", value: appNo },
+        { key: "history", value: true },
+        { key: "tenantId", value: getTenantIdCommon() }
+      ];
+      let Response = await getWorkFlowData(queryObj);*/
+      for (let i = 0; i < combinedSearchResults.length; i++) {
+        let element = findAndReplace(combinedSearchResults[i], null, "NA");
+        let appStatus;
+        if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
+          appStatus = combinedWFSearchResults.filter(item => item.businessId.includes(element.applicationNo))[0]
+          if (appStatus !== undefined && appStatus.state !== undefined) {
+            appStatus = appStatus.state.applicationStatus;            
+          }else{
+            appStatus = "NA";
+          }
+          if (element.property && element.property.owners &&
+            element.property.owners !== "NA" &&
+            element.property.owners !== null &&
+            element.property.owners.length > 1) {
+            let ownerName = "";
+            element.property.owners.forEach(ele => { ownerName = ownerName + ", " + ele.name })
+
+            finalArray.push({
+              connectionNo: element.connectionNo,
+              applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
+              name: ownerName.slice(2),
+              applicationStatus: appStatus,
+              address: handleAddress(element),
+              service: element.service,
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
+            })
+          } else {
+            finalArray.push({
+              connectionNo: element.connectionNo,
+              applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
+              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:"",
+              applicationStatus: appStatus,
+              address: handleAddress(element),
+              service: element.service,
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
+            })
+          }
         }
       }
       showApplicationResults(finalArray, dispatch)
@@ -201,11 +299,15 @@ const renderSearchApplicationTable = async (state, dispatch) => {
 
 const handleAddress = (element) => {
   let city = (
+    element.property &&
+    element.property !== "NA" &&
     element.property.address !== undefined &&
     element.property.address.city !== undefined &&
     element.property.address.city !== null
   ) ? element.property.address.city : "";
   let localityName = (
+    element.property &&
+    element.property !== "NA" &&
     element.property.address.locality !== undefined &&
     element.property.address.locality !== null &&
     element.property.address.locality.name !== null
@@ -224,38 +326,42 @@ const showHideApplicationTable = (booleanHideOrShow, dispatch) => {
 
 const showConnectionResults = (connections, dispatch) => {
   let data = connections.map(item => ({
-    [getTextToLocalMapping("Service")]: item.service,
-    [getTextToLocalMapping("Consumer No")]: item.connectionNo,
-    [getTextToLocalMapping("Owner Name")]: item.name,
-    [getTextToLocalMapping("Status")]: item.status,
-    [getTextToLocalMapping("Due")]: item.due,
-    [getTextToLocalMapping("Address")]: item.address,
-    [getTextToLocalMapping("Due Date")]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
-    ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["connectionType"]: item.connectionType
+    ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
+    ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+    ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
+    ["WS_COMMON_TABLE_COL_STATUS_LABEL"]: item.status,
+    ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
+    ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
+    ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }));
   dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
-  dispatch(handleField("search", "components.div.children.searchResults", "props.title",
-    `${getTextToLocalMapping("Search Results for Water & Sewerage Connections")} (${connections.length})`
+  dispatch(handleField("search", "components.div.children.searchResults", "props.rows",
+    connections.length
   ));
   showHideConnectionTable(true, dispatch);
 }
 
+const getApplicationType = (applicationType) => {
+  return (applicationType)?applicationType.split("_").join(" "):applicationType;
+}
 const showApplicationResults = (connections, dispatch) => {
   let data = connections.map(item => ({
-    [getTextToLocalMapping("Consumer No")]: item.connectionNo,
-    [getTextToLocalMapping("Application No")]: item.applicationNo,
-    [getTextToLocalMapping("Application Type")]: item.service === "WATER" ? "New Water Connection" : "New Sewerage Connection",
-    [getTextToLocalMapping("Owner Name")]: item.name,
-    [getTextToLocalMapping("Application Status")]: item.applicationStatus.split("_").join(" "),
-    [getTextToLocalMapping("Address")]: item.address,
-    ["tenantId"]: JSON.parse(getUserInfo()).tenantId,
-    ["service"]: item.service,
-    ["connectionType"]: item.connectionType,
+    ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
+    ["WS_COMMON_TABLE_COL_APP_NO_LABEL"]: item.applicationNo,
+    ["WS_COMMON_TABLE_COL_APP_TYPE_LABEL"]: getApplicationType(item.applicationType),
+    ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: item.name,
+    ["WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL"]: item.applicationStatus.split("_").join(" "),
+    ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
+    ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
+    ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
   }));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
-  dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.title",
-    `${getTextToLocalMapping("Search Results for Water & Sewerage Application")} (${connections.length})`
+  dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.rows",
+    connections.length
   ));
   showHideApplicationTable(true, dispatch);
 }
+

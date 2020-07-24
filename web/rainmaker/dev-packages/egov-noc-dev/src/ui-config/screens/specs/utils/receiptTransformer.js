@@ -1,19 +1,11 @@
-import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTransformedLocale, getTranslatedLabel, getUlbGradeLabel, getUserDataFromUuid, transformById } from "egov-ui-framework/ui-utils/commons";
+import { getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import store from "../../../../ui-redux/store";
-import { getMdmsData, getReceiptData, getFinancialYearDates } from "../utils";
-import {
-  getLocalization,
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getUlbGradeLabel,
-  getTranslatedLabel,
-  transformById,
-  getTransformedLocale,
-  getUserDataFromUuid
-} from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { getReceiptData, searchMdmsData } from "../utils";
+import commonConfig from "config/common.js";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -53,7 +45,7 @@ export const getMessageFromLocalization = code => {
 export const loadUlbLogo = tenantid => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
     canvas.height = this.height;
@@ -64,7 +56,7 @@ export const loadUlbLogo = tenantid => {
     );
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -285,29 +277,29 @@ export const loadReceiptData = async (consumerCode, tenant) => {
   ];
   let response = await getReceiptData(queryObject);
 
-  if (response && response.Receipt && response.Receipt.length > 0) {
+  if (response && response.Payments && response.Payments.length > 0) {
     data.receiptNumber = nullToNa(
-      get(response, "Receipt[0].Bill[0].billDetails[0].receiptNumber", "NA")
+      get(response, "Payments[0].paymentDetails[0].receiptNumber", "NA")
     );
     data.amountPaid = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].amountPaid",
+      "Payments[0].paymentDetails[0].totalAmountPaid",
       0
     );
     data.totalAmount = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].totalAmount",
+      "Payments[0].paymentDetails[0].totalDue",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
     data.paymentMode = nullToNa(
-      get(response, "Receipt[0].instrument.instrumentType.name", "NA")
+      get(response, "Payments[0].paymentMode", "NA")
     );
     data.transactionNumber = nullToNa(
-      get(response, "Receipt[0].instrument.transactionNumber", "NA")
+      get(response, "Payments[0].transactionNumber", "NA")
     );
-    data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
-    data.branchName = get(response, "Receipt[0].instrument.branchName", null);
+    data.bankName = get(response, "Payments[0].bankName", "NA");
+    data.branchName = get(response, "Payments[0].branchName", null);
     data.bankAndBranch = nullToNa(
       data.bankName && data.branchName
         ? data.bankName + ", " + data.branchName
@@ -315,25 +307,29 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.paymentDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].receiptDate", 0)
+        get(response, "Payments[0].transactionDate", 0)
       )
     );
     data.g8ReceiptNo = nullToNa(
       get(
         response,
-        "Receipt[0].Bill[0].billDetails[0].manualReceiptNumber",
+        "Payments[0].paymentDetails[0].manualReceiptNumber",
         "NA"
       )
     );
     data.g8ReceiptDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].manualReceiptDate", 0)
+        get(response, "Payments[0].paymentDetails[0].manualReceiptDate", 0)
       )
     );
     /** START NOC Fee, Adhoc Penalty/Rebate Calculation */
     let nocAdhocPenalty = 0,
       nocAdhocRebate = 0;
-    response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {
+      response.Payments[0]&& response.Payments[0].paymentDetails[0]&&
+      response.Payments[0].paymentDetails[0].bill&&
+      response.Payments[0].paymentDetails[0].bill.billDetails[0]&&
+      response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails&&
+      response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(item => {
       let desc = item.taxHeadCode ? item.taxHeadCode : "";
       if (desc === "FIRENOC_FEES") {
         data.nocFee = item.amount;
@@ -352,27 +348,21 @@ export const loadReceiptData = async (consumerCode, tenant) => {
   store.dispatch(prepareFinalObject("receiptDataForPdf", data));
 };
 
-export const loadMdmsData = async tenantid => {
+export const loadMdmsData = async tenantId => {
   let localStorageLabels = JSON.parse(
     window.localStorage.getItem(`localization_${getLocale()}`)
   );
   let localizationLabels = transformById(localStorageLabels, "code");
   let data = {};
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: `${tenantid}`
-    },
-    {
-      key: "moduleName",
-      value: "tenant"
-    },
-    {
-      key: "masterName",
-      value: "tenants"
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "tenant", masterDetails: [{ name: "tenants" }] }
+      ]
     }
-  ];
-  let response = await getMdmsData(queryObject);
+  };
+  let response = await searchMdmsData(mdmsBody);
 
   if (
     response &&
@@ -380,7 +370,7 @@ export const loadMdmsData = async tenantid => {
     response.MdmsRes.tenant.tenants.length > 0
   ) {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
-      return item.code == tenantid;
+      return item.code == tenantId;
     });
     /** START Corporation name generation logic */
     const ulbGrade = get(ulbData, "city.ulbGrade", "NA")

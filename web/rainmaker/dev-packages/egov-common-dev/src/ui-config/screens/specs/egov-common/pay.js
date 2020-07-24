@@ -72,7 +72,7 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     if(index > -1){
         dispatch(prepareFinalObject("commonPayInfo" , commonPayDetails[index]));
     }else{
-        const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+        const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
         dispatch(prepareFinalObject("commonPayInfo" , details));
     }
 
@@ -94,7 +94,8 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     if (get(totalAmount, "totalAmount") != undefined) {
         const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         dispatch(handleField("pay", componentJsonpath, "props.value", totalAmount.totalAmount));
-        if (totalAmount.totalAmount === 0 || totalAmount.totalAmount <= 100) {
+        const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+        if ((totalAmount.totalAmount === 0 || totalAmount.totalAmount <= 100) && !isAdvancePaymentAllowed) {
             dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
         }
     }
@@ -175,8 +176,8 @@ const screenConfig = {
                                 ...AmountToBePaid,
                                 visible: false
                             },
-                            capturePaymentDetails : ifUserRoleExists("CITIZEN") ? {} : capturePaymentDetails,
-                            g8Details : ifUserRoleExists("CITIZEN") ? {} : g8Details
+                            capturePaymentDetails : process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
+                            g8Details : process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details
                         })
                     }
                 },

@@ -1,10 +1,11 @@
-
-import { getLocaleLabels, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getLocaleLabels, getTransformedLocalStorgaeLabels, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 // import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-import React from "react";
-import store from "ui-redux/store";
+
+// import store from "ui-redux/store";
 import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
 
 const getLocalTextFromCode = localCode => {
@@ -14,8 +15,8 @@ const getLocalTextFromCode = localCode => {
 };
 
 export const textToLocalMapping = {
-  "Property Tax Unique Id": getLocaleLabels(
-    "Property Tax Unique Id",
+  "Unique Property ID": getLocaleLabels(
+    "Unique Property ID",
     "PT_COMMON_TABLE_COL_PT_ID",
     getTransformedLocalStorgaeLabels()
   ),
@@ -108,66 +109,60 @@ export const textToLocalMapping = {
 
 export const searchPropertyTable = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     className: "propertyTab",
-    // data: [],
     columns: [
       {
-        name: getTextToLocalMapping("Property Tax Unique Id"),
+        labelName: "Unique Property ID",
+        labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
-              }
-
-            >
-              {value}
-            </span>
+          customBodyRender: (value, tableMeta) => (
+            <div>
+              <a href="javascript:void(0)" onClick={() => onPropertyTabClick(tableMeta)}>{value}</a>
+            </div>
           )
         }
       },
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Guardian Name"),
-      getTextToLocalMapping("Existing Property Id"),
-      getTextToLocalMapping("Address"),
+      {labelName: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {labelName: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
+      {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
+      {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: getTextToLocalMapping("Status"),
+        labelName: "Status",
+        labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
+            <LabelContainer
               style={
                 value === "ACTIVE" ? { color: "green" } : { color: "red" }
               }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
       {
-        name: "tenantId",
+        labelName: "Tenant Id",
+        labelKey: "TENANT_ID",
         options: {
           display: false
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for PT Applications"),
+    title: {labelKey:"PT_HOME_PROPERTY_RESULTS_TABLE_HEADING", labelName:"Search Results for Properties"},
+    rows:"",
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index, dispatch) => {
-        onPropertyTabClick(row, dispatch);
-      }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Application Date",
@@ -189,70 +184,61 @@ export const searchPropertyTable = {
 
 export const searchApplicationTable = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     className: "appTab",
-    // data: [],
     columns: [
       {
-        name: getTextToLocalMapping("Application No"),
+        labelName: "Application No",
+        labelKey: "PT_COMMON_TABLE_COL_APP_NO",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
-              onClick={() => {
-                applicationNumberClick(value)
-              }
-              }
-              style={
-                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
-              }
+            <a href="javascript:void(0)"
+              onClick={() => applicationNumberClick(value) }
             >
               {value.acknowldgementNumber}
-            </span>
+            </a>
           )
         }
       },
       {
-        name: getTextToLocalMapping("Property Tax Unique Id"),
+        labelName: "Unique Property ID",
+        labelKey: "PT_COMMON_TABLE_COL_PT_ID",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
-              style={
-                { color: "#337ab7", cursor: "pointer", textDecoration: "underline" }
-              }
-              onClick={() => {
-                propertyIdClick(value)
-              }}
+            <a href="javascript:void(0)"
+              onClick={() => propertyIdClick(value) }
             >
               {value.propertyId}
-            </span>
+            </a>
           )
         }
       },
-      getTextToLocalMapping("Application Type"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Address"),
+      {labelName: "Application Type", labelKey: "PT_COMMON_TABLE_COL_APP_TYPE"},
+      {labelName: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
+      {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
-        name: getTextToLocalMapping("Status"),
+        labelName: "Status",
+        labelKey: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         options: {
           filter: false,
           customBodyRender: value => (
-            <span
+            <LabelContainer
               style={
                 value === "ACTIVE" ? { color: "green" } : { color: "red" }
               }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
       {
-        name: "tenantId",
+        labelName: "tenantId",
+        labelKey: "tenantId",
         options: {
           display: false,
         }
@@ -266,7 +252,8 @@ export const searchApplicationTable = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for PT Applications"),
+    title: {labelKey:"PT_HOME_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Property Application"},
+    rows:"",
     options: {
       filter: false,
       download: false,
@@ -298,19 +285,13 @@ export const searchApplicationTable = {
 
 
 
-const onPropertyTabClick = (rowData, dispatch) => {
-  switch (rowData[5]) {
+const onPropertyTabClick = (tableMeta) => {
+  switch (tableMeta.rowData[5]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
-        }`;
+      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}`;
       break;
     default:
-      // window.location.href = `search-preview?applicationNumber=${
-      // window.location.pathname=`property-tax/property/${rowData[0]}/${rowData[6]}`;
-      navigate(propertyInformationScreenLink(rowData[0].props.children,rowData[6]));
-      //   rowData[0]
-      // }&tenantId=${rowData[6]}`; 
+      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[6]));
       break;
   }
 };
