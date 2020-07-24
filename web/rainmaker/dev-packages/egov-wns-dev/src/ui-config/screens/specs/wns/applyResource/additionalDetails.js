@@ -60,7 +60,8 @@ export const updateWaterSource = async ( state, dispatch ) => {
 } 
 const waterSourceTypeChange = (reqObj) => {
   try {
-      let { dispatch } = reqObj;
+      let { dispatch, value } = reqObj;
+      dispatch(prepareFinalObject("WaterConnection[0].waterSource", value));
       dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", ''));
   } catch (e) {
     console.log(e);
@@ -70,8 +71,7 @@ const waterSubSourceChange = (reqObj) => {
   try {
       let { dispatch, value } = reqObj;
       let rowValue = value.split(".");
-      dispatch(prepareFinalObject("WaterConnection[0].waterSource", rowValue[0]));
-      dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", value));
+      dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", rowValue[1]));
   } catch (e) {
     console.log(e);
   }

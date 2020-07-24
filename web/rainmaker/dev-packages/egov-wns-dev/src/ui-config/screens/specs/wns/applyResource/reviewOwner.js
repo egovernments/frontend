@@ -69,7 +69,7 @@ export const reviewWaterSource = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_WATER_SOURCE"
   },
   {
-    jsonPath: "DynamicMdms.ws-services-masters.waterSource.waterSourceType",
+    jsonPath: "WaterConnection[0].waterSource",
     callBack: handleNA
   }
 );
@@ -79,7 +79,7 @@ export const reviewWaterSubSource = getLabelWithValue(
     labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE"
   },
   {
-    jsonPath: "DynamicMdms.ws-services-masters.waterSource.waterSubSource",
+    jsonPath: "WaterConnection[0].waterSubSource",
     callBack: handleNA
   }
 );

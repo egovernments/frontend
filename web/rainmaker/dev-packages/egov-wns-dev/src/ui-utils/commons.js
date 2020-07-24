@@ -1996,8 +1996,7 @@ export const getWaterSource = (waterSource, waterSubSource) => {
             return waterSource;
         }
         if(waterSubSource && waterSubSource !== 'NA') {
-            //waterSource += "." + waterSubSource;
-            waterSource = waterSubSource;
+            waterSource += "." + waterSubSource;
         }
     }
     return waterSource;
