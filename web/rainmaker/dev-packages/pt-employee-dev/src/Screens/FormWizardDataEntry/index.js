@@ -613,6 +613,7 @@ class FormWizardDataEntry extends Component {
 
   componentWillUnmount() {
     this.unlisten();
+    this.props.prepareFinalObject("DemandPropertiesResponse",{});
   }
 
   handleRemoveOwner = (index, formKey) => {
@@ -2637,6 +2638,7 @@ class FormWizardDataEntry extends Component {
     resetFormWizard(form, removeForm);
     prepareFormDataAction("Properties", []);
     prepareFinalObject("DemandProperties", []);
+    prepareFinalObject("DemandPropertiesResponse", []);
     this.onTabClick(0);
   };
 
