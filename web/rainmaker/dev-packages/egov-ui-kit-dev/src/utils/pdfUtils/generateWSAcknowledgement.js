@@ -16,7 +16,8 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     let propertyDetail = propDetail.map(cur => {
         if (cur.key === "Rainwater harvesting Facility") {
             if (cur.value === true) { return ({ key: cur.key, value: "Yes" }) }
-            else { return ({ key: cur.key, value: "No" }) }
+            else if(cur.value === false){ return ({ key: cur.key, value: "No" }) }
+            else{ return ({ key: cur.key, value: "NA" })}
         } else {
             return ({ key: cur.key, value: cur.value })
         }

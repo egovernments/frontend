@@ -252,11 +252,7 @@ export const getData = async (action, state, dispatch) => {
   const actionType = getQueryArg(window.location.href, "action");
   let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch);
-     //if both application number and propertyID is present get propertydetails
-  if(applicationNo && propertyID){
-    let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-   getApplyPropertyDetails(queryObject,dispatch,propertyID)
-  }else if (applicationNo) {
+   if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
       { key: "tenantId", value: tenantId },
