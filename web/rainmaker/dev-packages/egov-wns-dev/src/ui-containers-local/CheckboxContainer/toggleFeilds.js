@@ -31,13 +31,7 @@ export const toggleWater = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
-    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSourceType`,
-    "visible",
-    value
-  );
-  onFieldChange(
-    "apply",
-    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSubSource`,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.dynamicMdmsWaterSource`,
     "visible",
     value
   );
