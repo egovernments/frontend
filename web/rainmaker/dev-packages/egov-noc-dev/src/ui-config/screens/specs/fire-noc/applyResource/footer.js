@@ -18,8 +18,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
     state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-  );
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].tenantId"
+  )
   const applicationNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
@@ -84,13 +84,13 @@ const moveToReview = (state, dispatch) => {
 const getMdmsData = async (state, dispatch) => {
   let tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    "FireNOCs[0].tenantId"
   );
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "firenoc", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
@@ -106,7 +106,7 @@ const getMdmsData = async (state, dispatch) => {
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        payload.MdmsRes.firenoc.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -123,11 +123,11 @@ const callBackForNext = async (state, dispatch) => {
   );
   // console.log(activeStep);
   let isFormValid = true;
-  let hasFieldToaster = false;
+  let hasFieldToaster = false; 
 
   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
+      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children",
       state,
       dispatch
     );

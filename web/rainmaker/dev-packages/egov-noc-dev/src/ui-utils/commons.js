@@ -50,6 +50,7 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 };
 
 export const getSearchResults = async (queryObject, dispatch) => {
+
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
@@ -59,6 +60,20 @@ export const getSearchResults = async (queryObject, dispatch) => {
       queryObject
     );
     store.dispatch(toggleSpinner());
+
+    response.FireNOCs.forEach(firenoc => {
+
+      let buildings = firenoc.fireNOCDetails.buildings;
+
+      for (let i = 0; i < buildings.length; i++) {
+
+        buildings[i].landArea = parseInt(buildings[i].landArea);
+        buildings[i].parkingArea = parseInt(buildings[i].parkingArea);
+        buildings[i].totalCoveredArea = parseInt(buildings[i].totalCoveredArea);
+
+      }
+    });
+
     return response;
   } catch (error) {
     store.dispatch(
@@ -84,13 +99,65 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "FireNOCs",
       []
     );
+
+    let newbuildings = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.buildings",
+      []
+    );
+    newbuildings.map(index => {
+
+      set(
+        index,
+        `landArea`,
+        parseInt(index.landArea)
+      );
+
+      set(
+        index,
+        `totalCoveredArea`,
+        parseInt(index.totalCoveredArea)
+      );
+      set(
+        index,
+        `parkingArea`,
+        parseInt(index.parkingArea)
+      );
+
+
+      if (!index.parkingArea) {
+        set(
+          index,
+          `parkingArea`,
+          0
+        );
+  
+      }
+      else {
+        set(
+          index,
+          `parkingArea`,
+          parseInt(index.parkingArea)
+        );
+      }
+    })
+
+
+
+
+
     let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+      "FireNOCs[0].tenantId",
       getTenantId()
     );
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
+    set(
+      payload[0],
+      `fireNOCDetails.buildings`,
+      newbuildings
+    );
 
     // Get uploaded documents from redux
     let reduxDocuments = get(

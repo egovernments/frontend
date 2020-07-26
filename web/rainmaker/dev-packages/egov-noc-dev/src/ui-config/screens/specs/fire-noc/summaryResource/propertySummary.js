@@ -85,7 +85,98 @@ const propertyDetails = {
               masterName: "BuildingType"
             }
           }
-        )
+        ),
+        buildingLandArea: getLabelWithValue(
+          {
+            labelName: "Land Area",
+            // labelKey: "NOC_PROPERTY_DETAILS_LAND_AREA_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].landArea",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingLandArea"
+            // },
+          }
+        ),
+        buildingCoveredArea: getLabelWithValue(
+          {
+            labelName: "Total Covered Area",
+            // labelKey: "NOC_PROPERTY_DETAILS_COVERED_AREA_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingCoveredArea"
+            // },
+          }
+        ),
+        buildingParkingArea: getLabelWithValue(
+          {
+            labelName: "Parking Area",
+            labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingleftSurrounding: getLabelWithValue(
+          {
+            labelName: "Left surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_LEFT_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingrightSurrounding: getLabelWithValue(
+          {
+            labelName: "Right surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_RIGHT_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].rightSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingfrontSurrounding: getLabelWithValue(
+          {
+            labelName: "Front surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_FRONT_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].frontSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
+        buildingbackSurrounding: getLabelWithValue(
+          {
+            labelName: "Back surrounding",
+            // labelKey: "NOC_PROPERTY_DETAILS_BACK_SURROUNDING_LABEL"
+          },
+          {
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].backSurrounding",
+            // localePrefix: {
+            //   moduleName: "firenoc",
+            //   masterName: "BuildingParkingArea"
+            // },
+          }
+        ),
       })
     }),
     items: [],
@@ -101,6 +192,41 @@ const propertyDetails = {
 
 const propertyLocationDetails = getCommonGrayCard({
   propertyLocationContainer: getCommonContainer({
+
+    areaType: getLabelWithValue(
+      {
+        labelName: "Area Type",
+        // labelKey: "NOC_AREA_TYPE_LABEL"
+      },
+      { 
+        
+      jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType" ,
+
+    }),
+    district: getLabelWithValue(
+      {
+        labelName: "District Name",
+        // labelKey: "NOC_DISTRICT_LABEL"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+       callBack: value => {
+        return `TL_${value}`;
+      }
+     }
+    ),
+    subDistrict: getLabelWithValue(
+      {
+        labelName: "sub District Name",
+        // labelKey: "NOC_SUB_DISTRICT_LABEL"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+     
+      callBack: value => {
+        return `${value}`;
+      }
+          
+     }
+    ), 
     propertyId: getLabelWithValue(
       {
         labelName: "Property ID",
@@ -114,7 +240,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelKey: "NOC_PROPERTY_CITY_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
         localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
@@ -143,7 +269,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Street Name",
         labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2" }
     ),
     mohalla: getLabelWithValue(
       {
@@ -163,7 +289,7 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Pincode",
         labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode" }  
     ),
     locationOnMap: getLabelWithValue(
       {
