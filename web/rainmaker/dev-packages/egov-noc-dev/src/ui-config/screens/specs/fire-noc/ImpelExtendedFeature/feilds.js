@@ -188,36 +188,36 @@ export const NOCareaTypeField = {
           }
         })
       },
-      parkingArea: {
-        ...getTextField({
-          label: {
-            labelName: "Parking Area (in Sq meters)",
-            labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Parking Area (in Sq meters)",
-            labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_PLACEHOLDER"
-          },
-          // required: true,
-          // pattern: getPattern("MobileNo"),
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
-          // props: {
-          //   style: {
-          //     maxWidth: "400px"
-          //   }
-          // },
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          props:{
-            type: "number",
-            className:"applicant-details-error"
-          }
-        })
-      },
+      // parkingArea: {
+      //   ...getTextField({
+      //     label: {
+      //       labelName: "Parking Area (in Sq meters)",
+      //       labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_LABEL"
+      //     },
+      //     placeholder: {
+      //       labelName: "Enter Parking Area (in Sq meters)",
+      //       labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_PLACEHOLDER"
+      //     },
+      //     // required: true,
+      //     // pattern: getPattern("MobileNo"),
+      //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      //     jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+      //     // props: {
+      //     //   style: {
+      //     //     maxWidth: "400px"
+      //     //   }
+      //     // },
+      //     gridDefination: {
+      //       xs: 12,
+      //       sm: 12,
+      //       md: 6
+      //     },
+      //     props:{
+      //       type: "number",
+      //       className:"applicant-details-error"
+      //     }
+      //   })
+      // },
       leftSurrounding: {
         ...getTextField({
           label: {
