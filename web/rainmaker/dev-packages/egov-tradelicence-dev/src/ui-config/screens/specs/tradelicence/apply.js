@@ -190,6 +190,7 @@ export const getData = async (action, state, dispatch) => {
       );
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
+  const applicationType = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", null);
 
   if (applicationNo) {
     //Edit/Update Flow ----
