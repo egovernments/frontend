@@ -59,6 +59,18 @@ export const getSearchResults = async (queryObject, dispatch) => {
       queryObject
     );
     store.dispatch(toggleSpinner());
+    if(response)
+    {
+
+        debugger;
+        console.log("response888888888888888888888888-",response);
+        let isLegacy = true;
+        // set("FireNOCs[0].fireNOCDetails", isLegacy);
+        dispatch(prepareFinalObject("FireNOCs", isLegacy));
+    }
+    else{
+      
+    }
    if(response===''){
     store.dispatch(
       toggleSnackbar(
@@ -88,13 +100,13 @@ export const getSearchResults = async (queryObject, dispatch) => {
       }
     }
   
- let mycity = response.FireNOCs[0].tenantId
+ //let mycity = response.FireNOCs[0].tenantId
 
-        set(
-          response.FireNOCs[0].fireNOCDetails,
-        "tenantId",
-        mycity
-      );
+      //   set(
+      //     response.FireNOCs[0].fireNOCDetails,
+      //   "tenantId",
+      //   mycity
+      // );
     response.FireNOCs.forEach(firenoc=>{
 
       let buildings = firenoc.fireNOCDetails.buildings;
@@ -172,7 +184,18 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
   }
 
     })
-
+    // let isLegacyValue = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "FireNOCs[0].isLegacy",
+    //   []
+    // )
+ 
+ 
+    // if(isLegacyValue){
+ 
+    //     set(payload[0], "isLegacyValue", isLegacyValue);
+ 
+    // }
     let provisionalnocnumber = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].provisionFireNOCNumber",
@@ -583,7 +606,13 @@ export const prepareDocumentsUploadRedux = (state, dispatch) => {
 };
 
 export const furnishNocResponse = response => {
+  debugger;
   // Handle applicant ownership dependent dropdowns
+  // if(response){
+  //   let isLegacy = true;
+  //      // set("FireNOCs[0].fireNOCDetails", isLegacy);
+  //      store.dispatch(prepareFinalObject("FireNOCs[0].isLegcy", isLegacy));
+  // }
   let ownershipType = get(
     response,
     "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType"
@@ -593,7 +622,7 @@ export const furnishNocResponse = response => {
     "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
     ownershipType == undefined ? "SINGLE" : ownershipType.split(".")[0]
   );
-
+  
   // Prepare UOMS and Usage Type Dropdowns in required format
   let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
   buildings.forEach((building, index) => {
@@ -615,7 +644,36 @@ export const furnishNocResponse = response => {
       usageType == undefined ? "" : usageType.split(".")[0]
     );
   });
+  console.log("=========response=========",response);
+  // let ownershipType = get(
+  //   response,
+  //   "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType"
+  // );
 
+  let nocType = get(
+    response,
+    "FireNOCs[0].fireNOCDetails.fireNOCType",
+    []
+  );
+  if(nocType==="RENEWAL"){
+    let isLegacy =  true;
+    set(
+      response,
+      "FireNOCs[0].fireNOCDetails.isLegacy",
+      isLegacy
+    );
+  }
+  else{
+    let isLegacy = false;
+    set(
+      response,
+      "FireNOCs[0].fireNOCDetails.isLegacy",
+      isLegacy
+    );
+  }
+ 
+  
+  debugger;
   return response;
 };
 
