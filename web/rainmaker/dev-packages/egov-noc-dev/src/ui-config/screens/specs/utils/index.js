@@ -97,6 +97,10 @@ export const validateFields = (
   return isFormValid;
 };
 
+export const checkValueForNA = value => {
+  return value ? value : "NA";
+};
+
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {

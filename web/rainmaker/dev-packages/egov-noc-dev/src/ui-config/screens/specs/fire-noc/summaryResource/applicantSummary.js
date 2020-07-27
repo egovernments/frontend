@@ -9,6 +9,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { checkValueForNA } from "../../utils";
 
 export const applicantSummary = getCommonGrayCard({
   header: {
@@ -145,17 +146,20 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId",
+                callBack: checkValueForNA
             }
           ),
           applicantPan: getLabelWithValue(
             {
               labelName: "PAN",
               labelKey: "NOC_APPLICANT_PAN_LABEL"
+
             },
             {
               jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan",
+                callBack: checkValueForNA
             }
           ),
           applicantAddress: getLabelWithValue(

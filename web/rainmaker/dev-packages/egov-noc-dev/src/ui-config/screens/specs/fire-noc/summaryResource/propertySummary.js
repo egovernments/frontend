@@ -11,7 +11,7 @@ import {
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
-
+import { checkValueForNA } from "../../utils";
 const test = value => {
   value = value ? value.split(".")[0] : "";
   return value;
@@ -132,10 +132,7 @@ const propertyDetails = {
           },
           {
             jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding",
-            // localePrefix: {
-            //   moduleName: "firenoc",
-            //   masterName: "BuildingParkingArea"
-            // },
+            callBack: checkValueForNA
           }
         ),
         buildingrightSurrounding: getLabelWithValue(
@@ -145,10 +142,7 @@ const propertyDetails = {
           },
           {
             jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].rightSurrounding",
-            // localePrefix: {
-            //   moduleName: "firenoc",
-            //   masterName: "BuildingParkingArea"
-            // },
+            callBack: checkValueForNA
           }
         ),
         buildingfrontSurrounding: getLabelWithValue(
@@ -158,10 +152,7 @@ const propertyDetails = {
           },
           {
             jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].frontSurrounding",
-            // localePrefix: {
-            //   moduleName: "firenoc",
-            //   masterName: "BuildingParkingArea"
-            // },
+            callBack: checkValueForNA
           }
         ),
         buildingbackSurrounding: getLabelWithValue(
@@ -171,10 +162,7 @@ const propertyDetails = {
           },
           {
             jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].backSurrounding",
-            // localePrefix: {
-            //   moduleName: "firenoc",
-            //   masterName: "BuildingParkingArea"
-            // },
+            callBack: checkValueForNA
           }
         ),
       })
@@ -232,7 +220,9 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Property ID",
         labelKey: "NOC_PROPERTY_ID_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId",
+      callBack: checkValueForNA
+     }
     ),
     city: getLabelWithValue(
       {
@@ -252,7 +242,9 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Door/House No.",
         labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo",
+        callBack: checkValueForNA
+     }
     ),
     buildingCompanyName: getLabelWithValue(
       {
@@ -261,7 +253,8 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName"
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName",
+          callBack: checkValueForNA
       }
     ),
     streetName: getLabelWithValue(
@@ -269,7 +262,9 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Street Name",
         labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2" }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
+      callBack: checkValueForNA
+     }
     ),
     mohalla: getLabelWithValue(
       {
@@ -289,7 +284,9 @@ const propertyLocationDetails = getCommonGrayCard({
         labelName: "Pincode",
         labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode" }  
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode",
+       callBack: checkValueForNA
+     }  
     ),
     locationOnMap: getLabelWithValue(
       {
@@ -298,7 +295,8 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude"
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
+          callBack: checkValueForNA
       }
     ),
     applicableFireStation: getLabelWithValue(
