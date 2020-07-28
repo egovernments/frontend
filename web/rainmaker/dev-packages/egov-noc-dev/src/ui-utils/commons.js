@@ -194,13 +194,41 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     }
 
 
-    
+    let oldfirenocnum = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].oldFireNOCNumber",
+      []
+    )
+
+
+    if(oldfirenocnum.length===0){
+
+      oldfirenocnum = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].oldFireNOCNumber",
+        []
+      )
+
+      var keyToDelete = "oldFireNOCNumber";
+
+      const codefull = get(
+        state.screenConfiguration,
+        "preparedFinalObject"
+        );
+
+       delete codefull.FireNOCs[0][keyToDelete];
+
+    }
 
     let provisionalnocnumber = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].provisionFireNOCNumber",
       []
     )
+
+
+
+
     if(provisionalnocnumber.length===0){
 
       provisionalnocnumber = get(
