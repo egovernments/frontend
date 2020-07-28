@@ -164,6 +164,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
 
 const renderSearchApplicationTable = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
+  queryObject.push({ key: "isConnectionSearch", value: true });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
@@ -203,7 +204,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
         }
       }
     }
-    try {
+    try { 
       let getSearchResult, getSearchResultForSewerage;
       if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('water')) {
         getSearchResult = getSearchResults(queryObject)
