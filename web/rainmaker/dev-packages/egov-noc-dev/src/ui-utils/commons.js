@@ -62,7 +62,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
 
 
 
-   if(response===''){
+    if(response===''){
     store.dispatch(
       toggleSnackbar(
         true,
@@ -477,7 +477,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.Documents[0].allowedDocs",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.Documents",
     []
   );
  

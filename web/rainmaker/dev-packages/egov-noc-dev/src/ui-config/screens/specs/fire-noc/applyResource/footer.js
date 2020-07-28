@@ -128,6 +128,7 @@ const getMdmsData = async (state, dispatch) => {
       ]
     }
   };
+
   try {
     let payload = await httpRequest(
       "post",
@@ -137,10 +138,32 @@ const getMdmsData = async (state, dispatch) => {
       mdmsBody
     );
 
+    let noctypedata = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.fireNOCType"
+    );
+
+
+
+    let allowedDocs= [] 
+
+for (let index = 0; index < payload.MdmsRes.firenoc.Documents.length; index++) 
+{
+  const element = payload.MdmsRes.firenoc.Documents[index];
+
+  if( element.applicationType===noctypedata)
+  {
+    allowedDocs = element.allowedDocs
+  }
+
+  
+}
+// = payload.MdmsRes.firenoc.Documents.filter(doc=>doc.applicationType===noctypedata).allowedDocs;
+
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.firenoc.Documents",
-        payload.MdmsRes.firenoc.Documents
+        allowedDocs
       )
     );
     prepareDocumentsUploadData(state, dispatch);
