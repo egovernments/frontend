@@ -14,6 +14,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
@@ -191,10 +192,10 @@ const onRowClick = rowData => {
     const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
     switch (state) {
       case "INITIATED":
-        window.location.assign(`${origin}${environment}/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        routeTo(`/oc-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`)
         break;
       default:
-        window.location.assign(`${origin}${environment}/oc-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
+        routeTo(`/oc-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
         break;
     }
   } else {
@@ -204,10 +205,10 @@ const onRowClick = rowData => {
     }
     switch (state) {
       case "INITIATED":
-        window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
+        routeTo(`/egov-bpa/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`)
         break;
       default:
-        window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`;
+        routeTo(`/egov-bpa/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`);
         break;
     }
   }

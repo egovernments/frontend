@@ -28,6 +28,7 @@ import set from "lodash/set";
 import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-utils/api";
 import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -3683,12 +3684,13 @@ export const applyForm = (state, dispatch) => {
     );
 
     if (isOcCityValid) {
-      window.location.href =
-        process.env.NODE_ENV === "production"
-          ? `/citizen/oc-bpa/apply?tenantId=${tenantId}`
-          : process.env.REACT_APP_SELF_RUNNING === true
-            ? `/egov-ui-framework/oc-bpa/apply?tenantId=${tenantId}`
-            : `/oc-bpa/apply?tenantId=${tenantId}`;
+      // window.location.href =
+      //   process.env.NODE_ENV === "production"
+      //     ? `/citizen/oc-bpa/apply?tenantId=${tenantId}`
+      //     : process.env.REACT_APP_SELF_RUNNING === true
+      //       ? `/egov-ui-framework/oc-bpa/apply?tenantId=${tenantId}`
+      //       : `/oc-bpa/apply?tenantId=${tenantId}`;
+      routeTo(`/oc-bpa/apply?tenantId=${tenantId}`)
     };
   } else {
     const isTradeDetailsValid = validateFields(
@@ -3699,12 +3701,13 @@ export const applyForm = (state, dispatch) => {
     );
 
     if (isTradeDetailsValid) {
-      window.location.href =
-        process.env.NODE_ENV === "production"
-          ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
-          : process.env.REACT_APP_SELF_RUNNING === true
-            ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
-            : `/egov-bpa/apply?tenantId=${tenantId}`;
+      // window.location.href =
+      //   process.env.NODE_ENV === "production"
+      //     ? `/citizen/egov-bpa/apply?tenantId=${tenantId}`
+      //     : process.env.REACT_APP_SELF_RUNNING === true
+      //       ? `/egov-ui-framework/egov-bpa/apply?tenantId=${tenantId}`
+      //       : `/egov-bpa/apply?tenantId=${tenantId}`;
+      routeTo(`/egov-bpa/apply?tenantId=${tenantId}`);
     };
   }
 

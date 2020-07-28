@@ -4,6 +4,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -81,14 +82,10 @@ export const searchResults = {
 const onRowClick = rowData => {
   switch (rowData[5]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[5]
-      }`;
+      routeTo(`/bpastakeholder/apply?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[5]}`;
+      routeTo(`/bpastakeholder/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
       break;
   }
 };
