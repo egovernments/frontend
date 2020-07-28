@@ -175,11 +175,13 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       state,
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
     );
+
     if(noctypedata==="NEW" || noctypedata==="PROVISIONAL"){
+
       let isLegacy =  false;
       set(
         payload[0],
-        "FireNOCs[0].fireNOCDetails.isLegacy",
+        "isLegacy",
         isLegacy
       );
     }
@@ -188,7 +190,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       let isLegacy = true;
       set(
         payload[0],
-        "FireNOCs[0].fireNOCDetails.isLegacy",
+        "isLegacy",
         isLegacy
       );
     }
@@ -636,38 +638,6 @@ export const prepareDocumentsUploadRedux = (state, dispatch) => {
 
 export const furnishNocResponse = response => {
 
-  // debugger;
-  // Handle applicant ownership dependent dropdowns
-  // if(! response){
-
-  //   debugger;
-
-  //   let nocType = get(
-  //     response,
-  //     "FireNOCs[0].fireNOCDetails.fireNOCType",
-  //     []
-  //   );
-  //   if(nocType==="RENEWAL"){
-  //     let isLegacy =  true;
-  //     set(
-  //       response,
-  //       "FireNOCs[0].fireNOCDetails.isLegacy",
-  //       isLegacy
-  //     );
-  //   }
-  //   else{
-  //     let isLegacy = false;
-  //     set(
-  //       response,
-  //       "FireNOCs[0].fireNOCDetails.isLegacy",
-  //       isLegacy
-  //     );
-  //   }
-  // }
-  // else{
-  //   debugger;
-
-  // }
   let ownershipType = get(
     response,
     "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType"
@@ -702,14 +672,14 @@ export const furnishNocResponse = response => {
 
   let nocType = get(
     response,
-    "FireNOCs[0].fireNOCDetails.fireNOCType",
+    "FireNOCs[0].fireNOCType",
     []
   );
   if(nocType==="RENEWAL"){
     let isLegacy =  true;
     set(
       response,
-      "FireNOCs[0].fireNOCDetails.isLegacy",
+      "FireNOCs[0].isLegacy",
       isLegacy
     );
   }
@@ -717,7 +687,7 @@ export const furnishNocResponse = response => {
     let isLegacy = false;
     set(
       response,
-      "FireNOCs[0].fireNOCDetails.isLegacy",
+      "FireNOCs[0].isLegacy",
       isLegacy
     );
   }
