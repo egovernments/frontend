@@ -87,7 +87,6 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
 const loadProvisionalNocData2 = async (state, dispatch) => {
 
-  debugger;
   let oldfireNOCNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
@@ -95,31 +94,29 @@ const loadProvisionalNocData2 = async (state, dispatch) => {
   );
 
 
-  if (!oldfireNOCNumber.match(getPattern("FireNOCNo"))) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Incorrect FireNOC Number!",
-          labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
-        },
-        "error"
-      )
-    );
-    return;
-  }
+  // if (!oldfireNOCNumber.match(getPattern("FireNOCNo"))) {
+  //   dispatch(
+  //     toggleSnackbar(
+  //       true,
+  //       {
+  //         labelName: "Incorrect FireNOC Number!",
+  //         labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
+  //       },
+  //       "error"
+  //     )
+  //   );
+  //   return;
+  // }
 
   let response = await getSearchResults([
-    { key: "oldFireNOCNumber", value: oldfireNOCNumber }
+    { key: "FireNOCNumber", value: oldfireNOCNumber }
   ]);
 
   // let response = await getSearchResults([
   //   { key: "oldFireNOCNumber", value:  }
   // ]);
-debugger;
   response = furnishNocResponse(response);
   console.log("=====response======",response);
-  debugger;
   let nocType = get(
     state.screenConfiguration.preparedFinalObject,
     "FireNOCs[0].fireNOCDetails.fireNOCType",
@@ -210,7 +207,6 @@ export const nocDetails = getCommonCard({
     }),
 
     beforeFieldChange: (action, state, dispatch) => {
-      debugger;
     if (action.value === "PROVISIONAL") {
         dispatch(
           handleField(

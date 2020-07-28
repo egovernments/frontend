@@ -59,18 +59,9 @@ export const getSearchResults = async (queryObject, dispatch) => {
       queryObject
     );
     store.dispatch(toggleSpinner());
-    if(response)
-    {
 
-        debugger;
-        console.log("response888888888888888888888888-",response);
-        let isLegacy = true;
-        // set("FireNOCs[0].fireNOCDetails", isLegacy);
-        dispatch(prepareFinalObject("FireNOCs", isLegacy));
-    }
-    else{
-      
-    }
+
+
    if(response===''){
     store.dispatch(
       toggleSnackbar(
@@ -99,14 +90,9 @@ export const getSearchResults = async (queryObject, dispatch) => {
         );
       }
     }
-  
- //let mycity = response.FireNOCs[0].tenantId
 
-      //   set(
-      //     response.FireNOCs[0].fireNOCDetails,
-      //   "tenantId",
-      //   mycity
-      // );
+
+  
     response.FireNOCs.forEach(firenoc=>{
 
       let buildings = firenoc.fireNOCDetails.buildings;
@@ -184,18 +170,32 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
   }
 
     })
-    // let isLegacyValue = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "FireNOCs[0].isLegacy",
-    //   []
-    // )
- 
- 
-    // if(isLegacyValue){
- 
-    //     set(payload[0], "isLegacyValue", isLegacyValue);
- 
-    // }
+
+    let noctypedata = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
+    );
+    if(noctypedata==="NEW" || noctypedata==="PROVISIONAL"){
+      let isLegacy =  false;
+      set(
+        payload[0],
+        "FireNOCs[0].fireNOCDetails.isLegacy",
+        isLegacy
+      );
+    }
+
+    else{
+      let isLegacy = true;
+      set(
+        payload[0],
+        "FireNOCs[0].fireNOCDetails.isLegacy",
+        isLegacy
+      );
+    }
+
+
+    
+
     let provisionalnocnumber = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].provisionFireNOCNumber",
@@ -477,9 +477,10 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
   let documents = get(
     state,
-    "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.Documents[0].allowedDocs",
     []
   );
+ 
   documents = documents.filter(item => {
     return item.active;
   });
@@ -606,12 +607,38 @@ export const prepareDocumentsUploadRedux = (state, dispatch) => {
 };
 
 export const furnishNocResponse = response => {
-  debugger;
+
+  // debugger;
   // Handle applicant ownership dependent dropdowns
-  // if(response){
-  //   let isLegacy = true;
-  //      // set("FireNOCs[0].fireNOCDetails", isLegacy);
-  //      store.dispatch(prepareFinalObject("FireNOCs[0].isLegcy", isLegacy));
+  // if(! response){
+
+  //   debugger;
+
+  //   let nocType = get(
+  //     response,
+  //     "FireNOCs[0].fireNOCDetails.fireNOCType",
+  //     []
+  //   );
+  //   if(nocType==="RENEWAL"){
+  //     let isLegacy =  true;
+  //     set(
+  //       response,
+  //       "FireNOCs[0].fireNOCDetails.isLegacy",
+  //       isLegacy
+  //     );
+  //   }
+  //   else{
+  //     let isLegacy = false;
+  //     set(
+  //       response,
+  //       "FireNOCs[0].fireNOCDetails.isLegacy",
+  //       isLegacy
+  //     );
+  //   }
+  // }
+  // else{
+  //   debugger;
+
   // }
   let ownershipType = get(
     response,
@@ -644,11 +671,6 @@ export const furnishNocResponse = response => {
       usageType == undefined ? "" : usageType.split(".")[0]
     );
   });
-  console.log("=========response=========",response);
-  // let ownershipType = get(
-  //   response,
-  //   "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType"
-  // );
 
   let nocType = get(
     response,
