@@ -87,7 +87,7 @@ const NOCSearchAndResult = {
     getRequiredDocData(action, state, dispatch).then(() => {
       let documents = get(
         state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents[0].allowedDocs",
+        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
         []
       );
       set(
