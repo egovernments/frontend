@@ -35,7 +35,8 @@ import {
   permitOrderNoDownload, 
   requiredDocumentsData, 
   setProposedBuildingData,
-  prepareNocFinalCards
+  prepareNocFinalCards,
+  compare
 } from "../utils/index";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
 import { declarations } from "./summaryResource/declarations";
@@ -380,7 +381,7 @@ const setSearchResponse = async (
     { key: "sourceRefId", value: applicationNumber }
   ], state);
   dispatch(prepareFinalObject("Noc", payload.Noc));
-
+  payload.Noc.sort(compare);
   // await prepareNOCUploadData(state, dispatch);
   // prepareNocFinalCards(state, dispatch);
 

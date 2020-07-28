@@ -33,7 +33,8 @@ import {
   requiredDocumentsData, 
   revocationPdfDownload,
   setProposedBuildingData,
-  prepareNocFinalCards
+  prepareNocFinalCards,
+  compare
 } from "../utils/index";
 // import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformerForBpa";
 import { citizenFooter, updateBpaApplication } from "./searchResource/citizenFooter";
@@ -476,6 +477,7 @@ const setSearchResponse = async (
     { key: "sourceRefId", value: applicationNumber }
   ], state);
   dispatch(prepareFinalObject("Noc", payload.Noc));
+  payload.Noc.sort(compare);
   // await prepareNOCUploadData(state, dispatch);
   // prepareNocFinalCards(state, dispatch);
 
