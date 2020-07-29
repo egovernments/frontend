@@ -43,7 +43,7 @@ export const callPGService = async (state, dispatch) => {
     dispatch(
       toggleSnackbar(
         true,
-        { labelName: "Please enter an amount greater than zero!", labelKey: "Please enter an amount greater than zero!" },
+        { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
         "error"
       )
     );
@@ -399,7 +399,7 @@ const callBackForPay = async (state, dispatch) => {
     dispatch(
       toggleSnackbar(
         true,
-        { labelName: "Please enter an amount greater than zero!", labelKey: "Please enter an amount greater than zero!" },
+        { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
         "error"
       )
     );
