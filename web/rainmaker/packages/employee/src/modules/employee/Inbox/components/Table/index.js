@@ -70,7 +70,7 @@ class InboxData extends React.Component {
       { key: "history", value: true },
       { key: "tenantId", value: tenantId },
     ];
-    const payload = await httpRequest("egov-workflow-v2/egov-wf/process/_search?", "", queryObject);
+    const payload = await httpRequest("egov-workflow/egov-wf/process/_search?", "", queryObject);
     const processInstances = payload && payload.ProcessInstances.length > 0 && orderWfProcessInstances(payload.ProcessInstances);
     return processInstances;
   };

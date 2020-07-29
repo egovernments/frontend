@@ -11,7 +11,7 @@ export const fetchBuisnessService = (payload) => {
 export const getBuisnessServiceData = (queryObject) => {
   return async (dispatch, getState) => {
     try {
-      const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest("egov-workflow/egov-wf/businessservice/_search", "_search", queryObject);
       dispatch(fetchBuisnessService(payload));
     } catch (error) {
       console.log(error);

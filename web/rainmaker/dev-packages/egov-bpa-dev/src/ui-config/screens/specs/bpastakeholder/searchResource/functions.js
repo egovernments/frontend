@@ -171,7 +171,7 @@ export const getWorkFlowData = async Licenses => {
   try {
     const payload = await httpRequest(
       "post",
-      "egov-workflow-v2/egov-wf/process/_search",
+      "egov-workflow/egov-wf/process/_search",
       "",
       queryObject
     );
@@ -218,7 +218,7 @@ export const getWorkFlowDataForBPA = async Licenses => {
       try {
         let payload = await httpRequest(
           "post",
-          "egov-workflow-v2/egov-wf/process/_search",
+          "egov-workflow/egov-wf/process/_search",
           "",
           queryObject
         );

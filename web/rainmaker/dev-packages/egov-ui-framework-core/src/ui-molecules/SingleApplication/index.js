@@ -31,7 +31,7 @@ class SingleApplication extends React.Component {
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbar } = this.props;
     try {
-      const payload = await httpRequest("post", "egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest("post", "egov-workflow/egov-wf/businessservice/_search", "_search", queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {

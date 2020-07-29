@@ -62,7 +62,7 @@ const getBusinessService = async (dispatch) => {
   ];
   const payload = await httpRequest(
     "post",
-    "egov-workflow-v2/egov-wf/businessservice/_search",
+    "egov-workflow/egov-wf/businessservice/_search",
     "_search",
     queryObject
   );

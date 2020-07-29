@@ -460,7 +460,7 @@ class TableData extends Component {
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbarAndSetText } = this.props;
     try {
-      const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest("egov-workflow/egov-wf/businessservice/_search", "_search", queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
@@ -486,7 +486,7 @@ class TableData extends Component {
       this.showLoading();
       this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       const requestBody = [{ key: "tenantId", value: tenantId }];
-      const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      const responseData = await httpRequest("egov-workflow/egov-wf/process/_search", "_search", requestBody);
       const assignedData = orderBy(
         filter(responseData.ProcessInstances, (item) => {
           let assignes = get(item, 'assignes');

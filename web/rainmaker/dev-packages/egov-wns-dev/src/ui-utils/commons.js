@@ -218,7 +218,7 @@ export const getWorkFlowData = async (queryObject) => {
     try {
         const response = await httpRequest(
             "post",
-            "egov-workflow-v2/egov-wf/process/_search",
+            "egov-workflow/egov-wf/process/_search",
             "_search",
             queryObject
         );
@@ -1745,7 +1745,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         if (type === 'sanctionLetter') {
             const slaDetails = await httpRequest(
                 "post",
-                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
+                `egov-workflow/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
                 "_search"
             );
 

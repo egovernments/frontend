@@ -929,7 +929,7 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
       }
     } else {
       const payload = await httpRequest(
-        "egov-workflow-v2/egov-wf/process/_search",
+        "egov-workflow/egov-wf/process/_search",
         "_search",
         queryObject
       );

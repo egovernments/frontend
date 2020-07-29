@@ -13,7 +13,7 @@ export const getWorkFlowData = queryObject => {
     try {
       const payload = await httpRequest(
         "post",
-        "egov-workflow-v2/egov-wf/process/_search",
+        "egov-workflow/egov-wf/process/_search",
         "",
         queryObject
       );
