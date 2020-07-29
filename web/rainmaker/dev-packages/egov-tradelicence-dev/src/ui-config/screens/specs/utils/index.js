@@ -1369,7 +1369,7 @@ export const validateFields = (
     if (fields.hasOwnProperty(variable)) {
       if (
         fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" &&
-        fields[variable].props &&
+        fields[variable].props && fields[variable].jsonPath &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
         !validate(
@@ -1386,6 +1386,27 @@ export const validateFields = (
         )
       ) {
         isFormValid = false;
+      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
+        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+        dropdownFields.forEach((item, i) => {
+          let isValid = get(
+            state.screenConfiguration.preparedFinalObject ,
+            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[0].${item.key}`,
+            ''
+          );
+          if(isValid == '' || isValid == 'none') {
+            isFormValid = false;
+            dispatch(
+              handleField(
+                "apply",
+                `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
+                "isRequired",
+                true
+              )
+            );
+          }
+        });
+        
       }
     }
   }
@@ -1402,7 +1423,7 @@ export const validateDynamicMDMSFields = ( objectJsonPath, state, dispatch, scre
   dropdownFields.forEach(item => {
     let isValid = get(
       state.screenConfiguration.preparedFinalObject ,
-      `DynamicMdms.${moduleName}.${rootBlockSub}.${item.key}`,
+      `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${item.index}].${item.key}`,
       ''
     );
     if(isValid == '' || isValid == 'none') {
@@ -2189,11 +2210,11 @@ export const getTextToLocalMapping = label => {
 export const checkValueForNA = value => {
   return value ? value : "NA";
 };
-export const triggerUpdateByKey = (state, key, value, dispatch) => {
+export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
   if(dispatch == "set"){
-    set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.${key}`, value);
+    set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.selectedValues[${keyIndex}]`, value);
   } else {
-    dispatch(prepareFinalObject( `DynamicMdms.TradeLicense.tradeUnits.${key}`, value ));
+    dispatch(prepareFinalObject( `DynamicMdms.TradeLicense.tradeUnits.${keyIndex}`, value ));
   }
 }
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
@@ -2203,16 +2224,15 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
       tradeSubTypes.forEach((tradeSubType, i) => {
         const tradeCat = tradeSubType.tradeType.split(".")[0];
         const tradeType = tradeSubType.tradeType.split(".")[1];
-        triggerUpdateByKey(state, 'tradeCategory', tradeCat, 'set');
-        triggerUpdateByKey(state, 'tradeType', tradeType, 'set');
-        triggerUpdateByKey(state, 'tradeSubType', tradeSubType.tradeType, 'set');
+        let formObj = {
+          tradeCategory: tradeCat, tradeType: tradeType, tradeSubType: tradeSubType.tradeType
+        }
+        triggerUpdateByKey(state, i, formObj, 'set');
 
-        triggerUpdateByKey(state, 'tradeTypeTransformed', getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
-        triggerUpdateByKey(state, 'tradeSubTypeTransformed', getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}.${tradeType}`, [])) , dispatch);
+        triggerUpdateByKey(state, `tradeTypeTransformed.allDropdown[${i}]`, getObjectKeys(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}`, [])) , dispatch);
+        triggerUpdateByKey(state, `tradeSubTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeUnitsTransformed.${tradeCat}.${tradeType}`, [])) , dispatch);
  
-        triggerUpdateByKey(state, 'tradeCategory', tradeCat , dispatch);
-        triggerUpdateByKey(state, 'tradeType', tradeType , dispatch);
-        triggerUpdateByKey(state, 'tradeSubType', tradeSubType.tradeType , dispatch);
+        triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
       });
     } catch (e) {
       console.log(e);
@@ -2231,11 +2251,11 @@ export const updateStructureTypes = async ( state, dispatch ) => {
       structType.split(".")[0]
     );
     try {
-      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureType`, structType.split(".")[0] ));
+      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureType`, structType.split(".")[0] ));
       
-      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.structureTypes.structureTypesTransformed.${structType.split(".")[0]}`, [])) ));
+      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.structureTypes.structureTypesTransformed.${structType.split(".")[0]}`, [])) ));
 
-      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubType`, structType ));
+      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType`, structType ));
         dispatch(
           prepareFinalObject(
             "LicensesTemp[0].tradeLicenseDetail.structureType",
@@ -2287,21 +2307,21 @@ export const updateOwnerShipEdit = async ( state, dispatch ) => {
   );
   set(
     state,
-    "screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.tradeOwner.ownership",
+    "screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.tradeOwner.selectedValues[0].ownership",
     tradeOwnershipCat
   );
   try {
 
       dispatch(
         prepareFinalObject(
-          "DynamicMdms.common-masters.tradeOwner.ownership",
+          "DynamicMdms.common-masters.tradeOwner.selectedValues[0].ownership",
           tradeOwnershipCat
         )
       );
 
-    dispatch(prepareFinalObject( `DynamicMdms.common-masters.tradeOwner.subOwnershipTransformed`, getObjectValues(get( state.screenConfiguration.preparedFinalObject, `DynamicMdms.common-masters.tradeOwner.tradeOwnerTransformed.${tradeOwnershipCat}`, [])) ));
+    dispatch(prepareFinalObject( `DynamicMdms.common-masters.tradeOwner.subOwnershipTransformed.allDropdown[0]`, getObjectValues(get( state.screenConfiguration.preparedFinalObject, `DynamicMdms.common-masters.tradeOwner.tradeOwnerTransformed.${tradeOwnershipCat}`, [])) ));
 
-    dispatch(prepareFinalObject( `DynamicMdms.common-masters.tradeOwner.subOwnership`, tradeSubOwnershipCat ));
+    dispatch(prepareFinalObject( `DynamicMdms.common-masters.tradeOwner.selectedValues[0].subOwnership`, tradeSubOwnershipCat ));
     //handlefield for Type of OwnerShip while setting drop down values as beforeFieldChange won't be callled
     if (tradeOwnershipCat === "INDIVIDUAL") {
       dispatch(

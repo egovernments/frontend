@@ -41,28 +41,36 @@ const getPlumberRadioButton = {
   },
   type: "array"
 };
-export const triggerUpdateByKey = (state, key, value, dispatch) => {
+export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
   if(dispatch == "set"){
-    set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.ws-services-masters.waterSource.${key}`, value);
+    set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.ws-services-masters.waterSource.selectedValues[${keyIndex}]`, value);
   } else {
-    dispatch(prepareFinalObject( `DynamicMdms.ws-services-masters.waterSource.${key}`, value ));
+    dispatch(prepareFinalObject( `DynamicMdms.ws-services-masters.waterSource.${keyIndex}`, value ));
   }
 }
 export const updateWaterSource = async ( state, dispatch ) => {  
   const waterSource = get( state, "screenConfiguration.preparedFinalObject.WaterConnection[0].waterSource", null);
   const waterSubSource = get( state, "screenConfiguration.preparedFinalObject.WaterConnection[0].waterSubSource", null);
   let modValue = waterSource + "." + waterSubSource;
-  triggerUpdateByKey(state, 'waterSourceType', waterSource, 'set');
-  triggerUpdateByKey(state, 'waterSubSource', modValue, 'set');
-  triggerUpdateByKey(state, 'waterSubSourceTransformed', getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.ws-services-masters.waterSource.waterSourceTransformed.${waterSource}`, [])) , dispatch);
-  triggerUpdateByKey(state, 'waterSourceType', waterSource , dispatch);
-  triggerUpdateByKey(state, 'waterSubSource', modValue , dispatch);
+  let i = 0;
+  let formObj = {
+    waterSourceType: waterSource, waterSubSource: modValue
+  }
+  triggerUpdateByKey(state, i, formObj, 'set');
+
+  triggerUpdateByKey(state, `waterSubSourceTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.ws-services-masters.waterSource.waterSourceTransformed.${waterSource}`, [])) , dispatch);
+
+  triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
 } 
 const waterSourceTypeChange = (reqObj) => {
   try {
-      let { dispatch, value } = reqObj;
+      let { dispatch, value, state } = reqObj;
       dispatch(prepareFinalObject("WaterConnection[0].waterSource", value));
       dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", ''));
+      let formObj = {
+        waterSourceType: value, waterSubSource: ''
+      }
+      triggerUpdateByKey(state, `selectedValues[0]`, formObj , dispatch);
   } catch (e) {
     console.log(e);
   }
