@@ -51,11 +51,8 @@ export const getLoggedinUserRole = (wfState) => {
                 else if (wfState === "NOC_VERIFICATION_PENDING") {
                     currentRole = "BPA Noc Verifier"
                 }
-                else if (window.location.href.includes("noc-search-preview")) {
-                    currentRole = "NOC Approver"
-                }
                 else {
-                    currentRole = "BPA Architect"
+                    currentRole = "NOC Approver"
                 }
             }
 
