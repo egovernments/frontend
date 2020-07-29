@@ -188,6 +188,22 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.FireNOCs[0].provisionFireNOCNumber",
       ""
     );
+
+    let isnocdetailsCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children",
+      state,
+      dispatch
+    );
+
+
+    if (
+      !isnocdetailsCardValid 
+
+    ) {
+      isFormValid = false;
+      hasFieldToaster = true;
+    }
+
     if(fireNOCNumber !=''){
       
       let response = await getSearchResults([
