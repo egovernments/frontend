@@ -14,7 +14,13 @@ const UploadedDocument = Loadable({
   loading: () => <Loading />
 });
 
+const NocNumber = Loadable({
+  loader: () => import("./NocNumber"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
-  UploadedDocument
+  UploadedDocument,
+  NocNumber
 };

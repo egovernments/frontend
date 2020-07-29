@@ -42,7 +42,7 @@ const titlebar2 = {
   children: {
     nocApprovalNumber: {
       uiFramework: "custom-atoms-local",
-      moduleName: "egov-bpa",
+      moduleName: "egov-common-noc",
       componentPath: "NocNumber",
       gridDefination: {},
       props: {
