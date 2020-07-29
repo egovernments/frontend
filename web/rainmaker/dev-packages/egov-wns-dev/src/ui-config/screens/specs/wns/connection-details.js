@@ -235,11 +235,26 @@ const screenConfig = {
             header1: {
               gridDefination: {
                 xs: 12,
-                sm: 6
+                sm: 7
               },
               ...headerrow
             },
+            helpSection: {
+              uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" } //, dsplay: "block"
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 5,
+                align: "right"
+              },
+              children: {
             connectionDetailsDownload
+              }
+            }
           }
         },
        /* headerSubDiv: {
