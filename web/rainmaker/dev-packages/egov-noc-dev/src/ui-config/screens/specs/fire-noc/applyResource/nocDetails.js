@@ -46,7 +46,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   response = furnishNocResponse(response);
 
- // dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+ dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
@@ -87,6 +87,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
 const loadProvisionalNocData2 = async (state, dispatch) => {
 
+
   let oldfireNOCNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
@@ -99,8 +100,8 @@ const loadProvisionalNocData2 = async (state, dispatch) => {
   //     toggleSnackbar(
   //       true,
   //       {
-  //         labelName: "Incorrect FireNOC Number!",
-  //         labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
+  //         labelName: "Incorrect old FireNOC Number!",
+  //         // labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
   //       },
   //       "error"
   //     )
@@ -154,8 +155,8 @@ const loadProvisionalNocData2 = async (state, dispatch) => {
   // Set provisional fire noc number
   dispatch(
     prepareFinalObject(
-      "FireNOCs[0].provisionFireNOCNumber",
-      get(response, "FireNOCs[0].fireNOCNumber", "")
+      "FireNOCs[0].oldFireNOCNumber",
+      get(response, "FireNOCs[0].oldFireNOCNumber", "")
     )
   );
 
@@ -284,7 +285,7 @@ export const nocDetails = getCommonCard({
       },
       pattern: getPattern("FireNOCNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      // required: true,
+      required: true,
       // pattern: getPattern("MobileNo"),
       jsonPath: "FireNOCs[0].oldFireNOCNumber",
       iconObj: {
