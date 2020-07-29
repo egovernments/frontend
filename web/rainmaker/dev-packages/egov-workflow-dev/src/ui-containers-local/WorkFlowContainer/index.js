@@ -116,6 +116,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=activate&status=success";
       case "REVOCATE":
         return "purpose=application&status=revocated"
+      case "VOID":
+          return "purpose=application&status=voided"
     }
   };
 
