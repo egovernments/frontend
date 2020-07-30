@@ -7,6 +7,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
+import { checkValueForNA } from "../../utils";
 
 export const nocSummary = getCommonGrayCard({
   header: {
@@ -79,10 +80,8 @@ export const nocSummary = getCommonGrayCard({
         labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].provisionFireNOCNumber"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+        jsonPath: "FireNOCs[0].provisionFireNOCNumber",
+        callBack: checkValueForNA
       }
     )
   })

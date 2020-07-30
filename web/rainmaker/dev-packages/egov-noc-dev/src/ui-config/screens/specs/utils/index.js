@@ -97,6 +97,10 @@ export const validateFields = (
   return isFormValid;
 };
 
+export const checkValueForNA = value => {
+  return value ? value : "NA";
+};
+
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {
@@ -600,7 +604,7 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: "FIRENOC" }
+        { key: "businessService", value: "FIRENOC" }
       ];
       const payload = await createBill(queryObj,dispatch);
       // let payload = sampleGetBill();
@@ -681,7 +685,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
       tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "FireNoc",
+          moduleName: "firenoc",
           masterDetails: [{ name: "Documents" }]
         }
       ]

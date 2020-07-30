@@ -70,7 +70,7 @@ const NOCSearchAndResult = {
     getRequiredDocData(action, state, dispatch).then(() => {
       let documents = get(
         state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.FireNoc.Documents",
+        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
         []
       );
       set(
@@ -147,7 +147,7 @@ const NOCSearchAndResult = {
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["NOC_CEMP", "SUPERUSER"]
+                roles: ["NOC_CEMP", "SUPERUSER","CITIZEN"]
               }
             }
           }

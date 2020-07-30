@@ -14,6 +14,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import "./index.css";
+import {NOCLandandTotalCoveredArea} from "../ImpelExtendedFeature/feilds";
 
 let previousUoms = [];
 
@@ -203,7 +204,7 @@ const commonBuildingData = buildingType => {
           moduleName: "firenoc",
           masterName: "BuildingType"
         },
-        jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageTypeMajor",
+        jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageSubType",
         sourceJsonPath: "applyScreenMdmsData.DropdownsData.BuildingUsageType",
         gridDefination: {
           xs: 12,
@@ -307,7 +308,8 @@ const commonBuildingData = buildingType => {
     NO_OF_BASEMENTS: prepareSelectField("NO_OF_BASEMENTS", 0, 5),
     PLOT_SIZE: prepareTextField("PLOT_SIZE"),
     BUILTUP_AREA: prepareTextField("BUILTUP_AREA"),
-    HEIGHT_OF_BUILDING: prepareTextField("HEIGHT_OF_BUILDING")
+    HEIGHT_OF_BUILDING: prepareTextField("HEIGHT_OF_BUILDING"),
+     ...NOCLandandTotalCoveredArea
   };
 };
 

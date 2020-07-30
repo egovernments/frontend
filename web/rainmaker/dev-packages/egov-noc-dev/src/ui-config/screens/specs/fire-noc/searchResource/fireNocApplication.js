@@ -11,6 +11,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
+import {NOCareaTypeField} from "../ImpelExtendedFeature/feilds";
+
 
 const resetFields = (state, dispatch) => {
   dispatch(
@@ -61,6 +63,25 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.areaType",
+      "props.value",
+      ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.newProvisionalType",
+      "props.value",
+      ""
+    )
+  );
+
 };
 
 export const NOCApplication = getCommonCard({
@@ -206,7 +227,9 @@ export const NOCApplication = getCommonCard({
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
-    })
+    }),
+    ...NOCareaTypeField,
+
   }),
 
   button: getCommonContainer({

@@ -116,7 +116,34 @@ const screenConfig = {
         false
       );
     }
+    let value = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+    let currentcity = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",[]);
+    var mtenantid = value === 'Urban'? currentcity : tenantId;
+    if( value === 'Urban')
+    {           
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.subDistrict.visible",
+        false
+      );      
 
+    }       
+    else {      
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.city.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.mohalla.visible",
+        false
+      );
+      } 
     generateBill(dispatch, applicationNumber, tenantId);
     prepareDocumentsView(state, dispatch);
     return action;
