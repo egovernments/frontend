@@ -1,11 +1,12 @@
 import React from "react";
 import { AckHeader, AckBody, AckFooter } from "../../ui-atoms";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import "./index.css";
 
 class AcknowledgementContainer extends React.Component {
 
 	onclickFooter = (path)=>{
-		window.location.href = `${document.location.origin}${path}`;
+		routeTo(path);
 	}
 
 	render() {
