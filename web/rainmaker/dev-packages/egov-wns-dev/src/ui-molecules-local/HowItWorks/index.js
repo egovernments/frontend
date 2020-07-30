@@ -8,6 +8,8 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import { getDomainLink } from "../../ui-utils/commons";
+import store from "ui-redux/store";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 const styles = theme => ({
   root: {
     margin: "2px 8px",
@@ -18,7 +20,7 @@ const styles = theme => ({
 class HowItWorks extends React.Component {
 
   clickHandler = () => {
-    window.location.href = `${getDomainLink()}/citizen/wns-citizen/howItWorks`
+    store.dispatch(setRoute("howItWorks"))
   }
 
   render() {

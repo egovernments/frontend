@@ -8,6 +8,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import get from "lodash/get";
 import {getWorkFlowData, getDomainLink, isWorkflowExists } from "../../ui-utils/commons"
 import { httpRequest } from "../../ui-utils/api";
+import store from "ui-redux/store";
 
 class Footer extends React.Component {
   state = {
@@ -55,8 +56,8 @@ class Footer extends React.Component {
               "error"
             );
             return false;
-          }            
-          window.location.href = `${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`                    
+          }   
+          store.dispatch(setRoute(`${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`));
        }
       };
     //if(applicationType === "MODIFY"){

@@ -3,7 +3,9 @@ import { sortByEpoch, getEpochForDate } from "../../utils";
 import { Link } from "react-router-dom"
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { getDomainLink } from "../../../../../ui-utils/commons";
-import "./index.css"
+import "./index.css";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -38,11 +40,6 @@ export const searchResults = {
           customBodyRender: (value, data) => {
             if (data.rowData[4] !== undefined && typeof data.rowData[4] === 'number') {
               return (
-                // <Link
-                //   to={`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`}
-                //   style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
-                //   Pay now
-                // </Link>
                 <div className="linkStyle" onClick={() => getViewBillDetails(data)} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
                   <LabelContainer
                     labelKey="CS_COMMON_PAY"
@@ -107,5 +104,7 @@ export const searchResults = {
 
 
 const getViewBillDetails = data => {  
-  window.location.href = `${getDomainLink()}/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`
+  store.dispatch(
+    setRoute(`${getDomainLink()}/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
+  )
 }

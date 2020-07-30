@@ -243,16 +243,14 @@ const callBackForApply = async (state, dispatch) => {
         setTimeout(() => {
           const isMode=getQueryArg(window.location.href,"mode");
           if(isMode==="MODIFY"){
-            window.location.href= `${window.location.origin}${getDomainLink()}${redirectUrl}&propertyId=${payload.Properties[0].propertyId}`
-          }else{
-            window.location.href= `${window.location.origin}${getDomainLink()}${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`
-          }
-         
-          /*store.dispatch(
-            setRoute(
-              `${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`
+            store.dispatch(
+              setRoute(`${getDomainLink()}${redirectUrl}&propertyId=${payload.Properties[0].propertyId}`)
             )
-          );*/
+          }else{
+            store.dispatch(
+              setRoute(`${getDomainLink()}${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
+            )
+          }
         }, 3000);
       }
       else {

@@ -14,6 +14,8 @@ import { resetFields } from "./mutation-methods";
 import "./index.css"
 import {searchPropertyDetails} from "./mutation-methods"
 import { getDomainLink } from "../../../../ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -134,8 +136,7 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  let link = window.location.origin;                  
-                  window.location.href = `${link}${getDomainLink()}/pt-common-screens/register-property?redirectUrl=${url}`
+                  store.dispatch(setRoute(`${getDomainLink()}/pt-common-screens/register-property?redirectUrl=${url}`));               
                 }
               },
             }
