@@ -142,8 +142,8 @@ const getMdmsData = async (action, state, dispatch) => {
         },
         {
           moduleName: "firenoc",
-          masterDetails: [{ name: "BuildingType" }, { name: "FireStations" },{ name: "Documents" }
-        ]
+          masterDetails: [{ name: "BuildingType" }, { name: "FireStations" }, { name: "Documents" }
+          ]
         },
         {
           moduleName: "egov-location",
@@ -248,7 +248,7 @@ export const prepareEditFlow = async (
     // Set no of buildings radiobutton and eventually the cards
     let noOfBuildings =
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
-      "MULTIPLE"
+        "MULTIPLE"
         ? "MULTIPLE"
         : "SINGLE";
     dispatch(
@@ -293,8 +293,8 @@ const screenConfig = {
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
-    
-   
+
+
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "fire-noc");
@@ -408,16 +408,16 @@ const screenConfig = {
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
       nocType
     );
-/* 
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.area",
-        "props.value",
-        "Urban"
-      )
-    );  */
-  
+    /* 
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.area",
+            "props.value",
+            "Urban"
+          )
+        );  */
+
     set(
       state,
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
@@ -442,18 +442,19 @@ const screenConfig = {
         {}
       );
     }
-    if (
-      get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
-      ) === "PROVISIONAL"
-    ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber.props.style",
-        { visibility: "hidden" }
-      );
-    }
+    // if (
+    //   get(
+    //     state,
+    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
+    //   ) === "PROVISIONAL"
+    // ) {
+    //   set(
+    //     action.screenConfig,
+    //     "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
+    //     "visible",
+    //     false
+    //   );
+    // }
     // if (
     //   get(
     //     state,

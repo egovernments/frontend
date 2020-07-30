@@ -85,7 +85,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
   dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
 };
 
-const loadProvisionalNocData2 = async (state, dispatch) => {
+export const loadProvisionalNocData2 = async (state, dispatch) => {
 
 
   let oldfireNOCNumber = get(
@@ -123,10 +123,15 @@ const loadProvisionalNocData2 = async (state, dispatch) => {
     "FireNOCs[0].fireNOCDetails.fireNOCType",
     []
   );
+  let oldnocNumber = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].oldFireNOCNumber",
+    []
+  );
   console.log("------nocType---",nocType);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
   dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.fireNOCType",nocType));
-
+  dispatch(prepareFinalObject("FireNOCs[0].oldFireNOCNumber",oldnocNumber));
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
     get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
@@ -209,45 +214,42 @@ export const nocDetails = getCommonCard({
 
     beforeFieldChange: (action, state, dispatch) => {
     if (action.value === "PROVISIONAL") {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-            "props.style",
-            { visibility: "hidden" }
-          )
-        );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
+          "visible",
+          false
+        )
+      );
         dispatch(
           handleField(
             "apply",
             "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
-            "props.style",
-            { visibility: "hidden" }
+            "visible",
+            false
           )
         );
 
       }
       else if(action.value === "RENEWAL")
       {
-
         dispatch(
           handleField(
             "apply",
             "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
-            "props.style",
-            { visibility: "visible" }
+            "visible",
+            true
           )
         );
-
         dispatch(
           handleField(
             "apply",
             "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-            "props.style",
-            { visibility: "hidden" }
+            "visible",
+            false
           )
         );
-
       }
          
       else {
@@ -255,21 +257,18 @@ export const nocDetails = getCommonCard({
           handleField(
             "apply",
             "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-            "props.style",
-            { display: "visible" }
+            "visible",
+            true
            )
         );
-
-
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
-            "props.style",
-            { visibility: "hidden" }
-          )
-        );
-
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
+              "visible",
+              false
+            )
+          );
       }
     }
   },
@@ -286,6 +285,7 @@ export const nocDetails = getCommonCard({
       pattern: getPattern("FireNOCNo"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
+      visible:false,
       // pattern: getPattern("MobileNo"),
       jsonPath: "FireNOCs[0].oldFireNOCNumber",
       iconObj: {
@@ -318,6 +318,7 @@ export const nocDetails = getCommonCard({
         },
         pattern: getPattern("FireNOCNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        visible:false,
         // required: true,
         // pattern: getPattern("MobileNo"),
         jsonPath: "FireNOCs[0].provisionFireNOCNumber",

@@ -10,7 +10,7 @@ import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-
+import {loadProvisionalNocData2}  from "./nocDetails"
 import {
   createUpdateNocApplication,
   prepareDocumentsUploadData
@@ -29,22 +29,22 @@ const setReviewPageRoute = (state, dispatch) => {
     []
   );
 
- 
-  
- let tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].tenantId",
-      getTenantId()
-     );
- 
- /*  else 
-  {
-     tenantId = get(
+
+
+  let tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+    "FireNOCs[0].tenantId",
     getTenantId()
-   );
-  } */
+  );
+
+  /*  else 
+   {
+      tenantId = get(
+     state.screenConfiguration.preparedFinalObject,
+     "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+     getTenantId()
+    );
+   } */
 
   /* let tenantId = get(
     state,
@@ -145,20 +145,18 @@ const getMdmsData = async (state, dispatch) => {
 
 
 
-    let allowedDocs= [] 
+    let allowedDocs = []
 
-for (let index = 0; index < payload.MdmsRes.firenoc.Documents.length; index++) 
-{
-  const element = payload.MdmsRes.firenoc.Documents[index];
+    for (let index = 0; index < payload.MdmsRes.firenoc.Documents.length; index++) {
+      const element = payload.MdmsRes.firenoc.Documents[index];
 
-  if( element.applicationType===noctypedata)
-  {
-    allowedDocs = element.allowedDocs
-  }
+      if (element.applicationType === noctypedata) {
+        allowedDocs = element.allowedDocs
+      }
 
-  
-}
-// = payload.MdmsRes.firenoc.Documents.filter(doc=>doc.applicationType===noctypedata).allowedDocs;
+
+    }
+    // = payload.MdmsRes.firenoc.Documents.filter(doc=>doc.applicationType===noctypedata).allowedDocs;
 
     dispatch(
       prepareFinalObject(
@@ -188,41 +186,54 @@ const callBackForNext = async (state, dispatch) => {
       "screenConfiguration.preparedFinalObject.FireNOCs[0].provisionFireNOCNumber",
       ""
     );
-
-    let isnocdetailsCardValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children",
+    let fireType = get(
       state,
-      dispatch
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
+      ""
     );
+    if (fireType === "RENEWAL") {
+      let isnocdetailsCardValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children",
+        state,
+        dispatch
+      );
 
 
-    if (
-      !isnocdetailsCardValid 
-
-    ) {
-      isFormValid = false;
-      hasFieldToaster = true;
+      if (!isnocdetailsCardValid) {
+        isFormValid = false;
+        hasFieldToaster = false;
+      }
     }
 
-    if(fireNOCNumber !=''){
-      
+    if (fireNOCNumber != '') {
+
       let response = await getSearchResults([
         { key: "fireNOCNumber", value: fireNOCNumber }
       ]);
 
-      if(response===''){
-        isFormValid=false;
-       }
+      if (response === '') {
+        isFormValid = false;
+      }
 
-       if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
-          if (response.FireNOCs.length === 0) {
-            isFormValid=false;
-          }
+      if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+        if (response.FireNOCs.length === 0) {
+          isFormValid = false;
         }
       }
     }
+    debugger;
+    let oldFIRENocNumber = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
+      ""
+    );
+    if( oldFIRENocNumber){
+      loadProvisionalNocData2(state, dispatch);
+      
+    }
+  }
 
-  if (activeStep === 1) {  
+  if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
       state,
@@ -535,9 +546,9 @@ export const footer = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-       // minWidth: "200px",
+        // minWidth: "200px",
         height: "48px",
-        marginRight: "16px" 
+        marginRight: "16px"
       }
     },
     children: {
@@ -565,7 +576,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-       // minWidth: "200px",
+        // minWidth: "200px",
         height: "48px",
         marginRight: "45px"
       }
