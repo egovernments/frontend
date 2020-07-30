@@ -91,22 +91,27 @@ export const getDownloadItems = (status, applicationNumber, state) => {
           applicationDownloadObject
         ],
         printMenu: [
-          tlCertificatePrintObject,
+          tlCertificateDownloadObject,
           receiptPrintObject,
           applicationPrintObject
         ]
       };
-
-    // case "pending_approval":
-    //   return {
-    //     downloadMenu: [receiptDownloadObject, applicationDownloadObject],
-    //     printMenu: [receiptPrintObject, applicationPrintObject]
-    //   };
-
-    default:
+      
+      case "PENDINGPAYMENT":
       return {
         downloadMenu: [applicationDownloadObject],
         printMenu: [applicationPrintObject]
+      };
+    case "PENDINGAPPROVAL":
+      return {
+        downloadMenu: [receiptDownloadObject, applicationDownloadObject],
+        printMenu: [receiptPrintObject, applicationPrintObject]
+      };
+
+    default:
+      return {
+        downloadMenu: [receiptDownloadObject,applicationDownloadObject],
+        printMenu: [receiptDownloadObject,applicationPrintObject]
       };
       break;
   }
