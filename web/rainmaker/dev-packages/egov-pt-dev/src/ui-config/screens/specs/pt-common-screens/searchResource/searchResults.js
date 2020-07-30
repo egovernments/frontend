@@ -3,6 +3,8 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getQueryArg, getStatusKey } from "egov-ui-framework/ui-utils/commons";
 import { getEpochForDate, sortByEpoch } from "../../utils";
 import { getDomainLink } from "../../../../../ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
 
  export const getQueryRedirectUrl = () => {
   const url = getQueryArg(window.location.href,"redirectUrl");
@@ -104,8 +106,12 @@ const getSelect=data=>{
   }
   const isMode=getQueryArg(window.location.href,"mode");
   if(isMode==="MODIFY"){
-    window.location.href=`${getDomainLink()}${url}&propertyId=${data.rowData[0]}` 
+    store.dispatch(
+      setRoute(`${getDomainLink()}${url}&propertyId=${data.rowData[0]}` )
+    )
   }else{
-    window.location.href=`${getDomainLink()}${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}` 
+    store.dispatch(
+      setRoute(`${getDomainLink()}${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`)
+    ) 
   }
 }
