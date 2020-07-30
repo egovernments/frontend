@@ -49,8 +49,9 @@ class Footer extends React.Component {
       menu: getDownloadItems(status, applicationNumber, state).printMenu,
     };
   };
-  openActionDialog = async (item) => {
-    const { handleFieldChange, setRoute, dataPath } = this.props;
+  openActionDialog = async (item,label) => {
+
+    const { handleFieldChange, setRoute, dataPath,onDialogButtonClick } = this.props;
     let employeeList = [];
     handleFieldChange(`${dataPath}[0].comment`, "");
     handleFieldChange(`${dataPath}[0].assignee`, "");
@@ -87,7 +88,16 @@ class Footer extends React.Component {
           };
         });
     }
-    this.setState({ open: true, data: item, employeeList });
+    if(label === "APPROVE"){
+      this.setState({ data: item, employeeList });
+      onDialogButtonClick(label,false);
+
+    }
+    else{
+      this.setState({ open : true,data: item, employeeList });
+
+    }
+
   };
   onClose = () => {
     this.setState({
@@ -139,7 +149,7 @@ class Footer extends React.Component {
                   <Button
                     color={color}
                     variant={variant}
-                    onClick={() => this.openActionDialog(item)}
+                    onClick={() => this.openActionDialog(item,buttonLabel)}
                     style={{
                       minWidth: "200px",
                       height: "48px",
@@ -175,6 +185,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setRoute: (url) => dispatch(setRoute(url)),
+    
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);
