@@ -228,7 +228,7 @@ const callBackForNext = async (state, dispatch) => {
       ""
     );
     if( oldFIRENocNumber){
-      loadProvisionalNocData2(state, dispatch);
+      await  loadProvisionalNocData2(state, dispatch);
       
     }
   }

@@ -46,7 +46,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
 
   response = furnishNocResponse(response);
 
- dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
@@ -64,14 +64,14 @@ const loadProvisionalNocData = async (state, dispatch) => {
   );
 
   // Set noc type radiobutton to NEW
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
-      "props.value",
-      "NEW"
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
+  //     "props.value",
+  //     "NEW"
+  //   )
+  // );
 
   // Set provisional fire noc number
   dispatch(
@@ -86,28 +86,12 @@ const loadProvisionalNocData = async (state, dispatch) => {
 };
 
 export const loadProvisionalNocData2 = async (state, dispatch) => {
-
-
   let oldfireNOCNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
     ""
   );
 
-
-  // if (!oldfireNOCNumber.match(getPattern("FireNOCNo"))) {
-  //   dispatch(
-  //     toggleSnackbar(
-  //       true,
-  //       {
-  //         labelName: "Incorrect old FireNOC Number!",
-  //         // labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
-  //       },
-  //       "error"
-  //     )
-  //   );
-  //   return;
-  // }
 
   let response = await getSearchResults([
     { key: "FireNOCNumber", value: oldfireNOCNumber }
@@ -116,8 +100,20 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
   // let response = await getSearchResults([
   //   { key: "oldFireNOCNumber", value:  }
   // ]);
+
+  let isLegacy = false;
+  if (!get(response, "FireNOCs", []).length) {
+
+    isLegacy = true;
+
+  }
+  // else{
+  //   dispatch(prepareFinalObject("FireNOCs[0].isLegacy",false));
+
+  // }
+
   response = furnishNocResponse(response);
-  console.log("=====response======",response);
+  console.log("=====response======", response);
   let nocType = get(
     state.screenConfiguration.preparedFinalObject,
     "FireNOCs[0].fireNOCDetails.fireNOCType",
@@ -128,10 +124,13 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
     "FireNOCs[0].oldFireNOCNumber",
     []
   );
-  console.log("------nocType---",nocType);
+  console.log("------nocType---", nocType);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.fireNOCType",nocType));
-  dispatch(prepareFinalObject("FireNOCs[0].oldFireNOCNumber",oldnocNumber));
+
+  debugger;
+  dispatch(prepareFinalObject("FireNOCs[0].isLegacy", isLegacy));
+  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.fireNOCType", nocType));
+  dispatch(prepareFinalObject("FireNOCs[0].oldFireNOCNumber", oldnocNumber));
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
     get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
@@ -148,14 +147,14 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
   );
 
   // Set noc type radiobutton to NEW
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
-      "props.value",
-      "NEW"
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "apply",
+  //     "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
+  //     "props.value",
+  //     "NEW"
+  //   )
+  // );
 
   // Set provisional fire noc number
   dispatch(
@@ -183,84 +182,45 @@ export const nocDetails = getCommonCard({
   ),
   break: getBreak(),
   nocDetailsContainer: getCommonContainer({
-    
+
     nocSelect: {
       ...getSelectField({
-      label: {
-        labelName: "NOC Type",
-        labelKey: "NOC_TYPE_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Type",
-        labelKey: "NOC_APPLICATION_TYPE_PLACEHOLDER"
-      },
-      data: [
-        {
-          code: "NEW",
-          label: "NOC_TYPE_NEW_RADIOBUTTON"
+        label: {
+          labelName: "NOC Type",
+          labelKey: "NOC_TYPE_LABEL"
         },
-        {
-          code: "PROVISIONAL",
-          label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
+        placeholder: {
+          labelName: "Select Application Type",
+          labelKey: "NOC_APPLICATION_TYPE_PLACEHOLDER"
         },
-        {
-          code: "RENEWAL",
-          label: "NOC_TYPE_RENEWAL_RADIOBUTTON"
-        }
-      ],
-      jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
-      //required: true
-    }),
+        data: [
+          {
+            code: "NEW",
+            label: "NOC_TYPE_NEW_RADIOBUTTON"
+          },
+          {
+            code: "PROVISIONAL",
+            label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
+          },
+          {
+            code: "RENEWAL",
+            label: "NOC_TYPE_RENEWAL_RADIOBUTTON"
+          }
+        ],
+        jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
+        //required: true
+      }),
 
-    beforeFieldChange: (action, state, dispatch) => {
-    if (action.value === "PROVISIONAL") {
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-          "visible",
-          false
-        )
-      );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
-            "visible",
-            false
-          )
-        );
-
-      }
-      else if(action.value === "RENEWAL")
-      {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
-            "visible",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-            "visible",
-            false
-          )
-        );
-      }
-         
-      else {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-            "visible",
-            true
-           )
-        );
+      beforeFieldChange: (action, state, dispatch) => {
+        if (action.value === "PROVISIONAL") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
+              "visible",
+              false
+            )
+          );
           dispatch(
             handleField(
               "apply",
@@ -269,43 +229,81 @@ export const nocDetails = getCommonCard({
               false
             )
           );
-      }
-    }
-  },
-  oldFIRENocNumber: {
-    ...getTextField({
-      label: {
-        labelName: "old fire NoC number",
-        // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter old fire NoC number",
-        // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_PLACEHOLDER"
-      },
-      pattern: getPattern("FireNOCNo"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: true,
-      visible:false,
-      // pattern: getPattern("MobileNo"),
-      jsonPath: "FireNOCs[0].oldFireNOCNumber",
-      iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch, fieldInfo) => {
-            loadProvisionalNocData2(state, dispatch);
-          }
+
+        }
+        else if (action.value === "RENEWAL") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
+              "visible",
+              false
+            )
+          );
+        }
+
+        else {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
+              "visible",
+              false
+            )
+          );
         }
       }
-      // title: {
-      //   value: "Please search owner profile linked to the mobile no.",
-      //   key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
-      // },
-      // infoIcon: "info_circle"
-    })
-  },
+    },
+    oldFIRENocNumber: {
+      ...getTextField({
+        label: {
+          labelName: "old fire NoC number",
+          // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter old fire NoC number",
+          // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_PLACEHOLDER"
+        },
+        pattern: getPattern("FireNOCNo"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        required: true,
+        visible: false,
+        // pattern: getPattern("MobileNo"),
+        jsonPath: "FireNOCs[0].oldFireNOCNumber",
+        iconObj: {
+          iconName: "search",
+          position: "end",
+          color: "#FE7A51",
+          onClickDefination: {
+            action: "condition",
+            callBack: (state, dispatch, fieldInfo) => {
+              loadProvisionalNocData2(state, dispatch);
+            }
+          }
+        }
+        // title: {
+        //   value: "Please search owner profile linked to the mobile no.",
+        //   key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
+        // },
+        // infoIcon: "info_circle"
+      })
+    },
     provisionalNocNumber: {
       ...getTextField({
         label: {
@@ -318,7 +316,7 @@ export const nocDetails = getCommonCard({
         },
         pattern: getPattern("FireNOCNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        visible:false,
+        visible: false,
         // required: true,
         // pattern: getPattern("MobileNo"),
         jsonPath: "FireNOCs[0].provisionFireNOCNumber",

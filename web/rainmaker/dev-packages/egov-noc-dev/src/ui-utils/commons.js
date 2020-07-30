@@ -186,15 +186,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       );
     }
 
-    else{
-      let isLegacy = true;
-      set(
-        payload[0],
-        "isLegacy",
-        isLegacy
-      );
-    }
-
 
     let oldfirenocnum = get(
       state.screenConfiguration.preparedFinalObject,
