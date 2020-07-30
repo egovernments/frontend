@@ -1,18 +1,16 @@
 
-import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-    getQueryArg,
-    getTransformedLocale,
     getFileUrl,
-    getFileUrlFromAPI
+    getFileUrlFromAPI, getQueryArg,
+    getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import jp from "jsonpath";
-import _ from "lodash";
+import get from "lodash/get";
 import groupBy from "lodash/groupBy";
-import { getLoggedinUserRole } from "./index";
 import { httpRequest } from "../../../../ui-utils/api";
-import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
+import { getLoggedinUserRole } from "./index";
 
 const getDocumentCodes = (documentType) => {
     var code = getTransformedLocale(documentType);
@@ -141,7 +139,7 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
     );
     let cardReadOnly = false;
     let readOnly = false;
-    if(isVisibleTrue === false) {
+    if (isVisibleTrue === false) {
         cardReadOnly = true;
         readOnly = true;
     }

@@ -1,6 +1,6 @@
-import * as actionTypes from "./actionTypes";
-import { httpRequest } from "ui-utils/api";
 import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
+import { httpRequest } from "ui-utils/api";
+import * as actionTypes from "./actionTypes";
 
 export const setProcessInstances = payload => {
   return {

@@ -9,7 +9,7 @@ import "./index.css";
 import { searchApplicationResults } from "./searchResource/searchApplicationResults";
 import { searchResults } from "./searchResource/searchResults";
 import { showSearches } from "./searchResource/searchTabs";
-import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
+import { SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [

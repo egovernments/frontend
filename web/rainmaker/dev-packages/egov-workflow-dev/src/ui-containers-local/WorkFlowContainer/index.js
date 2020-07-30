@@ -3,6 +3,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import get from "lodash/get";
@@ -12,7 +13,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
-import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -174,7 +174,7 @@ class WorkFlowContainer extends React.Component {
           data.workflow.varificationDocuments[i].fileStore = data.workflow.varificationDocuments[i].fileStoreId
         }
       }
-      if(get(data, "workflow.comment")) {
+      if (get(data, "workflow.comment")) {
         data.workflow.comments = get(data, "workflow.comment");
       }
     }
@@ -301,7 +301,7 @@ class WorkFlowContainer extends React.Component {
 
     if (isDocRequired) {
       let documents = get(data, "wfDocuments");
-      if( dataPath === "BPA") {
+      if (dataPath === "BPA") {
         documents = get(data, "workflow.varificationDocuments");
       }
       if (documents && documents.length > 0) {
@@ -536,7 +536,7 @@ class WorkFlowContainer extends React.Component {
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName}/>
+          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName} />
         )}
         {showFooter &&
           <Footer

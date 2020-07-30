@@ -7,12 +7,10 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import {
   getFileUrl,
   getFileUrlFromAPI, getLocaleLabels, getQueryArg,
-
-
   getTransformedLocale, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
-import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import { printPdf } from "egov-ui-kit/utils/commons";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import {
   getTenantId,
   getUserInfo,
@@ -4376,7 +4374,7 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
   }
 
   let sendBackCitizen = true;
-  if(bpaDetails.status && bpaDetails.status.includes("CITIZEN_ACTION_PENDING")) {
+  if (bpaDetails.status && bpaDetails.status.includes("CITIZEN_ACTION_PENDING")) {
     sendBackCitizen = false;
   }
 

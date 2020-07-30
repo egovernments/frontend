@@ -1,15 +1,14 @@
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../..//ui-utils/commons";
 import { validateFields } from "../../utils";
 import {
   convertDateToEpoch, convertEpochToDate,
-
   getTextToLocalMapping
 } from "../../utils/index";
-import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 
 const convertMillisecondsToDays = (milliseconds) => {
   return Math.round(milliseconds / (1000 * 60 * 60 * 24));

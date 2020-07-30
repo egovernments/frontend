@@ -8,7 +8,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { epochToDate, getApplicationType } from "egov-ui-kit/utils/commons";
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
+import { getUserInfo, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
 import React from "react";
@@ -16,8 +17,6 @@ import { connect } from "react-redux";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import Label from "../../ui-containers/LabelContainer";
 import "./index.css";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
 
 const styles = {
   card: {
@@ -84,10 +83,10 @@ class SingleApplication extends React.Component {
           default:
             setRoute(`/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         }
-      } else if(item.serviceType === "BPA_OC") {
+      } else if (item.serviceType === "BPA_OC") {
         switch (item.appStatus) {
           case "INITIATED":
-            if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {
+            if (roles && roles.length == 1 && roles[0].code == "CITIZEN") {
               setRoute(`/oc-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
             } else {
               setRoute(`/oc-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
@@ -99,7 +98,7 @@ class SingleApplication extends React.Component {
       } else {
         switch (item.appStatus) {
           case "INITIATED":
-            if(roles && roles.length == 1 && roles[0].code == "CITIZEN") {
+            if (roles && roles.length == 1 && roles[0].code == "CITIZEN") {
               setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&type=${item.type}`);
             } else {
               setRoute(`/egov-bpa/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);

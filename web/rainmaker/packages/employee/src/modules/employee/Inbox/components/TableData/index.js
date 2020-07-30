@@ -8,6 +8,7 @@ import { getLocaleLabels, transformById } from "egov-ui-framework/ui-utils/commo
 import TextFieldIcon from "egov-ui-kit/components/TextFieldIcon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { SEARCHWFBUSINESS, SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import { getLocale, getLocalization, getTenantId, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import cloneDeep from "lodash/cloneDeep";
@@ -22,7 +23,6 @@ import { Taskboard } from "../actionItems";
 import Filter from "../Filter";
 import InboxData from "../Table";
 import "./index.css";
-import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -461,7 +461,7 @@ class TableData extends Component {
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbarAndSetText } = this.props;
     try {
-      const payload = await httpRequest(SEARCHWFBUSINESS.GET.URL,  SEARCHWFBUSINESS.GET.ACTION, queryObject);
+      const payload = await httpRequest(SEARCHWFBUSINESS.GET.URL, SEARCHWFBUSINESS.GET.ACTION, queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
@@ -487,7 +487,7 @@ class TableData extends Component {
       this.showLoading();
       this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       const requestBody = [{ key: "tenantId", value: tenantId }];
-      const responseData = await httpRequest(SEARCHWFPROCESS.GET.URL,  SEARCHWFPROCESS.GET.ACTION, requestBody);
+      const responseData = await httpRequest(SEARCHWFPROCESS.GET.URL, SEARCHWFPROCESS.GET.ACTION, requestBody);
       const assignedData = orderBy(
         filter(responseData.ProcessInstances, (item) => {
           let assignes = get(item, 'assignes');

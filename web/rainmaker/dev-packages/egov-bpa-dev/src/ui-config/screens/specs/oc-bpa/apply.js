@@ -1,51 +1,37 @@
 import {
   getCommonContainer,
   getCommonHeader,
-  getStepperObject,
-  getLabel
+  getLabel, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  prepareDocumentsUploadData,
-  getAppSearchResults,
-  createUpdateOCBpaApplication
-} from "../../../../ui-utils/commons";
-import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
-import {
-  getQueryArg,
-  setBusinessServiceDataToLocalStorage,
-  getFileUrlFromAPI,
+  getFileUrlFromAPI, getQueryArg,
   getTransformedLocale,
-  orderWfProcessInstances
+  orderWfProcessInstances, setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
-import {
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField,
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import set from "lodash/set";
-import get from "lodash/get";
 import jp from "jsonpath";
+import get from "lodash/get";
+import set from "lodash/set";
+import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
+import { createUpdateOCBpaApplication, getAppSearchResults, prepareDocumentsUploadData } from "../../../../ui-utils/commons";
 import {
-  basicDetails,
-  buildingPlanScrutinyDetails,
-  proposedBuildingDetails,
-  abstractProposedBuildingDetails
-} from "./applyResource/scrutinyDetails";
-import { documentAndNocDetails } from './applyResource/documentAndNocDetails';
-import { summaryDetails } from "./summary";
-import { footer, showRisktypeWarning } from "./applyResource/footer";
-import {
-  getBpaMdmsData,
+  applicantNameAppliedByMaping, edcrDetailsToBpaDetails, getBpaMdmsData,
   getOcEdcrDetails,
   getTodaysDateInYYYMMDD,
-  edcrDetailsToBpaDetails,
-  setProposedBuildingData,
-  applicantNameAppliedByMaping
+  setProposedBuildingData
 } from "../utils";
-import { changeStep } from "./applyResource/footer";
-import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
+import { documentAndNocDetails } from './applyResource/documentAndNocDetails';
+import { changeStep, footer, showRisktypeWarning } from "./applyResource/footer";
+import {
+  abstractProposedBuildingDetails, basicDetails,
+  buildingPlanScrutinyDetails,
+  proposedBuildingDetails
+} from "./applyResource/scrutinyDetails";
 import { comparisondialog } from "./comparisondialog";
+import { summaryDetails } from "./summary";
+
 
 export const stepsData = [
   { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
@@ -178,7 +164,7 @@ const procedToNextStep = async (state, dispatch) => {
     handleField("apply", "components.cityPickerDialog", "props.open", !toggle)
   );
   var isFormValid = await createUpdateOCBpaApplication(state, dispatch, "INITIATE");
-  if(isFormValid) {
+  if (isFormValid) {
     prepareDocumentsUploadData(state, dispatch);
     changeStep(state, dispatch, "", 1);
   }
@@ -197,15 +183,15 @@ const setSearchResponse = async (
     },
     { key: "applicationNo", value: applicationNumber }
   ]);
-  
+
   dispatch(prepareFinalObject("BPA", response.BPA[0]));
   let edcrRes = await edcrHttpRequest(
     "post",
     "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + get(response, "BPA[0].edcrNumber") + "&tenantId=" + tenantId,
     "search", []
-    );
+  );
 
-  dispatch(prepareFinalObject(`ocScrutinyDetails`, edcrRes.edcrDetail[0] ));
+  dispatch(prepareFinalObject(`ocScrutinyDetails`, edcrRes.edcrDetail[0]));
   dispatch(prepareFinalObject("BPAs.appdate", get(response, "BPA[0].auditDetails.createdTime")));
   await setProposedBuildingData(state, dispatch, "ocApply", "ocApply");
   await edcrDetailsToBpaDetails(state, dispatch);
@@ -215,7 +201,7 @@ const setSearchResponse = async (
 };
 
 export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
-  let docs = get (state.screenConfiguration.preparedFinalObject, "documentsContract");
+  let docs = get(state.screenConfiguration.preparedFinalObject, "documentsContract");
   let bpaDocs = [];
   if (docs && docs.length > 0) {
     docs.forEach(section => {
@@ -223,31 +209,31 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
         let docObj = {};
         docObj.documentType = section.code;
         docObj.documentCode = doc.code;
-        if(uploadedDocs && uploadedDocs.length > 0) {
+        if (uploadedDocs && uploadedDocs.length > 0) {
           docObj.isDocumentRequired = false;
         }
         else {
-          docObj.isDocumentRequired = doc.required;          
+          docObj.isDocumentRequired = doc.required;
         }
         docObj.isDocumentTypeRequired = doc.required;
         bpaDocs.push(docObj);
       })
     });
   }
-  
-  let bpaDetails = get (state.screenConfiguration.preparedFinalObject, "BPA");
+
+  let bpaDetails = get(state.screenConfiguration.preparedFinalObject, "BPA");
   let uploadedDocs = bpaDetails.documents;
-  
-  if(uploadedDocs && uploadedDocs.length > 0) {
+
+  if (uploadedDocs && uploadedDocs.length > 0) {
     let fileStoreIds = jp.query(uploadedDocs, "$.*.fileStoreId");
     let fileUrls = fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
     uploadedDocs.forEach(upDoc => {
-      bpaDocs.forEach((bpaDoc,index) => {
+      bpaDocs.forEach((bpaDoc, index) => {
         let bpaDetailsDoc;
-        if(upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0]+"."+(upDoc.documentType).split('.')[1];
-        if(bpaDetailsDoc == bpaDoc.documentCode) {
+        if (upDoc.documentType) bpaDetailsDoc = (upDoc.documentType).split('.')[0] + "." + (upDoc.documentType).split('.')[1];
+        if (bpaDetailsDoc == bpaDoc.documentCode) {
           let url = (fileUrls && fileUrls[upDoc.fileStoreId] && fileUrls[upDoc.fileStoreId].split(",")[0]) || "";
-          let name = (fileUrls[upDoc.fileStoreId] && 
+          let name = (fileUrls[upDoc.fileStoreId] &&
             decodeURIComponent(
               fileUrls[upDoc.fileStoreId]
                 .split(",")[0]
@@ -256,37 +242,37 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
                 .pop()
                 .slice(13)
             )) ||
-          `Document - ${index + 1}`;
+            `Document - ${index + 1}`;
           bpaDoc.dropDownValues = {};
-          bpaDoc.dropDownValues.value =  upDoc.documentType;
-          if(bpaDoc.documents ){
+          bpaDoc.dropDownValues.value = upDoc.documentType;
+          if (bpaDoc.documents) {
             bpaDoc.documents.push(
               {
                 title: getTransformedLocale(bpaDoc.dropDownValues.value),
-                dropDownValues : bpaDoc.dropDownValues.value,    
+                dropDownValues: bpaDoc.dropDownValues.value,
                 name: name,
                 linkText: "View",
-                fileName : name,
-                fileStoreId : upDoc.fileStoreId,
-                fileUrl : url,
-                wfState: upDoc.wfState ,
-                isClickable:false,
-                additionalDetails: upDoc.additionalDetails                                
+                fileName: name,
+                fileStoreId: upDoc.fileStoreId,
+                fileUrl: url,
+                wfState: upDoc.wfState,
+                isClickable: false,
+                additionalDetails: upDoc.additionalDetails
               }
             );
-          }else{
+          } else {
             bpaDoc.documents = [
               {
                 title: getTransformedLocale(bpaDoc.dropDownValues.value),
-                dropDownValues : bpaDoc.dropDownValues.value,             
+                dropDownValues: bpaDoc.dropDownValues.value,
                 name: name,
                 linkText: "View",
-                fileName : name,
-                fileStoreId : upDoc.fileStoreId,
-                fileUrl : url,
+                fileName: name,
+                fileStoreId: upDoc.fileStoreId,
+                fileUrl: url,
                 wfState: upDoc.wfState,
-                isClickable:false,
-                additionalDetails: upDoc.additionalDetails                                 
+                isClickable: false,
+                additionalDetails: upDoc.additionalDetails
               }
             ];
           }
@@ -295,46 +281,46 @@ export const prepareDocumentDetailsUploadRedux = async (state, dispatch) => {
     })
     let previewStoreIds = jp.query(bpaDocs, "$..[*].*.fileStoreId");
     let previewFileUrls = previewStoreIds.length > 0 ? await getFileUrlFromAPI(previewStoreIds) : {};
-      
+
     bpaDocs.forEach(doc => {
 
       if (doc.documents && doc.documents.length > 0) {
-          doc.documents.forEach(docDetail =>{
-            docDetail["link"] = fileUrls[docDetail.fileStoreId];
-            return docDetail;
-          });
+        doc.documents.forEach(docDetail => {
+          docDetail["link"] = fileUrls[docDetail.fileStoreId];
+          return docDetail;
+        });
       }
     });
     dispatch(prepareFinalObject("documentDetailsUploadRedux", bpaDocs));
   }
 }
 
-const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJsonpath)=>{
+const setTaskStatus = async (state, applicationNumber, tenantId, dispatch, componentJsonpath) => {
   const queryObject = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
     { key: "tenantId", value: tenantId }
   ];
-  let processInstances =[];
-    const payload = await httpRequest(
-      "post",
-      SEARCHWFPROCESS.GET.URL,
-      "",
-      queryObject
+  let processInstances = [];
+  const payload = await httpRequest(
+    "post",
+    SEARCHWFPROCESS.GET.URL,
+    "",
+    queryObject
+  );
+  if (payload && payload.ProcessInstances.length > 0) {
+    processInstances = orderWfProcessInstances(
+      payload.ProcessInstances
     );
-    if (payload && payload.ProcessInstances.length > 0) {
-      processInstances= orderWfProcessInstances(
-        payload.ProcessInstances
-      );      
-      dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances",processInstances));
-      
-      let sendToArchitect = (processInstances && processInstances.length>1 && processInstances[processInstances.length-1].action)||"";
-      
-      if(sendToArchitect =="SEND_TO_ARCHITECT"){
-        dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
-      }
-     
+    dispatch(prepareFinalObject("BPAs.taskStatusProcessInstances", processInstances));
+
+    let sendToArchitect = (processInstances && processInstances.length > 1 && processInstances[processInstances.length - 1].action) || "";
+
+    if (sendToArchitect == "SEND_TO_ARCHITECT") {
+      dispatch(handleField("apply", 'components.div.children.taskStatus', "visible", true));
     }
+
+  }
 }
 
 const screenConfig = {
@@ -355,7 +341,7 @@ const screenConfig = {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
       const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
-      if(edcrNumber) {
+      if (edcrNumber) {
         dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
         getOcEdcrDetails(state, dispatch)
       }
@@ -368,7 +354,7 @@ const screenConfig = {
       { key: "businessServices", value: "BPA_OC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    setTaskStatus(state,applicationNumber,tenantId,dispatch,componentJsonpath);
+    setTaskStatus(state, applicationNumber, tenantId, dispatch, componentJsonpath);
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -423,22 +409,22 @@ const screenConfig = {
         taskStatus: {
           moduleName: "egov-workflow",
           uiFramework: "custom-containers-local",
-          componentPath: "WorkFlowContainer",          
+          componentPath: "WorkFlowContainer",
           visible: false,
-          componentJsonpath:'components.div.children.taskStatus',
+          componentJsonpath: 'components.div.children.taskStatus',
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
             updateUrl: "/bpa-services/v1/bpa/_update"
           }
-          },
+        },
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
         footer
       }
     },
-    cityPickerDialog :{
+    cityPickerDialog: {
       componentPath: "Dialog",
       props: {
         open: false,
@@ -517,11 +503,11 @@ const screenConfig = {
         }
       }
     },
-    cityPickerDialogofComparison :{
+    cityPickerDialogofComparison: {
       componentPath: "Dialog",
       props: {
         open: false,
-       // maxWidth: "md"
+        // maxWidth: "md"
       },
       children: {
         dialogContent: {

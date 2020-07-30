@@ -13,6 +13,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
@@ -21,7 +22,6 @@ import React from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getWFConfig } from "./workflowRedirectionConfig";
-import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 class InboxData extends React.Component {
   state = {
     dialogOpen: false,
@@ -170,14 +170,14 @@ class InboxData extends React.Component {
                         <div className="rainmaker-displayInline">
                           {sortOrder === "desc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("asc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500", marginTop:"-5px",minWidth:"150px"}} color="#000000"/>
-                              <ArrowDropUpIcon style={{marginTop:"-3px"  }}/>
+                              <Label label={item} labelStyle={{ fontWeight: "500", marginTop: "-5px", minWidth: "150px" }} color="#000000" />
+                              <ArrowDropUpIcon style={{ marginTop: "-3px" }} />
                             </div>
                           )}
                           {sortOrder === "asc" && (
                             <div className="arrow-icon-style" onClick={() => this.sortingTable("desc")}>
-                              <Label label={item} labelStyle={{ fontWeight: "500" , marginTop:"-5px",minWidth:"150px"}} color="#000000" />
-                              <ArrowDropDownIcon style={{marginTop:"-3px"  }}/>
+                              <Label label={item} labelStyle={{ fontWeight: "500", marginTop: "-5px", minWidth: "150px" }} color="#000000" />
+                              <ArrowDropDownIcon style={{ marginTop: "-3px" }} />
                             </div>
                           )}
                         </div>

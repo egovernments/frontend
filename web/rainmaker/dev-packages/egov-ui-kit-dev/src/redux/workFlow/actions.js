@@ -1,6 +1,6 @@
-import * as actionTypes from "./actionTypes";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
+import { SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
+import * as actionTypes from "./actionTypes";
 
 export const fetchBuisnessService = (payload) => {
   return {

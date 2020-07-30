@@ -5,7 +5,7 @@ import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { TENANT } from "egov-ui-kit/utils/endPoints";
+import { SEARCHWFPROCESS, TENANT } from "egov-ui-kit/utils/endPoints";
 import { getAccessToken, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
@@ -14,7 +14,6 @@ import set from "lodash/set";
 import React from "react";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
-import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",

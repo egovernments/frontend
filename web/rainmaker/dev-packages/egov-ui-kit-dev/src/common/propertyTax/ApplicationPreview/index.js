@@ -8,7 +8,7 @@ import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { FETCHASSESSMENTS, PROPERTY } from "egov-ui-kit/utils/endPoints";
+import { FETCHASSESSMENTS, PROPERTY, SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
 import { getLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { generatePdfFromDiv, getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import WorkFlowContainer from "egov-workflow/ui-containers-local/WorkFlowContainer";
@@ -22,7 +22,6 @@ import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import "./index.css";
-import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
 
 const innerDivStyle = {
   padding: "0",
