@@ -11,6 +11,7 @@ import {
 
   getTransformedLocale, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import { printPdf } from "egov-ui-kit/utils/commons";
 import {
   getTenantId,
@@ -3955,7 +3956,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     ];
     const wfPayload = await httpRequest(
       "post",
-      "egov-workflow/egov-wf/process/_search",
+      SEARCHWFPROCESS.GET.URL,
       "",
       queryObject
     );

@@ -8,6 +8,7 @@ import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 
 export const serviceConst = {    
     "WATER" : "WATER",
@@ -218,7 +219,7 @@ export const getWorkFlowData = async (queryObject) => {
     try {
         const response = await httpRequest(
             "post",
-            "egov-workflow/egov-wf/process/_search",
+            SEARCHWFPROCESS.GET.URL,
             "_search",
             queryObject
         );
@@ -1745,7 +1746,7 @@ export const downloadApp = async (wnsConnection, type, mode = "download") => {
         if (type === 'sanctionLetter') {
             const slaDetails = await httpRequest(
                 "post",
-                `egov-workflow/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
+                `${SEARCHWFBUSINESS.GET.URL}?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
                 "_search"
             );
 

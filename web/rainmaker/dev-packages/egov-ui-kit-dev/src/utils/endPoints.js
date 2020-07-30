@@ -192,3 +192,15 @@ export const FETCHASSESSMENTS = {
     ACTION: "_search",
   },
 };
+export const SEARCHWFBUSINESS = {
+  GET: {
+    URL: "egov-workflow/egov-wf/businessservice/_search",
+    ACTION: "_search",
+  },
+};
+export const SEARCHWFPROCESS = {
+  GET: {
+    URL: "egov-workflow/egov-wf/process/_search",
+    ACTION: "_search",
+  },
+};

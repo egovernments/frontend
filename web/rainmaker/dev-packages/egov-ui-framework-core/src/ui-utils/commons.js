@@ -10,6 +10,7 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
+import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -329,7 +330,7 @@ export const setBusinessServiceDataToLocalStorage = async (
     dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
-      "egov-workflow/egov-wf/businessservice/_search",
+      SEARCHWFBUSINESS.GET.URL,
       "_search",
       queryObject
     );

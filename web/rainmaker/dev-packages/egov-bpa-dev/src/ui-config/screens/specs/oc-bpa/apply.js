@@ -10,7 +10,7 @@ import {
   getAppSearchResults,
   createUpdateOCBpaApplication
 } from "../../../../ui-utils/commons";
-
+import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
@@ -318,7 +318,7 @@ const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJ
   let processInstances =[];
     const payload = await httpRequest(
       "post",
-      "egov-workflow/egov-wf/process/_search",
+      SEARCHWFPROCESS.GET.URL,
       "",
       queryObject
     );

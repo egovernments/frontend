@@ -21,6 +21,7 @@ import React from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getWFConfig } from "./workflowRedirectionConfig";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 class InboxData extends React.Component {
   state = {
     dialogOpen: false,
@@ -70,7 +71,7 @@ class InboxData extends React.Component {
       { key: "history", value: true },
       { key: "tenantId", value: tenantId },
     ];
-    const payload = await httpRequest("egov-workflow/egov-wf/process/_search?", "", queryObject);
+    const payload = await httpRequest(SEARCHWFPROCESS.GET.URL, "", queryObject);
     const processInstances = payload && payload.ProcessInstances.length > 0 && orderWfProcessInstances(payload.ProcessInstances);
     return processInstances;
   };

@@ -12,6 +12,7 @@ import _ from "lodash";
 import groupBy from "lodash/groupBy";
 import { getLoggedinUserRole } from "./index";
 import { httpRequest } from "../../../../ui-utils/api";
+import {SEARCHWFBUSINESS,SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 
 const getDocumentCodes = (documentType) => {
     var code = getTransformedLocale(documentType);
@@ -36,7 +37,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
         ];
         const wfPayload = await httpRequest(
             "post",
-            "egov-workflow/egov-wf/process/_search",
+            SEARCHWFPROCESS.GET.URL,
             "",
             queryObject
         );

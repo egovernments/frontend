@@ -14,6 +14,7 @@ import set from "lodash/set";
 import React from "react";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
+import { SEARCHWFPROCESS } from "egov-ui-kit/utils/endPoints";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -929,7 +930,7 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
       }
     } else {
       const payload = await httpRequest(
-        "egov-workflow/egov-wf/process/_search",
+        SEARCHWFPROCESS.GET.URL,
         "_search",
         queryObject
       );

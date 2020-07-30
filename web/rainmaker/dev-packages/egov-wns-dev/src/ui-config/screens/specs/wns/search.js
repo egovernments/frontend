@@ -9,6 +9,7 @@ import "./index.css";
 import { searchApplicationResults } from "./searchResource/searchApplicationResults";
 import { searchResults } from "./searchResource/searchResults";
 import { showSearches } from "./searchResource/searchTabs";
+import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -62,7 +63,7 @@ const getBusinessService = async (dispatch) => {
   ];
   const payload = await httpRequest(
     "post",
-    "egov-workflow/egov-wf/businessservice/_search",
+    SEARCHWFBUSINESS.GET.URL,
     "_search",
     queryObject
   );

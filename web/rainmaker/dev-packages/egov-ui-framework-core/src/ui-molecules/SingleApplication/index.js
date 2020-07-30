@@ -17,6 +17,8 @@ import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import Label from "../../ui-containers/LabelContainer";
 import "./index.css";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
+
 const styles = {
   card: {
     marginLeft: 8,
@@ -31,7 +33,7 @@ class SingleApplication extends React.Component {
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbar } = this.props;
     try {
-      const payload = await httpRequest("post", "egov-workflow/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest("post", SEARCHWFBUSINESS.GET.URL, "_search", queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {

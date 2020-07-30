@@ -22,7 +22,7 @@ import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import "./index.css";
-
+import {SEARCHWFBUSINESS } from "egov-ui-kit/utils/endPoints";
 
 const innerDivStyle = {
   padding: "0",
@@ -133,7 +133,7 @@ class ApplicationPreview extends Component {
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbarAndSetText } = this.props;
     try {
-      const payload = await httpRequest("egov-workflow/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest(SEARCHWFBUSINESS.GET.URL, "_search", queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
