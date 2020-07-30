@@ -1,6 +1,6 @@
 import { prepareFormData, getTenantForLatLng } from "egov-ui-kit/utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 const updateComplaintStatus = (state, form) => {
   const formData = prepareFormData(form);
@@ -32,6 +32,7 @@ const transformer = (formKey, form = {}, state = {}) => {
       formData.services[0] = filteredServiceData;
       return formData;
     },
+
     comment: () => {
       const formData = prepareFormData(form);
       const serviceRequestId = decodeURIComponent(window.location.pathname.split("/").pop());
@@ -80,6 +81,7 @@ const transformer = (formKey, form = {}, state = {}) => {
       const { previousRoute } = state.app;
       const { fields: otpFields } = form;
       let fields;
+
       if (previousRoute.endsWith("register")) {
         fields = state.form["register"].fields;
         fields = {
@@ -96,10 +98,6 @@ const transformer = (formKey, form = {}, state = {}) => {
             jsonPath: "User.tenantId",
             value: fields.city.value,
           },
-          permanentCity: {
-            jsonPath: "User.permanentCity",
-            value: fields.city.value,
-          },
         };
       } else if (previousRoute.endsWith("login")) {
         fields = state.form["login"].fields;
@@ -114,54 +112,55 @@ const transformer = (formKey, form = {}, state = {}) => {
           },
         };
       }
-      else if(previousRoute.indexOf("smsLink=true") > 0) {
-        fields = {
-          password: {
-            jsonPath:"login.password",
-            value: otpFields.otp.value,
-          },
-          username: {
-            jsonPath: "login.username",
-            value: otpFields.otp.phone,
-          },
-        };
-      }
       return prepareFormData({ ...form, fields });
     },
     employeeOTP: () => {
       const formData = prepareFormData(form);
-      const commonConfig = require("config/common").default;
       const { fields } = state.form.employeeForgotPasswd || {};
-      const {tenantId ={}} = fields;
-      formData.tenantId = tenantId.value || commonConfig.tenantId;
-      
-      //below code is commented without knowming the prior use of employee otp screen jaya
-      // formData.userName = fields.username.value;
+      formData.tenantId = fields.tenantId.value;
+      formData.type="EMPLOYEE";
       return formData;
     },
     employeeChangePassword: () => {
       const formData = prepareFormData(form);
+      const { auth } = state;
+      const username = get(auth, "userInfo.userName");
+      const type = process.env.REACT_APP_NAME === "Citizen" ? "CITIZEN" : "EMPLOYEE";
       const tenantId = getTenantId();
       formData.tenantId = tenantId;
+      formData.username = username;
+      formData.type = type;
       return formData;
     },
     complaint: async () => {
       const formData = prepareFormData(form);
       const userInfo = getUserInfo();
+      const isNative = JSON.parse(localStorageGet("isNative"));
+      // let userRole = null;
       let userPhone = null;
+      let userRole = null;
       try {
         userPhone = JSON.parse(userInfo).mobileNumber;
+        userRole = JSON.parse(userInfo).roles[0].code;
+        formData.services[0].source =
+          userRole === "CITIZEN" ? (isNative ? "mobileapp" : "web") : "";
         formData.services[0].phone = userPhone;
       } catch (error) {}
 
       try {
-        const { latitude, longitude } = form.fields;
-        const tenantId = await getTenantForLatLng(latitude.value, longitude.value);
-        formData.services[0].tenantId = tenantId;
-        if(!formData.services[0].tenantId)
-        {
-          formData.services[0].tenantId=form.fields.city.value;
+        const { latitude, longitude, city } = form.fields;
+        let tenantId = "";
+        if (latitude.value) {
+          tenantId = await getTenantForLatLng(latitude.value, longitude.value);
+        } else {
+          tenantId = city.value && city.value;
         }
+        formData.services[0].tenantId = tenantId;
+        const userRolesArray = JSON.parse(userInfo).roles.filter(item => item.tenantId === tenantId || item.tenantId === process.env.REACT_APP_DEFAULT_TENANT_ID);
+        const index = userRolesArray.findIndex((role) => {
+          return role.code === "CSR";
+        });
+        formData.services[0].source = index > -1 ? "ivr" : isNative ? "mobileapp" : "web" ;
       } catch (error) {
         throw new Error(error.message);
       }
@@ -171,7 +170,6 @@ const transformer = (formKey, form = {}, state = {}) => {
 
   if (formKey in transformers) {
     try {
-      console.log("===========", );
       return transformers[formKey]();
     } catch (error) {
       throw new Error(error.message);
