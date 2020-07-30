@@ -26,20 +26,20 @@ export const paymentSuccessFooter = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
-  let tlCertificateDownloadObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
-    link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
-    },
-    leftIcon: "book"
-  };
-  let tlCertificatePrintObject = {
-    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
-    link: () => {
-      generateReceipt(state, dispatch, "certificate_print");
-    },
-    leftIcon: "book"
-  };
+  // let tlCertificateDownloadObject = {
+  //   label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+  //   link: () => {
+  //     generateReceipt(state, dispatch, "certificate_download");
+  //   },
+  //   leftIcon: "book"
+  // };
+  // let tlCertificatePrintObject = {
+  //   label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+  //   link: () => {
+  //     generateReceipt(state, dispatch, "certificate_print");
+  //   },
+  //   leftIcon: "book"
+  // };
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
@@ -69,23 +69,30 @@ export const paymentSuccessFooter = (
     leftIcon: "assignment"
   };
   switch (status) {
+    // case "APPROVED":
+    //   downloadMenu = [tlCertificateDownloadObject, receiptDownloadObject];
+    //   printMenu = [tlCertificatePrintObject, receiptPrintObject];
+    //   break;
     case "APPROVED":
-      downloadMenu = [tlCertificateDownloadObject, receiptDownloadObject];
-      printMenu = [tlCertificatePrintObject, receiptPrintObject];
+      downloadMenu = [receiptDownloadObject];
+      printMenu = [receiptPrintObject];
       break;
     case "APPLIED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject, tlCertificateDownloadObject];
-      printMenu = [applicationPrintObject, tlCertificatePrintObject];
+      downloadMenu = [receiptDownloadObject];
+      printMenu = [receiptPrintObject];
       break;
     // case "PENDINGPAYMENT":
-    //   downloadMenu = [applicationDownloadObject];
-    //   printMenu = [applicationPrintObject];
+    //   downloadMenu = [applicationDownloadObject, tlCertificateDownloadObject];
+    //   printMenu = [applicationPrintObject, tlCertificatePrintObject];
     //   break;
-    // case "pending_approval":
-    //   downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-    //   printMenu = [receiptPrintObject, applicationPrintObject];
-    //   break;
+    case "PENDINGPAYMENT":
+      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      printMenu = [receiptPrintObject, applicationPrintObject];
+      break;
+    case "PENDINGAPPROVAL":
+      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      printMenu = [receiptPrintObject, applicationPrintObject];
+      break;
     case "cancelled":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
       printMenu = [receiptPrintObject, applicationPrintObject];
