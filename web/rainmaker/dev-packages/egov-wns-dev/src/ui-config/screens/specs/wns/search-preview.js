@@ -316,7 +316,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
 
     setActionItems(action, obj);
-    loadReceiptGenerationData(applicationNumber, tenantId);
+    // loadReceiptGenerationData(applicationNumber, tenantId);
   }
 
 
