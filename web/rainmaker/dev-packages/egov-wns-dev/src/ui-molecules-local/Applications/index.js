@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 import "./index.css"
 import { getDomainLink } from "../../ui-utils/commons";
+import store from "ui-redux/store";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const styles = {
   card: {
@@ -22,7 +24,7 @@ const styles = {
 class Applications extends React.Component {
   getTaskDetails = data => {
     data.service = data.service.toUpperCase();
-    window.location.href = `${getDomainLink()}/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`
+    store.dispatch(setRoute(`${getDomainLink()}/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`))
   }
 
   titleCasingStatus = (status) => {
