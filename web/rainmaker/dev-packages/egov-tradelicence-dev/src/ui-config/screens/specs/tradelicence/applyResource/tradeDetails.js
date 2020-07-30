@@ -34,8 +34,8 @@ import "./index.css";
 
 const tradeCategoryChange = (reqObj) => {
   try {
-      let { dispatch } = reqObj;
-      dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", ''));
+      let { dispatch, index } = reqObj;
+      dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, ''));
   } catch (e) {
     console.log(e);
   }
@@ -43,8 +43,8 @@ const tradeCategoryChange = (reqObj) => {
 
 const tradeTypeChange = (reqObj) => {
   try {
-      let { dispatch } = reqObj;
-      dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", ''));
+      let { dispatch, index } = reqObj;
+      dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, ''));
   } catch (e) {
     console.log(e);
   }
@@ -52,7 +52,7 @@ const tradeTypeChange = (reqObj) => {
 
 const tradeSubTypeChange = (reqObj) => {
   try {
-      let { moduleName, rootBlockSub, keyValue, value, state, dispatch } = reqObj;
+      let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
       let keyValueRow = keyValue.replace(`.${value}`, ``);
       let tradeSubTypes = get(
         state.screenConfiguration.preparedFinalObject,
@@ -144,7 +144,7 @@ const tradeSubTypeChange = (reqObj) => {
           )
         );
      }
-     dispatch(pFO("Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType", value));
+     dispatch(pFO(`Licenses[0].tradeLicenseDetail.tradeUnits[${index}].tradeType`, value));
   } catch (e) {
     console.log(e);
   }
@@ -188,19 +188,22 @@ const tradeUnitCard = {
                   key : 'tradeCategory',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
-                  callBack: tradeCategoryChange
+                  callBack: tradeCategoryChange,
+                  isRequired : false
                 },
                 {
                   key : 'tradeType',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
-                  callBack: tradeTypeChange
+                  callBack: tradeTypeChange,
+                  isRequired : false
                 },
                 {
                   key : 'tradeSubType',
                   callBack: tradeSubTypeChange,
                   className:"applicant-details-error autocomplete-dropdown",
-                  fieldType : "autosuggest"
+                  fieldType : "autosuggest",
+                  isRequired : false
                 }
               ],
               moduleName: "TradeLicense",
@@ -208,7 +211,7 @@ const tradeUnitCard = {
               rootBlockSub : 'tradeUnits',
               filter: "[?(@.type=='TL')]",
               callBackEdit: updateMdmsDropDowns,
-              isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType"
+              isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType"
             }
           },
           tradeUOM: getTextField({
@@ -770,12 +773,14 @@ export const tradeDetails = getCommonCard({
             isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            isRequired : false
           },
           {
             key : 'structureSubType',
             callBack : structureSubTypeChange,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            isRequired : false
           }
         ],
         moduleName: "common-masters",
