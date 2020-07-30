@@ -16,8 +16,6 @@ import { prepareFinalObject, preparedFinalObject } from "egov-ui-framework/ui-re
 import { getSearchResults, getSearchResultsForSewerage, waterEstimateCalculation, getDescriptionFromMDMS, findAndReplace, swEstimateCalculation, setWSDocuments, getWaterSource } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
-  setMultiOwnerForSV,
-  setValidToFromVisibilityForSV,
   getDialogButton,
   convertDateToEpoch,
   showHideAdhocPopup
@@ -26,7 +24,6 @@ import { footerReview } from "./applyResource/footer";
 import { downloadPrintContainer } from "../wns/acknowledgement";
 import {
   getFeesEstimateOverviewCard,
-  getHeaderSideText,
   getTransformedStatus
 } from "../utils";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
@@ -235,12 +232,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const status = getTransformedStatus(
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
-
-    // const appStatus = get(
-    //   state,
-    //   "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus"
-    // );
-    // for showing addPenaltyRebateButton
     if(process.env.REACT_APP_NAME !== "Citizen" && (processInstanceAppStatus !== 'PENDING_FOR_PAYMENT' && processInstanceAppStatus !=="PENDING_FOR_CONNECTION_ACTIVATION" && processInstanceAppStatus !== 'CONNECTION_ACTIVATED')){
       
       dispatch(
@@ -316,7 +307,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
 
     setActionItems(action, obj);
-    // loadReceiptGenerationData(applicationNumber, tenantId);
   }
 
 
