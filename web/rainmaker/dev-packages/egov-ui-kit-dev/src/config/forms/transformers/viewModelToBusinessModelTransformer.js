@@ -142,9 +142,11 @@ const transformer = (formKey, form = {}, state = {}) => {
       try {
         userPhone = JSON.parse(userInfo).mobileNumber;
         userRole = JSON.parse(userInfo).roles[0].code;
+        const { phone } = form.fields;
+        formData.services[0].phone = userRole === "CITIZEN" ?userPhone:phone.value;
         formData.services[0].source =
           userRole === "CITIZEN" ? (isNative ? "mobileapp" : "web") : "";
-        formData.services[0].phone = userPhone;
+        // formData.services[0].phone = userPhone;
       } catch (error) {}
 
       try {
