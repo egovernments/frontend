@@ -659,23 +659,58 @@ export const footerReview = (
       ];
       break;
     case "APPLIED":
+      downloadMenu = [
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
-    case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+    case "PENDINGAPPROVAL":
+      downloadMenu = [
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        receiptPrintObject,
+        applicationPrintObject
+      ];
       break;
     case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      downloadMenu = [
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        receiptPrintObject,
+        applicationPrintObject
+      ];
       break;
     case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
+      downloadMenu = [
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        receiptPrintObject,
+        applicationPrintObject
+      ];
       break;
     default:
+      downloadMenu = [
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        receiptPrintObject,
+        applicationPrintObject
+      ];
       break;
   }
   /** END */
