@@ -4,7 +4,6 @@ import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/s
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import find from "lodash/find";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
@@ -230,11 +229,11 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
-        routeTo(`acknowledgement?${this.getPurposeString(
+        this.props.setRoute(`acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
         if (redirectQueryString) {
-          routeTo(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
+          this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
         }
       }
     } catch (e) {
