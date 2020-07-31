@@ -125,12 +125,31 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     "screenConfiguration.preparedFinalObject.FireNOCs[0].id"
   );
   let method = nocId ? "UPDATE" : "CREATE";
+
+  
   try {
     let payload = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs",
       []
     );
+
+
+
+    
+    // console.log("clonepayload",clonepayload);
+
+    // if(clonepayload[1].fireNOCDetails.action==="APPROVE")
+    // {
+
+    //   let data = clonepayload.filter(doc=>doc.fireNOCDetails.action==="APPROVE");
+
+    //   console.log(data,"jai");
+      
+    // }
+
+
+
 
     let newbuildings = get(
       state.screenConfiguration.preparedFinalObject,
@@ -185,6 +204,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         isLegacy
       );
     }
+
 
 
     let oldfirenocnum = get(
@@ -452,6 +472,29 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       );
     });
 
+    console.log("createpayloaddata",payload)
+
+    let data = payload.filter(doc=>doc.fireNOCDetails.action==="APPROVE");
+    console.log(data,"jai");
+
+    data = data.map((obj)=>{
+      if(obj.fireNOCDetails.action === "APPROVE")
+      {
+      obj.fireNOCDetails.action = "INITIATE";
+      }
+      })
+
+      set(
+        payload[1],
+        "payload[1]",
+        data
+      );
+
+      // payload.MdmsRes.Documents= documents;
+      // payload = data;
+
+      console.log(data,"updatedpayloadsss");
+
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
@@ -684,7 +727,6 @@ export const furnishNocResponse = response => {
   }
  
   
-  debugger;
   return response;
 };
 
