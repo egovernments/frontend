@@ -13,7 +13,6 @@ import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
 
-
 const tenant = getQueryArg(window.location.href, "tenantId");
 
 class WorkFlowContainer extends React.Component {
@@ -117,7 +116,7 @@ class WorkFlowContainer extends React.Component {
       case "REVOCATE":
         return "purpose=application&status=revocated"
       case "VOID":
-          return "purpose=application&status=voided"
+        return "purpose=application&status=voided"
     }
   };
 
@@ -179,7 +178,7 @@ class WorkFlowContainer extends React.Component {
           data.workflow.varificationDocuments[i].fileStore = data.workflow.varificationDocuments[i].fileStoreId
         }
       }
-      if(get(data, "workflow.comment")) {
+      if (get(data, "workflow.comment")) {
         data.workflow.comments = get(data, "workflow.comment");
       }
     }
@@ -230,11 +229,11 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
-        window.location.href = `acknowledgement?${this.getPurposeString(
+        this.props.setRoute(`acknowledgement?${this.getPurposeString(
           label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-       if(redirectQueryString){
-        window.location.href = `acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`;
+        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
+        if (redirectQueryString) {
+          this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
         }
       }
     } catch (e) {
@@ -286,7 +285,7 @@ class WorkFlowContainer extends React.Component {
 
     if (isDocRequired) {
       let documents = get(data, "wfDocuments");
-      if( dataPath === "BPA") {
+      if (dataPath === "BPA") {
         documents = get(data, "workflow.varificationDocuments");
       }
       if (documents && documents.length > 0) {
@@ -306,14 +305,14 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances,baseUrlTemp,bserviceTemp } = this.props;
+    const { ProcessInstances, baseUrlTemp, bserviceTemp } = this.props;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
     }
     // needs to remove this initialization if all other module integrated this changes.
-    let baseUrl = (baseUrlTemp)?baseUrlTemp:""
-    let bservice = (bserviceTemp)?bserviceTemp:""
+    let baseUrl = (baseUrlTemp) ? baseUrlTemp : ""
+    let bservice = (bserviceTemp) ? bserviceTemp : ""
 
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
@@ -331,7 +330,7 @@ class WorkFlowContainer extends React.Component {
       bservice = "PT"
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION"
-    } else if(!baseUrl && !bservice){
+    } else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
     }
@@ -422,7 +421,7 @@ class WorkFlowContainer extends React.Component {
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: (this.props.editredirect)?this.props.editredirect:this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
       };
     }
     return editAction;
@@ -502,14 +501,14 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
-    if((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
+    if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
       showFooter = false
     }
-       
+
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName}/>
+          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName} />
         )}
         {showFooter &&
           <Footer

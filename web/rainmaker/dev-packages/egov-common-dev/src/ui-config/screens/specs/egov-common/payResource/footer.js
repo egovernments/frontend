@@ -9,6 +9,14 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import "./index.css";
 
+const checkAmount = (totalAmount, customAmount) => {
+  if(totalAmount !== 0 && customAmount === 0){
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export const callPGService = async (state, dispatch) => {
   const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
   const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -36,6 +44,17 @@ export const callPGService = async (state, dispatch) => {
 
   if (amtToPay > taxAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
+    return;
+  }
+
+  if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid))) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
+        "error"
+      )
+    );
     return;
   }
 
@@ -381,6 +400,17 @@ const callBackForPay = async (state, dispatch) => {
 
   if (amtPaid > totalAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
+    return;
+  }
+
+  if (checkAmount(totalAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid))) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
+        "error"
+      )
+    );
     return;
   }
 

@@ -1,6 +1,8 @@
 import React from "react";
 import { sortByEpoch, getEpochForDate } from "../../utils";
-import './index.css'
+import './index.css';
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
 
 export const searchApplicationResults = {
   uiFramework: "custom-molecules",
@@ -116,12 +118,18 @@ export const searchApplicationResults = {
 const getApplicationDetails = data => {
   let connectionNo = `${data.rowData[0]}`;
   if(connectionNo && connectionNo !== 'NA' && data.rowData[2].includes('MODIFY')) {
-    window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`
+    store.dispatch(
+      setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`)
+    )
   } else {
-    window.location.href = `search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`
+    store.dispatch(
+      setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`)
+    )
   }
 }
 
 const getConnectionDetails = data => {
-  window.location.href = `connection-details?connectionNumber=${data.rowData[0]}&tenantId=${data.rowData[6]}&service=${data.rowData[7]}&connectionType=${data.rowData[8]}`
+  store.dispatch(
+    setRoute(`connection-details?connectionNumber=${data.rowData[0]}&tenantId=${data.rowData[6]}&service=${data.rowData[7]}&connectionType=${data.rowData[8]}`)
+  )
 }
