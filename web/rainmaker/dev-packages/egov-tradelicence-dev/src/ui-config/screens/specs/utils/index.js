@@ -1388,10 +1388,11 @@ export const validateFields = (
         isFormValid = false;
       } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
         let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+        let isIndex = fields[variable].index || 0;
         dropdownFields.forEach((item, i) => {
           let isValid = get(
             state.screenConfiguration.preparedFinalObject ,
-            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[0].${item.key}`,
+            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
             ''
           );
           if(isValid == '' || isValid == 'none') {
@@ -1410,26 +1411,6 @@ export const validateFields = (
       }
     }
   }
-  return isFormValid;
-};
-export const validateDynamicMDMSFields = ( objectJsonPath, state, dispatch, screen = "apply" ) => {
-  const fields = get(
-    state.screenConfiguration.screenConfig[screen],
-    objectJsonPath,
-    {}
-  );
-  let isFormValid = true;
-  let {masterName, moduleName, rootBlockSub, dropdownFields} = fields.props;
-  dropdownFields.forEach(item => {
-    let isValid = get(
-      state.screenConfiguration.preparedFinalObject ,
-      `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${item.index}].${item.key}`,
-      ''
-    );
-    if(isValid == '' || isValid == 'none') {
-      isFormValid = false;
-    }
-  });
   return isFormValid;
 };  
 export const epochToYmdDate = et => {
