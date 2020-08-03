@@ -428,11 +428,11 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
       ) === "PROVISIONAL"
     ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber.props.style",
-        { visibility: "hidden" }
-      );
+      // set(
+      //   action.screenConfig,
+      //   "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber.props.style",
+      //   { visibility: "hidden" }
+      // );
     }
     // if (
     //   get(

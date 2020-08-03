@@ -61,6 +61,35 @@ export const getSearchResults = async (queryObject, dispatch) => {
     );
     store.dispatch(toggleSpinner());
 
+    if(response===''){
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "This Provisional NoC number is not registered!",
+            //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+          },
+          "info"
+        )
+      );
+      return null;
+     }
+     if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+  
+        if (response.FireNOCs.length === 0) {
+          store.dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "This Provisional NoC number is not registered!",
+                //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+              },
+              "info"
+            )
+          );
+        }
+      }
+
     response.FireNOCs.forEach(firenoc => {
 
       let buildings = firenoc.fireNOCDetails.buildings;
@@ -143,7 +172,31 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     })
 
 
+    let provisionalnocnumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].provisionFireNOCNumber",
+      []
+    )
 
+
+    if(provisionalnocnumber.length===0){
+
+      provisionalnocnumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].provisionFireNOCNumber",
+        []
+      )
+
+      var keyToDelete = "provisionFireNOCNumber";
+
+      const codefull = get(
+        state.screenConfiguration,
+        "preparedFinalObject"
+        );
+
+       delete codefull.FireNOCs[0][keyToDelete];
+
+    }
 
 
     let tenantId = get(

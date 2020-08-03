@@ -14,6 +14,8 @@ import {
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {loadProvisionalNocData2} from "./nocDetails";
+
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
@@ -124,6 +126,61 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false; 
+
+  if(activeStep === 0)
+{
+  debugger;
+  let fireNOCNumber = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].provisionFireNOCNumber",
+    ""
+  );
+  let fireType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType",
+    ""
+  );
+  if (fireType === "RENEWAL") {
+    let isnocdetailsCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children",
+      state,
+      dispatch
+    );
+
+
+    if (!isnocdetailsCardValid) {
+      isFormValid = false;
+      hasFieldToaster = false;
+    }
+  }
+
+  if (fireNOCNumber != '') {
+
+    let response = await getSearchResults([
+      { key: "fireNOCNumber", value: fireNOCNumber }
+    ]);
+
+    if (response === '') {
+      isFormValid = false;
+    }
+
+    if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+      if (response.FireNOCs.length === 0) {
+        isFormValid = false;
+      }
+    }
+  }
+  let oldFIRENocNumber = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
+    ""
+  );
+  if( oldFIRENocNumber){
+    await  loadProvisionalNocData2(state, dispatch);
+    
+  }
+}
+
 
   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
