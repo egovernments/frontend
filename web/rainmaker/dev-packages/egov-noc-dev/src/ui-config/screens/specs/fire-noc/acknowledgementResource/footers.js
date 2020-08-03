@@ -299,7 +299,7 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
       },
       onClickDefination: {
         action: "page_change",
-        path: `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+        path: `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
       }
     }
   });

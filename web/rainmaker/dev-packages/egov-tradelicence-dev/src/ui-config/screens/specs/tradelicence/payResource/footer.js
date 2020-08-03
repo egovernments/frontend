@@ -59,6 +59,7 @@ export const callPGService = async (state, dispatch) => {
           ),
           module: "TL",
           taxAndPayments,
+          businessService:taxAndPayments[0].businessService,
           billId: get(billPayload, "billResponse.Bill[0].id"),
           consumerCode: get(
             billPayload,

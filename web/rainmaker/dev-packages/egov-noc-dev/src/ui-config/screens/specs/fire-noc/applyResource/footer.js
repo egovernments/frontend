@@ -16,6 +16,11 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {loadProvisionalNocData2} from "./nocDetails";
 
+import {
+  furnishNocResponse,
+  getSearchResults
+} from "../../../../../ui-utils/commons";
+
 
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
