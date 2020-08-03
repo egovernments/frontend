@@ -120,6 +120,29 @@ const screenConfig = {
       );
     }
 
+    let firNOCType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
+
+
+      if( firNOCType === "RENEWAL")
+      {           
+        set(
+          action,
+          "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
+          false
+        );      
+  
+      }       
+      else {      
+        set(
+          action,
+          "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
+          false
+        );  
+  
+        } 
+
     let value = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);

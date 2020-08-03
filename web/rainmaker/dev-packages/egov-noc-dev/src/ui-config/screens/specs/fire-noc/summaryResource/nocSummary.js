@@ -84,6 +84,18 @@ export const nocSummary = getCommonGrayCard({
         //   return value.split(".")[1];
         // }
       }
+    ),
+    oldFireNocNumber: getLabelWithValue(
+      {
+        labelName: "Old Fire NoC Number",
+        // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
+      },
+      {
+        jsonPath: "FireNOCs[0].oldFireNOCNumber"
+        // callBack: value => {
+        //   return value.split(".")[1];
+        // }
+      }
     )
   })
 });

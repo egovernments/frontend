@@ -44,9 +44,34 @@ const loadProvisionalNocData = async (state, dispatch) => {
     { key: "fireNOCNumber", value: fireNOCNumber }
   ]);
 
+
+  if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+
+    if (response.FireNOCs.length === 0) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "This Provisional NoC number is not registered!",
+            //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+          },
+          "info"
+        )
+      );
+    }
+  }
+
   response = furnishNocResponse(response);
 
+  let nocType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.fireNOCType",
+    []
+  );
+
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+
+  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.fireNOCType", nocType));
 
   // Set no of buildings radiobutton and eventually the cards
   let noOfBuildings =
@@ -92,14 +117,25 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
     ""
   );
 
-
   let response = await getSearchResults([
     { key: "FireNOCNumber", value: oldfireNOCNumber }
   ]);
 
-  // let response = await getSearchResults([
-  //   { key: "oldFireNOCNumber", value:  }
-  // ]);
+   if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+
+      if (response.FireNOCs.length === 0) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "This Fire NoC number is not registered in the system!",
+              //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+            },
+            "info"
+          )
+        );
+      }
+    }
 
   let isLegacy = false;
   if (!get(response, "FireNOCs", []).length) {
@@ -127,7 +163,6 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
   console.log("------nocType---", nocType);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
-  debugger;
   dispatch(prepareFinalObject("FireNOCs[0].isLegacy", isLegacy));
   dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.fireNOCType", nocType));
   dispatch(prepareFinalObject("FireNOCs[0].oldFireNOCNumber", oldnocNumber));
@@ -273,11 +308,11 @@ export const nocDetails = getCommonCard({
     oldFIRENocNumber: {
       ...getTextField({
         label: {
-          labelName: "old fire NoC number",
+          labelName: "Old Fire NoC Number",
           // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
         },
         placeholder: {
-          labelName: "Enter old fire NoC number",
+          labelName: "Enter Old Fire NoC Number",
           // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_PLACEHOLDER"
         },
         pattern: getPattern("FireNOCNo"),
