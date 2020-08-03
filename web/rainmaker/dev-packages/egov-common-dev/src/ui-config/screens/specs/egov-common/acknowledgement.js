@@ -104,13 +104,13 @@ const getAcknowledgementCard = (
                         icon: "done",
                         backgroundColor: "#39CB74",
                             header: {
-                                labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE`
+                                labelKey: roleExists ? `CITIZEN_SUCCESS_PAYMENT_MESSAGE` : `EMPLOYEE_SUCCESS_PAYMENT_MESSAGE`
                             },
                             body: {
-                                labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                                labelKey: roleExists ? `CITIZEN_SUCCESS_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_SUCCESS_PAYMENT_MESSAGE_DETAIL`
                             },
                             tailText: {
-                                labelKey : roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`
+                                labelKey : roleExists ? `CITIZEN_SUCCESS_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_PAYMENT_RECEIPT_NO`
                             },
                         number: receiptNumber
                     })
@@ -129,10 +129,10 @@ const getAcknowledgementCard = (
                         icon: "close",
                         backgroundColor: "#E54D42",
                         header: {
-                            labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE`
+                            labelKey: roleExists ? `CITIZEN_FAILURE_AYMENT_MESSAGE` : `EMPLOYEE_FAILURE_PAYMENT_MESSAGE`
                         },
                         body: {
-                            labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                            labelKey: roleExists ? `CITIZEN_FAILURE_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_FAILURE_PAYMENT_MESSAGE_DETAIL`
                         }
                     })
                 }
