@@ -141,6 +141,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             value={fieldProps.value}
             canFetchValueFromJsonpath={false}
             formName={fieldProps.formName}
+            isClearable={true}
             onChange={(chosenRequest, index) => {
               handleFieldChange(fieldKey, chosenRequest.target.value, fieldProps.jsonPath);
             }}

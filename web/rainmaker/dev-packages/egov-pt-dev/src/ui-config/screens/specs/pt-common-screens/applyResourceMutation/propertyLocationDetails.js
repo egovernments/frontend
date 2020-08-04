@@ -140,6 +140,7 @@ export const propertyLocationDetails = getCommonCard({
         labelsFromLocalisation: true,
         suggestions: [],
         fullwidth: true,
+        isClearable: true,
         inputLabelProps: {
           shrink: true
         },

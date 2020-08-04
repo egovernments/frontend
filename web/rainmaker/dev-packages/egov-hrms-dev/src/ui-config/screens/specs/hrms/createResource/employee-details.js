@@ -96,6 +96,7 @@ export const employeeDetails = getCommonCard({
           labelKey: "HR_GENDER_PLACEHOLDER"
         },
         required: true,
+        isClearable: true,
         labelsFromLocalisation: true,
       },
       required: true,
@@ -222,6 +223,7 @@ export const professionalDetails = getCommonCard(
             labelKey: "HR_EMPLOYMENT_TYPE_PLACEHOLDER"
           },
           required: true,
+          isClearable: true,
           labelsFromLocalisation: true,
           className: "autocomplete-dropdown",
           sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeType",
@@ -253,6 +255,7 @@ export const professionalDetails = getCommonCard(
             labelKey: "HR_STATUS_PLACEHOLDER"
           },
           required: true,
+          isClearable: true,
           labelsFromLocalisation: true,
           className: "autocomplete-dropdown",
           sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeStatus",

@@ -82,6 +82,7 @@ export const newCollectionDetailsCard = getCommonCard(
             value: tenantId,
             disabled: true,
             labelsFromLocalisation: true,
+            isClearable: true,
             className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
           },
