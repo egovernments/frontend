@@ -107,11 +107,11 @@ const getSelect=data=>{
   const isMode=getQueryArg(window.location.href,"mode");
   if(isMode==="MODIFY"){
     store.dispatch(
-      setRoute(`${getDomainLink()}${url}&propertyId=${data.rowData[0]}` )
+      setRoute(`${url}&propertyId=${data.rowData[0]}` )
     )
   }else{
     store.dispatch(
-      setRoute(`${getDomainLink()}${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`)
+      setRoute(`${url}?propertyId=${data.rowData[0]}&tenantId=${data.rowData[4]}`)
     ) 
   }
 }
