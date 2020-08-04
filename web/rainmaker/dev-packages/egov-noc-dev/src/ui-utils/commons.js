@@ -60,6 +60,19 @@ export const getSearchResults = async (queryObject, dispatch) => {
     );
     store.dispatch(toggleSpinner());
 
+    if(response===''){
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "This Provisional NoC number is not registered!",
+            //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+          },
+          "info"
+        )
+      );
+      return null;
+     }
 
     response.FireNOCs.forEach(firenoc=>{
 

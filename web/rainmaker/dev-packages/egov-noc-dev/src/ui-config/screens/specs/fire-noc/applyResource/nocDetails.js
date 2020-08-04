@@ -26,19 +26,19 @@ const loadProvisionalNocData = async (state, dispatch) => {
   );
 
 
-  if (!fireNOCNumber.match(getPattern("FireNOCNo"))) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Incorrect FireNOC Number!",
-          labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
-        },
-        "error"
-      )
-    );
-    return;
-  }
+  // if (!fireNOCNumber.match(getPattern("FireNOCNo"))) {
+  //   dispatch(
+  //     toggleSnackbar(
+  //       true,
+  //       {
+  //         labelName: "Incorrect FireNOC Number!",
+  //         labelKey: "ERR_FIRENOC_NUMBER_INCORRECT"
+  //       },
+  //       "error"
+  //     )
+  //   );
+  //   return;
+  // }
 
   let response = await getSearchResults([
     { key: "fireNOCNumber", value: fireNOCNumber }
