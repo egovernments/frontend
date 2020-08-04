@@ -222,6 +222,7 @@ const commonApplicantInformation = () => {
             moduleName: "common-masters",
             masterName: "OwnerType"
           },
+          isClearable: true,
           labelsFromLocalisation: true,
           className: "autocomplete-dropdown",
           jsonPath: "Property.ownersTemp[0].ownerType",
@@ -334,6 +335,7 @@ const commonApplicantInformation = () => {
             },
             className: "applicant-details-error autocomplete-dropdown",
             required: true,
+            isClearable: true,
             labelsFromLocalisation: true,
             jsonPath: "Property.ownersTemp[0].documentType",
             sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
@@ -421,6 +423,7 @@ const institutionTypeInformation = () => {
               masterName: "OwnerShipCategory"
             },
             required: true,
+            isClearable: true,
             labelsFromLocalisation: true,
             className: "autocomplete-dropdown",
             jsonPath: "Property.institutionTemp.institutionType",
@@ -593,6 +596,7 @@ export const transfereeDetails = getCommonCard({
               masterName: "OwnerShipCategory"
             },
             required: true,
+            isClearable: true,
             labelsFromLocalisation: true,
             className: "applicant-details-error autocomplete-dropdown",
             jsonPath: "Property.ownershipCategoryTemp",

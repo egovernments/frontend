@@ -162,6 +162,7 @@ class DynamicMdmsContainer extends Component {
               masterName: masterNameCaps
             },
             fullwidth: true,
+            isClearable: true,
             required: isRequired,
             helperText : isRequired ? "Required" : '',
             inputLabelProps: {
