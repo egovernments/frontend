@@ -66,12 +66,18 @@
     padding-bottom: 16px; }
     @media only screen and (max-width: 768px) {
       .ack-body {
-        margin-left: 16px !important;
+       // margin-left: 16px !important;
+       text-align: center!important;
         width: fit-content !important;
         flex: none !important; }
       .ack-text {
         padding: 20px;
-        text-align: left !important;
+        text-align: center!important;
         justify-content: center !important;
         flex: none !important; }
+    }
+    @media only screen and (max-width: 768px) {
+      .ack-body h1, .ack-text h1{
+        text-align: center!important;
+      }
     }
