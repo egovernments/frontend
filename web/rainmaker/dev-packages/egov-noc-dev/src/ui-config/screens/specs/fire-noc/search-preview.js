@@ -296,6 +296,29 @@ const setSearchResponse = async (
   // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
+  let firNOCType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
+
+
+    if( firNOCType === "RENEWAL")
+    {           
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
+        false
+      );      
+
+    }       
+    else {      
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
+        false
+      );  
+
+      } 
+
   // Set Institution/Applicant info card visibility
   if (
     get(
@@ -348,6 +371,8 @@ const screenConfig = {
     // ];
  
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+        debugger;
+
     // searchBill(dispatch, applicationNumber, tenantId);
   //  createBill(queryObject1,dispatch)
   //  .then(payload=>{
@@ -371,6 +396,8 @@ const screenConfig = {
   // })
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
+
+
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
