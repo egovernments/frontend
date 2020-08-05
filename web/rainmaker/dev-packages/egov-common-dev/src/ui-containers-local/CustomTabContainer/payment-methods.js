@@ -367,17 +367,17 @@ export const poDetails = getCommonContainer({
 });
 
 export const cheque = getCommonContainer({
-  payeeDetails,
+  payeeDetails:{...payeeDetails},
   chequeDetails
 });
 
 export const neftRtgs = getCommonContainer({
-  payeeDetails,
+  payeeDetails:{...payeeDetails},
   onlineDetails
 });
 
 export const postalOrder = getCommonContainer({
-  payeeDetails,
+  payeeDetails:{...payeeDetails},
   poDetails
 });
 
@@ -460,7 +460,7 @@ export const demandDraftDetails = getCommonContainer({
 });
 
 export const demandDraft = getCommonContainer({
-  payeeDetails,
+  payeeDetails:{...payeeDetails},
   demandDraftDetails
 });
 
@@ -508,12 +508,12 @@ export const cardDetails = getCommonContainer({
 });
 
 export const card = getCommonContainer({
-  payeeDetails,
+  payeeDetails:{...payeeDetails},
   cardDetails
 });
 
 export const cash = getCommonContainer({
-  payeeDetails
+  payeeDetails:{...payeeDetails},
 });
 
 
