@@ -8,7 +8,7 @@ import {
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -66,7 +66,8 @@ const onIconClick = (state, dispatch, index) => {
 
 
 export const payeeDetails = getCommonContainer({
-  paidBy: getSelectField({
+  paidBy: {
+   ...getSelectField({
     label: {
       labelName: "Paid By",
       labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
@@ -86,6 +87,62 @@ export const payeeDetails = getCommonContainer({
     jsonPath: "ReceiptTemp[0].Bill[0].payer",
     required: true
   }),
+  beforeFieldChange: (action, state, dispatch) => {
+    const payerName = get(
+      state.screenConfiguration.preparedFinalObject,
+      "ReceiptTemp[0].Bill[0].paidBy"
+    );
+
+    let payerMobNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      "ReceiptTemp[0].Bill[0].payerMobileNumber"
+    );
+    console.log("Paid By..",payerMobNo);
+    let payerValueFieldPath = action.componentJsonpath.split(
+      "."
+    );
+    payerValueFieldPath.pop();
+    payerValueFieldPath = payerValueFieldPath.join(".");
+   
+    if(action.value == "COMMON_OWNER" && payerName){
+        dispatch(
+          handleField(
+            "pay",
+            `${payerValueFieldPath}.payerName`,
+            "props.disabled",
+            true
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${payerValueFieldPath}.payerMobileNo`,
+            "props.disabled",
+            true
+          )
+        );
+       
+      }else{
+        dispatch(
+          handleField(
+            "pay",
+            `${payerValueFieldPath}.payerName`,
+            "props.disabled",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `${payerValueFieldPath}.payerMobileNo`,          
+            "props.disabled",
+            false
+          )
+        );
+        
+      }
+     }
+  },
   payerName: getTextField({
     label: {
       labelName: "Payer Name",
