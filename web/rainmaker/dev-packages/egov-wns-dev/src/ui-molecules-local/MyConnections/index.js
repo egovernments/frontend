@@ -27,7 +27,7 @@ class MyConnections extends React.Component {
   getConnectionDetails = data => {
     store.dispatch(
       setRoute(
-        `${getDomainLink()}/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+        `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
       )
     );
   }
@@ -35,7 +35,7 @@ class MyConnections extends React.Component {
   getViewBillDetails = data => {
     store.dispatch(
       setRoute(
-        `${getDomainLink()}/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
+        `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}&connectionType=${data.connectionType}`
       )
     );
   }
