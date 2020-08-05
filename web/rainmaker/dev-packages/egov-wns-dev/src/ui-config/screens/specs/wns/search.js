@@ -3,7 +3,7 @@ import { showSearches } from "./searchResource/searchTabs";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchResults } from "./searchResource/searchResults";
 import { searchApplicationResults } from "./searchResource/searchApplicationResults";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
@@ -83,6 +83,39 @@ const getBusinessService=async(businessService, dispatch)=>{
     }
 }
 
+export const getMdmsTenantsData = async (dispatch) => {
+  let mdmsBody = {
+      MdmsCriteria: {
+          tenantId: commonConfig.tenantId,
+          moduleDetails: [
+              {
+                  moduleName: "tenant",
+                  masterDetails: [
+                      {
+                          name: "tenants"
+                      }
+                  ]
+              },
+          ]
+      }
+  };
+  try {
+      let payload = null;
+      payload = await httpRequest(
+          "post",
+          "/egov-mdms-service/v1/_search",
+          "_search",
+          [],
+          mdmsBody
+      );
+
+      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+
+  } catch (e) {
+      console.log(e);
+  }
+};
+
 const commonGetAppStatus=(payload)=>{
   const { states } = payload.BusinessServices[0] || [];
   if (states && states.length > 0) {
@@ -99,6 +132,8 @@ const employeeSearchResults = {
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);
     getMDMSAppType(dispatch);
+    getMdmsTenantsData(dispatch);
+    dispatch(prepareFinalObject("searchConnection.tenantId", getTenantIdCommon()));
     return action;
   },
   components: {
