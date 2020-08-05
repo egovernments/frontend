@@ -136,7 +136,7 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                  store.dispatch(setRoute(`${getDomainLink()}/pt-common-screens/register-property?redirectUrl=${url}`));               
+                  store.dispatch(setRoute(`/pt-common-screens/register-property?redirectUrl=${url}`));               
                 }
               },
             }

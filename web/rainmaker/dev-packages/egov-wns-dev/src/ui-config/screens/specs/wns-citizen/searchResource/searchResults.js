@@ -105,6 +105,6 @@ export const searchResults = {
 
 const getViewBillDetails = data => {  
   store.dispatch(
-    setRoute(`${getDomainLink()}/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
+    setRoute(`/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
   )
 }

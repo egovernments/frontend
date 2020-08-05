@@ -244,11 +244,11 @@ const callBackForApply = async (state, dispatch) => {
           const isMode=getQueryArg(window.location.href,"mode");
           if(isMode==="MODIFY"){
             store.dispatch(
-              setRoute(`${getDomainLink()}${redirectUrl}&propertyId=${payload.Properties[0].propertyId}`)
+              setRoute(`${redirectUrl}&propertyId=${payload.Properties[0].propertyId}`)
             )
           }else{
             store.dispatch(
-              setRoute(`${getDomainLink()}${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
+              setRoute(`${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
             )
           }
         }, 3000);

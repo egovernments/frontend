@@ -24,7 +24,7 @@ const styles = {
 class Applications extends React.Component {
   getTaskDetails = data => {
     data.service = data.service.toUpperCase();
-    store.dispatch(setRoute(`${getDomainLink()}/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`))
+    store.dispatch(setRoute(`/wns/search-preview?applicationNumber=${data.applicationNo}&history=${true}&tenantId=${data.property.tenantId}&service=${data.service}`))
   }
 
   titleCasingStatus = (status) => {

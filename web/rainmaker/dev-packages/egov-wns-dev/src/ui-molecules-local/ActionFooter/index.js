@@ -57,7 +57,7 @@ class Footer extends React.Component {
             );
             return false;
           }   
-          store.dispatch(setRoute(`${getDomainLink()}/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`));
+          store.dispatch(setRoute(`/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`));
        }
       };
     //if(applicationType === "MODIFY"){
