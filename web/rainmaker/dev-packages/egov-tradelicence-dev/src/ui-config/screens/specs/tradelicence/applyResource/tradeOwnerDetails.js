@@ -163,7 +163,7 @@ export const getRelationshipRadioButton = {
   type: "array"
 };
 
-export const OwnerInfoCard = {
+const OwnerInfoCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
@@ -179,46 +179,12 @@ export const OwnerInfoCard = {
           }
         }
       ),
-      tradeUnitCardContainerOwnerInfo: getCommonContainer({
-        getOwnerMobNoField: getTextField({
-          label: {
-            labelName: "Mobile No.",
-            labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
-          },
-          props:{
-            className:"applicant-details-error"
-          },
-          placeholder: {
-            labelName: "Enter Mobile No.",
-            labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_PLACEHOLDER"
-          },
-          required: true,
-          pattern: getPattern("MobileNo"),
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-          iconObj: {
-            iconName: "search",
-            position: "end",
-            color: "#FE7A51",
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch, fieldInfo) => {
-                getDetailsForOwner(state, dispatch, fieldInfo);
-              }
-            }
-          },
-          title: {
-            value: "Please search owner profile linked to the mobile no.",
-            key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
-          },
-          infoIcon: "info_circle"
-        }),
+      tradeUnitCardContainer: getCommonContainer({
+        getOwnerMobNoField,
         ownerName: getTextField({
           label: {
             labelName: "Name",
             labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL"
-          },
-          props:{
-            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Name",
@@ -228,84 +194,9 @@ export const OwnerInfoCard = {
           pattern: getPattern("Name"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"
         }),
-        getFatherNameField: getTextField({
-          label: {
-            labelName: "Father/Spouse Name",
-            labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
-          },
-          props:{
-            className:"applicant-details-error"
-          },
-          placeholder: {
-            labelName: "Enter Father/Spouse Name",
-            labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_PLACEHOLDER"
-          },
-          required: true,
-          pattern: getPattern("Name"),
-          jsonPath:
-            "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
-        }),
-        getRelationshipRadioButton: {
-          uiFramework: "custom-containers",
-          componentPath: "RadioGroupContainer",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-          props: {
-            label: {
-              name: "Relationship",
-              key: "TL_COMMON_RELATIONSHIP_LABEL"
-            },
-            buttons: [
-              {
-                labelName: "Father",
-                labelKey: "COMMON_RELATION_FATHER",
-                value: "FATHER"
-              },
-              {
-                label: "Husband",
-                labelKey: "COMMON_RELATION_HUSBAND",
-                value: "HUSBAND"
-              }
-            ],
-            jsonPath:
-              "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-            required: true
-          },
-          required: true,
-          type: "array"
-        },
-        getOwnerGenderField: getSelectField({
-          label: {
-            labelName: "Gender",
-            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Gender",
-            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
-          },
-          required: true,
-          optionValue: "code",
-          optionLabel: "label",
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-          data: [
-            {
-              code: "MALE",
-              label: "COMMON_GENDER_MALE"
-            },
-            {
-              code: "FEMALE",
-              label: "COMMON_GENDER_FEMALE"
-            },
-            {
-              code: "OTHERS",
-              label: "COMMON_GENDER_TRANSGENDER"
-            }
-          ]
-        }),
+        getFatherNameField,
+        getRelationshipRadioButton,
+        getOwnerGenderField,
         ownerDOB: {
           ...getDateField({
             label: {
@@ -328,28 +219,11 @@ export const OwnerInfoCard = {
             }
           })
         },
-        getOwnerEmailField: getTextField({
-          label: {
-            labelName: "Email",
-            labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
-          },
-          props:{
-            className:"applicant-details-error"
-          },
-          placeholder: {
-            labelName: "Enter Email",
-            labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
-          },
-          pattern: getPattern("Email"),
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
-        }),
+        getOwnerEmailField,
         ownerPAN: getTextField({
           label: {
             labelName: "PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
-          },
-          props:{
-            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Owner's PAN No.",
@@ -362,9 +236,6 @@ export const OwnerInfoCard = {
           label: {
             labelName: "Correspondence Address",
             labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
-          },
-          props:{
-            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Correspondence Address",
@@ -421,46 +292,12 @@ export const ownerInfoInstitutional = {
         }
       }
     ),
-    tradeUnitCardContainerInstitutional: getCommonContainer({
-      getOwnerMobNoField: getTextField({
-        label: {
-          labelName: "Mobile No.",
-          labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Mobile No.",
-          labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getPattern("MobileNo"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch, fieldInfo) => {
-              getDetailsForOwner(state, dispatch, fieldInfo);
-            }
-          }
-        },
-        title: {
-          value: "Please search owner profile linked to the mobile no.",
-          key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
-        },
-        infoIcon: "info_circle"
-      }),
+    tradeUnitCardContainer: getCommonContainer({
+      getOwnerMobNoField,
       offTelephone: getTextField({
         label: {
           labelName: "Official Telephone No.",
           labelKey: "TL_NEW_OWNER_PHONE_LABEL"
-        },
-        props:{
-          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Official Telephone No.",
@@ -476,9 +313,6 @@ export const ownerInfoInstitutional = {
           labelName: "Name of Authorised Person",
           labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
-        },
         placeholder: {
           labelName: "Enter Name of Authorised Person",
           labelKey: "TL_NEW_OWNER_AUTH_PER_PLACEHOLDER"
@@ -493,9 +327,6 @@ export const ownerInfoInstitutional = {
           labelName: "Designation",
           labelKey: "TL_NEW_OWNER_DESIG_LABEL"
         },
-        props:{
-          className:"applicant-details-error"
-        },
         placeholder: {
           labelName: "Enter Designation",
           labelKey: "TL_NEW_OWNER_DESIG_PLACEHOLDER"
@@ -504,83 +335,9 @@ export const ownerInfoInstitutional = {
         required: true,
         jsonPath: "Licenses[0].tradeLicenseDetail.institution.designation"
       }),
-      getFatherNameField: getTextField({
-        label: {
-          labelName: "Father/Spouse Name",
-          labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Father/Spouse Name",
-          labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getPattern("Name"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
-      }),
-      getRelationshipRadioButton: {
-        uiFramework: "custom-containers",
-        componentPath: "RadioGroupContainer",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-        props: {
-          label: {
-            name: "Relationship",
-            key: "TL_COMMON_RELATIONSHIP_LABEL"
-          },
-          buttons: [
-            {
-              labelName: "Father",
-              labelKey: "COMMON_RELATION_FATHER",
-              value: "FATHER"
-            },
-            {
-              label: "Husband",
-              labelKey: "COMMON_RELATION_HUSBAND",
-              value: "HUSBAND"
-            }
-          ],
-          jsonPath:
-            "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
-          required: true
-        },
-        required: true,
-        type: "array"
-      },
-      getOwnerGenderField: getSelectField({
-        label: {
-          labelName: "Gender",
-          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Gender",
-          labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
-        },
-        required: true,
-        optionValue: "code",
-        optionLabel: "label",
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-        data: [
-          {
-            code: "MALE",
-            label: "COMMON_GENDER_MALE"
-          },
-          {
-            code: "FEMALE",
-            label: "COMMON_GENDER_FEMALE"
-          },
-          {
-            code: "OTHERS",
-            label: "COMMON_GENDER_TRANSGENDER"
-          }
-        ]
-      }),
+      getFatherNameField,
+      getRelationshipRadioButton,
+      getOwnerGenderField,
       ownerDOB: {
         ...getDateField({
           label: {
@@ -603,28 +360,11 @@ export const ownerInfoInstitutional = {
           }
         })
       },
-      getOwnerEmailField: getTextField({
-        label: {
-          labelName: "Email",
-          labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
-        },
-        props:{
-          className:"applicant-details-error"
-        },
-        placeholder: {
-          labelName: "Enter Email",
-          labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
-        },
-        pattern: getPattern("Email"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
-      }),
+      getOwnerEmailField,
       ownerAddress: getTextField({
         label: {
           labelName: "Official Corrospondence Address",
           labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
-        },
-        props:{
-          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Official Corrospondence Address",

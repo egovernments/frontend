@@ -94,6 +94,7 @@ const screenConfig = {
       "applicationNumber"
     );
     let tenantId = getQueryArg(window.location.href, "tenantId");
+    let bussinessService =  getQueryArg(window.location.href, "");
     loadNocData(dispatch, applicationNumber, tenantId);
     fetchBill(state, dispatch, applicationNumber, tenantId);
     return action;

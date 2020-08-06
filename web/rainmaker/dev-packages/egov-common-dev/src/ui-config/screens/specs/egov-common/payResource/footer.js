@@ -50,8 +50,8 @@ export const callPGService = async (state, dispatch) => {
   };
   let taxAndPayments = [];
   taxAndPayments.push({
-    // taxAmount:taxAmount,
-    // businessService: businessService,
+    taxAmount:taxAmount,
+    businessService: businessService,
     billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
   });
@@ -66,6 +66,7 @@ export const callPGService = async (state, dispatch) => {
         productInfo: "Common Payment",
         gateway: "AXIS",
         taxAndPayments,
+        businessService:taxAndPayments[0].businessService,
         user,
         callbackUrl
       }

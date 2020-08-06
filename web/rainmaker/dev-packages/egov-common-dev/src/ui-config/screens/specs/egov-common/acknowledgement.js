@@ -129,10 +129,10 @@ const getAcknowledgementCard = (
                         icon: "close",
                         backgroundColor: "#E54D42",
                         header: {
-                            labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE`
+                            labelKey: roleExists ? `CITIZEN_FAILURE_AYMENT_MESSAGE` : `EMPLOYEE_FAILURE_PAYMENT_MESSAGE`
                         },
                         body: {
-                            labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                            labelKey: roleExists ? `CITIZEN_FAILURE_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_FAILURE_PAYMENT_MESSAGE_DETAIL`
                         }
                     })
                 }

@@ -282,7 +282,7 @@ class AllComplaints extends Component {
     return role === "ao" ? (
       <div>
         <div
-          className="sort-button rainmaker-displayInline"
+          className="sort-button example rainmaker-displayInline"
           style={{ padding: "20px 20px 0px 0px", justifyContent: "flex-end" }}
         >
           <div

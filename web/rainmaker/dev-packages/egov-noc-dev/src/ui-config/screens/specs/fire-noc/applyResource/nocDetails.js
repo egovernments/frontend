@@ -44,6 +44,22 @@ const loadProvisionalNocData = async (state, dispatch) => {
     { key: "fireNOCNumber", value: fireNOCNumber }
   ]);
 
+  if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+
+    if (response.FireNOCs.length === 0) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "This Provisional NoC number is not registered!",
+            //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+          },
+          "info"
+        )
+      );
+    }
+  }
+
   let nocType = get(
     state.screenConfiguration.preparedFinalObject,
     "FireNOCs[0].fireNOCDetails.fireNOCType",
@@ -105,9 +121,21 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
     { key: "FireNOCNumber", value: oldfireNOCNumber }
   ]);
 
-  // let response = await getSearchResults([
-  //   { key: "oldFireNOCNumber", value:  }
-  // ]);
+  if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
+
+    if (response.FireNOCs.length === 0) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "This Fire NoC number is not registered in the system!",
+            //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+          },
+          "info"
+        )
+      );
+    }
+  }
 
   let isLegacy = false;
   if (!get(response, "FireNOCs", []).length) {
@@ -121,7 +149,6 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
   // }
 
   response = furnishNocResponse(response);
-  console.log("=====response======", response);
   let nocType = get(
     state.screenConfiguration.preparedFinalObject,
     "FireNOCs[0].fireNOCDetails.fireNOCType",
@@ -132,7 +159,6 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
     "FireNOCs[0].oldFireNOCNumber",
     []
   );
-  console.log("------nocType---", nocType);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
   dispatch(prepareFinalObject("FireNOCs[0].isLegacy", isLegacy));

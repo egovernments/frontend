@@ -74,21 +74,6 @@ export const getSearchResults = async (queryObject, dispatch) => {
       );
       return null;
      }
-     if (response && response.FireNOCs && response.FireNOCs.hasOwnProperty("length")) {
-  
-        if (response.FireNOCs.length === 0) {
-          store.dispatch(
-            toggleSnackbar(
-              true,
-              {
-                labelName: "This Provisional NoC number is not registered!",
-                //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
-              },
-              "info"
-            )
-          );
-        }
-      }
 
     response.FireNOCs.forEach(firenoc => {
 
@@ -170,6 +155,21 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       //   );
       // }
     })
+
+    let noctypedata = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
+    );
+
+    if(noctypedata==="NEW" || noctypedata==="PROVISIONAL"){
+
+      let isLegacy =  false;
+      set(
+        payload[0],
+        "isLegacy",
+        isLegacy
+      );
+    }
 
 
     let provisionalnocnumber = get(

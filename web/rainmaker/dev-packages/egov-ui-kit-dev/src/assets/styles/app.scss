@@ -136,7 +136,7 @@ body.employee-user-profile {
   font-size: 20px !important;
   font-weight: 500;
   color: #fff;
-  overflow: hidden;
+  // overflow: visible;
   text-overflow: ellipsis;
 }
 
@@ -151,6 +151,7 @@ body.employee-user-profile {
   .screenHeaderLabelStyle .label-text {
     color: #484848 !important;
     font-size: 14px !important;
+    overflow: visible!important;
   }
   
   .with-icon-menu{

@@ -48,4 +48,8 @@
     text-align: center;
     padding: 0 !important; }
   .employee-complaints-tab {
-    padding-top: 60px; } }
+    padding-top: 0px; }
+    .example{
+      padding-top: 70px!important;
+    }
+  }
