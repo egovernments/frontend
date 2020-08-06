@@ -316,7 +316,7 @@ const commonBuildingData = buildingType => {
         });
 
         // Set required fields defaults
-        setMandatory(dispatch, `${path}.PLOT_SIZE`, false);
+        // setMandatory(dispatch, `${path}.PLOT_SIZE`, false);
         setMandatory(dispatch, `${path}.BUILTUP_AREA`, false);
         setMandatory(dispatch, `${path}.HEIGHT_OF_BUILDING`, false);
 
@@ -337,7 +337,7 @@ const commonBuildingData = buildingType => {
     },
     NO_OF_FLOORS: prepareSelectField("NO_OF_FLOORS", 1, 20),
     NO_OF_BASEMENTS: prepareSelectField22("NO_OF_BASEMENTS", 0, 5),
-    PLOT_SIZE: prepareTextField("PLOT_SIZE"),
+    // PLOT_SIZE: prepareTextField("PLOT_SIZE"),
     BUILTUP_AREA: prepareTextField("BUILTUP_AREA"),
     HEIGHT_OF_BUILDING: prepareTextField("HEIGHT_OF_BUILDING"),
     landArea: {

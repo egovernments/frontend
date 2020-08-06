@@ -244,6 +244,10 @@ export const NOCApplication = getCommonCard({
         {
           code: "PROVISIONAL",
           label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
+        },
+        {
+          code: "RENEWAL",
+          label: "RENEWAL"
         }
       ],
       // jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
