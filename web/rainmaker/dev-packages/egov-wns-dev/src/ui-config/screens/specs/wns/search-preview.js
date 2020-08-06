@@ -64,7 +64,7 @@ const headerrow = getCommonContainer({
       moduleName: "egov-wns",
       componentPath: "ApplicationNoContainer",
       props: {
-        number: applicationNumber
+        number: getQueryArg(window.location.href, "applicationNumber")
       }
     }
   }),
@@ -454,7 +454,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
     //To set the application no. at the  top
     set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number", applicationNumber);
@@ -473,7 +473,11 @@ const screenConfig = {
     set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopup);
     loadUlbLogo(tenantId);
     beforeInitFn(action, state, dispatch, applicationNumber);
-
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number",
+      applicationNumber
+    );
     return action;
   },
 
@@ -581,8 +585,7 @@ const searchResults = async (action, state, dispatch, applicationNumber,processI
   if (service === serviceConst.WATER) {
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
-    payload.WaterConnection[0].service = service;
-
+    set(payload,'WaterConnection[0].service',service);
     const convPayload = findAndReplace(payload, "NA", null)
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
