@@ -23,6 +23,18 @@ export const wnsApplication = getCommonCard({
         label: {
             labelKey: "WS_PROP_DETAIL_CITY"
         },
+        props: {
+          label: {
+            labelKey: "WS_PROP_DETAIL_CITY"
+          },
+          placeholder: {
+            labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          }
+        },  
         placeholder: {
             labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
         },
@@ -56,7 +68,7 @@ export const wnsApplication = getCommonCard({
     }),
     ownerMobNo: getTextField({
         label: {
-            labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
+            labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
         },
         placeholder: {
             labelKey: "WS_OWN_DETAIL_MOBILE_NO_PLACEHOLDER"

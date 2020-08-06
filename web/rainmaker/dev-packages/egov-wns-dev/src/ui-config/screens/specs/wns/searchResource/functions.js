@@ -23,24 +23,9 @@ const renderSearchConnectionTable = async (state, dispatch) => {
   let queryObject = [];
   queryObject.push({ key: "searchType", value: "CONNECTION" });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
-  const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
-
-  const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
-  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
-    dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_PT_COMMON_FILL_MANDATORY_FIELDS" }, "warning"));
-  } else if (
-    Object.keys(searchScreenObject).length == 1 ||
-    Object.values(searchScreenObject).every(x => x === "")
+  Object.keys(searchScreenObject).forEach((key) => (searchScreenObject[key] == "") && delete searchScreenObject[key]);
+  if (
+    Object.values(searchScreenObject).length <= 1
   ) {
     dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_PT_COMMON_FILL_MANDATORY_FIELDS" }, "warning"));
   } else if (
@@ -168,14 +153,14 @@ const renderSearchApplicationTable = async (state, dispatch) => {
   queryObject.push({ key: "isConnectionSearch", value: true });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch",
     state,
     dispatch,
     "search"

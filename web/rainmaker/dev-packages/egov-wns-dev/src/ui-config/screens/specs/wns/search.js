@@ -93,6 +93,9 @@ export const getMdmsTenantsData = async (dispatch) => {
                   masterDetails: [
                       {
                           name: "tenants"
+                      },
+                      { 
+                        name: "citymodule" 
                       }
                   ]
               },
@@ -108,7 +111,7 @@ export const getMdmsTenantsData = async (dispatch) => {
           [],
           mdmsBody
       );
-
+      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
 
   } catch (e) {
