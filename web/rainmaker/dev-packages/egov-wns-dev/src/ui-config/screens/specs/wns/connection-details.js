@@ -16,7 +16,10 @@ import { getPropertyDetails } from "./connectionDetailsResource/property-details
 import { getOwnerDetails, connHolderDetailsSummary, connHolderDetailsSameAsOwnerSummary } from "./connectionDetailsResource/owner-deatils";
 import {
   ifUserRoleExists
+
 } from "../utils";
+import set from "lodash/set";
+
 const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
@@ -192,7 +195,7 @@ const headerrow = getCommonContainer({
     moduleName: "egov-wns",
     componentPath: "ConsumerNoContainer",
     props: {
-      number: connectionNumber
+      number: getQueryArg(window.location.href, "connectionNumber")
     }
   }
 });
@@ -215,7 +218,13 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    beforeInitFn(action, state, dispatch, connectionNumber);
+   let connectionNo= getQueryArg(window.location.href, "connectionNumber")
+    beforeInitFn(action, state, dispatch, connectionNo);
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
+      connectionNo
+    );
     return action;
   },
 
