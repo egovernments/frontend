@@ -214,7 +214,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      approvalSuccessFooter
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
