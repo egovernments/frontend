@@ -197,24 +197,24 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
-      if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-        data = data[0];
-        data.assignees = [];
-        if (data.assignee) {
-          data.assignee.forEach(assigne => {
-            data.assignees.push({
-              uuid: assigne
-            })
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      data = data[0];
+      data.assignees = [];
+      if (data.assignee) {
+        data.assignee.forEach(assigne => {
+          data.assignees.push({
+            uuid: assigne
           })
-        }
-        data.processInstance = {
-          documents: data.wfDocuments,
-          assignes: data.assignees,
-          comment: data.comment,
-          action: data.action
-        }
-        data.waterSource = data.waterSource + "." + data.waterSubSource;
+        })
       }
+      data.processInstance = {
+        documents: data.wfDocuments,
+        assignes: data.assignees,
+        comment: data.comment,
+        action: data.action
+      }
+      data.waterSource = data.waterSource + "." + data.waterSubSource;
+    }
 
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
@@ -302,13 +302,21 @@ class WorkFlowContainer extends React.Component {
       appendToPath = ""
     }
 
-
     set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
       const documents = get(data, "wfDocuments");
       if (documents && documents.length > 0) {
-        this.wfUpdate(label);
+        const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []).length > 0;
+        if (assigneePresent) {
+          this.wfUpdate(label);
+        } else {
+          toggleSnackbar(
+            true,
+            { labelName: "Please Upload file !", labelKey: "ERR_UPLOAD_FILE" },
+            "error"
+          );
+        }
       } else {
         toggleSnackbar(
           true,
@@ -317,7 +325,19 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else {
-      this.wfUpdate(label);
+      const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []).length > 0;
+      if (assigneePresent) {
+        this.wfUpdate(label);
+      } else {
+        toggleSnackbar(
+          true,
+          { labelName: "Please select assignee name!", 
+          // labelKey: "ERR_UPLOAD_FILE" 
+        },
+          "error"
+        );
+      }
+      // this.wfUpdate(label);
     }
   };
 

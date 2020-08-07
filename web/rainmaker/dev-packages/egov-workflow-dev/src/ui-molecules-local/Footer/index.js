@@ -60,7 +60,7 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async item => {
-    const { handleFieldChange, setRoute, dataPath } = this.props;
+    const { handleFieldChange, setRoute, dataPath  } = this.props;
     let employeeList = [];
 
     if (dataPath === "BPA") {
@@ -107,6 +107,15 @@ class Footer extends React.Component {
           };
         });
     }
+    // if(label === "APPROVE"){
+    //   this.setState({ data: item, employeeList });
+    //   onDialogButtonClick(label,false);
+
+    // }
+    // else{
+    //   this.setState({ open : true,data: item, employeeList });
+
+    // }
 
     this.setState({ open: true, data: item, employeeList });
   };
