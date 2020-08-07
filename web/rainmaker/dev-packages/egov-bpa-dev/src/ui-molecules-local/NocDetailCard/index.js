@@ -378,20 +378,20 @@ class NocDetailCard extends Component {
     let fileTobeRemoved =
     nocFinalCardsforPreview[cardIndex].documents[uploadedDocIndex];
 
-    if (Array.isArray(Noc)) {
-      if (Noc.length > 0) {
-        uploadedDocs = Noc[0].documents;
-        uploadedDocs = this.getFinalDocsAfterRemovingDocument(uploadedDocs, fileTobeRemoved);
-        Noc[0].documents = uploadedDocs;
-      }
-    } else {
-      uploadedDocs = Noc.documents;
-      uploadedDocs = this.getFinalDocsAfterRemovingDocument(
-        uploadedDocs,
-        fileTobeRemoved
-      );
-      Noc.documents = uploadedDocs;
-    }
+    // if (Array.isArray(Noc)) {
+    //   if (Noc.length > 0) {
+    //     uploadedDocs = Noc[0].documents;
+    //     uploadedDocs = this.getFinalDocsAfterRemovingDocument(uploadedDocs, fileTobeRemoved);
+    //     Noc[0].documents = uploadedDocs;
+    //   }
+    // } else {
+    //   uploadedDocs = Noc.documents;
+    //   uploadedDocs = this.getFinalDocsAfterRemovingDocument(
+    //     uploadedDocs,
+    //     fileTobeRemoved
+    //   );
+    //   Noc.documents = uploadedDocs;
+    // }
 
     nocFinalCardsforPreview[cardIndex].documents.splice(uploadedDocIndex, 1);
     prepareFinalObject("Noc", Noc);
