@@ -211,7 +211,27 @@ class FormWizardDataEntry extends Component {
               return b.taxPeriodFrom - a.taxPeriodFrom;
             })) ||
           [];
-        
+
+            let ptdemands = 0;
+
+          
+          demands.forEach((demand, yearKey) => {
+            if (demand.demandDetails)
+            {
+              demand.demandDetails.forEach((demandData, demandKey) => {
+              if (demandData.taxHeadMasterCode==="PT_TAX") {
+                ptdemands= ptdemands+1;
+            }
+              });                  
+           };
+          });
+
+          if(demands.length !==ptdemands)
+          {
+            alert("This Property has duplicate demands, please contact Administrator ");
+          }
+
+
 
         demands.forEach((demand, yearKey) => {
           //add order for the taxt head and do the oerdering
@@ -238,7 +258,7 @@ class FormWizardDataEntry extends Component {
           } else {
             demand.demandDetails = [];
           }
-          
+
 
           return demand.demandDetails.forEach((demandData, demandKey) => {
             if (demandData.order > -1 && demandData.isLegacy) {
@@ -250,77 +270,17 @@ class FormWizardDataEntry extends Component {
                     generalMDMSDataById.TaxPeriod[item].fromDate ===
                     demand.taxPeriodFrom
                   ) {
-                    finalYear =
-                      generalMDMSDataById.TaxPeriod[item].financialYear;
+                    finalYear = 
+                    generalMDMSDataById.TaxPeriod[item].financialYear;
                   }
                             
                 }
               );  
-                         
-              
-            
-                                     
-                   if (mdmsYears[0].fromDate > demand.taxPeriodFrom  && yearKey==0) { 
-
-                    
-                                                        
-                  /*  prepareFinalObject(
-                      `DemandProperties[0].propertyDetails[0].demand[${yearKey}]`, 
-                       null
-                     );   */
-                                      
                      
-                 
-                     newkey = yearKey +1
+              
 
-                  prepareFinalObject(
-                    `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
-                     demandData.taxHeadMasterCode
-                   ),
-                     prepareFinalObject(
-                       `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].PT_DEMAND`,
-                       `${Math.trunc(demandData.taxAmount)}`
-                     ),
-                     prepareFinalObject(
-                       `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
-                       `${Math.trunc(demandData.collectionAmount)}`
-                     );
-                   prepareFinalObject(
-                     `DemandProperties[0].propertyDetails[0].demand[${newkey}].demand[${finalYear}][${demandData.order}].ID`,
-                     demandData.id
-                   );                   
-          
-                   
-                  }
-               
-                 else
-                  {
-                    prepareFinalObject(
-                      `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
-                       demandData.taxHeadMasterCode
-                     ),
-                       prepareFinalObject(
-                         `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_DEMAND`,
-                         `${Math.trunc(demandData.taxAmount)}`
-                       ),
-                       prepareFinalObject(
-                         `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
-                         `${Math.trunc(demandData.collectionAmount)}`
-                       );
-                     prepareFinalObject(
-                       `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].ID`,
-                       demandData.id
-                     );
 
-                  }
-               
-                     /* }
-                
-              );  */
-
-             
-
-        /*    prepareFinalObject(
+               prepareFinalObject(
                 `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
                  demandData.taxHeadMasterCode
                ),
@@ -335,7 +295,7 @@ class FormWizardDataEntry extends Component {
                prepareFinalObject(
                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].ID`,
                  demandData.id
-               );   */
+               );  
  
             /*   if()
               {

@@ -12,11 +12,41 @@ import { getTenantId ,getFinalData} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import set from "lodash/set";
 import Label from "egov-ui-kit/utils/translationNode";
 class DemandCollection extends React.Component {
   render() {
     const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
     const finalData=getFinalData();
+
+  let firstdisplay_year = [];
+   firstdisplay_year = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand[0].demand[${finalData[0].financialYear}]`, '');
+   let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, '');
+   let dummyarray = [];
+
+   if (firstdisplay_year.length === 0) {
+    dummyarray[0] = null;
+
+    if (demands_data[0] != null) {
+     for (let i = 0; i < demands_data.length; i++) {
+      if (demands_data[i] != null) {
+       dummyarray[i + 1] = demands_data[i];
+      }
+     }
+    } else {
+     dummyarray = demands_data;
+
+    }
+   } else {
+    dummyarray = demands_data;
+   }
+
+
+   //set(preparedFinalObject,`DemandProperties[0].propertyDetails[0].demand`,'');
+
+   set(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`, dummyarray);
+
+
     const getYear =
       finalData && finalData.length ? (
         finalData.map((data, index) => {
@@ -37,8 +67,8 @@ class DemandCollection extends React.Component {
                           fontSize="16px"
                         />
                         </div>
-                        {data.taxHead.map((taxData, index1) => {
-                          return (
+                        {data.taxHead.map((taxData, index1) => {                        
+                           return (
                             <div className={`col-xs-12`}>
                               <TextField
                                 floatingLabelText={<Label label={taxData.code}/>}
