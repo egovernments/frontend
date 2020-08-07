@@ -450,9 +450,9 @@ class FormWizard extends Component {
     const { selected } = this.state;
     const isReviewPage = selected === 3;
     switch (ownerType) {
-      case "SINGLEOWNER":
+      case "INDIVIDUAL.SINGLEOWNER":
         return <OwnerInfoHOC disabled={isReviewPage} />;
-      case "MULTIPLEOWNERS":
+      case "INDIVIDUAL.MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
             addOwner={() => {
@@ -940,7 +940,7 @@ class FormWizard extends Component {
               ownershipType,
               "fields.typeOfOwnership.value"
             );
-            if (ownershipTypeSelected === "SINGLEOWNER") {
+            if (ownershipTypeSelected === "INDIVIDUAL.SINGLEOWNER") {
               const { ownerInfo } = form;
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
@@ -1329,7 +1329,7 @@ class FormWizard extends Component {
           financialYearFromQuery
         );
       }
-      if (selectedownerShipCategoryType === "SINGLEOWNER") {
+      if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
         set(
           prepareFormData,
           "Properties[0].propertyDetails[0].owners",
@@ -1481,7 +1481,7 @@ class FormWizard extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
@@ -1647,7 +1647,7 @@ class FormWizard extends Component {
         assessmentId
       );
     }
-    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+    if (selectedownerShipCategoryType === "INDIVIDUAL.SINGLEOWNER") {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].owners",
