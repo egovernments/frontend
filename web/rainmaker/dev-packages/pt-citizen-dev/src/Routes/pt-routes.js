@@ -205,7 +205,7 @@ const routes = [
       
       // hideBackButton: true,
     }
-  },  
+  },
   {
     path: "propert-tax/review-property",
     component: ReviewForm,
@@ -250,17 +250,17 @@ const routes = [
       title: "PT_EXAMPLES"
     }
   },
-  {
-    path: "property-tax/pt-acknowledgment",
-    component: ptAcknowledgment,
-    needsAuthentication: true,
-    options: {
-      hideFooter: false,
-      hideTitle: true,
-      // hideBackButton: true,
-      // title: "PT_ACKNOWLEDGEMENT"
+    {
+      path: "property-tax/pt-acknowledgment",
+      component: ptAcknowledgment,
+      needsAuthentication: true,
+      options: {
+        hideFooter: false,
+        hideTitle: true,
+        // hideBackButton: true,
+        // title: "PT_ACKNOWLEDGEMENT"
+      }
     }
-  }
 ];
 
 export default routes;
