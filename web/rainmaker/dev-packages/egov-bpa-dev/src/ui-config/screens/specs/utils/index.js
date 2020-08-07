@@ -4658,13 +4658,19 @@ const dispatchFinalNocCardsForPreview = (state, dispatch, nocDocuments, nocDocum
   if (documentCards && documentCards.length > 0) {
     cards = documentCards[0].cards;
   }
-  for (var i = 0; i < cards.length; i++) {
-    cards[i].documents && cards[i].documents.length && 
-    cards[i].documents.map(fidocs =>{
-      fidocs.link = nocDocuments[i].link;
-      fidocs.name = nocDocuments[i].name;
+  
+for (var i = 0; i < cards.length; i++) {
+  cards[i].documents && cards[i].documents.length && 
+  cards[i].documents.map(fidocs =>{
+    nocDocuments && nocDocuments.length &&
+    nocDocuments.forEach(doc => { 
+      if(doc.fileStoreId === fidocs.fileStoreId) {
+        fidocs.link = get(doc, "link");
+        fidocs.name = get(doc, "name");
+      }
     })
-  }  
+  })
+}
 
   if (nocDocumentsFromMdms && nocDocumentsFromMdms.length > 0) {
     const allCards = [].concat(...nocDocumentsFromMdms.map(({ cards }) => cards || []));
