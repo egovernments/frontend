@@ -236,6 +236,18 @@ export const additionDetails = getCommonCard({
         label: {
           labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
         },
+        props: {
+          label: {
+            labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+          },
+          placeholder: {
+            labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "WS",
+            masterName: "ROADTYPE"
+          }
+      },
         placeholder: {
           labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
         },
