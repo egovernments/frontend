@@ -7,7 +7,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists } from "../ui-config/screens/specs/utils";
-import { httpRequest } from "./api";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
