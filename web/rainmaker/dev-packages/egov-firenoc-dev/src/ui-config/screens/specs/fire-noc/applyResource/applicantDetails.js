@@ -316,6 +316,7 @@ const commonApplicantInformation = () => {
             sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
             jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].ownerType",
             required: true,
+            isClearable: true,
             labelsFromLocalisation: true,
             className: "autocomplete-dropdown",
           },

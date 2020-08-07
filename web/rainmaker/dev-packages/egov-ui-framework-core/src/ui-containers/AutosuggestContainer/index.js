@@ -56,6 +56,7 @@ class AutoSuggestor extends Component {
           placeholder={translatedPlaceholder}
           helperText={required && errorText}
           error={errorText == "Required" && required}
+          isClearable={true}
           {...rest}
         />
       </div>
