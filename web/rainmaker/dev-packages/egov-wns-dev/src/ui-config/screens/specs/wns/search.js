@@ -112,7 +112,7 @@ export const getMdmsTenantsData = async (dispatch) => {
           mdmsBody
       );
       payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
-      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+      dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
 
   } catch (e) {
       console.log(e);
