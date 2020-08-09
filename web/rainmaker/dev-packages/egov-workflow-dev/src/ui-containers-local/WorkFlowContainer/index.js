@@ -307,8 +307,13 @@ class WorkFlowContainer extends React.Component {
     if (isDocRequired) {
       const documents = get(data, "wfDocuments");
       if (documents && documents.length > 0) {
+
+        const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
+        const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
         const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []).length > 0;
-        if (assigneePresent) {
+        const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
+
+        if (assigneePresent || FirenocassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL") {
           this.wfUpdate(label);
         } else {
           toggleSnackbar(
@@ -325,19 +330,25 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else {
+      const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
+      const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
       const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []).length > 0;
-      if (assigneePresent) {
-        this.wfUpdate(label);
-      } else {
-        toggleSnackbar(
-          true,
-          { labelName: "Please select assignee name!", 
-          // labelKey: "ERR_UPLOAD_FILE" 
-        },
-          "error"
-        );
-      }
-      // this.wfUpdate(label);
+      const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
+
+        if(assigneePresent || FirenocassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL"){
+          this.wfUpdate(label);
+
+        }
+        else{
+          toggleSnackbar(
+            true,
+            { labelName: "Please select assignee name!", 
+            // labelKey: "ERR_UPLOAD_FILE" 
+          },
+            "error"
+          );
+        }   
+
     }
   };
 

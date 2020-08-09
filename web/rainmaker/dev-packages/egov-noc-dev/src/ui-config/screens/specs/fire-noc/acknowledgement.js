@@ -176,6 +176,7 @@ const getAcknowledgementCard = (
             props: {
               style: {
                 display: "flex",
+                cursor:"pointer"
 
               }
             },
