@@ -411,6 +411,24 @@ export const tradeOwnerDetails = getCommonCard({
         sourceJsonPath:
           "applyScreenMdmsData.common-masters.OwnerShipCategoryTransformed"
       }),
+      // handleField(
+          //   "apply",
+          //   "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.subOwnership",
+          //   "props.value",
+          //   get(
+          //     state.screenConfiguration.preparedFinalObject,
+          //     "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed[0].code"
+          //   )
+          // )
+          
+          // dispatch(
+          //   pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+          //    get(
+          //     state.screenConfiguration.preparedFinalObject,
+          //     "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed[0].code"
+          //   ))
+            
+          // );
       beforeFieldChange: (action, state, dispatch) => {
         try {
           dispatch(
@@ -423,6 +441,7 @@ export const tradeOwnerDetails = getCommonCard({
               )
             )
           );
+          
           if (action.value === "INDIVIDUAL") {
             if (
               get(
@@ -448,26 +467,20 @@ export const tradeOwnerDetails = getCommonCard({
                 false
               )
             );
-          } else {
+
+          }
+          else {
             dispatch(
               handleField(
                 "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-                "visible",
-                false
+                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.subOwnership",
+                "props.value",
+                get(
+                  state.screenConfiguration.preparedFinalObject,
+                  "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed[0].code"
+                )
               )
-            );
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
-                "visible",
-                true
-              )
-            );
-            dispatch(
-              pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
-            );
+            ); 
           }
         } catch (e) {
           console.log(e);
