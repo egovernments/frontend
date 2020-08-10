@@ -19,8 +19,6 @@ import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import PTInformation from "../AssessmentList/components/PTInformation";
 import "./index.css";
 
-import "./index.css";
-
 class PTAcknowledgement extends React.Component {
   state = {
     propertyId: "",
@@ -39,14 +37,14 @@ class PTAcknowledgement extends React.Component {
       { key: "tenantId", value: tenantId },
     ]);
     this.setState({ propertyId: propertyId });
+    loadUlbLogo(tenantId);
   };
-  //loadUlbLogo(tenantId);
+  
   onGoHomeClick = () => {
     process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
   };
   download() {
     const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
-    console.log("=====selPropertyDetails=======",selPropertyDetails,UlbLogoForPdf,generalMDMSDataById);
     generatePTAcknowledgment(selPropertyDetails, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${selPropertyDetails.propertyId}.pdf`);
   }
   print() {
