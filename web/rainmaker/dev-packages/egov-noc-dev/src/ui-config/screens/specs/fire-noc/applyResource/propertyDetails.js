@@ -204,7 +204,7 @@ const commonBuildingData = buildingType => {
           moduleName: "firenoc",
           masterName: "BuildingType"
         },
-        jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageSubType",
+        jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
         sourceJsonPath: "applyScreenMdmsData.DropdownsData.BuildingUsageType",
         gridDefination: {
           xs: 12,
@@ -229,7 +229,7 @@ const commonBuildingData = buildingType => {
           return item.active && item.code.startsWith(action.value);
         });
         dispatch(
-          handleField("apply", path, "props.data", buildingSubUsageTypeData)
+          handleField("apply", path, "props.data", buildingSubUsageTypeData[0].BuildingSubType)
         );
       }
     },
@@ -248,7 +248,7 @@ const commonBuildingData = buildingType => {
           moduleName: "firenoc",
           masterName: "BuildingType"
         },
-        jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
+        jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageSubType",
         gridDefination: {
           xs: 12,
           sm: 12,
