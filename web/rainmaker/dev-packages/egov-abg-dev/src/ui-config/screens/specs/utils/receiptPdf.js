@@ -9,10 +9,6 @@ import {
   loadMdmsData, loadPtBillData,
   loadUlbLogo
 } from "./receiptTransformer";
-downloadMultipleBill
-
-
-
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
