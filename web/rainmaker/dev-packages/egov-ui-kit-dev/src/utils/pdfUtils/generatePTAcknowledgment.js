@@ -45,7 +45,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
         })
         unitInfoCard = unitItems
     }
-    property.owners = property.owners.filter(owner => owner.status == "ACTIVE")
+    property.owners = property.owners && property.owners.filter(owner => owner.status == "ACTIVE")
     const ownerInfo = getOwnerInfo(property, generalMDMSDataById);
     const addressCard = getAddressItems(property);
     const ownerCard = getMultipleItemCard(ownerInfo, 'PT_OWNER');
