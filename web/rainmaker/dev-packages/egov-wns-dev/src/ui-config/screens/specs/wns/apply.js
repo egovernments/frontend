@@ -402,8 +402,13 @@ export const getData = async (action, state, dispatch) => {
           );
         }
       }
-      let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
-      dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
+      if(propertyID){
+        let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
+        getApplyPropertyDetails(queryObject,dispatch,propertyID)
+      } else {
+        let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
+        dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
+      }  
       //For Modify Connection hide the connection details card
       if(isMode){
         showHideFieldModifyConnection(action);

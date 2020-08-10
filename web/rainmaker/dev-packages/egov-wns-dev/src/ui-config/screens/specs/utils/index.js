@@ -1382,15 +1382,34 @@ export const resetFieldsForConnection = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerNo",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerid",
       "props.value",
       ""
     )
   );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.oldConsumerid",
+      "props.value",
+      ""
+    )
+  );
+
   dispatch(
     handleField(
       "search",
       "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
       "props.value",
       ""
     )
