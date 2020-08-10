@@ -153,7 +153,7 @@ const callBackForApply = async (state, dispatch) => {
 
     })
 
-  propertyPayload.ownersTemp.map(owner => {
+    propertyPayload.ownersTemp && propertyPayload.ownersTemp.length >0 && propertyPayload.ownersTemp.map(owner => {
     if (owner.documentUid && owner.documentType) {
       owner.documents = [{}]
       owner.documents[0].fileStoreId = owner.documentUid;

@@ -285,26 +285,29 @@ export const loadReceiptData = async (consumerCode, tenant) => {
   ];
   let response = await getReceiptData(queryObject);
 
-  if (response && response.Receipt && response.Receipt.length > 0) {
+debugger;
+  console.log("respons of collection service",response);
+
+  if (response && response.Payments && response.Payments.length > 0) {
     data.receiptNumber = nullToNa(
-      get(response, "Receipt[0].Bill[0].billDetails[0].receiptNumber", "NA")
+      get(response, "Payments[0].paymentDetails[0].receiptNumber", "NA")
     );
     data.amountPaid = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].amountPaid",
+      "Payments[0].paymentDetails[0].bill[0].billDetails[0].amountPaid",
       0
     );
     data.totalAmount = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].totalAmount",
+      "Payments[0].paymentDetails[0].bill[0].totalAmount",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
     data.paymentMode = nullToNa(
-      get(response, "Receipt[0].instrument.instrumentType.name", "NA")
+      get(response, "Payments[0].paymentMode", "NA")
     );
     data.transactionNumber = nullToNa(
-      get(response, "Receipt[0].instrument.transactionNumber", "NA")
+      get(response, "Payments[0].transactionNumber", "NA")
     );
     data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
     data.branchName = get(response, "Receipt[0].instrument.branchName", null);
@@ -315,29 +318,30 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.paymentDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].receiptDate", 0)
+        get(response, "Payments[0].paymentDetails[0].receiptDate", 0)
       )
     );
     data.g8ReceiptNo = nullToNa(
       get(
         response,
-        "Receipt[0].Bill[0].billDetails[0].manualReceiptNumber",
+        "Payments[0].paymentDetails[0].manualReceiptNumber",
         "NA"
       )
     );
     data.g8ReceiptDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].manualReceiptDate", 0)
+        get(response, "Payments[0].paymentDetails[0].receiptDate", 0)
       )
     );
     /** START NOC Fee, Adhoc Penalty/Rebate Calculation */
     let nocAdhocPenalty = 0,
       nocAdhocRebate = 0;
-    response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {
+    response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(item => {
       let desc = item.taxHeadCode ? item.taxHeadCode : "";
       if (desc === "FIRENOC_FEES") {
         data.nocFee = item.amount;
       } else if (desc === "FIRENOC_ADHOC_PENALTY") {
+
         nocAdhocPenalty = item.amount;
       } else if (desc === "FIRENOC_ADHOC_REBATE") {
         nocAdhocRebate = item.amount;

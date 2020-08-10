@@ -85,7 +85,6 @@ class ActionDialog extends React.Component {
   };
 
   render() {
-        
     let {
       open,
       onClose,
@@ -182,6 +181,7 @@ class ActionDialog extends React.Component {
                         style={{ marginRight: "15px" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
+                        required={true}
                         data={dropDownData}
                         optionValue="value"
                         optionLabel="label"

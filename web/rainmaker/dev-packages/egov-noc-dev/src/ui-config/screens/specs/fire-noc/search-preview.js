@@ -301,23 +301,23 @@ const setSearchResponse = async (
     "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
 
 
-    if( firNOCType === "RENEWAL")
-    {           
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
-        false
-      );      
+    // if( firNOCType === "RENEWAL")
+    // {           
+    //   set(
+    //     action,
+    //     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
+    //     false
+    //   );      
 
-    }       
-    else {      
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
-        false
-      );  
+    // }       
+    // else {      
+    //   set(
+    //     action,
+    //     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
+    //     false
+    //   );  
 
-      } 
+    //   } 
 
   // Set Institution/Applicant info card visibility
   if (

@@ -524,6 +524,7 @@ const accessoriesCard = {
       accessoriesCardContainer: getCommonContainer({
         accessoriesName: {
           ...getSelectField({
+            componentPath: "AutosuggestContainer",
             label: {
               labelName: "Accessories",
               labelKey: "TL_NEW_TRADE_DETAILS_ACC_LABEL"
@@ -543,6 +544,12 @@ const accessoriesCard = {
             gridDefination: {
               xs: 12,
               sm: 4
+            },
+            props: {
+              menuPortalTarget:document.querySelector('body'),
+              setDataInField: true,
+              labelsFromLocalisation: true
+              // hasLocalization: false
             }
           }),
           beforeFieldChange: (action, state, dispatch) => {
@@ -638,6 +645,14 @@ const accessoriesCard = {
                     false
                   )
                 );
+                 dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesCount`,
+                    "props.value",
+                    1
+                  )
+                );
               } else {
                 dispatch(
                   handleField(
@@ -684,8 +699,8 @@ const accessoriesCard = {
             },
             pattern: getPattern("UOMValue"),
             props: {
-              className:"applicant-details-error",
               disabled: true,
+              //setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue"
             },
             required: true,
