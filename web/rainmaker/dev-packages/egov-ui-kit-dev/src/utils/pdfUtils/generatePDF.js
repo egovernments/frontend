@@ -110,7 +110,7 @@ const getLabel = (value, type = 'key') => {
 const getMultiCard = (items = [], color = 'grey') => {
     let card = []
 
-    items.map(item => {
+    item && items.map(item => {
         if (item.header) {
             let row = []
             row.push(getLabel(getLocaleLabels(item.header, item.header), 'header'))
