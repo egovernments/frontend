@@ -3,17 +3,25 @@ import {
   getCommonSubHeader,
   getCommonContainer,
   getLabelWithValue,
+  getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { convertEpochToDateAndHandleNA } from '../../utils';
 
 export const reviewModificationsEffectiveDate = {
-  reviewModification:getLabelWithValue(
+  reviewModification: getLabelWithValueForModifiedLabel(
   {
     labelName: "Modifications Effective Date",
     labelKey: "WS_MODIFICATIONS_EFFECTIVE_DATE"
   },
   {
     jsonPath: "WaterConnection[0].dateEffectiveFrom",
+    callBack: convertEpochToDateAndHandleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.dateEffectiveFrom",
     callBack: convertEpochToDateAndHandleNA
   }
 )};
