@@ -225,6 +225,7 @@ class WorkFlowContainer extends React.Component {
         [dataPath]: data
       });
 
+
       this.setState({
         open: false
       });
@@ -334,8 +335,9 @@ class WorkFlowContainer extends React.Component {
       const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
       const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []).length > 0;
       const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
-
-        if(assigneePresent || FirenocassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL"){
+      const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes", []) ? true: false;
+      const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
+        if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE"){
           this.wfUpdate(label);
 
         }
