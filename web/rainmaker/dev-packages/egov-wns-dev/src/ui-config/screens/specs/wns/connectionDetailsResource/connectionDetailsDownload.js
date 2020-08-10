@@ -24,9 +24,9 @@ export const connectionDetailsDownload = getCommonApplyFooter("RIGHT",{
       variant: "outlined",
       color: "primary",
       style: {
-        minWidth: "180px",
+        minWidth: "150px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "10px"
       }
     },
     children: {
@@ -47,9 +47,9 @@ export const connectionDetailsDownload = getCommonApplyFooter("RIGHT",{
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "180px",
+        minWidth: "150px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "10px"
       }
     },
     children: {
