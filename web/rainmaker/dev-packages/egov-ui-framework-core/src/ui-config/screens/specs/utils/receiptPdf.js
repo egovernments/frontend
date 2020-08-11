@@ -784,7 +784,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
           },
           {
             width: "*",
-            text: `Rs. ${transformedData.totalAmount}`
+            text: `₹. ${transformedData.totalAmount}`
           }
         ]
       },

@@ -91,6 +91,7 @@ class ShowField extends Component {
     const additionalConfig = reportDetails.hasOwnProperty("additionalConfig") && reportDetails.additionalConfig ? reportDetails.additionalConfig: {};
     const reportHeader = reportDetails.hasOwnProperty("reportHeader") ? reportDetails.reportHeader : [];
     const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
+    const exportOptions = flag ? { rows: ".selected", columns } : { columns };
     let reportTitle = this.getReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
 
@@ -109,8 +110,11 @@ class ShowField extends Component {
         footer: true,
         customize: function(doc) {
           doc.content[0].text = [];
-          doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
+          doc.content[0].text.push({ text: "eChhawani System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
+        },
+        exportOptions: {
+          columns: ':visible'
         },
         className: "report-pdf-button",
       },
@@ -118,7 +122,7 @@ class ShowField extends Component {
         extend: "excel",
         text: "XLS",
         filename: _this.state.reportName,
-        title: reportTitle,
+        title:  _this.state.reportName,
         messageTop: tabLabel,
         footer: true,
         className: "report-excel-button",

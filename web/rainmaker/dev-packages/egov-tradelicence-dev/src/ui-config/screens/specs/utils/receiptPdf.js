@@ -861,7 +861,7 @@ console.log(transformedData);
           },
           {
             width: "*",
-            text: getLocaleLabels("Rs.","TL_LOCALIZATION_TRADE_LICENSE_RS") +transformedData.totalAmount,
+            text: getLocaleLabels("₹.","TL_LOCALIZATION_TRADE_LICENSE_RS") +transformedData.totalAmount,
        //     font: "Roboto"
           }
         ]

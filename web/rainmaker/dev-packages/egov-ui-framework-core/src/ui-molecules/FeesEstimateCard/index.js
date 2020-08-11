@@ -103,7 +103,7 @@ function FeesEstimateCard(props) {
           Total Amount
         </Typography>
         <Typography className={classes.bigheader} align="right">
-          Rs {total}
+          ₹ {total}
         </Typography>
         <Card className={classes.whiteCard}>
           {estimate.extra.map((item, key) => {

@@ -47,12 +47,12 @@ const getMultiItem = (billingslabData, classes, style) => {
             }}
           />
         </Grid>
-        <Grid sm={2}>
+        <Grid sm={3}>
           <Label
             label={
               labelCategory === "TRADETYPE"
-                ? `Rs ${item.rate}`
-                : `Rs ${item.total}`
+                ? (item.UOM?`(₹ ${item.rate}/${item.UOM}) * ${item.count} `:`₹ ${item.rate}`)
+                : `₹ ${item.total}`
             }
             style={{
               color: "rgba(0, 0, 0, 0.8700000047683716)",
@@ -99,7 +99,7 @@ class ViewBreakupContainer extends React.Component {
         </Grid>
         <Grid sm={2}>
           <LabelContainer
-            labelName={`Rs ${total}`}
+            labelName={`₹ ${total}`}
             style={
               style
                 ? style
@@ -132,7 +132,7 @@ class ViewBreakupContainer extends React.Component {
         </Grid>
         <Grid sm={2}>
           <LabelContainer
-            labelName={`Rs ${total}`}
+            labelName={`₹ ${total}`}
             style={{
               color: "rgba(0, 0, 0, 0.8700000047683716)",
               fontSize: "14px",

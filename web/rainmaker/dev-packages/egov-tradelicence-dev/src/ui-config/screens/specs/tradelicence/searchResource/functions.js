@@ -6,12 +6,13 @@ import {
   convertDateToEpoch,
   getTextToLocalMapping
 } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-//import { LabelContainer } from "egov-ui-framework/ui-containers";
 
+//Added toggleSpinner for Search by Minju
 export const searchApiCall = async (state, dispatch) => {
+  dispatch(toggleSpinner());
   showHideTable(false, dispatch);
   let queryObject = [
     {
@@ -40,6 +41,7 @@ export const searchApiCall = async (state, dispatch) => {
   );
 
   if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
@@ -54,6 +56,7 @@ export const searchApiCall = async (state, dispatch) => {
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
@@ -70,6 +73,7 @@ export const searchApiCall = async (state, dispatch) => {
     searchScreenObject["toDate"] !== undefined &&
     searchScreenObject["toDate"].length !== 0
   ) {
+    dispatch(toggleSpinner());
     dispatch(
       toggleSnackbar(
         true,
@@ -136,7 +140,9 @@ export const searchApiCall = async (state, dispatch) => {
         )
       );
       showHideTable(true, dispatch);
+      dispatch(toggleSpinner());
     } catch (error) {
+      dispatch(toggleSpinner());
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);
     }

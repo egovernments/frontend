@@ -129,39 +129,86 @@ export const getFatherNameField = getTextField({
   pattern: getPattern("Name"),
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
 });
-export const getRelationshipRadioButton = {
-  uiFramework: "custom-containers",
-  componentPath: "RadioGroupContainer",
-  gridDefination: {
-    xs: 12,
-    sm: 12,
-    md: 6
+
+
+export const getRelationshipField = getSelectField({
+  label: {
+    labelName: "Relationship",
+    labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
   },
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-  props: {
-    label: {
-      name: "Relationship",
-      key: "TL_COMMON_RELATIONSHIP_LABEL"
-    },
-    buttons: [
-      {
-        labelName: "Father",
-        labelKey: "COMMON_RELATION_FATHER",
-        value: "FATHER"
-      },
-      {
-        label: "Husband",
-        labelKey: "COMMON_RELATION_HUSBAND",
-        value: "HUSBAND"
-      }
-    ],
-    jsonPath:"Licenses[0].tradeLicenseDetail.owners[0].relationship",
-    required: true
+  placeholder: {
+    labelName: "Select Relationship",
+    labelKey: "TL_COMMON_RELATIONSHIP_PLACEHOLDER"
   },
   required: true,
-  type: "array"
-};
+  optionValue: "code",
+  optionLabel: "label",
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+  data: [
+    {
+      code: "FATHER",
+      label: "COMMON_RELATION_FATHER"
+    },
+    {
+      code: "MOTHER",
+      label: "COMMON_RELATION_MOTHER"
+    },
+    {
+      code: "SPOUSE",
+      label: "COMMON_RELATION_SPOUSE"
+    },    
+    {
+      code: "GUARDIAN",
+      label: "COMMON_RELATION_GUARDIAN"
+      
+    }
+  ]
+});
 
+
+// export const getRelationshipRadioButton = {
+//   uiFramework: "custom-containers",
+//   componentPath: "RadioGroupContainer",
+//   gridDefination: {
+//     xs: 12,
+//     sm: 12,
+//     md: 6
+//   },
+//   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+//   props: {
+//     label: {
+//       name: "Relationship",
+//       key: "TL_COMMON_RELATIONSHIP_LABEL"
+//     },
+//     buttons: [
+//       {
+//         labelName: "Father",
+//         labelKey: "COMMON_RELATION_FATHER",
+//         value: "FATHER"
+//       },
+//       {
+//         labelName: "Mother",
+//         labelKey: "COMMON_RELATION_MOTHER",
+//         value: "MOTHER"
+//       },
+//       {
+//         label: "Spouse",
+//         labelKey: "COMMON_RELATION_SPOUSE",
+//         value: "SPOUSE"
+//       },
+//       {
+//         labelName: "Guardian",
+//         labelKey: "COMMON_RELATION_GUARDIAN",
+//         value: "GUARDIAN"
+//       }
+//     ],
+//     jsonPath:"Licenses[0].tradeLicenseDetail.owners[0].relationship",
+//     required: true
+//   },
+//   required: true,
+//   type: "array"
+// };
+//Added by Minju Other Relationship as per UAT obsn from DGDE on 30/07/2020
 export const OwnerInfoCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -244,77 +291,110 @@ export const OwnerInfoCard = {
           jsonPath:
             "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
         }),
-        getRelationshipRadioButton: {
-          uiFramework: "custom-containers",
-          componentPath: "RadioGroupContainer",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
+        // getRelationshipRadioButton: {
+        //   uiFramework: "custom-containers",
+        //   componentPath: "RadioGroupContainer",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 12,
+        //     md: 6
+        //   },
+        //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+        //   props: {
+        //     label: {
+        //       name: "Relationship",
+        //       key: "TL_COMMON_RELATIONSHIP_LABEL"
+        //     },
+        //     buttons: [
+        //       {
+        //         labelName: "Father",
+        //         labelKey: "COMMON_RELATION_FATHER",
+        //         value: "FATHER"
+        //       },
+        //       {
+        //         labelName: "Mother",
+        //         labelKey: "COMMON_RELATION_MOTHER",
+        //         value: "MOTHER"
+        //       },
+        //       {
+        //         label: "Spouse",
+        //         labelKey: "COMMON_RELATION_SPOUSE",
+        //         value: "SPOUSE"
+        //       },
+        //       {
+        //         labelName: "Guardian",
+        //         labelKey: "COMMON_RELATION_GUARDIAN",
+        //         value: "GUARDIAN"
+        //       }
+        //     ],
+        //     jsonPath:
+        //       "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+        //     required: true
+        //   },
+        //   required: true,
+        //   type: "array"
+        // },
+        getRelationshipField : getSelectField({
+          label: {
+            labelName: "Relationship",
+            labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
           },
+          placeholder: {
+            labelName: "Select Relationship",
+            labelKey: "TL_COMMON_RELATIONSHIP_PLACEHOLDER"
+          },
+          required: true,
+          optionValue: "code",
+          optionLabel: "label",
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-          props: {
-            label: {
-              name: "Relationship",
-              key: "TL_COMMON_RELATIONSHIP_LABEL"
+          data: [
+            {
+              code: "FATHER",
+              label: "COMMON_RELATION_FATHER"
             },
-            buttons: [
-              {
-                labelName: "Father",
-                labelKey: "COMMON_RELATION_FATHER",
-                value: "FATHER"
-              },
-              {
-                label: "Husband",
-                labelKey: "COMMON_RELATION_HUSBAND",
-                value: "HUSBAND"
-              }
-            ],
-            jsonPath:
-              "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-            required: true
+            {
+              code: "MOTHER",
+              label: "COMMON_RELATION_MOTHER"
+            },
+            {
+              code: "SPOUSE",
+              label: "COMMON_RELATION_SPOUSE"
+            },    
+            {
+              code: "GUARDIAN",
+              label: "COMMON_RELATION_GUARDIAN"
+              
+            }
+          ]
+        }),
+        getOwnerGenderField: getSelectField({
+          label: {
+            labelName: "Gender",
+            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+          },
+          placeholder: {
+            labelName: "Select Gender",
+            labelKey: "TL_NEW_OWNER_DETAILS_GENDER_PLACEHOLDER"
           },
           required: true,
-          type: "array"
-        },
-        getOwnerGenderField: {
-          uiFramework: "custom-containers",
-          componentPath: "RadioGroupContainer",
-          gridDefination: {
-            xs: 12,
-            sm: 12,
-            md: 6
-          },
+          optionValue: "code",
+          optionLabel: "label",
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
-          props: {
-            label: {
-              name: "Gender",
-              key: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+          data: [
+            {
+              code: "MALE",
+              label: "COMMON_GENDER_MALE"
             },
-            buttons: [
-              {
-                labelName: "Male",
-                labelKey: "COMMON_GENDER_MALE",
-                value: "MALE"
-              },
-              {
-                label: "Female",
-                labelKey: "COMMON_GENDER_FEMALE",
-                value: "FEMALE"
-              },
-              {
-                label: "Others",
-                labelKey: "COMMON_GENDER_TRANSGENDER",
-                value: "OTHERS"
-              }
-            ],
-            jsonPath:
-              "Licenses[0].tradeLicenseDetail.owners[0].gender",
-            required: true
-          },
-          required: true,
-          type: "array"
-        },
+            {
+              code: "FEMALE",
+              label: "COMMON_GENDER_FEMALE"
+            },
+            {
+              code: "OTHERS",
+              label: "COMMON_GENDER_TRANSGENDER"
+            }
+          ]
+        }),
         ownerDOB: {
           ...getDateField({
             label: {
@@ -529,39 +609,82 @@ export const ownerInfoInstitutional = {
         pattern: getPattern("Name"),
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
       }),
-      getRelationshipRadioButton: {
-        uiFramework: "custom-containers",
-        componentPath: "RadioGroupContainer",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
+      // getRelationshipRadioButton: {
+      //   uiFramework: "custom-containers",
+      //   componentPath: "RadioGroupContainer",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 12,
+      //     md: 6
+      //   },
+      //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+      //   props: {
+      //     label: {
+      //       name: "Relationship",
+      //       key: "TL_COMMON_RELATIONSHIP_LABEL"
+      //     },
+      //     buttons: [
+      //       {
+      //         labelName: "Father",
+      //         labelKey: "COMMON_RELATION_FATHER",
+      //         value: "FATHER"
+      //       },
+      //       {
+      //         labelName: "Mother",
+      //         labelKey: "COMMON_RELATION_MOTHER",
+      //         value: "MOTHER"
+      //       },
+      //       {
+      //         label: "Spouse",
+      //         labelKey: "COMMON_RELATION_SPOUSE",
+      //         value: "SPOUSE"
+      //       },
+      //       {
+      //         labelName: "Guardian",
+      //         labelKey: "COMMON_RELATION_GUARDIAN",
+      //         value: "GUARDIAN"
+      //       }
+      //     ],
+      //     jsonPath:
+      //     "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+      //     required: true
+      //   },
+      //   required: true,
+      //   type: "array"
+      // },
+      getRelationshipField : getSelectField({
+        label: {
+          labelName: "Relationship",
+          labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-        props: {
-          label: {
-            name: "Relationship",
-            key: "TL_COMMON_RELATIONSHIP_LABEL"
-          },
-          buttons: [
-            {
-              labelName: "Father",
-              labelKey: "COMMON_RELATION_FATHER",
-              value: "FATHER"
-            },
-            {
-              label: "Husband",
-              labelKey: "COMMON_RELATION_HUSBAND",
-              value: "HUSBAND"
-            }
-          ],
-          jsonPath:
-            "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
-          required: true
+        placeholder: {
+          labelName: "Select Relationship",
+          labelKey: "TL_COMMON_RELATIONSHIP_PLACEHOLDER"
         },
         required: true,
-        type: "array"
-      },
+        optionValue: "code",
+        optionLabel: "label",
+        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+        data: [
+          {
+            code: "FATHER",
+            label: "COMMON_RELATION_FATHER"
+          },
+          {
+            code: "MOTHER",
+            label: "COMMON_RELATION_MOTHER"
+          },
+          {
+            code: "SPOUSE",
+            label: "COMMON_RELATION_SPOUSE"
+          },    
+          {
+            code: "GUARDIAN",
+            label: "COMMON_RELATION_GUARDIAN"
+            
+          }
+        ]
+      }),
       getOwnerGenderField: getSelectField({
         label: {
           labelName: "Gender",

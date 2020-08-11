@@ -818,7 +818,7 @@ export const tradeDetails = getCommonCard({
     }),
     tradeOperationalArea: getTextField({
       label: {
-        labelName: "Operatonal Area (Sq Ft)",
+        labelName: "Area of trade premises (Sq Ft)",
         labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
       },
       props:{
@@ -826,9 +826,10 @@ export const tradeDetails = getCommonCard({
         disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
       },
       placeholder: {
-        labelName: "Enter Operatonal Area in Sq Ft",
+        labelName: "Enter Area of trade premises in Sq Ft",
         labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
       },
+      required: true,
       pattern: getPattern("OperationalArea"),
       jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
     }),
@@ -852,7 +853,8 @@ export const tradeDetails = getCommonCard({
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
   ),
   tradeUnitCard,
-  accessoriesCard
+  //Commented by Minju for removing accessory on 13/06/2020
+  //accessoriesCard
 });
 
 const setFieldsOnAddItem = (state, multiItemContent) => {

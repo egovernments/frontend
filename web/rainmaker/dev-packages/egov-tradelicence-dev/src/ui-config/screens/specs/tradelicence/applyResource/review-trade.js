@@ -341,7 +341,22 @@ export const tradeLocationDetails = {
         "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo",
       callBack: checkValueForNA
     }
-  )
+  ),
+    reviewPremisis: getLabelWithValue(
+      {
+        labelName: "Occupancy",
+        labelKey: "TL_NEW_TRADE_DETAILS_PREMISIS_LABEL"
+      },
+      {
+        jsonPath:
+          "Licenses[0].tradeLicenseDetail.additionalDetail.premisis",
+          localePrefix: {
+            moduleName: "COMMON",
+            masterName: "PREMISIS"
+          },
+          callBack: checkValueForNA
+      }
+    )
 }
 export const getReviewTrade = (isEditable = true) => {
   return getCommonGrayCard({
@@ -398,8 +413,8 @@ export const getReviewTrade = (isEditable = true) => {
     viewOne: getCommonContainer(tradeReviewDetails),
     div1: getDivider(),
     viewTwo: tradeTypeCard,
-    div2: getDivider(),
-    viewThree: accessoriesCard,
+   // div2: getDivider(),
+  //  viewThree: accessoriesCard,
 
     div3: getDivider(),
     viewFour: getCommonContainer(tradeLocationDetails)

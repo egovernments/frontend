@@ -306,8 +306,32 @@ export const tradeLocationDetails = getCommonCard(
         // pattern: getPattern("ElectricityConnNo"),
         jsonPath:
           "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
-      })
-    },
+      }),
+      tradePremisis : getSelectField({
+        label: {
+          labelName: "Occupancy",
+          labelKey: "TL_NEW_TRADE_DETAILS_PREMISIS_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Occupancy",
+          labelKey: "TL_NEW_TRADE_DETAILS_PREMISIS_PLACEHOLDER"
+        },
+        required: true,
+        optionValue: "code",
+        optionLabel: "label",
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.premisis",
+        data: [
+          {
+            code: "RENTED",
+            label: "COMMON_PREMISIS_RENTED"
+          },
+          {
+            code: "SELF OCCUPIED",
+            label: "COMMON_PREMISIS_SELF_OCCUPIED"
+          }
+        ]
+      }),
+    },  
     {
       style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"pointer-events":"none"}:{} 
     }

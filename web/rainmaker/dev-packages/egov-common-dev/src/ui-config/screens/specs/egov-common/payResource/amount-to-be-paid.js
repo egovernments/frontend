@@ -53,7 +53,7 @@ const AmountToBePaid = getCommonGrayCard({
     displayAmount: {
       ...getTextField({
         label: {
-          labelName: "Amount to pay (Rs)",
+          labelName: "Amount to pay (₹)",
           labelKey: "AMOUNT_TO_PAY"
         },
         pattern: getPattern("Amount"),
