@@ -42,7 +42,7 @@ const titlebar2 = {
   children: {
     nocApprovalNumber: {
       uiFramework: "custom-atoms-local",
-      moduleName: "egov-common-noc",
+      moduleName: "egov-noc",
       componentPath: "NocNumber",
       gridDefination: {},
       props: {
@@ -160,7 +160,7 @@ const nocDetails = getCommonGrayCard({
   },
   documentDetailsCard: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-common-noc",
+    moduleName: "egov-noc",
     componentPath: "PreviewContainer",
     props: {
       sourceJsonPath: "documentDetailsPreview",

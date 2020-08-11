@@ -1,5 +1,5 @@
 {
-  "name": "egov-common-noc-dev",
+  "name": "egov-noc-dev",
   "version": "0.0.1",
   "license": "egov",
   "private": true,
@@ -60,7 +60,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build-css": "node-sass-chokidar src/ -o src/",
-    "transpile": "npm run build-css && babel src -d ../../packages/egov-common-noc --copy-files",
+    "transpile": "npm run build-css && babel src -d ../../packages/egov-noc --copy-files",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
