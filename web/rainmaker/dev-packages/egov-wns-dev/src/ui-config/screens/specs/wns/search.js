@@ -218,8 +218,7 @@ const employeeSearchResults = {
       }
     },
     adhocDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-wns",
+      uiFramework: "custom-containers",
       componentPath: "DialogContainer",
       props: {
         open: false,
