@@ -74,7 +74,7 @@ const getDetailsFromProperty = async (state, dispatch) => {
     if (propertyId) {
       let payload = await httpRequest(
         "post",
-        `/pt-services-v2/property/_search?tenantId=${tenantId}&ids=${propertyId}`,
+        `/firenoc-services/v1/_search?tenantId=${tenantId}&ids=${propertyId}`,
         "_search",
         [],
         {}
@@ -902,17 +902,17 @@ export const propertyLocationDetails = getCommonCard(
           labelName: "Enter Property ID",
           labelKey: "NOC_PROPERTY_ID_PLACEHOLDER"
         },
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              getDetailsFromProperty(state, dispatch);
-            }
-          }
-        },
+        // iconObj: {
+        //   iconName: "search",
+        //   position: "end",
+        //   color: "#FE7A51",
+        //   onClickDefination: {
+        //     action: "condition",
+        //     callBack: (state, dispatch) => {
+        //       getDetailsFromProperty(state, dispatch);
+        //     }
+        //   }
+        // },
         // title: {
         //   value:
         //     "If you have already assessed your property, then please search your property by your PAID",
@@ -920,7 +920,7 @@ export const propertyLocationDetails = getCommonCard(
         // },
         // infoIcon: "info_circle",
         jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId",
-        visible: false
+        visible: true
       }),
 
     /*   propertyCity: {
