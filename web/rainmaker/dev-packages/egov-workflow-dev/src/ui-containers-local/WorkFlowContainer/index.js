@@ -314,7 +314,64 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else {
-      this.wfUpdate(label);
+      const { Licenses } = preparedFinalObject;
+      const status = Licenses[0].status;
+    
+      switch(status){
+        case "FIELDINSPECTION":
+          const tradeSubType = get(
+            preparedFinalObject,
+            `Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType`,
+            //"screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType",
+            []
+          );
+          if (tradeSubType == null ||tradeSubType == "")  {
+            toggleSnackbar(
+              true,
+              { labelName: "Please fill all mandatory fields !", labelKey: "COMMON_MANDATORY_MISSING_ERROR" },
+              "error"
+            );
+          }
+          else {
+          this.wfUpdate(label);
+          }
+          break;
+        case "PENDINGAPPROVAL":
+         const  cbrnDate = get(
+            preparedFinalObject,
+            `Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate`,
+            // "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate",
+            []
+          );
+         const cbrnNumber = get(
+            preparedFinalObject,
+            `Licenses[0].tradeLicenseDetail.additionalDetail.cbrnNumber`,
+            // "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.cbrnNumber",
+            []
+          );
+          if (cbrnDate == null || cbrnNumber == null||cbrnDate == ""|| cbrnNumber == "") {
+            toggleSnackbar(
+              true,
+              { labelName: "Please fill all mandatory fields !", labelKey: "COMMON_MANDATORY_MISSING_ERROR" },
+              "error"
+            );
+          }
+         else if(cbrnNumber.length>50){
+            toggleSnackbar(
+              true,
+              { labelName: "CBR Number should be of length less than 50", labelKey: "COMMON_MANDATORY_MISSING_ERROR"},
+              "error"
+            );
+          }
+          
+          else {
+          this.wfUpdate(label);
+          }
+          break;
+          default :
+          this.wfUpdate(label);
+
+      }
     }
   };
 

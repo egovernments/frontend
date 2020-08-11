@@ -16,7 +16,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import "./index.css";
-
+let status =null
 class Footer extends React.Component {
   state = {
     open: false,
@@ -69,8 +69,19 @@ class Footer extends React.Component {
     } else {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);
+      switch(status){
+        case 'PENDINGAPPROVAL':
+          handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.cbrnNumber`, null);
+          handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.cbrnDate`, null);
+          break;
+          case 'FIELDINSPECTION': 
+         handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.tradeSubType`, null);
+          break;
+          case 'APPLIED':
+            break;
+      }
     }
-
+    
     if (item.isLast) {
       const url =
         process.env.NODE_ENV === "development"
@@ -177,7 +188,7 @@ class Footer extends React.Component {
       });
 
     if (moduleName === "NewTL") {
-      const status = get(
+      status = get(
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].status`
       );
@@ -301,6 +312,7 @@ class Footer extends React.Component {
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}
           dataPath={dataPath}
+          state={state}
         />
       </div>
     );
