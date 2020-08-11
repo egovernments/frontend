@@ -58,6 +58,7 @@ export const header = getCommonContainer({
       ? getCommonHeader({
           labelName: `Apply for New Trade License ${
             process.env.REACT_APP_NAME === "Citizen"
+           
               ? "(" + getCurrentFinancialYear() + ")"
               : ""
           }`,
@@ -174,8 +175,9 @@ export const getMdmsData = async (action, state, dispatch) => {
       payload,
       "MdmsRes.egf-master.FinancialYear",
       []
-    ).filter(item => item.module === "TL" && item.active === true);
+    ).filter(item => item.module === "TL" && item.finYearRange===getCurrentFinancialYear() && item.active === true);
     set(payload, "MdmsRes.egf-master.FinancialYear", financialYearData);
+    console.log("========getCurrentFinancialYear",getCurrentFinancialYear());
   } catch (e) {
     console.log(e);
   }

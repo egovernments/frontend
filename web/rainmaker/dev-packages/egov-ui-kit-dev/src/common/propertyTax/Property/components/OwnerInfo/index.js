@@ -304,7 +304,7 @@ class OwnerInfo extends Component {
       } else {
         // this.openApplyDocsUI();
         // this.setState({ docRequired: true });
-        let link = `/pt-mutation/apply-document?consumerCode=${propertyId}&tenantId=${tenantId}`;
+        let link = `/pt-mutation/apply?consumerCode=${propertyId}&tenantId=${tenantId}`;
 
         // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
         // window.location.href =
