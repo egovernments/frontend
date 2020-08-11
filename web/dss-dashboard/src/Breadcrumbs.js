@@ -14,9 +14,9 @@ const Breadcrumb = props => {
   } = props;
   const pathnames = pathname.split("/").filter(x => x);
   return (
-    <Breadcrumbs aria-label="breadcrumb">
+    <Breadcrumbs style={{ margin: 13 }} aria-label="breadcrumb">
       {pathnames.length > 0 ? (
-        <Link component="button" variant="body2" onClick={() => history.push("/")}>Home</Link>
+        <Link style={{ color: '#FC6A03' }} component="button" variant="body2" onClick={() => history.push("/")}>Home</Link>
       ) : (
           <Typography> Home </Typography>
         )}
@@ -26,7 +26,7 @@ const Breadcrumb = props => {
         return isLast ? (
           <Typography key={name}>{name}</Typography>
         ) : (
-            <Link style={{ color: 'inherit', textDecoration: 'inherit' }} key={name} onClick={() => history.push(routeTo)}>
+            <Link style={{ color: '#FF8C00' }} component="button" variant="body2" key={name} onClick={() => history.push(routeTo)}>
               {name}
             </Link>
 
