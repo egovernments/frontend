@@ -447,6 +447,22 @@ export const OwnerInfoCard = {
           pattern: getPattern("PAN"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
         }),
+        ownerAadhaar: getTextField({
+          label: {
+            labelName: "Aadhar No.",
+            labelKey: "TL_NEW_OWNER_DETAILS_AADHAR_LABEL"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          required: true,
+          placeholder: {
+            labelName: "Enter Owner's AADHAR No.",
+            labelKey: "TL_NEW_OWNER_DETAILS_AADHAR_PLACEHOLDER"
+          },
+          pattern: getPattern("AadharNo"),
+          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].aadhaarNumber"
+        }),
         ownerAddress: getTextField({
           label: {
             labelName: "Correspondence Address",

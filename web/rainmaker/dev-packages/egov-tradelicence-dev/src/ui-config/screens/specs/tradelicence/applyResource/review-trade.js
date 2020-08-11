@@ -127,6 +127,32 @@ export const tradetypeDetails = {
       labelKey: "TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL"
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue", callBack: checkValueForNA }
+  ),
+  reviewTradeValue: getLabelWithValue(
+    {
+      labelName: "Trade Type",
+      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
+    },
+    { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType", callBack: checkValueForNA }
+  ),
+  reviewCbrnNumberValue: getLabelWithValue(
+    {
+      labelName: "cbrnNumber",
+      labelKey: "TL_NEW_TRADE_DETAILS_CBRNUMBER_LABEL"
+    },
+    { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.cbrnNumber", callBack: checkValueForNA }
+  ),
+  reviewCbrnDateValue: getLabelWithValue(
+    {
+      labelName: "cbrnDate",
+      labelKey: "TL_NEW_TRADE_DETAILS_CBRNDATE_LABEL"
+    },
+    { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate", 
+    callBack: value => {
+      var date = new Date(Math.round(Number(value)));
+      var formattedDate =date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+      return value ?  formattedDate : "NA";
+    } }
   )
 }
 
