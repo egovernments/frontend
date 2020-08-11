@@ -55,8 +55,8 @@ export const getWFConfig = (module, businessService) => {
       }
       case "NOC-SERVICES":
       return {
-        INITIATED: "/egov-common-noc/search-preview",
-        DEFAULT: "/egov-common-noc/search-preview",
+        INITIATED: "/noc/search-preview",
+        DEFAULT: "/noc/search-preview",
       };
   }
 };
