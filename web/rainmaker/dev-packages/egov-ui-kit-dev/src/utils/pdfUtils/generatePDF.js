@@ -413,7 +413,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     {
                         "text": [
                             {
-                                "text": applicationData.applicationNoHeader ? getLocaleLabels(applicationData.applicationNoHeader, applicationData.applicationNoHeader) : '',
+                                "text": applicationData.applicationNoHeader ? getLocaleLabels(applicationData.applicationNoHeader, applicationData.applicationNoHeader) + ' ' : '',
                                 bold: true
                             },
                             {
@@ -427,7 +427,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     {
                         "text": [
                             {
-                                "text": applicationData.additionalHeader ? getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader) : '',
+                                "text": applicationData.additionalHeader ? getLocaleLabels(applicationData.additionalHeader, applicationData.additionalHeader) + ' ' : '',
                                 bold: true
                             },
                             {
