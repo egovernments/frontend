@@ -31,6 +31,7 @@ const getWFstatus = (status) => {
       return "Pending for Citizen Action";
     case "OPEN":
     case "APPLIED":
+    case "DOCUMENTVERIFY":
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
       return "Pending for Document Verification";
     case "REJECTED":
