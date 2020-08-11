@@ -8,8 +8,6 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { convertEpochToDateAndHandleNA, handleNA } from "../../utils";
 import { serviceConst } from "../../../../../ui-utils/commons";
-const service = getQueryArg(window.location.href, "service")
-
 const getHeader = label => {
   return {
     uiFramework: "custom-molecules-local",
@@ -327,10 +325,10 @@ export const additionDetailsWater=connectionWater;
 export const additionDetailsSewerage=connectionSewerage;
 
 export const renderService = () => {
-  //return getCommonContainer(connectionWater);
-  if (service === serviceConst.WATER) {
+  let isService = getQueryArg(window.location.href, "service");
+  if (isService === serviceConst.WATER) {
     return getCommonContainer(connectionWater);
-  } else if (service === serviceConst.SEWERAGE) {
+  } else if (isService === serviceConst.SEWERAGE) {
     return getCommonContainer(connectionSewerage)
   }
 }
