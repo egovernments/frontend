@@ -123,7 +123,7 @@ const setMandatory = (dispatch, path, value) => {
 
 const buildingUsageTypeChange = (reqObj) => {
   const {dispatch, state, value, index} = reqObj;
-  dispatch(prepareFinalObject(`FireNOCs[0].fireNOCDetails.buildings[${index}].usageTypeMajor`, value));
+  dispatch(prepareFinalObject(`FireNOCs[0].fireNOCDetails.buildings[${index}].usageTypeMajor`, value ? value : "none"));
 }
 
 const buildingSubUsageTypeChange = (reqObj) => {
