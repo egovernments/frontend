@@ -238,6 +238,10 @@ export const reviewRoadType = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreen.roadType",
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "ROADTYPE"
+    },
     callBack: handleNA
   },
   {
