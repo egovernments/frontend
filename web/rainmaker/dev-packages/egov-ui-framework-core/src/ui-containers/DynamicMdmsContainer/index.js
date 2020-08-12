@@ -48,6 +48,7 @@ class DynamicMdmsContainer extends Component {
   }
   onFieldChange = ( screenKey, componentJsonpath, property, value ) => {
     let { dispatch, dropdownFields, moduleName, rootBlockSub, index= 0 } = this.props;
+    value = value === null ? "none": value;
     dispatch(prepareFinalObject( componentJsonpath , value ));
     let isIndex = null;
     if(componentJsonpath){
