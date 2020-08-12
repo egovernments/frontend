@@ -1,7 +1,8 @@
 import commonConfig from "config/common.js";
 import {
   handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
-  toggleSnackbar
+  toggleSnackbar,
+  toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import {
@@ -625,7 +626,10 @@ export const handleFileUpload = (event, handleDocument, props) => {
         alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
         uploadDocument = false;
       }
+      try{
       if (uploadDocument) {
+       
+        store.dispatch(toggleSpinner());
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,
@@ -633,6 +637,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
             file,
             commonConfig.tenantId
           );
+          store.dispatch(toggleSpinner());
           handleDocument(file, fileStoreId);
         } else {
           const fileStoreId = await uploadFile(
@@ -641,9 +646,22 @@ export const handleFileUpload = (event, handleDocument, props) => {
             file,
             commonConfig.tenantId
           );
+          store.dispatch(toggleSpinner());
           handleDocument(file, fileStoreId);
         }
       }
+    }
+    catch(e){
+     store.dispatch(toggleSpinner());
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Invalid Document Format !", labelKey: "INAVLID_DOCUMENT_FORMAT" },
+          "error"
+        )
+      );
+      
+    }
     });
   }
 };

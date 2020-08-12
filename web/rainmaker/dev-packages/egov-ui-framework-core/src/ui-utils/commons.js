@@ -10,7 +10,7 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
-
+import store from "redux/store";
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
     if (components.hasOwnProperty(componentKey)) {
@@ -203,21 +203,24 @@ export const replaceStrInPath = (inputString, search, replacement) => {
   return inputString.replaceAll(search, replacement);
 };
 
-export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
+export const getFileUrlFromAPI = async (fileStoreId, tenantId,dispatch) => {
   const queryObject = [
     { key: "tenantId", value: tenantId || commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
+    store.dispatch(toggleSpinner());
     const fileUrl = await httpRequest(
       "get",
       "/filestore/v1/files/url",
       "",
       queryObject
     );
+    store.dispatch(toggleSpinner());
     return fileUrl;
   } catch (e) {
     console.log(e);
+    store.dispatch(toggleSpinner());
   }
 };
 
