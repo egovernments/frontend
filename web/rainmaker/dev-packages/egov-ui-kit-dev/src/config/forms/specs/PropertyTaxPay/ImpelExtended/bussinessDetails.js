@@ -50,6 +50,7 @@ const formConfig = {
       floatingLabelText: "PT_COMMON_BUSSINESS_NAME",
       hintText: "Bussiness Name",
       fullWidth: true,
+      required:true
     },
     remrks: {
       id: "remarks",
@@ -63,6 +64,7 @@ const formConfig = {
   },
   beforeInitForm: (action, store) => {
     try {
+
       let state = store.getState();
       let vasikaD =get(state.common.prepareFormData, "Properties[0].additionalDetails.vasikaDate", "");
       let vasikaDate=vasikaD ? new Date(vasikaD):null;

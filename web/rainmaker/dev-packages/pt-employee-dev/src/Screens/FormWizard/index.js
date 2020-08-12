@@ -663,7 +663,7 @@ class FormWizard extends Component {
     const { setRoute, displayFormErrorsAction, form, requiredDocCount } = this.props;
     switch (selected) {
       //validating property address is validated
-      case 0:
+      case 0:   
         if (
           window.appOverrides &&
           !window.appOverrides.validateForm("propertyAddress", form)
@@ -706,8 +706,35 @@ class FormWizard extends Component {
           );
           break;
         }
+        const { basicInformation, plotDetails,bussinessDetails } = form;
 
-        const { basicInformation, plotDetails } = form;
+        const isbussiFormValid = validateForm(form.bussinessDetails);
+        let getUsageType =  get(form,"basicInformation.fields.typeOfUsage.value", "");
+        if(getUsageType === "COMMERCIAL"){
+
+          if (isbussiFormValid) {
+            callDraft(this);
+            window.scrollTo(0, 0);
+            this.setState({
+              selected: index,
+              formValidIndexArray: [...formValidIndexArray, selected]
+            });
+          } 
+          else {
+            displayFormErrorsAction("bussinessDetails");
+          }
+
+        }
+        else{
+          callDraft(this);
+          window.scrollTo(0, 0);
+          this.setState({
+            selected: index,
+            formValidIndexArray: [...formValidIndexArray, selected]
+          });
+        }
+
+        break;
         if (basicInformation ) {
           const isBasicInformationFormValid = validateForm(basicInformation);
           if (isBasicInformationFormValid ) {
@@ -757,15 +784,7 @@ class FormWizard extends Component {
             displayFormErrorsAction("basicInformation");
           }
         }
-        // if (bussinessDetails && checkBoxDetails){
-        //   const isBasicInformationFormValid = validateForm(bussinessDetails);
-        //   if(isBasicInformationFormValid){
-        //     console.log("=====isBasicInformationFormValid======",isBasicInformationFormValid);
-        //   }
-        //   else{
-        //     displayFormErrorsAction("bussinessDetails");
-        //   }
-        // }
+
         getImportantDates(this);
         break;
       case 2:
