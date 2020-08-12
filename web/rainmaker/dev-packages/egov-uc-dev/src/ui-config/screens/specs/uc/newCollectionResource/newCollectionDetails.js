@@ -62,7 +62,7 @@ export const newCollectionDetailsCard = getCommonCard(
             }
             let requestBody = {
               MdmsCriteria: {
-                tenantId: action.value,
+                tenantId: action.value.split(".")[0],
                 moduleDetails: [
                   {
                     moduleName: "BillingService",
@@ -76,6 +76,9 @@ export const newCollectionDetailsCard = getCommonCard(
                       },
                       {
                         name: "TaxPeriod"
+                      },
+                      {
+                        name:"ServiceGLCODEMapping"
                       }
                     ]
                   }

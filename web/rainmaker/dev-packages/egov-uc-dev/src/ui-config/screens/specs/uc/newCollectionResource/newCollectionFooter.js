@@ -148,7 +148,15 @@ const createDemand = async (state, dispatch) => {
   );
   set(demands[0], "additionalDetails.consumerName", state.screenConfiguration.preparedFinalObject.Demands[0].consumerName);
   set(demands[0], "additionalDetails.mobileNumber", state.screenConfiguration.preparedFinalObject.Demands[0].mobileNumber);
-// Making payer object as null if it is empty object, later will changge in component.
+//GLCODE
+  for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping.length; i++) {
+
+    if ((state.screenConfiguration.preparedFinalObject.Demands[0].serviceType === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].cb === tenantId)) {
+      set(demands[0], "additionalDetails.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].glcode);
+    }
+
+  }
+  // Making payer object as null if it is empty object, later will changge in component.
 if(Object.keys(demands[0].payer).length === 0) {
   demands[0].payer = null;
 }
