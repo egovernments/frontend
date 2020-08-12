@@ -4779,6 +4779,7 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
       })
     }
   });
+  cards.sort(documentsSorting);
   dispatch(prepareFinalObject("finalCardsforPreview", cards));
 
 }
@@ -4860,6 +4861,7 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
       card["code"] = doc.code;
       card["required"] = doc.required ? true : false;
       card["allow"] = (doc.allow && JSON.parse(doc.allow)) ? true : false;
+      card["orderNumber"] = get(doc, "order");
       if (doc.hasDropdown && doc.dropDownValues) {
         let dropDownValues = {};
         dropDownValues.label = "Select Documents";
@@ -5777,4 +5779,16 @@ export const applicantNameAppliedByMaping = async (state, dispatch, bpaDetails, 
   await permitNumberLink(state, dispatch);
   await ocuupancyType(state, dispatch);
   await residentialType(state, dispatch);
+}
+
+function documentsSorting(a, b) {
+  let orderA = a.orderNumber
+  let orderB = b.orderNumber
+  let comparison = 0;
+  if (orderA > orderB) {
+    comparison = 1;
+  } else if (orderA < orderB) {
+    comparison = -1;
+  }
+  return comparison;
 }

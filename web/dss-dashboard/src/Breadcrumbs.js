@@ -15,19 +15,18 @@ const Breadcrumb = props => {
   const pathnames = pathname.split("/").filter(x => x);
   return (
     <Breadcrumbs style={{ margin: 13 }} aria-label="breadcrumb">
-      {pathnames.length > 0 ? (
-        <Link style={{ color: '#FC6A03' }} component="button" variant="body2" onClick={() => history.push("/")}>Home</Link>
-      ) : (
-          <Typography> Home </Typography>
-        )}
       {pathnames.map((name, index) => {
+       let displayname=name;
+       if(name==='dashboard')
+           displayname='Home';
+    
         const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames.length - 1;
         return isLast ? (
-          <Typography key={name}>{name}</Typography>
+          <Typography key={name}>{displayname}</Typography>
         ) : (
-            <Link style={{ color: '#FF8C00' }} component="button" variant="body2" key={name} onClick={() => history.push(routeTo)}>
-              {name}
+            <Link style={{ color: '#FC6A03' }} component="button" variant="body2" key={name} onClick={() => history.push(routeTo)}>
+              {displayname}
             </Link>
 
           );
