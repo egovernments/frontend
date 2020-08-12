@@ -1310,8 +1310,8 @@ export const submitBpaApplication = async (state, dispatch) => {
   let isDeclared = get(state, "screenConfiguration.preparedFinalObject.BPA.isDeclared");
 
   if (isDeclared) {
-    let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
     let nocRespose = await nocapplicationUpdate(state);
+    let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
     const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     if (get(response, "status", "") === "success") {
@@ -1343,8 +1343,8 @@ export const submitBpaApplication = async (state, dispatch) => {
 
 export const updateBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
-  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
   let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
+  let response = await createUpdateBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (get(response, "status", "") === "success" && nocRespose == "successful") {
@@ -1357,8 +1357,8 @@ export const updateBpaApplication = async (state, dispatch) => {
 };
 export const updateOcBpaApplication = async (state, dispatch) => {
   const bpaAction = "SEND_TO_CITIZEN";
-  let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
   let nocRespose = await updateNocApplication(state, dispatch, "INITIATE");
+  let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (response && nocRespose == "successful") {
@@ -1552,8 +1552,8 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
 
 export const submitOCBpaApplication = async (state, dispatch) => {
   const bpaAction = "APPLY";
-  let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
   let nocRespose = await nocapplicationUpdate(state);
+  let response = await createUpdateOCBpaApplication(state, dispatch, bpaAction);
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.BPA.applicationNo");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   if (response) {
