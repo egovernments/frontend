@@ -316,7 +316,9 @@ class WorkFlowContainer extends React.Component {
 
         if (assigneePresent || FirenocassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL") {
           this.wfUpdate(label);
-        } else {
+        } 
+        
+        else {
           toggleSnackbar(
             true,
             { labelName: "Please Upload file !", labelKey: "ERR_UPLOAD_FILE" },
@@ -337,18 +339,20 @@ class WorkFlowContainer extends React.Component {
       const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
       const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
       const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
+
         if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE"){
           this.wfUpdate(label);
-
         }
         else{
-          toggleSnackbar(
-            true,
-            { labelName: "Please select assignee name!", 
-            // labelKey: "ERR_UPLOAD_FILE" 
-          },
-            "error"
-          );
+          alert("Please select assignee name !");
+          // toggleSnackbar(
+          //   true,
+          //   { 
+          //     labelName: "Please select assignee name!", 
+          //     // labelKey: "ERR_UPLOAD_FILE" 
+          // },
+          //   "error"
+          // );
         }   
 
     }
