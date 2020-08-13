@@ -1,7 +1,7 @@
 import React from "react";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { Card } from "components";
-import moment from "moment";
+// import moment from "moment";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 
@@ -82,7 +82,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
 export const getUnitInfo = (units = [], propertyDetails) => {
   units = units || [];
   let floors = [];
-  
+
   units.map((unit, index) => {
     console.log("======units======", units);
     if(unit){
@@ -94,11 +94,11 @@ export const getUnitInfo = (units = [], propertyDetails) => {
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
         value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
-      }, 
+      },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
         value: unit.usageCategoryDetail ? 'PROPERTYTAX_BILLING_SLAB_'+ unit.usageCategoryDetail :"NA",
-      }, 
+      },
       {
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
@@ -121,8 +121,8 @@ export const getUnitInfo = (units = [], propertyDetails) => {
 }
 const getVasikaItems = (additionalDetails) => {
 
-  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)? moment( additionalDetails.vasikaDate).format('DD-MM-YYYY'):null;
- var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? moment( additionalDetails.allotmentDate).format('DD-MM-YYYY'):null;
+  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)?additionalDetails.vasikaDate).toISOString().split('T')[0]:null;
+ var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? additionalDetails.allotmentDate).toISOString().split('T')[0]:null;
 
   return (
     additionalDetails && [
@@ -144,11 +144,11 @@ const getVasikaItems = (additionalDetails) => {
           },
           {
             key: "PT_COMMON_BUSSINESS_NAME",
-            value:  additionalDetails.businessName || "NA", 
+            value:  additionalDetails.businessName || "NA",
           },
           {
             key: "PT_COMMON_REMARKS",
-            value:  additionalDetails.remrks || "NA", 
+            value:  additionalDetails.remrks || "NA",
           },
           {
             key: "PT_COMMON_HEIGHT_OF_PROPERTY",
@@ -158,7 +158,7 @@ const getVasikaItems = (additionalDetails) => {
             key: "PT_COMMON_INFLAMMABLE_MATERIAL_PROPERTY",
             value:  additionalDetails.heightOfProperty === true ? "Yes" : "No",
           },
-         
+
         ]
       );
 }
