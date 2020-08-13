@@ -15,6 +15,7 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 //const hasApproval = getQueryArg(window.location.href, "hasApproval");
@@ -39,14 +40,18 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  const userName = JSON.parse(getUserInfo()).userName;
   dispatch(
-    handleField(
-      "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNumber",
-      "props.value",
-      ""
-    )
+    prepareFinalObject("searchScreen.mobileNumber", userName)
   );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
   dispatch(
     handleField(
       "search",

@@ -11,7 +11,7 @@ import { searchResult } from "./receiptsResources/searchResult";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const tenantId = getTenantId();
@@ -65,6 +65,10 @@ const ucSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
+    const userName = JSON.parse(getUserInfo()).userName;
+    dispatch(
+      prepareFinalObject("searchScreen.mobileNumber", userName)
+    );
     return action;
   },
   components: {
