@@ -13,7 +13,6 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
-import printJS from 'print-js';
 import axios from 'axios';
 
 
@@ -521,7 +520,7 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
           myWindow.print();
         });
       }
-    
+
     }
   });
 }
@@ -551,7 +550,7 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
       if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
-        console.log("Could not find any receipts");   
+        console.log("Could not find any receipts");
         return;
       }
       const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
@@ -565,10 +564,10 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
           if(res&&res.filestoreIds&&res.filestoreIds.length>0){
             res.filestoreIds.map(fileStoreId=>{
               downloadReceiptFromFilestoreID(fileStoreId,mode)
-            })          
+            })
           }else{
-            console.log("Error In Receipt Download");        
-          }         
+            console.log("Error In Receipt Download");
+          }
         });
       }
     })
@@ -609,4 +608,3 @@ export const downloadBill = async (consumerCode ,tenantId ,configKey = "consolid
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
       }
 }
-
