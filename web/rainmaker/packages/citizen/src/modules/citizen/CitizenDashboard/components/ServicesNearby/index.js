@@ -7,11 +7,11 @@ import "./index.css";
 class ServicesNearby extends React.Component {
   getServicesNearBy = () => {
     return [
-      {
-        label: "COMMON_EVENTS_LABEL",
-        icon: <Icon className="service-icon" action="custom" name="calendar" />,
-        route: "events",
-      },
+      // {
+      //   label: "COMMON_EVENTS_LABEL",
+      //   icon: <Icon className="service-icon" action="custom" name="calendar" />,
+      //   route: "events",
+      // },
       {
         label: "COMMON_MYCITY_LABEL",
         icon: <Icon className="service-icon" action="custom" name="home-city-outline" />,
@@ -38,7 +38,7 @@ class ServicesNearby extends React.Component {
     const { onServiceClick } = this.props;
     return (
       <Grid container>
-        <Grid item xs={6} sm={6} align="center" style={{ paddingRight : 8,cursor: "pointer" }}  onClick={() => onServiceClick("events")}>
+        {/* <Grid item xs={6} sm={6} align="center" style={{ paddingRight : 8,cursor: "pointer" }}  onClick={() => onServiceClick("events")}>
           <Card className="servicelist-style"
             textChildren={
               <div className="local-information-cont" >
@@ -47,8 +47,8 @@ class ServicesNearby extends React.Component {
               </div>
             }
           />
-        </Grid>
-        <Grid item xs={6} sm={6} align="center" style={{ cursor: "pointer" }}  onClick={() => onServiceClick("my-city")}>
+        </Grid> */}
+        <Grid item xs={12} sm={12} align="center" style={{ cursor: "pointer" }}  onClick={() => onServiceClick("my-city")}>
           <Card className="servicelist-style"
             textChildren={
               <div className="local-information-cont" >
