@@ -121,8 +121,8 @@ export const getUnitInfo = (units = [], propertyDetails) => {
 }
 const getVasikaItems = (additionalDetails) => {
 
-  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)?additionalDetails.vasikaDate).toISOString().split('T')[0]:null;
- var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? additionalDetails.allotmentDate).toISOString().split('T')[0]:null;
+  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)?additionalDetails.vasikaDate.toISOString().split('T')[0]:null;
+ var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? additionalDetails.allotmentDate.toISOString().split('T')[0]:null;
 
   return (
     additionalDetails && [
