@@ -375,7 +375,7 @@ export const additionDetails = getCommonCard({
 });
 
 const showHideFeilds = (dispatch, value) => {
-  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
+  let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
   dispatch(
     handleField(
       "apply",
