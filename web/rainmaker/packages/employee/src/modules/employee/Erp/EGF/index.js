@@ -28,8 +28,8 @@ class EGFFinance extends Component {
       subdomainurl = hostname.substring(hostname.search("qa"), hostname.length);
       erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
     } else if (hostname.search("uat") != -1) {
-      // subdomainurl = hostname.substring(hostname.search('uat'),hostname.length);
-      subdomainurl = "uat.egovernments.org";
+      subdomainurl = hostname.substring(hostname.search('uat'),hostname.length);
+      //subdomainurl = "uat.egovernments.org";
       erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
     } else {
       subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
