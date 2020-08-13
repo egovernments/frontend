@@ -31,9 +31,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
-    "webfontloader": "^1.6.28",
-    "react-select": "^2.3.0"
-  },
+    "webfontloader": "^1.6.28"
+    },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "yarn run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
