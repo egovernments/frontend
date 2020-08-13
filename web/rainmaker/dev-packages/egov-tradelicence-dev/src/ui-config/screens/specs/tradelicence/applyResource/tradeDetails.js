@@ -7,7 +7,8 @@ import {
   getDateField,
   getSelectField,
   getCommonContainer,
-  getPattern
+  getPattern,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getIconStyle,
@@ -19,7 +20,8 @@ import {
   fillOldLicenseData,
   getTradeTypeDropdownData,
   updateMdmsDropDowns,
-  updateStructureTypes
+  updateStructureTypes,
+  downloadHelpFile
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
@@ -211,6 +213,7 @@ const tradeUnitCard = {
               isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType"
             }
           },
+         
           tradeUOM: getTextField({
             label: {
               labelName: "UOM (Unit of Measurement)",
@@ -251,7 +254,47 @@ const tradeUnitCard = {
               xs: 12,
               sm: 4
             }
-          })
+          }),
+          helpPdfButton:{
+            componentPath:"Button",
+            jsonPath:"Licenses[0].tradeLicenseDetail.pdf",
+           
+            gridDefination: {
+              xs: 12,
+              sm: 4
+            },
+            props:{
+              //variant: "outlined",
+              color:"primary",                 
+                style:{
+                minWidth:"180px",
+                height:"48px",
+                marginRight:"45",
+                borderRadius: "inherit"
+              }
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: (state, dispatch) => {
+              downloadHelpFile(state, dispatch);
+              }
+            },
+            children:{
+              
+              nextButtonIcon:{
+                uiFramework:"custom-atoms",
+                componentPath:"Icon",
+                props:{
+                  iconName:"cloud_download"
+                }
+              },
+              nextButtonLabel:getLabel({
+                labelName:"Trade Type Help",
+                labelKey:"TRADETYPE_HELP"
+              }),
+            },
+                        
+           }, 
         },
         {
           style: {

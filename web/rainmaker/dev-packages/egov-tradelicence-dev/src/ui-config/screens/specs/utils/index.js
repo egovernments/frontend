@@ -2378,3 +2378,13 @@ export const pageResetAndChange = (state, dispatch, tenant) => {
   dispatch(prepareFinalObject("LicensesTemp", []));
   dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
+
+export const downloadHelpFile = async (state, dispatch) => {  
+  console.info("downlod the help file from the following");
+  const helpurl = get(state.screenConfiguration.preparedFinalObject,
+    "helpFileUrl",
+    ""
+  );  
+  console.info("help url==",helpurl);
+  window.open(helpurl,"_blank");
+};

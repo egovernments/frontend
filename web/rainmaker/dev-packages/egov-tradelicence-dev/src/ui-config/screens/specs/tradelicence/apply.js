@@ -90,6 +90,7 @@ export const getMdmsData = async (action, state, dispatch) => {
             { name: "OwnerType" },
             { name: "DocumentType" },
             { name: "UOM" },
+            { name: "Help" }
           ]
         },
         {
@@ -131,6 +132,16 @@ export const getMdmsData = async (action, state, dispatch) => {
       []
     ).filter(item => item.module === "TL" && item.active === true);
     set(payload, "MdmsRes.egf-master.FinancialYear", financialYearData);
+    const presentTenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):getTenantId();
+    console.info("=getting my help url for tenant id TL=",presentTenantId);
+    //console.info("src urls==",get(payload,"MdmsRes.common-masters.Help",[]));
+      let helpUrl = get(
+        payload,
+        "MdmsRes.common-masters.Help",
+        []
+        ).filter(item =>item.code ==="TL" && item.tenant === presentTenantId);
+    console.info("help url is set for TL==",helpUrl[0].URL);
+    dispatch(prepareFinalObject("helpFileUrl", helpUrl[0].URL));  
   } catch (e) {
     console.log(e);
   }

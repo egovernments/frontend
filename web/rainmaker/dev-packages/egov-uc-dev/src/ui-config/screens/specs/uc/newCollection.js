@@ -6,9 +6,12 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { setServiceCategory } from "../utils";
-import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
-import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
 
+import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
+import {newCollectionConsumerDetailsCard} from './newCollectionResource/neCollectionConsumerDetails'
+import{newCollectionServiceDetailsCard} from './newCollectionResource/newCollectionServiceDetails';
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const header = getCommonHeader({
   labelName: "New Collection",
   labelKey: "UC_COMMON_HEADER"
@@ -74,6 +77,12 @@ const getData = async (action, state, dispatch, demandId) => {
             },
             { name: "citymodule" }
           ]
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [            
+            { name: "Help" }
+          ]
         }
       ]
     }
@@ -113,6 +122,84 @@ const getData = async (action, state, dispatch, demandId) => {
     dispatch(
       prepareFinalObject("Demands[0].tenantId", tenantId)
     );
+
+    const presentTenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):getTenantId();
+    console.info("getting my help url for tenant id mCollect==",presentTenantId);
+    //console.info("src urls==",get(payload,"MdmsRes.common-masters.Help",[]));
+      let helpUrl = get(
+        payload,
+        "MdmsRes.common-masters.Help",
+        []
+        ).filter(item =>item.code ==="UC");
+    //console.info("my help url==",helpUrl);
+    console.info("my help url is set or mCollect==",helpUrl[0].URL);
+    
+    dispatch(prepareFinalObject("helpFileUrl", helpUrl[0].URL));
+//Get Mohalla data
+        
+try {
+  let payload = await httpRequest(
+    "post",
+    "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+    "_search",
+    [{ key: "tenantId", value: `${tenantId}`, }],
+    {}
+  );
+  const mohallaData =
+    payload &&
+    payload.TenantBoundary[0] &&
+    payload.TenantBoundary[0].boundary &&
+    payload.TenantBoundary[0].boundary.reduce((result, item) => {
+      result.push({
+        ...item,
+        name: `${tenantId
+          .toUpperCase()
+          .replace(
+            /[.]/g,
+            "_"
+          )}_REVENUE_${item.code
+          .toUpperCase()
+          .replace(/[._:-\s\/]/g, "_")}`
+      });
+      return result;
+    }, []);
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.tenant.localities",
+      mohallaData
+    )
+  );
+  
+  dispatch(
+    handleField(
+      "newCollection",
+      "components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children.ConsumerLocMohalla",
+      "props.suggestions",
+      mohallaData
+      // payload.TenantBoundary && payload.TenantBoundary[0].boundary
+    )
+  );
+  const mohallaLocalePrefix = {
+    moduleName: `${tenantId}`,
+    masterName: "REVENUE"
+  };
+ 
+  dispatch(
+    handleField(
+      "newCollection",
+      "components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children.ConsumerLocMohalla",
+      "props.localePrefix",
+      mohallaLocalePrefix
+    )
+  );
+} catch (e) {
+  console.log(e);
+}
+//End of Mohalla data
+
+
+
+
   } catch (e) {
     console.log(e);
   }
@@ -160,12 +247,12 @@ const newCollection = {
 
       set(
         screenConfigForUpdate,
-        "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",
+        "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",
         true
       );
       set(
         screenConfigForUpdate,
-        "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType.props.disabled",
+        "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType.props.disabled",
         true
       );
       action.screenConfig = screenConfigForUpdate;
@@ -198,7 +285,9 @@ const newCollection = {
             }
           }
         },
-        newCollectionDetailsCard,
+       // newCollectionDetailsCard,
+       newCollectionConsumerDetailsCard,
+        newCollectionServiceDetailsCard, 
         newCollectionFooter
       }
     }

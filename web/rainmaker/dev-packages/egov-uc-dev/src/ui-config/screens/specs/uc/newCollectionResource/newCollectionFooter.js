@@ -46,8 +46,8 @@ export const newCollectionFooter = getCommonApplyFooter({
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
-        labelName: "NEXT",
-        labelKey: "UC_BUTTON_NEXT"
+        labelName: "Generate Challan",
+        labelKey: "UC_ECHALLAN"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",

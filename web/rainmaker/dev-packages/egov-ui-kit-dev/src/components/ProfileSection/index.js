@@ -47,13 +47,18 @@ class ProfileSection extends React.Component {
     this.props.setRoute("/");
   };
 
-  onTenantChange = (event, index, value) => {
-    if (location.pathname.includes("/inbox")) {
-      this.setState({ ...this.state, tenantSelected: value });
-      setTenantId(value);
-      this.props.setRoute("/");
-    } else {
-      this.setState({ ...this.state, open: true, tempTenantSelected: value });
+  onTenantChange = (event, index, value,tenantIdsList) => {
+    //checking for multi-tenancy in Employee profile edit
+    //if multiple tenants are present in dropdown then only redirect to inbox page
+    if(tenantIdsList != undefined){
+      console.info("i have multi tenancy");
+      if (location.pathname.includes("/inbox")) {
+        this.setState({ ...this.state, tenantSelected: value });
+        setTenantId(value);
+        this.props.setRoute("/");
+      } else {
+        this.setState({ ...this.state, open: true, tempTenantSelected: value });
+      }
     }
   };
 

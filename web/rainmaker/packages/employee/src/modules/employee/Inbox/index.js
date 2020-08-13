@@ -85,7 +85,7 @@ class Inbox extends Component {
             <Label className="landingPageUser flex-child" label={name} />,
           </div>
           <div className="quick-action-button">
-            <MenuButton data={buttonItems} />
+            {downloadMenu.length!=0 &&<MenuButton data={buttonItems} />}
           </div>
         </div>
         <div className={"inbox-service-list"}>

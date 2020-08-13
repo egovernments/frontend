@@ -339,6 +339,17 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
   );
 };
 
+
+
+export const downloadHelpFile = async (state, dispatch) => {  
+  const helpurl = get(state.screenConfiguration.preparedFinalObject,
+    "helpFileUrl",
+    ""
+  );   
+  window.open(helpurl,"_blank");
+};
+
+
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
