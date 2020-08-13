@@ -79,6 +79,12 @@ const NOCSearchAndResult = {
       "screenConfiguration.preparedFinalObject.searchScreen",
       {}
     );
+    dispatch(
+      prepareFinalObject(
+        "DynamicMdms",
+        {}
+      )
+    );
     return action;
   },
   components: {
