@@ -11,6 +11,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import { getDetailsForOwner } from "../../utils";
 import get from "lodash/get";
 import "./index.css";
@@ -160,6 +161,7 @@ const commonApplicantInformation = () => {
           labelKey: "NOC_ENTER_APPLICANT_DOB_PLACEHOLDER"
         },
         required: true,
+        isDOB: true,
         pattern: getPattern("Date"),
         errorMessage: "Invalid Date",
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].dob",
@@ -169,7 +171,10 @@ const commonApplicantInformation = () => {
           md: 6
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error",
+          inputProps: {
+            max: getTodaysDateInYMD()
+          }
         }
       }),
       applicantEmail: getTextField({
