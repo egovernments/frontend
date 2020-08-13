@@ -127,7 +127,7 @@ const callBackForNext = async (state, dispatch) => {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
     // }
-    if (getQueryArg(window.location.href, "action") === "edit" && !isMode ) {
+    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode() ) {
       let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       const uploadedDocData = application.documents;
       const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
@@ -291,7 +291,7 @@ const callBackForNext = async (state, dispatch) => {
                 );
                 if (sewerData && sewerData.length > 0 && waterData.length === 0) { await applyForWater(state, dispatch); }
                 else if (waterData && waterData.length > 0 && sewerData.length === 0) { await applyForSewerage(state, dispatch); }
-              } else if ((sewerChecked && sewerData.length === 0) || (isMode && sewerData.length === 1 && !modifyAppCreated))  {
+              } else if ((sewerChecked && sewerData.length === 0) || (isModifyMode() && sewerData.length === 1 && !modifyAppCreated))  {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
@@ -299,7 +299,7 @@ const callBackForNext = async (state, dispatch) => {
                   )
                 );
                 await applyForSewerage(state, dispatch);
-              } else if ((waterChecked && waterData.length === 0) || (isMode && waterData.length === 1 && !modifyAppCreated)) {
+              } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated)) {
                 dispatch(
                   prepareFinalObject(
                     "applyScreen.service",
@@ -363,7 +363,7 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
 
   if (activeStep === 1) {
-    if(isMode) {
+    if(isModifyMode()) {
       isFormValid = true; 
       hasFieldToaster = false;
     } else {
@@ -382,7 +382,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
-    if(isMode) {
+    if(isModifyMode()) {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
         isFormValid = true; hasFieldToaster = false;
@@ -395,7 +395,7 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false; 
       }
     } else{
-      if (getQueryArg(window.location.href, "action") === "edit" && (!isMode || (isMode && isModifyModeAction()))) {
+      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
       isFormValid = true;
@@ -609,7 +609,7 @@ export const changeStep = (
       );
       if(isDocsUploaded){
         activeStep = process.env.REACT_APP_NAME === "Citizen" ? 3 : 2;
-      } else if(isMode){
+      } else if(isModifyMode()){
         activeStep = 2;
       }
     } else if (process.env.REACT_APP_NAME === "Citizen" && activeStep === 3) {
@@ -681,7 +681,7 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 1:
-      let mStepSecond = (isMode) ? 'formwizardThirdStep' : 'formwizardSecondStep';
+      let mStepSecond = (isModifyMode()) ? 'formwizardThirdStep' : 'formwizardSecondStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
@@ -691,7 +691,7 @@ export const renderSteps = (activeStep, dispatch) => {
       );
       break;
     case 2:
-      let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
+      let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
@@ -724,7 +724,7 @@ export const renderStepsCitizen = (activeStep, dispatch) => {
       );
       break;
     case 1:
-      let mStepSecond = (isMode) ? 'formwizardThirdStep' : 'formwizardSecondStep';
+      let mStepSecond = (isModifyMode()) ? 'formwizardThirdStep' : 'formwizardSecondStep';
       dispatchMultipleFieldChangeAction(
         "apply",
         getActionDefinationForStepper(
@@ -777,7 +777,7 @@ export const getActionDefinationForStepper = path => {
     let mStep1 = "formwizardThirdStep";
     let mStep2 = "formwizardSecondStep"; 
 
-    if(isMode) {
+    if(isModifyMode()) {
       mStep1 = "formwizardSecondStep";
       mStep2 = "formwizardThirdStep";
     }

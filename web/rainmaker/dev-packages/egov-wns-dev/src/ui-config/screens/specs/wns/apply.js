@@ -46,7 +46,7 @@ export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
   } 
-  else if(isMode){
+  else if(isModifyMode()){
     return [{ labelKey: "WS_COMMON_PROPERTY_DETAILS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
   } else{
       return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
@@ -55,7 +55,7 @@ export const stepperData = () => {
 export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepperData());
 
 export const getHeaderLabel = () => {
-  if (isMode) {
+  if (isModifyMode()) {
     return process.env.REACT_APP_NAME === "Citizen" ? "WS_MODIFY_NEW_CONNECTION_HEADER" : "WS_MODIFY_CONNECTION_HEADER"
   }
   return process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
@@ -72,7 +72,7 @@ export const header = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
-    props: { number: "NA", mode: isMode },
+    props: { number: "NA", mode: isModifyMode() },
     visible: false
   },
 
@@ -80,7 +80,7 @@ export const header = getCommonContainer({
     uiFramework: "custom-atoms-local",
     moduleName: "egov-wns",
     componentPath: "ApplicationNoContainer",
-    props: { number: "NA", mode: isMode },
+    props: { number: "NA", mode: isModifyMode() },
     visible: false
   }
 
@@ -92,7 +92,7 @@ export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Ci
 
 export const reviewDocumentDetails = reviewDocuments();
 
-export const reviewModificationsDetails = (isMode)?reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen"):{};
+export const reviewModificationsDetails = (isModifyMode())?reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen"):{};
 
 const summaryScreenCitizen = getCommonCard({
   reviewConnDetails,
@@ -250,7 +250,7 @@ export const getData = async (action, state, dispatch) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const propertyID = getQueryArg(window.location.href, "propertyId");
   const actionType = getQueryArg(window.location.href, "action");
-  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
+  let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch);
    if (applicationNo) {
     //Edit/Update Flow ----
@@ -285,11 +285,11 @@ export const getData = async (action, state, dispatch) => {
         showHideFieldsFirstStep(dispatch,"",false);
       }
       // For Modify connection details
-      if(isMode && !isModifyModeAction()) { 
+      if(isModifyMode() && !isModifyModeAction()) { 
         // this delete for initiate modify connection 
         delete combinedArray[0].id; combinedArray[0].documents = []; 
       }
-      if(isMode && isModifyModeAction()){
+      if(isModifyMode() && isModifyModeAction()){
           // ModifyEdit should not call create.
           dispatch(prepareFinalObject("modifyAppCreated", true));
       }
@@ -410,7 +410,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       }  
       //For Modify Connection hide the connection details card
-      if(isMode){
+      if(isModifyMode()){
         showHideFieldModifyConnection(action);
       }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
@@ -545,7 +545,7 @@ const screenConfig = {
         toggleSewerageFeilds(action, false);
       }
     }
-    if (isMode){
+    if (isModifyMode()){
       triggerModificationsDisplay(action, true);
     } else {
       triggerModificationsDisplay(action, false);
