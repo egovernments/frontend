@@ -242,7 +242,7 @@ const OwnerInfoCard = {
             labelKey: "TL_NEW_OWNER_DETAILS_ADDR_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Address"),
+          pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
         }),
         OwnerSpecialCategory: getSelectField({
