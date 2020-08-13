@@ -84,16 +84,16 @@ const applicationOverview = getCommonContainer({
         callBack: checkValueForNA
       }
     ),
-    status: getLabelWithValue(
-      {
-        labelName: "Status",
-        labelKey: "NOC_STATUS_LABEL"
-      },
-      {
-        jsonPath: "Noc.applicationStatus",
-        callBack: checkValueForNA
-      }
-    ),
+    // status: getLabelWithValue(
+    //   {
+    //     labelName: "Status",
+    //     labelKey: "NOC_STATUS_LABEL"
+    //   },
+    //   {
+    //     jsonPath: "Noc.applicationStatus",
+    //     callBack: checkValueForNA
+    //   }
+    // ),
     viewApplication: {
       componentPath: "Button",
       gridDefination: {
@@ -110,7 +110,7 @@ const applicationOverview = getCommonContainer({
       },
       children: {
         buttonLabel: getLabel({
-          labelName: "VIEW APPLICATION",
+          labelName: "VIEW SOURCE APPLICATION",
           labelKey: "NOC_VIEW_APP_BUTTON"
         })
       },
