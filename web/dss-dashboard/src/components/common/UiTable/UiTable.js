@@ -136,7 +136,7 @@ class EnhancedTable extends React.Component {
         selected={isSelected}
         className={classes.tBodyStyle}
       >
-         {needHash ?
+        {needHash ?
           <TableCell component="td" scope="row" className={classes.hashcolumn} data-title={"SN: "}>
             {this.state.page * this.state.rowsPerPage + idx + 1}
           </TableCell>
@@ -162,17 +162,17 @@ class EnhancedTable extends React.Component {
     )
   }
   renderCenterTable(n, idx) {
-    const { classes, columnData , needHash} = this.props
+    const { classes, columnData, needHash } = this.props
     const isSelected = this.isSelected(n.Email)
     // let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
-		// 	let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
+    // 	let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
     // 	let value = "";
-    
-    let colorCode=Math.floor(Math.random() * Math.floor(2))
-    let insightColor = colorCode=== 0 ? "#db534a" : "#2ba129";
-      let insightIcon = colorCode === 0 ? Arrow_Downward : Arrow_Upward ;
-      let sign= colorCode === 0 ? '-' : '+' ;
-    	
+
+    let colorCode = Math.floor(Math.random() * Math.floor(2))
+    let insightColor = colorCode === 0 ? "#db534a" : "#2ba129";
+    let insightIcon = colorCode === 0 ? Arrow_Downward : Arrow_Upward;
+    let sign = colorCode === 0 ? '-' : '+';
+
     return (
       <TableRow
         hover
@@ -184,55 +184,46 @@ class EnhancedTable extends React.Component {
         selected={isSelected}
         className={classes.tBodyStyle}
       >
-         {needHash ?
+        {needHash ?
           <TableCell component="td" scope="row" className={classes.hashcolumn} data-title={"SN: "}>
             {this.state.page * this.state.rowsPerPage + idx + 1}
           </TableCell>
           : null
         }
         {_.keys(n).map(d => {
-          console.log(n,d,n[d],n[d]&&n[d][1],'table');
-          let value=Math.floor(Math.random() * Math.floor(89))+1;
-          if(typeof n[d] !== 'object'&& n[d]=="0"){
-            value=100-Math.floor(Math.random() * Math.floor(40))-1;
-             insightColor = "#db534a" ;
-       insightIcon =  Arrow_Downward  ;
+          /* console.log(n,d,n[d],n[d]&&n[d][1],'table'); */
+          let value = Math.floor(Math.random() * Math.floor(89)) + 1;
+          if (typeof n[d] !== 'object' && n[d] == "0") {
+            value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
+            insightColor = "#db534a";
+            insightIcon = Arrow_Downward;
           }
           return (
-            
-            <TableCell key={d} 
+            <TableCell key={d}
               align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false))
-             /*    ? 'right' : 'left'}  to  make numbers to right align if needed */
-             ? 'left' : 'left'}
+                /*    ? 'right' : 'left'}  to  make numbers to right align if needed */
+                ? 'left' : 'left'}
               component='td' scope='row' data-title={d} >
-                
-
               {
                 d === this.props.column ?
-                 <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
-                  : (typeof n[d] === 'object')?
-                     n[d][1]
-              :
-                    <div style={{ marginTop:"-8px",whiteSpace:"nowrap"}}>
+                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
+                  : (typeof n[d] === 'object') ?
+                    n[d][1]
+                    :
+                    <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
                       <React.Fragment>
-                      <Tooltip title={`${sign}${value}% from last year`} placement="top" arrow  classes={{ tooltip: classes.lightTooltip }}>
-                      
-                      <span style={{cursor:'pointer'}}>	
-                        <span className={"table-value"}>{n[d]}</span>
-                        <span style={{ marginLeft: "2vh",fontSize:'initial',paddingRight: "8px" }}>
-                          <img src={insightIcon} style={{ height: "12px", color: insightColor }} />
-                        </span>
-              <span style={{ color: insightColor, fontSize: '14px'  }}>{value<10?' ':''}{value}%</span>
-                        </span>
+                        <Tooltip title={`${sign}${value}% from last year`} placement="top" arrow classes={{ tooltip: classes.lightTooltip }}>
+                          <span style={{ cursor: 'pointer' }}>
+                            <span className={"table-value"}>{n[d]}</span>
+                            <span style={{ marginLeft: "2vh", fontSize: 'initial', paddingRight: "8px" }}>
+                              <img src={insightIcon} style={{ height: "12px", color: insightColor }} />
+                            </span>
+                            <span style={{ color: insightColor, fontSize: '14px' }}>{value < 10 ? ' ' : ''}{value}%</span>
+                          </span>
                         </Tooltip>
                       </React.Fragment>
                     </div>
-                    }
-
-              
-
-
-                     
+              }
             </TableCell>)
         })}
       </TableRow>
@@ -280,15 +271,15 @@ class EnhancedTable extends React.Component {
     let { strings } = this.props;
     let expData = _.cloneDeep(tableData);
     // iterate here for Excel download
-    for(var i=0; i < expData.length; i++){
-      if(typeof expData[i] === 'object'){
-        for(var key in expData[i]){
-          if(typeof expData[i][key] === 'object'){
+    for (var i = 0; i < expData.length; i++) {
+      if (typeof expData[i] === 'object') {
+        for (var key in expData[i]) {
+          if (typeof expData[i][key] === 'object') {
             expData[i][key] = expData[i][key][1]
           }
           //console.log(expData[i][key]);     
         }
-      }   
+      }
     }
     return (
       <Paper className={classes.root}>
@@ -310,7 +301,7 @@ class EnhancedTable extends React.Component {
         </div>
         <div className={classes.tableDiv}>
           {
-            <Table  className={[classes.table, 'responsiveTable'].join(' ')} aria-labelledby='tableTitle'>
+            <Table className={[classes.table, 'responsiveTable'].join(' ')} aria-labelledby='tableTitle'>
               <UiTableHead
                 className={classes.thead}
                 columnData={columnData}
