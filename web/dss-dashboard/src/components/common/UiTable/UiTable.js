@@ -193,14 +193,16 @@ class EnhancedTable extends React.Component {
         {_.keys(n).map(d => {
           /* console.log(n,d,n[d],n[d]&&n[d][1],'table'); */
           let value = Math.floor(Math.random() * Math.floor(89)) + 1;
-          if (typeof n[d] !== 'object' && n[d] == "0") {
-            value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
-            insightColor = "#db534a";
-            insightIcon = Arrow_Downward;
-          }else if (typeof n[d] !== 'object' && n[d] == "100") {
-            value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
-            insightColor = "#2ba129";
-            insightIcon = Arrow_Upward;
+          if (typeof n[d] !== 'object') {
+            if( n[d] == "0 %"|| n[d] == "0"){
+              value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
+              insightColor = "#db534a";
+              insightIcon = Arrow_Downward;
+            }else if( n[d] == "100 %" || n[d] == "100"){
+              value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
+              insightColor = "#2ba129";
+              insightIcon = Arrow_Upward;
+            }
           }
           return (
             <TableCell key={d}
