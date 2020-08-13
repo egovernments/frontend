@@ -76,7 +76,7 @@ const moveToReview = (state, dispatch) => {
         } else {
           validateDocumentField = true;
         }
-      } else {
+      } else if(!isModifyMode()){
         dispatch(
           toggleSnackbar(
             true,
@@ -86,7 +86,9 @@ const moveToReview = (state, dispatch) => {
         );
         validateDocumentField = false;
         break;
-      }
+      } else {
+        validateDocumentField = true;
+      }
     } else {
       validateDocumentField = true;
     }

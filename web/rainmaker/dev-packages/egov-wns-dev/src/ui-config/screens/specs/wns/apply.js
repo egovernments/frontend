@@ -551,6 +551,7 @@ const screenConfig = {
       triggerModificationsDisplay(action, false);
     }
     prepareDocumentsUploadData(state, dispatch);
+    set(action, "screenConfig.components.div.children.stepper.props.steps", stepperData());
     return action;
   },
 

@@ -156,8 +156,11 @@ export const roadDetails={
     },
     {
       jsonPath: "WaterConnection[0].roadType",
-      callBack: handleNA
-      // callBack: convertEpochToDate
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "ROADTYPE"
+      }
     }
   ),
   reviewArea : getLabelWithValue(
