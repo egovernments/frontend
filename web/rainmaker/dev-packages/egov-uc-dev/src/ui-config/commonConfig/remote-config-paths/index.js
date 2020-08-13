@@ -2,7 +2,7 @@ const remoteConfigPath = (path, screenKey) => {
   let config = {};
   switch (path) {
     case "egov-uc":
-      config = require(`egov-uc/ui-config/screens/specs/${path}/${screenKey}`)
+      config = require(`ui-config/screens/specs/${path}/${screenKey}`)
         .default;
       break;
     default:
