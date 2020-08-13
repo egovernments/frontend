@@ -1,30 +1,124 @@
+import React from "react";
 // User related routes
-import Login from "modules/employee/User/Login";
-import OTP from "modules/employee/User/OTP";
-import LanguageSelection from "modules/employee/User/LanguageSelection";
-import ChangePassword from "modules/employee/User/ChangePassword";
-import Profile from "modules/employee/User/Profile";
-import ForgotPassword from "modules/employee/User/ForgotPassword";
-import PushLocalization from "modules/employee/PushLocalization";
-
-// Employee specific routes
-import { TrackLocation } from "modules/common";
-import { ImageModalDisplay } from "modules/common";
-import { PrivacyPolicy } from "modules/common";
-import LandingPage from "modules/employee/LandingPage";
-import Inbox from "modules/employee/Inbox";
-import MDMS from "modules/common/MDMS";
-import Home from "modules/employee/Home";
-import Report from "modules/employee/reports/report";
-import EGFFinance from "modules/employee/Erp/EGF";
-import Notifications from "modules/employee/Notifications";
-
+import Loadable from "react-loadable";
+import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
 
-// import PTHome from "modules/employee/PropertyTax/PTHome";
+const Loading = () => <LoadingIndicator />;
+
+
+
+const Login = Loadable({
+  loader: () => import("modules/employee/User/Login"),
+  loading: Loading,
+});
+
+// import Login from "modules/employee/User/Login";
+
+const OTP = Loadable({
+  loader: () => import("modules/employee/User/OTP"),
+  loading: Loading,
+});
+// import OTP from "modules/employee/User/OTP";
+
+const LanguageSelection = Loadable({
+  loader: () => import("modules/employee/User/LanguageSelection"),
+  loading: Loading,
+});
+// import LanguageSelection from "modules/employee/User/LanguageSelection";
+
+const ChangePassword = Loadable({
+  loader: () => import("modules/employee/User/ChangePassword"),
+  loading: Loading,
+});
+// import ChangePassword from "modules/employee/User/ChangePassword";
+
+const Profile = Loadable({
+  loader: () => import("modules/employee/User/Profile"),
+  loading: Loading,
+});
+// import Profile from "modules/employee/User/Profile";
+
+const ForgotPassword = Loadable({
+  loader: () => import("modules/employee/User/ForgotPassword"),
+  loading: Loading,
+});
+// import ForgotPassword from "modules/employee/User/ForgotPassword";
+
+const PushLocalization = Loadable({
+  loader: () => import("modules/employee/PushLocalization"),
+  loading: Loading,
+});
+// import PushLocalization from "modules/employee/PushLocalization";
+
+// Employee specific routes
+const { TrackLocation } = Loadable({
+  loader: () => import("modules/common"),
+  loading: Loading,
+});
+// import { TrackLocation } from "modules/common";
+
+const { ImageModalDisplay } = Loadable({
+  loader: () => import("modules/common"),
+  loading: Loading,
+});
+// import { ImageModalDisplay } from "modules/common";
+
+const { PrivacyPolicy } = Loadable({
+  loader: () => import("modules/common"),
+  loading: Loading,
+});
+
+// import { PrivacyPolicy } from "modules/common";
+
+const LandingPage = Loadable({
+  loader: () => import("modules/employee/LandingPage"),
+  loading: Loading,
+});
+
+// import LandingPage from "modules/employee/LandingPage";
+
+const Inbox = Loadable({
+  loader: () => import("modules/employee/Inbox"),
+  loading: Loading,
+});
+// import Inbox from "modules/employee/Inbox";
+
+const MDMS = Loadable({
+  loader: () => import("modules/common/MDMS"),
+  loading: Loading,
+});
+// import MDMS from "modules/common/MDMS";
+
+const Home = Loadable({
+  loader: () => import("modules/employee/Home"),
+  loading: Loading,
+});
+// import Home from "modules/employee/Home";
+
+const Report = Loadable({
+  loader: () => import("modules/employee/reports/report"),
+  loading: Loading,
+});
+// import Report from "modules/employee/reports/report";
+
+const EGFFinance = Loadable({
+  loader: () => import("modules/employee/Erp/EGF"),
+  loading: Loading,
+});
+// import EGFFinance from "modules/employee/Erp/EGF";
+
+const Notifications = Loadable({
+  loader: () => import("modules/employee/Notifications"),
+  loading: Loading,
+});
+// import Notifications from "modules/employee/Notifications";
+
+
+
 
 //Redirection Url
 const redirectionUrl = "/user/login";

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SelectField from "material-ui/SelectField";
-import Select, { components } from "react-select";
+import Select from "react-select";
 import MenuItem from "material-ui/MenuItem";
 import Label from "../../utils/translationNode";
 import "./index.css";
@@ -124,7 +123,7 @@ const customStyles = {
 };
 
 class ReactSelectDropdown extends React.Component {
-  
+
 
   /* state = {
     selectedOption: null,
@@ -132,7 +131,7 @@ class ReactSelectDropdown extends React.Component {
   handleChange = (selectedOption) => {
     this.setState({ selectedOption });
   } */
-  
+
 
   render()
   {
@@ -173,7 +172,7 @@ class ReactSelectDropdown extends React.Component {
       ...rest
     } = this.props;
 
-  
+
 
     const getTransformedLocale = (label) => {
       return label&&label.toUpperCase().replace(/[.:-\s\/]/g, "_");
@@ -187,7 +186,7 @@ class ReactSelectDropdown extends React.Component {
       ) : (
         value
       );
-    }; 
+    };
 
   const renderSelectMenuItems = () => {
       return dropDownData.map((option, index) => {
@@ -202,14 +201,14 @@ class ReactSelectDropdown extends React.Component {
           />
         );
       });
-    }; 
+    };
 
      let label = value? dropDownData.filter(
         item => item.value === value
-      ):"";    
+      ):"";
 
   const { moduleName, masterName } = localePrefix || "";
- 
+
   return (
     <div style={{width: '100%', fontSize: "12px",
     fontWeight: "500"}}>
@@ -247,7 +246,7 @@ class ReactSelectDropdown extends React.Component {
      isSearchable = "true"
      //defaultValue ={label}
      /*  floatingLabelShrinkStyle={floatingLabelBaseShrinkStyle}
-     floatingLabelFixed={true}      
+     floatingLabelFixed={true}
      floatingLabelStyle={floatingLabelStyle}
      iconStyle={ iconStyle ? iconStyle : { fill: "#484848" }}
      underlineStyle={{ ...underlineFocusBaseStyle, ...underlineStyle }}
@@ -255,13 +254,13 @@ class ReactSelectDropdown extends React.Component {
      /* {...rest} */
     >
     </Select>
-    
-    {errorText?<div style={{color:"red"}}> {errorText} <div style={{  borderBottom: "3px solid rgb(244, 67, 54)", marginTop: "-21px" }}> </div></div>:""} 
-    
+
+    {errorText?<div style={{color:"red"}}> {errorText} <div style={{  borderBottom: "3px solid rgb(244, 67, 54)", marginTop: "-21px" }}> </div></div>:""}
+
 
     {//renderSelectMenuItems()
     }
-    </div> 
+    </div>
   );
 }
 };
@@ -283,6 +282,3 @@ export default connect(
   mapStateToProps,
   null
 )(ReactSelectDropdown);
-
-
-
