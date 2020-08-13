@@ -44,7 +44,7 @@ const getMultiItem = (billingslabData, classes, style) => {
         </Grid>
         <Grid sm={2}>
           <Label
-            label={`Rs ${item.rate}`}
+            label={`₹ ${item.rate}`}
             style={{
               color: "rgba(0, 0, 0, 0.8700000047683716)",
               fontSize: "14px",
@@ -90,7 +90,7 @@ class ViewBreakupContainer extends React.Component {
         </Grid>
         <Grid sm={2}>
           <Label
-            label={`Rs ${total}`}
+            label={`₹ ${total}`}
             style={
               style
                 ? style

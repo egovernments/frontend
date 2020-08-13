@@ -145,7 +145,7 @@ function FeesEstimateCard(props) {
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">
-        ? {total}
+        ₹ {total}
         </Typography>
         {isPaid? (
         <Typography variant="body2" align="right"  style={{ color: 'green' }}>
