@@ -2,9 +2,10 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { isModifyMode } from "./../../ui-utils/commons";
-let isMode = isModifyMode();
-let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
+
 export const toggleWater = (onFieldChange, value) => {
+  let isMode = isModifyMode();
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   onFieldChange(
     "apply",
     "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize",
@@ -134,6 +135,8 @@ export const toggleWater = (onFieldChange, value) => {
 }
 
 export const toggleSewerage = (onFieldChange, value) => {
+  let isMode = isModifyMode();
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   onFieldChange(
     "apply",
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewConnectionType",
@@ -191,6 +194,8 @@ export const toggleSewerage = (onFieldChange, value) => {
 }
 
 export const togglePlumberFeilds = (onFieldChange, value) => {
+  let isMode = isModifyMode();
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   onFieldChange(
     "apply",
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children.plumberLicenceNo`,
@@ -263,6 +268,8 @@ export const togglePropertyFeilds = (action, value) => {
 }
 
 export const toggleSewerageFeilds = (action, value) => {
+  let isMode = isModifyMode();
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   set(
     action.screenConfig,
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfToilets.visible`,
@@ -306,6 +313,8 @@ export const toggleSewerageFeilds = (action, value) => {
 }
 
 export const toggleWaterFeilds = (action, value) => {
+  let isMode = isModifyMode();
+  let mStep = (isMode) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   set(
     action.screenConfig,
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.connectionType.visible`,
