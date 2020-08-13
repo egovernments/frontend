@@ -1,21 +1,21 @@
-import React from 'react'
-import _ from 'lodash'
-import { withStyles } from '@material-ui/core/styles'
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
-import UiTableHead from './UiTableHead'
-import styles from './UiTableStyles'
-import TableSearch from '../TableSearch/TableSearch'
-import ExportToExcel from '../ExportToExel'
-import Arrow_Downward from '../../../images/arrows/Arrow_Downward.svg'
-import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg'
 import { Tooltip } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import _ from 'lodash';
+import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import Arrow_Downward from '../../../images/arrows/Arrow_Downward.svg';
+import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
+import ExportToExcel from '../ExportToExel';
+import TableSearch from '../TableSearch/TableSearch';
+import UiTableHead from './UiTableHead';
+import styles from './UiTableStyles';
 
 class EnhancedTable extends React.Component {
   constructor(props) {
@@ -197,6 +197,10 @@ class EnhancedTable extends React.Component {
             value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
             insightColor = "#db534a";
             insightIcon = Arrow_Downward;
+          }else if (typeof n[d] !== 'object' && n[d] == "100") {
+            value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
+            insightColor = "#2ba129";
+            insightIcon = Arrow_Upward;
           }
           return (
             <TableCell key={d}
