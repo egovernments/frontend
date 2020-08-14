@@ -7,7 +7,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists } from "../ui-config/screens/specs/utils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+// import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { httpRequest } from "./api";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -149,6 +150,24 @@ export const getSearchResults = async queryObject => {
         return result;
     } catch (error) { console.log(error) }
 };
+
+export const getMdmsDataForBill = async (tenantId)=>{
+    try {
+        // Get the MDMS data for billingPeriod
+        let mdmsBody = {
+            MdmsCriteria: {
+                tenantId: tenantId,
+                moduleDetails: [
+                    { moduleName: "ws-services-masters", masterDetails: [{ name: "billingPeriod" }] },
+                    { moduleName: "sw-services-calculation", masterDetails: [{ name: "billingPeriod" }] }
+                ]
+            }
+        }
+        //Read metered & non-metered demand expiry date and assign value.
+        return await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+       
+    } catch (err) { console.log(err) }
+}
 
 export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());

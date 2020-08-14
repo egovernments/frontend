@@ -1,10 +1,12 @@
 import React from "react";
 import { sortByEpoch, getEpochForDate } from "../../utils";
-// import './index.css';
+// import './index.css'
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
 
-export const searchApplicationResults = {
+
+export const searchApplicationResult = {
 	uiFramework: "custom-molecules",
 	moduleName: "egov-wns",
 	componentPath: "Table",
@@ -12,48 +14,8 @@ export const searchApplicationResults = {
 	props: {
 		columns: [
 			{
-				name: "Consumer No",
-				labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
-				options: {
-					filter: false,
-					customBodyRender: (value, data) => {
-						if (data.rowData[0] !== "NA" && data.rowData[0] !== null) {
-							return (
-								<div className="linkStyle" onClick={() => getConnectionDetails(data)}>
-									<a>{value}</a>
-								</div>
-							)
-						} else {
-							return (
-								<p>{value}</p>
-							)
-						}
-					}
-				}
-			},
-			{
-				name: "Application No",
-				labelKey: "WS_COMMON_TABLE_COL_APP_NO_LABEL",
-				options: {
-					filter: false,
-					customBodyRender: (value, data) => {
-						if (data.rowData[1] !== "NA" && data.rowData[1] !== null) {
-							return (
-								<div className="linkStyle" onClick={() => getApplicationDetails(data)}>
-									<a>{value}</a>
-								</div>
-							)
-						} else {
-							return (
-								<p>{value}</p>
-							)
-						}
-					}
-				}
-			},
-			{
-				name: "Application Type",
-				labelKey: "WS_COMMON_TABLE_COL_APP_TYPE_LABEL",
+				name: "Service",
+				labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL",
 				options: {
 					filter: false,
 					customBodyRender: value => (
@@ -63,32 +25,55 @@ export const searchApplicationResults = {
 					)
 				}
 			},
+			{
+				name: "Consumer No",
+				labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+				options: {
+					filter: false,
+					customBodyRender: (value, index) => (
+						<div className="linkStyle" onClick={() => getConnectionDetails(index)}>
+							<a>{value}</a>
+						</div>
+					)
+				}
+			},
 			{ name: "Owner Name", labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-			{ name: "Application Status", labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL" },
 			{ name: "Address", labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
+			{ name: "Status", labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL" },
+			{ name: "Due", labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
+			{ name: "Due Date", labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL" },
 			{
-				name: "tenantId",
-				labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
+				name: "Action",
+				labelKey: "WS_COMMON_TABLE_COL_ACTION_LABEL",
 				options: {
-					display: false
-				}
-			},
-			{
-				name: "service",
-				labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL",
-				options: {
-					display: false
-				}
-			},
-			{
-				name: "connectionType",
-				labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
-				options: {
-					display: false
-				}
+					filter: false,
+					// customBodyRender: (value, data) => {
+					// 	if (data.rowData[4] !== undefined && typeof data.rowData[4] === 'number') {
+					// 		return (
+					// 			<div className="linkStyle" onClick={() => getViewBillDetails(data)} style={{ color: '#fe7a51', textTransform: 'uppercase' }}>
+					// 				<LabelContainer
+					// 					labelKey="WS_COMMON_COLLECT_LABEL"
+					// 					style={{
+					// 						color: "#fe7a51",
+					// 						fontSize: 14,
+					// 					}}
+					// 				/>
+					// 			</div>
+					// 		)
+					// 	}
+					// 	else {
+					// 		return ("NA")
+					// 	}
+					// }
+					customBodyRender: (value, tableMeta) =>
+						(true )? getPayButton(tableMeta ) : (
+							value.totalAmount === 0 && value.status === "ACTIVE" && true ? getPayButton(tableMeta) : ""
+						),
+				},
 			}
+			
 		],
-		title: { labelKey: "WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName: "Search Results for Water & Sewerage Application" },
+		title: { labelKey: "WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName: "Search Results for Water & Sewerage Connections" },
 		options: {
 			filter: false,
 			download: false,
@@ -115,21 +100,29 @@ export const searchApplicationResults = {
 	}
 };
 
-const getApplicationDetails = data => {
-	let connectionNo = `${data.rowData[0]}`;
-	if (connectionNo && connectionNo !== 'NA' && data.rowData[2].includes('MODIFY')) {
-		store.dispatch(
-			setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}&mode=MODIFY`)
-		)
-	} else {
-		store.dispatch(
-			setRoute(`search-preview?applicationNumber=${data.rowData[1]}&tenantId=${data.rowData[6]}&history=true&service=${data.rowData[7]}`)
-		)
-	}
-}
-
 const getConnectionDetails = data => {
 	store.dispatch(
-		setRoute(`connection-details?connectionNumber=${data.rowData[0]}&tenantId=${data.rowData[6]}&service=${data.rowData[7]}&connectionType=${data.rowData[8]}`)
+		setRoute(`connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}&due=${data.rowData[4]}`)
+	)
+}
+
+// const getViewBillDetails = data => {
+// 	store.dispatch(
+// 		setRoute(`viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}&connectionType=${data.rowData[9]}`)
+// 	)
+// }
+const payAmount = (tableMeta) => {
+	debugger;
+	setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[1]}&tenantId=${tableMeta.rowData[8]}&businessService=wns`);
+};
+const getPayButton = (tableMeta) => {
+	debugger;
+	return (
+		<a href="javascript:void(0)"
+			onClick={() => payAmount(tableMeta)}
+			style={{ color: "#FE7A51" }}
+		>
+			<LabelContainer labelKey="PT_TOTALDUES_PAY" labelName="PAY" />
+		</a>
 	)
 }

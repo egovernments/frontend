@@ -9,10 +9,11 @@ import {
   getTenantName
 } from "./publicSearchUtils";
 import { validateFields } from "../../utils/index";
-import { findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst, fetchBill } from "../../../../../ui-utils/commons";
+import { convertEpochToDate } from "../../utils/index";
+import { findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst, fetchBill, getMdmsDataForBill } from "../../../../../ui-utils/commons";
 import { ComponentJsonPath, getPropertyWithBillAmount } from "./publicSearchUtils";
 
-export const propertySearch = async (state, dispatch) => {
+export const searchConnections = async (state, dispatch) => {
   searchApiCall(state, dispatch);
 };
 
@@ -80,12 +81,12 @@ const searchApiCall = async (state, dispatch) => {
     return;
   }
   
-  if (searchScreenObject.tenantId && searchScreenObject.locality && !(searchScreenObject.ids || searchScreenObject.mobileNumber || searchScreenObject.ownerName)) {
+  if (searchScreenObject.tenantId  && !(searchScreenObject.ids || searchScreenObject.mobileNumber || searchScreenObject.ownerName)) {
     dispatch(
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill at least one field along with city and locality",
+          labelName: "Please fill at least one field along with city",
           labelKey:
             "PT_SEARCH_SELECT_AT_LEAST_ONE_FIELD_WITH_CITY_AND_LOCALITY"
         },
@@ -110,23 +111,10 @@ const searchApiCall = async (state, dispatch) => {
     let waterMeteredDemandExipryDate = 0;
     let waterNonMeteredDemandExipryDate = 0;
     let sewerageNonMeteredDemandExpiryDate = 0;
-    let payloadbillingPeriod
+    let payloadbillingPeriod;
+    let tenantId=searchScreenObject.tenantId;
     try {
-      try {
-        // Get the MDMS data for billingPeriod
-        let mdmsBody = {
-          MdmsCriteria: {
-            tenantId: searchScreenObject.tenantId,
-            moduleDetails: [
-              { moduleName: "ws-services-masters", masterDetails: [{ name: "billingPeriod" }] },
-              { moduleName: "sw-services-calculation", masterDetails: [{ name: "billingPeriod" }] }
-            ]
-          }
-        }
-        //Read metered & non-metered demand expiry date and assign value.
-        payloadbillingPeriod = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-
-      } catch (err) { console.log(err) }
+      payloadbillingPeriod = await getMdmsDataForBill(tenantId);
       let getSearchResult = getSearchResults(queryObject)
       let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
       let finalArray = [];
@@ -205,12 +193,12 @@ const searchApiCall = async (state, dispatch) => {
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search",
-      "components.div.children.searchResults",
+      "public-search",
+      "components.div.children.searchApplicationResult",
       "visible",
       booleanHideOrShow
     )
-  );
+  );    
 };
 
 const showResults = (connections, dispatch, tenantId) => {
@@ -222,11 +210,11 @@ const showResults = (connections, dispatch, tenantId) => {
     ["WS_COMMON_TABLE_COL_DUE_LABEL"]: item.due,
     ["WS_COMMON_TABLE_COL_ADDRESS"]: item.address,
     ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.dueDate !== undefined && item.dueDate !== "NA") ? convertEpochToDate(item.dueDate) : item.dueDate,
-    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: item.tenantId,
+    ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: tenantId,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType
   }))
-
-  dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
-  dispatch(handleField("search", "components.div.children.searchResults", "props.rows", connections.length));
+  debugger;
+  dispatch(handleField("public-search", "components.div.children.searchApplicationResult", "props.data", data));
+  dispatch(handleField("public-search", "components.div.children.searchApplicationResult", "props.rows", connections.length));
   showHideTable(true, dispatch);
 }

@@ -11,7 +11,7 @@ import {
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { propertySearch, resetFields } from "./search-methods";
+import { searchConnections, resetFields } from "./search-methods";
 import { WithoutAuthSearchApiCall } from "../searchResource/functions"
 import { getMohallaData } from "egov-ui-kit/utils/commons";
 import { applyMohallaData } from "./publicSearchUtils";
@@ -71,8 +71,6 @@ export const searchApplications = {
 								[{ key: "tenantId", value: action.value }],
 								{}
 							);
-							// const mohallaData = getMohallaData(payload, action.value);
-							// applyMohallaData(mohallaData, action.value, dispatch);
 						} catch (e) {
 							console.log(e);
 						}
@@ -199,7 +197,7 @@ export const searchApplications = {
 					},
 					onClickDefination: {
 						action: "condition",
-						callBack: propertySearch
+						callBack: searchConnections
 					}
 				}
 			})
