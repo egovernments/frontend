@@ -486,8 +486,35 @@ export const propertyLocationDetails = getCommonCard(
         },
 
       },
-
-
+      propertyId: getTextField({
+        label: {
+          labelName: "Property ID",
+          labelKey: "NOC_PROPERTY_ID_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Property ID",
+          labelKey: "NOC_PROPERTY_ID_PLACEHOLDER"
+        },
+        // iconObj: {
+        //   iconName: "search",
+        //   position: "end",
+        //   color: "#FE7A51",
+        //   onClickDefination: {
+        //     action: "condition",
+        //     callBack: (state, dispatch) => {
+        //       getDetailsFromProperty(state, dispatch);
+        //     }
+        //   }
+        // },
+        // title: {
+        //   value:
+        //     "If you have already assessed your property, then please search your property by your PAID",
+        //   key: "NOC_PROPERTY_ID_TOOLTIP_MESSAGE"
+        // },
+        // infoIcon: "info_circle",
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId",
+        visible: true
+      }),
 
       propertyCity: {
         ...getSelectField({
