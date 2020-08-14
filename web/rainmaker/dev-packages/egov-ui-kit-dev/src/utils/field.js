@@ -1,5 +1,4 @@
 import React from "react";
-import moment from 'moment';
 import { TextField, MobileNumberField, SingleCheckbox, DropDown,DatePicker, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
 
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
@@ -33,7 +32,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
         case "date":
           return (
             <DatePicker
-            formatDate={(date) => moment(date).format('DD-MM-YYYY')}
+            formatDate={(date) => date.toISOString().split('T')[0]}
             onChange={(e, value) => handleFieldChange(fieldKey,value)}
             autoOk={true}
             {...rest}
