@@ -78,7 +78,7 @@ export const subUsageType = {
   subUsageType: {
     id: "assessment-subUsageType",
     jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryDetail",
-    type: "SelectDropDown",
+    type: "singleValueList",
     localePrefix: "PROPERTYTAX_BILLING_SLAB",
     floatingLabelText: "PT_FORM2_SUB_USAGE_TYPE",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
