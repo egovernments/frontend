@@ -234,6 +234,7 @@ h6 span {
     letter-spacing: normal;
     color: #000000;
     position: absolute;
+    margin-top: 15px;
 }
 
 .tableHeading {
@@ -381,7 +382,10 @@ h6 span {
     margin-left: 10px;
     padding-top: 5px;
 }
-
+.table-filters{
+         display: flex; 
+         flex-direction: row;
+}
 .GF_Denomination{
     max-width:100px;
 }
@@ -503,18 +507,37 @@ button:focus {
     }
     .tableHeading {
         display: flex;
-        /* flex-direction: row-reverse; */
-        flex: 1
+        flex-direction: column;
+        flex: 1;
+        position: unset;
+        margin-top: -5px;
     }
+    .tableFilterChipWrap {
+        margin-top: 10px;
+        margin-left: 0px;
+      }
+      .table-filters{
+        flex-direction: column;  
+      }
 }
 
 @media (max-width: 375px) {
     .tableHeading {
         display: flex;
-        /* flex-direction: row-reverse; */
-        flex: 1
+        flex-direction: column;
+        flex: 1;
+        position: unset;
+        margin-top: -5px;
     }
+    .tableFilterChipWrap {
+        margin-top: 10px;
+        margin-left: 0px;
+      }
+      .table-filters{
+        flex-direction: column;  
+      }
 }
+
 
 /* .MuiInput-underline-337:before {
     border-bottom: none !important;

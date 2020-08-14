@@ -233,9 +233,9 @@ class TableChart extends Component {
         }
       }
       return (
-        <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column',    marginTop: '-15px' }}>
           <div className="tableHeading">
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div className={"table-filters"}>
               <SwitchButton clickFromTab={this.clickFromTab} chartParent={chartParent} />
               {(this.state.data && !_.isEmpty(this.state.filterList, true)) &&
             <div className="row tableFilterChipWrap">
