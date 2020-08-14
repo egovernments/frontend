@@ -351,7 +351,7 @@ h6 span {
     /* #17c1f4; */
     color: white !important;
     margin-left: -3px !important;
-        margin-top: -1px;
+    margin-top: -1px;
 }
 
 .MuiChip-label {
@@ -382,13 +382,16 @@ h6 span {
     margin-left: 10px;
     padding-top: 5px;
 }
-.table-filters{
-         display: flex; 
-         flex-direction: row;
+
+.table-filters {
+    display: flex;
+    flex-direction: row;
 }
-.GF_Denomination{
-    max-width:100px;
+
+.GF_Denomination {
+    max-width: 100px;
 }
+
 .fa-info-circle {
     color: grey !important;
     font-size: 20px;
@@ -436,6 +439,7 @@ button:focus {
 }
 
 @media (min-width:320px) {
+
     /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
     .col-lg-1,
     .col-lg-10,
@@ -452,15 +456,18 @@ button:focus {
     .col-lg-auto {
         margin-bottom: 20px;
     }
+
     .navbar-nav {
         display: none;
     }
+
     .rowList {
         padding-top: 0px;
     }
 }
 
 @media (min-width:480px) {
+
     /* smartphones, Android phones, landscape iPhone */
     .col-lg-1,
     .col-lg-10,
@@ -477,9 +484,11 @@ button:focus {
     .col-lg-auto {
         margin-bottom: 20px;
     }
+
     .navbar-nav {
         display: none;
     }
+
     .rowList {
         padding-top: 0px;
     }
@@ -505,6 +514,7 @@ button:focus {
     .MuiCardContent-root {
         padding: 20px 8px !important;
     }
+
     .tableHeading {
         display: flex;
         flex-direction: column;
@@ -512,13 +522,15 @@ button:focus {
         position: unset;
         margin-top: -5px;
     }
+
     .tableFilterChipWrap {
         margin-top: 10px;
         margin-left: 0px;
-      }
-      .table-filters{
-        flex-direction: column;  
-      }
+    }
+
+    .table-filters {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 375px) {
@@ -529,13 +541,15 @@ button:focus {
         position: unset;
         margin-top: -5px;
     }
+
     .tableFilterChipWrap {
         margin-top: 10px;
         margin-left: 0px;
-      }
-      .table-filters{
-        flex-direction: column;  
-      }
+    }
+
+    .table-filters {
+        flex-direction: column;
+    }
 }
 
 
