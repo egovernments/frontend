@@ -94,18 +94,20 @@ class DocumentList extends Component {
         },
         []
       );
+
+      getQueryArg(window.location.href, "action") !== "edit" &&
+      Object.values(uploadedDocuments).forEach((item, index) => {
+        prepareFinalObject(
+          `Licenses[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
+          { ...item[0] }
+        );
+      });
+      
       this.setState({
         uploadedDocuments: uploadedDocumentsArranged,
         uploadedIndex
       });
     }
-    getQueryArg(window.location.href, "action") !== "edit" &&
-      Object.values(uploadedDocuments).forEach((item, index) => {
-        prepareFinalObject(
-          `Licenses[0].tradeLicenseDetail.applicationDocuments[${index}]`,
-          { ...item[0] }
-        );
-      });
   };
 
   onUploadClick = uploadedDocIndex => {
