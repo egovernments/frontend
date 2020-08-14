@@ -208,7 +208,7 @@ class EnhancedTable extends React.Component {
             <TableCell key={d}
               align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false))
                 /*    ? 'right' : 'left'}  to  make numbers to right align if needed */
-                ? 'left' : 'left'}
+                ? 'right' : 'left'}
               component='td' scope='row' data-title={d} >
               {
                 d === this.props.column ?

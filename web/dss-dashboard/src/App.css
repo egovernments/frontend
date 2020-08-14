@@ -233,6 +233,7 @@ h6 span {
     line-height: normal;
     letter-spacing: normal;
     color: #000000;
+    position: absolute;
 }
 
 .tableHeading {
@@ -368,7 +369,7 @@ h6 span {
     /* margin-bottom: 20px; */
     text-align: left;
     display: flex;
-    margin-top: 10px;
+    margin-left: 10px;
 }
 
 .tableFilterChipWrap .chipWrap {
