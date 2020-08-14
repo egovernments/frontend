@@ -36,8 +36,8 @@ class Chips extends React.Component {
 						className={classes.root}
 						variant="outlined"
 						size="small"
-						avatar={<Avatar>{label ? label : ''}</Avatar>}
-						label={value[4]}
+						// avatar={<Avatar>{label ? label : ''}</Avatar>}
+						label={` ${label ? label : ''} : ${value[4]}`}
 						style={{ width: 'max-content' }}
 						clickable
 						onDelete={this.handleClick}
@@ -47,8 +47,8 @@ class Chips extends React.Component {
 						className={classes.root}
 						variant="outlined"
 						size="small"
-						avatar={<Avatar>{label ? label : ''}</Avatar>}
-						label={value[4]}
+						// avatar={<Avatar>{label ? label : ''}</Avatar>}
+						label={` ${label ? label : ''} : ${value[4]}`}
 						clickable
 						onDelete={this.handleClick}
 					/>
