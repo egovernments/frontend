@@ -83,8 +83,18 @@ class DynamicMdmsContainer extends Component {
     let { dropdownFields } = this.props;
     let dropdownData = [];
     let transformedData = this.getValueByKey(keyValue);
+    if(keyValue && keyValue.match(/\./g).length == index - 1 ) {
+      transformedData = undefined;
+    }
     dropdownData = (dropdownFields.length - 1 ==  index ) ? getObjectValues(transformedData) : getObjectKeys(transformedData);
-    this.setValueByKey(dropdownFields[index].key, dropdownData);
+    if(transformedData == undefined){
+      for(let j=index; j < dropdownFields.length;j++){
+        this.setValueByKey(dropdownFields[j].key, transformedData);
+      }
+    } else{
+      this.setValueByKey(dropdownFields[index].key, dropdownData);
+    }
+    
   }
   getSelectedPathValues = () => {
     let { dropdownFields, rootBlockSub, moduleName, state, dispatch, index = 0 } = this.props;
