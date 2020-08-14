@@ -54,7 +54,7 @@
     "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.1",
+    "react-scripts": "^1.1.1",
     "react-select": "^2.3.0",
     "react-swipeable-views": "^0.13.1",
     "react-table": "^6.8.6",
@@ -64,7 +64,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "print-js": "1.0.63"
   },
   "scripts": {
         "build": "run-s build-css build-js",
