@@ -18,19 +18,19 @@ const DisclaimerInformation = () =>{
                     <tr>
                         <td className="tdStyle">
                         <img src={chrome} alt="Logo"/><br></br>
-                        <label> >V-23 </label>
+                                <label> >V- </label>
                         </td>
                         <td className="tdStyle">
                         <img src={edge} alt="Logo" /><br></br>
-                        <label>>V-10 </label>
+                        <label>>V- </label>
                         </td>
                         <td className="tdStyle">
                         <img src={firefox} alt="Logo" /><br></br>
-                        <label>>V-21 </label>
+                        <label>>V- </label>
                         </td>
                         <td className="tdStyle">
                         <img src={ie} alt="Logo"/> <br></br>
-                        <label>>V-9 </label>
+                        <label>>V- </label>
                         </td>
                     </tr>
                     {/* <tr>
