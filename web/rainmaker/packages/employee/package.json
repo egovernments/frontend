@@ -12,6 +12,7 @@
     "autoselector": "^1.5.8",
     "axios": "^0.17.1",
     "babel-runtime": "^6.26.0",
+    "core-js":"3.6.5",
     "datatables": "^1.10.18",
     "datatables-buttons": "^1.0.3",
     "datatables.net-buttons": "^1.5.4",
