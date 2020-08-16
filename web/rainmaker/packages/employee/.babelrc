@@ -1,7 +1,5 @@
 {
-  "presets": ["es2015", "react", "stage-0", ["@babel/preset-env",{"targets":{
-    "browsers":["> 0.25%, not dead"]},"useBuiltIns": "usage" ,"corejs":3
-  }]],
+  "presets": ["es2015", "react", "stage-0"],
   "plugins": [
     [
       "transform-runtime",
