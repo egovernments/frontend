@@ -3,7 +3,8 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer
+  getCommonContainer,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -17,6 +18,7 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
   setMultiOwnerForSV,
+  showHideAdhocPopup,
   setValidToFromVisibilityForSV,
   getDialogButton
 } from "../utils";
@@ -35,6 +37,7 @@ import set from "lodash/set";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale} from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
+import { adhocPopup } from "./applyResource/adhocPopup";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -71,6 +74,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     get(payload, "Licenses[0].status"),
     get(payload, "Licenses[0].licenseNumber")
   );
+  let rebateAmount = get(payload, "Licenses[0].tradeLicenseDetail.adhocExemption");
   set(payload, "Licenses[0].headerSideText", headerSideText);
   set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
@@ -85,6 +89,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
       action,
       get(payload, "Licenses[0].licenseType")
     );
+  }
+  if(rebateAmount && rebateAmount < 0){
+    set(payload, "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
   }
 
   await setDocuments(
@@ -471,6 +478,27 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "ADD REBATE/PENALTY",
+        labelKey: "TL_PAYMENT_ADD_RBT_PEN"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: showHideAdhocPopup
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      roles: ["TL_APPROVER","TL_DOC_VERIFIER"]
+    }
+  },
   viewBreakupButton: getDialogButton(
     "VIEW BREAKUP",
     "TL_PAYMENT_VIEW_BREAKUP",
@@ -542,7 +570,15 @@ const screenConfig = {
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            updateUrl: "/tl-services/v1/_update",
+            beforeSubmitHook:
+              (data) =>{
+                 let rebateAmount = data[0].tradeLicenseDetail.adhocExemption;
+                 if(rebateAmount && rebateAmount > 0){
+                   data = set(data, "[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+                 }
+                 return data;
+              }
           }
         },
         // actionDialog: {
@@ -580,6 +616,19 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "search-preview"
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: adhocPopup
       }
     }
   }
