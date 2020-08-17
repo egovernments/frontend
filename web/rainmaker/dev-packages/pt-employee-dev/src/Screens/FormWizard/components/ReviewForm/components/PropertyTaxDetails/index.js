@@ -21,6 +21,8 @@ class PropertyTaxDetails extends React.Component {
     // document
     //   .getElementsByClassName("tax-calculation-card-header")[0]
     //   .addEventListener("click", this.toggleExpander);
+    this.props.prepareFinalObject('adhocExemptionPenalty', {});
+
   };
 
   render() {
