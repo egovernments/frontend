@@ -8,15 +8,15 @@ const formValidation = (store) => (next) => (action) => {
   const state = store.getState();
 
   if (type === actionTypes.FIELD_CHANGE) {
-    // try {
-    //   let hook = require(`config/forms/hooks/${formKey}`).default;
-    //   hook = hook.fieldChange;
-    //   if (hook && typeof hook === "function") {
-    //     hook(fieldKey, formKey, value, state, dispatch);
-    //   }
-    // } catch (e) {
-    //   // the exceptions are assumed to be thrown only due to absence of a hook
-    // }
+    try {
+      let hook = require(`config/forms/hooks/${formKey}`).default;
+      hook = hook.fieldChange;
+      if (hook && typeof hook === "function") {
+        hook(fieldKey, formKey, value, state, dispatch);
+      }
+    } catch (e) {
+      // the exceptions are assumed to be thrown only due to absence of a hook
+    }
     const { form } = state;
     const { fields } = form[formKey];
     const { beforeFieldChange } = fields[fieldKey];
