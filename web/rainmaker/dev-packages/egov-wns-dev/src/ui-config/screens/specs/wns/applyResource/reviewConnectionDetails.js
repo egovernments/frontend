@@ -726,7 +726,8 @@ const connHolderDetailsSummary = () => {
       prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
-    type: "array"
+    type: "array",
+    visible:true
   })
 }
 
@@ -756,7 +757,8 @@ const connHolderDetailsSameAsOwnerSummary = () => {
       prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
-    type: "array"
+    type: "array", 
+    visible:true
   })
 }
 
