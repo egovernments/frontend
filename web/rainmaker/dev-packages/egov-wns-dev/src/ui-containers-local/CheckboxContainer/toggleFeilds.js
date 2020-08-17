@@ -241,6 +241,18 @@ export const toggleConnHolderDetails=(onFieldChange, value)=>{
     "visible",
     value
   );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewSix",
+    "visible",
+    !value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFive",
+    "visible",
+    value
+  );
 }
 
 export const togglePropertyFeilds = (action, value) => {
