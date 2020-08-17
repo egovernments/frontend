@@ -771,49 +771,39 @@ export const tradeDetails = getCommonCard({
   ),
   tradeDetailsConatiner: getCommonContainer({
     financialYear: {
-      uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
-        componentPath: "AutosuggestContainer",
+      ...getSelectField({
+        label: {
+          labelName: "Financial Year",
+          labelKey: "TL_FINANCIAL_YEAR_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Financial Year",
+          labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
+        },
+        required: true,
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
          props:{
-          className: "autocomplete-dropdown",
-          suggestions: [],
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-          label: {
-            labelName: "Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
-          },
-          required: true,
-          isClearable: true,
-          jsonPath: "Licenses[0].financialYear",
-          sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-          inputLabelProps: {
-            shrink: true
-          }
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
         },
         gridDefination: {
           xs: 12,
           sm: 6
-        },
-        required: true
+        }
+      })
     },
-    dummyDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-      props: {
-        disabled: true
-      }
-    },
+    // dummyDiv: {
+    //   uiFramework: "custom-atoms",
+    //   componentPath: "Div",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 6
+    //   },
+    //   visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+    //   props: {
+    //     disabled: true
+    //   }
+    // },
     // applicationType: {
     //   ...getSelectField({
     //     label: {
@@ -862,40 +852,40 @@ export const tradeDetails = getCommonCard({
     //     }
     //   }
     // },
-    // oldLicenseNo: getTextField({
-    //   label: {
-    //     labelName: "Old License No",
-    //     labelKey: "TL_OLD_LICENSE_NO"
-    //   },
-    //   placeholder: {
-    //     labelName: "Enter Old License No",
-    //     labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6
-    //   },
-    //   props:{
-    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
-    //   },
-    //   iconObj: {
-    //     iconName: "search",
-    //     position: "end",
-    //     color: "#FE7A51",
-    //     onClickDefination: {
-    //       action: "condition",
-    //       callBack: (state, dispatch) => {
-    //         fillOldLicenseData(state, dispatch);
-    //       }
-    //     }
-    //   },
-    //   title: {
-    //     value: "Fill the form by searching your old approved trade license",
-    //     key: "TL_OLD_TL_NO"
-    //   },
-    //   infoIcon: "info_circle",
-    //   jsonPath: "Licenses[0].oldLicenseNumber"
-    // }),
+    oldLicenseNo: getTextField({
+      label: {
+        labelName: "Old License No",
+        labelKey: "TL_OLD_LICENSE_NO"
+      },
+      placeholder: {
+        labelName: "Enter Old License No",
+        labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      props:{
+        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
+      },
+      iconObj: {
+        iconName: "search",
+        position: "end",
+        color: "#FE7A51",
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            fillOldLicenseData(state, dispatch);
+          }
+        }
+      },
+      title: {
+        value: "Fill the form by searching your old approved trade license",
+        key: "TL_OLD_TL_NO"
+      },
+      infoIcon: "info_circle",
+      jsonPath: "Licenses[0].oldLicenseNumber"
+    }),
     tradeLicenseType: {
       ...getSelectField({
         label: {
