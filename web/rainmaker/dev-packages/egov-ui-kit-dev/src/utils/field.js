@@ -1,7 +1,7 @@
 import React from "react";
 // import moment from 'moment';
 import { TextField, MobileNumberField, SingleCheckbox, DropDown,DatePicker, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
-// import ReactSelectDropdown from "egov-ui-kit/components/ReactSelectDropdown";
+import ReactSelectDropdown from "egov-ui-kit/components/ReactSelectDropdown";
 
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
   const renderField = () => {
@@ -31,20 +31,20 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             onChange={(e, value, selectedValue) => handleFieldChange(fieldKey, selectedValue)}
           />
         );
-        // case "SelectDropDown":
-        //   return (
-        //     <ReactSelectDropdown
-        //       {...rest}
-        //       {...fieldProps}
-        //       dropDownData={fieldProps.dropDownData || []}
-        //       onChange={(e, value, selectedValue) =>
-        //       {
-        //
-        //         handleFieldChange(fieldKey, e.value)
-        //       }
-        //       }
-        //     />
-        //   );
+        case "SelectDropDown":
+          return (
+            <ReactSelectDropdown
+              {...rest}
+              {...fieldProps}
+              dropDownData={fieldProps.dropDownData || []}
+              onChange={(e, value, selectedValue) =>
+              {
+        
+                handleFieldChange(fieldKey, e.value)
+              }
+              }
+            />
+          );
         case "date":
           return (
             <DatePicker
