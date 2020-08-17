@@ -4,7 +4,6 @@ import SelectField from "material-ui/SelectField";
 import Select, { components } from "react-select";
 import MenuItem from "material-ui/MenuItem";
 import Label from "../../utils/translationNode";
-import "./index.css";
 import { connect } from "react-redux";
 import filter from "lodash/filter";
 import { getTranslatedLabel } from "../../utils/commons";
