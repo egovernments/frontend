@@ -1,4 +1,3 @@
-
 import {
   getCommonCard,
   getCommonContainer,
@@ -325,14 +324,22 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
       [],
       mdmsBody
     );
+    debugger;
 
     let OwnerTypeDocument = get(
       payload,
       "MdmsRes.PropertyTax.OwnerTypeDocument"
     )
+    console.log("OwnerTypeDocument0",OwnerTypeDocument);
     let propertyConfiguation = get(payload, "MdmsRes.PropertyTax.PropertyConfiguration");
-    dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", OwnerTypeDocument));
     dispatch(prepareFinalObject("PropertyConfiguration", propertyConfiguation));
+    set(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.OwnerTypeDocument",
+      OwnerTypeDocument
+    );
+    // dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", OwnerTypeDocument));
+
     showHideMutationDetailsCard(action, state, dispatch);
   } catch (e) {
     console.log(e);
@@ -369,7 +376,7 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }, { name: "OwnerTypeDocument" }] }
       ]
     }
   };

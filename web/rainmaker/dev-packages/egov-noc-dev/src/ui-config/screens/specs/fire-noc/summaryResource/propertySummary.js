@@ -239,32 +239,54 @@ const propertyLocationDetails = getCommonGrayCard({
     ),
     doorHouseNo: getLabelWithValue(
       {
-        labelName: "Door/House No.",
-        labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
+        labelName: "Plot/Survey No.",
+        // labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo",
         callBack: checkValueForNA
      }
     ),
-    buildingCompanyName: getLabelWithValue(
-      {
-        labelName: "Building/Company Name",
-        labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
-      },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName",
-          callBack: checkValueForNA
-      }
-    ),
+    // buildingCompanyName: getLabelWithValue(
+    //   {
+    //     labelName: "Building/Company Name",
+    //     labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
+    //   },
+    //   {
+    //     jsonPath:
+    //       "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName",
+    //       callBack: checkValueForNA
+    //   }
+    // ),
     streetName: getLabelWithValue(
       {
         labelName: "Street Name",
         labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
       },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
-      callBack: checkValueForNA
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street",
+        callBack: checkValueForNA
      }
+    ),
+    villageName: getLabelWithValue(
+      {
+        labelName: "Village Name",
+        labelKey: "NOC_PROPERTY_DETAILS_VILL_NAME_LABEL"
+      },
+      { 
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
+        callBack: checkValueForNA
+
+      }
+    ),
+    landMarkName: getLabelWithValue( 
+      {
+        labelName: "Landmark Name",
+        labelKey: "NOC_PROPERTY_DETAILS_LANDMARK_NAME_LABEL"
+      },
+      { 
+        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.landmark",
+        callBack: checkValueForNA 
+    }
+       ,   
     ),
     mohalla: getLabelWithValue(
       {
@@ -299,19 +321,19 @@ const propertyLocationDetails = getCommonGrayCard({
           callBack: checkValueForNA
       }
     ),
-    applicableFireStation: getLabelWithValue(
-      {
-        labelName: "Applicable Fire Station",
-        labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
-        localePrefix: {
-          moduleName: "firenoc",
-          masterName: "FireStations"
-        }
-      }
-    )
+    // applicableFireStation: getLabelWithValue(
+    //   {
+    //     labelName: "Applicable Fire Station",
+    //     labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
+    //   },
+    //   {
+    //     jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
+    //     localePrefix: {
+    //       moduleName: "firenoc",
+    //       masterName: "FireStations"
+    //     }
+    //   }
+    // )
   })
 });
 

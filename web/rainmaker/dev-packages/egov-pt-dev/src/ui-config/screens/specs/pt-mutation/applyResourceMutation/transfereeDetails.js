@@ -325,7 +325,7 @@ const thirdStepPath= "components.div.children.formwizardThirdStep.children.summa
           moduleName: "PropertyTax",
           masterName: "ReasonForTransfer"
         },
-        sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
+        sourceJsonPath: "applyScreenMdmsData.PropertyTax.OwnerTypeDocument",
         props: {
           className: "applicant-details-error",
           style: {
