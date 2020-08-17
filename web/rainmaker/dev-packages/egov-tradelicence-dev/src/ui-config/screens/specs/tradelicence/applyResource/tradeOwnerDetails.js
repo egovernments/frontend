@@ -371,7 +371,7 @@ export const ownerInfoInstitutional = {
           labelKey: "TL_NEW_OWNER_OFF_ADDR_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Address"),
+        pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
       })
     })
@@ -420,15 +420,13 @@ export const tradeOwnerDetails = getCommonCard({
           //     "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed[0].code"
           //   )
           // )
-          
-          // dispatch(
+          // );
+         // dispatch(
           //   pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
           //    get(
           //     state.screenConfiguration.preparedFinalObject,
           //     "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed[0].code"
           //   ))
-            
-          // );
       beforeFieldChange: (action, state, dispatch) => {
         try {
           dispatch(
@@ -473,14 +471,22 @@ export const tradeOwnerDetails = getCommonCard({
             dispatch(
               handleField(
                 "apply",
-                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.subOwnership",
-                "props.value",
-                get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed[0].code"
-                )
+                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
+                "visible",
+                true
               )
             ); 
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+                "visible",
+                false
+              )
+            );
+            dispatch(
+              pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+            )
           }
         } catch (e) {
           console.log(e);

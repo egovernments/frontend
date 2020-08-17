@@ -10,7 +10,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
-
+import "./index.css";
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Trade License Application",
@@ -83,7 +83,23 @@ export const tradeLicenseApplication = getCommonCard({
   }),
   applicationTypeAndToFromDateContainer: getCommonContainer({
     applicationType: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "AutosuggestContainer",
+      jsonPath:
+        "searchScreen.applicationType",
+      sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      props: {
+        className: "applicant-details-error autocomplete-dropdown",
+        labelsFromLocalisation: true,
+        suggestions: [],
+        jsonPath:
+        "searchScreen.applicationType",
+        sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
         label: {
           labelName: "Application Type",
           labelKey: "TL_APPLICATION_TYPE_LABEL"
@@ -96,18 +112,14 @@ export const tradeLicenseApplication = getCommonCard({
           moduleName: "TradeLicense",
           masterName: "ApplicationType"
         },
-        jsonPath:
-          "searchScreen.applicationType",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        props: {
-          className: "applicant-details-error"
+        fullwidth: true,
+        required: false,
+        isClearable:true,
+        inputLabelProps: {
+          shrink: true
         }
-      })
-    },
+      }
+  },
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
       placeholder: {
@@ -141,59 +153,66 @@ export const tradeLicenseApplication = getCommonCard({
     })
   }),
   appStatusContainer: getCommonContainer({
-    applicationNo: getSelectField({
-      label: {
-        labelName: "Application status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
-      },
-      required: false,
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "NEWTL"
+    applicationNo: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "Application status",
+          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Application Status",
+          labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_PLACEHOLDER"
+        },
+        required: false,
+        localePrefix: {
+          moduleName: "WF",
+          masterName: "NEWTL"
+        },
+        className: "autocomplete-dropdown",
+        labelsFromLocalisation: true,
+        isClearable:true,
+        data:[
+          {
+            code : "INITIATED"
+          },
+          {
+            code : "APPLIED"
+          },
+          {
+            code : "FIELDINSPECTION"
+          },
+          {
+            code : "PENDINGAPPROVAL"
+          },
+          {
+            code : "PENDINGPAYMENT"
+          },
+          {
+            code : "APPROVED"
+          },
+          {
+            code : "CITIZENACTIONREQUIRED"
+          },     
+          {
+            code : "EXPIRED"
+          },
+          {
+            code : "CANCELLED"
+          },
+          {
+            code : "REJECTED"
+          }
+        ],
       },
       jsonPath: "searchScreen.status",
-      data:[
-        {
-          code : "INITIATED"
-        },
-        {
-          code : "APPLIED"
-        },
-        {
-          code : "FIELDINSPECTION"
-        },
-        {
-          code : "PENDINGAPPROVAL"
-        },
-        {
-          code : "PENDINGPAYMENT"
-        },
-        {
-          code : "APPROVED"
-        },
-        {
-          code : "CITIZENACTIONREQUIRED"
-        },     
-        {
-          code : "EXPIRED"
-        },
-        {
-          code : "CANCELLED"
-        },
-        {
-          code : "REJECTED"
-        }
-      ],
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    }),
-
+    },
   }),
   
 
