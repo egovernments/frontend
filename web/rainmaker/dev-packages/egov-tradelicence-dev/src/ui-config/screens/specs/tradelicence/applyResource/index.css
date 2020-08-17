@@ -49,3 +49,7 @@
   .tl-print-button {
     margin-left: 10px;
     width: 150px; } }
+
+.autocomplete-dropdown div:nth-child(2),
+.autocomplete-dropdown div:nth-child(3) {
+  display: none !important; }
