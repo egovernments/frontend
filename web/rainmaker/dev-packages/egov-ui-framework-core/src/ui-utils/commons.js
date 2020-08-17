@@ -627,6 +627,15 @@ export const getTodaysDateInYMD = () => {
   return date;
 };
 
+export const getMaxDate = (yr) => {
+  let date = new Date();
+  let year = date.getFullYear() - yr;
+  let month = date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${year}-${month}-${day}`;
+  return date;
+};
+
 export const isPublicSearch = () => {
   return location && location.pathname && location.pathname.includes("/withoutAuth");
 }
