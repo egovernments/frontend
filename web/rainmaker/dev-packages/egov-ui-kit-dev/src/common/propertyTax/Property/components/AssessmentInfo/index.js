@@ -164,6 +164,7 @@ const getVasikaItems = (additionalDetails) => {
 }
 
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
+  console.log("popsdsdsdddddddddddddddd",properties);
 let hideSubsectionLabel=false;
   let assessmentItems = [];
   let subUnitItems = [];
@@ -172,11 +173,15 @@ let hideSubsectionLabel=false;
   if (properties) {
     const { propertyDetails } = properties;
     const { additionalDetails } = properties;
-
     if (propertyDetails && propertyDetails.length > 0) {
-      subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
+
+     let subUnitItemsdata = propertyDetails[0].units.filter(unit=>{
+       return unit.active === true
+      });
+      subUnitItems = getUnitInfo(subUnitItemsdata);
+
+      // subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
       subVasikaItems = getVasikaItems(additionalDetails);
-      // console.log(subVasikaItems,"subVasikaItems");
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){
         hideSubsectionLabel=true;
