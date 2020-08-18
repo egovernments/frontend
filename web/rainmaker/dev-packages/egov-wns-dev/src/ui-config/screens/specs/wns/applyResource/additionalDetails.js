@@ -234,22 +234,23 @@ export const additionDetails = getCommonCard({
     roadDetails: getCommonContainer({
       roadType: getSelectField({
         label: {
+          labelName: "Road Type",
           labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
         },
-        props: {
-          label: {
-            labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
-          },
-          placeholder: {
-            labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "WS",
-            masterName: "ROADTYPE"
-          }
-      },
+      //   props: {
+      //     label: {
+      //       labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+      //     },
+      //     placeholder: {
+      //       labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
+      //     }
+      // },
         placeholder: {
           labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "ROADTYPE"
         },
         required: false,
         sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",

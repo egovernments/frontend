@@ -277,7 +277,13 @@ export const getData = async (action, state, dispatch) => {
         dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
       }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
+      if (waterConnections.length > 0){
+        waterConnections[0].additionalDetails.locality = waterConnections[0].property.address.locality.code;
+      }
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
+      if (sewerageConnections.length > 0) {
+        sewerageConnections[0].additionalDetails.locality = sewerageConnections[0].property.address.locality.code;
+      }
       let combinedArray = waterConnections.concat(sewerageConnections);
 
       if(!isActiveProperty(combinedArray[0].property)){
@@ -293,6 +299,7 @@ export const getData = async (action, state, dispatch) => {
           // ModifyEdit should not call create.
           dispatch(prepareFinalObject("modifyAppCreated", true));
       }
+      
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
