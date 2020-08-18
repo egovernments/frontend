@@ -60,6 +60,10 @@ export const propertySearchApiCall = async (state, dispatch) => {
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
         let propertyData = response.Properties[0];
+        if(typeof propertyData.additionalDetails !== "object"){
+          propertyData.additionalDetails={};
+        }
+        propertyData.additionalDetails.locality = response.Properties[0].address.locality;
         if(!isActiveProperty(propertyData)){
           dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyData.status}`, labelName: `Property Status is ${propertyData.status}` }, "warning"));     
           showHideFieldsFirstStep(dispatch,propertyData.propertyId,false); 
