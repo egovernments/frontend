@@ -314,7 +314,7 @@ class DocumentList extends Component {
               disabled={card.dropdown.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
               optionValue="code"
               optionLabel="label"
-              required={true}
+              required={card.required}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
               className= "autocomplete-dropdown"

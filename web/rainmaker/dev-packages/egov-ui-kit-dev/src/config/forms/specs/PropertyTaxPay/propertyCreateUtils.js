@@ -52,11 +52,13 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
   if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
-      properties[0].documents.push({
-        documentType: documentsUploadRedux[key].dropdown.value,
-        fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
-        documentUid: documentsUploadRedux[key].documents[0].fileStoreId,
-      });
+      if(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value && documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileStoreId) {
+        properties[0].documents.push({
+          documentType: documentsUploadRedux[key].dropdown.value,
+          fileStoreId: documentsUploadRedux[key].documents[0].fileStoreId,
+          documentUid: documentsUploadRedux[key].documents[0].fileStoreId,
+        });
+      }
     });
   }
 
@@ -122,12 +124,15 @@ export const convertToArray = (documentsUploadRedux) => {
         if (dropdownValue == '' && docTitleArray.length == 1) {
           return;
         }
-        return documentsData.push({
-          title: docTitleArray[docTitleArray.length - 1],
-          link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
-          linkText: "View",
-          name: documentsUploadRedux[key].documents[0].fileName,
-        });
+        if(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileUrl && documentsUploadRedux[key].documents[0].fileName) {
+          documentsData.push({
+            title: docTitleArray[docTitleArray.length - 1],
+            link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
+            linkText: "View",
+            name: documentsUploadRedux[key].documents[0].fileName,
+          });
+        }
+        return documentsData;
       });
       return documentsData;
     }

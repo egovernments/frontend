@@ -944,17 +944,18 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
 
 export const isDocumentValid = (docUploaded, requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
-  let temp = 0;
-  if (totalDocsKeys.length >= requiredDocCount) {
+  let isValid = true;
     for (let key = 0; key < totalDocsKeys.length; key++) {
-      if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
-        temp++;
+      if(docUploaded[key].isDocumentRequired) {
+        if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
+          isValid = true;
+        } else {
+          isValid = false;
+          break;
+        }
       }
     }
-    return temp >= requiredDocCount ? true : false;
-  } else {
-    return false;
-  }
+    return isValid;
 }
 
 export const getMohallaData = (payload, tenantId) => {
