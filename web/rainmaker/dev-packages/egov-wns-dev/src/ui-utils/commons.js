@@ -901,6 +901,7 @@ export const applyForWater = async (state, dispatch) => {
                 response.WaterConnection[0].water=true;
                 let waterSource = response.WaterConnection[0].waterSource.split(".");
                 response.WaterConnection[0].waterSource = waterSource[0];
+                response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
@@ -954,6 +955,7 @@ export const applyForSewerage = async (state, dispatch) => {
             if(isModifyMode()){
                 response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
                 response.SewerageConnections[0].sewerage=true;
+                response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }

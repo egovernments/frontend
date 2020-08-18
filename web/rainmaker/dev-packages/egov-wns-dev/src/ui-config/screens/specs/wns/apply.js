@@ -269,11 +269,13 @@ export const getData = async (action, state, dispatch) => {
         try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
         payloadSewerage.SewerageConnections[0].water = false;
         payloadSewerage.SewerageConnections[0].sewerage = true;
+        payloadSewerage.SewerageConnections[0].service = "Sewerage";
         dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
       } else {
         try { payloadWater = await getSearchResults(queryObject) } catch (error) { console.error(error); };
         payloadWater.WaterConnection[0].water = true;
         payloadWater.WaterConnection[0].sewerage = false;
+        payloadWater.WaterConnection[0].service = "Water";
         dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
       }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
