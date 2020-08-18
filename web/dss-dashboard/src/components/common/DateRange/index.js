@@ -3,7 +3,11 @@ import React from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import { addDays } from 'date-fns';
 import CustomCalendar from './customCalander/cCalander';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DateRangePicker } from 'react-date-range';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import SwitchButton from '../switchButtons/switchButtons';
@@ -35,6 +39,11 @@ class DateRange extends React.Component {
       { key: "6", value: fYearObj[1].title},
       { key: "7", value: "Custom" },
       ],
+      range : [{
+          startDate: moment(new Date(),"DD/MM/YYYY").startOf('day').unix(),
+          endDate: moment(addDays(new Date(), 7),"DD/MM/YYYY").startOf('day').unix(),
+          key: 'selection'
+      }]
     }
   }
   handleCancel = () => {
@@ -59,71 +68,86 @@ class DateRange extends React.Component {
     }
   }
 
-  getDateFilter(value) {
-    switch (_.toUpper(value)) {
-      case 'TODAY':
+  getDateFilter(selectionObj){
+    console.log("========>selectionObj",selectionObj)
+    let duration1 = this.getDuration(moment(selectionObj.startDate || new Date(), "DD/MM/YYYY"), moment(selectionObj.endDate || new Date(), "DD/MM/YYYY"))
 
-        return {
-          title: "TODAY",
-          value: {
-            startDate: moment().startOf('day').unix(),
-            endDate: moment().endOf('day').unix(),
-            interval: 'day'
-          }
-        }
-      case 'THIS WEEK':
-
-        return {
-          title: "WEEK",
-          value: {
-            startDate: moment().startOf('week').unix(),
-            endDate: moment().endOf('week').unix(),
-            interval: 'week'
-          }
-        }
-      case 'THIS MONTH':
-        return {
-          title: "MONTH",
-          value: {
-            startDate: moment().startOf('month').unix(),
-            endDate: moment().endOf('month').unix(),
-            interval: 'week'
-          }
-        }
-      case 'THIS QUARTER':
-        return {
-          title: "QUARTER",
-          value: {
-            startDate: moment().startOf('quarter').unix(),
-            endDate: moment().endOf('quarter').unix(),
-            interval: 'week'
-          }
-        }
-      case 'THIS YEAR':
-        return {
-          title: "YEAR",
-          value: {
-            startDate: moment().startOf('year').unix(),
-            endDate: moment().endOf('year').unix(),
-            interval: 'month'
-          }
-        }
-      case 'CUSTOM':
-        let duration1 = this.getDuration(moment(this.state.from || new Date(), "DD/MM/YYYY"), moment(this.state.to || new Date(), "DD/MM/YYYY"))
-
-        return {
-          title: "CUSTOM",
-          value: {
-            startDate: moment(this.state.from || new Date(), "DD/MM/YYYY").startOf('day').unix(),
-            endDate: moment(this.state.to || new Date(), "DD/MM/YYYY").endOf('day').unix(),
-            interval: duration1
-          }
-        }
-
-      default:
-        return this.getFinancialYearObj(value)
+    return {
+      title : "",
+      value: {
+          startDate: moment(selectionObj.startDate || new Date(), "DD/MM/YYYY").startOf('day').unix(),
+          endDate: moment(selectionObj.endDate || new Date(), "DD/MM/YYYY").endOf('day').unix(),
+          interval: duration1
+      }
     }
+
   }
+
+  // getDateFilter(value) {
+  //   switch (_.toUpper(value)) {
+  //     case 'TODAY':
+
+  //       return {
+  //         title: "TODAY",
+  //         value: {
+  //           startDate: moment().startOf('day').unix(),
+  //           endDate: moment().endOf('day').unix(),
+  //           interval: 'day'
+  //         }
+  //       }
+  //     case 'THIS WEEK':
+
+  //       return {
+  //         title: "WEEK",
+  //         value: {
+  //           startDate: moment().startOf('week').unix(),
+  //           endDate: moment().endOf('week').unix(),
+  //           interval: 'week'
+  //         }
+  //       }
+  //     case 'THIS MONTH':
+  //       return {
+  //         title: "MONTH",
+  //         value: {
+  //           startDate: moment().startOf('month').unix(),
+  //           endDate: moment().endOf('month').unix(),
+  //           interval: 'week'
+  //         }
+  //       }
+  //     case 'THIS QUARTER':
+  //       return {
+  //         title: "QUARTER",
+  //         value: {
+  //           startDate: moment().startOf('quarter').unix(),
+  //           endDate: moment().endOf('quarter').unix(),
+  //           interval: 'week'
+  //         }
+  //       }
+  //     case 'THIS YEAR':
+  //       return {
+  //         title: "YEAR",
+  //         value: {
+  //           startDate: moment().startOf('year').unix(),
+  //           endDate: moment().endOf('year').unix(),
+  //           interval: 'month'
+  //         }
+  //       }
+  //     case 'CUSTOM':
+  //       let duration1 = this.getDuration(moment(this.state.from || new Date(), "DD/MM/YYYY"), moment(this.state.to || new Date(), "DD/MM/YYYY"))
+
+  //       return {
+  //         title: "CUSTOM",
+  //         value: {
+  //           startDate: moment(this.state.from || new Date(), "DD/MM/YYYY").startOf('day').unix(),
+  //           endDate: moment(this.state.to || new Date(), "DD/MM/YYYY").endOf('day').unix(),
+  //           interval: duration1
+  //         }
+  //       }
+
+  //     default:
+  //       return this.getFinancialYearObj(value)
+  //   }
+  // }
 
   getFinancialYearObj(value){
       let fYearObj = this.state.fYearObj, returnObj;
@@ -166,6 +190,24 @@ class DateRange extends React.Component {
       })
     }
   }
+
+
+  onChange = (item) => {
+    console.log("=======>",item)
+    this.setState({
+      range :  [item.selection]
+    })
+
+    let { handleSelectedOk } = this.props;
+    handleSelectedOk(false, 'duration', this.getDateFilter(item.selection))
+    console.log("======getDateFilter",this.getDateFilter(item.selection))
+    this.props.onClose();
+    // if (target) {
+    //   this.setState({
+    //     [target]: value,
+    //   })
+    // }
+  }
   render() {
     let { classes, open } = this.props;
     return (
@@ -181,27 +223,36 @@ class DateRange extends React.Component {
           {this.state.title}
         </DialogTitle>
         <DialogContent dividers>
-          <div className={classes.fils}>
+          {/* <div className={classes.fils}>
             <SwitchButton
               data={this.state.buttons}
               selected={this.state.value ||  this.state.buttons[this.state.default].value}
               type="normal" target={"duration"} 
               handleSelected={this.handleChanges.bind(this)}>
             </SwitchButton>
-          </div>
-          {this.state.value === 'Custom' &&
+          </div> 
+          {
+            this.state.value === 'Custom' &&
             <div className={classes.calanderDisplay}>
               <div className={classes.calanderclass}>
-                <CustomCalendar key="from" position="from" selectCDate={this.selectCDate.bind(this, 'from')} />
+                  <CustomCalendar key="from" position="from" selectCDate={this.selectCDate.bind(this, 'from')} /> 
               </div>
               <div className={classes.to}>
                 <span>to</span>
               </div>
               <div className={classes.calanderclass}>
-                <CustomCalendar key="to" position="to" selectCDate={this.selectCDate.bind(this, 'to')} />
+                 <CustomCalendar key="to" position="to" selectCDate={this.selectCDate.bind(this, 'to')} />  
               </div>
             </div>
-          }
+          } */}
+              <DateRangePicker
+                onChange={this.onChange}
+                showSelectionPreview={true}
+                moveRangeOnFirstSelection={false}
+                months={2}
+                ranges={this.state.range}
+                direction="horizontal"
+              />;
 
         </DialogContent>
         <DialogActions className={classes.actions}>
