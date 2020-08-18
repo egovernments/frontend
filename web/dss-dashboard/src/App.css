@@ -370,6 +370,16 @@ h6 span {
     display: flex;
     margin-top: 10px;
 }
+.pieFilterChipWrap{
+    margin-bottom: 10px;
+    text-align: left;
+    display: flex;
+}
+
+.pieFilterChipWrap .chipWrap {
+    margin: 5px 10px 0px 10px ;
+    display: flex;
+}
 
 .tableFilterChipWrap .chipWrap {
     margin: 0px 20px;
@@ -504,6 +514,9 @@ button:focus {
         display: flex;
         /* flex-direction: row-reverse; */
         flex: 1
+    }
+    .pieFilterChipWrap{
+        margin-bottom: 0px;
     }
 }
 
