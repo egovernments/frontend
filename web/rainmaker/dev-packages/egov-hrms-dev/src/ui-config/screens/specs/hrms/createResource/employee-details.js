@@ -262,10 +262,6 @@ export const professionalDetails = getCommonCard(
           inputLabelProps: {
             shrink: true
           },
-          localePrefix: {
-            moduleName: "ACCESSCONTROL_ROLES",
-            masterName: "ROLES"
-          },
           isMulti: true,
         },
         gridDefination: {
