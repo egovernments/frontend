@@ -740,6 +740,7 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
     case "FireNoc":
       return (state, dispatch) => {
         dispatch(prepareFinalObject("FireNOCs", []));
+        dispatch(prepareFinalObject("DynamicMdms", {}));
         dispatch(prepareFinalObject("documentsUploadRedux", {}));
         const applyUrl =
           process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
@@ -765,7 +766,7 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
         return (state, dispatch) => {
           dispatch(prepareFinalObject("Licenses", []));
           dispatch(prepareFinalObject("LicensesTemp", []));
-          dispatch(prepareFinalObject("DynamicMdms", []));
+          dispatch(prepareFinalObject("DynamicMdms", {}));
           const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
           dispatch(
             handleField("search", "components.adhocDialog", "props.open", false)
