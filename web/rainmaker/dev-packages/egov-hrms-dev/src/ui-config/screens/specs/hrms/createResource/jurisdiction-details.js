@@ -36,10 +36,6 @@ const jurisdictionDetailsCard = {
               required: true,
               jsonPath: "Employee[0].jurisdictions[0].hierarchy",
               sourceJsonPath: "createScreenMdmsData.hierarchyList",
-              localePrefix :{
-                moduleName : "EGOV_LOCATION",
-                masterName : "TENANTBOUNDARY"
-              },
               props: {
                 className: "hr-generic-selectfield",
                 optionValue: "code",
@@ -103,10 +99,6 @@ const jurisdictionDetailsCard = {
               },
               required: true,
               jsonPath: "Employee[0].jurisdictions[0].boundaryType",
-              localePrefix :{
-                moduleName : "EGOV_LOCATION",
-                masterName : "BOUNDARYTYPE"
-              },
               props: {
                 className: "hr-generic-selectfield",
                 optionValue: "value",
