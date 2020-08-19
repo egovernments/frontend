@@ -26,7 +26,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchMDMDDocumentTypeSuccess } from "redux/store/actions";
 import store from "ui-redux/store";
-import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC,BussinessDetailsHOC,CheckBoxDetailsHOC } from "./components/Forms";
+import { InstitutionAuthorityHOC, InstitutionHOC, OwnerInfoHOC, OwnerInformation, OwnershipTypeHOC, PropertyAddressHOC, UsageInformationHOC, BussinessDetailsHOC, CheckBoxDetailsHOC } from "./components/Forms";
 import FloorsDetails from "./components/Forms/FloorsDetails";
 import MultipleOwnerInfoHOC from "./components/Forms/MultipleOwnerInfo";
 import PlotDetails from "./components/Forms/PlotDetails";
@@ -663,7 +663,7 @@ class FormWizard extends Component {
     const { setRoute, displayFormErrorsAction, form, requiredDocCount } = this.props;
     switch (selected) {
       //validating property address is validated
-      case 0:   
+      case 0:
         if (
           window.appOverrides &&
           !window.appOverrides.validateForm("propertyAddress", form)
@@ -706,38 +706,35 @@ class FormWizard extends Component {
           );
           break;
         }
-        const { basicInformation, plotDetails,bussinessDetails } = form;
+        const { basicInformation, plotDetails, bussinessDetails } = form;
+        debugger;
+        // const isbussiFormValid = validateForm(form.bussinessDetails);
+        // let getUsageType =  get(form,"basicInformation.fields.typeOfUsage.value", "");
+        // if(getUsageType === "COMMERCIAL"){
 
-        const isbussiFormValid = validateForm(form.bussinessDetails);
-        let getUsageType =  get(form,"basicInformation.fields.typeOfUsage.value", "");
-        if(getUsageType === "COMMERCIAL"){
-
-          if (isbussiFormValid) {
-            callDraft(this);
-            window.scrollTo(0, 0);
-            this.setState({
-              selected: index,
-              formValidIndexArray: [...formValidIndexArray, selected]
-            });
-          } 
-          else {
-            displayFormErrorsAction("bussinessDetails");
-          }
-
-        }
-        else{
-          callDraft(this);
-          window.scrollTo(0, 0);
-          this.setState({
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
-          });
-        }
-
-        break;
-        if (basicInformation ) {
+        //   if (isbussiFormValid) {
+        //     callDraft(this);
+        //     window.scrollTo(0, 0);
+        //     this.setState({
+        //       selected: index,
+        //       formValidIndexArray: [...formValidIndexArray, selected]
+        //     });
+        //   } 
+        //   else {
+        //     displayFormErrorsAction("bussinessDetails");
+        //   }
+        // }
+        // else{
+        //   callDraft(this);
+        //   window.scrollTo(0, 0);
+        //   this.setState({
+        //     selected: index,
+        //     formValidIndexArray: [...formValidIndexArray, selected]
+        //   });
+        // }
+        if (basicInformation) {
           const isBasicInformationFormValid = validateForm(basicInformation);
-          if (isBasicInformationFormValid ) {
+          if (isBasicInformationFormValid) {
             if (plotDetails) {
               const isPlotDetailsFormValid = validateForm(plotDetails);
               if (isPlotDetailsFormValid) {
@@ -760,6 +757,26 @@ class FormWizard extends Component {
                       }
                     }
                     if (floorValidation) {
+
+                      const isbussiFormValid = validateForm(bussinessDetails);
+                      let getUsageType = get(form, "basicInformation.fields.typeOfUsage.value", "");
+
+                      if (getUsageType === "COMMERCIAL") {
+
+                        if (isbussiFormValid) {
+                          callDraft(this);
+                          window.scrollTo(0, 0);
+                          this.setState({
+                            selected: index,
+                            formValidIndexArray: [...formValidIndexArray, selected]
+                          });
+                        }
+                        else {
+                          displayFormErrorsAction("bussinessDetails");
+                          break;
+                        }
+                      }
+
                       callDraft(this);
                       window.scrollTo(0, 0);
                       this.setState({
@@ -768,6 +785,25 @@ class FormWizard extends Component {
                       });
                     }
                   } else {
+
+                    const isbussiFormValid = validateForm(bussinessDetails);
+                    let getUsageType = get(form, "basicInformation.fields.typeOfUsage.value", "");
+
+                    if (getUsageType === "COMMERCIAL") {
+
+                      if (isbussiFormValid) {
+                        callDraft(this);
+                        window.scrollTo(0, 0);
+                        this.setState({
+                          selected: index,
+                          formValidIndexArray: [...formValidIndexArray, selected]
+                        });
+                      }
+                      else {
+                        displayFormErrorsAction("bussinessDetails");
+                        break;
+                      }
+                    }
                     callDraft(this);
                     window.scrollTo(0, 0);
                     this.setState({
@@ -783,6 +819,7 @@ class FormWizard extends Component {
           } else {
             displayFormErrorsAction("basicInformation");
           }
+
         }
 
         getImportantDates(this);

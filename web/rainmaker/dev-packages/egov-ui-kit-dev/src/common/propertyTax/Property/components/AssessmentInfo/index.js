@@ -175,10 +175,14 @@ let hideSubsectionLabel=false;
     const { additionalDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
 
+      if(!propertyDetails[0].units){
+        propertyDetails[0].units = []
+      }
+
      let subUnitItemsdata = propertyDetails[0].units.filter(unit=>{
        return unit.active === true
       });
-      subUnitItems = getUnitInfo(subUnitItemsdata);
+      subUnitItems = getUnitInfo(subUnitItemsdata,propertyDetails[0]);
 
       // subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
       subVasikaItems = getVasikaItems(additionalDetails);
