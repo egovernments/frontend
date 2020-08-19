@@ -8,7 +8,9 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import "./index.css";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-
+import get from "lodash/get"; 
+import find from "lodash/find"; 
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons"; 
 const pickBtn = {
   display: "block"
 };
@@ -138,11 +140,24 @@ class MapLocator extends Component {
 
   render() {
     let { currLoc } = this.state;
-    const { location, localizationLabels } = this.props;
+    const { location, localizationLabels ,preparedFinalObject } = this.props;
+    let defLocation = defaultLocation;
+    console.log("Current location ", currLoc, location);
+    try{
+      console.log("preparedFinalObject" ,preparedFinalObject)
+      const tenantId = getQueryArg(window.location.href, "tenantId"); 
+      const cityList =get(preparedFinalObject, `applyScreenMdmsData.tenant.tenants` );
+      const selectedCb=find(cityList, {code:tenantId});
+      if(selectedCb!=undefined){
+        defLocation = { lat: get(selectedCb, `city.latitude`), lng: get(selectedCb, `city.longitude`) };
+      }
+    }catch(e){
+      console.log("error in finding tenantid ",e);
+    }
     var _currloc = !isEmpty(currLoc)
       ? currLoc
       : isEmpty(location)
-      ? defaultLocation
+      ? defLocation
       : location;
     let translatedSearchPlaceholder = getLocaleLabels(
       "Search Address",
@@ -236,9 +251,10 @@ class MapLocator extends Component {
 //};
 
 const mapSateToProps = state => {
-  const { app } = state;
+  const { app ,screenConfiguration } = state;
   const { localizationLabels } = app;
-  return { localizationLabels };
+  const { preparedFinalObject } =screenConfiguration
+  return { localizationLabels,preparedFinalObject };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -5,6 +5,7 @@ import { List, Dialog, TextFieldIcon, AutoSuggest } from "components";
 import DownArrow from "material-ui/svg-icons/navigation/arrow-drop-down";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
+import filter  from "lodash/filter";
 import { getTranslatedLabel } from "../../../utils/commons";
 
 class CityPickerDialog extends Component {
@@ -137,7 +138,11 @@ class CityPickerDialog extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const cities = state.common.cities || [];
+  let cities = state.common.cities || [];
+ let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+  if(!isEmployee) {
+    cities =filter(cities, c => c.city.ulbGrade !=="ST" );
+  }
   const localizationLabels = get(state.app, "localizationLabels", {});
   return { cities, localizationLabels };
 };
