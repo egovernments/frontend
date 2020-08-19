@@ -34,7 +34,7 @@ const getMultiItem = (billingslabData, classes, style) => {
     else if ((item.type = "accessories")) labelCategory = "ACCESSORIESCATEGORY";
     return (
       <Grid sm={12} className={classes.container} container={true}>
-        <Grid sm={10}>
+        <Grid sm={9}>
           <LabelContainer
             labelKey={`TRADELICENSE_${labelCategory}_${item.category
               .toUpperCase()

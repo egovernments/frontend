@@ -68,6 +68,15 @@ export const validateField = field => {
     isFieldValid = false;
   }
 
+  if (
+    isFieldValid &&
+    field.props && field.props.inputProps &&
+    field.props.inputProps.min &&
+    (value < field.props.inputProps.min)
+  ) {
+    isFieldValid = false;
+  }
+
   if (isDOB) {
     if (value) {
       let currentDate = new Date().getTime();

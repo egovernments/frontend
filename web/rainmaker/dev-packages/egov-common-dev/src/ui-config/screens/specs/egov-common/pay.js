@@ -105,6 +105,13 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
         dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
         dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
     }
+    if(get(totalAmount, "totalAmount") === 0){
+        if(process.env.REACT_APP_NAME === "Citizen"){
+        const buttonJsonpath = paybuttonJsonpath +"makePayment";
+        dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
+        dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
+        }
+    }
 
     const consumeCodeComponentPath = 'components.div.children.headerDiv.children.header.children.consumerCode';
     const consumerCodeFromResponse = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");;

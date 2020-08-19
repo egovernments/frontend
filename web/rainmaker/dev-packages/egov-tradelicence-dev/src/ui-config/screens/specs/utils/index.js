@@ -411,11 +411,11 @@ export const getIconStyle = key => {
 
 export const showHideAdhocPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["pay"],
+    state.screenConfiguration.screenConfig["search-preview"],
     "components.adhocDialog.props.open",
     false
   );
-  dispatch(handleField("pay", "components.adhocDialog", "props.open", !toggle));
+  dispatch(handleField("search-preview", "components.adhocDialog", "props.open", !toggle));
 };
 
 export const getButtonVisibility = (status, button) => {
@@ -1028,6 +1028,8 @@ const getToolTipInfo = (taxHead, LicenseData) => {
       return get(LicenseData, "tradeLicenseDetail.adhocPenaltyReason");
     case "TL_ADHOC_REBATE":
       return get(LicenseData, "tradeLicenseDetail.adhocExemptionReason");
+    case "TL_GARBAGE_FEE":
+      return get(LicenseData, "tradeLicenseDetail.additionalDetail.garbageComments");
     default:
       return "";
   }
@@ -1117,7 +1119,7 @@ const getBillingSlabData = async (
   dispatch,
   billingSlabIds,
   tenantId,
-  accessories
+  accessories,tradeUnits
 ) => {
   const { accesssoryBillingSlabIds, tradeTypeBillingSlabIds } =
     billingSlabIds || {};
@@ -1157,9 +1159,22 @@ const getBillingSlabData = async (
         response.billingSlab.reduce(
           (result, item) => {
             if (item.tradeType) {
-              tradeTotal = tradeTotal + item.rate;
+              let tradeUnit =tradeUnits.find(
+                tradeUnit =>
+                  item.tradeType === tradeUnit.tradeType
+              );
+              let count ;
+              let UOM;
+              if(tradeUnit){
+               count = tradeUnit.uomValue;
+               UOM = tradeUnit.uom;
+              }
+              tradeTotal = count?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
               result.tradeUnitData.push({
                 rate: item.rate,
+                tradeTotal:tradeTotal,
+                UOM,
+                count:count,
                 category: item.tradeType,
                 type: "trade"
               });
@@ -1222,9 +1237,13 @@ const getBillingSlabData = async (
 
 const isApplicationPaid = (currentStatus, workflowCode) => {
   let isPAID = false;
-  if (currentStatus === "CITIZENACTIONREQUIRED") {
+  // if (currentStatus === "CITIZENACTIONREQUIRED") {
+  //   return isPAID;
+  // }
+  if(currentStatus==="CITIZENACTIONREQUIRED"  || (currentStatus!=="APPROVED" && currentStatus!=="CANCELLED") ){
     return isPAID;
-  }
+ }
+
   const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 
   if (!isEmpty(businessServiceData)) {
@@ -1312,6 +1331,7 @@ export const createEstimateData = async (
   );
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
+  const tradeUnits = get(LicenseData, "tradeLicenseDetail.tradeUnits", []);
   if (payload) {
     const getBillResponse = await calculateBill(getBillQueryObj);
     getBillResponse &&
@@ -1320,8 +1340,15 @@ export const createEstimateData = async (
         dispatch,
         getBillResponse.billingSlabIds,
         tenantId,
-        accessories
+        accessories,tradeUnits
       );
+      if(getBillResponse){
+        set(
+          payload,
+          "billResponse",
+          getBillResponse.billResponse
+        );
+       }
   }
 
   /** Waiting for estimate to load while downloading confirmation form */

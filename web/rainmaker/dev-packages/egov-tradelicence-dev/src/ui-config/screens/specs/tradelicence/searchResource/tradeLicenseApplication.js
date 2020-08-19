@@ -10,7 +10,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
-
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Trade License Application",
@@ -133,7 +133,12 @@ export const tradeLicenseApplication = getCommonCard({
       },
       pattern: getPattern("Date"),
       errorMessage: "ERR_INVALID_DATE",
-      required: false
+      required: false,
+      props: {
+        inputProps: {
+          max: getTodaysDateInYMD()
+        }
+      }
     }),
 
     toDate: getDateField({
@@ -149,7 +154,12 @@ export const tradeLicenseApplication = getCommonCard({
       },
       pattern: getPattern("Date"),
       errorMessage: "ERR_INVALID_DATE",
-      required: false
+      required: false,
+      props: {
+        inputProps: {
+          max: getTodaysDateInYMD()
+        }
+      }
     })
   }),
   appStatusContainer: getCommonContainer({
@@ -180,6 +190,9 @@ export const tradeLicenseApplication = getCommonCard({
           },
           {
             code : "APPLIED"
+          },
+          {
+            code : "PENDINGAPPLFEE"
           },
           {
             code : "FIELDINSPECTION"

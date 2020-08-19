@@ -13,7 +13,8 @@ import some from "lodash/some";
 import { applyTradeLicense, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
 import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields} from "../../utils";
 import "./index.css";
-
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
+import isEmpty from "lodash/isEmpty";
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
   const tenantId = get(LicenseData, "tenantId");
@@ -26,6 +27,25 @@ const moveToSuccess = (LicenseData, dispatch) => {
     )
   );
 };
+const moveToAppfeeSuccess = (LicenseData, dispatch) => {
+  const applicationNo = get(LicenseData, "applicationNumber");
+  const tenantId = get(LicenseData, "tenantId");
+  const financialYear = get(LicenseData, "financialYear");
+  const purpose = "apply";
+  const status = "success";
+  // dispatch(
+  //   setRoute(
+  //     `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+  //   )
+  // );
+  dispatch(
+       setRoute(
+        `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=TL`
+       )
+     );
+
+};
+
 const editRenewalMoveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
   const tenantId = get(LicenseData, "tenantId");
@@ -75,6 +95,38 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
     }
   });
 };
+
+const getAge = (dateString) =>{
+  var today = new Date();
+  var birthDate = new Date(dateString);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+  }
+  return age;
+};
+
+export const callBackForAppFee = async (state, dispatch) => {
+  let isFormValid = true;
+  let activeStep = get(
+    state.screenConfiguration.screenConfig["apply"],
+    "components.div.children.stepper.props.activeStep",
+    0
+  );
+  const LicenseData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0]"
+  );
+  isFormValid = await applyTradeLicense(state, dispatch,activeStep);
+  if (isFormValid) {
+    if (getQueryArg(window.location.href, "action") === "EDITRENEWAL")
+    editRenewalMoveToSuccess(LicenseData, dispatch);
+    else
+    moveToAppfeeSuccess(LicenseData, dispatch);
+  }
+}
+
 
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
@@ -209,6 +261,27 @@ export const callBackForNext = async (state, dispatch) => {
       );
       return false; // to show the above message
     }
+//DOB validation
+    let dob = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.owners[0].dob"
+    ) 
+  let age = getAge(dob);
+  
+  if(age < 18){
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Invalid DOB!",
+          labelKey: "ERR_INVALID_DOB"
+        },
+        "error"
+      )
+    );
+    return false;
+  }
+
     if (isFormValid && isOwnerShipValid) {
       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
       if (!isFormValid) {
@@ -372,7 +445,24 @@ export const changeStep = (
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = activeStep < 3 ? true : false;
-  const isPayButtonVisible = activeStep === 3 ? true : false;
+  const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+  let isAppFeeReqd = false;
+  if (!isEmpty(businessServiceData)) {
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+    const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].state === "PENDINGAPPLFEE") {
+        console.log("PENDINGAPPLFEE::::");
+        isAppFeeReqd = true;
+        break;
+      }
+     
+    }
+  } 
+  console.log("isAppFeeReqd::::",isAppFeeReqd);
+  const isPayButtonVisible = (activeStep===3 && !isAppFeeReqd) ? true : false;
+  const isAppPayButtonVisible = (activeStep===3 && isAppFeeReqd)  ? true : false;
+
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -393,6 +483,11 @@ export const changeStep = (
       path: "components.div.children.footer.children.payButton",
       property: "visible",
       value: isPayButtonVisible
+    },
+    {
+      path: "components.div.children.footer.children.appfeeButton",
+      property: "visible",
+      value: isAppPayButtonVisible
     }
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
@@ -571,6 +666,37 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: callBackForNext
+    },
+    visible: false
+  },
+  appfeeButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "180px",
+        height: "48px",
+        marginRight: "45px",
+        borderRadius: "inherit"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Pay",
+        labelKey: "TL_COMMON_BUTTON_SUBMIT_PAY"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForAppFee
     },
     visible: false
   }

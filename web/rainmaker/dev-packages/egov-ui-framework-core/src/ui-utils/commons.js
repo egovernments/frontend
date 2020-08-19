@@ -625,6 +625,7 @@ export const getCommonPayUrl = (dispatch, applicationNo, tenantId, businessServi
 export const getTodaysDateInYMD = () => {
   let date = new Date();
   let month = date.getMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
   let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
   date = `${date.getFullYear()}-${month}-${day}`;
   return date;

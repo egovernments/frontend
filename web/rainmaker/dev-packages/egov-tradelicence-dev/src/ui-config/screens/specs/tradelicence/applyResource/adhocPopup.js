@@ -100,7 +100,11 @@ const updateAdhoc = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.adhocExemption"
   );
-  if (adhocAmount || rebateAmount) {
+  const garbageCharges =  get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.additionalDetail.garbageCharges"
+  );
+  if (adhocAmount || rebateAmount || garbageCharges) {
     const totalAmount = get(
       state.screenConfiguration.preparedFinalObject,
       "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
@@ -164,7 +168,7 @@ export const adhocPopup = getCommonContainer({
         children: {
           div: getCommonHeader(
             {
-              labelName: "Add Adhoc Penalty/Rebate",
+              labelName: "Add Garbage Charges",
               labelKey: "TL_ADD_HOC_CHARGES_POPUP_HEAD"
             },
             {
@@ -218,64 +222,65 @@ export const adhocPopup = getCommonContainer({
   },
   adhocPenaltyCard: getCommonContainer(
     {
-      subheader: getCommonSubHeader(
-        {
-          labelName: "Adhoc Penalty",
-          labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_FIRST"
-        },
-        {
-          style: {
-            fontSize: "16px"
-          }
-        }
-      ),
+      // subheader: getCommonSubHeader(
+      //   {
+      //     labelName: "Adhoc Penalty",
+      //     labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_FIRST"
+      //   },
+      //   {
+      //     style: {
+      //       fontSize: "16px"
+      //     }
+      //   }
+      // ),
       penaltyAmountAndReasonContainer: getCommonContainer({
         penaltyAmount: getTextField({
           label: {
-            labelName: "Adhoc Penalty Amount",
+            labelName: "Garbage Charges",
             labelKey: "TL_ADD_HOC_CHARGES_POPUP_PEN_AMT_LABEL"
           },
           placeholder: {
-            labelName: "Enter Adhoc Charge Amount",
+            labelName: "Enter Garbage Charge Amount",
             labelKey: "TL_ADD_HOC_CHARGES_POPUP_PEN_AMT_PLACEHOLDER"
           },
           props: {
+            type:"number",
             style: {
               width: "90%"
             }
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenalty"
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageCharges"
         }),
-        penaltyReason: getSelectField({
-          label: {
-            labelName: "Reason for Adhoc Penalty",
-            labelKey: "TL_PAYMENT_PENALTY_REASON"
-          },
-          placeholder: {
-            labelName: "Select reason for Adhoc Penalty",
-            labelKey: "TL_PAYMENT_PENALTY_REASON_SELECT"
-          },
-          props: {
-            style: {
-              width: "90%"
-            }
-          },
-          data: [
-            {
-              code: "TL_ADHOC_PENDING_DUES"
-            },
-            {
-              code: "TL_ADHOC_MISCALCULATION"
-            },
-            {
-              code: "TL_ADHOC_ONE_TIME_PENALTY"
-            },
-            {
-              code: "TL_ADHOC_OTHER"
-            }
-          ],
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
-        })
+        // penaltyReason: getSelectField({
+        //   label: {
+        //     labelName: "Reason for Adhoc Penalty",
+        //     labelKey: "TL_PAYMENT_PENALTY_REASON"
+        //   },
+        //   placeholder: {
+        //     labelName: "Select reason for Adhoc Penalty",
+        //     labelKey: "TL_PAYMENT_PENALTY_REASON_SELECT"
+        //   },
+        //   props: {
+        //     style: {
+        //       width: "90%"
+        //     }
+        //   },
+        //   data: [
+        //     {
+        //       code: "TL_ADHOC_PENDING_DUES"
+        //     },
+        //     {
+        //       code: "TL_ADHOC_MISCALCULATION"
+        //     },
+        //     {
+        //       code: "TL_ADHOC_ONE_TIME_PENALTY"
+        //     },
+        //     {
+        //       code: "TL_ADHOC_OTHER"
+        //     }
+        //   ],
+        //   jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
+        // })
       }),
       commentsField: getTextField({
         label: {
@@ -295,7 +300,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.penaltyComments"
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageComments"
       })
     },
     {
@@ -304,94 +309,94 @@ export const adhocPopup = getCommonContainer({
       }
     }
   ),
-  adhocRebateCard: getCommonContainer(
-    {
-      subHeader: getCommonSubHeader(
-        {
-          labelName: "Adhoc Rebate",
-          labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_SEC"
-        },
-        {
-          style: {
-            fontSize: "16px"
-          }
-        }
-      ),
-      rebateAmountAndReasonContainer: getCommonContainer({
-        rebateAmount: getTextField({
-          label: {
-            labelName: "Adhoc Rebate Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Adhoc Rebate Amount",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
-          },
-          props: {
-            style: {
-              width: "90%"
-            }
-          },
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
-        }),
-        rebateReason: getSelectField({
-          label: {
-            labelName: "Reason for Adhoc Rebate",
-            labelKey: "TL_PAYMENT_REBATE_REASON"
-          },
-          placeholder: {
-            labelName: "Select Reason for Adhoc Rebate",
-            labelKey: "TL_PAYMENT_REBATE_REASON_SELECT"
-          },
-          props: {
-            style: {
-              width: "90%"
-            }
-          },
-          data: [
-            {
-              code: "TL_REBATE_ADVANCED_PAID"
-            },
-            {
-              code: "TL_REBATE_BY_COMMISSIONER"
-            },
-            {
-              code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
-            },
-            {
-              code: "TL_ADHOC_OTHER"
-            }
-          ],
-          jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
-        }),
-        rebateCommentsField: getTextField({
-          label: {
-            labelName: "Enter Comments",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Comments",
-            labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12
-          },
-          props: {
-            style: {
-              width: "90%"
-            }
-          },
-          jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
-        })
-      })
-    },
-    {
-      style: {
-        marginTop: "24px"
-      }
-    }
-  ),
+  // adhocRebateCard: getCommonContainer(
+  //   {
+  //     subHeader: getCommonSubHeader(
+  //       {
+  //         labelName: "Adhoc Rebate",
+  //         labelKey: "TL_ADD_HOC_CHARGES_POPUP_SUB_SEC"
+  //       },
+  //       {
+  //         style: {
+  //           fontSize: "16px"
+  //         }
+  //       }
+  //     ),
+  //     rebateAmountAndReasonContainer: getCommonContainer({
+  //       rebateAmount: getTextField({
+  //         label: {
+  //           labelName: "Adhoc Rebate Amount",
+  //           labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_LABEL"
+  //         },
+  //         placeholder: {
+  //           labelName: "Enter Adhoc Rebate Amount",
+  //           labelKey: "TL_ADD_HOC_CHARGES_POPUP_RBT_AMT_PLACEHOLDER"
+  //         },
+  //         props: {
+  //           style: {
+  //             width: "90%"
+  //           }
+  //         },
+  //         jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
+  //       }),
+  //       rebateReason: getSelectField({
+  //         label: {
+  //           labelName: "Reason for Adhoc Rebate",
+  //           labelKey: "TL_PAYMENT_REBATE_REASON"
+  //         },
+  //         placeholder: {
+  //           labelName: "Select Reason for Adhoc Rebate",
+  //           labelKey: "TL_PAYMENT_REBATE_REASON_SELECT"
+  //         },
+  //         props: {
+  //           style: {
+  //             width: "90%"
+  //           }
+  //         },
+  //         data: [
+  //           {
+  //             code: "TL_REBATE_ADVANCED_PAID"
+  //           },
+  //           {
+  //             code: "TL_REBATE_BY_COMMISSIONER"
+  //           },
+  //           {
+  //             code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
+  //           },
+  //           {
+  //             code: "TL_ADHOC_OTHER"
+  //           }
+  //         ],
+  //         jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
+  //       }),
+  //       rebateCommentsField: getTextField({
+  //         label: {
+  //           labelName: "Enter Comments",
+  //           labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+  //         },
+  //         placeholder: {
+  //           labelName: "Enter Comments",
+  //           labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+  //         },
+  //         gridDefination: {
+  //           xs: 12,
+  //           sm: 12
+  //         },
+  //         props: {
+  //           style: {
+  //             width: "90%"
+  //           }
+  //         },
+  //         jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
+  //       })
+  //     })
+  //   },
+  //   {
+  //     style: {
+  //       marginTop: "24px"
+  //     }
+  //   }
+  // ),
   div: {
     uiFramework: "custom-atoms",
     componentPath: "Div",

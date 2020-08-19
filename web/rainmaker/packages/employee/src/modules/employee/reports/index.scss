@@ -79,6 +79,10 @@
 //   word-break: break-word;
 // }
 
+.dropdown-menu {
+  display: block !important;
+} 
+
 .dropdown-menu > .active > a  {
   background-color: #fe7a51!important;
   color: #000!important;

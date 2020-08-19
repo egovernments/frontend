@@ -162,6 +162,33 @@ const structureSubTypeChange = (reqObj) => {
   }
 }  
 
+const showDateBasedOnOldLicense = (state,dispatch,action) =>{
+  const oldLicenseNo = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Licenses[0].oldLicenseNumber"
+  );
+  if(oldLicenseNo!=null && oldLicenseNo !=""){
+     dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
+        "props.inputProps.min",
+        ""
+      )
+    );
+  }
+  else{
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
+        "props.inputProps.min",
+        getFinancialYearDates("yyyy-mm-dd").startDate
+      )
+    );
+  }
+};
+
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -632,52 +659,40 @@ export const tradeDetails = getCommonCard({
           sm: 6
         }
     },
-    // oldLicenseNo: getTextField({
-    //   label: {
-    //     labelName: "Old License No",
-    //     labelKey: "TL_OLD_LICENSE_NO"
-    //   },
-    //   placeholder: {
-    //     labelName: "Enter Old License No",
-    //     labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6
-    //   },
-    //   props:{
-    //     disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
-    //   },
-    //   iconObj: {
-    //     iconName: "search",
-    //     position: "end",
-    //     color: "#FE7A51",
-    //     onClickDefination: {
-    //       action: "condition",
-    //       callBack: (state, dispatch) => {
-    //         fillOldLicenseData(state, dispatch);
-    //       }
-    //     }
-    //   },
-    //   title: {
-    //     value: "Fill the form by searching your old approved trade license",
-    //     key: "TL_OLD_TL_NO"
-    //   },
-    //   infoIcon: "info_circle",
-    //   jsonPath: "Licenses[0].oldLicenseNumber"
-    // }),
-    dummyDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
+    oldLicenseNo: getTextField({
+      label: {
+        labelName: "Old License No",
+        labelKey: "TL_OLD_LICENSE_NO"
+      },
+      placeholder: {
+        labelName: "Enter Old License No",
+        labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
+      },
       gridDefination: {
         xs: 12,
         sm: 6
       },
-      visible: true,
-      props: {
-        disabled: true
-      }
-    },
+      props:{
+        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
+      },
+      // iconObj: {
+      //   iconName: "search",
+      //   position: "end",
+      //   color: "#FE7A51",
+      //   onClickDefination: {
+      //     action: "condition",
+      //     callBack: (state, dispatch) => {
+      //       fillOldLicenseData(state, dispatch);
+      //     }
+      //   }
+      // },
+      // title: {
+      //   value: "Fill the form by searching your old approved trade license",
+      //   key: "TL_OLD_TL_NO"
+      // },
+      // infoIcon: "info_circle",
+      jsonPath: "Licenses[0].oldLicenseNumber"
+    }),
     tradeLicenseType: {
       ...getSelectField({
         label: {
@@ -833,7 +848,12 @@ export const tradeDetails = getCommonCard({
       },
       props:{
         className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false
+        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        
+        inputProps: {
+          min: getFinancialYearDates("yyyy-mm-dd").startDate
+          
+        }
       },
       placeholder: {
         labelName: "Enter Trade Commencement Date",
@@ -841,7 +861,13 @@ export const tradeDetails = getCommonCard({
       },
       required: true,
       pattern: getPattern("Date"),
-      jsonPath: "Licenses[0].commencementDate"
+      jsonPath: "Licenses[0].commencementDate",
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch,action) => {
+          showDateBasedOnOldLicense(state, dispatch,action);
+        }
+      }
     }),
     tradeGSTNo: getTextField({
       label: {

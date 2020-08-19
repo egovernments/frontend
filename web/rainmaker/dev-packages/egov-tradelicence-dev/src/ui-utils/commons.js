@@ -82,7 +82,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
   );
   let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
     let applicationDocument = {}
-    applicationDocuments.map(appDoc => {
+    applicationDocuments && applicationDocuments.map(appDoc => {
       if (appDoc.documentType == mdmsDoc.documentType) {
         applicationDocument = { ...appDoc }
       }
@@ -177,7 +177,14 @@ export const updatePFOforSearchResults = async (
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
   if (isEditRenewal) {
-    const nextYear = generateNextFinancialYear(state);
+    //const nextYear = generateNextFinancialYear(state);
+    const currentFY = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].financialYear"
+    );
+    const nextYear = await getNextFinancialYearForRenewal(
+      currentFY
+    );
     dispatch(
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }
@@ -337,10 +344,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "tradeLicenseDetail.address.tenantId",
       ""
     );
+    const workflowCode = get(queryObject[0], "workflowCode");
+    const applicationType = get(queryObject[0], "applicationType");
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
+      { key: "businessServices", value:  workflowCode ? workflowCode : "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
@@ -353,18 +362,21 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
-    set(queryObject[0], "workflowCode", "NewTL");
-    set(queryObject[0], "applicationType", "NEW");
+    // set(queryObject[0], "workflowCode", "NewTL");
+    // set(queryObject[0], "applicationType", "NEW");
+    set(queryObject[0], "workflowCode", workflowCode ? workflowCode : "NewTL");
+    set(queryObject[0], "applicationType", applicationType ? applicationType : "NEW");
     if (queryObject[0].applicationNumber) {
       //call update
-      const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
+      const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL" || queryObject[0].applicationType!=="NEW";
       if (isEditRenewal) {
         // if(process.env.REACT_APP_NAME === "Citizen"){
         //   const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
         //   set(queryObject[0], "financialYear", nextFinancialyear);
         // }     
         set(queryObject[0], "applicationType", "RENEWAL");
-        set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
+        //set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
+        set(queryObject[0], "workflowCode",'EDITRENEWAL');
       }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
