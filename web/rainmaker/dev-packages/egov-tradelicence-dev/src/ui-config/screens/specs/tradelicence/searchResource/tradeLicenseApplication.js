@@ -266,4 +266,9 @@ export const tradeLicenseApplication = getCommonCard({
       }
     })
   })
+},
+{
+  style: {
+    overflow: "visible"
+  },
 });
