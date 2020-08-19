@@ -3,6 +3,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
+import compact from "lodash/compact";
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils";
 import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
@@ -205,15 +206,18 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
-    let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
-    return {
-      documentType: documentValue,
-      fileStoreId: document.documents[0].fileStoreId,
-      documentUid: document.documents[0].fileStoreId,
-      auditDetails: null,
-      status: "ACTIVE"
+    if(document.dropdown && document.dropdown.value && document.documents && document.documents[0] && document.documents[0].fileStoreId) {
+      let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
+      return {
+        documentType: documentValue,
+        fileStoreId: document.documents[0].fileStoreId,
+        documentUid: document.documents[0].fileStoreId,
+        auditDetails: null,
+        status: "ACTIVE"
+      }
     }
-  })
+  });
+  newDocuments = compact(newDocuments);
   let oldDocuments = [];
   oldDocuments = propertyPayload.documents && Array.isArray(propertyPayload.documents) && propertyPayload.documents.filter(document => {
     return (document.documentType.includes('USAGEPROOF') || document.documentType.includes('OCCUPANCYPROOF') || document.documentType.includes('CONSTRUCTIONPROOF'))
