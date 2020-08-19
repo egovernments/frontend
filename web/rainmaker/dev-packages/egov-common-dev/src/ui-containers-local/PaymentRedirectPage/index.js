@@ -49,14 +49,14 @@ class PaymentRedirect extends Component {
   componentDidMount = async () => {
     let { search } = this.props.location;
     const {reduxObj , prepareFinalObject} = this.props;
-    const txnQuery=search.split('&')[0].replace('eg_pg_txnid','transactionId');
+    const txnQuery=search.split('&')[1].replace('eg_pg_txnid','transactionId');
     console.log(txnQuery,'txnQuery');
     const isPublicSearch = this.checkPublicSearch();
     
     try {
       let pgUpdateResponse = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_update" + txnQuery,
+        "pg-service/transaction/v1/_update?" + txnQuery,
         "_update",
         [],
         {}
@@ -64,7 +64,10 @@ class PaymentRedirect extends Component {
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
-        const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}`;
+      	let bservice=search.split('&')[0];
+      	console.log("bservice  --> ",bservice);
+        bservice= bservice.substr(1);
+        const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}&${bservice}`;
         const ackFailureUrl = isPublicSearch ? `/withoutAuth${url}` : url;
         this.props.setRoute(ackFailureUrl);
       } else {
