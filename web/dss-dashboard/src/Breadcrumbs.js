@@ -16,10 +16,7 @@ const Breadcrumb = props => {
   return (
     <Breadcrumbs style={{ margin: 13 }} aria-label="breadcrumb">
       {pathnames.map((name, index) => {
-       let displayname=name;
-       if(name==='dashboard')
-           displayname='Home';
-    
+       let displayname=getDisplayName(name);       
         const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
         const isLast = index === pathnames.length - 1;
         return isLast ? (
@@ -34,5 +31,24 @@ const Breadcrumb = props => {
     </Breadcrumbs>
   );
 };
+
+const getDisplayName = (name) => {
+  switch (name) {
+    case "dashboard":
+      return "Home";
+    case "propertytax":
+      return "Property Tax";
+    case "overview":
+      return "Overview";
+    case "tradelicense":
+      return "Trade License";
+    case "pgr":
+      return "Complaints";
+    case "ws":
+      return "Water & Sewerage";    
+    default:
+      return name;
+  }
+}
 
 export default withRouter(Breadcrumb);
