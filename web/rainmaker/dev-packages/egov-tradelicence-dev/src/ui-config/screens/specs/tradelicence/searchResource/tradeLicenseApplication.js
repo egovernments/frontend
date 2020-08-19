@@ -10,7 +10,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
-import "./index.css";
+import "./../index.css";
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Trade License Application",
