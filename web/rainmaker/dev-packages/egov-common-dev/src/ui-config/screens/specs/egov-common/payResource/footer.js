@@ -160,7 +160,7 @@ const getSelectedTabIndex = paymentType => {
         selectedTabIndex: 0,
         fieldsToValidate: ["payeeDetails"]
       };
-    case "Cheque":
+    case "CHEQUE":
       return {
         selectedPaymentMode: "cheque",
         selectedTabIndex: 1,
@@ -235,11 +235,16 @@ const callBackForPay = async (state, dispatch) => {
   }
  
   // --- Validation related -----//
-  dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
-  const selectedPaymentType = get(
+  
+  let selectedPaymentType = get(
     state.screenConfiguration.preparedFinalObject,
     "ReceiptTemp[0].instrument.instrumentType.name"
   );
+  if(!selectedPaymentType){
+    dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
+    selectedPaymentType = "Cash";
+  }
+
   const {
     selectedTabIndex,
     selectedPaymentMode,
