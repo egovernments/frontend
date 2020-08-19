@@ -143,12 +143,15 @@ const mapStateToProps = (state, ownProps) => {
   const { generalMDMSDataById } = common || {};
   const { preparedFinalObject } = screenConfiguration;
   let { documentsUploadRedux } = preparedFinalObject;
-  console.log("======documentsUploadRedux===",documentsUploadRedux);
+  // console.log("======documentsUploadRedux===",documentsUploadRedux);
   documentsUploadRedux = convertToArray(documentsUploadRedux);
-  console.log("======documentsUploadRedux==after array=",documentsUploadRedux);
+  // console.log("======documentsUploadRedux==after array=",documentsUploadRedux);
+  if(!documentsUploadRedux){
+    documentsUploadRedux = []
+  }
   documentsUploadRedux = documentsUploadRedux.filter((doc)=>doc.link && doc.link.value!=="");
   documentsUploadRedux === [] ? "": documentsUploadRedux;
-  console.log("======documentsUploadRedux===",documentsUploadRedux);
+  // console.log("======documentsUploadRedux===",documentsUploadRedux);
   return {
     ownProps,
     generalMDMSDataById,
