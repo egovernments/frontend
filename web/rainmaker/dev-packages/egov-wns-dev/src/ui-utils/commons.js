@@ -891,12 +891,17 @@ export const applyForWater = async (state, dispatch) => {
                 set(queryObject, "waterSource", getWaterSource(queryObject.waterSource, queryObject.waterSubSource));
             }
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
+            if (typeof response.WaterConnection[0].additionalDetails !== 'object'){
+                response.WaterConnection[0].additionalDetails={};
+            }
+            response.WaterConnection[0].additionalDetails.locality = queryObject.property.address.locality.code;
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));            
             if(isModifyMode()){
                 response.WaterConnection = await getPropertyObj(response.WaterConnection);
                 response.WaterConnection[0].water=true;
                 let waterSource = response.WaterConnection[0].waterSource.split(".");
                 response.WaterConnection[0].waterSource = waterSource[0];
+                response.WaterConnection[0].service = "Water";
                 response.WaterConnection[0].waterSubSource = waterSource[1];
                 dispatch(prepareFinalObject("applyScreen", response.WaterConnection[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
@@ -933,15 +938,24 @@ export const applyForSewerage = async (state, dispatch) => {
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
+            if (typeof response.SewerageConnection[0].additionalDetails !== 'object') {
+                response.SewerageConnection[0].additionalDetails = {};
+            }
+            searchResponse.SewerageConnection[0].additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
         } else {
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
+            if (typeof response.SewerageConnection[0].additionalDetails !== 'object') {
+                response.SewerageConnection[0].additionalDetails = {};
+            }
+            response.SewerageConnection[0].additionalDetails.locality = queryObject.property.address.locality.code;
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
             if(isModifyMode()){
                 response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
                 response.SewerageConnections[0].sewerage=true;
+                response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
                 dispatch(prepareFinalObject("modifyAppCreated", true));
             }
@@ -1014,7 +1028,15 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: queryObject });
+            if (typeof response.WaterConnection[0].additionalDetails !== 'object') {
+                response.WaterConnection[0].additionalDetails = {};
+            }
+            response.WaterConnection[0].additionalDetails.locality = queryObject.property.address.locality.code;
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
+            if (typeof sewerageResponse.SewerageConnection[0].additionalDetails !== 'object') {
+                sewerageResponse.SewerageConnection[0].additionalDetails = {};
+            }
+            sewerageResponse.SewerageConnection[0].additionalDetails.locality = queryObject.property.address.locality.code;
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
         }
