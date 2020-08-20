@@ -797,10 +797,11 @@ export const getObjectKeys = objData => {
   );
 };
 export const getMdmsJson = async (state, dispatch, reqObj) => {
-  let { setPath, setTransformPath, dispatchPath, moduleName, name, type } = reqObj;
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, type, tenantId } = reqObj;
+  tenantId = tenantId ? tenantId : commonConfig.tenantId;
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: tenantId,
       moduleDetails: [
         {
           moduleName,

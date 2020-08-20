@@ -32,7 +32,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import get from "lodash/get";
 import filter from "lodash/filter";
 import "./index.css";
-
+import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 const tradeCategoryChange = (reqObj) => {
   try {
@@ -237,7 +237,8 @@ const tradeUnitCard = {
               rootBlockSub : 'tradeUnits',
               type : 'TL',
               callBackEdit: updateMdmsDropDowns,
-              isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType"
+              isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType",
+              tenantId: process.env.REACT_APP_NAME === "Citizen"? getQueryArg(window.location.href, "tenantId") : getTenantId(),
             }
           },
          

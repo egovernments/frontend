@@ -16,7 +16,8 @@ class DynamicMdmsContainer extends Component {
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   triggerInitilaApi = async () => {
-    let { rootBlockSub, state, moduleName, masterName, type, dispatch, callBackEdit, isDependency, dropdownFields } = this.props;
+    let { rootBlockSub, state, moduleName, masterName, type, dispatch, callBackEdit, isDependency, dropdownFields ,tenantId } = this.props;
+    
     const isDependencyCheck = isDependency ? get( state.screenConfiguration.preparedFinalObject , isDependency, false ) : true;
     if(isDependencyCheck){
       let reqObj = {
@@ -26,7 +27,8 @@ class DynamicMdmsContainer extends Component {
         moduleName,
         name : masterName,
         rootBlockSub,
-        type
+        type,
+        tenantId :tenantId
       }
       dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, true ));
       await getMdmsJson(state, dispatch, reqObj);
