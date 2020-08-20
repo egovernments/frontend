@@ -49,17 +49,21 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     delete unit.unitArea;
   });
 
+
   if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {
-      properties[0].documents.push({
-        documentType: documentsUploadRedux[key].dropdown ? documentsUploadRedux[key].dropdown.value : "",
-        fileStoreId: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileStoreId : "",
-        documentUid: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileStoreId : "",
-      });
-    });
-  }
+      
+      if(documentsUploadRedux[key].documents){
+        properties[0].documents.push({
+          documentType: documentsUploadRedux[key].dropdown ? documentsUploadRedux[key].dropdown.value : "",
+          fileStoreId: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileStoreId : "",
+          documentUid: documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0] ? documentsUploadRedux[key].documents[0].fileStoreId : "",
+        });
+      }
 
+      })
+  }
   if (properties[0].institution) {
     properties[0].institution.nameOfAuthorizedPerson = properties[0].owners[0].name;
     properties[0].institution.tenantId = properties[0].tenantId;
