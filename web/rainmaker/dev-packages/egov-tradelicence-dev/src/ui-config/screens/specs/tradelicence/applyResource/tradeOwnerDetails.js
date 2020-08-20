@@ -242,7 +242,7 @@ const OwnerInfoCard = {
             labelKey: "TL_NEW_OWNER_DETAILS_ADDR_PLACEHOLDER"
           },
           required: true,
-          pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
+          pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
         }),
         OwnerSpecialCategory: getSelectField({
@@ -371,7 +371,7 @@ export const ownerInfoInstitutional = {
           labelKey: "TL_NEW_OWNER_OFF_ADDR_PLACEHOLDER"
         },
         required: true,
-        pattern: /^[^{0-9}^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
+        pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
       })
     })
@@ -484,9 +484,9 @@ export const tradeOwnerDetails = getCommonCard({
                 false
               )
             );
-            dispatch(
-              pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
-            )
+            // dispatch(
+            //   pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+            // )
           }
         } catch (e) {
           console.log(e);
