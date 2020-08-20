@@ -1239,17 +1239,22 @@ const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
   if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
-    for (var i = 0; i < states.length; i++) {
-      if (states[i].state === currentStatus) {
-        break;
-      }
-      if (
-        states[i].actions &&
-        states[i].actions.filter(item => item.action === "PAY").length > 0
-      ) {
-        isPAID = true;
-        break;
-      }
+    // for (var i = 0; i < states.length; i++) {
+     
+    //   if (
+    //     states[i].actions &&
+    //     states[i].actions.filter(item => item.action === "PAY").length > 0
+    //   ) {
+    //     isPAID = true;
+    //     break;
+    //   }
+    //   if (states[i].state === currentStatus) {
+    //     break;
+    //   }
+    // }
+
+    if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "PENDINGPAYMENT" ){
+      isPAID = true;
     }
   } else {
     isPAID = false;
