@@ -83,8 +83,7 @@ export const tradeLicenseApplication = getCommonCard({
   }),
   applicationTypeAndToFromDateContainer: getCommonContainer({
     applicationType: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      uiFramework: "custom-containers",
       componentPath: "AutosuggestContainer",
       jsonPath:
         "searchScreen.applicationType",
@@ -94,7 +93,6 @@ export const tradeLicenseApplication = getCommonCard({
         sm: 4
       },
       props: {
-        className: "applicant-details-error autocomplete-dropdown",
         labelsFromLocalisation: true,
         suggestions: [],
         jsonPath:
@@ -154,8 +152,7 @@ export const tradeLicenseApplication = getCommonCard({
   }),
   appStatusContainer: getCommonContainer({
     applicationNo: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      uiFramework: "custom-containers",
       componentPath: "AutosuggestContainer",
       props: {
         label: {
@@ -171,7 +168,6 @@ export const tradeLicenseApplication = getCommonCard({
           moduleName: "WF",
           masterName: "NEWTL"
         },
-        className: "autocomplete-dropdown",
         labelsFromLocalisation: true,
         isClearable:true,
         data:[
