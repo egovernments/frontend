@@ -43,7 +43,7 @@ const serviceCategoryChange = (reqObj) => {
     "Demands[0].id",
     null
   );
-
+  resetTaxAmountFields(state,dispatch);
   const serviceData = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
@@ -426,6 +426,43 @@ export const newCollectionDetailsCard = getCommonCard(
     }
   }
 );
+
+const resetTaxAmountFields = (state,dispatch)=>{
+  const noOfPreviousTaxHeads = get(
+    state.screenConfiguration,
+    "preparedFinalObject.Demands[0].demandDetails",
+    []
+  ).length;
+  const taxFields = get(
+    state.screenConfiguration,
+    "screenConfig.newCollection.components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
+    {}
+  );
+  const taxFieldKeys = Object.keys(taxFields).filter(item =>
+    item.startsWith("taxheadField_")
+  );
+  if (noOfPreviousTaxHeads > 0) {
+    for (let i = 0; i < taxFieldKeys.length; i++) {
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
+          `${taxFieldKeys[i]}.props.value`,
+          ""
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
+          `${taxFieldKeys[i]}.visible`,
+          false
+        )
+      );
+    }
+    dispatch(prepareFinalObject(`Demands[0].demandDetails`, []));
+  }
+}
 
 const setTaxHeadFields = (value, state, dispatch) => {
   const serviceData = get(
