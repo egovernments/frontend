@@ -244,6 +244,20 @@ export const generateKeyValue = (preparedFinalObject, containerObject) => {
     })
     return keyValue;
 }
+export const generateKeyValueForModify = (preparedFinalObject, containerObject) => {
+    let keyValue = []
+    Object.keys(containerObject).map(keys => {
+        const labelObject = containerObject[keys].children.label1.children.key.props;
+        const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
+        const valueObject = containerObject[keys].children.value1.children.key.props;
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
+        value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
+        keyValue.push({ key, value });
+    })
+    return keyValue;
+}
+
 let tableborder = {
     hLineColor: function (i, node) {
         return "#979797";

@@ -3,7 +3,7 @@ import { connDetailsWater, connDetailsSewerage } from "egov-wns/ui-config/screen
 import { plumberDetails, roadDetails, additionDetailsWater, additionDetailsSewerage, activateDetailsMeter, activateDetailsNonMeter } from "egov-wns/ui-config/screens/specs/wns/applyResource/review-owner";
 import get from "lodash/get";
 import { reviewModificationsEffectiveDate } from "egov-wns/ui-config/screens/specs/wns/applyResource/reviewModificationsEffective";
-import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
+import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard, generateKeyValueForModify } from "./generatePDF";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print", service, connType) => {
@@ -50,7 +50,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     let plumberDetail = [];
     let roadDetail = [];
     if (isMode === "MODIFY") {
-        reviewModificationsEffective = generateKeyValue(preparedFinalObject, reviewModificationsEffectiveDate);
+        reviewModificationsEffective = generateKeyValueForModify(preparedFinalObject, reviewModificationsEffectiveDate);
     } else {
         plumberDetail = generateKeyValue(preparedFinalObject, plumberDetails);
         roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
