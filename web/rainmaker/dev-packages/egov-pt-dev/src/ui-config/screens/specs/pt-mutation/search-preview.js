@@ -157,20 +157,20 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
     },
     leftIcon: "book"
   };
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
-    link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber);
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
-    link: () => {
-      downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber, 'print');
-    },
-    leftIcon: "receipt"
-  };
+  // let receiptDownloadObject = {
+  //   label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
+  //   link: () => {
+  //     downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber);
+  //   },
+  //   leftIcon: "receipt"
+  // };
+  // let receiptPrintObject = {
+  //   label: { labelName: "Receipt", labelKey: "MT_RECEIPT" },
+  //   link: () => {
+  //     downloadReceitForm(get(state, "screenConfiguration.preparedFinalObject.Payments"), "consolidatedreceipt", tenantId,applicationNumber, 'print');
+  //   },
+  //   leftIcon: "receipt"
+  // };
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
@@ -189,12 +189,12 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
     case "ACTIVE":
       downloadMenu = [
         certificateDownloadObject,
-        receiptDownloadObject,
+        // receiptDownloadObject,
         applicationDownloadObject
       ];
       printMenu = [
         certificatePrintObject,
-        receiptPrintObject,
+        // receiptPrintObject,
         applicationPrintObject
       ];
       break;
