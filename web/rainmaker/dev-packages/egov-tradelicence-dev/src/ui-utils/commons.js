@@ -669,7 +669,7 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     const financialYears = get(payload.MdmsRes, "egf-master.FinancialYear");
     const currrentFYending = financialYears.filter(item => item.code === currentFinancialYear)[0]
       .endingDate;
-    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
+    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending+1000)[0];
     return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
   } catch (e) {
     console.log(e.message)
