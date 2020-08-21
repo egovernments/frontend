@@ -882,7 +882,7 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 queryObjectForUpdate.additionalDetails = {};
             }
-            queryObjectForUpdate.additionalDetails.locality = queryObject.property.address.locality.code;
+            queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
@@ -990,7 +990,6 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", null);
             queryObjectForUpdateWater.waterSource = queryObjectForUpdateWater.waterSource ? queryObjectForUpdateWater.waterSource : waterSource;
             queryObjectForUpdateWater.waterSubSource = queryObjectForUpdateWater.waterSubSource ? queryObjectForUpdateWater.waterSubSource : waterSubSource;
-
             let queryObjectForUpdateSewerage = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0]");
             queryObjectForUpdateWater = { ...queryObjectForUpdateWater, ...queryObject }
             queryObjectForUpdateWater = findAndReplace(queryObjectForUpdateWater, "NA", null);
