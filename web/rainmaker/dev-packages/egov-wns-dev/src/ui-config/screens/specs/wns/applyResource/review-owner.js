@@ -157,10 +157,10 @@ export const roadDetails={
     {
       jsonPath: "WaterConnection[0].roadType",
       callBack: handleNA,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "ROADTYPE"
-      }
+      // localePrefix: {
+      //   moduleName: "WS",
+      //   masterName: "ROADTYPE"
+      // }
     }
   ),
   reviewArea : getLabelWithValue(
