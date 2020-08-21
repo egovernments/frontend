@@ -707,7 +707,6 @@ class FormWizard extends Component {
           break;
         }
         const { basicInformation, plotDetails, bussinessDetails } = form;
-        debugger;
         // const isbussiFormValid = validateForm(form.bussinessDetails);
         // let getUsageType =  get(form,"basicInformation.fields.typeOfUsage.value", "");
         // if(getUsageType === "COMMERCIAL"){

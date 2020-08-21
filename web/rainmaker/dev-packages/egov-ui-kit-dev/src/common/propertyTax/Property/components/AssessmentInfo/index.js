@@ -178,12 +178,20 @@ let hideSubsectionLabel=false;
       if(!propertyDetails[0].units){
         propertyDetails[0].units = []
       }
-
      let subUnitItemsdata = propertyDetails[0].units.filter(unit=>{
-       return unit.active === true
-      });
-      subUnitItems = getUnitInfo(subUnitItemsdata,propertyDetails[0]);
 
+      if(unit.active === true){
+        return unit.active === true
+      }
+      if(unit.active === false){
+        console.log("False");
+      }
+      else{
+        return propertyDetails[0]['units'], propertyDetails[0]
+      }
+
+    })
+      subUnitItems = getUnitInfo(subUnitItemsdata,propertyDetails[0]);
       // subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
       subVasikaItems = getVasikaItems(additionalDetails);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
