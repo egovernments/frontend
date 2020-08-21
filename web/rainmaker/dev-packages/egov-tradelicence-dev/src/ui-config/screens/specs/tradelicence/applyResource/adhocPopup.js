@@ -90,7 +90,29 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 
   showHideAdhocPopup(state, dispatch);
 };
-
+let totalAmount = (estimateCardData) => {
+  let tlTax=0;
+  let commonRebate=0;
+  let commonPenalty=0;
+  let adhocPenalty=0;
+  estimateCardData.forEach(data => {
+   
+    if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
+      tlTax = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
+      commonRebate = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
+      commonPenalty = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
+      adhocPenalty= data.value ? data.value : 0;
+    }
+  });
+    
+  return tlTax+adhocPenalty+commonPenalty-Math.abs(commonRebate);
+}
 const updateAdhoc = (state, dispatch) => {
   const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
@@ -117,6 +139,8 @@ const updateAdhoc = (state, dispatch) => {
         )
       );
     } else {
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
       getEstimateDataAfterAdhoc(state, dispatch);
     }
   } else {
