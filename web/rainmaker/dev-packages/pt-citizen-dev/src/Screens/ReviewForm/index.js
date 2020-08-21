@@ -297,7 +297,7 @@ const mapStateToProps = (state, ownProps) => {
   console.log("======documentsUploadRedux===",documentsUploadRedux);
   documentsUploadRedux = convertToArray(documentsUploadRedux);
   console.log("======documentsUploadRedux==after array=",documentsUploadRedux);
-  documentsUploadRedux = documentsUploadRedux.filter((doc)=>doc.link && doc.link.value!=="");
+  documentsUploadRedux = documentsUploadRedux && documentsUploadRedux.filter((doc)=>doc.link && doc.link.value!=="");
   console.log("======documentsUploadRedux===",documentsUploadRedux);
   return {
     ownProps,

@@ -362,7 +362,7 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances } = this.props;
+    const { ProcessInstances, preparedFinalObject } = this.props;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
@@ -389,6 +389,11 @@ class WorkFlowContainer extends React.Component {
       bservice = "PT"
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION"
+    } else if (moduleName === "PT.CREATE" && action == "EDIT"){
+      let propertyId = get(preparedFinalObject, 'PTApplication.propertyId');
+      baseUrl = process.env.REACT_APP_NAME === "Citizen" ? `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}` : '' ;
+      console.info("baseUrl",baseUrl);
+      return baseUrl;
     } else {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
