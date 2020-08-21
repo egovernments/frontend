@@ -7,6 +7,8 @@ import Label from "../../utils/translationNode";
 import { connect } from "react-redux";
 import filter from "lodash/filter";
 import { getTranslatedLabel } from "../../utils/commons";
+import "./index.css";
+
 
 const floatingLabelStyle = {
   fontSize: "12px",

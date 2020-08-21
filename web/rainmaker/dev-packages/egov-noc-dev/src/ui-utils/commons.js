@@ -61,7 +61,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     );
     store.dispatch(toggleSpinner());
 
-    if(response===''){
+    if (response === '') {
       store.dispatch(
         toggleSnackbar(
           true,
@@ -73,7 +73,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
         )
       );
       return null;
-     }
+    }
 
     response.FireNOCs.forEach(firenoc => {
 
@@ -145,7 +145,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       //     `parkingArea`,
       //     0
       //   );
-  
+
       // }
       // else {
       //   set(
@@ -161,9 +161,9 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
     );
 
-    if(noctypedata==="NEW" || noctypedata==="PROVISIONAL"){
+    if (noctypedata === "NEW" || noctypedata === "PROVISIONAL") {
 
-      let isLegacy =  false;
+      let isLegacy = false;
       set(
         payload[0],
         "isLegacy",
@@ -179,7 +179,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     )
 
 
-    if(provisionalnocnumber.length===0){
+    if (provisionalnocnumber.length === 0) {
 
       provisionalnocnumber = get(
         state.screenConfiguration.preparedFinalObject,
@@ -192,9 +192,9 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       const codefull = get(
         state.screenConfiguration,
         "preparedFinalObject"
-        );
+      );
 
-       delete codefull.FireNOCs[0][keyToDelete];
+      delete codefull.FireNOCs[0][keyToDelete];
 
     }
 
@@ -419,6 +419,10 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
     []
   );
+
+  let NOCType = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType", []);
+  documents = documents.filter(doc=>{return doc.applicationType  === NOCType });
+  documents = documents.length ? documents[0].allowedDocs : [] ;
   documents = documents.filter(item => {
     return item.active;
   });
