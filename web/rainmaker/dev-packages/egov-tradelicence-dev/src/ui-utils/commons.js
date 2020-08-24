@@ -37,6 +37,7 @@ import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import commonConfig from "config/common.js";
 
 export const updateTradeDetails = async requestBody => {
+  console.log("=======3=======");
   try {
     const payload = await httpRequest(
       "post",
@@ -137,7 +138,7 @@ const generateNextFinancialYear = state => {
   const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
     .endingDate;
 
-    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
+    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending+1000)[0];
   return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
 
 };
@@ -353,7 +354,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
+      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "EDITRENEWAL" : "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
@@ -366,8 +367,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
-    set(queryObject[0], "workflowCode", "NewTL");
-    set(queryObject[0], "applicationType", "NEW");
+    if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL" || get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "RENEWAL") {
+      set(queryObject[0], "workflowCode", "EDITRENEWAL");
+      set(queryObject[0], "applicationType", "RENEWAL");
+    } else {
+      set(queryObject[0], "workflowCode", "NewTL");
+      set(queryObject[0], "applicationType", "NEW");
+    }
     if (queryObject[0].applicationNumber) {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -438,14 +444,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+      const isRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       let updateResponse = [];
       if (!isEditFlow) {
+        console.log("=======4=======");
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
       }
       //Renewal flow
-
+     // console.log("=======4=======", Licenses);
       let updatedApplicationNo = "";
       let updatedTenant = "";
       if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
