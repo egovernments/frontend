@@ -356,7 +356,7 @@ export const demandDraftDetails = getCommonContainer({
       labelName: "Enter bank IFSC",
       labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
-    required: true,
+    required: false,
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
     iconObj: {
       iconName: "search",
