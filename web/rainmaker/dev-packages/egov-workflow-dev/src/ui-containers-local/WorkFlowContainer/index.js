@@ -229,11 +229,12 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
+        if (redirectQueryString) {
+          this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
+        }else{
         this.props.setRoute(`acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
-        if (redirectQueryString) {
-          this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
         }
       }
     } catch (e) {
