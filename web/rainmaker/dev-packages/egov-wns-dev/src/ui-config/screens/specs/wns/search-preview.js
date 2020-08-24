@@ -307,6 +307,9 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
 
     setActionItems(action, obj);
+    if(get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.locality")===null){
+      dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.address.locality.code")));
+    }
   }
 
 
