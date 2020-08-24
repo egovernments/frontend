@@ -224,6 +224,10 @@ export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER", hide
     return multipleItems;
 }
 export const getDocumentsCard = (documentsUploadRedux) => {
+        if(!documentsUploadRedux){
+          return  documentsUploadRedux =[];
+        }
+
     return documentsUploadRedux.map(item => {
         return { key: getLocaleLabels(item.title, item.title), value: item.name }
     })
@@ -443,7 +447,6 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
         ],
         pageBreakBefore: function (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) {
             //check if signature part is completely on the last page, add pagebreak if not
-
             let nodeLength = followingNodesOnPage.length;
             followingNodesOnPage.map((node, ind) => {
                 if (node.style == 'pdf-table-card') {

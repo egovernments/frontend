@@ -18,6 +18,7 @@ import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import PTInformation from "../AssessmentList/components/PTInformation";
 import "./index.css";
+import { generatePdfFromDiv } from "../../../utils/PTCommon";
 
 class PTAcknowledgement extends React.Component {
   state = {
@@ -130,9 +131,9 @@ class PTAcknowledgement extends React.Component {
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        //generatePdfFromDiv("download", propertyId, "#property-review-form");
+        generatePdfFromDiv("download", propertyId, "#property-review-form");
         this.download();
-        //this.downloadAcknowledgementForm();
+        this.downloadAcknowledgementForm();
         console.log("Download");
       },
       leftIcon: "assignment",
@@ -141,9 +142,9 @@ class PTAcknowledgement extends React.Component {
     let tlCertificatePrintObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-       // generatePdfFromDiv("print", propertyId, "#property-review-form");
+       generatePdfFromDiv("print", propertyId, "#property-review-form");
        this.print();
-        //console.log("Print");
+        console.log("Print");
       },
       leftIcon: "book",
     };
