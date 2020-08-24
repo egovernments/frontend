@@ -314,7 +314,7 @@ class WorkFlowContainer extends React.Component {
         const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
         const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
         const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
-        const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []).length > 0;
+        const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
         const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
         const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
         const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
@@ -343,19 +343,14 @@ class WorkFlowContainer extends React.Component {
       const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
       const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
       const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
-      const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []).length > 0;
+      const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
       const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
       const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
       const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
 
-        if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN"){
+        if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
           this.wfUpdate(label);
         }
-        else{
-          alert("Please select assignee name !");
-
-        }   
-
     }
   };
 
@@ -392,7 +387,6 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "PT.CREATE" && action == "EDIT"){
       let propertyId = get(preparedFinalObject, 'PTApplication.propertyId');
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}` : '' ;
-      console.info("baseUrl",baseUrl);
       return baseUrl;
     } else {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
