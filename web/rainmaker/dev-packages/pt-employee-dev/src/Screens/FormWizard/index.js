@@ -707,30 +707,7 @@ class FormWizard extends Component {
           break;
         }
         const { basicInformation, plotDetails, bussinessDetails } = form;
-        // const isbussiFormValid = validateForm(form.bussinessDetails);
-        // let getUsageType =  get(form,"basicInformation.fields.typeOfUsage.value", "");
-        // if(getUsageType === "COMMERCIAL"){
 
-        //   if (isbussiFormValid) {
-        //     callDraft(this);
-        //     window.scrollTo(0, 0);
-        //     this.setState({
-        //       selected: index,
-        //       formValidIndexArray: [...formValidIndexArray, selected]
-        //     });
-        //   } 
-        //   else {
-        //     displayFormErrorsAction("bussinessDetails");
-        //   }
-        // }
-        // else{
-        //   callDraft(this);
-        //   window.scrollTo(0, 0);
-        //   this.setState({
-        //     selected: index,
-        //     formValidIndexArray: [...formValidIndexArray, selected]
-        //   });
-        // }
         if (basicInformation) {
           const isBasicInformationFormValid = validateForm(basicInformation);
           if (isBasicInformationFormValid) {
@@ -775,13 +752,25 @@ class FormWizard extends Component {
                           break;
                         }
                       }
+                      let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
+                     let intPlot = parseInt(getPlotSizeValue);
+                      if(intPlot < 20)
+                      {
+                        alert("Please Enter the plot size greater than 20 sq yards")
+                        displayFormErrorsAction("plotDetails");
+                        break;
 
-                      callDraft(this);
-                      window.scrollTo(0, 0);
-                      this.setState({
-                        selected: index,
-                        formValidIndexArray: [...formValidIndexArray, selected]
-                      });
+                      }
+                      else{
+                        callDraft(this);
+                        window.scrollTo(0, 0);
+                        this.setState({
+                          selected: index,
+                          formValidIndexArray: [...formValidIndexArray, selected]
+                        });
+                      }
+
+
                     }
                   } else {
 
@@ -803,6 +792,15 @@ class FormWizard extends Component {
                         break;
                       }
                     }
+                    let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
+                    let intPlot = parseInt(getPlotSizeValue);
+                     if(intPlot < 20)
+                     {
+                       alert("Please Enter the plot size greater than 20 sq yards")
+                       displayFormErrorsAction("plotDetails");
+                       break;
+
+                     }
                     callDraft(this);
                     window.scrollTo(0, 0);
                     this.setState({

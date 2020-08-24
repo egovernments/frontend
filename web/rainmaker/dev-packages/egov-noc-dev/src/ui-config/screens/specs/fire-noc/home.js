@@ -49,7 +49,7 @@ const tradeLicenseSearchAndResult = {
     getRequiredDocData(action, state, dispatch).then(() => {
       let documents = get(
         state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents",
+        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.firenoc.Documents[0].allowedDocs",
         []
       );
       set(

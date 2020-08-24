@@ -180,6 +180,10 @@ let hideSubsectionLabel=false;
       }
      let subUnitItemsdata = propertyDetails[0].units.filter(unit=>{
 
+      if(!propertyDetails[0].units){
+        propertyDetails[0].units = []
+      }
+
       if(unit.active === true){
         return unit.active === true
       }
