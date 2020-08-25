@@ -41,6 +41,9 @@ const setReviewPageRoute = (state, dispatch) => {
   if(isModifyMode() && isModifyModeAction()){
     reviewUrl +="&mode=MODIFY"
   }
+  if(get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.locality",null)===null){
+    dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.address.locality.code")));
+  }
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
