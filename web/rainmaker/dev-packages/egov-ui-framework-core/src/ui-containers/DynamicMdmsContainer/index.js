@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSelectField } from "../../ui-config/screens/specs/utils";
 import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
-import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg , getTLTenantId } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 class DynamicMdmsContainer extends Component {
   state = {
@@ -16,8 +16,13 @@ class DynamicMdmsContainer extends Component {
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   triggerInitilaApi = async () => {
+
     let { rootBlockSub, state, moduleName, masterName, type, dispatch, callBackEdit, isDependency, dropdownFields ,tenantId } = this.props;
-    
+    console.log("triggerInitilaApi ", tenantId);
+    tenantId =null;
+    if(moduleName ==="TradeLicense" && masterName ==="TradeType"){
+      tenantId=getTLTenantId();
+    }
     const isDependencyCheck = isDependency ? get( state.screenConfiguration.preparedFinalObject , isDependency, false ) : true;
     if(isDependencyCheck){
       let reqObj = {

@@ -29,12 +29,6 @@ class App extends Component {
 
   componentDidMount() {
 
-    const script = document.createElement("script");
-    script.src = "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/ulb-overrides-uat-20191226.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-
     const { fetchLocalizationLabel, fetchCurrentLocation, fetchMDMSData } = this.props;
     let requestBody = {
       MdmsCriteria: {
