@@ -341,7 +341,7 @@ const createChallan = async(state,dispatch) =>{
   //  }
        
     
-    console.info("eChallans in state presetn==",eChallans);
+    
     set(eChallans[0], "consumerType", eChallans[0].businessService);
     
     eChallans[0].amount &&
@@ -363,6 +363,13 @@ const createChallan = async(state,dispatch) =>{
     
     const mobileNumber = eChallans[0].citizen.mobileNumber;
     const consumerName = eChallans[0].citizen.consumerName;
+    //glcode
+    for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping.length; i++) {
+      if ((state.screenConfiguration.preparedFinalObject.Challan[0].serviceType === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].cb === state.screenConfiguration.preparedFinalObject.Challan[0].tenantId)) {
+        set(eChallans[0], "additionalDetail.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].glcode);
+      }
+    }
+    console.info("eChallans in state presetn==", eChallans);
     //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
     const taxPeriodValid = isTaxPeriodValid(dispatch, eChallans[0], state);
     

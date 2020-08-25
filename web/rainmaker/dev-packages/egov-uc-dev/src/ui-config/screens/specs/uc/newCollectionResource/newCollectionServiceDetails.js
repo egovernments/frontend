@@ -110,17 +110,24 @@ import {
                 [],
                 requestBody
               );
-              
+             
               dispatch(
                 prepareFinalObject(
                   "applyScreenMdmsData.BillingService",
                   payload.MdmsRes.BillingService
                 )
               );
+              dispatch(
+                prepareFinalObject(
+                  "applyScreenMdmsData.GLCodeMapping",
+                  payload.MdmsRes.BillingService.ServiceGLCODEMapping
+                )
+              );
               setServiceCategory(
                 get(payload, "MdmsRes.BillingService.BusinessService", []),
                 dispatch
               );
+              
             } catch (e) {
               console.log(e);
             }
