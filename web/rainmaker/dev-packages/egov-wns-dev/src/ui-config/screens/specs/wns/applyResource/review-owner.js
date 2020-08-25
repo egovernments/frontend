@@ -6,7 +6,7 @@ import {
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { convertEpochToDateAndHandleNA, handleNA } from "../../utils";
+import { convertEpochToDateAndHandleNA, handleNA,handleRoadType } from "../../utils";
 import { serviceConst } from "../../../../../ui-utils/commons";
 const getHeader = label => {
   return {
@@ -156,11 +156,7 @@ export const roadDetails={
     },
     {
       jsonPath: "WaterConnection[0].roadType",
-      callBack: handleNA,
-      localePrefix: {
-        moduleName: "WS",
-        masterName: "ROADTYPE"
-      }
+      callBack: handleRoadType
     }
   ),
   reviewArea : getLabelWithValue(

@@ -260,6 +260,11 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
+export const handleRoadType = params =>{
+  return handleNA(params)=="NA"?"NA":'WS_ROADTYPE_'+params;
+}
+
+
 export const convertEpochToDate = dateEpoch => {
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
