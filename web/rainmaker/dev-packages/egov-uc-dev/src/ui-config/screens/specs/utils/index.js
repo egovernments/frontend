@@ -50,15 +50,17 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
-  screen = "apply"
+  //screen = "apply"
+  screen = "newCollection"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
     {}
   );
+ 
   let isFormValid = true;
-  for (var variable in fields) {
+  for (var variable in fields) {    
     if (fields.hasOwnProperty(variable)) {
       if (
         fields[variable] &&

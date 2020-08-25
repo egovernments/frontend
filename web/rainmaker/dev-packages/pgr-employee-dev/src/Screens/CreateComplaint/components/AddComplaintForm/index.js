@@ -23,6 +23,7 @@ const AddComplaintForm = ({
   const { name, phone, mohalla, city, address, landmark, houseNo } = fields;
   const submit = form.submit;
   if(city && city.dropDownData && city.dropDownData.length > 0) {
+    city.dropDownData = city.dropDownData.filter(item => (localStorage.getItem('tenant-id') == item.value));
     city.dropDownData.map((item, key)=>{
       city.dropDownData[key].code = item.value;
       city.dropDownData[key].name = item.label;

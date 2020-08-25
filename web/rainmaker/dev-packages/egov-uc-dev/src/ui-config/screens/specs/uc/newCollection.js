@@ -286,7 +286,7 @@ const newCollection = {
           }
         },
        // newCollectionDetailsCard,
-       newCollectionConsumerDetailsCard,
+        newCollectionConsumerDetailsCard,
         newCollectionServiceDetailsCard, 
         newCollectionFooter
       }

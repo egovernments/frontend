@@ -3,6 +3,8 @@ import { generateReciept } from "../../utils/recieptPdf";
 import { ifUserRoleExists } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 
 const getCommonApplyFooter = children => {
   return {
@@ -44,8 +46,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       }
     }
   },
-
-  viewReceiptButton: {
+    payButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
@@ -57,15 +58,28 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       }
     },
     children: {
-      downloadReceiptButtonLabel: getLabel({
-        labelName: "VIEW RECEIPT",
-        labelKey: "UC_BUTTON_VIEW_RECEIPT"
+        payButtonLabel: getLabel({
+        labelName: "PROCEED TO PAYMENT",
+        labelKey: "UC_BUTTON_PAY"
       })
     },
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        viewReceipt(state, dispatch);
+       const challanNo = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Challan.challanNo"
+      );
+      const tenantId = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Challan.tenantId"
+      );
+      const businessService = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Challan.serviceType"
+      );
+      
+        getCommonPayUrl(dispatch, challanNo, tenantId, businessService);
       }
     }
   }

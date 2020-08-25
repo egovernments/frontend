@@ -14,7 +14,7 @@ const styles = {
 
 function ApplicationNoContainer(props) {
   const { number } = props;
-  return <div style={styles}>Application No. {number}</div>;
+  return <div style={styles}>Challan No. {number}</div>;
 }
 
 export default ApplicationNoContainer;
