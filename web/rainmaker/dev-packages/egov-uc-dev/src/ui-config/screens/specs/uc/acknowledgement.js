@@ -12,12 +12,79 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
+import { downloadChallan } from "../utils";
 
 const header = getCommonHeader({
   labelName: `mCollect`,
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
  });
+
+ const downloadprintMenu = (state, dispatch) => {
+  let applicationDownloadObject = {
+    label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
+    link: () => {
+      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      downloadChallan(Challan);    
+      
+     // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
+    link: () => {
+      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      downloadChallan(Challan);    
+      // downloadAcknowledgementForm(Licenses,'print');
+     // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+    },
+    leftIcon: "assignment"
+  };
+  let downloadMenu = [];
+  let printMenu = [];
+  downloadMenu = [applicationDownloadObject];
+  printMenu = [applicationPrintObject];
+
+
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "downloadprint-commonmenu",
+      style: { textAlign: "right", display: "flex" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+            menu: downloadMenu
+          }
+        }
+      },
+      printMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            menu: printMenu
+          }
+        }
+      }
+
+    },
+  }
+
+}
 
 const getAcknowledgementCard = (
   state,
@@ -102,30 +169,30 @@ const getAcknowledgementCard = (
       "ReceiptTemp[0].Bill[0].billNumber"
     );
 
-    let downloadMenu = [];
-      let printMenu = [];
+    // let downloadMenu = [];
+    //   let printMenu = [];
+
+  //   const downloadprintMenu = (state, dispatch) => {
+  //     let applicationDownloadObject = {
+  //       label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+  //       link: () => {
+  //         const { UC_Challan } = state.screenConfiguration.preparedFinalObject;                  
+  //         generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'download');
+  //       },
+  //       leftIcon: "assignment"
+  //     };
+  //     let applicationPrintObject = {
+  //       label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+  //       link: () => {
+  //         const { UC_Challan } = state.screenConfiguration.preparedFinalObject;        
+  //         generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+  //       },
+  //       leftIcon: "assignment"
+  //     };
       
-    const downloadprintMenu = (state, dispatch) => {
-      let applicationDownloadObject = {
-        label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-        link: () => {
-          const { UC_Challan } = state.screenConfiguration.preparedFinalObject;                  
-          generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'download');
-        },
-        leftIcon: "assignment"
-      };
-      let applicationPrintObject = {
-        label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-        link: () => {
-          const { UC_Challan } = state.screenConfiguration.preparedFinalObject;        
-          generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
-        },
-        leftIcon: "assignment"
-      };
-      
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-   }
+  //     downloadMenu = [applicationDownloadObject];
+  //     printMenu = [applicationPrintObject];
+  //  }
 
      return {
      
@@ -168,58 +235,57 @@ const getAcknowledgementCard = (
                    }),
                }
               },
-         
-              helpSection: {
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
-               gridDefination: {
-                 xs: 12,
-                 sm: 6
-               },
-               props: {
-                className: "downloadprint-commonmenu",
-                style: { textAlign: "right", display: "flex",justifyContent: "flex-end" },
-               },
-               children: {
-               downloadMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                 data: {
-                   label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-                   leftIcon: "cloud_download",
-                   rightIcon: "arrow_drop_down",
-                   props: {
-                     variant: "outlined",
-                     style: { height: "60px", color: "#FE7A51",marginRight:"5px" },
-                     className: "tl-download-button",
-                   },
-                   menu: downloadMenu,
-                 },
-               },
-               },
-               printMenu: {
-               uiFramework: "custom-molecules",
-               componentPath: "DownloadPrintButton",
-               props: {
-                 data: {
-                   label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-                   leftIcon: "print",
-                   rightIcon: "arrow_drop_down",
-                   props: {
-                     variant: "outlined",
-                     style: { height: "60px", color: "#FE7A51" },
-                     className: "tl-print-button",
-                   },
-                   menu: printMenu,
-                 },
-               },
-             },
-             },
-            },
+              headerdownloadprint: downloadprintMenu(state, dispatch),
+            //   helpSection: {
+            //     uiFramework: "custom-atoms",
+            //     componentPath: "Div",
+            //    gridDefination: {
+            //      xs: 12,
+            //      sm: 6
+            //    },
+            //    props: {
+            //     className: "downloadprint-commonmenu",
+            //     style: { textAlign: "right", display: "flex",justifyContent: "flex-end" },
+            //    },
+            //    children: {
+            //    downloadMenu: {
+            //    uiFramework: "custom-molecules",
+            //    componentPath: "DownloadPrintButton",
+            //    props: {
+            //      data: {
+            //        label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            //        leftIcon: "cloud_download",
+            //        rightIcon: "arrow_drop_down",
+            //        props: {
+            //          variant: "outlined",
+            //          style: { height: "60px", color: "#FE7A51",marginRight:"5px" },
+            //          className: "tl-download-button",
+            //        },
+            //        menu: downloadMenu,
+            //      },
+            //    },
+            //    },
+            //    printMenu: {
+            //    uiFramework: "custom-molecules",
+            //    componentPath: "DownloadPrintButton",
+            //    props: {
+            //      data: {
+            //        label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            //        leftIcon: "print",
+            //        rightIcon: "arrow_drop_down",
+            //        props: {
+            //          variant: "outlined",
+            //          style: { height: "60px", color: "#FE7A51" },
+            //          className: "tl-print-button",
+            //        },
+            //        menu: printMenu,
+            //      },
+            //    },
+            //  },
+            //  },
+            // },
             }
-          },
-                 
+          },      
         
         
 
@@ -227,50 +293,7 @@ const getAcknowledgementCard = (
       },
      
      
-      // helpSection: {
-      //   uiFramework: "custom-atoms",
-      //   componentPath: "Div",
-      //   props: {
-      //     className: "downloadprint-commonmenu",
-      //     style: { textAlign: "right", display: "flex",justifyContent: "flex-end" },
-      //   },
-      //   children: {
-      //     downloadMenu: {
-      //       uiFramework: "custom-molecules",
-      //       componentPath: "DownloadPrintButton",
-      //       props: {
-      //         data: {
-      //           label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-      //           leftIcon: "cloud_download",
-      //           rightIcon: "arrow_drop_down",
-      //           props: {
-      //             variant: "outlined",
-      //             style: { height: "60px", color: "#FE7A51" },
-      //             className: "tl-download-button",
-      //           },
-      //           menu: [],
-      //         },
-      //       },
-      //     },
-      //     printMenu: {
-      //       uiFramework: "custom-molecules",
-      //       componentPath: "DownloadPrintButton",
-      //       props: {
-      //         data: {
-      //           label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-      //           leftIcon: "print",
-      //           rightIcon: "arrow_drop_down",
-      //           props: {
-      //             variant: "outlined",
-      //             style: { height: "60px", color: "#FE7A51" },
-      //             className: "tl-print-button",
-      //           },
-      //           menu: [],
-      //         },
-      //       },
-      //     },
-      //   },
-      // },
+      
 
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
