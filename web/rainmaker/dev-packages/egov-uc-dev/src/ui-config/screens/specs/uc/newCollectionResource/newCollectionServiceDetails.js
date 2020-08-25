@@ -55,9 +55,8 @@ import {
               labelName: "Select City",
               labelKey: "TL_SELECT_CITY"
             },
-            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
-            // "applyScreenMdmsData.common-masters.citiesByModule.UC.tenants",
-            jsonPath: "Demands[0].tenantId",
+            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",           
+            jsonPath: "Challan[0].tenantId",
             required: true,
             props: {
               required: true,
@@ -74,7 +73,7 @@ import {
             if (!citiesByModule.find(item => item.code === action.value)) {
               return action;
             }
-            console.log("action.value",action.value)
+           
             let requestBody = {
               MdmsCriteria: {
                 tenantId: action.value.split(".")[0],
@@ -100,7 +99,9 @@ import {
                 ]
               }
             };
+            
             try {
+             
               let payload = null;
               payload = await httpRequest(
                 "post",
@@ -109,7 +110,7 @@ import {
                 [],
                 requestBody
               );
-              console.log("payload",payload)
+              
               dispatch(
                 prepareFinalObject(
                   "applyScreenMdmsData.BillingService",
@@ -128,7 +129,7 @@ import {
         },
         helpPdfButton:{
             componentPath:"Button",
-            jsonPath:"Demands[0].ucCollection.pdf",
+            jsonPath:"Challan[0].ucCollection.pdf",
                gridDefination: {
               xs: 12,
               sm: 6
@@ -161,7 +162,7 @@ import {
               },
               downloadButtonLabel:getLabel({
                 labelName:"Help ?",
-                labelKey:"TL_COMMON_HELP"
+                labelKey:"UC_HELP_FILE"
               }),
             },
                         
@@ -170,7 +171,7 @@ import {
         serviceCategory: {
           uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
-          jsonPath: "Demands[0].businessService",
+          jsonPath: "Challan[0].businessService",
           gridDefination: {
             xs: 12,
             sm: 6
@@ -195,7 +196,7 @@ import {
             },
            
             visible: true,
-            jsonPath: "Demands[0].businessService",
+            jsonPath: "Challan[0].businessService",
             sourceJsonPath: "applyScreenMdmsData.serviceCategories",
             labelsFromLocalisation: true,
             suggestions: [],
@@ -207,8 +208,8 @@ import {
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
 
-            console.info("before field change",action,"Action.value==",action.value,"serv type==",state.screenConfiguration.preparedFinalObject.Demands[0].serviceType);
-            if(state.screenConfiguration.preparedFinalObject.Demands[0].serviceType){
+            
+            if(state.screenConfiguration.preparedFinalObject.Challan[0].serviceType){
               console.info("inside if");
             dispatch(
               handleField(
@@ -259,13 +260,13 @@ import {
                     false
                   )
                 );
-                const demandId = get(
+                const challanId = get(
                   state.screenConfiguration.preparedFinalObject,
-                  "Demands[0].id",
+                  "Challan[0].id",
                   null
                 );
                 //Set tax head fields if there is no service type available
-                if (!demandId && serviceData[action.value]) {
+                if (!challanId && serviceData[action.value]) {
                   const taxHeads = setTaxHeadFields(action, state, dispatch);
                 }
               }
@@ -276,7 +277,7 @@ import {
         serviceType: {
           uiFramework: "custom-containers",        
           componentPath: "AutosuggestContainer",
-          jsonPath: "Demands[0].serviceType",
+          jsonPath: "Challan[0].serviceType",
           gridDefination: {
             xs: 12,
             sm: 6
@@ -301,7 +302,7 @@ import {
             },
             
             visible: true,
-            jsonPath: "Demands[0].serviceType",
+            jsonPath: "Challan[0].serviceType",
             sourceJsonPath: "applyScreenMdmsData.serviceTypes",
             labelsFromLocalisation: true,
             suggestions: [],
@@ -311,12 +312,12 @@ import {
             }
           },
           beforeFieldChange: async (action, state, dispatch) => {
-                const demandId = get(
+                const challanId = get(
                     state.screenConfiguration.preparedFinalObject,
-                    "Demands[0].id",
+                    "Challan[0].id",
                     null
                   );
-                  if (!demandId && action.value) {
+                  if (!challanId && action.value) {
                     const taxHeads = setTaxHeadFields(action, state, dispatch);
                     console.log(taxHeads);
                     console.info("selected subtype==",action.value);
@@ -343,7 +344,7 @@ import {
           },
           required: true,
           pattern: getPattern("Date"),
-          jsonPath: "Demands[0].taxPeriodFrom",
+          jsonPath: "Challan[0].taxPeriodFrom",
           beforeFieldChange: async (action, state, dispatch) => {            
             if (action.value) {              
               dispatch(
@@ -387,7 +388,7 @@ import {
             // }           
           },
           pattern: getPattern("Date"),
-          jsonPath: "Demands[0].taxPeriodTo",
+          jsonPath: "Challan[0].taxPeriodTo",
           
         }),     
         
@@ -413,7 +414,7 @@ import {
           labelKey: "UC_COMMENT_PLACEHOLDER"
         },
         Required: false,
-        jsonPath: "Demands[0].additionalDetails.comment"
+        jsonPath: "Challan[0].additionalDetails.comment"
       }),
     //   helpPdfButton:{
     //     componentPath:"Button",
@@ -485,7 +486,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
       //Delete previous Tax Head fields
       const noOfPreviousTaxHeads = get(
         state.screenConfiguration,
-        "preparedFinalObject.Demands[0].demandDetails",
+        "preparedFinalObject.Challan[0].amount",
         []
       ).length;
       const taxFields = get(
@@ -515,19 +516,19 @@ const setTaxHeadFields = (action, state, dispatch) => {
             )
           );
         }
-        dispatch(prepareFinalObject(`Demands[0].demandDetails`, []));
+        dispatch(prepareFinalObject(`Challan[0].amount`, []));
       }
       //Show new tax head fields
       matchingTaxHeads.forEach((item, index) => {
         dispatch(
           prepareFinalObject(
-            `Demands[0].demandDetails[${index}].taxHeadMasterCode`,
+            `Challan[0].amount[${index}].taxHeadCode`,
             item.code
           )
         );
         dispatch(
           prepareFinalObject(
-            `Demands[0].demandDetails[${index}].collectionAmount`,
+            `Challan[0].amount[${index}].collectionAmount`,
             0
           )
         );
@@ -556,7 +557,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
               props: {
                 // required: true
               },
-              jsonPath: `Demands[0].demandDetails[${index}].taxAmount`
+              jsonPath: `Challan[0].amount[${index}].amount`
             })
           )
         );

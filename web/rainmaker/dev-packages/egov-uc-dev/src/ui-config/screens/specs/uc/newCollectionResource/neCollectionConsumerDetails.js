@@ -38,7 +38,7 @@ import {
                 visible: true,
                 pattern: getPattern("Name"),
                 errorMessage: "Invalid Name.",
-                jsonPath: "Demands[0].consumerName"
+                jsonPath: "Challan[0].citizen.name"
               }),
               ConsumerMobileNo: getTextField({
                 label: {
@@ -57,7 +57,7 @@ import {
                 visible: true,
                 pattern: getPattern("MobileNo"),
                 errorMessage: "Invalid Mobile No.",
-                jsonPath: "Demands[0].mobileNumber"
+                jsonPath: "Challan[0].citizen.mobileNumber"
               }),
               ConsumerHouseNo: getTextField({
                 label: {
@@ -69,7 +69,7 @@ import {
                   labelKey: "UC_DOOR_NO_PLACEHOLDER"
                 },
                 pattern: getPattern("DoorHouseNo"),
-                jsonPath: "Demands[0].address.doorNo"
+                jsonPath: "Challan[0].address.doorNo"
               }),
               ConsumerBuilidingName: getTextField({
                 label: {
@@ -81,7 +81,7 @@ import {
                   labelKey: "UC_BLDG_NAME_PLACEHOLDER"
                 },
                 pattern: getPattern("BuildingStreet"),
-                jsonPath: "Demands[0].address.buildingName"
+                jsonPath: "Challan[0].address.buildingName"
               }),
               ConsumerStreetName: getTextField({
                 label: {
@@ -93,13 +93,13 @@ import {
                   labelKey: "UC_SRT_NAME_PLACEHOLDER"
                 },
                 pattern: getPattern("BuildingStreet"),
-                jsonPath: "Demands[0].address.street"
+                jsonPath: "Challan[0].address.street"
               }),         
 
               ConsumerLocMohalla: {
                 uiFramework: "custom-containers",
                 componentPath: "AutosuggestContainer",
-                jsonPath: "Demands[0].address.locality.code",
+                jsonPath: "Challan[0].address.locality.code",
                 required: true,
                 props: {
                   style: {
@@ -115,7 +115,7 @@ import {
                     labelName: "Select Mohalla",
                     labelKey: "UC_MOHALLA_PLACEHOLDER"
                   },
-                  jsonPath: "Demands[0].address.locality.code",
+                  jsonPath: "Challan[0].address.locality.code",
                   sourceJsonPath: "applyScreenMdmsData.tenant.localities",
                   labelsFromLocalisation: true,
                   suggestions: [],
@@ -129,7 +129,19 @@ import {
                   xs: 12,
                   sm: 6
                 }
-              },              
+              },  
+              ConsumerPinCode: getTextField({
+                label: {
+                  labelName: "Pincode",
+                  labelKey: "UC_PINCODE_LABEL"
+                },
+                placeholder: {
+                  labelName: "Enter Pincode",
+                  labelKey: "UC_PINCODE_PLACEHOLDER"
+                },
+                pattern: getPattern("Pincode"),
+                jsonPath: "Challan[0].address.pincode"
+              }),              
         },        
         ) 
       },
