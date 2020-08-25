@@ -8,6 +8,8 @@ import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import {
+  getQueryArg} from "egov-ui-framework/ui-utils/commons";
+import {
   getNextFinancialYearForRenewal,
   getSearchResults
 } from "../../ui-utils/commons";
@@ -80,7 +82,7 @@ class Footer extends React.Component {
       return;
     }
     if (item.showEmployeeList) {
-      const tenantId = getTenantId();
+      const tenantId = getQueryArg(window.location.href,"tenantId") || getTenantId();
       const queryObj = [
         {
           key: "roles",

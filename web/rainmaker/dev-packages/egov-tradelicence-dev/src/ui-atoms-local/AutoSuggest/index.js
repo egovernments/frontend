@@ -230,6 +230,7 @@ class IntegrationReactSelect extends React.Component {
           placeholder={placeholder}
           {...rest}
           onChange={this.handleChange("single")}
+          isDisabled={this.props.disabled}
         />
       </div>
     );
