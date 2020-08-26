@@ -489,6 +489,8 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("applyScreen", {}));
   dispatch(prepareFinalObject("searchScreen", {}));
   dispatch(prepareFinalObject("connectionHolders", []));
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+  dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", []));
 }
 
 const screenConfig = {
