@@ -179,10 +179,11 @@ class IntegrationReactSelect extends React.Component {
   };
 
   handleChange = name => value => {
+    let isValue = value === null ? { value: "" } : value;
     this.setState({
       [name]: value
     });
-    this.props.onSelect(value);
+    this.props.onSelect(isValue);
   };
 
   render() {
