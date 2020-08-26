@@ -636,6 +636,7 @@ export const tradeDetails = getCommonCard({
         componentPath: "AutosuggestContainer",
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
+        required: true,
          props:{
           className: "autocomplete-dropdown",
           suggestions: [],
