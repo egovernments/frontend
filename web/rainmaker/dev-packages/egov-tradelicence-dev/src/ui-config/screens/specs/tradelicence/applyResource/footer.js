@@ -888,7 +888,7 @@ export const footerReviewTop = (
     },
     leftIcon: "assignment"
   };
-  
+
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -902,25 +902,19 @@ export const footerReviewTop = (
         applicationPrintObject
       ];
       break;
-    case "APPLIED":
-    case "CITIZENACTIONREQUIRED":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
+    case "APPLIED":
+    case "CITIZENACTIONREQUIRED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":  
+    case "CANCELLED":  
+    case "REJECTED":
     case "pending_approval":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
       printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
       break;
     default:
       break;
