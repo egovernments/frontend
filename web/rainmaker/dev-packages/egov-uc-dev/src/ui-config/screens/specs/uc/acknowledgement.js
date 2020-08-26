@@ -23,7 +23,6 @@ const header = getCommonHeader({
   let applicationDownloadObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
-
       const totalAmount = get(
         state.screenConfiguration.preparedFinalObject,
         "ReceiptTemp[0].Bill[0].totalAmount"
@@ -45,13 +44,8 @@ const header = getCommonHeader({
            billDate
         )
       );
-
       const { Challan } = state.screenConfiguration.preparedFinalObject;
-
-      
-
-      downloadChallan(Challan);    
-      
+      downloadChallan(Challan);         
      // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);
     },
     leftIcon: "assignment"
@@ -60,9 +54,7 @@ const header = getCommonHeader({
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
       const { Challan } = state.screenConfiguration.preparedFinalObject;
-      downloadChallan(Challan);    
-      // downloadAcknowledgementForm(Licenses,'print');
-     // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
+      downloadChallan(Challan);          
     },
     leftIcon: "assignment"
   };
@@ -75,9 +67,14 @@ const header = getCommonHeader({
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 6,
+      align: "right"
+    },
     props: {
       className: "downloadprint-commonmenu",
-      style: { textAlign: "right", display: "flex" }
+      style: { textAlign: "right", display: "flex", justifyContent: "flex-end" }
     },
     children: {
       downloadMenu: {
@@ -193,32 +190,7 @@ const getAcknowledgementCard = (
     const billNo = get(
       state.screenConfiguration.preparedFinalObject,
       "ReceiptTemp[0].Bill[0].billNumber"
-    );
-
-    // let downloadMenu = [];
-    //   let printMenu = [];
-
-  //   const downloadprintMenu = (state, dispatch) => {
-  //     let applicationDownloadObject = {
-  //       label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-  //       link: () => {
-  //         const { UC_Challan } = state.screenConfiguration.preparedFinalObject;                  
-  //         generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'download');
-  //       },
-  //       leftIcon: "assignment"
-  //     };
-  //     let applicationPrintObject = {
-  //       label: { labelName: "Application", labelKey: "TL_APPLICATION" },
-  //       link: () => {
-  //         const { UC_Challan } = state.screenConfiguration.preparedFinalObject;        
-  //         generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, 'print');
-  //       },
-  //       leftIcon: "assignment"
-  //     };
-      
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //  }
+    );    
 
      return {
      
@@ -261,65 +233,11 @@ const getAcknowledgementCard = (
                    }),
                }
               },
-              headerdownloadprint: downloadprintMenu(state, dispatch),
-            //   helpSection: {
-            //     uiFramework: "custom-atoms",
-            //     componentPath: "Div",
-            //    gridDefination: {
-            //      xs: 12,
-            //      sm: 6
-            //    },
-            //    props: {
-            //     className: "downloadprint-commonmenu",
-            //     style: { textAlign: "right", display: "flex",justifyContent: "flex-end" },
-            //    },
-            //    children: {
-            //    downloadMenu: {
-            //    uiFramework: "custom-molecules",
-            //    componentPath: "DownloadPrintButton",
-            //    props: {
-            //      data: {
-            //        label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-            //        leftIcon: "cloud_download",
-            //        rightIcon: "arrow_drop_down",
-            //        props: {
-            //          variant: "outlined",
-            //          style: { height: "60px", color: "#FE7A51",marginRight:"5px" },
-            //          className: "tl-download-button",
-            //        },
-            //        menu: downloadMenu,
-            //      },
-            //    },
-            //    },
-            //    printMenu: {
-            //    uiFramework: "custom-molecules",
-            //    componentPath: "DownloadPrintButton",
-            //    props: {
-            //      data: {
-            //        label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-            //        leftIcon: "print",
-            //        rightIcon: "arrow_drop_down",
-            //        props: {
-            //          variant: "outlined",
-            //          style: { height: "60px", color: "#FE7A51" },
-            //          className: "tl-print-button",
-            //        },
-            //        menu: printMenu,
-            //      },
-            //    },
-            //  },
-            //  },
-            // },
+              headerdownloadprint:downloadprintMenu(state, dispatch),            
             }
-          },      
-        
-        
-
+          },         
         },
-      },
-     
-     
-      
+      }, 
 
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -398,19 +316,12 @@ const screenConfig = {
         key: "tenantId",
         value: tenantId
       },
-      { key: "offset", value: "0" },
-      // {
-      //   key: "receiptNumbers",
-      //   value: billNumber
-      // },
+      { key: "offset", value: "0" },     
       {
         key: "businessServices",
         value: serviceCategory
       }
     ];
-
-   // getSearchData(dispatch, queryObject);
-
     const data = getAcknowledgementCard(
       state,
       dispatch,

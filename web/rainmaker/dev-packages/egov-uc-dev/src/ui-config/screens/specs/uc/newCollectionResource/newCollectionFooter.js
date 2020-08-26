@@ -324,23 +324,6 @@ const createChallan = async(state,dispatch) =>{
         get(state.screenConfiguration.preparedFinalObject, "Challan")
       )
     );
-    //console.info("glcode length=",state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping.length);
-    //set(eChallans[0], "additionalDetails.consumerName", state.screenConfiguration.preparedFinalObject.Challan[0].consumerName);
-    //set(eChallans[0], "additionalDetails.mobileNumber", state.screenConfiguration.preparedFinalObject.Challan[0].mobileNumber);
-   //GLCODE
-    // for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping.length; i++) {
-    //     if ((state.screenConfiguration.preparedFinalObject.Challan[0].serviceType === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].cb === tenantId)) {
-    //     set(eChallans[0], "additionalDetails.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].glcode);
-    //   }
-  
-    //  }
-    // Making payer object as null if it is empty object, later will changge in component.
-  
-    //  if(Object.keys(eChallans[0].payer).length === 0) {
-  //   eChallans[0].payer = null;
-  //  }
-       
-    
     
     set(eChallans[0], "consumerType", eChallans[0].businessService);
     
@@ -437,28 +420,9 @@ const generateBill = async (
       {}
     );
     if (payload && payload.Bill[0]) {
-      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-      //const estimateData = createEstimateData(payload.Bill[0]);
-      // estimateData &&
-      //   estimateData.length &&
-      //   dispatch(
-      //     prepareFinalObject(
-      //       "applyScreenMdmsData.estimateCardData",
-      //       estimateData
-      //     )
-      //   );
-      // dispatch(
-      //   prepareFinalObject("applyScreenMdmsData.consumerCode", consumerCode)
-      // );
-      // dispatch(
-      //   prepareFinalObject(
-      //     "applyScreenMdmsData.businessService",
-      //     businessService
-      //   )
-      // );
-      console.info("bill generated redirect to common pay");
-     // dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
-     dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&challanNumber=${consumerCode}`));
+      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));      
+      console.info("bill generated redirect to common pay");     
+      dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&challanNumber=${consumerCode}`));
     }
   } catch (e) {
     console.log(e);
