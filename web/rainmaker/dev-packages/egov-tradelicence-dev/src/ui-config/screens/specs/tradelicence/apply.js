@@ -224,7 +224,18 @@ export const getData = async (action, state, dispatch) => {
     }
     // dispatch(prepareFinalObject("LicensesTemp", []));
     await updatePFOforSearchResults(action, state, dispatch, applicationNo,tenantId);
-   
+   //To disabled the Trade Unit and Accessories 
+   let applicationStatus = get( state.screenConfiguration.preparedFinalObject, "Licenses[0].status")
+   if(applicationStatus != "INITIATED" || applicationStatus != "PENDINGPAYMENT") {
+     let isDisabledTUData = ['tradeCategory', 'tradeType', 'tradeSubType', 'tradeUOM', 'tradeUOMValue'];
+     let isDisabledASData = ['accessoriesCount', 'accessoriesName', 'accessoriesUOM', 'accessoriesUOMValue'];
+     isDisabledTUData.forEach(value => {
+       disabledKeyValue(dispatch, 'tradeUnitCard', value);
+     });
+     isDisabledASData.forEach(value => {
+       disabledKeyValue(dispatch, 'accessoriesCard', value);
+     });
+   }
     if (!queryValue) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
@@ -377,19 +388,7 @@ const screenConfig = {
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
-      );
-      //To disabled the Trade Unit and Accessories 
-      let applicationStatus = get( state.screenConfiguration.preparedFinalObject, "Licenses[0].status")
-      if(applicationStatus != "INITIATED" || applicationStatus != "APPLIED" || applicationStatus != "PENDINGPAYMENT") {
-        let isDisabledTUData = ['tradeCategory', 'tradeType', 'tradeSubType', 'tradeUOM', 'tradeUOMValue'];
-        let isDisabledASData = ['accessoriesCount', 'accessoriesName', 'accessoriesUOM', 'accessoriesUOMValue'];
-        isDisabledTUData.forEach(value => {
-          disabledKeyValue(dispatch, 'tradeUnitCard', value);
-        });
-        isDisabledASData.forEach(value => {
-          disabledKeyValue(dispatch, 'accessoriesCard', value);
-        });
-      }
+      ); 
     });
 
     return action;

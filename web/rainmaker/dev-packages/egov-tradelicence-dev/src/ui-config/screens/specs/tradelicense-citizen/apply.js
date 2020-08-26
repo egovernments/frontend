@@ -79,7 +79,7 @@ const updateSearchResults = async (
     );
   }
   let applicationStatus = get( state.screenConfiguration.preparedFinalObject, "Licenses[0].status")
-  if(applicationStatus != "INITIATED" || applicationStatus != "APPLIED" || applicationStatus != "PENDINGPAYMENT") {
+  if(applicationStatus != "INITIATED" || applicationStatus != "PENDINGPAYMENT") {
     let isDisabledTUData = ['tradeCategory', 'tradeType', 'tradeSubType', 'tradeUOM', 'tradeUOMValue'];
     let isDisabledASData = ['accessoriesCount', 'accessoriesName', 'accessoriesUOM', 'accessoriesUOMValue'];
     isDisabledTUData.forEach(value => {
