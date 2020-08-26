@@ -118,7 +118,7 @@ export const propertyLocationDetails = getCommonCard({
     },
     localityOrMohalla: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      moduleName: "egov-pt",
       componentPath: "AutosuggestContainer",
       jsonPath: "Property.address.locality.code",//db sake
       required: true,
@@ -185,4 +185,8 @@ export const propertyLocationDetails = getCommonCard({
       jsonPath: "Property.address.buildingName"
     })
   })
+}, {
+  style: {
+    overflow: "visible"
+  }
 });
