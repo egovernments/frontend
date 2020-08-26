@@ -23,7 +23,33 @@ const header = getCommonHeader({
   let applicationDownloadObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
+
+      const totalAmount = get(
+        state.screenConfiguration.preparedFinalObject,
+        "ReceiptTemp[0].Bill[0].totalAmount"
+      );
+      const billDate = get(
+        state.screenConfiguration.preparedFinalObject,
+        "ReceiptTemp[0].Bill[0].billDate"
+      );
+      
+      dispatch(
+        prepareFinalObject(
+          "Challan.totalAmount",
+          totalAmount
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "Challan.billDate",
+           billDate
+        )
+      );
+
       const { Challan } = state.screenConfiguration.preparedFinalObject;
+
+      
+
       downloadChallan(Challan);    
       
      // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);

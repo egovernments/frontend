@@ -410,7 +410,7 @@ export const getTextToLocalMapping = label => {
 
 
 export const downloadChallan = async (Challan, mode = 'download') => {
-  console.info("Came to download challan");
+  console.info("Came to download challan",Challan);
   let tenantId = get(Challan, "tenantId");
   const queryStr = [
     { key: "key", value:"mcollect-challan" },
