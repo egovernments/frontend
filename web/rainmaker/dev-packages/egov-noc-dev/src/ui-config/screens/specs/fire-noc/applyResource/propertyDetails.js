@@ -177,18 +177,18 @@ const commonBuildingData = buildingType => {
         }
       })
     },
-    dummyDiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
-      props: {
-        disabled: true
-      }
-    },
+    // dummyDiv: {
+    //   uiFramework: "custom-atoms",
+    //   componentPath: "Div",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 12,
+    //     md: 6
+    //   },
+    //   props: {
+    //     disabled: true
+    //   }
+    // },
     buildingUsageType: {
       ...getSelectField({
         label: {

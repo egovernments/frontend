@@ -154,7 +154,14 @@ const screenConfig = {
         action,
         "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.subDistrict.visible",
         false
-      );      
+      );   
+      
+      
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName.visible",
+        false
+      );  
 
     }       
     else {      
