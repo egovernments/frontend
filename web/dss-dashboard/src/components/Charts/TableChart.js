@@ -13,6 +13,7 @@ import NFormatterFun from '../common/numberFormaterFun';
 import SwitchButton from '../common/tableswitchs/switchButtons';
 import UiTable from '../common/UiTable/UiTable';
 import styles from './styles';
+import getPrevFinancialYearObj from '../../actions/getPrevFinancialYearObj';
 
 
 class TableChart extends Component {
@@ -28,11 +29,61 @@ class TableChart extends Component {
       drillDownId: null,
       active: null,
       drilfilters: null,
+      lastYeardata: null,
+      filterData: this.props.filters,
+      getFYObj: getPrevFinancialYearObj(),
       filterList: {}
     }
   }
 
+
+  getLastYearRequest(calledFrom, visualcode, active, filterList) {
+
+    var newFilterData = this.state.filterData;
+
+    var startDate = this.state.getFYObj.value.startDate;
+
+    for (var i = startDate.toString().length; i < 13; i++) {
+      startDate = startDate.toString().concat('0');
+    }
+    newFilterData.duration.startDate = startDate;
+
+    var endDate = this.state.getFYObj.value.endDate;
+
+    for (var i = endDate.toString().length; i < 13; i++) {
+      endDate = endDate.toString().concat('0');
+    }
+    newFilterData.duration.endDate = endDate;
+
+    let getAxiosOptions = getChartOptions(visualcode, newFilterData);
+
+    if (getAxiosOptions && getAxiosOptions.url) {
+      axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
+        .then(response => {
+          let tmpState = {};
+          let tempData = response.data.responseData;
+          let drillCode = response.data.responseData['drillDownChartId'];
+          let visualcode = response.data.responseData['visualizationCode'];
+          let drilfilters = (response.data.responseData['filter'] && response.data.responseData['filter'].length > 0) ? response.data.responseData['filter'][0] : null;
+          tmpState.lastYeardata = tempData;
+          tmpState.drillCode = drillCode;
+          tmpState.drilfilters = drilfilters;
+          if (active)
+            tmpState.active = active.toUpperCase();
+          if (drillCode != 'none' || calledFrom == 'clickFromTab')
+            tmpState.visualcode = visualcode;
+          tmpState.filterList = filterList;
+          this.setState(tmpState);
+        })
+        .catch(error => {
+          console.log(error.response)
+        });
+    }
+  }
+
+
   getRequest(calledFrom, visualcode, active, filterList) {
+    this.getLastYearRequest(calledFrom, visualcode, active, filterList);
     filterList = filterList ? filterList : this.state.filterList;
     let filters = {}, ttest = [], tempFL;
     if (!_.isEmpty(filterList, true)) {
@@ -113,7 +164,7 @@ class TableChart extends Component {
     tempValue = (typeof tempValue === 'object') ? tempValue[0] : tempValue;
     tabName = tabName.toUpperCase();
     let tempArr = [visualcode, drillCode, drilfilters, tabName, tempValue];
-    let filterList = this.state.filterList;
+    let filterList = {};
 
     if (_.isEmpty(filterList, true) || typeof filterList[tabName] == "undefined") {
       filterList[tabName] = [];
@@ -137,7 +188,7 @@ class TableChart extends Component {
       // New entry
       filterList[tabName].push(tempArr);
     }
-    this.getRequest("applyFilter", drillCode, '', filterList)
+    this.getRequest("applyFilter", drillCode, '', filterList);
   }
 
   getFilterObj(filters) {
@@ -160,13 +211,13 @@ class TableChart extends Component {
     if (!_.isEmpty(filterList, true) && typeof filterList[active] !== 'undefined' && filterList[active].length > 0) {
       visualcode = filterList[active][filterList[active].length - 1][1];
     }
-    this.getRequest("clickFromTab", visualcode, active)
+    this.getRequest("clickFromTab", visualcode, active);
   }
 
 
   render() {
     let { classes, chartData, chartKey, chartsData, strings, chartParent } = this.props;
-    let drillCode, visualcode, tabName, drilfilters;
+    let drillCode, visualcode, tabName, drilfilters, lastYearChartData;
     if (this.props && chartData) {
       if (this.state.data) {
         chartData = this.state.data.data;
@@ -179,8 +230,6 @@ class TableChart extends Component {
       visualcode = visualcode ? visualcode : chartsData[this.props.chartKey]['visualizationCode'];
       tabName = tabName ? tabName : chartParent[0]['tabName'];
       drilfilters = drilfilters ? drilfilters : chartsData[this.props.chartKey]['filter'][0];
-
-
 
 
       let colSortRow = {};
@@ -203,6 +252,8 @@ class TableChart extends Component {
       // small hack but need to remove from backend.
       columnData.splice(0, 1);
       let newData = [];
+      let newLastYearData = [];
+
       if (chartData) {
         for (var i = 0; i < chartData.length; i++) {
           let newrowData = _.cloneDeep(colSortRow)
@@ -231,6 +282,66 @@ class TableChart extends Component {
           }
         }
       }
+
+      if (!this.state.lastYeardata && chartData) {
+        let filterList = _.cloneDeep(this.state.filterList);
+        this.getLastYearRequest('', chartsData[this.props.chartKey]['visualizationCode'], '', filterList);
+      }
+
+      if (this.state.lastYeardata) {
+        lastYearChartData = this.state.lastYeardata.data;
+
+
+        colSortRow = {};
+        for (var i = 0; i < lastYearChartData.length; i++) {
+          if (!lastYearChartData[i]) {
+            if (lastYearChartData[i + 1]) {
+              lastYearChartData.splice(0, i + 1);
+              break;
+            }
+          }
+        }
+        columnData = _.chain(chartData).first().get("plots").map((k, v) => {
+          if (k.name != "S.N.") {
+            colSortRow[k.name] = '';
+            let yes = v < 0;
+            let isNumeric = _.toLower(k.symbol) === 'amount' || _.toLower(k.symbol) === "number" || _.toLower(k.symbol) === "percentage";
+            return { id: k.name, numeric: isNumeric, stickyHeader: yes, disablePadding: false, label: k.name, colType: k.symbol }
+          }
+        }).value();
+        // small hack but need to remove from backend.
+        columnData.splice(0, 1);
+        if (lastYearChartData) {
+          for (var i = 0; i < lastYearChartData.length; i++) {
+            let newrowData = _.cloneDeep(colSortRow)
+            if (lastYearChartData[i] && lastYearChartData[i]['plots']) {
+              _.map(lastYearChartData[i]['plots'], a => {
+                if (a.name != "S.N.") {
+                  if (a.symbol.toUpperCase() === 'TEXT') {
+                    let label = _.chain(a.label).split('.').join("_").toUpper().value();
+                    let text = null;
+                    try {
+                      text = strings["TENANT_TENANTS_" + label]
+                    } catch{
+                      text = a.label;
+                    }
+                    if (!text) {
+                      text = a.label;
+                    }
+                    newrowData[a.name] = [a.label, text]
+                  } else {
+                    let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
+                    newrowData[a.name] = val
+                  }
+                }
+              });
+              newLastYearData.push(newrowData)
+            }
+          }
+        }
+      }
+
+
       return (
         <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column', marginTop: '-15px' }}>
           <div className="tableHeading">
@@ -260,6 +371,7 @@ class TableChart extends Component {
             <UiTable
               column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : (chartsData[chartKey] && Array.isArray(chartsData[chartKey].filter) && chartsData[chartKey].filter.length > 0 ? chartsData[chartKey].filter[0].column : '')}
               data={newData}
+              lyData={newLastYearData}
               columnData={columnData}
               tableType='CENTERS_TABLE'
               cellClick={this.applyFilter.bind(this, visualcode, drillCode, drilfilters, tabName)}
