@@ -388,7 +388,7 @@ export const changeStep = (
   } else {
     activeStep = defaultActiveStep;
   }
-
+  debugger;
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = activeStep < 3 ? true : false;
   const isPayButtonVisible = activeStep === 3 ? true : false;
