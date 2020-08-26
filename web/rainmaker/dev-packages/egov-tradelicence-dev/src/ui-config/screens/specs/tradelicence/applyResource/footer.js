@@ -388,7 +388,7 @@ export const changeStep = (
   } else {
     activeStep = defaultActiveStep;
   }
-
+  debugger;
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = activeStep < 3 ? true : false;
   const isPayButtonVisible = activeStep === 3 ? true : false;
@@ -902,14 +902,23 @@ export const footerReviewTop = (
         applicationPrintObject
       ];
       break;
-    case "APPLIED":
-    case "CITIZENACTIONREQUIRED":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
+      case "APPLIED":
+      case "CITIZENACTIONREQUIRED":  
+      case "FIELDINSPECTION":
+      case "PENDINGAPPROVAL":
+          downloadMenu = [
+            receiptDownloadObject,
+            applicationDownloadObject
+          ];
+          printMenu = [
+            receiptPrintObject,
+            applicationPrintObject
+          ];
+          break;
+      case "PENDINGPAYMENT":
+        downloadMenu = [applicationDownloadObject];
+        printMenu = [applicationPrintObject];
+        break;
     case "pending_approval":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
       printMenu = [receiptPrintObject, applicationPrintObject];
