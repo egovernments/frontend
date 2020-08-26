@@ -1,4 +1,6 @@
-import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader,
+  getCommonContainer
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -9,22 +11,161 @@ import set from "lodash/set";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import { downloadChallan } from "../utils";
+
+const header = getCommonHeader({
+  labelName: `mCollect`,
+  labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
+ });
+
+ const downloadprintMenu = (state, dispatch) => {
+  let applicationDownloadObject = {
+    label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
+    link: () => {
+      const totalAmount = get(
+        state.screenConfiguration.preparedFinalObject,
+        "ReceiptTemp[0].Bill[0].totalAmount"
+      );
+      const billDate = get(
+        state.screenConfiguration.preparedFinalObject,
+        "ReceiptTemp[0].Bill[0].billDate"
+      );
+      
+      dispatch(
+        prepareFinalObject(
+          "Challan.totalAmount",
+          totalAmount
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "Challan.billDate",
+           billDate
+        )
+      );
+      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      downloadChallan(Challan);         
+     // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
+    link: () => {
+      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      downloadChallan(Challan);          
+    },
+    leftIcon: "assignment"
+  };
+  let downloadMenu = [];
+  let printMenu = [];
+  downloadMenu = [applicationDownloadObject];
+  printMenu = [applicationPrintObject];
+
+
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 6,
+      align: "right"
+    },
+    props: {
+      className: "downloadprint-commonmenu",
+      style: { textAlign: "right", display: "flex", justifyContent: "flex-end" }
+    },
+    children: {
+      downloadMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+            leftIcon: "cloud_download",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+            menu: downloadMenu
+          }
+        }
+      },
+      printMenu: {
+        uiFramework: "custom-molecules",
+        componentPath: "DownloadPrintButton",
+        props: {
+          data: {
+            label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+            leftIcon: "print",
+            rightIcon: "arrow_drop_down",
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            menu: printMenu
+          }
+        }
+      }
+
+    },
+  }
+
+}
 
 const getAcknowledgementCard = (
   state,
   dispatch,
   purpose,
   status,
-  receiptNumber,
-  secondNumber,
-  tenant
+  challanNumber,
+ 
 ) => {
-  if (purpose === "pay" && status === "success") {
-    return {
-      header: getCommonHeader({
-        labelName: `New Collection`,
-        labelKey: "UC_COMMON_HEADER"
-      }),
+   if(purpose === "challan" && status === "success"){
+    const billNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      "ReceiptTemp[0].Bill[0].billNumber"
+    ); 
+
+     return {     
+       headerDiv:{
+        uiFramework: "custom-atoms",
+        componentPath: "Div",       
+        children: {
+          headerDiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",  
+            children: {
+              header: {
+                gridDefination: {
+                  xs: 12,
+                  sm: 2
+                },
+                ...header,            
+              },
+              challanNo:{
+                uiFramework: "custom-atoms",
+                componentPath: "Div",
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+               children: {
+                challanNumberContainer: getCommonContainer({
+                  challanNumber: {
+                       uiFramework: "custom-atoms-local",
+                       moduleName: "egov-uc",
+                       componentPath: "ApplicationNoContainer",
+                       
+                       props: {
+                         number: challanNumber,
+                       },
+                     },
+                   }),
+               }
+              },
+              headerdownloadprint:downloadprintMenu(state, dispatch),            
+            }
+          },         
+        },
+      }, 
+
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -39,19 +180,19 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Payment has been collected successfully!",
-              labelKey: "UC_PAYMENT_COLLECTED_SUCCESS_MESSAGE_MAIN"
+              labelName: "Bill Generated Successfully!",
+              labelKey: "UC_BILL_GENERATED_SUCCESS_MESSAGE"
             },
             body: {
               labelName:
                 "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-              labelKey: "UC_PAYMENT_SUCCESS_MESSAGE_SUB"
+              labelKey: "UC_BILL_GENERATION_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "payment receipt no.",
-              labelKey: "UC_PAYMENT_NO_LABEL"
+              labelName: "Bill No.",
+              labelKey: "UC_BILL_NO_LABEL"
             },
-            number: receiptNumber
+            number: billNo
           })
         }
       },
@@ -61,11 +202,13 @@ const getAcknowledgementCard = (
       },
       applicationSuccessFooter: acknowledgementSuccesFooter
     };
-  } else if (purpose === "pay" && status === "failure") {
+  }
+  else if (purpose === "challan" && status === "failure") {
+    console.info("came to failure");
     return {
       header: getCommonHeader({
-        labelName: `New collection`,
-        labelKey: "new collection"
+        labelName: `mCollect`,
+        labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -75,12 +218,12 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Payment Collection failed!",
-              labelKey: "UC_PAYMENT_FAILED"
+              labelName: "Sorry Bill generation failed!",
+              labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE"
             },
             body: {
-              labelName: "Payment Collection has been failed!",
-              labelKey: "UC_PAYMENT_NOTIFICATION"
+              labelName: "Sorry Bill generation has been failed!",
+              labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE_BODY"
             }
           })
         }
@@ -88,6 +231,7 @@ const getAcknowledgementCard = (
       paymentFailureFooter: acknowledgementFailureFooter
     };
   }
+  
 };
 
 const getSearchData = async (dispatch, queryObj) => {
@@ -115,8 +259,8 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-    const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
-    const secondNumber = getQueryArg(window.location.href, "secondNumber");
+   // const billNumber = getQueryArg(window.location.href, "billNumber");
+    const challanNumber = getQueryArg(window.location.href, "challanNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const serviceCategory = getQueryArg(
       window.location.href,
@@ -128,26 +272,19 @@ const screenConfig = {
         key: "tenantId",
         value: tenantId
       },
-      { key: "offset", value: "0" },
-      {
-        key: "receiptNumbers",
-        value: receiptNumber
-      },
+      { key: "offset", value: "0" },     
       {
         key: "businessServices",
         value: serviceCategory
       }
     ];
-
-    getSearchData(dispatch, queryObject);
-
     const data = getAcknowledgementCard(
       state,
       dispatch,
       purpose,
       status,
-      receiptNumber,
-      secondNumber,
+      //billNumber,
+      challanNumber,
       tenant
     );
     set(action, "screenConfig.components.div.children", data);

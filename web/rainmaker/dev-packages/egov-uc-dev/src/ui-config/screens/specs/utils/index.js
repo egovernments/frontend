@@ -7,6 +7,7 @@ import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -50,15 +51,18 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
-  screen = "apply"
+  //screen = "apply"
+  screen = "newCollection"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
     {}
   );
+ 
   let isFormValid = true;
   for (var variable in fields) {
+    
     if (fields.hasOwnProperty(variable)) {
       if (
         fields[variable] &&
@@ -403,3 +407,35 @@ export const getTextToLocalMapping = label => {
       );
   }
 };
+
+
+export const downloadChallan = async (Challan, mode = 'download') => {
+  console.info("Came to download challan",Challan);
+  let tenantId = get(Challan, "tenantId");
+  const queryStr = [
+    { key: "key", value:"mcollect-challan" },
+    { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
+  ];
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+    try {
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Challan }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+            res.filestoreIds.map(fileStoreId => {
+              downloadReceiptFromFilestoreID(fileStoreId, mode)
+            })
+          } else {
+            console.log("Error In Acknowledgement form Download");
+          }
+        });
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  
+}

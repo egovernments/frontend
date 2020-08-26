@@ -4,7 +4,8 @@ import {
 
   getCommonContainer, getCommonGrayCard, getCommonHeader,
 
-  getCommonTitle
+  getCommonTitle,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -26,13 +27,15 @@ import {
   getDialogButton, getFeesEstimateCard,
   getHeaderSideText,
   getTransformedStatus, setMultiOwnerForSV,
-  setValidToFromVisibilityForSV
+  setValidToFromVisibilityForSV,
+  showHideAdhocPopup
 } from "../utils";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
+import { adhocPopup } from "./applyResource/adhocPopup";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -164,6 +167,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
 
+    if (status !== "FIELDINSPECTION") {
+      dispatch(
+       handleField(
+         "search-preview",
+         "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+         "visible",
+         false
+       )
+     );
+   }
+
     const financialYear = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
@@ -180,6 +194,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         dispatch, 'TL'
       );
     }
+
+    get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
+      ? setMultiOwnerForSV(action, true)
+      : setMultiOwnerForSV(action, false);
 
     const businessService = get(
       state.screenConfiguration.preparedFinalObject,
@@ -264,7 +284,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       financialYear
     );
 
-    if (status !== "INITIATED") {
+    if (status !== "INITIATED"  && status !== "PENDINGAPPLFEE") {
       process.env.REACT_APP_NAME === "Citizen"
         ? set(
           action,
@@ -461,6 +481,28 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "ADD GARBAGE CHARGES",
+        labelKey: "TL_PAYMENT_ADD_RBT_PEN"
+      })
+    },
+     onClickDefination: {
+       action: "condition",
+       callBack: showHideAdhocPopup
+     },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      roles: ["TL_FIELD_INSPECTOR"]
+    },
+    visible: (getQueryArg(window.location.href, "tenantId")==='pb.secunderabad')? true:false
+  },
   viewBreakupButton: getDialogButton(
     "VIEW BREAKUP",
     "TL_PAYMENT_VIEW_BREAKUP",
@@ -570,6 +612,19 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "search-preview"
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: adhocPopup
       }
     }
   }

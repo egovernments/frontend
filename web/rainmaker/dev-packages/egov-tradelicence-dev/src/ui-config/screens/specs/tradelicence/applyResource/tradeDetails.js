@@ -27,7 +27,7 @@ import {
   prepareFinalObject as pFO,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg , getTodaysDateInYMD} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg , getTodaysDateInYMD , getTLTenantId  } from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
@@ -238,7 +238,7 @@ const tradeUnitCard = {
               type : 'TL',
               callBackEdit: updateMdmsDropDowns,
               isDependency : "DynamicMdms.common-masters.structureTypes.structureSubType",
-              tenantId: process.env.REACT_APP_NAME === "Citizen"? getQueryArg(window.location.href, "tenantId") : getTenantId(),
+              tenantId: getTLTenantId(),
             }
           },
          
@@ -636,6 +636,7 @@ export const tradeDetails = getCommonCard({
         componentPath: "AutosuggestContainer",
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
+        required: true,
          props:{
           className: "autocomplete-dropdown",
           suggestions: [],

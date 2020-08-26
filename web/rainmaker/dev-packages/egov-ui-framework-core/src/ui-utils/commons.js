@@ -796,6 +796,10 @@ export const getObjectKeys = objData => {
     })
   );
 };
+export const getTLTenantId = () =>{
+  return process.env.REACT_APP_NAME === "Citizen" ? getQueryArg(window.location.href, "tenantId") : getTenantId();
+};
+
 export const getMdmsJson = async (state, dispatch, reqObj) => {
   let { setPath, setTransformPath, dispatchPath, moduleName, name, type, tenantId } = reqObj;
   tenantId = tenantId ? tenantId : commonConfig.tenantId;
