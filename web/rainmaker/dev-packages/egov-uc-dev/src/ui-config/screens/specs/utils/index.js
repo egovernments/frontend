@@ -411,9 +411,17 @@ export const getTextToLocalMapping = label => {
 
 export const downloadChallan = async (Challan, mode = 'download') => {
   console.info("Came to download challan");
+  let tenantId = get(Challan, "tenantId");
   const queryStr = [
-    { key: "key", value:"mcollect-challan" }    
-  ]  
+    { key: "key", value:"mcollect-challan" },
+    { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
+  ];
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
     try {
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Challan }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
