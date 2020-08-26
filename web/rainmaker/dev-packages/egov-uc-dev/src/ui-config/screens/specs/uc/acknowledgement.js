@@ -117,93 +117,20 @@ const getAcknowledgementCard = (
   challanNumber,
  
 ) => {
-  if (purpose === "pay" && status === "success") {
-    return {
-      header: getCommonHeader({
-        labelName: `New Collection`,
-        labelKey: "UC_COMMON_HEADER"
-      }),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        props: {
-          style: {
-            position: "absolute",
-            width: "95%"
-          }
-        },
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Payment has been collected successfully!",
-              labelKey: "UC_PAYMENT_COLLECTED_SUCCESS_MESSAGE_MAIN"
-            },
-            body: {
-              labelName:
-                "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-              labelKey: "UC_PAYMENT_SUCCESS_MESSAGE_SUB"
-            },
-            tailText: {
-              labelName: "payment receipt no.",
-              labelKey: "UC_PAYMENT_NO_LABEL"
-            },
-            number: challanNumber
-          })
-        }
-      },
-      iframeForPdf: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div"
-      },
-      applicationSuccessFooter: acknowledgementSuccesFooter
-    };
-  } else if (purpose === "pay" && status === "failure") {
-    return {
-      header: getCommonHeader({
-        labelName: `New collection`,
-        labelKey: "new collection"
-      }),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: "Payment Collection failed!",
-              labelKey: "UC_PAYMENT_FAILED"
-            },
-            body: {
-              labelName: "Payment Collection has been failed!",
-              labelKey: "UC_PAYMENT_NOTIFICATION"
-            }
-          })
-        }
-      },
-      paymentFailureFooter: acknowledgementFailureFooter
-    };
-  }
-  else if(purpose === "challan" && status === "success"){
+   if(purpose === "challan" && status === "success"){
     const billNo = get(
       state.screenConfiguration.preparedFinalObject,
       "ReceiptTemp[0].Bill[0].billNumber"
-    );    
+    ); 
 
-     return {
-     
+     return {     
        headerDiv:{
         uiFramework: "custom-atoms",
-        componentPath: "Div",
-       
+        componentPath: "Div",       
         children: {
-
           headerDiv: {
             uiFramework: "custom-atoms",
-            componentPath: "Container",
-  
+            componentPath: "Container",  
             children: {
               header: {
                 gridDefination: {
@@ -276,6 +203,35 @@ const getAcknowledgementCard = (
       applicationSuccessFooter: acknowledgementSuccesFooter
     };
   }
+  else if (purpose === "challan" && status === "failure") {
+    console.info("came to failure");
+    return {
+      header: getCommonHeader({
+        labelName: `mCollect`,
+        labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "close",
+            backgroundColor: "#E54D42",
+            header: {
+              labelName: "Sorry Bill generation failed!",
+              labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE"
+            },
+            body: {
+              labelName: "Sorry Bill generation has been failed!",
+              labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE_BODY"
+            }
+          })
+        }
+      },
+      paymentFailureFooter: acknowledgementFailureFooter
+    };
+  }
+  
 };
 
 const getSearchData = async (dispatch, queryObj) => {

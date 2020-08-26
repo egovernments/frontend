@@ -352,19 +352,13 @@ const createChallan = async(state,dispatch) =>{
         set(eChallans[0], "additionalDetail.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].glcode);
       }
     }
-    console.info("eChallans in state presetn==", eChallans);
     //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
     const taxPeriodValid = isTaxPeriodValid(dispatch, eChallans[0], state);
     
     console.info("echallan requ=",eChallans);
     if (taxPeriodValid) {
-
-      console.info("tax period valid?");
-
-      const url = "/echallan-services/eChallan/v1/_create";
-             
-        console.info("url=",url);
-      try {
+      const url = "/echallan-services/eChallan/v1/_create";     
+       try {
           const payload = await httpRequest("post", url, "", [], {
           Challan: eChallans[0]
         });
@@ -379,11 +373,11 @@ const createChallan = async(state,dispatch) =>{
             "challans[0].businessService",
             businessService.split(".")[0]
           );
-          dispatch(prepareFinalObject("Challan", payload.challans[0]));
-          console.info("generate bill");
+          dispatch(prepareFinalObject("Challan", payload.challans[0]));          
           await generateBill(consumerCode, tenantId, businessService, dispatch);
         } else {
-          alert("Empty response!!");
+          console.info("some error  happened while generating challan");
+          dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
         }
       } catch (e) {
         console.log(e.message);
@@ -397,11 +391,8 @@ const createChallan = async(state,dispatch) =>{
             "error"
           )
         );
-      }
-    
-    
-    }
- 
+      }    
+    } 
 }
 
 const generateBill = async (
@@ -415,17 +406,20 @@ const generateBill = async (
     const payload = await httpRequest(
       "post",
       `/billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
-      "",
+       "",
       [],
       {}
     );
     if (payload && payload.Bill[0]) {
-      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));      
-      console.info("bill generated redirect to common pay");     
+      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));                
       dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&challanNumber=${consumerCode}`));
+    }
+    else{     
+      dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
     }
   } catch (e) {
     console.log(e);
+    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
   }
 };
 
