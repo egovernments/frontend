@@ -119,6 +119,7 @@ const propertyDetails = {
           },
           {
             jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+            callBack: checkValueForNA
             // localePrefix: {
             //   moduleName: "firenoc",
             //   masterName: "BuildingParkingArea"
@@ -297,7 +298,8 @@ const propertyLocationDetails = getCommonGrayCard({
         jsonPath:
           "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
         callBack: value => {
-          return `${getTransformedLocale(tenantId)}_REVENUE_${value}`;
+          let res = value.replace("-", "_");
+          return `${getTransformedLocale(tenantId)}_REVENUE_${res}`;
         }
       }
     ),

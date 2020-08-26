@@ -82,7 +82,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
       for (let i = 0; i < buildings.length; i++) {
 
         buildings[i].landArea = parseInt(buildings[i].landArea);
-        // buildings[i].parkingArea = parseInt(buildings[i].parkingArea);
+        buildings[i].parkingArea = parseInt(buildings[i].parkingArea);
         buildings[i].totalCoveredArea = parseInt(buildings[i].totalCoveredArea);
 
       }
@@ -132,28 +132,28 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         `totalCoveredArea`,
         parseInt(index.totalCoveredArea)
       );
-      // set(
-      //   index,
-      //   `parkingArea`,
-      //   parseInt(index.parkingArea)
-      // );
+      set(
+        index,
+        `parkingArea`,
+        parseInt(index.parkingArea)
+      );
 
 
-      // if (!index.parkingArea) {
-      //   set(
-      //     index,
-      //     `parkingArea`,
-      //     0
-      //   );
+      if (!index.parkingArea) {
+        set(
+          index,
+          `parkingArea`,
+          0
+        );
 
-      // }
-      // else {
-      //   set(
-      //     index,
-      //     `parkingArea`,
-      //     parseInt(index.parkingArea)
-      //   );
-      // }
+      }
+      else {
+        set(
+          index,
+          `parkingArea`,
+          parseInt(index.parkingArea)
+        );
+      }
     })
 
     let noctypedata = get(
