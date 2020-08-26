@@ -1,5 +1,6 @@
 
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { createPropertyPayload } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { hideSpinner } from "egov-ui-kit/redux/common/actions";
@@ -87,6 +88,16 @@ const getAssessmentDetails = async () => {
 }
 export const createProperty = async (Properties, action, props) => {
     const { documentsUploadRedux, newProperties, propertiesEdited ,propertyAdditionalDetails} = props;
+    let isDocumentValid = true;
+    Object.keys(documentsUploadRedux).map((key) => {
+        if(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents.length > 0 && !(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value)){
+            isDocumentValid = false;
+        }
+    });
+    if(!isDocumentValid){
+        store.dispatch(toggleSnackbarAndSetText(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
+        return;
+    }
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = action;
     if (action === "_update") {

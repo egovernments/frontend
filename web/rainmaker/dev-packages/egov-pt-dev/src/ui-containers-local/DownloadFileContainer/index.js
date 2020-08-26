@@ -33,7 +33,7 @@ const mapStateToProps = (state, ownProps) => {
         }
       }
       else {
-        if(item.dropdown && item.dropdown.value && item.documents && Array.isArray(item.documents) && item.documents[0].fileUrl){
+        if(item.documents && Array.isArray(item.documents) && item.documents[0].fileUrl){
           return {
             title: item.documentCode,
             link: item.documents[0].fileUrl.split(",")[0],

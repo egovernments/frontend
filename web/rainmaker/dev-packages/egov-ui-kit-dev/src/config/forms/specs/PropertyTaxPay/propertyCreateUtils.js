@@ -120,13 +120,13 @@ export const convertToArray = (documentsUploadRedux) => {
       let documentsData = [];
       Object.keys(documentsUploadRedux).map((key) => {
         const dropdownValue = documentsUploadRedux[key] && documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value || '';
-        let docTitleArray = dropdownValue.split(".");
-        if (dropdownValue == '' && docTitleArray.length == 1) {
-          return;
-        }
+        let docTitleArray = dropdownValue && dropdownValue.split(".");
+        // if (dropdownValue == '' && docTitleArray.length == 1) {
+        //   return;
+        // }
         if(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents[0].fileUrl && documentsUploadRedux[key].documents[0].fileName) {
           documentsData.push({
-            title: docTitleArray[docTitleArray.length - 1],
+            title: docTitleArray && docTitleArray.length > 0 && docTitleArray[docTitleArray.length - 1],
             link: getFileUrl(documentsUploadRedux[key].documents[0].fileUrl),
             linkText: "View",
             name: documentsUploadRedux[key].documents[0].fileName,
