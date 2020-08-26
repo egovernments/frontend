@@ -134,6 +134,18 @@ const callBackForApply = async (state, dispatch) => {
 
   let documentsUploadRedux = get(
     state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
+  
+    let isDocumentValid = true;
+    Object.keys(documentsUploadRedux).map((key) => {
+        if(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents.length > 0 && !(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value)){
+            isDocumentValid = false;
+        }
+    });
+    if(!isDocumentValid){
+        dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
+        return;
+    }
+  
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
