@@ -38,10 +38,19 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
 let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
-const serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
+
+const resetData=()=>{
+   applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+   service = getQueryArg(window.location.href, "service");
+   serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
+   serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
+   redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+   editredirect = `apply?${redirectQueryString}&action=edit`;
+}
 
 if(isModifyMode()){ 
   redirectQueryString += '&mode=MODIFY';
@@ -87,7 +96,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     { key: "history", value: true },
     { key: "tenantId", value: tenantId }
   ];
-
+  if(getQueryArg(window.location.href, "service",null)!=null){
+    resetData();
+  }
+  
   let Response =await getWorkFlowData(queryObj);
   let processInstanceAppStatus=Response.ProcessInstances[0].state.applicationStatus;
   //Search details for given application Number
@@ -480,6 +492,12 @@ const screenConfig = {
       "screenConfig.components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number",
       applicationNumber
     );
+    set(action,'screenConfig.components.div.children.taskStatus.props.dataPath', (service === serviceConst.WATER)?"WaterConnection":"SewerageConnection");
+    set(action,'screenConfig.components.div.children.taskStatus.props.moduleName',serviceModuleName);
+    set(action,'screenConfig.components.div.children.taskStatus.props.updateUrl', serviceUrl);
+    set(action,'screenConfig.components.div.children.taskStatus.props.bserviceTemp', (service === serviceConst.WATER)?"WS.ONE_TIME_FEE":"SW.ONE_TIME_FEE");
+    set(action,'screenConfig.components.div.children.taskStatus.props.redirectQueryString', redirectQueryString);
+    set(action,'screenConfig.components.div.children.taskStatus.props.editredirect', editredirect);
     return action;
   },
 
