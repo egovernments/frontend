@@ -119,13 +119,12 @@ const getData = async (action, state, dispatch, demandId) => {
     } else if (tenantId) {
       loadServiceType(tenantId, dispatch)
     }
-    dispatch(
-      prepareFinalObject("Demands[0].tenantId", tenantId)
-    );
+    // dispatch(
+    //   prepareFinalObject("Demands[0].tenantId", tenantId)
+    // );
 
     const presentTenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):getTenantId();
-    console.info("getting my help url for tenant id mCollect==",presentTenantId);
-    //console.info("src urls==",get(payload,"MdmsRes.common-masters.Help",[]));
+      
       let helpUrl = get(
         payload,
         "MdmsRes.common-masters.Help",
