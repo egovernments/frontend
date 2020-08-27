@@ -114,6 +114,7 @@ const viewReceipt = (state, dispatch) => {
 };
 
 const goToHome = (state, dispatch) => {
-  dispatch(prepareFinalObject("Demands", []));
+ // dispatch(prepareFinalObject("Demands", []));
+  dispatch(prepareFinalObject("Challan", []));
   dispatch(setRoute(`${getRedirectionURL()}`));
 };

@@ -153,7 +153,8 @@ const ucSearchAndResult = {
 export default ucSearchAndResult;
 
 const openNewCollectionForm = (state, dispatch) => {
-  dispatch(prepareFinalObject("Demands", []));
+ // dispatch(prepareFinalObject("Demands", []));
+ dispatch(prepareFinalObject("Challan", []));
   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
