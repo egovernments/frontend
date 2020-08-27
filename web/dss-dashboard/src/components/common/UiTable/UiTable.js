@@ -193,6 +193,11 @@ class EnhancedTable extends React.Component {
     const { classes, columnData, needHash } = this.props
     const isSelected = this.isSelected(n.Email);
     let lydata = this.renderLastYearRowData(n, idx);
+    var existingFilters = this.props.filters;
+    var title = existingFilters.duration.title;
+    if(title.includes(',')){
+         title='CUSTOM';
+    }
 
 
     // let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
@@ -203,7 +208,6 @@ class EnhancedTable extends React.Component {
     let insightColor = colorCode === 0 ? "#db534a" : "#2ba129";
     let insightIcon = colorCode === 0 ? Arrow_Downward : Arrow_Upward;
     let sign = colorCode === 0 ? '-' : '+';
-
     return (
       <TableRow
         hover
@@ -221,38 +225,45 @@ class EnhancedTable extends React.Component {
           </TableCell>
           : null
         }
-        {_.keys(n).map(d => {        
+        {_.keys(n).map(d => {
 
           /* console.log(n,d,n[d],n[d]&&n[d][1],'table'); */
-          let value = n[d];
+          let value = Math.round(n[d].toString().replace(/[&\/\\#,%]/g, ''));
+          if (value > 100) {
+            value = 100;
+          }
           insightColor = "#2ba129";
           insightIcon = Arrow_Upward;
 
           {
             _.keys(lydata).map(dt => {
               if (typeof n[d] !== 'object' && typeof lydata[dt] !== 'object' && (d === dt)) {
-                var lyData = parseInt(lydata[dt].toString().replace(/[&\/\\#,%]/g, ''));
-                var cyData = parseInt(n[d].toString().replace(/[&\/\\#,%]/g, ''));
+                var lyData = Math.round(lydata[dt].toString().replace(/[&\/\\#,%]/g, ''));
+                var cyData = Math.round(n[d].toString().replace(/[&\/\\#,%]/g, ''));
                 if (cyData === 0 && lyData === 0) {
                   value = 0;
                 }
-                else if (cyData <= 0 && lyData > 0 ) {
+                else if (cyData == 0) {
                   value = lyData;
-                  if(value>100)
-                     value=100;
+                  if (value > 100)
+                    value = 100;
+
                   insightColor = "#db534a";
                   insightIcon = Arrow_Downward;
-                } else if (cyData > 0 && lyData <= 0) {                  
+
+                }
+                else if (lyData == 0) {
                   value = cyData;
-                  if(value>100)
-                     value=100;
+                  if (value > 100)
+                    value = 100;
+
                   insightColor = "#2ba129";
                   insightIcon = Arrow_Upward;
                 }
                 else {
                   value = Math.round(((cyData - lyData) / lyData) * 100);
-                  if(value > 100)
-                     value = value / 100 ;
+                  if (value > 100)
+                    value = value / 100;
                   if (value <= 0) {
                     insightColor = "#db534a";
                     insightIcon = Arrow_Downward;
@@ -266,15 +277,30 @@ class EnhancedTable extends React.Component {
             }
             )
           }
-
           return (
             <TableCell key={d}
               align={((_.get(_.find(columnData, c => c.id === d), 'numeric') || false))
                 /*    ? 'right' : 'left'}  to  make numbers to right align if needed */
                 ? 'right' : 'left'}
               component='td' scope='row' data-title={d} >
-              {
-                d === this.props.column ?
+              { title === 'CUSTOM' ?
+                  d === this.props.column ?
+                    <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
+                    : (typeof n[d] === 'object') ?
+                      n[d][1]
+                      :
+                      <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
+                        <React.Fragment>
+                            <span style={{ cursor: 'pointer' }}>
+                              <span className={"table-value"}>{n[d]}</span>
+                              <span style={{ marginLeft: "2vh", fontSize: 'initial', paddingRight: "8px" }}>
+                              </span>
+                            </span>
+                            
+                        </React.Fragment>
+                      </div>
+                  :
+                  d === this.props.column ?
                   <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
                   : (typeof n[d] === 'object') ?
                     n[d][1]
@@ -290,6 +316,7 @@ class EnhancedTable extends React.Component {
                             <span style={{ color: insightColor, fontSize: '14px' }}>{value < 10 ? ' ' : ''}{value}%</span>
                           </span>
                         </Tooltip>
+                          
                       </React.Fragment>
                     </div>
               }

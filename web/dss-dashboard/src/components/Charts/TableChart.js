@@ -14,6 +14,7 @@ import SwitchButton from '../common/tableswitchs/switchButtons';
 import UiTable from '../common/UiTable/UiTable';
 import styles from './styles';
 import getPrevFinancialYearObj from '../../actions/getPrevFinancialYearObj';
+import moment from 'moment';
 
 
 class TableChart extends Component {
@@ -30,30 +31,99 @@ class TableChart extends Component {
       active: null,
       drilfilters: null,
       lastYeardata: null,
-      filterData: this.props.filters,
       getFYObj: getPrevFinancialYearObj(),
-      filterList: {}
+      filterList: {},
+      filterData: this.props.filters
     }
   }
 
 
+  getDateFilter(value) {
+    switch (_.toUpper(value)) {
+      case 'TODAY':
+
+        return {
+          title: "TODAY",
+          value: {
+            startDate: moment(moment().subtract(1, 'day')).startOf('day').unix(),
+            endDate: moment(moment().subtract(1, 'day')).endOf('day').unix(),
+            interval: 'day'
+          }
+        }
+      case 'WEEK':
+
+        return {
+          title: "WEEK",
+          value: {
+            startDate: moment(moment().subtract(1, 'week')).startOf('week').unix(),
+            endDate: moment(moment().subtract(1, 'week')).endOf('week').unix(),
+            interval: 'week'
+          }
+        }
+      case 'MONTH':
+        return {
+          title: "MONTH",
+          value: {
+            startDate: moment(moment().subtract(1, 'month')).startOf('month').unix(),
+            endDate: moment(moment().subtract(1, 'month')).endOf('month').unix(),
+            interval: 'week'
+          }
+        }
+      case 'QUARTER':
+        return {
+          title: "QUARTER",
+          value: {
+            startDate: moment(moment().subtract(1, 'quarter')).startOf('quarter').unix(),
+            endDate: moment(moment().subtract(1, 'quarter')).endOf('quarter').unix(),
+            interval: 'week'
+          }
+        }
+      case 'PREVYEAR':
+        return {
+          title: "YEAR",
+          value: {
+            startDate: moment(moment().subtract(2, 'year')).startOf('year').unix(),
+            endDate: moment(moment().subtract(2, 'year')).endOf('year').unix(),
+            interval: 'month'
+          }
+        }
+
+      default:
+        return getPrevFinancialYearObj();
+    }
+  }
+
   getLastYearRequest(calledFrom, visualcode, active, filterList) {
-
     var newFilterData = this.state.filterData;
+    var existingFilters = this.props.filters;
+    var title = existingFilters.duration.title;
 
-    var startDate = this.state.getFYObj.value.startDate;
+    var currentYear = moment().startOf('year').format('YY')
+
+    var returnVal, prevYear;
+    if (title) {
+      returnVal = title.split(/[-]/g);
+      prevYear = parseInt(returnVal.toString().replace(/[FY ]/g, ''));
+      if (returnVal && returnVal[0].includes('FY') && prevYear !== currentYear)
+        title = 'PREVYEAR';
+    }
+    let dateFilter = this.getDateFilter(title);
+
+    var startDate = dateFilter.value.startDate;
 
     for (var i = startDate.toString().length; i < 13; i++) {
       startDate = startDate.toString().concat('0');
     }
     newFilterData.duration.startDate = startDate;
 
-    var endDate = this.state.getFYObj.value.endDate;
+    var endDate = dateFilter.value.endDate;
+
 
     for (var i = endDate.toString().length; i < 13; i++) {
       endDate = endDate.toString().concat('0');
     }
     newFilterData.duration.endDate = endDate;
+    newFilterData.duration.interval = dateFilter.value.interval;
 
     let getAxiosOptions = getChartOptions(visualcode, newFilterData);
 
@@ -83,7 +153,9 @@ class TableChart extends Component {
 
 
   getRequest(calledFrom, visualcode, active, filterList) {
+
     this.getLastYearRequest(calledFrom, visualcode, active, filterList);
+
     filterList = filterList ? filterList : this.state.filterList;
     let filters = {}, ttest = [], tempFL;
     if (!_.isEmpty(filterList, true)) {
@@ -371,6 +443,7 @@ class TableChart extends Component {
             <UiTable
               column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : (chartsData[chartKey] && Array.isArray(chartsData[chartKey].filter) && chartsData[chartKey].filter.length > 0 ? chartsData[chartKey].filter[0].column : '')}
               data={newData}
+              filters={this.props.filters}
               lyData={newLastYearData}
               columnData={columnData}
               tableType='CENTERS_TABLE'
