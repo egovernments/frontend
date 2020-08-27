@@ -470,7 +470,11 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+    ];
 
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     //To set the application no. at the  top
     set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.application.children.applicationNumber.props.number", applicationNumber);
     // if (status !== "pending_payment") {
@@ -479,11 +483,7 @@ const screenConfig = {
     if(isModifyMode()){
       serviceModuleName = service === serviceConst.WATER ? "ModifyWSConnection" : "ModifySWConnection";
     }
-    const queryObject = [
-      { key: "tenantId", value: tenantId }
-    ];
 
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopup);
     loadUlbLogo(tenantId);
     beforeInitFn(action, state, dispatch, applicationNumber);
