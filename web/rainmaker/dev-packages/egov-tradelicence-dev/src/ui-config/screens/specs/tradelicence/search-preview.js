@@ -273,7 +273,23 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       tenantId,
       financialYear
     );
+    if (status === "REJECTED"|| status ==="APPROVED" || status ==="APPLIED") {
+      console.log("=====status=123======" + status + "============");
+      // set(
+      //   action.screenConfgig,
+      //   "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton.visible",
+      //   false
+      // );
 
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+          "visible",
+          false
+        )
+      );
+    }
     if(status !== "INITIATED"){
       process.env.REACT_APP_NAME === "Citizen"
       ? set(
