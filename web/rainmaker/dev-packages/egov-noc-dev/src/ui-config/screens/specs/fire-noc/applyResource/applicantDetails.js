@@ -492,7 +492,7 @@ export const applicantDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Applicant Details",
-      labelKey: "NOC_APPLICANT_DETAILS_HEADER"
+      // labelKey: "NOC_APPLICANT_DETAILS_HEADER"
     },
     {
       style: {

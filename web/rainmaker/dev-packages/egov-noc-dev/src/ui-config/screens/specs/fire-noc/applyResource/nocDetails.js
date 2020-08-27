@@ -66,10 +66,19 @@ const loadProvisionalNocData = async (state, dispatch) => {
     []
   );
 
+
   response = furnishNocResponse(response);
+
+  let provisionFireNOCNumber = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].provisionFireNOCNumber",
+    []
+  );
 
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
   dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.fireNOCType", nocType));
+  dispatch(prepareFinalObject("FireNOCs[0].provisionFireNOCNumber", provisionFireNOCNumber));
+
 
 
   // Set no of buildings radiobutton and eventually the cards
@@ -98,15 +107,15 @@ const loadProvisionalNocData = async (state, dispatch) => {
   // );
 
   // Set provisional fire noc number
-  dispatch(
-    prepareFinalObject(
-      "FireNOCs[0].provisionFireNOCNumber",
-      get(response, "FireNOCs[0].fireNOCNumber", "")
-    )
-  );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "FireNOCs[0].provisionFireNOCNumber",
+  //     get(response, "FireNOCs[0].fireNOCNumber", "")
+  //   )
+  // );
 
   // Set fire noc id to null
-  dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
+  // dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
 };
 
 export const loadProvisionalNocData2 = async (state, dispatch) => {
@@ -143,10 +152,6 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
     isLegacy = true;
 
   }
-  // else{
-  //   dispatch(prepareFinalObject("FireNOCs[0].isLegacy",false));
-
-  // }
 
   response = furnishNocResponse(response);
   let nocType = get(

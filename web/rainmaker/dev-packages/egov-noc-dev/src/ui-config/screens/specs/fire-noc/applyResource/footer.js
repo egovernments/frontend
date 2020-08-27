@@ -89,10 +89,7 @@ const moveToReview = (state, dispatch) => {
 };
 
 const getMdmsData = async (state, dispatch) => {
-  let tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].tenantId"
-  );
+  let tenantId = "pb"
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,

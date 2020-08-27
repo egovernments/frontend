@@ -372,6 +372,21 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       );
     });
 
+    let data = payload.filter(doc=>doc.fireNOCDetails.action==="APPROVE");
+
+    data = data.map((obj)=>{
+      if(obj.fireNOCDetails.action === "APPROVE")
+      {
+      obj.fireNOCDetails.action = "INITIATE";
+      }
+      })
+
+      set(
+        payload[1],
+        "payload[1]",
+        data
+      );
+
     let response;
     if (method === "CREATE") {
       response = await httpRequest(

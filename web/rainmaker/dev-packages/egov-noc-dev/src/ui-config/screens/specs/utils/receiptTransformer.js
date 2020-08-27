@@ -285,8 +285,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
   ];
   let response = await getReceiptData(queryObject);
 
-debugger;
-  console.log("respons of collection service",response);
+  // console.log("respons of collection service",response);
 
   if (response && response.Payments && response.Payments.length > 0) {
     data.receiptNumber = nullToNa(
