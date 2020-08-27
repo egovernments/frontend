@@ -7,9 +7,28 @@ import {
   getTextToLocalMapping
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateFields } from "../../utils";
+import { validateFields, resetFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-//import { LabelContainer } from "egov-ui-framework/ui-containers";
+
+
+export const resetAllFields = (state, dispatch) => {
+
+  resetFields(
+    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  resetFields(
+    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+}
+
+
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -94,31 +113,32 @@ export const searchApiCall = async (state, dispatch) => {
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
           });
         } else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim().toUpperCase() });
+          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
         }
       }
     }
 
     const response = await getSearchResults(queryObject);
     try {
-      
       let data = response.Licenses.map(item => ({
-        ['TL_COMMON_TABLE_COL_APP_NO']:
+  
+        [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
-        ['TL_COMMON_TABLE_COL_LIC_NO']: item.licenseNumber || "-",
-        ['TL_COMMON_TABLE_COL_TRD_NAME']: item.tradeName || "-",
-        ['TL_COMMON_TABLE_COL_OWN_NAME']:
+        [getTextToLocalMapping("License No")]: item.licenseNumber || "-",
+        [getTextToLocalMapping("Trade Name")]: item.tradeName || "-",
+        [getTextToLocalMapping("Owner Name")]:
           item.tradeLicenseDetail.owners[0].name || "-",
-        ['TL_COMMON_TABLE_COL_APP_DATE']:
+        [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
-          ['TL_COMMON_TABLE_COL_FIN_YEAR']:
+          [getTextToLocalMapping("Financial Year")]:
           item.financialYear || "-",
-          ['TL_COMMON_TABLE_COL_APP_TYPE']:
-          `TL_TYPE_${item.applicationType}`  || "NEW",
-        ['TL_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ["TENANT_ID"]: item.tenantId,
-        ["TL_COMMON_TABLE_COL_STATUS"]: item.status || "-"
+          [getTextToLocalMapping("Application Type")]:
+          item.applicationType || "NEW",
+        [getTextToLocalMapping("Status")]: item.status || "-",
+        ["tenantId"]: item.tenantId,
+        ["status1"]: item.status || "-"
       }));
+
       dispatch(
         handleField(
           "search",
@@ -131,8 +151,10 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResults",
-          "props.rows",
-          response.Licenses.length
+          "props.title",
+          `${getTextToLocalMapping(
+            "Search Results for Trade License Applications"
+          )} (${response.Licenses.length})`
         )
       );
       showHideTable(true, dispatch);

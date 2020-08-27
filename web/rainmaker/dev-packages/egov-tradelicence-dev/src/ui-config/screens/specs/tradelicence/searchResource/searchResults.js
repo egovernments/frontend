@@ -1,104 +1,76 @@
 import React from "react";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
 import {
   sortByEpoch,
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import { getLocaleLabels, getStatusKey} from "egov-ui-framework/ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
+  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     columns: [
+      getTextToLocalMapping("Application No"),
+      getTextToLocalMapping("License No"),
+      getTextToLocalMapping("Trade Name"),
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Application Date"),
+      getTextToLocalMapping("Financial Year"),
       {
-        labelName: "Application No",
-        labelKey: "TL_COMMON_TABLE_COL_APP_NO",
-        options: {
-          filter: false,
-          customBodyRender: (value, tableMeta) => (
-              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
-          )
-        }
-      },
-      {
-        labelName: "License No",
-        labelKey: "TL_COMMON_TABLE_COL_LIC_NO"
-      },
-      {
-        labelName: "Trade Name",
-        labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
-      },
-      {
-        labelName: "Owner Name",
-        labelKey: "TL_COMMON_TABLE_COL_OWN_NAME"
-      },
-      {
-        labelName: "Application Date",
-        labelKey: "TL_COMMON_TABLE_COL_APP_DATE"
-      },
-      {
-        labelName: "Financial Year",
-        labelKey: "TL_COMMON_TABLE_COL_FIN_YEAR"
-      },
-      {
-        labelName: "Application Type",
-        labelKey: "TL_COMMON_TABLE_COL_APP_TYPE",
+        name: getTextToLocalMapping("Application Type"),
         options: {
           filter: false,
           customBodyRender: value => (
             <span>
-              {getLocaleLabels(value,value)}
+              {getTextToLocalMapping(value)}
             </span>
           )
         }
       },
       {
-        labelName: "Status",
-        labelKey: "TL_COMMON_TABLE_COL_STATUS",
+        name: getTextToLocalMapping("Status"),
         options: {
           filter: false,
           customBodyRender: value => (
-            <LabelContainer
+            <span
               style={
-                value.includes("APPROVED") ? { color: "green" } : { color: "red" }
+                value === "APPROVED" ? { color: "green" } : { color: "red" }
               }
-              labelKey={getStatusKey(value).labelKey}
-              labelName={getStatusKey(value).labelName}
-            />
+            >
+              {getTextToLocalMapping(value)}
+            </span>
           )
         }
       },
       {
-        labelName: "Tenant Id",
-        labelKey: "TENANT_ID",
+        name: "tenantId",
         options: {
           display: false
         }
       },
       {
-        labelName: "Status",
-        labelKey: "TL_COMMON_TABLE_COL_STATUS",
+        name:"status1",
         options: {
           display: false
         }
       },
 
     ],
-    title: {
-      labelName: "Search Results for Trade License Applications",
-      labelKey: "TL_HOME_SEARCH_RESULTS_TABLE_HEADING"
-    },
-    rows : "",
+    title: getTextToLocalMapping(
+      "Search Results for Trade License Applications"
+    ),
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20]
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index) => {
+        onRowClick(row);
+      }
     },
     customSortColumn: {
       column: "Application Date",
@@ -124,6 +96,7 @@ const onRowClick = rowData => {
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[8]
       }`;
+      // }&action=edit`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${

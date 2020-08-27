@@ -1,23 +1,40 @@
-import commonConfig from "config/common.js";
-import {
-  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
-  toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { uploadFile } from "egov-ui-framework/ui-utils/api";
-import {
-  acceptedFiles, getFileUrl,
-  getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage
-} from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import set from "lodash/set";
-import store from "redux/store";
+import { httpRequest } from "./api";
 import {
   convertDateToEpoch,
-  getCurrentFinancialYear, getTranslatedLabel,
+  getCurrentFinancialYear,
+  getCheckBoxJsonpath,
+  getSafetyNormsJson,
+  getHygeneLevelJson,
+  getLocalityHarmedJson,
+  setFilteredTradeTypes,
+  getTradeTypeDropdownData
+} from "../ui-config/screens/specs/utils";
+import {
+  prepareFinalObject,
+  toggleSnackbar
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getTranslatedLabel,
+  updateDropDowns,
   ifUserRoleExists
 } from "../ui-config/screens/specs/utils";
-import { httpRequest } from "./api";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "redux/store";
+import get from "lodash/get";
+import set from "lodash/set";
+import {
+  getQueryArg,
+  getFileUrl,
+  getFileUrlFromAPI
+} from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  setBusinessServiceDataToLocalStorage,
+  getMultiUnits,
+  acceptedFiles,
+} from "egov-ui-framework/ui-utils/commons";
+import { uploadFile } from "egov-ui-framework/ui-utils/api";
+import commonConfig from "config/common.js";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -68,32 +85,11 @@ export const getSearchResults = async queryObject => {
 };
 
 const setDocsForEditFlow = async (state, dispatch) => {
-  let applicationDocuments = get(
+  const applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     []
   );
-  /* To change the order of application documents similar order of mdms order*/
-  const mdmsDocs = get(
-    state.screenConfiguration.preparedFinalObject,
-    "applyScreenMdmsData.TradeLicense.documentObj[0].allowedDocs",
-    []
-  );
-  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
-    let applicationDocument = {}
-    applicationDocuments.map(appDoc => {
-      if (appDoc.documentType == mdmsDoc.documentType) {
-        applicationDocument = { ...appDoc }
-      }
-    })
-    return applicationDocument;
-  }
-  ).filter(docObj => Object.keys(docObj).length > 0)
-  applicationDocuments = [...orderedApplicationDocuments];
-  dispatch(
-    prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", applicationDocuments)
-  );
-
   let uploadedDocuments = {};
   let fileStoreIds =
     applicationDocuments &&
@@ -141,7 +137,7 @@ const generateNextFinancialYear = state => {
   const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
     .endingDate;
 
-  const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
+    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending+1000)[0];
   return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
 
 };
@@ -151,6 +147,7 @@ export const updatePFOforSearchResults = async (
   state,
   dispatch,
   queryValue,
+  queryValuePurpose,
   tenantId
 ) => {
   let queryObject = [
@@ -181,11 +178,37 @@ export const updatePFOforSearchResults = async (
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }
 
+  const licenseType = payload && get(payload, "Licenses[0].licenseType");
+  const structureSubtype =
+    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
+  const tradeTypes = setFilteredTradeTypes(
+    state,
+    dispatch,
+    licenseType,
+    structureSubtype
+  );
+  const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
+  tradeTypeDdData &&
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+        tradeTypeDdData
+      )
+    );
   setDocsForEditFlow(state, dispatch);
+  updateDropDowns(payload, action, state, dispatch, queryValue);
+  if (queryValuePurpose !== "cancel") {
+    set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
+    set(payload, getHygeneLevelJson(queryValuePurpose), "yes");
+    set(payload, getLocalityHarmedJson(queryValuePurpose), "No");
+  }
+  set(payload, getCheckBoxJsonpath(queryValuePurpose), true);
 
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
+
+  return payload;
 };
 
 export const getBoundaryData = async (
@@ -307,7 +330,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
       )
     );
-    let documents = get(
+     let documents = get(
       queryObject[0],
       "tradeLicenseDetail.applicationDocuments"
     );
@@ -339,7 +362,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
+      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "EDITRENEWAL" : "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
@@ -352,24 +375,27 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
 
     set(queryObject[0], "tenantId", tenantId);
-    set(queryObject[0], "workflowCode", "NewTL");
-    set(queryObject[0], "applicationType", "NEW");
+    if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL" || get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "RENEWAL") {
+      set(queryObject[0], "workflowCode", "EDITRENEWAL");
+      set(queryObject[0], "applicationType", "RENEWAL");
+    } else {
+      set(queryObject[0], "workflowCode", "NewTL");
+      set(queryObject[0], "applicationType", "NEW");
+    }
     if (queryObject[0].applicationNumber) {
       //call update
       const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-      if (isEditRenewal) {
+      if(isEditRenewal ){
         // if(process.env.REACT_APP_NAME === "Citizen"){
         //   const nextFinancialyear = await getNextFinancialYearForRenewal(queryObject[0].financialYear);
         //   set(queryObject[0], "financialYear", nextFinancialyear);
-        // }     
+        // }
         set(queryObject[0], "applicationType", "RENEWAL");
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
       }
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
-      const selectedTradeSubType = get(state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
-      tradeUnits[0].tradeType = selectedTradeSubType;
       set(
         queryObject[0],
         "tradeLicenseDetail.tradeUnits",
@@ -389,50 +415,74 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let action = "INITIATE";
       //Code for edit flow
 
-      if (
-        queryObject[0].tradeLicenseDetail &&
-        queryObject[0].tradeLicenseDetail.applicationDocuments
-      ) {
+       if (
+          queryObject[0].tradeLicenseDetail &&
+          queryObject[0].tradeLicenseDetail.applicationDocuments
+        ) {
+          
+          
+          if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal) {
+          } else if (activeIndex === 1) {
+            set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
+          } else action = "APPLY";
+        }
 
-
-        if (getQueryArg(window.location.href, "action") === "edit" || isEditRenewal) {
-        } else if (activeIndex === 1) {
-          set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
-        } else action = "APPLY";
-      }
-
-      if ((activeIndex === 3 || activeIndex === 1) && isEditRenewal) {
-        action = activeIndex === 3 ? "APPLY" : "INITIATE";
+      if (activeIndex === 3 && isEditRenewal) {
+        action = "APPLY";
         let renewalSearchQueryObject = [
           { key: "tenantId", value: queryObject[0].tenantId },
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
         ];
         const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
+        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
+
+      /* for (let i = 1; i <= renewalDocuments.length; i++) {
+          if (i > renewalDocuments.length) {
+            renewalDocuments.push(documents[i-1])
+          }
+        } */
+        /* if (renewalDocuments && renewalDocuments.length>1) {
+          renewalDocuments.splice(0, 1);
+        } */
+
         for (let i = 1; i <= documents.length; i++) {
           if (i > renewalDocuments.length) {
-            renewalDocuments.push(documents[i - 1])
+            renewalDocuments.push(documents[i-1])
           }
-          else {
-            if (!documents[i - 1].hasOwnProperty("id")) {
-              renewalDocuments[i - 1].active = false;
-              renewalDocuments.push(documents[i - 1])
-            }
+          else{
+             if(!documents[i-1].hasOwnProperty("id")){
+             renewalDocuments[i-1].active=false;
+             renewalDocuments.push(documents[i-1])
+             }
           }
         }
+
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
 
       }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
+      const isRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
+
       let updateResponse = [];
-      if (!isEditFlow) {
-        updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
+      
+         if (!isEditFlow) {       
+          updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
-      }
+      }         
       //Renewal flow
+/* 
+      if (isRenewal  ) {
+
+        if(get(queryObject[0],"applicationType", "") != "Renewal" && get(queryObject[0], "status", "") != "INITIATED" && action !="INITIATE")
+        {
+          updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
+          Licenses: queryObject
+        })
+       }
+      }  */
 
       let updatedApplicationNo = "";
       let updatedTenant = "";
@@ -453,7 +503,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { key: "tenantId", value: updatedTenant },
         { key: "applicationNumber", value: updatedApplicationNo }
       ];
-      let searchResponse = await getSearchResults(searchQueryObject);
+      // let searchResponse = await getSearchResults(searchQueryObject);
+      let searchResponse = updateResponse;
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
@@ -463,23 +514,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
-      const selectedTradeCat = get(
-        state.screenConfiguration.preparedFinalObject,
-        "DynamicMdms.TradeLicense.tradeUnits.tradeCategory"
-      );
-      const selectedTradeType = get(
-        state.screenConfiguration.preparedFinalObject,
-        "DynamicMdms.TradeLicense.tradeUnits.tradeType"
-      );
-
       const tradeTemp = updatedtradeUnits.map((item, index) => {
         return {
-          tradeSubType: selectedTradeType || item.tradeType.split(".")[1],
-          tradeType: selectedTradeCat || item.tradeType.split(".")[0]
+          tradeSubType: item.tradeType.split(".")[1],
+          tradeType: item.tradeType.split(".")[0]
         };
       });
-
-
       dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
       createOwnersBackup(dispatch, searchResponse);
     } else {
@@ -495,12 +535,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let mergedOwners =
         owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
 
-      const selectedTradeSubType = get(
-        state.screenConfiguration.preparedFinalObject,
-        "DynamicMdms.TradeLicense.tradeUnits.tradeSubType"
-      );
-
-      mergedTradeUnits[0].tradeType = selectedTradeSubType;
       set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
       set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
       set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
@@ -609,13 +643,13 @@ export const handleFileUpload = (event, handleDocument, props) => {
     endPoint: "filestore/v1/files"
   };
   let uploadDocument = true;
-  const { maxFileSize, formatProps, moduleName } = props;
+  const { maxFileSize, inputProps, moduleName } = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;
     Object.keys(files).forEach(async (key, index) => {
       const file = files[key];
-      const fileValid = isFileValid(file, acceptedFiles(formatProps.accept));
+      const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
       const isSizeValid = getFileSize(file) <= maxFileSize;
       if (!fileValid) {
         alert(`Only image or pdf files can be uploaded`);
@@ -674,9 +708,111 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     const financialYears = get(payload.MdmsRes, "egf-master.FinancialYear");
     const currrentFYending = financialYears.filter(item => item.code === currentFinancialYear)[0]
       .endingDate;
-    const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending)[0];
-    return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
+    let currrentUpdate  = currrentFYending+1000;
+    const nectYearObject = financialYears.filter(item => item.startingDate === currrentUpdate)[0];
+      return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
   } catch (e) {
     console.log(e.message)
+  }
+}
+let getModifiedBill = (bill) =>{
+  let tax=0;
+  let adhocPenalty=0;
+  let penalty=0;
+  let adhocRebate=0
+  let rebate=0;
+  bill.billDetails.forEach(billdetail =>{
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "TL_TAX":
+            tax = Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_TAX":
+            tax =
+              Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          default:
+            break;
+        }
+      })
+    })
+  set(bill, `additionalDetails.tax`, tax);
+  set(bill, `additionalDetails.adhocRebate`, adhocRebate);
+  set(bill, `additionalDetails.penalty`, penalty);
+  set(bill, `additionalDetails.adhocPenalty`, adhocPenalty);
+  set(bill, `additionalDetails.rebate`, rebate);
+
+  return bill;
+}
+export const downloadBill = (receiptQueryString, mode = "download") => {
+  const FETCHBILL = {
+      GET: {
+          URL: "/billing-service/bill/v2/_fetchbill",
+          ACTION: "_get",
+      },
+  };
+  const DOWNLOADBILL = {
+      GET: {
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
+      },
+  };
+
+  try {
+      httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+          const queryStr = [
+              { key: "key", value: "consolidatedbill" },
+              { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+          ]
+          payloadReceiptDetails.Bill[0] = getModifiedBill(payloadReceiptDetails.Bill[0]);
+          httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { Bill: [payloadReceiptDetails.Bill[0]] }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+              .then(res => {
+                  getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                      if (mode === 'download') {
+                          var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                          win.focus();
+                      }
+                      else {
+                          printJS(fileRes[res.filestoreIds[0]])
+                      }
+                  });
+
+              });
+      })
+
+  } catch (exception) {
+      alert('Some Error Occured while downloading Bill!');
   }
 }

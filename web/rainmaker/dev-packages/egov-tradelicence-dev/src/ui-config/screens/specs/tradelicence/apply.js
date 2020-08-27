@@ -1,20 +1,41 @@
-import commonConfig from "config/common.js";
-import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  getStepperObject,
+  getCommonHeader,
+  getCommonCard,
+  getCommonContainer,
+  getCommonTitle,
+  getCommonParagraph
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+
 import get from "lodash/get";
 import set from "lodash/set";
-import { httpRequest } from "../../../../ui-utils";
-import { getBoundaryData, updatePFOforSearchResults } from "../../../../ui-utils/commons";
-import { getAllDataFromBillingSlab, getCurrentFinancialYear, pageResetAndChange } from "../utils";
-import { documentList } from "./applyResource/documentList";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import {
+  commonTransform,
+  objectToDropdown,
+  getCurrentFinancialYear,
+  getnextFinancialYear,
+  getAllDataFromBillingSlab
+} from "../utils";
+import {
+  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
+import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 import { tradeDetails } from "./applyResource/tradeDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
-import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
-
+import { documentList } from "./applyResource/documentList";
+import { httpRequest } from "../../../../ui-utils";
+import {
+  updatePFOforSearchResults,
+  getBoundaryData
+} from "../../../../ui-utils/commons";
+import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import commonConfig from "config/common.js";
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
@@ -26,19 +47,24 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
+export const pageResetAndChange = (state, dispatch,tenantId) => {
+  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+  dispatch(prepareFinalObject("LicensesTemp", []));
+ dispatch(setRoute(`/tradelicence/apply?tenantId=${tenantId}`));
+};
 export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
       ? getCommonHeader({
-        labelName: `Apply for New Trade License ${
-          process.env.REACT_APP_NAME === "Citizen"
-            ? "(" + getCurrentFinancialYear() + ")"
-            : ""
+          labelName: `Apply for New Trade License ${
+            process.env.REACT_APP_NAME === "Citizen"
+              ? "(" + getCurrentFinancialYear() + ")"
+              : ""
           }`,
-        // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
-        labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR" : "TL_COMMON_APPL_NEW_LICENSE_YEAR"
+         // dynamicArray: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? [getnextFinancialYear(getCurrentFinancialYear())]:[getCurrentFinancialYear()],
+          labelKey: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "TL_COMMON_APPL_RENEWAL_LICENSE_YEAR":"TL_COMMON_APPL_NEW_LICENSE_YEAR"
 
-      })
+        })
       : {},
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -74,22 +100,25 @@ export const tradeDocumentDetails = getCommonCard({
 export const getMdmsData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: process.env.REACT_APP_NAME === "Citizen"? getQueryArg(window.location.href, "tenantId") : state.auth.userInfo.tenantId,
       moduleDetails: [
         {
           moduleName: "TradeLicense",
           masterDetails: [
+            { name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" },
-            { name: "documentObj" }
+            { name: "OccupancyType" },
+            { name: "RelationType" }
           ]
         },
         {
           moduleName: "common-masters",
           masterDetails: [
             { name: "OwnerType" },
+            { name: "OwnerShipCategory" },
             { name: "DocumentType" },
-            { name: "UOM" },
+            { name: "UOM" }
           ]
         },
         {
@@ -116,6 +145,23 @@ export const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    set(
+      payload,
+      "MdmsRes.TradeLicense.MdmsTradeType",
+      get(payload, "MdmsRes.TradeLicense.TradeType", [])
+    );
+    payload = commonTransform(payload, "MdmsRes.TradeLicense.TradeType");
+    payload = commonTransform(
+      payload,
+      "MdmsRes.common-masters.OwnerShipCategory"
+    );
+    set(
+      payload,
+      "MdmsRes.common-masters.OwnerShipCategoryTransformed",
+      objectToDropdown(
+        get(payload, "MdmsRes.common-masters.OwnerShipCategory", [])
+      )
+    );
     const localities = get(
       state.screenConfiguration,
       "preparedFinalObject.applyScreenMdmsData.tenant.localities",
@@ -138,15 +184,13 @@ export const getMdmsData = async (action, state, dispatch) => {
 
 export const getData = async (action, state, dispatch) => {
   const queryValue = getQueryArg(window.location.href, "applicationNumber");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
-
   const applicationNo = queryValue
     ? queryValue
     : get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].oldLicenseNumber",
-      null
-    );
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].oldLicenseNumber",
+        null
+      );
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
@@ -155,30 +199,26 @@ export const getData = async (action, state, dispatch) => {
     //Edit/Update Flow ----
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+      "Licenses[0].applicationType",
       null
     );
-    const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
+    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
 
-    if (getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal) {
+    if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
       dispatch(
         prepareFinalObject("Licenses", [
           {
             licenseType: "PERMANENT",
             oldLicenseNumber: queryValue ? "" : applicationNo,
-            tradeLicenseDetail: {
-              additionalDetail: {
-                applicationType: applicationType ? applicationType : "NEW"
-              }
-            }
+            applicationType: applicationType ? applicationType : "NEW"
           }
         ])
       );
     }
     // dispatch(prepareFinalObject("LicensesTemp", []));
-    await updatePFOforSearchResults(action, state, dispatch, applicationNo, tenantId);
+    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
 
-    if (!queryValue) {
+    if (queryValue && isEditRenewal) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].applicationNumber",
@@ -188,21 +228,14 @@ export const getData = async (action, state, dispatch) => {
         prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
       );
       if (oldApplicationNo !== null) {
-        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
-        dispatch(
-          prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-            "APPLICATIONTYPE.RENEWAL"
-          )
-        );
-        dispatch(
+         dispatch(
           handleField(
             "apply",
             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
             "props.value",
-            ""
+            get(state.screenConfiguration.preparedFinalObject,"Licenses[0].financialYear","")
           )
-        );
+        );   
         dispatch(
           handleField(
             "apply",
@@ -210,10 +243,21 @@ export const getData = async (action, state, dispatch) => {
             "props.value",
             "APPLICATIONTYPE.RENEWAL"
           )
+        );  
+        dispatch(
+          prepareFinalObject(
+            "Licenses[0].applicationType",
+            "RENEWAL"
+          )
         );
       }
 
-      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemption", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenaltyReason", null));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemptionReason", null));
+
+     // dispatch(prepareFinalObject("Licenses[0].applicationNumber", " "));
       dispatch(
         handleField(
           "apply",
@@ -279,14 +323,13 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
-    // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
     const tenantId = getTenantId();
-    const URL = window.location.href
-    const URLsplit = URL.split("/")
-    if (URLsplit[URLsplit.length - 1] == "apply") {
-      pageResetAndChange(state, dispatch, tenantId)
+    const URL=window.location.href
+    const URLsplit=URL.split("/")
+    if(URLsplit[URLsplit.length-1]=="apply"){
+      pageResetAndChange(state,dispatch,tenantId)
     }
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
@@ -323,7 +366,6 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
-
     });
 
     return action;
