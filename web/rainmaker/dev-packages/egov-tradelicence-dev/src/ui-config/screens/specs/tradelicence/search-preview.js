@@ -174,7 +174,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
     );
-
+    let cat = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    );
+    cat && cat.split(
+      "."
+    )[0] === "INDIVIDUAL"
+      ? setMultiOwnerForSV(action, true)
+      : setMultiOwnerForSV(action, false);
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
@@ -522,6 +530,7 @@ const screenConfig = {
       "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
       applicationNumber
     );
+    
     beforeInitFn(action, state, dispatch, applicationNumber);
     return action;
   },
