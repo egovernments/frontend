@@ -1,6 +1,4 @@
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { isModifyMode } from "./../../ui-utils/commons";
 
 export const toggleWater = (onFieldChange, value) => {
@@ -234,7 +232,7 @@ export const togglePlumberFeilds = (onFieldChange, value) => {
   );
 }
 
-export const toggleConnHolderDetails=(onFieldChange, value)=>{
+export const toggleConnHolderDetails = (onFieldChange, value) => {
   onFieldChange(
     "apply",
     "components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails",
@@ -276,7 +274,7 @@ export const togglePropertyFeilds = (action, value) => {
     "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
     value
   );
-  
+
 }
 
 export const toggleSewerageFeilds = (action, value) => {
@@ -292,7 +290,7 @@ export const toggleSewerageFeilds = (action, value) => {
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfWaterClosets.visible`,
     value
   );
-  if(!value){
+  if (!value) {
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfToilets.visible`,
@@ -368,18 +366,23 @@ export const toggleWaterFeilds = (action, value) => {
     action.screenConfig,
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.visible`,
     value
-    );
+  );
+  set(
+    action.screenConfig,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible`,
+    value
+  );
+  set(
+    action.screenConfig,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.visible`,
+    value
+  );
+  if (!value) {
     set(
       action.screenConfig,
-      `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible`,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.dynamicMdmsWaterSource.visible`,
       value
-      );
-      set(
-        action.screenConfig,
-        `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.visible`,
-        value
-        );
- if(!value){
+    );
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.connectionType.visible`,
@@ -409,17 +412,17 @@ export const toggleWaterFeilds = (action, value) => {
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.visible`,
       value
-      );
-      set(
-        action.screenConfig,
-        `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible`,
-        value
-        );
-        set(
-          action.screenConfig,
-          `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.visible`,
-          value
-          );
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate.visible`,
+      value
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading.visible`,
+      value
+    );
   }
   set(
     action.screenConfig,

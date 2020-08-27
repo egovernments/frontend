@@ -1,89 +1,83 @@
 import {
-  getCommonHeader,
-  getCommonCard,
-  getCommonTitle,
-  getCommonGrayCard,
-  getCommonContainer,
-  convertEpochToDate
+  convertEpochToDate, getCommonCard,
+
+
+  getCommonContainer, getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS, serviceConst } from "../../../../ui-utils/commons";
+import set from "lodash/set";
+import { getDescriptionFromMDMS, getSearchResults, getSearchResultsForSewerage, serviceConst } from "../../../../ui-utils/commons";
+import { ifUserRoleExists } from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
-import { getServiceDetails } from "./connectionDetailsResource/service-details";
+import { connHolderDetailsSameAsOwnerSummary, connHolderDetailsSummary, getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
-import { getOwnerDetails, connHolderDetailsSummary, connHolderDetailsSameAsOwnerSummary } from "./connectionDetailsResource/owner-deatils";
-import {
-  ifUserRoleExists
-
-} from "../utils";
-import set from "lodash/set";
+import { getServiceDetails } from "./connectionDetailsResource/service-details";
 
 const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 
-const getApplicationNumber = (dispatch,connectionsObj) => {
+const getApplicationNumber = (dispatch, connectionsObj) => {
   let appNos = "";
-  if(connectionsObj.length > 1){
-    for(var i=0; i< connectionsObj.length; i++){
-      appNos += connectionsObj[i].applicationNo +",";
+  if (connectionsObj.length > 1) {
+    for (var i = 0; i < connectionsObj.length; i++) {
+      appNos += connectionsObj[i].applicationNo + ",";
     }
-    appNos = appNos.slice(0,-1);
-  }else{
+    appNos = appNos.slice(0, -1);
+  } else {
     appNos = connectionsObj[0].applicationNo;
   }
   dispatch(prepareFinalObject("applicationNos", appNos));
 }
-const showHideConnectionHolder = (dispatch,connectionHolders) => {
-  if(connectionHolders != 'NA' && connectionHolders.length > 0){
-        dispatch(
-          handleField(
-            "connection-details",
-            "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
-            "visible",
-            true
-          )
-        );
-        dispatch(
-          handleField(
-            "connection-details",
-            "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
-            "visible",
-            false
-          )
-        );
-      }else{
-        dispatch(
-          handleField(
-            "connection-details",
-            "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
-            "visible",
-            false
-          )
-        );
-        dispatch(
-          handleField(
-            "connection-details",
-            "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
-            "visible",
-            true
-          )
-        );
-      }
+const showHideConnectionHolder = (dispatch, connectionHolders) => {
+  if (connectionHolders != 'NA' && connectionHolders.length > 0) {
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
+        "visible",
+        false
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHolders",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.connectionHoldersSameAsOwner",
+        "visible",
+        true
+      )
+    );
+  }
 }
 export const sortpayloadDataObj = (connectionObj) => {
-  return connectionObj.sort((a,b) => (a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate)?1:-1)
+  return connectionObj.sort((a, b) => (a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate) ? 1 : -1)
 }
 
 const getActiveConnectionObj = (connectionsObj) => {
   let getActiveConnectionObj = "";
-  for(var i=0; i< connectionsObj.length; i++){
-    if(connectionsObj[i] &&
-       connectionsObj[i].applicationStatus === 'CONNECTION_ACTIVATED' || 
-       connectionsObj[i].applicationStatus === 'APPROVED')
-    {
+  for (var i = 0; i < connectionsObj.length; i++) {
+    if (connectionsObj[i] &&
+      connectionsObj[i].applicationStatus === 'CONNECTION_ACTIVATED' ||
+      connectionsObj[i].applicationStatus === 'APPROVED') {
       getActiveConnectionObj = connectionsObj[i];
       break;
     }
@@ -100,7 +94,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     let payloadData = await getSearchResultsForSewerage(queryObject, dispatch);
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
       payloadData.SewerageConnections = sortpayloadDataObj(payloadData.SewerageConnections);
-      
+
 
 
       let sewerageConnection = getActiveConnectionObj(payloadData.SewerageConnections);
@@ -135,12 +129,12 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           sewerageConnection.property.propertyTypeData = "NA"
         }
       }*/
-      showHideConnectionHolder(dispatch,sewerageConnection.connectionHolders); 
+      showHideConnectionHolder(dispatch, sewerageConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection))
-      getApplicationNumber(dispatch,payloadData.SewerageConnections);
+      getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
   } else if (service === serviceConst.WATER) {
-    let payloadData = await getSearchResults(queryObject);    
+    let payloadData = await getSearchResults(queryObject);
     if (payloadData !== null && payloadData !== undefined && payloadData.WaterConnection.length > 0) {
       payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
       let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
@@ -174,9 +168,9 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           waterConnection.property.propertyTypeData = "NA"
         }
       }*/
-      showHideConnectionHolder(dispatch,waterConnection.connectionHolders);     
+      showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
-      getApplicationNumber(dispatch,payloadData.WaterConnection);
+      getApplicationNumber(dispatch, payloadData.WaterConnection);
     }
   }
 };
@@ -210,21 +204,22 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
-const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP'))?connectionDetailsFooter:{};
+const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
 
-export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails, connectionHolders, connectionHoldersSameAsOwner});
+export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails, connectionHolders, connectionHoldersSameAsOwner });
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-   let connectionNo= getQueryArg(window.location.href, "connectionNumber")
+    let connectionNo = getQueryArg(window.location.href, "connectionNumber")
     beforeInitFn(action, state, dispatch, connectionNo);
     set(
       action,
       "screenConfig.components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
       connectionNo
     );
+    set(action, "components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber", connectionNo)
     return action;
   },
 
@@ -261,43 +256,11 @@ const screenConfig = {
                 align: "right"
               },
               children: {
-            connectionDetailsDownload
+                connectionDetailsDownload
               }
             }
           }
         },
-       /* headerSubDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-          children: {
-           word1: {
-              ...getCommonTitle(
-                {
-                  labelKey: "WS_CONNECTION_DETAILS_CONNECTION_STATUS_HEADER"
-                },
-                {
-                  style: {
-                    marginRight: "10px",
-                    // color: "rgba(0, 0, 0, 0.6000000238418579)"
-                  }
-                }
-              )
-            },
-            word2: {
-              ...getCommonTitle({
-                labelName: "Active",
-                // jsonPath: "WaterConnection[0].headerSideText.word2"
-              }
-                ,
-                {
-                  style: {
-                    marginRight: "10px",
-                    color: "rgba(0, 0, 0, 0.6000000238418579)"
-                  }
-                })
-            }           
-          }
-        },*/
         connectionDetails,
         getConnectionDetailsFooterAction
       }
