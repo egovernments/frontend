@@ -161,9 +161,45 @@ class EnhancedTable extends React.Component {
       </TableRow>
     )
   }
+
+
+  renderLastYearRowData(n, idx) {
+    let items = [];
+
+    {
+      _.keys(n).map(d => {
+        let value = Math.floor(Math.random() * Math.floor(89)) + 1;
+        this.props.lyData.map((ly, i) => {
+          _.keys(ly).map(dt => {
+            if (typeof ly[dt] === 'object' && typeof n[d] === 'object') {
+              if (ly[dt][0] === n[d][0]) {
+                items = ly;
+              }
+
+            }
+          })
+        }
+        )
+      }
+      )
+    }
+    return items;
+  }
+
+
+
+
   renderCenterTable(n, idx) {
     const { classes, columnData, needHash } = this.props
-    const isSelected = this.isSelected(n.Email)
+    const isSelected = this.isSelected(n.Email);
+    let lydata = this.renderLastYearRowData(n, idx);
+    var existingFilters = this.props.filters;
+    var title = existingFilters.duration.title;
+    if(title.includes(',')){
+         title='CUSTOM';
+    }
+
+
     // let insightColor = data.insight_data ? data.insight_data.colorCode === "lower_red" ? "#e54d42" : "#259b24" : '';
     // 	let insightIcon = data.insight_data ? data.insight_data.colorCode === "lower_red" ? Arrow_Downward : Arrow_Upward : '';
     // 	let value = "";
@@ -172,7 +208,6 @@ class EnhancedTable extends React.Component {
     let insightColor = colorCode === 0 ? "#db534a" : "#2ba129";
     let insightIcon = colorCode === 0 ? Arrow_Downward : Arrow_Upward;
     let sign = colorCode === 0 ? '-' : '+';
-
     return (
       <TableRow
         hover
@@ -191,18 +226,56 @@ class EnhancedTable extends React.Component {
           : null
         }
         {_.keys(n).map(d => {
+
           /* console.log(n,d,n[d],n[d]&&n[d][1],'table'); */
-          let value = Math.floor(Math.random() * Math.floor(89)) + 1;
-          if (typeof n[d] !== 'object') {
-            if( n[d] == "0 %"|| n[d] == "0"){
-              value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
-              insightColor = "#db534a";
-              insightIcon = Arrow_Downward;
-            }else if( n[d] == "100 %" || n[d] == "100"){
-              value = 100 - Math.floor(Math.random() * Math.floor(40)) - 1;
-              insightColor = "#2ba129";
-              insightIcon = Arrow_Upward;
+          let value = Math.round(n[d].toString().replace(/[&\/\\#,%]/g, ''));
+          if (value > 100) {
+            value = 100;
+          }
+          insightColor = "#2ba129";
+          insightIcon = Arrow_Upward;
+
+          {
+            _.keys(lydata).map(dt => {
+              if (typeof n[d] !== 'object' && typeof lydata[dt] !== 'object' && (d === dt)) {
+                var lyData = Math.round(lydata[dt].toString().replace(/[&\/\\#,%]/g, ''));
+                var cyData = Math.round(n[d].toString().replace(/[&\/\\#,%]/g, ''));
+                if (cyData === 0 && lyData === 0) {
+                  value = 0;
+                }
+                else if (cyData == 0) {
+                  value = lyData;
+                  if (value > 100)
+                    value = 100;
+
+                  insightColor = "#db534a";
+                  insightIcon = Arrow_Downward;
+
+                }
+                else if (lyData == 0) {
+                  value = cyData;
+                  if (value > 100)
+                    value = 100;
+
+                  insightColor = "#2ba129";
+                  insightIcon = Arrow_Upward;
+                }
+                else {
+                  value = Math.round(((cyData - lyData) / lyData) * 100);
+                  if (value > 100)
+                    value = value / 100;
+                  if (value <= 0) {
+                    insightColor = "#db534a";
+                    insightIcon = Arrow_Downward;
+                  } else {
+                    insightColor = "#2ba129";
+                    insightIcon = Arrow_Upward;
+                  }
+
+                }
+              }
             }
+            )
           }
           return (
             <TableCell key={d}
@@ -210,8 +283,24 @@ class EnhancedTable extends React.Component {
                 /*    ? 'right' : 'left'}  to  make numbers to right align if needed */
                 ? 'right' : 'left'}
               component='td' scope='row' data-title={d} >
-              {
-                d === this.props.column ?
+              { title === 'CUSTOM' ?
+                  d === this.props.column ?
+                    <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
+                    : (typeof n[d] === 'object') ?
+                      n[d][1]
+                      :
+                      <div style={{ marginTop: "-8px", whiteSpace: "nowrap" }}>
+                        <React.Fragment>
+                            <span style={{ cursor: 'pointer' }}>
+                              <span className={"table-value"}>{n[d]}</span>
+                              <span style={{ marginLeft: "2vh", fontSize: 'initial', paddingRight: "8px" }}>
+                              </span>
+                            </span>
+                            
+                        </React.Fragment>
+                      </div>
+                  :
+                  d === this.props.column ?
                   <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{n[d][1]}</span>
                   : (typeof n[d] === 'object') ?
                     n[d][1]
@@ -227,11 +316,15 @@ class EnhancedTable extends React.Component {
                             <span style={{ color: insightColor, fontSize: '14px' }}>{value < 10 ? ' ' : ''}{value}%</span>
                           </span>
                         </Tooltip>
+                          
                       </React.Fragment>
                     </div>
               }
             </TableCell>)
-        })}
+
+
+        }
+        )}
       </TableRow>
     )
   }
@@ -270,7 +363,6 @@ class EnhancedTable extends React.Component {
   render() {
     const { data, columnData, Gfilter, noPage, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
     // const { tableData, order, orderBy, selected } = this.state
-
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
     const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
     var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
