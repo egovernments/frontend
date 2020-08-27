@@ -236,6 +236,7 @@ export const getData = async (action, state, dispatch) => {
        disabledKeyValue(dispatch, 'accessoriesCard', value);
      });
    }
+
     if (!queryValue) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
@@ -270,8 +271,12 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-
+      debugger;
+      console.log("========renewal=====");
       dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+     
+      // set(licences[0],"tradeLicenseDetail.adhocPenalty", null);
+      // set(licences[0],"tradeLicenseDetail.adhocExemption", null);
       dispatch(
         handleField(
           "apply",
@@ -281,6 +286,10 @@ export const getData = async (action, state, dispatch) => {
         )
       );
     }
+    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenaltyReason", null));
+    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemptionReason", null));
   }
 };
 

@@ -144,7 +144,11 @@ class Footer extends React.Component {
     set(licences[0], "workflowCode", wfCode);
     set(licences[0], "applicationType", "RENEWAL");
     set(licences[0], "financialYear", nextFinancialYear);
-
+    set(licences[0],"tradeLicenseDetail.adhocPenalty", null);
+    set(licences[0],"tradeLicenseDetail.adhocExemption", null);
+    set(licences[0],"tradeLicenseDetail.adhocPenaltyReason", null);
+    set(licences[0],"tradeLicenseDetail.adhocExemptionReason", null);
+    console.log("=====5555=====", );
     const response = await httpRequest(
       "post",
       "/tl-services/v1/_update",
