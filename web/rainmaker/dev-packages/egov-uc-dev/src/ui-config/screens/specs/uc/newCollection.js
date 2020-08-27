@@ -215,12 +215,12 @@ try {
           }
         ]
       });
-      dispatch(
-        prepareFinalObject(
-          "Demands[0].consumerCode",
-          get(payload, "idResponses[0].id", "")
-        )
-      );
+      // dispatch(
+      //   prepareFinalObject(
+      //     "Demands[0].consumerCode",
+      //     get(payload, "idResponses[0].id", "")
+      //   )
+      // );
       loadServiceType(tenantId, dispatch);
     } catch (e) {
       console.log(e);
