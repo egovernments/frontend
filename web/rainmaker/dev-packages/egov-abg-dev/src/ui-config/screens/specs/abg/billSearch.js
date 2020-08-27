@@ -94,7 +94,11 @@ const billSearchAndResult = {
         )
       );
     }
-
+    //added by vidya to get mobile number
+    const userName = JSON.parse(getUserInfo()).userName;
+    dispatch(
+      prepareFinalObject("searchScreen.mobileNumber", userName)
+    );
     return action;
   },
   components: {
