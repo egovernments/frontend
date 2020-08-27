@@ -202,7 +202,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].tenantId",
-      getTenantId()
+      "pb.batala"
     );
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
