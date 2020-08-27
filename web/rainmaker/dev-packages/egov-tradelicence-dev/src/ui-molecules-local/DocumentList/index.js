@@ -11,16 +11,16 @@ import {
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons"
+import { handleFileUpload } from "../../ui-utils/commons";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
+import isUndefined from "lodash/isUndefined";
 
 const styles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
     padding: "16px",
-    marginBottom: "16px",
-    wordBreak : "break-word"
+    marginBottom: "16px"
   },
   documentIcon: {
     backgroundColor: "#FFFFFF",
@@ -63,6 +63,9 @@ const documentTitle = {
   letterSpacing: "0.67px",
   lineHeight: "19px"
 };
+// const S3_BUCKET = {
+//   endPoint: "filestore/v1/files"
+// };
 
 class DocumentList extends Component {
   state = {
@@ -80,7 +83,8 @@ class DocumentList extends Component {
     if (uploadedDocuments && Object.keys(uploadedDocuments).length) {
       let simplified = Object.values(uploadedDocuments).map(item => item[0]);
       let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
-        const index = simplified.findIndex(i => i.documentType === item.code);
+        const index = simplified.findIndex(i => i.documentType === item.name);
+        // !isUndefined(index) && (acc[ind] = [simplified[index]]);
         index > -1 && (acc[ind] = [simplified[index]]);
         return acc;
       }, {});
@@ -115,7 +119,7 @@ class DocumentList extends Component {
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex, uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, tenantId } = this.props;
-    const { jsonPath, code } = documents[uploadedDocIndex];
+    const { jsonPath, name } = documents[uploadedDocIndex];
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
     uploadedDocuments = {
       ...uploadedDocuments,
@@ -124,11 +128,12 @@ class DocumentList extends Component {
           fileName: file.name,
           fileStoreId,
           fileUrl: Object.values(fileUrl)[0],
-          documentType: code,
+          documentType: name,
           tenantId
         }
       ]
     };
+
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", {
       ...uploadedDocuments
     });
@@ -136,7 +141,7 @@ class DocumentList extends Component {
       fileName: file.name,
       fileStoreId,
       fileUrl: Object.values(fileUrl)[0],
-      documentType: code,
+      documentType: name,
       tenantId
     });
     this.setState({ uploadedDocuments });
@@ -147,7 +152,8 @@ class DocumentList extends Component {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
     const jsonPath = documents[remDocIndex].jsonPath;
-   (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" )&&
+    (getQueryArg(window.location.href, "action") === "edit" ||
+      getQueryArg(window.location.href, "action") === "EDITRENEWAL") &&
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject("LicensesTemp[0].removedDocs", [
         ...get(preparedFinalObject, "LicensesTemp[0].removedDocs", []),
@@ -178,14 +184,24 @@ class DocumentList extends Component {
     }
   };
   render() {
-    const { classes, documents, documentTypePrefix } = this.props;
-    
+    const {
+      classes,
+      documents,
+      documentTypePrefix,
+      description,
+      imageDescription,
+      inputProps
+    } = this.props;
+
     const { uploadedIndex } = this.state;
-    console.log("prpsssss",uploadedIndex);
+    console.log("prpsssss", uploadedIndex);
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&
           documents.map((document, key) => {
+            // const currentDocumentProps = inputProps.filter(
+            //   item => item.type === document.name
+            // );
             return (
               <div
                 key={key}
@@ -208,21 +224,32 @@ class DocumentList extends Component {
                   </Grid>
                   <Grid item={true} xs={6} sm={6} align="left">
                     <LabelContainer
-                      labelName={documentTypePrefix + document.code}
-                      labelKey={documentTypePrefix + document.code}
+                      labelName={documentTypePrefix + document.name}
+                      labelKey={documentTypePrefix + document.name}
                       style={documentTitle}
                     />
                     {document.required && (
                       <sup style={{ color: "#E54D42" }}>*</sup>
                     )}
-                    <Typography variant="caption">
+                    {/* <Typography variant="caption">
                       <LabelContainer
+                        labelName={document.statement}
                         labelKey={document.statement}
                       />
-                    </Typography>
+
+                    </Typography> */}
                     <Typography variant="caption">
                       <LabelContainer
-                     labelKey={document.description}
+                        labelName={
+                          document.name == "OWNERPHOTO"
+                            ? this.props.imageDescription.labelName
+                            : description.labelName
+                        }
+                        labelKey={
+                          document.name == "OWNERPHOTO"
+                            ? this.props.imageDescription.labelKey
+                            : description.labelKey
+                        }
                       />
                     </Typography>
                   </Grid>
@@ -231,14 +258,23 @@ class DocumentList extends Component {
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
                       handleFileUpload={e =>
-                        handleFileUpload(e, this.handleDocument, this.props.inputProps[key])
+                        handleFileUpload(
+                          e,
+                          this.handleDocument,
+                          this.props
+                        )
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
                       removeDocument={() => this.removeDocument(key)}
                       documents={this.state.uploadedDocuments[key]}
                       onButtonClick={() => this.onUploadClick(key)}
+                      inputProps={
+                        document.name == "OWNERPHOTO"
+                          ? this.props.imageProps
+                          : this.props.inputProps
+                      }
                       buttonLabel={this.props.buttonLabel}
-                      inputProps={document.formatProps}
+                      //inputProps={currentDocumentProps[0].formatProps}
                     />
                   </Grid>
                 </Grid>
