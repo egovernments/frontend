@@ -3,6 +3,7 @@ import Dialog from "material-ui/Dialog";
 import PropTypes from "prop-types";
 import Icon from "../Icon";
 import "./index.css";
+import WcBanner from "egov-ui-kit/assets/images/wc_banner.png";
 
 const defaultOverlayStyle = {};
 const defaultTitleStyle = {
@@ -47,6 +48,7 @@ const DialogUI = ({
   style,
   isClose,
   onRequestClose,
+  isImage = false
 }) => {
   return (
     <Dialog
@@ -56,6 +58,11 @@ const DialogUI = ({
       actions={actions}
       titleStyle={{ ...defaultTitleStyle, ...titleStyle }}
       children={[
+        isImage && (
+          <span className="dialog-wc-image" >
+            <img style={{ width: "100%" }} src={WcBanner ? WcBanner : ''} />
+          </span>
+        ),
         isClose && (
           <div className="dialog-close-button" key={"dialog-close-button"}>
             <Icon action="navigation" name="close" color="#484848" style={closebuttonStyle} onClick={handleClose} />
