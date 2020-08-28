@@ -346,6 +346,65 @@ const setSearchResponse = async (
     );
   }
 
+
+  let areaTypeDta= get(response,
+    "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
+      ""
+    )
+
+if(areaTypeDta === "Urban")
+{
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.subDistrict",
+      "visible",
+      false
+    )
+  );
+
+}
+
+else{
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.city",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.mohalla",
+      "visible",
+      false
+    )
+  );
+
+}
+
+
+
+
+
+
+
+  
+
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
@@ -371,7 +430,6 @@ const screenConfig = {
     // ];
  
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-        debugger;
 
     // searchBill(dispatch, applicationNumber, tenantId);
   //  createBill(queryObject1,dispatch)
@@ -424,6 +482,28 @@ const screenConfig = {
       { key: "businessServices", value: "FIRENOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+
+    // let firNOCType2 = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+    // if(firNOCType2){
+
+      // set(
+      //   action,
+      //   "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName.props.visible",
+      //   false
+      // );
+
+    //}
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName.props.visible",
+        "visible",
+        false
+      )
+    );
+
 
     // Hide edit buttons
     set(
