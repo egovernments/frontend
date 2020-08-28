@@ -52,7 +52,7 @@ export const stepperData = () => {
       return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
     }
 }
-export const stepper = getStepperObject({ props: { activeStep: 0 } }, stepperData());
+export const stepper = getStepperObject({ props: { activeStep: 0 ,className:"wns-stepper"} }, stepperData());
 
 export const getHeaderLabel = () => {
   if (isModifyMode()) {
