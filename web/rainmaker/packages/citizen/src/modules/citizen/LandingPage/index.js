@@ -5,7 +5,7 @@ import { Label } from "egov-ui-kit/utils/translationNode";
 import WelcomeMessage from "egov-ui-kit/common/common/WelcomeMessage";
 import get from "lodash/get";
 class LandingPage extends Component {
-  state = { mdmsResponse: {}, dialogueOpen: false, openWCDialog : false };
+  state = { mdmsResponse: {}, dialogueOpen: false, openWCDialog : false, pCity: '' };
   componentWillReceiveProps = (nextProps) => {
     let { citiesByModule = [] } = nextProps;
     let { openWCDialog } = this.state; 
@@ -14,7 +14,7 @@ class LandingPage extends Component {
         let allCity = citiesByModule['PGR.WHATSAPP'] && citiesByModule['PGR.WHATSAPP'].tenants;
         if(allCity && !openWCDialog) {
           const isCityExists = allCity.find(o => o.code === permanentCity);
-          if(isCityExists) this.setState({ openWCDialog : true });
+          if(isCityExists) this.setState({ openWCDialog : true, pCity: isCityExists.name });
         }
     }
   };
@@ -115,7 +115,7 @@ class LandingPage extends Component {
   render() {
     const { history, name, citiesByModule } = this.props;
     const { getModuleItems, onPGRClick, onDialogueClose } = this;
-    const { openWCDialog }= this.state;
+    const { openWCDialog, pCity }= this.state;
     const moduleItems = getModuleItems(citiesByModule) || [];
     const renderCityPicker = moduleItems && moduleItems.findIndex((item) => item.moduleTitle === "Complaints") > -1;
     return (
@@ -132,7 +132,7 @@ class LandingPage extends Component {
       <WelcomeMessage
           WCPopupOpen={openWCDialog}
           WCPopupClose={this.handleWCClose}
-          title={"mSeva WhatsApp Chatbot is now Live in your City"}
+          title={`mSeva WhatsApp Chatbot is now Live in your ${pCity}`}
           body={""}
       />
       </div>
