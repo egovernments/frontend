@@ -1,20 +1,17 @@
-import {
-  getLabel
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import get from "lodash/get";
-import { getCommonApplyFooter } from "../../utils";
-import "./index.css";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
 import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "../../../../../ui-utils";
-import { getDomainLink } from "../../../../../ui-utils/commons";
-import store from "ui-redux/store";
+import get from "lodash/get";
 import set from 'lodash/set';
-import { getQueryRedirectUrl} from "../searchResource/searchResults";
-import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField } from 'egov-ui-framework/ui-redux/screen-configuration/actions';
+import store from "ui-redux/store";
+import { httpRequest } from "../../../../../ui-utils";
+import { getCommonApplyFooter } from "../../utils";
+import { getQueryRedirectUrl } from "../searchResource/searchResults";
+import "./index.css";
 
 
-let redirectUrl = getQueryRedirectUrl();
+
 let screenKey = "register-property"
 
 const callBackForApply = async (state, dispatch) => {
@@ -63,74 +60,74 @@ const callBackForApply = async (state, dispatch) => {
     dispatch,
     screenKey
   );
-  
+
 
   let isPropertyOwnerDetailsTypeSelection = validateFields(
-     "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
-     state,
-     dispatch,
-     screenKey
-   );
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
+    state,
+    dispatch,
+    screenKey
+  );
   let isPropertyOwnerDetailsValid = true;
   let multiOwnerItems;
-  if(propertyPayload.ownershipCategory){
-  	if(propertyPayload.ownershipCategory === 'INDIVIDUAL.SINGLEOWNER'){
-	  isPropertyOwnerDetailsValid = validateFields(   
-	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
-	     state,
-	     dispatch,
-	     screenKey
-	   );
-	}else if(propertyPayload.ownershipCategory === 'INDIVIDUAL.MULTIPLEOWNERS'){
-	   
-	   multiOwnerItems = get(
-		    state,
-		    "screenConfiguration.screenConfig.register-property.components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
-		  );
-      if(multiOwnerItems && multiOwnerItems.length > 0){
-  	   for(var i=0;i < multiOwnerItems.length;i++){
-           if(multiOwnerItems[i] && !multiOwnerItems[i].hasOwnProperty('isDeleted')){
-        	   isPropertyOwnerDetailsValid = validateFields(   
-        	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items["+i+"].item"+i+".children.cardContent.children.applicantCard.children",
-        	     state,
-        	     dispatch,
-        	     screenKey
-        	   );
-            }
+  if (propertyPayload.ownershipCategory) {
+    if (propertyPayload.ownershipCategory === 'INDIVIDUAL.SINGLEOWNER') {
+      isPropertyOwnerDetailsValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+        state,
+        dispatch,
+        screenKey
+      );
+    } else if (propertyPayload.ownershipCategory === 'INDIVIDUAL.MULTIPLEOWNERS') {
+
+      multiOwnerItems = get(
+        state,
+        "screenConfiguration.screenConfig.register-property.components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
+      );
+      if (multiOwnerItems && multiOwnerItems.length > 0) {
+        for (var i = 0; i < multiOwnerItems.length; i++) {
+          if (multiOwnerItems[i] && !multiOwnerItems[i].hasOwnProperty('isDeleted')) {
+            isPropertyOwnerDetailsValid = validateFields(
+              "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[" + i + "].item" + i + ".children.cardContent.children.applicantCard.children",
+              state,
+              dispatch,
+              screenKey
+            );
+          }
         }
       }
-	   
-	}else if(propertyPayload.ownershipCategory === 'INSTITUTIONALGOVERNMENT' || propertyPayload.ownershipCategory === 'INSTITUTIONALPRIVATE'){	   
-    dispatch(
-      handleField(
-        screenKey,
-        "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails",
-        "required",
-         true
-      )
+
+    } else if (propertyPayload.ownershipCategory === 'INSTITUTIONALGOVERNMENT' || propertyPayload.ownershipCategory === 'INSTITUTIONALPRIVATE') {
+      dispatch(
+        handleField(
+          screenKey,
+          "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails",
+          "required",
+          true
+        )
+      );
+      let isPropertyOwnerInstitutionTypeValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
+        state,
+        dispatch,
+        screenKey
+      );
+      let isPropertyOwnerInstitutionInfoValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.institutionDetailsContainer.children",
+        state,
+        dispatch,
+        screenKey
+      );
+
+      isPropertyOwnerDetailsValid = (isPropertyOwnerInstitutionTypeValid) ? isPropertyOwnerInstitutionInfoValid : false
+    }
+  } else {
+    isPropertyOwnerDetailsValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+      state,
+      dispatch,
+      screenKey
     );
-	   let isPropertyOwnerInstitutionTypeValid = validateFields(   
-	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children",
-	     state,
-	     dispatch,
-	     screenKey
-	   );	   
-	   let isPropertyOwnerInstitutionInfoValid = validateFields(   
-	"components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.institutionDetailsContainer.children",
-	     state,
-	     dispatch,
-	     screenKey
-	   );
-	   
-	   isPropertyOwnerDetailsValid = (isPropertyOwnerInstitutionTypeValid)?isPropertyOwnerInstitutionInfoValid:false
-	}
-  }else{
-    isPropertyOwnerDetailsValid = validateFields(   
-  "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
-       state,
-       dispatch,
-       screenKey
-     );
   }
   if (
     isAssemblyDetailsValid &&
@@ -142,14 +139,14 @@ const callBackForApply = async (state, dispatch) => {
     isPropertyOwnerDetailsTypeSelection &&
     isPropertyOwnerDetailsValid
   ) {
-    if(multiOwnerItems && multiOwnerItems.length > 0){
-      let checkmultiownerCount=multiOwnerItems.length;
-      for(var i=0;i < multiOwnerItems.length;i++){        
-        if(multiOwnerItems[i] && multiOwnerItems[i].hasOwnProperty('isDeleted')){
+    if (multiOwnerItems && multiOwnerItems.length > 0) {
+      let checkmultiownerCount = multiOwnerItems.length;
+      for (var i = 0; i < multiOwnerItems.length; i++) {
+        if (multiOwnerItems[i] && multiOwnerItems[i].hasOwnProperty('isDeleted')) {
           checkmultiownerCount--;
         }
       }
-      if(checkmultiownerCount<2){
+      if (checkmultiownerCount < 2) {
         dispatch(
           toggleSnackbar(
             true, {
@@ -163,19 +160,19 @@ const callBackForApply = async (state, dispatch) => {
       }
     }
     // Property.landArea Property.totalConstructedArea
-    if(propertyPayload.totalConstructedArea > propertyPayload.landArea){
+    if (propertyPayload.totalConstructedArea > propertyPayload.landArea) {
       dispatch(
-         toggleSnackbar(
-           true, {
-           labelKey: "PT_COMMON_TOTAL_CONSTRUCTEDAREA_LESS_THAN_LANDAREA_REQUIRED",
-           labelName: "Total constructed area less than land area"
-         },
-           "warning"
-         )
-       )
-       return false;
+        toggleSnackbar(
+          true, {
+          labelKey: "PT_COMMON_TOTAL_CONSTRUCTEDAREA_LESS_THAN_LANDAREA_REQUIRED",
+          labelName: "Total constructed area less than land area"
+        },
+          "warning"
+        )
+      )
+      return false;
     }
-    for( var i = propertyPayload.owners.length-1; i--;){
+    for (var i = propertyPayload.owners.length - 1; i--;) {
       if (propertyPayload.owners[i].hasOwnProperty('isDeleted')) propertyPayload.owners.splice(i, 1);
     }
     propertyPayload.owners.map(owner => {
@@ -215,12 +212,12 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
-    let additionalDetails={
-      isRainwaterHarvesting:false
+    let additionalDetails = {
+      isRainwaterHarvesting: false
     }
-    propertyPayload.additionalDetails=additionalDetails;
+    propertyPayload.additionalDetails = additionalDetails;
     try {
-      if(propertyPayload.propertyType === 'BUILTUP.SHAREDPROPERTY') {
+      if (propertyPayload.propertyType === 'BUILTUP.SHAREDPROPERTY') {
         let unit = {};
         unit.usageCategory = propertyPayload.subUsageCategory;
         unit.occupancyType = "SELFOCCUPIED";
@@ -241,14 +238,14 @@ const callBackForApply = async (state, dispatch) => {
       if (payload) {
         store.dispatch(handleField(screenKey, "components.adhocDialog", "props.open", true));
         setTimeout(() => {
-          const isMode=getQueryArg(window.location.href,"mode");
-          if(isMode==="MODIFY"){
+          const isMode = getQueryArg(window.location.href, "mode");
+          if (isMode === "MODIFY") {
             store.dispatch(
-              setRoute(`${redirectUrl}&propertyId=${payload.Properties[0].propertyId}`)
+              setRoute(`${getQueryRedirectUrl()}&propertyId=${payload.Properties[0].propertyId}`)
             )
-          }else{
+          } else {
             store.dispatch(
-              setRoute(`${redirectUrl}?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
+              setRoute(`${getQueryRedirectUrl()}&propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
             )
           }
         }, 3000);
