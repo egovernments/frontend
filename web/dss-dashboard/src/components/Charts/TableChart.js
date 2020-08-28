@@ -104,7 +104,7 @@ class TableChart extends Component {
     if (title) {
       returnVal = title.split(/[-]/g);
       prevYear = parseInt(returnVal.toString().replace(/[FY ]/g, ''));
-      if (returnVal && returnVal[0].includes('FY') && prevYear !== currentYear)
+      if (returnVal && returnVal[0].includes('FY') && Math.round(prevYear) !== Math.round(currentYear))
         title = 'PREVYEAR';
     }
     let dateFilter = this.getDateFilter(title);
@@ -154,7 +154,7 @@ class TableChart extends Component {
 
   getRequest(calledFrom, visualcode, active, filterList) {
 
-    this.getLastYearRequest(calledFrom, visualcode, active, filterList);
+    // this.getLastYearRequest(calledFrom, visualcode, active, filterList);
 
     filterList = filterList ? filterList : this.state.filterList;
     let filters = {}, ttest = [], tempFL;
@@ -175,7 +175,6 @@ class TableChart extends Component {
         }
       });
     }
-
 
     var globalFilters = this.props.filters;
     globalFilters = { ...globalFilters, ...filters };
@@ -228,6 +227,7 @@ class TableChart extends Component {
         visualcode = this.state.visualcode
       }
     }
+
     this.getRequest("handleChipClick", visualcode, '', filterList);
   }
 
@@ -283,6 +283,7 @@ class TableChart extends Component {
     if (!_.isEmpty(filterList, true) && typeof filterList[active] !== 'undefined' && filterList[active].length > 0) {
       visualcode = filterList[active][filterList[active].length - 1][1];
     }
+
     this.getRequest("clickFromTab", visualcode, active);
   }
 
@@ -290,6 +291,7 @@ class TableChart extends Component {
   render() {
     let { classes, chartData, chartKey, chartsData, strings, chartParent } = this.props;
     let drillCode, visualcode, tabName, drilfilters, lastYearChartData;
+
     if (this.props && chartData) {
       if (this.state.data) {
         chartData = this.state.data.data;
@@ -302,7 +304,6 @@ class TableChart extends Component {
       visualcode = visualcode ? visualcode : chartsData[this.props.chartKey]['visualizationCode'];
       tabName = tabName ? tabName : chartParent[0]['tabName'];
       drilfilters = drilfilters ? drilfilters : chartsData[this.props.chartKey]['filter'][0];
-
 
       let colSortRow = {};
       for (var i = 0; i < chartData.length; i++) {
@@ -355,10 +356,15 @@ class TableChart extends Component {
         }
       }
 
+
       if (!this.state.lastYeardata && chartData) {
         let filterList = _.cloneDeep(this.state.filterList);
-        this.getLastYearRequest('', chartsData[this.props.chartKey]['visualizationCode'], '', filterList);
+        if (drillCode === 'none')
+          this.getLastYearRequest('', this.state.prevDrillCode, '', filterList);
+        else
+          this.getLastYearRequest('', visualcode, '', filterList);
       }
+
 
       if (this.state.lastYeardata) {
         lastYearChartData = this.state.lastYeardata.data;
@@ -411,7 +417,9 @@ class TableChart extends Component {
             }
           }
         }
+        this.state.lastYeardata = null;
       }
+      this.state.prevDrillCode = drillCode;
 
 
       return (
