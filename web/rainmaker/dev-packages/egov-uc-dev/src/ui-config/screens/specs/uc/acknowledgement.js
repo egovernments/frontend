@@ -69,7 +69,7 @@ const header = getCommonHeader({
     componentPath: "Div",
     gridDefination: {
       xs: 12,
-      sm: 6,
+      sm: 7,
       align: "right"
     },
     props: {
@@ -116,7 +116,7 @@ const getAcknowledgementCard = (
   status,
   challanNumber,
  
-) => {
+ ) => {
    if(purpose === "challan" && status === "success"){
     const billNo = get(
       state.screenConfiguration.preparedFinalObject,
@@ -132,6 +132,7 @@ const getAcknowledgementCard = (
             uiFramework: "custom-atoms",
             componentPath: "Container",  
             children: {
+
               header: {
                 gridDefination: {
                   xs: 12,
@@ -139,27 +140,22 @@ const getAcknowledgementCard = (
                 },
                 ...header,            
               },
-              challanNo:{
-                uiFramework: "custom-atoms",
-                componentPath: "Div",
+              consumerCode: {
+                uiFramework: "custom-atoms-local",
+                moduleName:  "egov-uc",//"egov-common",
+                componentPath: "ApplicationNoContainer",
                 gridDefination: {
                   xs: 12,
-                  sm: 4
+                  sm: 3
                 },
-               children: {
-                challanNumberContainer: getCommonContainer({
-                  challanNumber: {
-                       uiFramework: "custom-atoms-local",
-                       moduleName: "egov-uc",
-                       componentPath: "ApplicationNoContainer",
-                       
-                       props: {
-                         number: challanNumber,
-                       },
-                     },
-                   }),
-               }
-              },
+                props: {
+                    number: challanNumber,
+                    label: {
+                      labelKey: "PAYMENT_UC_CONSUMER_CODE",
+                    },
+                }
+             },
+            
               headerdownloadprint:downloadprintMenu(state, dispatch),            
             }
           },         

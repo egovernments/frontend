@@ -124,9 +124,9 @@ const processChallan = async (state, dispatch) => {
         if(uuid){          
           dispatch(prepareFinalObject("Challan[0].accountId" , uuid));
         }
-        else{          
-          dispatch(prepareFinalObject("Challan[0].accountId" , ""));
-        }
+        // else{          
+        //   dispatch(prepareFinalObject("Challan[0].accountId" , ));
+        // }
              
         await createChallan(state, dispatch);       
         allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
