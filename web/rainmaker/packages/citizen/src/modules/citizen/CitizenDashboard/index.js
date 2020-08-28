@@ -6,6 +6,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import ServicesNearby from "./components/ServicesNearby";
 import { Notifications, Screen } from "modules/common";
 import LogoutDialog from "egov-ui-kit/common/common/Header/components/LogoutDialog";
+import WelcomeMessage from "egov-ui-kit/common/common/WelcomeMessage";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
@@ -17,19 +18,29 @@ class CitizenDashboard extends Component {
   state = {
     whatsNewEvents: [],
     openDialog: false,
+    openWCDialog : false
   };
-
   componentWillReceiveProps = (nextProps) => {
     const { cityUpdateDialog } = nextProps;
+    let { whatShappTenants = [] } = this.props;
+    let { openWCDialog } = this.state; 
     const permanentCity = get(nextProps, "userInfo.permanentCity");
     if (!permanentCity) {
-      if (get(this.props, "userInfo.permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
+      let isCheck =get(this.props, "userInfo.permanentCity") !== get(nextProps, "userInfo.permanentCity");
+      if (isCheck) {
         if (cityUpdateDialog) {
           this.setState({
             openDialog: true,
           });
         }
       }
+    }
+    if (permanentCity) {
+        let allCity = whatShappTenants['PGR.WHATSAPP'] && whatShappTenants['PGR.WHATSAPP'].tenants;
+        if(allCity && !openWCDialog) {
+          const isCityExists = allCity.find(o => o.code === permanentCity);
+          if(isCityExists) this.setState({ openWCDialog : true });
+        }
     }
   };
 
@@ -38,7 +49,12 @@ class CitizenDashboard extends Component {
     prepareFinalObject("cityUpdateDialog", false);
     this.setState({ ...this.state, openDialog: false });
   };
-
+  handleWCClose = () => {
+    //const { prepareFinalObject } = this.props;
+    //prepareFinalObject("cityUpdateDialog", false);
+    this.setState({ ...this.state, openWCDialog: false });
+  };
+  
   redirectToEditProfile = () => {
     const { setRoute } = this.props;
     setRoute("user/profile");
@@ -56,7 +72,8 @@ class CitizenDashboard extends Component {
 
   render() {
     const { history, loading, whatsNewEvents, setRoute } = this.props;
-    const { openDialog } = this.state;
+    const { openDialog, openWCDialog } = this.state;
+
     return (
       <Screen loading={loading}>
         {/* <SearchService history={history} /> */}
@@ -98,6 +115,12 @@ class CitizenDashboard extends Component {
           title={"Alert"}
           body={"Please update your City"}
         />
+        <WelcomeMessage
+          WCPopupOpen={openWCDialog}
+          WCPopupClose={this.handleWCClose}
+          title={"mSeva WhatsApp Chatbot is now Live in your City"}
+          body={""}
+        />
       </Screen>
     );
   }
@@ -108,13 +131,14 @@ const mapStateToProps = (state) => {
   const cityUpdateDialog = get(state.screenConfiguration, "preparedFinalObject.cityUpdateDialog");
   const userInfo = get(state.auth, "userInfo");
   const loading = get(state.app, "notificationObj.loading");
+  const whatShappTenants = get(state.common, "citiesByModule");
   let filteredNotifications =
     notifications &&
     Object.values(notifications).filter((item) => {
       return item.type === "BROADCAST" || (item.type === "SYSTEMGENERATED" && item.actions);
     });
   let whatsNewEvents = filteredNotifications && filteredNotifications.slice(0, Math.min(3, filteredNotifications.length));
-  return { notifications, userInfo, loading, whatsNewEvents, cityUpdateDialog };
+  return { notifications, userInfo, loading, whatsNewEvents, cityUpdateDialog, whatShappTenants };
 };
 
 const mapDispatchToProps = (dispatch) => {
