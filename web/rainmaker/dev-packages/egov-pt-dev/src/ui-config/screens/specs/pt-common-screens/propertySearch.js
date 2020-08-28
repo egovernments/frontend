@@ -19,7 +19,7 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
 
-const url = getQueryRedirectUrl();
+
 
 const getMDMSData = async (dispatch) => {
   const mdmsBody = {
@@ -133,7 +133,7 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: () => {
-
+                  let url = getQueryRedirectUrl();
                   let applicationNo = getQueryArg(window.location.href, "applicationNumber");
                   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
                   const actionType = getQueryArg(window.location.href, "action");
