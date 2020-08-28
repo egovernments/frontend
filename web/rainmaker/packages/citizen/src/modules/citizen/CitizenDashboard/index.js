@@ -18,7 +18,8 @@ class CitizenDashboard extends Component {
   state = {
     whatsNewEvents: [],
     openDialog: false,
-    openWCDialog : false
+    openWCDialog : false,
+    pCity : ''
   };
   componentWillReceiveProps = (nextProps) => {
     const { cityUpdateDialog } = nextProps;
@@ -39,7 +40,7 @@ class CitizenDashboard extends Component {
         let allCity = whatShappTenants['PGR.WHATSAPP'] && whatShappTenants['PGR.WHATSAPP'].tenants;
         if(allCity && !openWCDialog) {
           const isCityExists = allCity.find(o => o.code === permanentCity);
-          if(isCityExists) this.setState({ openWCDialog : true });
+          if(isCityExists) this.setState({ openWCDialog : true, pCity: isCityExists.name });
         }
     }
   };
@@ -72,8 +73,7 @@ class CitizenDashboard extends Component {
 
   render() {
     const { history, loading, whatsNewEvents, setRoute } = this.props;
-    const { openDialog, openWCDialog } = this.state;
-
+    const { openDialog, openWCDialog, pCity } = this.state;
     return (
       <Screen loading={loading}>
         {/* <SearchService history={history} /> */}
@@ -118,7 +118,7 @@ class CitizenDashboard extends Component {
         <WelcomeMessage
           WCPopupOpen={openWCDialog}
           WCPopupClose={this.handleWCClose}
-          title={"mSeva WhatsApp Chatbot is now Live in your City"}
+          title={`mSeva WhatsApp Chatbot is now Live in your ${pCity}`}
           body={""}
         />
       </Screen>
