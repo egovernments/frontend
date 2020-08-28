@@ -2,10 +2,25 @@ import React, { Component } from "react";
 import { Dashboard } from "modules/common";
 import { connect } from "react-redux";
 import { Label } from "egov-ui-kit/utils/translationNode";
-
+import WelcomeMessage from "egov-ui-kit/common/common/WelcomeMessage";
+import get from "lodash/get";
 class LandingPage extends Component {
-  state = { mdmsResponse: {}, dialogueOpen: false };
-
+  state = { mdmsResponse: {}, dialogueOpen: false, openWCDialog : false, pCity: '' };
+  componentWillReceiveProps = (nextProps) => {
+    let { citiesByModule = [] } = nextProps;
+    let { openWCDialog } = this.state; 
+    const permanentCity = get(nextProps, "userInfo.permanentCity");
+    if (permanentCity) {
+        let allCity = citiesByModule['PGR.WHATSAPP'] && citiesByModule['PGR.WHATSAPP'].tenants;
+        if(allCity && !openWCDialog) {
+          const isCityExists = allCity.find(o => o.code === permanentCity);
+          if(isCityExists) this.setState({ openWCDialog : true, pCity: isCityExists.name });
+        }
+    }
+  };
+  handleWCClose = () => {
+    this.setState({ ...this.state, openWCDialog: false });
+  };
   onPGRClick = () => {
     this.setState({
       dialogueOpen: true,
@@ -100,9 +115,11 @@ class LandingPage extends Component {
   render() {
     const { history, name, citiesByModule } = this.props;
     const { getModuleItems, onPGRClick, onDialogueClose } = this;
+    const { openWCDialog, pCity }= this.state;
     const moduleItems = getModuleItems(citiesByModule) || [];
     const renderCityPicker = moduleItems && moduleItems.findIndex((item) => item.moduleTitle === "Complaints") > -1;
     return (
+      <div>
       <Dashboard
         moduleItems={moduleItems}
         history={history}
@@ -112,6 +129,13 @@ class LandingPage extends Component {
         dialogueOpen={this.state.dialogueOpen}
         renderCityPicker={renderCityPicker}
       />
+      <WelcomeMessage
+          WCPopupOpen={openWCDialog}
+          WCPopupClose={this.handleWCClose}
+          title={`mSeva WhatsApp Chatbot is now Live in your ${pCity}`}
+          body={""}
+      />
+      </div>
     );
   }
 }
@@ -121,7 +145,6 @@ const mapStateToProps = (state) => {
   const { citiesByModule } = common || {};
   const { userInfo } = auth;
   const name = userInfo && userInfo.name;
-
   return { name, citiesByModule };
 };
 
