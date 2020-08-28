@@ -381,8 +381,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
-      const selectedTradeSubType = get(state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
-      tradeUnits[0].tradeType = selectedTradeSubType;
+      //const selectedTradeSubType = get(state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
+      //tradeUnits[0].tradeType = selectedTradeSubType;
       set(
         queryObject[0],
         "tradeLicenseDetail.tradeUnits",
@@ -476,19 +476,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
-      const selectedTradeCat = get(
-        state.screenConfiguration.preparedFinalObject,
-        "DynamicMdms.TradeLicense.tradeUnits.tradeCategory"
-      );
-      const selectedTradeType = get(
-        state.screenConfiguration.preparedFinalObject,
-        "DynamicMdms.TradeLicense.tradeUnits.tradeType"
-      );
-
       const tradeTemp = updatedtradeUnits.map((item, index) => {
         return {
-          tradeSubType: selectedTradeType || item.tradeType.split(".")[1],
-          tradeType: selectedTradeCat || item.tradeType.split(".")[0]
+          tradeSubType: item.tradeType.split(".")[1],
+          tradeType: item.tradeType.split(".")[0]
         };
       });
 
@@ -507,13 +498,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         accessories.filter(item => !item.hasOwnProperty("isDeleted"));
       let mergedOwners =
         owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
-
-      const selectedTradeSubType = get(
-        state.screenConfiguration.preparedFinalObject,
-        "DynamicMdms.TradeLicense.tradeUnits.tradeSubType"
-      );
-
-      mergedTradeUnits[0].tradeType = selectedTradeSubType;
       set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
       set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
       set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
