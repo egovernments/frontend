@@ -1,9 +1,9 @@
-import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { getDomainLink } from "../../ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { connect } from "react-redux";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import get from "lodash/get";
+import React from "react";
+import { connect } from "react-redux";
 const styles = {
   color: "rgba(0, 0, 0, 0.87)",
   marginLeft: "3%",
@@ -19,20 +19,31 @@ const clickHereStyles = {
 }
 class AddLinkForProperty extends React.Component {
   render() {
-    const { url,isMode, selectedPropertyId } = this.props;
-    let link = window.location.origin;  
-    link += `${getDomainLink()}/pt-common-screens/propertySearch?redirectUrl=${url}`;
+    const { url, isMode, selectedPropertyId } = this.props;
+    let link = `/pt-common-screens/propertySearch?redirectUrl=${url}`;
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    let modifyLink = window.location.origin + `${getDomainLink()}/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${selectedPropertyId}&tenantId=${ tenantId }&redirectTo=${url.substring(1)}`
-    if(isMode==="MODIFY"){
+    let modifyLink = `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${selectedPropertyId}&tenantId=${tenantId}&redirectTo=${url.substring(1)}`
+    if (link) {
+      let applicationNo = getQueryArg(window.location.href, "applicationNumber");
+      const connectionNo = getQueryArg(window.location.href, "connectionNumber");
+      const actionType = getQueryArg(window.location.href, "action");
+      link = applicationNo ? link + `&applicationNumber=${applicationNo}` : link;
+      link = connectionNo ? link + `&connectionNumber=${connectionNo}` : link;
+      link = actionType ? link + `&action=${actionType}` : link;
+    }
+
+
+
+    if (isMode === "MODIFY") {
       return (
         <div style={styles}>
-          <a href={`${link}`} ><LabelContainer
-              style={clickHereStyles}
-              labelKey="WS_SEARCH_PROPERTY" />
+          <a href="javascript:void(0)" onClick={() => routeTo(link)} ><LabelContainer
+            style={clickHereStyles}
+            labelKey="WS_SEARCH_PROPERTY" />
           </a> <span> </span>
-          <a href={`${modifyLink}`} >
-              <LabelContainer
+
+          <a href="javascript:void(0)" onClick={() => routeTo(modifyLink)} >
+            <LabelContainer
               style={clickHereStyles}
               labelKey="WS_MODIFY_PROPERTY" />
           </a>
@@ -43,7 +54,7 @@ class AddLinkForProperty extends React.Component {
         <div style={styles}>
           <LabelContainer
             labelName="To Find/Create Property ID"
-            labelKey="WS_APPLY_CREATE_MSG" /><span> </span><a href={`${link}`} ><LabelContainer
+            labelKey="WS_APPLY_CREATE_MSG" /><span> </span><a href="javascript:void(0)" onClick={() => routeTo(link)}  ><LabelContainer
               style={clickHereStyles}
               labelKey="WS_APPLY_CLICK_HERE" />
           </a>
