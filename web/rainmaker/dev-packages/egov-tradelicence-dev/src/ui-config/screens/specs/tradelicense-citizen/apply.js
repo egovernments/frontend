@@ -57,6 +57,10 @@ const updateSearchResults = async (
     window.location.href,
     "applicationNumber"
   );
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemption", null));
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenaltyReason", null));
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemptionReason", null));
   if (!queryValueFromUrl) {
     dispatch(
       prepareFinalObject(
@@ -70,10 +74,6 @@ const updateSearchResults = async (
     );
     debugger;
     dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
-    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenalty", null));
-    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemption", null));
-    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenaltyReason", null));
-    dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemptionReason", null));
     dispatch(
       handleField(
         "apply",
