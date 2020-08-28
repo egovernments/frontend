@@ -54,6 +54,7 @@ const tradeTypeChange = (reqObj) => {
 
 const tradeSubTypeChange = (reqObj) => {
   try {
+     
 	  let { moduleName, rootBlockSub, keyValue, value, state, dispatch, index } = reqObj;
       let keyValueRow = keyValue.replace(`.${value}`, ``);
       let tradeSubTypes = get(
@@ -68,15 +69,21 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
             "props.value",
+            currentObject[0].uom
+          )
+        );
+        dispatch(
+          pFO(
+            `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uom`,
             currentObject[0].uom
           )
         );
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.required",
             true
           )
@@ -84,7 +91,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.disabled",
             false
           )
@@ -93,7 +100,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.required",
             false
           )
@@ -102,7 +109,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.disabled",
             true
           )
@@ -111,7 +118,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
             "props.value",
             ""
           )
@@ -119,7 +126,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.value",
             ""
           )
@@ -127,20 +134,20 @@ const tradeSubTypeChange = (reqObj) => {
 
         dispatch(
           pFO(
-            `Licenses[0].tradeLicenseDetail.tradeUnits[0].uom`,
+            `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uom`,
             null
           )
         );
         dispatch(
           pFO(
-            `Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue`,
+            `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uomValue`,
             null
           )
         );
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.error",
             false
           )
@@ -253,7 +260,8 @@ const tradeUnitCard = {
             },
             // required: true,
             props: {
-              disabled: true
+              disabled: true,
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
             },
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
             gridDefination: {
