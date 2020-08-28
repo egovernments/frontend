@@ -3,6 +3,7 @@
 box-shadow: none !important;
 margin-top: 0px !important; 
     div{
+      background-color: transparent;
         div{
           background-color: transparent;
         }
@@ -57,10 +58,10 @@ margin-top: 0px !important;
  @media only screen and (max-width: 768px) {
   #material-ui-resetButton{
       float:none !important;
-      margin-left: 38px !important; 
+      margin: 0px 20px 10px!important;
   }
   #material-ui-searchButton{
-    margin-left: 38px !important; 
+    margin: 0px 20px!important;
   }
   
   .ack-body, .ack-tail {
