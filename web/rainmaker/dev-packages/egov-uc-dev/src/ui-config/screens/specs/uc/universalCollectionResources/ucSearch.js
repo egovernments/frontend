@@ -61,6 +61,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.consumerCodes",
+      "props.value",
+      ""
+    )
+  );
 };
 
 export const UCSearchCard = getCommonCard({
@@ -198,7 +206,25 @@ export const UCSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       }
-    })
+    }),
+    consumerCodes: getTextField({
+      label: {
+        labelName: "Challan Number.",
+        labelKey: "UC_CHALLAN_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Challan No.",
+        labelKey: "UC_CHALLAN_NO_LABEL_PLACEHOLDER"
+      },
+      required: false,
+      visible: true,
+      jsonPath: "searchScreen.consumerCodes",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
+
   }),
 
   buttonContainer: getCommonContainer({
