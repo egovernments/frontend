@@ -160,6 +160,9 @@ export const UCSearchCard = getCommonCard({
         position: "start"
       },
       required: false,
+      props: {
+        disabled: true
+      },      
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
       jsonPath: "searchScreen.mobileNumber"

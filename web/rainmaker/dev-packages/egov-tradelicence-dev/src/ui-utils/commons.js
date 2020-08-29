@@ -19,6 +19,7 @@ import {
   ifUserRoleExists
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import { logout } from "egov-ui-kit/redux/auth/actions";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -58,13 +59,19 @@ export const getSearchResults = async queryObject => {
     );
     return response;
   } catch (error) {
-    store.dispatch(
+   
+    Promise.resolve(store.dispatch(
       toggleSnackbar(
         true,
         { labelName: error.message, labelCode: error.message },
         "error"
       )
-    );
+    )).then((res)=>{
+      if(error.message.indexOf("Unauthorized user to access the application") != -1)
+      store.dispatch(logout());
+    });
+     
+  
   }
 };
 

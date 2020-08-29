@@ -7,6 +7,8 @@ import { billSearchCard } from "./billSearchResources/billSearchCard";
 import { searchResults } from "./billSearchResources/searchResults";
 import "./index.css";
 import { ifUserRoleExists } from "../utils";
+import get from "lodash/get";
+import filter  from "lodash/filter";
 
 const header = getCommonHeader({
   labelName: "Universal Bill",
@@ -42,7 +44,8 @@ const getMDMSData = async (action, state, dispatch) => {
           moduleName: "tenant",
           masterDetails: [
             {
-              name: "tenants"
+              name: "tenants",
+              filter : `[?(@.city.ulbGrade!="ST")]`,
             }
           ]
         }
