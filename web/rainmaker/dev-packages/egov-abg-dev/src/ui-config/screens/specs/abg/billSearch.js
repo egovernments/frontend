@@ -6,6 +6,7 @@ import { httpRequest } from "../../../../ui-utils";
 import { billSearchCard } from "./billSearchResources/billSearchCard";
 import { searchResults } from "./billSearchResources/searchResults";
 import "./index.css";
+import { ifUserRoleExists } from "../utils";
 
 const header = getCommonHeader({
   labelName: "Universal Bill",
@@ -95,7 +96,7 @@ const billSearchAndResult = {
       );
     }
     //added by vidya to get mobile number
-    if(process.env.REACT_APP_NAME === "Citizen"){
+    if(ifUserRoleExists("CITIZEN")){
       const userName = JSON.parse(getUserInfo()).userName;
       dispatch(
         prepareFinalObject("searchScreen.mobileNumber", userName)
