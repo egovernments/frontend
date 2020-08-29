@@ -771,14 +771,24 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
   }
 }
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
+
   let toggle = get(
     state.screenConfiguration.screenConfig[screenKey],
     "components.adhocDialog.props.open",
     false
   );
-  dispatch(
-    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
-  );
+
+  if (screenKey == "tlhome") {
+    dispatch(
+      handleField(screenKey, "components.adhocDialog", "props.open", toggle)
+    );
+  }
+  else {
+    dispatch(
+      handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+    );
+  }
+
 };
 export const getObjectValues = objData => {
   return (

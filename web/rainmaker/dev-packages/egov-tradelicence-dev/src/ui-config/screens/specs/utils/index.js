@@ -410,6 +410,7 @@ export const getIconStyle = key => {
 };
 
 export const showHideAdhocPopup = (state, dispatch) => {
+  
   let toggle = get(
     state.screenConfiguration.screenConfig["search-preview"],
     "components.adhocDialog.props.open",
@@ -2007,7 +2008,14 @@ export const applyForm = (state, dispatch, action) => {
     state.screenConfiguration.preparedFinalObject,
     "citiesByModule.citizenTenantId"
   );
-  const reqDocUi=get( state, "screenConfiguration.screenConfig.home.components.adhocDialog.children.popup", []);
+  const applyUrl = process.env.NODE_ENV === "production"
+  ? `/tradelicense-citizen/apply?tenantId=${tenantId}`
+  : process.env.REACT_APP_SELF_RUNNING === true
+    ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+    : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+dispatch(setRoute(applyUrl))
+
+ /* const reqDocUi=get( state, "screenConfiguration.screenConfig.home.components.adhocDialog.children.popup", []);
   set(reqDocUi, 'children.footer.children.footerChildElement.children.applyButton.onClickDefination', {
   action: "condition",
     callBack: (state, dispatch) => {
@@ -2025,6 +2033,8 @@ export const applyForm = (state, dispatch, action) => {
     "screenConfig.components.adhocDialog.children.popup",
     reqDocUi
   );
+  */
+
   const isTradeDetailsValid = validateFields(
     "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
     state,
@@ -2032,7 +2042,7 @@ export const applyForm = (state, dispatch, action) => {
     "home"
   );
   if (isTradeDetailsValid) {
-    showReqDocPopup(state, dispatch, "home");
+    showReqDocPopup(state, dispatch, "tlhome");
   }
   dispatch(prepareFinalObject("Licenses", []));
   dispatch(prepareFinalObject("LicensesTemp", []));
