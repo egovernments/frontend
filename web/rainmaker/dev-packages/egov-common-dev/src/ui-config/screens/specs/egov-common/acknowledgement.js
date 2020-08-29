@@ -140,6 +140,27 @@ const getAcknowledgementCard = (
             },
             paymentFooter: paymentFooter(state, consumerCode, tenant, status, businessService)
         };
+    } else if (status === "pending") {
+        return {
+            header,
+            applicationSuccessCard: {
+                uiFramework: "custom-atoms",
+                componentPath: "Div",
+                children: {
+                    card: acknowledgementCard({
+                        icon: "close",
+                        backgroundColor: "#E54D42",
+                        header: {
+                            labelKey: roleExists ? `CITIZEN_PENDING_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_PENDING_${transBusinessService}_PAYMENT_MESSAGE`
+                        },
+                        body: {
+                            labelKey: roleExists ? `CITIZEN_PENDING_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_PENDING_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                        }
+                    })
+                }
+            },
+            paymentFooter: paymentFooter(state, consumerCode, tenant, status, businessService)
+        };
     }
 };
 const screenConfig = {
