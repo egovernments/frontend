@@ -80,10 +80,36 @@ export const submitForm = (formKey, saveUrl) => {
             formData.employee.tenantId,
             "EMPLOYEE"
           );
-        } else {
+        }else if(formData.hasOwnProperty("existingPassword")) {
+          
+          let encodedString = new Buffer(formData.existingPassword).toString('base64');
+          encodedString = new Buffer(encodedString).toString('base64');
+          formData.existingPassword = encodedString;
+
+          encodedString = new Buffer(formData.newPassword).toString('base64');
+          encodedString = new Buffer(encodedString).toString('base64');
+          formData.newPassword = encodedString;
+          formResponse = await httpRequest(saveUrl, action, [], formData);
+          
+        }       
+        else {
           formResponse = await httpRequest(saveUrl, action, [], formData);
         }
         dispatch(submitFormComplete(formKey, formResponse, saveUrl));
+        //Added By Minju to Display the Message
+        if(formKey === "employeeChangePassword"){
+          dispatch(
+            toggleSnackbarAndSetText(
+              true,
+              {
+                labelName: "Password changed successfully!",
+                labelKey: "CS_COMMON_EMPLOYEEOTP_CHANGED_PASSWORD_SUCCESS",
+              },
+              "success"
+            )
+          );
+        }
+
       } catch (error) {
         const { message } = error;
         // throw new Error(error);

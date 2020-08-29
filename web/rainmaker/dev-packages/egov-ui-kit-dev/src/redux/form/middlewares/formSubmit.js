@@ -1,6 +1,6 @@
 import * as actionTypes from "../actionTypes";
 import { resetForm } from "../actions";
-import { authenticated, userProfileUpdated } from "egov-ui-kit/redux/auth/actions";
+import { authenticated, userProfileUpdated,logout } from "egov-ui-kit/redux/auth/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { addQueryArg, mergeMDMSDataArray } from "egov-ui-kit/utils/commons";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
@@ -56,6 +56,11 @@ const formSubmit = (store) => (next) => (action) => {
     if (formKey === "profile") {
       delete payload.responseInfo;
       dispatch(userProfileUpdated(payload));
+    }
+
+    if(formKey === "employeeChangePassword"){
+      delete payload.responseInfo;
+      dispatch(logout());
     }
 
     // use a flag reset true or false

@@ -154,7 +154,11 @@ export const loginRequest = async (username = null, password = null, refreshToke
   let apiError = "Api Error";
   var params = new URLSearchParams();
   username && params.append("username", username);
-  password && params.append("password", password);
+  //Added for VAPT
+  let encodedString = new Buffer(password).toString('base64');
+  encodedString = new Buffer(encodedString).toString('base64');
+  password && params.append("password", encodedString);
+  //password && params.append("password", password);
   refreshToken && params.append("refresh_token", refreshToken);
   params.append("grant_type", grantType);
   params.append("scope", "read");
