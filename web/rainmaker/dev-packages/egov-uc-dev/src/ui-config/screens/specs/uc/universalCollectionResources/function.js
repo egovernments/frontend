@@ -49,9 +49,6 @@ export const searchApiCall = async (state, dispatch) => {
     Object.keys(searchScreenObject).length == 0 ||
     checkEmptyFields(searchScreenObject)
   ) {
-    alert();
-    console.info("lenth==", Object.keys(searchScreenObject).length);
-   
     dispatch(
       toggleSnackbar(
         true,
