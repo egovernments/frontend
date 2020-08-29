@@ -112,13 +112,7 @@ export const reviewOwnerPAN = getLabelWithValue(
   },
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan", callBack: checkValueForNA }
 );
-export const reviewOwnerAADHAR = getLabelWithValue(
-  {
-    labelName: "Aadhar No.",
-    labelKey: "TL_NEW_OWNER_DETAILS_AADHAR_LABEL"
-  },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].aadhaarNumber", callBack: checkValueForNA }
-);
+
 
 
 export const tradeOwnerDetails = {
@@ -138,7 +132,6 @@ export const tradeOwnerDetails = {
   reviewOwnerDOB,
   reviewOwnerEmail,
   reviewOwnerPAN,
-  reviewOwnerAADHAR,
   reviewOwnerAddr: getLabelWithValue(
     {
       labelName: "Corrospondence Address",
