@@ -833,13 +833,17 @@ export const tradeDetails = getCommonCard({
       props: {
         dropdownFields: [
           {
+            defaultValue:"IMMOVABLE",
             key : 'structureType',
-            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            //isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            isDisabled:true,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
           },
           {
+            defaultValue:"IMMOVABLE.PUCCA",
             key : 'structureSubType',
+            isDisabled:true,
             callBack : structureSubTypeChange,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",

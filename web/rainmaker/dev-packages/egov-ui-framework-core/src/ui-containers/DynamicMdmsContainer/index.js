@@ -153,7 +153,7 @@ class DynamicMdmsContainer extends Component {
             label: {
               labelKey: moduleNameCaps + '_' + key.toUpperCase() + '_LABEL'
             },
-            
+            disabled: isDisabled ? isDisabled : false,
             placeholder: {
               labelKey: moduleNameCaps + '_' + key.toUpperCase() + "_PLACEHOLDER"
             },
