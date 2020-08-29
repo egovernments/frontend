@@ -32,18 +32,22 @@ const resetFields = (state, dispatch) => {
     )
   );
   //Added by vidya to get mobile number
-  const userName = JSON.parse(getUserInfo()).userName;
-  dispatch(
-    prepareFinalObject("searchScreen.mobileNumber", userName)
-  );
-  // dispatch(
-  //   handleField(
-  //     "billSearch",
-  //     "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
-  //     "props.value",
-  //     ""
-  //   )
-  // );
+  if(process.env.REACT_APP_NAME === "Citizen"){
+    const userName = JSON.parse(getUserInfo()).userName;
+    dispatch(
+      prepareFinalObject("searchScreen.mobileNumber", userName)
+    );
+  } else{
+    dispatch(
+      handleField(
+        "billSearch",
+        "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+        "props.value",
+        ""
+      )
+    );
+  }  
+  
   dispatch(
     handleField(
       "billSearch",
@@ -216,7 +220,7 @@ export const billSearchCard = getCommonCard({
         labelKey: "ABG_MOBILE_NO_PLACEHOLDER"
       },
       props: {
-        disabled: true
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
       },
       gridDefination: {
         xs: 12,

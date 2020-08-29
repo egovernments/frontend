@@ -95,10 +95,12 @@ const billSearchAndResult = {
       );
     }
     //added by vidya to get mobile number
-    const userName = JSON.parse(getUserInfo()).userName;
-    dispatch(
-      prepareFinalObject("searchScreen.mobileNumber", userName)
-    );
+    if(process.env.REACT_APP_NAME === "Citizen"){
+      const userName = JSON.parse(getUserInfo()).userName;
+      dispatch(
+        prepareFinalObject("searchScreen.mobileNumber", userName)
+      );
+    }
     return action;
   },
   components: {
