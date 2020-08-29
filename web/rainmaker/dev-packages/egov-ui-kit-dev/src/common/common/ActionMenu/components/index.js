@@ -122,6 +122,10 @@ class ActionMenuComp extends Component {
         searchText: "",
       });
     }
+    //Temp Fix for fetch localization 
+    else if (nextProps && nextProps.activeRoutePath !== "null" && nextProps.activeRoutePath == "" &&  this.props.activeRoutePath == "") {
+      this.fetchLocales();
+    }
     /**
      * Reset menu after arraylist changes
      */
