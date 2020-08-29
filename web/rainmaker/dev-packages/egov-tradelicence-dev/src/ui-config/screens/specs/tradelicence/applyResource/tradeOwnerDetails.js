@@ -12,7 +12,7 @@ import {
 import { getQueryArg,getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import {
   getDetailsForOwner,
-  updateOwnerShipEdit
+  updateOwnerShipEdit,getMaxDateForDOB
 } from "../../utils";
 import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
@@ -412,7 +412,7 @@ export const OwnerInfoCard = {
             jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
             props: {
               inputProps: {
-                max: getTodaysDateInYMD()
+                max: getMaxDateForDOB()
               }
             }
           })

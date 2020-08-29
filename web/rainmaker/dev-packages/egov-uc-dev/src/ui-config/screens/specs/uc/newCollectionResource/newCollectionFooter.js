@@ -59,8 +59,7 @@ export const newCollectionFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: (state, dispatch) => {
-       // processDemand(state, dispatch);
+      callBack: (state, dispatch) => {      
           processChallan(state, dispatch);
       }
     }
@@ -80,71 +79,6 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
   });
 };
 
-// const processDemand = async (state, dispatch) => {
-//   const isFormValid = validateFields(
-//     "components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children",
-//     state,
-//     dispatch,
-//     "newCollection"
-//   );
-
-
-
-//   console.info("validate field?",isFormValid);
-//   if (isFormValid) {
-//     try {
-//       const mobileNumber = get(
-//         state.screenConfiguration.preparedFinalObject,
-//         "Demands[0].mobileNumber"
-//       );
-//       let payload = await httpRequest(
-//         "post",
-//         `/user/_search?tenantId=${commonConfig.tenantId}`,
-//         "_search",
-//         [],
-//         {
-//           tenantId: commonConfig.tenantId,
-//           userName: mobileNumber
-//         }
-//       );
-//       if (payload ) {
-//         console.info("got user details==",payload);
-//         const uuid = get(payload , "user[0].uuid");
-//         dispatch(prepareFinalObject("Demands[0].payer.uuid" , uuid));
-//         console.info("await for create demand");
-//         await createDemand(state, dispatch);       
-//         allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
-//           "Challan[0].taxPeriodFrom",
-//           "Challan[0].taxPeriodTo"
-//         ]);
-//         const applicationNumber = get(
-//           state.screenConfiguration.preparedFinalObject,
-//           "Challan[0].challanNo"
-//         );
-//         const tenantId = get(
-//           state.screenConfiguration.preparedFinalObject,
-//           "Challan[0].tenantId"
-//         );
-//         const businessService = get(
-//           state.screenConfiguration.preparedFinalObject,
-//           "Challan[0].serviceType"
-//         );
-//         getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
-//       }
-//     } catch (error) {}
-//   } else {
-//     dispatch(
-//       toggleSnackbar(
-//         true,
-//         {
-//           labelName: "Please fill the required fields.",
-//           labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
-//         },
-//         "info"
-//       )
-//     );
-//   }
-// };
 
 const processChallan = async (state, dispatch) => {
 
@@ -190,11 +124,10 @@ const processChallan = async (state, dispatch) => {
         if(uuid){          
           dispatch(prepareFinalObject("Challan[0].accountId" , uuid));
         }
-        else{          
-          dispatch(prepareFinalObject("Challan[0].accountId" , ""));
-        }
-       
-      //  await createDemand(state, dispatch);
+        // else{          
+        //   dispatch(prepareFinalObject("Challan[0].accountId" , ));
+        // }
+             
         await createChallan(state, dispatch);       
         allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
           "Challan[0].taxPeriodFrom",
@@ -231,90 +164,7 @@ const processChallan = async (state, dispatch) => {
   }
 };
 
-const createDemand = async (state, dispatch) => {
-  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-  let demands = JSON.parse(
-    JSON.stringify(
-      get(state.screenConfiguration.preparedFinalObject, "Demands")
-    )
-  );
-  set(demands[0], "additionalDetails.consumerName", state.screenConfiguration.preparedFinalObject.Demands[0].consumerName);
-  set(demands[0], "additionalDetails.mobileNumber", state.screenConfiguration.preparedFinalObject.Demands[0].mobileNumber);
- //GLCODE
-  for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping.length; i++) {
 
-    if ((state.screenConfiguration.preparedFinalObject.Demands[0].serviceType === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].cb === tenantId)) {
-      set(demands[0], "additionalDetails.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.BillingService.ServiceGLCODEMapping[i].glcode);
-    }
-
-  }
-  // Making payer object as null if it is empty object, later will changge in component.
- if(Object.keys(demands[0].payer).length === 0) {
-  demands[0].payer = null;
- }
-  set(demands[0], "consumerType", demands[0].businessService);
-  demands[0].demandDetails &&
-    demands[0].demandDetails.forEach(item => {
-      if (!item.amount) {
-        item.amount = 0;
-      }
-    });
-  demands[0].serviceType &&
-    set(demands[0], "businessService", demands[0].serviceType);
-  set(
-    demands[0],
-    "taxPeriodFrom",
-    convertDateToEpoch(demands[0].taxPeriodFrom)
-  );
-  set(demands[0], "taxPeriodTo", convertDateToEpoch(demands[0].taxPeriodTo));
-  const mobileNumber = demands[0].mobileNumber;
-  const consumerName = demands[0].consumerName;
-  //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
-  const taxPeriodValid = isTaxPeriodValid(dispatch, demands[0], state);
-
-  if (taxPeriodValid) {
-    const url = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Demands[0].id",
-      null
-    )
-      ? "/billing-service/demand/_update"
-      : "/billing-service/demand/_create";
-    try {
-      const payload = await httpRequest("post", url, "", [], {
-        Demands: demands
-      });
-      if (payload.Demands.length > 0) {
-        //const consumerCode = get(payload, "Demands[0].consumerCode");
-        const businessService = get(payload, "Demands[0].businessService");
-        set(payload, "Demands[0].mobileNumber", mobileNumber);
-        set(payload, "Demands[0].consumerName", consumerName);
-        set(payload, "Demands[0].serviceType", businessService);
-        set(
-          payload,
-          "Demands[0].businessService",
-          businessService.split(".")[0]
-        );
-        dispatch(prepareFinalObject("Demands", payload.Demands));
-        //await generateBill(consumerCode, tenantId, businessService, dispatch);
-      } else {
-        alert("Empty response!!");
-      }
-    } catch (e) {
-      console.log(e.message);
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: e.message,
-            labelKey: e.message
-          },
-          "error"
-        )
-      );
-    }
-  }
-};
 
 const createChallan = async(state,dispatch) =>{
     console.info("creating challan");
@@ -352,19 +202,13 @@ const createChallan = async(state,dispatch) =>{
         set(eChallans[0], "additionalDetail.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].glcode);
       }
     }
-    console.info("eChallans in state presetn==", eChallans);
     //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
     const taxPeriodValid = isTaxPeriodValid(dispatch, eChallans[0], state);
     
     console.info("echallan requ=",eChallans);
     if (taxPeriodValid) {
-
-      console.info("tax period valid?");
-
-      const url = "/echallan-services/eChallan/v1/_create";
-             
-        console.info("url=",url);
-      try {
+      const url = "/echallan-services/eChallan/v1/_create";     
+       try {
           const payload = await httpRequest("post", url, "", [], {
           Challan: eChallans[0]
         });
@@ -379,11 +223,11 @@ const createChallan = async(state,dispatch) =>{
             "challans[0].businessService",
             businessService.split(".")[0]
           );
-          dispatch(prepareFinalObject("Challan", payload.challans[0]));
-          console.info("generate bill");
+          dispatch(prepareFinalObject("Challan", payload.challans[0]));          
           await generateBill(consumerCode, tenantId, businessService, dispatch);
         } else {
-          alert("Empty response!!");
+          console.info("some error  happened while generating challan");
+          dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
         }
       } catch (e) {
         console.log(e.message);
@@ -397,11 +241,8 @@ const createChallan = async(state,dispatch) =>{
             "error"
           )
         );
-      }
-    
-    
-    }
- 
+      }    
+    } 
 }
 
 const generateBill = async (
@@ -415,17 +256,21 @@ const generateBill = async (
     const payload = await httpRequest(
       "post",
       `/billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
-      "",
+       "",
       [],
       {}
     );
     if (payload && payload.Bill[0]) {
-      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));      
-      console.info("bill generated redirect to common pay");     
+      console.info("Prepareing Receipt Temp===");
+      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));                
       dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&challanNumber=${consumerCode}`));
+    }
+    else{     
+      dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
     }
   } catch (e) {
     console.log(e);
+    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
   }
 };
 

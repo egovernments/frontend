@@ -24,12 +24,15 @@ export const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
+
+  console.info("searchScreenObject==>",searchScreenObject);
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children",
     state,
     dispatch,
     "search"
   );
+  console.info("isSearchBoxFirstRowValid??==",isSearchBoxFirstRowValid);
   if (!isSearchBoxFirstRowValid) {
     dispatch(
       toggleSnackbar(
@@ -156,7 +159,8 @@ const checkEmptyFields = (searchScreenObject) => {
   const businessServices = get(searchScreenObject, 'businessServices', null)
   const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)) { return true; }
+  const consumerCodes = get(searchScreenObject,'consumerCodes',null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)&& checkEmpty(consumerCodes)) { return true; }
   return false;
 }
 const checkEmpty = (value) => {

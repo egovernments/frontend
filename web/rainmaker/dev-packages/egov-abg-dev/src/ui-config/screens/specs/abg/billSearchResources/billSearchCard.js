@@ -2,6 +2,7 @@ import { getCommonCard, getCommonContainer, getCommonHeader, getCommonSubHeader,
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./function";
+import { ifUserRoleExists } from "../../utils";
 
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 // console.log("tenantId--- ", tenantId);
@@ -31,14 +32,23 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
-      "props.value",
-      ""
-    )
-  );
+  //Added by vidya to get mobile number
+  if(ifUserRoleExists("CITIZEN")){
+    const userName = JSON.parse(getUserInfo()).userName;
+    dispatch(
+      prepareFinalObject("searchScreen.mobileNumber", userName)
+    );
+  } else{
+    dispatch(
+      handleField(
+        "billSearch",
+        "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+        "props.value",
+        ""
+      )
+    );
+  }  
+  
   dispatch(
     handleField(
       "billSearch",
@@ -209,6 +219,9 @@ export const billSearchCard = getCommonCard({
       placeholder: {
         labelName: "Enter Mobile No.",
         labelKey: "ABG_MOBILE_NO_PLACEHOLDER"
+      },
+      props: {        
+        disabled: ifUserRoleExists("CITIZEN") ? true : false,
       },
       gridDefination: {
         xs: 12,
