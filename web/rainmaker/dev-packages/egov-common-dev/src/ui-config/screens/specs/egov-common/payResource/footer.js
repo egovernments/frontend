@@ -126,93 +126,22 @@ export const callPGService = async (state, dispatch) => {
         console.log("Redirection URL ",redirectionUrl);
         try{
           const gatewayParam = JSON.parse(redirectionUrl);
+          
           var newForm = $('<form>', {
             action: gatewayParam.txURL,
             method: 'post',
             target: '_top',
-          }).append(
-            $('<input>', {
-              name: 'orderId',
-              value: gatewayParam.orderId,
-              type: 'hidden',
-            })).append(
+          });
+          for (var key in gatewayParam) {
+            newForm.append(
               $('<input>', {
-                name: 'requestDateTime',
-                value: gatewayParam.requestDateTime,
+                name: key,
+                value: gatewayParam[key],
                 type: 'hidden',
-              })).append(
-                $('<input>', {
-                  name: 'successUrl',
-                  value: gatewayParam.successUrl,
-                  type: 'hidden',
-                })).append(
-                  $('<input>', {
-                    name: 'failUrl',
-                    value: gatewayParam.failUrl,
-                    type: 'hidden',
-                  })).append(
-                    $('<input>', {
-                      name: 'messageType',
-                      value: gatewayParam.messageType,
-                      type: 'hidden',
-                    })).append(
-                      $('<input>', {
-                        name: 'merchantId',
-                        value: gatewayParam.merchantId,
-                        type: 'hidden',
-                      })).append(
-                        $('<input>', {
-                          name: 'customerId',
-                          value: gatewayParam.customerId,
-                          type: 'hidden',
-                        })).append(
-                          $('<input>', {
-                            name: 'serviceId',
-                            value: gatewayParam.serviceId,
-                            type: 'hidden',
-                          })).append(
-                            $('<input>', {
-                              name: 'currencyCode',
-                              value: gatewayParam.currencyCode,
-                              type: 'hidden',
-                            })).append(
-                              $('<input>', {
-                                name: 'transactionAmount',
-                                value: gatewayParam.transactionAmount,
-                                type: 'hidden',
-                              })).append(
-                                $('<input>', {
-                                  name: 'additionalField1',
-                                  value: gatewayParam.additionalField1,
-                                  type: 'hidden',
-                                })).append(
-                                  $('<input>', {
-                                    name: 'additionalField2',
-                                    value: gatewayParam.additionalField2,
-                                    type: 'hidden',
-                                  })).append(
-                                    $('<input>', {
-                                      name: 'additionalField3',
-                                      value: gatewayParam.additionalField3,
-                                      type: 'hidden',
-                                    })).append(
-                                      $('<input>', {
-                                        name: 'additionalField4',
-                                        value: gatewayParam.additionalField4,
-                                        type: 'hidden',
-                                      })).append(
-                                        $('<input>', {
-                                          name: 'additionalField5',
-                                          value: gatewayParam.additionalField5,
-                                          type: 'hidden',
-                                        })).append(
-                                          $('<input>', {
-                                            name: 'checksum',
-                                            value: gatewayParam.checksum,
-                                            type: 'hidden',
-                                          }))
+              }))
+          }
+           
           $(document.body).append(newForm);
-          console.log("Form data", newForm);
           newForm.submit();
         }catch (e) {
           console.log("Error in payment redirect ",e);
