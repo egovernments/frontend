@@ -12,11 +12,13 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import compact from "lodash/compact";
 import store from "redux/store";
 import {
   convertDateToEpoch,
   getCurrentFinancialYear, getTranslatedLabel,
-  ifUserRoleExists
+  ifUserRoleExists,
+  getUniqueItemsFromArray
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 import { logout } from "egov-ui-kit/redux/auth/actions";
@@ -322,10 +324,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
       )
     );
-    let documents = get(
-      queryObject[0],
-      "tradeLicenseDetail.applicationDocuments"
-    );
+    //------ removing null from document array ------
+    let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
+    let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
+    set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
+    //-----------------------------------------------
+    // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
     set(
       queryObject[0],
       "validFrom",
