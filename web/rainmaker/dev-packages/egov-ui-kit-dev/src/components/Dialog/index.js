@@ -60,7 +60,7 @@ const DialogUI = ({
       children={[
         isImage && (
           <span className="dialog-wc-image" >
-            <img style={{ width: "100%" }} src={WcBanner ? WcBanner : ''} />
+            <img style={{ width: "100%", backgroundRepeat: "no-repeat" }} src={WcBanner ? WcBanner : ''} />
           </span>
         ),
         isClose && (
