@@ -397,7 +397,8 @@ export const isImage = (url) => {
   const acceptedImageTypes = ["jpg", "jpeg", "png"];
   const urlParts = url && url.split("?");
   const imageType = urlParts && urlParts.length && urlParts[0].split(".") && urlParts[0].split(".").length && urlParts[0].split(".").pop();
-  return (imageType && acceptedImageTypes.indexOf(imageType) !== -1) || false;
+  //return (imageType && acceptedImageTypes.indexOf(imageType) !== -1) || false;
+  return true;  //Always return true. As the format is not returned by the URL. AWS is not used in our case.
 };
 
 //using in Employee Screens
