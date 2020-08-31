@@ -118,7 +118,7 @@ class CitizenDashboard extends Component {
         <WelcomeMessage
           WCPopupOpen={openWCDialog}
           WCPopupClose={this.handleWCClose}
-          title={`mSeva WhatsApp Chatbot is now Live in your ${pCity}`}
+          title={`mSeva WhatsApp Chatbot is now Live in ${pCity}`}
           body={""}
         />
       </Screen>
