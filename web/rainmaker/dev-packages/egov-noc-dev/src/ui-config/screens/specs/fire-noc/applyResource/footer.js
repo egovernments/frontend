@@ -131,7 +131,6 @@ const callBackForNext = async (state, dispatch) => {
 
   if(activeStep === 0)
 {
-  debugger;
   let fireNOCNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].provisionFireNOCNumber",
