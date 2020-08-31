@@ -12,7 +12,10 @@ export const getQueryRedirectUrl = () => {
     const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const action = getQueryArg(window.location.href, "action");
-    return `${url}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=${action}&mode=${isMode}`
+    const modeaction = getQueryArg(window.location.href, "modeaction");
+    let returnUrl= `${url}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=${action}&mode=${isMode}`;
+    returnUrl= modeaction?returnUrl+'&modeaction='+modeaction:returnUrl;
+    return returnUrl;
   } else {
     url = url + '?'
     let applicationNo = getQueryArg(window.location.href, "applicationNumber");

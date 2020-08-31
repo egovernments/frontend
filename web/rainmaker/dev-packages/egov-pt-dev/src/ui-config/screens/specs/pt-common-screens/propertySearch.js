@@ -137,9 +137,13 @@ const screenConfig = {
                   let applicationNo = getQueryArg(window.location.href, "applicationNumber");
                   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
                   const actionType = getQueryArg(window.location.href, "action");
+                  const modeaction = getQueryArg(window.location.href, "modeaction");
+                  const mode = getQueryArg(window.location.href, "mode");
                   url = applicationNo ? url + `&applicationNumber=${applicationNo}` : url;
                   url = connectionNo ? url + `&connectionNumber=${connectionNo}` : url;
                   url = actionType ? url + `&action=${actionType}` : url;
+                  url = modeaction ? url + `&modeaction=${modeaction}` : url;
+                  url = mode ? url + `&mode=${mode}` : url;
                   store.dispatch(setRoute(`/pt-common-screens/register-property?redirectUrl=${url}`));
                 }
               },
