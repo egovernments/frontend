@@ -227,7 +227,7 @@ export const chequeDetails = getCommonContainer({
       labelName: "Enter bank IFSC",
       labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
-    required: false,
+    required: true,
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
     iconObj: {
       iconName: "search",
