@@ -50,17 +50,18 @@ const resetData=()=>{
    serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
    redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
    editredirect = `apply?${redirectQueryString}&action=edit`;
+   if(isModifyMode()){ 
+    redirectQueryString += '&mode=MODIFY';
+    editredirect += '&mode=MODIFY&modeaction=edit';
+    if(service === serviceConst.WATER){
+      headerLabel = "WS_MODIFY_TASK_DETAILS"
+    }else{
+      headerLabel = "SW_MODIFY_TASK_DETAILS"
+    }
+  }
+  
 }
 
-if(isModifyMode()){ 
-  redirectQueryString += '&mode=MODIFY';
-  editredirect += '&mode=MODIFY&modeaction=edit';
-  if(service === serviceConst.WATER){
-    headerLabel = "WS_MODIFY_TASK_DETAILS"
-  }else{
-    headerLabel = "SW_MODIFY_TASK_DETAILS"
-  }
-}
 
 
 const headerrow = getCommonContainer({
