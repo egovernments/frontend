@@ -95,8 +95,9 @@ let totalAmount = (estimateCardData) => {
   let commonRebate=0;
   let commonPenalty=0;
   let adhocPenalty=0;
+  debugger;
   estimateCardData.forEach(data => {
-   
+   console.log("=======data=======", data);
     if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
       tlTax = data.value ? data.value : 0;
     }
@@ -114,33 +115,102 @@ let totalAmount = (estimateCardData) => {
   return tlTax+adhocPenalty+commonPenalty-Math.abs(commonRebate);
 }
 const updateAdhoc = (state, dispatch) => {
-  const adhocAmount = get(
+  const adhocAmount = parseFloat(get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocPenalty"
-  );
-  const rebateAmount = get(
+    "Licenses[0].tradeLicenseDetail.adhocPenalty", 
+  ) ? get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocExemption"
-  );
+    "Licenses[0].tradeLicenseDetail.adhocPenalty", 
+  ) : 0 );
+  const rebateAmount = parseFloat(get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.adhocExemption", 
+  ) ? get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.adhocExemption", 
+  ) : 0);
+  
   if (adhocAmount || rebateAmount) {
-    const totalAmount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
-    );
-    if (rebateAmount && rebateAmount > totalAmount) {
+    let flag = true;
+    const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
+    if (rebateAmount && rebateAmount >= totalAmt) {
+      flag=false;
       dispatch(
         toggleSnackbar(
           true,
           {
-            labelName: "Rebate should be less than or equal to total amount!",
+            labelName: "Rebate should be greater than or equal to total amount!",
             labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
           },
           "warning"
         )
       );
-    } else {
+    }    
+    if (adhocAmount < 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Penalty amount should not be a negative value.",
+            labelKey: "ERR_PENALTY_NOT_NEGATIVE"
+          },
+          "warning"
+        )
+      );
       dispatch(prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    }
+    if (rebateAmount < 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Rebate amount should not be a negative value.",
+            labelKey: "ERR_REBATE_NOT_NEGATIVE"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
+    if (adhocAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Penalty amount should not be a decimal value.",
+            labelKey: "ERR_PENALTY_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    }
+    if (rebateAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Rebate amount should not be a decimal value.",
+            labelKey: "ERR_REBATE_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
+    if(flag) {
+      if (rebateAmount && rebateAmount > 0) {
+        dispatch(prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
+      }
       getEstimateDataAfterAdhoc(state, dispatch);
     }
   } else {
