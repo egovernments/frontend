@@ -50,7 +50,7 @@ export const propertyID = getCommonContainer({
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     jsonPath: "searchScreen.propertyIds",
   }),
-  searchButton: {
+  wnsPtySearchButton: {
     componentPath: "Button",
     gridDefination: { xs: 12, sm: 1, md: 1 },
     props: {
