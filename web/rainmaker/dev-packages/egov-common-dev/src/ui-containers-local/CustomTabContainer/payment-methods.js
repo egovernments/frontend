@@ -189,6 +189,21 @@ export const onlineDetails = getCommonContainer({
       disabled: true
     },
     jsonPath: "ReceiptTemp[0].instrument.bank.name"
+  }),
+  chequeBranch: getTextField({
+    label: {
+      labelName: "Bank Branch",
+      labelKey: "NOC_PAYMENT_BANK_BRANCH_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter bank branch",
+      labelKey: "NOC_PAYMENT_BANK_BRANCH_PLACEHOLDER"
+    },
+    required: true,
+    props: {
+      disabled: true
+    },
+    jsonPath: "ReceiptTemp[0].instrument.branchName"
   })
 });
 
