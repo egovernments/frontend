@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { withStyles } from '@material-ui/core/styles';
 import 'date-fns';
-import { addDays } from 'date-fns';
+import { addDays ,addMonths } from 'date-fns';
 import moment from 'moment';
 import React from 'react';
 import { createStaticRanges, DateRangePicker, defaultStaticRanges } from 'react-date-range';
@@ -225,13 +225,22 @@ class DateRange extends React.Component {
       ...defaultStaticRanges,
       ...createStaticRanges([
         {
-          label: 'THIS Quarter',
+          label: 'This Quarter',
           range: () => ({
             startDate: new Date(Number(`${moment().startOf('quarter').unix()}000`)),
             endDate: new Date(Number(`${moment().endOf('quarter').unix()}000`)),
-            interval: 'week'
+            interval: 'month'
           })
-        }
+        },
+        {
+          label: 'Last Quarter',
+          range: () => ({
+            startDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().startOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+            endDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().endOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+            interval: 'month'
+          })
+        },
+        
       ]),
       ...financialYears
     ];
