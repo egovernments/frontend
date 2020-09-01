@@ -88,7 +88,7 @@ const propertyDetails = {
         ),
         buildingLandArea: getLabelWithValue(
           {
-            labelName: "Land Area",
+            labelName: "Land Area(in Sq meters)",
             // labelKey: "NOC_PROPERTY_DETAILS_LAND_AREA_LABEL"
           },
           {
@@ -101,7 +101,7 @@ const propertyDetails = {
         ),
         buildingCoveredArea: getLabelWithValue(
           {
-            labelName: "Total Covered Area",
+            labelName: "Total Covered Area(in Sq meters)",
             // labelKey: "NOC_PROPERTY_DETAILS_COVERED_AREA_LABEL"
           },
           {
@@ -205,7 +205,7 @@ const propertyLocationDetails = getCommonGrayCard({
     ),
     subDistrict: getLabelWithValue(
       {
-        labelName: "sub District Name",
+        labelName: "Sub District Name",
         // labelKey: "NOC_SUB_DISTRICT_LABEL"
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",

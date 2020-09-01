@@ -397,8 +397,35 @@ else{
 
 }
 
+let NOCTypeDta= get(response,
+  "FireNOCs[0].fireNOCDetails.fireNOCType",
+    ""
+  )
 
+  if(NOCTypeDta === "RENEWAL"){
 
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber",
+        "visible",
+        false
+      )
+    );
+
+  }
+  else{
+
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber",
+        "visible",
+        false
+      )
+    );
+
+  }
 
 
 
@@ -454,28 +481,31 @@ const screenConfig = {
   // })
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
-    let firNOCType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
+    // let firNOCType = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
 
 
-      if( firNOCType === "RENEWAL")
-      {           
-        set(
-          action,
-          "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
-          false
-        );      
+      // if( firNOCType === "RENEWAL")
+      // {           
+      //   set(
+      //     action,
+      //     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
+      //     false
+      //   );      
   
-      }       
-      else {      
-        set(
-          action,
-          "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
-          false
-        );  
+      // }       
+      // else {      
+      //   set(
+      //     action,
+      //     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
+      //     false
+      //   );  
   
-        } 
+      //   } 
+
+
+
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
