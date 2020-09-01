@@ -1,49 +1,46 @@
-import 'date-fns';
-import React from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import { addDays } from 'date-fns';
-import CustomCalendar from './customCalander/cCalander';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import SwitchButton from '../switchButtons/switchButtons';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { withStyles } from '@material-ui/core/styles';
-import style from './style';
+import 'date-fns';
+import { addDays } from 'date-fns';
 import moment from 'moment';
-import _ from 'lodash';
+import React from 'react';
+import { createStaticRanges, DateRangePicker, defaultStaticRanges } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
-import { DateRangePicker, defaultStaticRanges, createStaticRanges } from 'react-date-range';
+import style from './style';
 
 const year = (new Date()).getFullYear();
-let fYearObj = getFinancialYearObj('',true)
+let fYearObj = getFinancialYearObj('', true)
 class DateRange extends React.Component {
   constructor(props) {
-    super(props);    
+    super(props);
     this.state = {
       currentDate: new Date(),
       fromDate: '',
       toDate: '',
       value: null,
-      default:5,
+      default: 5,
       title: this.props.title1,
-      fYearObj:fYearObj,      
+      fYearObj: fYearObj,
       dateRanges: Array.from(new Array(20), (x, i) => i + year - 10),
       buttons: [{ key: "1", value: "Today" },
       { key: "2", value: "This Week" },
       { key: "3", value: "This Month" },
       { key: "4", value: "This Quarter" },
-      { key: "5", value: fYearObj[0].title},
-      { key: "6", value: fYearObj[1].title},
+      { key: "5", value: fYearObj[0].title },
+      { key: "6", value: fYearObj[1].title },
       { key: "7", value: "Custom" },
       ],
-      range : [{
-       
-          startDate: moment(new Date(),"DD/MM/YYYY").startOf('day').unix(),
-          endDate: moment(addDays(new Date(), 7),"DD/MM/YYYY").startOf('day').unix(),
-          key: 'selection'
+      range: [{
+
+        startDate: moment(new Date(), "DD/MM/YYYY").startOf('day').unix(),
+        endDate: moment(addDays(new Date(), 7), "DD/MM/YYYY").startOf('day').unix(),
+        key: 'selection'
       }]
     }
   }
@@ -69,16 +66,16 @@ class DateRange extends React.Component {
     }
   }
 
-  getDateFilter(selectionObj){
-    console.log("========>selectionObj",selectionObj)
+  getDateFilter(selectionObj) {
+    console.log("========>selectionObj", selectionObj)
     let duration1 = this.getDuration(moment(selectionObj.startDate || new Date(), "DD/MM/YYYY"), moment(selectionObj.endDate || new Date(), "DD/MM/YYYY"))
 
     return {
-      title : "",
+      title: "",
       value: {
-          startDate: moment(selectionObj.startDate || new Date(), "DD/MM/YYYY").startOf('day').unix(),
-          endDate: moment(selectionObj.endDate || new Date(), "DD/MM/YYYY").endOf('day').unix(),
-          interval: duration1
+        startDate: moment(selectionObj.startDate || new Date(), "DD/MM/YYYY").startOf('day').unix(),
+        endDate: moment(selectionObj.endDate || new Date(), "DD/MM/YYYY").endOf('day').unix(),
+        interval: duration1
       }
     }
 
@@ -150,15 +147,15 @@ class DateRange extends React.Component {
   //   }
   // }
 
-  getFinancialYearObj(value){
-      let fYearObj = this.state.fYearObj, returnObj;
-      for(var i=0; i<fYearObj.length;i++){
-        if(fYearObj[i] && fYearObj[i].title == value){
-          returnObj = fYearObj[i];
-          break;
-        } 
+  getFinancialYearObj(value) {
+    let fYearObj = this.state.fYearObj, returnObj;
+    for (var i = 0; i < fYearObj.length; i++) {
+      if (fYearObj[i] && fYearObj[i].title == value) {
+        returnObj = fYearObj[i];
+        break;
       }
-      return returnObj;
+    }
+    return returnObj;
   }
 
   /**
@@ -194,14 +191,14 @@ class DateRange extends React.Component {
 
 
   onChange = (item) => {
-    console.log("=======>",item)
+    console.log("=======>", item)
     this.setState({
-      range :  [item.selection]
+      range: [item.selection]
     })
 
     let { handleSelectedOk } = this.props;
     handleSelectedOk(false, 'duration', this.getDateFilter(item.selection))
-    console.log("======getDateFilter",this.getDateFilter(item.selection))
+    console.log("======getDateFilter", this.getDateFilter(item.selection))
     this.props.onClose();
     // if (target) {
     //   this.setState({
@@ -211,17 +208,32 @@ class DateRange extends React.Component {
   }
   render() {
     let { classes, open } = this.props;
+    let financialYears = this.state.fYearObj.map(fy => {
+
+      return createStaticRanges([
+        {
+          label: fy.title,
+          range: () => ({
+            startDate: new Date(Number(`${fy.value.startDate}000`)),
+            endDate: new Date(Number(`${fy.value.endDate}000`)),
+            interval: fy.value.interval
+          })
+        }
+      ])[0]
+    })
     const staticRanges = [
       ...defaultStaticRanges,
       ...createStaticRanges([
         {
-          label: 'Begining of Time',
+          label: 'THIS Quarter',
           range: () => ({
-            startDate:  moment().startOf('year').unix(),
-            endDate: new Date()
+            startDate: new Date(Number(`${moment().startOf('quarter').unix()}000`)),
+            endDate: new Date(Number(`${moment().endOf('quarter').unix()}000`)),
+            interval: 'week'
           })
         }
-      ])
+      ]),
+      ...financialYears
     ];
     return (
       <Dialog
@@ -258,26 +270,26 @@ class DateRange extends React.Component {
               </div>
             </div>
           } */}
-              <DateRangePicker
-                onChange={this.onChange}
-                showSelectionPreview={true}
-               
-                staticRanges={staticRanges}
-                moveRangeOnFirstSelection={false}
-                months={2}
-                showMonthAndYearPickers={true}
-                ranges={this.state.range}
-                direction="horizontal"
-              />;
+          <DateRangePicker
+            onChange={this.onChange}
+            showSelectionPreview={true}
+
+            staticRanges={staticRanges}
+            moveRangeOnFirstSelection={false}
+            months={2}
+            showMonthAndYearPickers={true}
+            ranges={this.state.range}
+            direction="horizontal"
+          />;
 
         </DialogContent>
         <DialogActions className={classes.actions}>
           <Button className={classes.cancelbtn} onClick={this.handleCancel.bind(this)}>
             {this.props.cancelBtn}
           </Button>
-          <Button className={classes.okbtn} variant="contained" elevation={1} onMouseLeave={() => { this.setState({ buttonHovered: false }) }} onMouseEnter={() => { this.setState({ buttonHovered: true }) }} onClick={this.handleOk.bind(this)}>
+          {/* <Button className={classes.okbtn} variant="contained" elevation={1} onMouseLeave={() => { this.setState({ buttonHovered: false }) }} onMouseEnter={() => { this.setState({ buttonHovered: true }) }} onClick={this.handleOk.bind(this)}>
             {this.props.selectBtn}
-          </Button>
+          </Button> */}
         </DialogActions>
       </Dialog>
     );
