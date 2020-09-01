@@ -12,11 +12,13 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import compact from "lodash/compact";
 import store from "redux/store";
 import {
   convertDateToEpoch,
   getCurrentFinancialYear, getTranslatedLabel,
-  ifUserRoleExists
+  ifUserRoleExists,
+  getUniqueItemsFromArray
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 import { logout } from "egov-ui-kit/redux/auth/actions";
@@ -110,6 +112,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
     fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
   applicationDocuments &&
     applicationDocuments.forEach((item, index) => {
+      
       uploadedDocuments[index] = [
         {
           fileName:
@@ -124,7 +127,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
               )) ||
             `Document - ${index + 1}`,
           fileStoreId: item.fileStoreId,
-          fileUrl: Object.values(fileUrlPayload)[index],
+          fileUrl: fileUrlPayload[item.fileStoreId],
           documentType: item.documentType,
           tenantId: item.tenantId,
           id: item.id
@@ -322,10 +325,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
       )
     );
-    let documents = get(
-      queryObject[0],
-      "tradeLicenseDetail.applicationDocuments"
-    );
+    //------ removing null from document array ------
+    let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
+    let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
+    set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
+    //-----------------------------------------------
+    // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
     set(
       queryObject[0],
       "validFrom",
@@ -420,9 +425,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
-
-      if ((activeIndex === 3 || activeIndex === 1) && isEditRenewal) {
-        action = activeIndex === 3 ? "APPLY" : "INITIATE";
+      if (activeIndex === 3 && isEditRenewal) {
+        action = "APPLY";
         let renewalSearchQueryObject = [
           { key: "tenantId", value: queryObject[0].tenantId },
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
@@ -448,9 +452,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if (!isEditFlow) {
+        if(isEditRenewal && queryObject[0].status === "INITIATED" && activeIndex === 1){
+        }
+        else{
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-          Licenses: queryObject
-        })
+             Licenses: queryObject
+           })
+        }
       }
       //Renewal flow
 
@@ -476,7 +484,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let searchResponse = await getSearchResults(searchQueryObject);
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
-      } else {
+      } 
+      else if(isEditRenewal){
+        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", queryObject[0].tradeLicenseDetail.applicationDocuments));
+      }
+      else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
       }
       const updatedtradeUnits = get(
