@@ -1232,6 +1232,7 @@ const getBillingSlabData = async (
 const isApplicationPaid = (currentStatus,workflowCode) => {
 let isPAID = false;
 if(currentStatus==="CITIZENACTIONREQUIRED"){
+  let isPAID = true;
   return isPAID;
 }
 const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
@@ -1253,8 +1254,9 @@ const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
     //   }
     // }
 
-    if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "PENDINGPAYMENT" ){
+    if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "PENDINGPAYMENT" && currentStatus != "CITIZENACTIONREQUIRED"){
       isPAID = true;
+      console.log("======current status======",currentStatus);
     }
   } else {
     isPAID = false;
