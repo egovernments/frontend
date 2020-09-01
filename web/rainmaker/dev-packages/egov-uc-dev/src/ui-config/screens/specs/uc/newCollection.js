@@ -374,8 +374,7 @@ const openReceiptSearchForm = (state, dispatch) => {
    dispatch(setRoute(path));
  };
 
- const openPayBillForm = (state, dispatch) => {
-   console.info("bill path");
+ const openPayBillForm = (state, dispatch) => {  
   const path = `/abg/billSearch`;
   dispatch(setRoute(path));
  };
