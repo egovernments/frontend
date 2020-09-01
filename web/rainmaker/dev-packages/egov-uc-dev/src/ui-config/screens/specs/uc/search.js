@@ -6,7 +6,7 @@ import {
 import { UCSearchCard } from "./universalCollectionResources/ucSearch";
 import get from "lodash/get";
 import { setServiceCategory } from "../utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
@@ -97,49 +97,49 @@ const ucSearchAndResult = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
 
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
 
-                buttonLabel: getLabel({
-                  labelName: "NEW COLLECTION",
-                  labelKey: "UC_SEARCH_RESULTS_NEW_COLLECTION_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  openNewCollectionForm(state, dispatch);
-                }
-              }
-            }
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW COLLECTION",
+            //       labelKey: "UC_SEARCH_RESULTS_NEW_COLLECTION_BUTTON"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       openNewCollectionForm(state, dispatch);
+            //     }
+            //   }
+            // }
           }
         },
         UCSearchCard,
@@ -152,13 +152,4 @@ const ucSearchAndResult = {
 
 export default ucSearchAndResult;
 
-const openNewCollectionForm = (state, dispatch) => {
- // dispatch(prepareFinalObject("Demands", []));
- dispatch(prepareFinalObject("Challan", []));
-  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-  const path =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/uc/newCollection`
-      : `/uc/newCollection`;
-  dispatch(setRoute(path));
-};
+

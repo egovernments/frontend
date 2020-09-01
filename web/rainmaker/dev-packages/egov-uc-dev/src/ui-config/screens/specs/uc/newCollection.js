@@ -1,12 +1,13 @@
 import commonConfig from "config/common.js";
-import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader,
+  getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { setServiceCategory } from "../utils";
-
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
 import {newCollectionConsumerDetailsCard} from './newCollectionResource/neCollectionConsumerDetails'
 import{newCollectionServiceDetailsCard} from './newCollectionResource/newCollectionServiceDetails';
@@ -281,6 +282,76 @@ const newCollection = {
                 sm: 6
               },
               ...header
+            },
+            buttonDiv: {
+              uiFramework: "custom-atoms",
+              componentPath: "Div",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right"
+              },
+              children: {
+                searchAndPayBtn :{
+                  componentPath: "Button",             
+                  //visible: enableButton,
+                  props: {
+                    variant: "outlined",
+                    color: "primary",
+                    style: {
+                      color: "primary",
+                      borderRadius: "2px",
+                      width: "250px",
+                      height: "48px",
+                      marginRight: "16px"
+                    }
+                  },
+                  children: {
+                    buttonLabel: getLabel({
+                      labelName: "Search And Pay",
+                      labelKey: "UC_SEARCHANDPAY_LABEL"
+                    }),
+                  },                  
+                  onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                      openNewCollectionForm(state, dispatch);
+                    }
+                  }
+                },
+                searchReceiptBtn:{
+                  componentPath: "Button",             
+                  //visible: enableButton,
+                  props: {
+                    variant: "outlined",
+                    color: "primary",
+                    style: {
+                      color: "primary",
+                      borderRadius: "2px",
+                      width: "250px",
+                      height: "48px",
+                      marginRight: "16px"
+                    }
+                  },
+                  children: {
+                    buttonLabel: getLabel({
+                      labelName: "Receipt Search",
+                      labelKey: "UC_SEARCHRECEIPT_LABEL"
+                    }),
+                  },
+               
+                  onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                      openReceiptSearchForm(state, dispatch);
+                    }
+                  }
+                },
+              },        
+              
+
+              
+            
             }
           }
         },
@@ -294,3 +365,14 @@ const newCollection = {
 };
 
 export default newCollection;
+
+const openReceiptSearchForm = (state, dispatch) => {
+  // dispatch(prepareFinalObject("Demands", []));
+  dispatch(prepareFinalObject("Challan", []));
+   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
+   const path =
+     process.env.REACT_APP_SELF_RUNNING === "true"
+       ? `/egov-ui-framework/uc/search`
+       : `/uc/search`;
+   dispatch(setRoute(path));
+ };

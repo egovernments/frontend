@@ -85,7 +85,8 @@ const header = getCommonHeader({
             label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+            props: { variant: "outlined", 
+            style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
             menu: downloadMenu
           }
         }
@@ -98,7 +99,8 @@ const header = getCommonHeader({
             label: { labelName: "PRINT", labelKey: "TL_PRINT" },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            props: { variant: "outlined", 
+            style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
             menu: printMenu
           }
         }
