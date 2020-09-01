@@ -13,7 +13,7 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { downloadChallan } from "../utils";
-
+import './index.css';
 const header = getCommonHeader({
   labelName: `mCollect`,
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
@@ -67,14 +67,10 @@ const header = getCommonHeader({
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
-    gridDefination: {
-      xs: 12,
-      sm: 7,
-      align: "right"
-    },
+     
     props: {
       className: "downloadprint-commonmenu",
-      style: { textAlign: "right", display: "flex", justifyContent: "flex-end" }
+      style: { textAlign: "right", display: "flex" }
     },
     children: {
       downloadMenu: {
@@ -85,8 +81,7 @@ const header = getCommonHeader({
             label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", 
-            style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "uc-download-button" },
             menu: downloadMenu
           }
         }
@@ -100,7 +95,7 @@ const header = getCommonHeader({
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", 
-            style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
+            style: { height: "60px", color: "#FE7A51" }, className: "uc-print-button" },
             menu: printMenu
           }
         }
@@ -124,55 +119,30 @@ const getAcknowledgementCard = (
       state.screenConfiguration.preparedFinalObject,
       "ReceiptTemp[0].Bill[0].billNumber"
     ); 
-
      return {     
-       headerDiv:{
-        uiFramework: "custom-atoms",
-        componentPath: "Div",       
-        children: {
-          headerDiv: {
-            uiFramework: "custom-atoms",
-            componentPath: "Container",  
-            children: {
-
-              header: {
-                gridDefination: {
-                  xs: 12,
-                  sm: 2
+      
+      header :getCommonContainer({
+        header: getCommonHeader({
+            labelName: `mCollect`, //later use getFinancialYearDates
+            labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION"
+        }),
+        consumerCode: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-common",
+            componentPath: "ApplicationNoContainer",
+            props: {
+                number: challanNumber,
+                label: {
+                    labelKey:   "PAYMENT_UC_CONSUMER_CODE",
                 },
-                ...header,            
-              },
-              consumerCode: {
-                uiFramework: "custom-atoms-local",
-                moduleName:  "egov-uc",//"egov-common",
-                componentPath: "ApplicationNoContainer",
-                gridDefination: {
-                  xs: 12,
-                  sm: 3
-                },
-                props: {
-                    number: challanNumber,
-                    label: {
-                      labelKey: "PAYMENT_UC_CONSUMER_CODE",
-                    },
-                }
-             },
-            
-              headerdownloadprint:downloadprintMenu(state, dispatch),            
             }
-          },         
-        },
-      }, 
-
+        }
+      }),
+      headerdownloadprint:downloadprintMenu(state, dispatch),  
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
-        props: {
-          style: {
-            position: "absolute",
-            width: "95%"
-          }
-        },
+          
         children: {
           card: acknowledgementCard({
             icon: "done",
@@ -198,6 +168,7 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div"
       },
+       
       applicationSuccessFooter: acknowledgementSuccesFooter
     };
   }
