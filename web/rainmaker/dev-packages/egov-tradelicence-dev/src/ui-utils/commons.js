@@ -112,6 +112,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
     fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
   applicationDocuments &&
     applicationDocuments.forEach((item, index) => {
+      
       uploadedDocuments[index] = [
         {
           fileName:
@@ -126,7 +127,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
               )) ||
             `Document - ${index + 1}`,
           fileStoreId: item.fileStoreId,
-          fileUrl: Object.values(fileUrlPayload)[index],
+          fileUrl: fileUrlPayload[item.fileStoreId],
           documentType: item.documentType,
           tenantId: item.tenantId,
           id: item.id
@@ -424,9 +425,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
-
-      if ((activeIndex === 3 || activeIndex === 1) && isEditRenewal) {
-        action = activeIndex === 3 ? "APPLY" : "INITIATE";
+      if (activeIndex === 3 && isEditRenewal) {
+        action = "APPLY";
         let renewalSearchQueryObject = [
           { key: "tenantId", value: queryObject[0].tenantId },
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
@@ -452,9 +452,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if (!isEditFlow) {
+        if(isEditRenewal && queryObject[0].status === "INITIATED" && activeIndex === 1){
+        }
+        else{
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-          Licenses: queryObject
-        })
+             Licenses: queryObject
+           })
+        }
       }
       //Renewal flow
 
@@ -480,7 +484,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let searchResponse = await getSearchResults(searchQueryObject);
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
-      } else {
+      } 
+      else if(isEditRenewal){
+        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", queryObject[0].tradeLicenseDetail.applicationDocuments));
+      }
+      else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
       }
       const updatedtradeUnits = get(
