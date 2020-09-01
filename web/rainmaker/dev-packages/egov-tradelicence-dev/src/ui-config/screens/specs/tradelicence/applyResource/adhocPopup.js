@@ -111,7 +111,7 @@ let totalAmount = (estimateCardData) => {
     }
   });
     
-  return tlTax+adhocPenalty+commonPenalty-Math.abs(commonRebate);
+  return tlTax;
 }
 const updateAdhoc = (state, dispatch) => {
   const adhocAmount = parseFloat(get(
