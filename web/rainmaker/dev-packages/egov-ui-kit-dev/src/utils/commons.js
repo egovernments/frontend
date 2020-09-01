@@ -397,7 +397,8 @@ export const isImage = (url) => {
   const acceptedImageTypes = ["jpg", "jpeg", "png"];
   const urlParts = url && url.split("?");
   const imageType = urlParts && urlParts.length && urlParts[0].split(".") && urlParts[0].split(".").length && urlParts[0].split(".").pop();
-  return (imageType && acceptedImageTypes.indexOf(imageType) !== -1) || false;
+  //return (imageType && acceptedImageTypes.indexOf(imageType) !== -1) || false;
+  return true;  //Always return true. As the format is not returned by the URL. AWS is not used in our case.
 };
 
 //using in Employee Screens
@@ -1028,14 +1029,14 @@ export const openPdf = async (link, openIn = '_blank') => {
 export const getModuleName = () => {
   const pathName = window.location.pathname;
   if (pathName.indexOf("inbox") > -1) { return "rainmaker-common"; }
+  else if (pathName.indexOf("dss") > -1) { return "rainmaker-dss"; }
   else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
   else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("wns") > -1) { return "rainmaker-ws"; }
-  else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
+  else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1 || pathName.indexOf("rainmaker-tl") > -1) { return "rainmaker-tl"; }
   else if (pathName.indexOf("hrms") > -1) { return "rainmaker-hr"; }
   else if (pathName.indexOf("fire-noc") > -1) { return "rainmaker-noc,rainmaker-pgr"; }
-  else if (pathName.indexOf("dss/home") > -1) { return "rainmaker-dss"; }
   else if (pathName.indexOf("language-selection") > -1) { return "rainmaker-common"; }
   else if (pathName.indexOf("login") > -1) { return "rainmaker-common"; }
   else if (pathName.indexOf("pay") > -1) { return "rainmaker-noc"; }

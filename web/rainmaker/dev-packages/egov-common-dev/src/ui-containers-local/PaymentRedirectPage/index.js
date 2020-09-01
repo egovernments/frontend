@@ -63,6 +63,8 @@ class PaymentRedirect extends Component {
       );
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
+      //Need to check flow for Pending Tx 
+      //set(pgUpdateResponse,"Transaction[0].txnStatus","PENDING");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
       	let bservice=search.split('&')[0];
       	console.log("bservice  --> ",bservice);
@@ -70,7 +72,14 @@ class PaymentRedirect extends Component {
         const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}&${bservice}`;
         const ackFailureUrl = isPublicSearch ? `/withoutAuth${url}` : url;
         this.props.setRoute(ackFailureUrl);
-      } else {
+      }else if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "PENDING") {
+      	let bservice=search.split('&')[0];
+      	console.log("bservice  --> ",bservice);
+        bservice= bservice.substr(1);
+        const url = `/egov-common/acknowledgement?status=${"pending"}&consumerCode=${consumerCode}&tenantId=${tenantId}&${bservice}`;
+        const ackFailureUrl = isPublicSearch ? `/withoutAuth${url}` : url;
+        this.props.setRoute(ackFailureUrl);
+      }else {
         const srcQuery=`?tenantId=${tenantId}&consumerCodes=${consumerCode}`
  
  
