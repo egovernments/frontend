@@ -101,7 +101,18 @@ const AddComplaintForm = ({
                 />}
               </div>
               <div className="col-sm-6 col-xs-12">
-                {mohalla && <AutosuggestContainer
+              <AutoSuggestDropdown
+              className="fix-for-layout-break autocomplete-dropdown"
+              fullWidth={true}
+              dataSource={mohalla && mohalla.dropDownData}
+              onChange={(chosenRequest, index) => {
+                handleFieldChange("mohalla", chosenRequest.value);
+              }}
+              floatingLabelText={mohalla && mohalla.floatingLabelText}
+            
+              {...mohalla}
+            />
+                {/*mohalla && <AutosuggestContainer
                   className="fix-for-layout-break autocomplete-dropdown"
                   fullWidth={true}
                   data={mohalla && mohalla.dropDownData}
@@ -122,7 +133,7 @@ const AddComplaintForm = ({
                   errorMessage={mohalla.errorMessage}
                   errorStyle={mohalla.errorStyle}
                   pattern={mohalla.pattern}
-                />}
+                />*/}
               </div>
               <div className="col-sm-6 col-xs-12">
                 <TextField
