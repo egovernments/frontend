@@ -7,7 +7,6 @@ import { addDays } from 'date-fns';
 import CustomCalendar from './customCalander/cCalander';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRangePicker } from 'react-date-range';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import SwitchButton from '../switchButtons/switchButtons';
@@ -16,6 +15,7 @@ import style from './style';
 import moment from 'moment';
 import _ from 'lodash';
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
+import { DateRangePicker, defaultStaticRanges, createStaticRanges } from 'react-date-range';
 
 const year = (new Date()).getFullYear();
 let fYearObj = getFinancialYearObj('',true)
@@ -40,6 +40,7 @@ class DateRange extends React.Component {
       { key: "7", value: "Custom" },
       ],
       range : [{
+       
           startDate: moment(new Date(),"DD/MM/YYYY").startOf('day').unix(),
           endDate: moment(addDays(new Date(), 7),"DD/MM/YYYY").startOf('day').unix(),
           key: 'selection'
@@ -210,6 +211,18 @@ class DateRange extends React.Component {
   }
   render() {
     let { classes, open } = this.props;
+    const staticRanges = [
+      ...defaultStaticRanges,
+      ...createStaticRanges([
+        {
+          label: 'Begining of Time',
+          range: () => ({
+            startDate:  moment().startOf('year').unix(),
+            endDate: new Date()
+          })
+        }
+      ])
+    ];
     return (
       <Dialog
         disableBackdropClick
@@ -248,8 +261,11 @@ class DateRange extends React.Component {
               <DateRangePicker
                 onChange={this.onChange}
                 showSelectionPreview={true}
+               
+                staticRanges={staticRanges}
                 moveRangeOnFirstSelection={false}
                 months={2}
+                showMonthAndYearPickers={true}
                 ranges={this.state.range}
                 direction="horizontal"
               />;
