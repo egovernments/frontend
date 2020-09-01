@@ -14,7 +14,7 @@ import{newCollectionServiceDetailsCard} from './newCollectionResource/newCollect
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const header = getCommonHeader({
-  labelName: "New Collection",
+  labelName: "New Challan",
   labelKey: "UC_COMMON_HEADER"
 });
 const tenantId = getTenantId();
