@@ -74,7 +74,8 @@ class DonutChart extends React.Component {
 		if (type && this.state.childData == null) {
 
 			let getAxiosOptions = getChartOptions("collectionBySelectedType",{duration: {...this.props.GFilterData.duration.value},
-			"selectedType": "RESIDENTIAL"
+			"selectedType": type,
+			"moduleLevel": "PT"
 					}			);
 			if (getAxiosOptions && getAxiosOptions.url) {
 				axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
