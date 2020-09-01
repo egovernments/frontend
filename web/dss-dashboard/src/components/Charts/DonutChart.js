@@ -9,6 +9,8 @@ import CONFIG from '../../config/configs';
 import Chips from '../common/Chips/Chips';
 import NFormatterFun from '../common/numberFormaterFun';
 import style from './styles';
+import axios from 'axios';
+import getChartOptions from '../../actions/getChartOptions';
 
 
 const options = {
@@ -67,8 +69,38 @@ class DonutChart extends React.Component {
 	}
 	onClickDataType = (type) => {
 
+
+		let drillDownData={};
 		if (type && this.state.childData == null) {
 
+			let getAxiosOptions = getChartOptions("collectionBySelectedType",{duration: {...this.props.GFilterData.duration.value},
+			"selectedType": "RESIDENTIAL"
+					}			);
+			if (getAxiosOptions && getAxiosOptions.url) {
+				axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
+				  .then(response => {
+					let tmpState = {};
+					let tempData = response.data.responseData;
+					 drillDownData = response.data.responseData.data[0];
+					// let visualcode = response.data.responseData['visualizationCode'];
+					// let drilfilters = (response.data.responseData['filter'] && response.data.responseData['filter'].length > 0) ? response.data.responseData['filter'][0] : null;
+					// tmpState.lastYeardata = tempData;
+					// tmpState.drillCode = drillCode;
+					// tmpState.drilfilters = drilfilters;
+					// if (active)
+					//   tmpState.active = active.toUpperCase();
+					// if (drillCode != 'none' || calledFrom == 'clickFromTab')
+					//   tmpState.visualcode = visualcode;
+					// tmpState.filterList = filterList;
+					// this.setState(tmpState);
+					console.log(tempData,drillDownData,'jk');
+				  })
+				  .catch(error => {
+					console.log(error.response)
+				  });
+			  }
+		
+		
 			//make an api call get the data  set to child
 
 			let childValue = {
@@ -93,7 +125,7 @@ class DonutChart extends React.Component {
 					value: 37
 				}]
 			}
-
+// childValue=drillDownData;
 			this.setState({
 				filter: {
 					isFilterSelected: true,
