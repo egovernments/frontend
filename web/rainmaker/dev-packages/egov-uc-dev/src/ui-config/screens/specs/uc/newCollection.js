@@ -315,7 +315,7 @@ const newCollection = {
                   onClickDefination: {
                     action: "condition",
                     callBack: (state, dispatch) => {
-                      openNewCollectionForm(state, dispatch);
+                      openPayBillForm(state, dispatch);
                     }
                   }
                 },
@@ -347,10 +347,7 @@ const newCollection = {
                     }
                   }
                 },
-              },        
-              
-
-              
+              },            
             
             }
           }
@@ -375,4 +372,9 @@ const openReceiptSearchForm = (state, dispatch) => {
        ? `/egov-ui-framework/uc/search`
        : `/uc/search`;
    dispatch(setRoute(path));
+ };
+
+ const openPayBillForm = (state, dispatch) => {  
+  const path = `/abg/billSearch`;
+  dispatch(setRoute(path));
  };
