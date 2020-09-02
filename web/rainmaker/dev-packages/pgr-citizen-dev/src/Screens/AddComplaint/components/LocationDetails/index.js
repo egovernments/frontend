@@ -39,7 +39,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               onChange={(e, value, selectedValue) => handleFieldChange("city", selectedValue)}
               {...city}
             /> */}
-            {city && <AutosuggestContainer
+            {/*city && <AutosuggestContainer
               className="fix-for-layout-break autocomplete-dropdown"
               fullWidth={true}
               data={city && city.dropDownData}
@@ -65,8 +65,8 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               errorStyle={city.errorStyle}
               pattern={city.pattern}
 
-            />}
-            {mohalla && <AutosuggestContainer
+            />*/}
+            {/*mohalla && <AutosuggestContainer
               className="fix-for-layout-break autocomplete-dropdown"
               fullWidth={true}
               data={mohalla && mohalla.dropDownData}
@@ -91,7 +91,31 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               errorMessage={mohalla.errorMessage}
               errorStyle={mohalla.errorStyle}
               pattern={mohalla.pattern}
-            />}
+            />*/}
+             <AutoSuggestDropdown
+              {...city}
+              className="fix-for-layout-break"
+              fullWidth={true}
+              dataSource={city && city.dropDownData}
+
+              onChange={(chosenCity, index) => {
+
+                handleFieldChange("city", chosenCity.value, city.jsonPath);
+
+
+              }}
+            />
+                <AutoSuggestDropdown
+              className="fix-for-layout-break autocomplete-dropdown"
+              fullWidth={true}
+              dataSource={mohalla && mohalla.dropDownData}
+              onChange={(chosenRequest, index) => {
+                handleFieldChange("mohalla", chosenRequest.value);
+              }}
+              floatingLabelText={mohalla && mohalla.floatingLabelText}
+            
+              {...mohalla} 
+              />
             <TextField id="addComplaint-house-no" {...houseNo} onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
             <TextField
               id="addComplaint-landmark-details"

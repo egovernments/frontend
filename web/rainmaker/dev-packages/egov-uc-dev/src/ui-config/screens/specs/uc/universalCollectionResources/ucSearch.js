@@ -98,10 +98,28 @@ export const UCSearchCard = getCommonCard({
         sm: 4
       }
     }),
+    consumerCodes: getTextField({
+      label: {
+        labelName: "Challan Number.",
+        labelKey: "UC_CHALLAN_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Challan No.",
+        labelKey: "UC_CHALLAN_NO_LABEL_PLACEHOLDER"
+      },
+      required: false,
+      visible: true,
+      jsonPath: "searchScreen.consumerCodes",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
     serviceType: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-uc",
       componentPath: "AutosuggestContainer",
+      visible: false,
       props: {
         className: "autocomplete-dropdown",
         label: {
@@ -117,6 +135,7 @@ export const UCSearchCard = getCommonCard({
           moduleName: "BillingService"
         },
         required: false,
+       
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
@@ -207,23 +226,7 @@ export const UCSearchCard = getCommonCard({
         sm: 4
       }
     }),
-    consumerCodes: getTextField({
-      label: {
-        labelName: "Challan Number.",
-        labelKey: "UC_CHALLAN_NO_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Challan No.",
-        labelKey: "UC_CHALLAN_NO_LABEL_PLACEHOLDER"
-      },
-      required: false,
-      visible: true,
-      jsonPath: "searchScreen.consumerCodes",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
+ 
 
   }),
 

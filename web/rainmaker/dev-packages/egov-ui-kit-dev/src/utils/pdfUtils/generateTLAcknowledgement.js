@@ -4,7 +4,8 @@ import get from "lodash/get";
 import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
 export const generateTLAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
-
+//console.log("fileName---",fileName);
+//console.log("preparedFinalObject---",preparedFinalObject);
     tradeLocationDetails.reviewMohalla.localiseValue = true;
     tradeLocationDetails.reviewCity.localiseValue = true;
 
@@ -43,13 +44,16 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
 
     let tradeAccessoriesSummary = []
     let tradeAccessoriesSummaryInfo = []
+    //console.log("get accessories--",get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []));
+    if(get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []))
+    {
     if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length === 1) {
         tradeAccessoriesSummary = generateKeyValue(preparedFinalObject, tradeAccessoriesDetails); //
     } else if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.accessories', []).length > 1) {
         tradeAccessoriesSummaryInfo = getMultiItems(preparedFinalObject, tradeAccessoriesDetails, 'Licenses[0].tradeLicenseDetail.accessories')
         tradeAccessoriesSummary = getMultipleItemCard(tradeAccessoriesSummaryInfo, "TL_TRADE_ACCESSORY");
     }
-
+    }
     let tradeOwnerSummary = []
     let tradeOwnerSummaryInfo = []
 
@@ -71,13 +75,12 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
 
     let pdfData = {
         header: "TL_TRADE_APPLICATION", tenantId: License.tradeLicenseDetail.address.tenantId,
-        applicationNoHeader: 'TL_PDF_LICENSE_NO', applicationNoValue: License.licenseNumber,
-        additionalHeader: "TL_PDF_APPLICATION_NO", additionalHeaderValue: License.applicationNumber,
+        applicationNoHeader: 'PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_NO', applicationNoValue: License.licenseNumber,
+        additionalHeader: "PDF_STATIC_LABEL_CONSOLIDATED_TLAPP_APPLICATION_NO", additionalHeaderValue: License.applicationNumber,
         cards: [
             { items: estimateDetails, type: 'estimate' },
             { header: "TL_COMMON_TR_DETAILS", items: tradeReviewSummary },
             { header: '-1', items: tradeTypeSummary, type: tradeTypeSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            { header: '-1', items: tradeAccessoriesSummary, type: tradeAccessoriesSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: '-1', items: tradeLocationSummary },
             { header: "TL_COMMON_OWN_DETAILS", items: tradeOwnerSummary, type: tradeOwnerSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'TL_COMMON_DOCS', items: documentCard }]
