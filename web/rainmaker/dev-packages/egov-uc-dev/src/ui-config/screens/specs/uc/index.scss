@@ -1,3 +1,36 @@
+
+@media only screen and (min-width: 768px) {
+  .downloadprint-commonmenu {
+    float: right;
+    margin-top: -50px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .uc-download-button {
+    margin-left: 5px;
+    margin-right: 1px;
+    width: 178px;
+  }
+  .uc-print-button {
+    margin-left: 1px;
+    width: 140px;
+  }
+  div#custom-atoms-rightdiv {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .uc-download-button {
+    margin-left: 10px;
+    width: 180px;
+  }
+  .uc-print-button {
+    margin-left: 5px;
+    width: 150px;
+  }
+}
 .autocomplete-dropdown {
     min-width: 80%;
     position: absolute;
