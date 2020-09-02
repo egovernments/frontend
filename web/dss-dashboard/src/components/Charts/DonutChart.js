@@ -1,16 +1,16 @@
 import { withStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 import _ from 'lodash';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { isMobile } from 'react-device-detect';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import getChartOptions from '../../actions/getChartOptions';
 import CONFIG from '../../config/configs';
 import Chips from '../common/Chips/Chips';
 import NFormatterFun from '../common/numberFormaterFun';
 import style from './styles';
-import axios from 'axios';
-import getChartOptions from '../../actions/getChartOptions';
 
 
 const options = {
@@ -69,75 +69,67 @@ class DonutChart extends React.Component {
 	}
 	onClickDataType = (type) => {
 
+		let duration = { ...this.props.GFilterData.duration.value };
+		duration.endDate = String(duration.endDate).length === 10 ? duration.endDate * 1000 : duration.endDate
+		duration.startDate = String(duration.startDate).length === 10 ? duration.startDate * 1000 : duration.startDate
 
-		let drillDownData={};
+		let drillDownData = {};
 		if (type && this.state.childData == null) {
 
-			let getAxiosOptions = getChartOptions("collectionBySelectedType",{duration: {...this.props.GFilterData.duration.value},
-			"selectedType": type,
-			"moduleLevel": "PT"
-					}			);
+			let getAxiosOptions = getChartOptions("collectionBySelectedType", {
+				duration: { ...duration },
+				selectedType: type,
+				modulelevel: "PT"
+			});
 			if (getAxiosOptions && getAxiosOptions.url) {
 				axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
-				  .then(response => {
-					let tmpState = {};
-					let tempData = response.data.responseData;
-					 drillDownData = response.data.responseData.data[0];
-					// let visualcode = response.data.responseData['visualizationCode'];
-					// let drilfilters = (response.data.responseData['filter'] && response.data.responseData['filter'].length > 0) ? response.data.responseData['filter'][0] : null;
-					// tmpState.lastYeardata = tempData;
-					// tmpState.drillCode = drillCode;
-					// tmpState.drilfilters = drilfilters;
-					// if (active)
-					//   tmpState.active = active.toUpperCase();
-					// if (drillCode != 'none' || calledFrom == 'clickFromTab')
-					//   tmpState.visualcode = visualcode;
-					// tmpState.filterList = filterList;
-					// this.setState(tmpState);
-					console.log(tempData,drillDownData,'jk');
-				  })
-				  .catch(error => {
-					console.log(error.response)
-				  });
-			  }
-		
-		
+					.then(response => {
+
+						drillDownData = response.data.responseData.data[0];
+
+						this.setState({
+							filter: {
+								isFilterSelected: true,
+								tabName: 'Usage Type', // shoulnt be hardcoded
+								filterValues: type
+							},
+							childData: [{
+								...drillDownData,
+								headerName: `${drillDownData.headerName}_${type}`
+							}]
+						})
+					})
+					.catch(error => {
+						console.log(error.response)
+					});
+			}
+
+
 			//make an api call get the data  set to child
 
-			let childValue = {
-				headerName: "DSS_PT_COLLECTION_BY_USAGE_TYPE",
-				headerSymbol: "amount",
-				headerValue: 61,
-				insight: null,
-				plots: [{
-					label: null,
-					name: "CASH",
-					symbol: "amount",
-					value: 50
-				}, {
-					label: null,
-					name: "CHEQUE",
-					symbol: "amount",
-					value: 13
-				}, {
-					label: null,
-					name: "ONLINE",
-					symbol: "amount",
-					value: 37
-				}]
-			}
-// childValue=drillDownData;
-			this.setState({
-				filter: {
-					isFilterSelected: true,
-					tabName: 'Usage Type', // shoulnt be hardcoded
-					filterValues: type
-				},
-				childData: [{
-					...childValue,
-					headerName: `${childValue.headerName}_${type}`
-				}]
-			})
+			// let childValue = {
+			// 	headerName: "DSS_PT_COLLECTION_BY_USAGE_TYPE",
+			// 	headerSymbol: "amount",
+			// 	headerValue: 61,
+			// 	insight: null,
+			// 	plots: [{
+			// 		label: null,
+			// 		name: "CASH",
+			// 		symbol: "amount",
+			// 		value: 50
+			// 	}, {
+			// 		label: null,
+			// 		name: "CHEQUE",
+			// 		symbol: "amount",
+			// 		value: 13
+			// 	}, {
+			// 		label: null,
+			// 		name: "ONLINE",
+			// 		symbol: "amount",
+			// 		value: 37
+			// 	}]
+			// }
+
 
 		}
 
@@ -200,13 +192,13 @@ class DonutChart extends React.Component {
 							options={options}
 							onElementsClick={(elems, l) => {
 								if (chartData[0].headerName === 'DSS_PT_COLLECTION_BY_USAGE_TYPE') {
-									let index = Array.isArray(elems) && elems.length > 0 && elems[0] && elems[0]['_index'] ;
-									let type = index!==null &&_data&&_data.labels&&_data.labels[index];
-
+									let index = Array.isArray(elems) && elems.length > 0 && elems[0] && elems[0]['_index'];
+									let type = index !== null && _data && _data.labels && _data.labels[index];
 									type && this.onClickDataType(type);
 								}
 							}}
 						/>
+						{isFilterSelected && <div>{strings[childData[0].headerName.toUpperCase()] || childData[0].headerName.toUpperCase()}</div>}
 					</div>
 				)
 			} else {
@@ -224,13 +216,14 @@ class DonutChart extends React.Component {
 							height={200}
 							onElementsClick={(elems, l) => {
 								if (chartData[0].headerName === 'DSS_PT_COLLECTION_BY_USAGE_TYPE') {
-									let index = Array.isArray(elems) && elems.length > 0 && elems[0] && elems[0]['_index'] ;
-									let type = index!==null &&_data&&_data.labels&&_data.labels[index];
+									let index = Array.isArray(elems) && elems.length > 0 && elems[0] && elems[0]['_index'];
+									let type = index !== null && _data && _data.labels && _data.labels[index];
 
 									type && this.onClickDataType(type);
 								}
 							}}
 						/>
+						{isFilterSelected && <div>{strings[childData[0].headerName.toUpperCase()] || childData[0].headerName.toUpperCase()}</div>}
 					</div>
 				)
 			}
