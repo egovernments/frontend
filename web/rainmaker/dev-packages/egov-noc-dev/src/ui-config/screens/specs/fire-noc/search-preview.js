@@ -296,9 +296,9 @@ const setSearchResponse = async (
   // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
-  let firNOCType = get(
-    state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
+  // let firNOCType = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
 
 
     // if( firNOCType === "RENEWAL")
@@ -351,6 +351,16 @@ const setSearchResponse = async (
     "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
       ""
     )
+
+    // const city = get(
+    //   response,
+    //   "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+    // );
+    //   // var mtenantid = value === 'Urban'? currentcity : tenantId;
+    
+    //   console.log("valuevalue",city);
+    //   // console.log("mtenantidmtenantid",mtenantid);
+    //   dispatch(fetchLocalizationLabel(getLocale(), `${city}`, city));
 
 if(areaTypeDta === "Urban")
 {
@@ -426,11 +436,15 @@ let NOCTypeDta= get(response,
     );
 
   }
+const city = get(
+  state.screenConfiguration.preparedFinalObject,
+  "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+);
+  // var mtenantid = value === 'Urban'? currentcity : tenantId;
 
+  // console.log("mtenantidmtenantid",mtenantid);
+  dispatch(fetchLocalizationLabel(getLocale(), `${city}`, city));
 
-
-
-  
 
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
@@ -448,6 +462,10 @@ const screenConfig = {
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.applicationNumber"
     );
+    const city = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+    );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     generateBill(dispatch, applicationNumber, tenantId);
     // const queryObject1 = [
@@ -456,9 +474,9 @@ const screenConfig = {
     //   { key: "services", value: "FIRENOC" }
     // ];
  
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
-    // searchBill(dispatch, applicationNumber, tenantId);
+    searchBill(dispatch, applicationNumber, tenantId);
   //  createBill(queryObject1,dispatch)
   //  .then(payload=>{
   //   console.log("2323232>>>....billData",payload);
@@ -481,58 +499,12 @@ const screenConfig = {
   // })
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
-    // let firNOCType = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
-
-
-      // if( firNOCType === "RENEWAL")
-      // {           
-      //   set(
-      //     action,
-      //     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
-      //     false
-      //   );      
-  
-      // }       
-      // else {      
-      //   set(
-      //     action,
-      //     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
-      //     false
-      //   );  
-  
-      //   } 
-
-
-
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "FIRENOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
-    // let firNOCType2 = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
-    // if(firNOCType2){
-
-      // set(
-      //   action,
-      //   "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName.props.visible",
-      //   false
-      // );
-
-    //}
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName.props.visible",
-        "visible",
-        false
-      )
-    );
 
 
     // Hide edit buttons

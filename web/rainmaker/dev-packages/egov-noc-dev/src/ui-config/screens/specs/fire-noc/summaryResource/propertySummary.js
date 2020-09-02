@@ -12,12 +12,24 @@ import {
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA } from "../../utils";
+import get from "lodash/get";
+import store from "ui-redux/store";
+
+
+let state = store.getState();
+
+console.log(state,"statestate");
+
+
 const test = value => {
   value = value ? value.split(".")[0] : "";
   return value;
 };
 
-const tenantId = getQueryArg(window.location.href, "tenantId");
+// const tenantId = getQueryArg(window.location.href, "tenantId");
+// console.log(state,"statestate");
+const tenantId = get(state.screenConfiguration.preparedFinalObject,"FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict","");
+console.log(tenantId,"tenantIdtenantId");
 
 const getHeader = label => {
   return {
@@ -298,8 +310,13 @@ const propertyLocationDetails = getCommonGrayCard({
         jsonPath:
           "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
         callBack: value => {
+
+          let mtenanatId = get(
+            state.screenConfiguration.preparedFinalObject,
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+          ); 
           let res = value.replace("-", "_");
-          return `${getTransformedLocale(tenantId)}_REVENUE_${res}`;
+          return `${getTransformedLocale(mtenanatId)}_REVENUE_${res}`;
         }
       }
     ),
