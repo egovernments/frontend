@@ -6,7 +6,7 @@ import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementC
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
-import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments, setOldPropertyData } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData, generalMDMSFetchSuccess, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
 import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
@@ -311,7 +311,7 @@ class FormWizard extends Component {
 
     let isAssesment = getQueryValue(search, "purpose") == 'assess';
     let isReassesment = getQueryValue(search, "purpose") == 'reassess';
-
+    const isModify = getQueryValue(search, "mode") == 'MODIFY';
     const isReasses = getQueryValue(search, "purpose") == 'reassess';
     const propertyId = getQueryValue(search, "propertyId");
 
@@ -387,6 +387,11 @@ class FormWizard extends Component {
     } else if (getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
       prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
     }
+     // Fetch property and store in state as Old property in case of edit in workflow
+    if(isModify){
+      await setOldPropertyData(search, prepareFinalObject);
+    }
+    //---------------------------------------------
   };
 
   handleRemoveOwner = (index, formKey) => {
@@ -409,7 +414,9 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { purpose } = this.state;
-    const disableOwner = !formWizardConstants[purpose].canEditOwner;
+    let { search: searchQuery } = this.props.location;
+    const isModify = getQueryValue(searchQuery, "mode") == 'MODIFY';
+    const disableOwner = !formWizardConstants[purpose].canEditOwner && !isModify;
 
     switch (ownerType) {
       case "SINGLEOWNER":
@@ -495,8 +502,8 @@ class FormWizard extends Component {
     const { location, propertiesEdited } = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
-    const disableOwner = !formWizardConstants[purpose].canEditOwner;
-
+    const isModify = getQueryValue(search, "mode") == 'MODIFY';
+    const disableOwner = !formWizardConstants[purpose].canEditOwner && !isModify;
     switch (selected) {
       case 0:
         return (
@@ -548,6 +555,7 @@ class FormWizard extends Component {
               isCompletePayment={isCompletePayment}
               calculationScreenData={this.state.calculationScreenData}
               getEstimates={this.getEstimates}
+              isModify={isModify}
             />
           </div>
         );
@@ -1328,7 +1336,8 @@ class FormWizard extends Component {
   createAndUpdate = async (index, action) => {
     const {
       selected,
-      formValidIndexArray
+      formValidIndexArray,
+      prepareFinalObject
     } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
     let { form, common, location, hideSpinner } = this.props;
@@ -1337,7 +1346,7 @@ class FormWizard extends Component {
     const assessmentId = getQueryValue(search, "assessmentId");
     const propertyMethodAction = !!propertyId ? "_update" : "_create";
     let prepareFormData = { ...this.props.prepareFormData };
-
+    const isModify = getQueryValue(search, "mode") == 'MODIFY';
     if (
       get(
         prepareFormData,
@@ -1465,7 +1474,7 @@ class FormWizard extends Component {
       this
     );
     // Create/Update property call, action will be either create or update
-    propertySubmitAction(properties, action, this.props);
+    propertySubmitAction(properties, action, this.props, isModify, prepareFinalObject);
   };
 
 

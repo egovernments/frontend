@@ -2,6 +2,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
+import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { httpRequest } from "egov-ui-kit/utils/api";
 
 export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
   properties[0] = {
@@ -204,3 +206,25 @@ export const prefillPTDocuments = async (payload, sourceJsonPath, destJsonPath, 
   }
   dispatch(prepareFinalObject(destJsonPath, docs));
 };
+
+export const setOldPropertyData = async (search, prepareFinalObject) => {
+  const propertyId = getQueryValue(search, "propertyId");
+  const tenantId = getQueryValue(search, "tenantId");
+  let searchPropertyResponse = await httpRequest(
+    "property-services/property/_search",
+    "_search",
+    [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "propertyIds",
+        value: propertyId //"PT-107-001278",
+      }
+    ]
+  );
+  const Property = convertToOldPTObject(searchPropertyResponse);
+  const oldProperty = Object.create(Property);
+  prepareFinalObject("OldProperty", oldProperty[0], null);
+} 

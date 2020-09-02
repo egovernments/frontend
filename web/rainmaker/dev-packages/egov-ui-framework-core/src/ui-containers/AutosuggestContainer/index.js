@@ -32,6 +32,7 @@ class AutoSuggestor extends Component {
       localizationLabels,
       required,
       errorText,
+      disabled,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -58,6 +59,7 @@ class AutoSuggestor extends Component {
           error={errorText == "Required" && required}
           isClearable={true}
           required={required}
+          disabled={disabled}
           {...rest}
         />
       </div>

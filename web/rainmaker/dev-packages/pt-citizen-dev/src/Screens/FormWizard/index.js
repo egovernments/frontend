@@ -6,10 +6,10 @@ import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementC
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
-import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments, setOldPropertyData } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
-import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
+import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms, setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { fetchAssessments } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -279,6 +279,7 @@ class FormWizard extends Component {
       const isReasses = getQueryValue(search, "purpose") == 'reassess';
       let isAssesment = getQueryValue(search, "purpose") == 'assess';
       let isReassesment = getQueryValue(search, "purpose") == 'reassess';
+      const isModify = getQueryValue(search, "mode") == 'MODIFY';
       const tenantId = getQueryValue(search, "tenantId");
       const propertyId = getQueryValue(search, "propertyId");
       const draftUuid = getQueryValue(search, "uuid");
@@ -358,6 +359,14 @@ class FormWizard extends Component {
       } else if (getQueryValue(search, "purpose") == "update" || getQueryValue(search, "purpose") == "assess" || getQueryValue(search, "purpose") == "reassess") {
         prepareFinalObject('Properties', this.props.common.prepareFormData.Properties);
       }
+      // Fetch property and store in state as Old property in case of edit in workflow
+      if(isModify){
+        await setOldPropertyData(search, prepareFinalObject);
+        this.props.setFieldProperty("propertyAddress", "city", "disabled", true);
+      } else{
+        this.props.setFieldProperty("propertyAddress", "city", "disabled", false);
+      }
+      //---------------------------------------------
     } catch (e) {
       console.log("e");
       toggleSpinner();
@@ -395,7 +404,9 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { purpose } = this.state;
-    const disableOwner = !formWizardConstants[purpose].canEditOwner;
+    let { search: searchQuery } = this.props.location;
+    const isModify = getQueryValue(searchQuery, "mode") == 'MODIFY';
+    const disableOwner = !formWizardConstants[purpose].canEditOwner && !isModify;
     switch (ownerType) {
       case "SINGLEOWNER":
         return <OwnerInfoHOC disabled={disableOwner} />;
@@ -455,8 +466,9 @@ class FormWizard extends Component {
     let { search: searchQuery } = this.props.location;
     let isAssesment = getQueryValue(searchQuery, "purpose") == 'assess';
     let isReassesment = getQueryValue(searchQuery, "purpose") == 'reassess';
-    const isCompletePayment = getQueryValue(search, "isCompletePayment");
-    const disableOwner = !formWizardConstants[purpose].canEditOwner;
+    const isCompletePayment = getQueryValue(searchQuery, "isCompletePayment");
+    const isModify = getQueryValue(searchQuery, "mode") == 'MODIFY';
+    const disableOwner = !formWizardConstants[purpose].canEditOwner && !isModify;
     switch (selected) {
       case 0:
         return (
@@ -506,6 +518,7 @@ class FormWizard extends Component {
             currentTenantId={currentTenantId}
             isCompletePayment={isCompletePayment}
             location={this.props.location}
+            isModify={isModify}
             isPartialPaymentInValid={
               get(this.state, "estimation[0].totalAmount", 1) < 100 ||
               get(
@@ -570,13 +583,15 @@ class FormWizard extends Component {
     // const { callPGService, callDraft } = this;
     const {
       selected,
-      formValidIndexArray
+      formValidIndexArray,
+      prepareFinalObject
     } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
     let { form, common, location, hideSpinner } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
+    const isModify = getQueryValue(search, "mode") == 'MODIFY';
     // const tenantId = getQueryValue(search, "tenantId");
     // const isCompletePayment = getQueryValue(search, "isCompletePayment");
     const propertyMethodAction = !!propertyId ? "_update" : "_create";
@@ -710,7 +725,7 @@ class FormWizard extends Component {
     );
     // Create/Update property call, action will be either create or update
 
-    propertySubmitAction(properties, action, this.props);
+    propertySubmitAction(properties, action, this.props, isModify, prepareFinalObject);
 
   };
 
@@ -1640,6 +1655,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchMDMDDocumentTypeSuccess(data)),
     handleFieldChange: (formKey, fieldKey, value) =>
       dispatch(handleFieldChange(formKey, fieldKey, value)),
+    setFieldProperty: (formKey, fieldKey, property, value) => 
+      dispatch(setFieldProperty(formKey, fieldKey, property, value)),
     prepareFormDataAction: (path, value) =>
       dispatch(prepareFormDataAction(path, value)),
     hideSpinner: () => dispatch(hideSpinner()),

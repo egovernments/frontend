@@ -6,6 +6,7 @@ import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { hideSpinner } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getBusinessServiceNextAction } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
+import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { get } from "lodash";
 import store from "ui-redux/store";
 import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
@@ -86,8 +87,10 @@ const getAssessmentDetails = async () => {
         console.log(e.message);
     }
 }
-export const createProperty = async (Properties, action, props) => {
-    const { documentsUploadRedux, newProperties, propertiesEdited ,propertyAdditionalDetails} = props;
+export const createProperty = async (Properties, action, props, isModify, preparedFinalObject) => {
+    const { documentsUploadRedux, newProperties, propertiesEdited ,propertyAdditionalDetails, location} = props;
+    const { search } = location;
+    const isEditInWorkflow = getQueryValue(search, "mode") == 'MODIFY';
     let isDocumentValid = true;
     Object.keys(documentsUploadRedux).map((key) => {
         if(documentsUploadRedux[key].documents && documentsUploadRedux[key].documents.length > 0 && !(documentsUploadRedux[key].dropdown && documentsUploadRedux[key].dropdown.value)){
@@ -100,10 +103,11 @@ export const createProperty = async (Properties, action, props) => {
     }
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
     const propertyMethodAction = action;
+    const currentAction = isEditInWorkflow ? 'CORRECTIONPENDING' : null;
     if (action === "_update") {
         const workflow = {
             "businessService": "PT.CREATE",
-            "action": getBusinessServiceNextAction('PT.CREATE', null) || "OPEN",
+            "action": getBusinessServiceNextAction('PT.CREATE', currentAction) || "OPEN",
             "moduleName": "PT"
         }
         if (propertyPayload.workflow) {
@@ -113,7 +117,7 @@ export const createProperty = async (Properties, action, props) => {
         }
     }
     try {
-        propertyPayload.creationReason = action == '_create' ? 'CREATE' : 'UPDATE';
+        propertyPayload.creationReason = action == '_create' ? 'CREATE' : isEditInWorkflow ? 'CREATE' : 'UPDATE';
         propertyPayload.additionalDetails?{...propertyPayload.additionalDetails,...propertyAdditionalDetails}:{...propertyAdditionalDetails};
         const propertyResponse = await httpRequest(
             `property-services/property/${propertyMethodAction}`,
