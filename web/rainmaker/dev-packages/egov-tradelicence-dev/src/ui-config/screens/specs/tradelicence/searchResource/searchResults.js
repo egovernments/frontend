@@ -90,17 +90,32 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  console.log("=====rowData[7]===",rowData)
+  console.log("=====rowData[7]===",rowData[6].props.children);
+
+  debugger;
+  if(rowData[6].props.children === "Renewal" && rowData[9]==="INITIATED"){
+    window.location.href = `apply?applicationNumber=${rowData[0]}&licenseNumber=${rowData[1]}&tenantId=${
+      rowData[8]
+    }&action=EDITRENEWAL`;
+  }else if(rowData[9]==="INITIATED"){
+    window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+         rowData[8]
+       }`;
+  }else{
+    window.location.href = `search-preview?applicationNumber=${
+         rowData[0]
+        }&tenantId=${rowData[8]}`;
+  }
   switch (rowData[9]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[8]
-      }`;
-      break;
-    default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[8]}`;
-      break;
+    // case "INITIATED":
+    //   window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+    //     rowData[8]
+    //   }`;
+    //   break;
+    // default:
+    //   window.location.href = `search-preview?applicationNumber=${
+    //     rowData[0]
+    //   }&tenantId=${rowData[8]}`;
+    //   break;
   }
 };
