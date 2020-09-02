@@ -332,12 +332,9 @@ export const loadUlbLogo = tenantid => {
         canvas = null;
     };
    // img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
-    //img.src = `https://raw.githubusercontent.com/belegovgithub/webaccess/master/images/scb.png`;
-  //  var imagePath = process.env.REACT_APP_IMAGE_PATH;
-  //  console.log("process.env.IMAGE_PATH--",`${commonConfig.logoPath}`);
-  //  console.log("process.env.imagePath--",imagePath);
-   // console.log("logo URL is---",`${commonConfig.logoPath}/${commonConfig.tenantId}/${cbCode}/logo.png`);
-   img.src = `https://raw.githubusercontent.com/belegovgithub/webaccess/master/images/${cbCode}/logo.png`;
+    var imagePath = process.env.REACT_APP_IMAGE_PATH;
+   //img.src = `https://raw.githubusercontent.com/belegovgithub/webaccess/master/images/${cbCode}/logo.png`;
+   img.src = imagePath+`/${cbCode}/logo.png`;
 };
 
 const getHeaderCard = (applicationData, logo) => {
@@ -385,7 +382,7 @@ const getHeaderCard = (applicationData, logo) => {
 
 }
 export const generatePDF = (logo, applicationData = {}, fileName) => {
-  //  console.log("applicationData--",applicationData);
+ //   console.log("applicationData--",applicationData);
     logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
