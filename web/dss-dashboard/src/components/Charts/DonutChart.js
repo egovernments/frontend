@@ -1,6 +1,6 @@
 import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
-import _ from 'lodash';
+import _, { get } from 'lodash';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { isMobile } from 'react-device-detect';
@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import getChartOptions from '../../actions/getChartOptions';
 import CONFIG from '../../config/configs';
+import { getLocaleLabels } from '../../utils/commons';
 import Chips from '../common/Chips/Chips';
 import NFormatterFun from '../common/numberFormaterFun';
 import style from './styles';
@@ -72,14 +73,14 @@ class DonutChart extends React.Component {
 		let duration = { ...this.props.GFilterData.duration.value };
 		duration.endDate = String(duration.endDate).length === 10 ? duration.endDate * 1000 : duration.endDate
 		duration.startDate = String(duration.startDate).length === 10 ? duration.startDate * 1000 : duration.startDate
-
+		let moduleLevel = this.props.selectedChart.data[0].headerName.includes("PT") ? 'PT' : this.props.selectedChart.data[0].headerName.includes("TL") ? "TL" : "PT";
 		let drillDownData = {};
 		if (type && this.state.childData == null) {
 
-			let getAxiosOptions = getChartOptions("collectionBySelectedType", {
+			let getAxiosOptions = getChartOptions(this.props.selectedChart.drillDownChartId, {
 				duration: { ...duration },
 				selectedType: type,
-				modulelevel: "PT"
+				modulelevel: moduleLevel
 			});
 			if (getAxiosOptions && getAxiosOptions.url) {
 				axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
@@ -90,7 +91,7 @@ class DonutChart extends React.Component {
 						this.setState({
 							filter: {
 								isFilterSelected: true,
-								tabName: 'Usage Type', // shoulnt be hardcoded
+								tabName: this.props.pieChartKey.length > 0 && this.props.pieChartKey[0] && getLocaleLabels(this.props.pieChartKey[0].toUpperCase()) || "", // shoulnt be hardcoded
 								filterValues: type
 							},
 							childData: [{
@@ -149,7 +150,7 @@ class DonutChart extends React.Component {
 		_.map(chartData, function (k, v) {
 			var plots = k['plots'];
 			for (var i = 0; i < plots.length; i++) {
-				tempData.labels.push(strings[plots[i]['name']] || plots[i]['name']);
+				tempData.labels.push(getLocaleLabels(plots[i]['name']));
 				tempdataSet.data.push(plots[i]['value'])
 				tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
 			}
@@ -183,22 +184,22 @@ class DonutChart extends React.Component {
 						{isFilterSelected &&
 							<div className="row pieFilterChipWrap">
 								<div className="filLabel">
-									Filters Applied
-					</div>
+									{getLocaleLabels("FILTERS_APPLIED")}
+								</div>
 								<div className="chipWrap" style={isMobile ? { margin: "2px 20px" } : {}}><Chips fromScreen="TableChart" index={0} label={tabName} tabName={tabName} value={values} handleClick={this.removeFilter} /></div></div>}
 						<Doughnut
 							data={_data}
 							height={350}
 							options={options}
 							onElementsClick={(elems, l) => {
-								if (chartData[0].headerName === 'DSS_PT_COLLECTION_BY_USAGE_TYPE') {
+								if (chartData[0].headerName === get(this.props,'selectedChart.data[0].headerName','') && this.props.selectedChart.drillDownChartId != "none") {
 									let index = Array.isArray(elems) && elems.length > 0 && elems[0] && elems[0]['_index'];
 									let type = index !== null && _data && _data.labels && _data.labels[index];
 									type && this.onClickDataType(type);
 								}
 							}}
 						/>
-						{isFilterSelected && <div>{strings[childData[0].headerName.toUpperCase()] || childData[0].headerName.toUpperCase()}</div>}
+						{isFilterSelected && <div>{getLocaleLabels(childData[0].headerName.toUpperCase())}</div>}
 					</div>
 				)
 			} else {
@@ -207,15 +208,15 @@ class DonutChart extends React.Component {
 						{isFilterSelected &&
 							<div className="row pieFilterChipWrap">
 								<div className="filLabel">
-									Filters Applied
-					</div>
+									{getLocaleLabels("FILTERS_APPLIED")}
+								</div>
 								<div className="chipWrap" style={isMobile ? { margin: "2px 20px" } : {}}><Chips fromScreen="TableChart" index={0} label={tabName} tabName={tabName} value={values} handleClick={this.removeFilter} /></div></div>}
 						<Doughnut
 							data={_data}
 							options={options}
 							height={200}
 							onElementsClick={(elems, l) => {
-								if (chartData[0].headerName === 'DSS_PT_COLLECTION_BY_USAGE_TYPE') {
+								if (chartData[0].headerName === get(this.props,'selectedChart.data[0].headerName','') && this.props.selectedChart.drillDownChartId != "none") {
 									let index = Array.isArray(elems) && elems.length > 0 && elems[0] && elems[0]['_index'];
 									let type = index !== null && _data && _data.labels && _data.labels[index];
 
@@ -223,7 +224,7 @@ class DonutChart extends React.Component {
 								}
 							}}
 						/>
-						{isFilterSelected && <div>{strings[childData[0].headerName.toUpperCase()] || childData[0].headerName.toUpperCase()}</div>}
+						{isFilterSelected && <div>{getLocaleLabels(childData[0].headerName.toUpperCase())}</div>}
 					</div>
 				)
 			}
@@ -232,10 +233,16 @@ class DonutChart extends React.Component {
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+	const pieChartKey = Object.keys(state.chartsData).filter(key => {
+		return get(state, `chartsData[${key}].data[0].headerName`, '') === ownProps.label;
+	})
+	const selectedChart = pieChartKey.length > 0 && pieChartKey[0] && state.chartsData[pieChartKey[0]] || {}
 	return {
 		GFilterData: state.GFilterData,
-		strings: state.lang
+		strings: state.lang,
+		selectedChart,
+		pieChartKey
 	}
 }
 const mapDispatchToProps = dispatch => {
