@@ -536,11 +536,11 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     ]);
 
     // If pending payment then get bill else get receipt
-    let billData = get(payload, "Receipt[0].Bill") || get(response, "Bill");
+    let billData = get(payload, "Payments[0].paymentDetails[0].bill") || get(response, "Bill");
 
     if (billData) {
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billData));
-      const estimateData = createEstimateData(billData[0]);
+      const estimateData = createEstimateData(billData);
       estimateData &&
         estimateData.length &&
         dispatch(
