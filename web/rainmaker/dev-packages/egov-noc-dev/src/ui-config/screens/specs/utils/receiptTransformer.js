@@ -2,6 +2,8 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
 import { getMdmsData, getReceiptData, getFinancialYearDates } from "../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
 import {
   getLocalization,
   getLocale
@@ -11,8 +13,12 @@ import {
   getTranslatedLabel,
   transformById,
   getTransformedLocale,
-  getUserDataFromUuid
+  getUserDataFromUuid,
+  getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
+
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+
 import { getSearchResults } from "../../../../ui-utils/commons";
 
 const ifNotNull = value => {
@@ -23,10 +29,10 @@ const nullToNa = value => {
   return ["", "NA", "null", null].includes(value) ? "NA" : value;
 };
 
-const createAddress = (doorNo, buildingName, street, locality, city) => {
+const createAddress = (doorNo, street, locality, city) => {
   let address = "";
   address += ifNotNull(doorNo) ? doorNo + ", " : "";
-  address += ifNotNull(buildingName) ? buildingName + ", " : "";
+//  address += ifNotNull(buildingName) ? buildingName + ", " : "";
   address += ifNotNull(street) ? street + ", " : "";
   address += locality + ", ";
   address += city;
@@ -50,7 +56,7 @@ export const getMessageFromLocalization = code => {
   return messageObject ? messageObject.message : code;
 };
 
-export const loadUlbLogo = tenantid => {
+export const loadUlbLogo = utenantId => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
   img.onload = function() {
@@ -64,7 +70,8 @@ export const loadUlbLogo = tenantid => {
     );
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+ //img.src = `/pb-egov-assets/${utenantId}/logo.png`; 
+ img.src = '/pb-egov-assets/pb/Punjab_FS_logo.jpg'; 
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -74,12 +81,11 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     { key: "applicationNumber", value: applicationNumber }
   ];
   let response = await getSearchResults(queryObject);
-
   if (response && response.FireNOCs && response.FireNOCs.length > 0) {
     data.applicationNumber = nullToNa(
       get(response, "FireNOCs[0].fireNOCDetails.applicationNumber", "NA")
     );
-    data.applicationStatus = get(response, "FireNOCs[0].fireNOCDetails.status");
+    data.applicationStatus = getMessageFromLocalization(nullToNa('NOC_'+get(response, "FireNOCs[0].fireNOCDetails.status")));
     data.applicationDate = nullToNa(
       epochToDate(
         get(response, "FireNOCs[0].fireNOCDetails.applicationDate", "NA")
@@ -118,6 +124,66 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "NA")
     );
     let buildings = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
+
+    data.landArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].landArea", "NA")
+    );
+
+    data.landArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].landArea", "NA")
+    );
+
+    data.totalCoveredArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea", "NA")
+    );
+
+    data.parkingArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea", "NA")
+    );
+
+    data.leftSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding", "NA")
+    );
+
+    data.rightSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].rightSurrounding", "NA")
+    );
+
+    data.backSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].backSurrounding", "NA")
+    );
+
+    data.frontSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].frontSurrounding", "NA")
+    );
+
+
+    data.totalCoveredArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea", "NA")
+    );
+
+    data.parkingArea = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea", "NA")
+    );
+
+    data.leftSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding", "NA")
+    );
+
+    data.rightSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].rightSurrounding", "NA")
+    );
+
+    data.backSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].backSurrounding", "NA")
+    );
+
+    data.frontSurrounding = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.buildings[0].frontSurrounding", "NA")
+    );
+
+    console.log("buildings", buildings);
+
     data.buildings = buildings.map(building => {
       let uoms = get(building, "uoms", []);
       let uomsObject = {};
@@ -132,13 +198,98 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
           )}`
         ),
         usageSubType: getMessageFromLocalization(
-          `FIRENOC_BUILDINGTYPE_${getTransformedLocale(
-            get(building, "usageType", "NA")
+          //`${getTransformedLocale(
+          `FIRENOC_BUILDINGSUBTYPE_${getTransformedLocale(
+            get(building, "usageSubType", "NA")
           )}`
         ),
         uoms: uomsObject
       };
     });
+
+
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenant,
+        moduleDetails: [
+          {
+            moduleName: "firenoc",
+            masterDetails: [{ name: "BuildingType" }]
+          },
+       
+        ]
+      }
+    };
+
+    var NBCGroup, NBCSubGroup;
+
+    try {
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      console.log(payload,"loadNBCData");
+
+      let BuildingType =  get(
+                            payload,
+                            "MdmsRes.firenoc.BuildingType",
+                            "NA" 
+                          );
+
+      console.log(BuildingType,"BuildingType");
+
+  
+      
+
+   //   let bsubtype = []
+/* 
+      for ( let i =0; i<=BuildingType.length; i++)
+        {
+            if(buildings[0].usageType === BuildingType[i].code )
+            {
+
+              console.log("test",BuildingType[i].BuildingSubType);
+
+            }
+       }  */
+
+       let bsubtype = BuildingType.filter(type => 
+        { if (buildings[0].usageType === type.code ) 
+          return type.BuildingSubType} 
+        );
+
+        console.log('bsubtype', bsubtype);
+
+
+        for(let i=0; i<=bsubtype[0].BuildingSubType.length>0;i++)
+        {
+
+          if(buildings[0].usageSubType===bsubtype[0].BuildingSubType[i].code)
+
+            {
+                NBCGroup =  bsubtype[0].BuildingSubType[i].NBCGroup ? bsubtype[0].BuildingSubType[i].NBCGroup: '' ;
+                NBCSubGroup = bsubtype[0].BuildingSubType[i].NBCSubGroup ? bsubtype[0].BuildingSubType[i].NBCSubGroup: '';
+                console.log('NBCGroup', NBCGroup);
+                console.log('NBCSubGroup', NBCSubGroup);
+            }
+
+            }       
+  
+      }           
+  
+
+  
+     catch (e) {
+      console.log(e);
+    }
+
+    data.NBCGroup = NBCGroup;
+    data.NBCSubGroup = NBCSubGroup;
+   
 
     // Property Location
     data.propertyId = nullToNa(
@@ -148,17 +299,28 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
-    data.city = nullToNa(
-      getMessageFromLocalization(
-        `TENANT_TENANTS_${getTransformedLocale(
-          get(
-            response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-            "NA"
-          )
-        )}`
+
+
+    data.basements = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId",
+        "NA"
       )
     );
+
+ 
+    let city_value = nullToNa(  
+      get(  
+         response,  
+         "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",  
+         "NA" 
+       )         
+   );
+
+    data.city = nullToNa(          
+        getMessageFromLocalization(`TL_${city_value}` ) ); 
+
     data.door = nullToNa(
       get(
         response,
@@ -166,6 +328,51 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
+
+    data.areaType = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",
+        "NA"
+      )
+    );
+
+    let district_value = nullToNa(  
+      get(  
+         response,  
+         "FireNOCs[0].fireNOCDetails.propertyDetails.address.city", 
+         "NA" 
+       )         
+   );
+
+    data.district = nullToNa(          
+        getMessageFromLocalization(`TL_${district_value}` ) );    
+      
+
+    data.subDistrict = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+        "NA"
+      )
+    );
+
+    data.village = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
+        "NA"
+      )
+    );
+
+    data.landmark = nullToNa(
+      get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.landmark",
+        "NA"
+      )
+    );
+
     data.buildingName = nullToNa(
       get(
         response,
@@ -180,17 +387,95 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
-    data.mohalla = nullToNa(
-      getMessageFromLocalization(
-        `revenue.locality.${getTransformedLocale(
-          get(
+
+
+    const  tenantId = getQueryArg(window.location.href, "tenantId"); 
+
+    
+    let value = get(
+      response,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+      "NA");
+
+      let utenantId = get(
+        response,
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+        "NA");
+
+    //const  tenantId = getQueryArg(window.location.href, "tenantId");    
+
+   if(data.areaType === 'Urban')
+    {
+
+
+     data.mohalla = nullToNa(         
+     /*  getTransformedLocale(
+            `${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_") }`           
+        )  */
+        getMessageFromLocalization(`${getTransformedLocale(utenantId)}_REVENUE_${value.replace("-", "_")}`)       
+
+      ); 
+    
+    }
+
+    else
+    {
+      data.mohalla = "N/A";
+    } 
+   
+
+/*     if(data.areaType === 'Urban')
+    {
+    data.mohalla = nullToNa(  
+        getMessageFromLocalization(
+            `${getTransformedLocale(tenantId)}_REVENUE_${value.replace("-", "_") }`           
+        )
+      ); 
+
+
+  
+      let city_value2 = nullToNa(  
+        get(  
+           response,  
+           "FireNOCs[0].fireNOCDetails.propertyDetails.locality.code",  
+           "NA" 
+         )         
+     );
+  
+      data.mymohalla = nullToNa(          
+          getMessageFromLocalization(`TL_${city_value2}` ) ); 
+      
+
+    console.log(data.mymohalla,"data.mymohalla");
+    }
+
+    else
+    {
+      data.mohalla = "N/A";
+    } */
+
+
+    /*   data.mohalla = nullToNa(
+        getMessageFromLocalization(
+        `${getTransformedLocale(
+            get(
             response,
-            "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+            "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
             "NA"
-          )
-        )}`
-      )
-    );
+            )
+            )}_REVENUE_${getTransformedLocale(
+            get(
+              response,
+              "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
+              "NA"
+              )
+            )}`
+          ));  */
+      
+
+    
+
+
     data.pincode = nullToNa(
       get(
         response,
@@ -205,13 +490,54 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         "NA"
       )
     );
-    data.address = createAddress(
+
+    const urbancreateAddress = (doorNo, street, mohalla, landmark, city, district, pincode) => {
+      let address = "";
+      address += ifNotNull(doorNo) ? doorNo + ", " : "";   
+      address += ifNotNull(street) ? street + ", " : "";
+      address += ifNotNull(mohalla) ? mohalla + ", " : "";
+      address += ifNotNull(landmark) ? landmark + ", " : "";      
+      address += ifNotNull(city) ? city + ", " : "";
+      address += ifNotNull(district) ? district + ", " : "";
+      address += ifNotNull(pincode) ? pincode + ", " : "";   
+      return address;
+    };
+
+    const ruralcreateAddress = ( doorNo, street, landmark, village, subDistrict, district, pincode ) => {
+      let address = "";
+      address += ifNotNull(doorNo) ? doorNo + ", " : "";   
+      address += ifNotNull(street) ? street + ", " : "";
+      address += ifNotNull(landmark) ? landmark + ", " : ""; 
+      address += ifNotNull(village) ? village + ", " : "";
+      address += ifNotNull(subDistrict) ? subDistrict + ", " : "";
+      address += ifNotNull(district) ? district + ", " : "";
+      address += ifNotNull(pincode) ? pincode + ", " : "";      
+      return address;
+    };
+
+    data.urbanaddress = urbancreateAddress(
       data.door,
-      data.buildingName,
       data.street,
       data.mohalla,
-      data.city
+      data.landmark,
+      data.city,     
+      data.district,     
+      data.pincode     
+
     );
+
+    data.ruraladdress = ruralcreateAddress(
+      data.door,
+      data.street,
+      data.landmark,
+      data.village,     
+      data.subDistrict,
+      data.district,
+      data.pincode
+
+        );
+
+        data.address = data.areaType==='Urban'? data.urbanaddress :data.ruraladdress ;
 
     // Applicant Details
     let owners = get(
@@ -232,6 +558,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         address: get(owner, "correspondenceAddress", "NA")
       };
     });
+
+   
 
     // Institution Details
     data.ownershipType = nullToNa(
@@ -268,7 +596,10 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     // User Data
     loadUserNameData(get(response, "FireNOCs[0].auditDetails.lastModifiedBy"));
   }
+
+  console.log(data,"********DATA***********");
   store.dispatch(prepareFinalObject("applicationDataForPdf", data));
+  
 };
 
 export const loadReceiptData = async (consumerCode, tenant) => {
@@ -279,34 +610,41 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: tenant
     },
     {
-      key: "consumerCodes",
+      key: "consumerCode",
       value: consumerCode
     }
   ];
   let response = await getReceiptData(queryObject);
 
-  // console.log("respons of collection service",response);
+   
+   data.collectedAmnt = nullToNa(
+    get(
+      response,
+      "Receipt[1].Bill[0].billDetails[0].amountPaid",
+      "NA"
+    )
+  );
 
-  if (response && response.Payments && response.Payments.length > 0) {
+  if (response && response.Receipt && response.Receipt.length > 0) {
     data.receiptNumber = nullToNa(
-      get(response, "Payments[0].paymentDetails[0].receiptNumber", "NA")
+      get(response, "Receipt[0].Bill[0].billDetails[0].receiptNumber", "NA")
     );
     data.amountPaid = get(
       response,
-      "Payments[0].paymentDetails[0].bill[0].billDetails[0].amountPaid",
+      "Receipt[0].Bill[0].billDetails[0].amountPaid",
       0
     );
     data.totalAmount = get(
       response,
-      "Payments[0].paymentDetails[0].bill[0].totalAmount",
+      "Receipt[0].Bill[0].billDetails[0].totalAmount",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
     data.paymentMode = nullToNa(
-      get(response, "Payments[0].paymentMode", "NA")
+      get(response, "Receipt[0].instrument.instrumentType.name", "NA")
     );
     data.transactionNumber = nullToNa(
-      get(response, "Payments[0].transactionNumber", "NA")
+      get(response, "Receipt[0].instrument.transactionNumber", "NA")
     );
     data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
     data.branchName = get(response, "Receipt[0].instrument.branchName", null);
@@ -317,30 +655,29 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.paymentDate = nullToNa(
       epochToDate(
-        get(response, "Payments[0].paymentDetails[0].receiptDate", 0)
+        get(response, "Receipt[0].Bill[0].billDetails[0].receiptDate", 0)
       )
     );
     data.g8ReceiptNo = nullToNa(
       get(
         response,
-        "Payments[0].paymentDetails[0].manualReceiptNumber",
+        "Receipt[0].Bill[0].billDetails[0].manualReceiptNumber",
         "NA"
       )
     );
     data.g8ReceiptDate = nullToNa(
       epochToDate(
-        get(response, "Payments[0].paymentDetails[0].receiptDate", 0)
+        get(response, "Receipt[0].Bill[0].billDetails[0].manualReceiptDate", 0)
       )
     );
     /** START NOC Fee, Adhoc Penalty/Rebate Calculation */
     let nocAdhocPenalty = 0,
       nocAdhocRebate = 0;
-    response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(item => {
+    response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {
       let desc = item.taxHeadCode ? item.taxHeadCode : "";
       if (desc === "FIRENOC_FEES") {
         data.nocFee = item.amount;
       } else if (desc === "FIRENOC_ADHOC_PENALTY") {
-
         nocAdhocPenalty = item.amount;
       } else if (desc === "FIRENOC_ADHOC_REBATE") {
         nocAdhocRebate = item.amount;
@@ -370,10 +707,12 @@ export const loadMdmsData = async tenantid => {
       key: "moduleName",
       value: "tenant"
     },
-    {
+     {
       key: "masterName",
       value: "tenants"
-    }
+    },
+  
+    
   ];
   let response = await getMdmsData(queryObject);
 
@@ -385,6 +724,10 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
+
+    console.log('prasad ulbData',ulbData);
+
+
     /** START Corporation name generation logic */
     const ulbGrade = get(ulbData, "city.ulbGrade", "NA")
       ? getUlbGradeLabel(get(ulbData, "city.ulbGrade", "NA"))
@@ -400,6 +743,8 @@ export const loadMdmsData = async tenantid => {
     ).toUpperCase()} ${getTranslatedLabel(ulbGrade, localizationLabels)}`;
 
     /** END */
+
+    data.ulbname = get(ulbData, "name", "NA");
     data.corporationAddress = get(ulbData, "address", "NA");
     data.corporationContact = get(ulbData, "contactNumber", "NA");
     data.corporationWebsite = get(ulbData, "domainUrl", "NA");
@@ -407,6 +752,7 @@ export const loadMdmsData = async tenantid => {
   }
   store.dispatch(prepareFinalObject("mdmsDataForPdf", data));
 };
+
 
 export const loadUserNameData = async uuid => {
   let data = {};
@@ -421,11 +767,25 @@ export const loadUserNameData = async uuid => {
   store.dispatch(prepareFinalObject("userDataForPdf", data));
 };
 
-/** Data used for creation of receipt is generated and stored in local storage here */
-export const loadPdfGenerationData = (applicationNumber, tenant) => {
-  /** Logo loaded and stored in local storage in base64 */
+ /** Data used for creation of receipt is generated and stored in local storage here */
+/*export const loadPdfGenerationData = (applicationNumber, tenant) => {
+  /** Logo loaded and stored in local storage in base64 
   loadUlbLogo(tenant);
   loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
   loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
   loadMdmsData(tenant);
+}; */
+
+/** Data used for creation of receipt is generated and stored in local storage here */
+export const loadPdfGenerationData = (applicationNumber, tenant) => {
+  /** Logo loaded and stored in local storage in base64 */
+
+  loadUlbLogo(tenant);
+
+  loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+  loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+
+  loadMdmsData(tenant);
+
+
 };
