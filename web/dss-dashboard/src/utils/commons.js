@@ -7,3 +7,7 @@ export const removeSignFromInsightData=(value='') =>{
     }
     return value;
 }
+
+export const getLocaleLabels = (key="", strings={} )=>{
+    return strings[key]||key;
+}
