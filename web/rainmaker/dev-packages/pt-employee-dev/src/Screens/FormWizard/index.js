@@ -414,9 +414,7 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { purpose } = this.state;
-    let { search: searchQuery } = this.props.location;
-    const isModify = getQueryValue(searchQuery, "mode") == 'MODIFY';
-    const disableOwner = !formWizardConstants[purpose].canEditOwner && !isModify;
+    const disableOwner = !formWizardConstants[purpose].canEditOwner;
 
     switch (ownerType) {
       case "SINGLEOWNER":
@@ -502,8 +500,7 @@ class FormWizard extends Component {
     const { location, propertiesEdited } = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
-    const isModify = getQueryValue(search, "mode") == 'MODIFY';
-    const disableOwner = !formWizardConstants[purpose].canEditOwner && !isModify;
+    const disableOwner = !formWizardConstants[purpose].canEditOwner;
     switch (selected) {
       case 0:
         return (
@@ -555,7 +552,6 @@ class FormWizard extends Component {
               isCompletePayment={isCompletePayment}
               calculationScreenData={this.state.calculationScreenData}
               getEstimates={this.getEstimates}
-              isModify={isModify}
             />
           </div>
         );

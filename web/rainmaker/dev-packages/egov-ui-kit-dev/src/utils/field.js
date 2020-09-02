@@ -36,7 +36,7 @@ const styles = {
 };
 
 
-const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
+const Field = ({ fieldKey, handleFieldChange, field = {}, disabled, onTextFieldIconClick, ...rest }) => {
   const renderField = () => {
     const { type, tooltip, label, hideField, Icon, iconRedirectionURL, ...fieldProps } = field;
     if (fieldProps.dropDownData && fieldProps.dropDownData.length > 0) {
@@ -49,15 +49,15 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
     switch (type) {
       case "textfield":
       case "textarea":
-        return <TextField {...rest} {...fieldProps} onChange={(e, value) => handleFieldChange(fieldKey, value)} multiLine={type === "textarea"} />;
+        return <TextField {...rest} {...fieldProps} onChange={(e, value) => handleFieldChange(fieldKey, value)} multiLine={type === "textarea"} disabled={disabled || fieldProps.disabled} />;
       case "mobilenumber":
-        return <MobileNumberField {...rest} {...fieldProps} onChange={(e, value) => handleFieldChange(fieldKey, value)} />;
+        return <MobileNumberField {...rest} {...fieldProps} onChange={(e, value) => handleFieldChange(fieldKey, value)} disabled={disabled || fieldProps.disabled} />;
       case "number":
       case "password":
-        return <TextField {...rest} {...fieldProps} type={type} onChange={(e, value) => handleFieldChange(fieldKey, value)} />;
+        return <TextField {...rest} {...fieldProps} type={type} onChange={(e, value) => handleFieldChange(fieldKey, value)} disabled={disabled || fieldProps.disabled} />;
       case "checkbox":
         return (
-          <SingleCheckbox {...rest} {...fieldProps} style={{ marginTop: "27px" }} onCheck={(e) => handleFieldChange(fieldKey, e.target.checked)} />
+          <SingleCheckbox {...rest} {...fieldProps} style={{ marginTop: "27px" }} onCheck={(e) => handleFieldChange(fieldKey, e.target.checked)} disabled={disabled || fieldProps.disabled} />
         );
       case "label":
         return <Label {...rest} {...fieldProps} />;
@@ -142,7 +142,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             canFetchValueFromJsonpath={false}
             formName={fieldProps.formName}
             isClearable={true}
-            disabled={fieldProps.disabled}
+            disabled={disabled || fieldProps.disabled}
             onChange={(chosenRequest, index) => {
               handleFieldChange(fieldKey, chosenRequest.target.value, fieldProps.jsonPath);
             }}
