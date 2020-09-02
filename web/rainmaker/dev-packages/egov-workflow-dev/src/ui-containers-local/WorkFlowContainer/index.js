@@ -307,7 +307,9 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances, baseUrlTemp, bserviceTemp } = this.props;
+    const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
+    const { PTApplication } = preparedFinalObject;
+    const { propertyId } = PTApplication;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
@@ -330,6 +332,9 @@ class WorkFlowContainer extends React.Component {
       }
     } else if (moduleName === "PT") {
       bservice = "PT"
+    } else if (moduleName === "PT.CREATE") {
+      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${
+        propertyId}&tenantId=${tenant}&mode=MODIFY`
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION"
     } else if (!baseUrl && !bservice) {
@@ -385,9 +390,9 @@ class WorkFlowContainer extends React.Component {
       localStorageGet("businessServiceData")
     );
     const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
-    // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
+    const nextState = data && data.length > 0 && find(data.states, { uuid: nextStateUUID });
 
-    const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
+    const isLastState = data ? nextState && nextState.isTerminateState : false;
     return isLastState;
   };
 
@@ -397,15 +402,15 @@ class WorkFlowContainer extends React.Component {
     );
     const data = find(businessServiceData, { businessService: moduleName });
     const nextState = find(data.states, { uuid: nextStateUUID });
-    return nextState.docUploadRequired;
+    return nextState && nextState.docUploadRequired;
   };
 
-  getActionIfEditable = (status, businessId, moduleName) => {
+  getActionIfEditable = (status, businessId, moduleName, applicationState) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
-    const state = find(data.states, { applicationStatus: status });
+    const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
     let actions = [];
     state.actions &&
       state.actions.forEach(item => {
@@ -440,6 +445,7 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
+    let applicationState = get(data[data.length - 1], "state.state");
     let filteredActions = [];
 
     filteredActions = get(data[data.length - 1], "nextActions", []).filter(
@@ -467,7 +473,8 @@ class WorkFlowContainer extends React.Component {
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
-      businessService
+      businessService,
+      applicationState
     );
     editAction.buttonLabel && actions.push(editAction);
     return actions;
