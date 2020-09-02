@@ -99,7 +99,10 @@ class LabelContainer extends React.Component {
 const mapStateToProps = (state, ownprops) => {
 	let fieldValue = "",isVisibleLabel = false;
 	const { localizationLabels } = state.app;
-	const { jsonPath, callBack, value, oldValue } = ownprops;
+	let { jsonPath, callBack, value, oldValue } = ownprops;
+	if(jsonPath === 'gender'){
+		value = value && value.toUpperCase();
+	}
 	if (oldValue) {
 		 if(value !== oldValue){
 			isVisibleLabel = true;
