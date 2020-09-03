@@ -121,6 +121,8 @@ export const generatePdfAndDownload = (
 export const applicationSuccessFooter = (
   state,
   dispatch,
+  purpose,
+  status,
   applicationNumber,
   tenant
 ) => {
@@ -151,6 +153,42 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: redirectionURL
       }
+    },
+    
+    proceedToPaymentButton: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        visible: (getButtonVisibility(purpose === "apply") || getButtonVisibility(status === "success")) ,
+        style: {
+          //  minWidth: "170px",
+          height: "48px",
+          marginRight: "45px"
+        }
+      },
+      children: {
+        proceedToPaymentButtonLabel: getLabel({
+          labelName: "Proceed to payment",
+          labelKey: "TL_PROCEED_PAYMENT"
+        })
+      },
+      //Add onClickDefination and RoleDefination later
+      onClickDefination: {
+        action: "page_change",
+        path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=TL`
+        //    /egov-common/pay?consumerCode=PB-TL-2020-09-03-023202&tenantId=pb.mohali&businessService=TL
+       
+        // process.env.REACT_APP_SELF_RUNNING === "true"
+        //   ? `/egov-ui-framework/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+        //   : `/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+      },
+      roleDefination: {
+        rolePath: "user-info.roles",
+        action: "PAY",
+        roles: ["TL_CEMP", "SUPERUSER"]
+      },
+      visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
     },
     downloadFormButton: {
       componentPath: "Button",

@@ -1032,7 +1032,7 @@ export const tradeDetails = getCommonCard({
         },
         props:{
           className:"applicant-details-error",
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+         disabled:getQueryArg(window.location.href, "action") === "RESUBMIT" || getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         },
         localePrefix: {
           moduleName: "common-masters",
