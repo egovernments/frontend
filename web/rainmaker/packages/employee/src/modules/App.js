@@ -12,6 +12,8 @@ import routes from "./Routes";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import { LoadingIndicator, CommonShareContainer } from "components";
+import Maintenance from "./Maintenance";
+// import "./maintenance.css"
 
 class App extends Component {
   constructor(props) {
@@ -86,10 +88,11 @@ class App extends Component {
     const { toast, loading, defaultUrl, hasLocalisation } = this.props;
     return (
       <div>
-        <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
+        <Maintenance/>
+        {/* <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} error={toast.error} />}
         {loading && <LoadingIndicator />}
-        <CommonShareContainer componentId="rainmaker-common-share" />
+        <CommonShareContainer componentId="rainmaker-common-share" /> */}
       </div>
     );
   }

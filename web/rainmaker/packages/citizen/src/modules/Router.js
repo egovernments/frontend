@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Citizen from "modules/citizen";
-
+import Maintenance from "modules/Maintenance";
 const Main = ({ routes, hasLocalisation, defaultUrl }) => {
   return (
     <main>
@@ -9,10 +9,9 @@ const Main = ({ routes, hasLocalisation, defaultUrl }) => {
         <Route
           path={`/`}
           render={(props) => {
-            return <Citizen match={props.match} routes={routes.citizen} />;
+            return <Maintenance />;
           }}
         />
-
         <Redirect from="/" to={hasLocalisation ? "/language-selection" : defaultUrl.citizen} />
       </Switch>
     </main>

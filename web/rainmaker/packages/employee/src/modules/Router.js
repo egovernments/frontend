@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import Employee from "modules/employee";
+import Maintenance from "modules/employee";
 import { ImageModalDisplay } from "modules/common";
 
 const Main = ({ routes, hasLocalisation, defaultUrl }) => {
@@ -10,7 +10,7 @@ const Main = ({ routes, hasLocalisation, defaultUrl }) => {
         <Route
           path={`/`}
           render={(props) => {
-            return <Employee match={props.match} routes={routes.employee} />;
+            return <Maintenance />;
           }}
         />
 
