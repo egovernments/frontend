@@ -2461,6 +2461,7 @@ export const updateOwnerShipEdit = async ( state, dispatch ) => {
 export const pageResetAndChange = (state, dispatch, tenant) => {
   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
   dispatch(prepareFinalObject("LicensesTemp", []));
+  dispatch(prepareFinalObject("DynamicMdms", []));
   dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
 
