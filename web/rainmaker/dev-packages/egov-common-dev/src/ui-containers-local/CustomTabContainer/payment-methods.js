@@ -434,7 +434,7 @@ export const cardDetails = getCommonContainer({
     // Pattern validation for Transaction number
     required: true,
     jsonPath: "ReceiptTemp[0].instrument.transactionNumber"
-  }),
+  })/*,
   repeatTrxNo: getTextField({
     label: {
       labelName: "Re-Enter Transaction No.",
@@ -447,7 +447,7 @@ export const cardDetails = getCommonContainer({
     // Pattern validation for Transaction number
     required: true,
     jsonPath: "ReceiptTemp[0].instrument.transactionNumberConfirm"
-  })
+  })*/
 });
 
 export const card = getCommonContainer({

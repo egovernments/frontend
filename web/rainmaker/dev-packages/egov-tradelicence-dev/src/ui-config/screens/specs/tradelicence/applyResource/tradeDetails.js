@@ -261,7 +261,7 @@ const tradeUnitCard = {
             // required: true,
             props: {
               disabled: true,
-              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
+             // jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
             },
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
             gridDefination: {
