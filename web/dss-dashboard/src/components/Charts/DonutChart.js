@@ -69,7 +69,7 @@ class DonutChart extends React.Component {
 		}
 	}
 	onClickDataType = (type) => {
-
+		let {  strings } = this.props;
 		let duration = { ...this.props.GFilterData.duration.value };
 		duration.endDate = String(duration.endDate).length === 10 ? duration.endDate * 1000 : duration.endDate
 		duration.startDate = String(duration.startDate).length === 10 ? duration.startDate * 1000 : duration.startDate
@@ -91,7 +91,7 @@ class DonutChart extends React.Component {
 						this.setState({
 							filter: {
 								isFilterSelected: true,
-								tabName: this.props.pieChartKey.length > 0 && this.props.pieChartKey[0] && getLocaleLabels(this.props.pieChartKey[0].toUpperCase()) || "", // shoulnt be hardcoded
+								tabName: this.props.pieChartKey.length > 0 && this.props.pieChartKey[0] && getLocaleLabels(this.props.pieChartKey[0].toUpperCase(),strings) || "", // shoulnt be hardcoded
 								filterValues: type
 							},
 							childData: [{
@@ -150,7 +150,7 @@ class DonutChart extends React.Component {
 		_.map(chartData, function (k, v) {
 			var plots = k['plots'];
 			for (var i = 0; i < plots.length; i++) {
-				tempData.labels.push(getLocaleLabels(plots[i]['name']));
+				tempData.labels.push(getLocaleLabels(plots[i]['name'],strings));
 				tempdataSet.data.push(plots[i]['value'])
 				tempdataSet.dataSymbol.push([plots[i]['symbol'], this.props.GFilterData['Denomination']]);
 			}
@@ -184,7 +184,7 @@ class DonutChart extends React.Component {
 						{isFilterSelected &&
 							<div className="row pieFilterChipWrap">
 								<div className="filLabel">
-									{getLocaleLabels("FILTERS_APPLIED")}
+									{getLocaleLabels("FILTERS_APPLIED",strings)}
 								</div>
 								<div className="chipWrap" style={isMobile ? { margin: "2px 20px" } : {}}><Chips fromScreen="TableChart" index={0} label={tabName} tabName={tabName} value={values} handleClick={this.removeFilter} /></div></div>}
 						<Doughnut
@@ -199,7 +199,7 @@ class DonutChart extends React.Component {
 								}
 							}}
 						/>
-						{isFilterSelected && <div>{getLocaleLabels(childData[0].headerName.toUpperCase())}</div>}
+						{isFilterSelected && <div>{getLocaleLabels(childData[0].headerName.toUpperCase(),strings)}</div>}
 					</div>
 				)
 			} else {
@@ -208,7 +208,7 @@ class DonutChart extends React.Component {
 						{isFilterSelected &&
 							<div className="row pieFilterChipWrap">
 								<div className="filLabel">
-									{getLocaleLabels("FILTERS_APPLIED")}
+									{getLocaleLabels("FILTERS_APPLIED",strings)}
 								</div>
 								<div className="chipWrap" style={isMobile ? { margin: "2px 20px" } : {}}><Chips fromScreen="TableChart" index={0} label={tabName} tabName={tabName} value={values} handleClick={this.removeFilter} /></div></div>}
 						<Doughnut
@@ -224,7 +224,7 @@ class DonutChart extends React.Component {
 								}
 							}}
 						/>
-						{isFilterSelected && <div>{getLocaleLabels(childData[0].headerName.toUpperCase())}</div>}
+						{isFilterSelected && <div>{getLocaleLabels(childData[0].headerName.toUpperCase(),strings)}</div>}
 					</div>
 				)
 			}
