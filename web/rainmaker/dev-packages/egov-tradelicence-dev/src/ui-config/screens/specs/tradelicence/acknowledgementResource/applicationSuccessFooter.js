@@ -160,7 +160,7 @@ export const applicationSuccessFooter = (
       props: {
         variant: "contained",
         color: "primary",
-        visible: (getButtonVisibility(purpose === "apply") || getButtonVisibility(status === "success")) ,
+       // visible: (getButtonVisibility(purpose === "apply") || getButtonVisibility(status === "success")) ,
         style: {
           //  minWidth: "170px",
           height: "48px",
