@@ -317,6 +317,8 @@ export const getEstimateCardDetails = (fees = [], color) => {
 export const loadUlbLogo = tenantid => {
     var img = new Image();
     img.crossOrigin = "Anonymous";
+    if(tenantid)
+    var cbCode = tenantid.split(".")[1];
     img.onload = function () {
         var canvas = document.createElement("CANVAS");
         var ctx = canvas.getContext("2d");
@@ -329,7 +331,10 @@ export const loadUlbLogo = tenantid => {
         localStorage.setItem("UlbLogoForPdf", canvas.toDataURL());
         canvas = null;
     };
-    img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+   // img.src = `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
+    var imagePath = process.env.REACT_APP_IMAGE_PATH;
+   //img.src = `https://raw.githubusercontent.com/belegovgithub/webaccess/master/images/${cbCode}/logo.png`;
+   img.src = imagePath+`/${cbCode}/logo.png`;
 };
 
 const getHeaderCard = (applicationData, logo) => {
@@ -351,7 +356,7 @@ const getHeaderCard = (applicationData, logo) => {
     body.push({
         stack: [
             {
-                text: getLocaleLabels(("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase(), ("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase()) + " " + getLocaleLabels(("CORPORATION", "CMN_ACK_CORPORATION_HEADER").toUpperCase(), ("CORPORATION", "CMN_ACK_CORPORATION_HEADER").toUpperCase()),
+                text: getLocaleLabels(("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase(), ("TENANT_TENANTS_" + applicationData.tenantId.replace('.', '_')).toUpperCase()) + " " + getLocaleLabels(("CANTONMENT", "CORE_COMMON_CITY").toUpperCase(), ("CANTONMENT BOARD", "PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_MUNICIPAL_CORPORATION").toUpperCase()),
                 style: "pdf-header-text"
             },
             {
@@ -377,6 +382,7 @@ const getHeaderCard = (applicationData, logo) => {
 
 }
 export const generatePDF = (logo, applicationData = {}, fileName) => {
+ //   console.log("applicationData--",applicationData);
     logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
@@ -589,6 +595,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
         switch (card.type) {
             case "singleItem":
                 if (!card.hide) {
+                    if(card.items.length>0)
                     data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
                 break;

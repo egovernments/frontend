@@ -17,7 +17,7 @@ const getCommonApplyFooter = children => {
   };
 };
 export const getRedirectionURL = () => {
-  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/search" : "/inbox";
+  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/newCollection" : "/inbox";
 
   return redirectionURL;
 };
@@ -25,7 +25,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
   goToHomeButton: {
     componentPath: "Button",
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
       style: {
         minWidth: "200px",

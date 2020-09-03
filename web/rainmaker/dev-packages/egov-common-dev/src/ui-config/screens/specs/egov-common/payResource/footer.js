@@ -397,9 +397,8 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["tenantId"] = finalReceiptData.tenantId;
   ReceiptBodyNew.Payment["totalDue"] = totalAmount;
 
-  ReceiptBodyNew.Payment["paymentMode"] =
-    finalReceiptData.instrument.instrumentType.name;
-  ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].paidBy;
+  ReceiptBodyNew.Payment["paymentMode"] = finalReceiptData.instrument.instrumentType.name;
+  ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].paidBy === "ANONYMOUS"?finalReceiptData.Bill[0].payerName:finalReceiptData.Bill[0].paidBy;
   ReceiptBodyNew.Payment["mobileNumber"] = finalReceiptData.Bill[0].payerMobileNumber;
   ReceiptBodyNew.Payment["payerName"] =  finalReceiptData.Bill[0].payerName;//finalReceiptData.Bill[0].paidBy?finalReceiptData.Bill[0].paidBy:(finalReceiptData.Bill[0].payerName||finalReceiptData.Bill[0].payer);
   if (finalReceiptData.instrument.transactionNumber) {
