@@ -352,15 +352,15 @@ const setSearchResponse = async (
       ""
     )
 
-    // const city = get(
-    //   response,
-    //   "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
-    // );
+    const city = get(
+      response,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+    );
     //   // var mtenantid = value === 'Urban'? currentcity : tenantId;
     
     //   console.log("valuevalue",city);
     //   // console.log("mtenantidmtenantid",mtenantid);
-    //   dispatch(fetchLocalizationLabel(getLocale(), `${city}`, city));
+      dispatch(fetchLocalizationLabel(getLocale(), `${city}`, city));
 
 if(areaTypeDta === "Urban")
 {
@@ -436,14 +436,14 @@ let NOCTypeDta= get(response,
     );
 
   }
-const city = get(
+const city22 = get(
   state.screenConfiguration.preparedFinalObject,
   "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
 );
   // var mtenantid = value === 'Urban'? currentcity : tenantId;
 
   // console.log("mtenantidmtenantid",mtenantid);
-  dispatch(fetchLocalizationLabel(getLocale(), `${city}`, city));
+  dispatch(fetchLocalizationLabel(getLocale(), `${city22}`, city22));
 
 
   prepareDocumentsView(state, dispatch);
