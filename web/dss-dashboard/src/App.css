@@ -376,7 +376,6 @@ h6 span {
     margin-bottom: 10px;
     text-align: left;
     display: flex;
-    width: min-content;
 }
 
 .pieFilterChipWrap .chipWrap {
