@@ -91,7 +91,7 @@ class DonutChart extends React.Component {
 						this.setState({
 							filter: {
 								isFilterSelected: true,
-								tabName: this.props.pieChartKey.length > 0 && this.props.pieChartKey[0] && getLocaleLabels(this.props.pieChartKey[0].toUpperCase(),strings) || "", // shoulnt be hardcoded
+								tabName: "",
 								filterValues: type
 							},
 							childData: [{
