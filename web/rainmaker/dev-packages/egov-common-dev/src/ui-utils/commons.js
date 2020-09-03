@@ -502,6 +502,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
 
 
 export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
+  
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
@@ -533,6 +534,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
       let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
+     
       if((billDetails && !billDetails.payerName) || !billDetails){
         billDetails = {
           payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
@@ -540,8 +542,10 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
         };
       }
       if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
+        // const paidByTest = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
+        // console.info("paidBy ==",paidByTest);
         payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
-        // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
+        payloadReceiptDetails.Payments[0].paidBy = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
         payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
       }
 
