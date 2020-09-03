@@ -308,7 +308,7 @@ class WorkFlowContainer extends React.Component {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
-    const { PTApplication } = preparedFinalObject;
+    const { PTApplication = {} } = preparedFinalObject;
     const { propertyId } = PTApplication;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
