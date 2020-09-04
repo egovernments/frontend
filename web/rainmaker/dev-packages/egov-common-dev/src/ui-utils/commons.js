@@ -578,9 +578,9 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
         const propertiesById = get(state.properties , "propertiesById");
         const propertiesFound = propertiesById ? Object.values(propertiesById) : null;
         let queryData = { Payments: payloadReceiptDetails.Payments };
-        // if(propertiesFound) {
-        //   queryData.properties = propertiesFound;
-        // }
+        if(propertiesFound) {
+          queryData.properties = propertiesFound;
+        }
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, queryData, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
           .then(res => {
             res.filestoreIds[0]
