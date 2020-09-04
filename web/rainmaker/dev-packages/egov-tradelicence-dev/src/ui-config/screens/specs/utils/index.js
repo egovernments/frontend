@@ -1765,17 +1765,21 @@ export const getDocList = (state, dispatch) => {
   get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
   const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
 
-  const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
+   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {
       if (document.code === item.documentType)
-        acc.push({
-          ...documentTypes[index]
-        })
+       { 
+         acc.push(
+          documentTypes[index]
+        )
+      }   
     });
     return acc;
-  }, [])
+  }, []) 
   const applicationDocArray = filteredDocTypes && filteredDocTypes.reduce((result, item) => {
     const transformedDocObj = documentObjArray[0].allowedDocs.filter(docObj => docObj.documentType === item.code)[0];
+    if(transformedDocObj)
+    {
     if (transformedDocObj.applicationType.includes(applicationType)) {
       result.push(
         {
@@ -1790,9 +1794,9 @@ export const getDocList = (state, dispatch) => {
         }
       )
     }
+  }
     return result;
   }, [])
-
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject(
