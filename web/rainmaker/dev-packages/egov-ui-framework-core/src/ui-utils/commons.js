@@ -120,6 +120,7 @@ export const getFileSize = file => {
 };
 
 export const isFileValid = (file, acceptedFiles) => {
+  console.log("acceptedFiles---",acceptedFiles);
   const mimeType = file["type"];
   return (
     (mimeType &&

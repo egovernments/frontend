@@ -1763,20 +1763,45 @@ export const getDocList = (state, dispatch) => {
 
   const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
   get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
+  console.log("documentObj before filter---",documentObj);
+  console.log("documentTypes before filter---",documentTypes);
   const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
-
-  const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
+console.log("documentObjArray---",documentObjArray);
+/*const filteredDocTypes = [];
+  documentTypes.find((document, index) => {
+    documentObjArray[0].allowedDocs.find((item , index1)=>{
+    if (document.code === item.documentType)
+    console.log("documentTypes[index]---",documentTypes[index]);
+    filteredDocTypes.push({
+        ...documentTypes[index]
+      })
+      console.log("filteredDocTypes---",filteredDocTypes);
+  })
+});*/
+console.log("filteredDocTypes ---",filteredDocTypes);
+   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {
       if (document.code === item.documentType)
-        acc.push({
-          ...documentTypes[index]
-        })
+       { 
+        console.log(" documentTypes[index]---", documentTypes[index]);
+         acc.push(
+          documentTypes[index]
+        )
+        console.log("acc---",acc);
+      }   
     });
     return acc;
-  }, [])
+  }, []) 
+  console.log("filteredDocTypes ---",filteredDocTypes);
+  console.log("filteredDocTypes length---",filteredDocTypes.length);
   const applicationDocArray = filteredDocTypes && filteredDocTypes.reduce((result, item) => {
+    console.log("items before----",item);
     const transformedDocObj = documentObjArray[0].allowedDocs.filter(docObj => docObj.documentType === item.code)[0];
+    console.log("transformedDocObj----",transformedDocObj);
+    if(transformedDocObj)
+    {
     if (transformedDocObj.applicationType.includes(applicationType)) {
+   //   console.log("items----",item);
       result.push(
         {
           code: item.code,
@@ -1790,10 +1815,12 @@ export const getDocList = (state, dispatch) => {
         }
       )
     }
+  }
     return result;
   }, [])
-
+  console.log("applicationDocArray length---",applicationDocArray);
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
+  console.log("applicationDocument length---",applicationDocument);
   dispatch(
     prepareFinalObject(
       "LicensesTemp[0].applicationDocuments",

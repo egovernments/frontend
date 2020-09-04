@@ -630,11 +630,13 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 
 export const handleFileUpload = (event, handleDocument, props) => {
+  console.log("props---",props);
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
   let uploadDocument = true;
   const { maxFileSize, formatProps, moduleName } = props;
+  console.log("formatProps---",formatProps);
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;
