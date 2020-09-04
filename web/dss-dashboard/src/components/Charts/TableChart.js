@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
 import axios from 'axios';
 import _ from 'lodash';
+import moment from 'moment';
+import React, { Component } from 'react';
 import { isMobile } from 'react-device-detect';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import APITransport from '../../actions/apitransport/apitransport';
 import getChartOptions from '../../actions/getChartOptions';
+import getPrevFinancialYearObj from '../../actions/getPrevFinancialYearObj';
 import Chips from '../common/Chips/Chips';
 import NFormatterFun from '../common/numberFormaterFun';
 import SwitchButton from '../common/tableswitchs/switchButtons';
 import UiTable from '../common/UiTable/UiTable';
 import styles from './styles';
-import getPrevFinancialYearObj from '../../actions/getPrevFinancialYearObj';
-import moment from 'moment';
 
 
 class TableChart extends Component {
@@ -142,6 +142,11 @@ class TableChart extends Component {
             tmpState.active = active.toUpperCase();
           if (drillCode != 'none' || calledFrom == 'clickFromTab')
             tmpState.visualcode = visualcode;
+          // if(filterList&&Object.values(filterList)[0].length== 2&& drillCode != 'none'){
+          //   tmpState.drilfilters = {...tmpState.drilfilters ,column:get(tempData,"data[0].plots[1].name",tmpState.drilfilters.column)};
+          //   tmpState.drilfilters.key=tmpState.drilfilters.column=="Ward"?"wardId":tmpState.drilfilters.key;
+
+          // }
           tmpState.filterList = filterList;
           this.setState(tmpState);
         })
@@ -205,6 +210,10 @@ class TableChart extends Component {
           if (drillCode != 'none' || calledFrom == 'clickFromTab')
             tempState.visualcode = visualcode;
           tempState.filterList = filterList;
+          // if(filterList&&Object.values(filterList)[0].length== 2&& drillCode != 'none'){
+          //   tempState.drilfilters = {...tempState.drilfilters ,column:get(tempData,"data[0].plots[1].name",tempState.drilfilters.column)};
+          //   tempState.drilfilters.key=tempState.drilfilters.column=="Ward"?"wardId":tempState.drilfilters.key;
+          // }
           this.setState(tempState);
         })
         .catch(error => {
