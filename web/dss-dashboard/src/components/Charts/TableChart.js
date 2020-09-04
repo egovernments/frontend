@@ -236,7 +236,7 @@ class TableChart extends Component {
     tempValue = (typeof tempValue === 'object') ? tempValue[0] : tempValue;
     tabName = tabName.toUpperCase();
     let tempArr = [visualcode, drillCode, drilfilters, tabName, tempValue];
-    let filterList = {};
+    let filterList = this.state.filterList;
 
     if (_.isEmpty(filterList, true) || typeof filterList[tabName] == "undefined") {
       filterList[tabName] = [];
