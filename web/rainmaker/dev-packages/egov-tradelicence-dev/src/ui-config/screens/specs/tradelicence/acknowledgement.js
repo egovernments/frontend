@@ -280,7 +280,8 @@ const getAcknowledgementCard = (
         state,
         dispatch,
         applicationNumber,
-        tenant
+        tenant,
+        status
       )
     };
   } else if (purpose === "resubmit" && status === "success") {
@@ -325,7 +326,8 @@ const getAcknowledgementCard = (
         state,
         dispatch,
         applicationNumber,
-        tenant
+        tenant,
+        status
       )
     };
   } else if (purpose === "pay" && status === "success") {
@@ -755,6 +757,7 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    console.log("=======state===",state);
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
     const financialYear = getQueryArg(window.location.href, "FY");

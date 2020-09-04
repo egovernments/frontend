@@ -359,7 +359,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.penaltyComments"
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.penaltyComments"
       })
     },
     {
@@ -446,7 +446,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.rebateComments"
         })
       })
     },

@@ -3,6 +3,9 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
+import get from "lodash/get";
+import set from "lodash/set";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -122,14 +125,23 @@ export const applicationSuccessFooter = (
   state,
   dispatch,
   purpose,
-  status,
-  applicationNumber,
-  tenant
+  status
 ) => {
   //const baseURL = getBaseURL();
+ 
   const roleExists = ifUserRoleExists("CITIZEN");
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   /* Mseva 2.0 changes */
+  
+  const aaa=  get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].status",
+    ""
+  );
+  console.log("==========aaaaa====",aaa);
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  let tenant = getQueryArg(window.location.href, "tenantId");
+  let purpose1 = getQueryArg(window.location.href, "purpose");
   const redirectionURL = roleExists ? "/" : "/inbox";
   return getCommonApplyFooter({
     gotoHome: {
@@ -186,9 +198,9 @@ export const applicationSuccessFooter = (
       roleDefination: {
         rolePath: "user-info.roles",
         action: "PAY",
-        roles: ["TL_CEMP", "SUPERUSER"]
+        roles: ["TL_CEMP", "SUPERUSER", "CITIZEN"]
       },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+      visible:purpose1 ==="apply" || purpose1 ==="EDITRENEWAL"|| purpose1 === "DIRECTRENEWAL" ? true :false
     },
     downloadFormButton: {
       componentPath: "Button",
