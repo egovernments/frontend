@@ -1035,7 +1035,7 @@ export const getModuleName = () => {
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
   else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1 || pathName.indexOf("citizen/feedback") > -1 || pathName.indexOf("resolve-success") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("wns") > -1) { return "rainmaker-ws"; }
-  else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1 || pathName.indexOf("rainmaker-tl") > -1||pathName.indexOf("/tradelicence/search")||pathName.indexOf("/tradelicence/apply")) { return "rainmaker-tl"; }
+  else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1 || pathName.indexOf("rainmaker-tl") > -1||pathName.indexOf("/tradelicence/search") >-1||pathName.indexOf("/tradelicence/apply")>-1) { return "rainmaker-tl"; }
   else if (pathName.indexOf("hrms") > -1) { return "rainmaker-hr"; }
   else if (pathName.indexOf("fire-noc") > -1) { return "rainmaker-noc,rainmaker-pgr"; }
   else if (pathName.indexOf("language-selection") > -1) { return "rainmaker-common"; }
