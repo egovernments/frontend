@@ -16,6 +16,8 @@ import { httpRequest } from "../../../../ui-utils/api";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generatePdf from "../utils/receiptPdf";
 import { prepareDocumentsView } from "../utils/index";
+import { generatePTMAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generatePTMAcknowledgement";
+
 import './index.css';
 import set from "lodash/set";
 import get from "lodash/get";
@@ -75,7 +77,11 @@ export const header = getCommonContainer({
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download" ,applicationNumber, ".print-mutation-application-pdf" )
+      debugger;
+      // generatePdfFromDiv("download" ,applicationNumber, "#print-mutation-application-pdf" )
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
      
     },
     leftIcon: "assignment"
@@ -87,7 +93,7 @@ export const header = getCommonContainer({
       // const documents = LicensesTemp[0].reviewDocData;
       // set(Licenses[0],"additionalDetails.documents",documents)
       // downloadAcknowledgementForm(Licenses,'print');
-generatePdfFromDiv("print" , applicationNumber, ".print-mutation-application-pdf")
+generatePdfFromDiv("print" , applicationNumber, "#print-mutation-application-pdf")
      
     },
     leftIcon: "assignment"

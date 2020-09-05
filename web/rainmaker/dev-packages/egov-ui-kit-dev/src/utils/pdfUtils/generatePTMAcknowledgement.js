@@ -1,17 +1,17 @@
 import { mutationSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/applyResourceMutation/mutationSummary";
-import { transfereeInstitutionSummaryDetails, transfereeSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transfereeSummary";
-import { transferorInstitutionSummaryDetails, transferorSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transferorSummary";
-import { registrationSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/summaryResource/registrationSummary";
+// import { transfereeInstitutionSummaryDetails, transfereeSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transfereeSummary";
+// import { transferorInstitutionSummaryDetails, transferorSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/searchPreviewResource/transferorSummary";
+// import { registrationSummaryDetails } from "egov-pt/ui-config/screens/specs/pt-mutation/summaryResource/registrationSummary";
 import get from "lodash/get";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
 export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
-    registrationSummaryDetails.transferReason.localiseValue=true;
-    transferorSummaryDetails.ownerType.localiseValue=true;
-    transfereeSummaryDetails.ownerType.localiseValue=true;
-    transfereeInstitutionSummaryDetails.institutionType.localiseValue=true;
-    transferorInstitutionSummaryDetails.institutionType.localiseValue=true;
+    // registrationSummaryDetails.transferReason.localiseValue=true;
+    // transferorSummaryDetails.ownerType.localiseValue=true;
+    // transfereeSummaryDetails.ownerType.localiseValue=true;
+    // transfereeInstitutionSummaryDetails.institutionType.localiseValue=true;
+    // transferorInstitutionSummaryDetails.institutionType.localiseValue=true;
     const mutationDetails = generateKeyValue(preparedFinalObject, mutationSummaryDetails);
     const registrationDetails = generateKeyValue(preparedFinalObject, registrationSummaryDetails);
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');

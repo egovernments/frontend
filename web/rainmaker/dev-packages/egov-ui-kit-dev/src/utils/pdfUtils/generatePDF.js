@@ -237,15 +237,15 @@ export const getDocumentsCard = (documentsUploadRedux) => {
 
 export const generateKeyValue = (preparedFinalObject, containerObject) => {
     let keyValue = []
-    Object.keys(containerObject).map(keys => {
-        const labelObject = containerObject[keys].children.label.children.key.props;
-        const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
-        const valueObject = containerObject[keys].children.value.children.key.props;
-        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
-        value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
-        value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
-        keyValue.push({ key, value });
-    })
+    // Object.keys(containerObject).map(keys => {
+    //     const labelObject = containerObject[keys].children.label.children.key.props;
+    //     const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
+    //     const valueObject = containerObject[keys].children.value.children.key.props;
+    //     let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+    //     value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
+    //     value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
+    //     keyValue.push({ key, value });
+    // })
     return keyValue;
 }
 let tableborder = {
