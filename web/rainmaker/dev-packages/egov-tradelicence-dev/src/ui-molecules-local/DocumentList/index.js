@@ -77,9 +77,11 @@ class DocumentList extends Component {
       uploadedDocsInRedux: uploadedDocuments,
       documents
     } = this.props;
+ 
     if (uploadedDocuments && Object.keys(uploadedDocuments).length) {
       let simplified = Object.values(uploadedDocuments).map(item => item[0]);
       let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
+         
         const index = simplified.findIndex(i => i.documentType === item.code);
         index > -1 && (acc[ind] = [simplified[index]]);
         return acc;
@@ -180,9 +182,7 @@ class DocumentList extends Component {
   };
   render() {
     const { classes, documents, documentTypePrefix } = this.props;
-    
     const { uploadedIndex } = this.state;
-    console.log("prpsssss",uploadedIndex);
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&
@@ -232,7 +232,7 @@ class DocumentList extends Component {
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
                       handleFileUpload={e =>
-                        handleFileUpload(e, this.handleDocument, this.props.inputProps[key])
+                        handleFileUpload(e, this.handleDocument, this.props.documents[key])
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
                       removeDocument={() => this.removeDocument(key)}

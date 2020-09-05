@@ -2,6 +2,7 @@ import {
   getCommonCard,
   getCommonGrayCard,
   getCommonTitle,
+  getSelectField,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
@@ -26,33 +27,25 @@ const jurisdictionDetailsCard = {
       jnDetailsCardContainer: getCommonContainer(
         {
           hierarchy: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-hrms",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "Employee[0].jurisdictions[0].hierarchy",
-            props: {
-              className: "hr-generic-selectfield autocomplete-dropdown",
-              optionValue: "code",
-              optionLabel: "name",
+            ...getSelectField({
               label: { labelName: "Hierarchy", labelKey: "HR_HIERARCHY_LABEL" },
               placeholder: {
                 labelName: "Select Hierarchy",
                 labelKey: "HR_HIERARCHY_PLACEHOLDER"
               },
+              required: true,
+              jsonPath: "Employee[0].jurisdictions[0].hierarchy",
               sourceJsonPath: "createScreenMdmsData.hierarchyList",
               localePrefix :{
                 moduleName : "EGOV_LOCATION",
                 masterName : "TENANTBOUNDARY"
               },
-              labelsFromLocalisation: true,
-              required: true,
-            },
-            required: true,
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-              md: 6
-            },
+              props: {
+                className: "hr-generic-selectfield",
+                optionValue: "code",
+                optionLabel: "name"
+              }
+            }),
             beforeFieldChange: (action, state, dispatch) => {
               let tenantBoundary = get(
                 state.screenConfiguration.preparedFinalObject,
@@ -80,8 +73,8 @@ const jurisdictionDetailsCard = {
               let crawlBoundaryData = selectedBoundaryData;
               while (crawlBoundaryData != null) {
                 boundaryList.push({
-                  code: crawlBoundaryData.label,
-                  name: crawlBoundaryData.label
+                  value: crawlBoundaryData.label,
+                  label: crawlBoundaryData.label
                 });
                 crawlBoundaryData = get(crawlBoundaryData, "children[0]", null);
               }
@@ -99,14 +92,7 @@ const jurisdictionDetailsCard = {
             }
           },
           boundaryType: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-hrms",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "Employee[0].jurisdictions[0].boundaryType",
-            props: {
-              className: "hr-generic-selectfield autocomplete-dropdown",
-              optionValue: "value",
-              optionLabel: "label",
+            ...getSelectField({
               label: {
                 labelName: "Boundary Type",
                 labelKey: "HR_BOUNDARY_TYPE_LABEL"
@@ -115,19 +101,18 @@ const jurisdictionDetailsCard = {
                 labelName: "Select Boundary Type",
                 labelKey: "HR_BOUNDARY_TYPE_PLACEHOLDER"
               },
+              required: true,
+              jsonPath: "Employee[0].jurisdictions[0].boundaryType",
               localePrefix :{
                 moduleName : "EGOV_LOCATION",
                 masterName : "BOUNDARYTYPE"
               },
-              required: true,
-              labelsFromLocalisation: true,
-            },
-            required: true,
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-              md: 6
-            },
+              props: {
+                className: "hr-generic-selectfield",
+                optionValue: "value",
+                optionLabel: "label",
+              }
+            }),
             beforeFieldChange: (action, state, dispatch) => {
               // GET COMPLETE EGOV-LOCATION DATA FROM PFO
               let tenantBoundary = get(
@@ -183,17 +168,17 @@ const jurisdictionDetailsCard = {
                 )
                   .flat(boundaryIndex)
                   .map(item => {
-                    return { code: item.code, name: item.name };
+                    return { value: item.code, label: item.name };
                   });
               } else {
                 processedBoundaryData = [
                   {
-                    code: get(
+                    value: get(
                       tenantBoundary[hierarchyIndex],
                       "boundary.code",
                       ""
                     ),
-                    name: get(
+                    label: get(
                       tenantBoundary[hierarchyIndex],
                       "boundary.name",
                       ""
@@ -215,32 +200,24 @@ const jurisdictionDetailsCard = {
             }
           },
           boundary: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-hrms",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "Employee[0].jurisdictions[0].boundary",
-            props: {
-              className: "hr-generic-selectfield autocomplete-dropdown",
-              optionValue: "value",
-              optionLabel: "label",
+            ...getSelectField({
               label: { labelName: "Boundary", labelKey: "HR_BOUNDARY_LABEL" },
               placeholder: {
                 labelName: "Select Boundary",
                 labelKey: "HR_BOUNDARY_PLACEHOLDER"
               },
+              required: true,
+              jsonPath: "Employee[0].jurisdictions[0].boundary",
               localePrefix:{
                 moduleName:"TENANT",
                 masterName:"TENANTS"
               },
-              required: true,
-              labelsFromLocalisation: true,
-            },
-            required: true,
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-              md: 6
-            },
+              props: {
+                className: "hr-generic-selectfield",
+                optionValue: "value",
+                optionLabel: "label"
+              }
+            })
           }
         },
         {
@@ -278,8 +255,4 @@ export const jurisdictionDetails = getCommonCard({
     }
   ),
   jurisdictionDetailsCard
-},{
-  style:{
-    overflow: "visible"
-  }
 });

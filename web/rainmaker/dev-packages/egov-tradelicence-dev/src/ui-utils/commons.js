@@ -439,11 +439,21 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           }
           else {
             if (!documents[i - 1].hasOwnProperty("id")) {
-              renewalDocuments[i - 1].active = false;
-              renewalDocuments.push(documents[i - 1])
+               renewalDocuments.push(documents[i - 1])
             }
+           
           }
         }
+        for (let j = 1; j <= renewalDocuments.length; j++) {
+          const index = documents.findIndex(
+            i => i.fileStoreId === renewalDocuments[j - 1].fileStoreId
+          );
+          if(index <= -1){
+            renewalDocuments[j - 1].active = false;
+          }
+
+        }
+
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
 
@@ -452,13 +462,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if (!isEditFlow) {
-        if(isEditRenewal && queryObject[0].status === "INITIATED" && activeIndex === 1){
-        }
-        else{
+        
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
              Licenses: queryObject
            })
-        }
+        
       }
       //Renewal flow
 
