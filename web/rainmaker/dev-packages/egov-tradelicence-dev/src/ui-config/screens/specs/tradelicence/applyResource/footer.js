@@ -1,4 +1,4 @@
-import { download } from "egov-common/ui-utils/commons";
+import { download,downloadAppFeeReceipt } from "egov-common/ui-utils/commons";
 import { dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -963,6 +963,8 @@ export const footerReviewTop = (
     },
     leftIcon: "receipt"
   };
+
+
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
@@ -975,6 +977,31 @@ export const footerReviewTop = (
     },
     leftIcon: "receipt"
   };
+
+  let appFeeReceiptDownloadObject = {
+    label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
+    },
+    leftIcon: "receipt"
+  };
+
+  let appFeeReceiptPrintObject = {
+    label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt");
+    },
+    leftIcon: "receipt"
+  };
+
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
@@ -1009,6 +1036,24 @@ export const footerReviewTop = (
         receiptPrintObject,
         applicationPrintObject
       ];
+      const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+      let isAppFeeReqd = false;
+      if (!isEmpty(businessServiceData)) {
+        const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+        const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
+        for (var i = 0; i < states.length; i++) {
+          if (states[i].state === "PENDINGAPPLFEE") {
+            console.log("PENDINGAPPLFEE::::");
+            isAppFeeReqd = true;
+            break;
+          }
+         
+        }
+      } 
+    if(isAppFeeReqd){
+      downloadMenu.push(appFeeReceiptDownloadObject);
+      printMenu.push(appFeeReceiptPrintObject);
+    }
       break;
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":
@@ -1139,6 +1184,30 @@ export const downloadPrintContainer = (
     },
     leftIcon: "receipt"
   };
+  let appFeeReceiptDownloadObject = {
+    label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
+    },
+    leftIcon: "receipt"
+  };
+
+  let appFeeReceiptPrintObject = {
+    label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt");
+    },
+    leftIcon: "receipt"
+  };
+
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
@@ -1173,6 +1242,24 @@ export const downloadPrintContainer = (
         receiptPrintObject,
         applicationPrintObject
       ];
+      const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+      let isAppFeeReqd = false;
+      if (!isEmpty(businessServiceData)) {
+        const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+        const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
+        for (var i = 0; i < states.length; i++) {
+          if (states[i].state === "PENDINGAPPLFEE") {
+            console.log("PENDINGAPPLFEE::::");
+            isAppFeeReqd = true;
+            break;
+          }
+         
+        }
+      } 
+    if(isAppFeeReqd){
+      downloadMenu.push(appFeeReceiptDownloadObject);
+      printMenu.push(appFeeReceiptPrintObject);
+    }
       break;
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":

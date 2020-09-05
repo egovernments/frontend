@@ -1,7 +1,7 @@
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
-import { download } from "../../../../ui-utils/commons";
+import { download,downloadAppFeeReceipt } from "../../../../ui-utils/commons";
 import { ifUserRoleExists, generateBill } from "../utils";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
@@ -12,6 +12,7 @@ import { getHeader } from "./pay";
 
 const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig) => {
    const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
+   const licence = get(state.screenConfiguration.preparedFinalObject , "Licenses");
     let receiptDownloadObject = {
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
@@ -19,6 +20,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
+            if(licence && licence[0].action && licence[0].action==="APPLY")
+            downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt",state);
+         
+        else
             download(receiptQueryString, "download", receiptKey, state);
 
         },
@@ -31,7 +36,11 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
                 { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-            download(receiptQueryString, "print", receiptKey, state);
+            if(licence && licence[0].action && licence[0].action==="APPLY")
+             downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt",state);
+          
+            else
+             download(receiptQueryString, "print", receiptKey, state);
         },
         leftIcon: "receipt"
     };
