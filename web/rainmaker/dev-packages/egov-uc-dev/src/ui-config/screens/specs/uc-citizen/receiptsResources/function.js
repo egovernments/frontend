@@ -38,7 +38,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ucSearchScreen",
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
@@ -104,6 +104,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
+    console.info("query obj=",queryObject);
     const responseFromAPI = await getSearchResults(queryObject);
     dispatch(prepareFinalObject("PaymentsSearchResponse", responseFromAPI));
 
@@ -115,7 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
       );
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
-        payeeName: get(Payments[i], `payerName`),
+        payeeName: get(Payments[i], `paidBy`), // changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),

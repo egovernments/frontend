@@ -67,7 +67,7 @@ const ucSearchAndResult = {
     getData(action, state, dispatch);
     const userName = JSON.parse(getUserInfo()).userName;
     dispatch(
-      prepareFinalObject("searchScreen.mobileNumber", userName)
+      prepareFinalObject("ucSearchScreen.mobileNumber", userName)
     );
     return action;
   },

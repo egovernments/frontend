@@ -534,20 +534,27 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
       let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
-     
-      if((billDetails && !billDetails.payerName) || !billDetails){
-        billDetails = {
-          payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
-          mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
-        };
-      }
-      if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
-        // const paidByTest = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
-        // console.info("paidBy ==",paidByTest);
-        payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
-        payloadReceiptDetails.Payments[0].paidBy = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
-        payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
-      }
+      
+      //If payerName is null set the paidBy for payerName
+      payloadReceiptDetails.Payments[0].payerName = !payloadReceiptDetails.Payments[0].payerName?payloadReceiptDetails.Payments[0].paidBy:payloadReceiptDetails.Payments[0].payerName;
+      
+
+
+
+      // if((billDetails && !billDetails.payerName) || !billDetails){
+      //   billDetails = {
+      //     payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
+      //     mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
+      //   };
+      // }
+      // if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
+      //   const paidByTest = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
+      //   console.info("paidBy ==",paidByTest);
+      //   payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
+      //   payloadReceiptDetails.Payments[0].paidBy = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
+      //   payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
+      //   console.info("setting payer details===",payloadReceiptDetails);
+      // }
 
       const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
       if (oldFileStoreId) {
