@@ -7,7 +7,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -197,12 +197,27 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       delete codefull.FireNOCs[0][keyToDelete];
 
     }
-    let tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].tenantId",
-      getTenantId()
-     );
+
+
+     if (process.env.REACT_APP_NAME === "Citizen")
+     {
+      let userInfodata = JSON.parse(getUserInfo());
+     const CitizenCity = get(userInfodata, "permanentCity");
+     set(payload[0], "tenantId", CitizenCity);
+     }
+     else{
+
+      let tenantId = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].tenantId",
+        getTenantId()
+       );
       set(payload[0], "tenantId", tenantId);
+
+     }
+
+
+
 
     set(payload[0], "fireNOCDetails.action", status);
     set(
