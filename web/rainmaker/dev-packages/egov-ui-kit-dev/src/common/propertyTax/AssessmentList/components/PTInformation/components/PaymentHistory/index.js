@@ -19,9 +19,16 @@ class PaymentHistory extends Component {
         };
     }
     getBillPeriod(billDetails = []) {
-        let latest = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
-        const billPeriod = getFormattedDate(latest[latest.length - 1].fromPeriod) + ' to ' + getFormattedDate(latest[0].toPeriod);
-        return billPeriod;
+       let updatedBillDetails = billDetails.filter(billDetail=>billDetail.amount!=0);
+
+        if(updatedBillDetails!=null && updatedBillDetails.length>0){
+            const billPeriod = getFormattedDate(updatedBillDetails[0].fromPeriod) + ' to ' + getFormattedDate(updatedBillDetails[0].toPeriod);
+            return billPeriod;
+        }
+        else{
+            const billPeriod = getFormattedDate(billDetails[0].fromPeriod) + ' to ' + getFormattedDate(billDetails[0].toPeriod);
+            return billPeriod; 
+        }
 
     }
     getTransformedPaymentHistory() {

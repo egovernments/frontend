@@ -197,14 +197,13 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       delete codefull.FireNOCs[0][keyToDelete];
 
     }
-
-
     let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].tenantId",
-      "pb.batala"
-    );
-    set(payload[0], "tenantId", tenantId);
+      getTenantId()
+     );
+      set(payload[0], "tenantId", tenantId);
+
     set(payload[0], "fireNOCDetails.action", status);
     set(
       payload[0],
