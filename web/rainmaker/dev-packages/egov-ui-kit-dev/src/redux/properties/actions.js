@@ -683,15 +683,27 @@ export const downloadReceipt = (receiptQueryString) => {
       // dispatch(downloadReceiptPending());
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
-        const queryStr = [
-          { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
-        ]
-        const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId")
+        const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId");
+        const businessModule=get(payloadReceiptDetails.Payments[0].paymentDetails[0],"businessService");
+        console.log("businee serice"+ businessModule);
       if(oldFileStoreId){
         downloadReceiptFromFilestoreID(oldFileStoreId,"download")
       }
      else{
+       if(businessModule== "PT")
+       {
+        const queryStr = [
+          { key: "key", value: "property-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
+        ]
+       }
+       else
+       {
+       const queryStr = [
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
+        ]
+       }
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
           .then(res => {
             getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
