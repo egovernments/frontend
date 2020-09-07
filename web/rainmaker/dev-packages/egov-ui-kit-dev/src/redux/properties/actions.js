@@ -690,28 +690,40 @@ export const downloadReceipt = (receiptQueryString) => {
         downloadReceiptFromFilestoreID(oldFileStoreId,"download")
       }
      else{
-       if(businessModule== "PT")
+  if(businessModule== "PT")
        {
-        const queryStr = [
+        const queryStr1 = [
           { key: "key", value: "property-receipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
         ]
+
+        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr1, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+            var win = window.open(res.filestoreIds[0] , '_blank');
+            win.focus();
+          });
+
+        });
        }
        else
        {
-       const queryStr = [
+        const queryStr2 = [
           { key: "key", value: "consolidatedreceipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
         ]
-       }
-        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-          .then(res => {
-            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-              var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-              win.focus();
-            });
+        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr2, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+            debugger;
+            var win = window.open(res.filestoreIds[0], '_blank');
 
+            win.focus();
           });
+
+        });
+      }
+
         }
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
