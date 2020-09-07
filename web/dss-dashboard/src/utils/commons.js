@@ -11,7 +11,11 @@ export const removeSignFromInsightData = (value = '') => {
 }
 
 export const getLocaleLabels = (key = "", strings = {}) => {
-    return strings[key] || key;
+    return strings[removeSpaceInLocalisationKey(key)] || key;
+}
+
+const removeSpaceInLocalisationKey = (key="")=>{
+return key.replaceAll(' ','_');
 }
 
 export const getTenantId = () => {
