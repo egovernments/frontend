@@ -104,6 +104,7 @@ class ActionDialog extends React.Component {
     } = dialogData;
     const { getButtonLabelName } = this;
     let fullscreen = false;
+    const showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }
@@ -175,7 +176,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && (
+                  {showEmployeeList && showAssignee && (
                     <Grid
                       item
                       sm="12"
