@@ -421,7 +421,7 @@ import {
           labelKey: "UC_COMMENT_PLACEHOLDER"
         },
         Required: false,
-        jsonPath: "Challan[0].additionalDetails.comment"
+        jsonPath: "Challan[0].additionalDetail.comment"
       }),
     //   helpPdfButton:{
     //     componentPath:"Button",
