@@ -220,7 +220,21 @@ export const tradeReviewDetails = {
     { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
     {
       jsonPath: "Licenses[0].validFrom",
-      callBack: convertEpochToDate
+     // callBack: convertEpochToDate
+     callBack: value => {
+      const dateFromApi = new Date(value);
+      let month = dateFromApi.getMonth() + 1;
+      let day = dateFromApi.getDate();
+      let year = dateFromApi.getFullYear();
+        if(day > 1)
+        {
+          day = "1";
+          month = month+1;
+        }
+      month = (month > 9 ? "" : "0") + month;
+      day = (day > 9 ? "" : "0") + day;
+      return `${day}/${month}/${year}`;
+      } 
     }
   ),
   reviewToDate: getLabelWithValue(
