@@ -40,6 +40,7 @@ class Chips extends React.Component {
 						style={{ width: 'max-content' }}
 						clickable
 						onDelete={this.handleClick}
+						onClick={this.handleClick}
 					/>
 				) : (
 						<Chip
@@ -50,6 +51,7 @@ class Chips extends React.Component {
 							label={` ${label&&label!="" ? label +' : ' : ''}${value[4]}`}
 							clickable
 							onDelete={this.handleClick}
+							onClick={this.handleClick}
 						/>
 					)}
 			</div>
