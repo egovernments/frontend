@@ -690,36 +690,26 @@ export const downloadReceipt = (receiptQueryString) => {
         downloadReceiptFromFilestoreID(oldFileStoreId,"download")
       }
      else{
-       if(businessModule== "PT")
-       {
-        const queryStr1 = [
+        const queryStrReceipt = [
           { key: "key", value: "property-receipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
         ]
-
-        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr1, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-        .then(res => {
-          getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-            win.focus();
-          });
-
-        });
-       }
-       else
-       {
-        const queryStr2 = [
+      
+        const queryStrConsltdReceipt = [
           { key: "key", value: "consolidatedreceipt" },
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
         ]
-        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr2, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        
+        let queryStr = businessModule === "PT" ?  queryStrReceipt: queryStrConsltdReceipt;
+    
+        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
             var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
             win.focus();
           });
-
         });
+        
       }
 
         }
