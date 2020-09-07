@@ -14,8 +14,13 @@ export const getLocaleLabels = (key = "", strings = {}) => {
     return strings[removeSpaceInLocalisationKey(key)] || key;
 }
 
-const removeSpaceInLocalisationKey = (key="")=>{
-return key.replaceAll(' ','_');
+const removeSpaceInLocalisationKey = (key = "") => {
+
+    let tempKey = key || "";
+    while (tempKey.includes(' ')) {
+        tempKey = tempKey.replace(' ', '_');
+    }
+    return tempKey;
 }
 
 export const getTenantId = () => {

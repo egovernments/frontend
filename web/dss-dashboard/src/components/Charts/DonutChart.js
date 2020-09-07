@@ -75,12 +75,15 @@ class DonutChart extends React.Component {
 		duration.startDate = String(duration.startDate).length === 10 ? duration.startDate * 1000 : duration.startDate
 		let moduleLevel = this.props.selectedChart.data[0].headerName.includes("PT") ? 'PT' : this.props.selectedChart.data[0].headerName.includes("TL") ? "TL" : "PT";
 		let drillDownData = {};
+		let selectedTypeObject={};
+		let selectedTypeKey=moduleLevel=="PT"?"selectedType":"tradeType";
+		selectedTypeObject[selectedTypeKey]=type;
 		if (type && this.state.childData == null) {
 
 			let getAxiosOptions = getChartOptions(this.props.selectedChart.drillDownChartId, {
 				duration: { ...duration },
-				selectedType: type,
-				modulelevel: moduleLevel
+				modulelevel: moduleLevel,
+				...selectedTypeObject
 			});
 			if (getAxiosOptions && getAxiosOptions.url) {
 				axios.post(getAxiosOptions.url, getAxiosOptions.dataoption, getAxiosOptions.options)
