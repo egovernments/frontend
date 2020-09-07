@@ -35,12 +35,14 @@ class DynamicMdmsContainer extends Component {
       if(getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL") {
         callBackEdit(state, dispatch);
       } else {
-        dropdownFields && dropdownFields.forEach((entry, i) => {
+      dropdownFields && dropdownFields.forEach((entry, i) => {
           if(entry.defaultValue){
             let componentJSONPath = `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${entry.key}`;
             this.onFieldChange('', componentJSONPath, '', entry.defaultValue);
           }
         });
+        console.log("for initiation")
+        callBackEdit(state, dispatch);
       }
     }
   }
