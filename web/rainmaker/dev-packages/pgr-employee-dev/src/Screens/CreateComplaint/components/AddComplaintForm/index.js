@@ -102,7 +102,7 @@ const AddComplaintForm = ({
               </div>
               <div className="col-sm-6 col-xs-12">
               <AutoSuggestDropdown
-              className="fix-for-layout-break autocomplete-dropdown"
+              className="fix-for-layout-break"
               fullWidth={true}
               dataSource={mohalla && mohalla.dropDownData}
               onChange={(chosenRequest, index) => {
