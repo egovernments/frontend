@@ -1147,7 +1147,6 @@ const getBillingSlabData = async (
         result.push(item.split("|")[0]);
         return result;
       }, []);
-
     let billingData = tradeUnit && [...tradeUnit];
     accessoryUnit && (billingData = [...billingData, ...accessoryUnit]);
     const queryObject = [
@@ -1161,7 +1160,6 @@ const getBillingSlabData = async (
         "",
         queryObject
       );
-
       let tradeTotal = 0;
       let accessoriesTotal = 0;
       const finalData =
@@ -1169,25 +1167,26 @@ const getBillingSlabData = async (
         response.billingSlab.reduce(
           (result, item) => {
             if (item.tradeType) {
-              let tradeUnit =tradeUnits.find(
-                tradeUnit =>
-                  item.tradeType === tradeUnit.tradeType
-              );
-              let count ;
-              let UOM;
-              if(tradeUnit){
-               count = tradeUnit.uomValue;
-               UOM = tradeUnit.uom;
-              }
-              tradeTotal = count?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
-              result.tradeUnitData.push({
-                rate: item.rate,
-                tradeTotal:tradeTotal,
-                UOM,
-                count:count,
-                category: item.tradeType,
-                type: "trade"
-              });
+              tradeUnits.forEach(function(tradeUnit){
+               if(item.tradeType === tradeUnit.tradeType)
+                {
+                  let count ;
+                  let UOM;
+                  if(tradeUnit){
+                  count = tradeUnit.uomValue;
+                  UOM = tradeUnit.uom;
+                  }
+                  tradeTotal = count?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
+                  result.tradeUnitData.push({
+                    rate: item.rate,
+                    tradeTotal:tradeTotal,
+                    UOM,
+                    count:count,
+                    category: item.tradeType,
+                    type: "trade"
+                  });
+                }
+            });
             } else {
               const count = accessories.find(
                 accessory =>
