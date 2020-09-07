@@ -62,7 +62,11 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-
+    if(item.buttonLabel === "ACTIVATE_CONNECTION"){
+      if(item.moduleName === "NewWS1" || item.moduleName === "NewSW1"){
+        item.showEmployeeList = false;
+      }
+    }
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
       handleFieldChange(`${dataPath}.assignees`, "");
