@@ -719,10 +719,11 @@ export const renewTradelicence = async (financialYear, state, dispatch) => {
   set(licences[0], "workflowCode", wfCode);
   set(licences[0], "applicationType", "RENEWAL");
   set(licences[0], "financialYear", nextFinancialYear);
-
+  store.dispatch(toggleSpinner());  
   const response = await httpRequest("post", "/tl-services/v1/_update", "", [], {
     Licenses: licences
   })
+  store.dispatch(toggleSpinner());
   const renewedapplicationNo = get(
     response,
     `Licenses[0].applicationNumber`

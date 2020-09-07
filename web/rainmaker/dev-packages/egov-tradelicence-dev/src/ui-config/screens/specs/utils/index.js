@@ -13,6 +13,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -476,12 +477,14 @@ export const objectToDropdown = object => {
 // Search API call
 export const getSearchResults = async queryObject => {
   try {
+    store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/tl-services/v1/_search",
       "",
       queryObject
     );
+    store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
     console.log(error);
@@ -491,12 +494,14 @@ export const getSearchResults = async queryObject => {
 
 export const getBill = async queryObject => {
   try {
+    store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/billing-service/bill/v2/_fetchbill",
       "",
       queryObject
     );
+    store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
     console.log(error);
@@ -1153,13 +1158,13 @@ const getBillingSlabData = async (
       { key: "tenantId", value: tenantId },
       { key: "ids", value: billingData && billingData.join(",") }
     ];
-    try {
+    try {      
       const response = await httpRequest(
         "post",
         "/tl-calculator/billingslab/_search",
         "",
         queryObject
-      );
+      );      
       let tradeTotal = 0;
       let accessoriesTotal = 0;
       const finalData =

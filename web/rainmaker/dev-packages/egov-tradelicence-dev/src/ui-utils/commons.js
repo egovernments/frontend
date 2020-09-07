@@ -25,6 +25,7 @@ import { logout } from "egov-ui-kit/redux/auth/actions";
 
 export const updateTradeDetails = async requestBody => {
   try {
+    store.dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       "/tl-services/v1/_update",
@@ -32,6 +33,7 @@ export const updateTradeDetails = async requestBody => {
       [],
       requestBody
     );
+    store.dispatch(toggleSpinner());
     return payload;
   } catch (error) {
     store.dispatch(toggleSnackbar(true, error.message, "error"));
@@ -53,12 +55,14 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 
 export const getSearchResults = async queryObject => {
   try {
+    store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/tl-services/v1/_search",
       "",
       queryObject
     );
+    store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
    
@@ -462,11 +466,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if (!isEditFlow) {
-        
+        store.dispatch(toggleSpinner());
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
              Licenses: queryObject
            })
-        
+           store.dispatch(toggleSpinner());
       }
       //Renewal flow
 
@@ -533,6 +537,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
       if (!queryObject[0].applicationNumber)
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
+        store.dispatch(toggleSpinner());
       const response = await httpRequest(
         "post",
         "/tl-services/v1/_create",
@@ -540,6 +545,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         [],
         { Licenses: queryObject }
       );
+      store.dispatch(toggleSpinner());
       dispatch(prepareFinalObject("Licenses", response.Licenses));
       createOwnersBackup(dispatch, response);
     }
