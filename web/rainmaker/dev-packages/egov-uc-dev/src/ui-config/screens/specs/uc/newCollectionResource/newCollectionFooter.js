@@ -14,6 +14,8 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -105,10 +107,12 @@ const processChallan = async (state, dispatch) => {
 
   if (isFormValid) {
     try {
+      dispatch(toggleSpinner());
       const mobileNumber = get(
         state.screenConfiguration.preparedFinalObject,
         "Challan[0].citizen.mobileNumber"
       );
+
       let payload = await httpRequest(
         "post",
         `/user/_search?tenantId=${commonConfig.tenantId}`,
@@ -119,6 +123,8 @@ const processChallan = async (state, dispatch) => {
           userName: mobileNumber
         }
       );
+
+
       if (payload ) {
         const uuid = get(payload , "user[0].uuid");        
         if(uuid){          
@@ -149,7 +155,11 @@ const processChallan = async (state, dispatch) => {
         //getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
        // getAcknowledgementCard(dispatch, applicationNumber, tenantId, businessService);
       }
-    } catch (error) {}
+      dispatch(toggleSpinner());
+    } catch (error) {
+
+      dispatch(toggleSpinner());
+    }
   } else {
     dispatch(
       toggleSnackbar(
