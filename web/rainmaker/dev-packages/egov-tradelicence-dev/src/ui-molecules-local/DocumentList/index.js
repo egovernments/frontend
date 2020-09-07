@@ -149,7 +149,9 @@ class DocumentList extends Component {
   removeDocument = remDocIndex => {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
-    const jsonPath = documents[remDocIndex].jsonPath;
+   // console.log("current docs--",get(preparedFinalObject, "Licenses[0].tradeLicenseDetail.applicationDocuments", []));
+    let currentDocs = get(preparedFinalObject, "Licenses[0].tradeLicenseDetail.applicationDocuments", []);
+
    (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" )&&
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject("LicensesTemp[0].removedDocs", [
@@ -159,13 +161,20 @@ class DocumentList extends Component {
           active: false
         }
       ]);
-    uploadedDocuments[remDocIndex] = [];
-    prepareFinalObject(jsonPath, uploadedDocuments[remDocIndex]);
+      
+      let res = Object.assign({}, uploadedDocuments)
+      delete res[remDocIndex];
+      
+      currentDocs.splice(remDocIndex,1);
+      
+    //  uploadedDocuments.splice(remDocIndex,1);
+   // uploadedDocuments[remDocIndex] = [];
+    prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", currentDocs);
     prepareFinalObject(
       "LicensesTemp[0].uploadedDocsInRedux",
-      uploadedDocuments
+      res
     );
-    this.setState({ uploadedDocuments });
+    this.setState({ res });
     this.getFileUploadStatus(false, remDocIndex);
   };
 
