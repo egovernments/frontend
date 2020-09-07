@@ -127,7 +127,7 @@ export const getFatherNameField = getTextField({
     labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_PLACEHOLDER"
   },
   required: true,
-  pattern: getPattern("Name"),
+  pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*“”‘’]{1,64}$/i,
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
 });
 export const getRelationshipRadioButton = {
@@ -191,7 +191,7 @@ const OwnerInfoCard = {
             labelKey: "TL_NEW_OWNER_DETAILS_NAME_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Name"),
+          pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*“”‘’]{1,64}$/i,
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"
         }),
         getFatherNameField,
@@ -242,7 +242,7 @@ const OwnerInfoCard = {
             labelKey: "TL_NEW_OWNER_DETAILS_ADDR_PLACEHOLDER"
           },
           required: true,
-          pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
+          pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*“”‘’]{1,64}$/i,
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
         }),
         OwnerSpecialCategory: getSelectField({
