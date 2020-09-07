@@ -354,6 +354,18 @@ class TableChart extends Component {
                     text = a.label;
                   }
                   newrowData[a.name] = [a.label, text]
+                } else if (a.symbol.toUpperCase() === 'STRING') {
+                  let label = _.chain(a.strValue).split('.').join("_").toUpper().value();
+                  let text = null;
+                  try {
+                    text = strings["TENANT_TENANTS_" + label]
+                  } catch{
+                    text = a.strValue;
+                  }
+                  if (!text) {
+                    text = a.strValue;
+                  }
+                  newrowData[a.name] = [a.strValue, text]
                 } else {
                   let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
                   newrowData[a.name] = val
