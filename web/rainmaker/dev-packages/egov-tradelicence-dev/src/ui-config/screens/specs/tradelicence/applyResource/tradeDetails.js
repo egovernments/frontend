@@ -282,7 +282,7 @@ const tradeUnitCard = {
             props: {
               disabled: true,
               setDataInField: true,
-              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
+             // jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
             },
             pattern: getPattern("UOMValue"),
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue",
