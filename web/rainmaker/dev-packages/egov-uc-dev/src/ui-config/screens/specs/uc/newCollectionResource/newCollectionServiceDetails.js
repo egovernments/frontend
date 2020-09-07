@@ -422,48 +422,7 @@ import {
         },
         Required: false,
         jsonPath: "Challan[0].additionalDetail.comment"
-      }),
-    //   helpPdfButton:{
-    //     componentPath:"Button",
-    //     jsonPath:"Demands[0].ucCollection.pdf",
-    //        gridDefination: {
-    //       xs: 12,
-    //       sm: 6
-    //     },
-    //     props:{
-    //       //variant: "outlined",
-    //       color:"primary",             
-    //         style:{
-    //         minWidth:"180px",
-    //         height:"48px",
-    //         marginRight:"45",
-    //         borderRadius: "inherit"
-    //       }
-    //     },
-        
-    //       onClickDefination: {
-    //           action: "condition",
-    //           callBack: (state, dispatch) => {
-    //           downloadHelpFile(state, dispatch);
-    //           }
-    //         },
-    //     children:{
-          
-    //       downloadButtonIcon:{
-    //         uiFramework:"custom-atoms",
-    //         componentPath:"Icon",
-    //         props:{
-    //           iconName:"cloud_download"
-    //         }
-    //       },
-    //       downloadButtonLabel:getLabel({
-    //         labelName:"Help ?",
-    //         labelKey:"TL_COMMON_HELP"
-    //       }),
-    //     },
-                    
-    //    }, 
-    
+      }),    
       
       
     }),    
@@ -557,12 +516,14 @@ const setTaxHeadFields = (action, state, dispatch) => {
                 .split(".")
                 .join("_")}`,
               required: item.isRequired || false,
-              pattern: getPattern("Amount"),
-              errorMessage: "Invalid Amount",
+              //pattern: getPattern("NonZeroAmount"),
+               pattern:item.isRequired ? getPattern("NonZeroAmount"):getPattern("Amount"),
+             
+              errorMessage: "Invalid Amount", 
               visible: true,
               // required: true,
               props: {
-                // required: true
+                // required: true                
               },
               jsonPath: `Challan[0].amount[${index}].amount`
             })
