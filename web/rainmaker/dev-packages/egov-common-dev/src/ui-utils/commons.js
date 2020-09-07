@@ -525,21 +525,44 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
+      console.info("for pdf download==",payloadReceiptDetails);
+      var payments = [];
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
           , "error"));
         return;
       }
+      else{
+        console.info("some payment details are present.")   
+        //If payerName is null set the paidBy for payerName
+        payloadReceiptDetails.Payments[0].payerName = !payloadReceiptDetails.Payments[0].payerName?payloadReceiptDetails.Payments[0].paidBy:payloadReceiptDetails.Payments[0].payerName;
+        payments.push(payloadReceiptDetails.Payments[0]);
+
+        const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+        if (oldFileStoreId) {
+          downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+        }
+        else {
+          httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+            .then(res => {
+              res.filestoreIds[0]
+              if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+                res.filestoreIds.map(fileStoreId => {
+                  downloadReceiptFromFilestoreID(fileStoreId, mode)
+                })
+              } else {
+                console.log('Some Error Occured while downloading Receipt!');
+                store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
+                  , "error"));
+              }
+            });
+        }
+      
+      }
       // Setting the Payer and mobile from Bill to reflect it in PDF
-      state = state ? state : {};
-      let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
-      
-      //If payerName is null set the paidBy for payerName
-      payloadReceiptDetails.Payments[0].payerName = !payloadReceiptDetails.Payments[0].payerName?payloadReceiptDetails.Payments[0].paidBy:payloadReceiptDetails.Payments[0].payerName;
-      
-
-
+      // state = state ? state : {};
+      // let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
 
       // if((billDetails && !billDetails.payerName) || !billDetails){
       //   billDetails = {
@@ -556,25 +579,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       //   console.info("setting payer details===",payloadReceiptDetails);
       // }
 
-      const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-      if (oldFileStoreId) {
-        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
-      }
-      else {
-        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-          .then(res => {
-            res.filestoreIds[0]
-            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-              res.filestoreIds.map(fileStoreId => {
-                downloadReceiptFromFilestoreID(fileStoreId, mode)
-              })
-            } else {
-              console.log('Some Error Occured while downloading Receipt!');
-              store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-                , "error"));
-            }
-          });
-      }
+     
     })
   } catch (exception) {
     console.log('Some Error Occured while downloading Receipt!');
