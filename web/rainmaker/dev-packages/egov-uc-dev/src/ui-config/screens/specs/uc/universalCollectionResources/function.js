@@ -10,18 +10,23 @@ const transfomedKeys = transformById(localizationLabels, "code");
 const tenantId = getTenantId();
 
 export const searchApiCall = async (state, dispatch) => {
+  
   showHideTable(false, dispatch);
-
-  let queryObject = [
+  let queryObject = [];
+  console.info("query obj0=",queryObject);
+   queryObject = [
     {
       key: "tenantId",
       value: tenantId
     },
     { key: "offset", value: "0" }
   ];
+
+ console.info("query obj1==",queryObject);
+
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ucSearchScreen",
     {}
   );
 
@@ -83,6 +88,8 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
+
+    console.info("query obj2==",queryObject);
     const responseFromAPI = await getSearchResults(queryObject);
     dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
     const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
@@ -93,7 +100,7 @@ export const searchApiCall = async (state, dispatch) => {
       );
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
-        payeeName: get(Payments[i], `payerName`),
+        payeeName: get(Payments[i], `paidBy`), // Changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),

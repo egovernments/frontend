@@ -42,7 +42,7 @@ const resetFields = (state, dispatch) => {
   );
   const userName = JSON.parse(getUserInfo()).userName;
   dispatch(
-    prepareFinalObject("searchScreen.mobileNumber", userName)
+    prepareFinalObject("ucSearchScreen.mobileNumber", userName)
   );
   // dispatch(
   //   handleField(
@@ -68,6 +68,16 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.consumerCodes",
+      "props.value",
+      ""
+    )
+  );
+
 };
 
 export const UCSearchCard = getCommonCard({
@@ -91,7 +101,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.receiptNumbers",
+      jsonPath: "ucSearchScreen.receiptNumbers",
       // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
@@ -109,7 +119,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.consumerCodes",
+      jsonPath: "ucSearchScreen.consumerCodes",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -155,7 +165,7 @@ export const UCSearchCard = getCommonCard({
         );
         const serviceTypes = selectedCategory && (selectedCategory.child && selectedCategory.child.length > 0 ? selectedCategory.child.map(item => item.code) : selectedCategory.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessServices", serviceTypes)
+          prepareFinalObject("ucSearchScreen.businessServices", serviceTypes)
         );
         return action;
       }
@@ -183,7 +193,8 @@ export const UCSearchCard = getCommonCard({
       },      
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "ucSearchScreen.mobileNumber",
+      sourceJsonPath:"ucSearchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({
@@ -198,7 +209,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.fromDate",
+      jsonPath: "ucSearchScreen.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -217,7 +228,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.toDate",
+      jsonPath: "ucSearchScreen.toDate",
 
       gridDefination: {
         xs: 12,

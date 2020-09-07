@@ -1,6 +1,6 @@
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
@@ -21,6 +21,7 @@ class WorkFlowContainer extends React.Component {
     open: false,
     action: ""
   };
+
 
   componentDidMount = async () => {
     const { prepareFinalObject, toggleSnackbar } = this.props;
@@ -120,12 +121,16 @@ class WorkFlowContainer extends React.Component {
   wfUpdate = async label => {
     let {
       toggleSnackbar,
+      toggleSpinner,
       preparedFinalObject,
       dataPath,
       moduleName,
       updateUrl,
       beforeSubmitHook
     } = this.props;
+
+    //Added toggleSpinner for Search
+    toggleSpinner();
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "NewTL") {
@@ -163,6 +168,7 @@ class WorkFlowContainer extends React.Component {
           getMultiUnits(accessories)
         );
       }
+      
     }
     if (dataPath === "BPA") {
       data.workflow.assignes = [];
@@ -211,14 +217,14 @@ class WorkFlowContainer extends React.Component {
       dataPath = "SewerageConnection";
     }
 
-    try {
+    
+    try {     
       if (beforeSubmitHook) {
         data = beforeSubmitHook(data);
       }
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
-      });
-
+      });    
       this.setState({
         open: false
       });
@@ -239,6 +245,7 @@ class WorkFlowContainer extends React.Component {
           return;
         }
 
+        
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
@@ -257,7 +264,9 @@ class WorkFlowContainer extends React.Component {
         }
 
       }
+      toggleSpinner();
     } catch (e) {
+      toggleSpinner();
       if (moduleName === "BPA") {
         toggleSnackbar(
           true,
@@ -629,6 +638,8 @@ const mapDispacthToProps = dispatch => {
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
+    toggleSpinner: () =>
+      dispatch(toggleSpinner()),
     setRoute: route => dispatch(setRoute(route))
   };
 };

@@ -5,14 +5,17 @@ import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails
 
 export const generateTLAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
 //console.log("fileName---",fileName);
+//console.log("tradeLocationDetails---",tradeLocationDetails);
+//console.log("tradeReviewDetails---",tradeReviewDetails);
 //console.log("preparedFinalObject---",preparedFinalObject);
     tradeLocationDetails.reviewMohalla.localiseValue = true;
     tradeLocationDetails.reviewCity.localiseValue = true;
+    tradeLocationDetails.reviewPremisis.localiseValue = true;
 
     tradetypeDetails.reviewTradeCategory.localiseValue = true;
     tradetypeDetails.reviewTradeType.localiseValue = true;
     tradetypeDetails.reviewTradeSubtype.localiseValue = true;
-
+   
     tradeAccessoriesDetails.reviewAccessoryType.localiseValue = true;
 
     tradeReviewDetails.reviewApplicationType.localiseValue = true;
@@ -39,7 +42,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
         tradeTypeSummary = generateKeyValue(preparedFinalObject, tradetypeDetails); //
     } else if (get(preparedFinalObject, 'Licenses[0].tradeLicenseDetail.tradeUnits', []).length > 1) {
         tradeTypeSummaryInfo = getMultiItems(preparedFinalObject, tradetypeDetails, 'Licenses[0].tradeLicenseDetail.tradeUnits')
-        tradeTypeSummary = getMultipleItemCard(tradeTypeSummaryInfo, "TL_TRADE_UNIT");
+        tradeTypeSummary = getMultipleItemCard(tradeTypeSummaryInfo, "TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER");
     }
 
     let tradeAccessoriesSummary = []
@@ -80,8 +83,8 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
         cards: [
             { items: estimateDetails, type: 'estimate' },
             { header: "TL_COMMON_TR_DETAILS", items: tradeReviewSummary },
-            { header: '-1', items: tradeTypeSummary, type: tradeTypeSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            { header: '-1', items: tradeLocationSummary },
+            { header: "TL_NEW_TRADE_DETAILS_TRADE_UNIT_DETAILS", items: tradeTypeSummary, type: tradeTypeSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
+            { header: 'TL_NEW_TRADE_DETAILS_TRADE_LOCATION_DETAILS', items: tradeLocationSummary },
             { header: "TL_COMMON_OWN_DETAILS", items: tradeOwnerSummary, type: tradeOwnerSummaryInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'TL_COMMON_DOCS', items: documentCard }]
     }

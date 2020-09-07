@@ -97,49 +97,7 @@ const ucSearchAndResult = {
               },
               ...header
             },
-            // newApplicationButton: {
-            //   componentPath: "Button",
-            //   gridDefination: {
-            //     xs: 12,
-            //     sm: 6,
-            //     align: "right"
-            //   },
-            //   visible: enableButton,
-            //   props: {
-            //     variant: "contained",
-            //     color: "primary",
-            //     style: {
-            //       color: "white",
-            //       borderRadius: "2px",
-            //       width: "250px",
-            //       height: "48px"
-            //     }
-            //   },
-
-            //   children: {
-            //     plusIconInsideButton: {
-            //       uiFramework: "custom-atoms",
-            //       componentPath: "Icon",
-            //       props: {
-            //         iconName: "add",
-            //         style: {
-            //           fontSize: "24px"
-            //         }
-            //       }
-            //     },
-
-            //     buttonLabel: getLabel({
-            //       labelName: "NEW COLLECTION",
-            //       labelKey: "UC_SEARCH_RESULTS_NEW_COLLECTION_BUTTON"
-            //     })
-            //   },
-            //   onClickDefination: {
-            //     action: "condition",
-            //     callBack: (state, dispatch) => {
-            //       openNewCollectionForm(state, dispatch);
-            //     }
-            //   }
-            // }
+ 
           }
         },
         UCSearchCard,
