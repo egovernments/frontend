@@ -2,6 +2,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
+import uniqBy from "lodash/uniqBy";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { httpRequest } from "egov-ui-kit/utils/api";
 
@@ -142,7 +143,8 @@ export const convertToArray = (documentsUploadRedux) => {
 };
 
 export const setPTDocuments = async (payload, sourceJsonPath, destJsonPath, dispatch, businessService) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
+  let uploadedDocData = get(payload, sourceJsonPath);
+  uploadedDocData = uniqBy(uploadedDocData, 'fileStoreId');
   const fileStoreIds =
     uploadedDocData &&
     uploadedDocData
