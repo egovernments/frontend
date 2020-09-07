@@ -15,7 +15,12 @@ export const getLocaleLabels = (key = "", strings = {}) => {
 }
 
 const removeSpaceInLocalisationKey = (key="")=>{
-return key.replaceAll(' ','_');
+
+// let tempKey=key||"";
+// while(tempKey.match(' ')!=null){
+// tempKey.replace(' ','_');
+// }
+return key;
 }
 
 export const getTenantId = () => {
