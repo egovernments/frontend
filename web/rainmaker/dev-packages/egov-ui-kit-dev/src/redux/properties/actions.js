@@ -709,8 +709,6 @@ export const downloadReceipt = (receiptQueryString) => {
             win.focus();
           });
         });
-        
-      }
 
         }
       } catch (error) {
