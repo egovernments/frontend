@@ -690,7 +690,7 @@ export const downloadReceipt = (receiptQueryString) => {
         downloadReceiptFromFilestoreID(oldFileStoreId,"download")
       }
      else{
-  if(businessModule== "PT")
+       if(businessModule== "PT")
        {
         const queryStr1 = [
           { key: "key", value: "property-receipt" },
@@ -699,8 +699,8 @@ export const downloadReceipt = (receiptQueryString) => {
 
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr1, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
-            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-            var win = window.open(res.filestoreIds[0] , '_blank');
+          getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
             win.focus();
           });
 
@@ -715,9 +715,7 @@ export const downloadReceipt = (receiptQueryString) => {
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr2, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-            debugger;
-            var win = window.open(res.filestoreIds[0], '_blank');
-
+            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
             win.focus();
           });
 
