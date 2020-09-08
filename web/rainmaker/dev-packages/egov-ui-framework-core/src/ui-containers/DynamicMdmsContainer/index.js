@@ -137,7 +137,7 @@ class DynamicMdmsContainer extends Component {
     let masterNameCaps = masterName.toUpperCase();
     let gridSm = ( 12 / dropdownFields.length ) <= 4 ? 4 : 6;
     dropdownFields && dropdownFields.forEach((entry, i) => {  
-      let { key, fieldType, isDisabled, className, isRequired = false } = entry;
+      let { key, fieldType, isDisabled, className, isRequired = false ,requiredValue=false} = entry;
       isRequired = isRequired ? this.checkValueExists(`DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`) : false;
       allObj[key] = (fieldType == "autosuggest") ? 
       {
@@ -175,6 +175,7 @@ class DynamicMdmsContainer extends Component {
             fullwidth: true,
             isClearable: true,
             required: isRequired,
+            required: requiredValue,
             helperText : isRequired ? "Required" : '',
             inputLabelProps: {
               shrink: true

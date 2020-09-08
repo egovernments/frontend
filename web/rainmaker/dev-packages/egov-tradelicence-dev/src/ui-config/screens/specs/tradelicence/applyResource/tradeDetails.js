@@ -189,21 +189,24 @@ const tradeUnitCard = {
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
                   callBack: tradeCategoryChange,
-                  isRequired : true
+                  isRequired : false,
+                  requiredValue : true
                 },
                 {
                   key : 'tradeType',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
                   callBack: tradeTypeChange,
-                  isRequired : true
+                  isRequired : false,
+                  requiredValue : true
                 },
                 {
                   key : 'tradeSubType',
                   callBack: tradeSubTypeChange,
                   className:"applicant-details-error autocomplete-dropdown",
                   fieldType : "autosuggest",
-                  isRequired : true
+                  isRequired : false,
+                  requiredValue : true
                 }
               ],
               moduleName: "TradeLicense",
@@ -775,14 +778,17 @@ export const tradeDetails = getCommonCard({
             isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
-            isRequired : true
+            isRequired : false,
+            requiredValue : true
+
           },
           {
             key : 'structureSubType',
             callBack : structureSubTypeChange,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
-            isRequired : true
+            isRequired : false,
+            requiredValue : true
           }
         ],
         moduleName: "common-masters",
