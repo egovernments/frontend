@@ -139,6 +139,7 @@ class DynamicMdmsContainer extends Component {
     dropdownFields && dropdownFields.forEach((entry, i) => {  
       let { key, fieldType, isDisabled, className, isRequired = false ,requiredValue=false} = entry;
       isRequired = isRequired ? this.checkValueExists(`DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`) : false;
+      requiredValue =  requiredValue==false?isRequired:requiredValue;
       allObj[key] = (fieldType == "autosuggest") ? 
       {
           uiFramework: "custom-containers",
