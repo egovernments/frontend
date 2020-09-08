@@ -2061,16 +2061,31 @@ export const showCityPicker = (state, dispatch) => {
 };
 
 export const applyForm = (state, dispatch, action) => {
-  const tenantId = get(
+   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "citiesByModule.citizenTenantId"
   );
-  const applyUrl = process.env.NODE_ENV === "production"
-  ? `/tradelicense-citizen/apply?tenantId=${tenantId}`
-  : process.env.REACT_APP_SELF_RUNNING === true
-    ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-    : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
-dispatch(setRoute(applyUrl))
+   if(tenantId==null||tenantId==""){
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please Select a Cantonment Board!!",
+          labelKey: "ERR_SELECT_CANTONMENTBOARD"
+        },
+        "error"
+      )
+    );
+  }
+  else{
+    const applyUrl = process.env.NODE_ENV === "production"
+    ? `/tradelicense-citizen/apply?tenantId=${tenantId}`
+    : process.env.REACT_APP_SELF_RUNNING === true
+      ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+      : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+  dispatch(setRoute(applyUrl))
+  }
+ 
 
  /* const reqDocUi=get( state, "screenConfiguration.screenConfig.home.components.adhocDialog.children.popup", []);
   set(reqDocUi, 'children.footer.children.footerChildElement.children.applyButton.onClickDefination', {
