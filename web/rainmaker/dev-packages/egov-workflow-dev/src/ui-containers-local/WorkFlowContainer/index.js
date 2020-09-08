@@ -118,6 +118,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=application&status=revocated"
       case "VOID":
         return "purpose=application&status=voided"
+      case "REOPEN":
+        return "purpose=reopen&status=success";
     }
   };
 
