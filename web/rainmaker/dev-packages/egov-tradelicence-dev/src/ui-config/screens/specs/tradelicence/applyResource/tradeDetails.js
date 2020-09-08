@@ -865,7 +865,8 @@ export const tradeDetails = getCommonCard({
         disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         
         inputProps: {
-          min: getFinancialYearDates("yyyy-mm-dd").startDate
+          min: getFinancialYearDates("yyyy-mm-dd").startDate,
+          max:getFinancialYearDates("yyyy-mm-dd").endDate
           
         }
       },
