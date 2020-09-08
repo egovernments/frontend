@@ -164,8 +164,12 @@ class DocumentList extends Component {
       
       let res = Object.assign({}, uploadedDocuments)
       delete res[remDocIndex];
-      
+     // console.log("currentDocs length--",currentDocs.length);
+      //console.log("remDocIndex--",remDocIndex);
+      if(currentDocs.length-1 == remDocIndex)
       currentDocs.splice(remDocIndex,1);
+      else
+      currentDocs[remDocIndex] = [];
       
     //  uploadedDocuments.splice(remDocIndex,1);
    // uploadedDocuments[remDocIndex] = [];
