@@ -818,9 +818,9 @@ class FormWizard extends Component {
                      else{
                       let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
                       let intPlot = parseInt(getPlotSizeValue);
-                       if(intPlot < 20)
+                       if(intPlot < 2)
                        {
-                         alert("Please Enter the plot size greater than 20 sq yards")
+                         alert("Please Enter the plot size greater than 2 sq yards")
                          displayFormErrorsAction("plotDetails");
                          break;
   
