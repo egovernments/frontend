@@ -31,7 +31,8 @@ class EnhancedTable extends React.Component {
       rowsPerPage: 10,
       showExpand: -1,
       fieldTableData: {},
-      tableData: this.props.data
+      tableData: this.props.data,
+      initialLoad: false
     }
     this.openSideDrawer = this.openSideDrawer.bind(this)
     this.handleRequestSort = this.handleRequestSort.bind(this)
@@ -62,10 +63,12 @@ class EnhancedTable extends React.Component {
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc'
     }
-
-    this.setState({ order, orderBy })
+    if (order == 'asc' && !this.state.initialLoad) {
+      this.setState({ order, orderBy, initialLoad: true })
+    } else {
+      this.setState({ order, orderBy })
+    }
   }
-
   handleSelectAllClick = (event, checked) => {
     const { tableType } = this.props
     const { tableData } = this.state
@@ -120,6 +123,7 @@ class EnhancedTable extends React.Component {
   cellClick(row, event) {
     if (typeof this.props.cellClick === 'function') {
       this.props.cellClick(row);
+     
     }
   }
   renderALLULBTable(n, idx) {
@@ -385,6 +389,11 @@ class EnhancedTable extends React.Component {
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
     const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
     var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
+
+    if (this.props.column && !this.state.initialLoad) {
+      this.handleRequestSort(null, this.props.column);
+      this.handleRequestSort(null, this.props.column);
+    }
 
     let { strings } = this.props;
     let expData = _.cloneDeep(tableData);
