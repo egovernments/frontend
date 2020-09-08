@@ -7,14 +7,14 @@ import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentS
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import DocumentsUpload from "egov-ui-kit/common/propertyTax/Property/components/DocumentsUpload";
 import { createAssessmentPayload, getCreatePropertyResponse, prefillPTDocuments, setOldPropertyData } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
-import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { setRoute, toggleSnackbarAndSetText, fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData, generalMDMSFetchSuccess, hideSpinner, prepareFormData as prepareFormDataAction, showSpinner, toggleSpinner, updatePrepareFormDataFromDraft } from "egov-ui-kit/redux/common/actions";
 import { deleteForm, displayFormErrors, handleFieldChange, removeForm, updateForms } from "egov-ui-kit/redux/form/actions";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { fetchAssessments } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { getEstimateFromBill, getFinancialYearFromQuery, getQueryValue, resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { addOwner, callDraft, configOwnersDetailsFromDraft, getCalculationScreenData, getHeaderLabel, getImportantDates, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, removeAdhocIfDifferentFY, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import { formWizardConstants, getFormattedEstimate, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
@@ -302,7 +302,8 @@ class FormWizard extends Component {
       showSpinner,
       hideSpinner,
       fetchGeneralMDMSData, history,
-      prepareFinalObject
+      prepareFinalObject,
+      fetchLocalizationLabel
     } = this.props;
     let { search } = location;
     showSpinner();
@@ -316,6 +317,7 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
 
     const tenantId = getQueryValue(search, "tenantId");
+    fetchLocalizationLabel(getLocale(), tenantId, tenantId);
     this.loadUlbLogo(tenantId)
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
@@ -1892,6 +1894,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(prepareFinalObject(jsonPath, value)),
     toggleSpinner: () => dispatch(toggleSpinner()),
     fetchAssessments: (fetchAssessmentsQueryObject) => dispatch(fetchAssessments(fetchAssessmentsQueryObject)),
+    fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
   };
 };
 
