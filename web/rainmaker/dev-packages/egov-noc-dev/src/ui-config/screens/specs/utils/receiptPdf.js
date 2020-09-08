@@ -6508,7 +6508,7 @@ const generatePdf = async (state, dispatch, type) => {
       break;
     case "certificate_download":
       fileName = `noc_certificate_${transformedData.fireNOCNumber}`;
-      if(transformedData.nocType=="NEW" || transformedData.nocType=="RENEW" )
+      if(transformedData.nocType=="NEW" || transformedData.nocType=="RENEWAL" )
       {
       application_data = await newgetApplicationData(
         transformedData,
@@ -6535,7 +6535,7 @@ const generatePdf = async (state, dispatch, type) => {
       break;
     case "certificate_print":
     fileName = `noc_certificate_${transformedData.fireNOCNumber}`;
-    if(transformedData.nocType=="NEW" || transformedData.nocType=="RENEW")
+    if(transformedData.nocType=="NEW" || transformedData.nocType=="RENEWAL")
     {
     application_data = await newgetApplicationData(
       transformedData,
