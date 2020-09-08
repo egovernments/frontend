@@ -444,11 +444,14 @@ class TableChart extends Component {
 
 
       return (
-        <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column', marginTop: '-15px' }}>
+        <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' ,marginTop: "10px"}}>
           <div className="tableHeading">
             <div className={"table-filters"}>
               <SwitchButton clickFromTab={this.clickFromTab} chartParent={chartParent} />
-              {(this.state.data && !_.isEmpty(this.state.filterList, true)) &&
+              
+            </div>
+          </div>
+          {(this.state.data && !_.isEmpty(this.state.filterList, true)) &&
                 <div className="row tableFilterChipWrap">
                   <div className="filLabel">
                     Filters Applied
@@ -465,9 +468,6 @@ class TableChart extends Component {
                   }
                 </div>
               }
-            </div>
-          </div>
-
           {
             <UiTable
               column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : (chartsData[chartKey] && Array.isArray(chartsData[chartKey].filter) && chartsData[chartKey].filter.length > 0 ? chartsData[chartKey].filter[0].column : '')}

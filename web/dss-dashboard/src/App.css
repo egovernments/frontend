@@ -241,6 +241,7 @@ h6 span {
     display: flex;
     /* flex-direction: row-reverse; */
     flex: 1 1;
+    margin-top: -25px;
 }
 
 .fwh {
@@ -369,10 +370,14 @@ h6 span {
 .tableFilterChipWrap {
     /* margin-bottom: 20px; */
     text-align: left;
+    flex-direction: row;
     display: flex;
-    margin-left: 10px;
+    margin-left: -8px;
+    position: absolute;
+    padding-top: 15px;
 }
-.pieFilterChipWrap{
+
+.pieFilterChipWrap {
     margin-bottom: 10px;
     text-align: left;
     display: flex;
@@ -386,6 +391,7 @@ h6 span {
 .tableFilterChipWrap .chipWrap {
     margin: 0px 20px;
     display: flex;
+
 }
 
 .tableFilterChipWrap .filLabel {
@@ -530,19 +536,27 @@ button:focus {
         flex-direction: column;
         flex: 1;
         position: unset;
-        margin-top: -5px;
+        margin-top: -28px;
     }
 
     .tableFilterChipWrap {
-        margin-top: 10px;
+        margin-top: 0px;
         margin-left: 0px;
+        flex-direction: column;
+        position: unset;
     }
 
     .table-filters {
         flex-direction: column;
     }
-    .pieFilterChipWrap{
+
+    .pieFilterChipWrap {
         margin-bottom: 0px;
+    }
+
+    .tableFilterChipWrap .chipWrap {
+        padding: 3px 0px;
+
     }
 }
 
@@ -552,11 +566,10 @@ button:focus {
         flex-direction: column;
         flex: 1;
         position: unset;
-        margin-top: -5px;
     }
 
     .tableFilterChipWrap {
-        margin-top: 10px;
+        margin-top: 0px;
         margin-left: 0px;
     }
 
