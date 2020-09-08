@@ -1,40 +1,47 @@
-import 'date-fns';
-import React from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import CustomCalendar from './customCalander/cCalander';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import SwitchButton from '../switchButtons/switchButtons';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { withStyles } from '@material-ui/core/styles';
-import style from './style';
+import 'date-fns';
+import { addDays ,addMonths } from 'date-fns';
 import moment from 'moment';
-import _ from 'lodash';
+import React from 'react';
+import { createStaticRanges, DateRangePicker, defaultStaticRanges } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
+import style from './style';
 
 const year = (new Date()).getFullYear();
-let fYearObj = getFinancialYearObj('',true)
+let fYearObj = getFinancialYearObj('', true)
 class DateRange extends React.Component {
   constructor(props) {
-    super(props);    
+    super(props);
     this.state = {
       currentDate: new Date(),
       fromDate: '',
       toDate: '',
       value: null,
-      default:5,
+      default: 5,
       title: this.props.title1,
-      fYearObj:fYearObj,      
+      fYearObj: fYearObj,
       dateRanges: Array.from(new Array(20), (x, i) => i + year - 10),
       buttons: [{ key: "1", value: "Today" },
       { key: "2", value: "This Week" },
       { key: "3", value: "This Month" },
       { key: "4", value: "This Quarter" },
-      { key: "5", value: fYearObj[0].title},
-      { key: "6", value: fYearObj[1].title},
+      { key: "5", value: fYearObj[0].title },
+      { key: "6", value: fYearObj[1].title },
       { key: "7", value: "Custom" },
       ],
+      range: [{
+
+        startDate: moment(new Date(), "DD/MM/YYYY").startOf('day').unix(),
+        endDate: moment(addDays(new Date(), 7), "DD/MM/YYYY").startOf('day').unix(),
+        key: 'selection'
+      }]
     }
   }
   handleCancel = () => {
@@ -59,81 +66,96 @@ class DateRange extends React.Component {
     }
   }
 
-  getDateFilter(value) {
-    switch (_.toUpper(value)) {
-      case 'TODAY':
+  getDateFilter(selectionObj) {
+    console.log("========>selectionObj", selectionObj)
+    let duration1 = this.getDuration(moment(selectionObj.startDate || new Date(), "DD/MM/YYYY"), moment(selectionObj.endDate || new Date(), "DD/MM/YYYY"))
 
-        return {
-          title: "TODAY",
-          value: {
-            startDate: moment().startOf('day').unix(),
-            endDate: moment().endOf('day').unix(),
-            interval: 'day'
-          }
-        }
-      case 'THIS WEEK':
-
-        return {
-          title: "WEEK",
-          value: {
-            startDate: moment().startOf('week').unix(),
-            endDate: moment().endOf('week').unix(),
-            interval: 'week'
-          }
-        }
-      case 'THIS MONTH':
-        return {
-          title: "MONTH",
-          value: {
-            startDate: moment().startOf('month').unix(),
-            endDate: moment().endOf('month').unix(),
-            interval: 'week'
-          }
-        }
-      case 'THIS QUARTER':
-        return {
-          title: "QUARTER",
-          value: {
-            startDate: moment().startOf('quarter').unix(),
-            endDate: moment().endOf('quarter').unix(),
-            interval: 'week'
-          }
-        }
-      case 'THIS YEAR':
-        return {
-          title: "YEAR",
-          value: {
-            startDate: moment().startOf('year').unix(),
-            endDate: moment().endOf('year').unix(),
-            interval: 'month'
-          }
-        }
-      case 'CUSTOM':
-        let duration1 = this.getDuration(moment(this.state.from || new Date(), "DD/MM/YYYY"), moment(this.state.to || new Date(), "DD/MM/YYYY"))
-
-        return {
-          title: "CUSTOM",
-          value: {
-            startDate: moment(this.state.from || new Date(), "DD/MM/YYYY").startOf('day').unix(),
-            endDate: moment(this.state.to || new Date(), "DD/MM/YYYY").endOf('day').unix(),
-            interval: duration1
-          }
-        }
-
-      default:
-        return this.getFinancialYearObj(value)
+    return {
+      title: "",
+      value: {
+        startDate: moment(selectionObj.startDate || new Date(), "DD/MM/YYYY").startOf('day').unix(),
+        endDate: moment(selectionObj.endDate || new Date(), "DD/MM/YYYY").endOf('day').unix(),
+        interval: duration1
+      }
     }
+
   }
 
-  getFinancialYearObj(value){
-      let fYearObj = this.state.fYearObj, returnObj;
-      for(var i=0; i<fYearObj.length;i++){
-        if(fYearObj[i] && fYearObj[i].title == value){
-          returnObj = fYearObj[i];
-          break;
-        } 
+  // getDateFilter(value) {
+  //   switch (_.toUpper(value)) {
+  //     case 'TODAY':
+
+  //       return {
+  //         title: "TODAY",
+  //         value: {
+  //           startDate: moment().startOf('day').unix(),
+  //           endDate: moment().endOf('day').unix(),
+  //           interval: 'day'
+  //         }
+  //       }
+  //     case 'THIS WEEK':
+
+  //       return {
+  //         title: "WEEK",
+  //         value: {
+  //           startDate: moment().startOf('week').unix(),
+  //           endDate: moment().endOf('week').unix(),
+  //           interval: 'week'
+  //         }
+  //       }
+  //     case 'THIS MONTH':
+  //       return {
+  //         title: "MONTH",
+  //         value: {
+  //           startDate: moment().startOf('month').unix(),
+  //           endDate: moment().endOf('month').unix(),
+  //           interval: 'week'
+  //         }
+  //       }
+  //     case 'THIS QUARTER':
+  //       return {
+  //         title: "QUARTER",
+  //         value: {
+  //           startDate: moment().startOf('quarter').unix(),
+  //           endDate: moment().endOf('quarter').unix(),
+  //           interval: 'week'
+  //         }
+  //       }
+  //     case 'THIS YEAR':
+  //       return {
+  //         title: "YEAR",
+  //         value: {
+  //           startDate: moment().startOf('year').unix(),
+  //           endDate: moment().endOf('year').unix(),
+  //           interval: 'month'
+  //         }
+  //       }
+  //     case 'CUSTOM':
+  //       let duration1 = this.getDuration(moment(this.state.from || new Date(), "DD/MM/YYYY"), moment(this.state.to || new Date(), "DD/MM/YYYY"))
+
+  //       return {
+  //         title: "CUSTOM",
+  //         value: {
+  //           startDate: moment(this.state.from || new Date(), "DD/MM/YYYY").startOf('day').unix(),
+  //           endDate: moment(this.state.to || new Date(), "DD/MM/YYYY").endOf('day').unix(),
+  //           interval: duration1
+  //         }
+  //       }
+
+  //     default:
+  //       return this.getFinancialYearObj(value)
+  //   }
+  // }
+
+  getFinancialYearObj(value) {
+    let fYearObj = this.state.fYearObj, returnObj;
+    for (var i = 0; i < fYearObj.length; i++) {
+      if (fYearObj[i] && fYearObj[i].title == value) {
+        returnObj = fYearObj[i];
+        break;
       }
-      return returnObj;
+    }
+    return returnObj;
   }
 
   /**
@@ -166,8 +188,62 @@ class DateRange extends React.Component {
       })
     }
   }
+
+
+  onChange = (item) => {
+    console.log("=======>", item)
+    this.setState({
+      range: [item.selection]
+    })
+
+    let { handleSelectedOk } = this.props;
+    handleSelectedOk(false, 'duration', this.getDateFilter(item.selection))
+    console.log("======getDateFilter", this.getDateFilter(item.selection))
+    this.props.onClose();
+    // if (target) {
+    //   this.setState({
+    //     [target]: value,
+    //   })
+    // }
+  }
   render() {
     let { classes, open } = this.props;
+    let financialYears = this.state.fYearObj.map(fy => {
+
+      return createStaticRanges([
+        {
+          label: fy.title,
+          range: () => ({
+            startDate: new Date(Number(`${fy.value.startDate}000`)),
+            endDate: new Date(Number(`${fy.value.endDate}000`)),
+            interval: fy.value.interval
+          })
+        }
+      ])[0]
+    })
+    const staticRanges = [
+      ...defaultStaticRanges,
+      ...createStaticRanges([
+        {
+          label: 'This Quarter',
+          range: () => ({
+            startDate: new Date(Number(`${moment().startOf('quarter').unix()}000`)),
+            endDate: new Date(Number(`${moment().endOf('quarter').unix()}000`)),
+            interval: 'month'
+          })
+        },
+        {
+          label: 'Last Quarter',
+          range: () => ({
+            startDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().startOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+            endDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().endOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+            interval: 'month'
+          })
+        },
+        
+      ]),
+      ...financialYears
+    ];
     return (
       <Dialog
         disableBackdropClick
@@ -181,36 +257,48 @@ class DateRange extends React.Component {
           {this.state.title}
         </DialogTitle>
         <DialogContent dividers>
-          <div className={classes.fils}>
+          {/* <div className={classes.fils}>
             <SwitchButton
               data={this.state.buttons}
               selected={this.state.value ||  this.state.buttons[this.state.default].value}
               type="normal" target={"duration"} 
               handleSelected={this.handleChanges.bind(this)}>
             </SwitchButton>
-          </div>
-          {this.state.value === 'Custom' &&
+          </div> 
+          {
+            this.state.value === 'Custom' &&
             <div className={classes.calanderDisplay}>
               <div className={classes.calanderclass}>
-                <CustomCalendar key="from" position="from" selectCDate={this.selectCDate.bind(this, 'from')} />
+                  <CustomCalendar key="from" position="from" selectCDate={this.selectCDate.bind(this, 'from')} /> 
               </div>
               <div className={classes.to}>
                 <span>to</span>
               </div>
               <div className={classes.calanderclass}>
-                <CustomCalendar key="to" position="to" selectCDate={this.selectCDate.bind(this, 'to')} />
+                 <CustomCalendar key="to" position="to" selectCDate={this.selectCDate.bind(this, 'to')} />  
               </div>
             </div>
-          }
+          } */}
+          <DateRangePicker
+            onChange={this.onChange}
+            showSelectionPreview={true}
+
+            staticRanges={staticRanges}
+            moveRangeOnFirstSelection={false}
+            months={2}
+            showMonthAndYearPickers={true}
+            ranges={this.state.range}
+            direction="horizontal"
+          />;
 
         </DialogContent>
         <DialogActions className={classes.actions}>
           <Button className={classes.cancelbtn} onClick={this.handleCancel.bind(this)}>
             {this.props.cancelBtn}
           </Button>
-          <Button className={classes.okbtn} variant="contained" elevation={1} onMouseLeave={() => { this.setState({ buttonHovered: false }) }} onMouseEnter={() => { this.setState({ buttonHovered: true }) }} onClick={this.handleOk.bind(this)}>
+          {/* <Button className={classes.okbtn} variant="contained" elevation={1} onMouseLeave={() => { this.setState({ buttonHovered: false }) }} onMouseEnter={() => { this.setState({ buttonHovered: true }) }} onClick={this.handleOk.bind(this)}>
             {this.props.selectBtn}
-          </Button>
+          </Button> */}
         </DialogActions>
       </Dialog>
     );
