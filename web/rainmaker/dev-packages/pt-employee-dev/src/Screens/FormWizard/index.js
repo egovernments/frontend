@@ -702,7 +702,7 @@ class FormWizard extends Component {
       financialYearFromQuery,
       estimation
     } = this.state;
-    const { setRoute, displayFormErrorsAction, form, requiredDocCount } = this.props;
+    const { setRoute, displayFormErrorsAction, form, requiredDocCount ,showSpinner } = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -962,12 +962,18 @@ class FormWizard extends Component {
           window.scrollTo(0, 0);
           if (isAssesment1) {
             // this.assessProperty();
+            this.setState({ nextButtonEnabled: false });
+            showSpinner();
             createAndUpdate(index, 'assess');
             // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
           }
           else if (isReassesment) {
+            this.setState({ nextButtonEnabled: false });
+            showSpinner();
             createAndUpdate(index, 're-assess');
           } else {
+            this.setState({ nextButtonEnabled: false });
+            showSpinner();
             createAndUpdate(index, 'create');
           }
           // createAndUpdate(index);

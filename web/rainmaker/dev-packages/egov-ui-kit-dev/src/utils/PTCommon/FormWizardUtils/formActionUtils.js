@@ -165,7 +165,7 @@ const getRedirectToURL=()=>{
 }
 
 const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNumber, FY) => {
-
+    store.dispatch(hideSpinner());
     let routeLink = `/property-tax/pt-acknowledgment?purpose=${purpose}&status=${status}`;
     routeLink = propertyId ? `${routeLink}&propertyId=${propertyId}` : `${routeLink}`;
     routeLink = tenantId ? `${routeLink}&tenantId=${tenantId}` : `${routeLink}`;
