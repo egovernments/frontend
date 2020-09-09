@@ -22,6 +22,7 @@ import {
   getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
 import orderBy from "lodash/orderBy";
+import { hideSpinner , showSpinner } from "egov-ui-kit/redux/common/actions";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -219,7 +220,7 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
     }
-
+    this.props.showSpinner();
     try {
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
@@ -231,6 +232,7 @@ class WorkFlowContainer extends React.Component {
       });
 
       if (payload) {
+        this.props.hideSpinner();
         let path = "";
 
         if (moduleName == "PT.CREATE") {
@@ -260,6 +262,7 @@ class WorkFlowContainer extends React.Component {
 
       }
     } catch (e) {
+      this.props.hideSpinner();
       if (moduleName === "BPA") {
         toggleSnackbar(
           true,
@@ -608,7 +611,12 @@ const mapDispacthToProps = dispatch => {
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
-    setRoute: route => dispatch(setRoute(route))
+    setRoute: route => dispatch(setRoute(route)),
+    setRoute: route => dispatch(setRoute(route)),
+    showSpinner:()=>
+    dispatch(showSpinner()),
+    hideSpinner:()=>
+    dispatch(hideSpinner())
   };
 };
 
