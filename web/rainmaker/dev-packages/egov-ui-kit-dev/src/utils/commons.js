@@ -528,64 +528,9 @@ export const getTenantForLatLng = async (lat, lng) => {
   }
 };
 
-export const findLatestAssignee2 = (actionArray, employeeId) => {
-
-  let shortenedList = [];
-  for (let i = 0; i < actionArray.length; i++) {
-    if(actionArray[i].assignee == employeeId || (actionArray[i].by && actionArray[i].by.split(":")[0] == employeeId))
-      shortenedList.push(actionArray[i]);
-  }
-
-  if(shortenedList && shortenedList.length>0 && 
-    shortenedList[0].status == "assigned" && shortenedList[0].assignee == employeeId)  // Return only if the my latest action says assigned. Its should not be reassignrequested/resolved or something else.
-  {
-    return shortenedList[0].assignee;
-  }  
-  /*for (let i = 0; i < actionArray.length; i++) {
-    if (actionArray[i].status === "assigned" && actionArray[i].assignee == employeeId) {
-      return actionArray[i].assignee;
-    }
-  }*/
-  return null;
-};
-
-export const checkIfPartResolved = (actionArray, employeeId) => {
-  console.log("Check the action array for part resolved", actionArray, employeeId);
-  for (let i = 0; i < actionArray.length; i++) {
-    if (actionArray[i].status === "assigned" && actionArray[i].assignee == employeeId) { //If the latest status is assigned
-      return null;
-    }
-    else
-    if (actionArray[i].status === "partresolved" && actionArray[i].by && actionArray[i].by.split(":")[0] == employeeId) { //If the latest status is partresolved
-      return employeeId;
-    }
-  }
-  return null;
-};
-
-export const checkReassignRequestedByMe = (actionArray, employeeId) => {
-  console.log("checkReassignRequestedByMe", actionArray, employeeId);
-  for (let i = 0; i < actionArray.length; i++) {
-    if (actionArray[i].status === "assigned" && actionArray[i].assignee == employeeId) { //If the latest status is assigned
-      return null;
-    }
-    else
-    if (actionArray[i].by && actionArray[i].by.split(":")[0] == employeeId) { 
-      if(actionArray[i].status === "reassignrequested") 
-        return employeeId;
-      else
-        return null;
-    }
-  }
-  return null;
-};
-
-
 export const findLatestAssignee = (actionArray) => {
-  console.log("Check the action array ", actionArray);
   for (let i = 0; i < actionArray.length; i++) {
     if (actionArray[i].status === "assigned") {
-      console.log("Latest assignee is ",actionArray[i].assignee);
       return actionArray[i].assignee;
     }
   }
