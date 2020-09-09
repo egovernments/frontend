@@ -11,6 +11,7 @@ import React from 'react';
 import { createStaticRanges, DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { isMobile } from 'react-device-detect';
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 import style from './style';
 
@@ -240,7 +241,7 @@ class DateRange extends React.Component {
 
             staticRanges={staticRanges}
             moveRangeOnFirstSelection={false}
-            months={1}
+            months={isMobile ? 1 : 2}
             showMonthAndYearPickers={true}
             ranges={this.state.range}
             direction="horizontal"
