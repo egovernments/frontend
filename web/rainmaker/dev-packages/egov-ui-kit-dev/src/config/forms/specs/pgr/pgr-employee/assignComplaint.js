@@ -6,9 +6,9 @@ const formConfig = {
       jsonPath: "actionInfo[0].action",
       value: "",
     },
-    assignee: {
-      id: "assignee",
-      jsonPath: "actionInfo[0].assignee",
+    assignee: { //This assignee mathes with wats sent from handle field change.
+      id: "assignee2",//This is not used
+      jsonPath: "actionInfo",
       value: "",
     },
   },

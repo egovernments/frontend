@@ -23,6 +23,9 @@ import {
   returnSLAStatus,
   getPropertyFromObj,
   findLatestAssignee,
+  findLatestAssignee2,
+  checkIfPartResolved,
+  checkReassignRequestedByMe,
   getTranslatedLabel
 } from "egov-ui-kit/utils/commons";
 import {
@@ -259,6 +262,7 @@ class ComplaintDetails extends Component {
       serviceRequestId,
       history,
       isAssignedToEmployee,
+      isPartResolved,
       reopenValidChecker
     } = this.props;
     let btnOneLabel = "";
@@ -269,6 +273,7 @@ class ComplaintDetails extends Component {
       complaintLoc = { lat: complaint.latitude, lng: complaint.longitude };
     }
     if (complaint) {
+      console.log("Hey inside here.",complaint);
       if (role === "ao") {
         if (complaint.complaintStatus.toLowerCase() === "unassigned") {
           btnOneLabel = "ES_REJECT_BUTTON";
@@ -289,6 +294,9 @@ class ComplaintDetails extends Component {
     if (timeLine && timeLine[0]) {
       action = timeLine[0].action;
     }
+
+    console.log("Check: ",complaint,isAssignedToEmployee, role, isPartResolved);
+    //alert("Check");
     return (
       <div>
         <Screen>
@@ -338,8 +346,9 @@ class ComplaintDetails extends Component {
                   complaint.complaintStatus.toLowerCase() !== "closed") ||
                 (role === "employee" &&
                   isAssignedToEmployee &&
-                  complaint.complaintStatus.toLowerCase() === "assigned" &&
-                  complaint.complaintStatus.toLowerCase() !== "closed") ? (
+                  complaint.complaintStatus.toLowerCase() === "assigned" && 
+                  complaint.complaintStatus.toLowerCase() !== "closed" && 
+                  !isPartResolved) ? (
                   <ActionButton
                     btnOneLabel={btnOneLabel}
                     btnOneOnClick={() =>
@@ -471,6 +480,7 @@ const mapStateToProps = (state, ownProps) => {
       : "employee";
 
   let isAssignedToEmployee = true;
+  let isPartResolved = false;
   if (selectedComplaint) {
     let userId =
       selectedComplaint &&
@@ -531,7 +541,10 @@ const mapStateToProps = (state, ownProps) => {
     timeLine = selectedComplaint.actions.filter(
       action => action.status && action.status
     );
-    isAssignedToEmployee = id == findLatestAssignee(timeLine) ? true : false; //not checking for type equality due to mismatch
+    isAssignedToEmployee = id == findLatestAssignee2(timeLine, id) ? true : false; //not checking for type equality due to mismatch
+    isPartResolved = id == checkIfPartResolved(timeLine,id) ? true : false;
+    //isReassignRequestedByMe =  id == checkReassignRequestedByMe(timeLine,id) ? true : false;
+    //|| (complaint.complaintStatus.toLowerCase() === "reassignrequested" && !isReassignRequestedByMe) && 
     timeLine.map(action => {
       if (action && action.status && action.status === "assigned") {
         let assignee = action.assignee;
@@ -601,6 +614,8 @@ const mapStateToProps = (state, ownProps) => {
       role,
       serviceRequestId,
       isAssignedToEmployee,
+      isPartResolved,
+      //isReassignRequestedByMe,
       complaintTypeLocalised,
       reopenValidChecker
     };
@@ -611,6 +626,8 @@ const mapStateToProps = (state, ownProps) => {
       role,
       serviceRequestId,
       isAssignedToEmployee,
+      isPartResolved,
+     // isReassignRequestedByMe,
       reopenValidChecker
     };
   }
