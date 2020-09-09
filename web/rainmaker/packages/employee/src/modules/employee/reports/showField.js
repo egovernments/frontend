@@ -155,10 +155,10 @@ export default class ShowField extends Component {
             floatingLabelText={
               <div className="rainmaker-displayInline">
                 <Label
-                  className="show-field-label"
+                  className="show-field-label-list"
                   label={description}
                   containerStyle={{ marginRight: "5px" }}
-                  style={{ fontSize: "16px !important" }}
+                  style={{ fontSize: "16px !important"}}
                 />
                 <span style={{ color: "#FF0000" }}>{obj.isMandatory ? " *" : ""}</span>
               </div>
