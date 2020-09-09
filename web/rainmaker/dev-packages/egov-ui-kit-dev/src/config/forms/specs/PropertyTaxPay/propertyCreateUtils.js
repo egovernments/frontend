@@ -6,7 +6,7 @@ import uniqBy from "lodash/uniqBy";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { httpRequest } from "egov-ui-kit/utils/api";
 
-export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
+export const createPropertyPayload = (properties, documentsUploadRedux) => {
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
@@ -28,9 +28,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
       obj.ownerType = obj.ownerType || "NONE";
     });
   }
-  if (newProperties && newProperties.length > 0) {
-    properties[0].owners = newProperties[0].owners;
-  }
+  
   properties[0].units.map((unit) => {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
