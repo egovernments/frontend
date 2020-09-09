@@ -1,7 +1,7 @@
 import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { getCommonSubHeader, getLabel, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getLocaleLabels, getQueryArg, getTodaysDateInYMD, getTransformedLocalStorgaeLabels, getObjectKeys, getObjectValues, } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
@@ -13,7 +13,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "ui-redux/store";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -492,7 +492,7 @@ export const getSearchResults = async queryObject => {
   }
 };
 
-export const getBill = async queryObject => {
+export const getBill =  async queryObject => {
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
@@ -2061,16 +2061,31 @@ export const showCityPicker = (state, dispatch) => {
 };
 
 export const applyForm = (state, dispatch, action) => {
-  const tenantId = get(
+   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
     "citiesByModule.citizenTenantId"
   );
-  const applyUrl = process.env.NODE_ENV === "production"
-  ? `/tradelicense-citizen/apply?tenantId=${tenantId}`
-  : process.env.REACT_APP_SELF_RUNNING === true
-    ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-    : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
-dispatch(setRoute(applyUrl))
+   if(tenantId==null||tenantId==""){
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please Select a Cantonment Board!!",
+          labelKey: "ERR_SELECT_CANTONMENTBOARD"
+        },
+        "error"
+      )
+    );
+  }
+  else{
+    const applyUrl = process.env.NODE_ENV === "production"
+    ? `/tradelicense-citizen/apply?tenantId=${tenantId}`
+    : process.env.REACT_APP_SELF_RUNNING === true
+      ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+      : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+  dispatch(setRoute(applyUrl))
+  }
+ 
 
  /* const reqDocUi=get( state, "screenConfiguration.screenConfig.home.components.adhocDialog.children.popup", []);
   set(reqDocUi, 'children.footer.children.footerChildElement.children.applyButton.onClickDefination', {

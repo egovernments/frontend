@@ -92,7 +92,7 @@ export const getOwnerDOBField = getDateField({
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
   props: {
     inputProps: {
-      max: getTodaysDateInYMD()
+      max: getMaxDateForDOB()
     }
   }
 });
@@ -731,7 +731,7 @@ export const ownerInfoInstitutional = {
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
           props: {
             inputProps: {
-              max: getTodaysDateInYMD()
+              max: getMaxDateForDOB()
             }
           }
         })

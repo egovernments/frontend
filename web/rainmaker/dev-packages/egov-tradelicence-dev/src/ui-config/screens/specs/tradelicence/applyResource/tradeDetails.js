@@ -280,9 +280,10 @@ const tradeUnitCard = {
             },
             required: true,
             props: {
+              required: false,
               disabled: true,
               setDataInField: true,
-             // jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
             },
             pattern: getPattern("UOMValue"),
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue",
@@ -865,7 +866,8 @@ export const tradeDetails = getCommonCard({
         disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         
         inputProps: {
-          min: getFinancialYearDates("yyyy-mm-dd").startDate
+          min: getFinancialYearDates("yyyy-mm-dd").startDate,
+          max:getFinancialYearDates("yyyy-mm-dd").endDate
           
         }
       },
@@ -1004,12 +1006,40 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
         multiItemContent[variable].props.jsonPath.split(".").pop() ===
         "uomValue"
       ) {
-        const disabledValue = get(
-          state.screenConfiguration.screenConfig["apply"],
-          `${multiItemContent[variable].componentJsonpath}.props.disabled`,
-          true
-        );
-        multiItemContent[variable].props.disabled = disabledValue;
+        
+        if(getTLTenantId()==="pb.secunderabad"){
+         
+          const disabledValue = get(
+            state.screenConfiguration.screenConfig["apply"],
+            `${multiItemContent[variable].componentJsonpath}.props.disabled`,
+            false
+          );
+          multiItemContent[variable].props.disabled = disabledValue;
+
+          const requiredValue = get(
+            state.screenConfiguration.screenConfig["apply"],
+            `${multiItemContent[variable].componentJsonpath}.props.required`,
+            true
+          );
+          multiItemContent[variable].props.required = requiredValue;
+
+        }else{
+         
+          const disabledValue = get(
+            state.screenConfiguration.screenConfig["apply"],
+            `${multiItemContent[variable].componentJsonpath}.props.disabled`,
+            true
+          );
+          multiItemContent[variable].props.disabled = disabledValue;
+
+          const requiredValue = get(
+            state.screenConfiguration.screenConfig["apply"],
+            `${multiItemContent[variable].componentJsonpath}.props.required`,
+            false
+          );
+          multiItemContent[variable].props.required = requiredValue;
+        }
+       
       }
     }
   }
