@@ -178,9 +178,10 @@ let hideSubsectionLabel=false;
       if(!propertyDetails[0].units){
         propertyDetails[0].units = []
       }
-      // let subUnitItemsdata  = propertyDetails[0].units ? propertyDetails[0].units.filter(unit=> unit && unit.active) : []
-      // subUnitItems = getUnitInfo(subUnitItemsdata,propertyDetails[0]);
-      subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
+      let subUnitItemsdata  = propertyDetails[0].units ? propertyDetails[0].units.filter(unit=> unit && (unit.active ||!("active" in unit))) : [];
+
+      subUnitItems = getUnitInfo(subUnitItemsdata,propertyDetails[0]);
+      // subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0]);
       subVasikaItems = getVasikaItems(additionalDetails);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){

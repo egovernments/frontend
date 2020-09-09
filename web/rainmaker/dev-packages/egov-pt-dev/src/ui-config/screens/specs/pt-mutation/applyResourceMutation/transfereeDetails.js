@@ -37,7 +37,7 @@ const commonApplicantInformation = () => {
           labelKey: "PT_MUTATION_APPLICANT_NAME_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        // pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath: "Property.ownersTemp[0].name",
         props: {
@@ -140,7 +140,7 @@ const commonApplicantInformation = () => {
           labelKey: "PT_MUTATION_TRANSFEREE_GUARDIAN_NAME_LABEL_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        // pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath:
           "Property.ownersTemp[0].fatherOrHusbandName",
@@ -295,7 +295,7 @@ const thirdStepPath= "components.div.children.formwizardThirdStep.children.summa
           labelName: "Enter Correspondence Address",
           labelKey: "PT_MUTATION_TRANSFEREE_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
-        pattern: getPattern("Address"),
+        // pattern: getPattern("Address"),
         required: true,
         errorMessage: "Invalid Address",
         jsonPath:
