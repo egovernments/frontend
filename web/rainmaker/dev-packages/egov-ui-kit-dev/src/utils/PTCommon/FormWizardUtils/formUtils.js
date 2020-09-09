@@ -194,6 +194,8 @@ export const convertToOldPTObject = (newObject) => {
     unit.unitArea = unit.constructionDetail.builtUpArea;
     return { ...unit }
   })
+  propertyDetails.units = propertyDetails.units.filter(unt=>unt.active);
+
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
   return Properties;

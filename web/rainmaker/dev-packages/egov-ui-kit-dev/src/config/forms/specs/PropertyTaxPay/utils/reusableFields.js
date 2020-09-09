@@ -62,6 +62,15 @@ export const floorCount = {
         for (var i = field.value; i < previousFloorNo; i++) {
           if (state.form.hasOwnProperty(`customSelect_${i}`)) {
             dispatch(removeForm(`customSelect_${i}`));
+
+            
+              let unitsData =get(state.common.prepareFormData, "Properties[0].units", "");
+             unitsData = unitsData.filter(unt =>{
+              let intUnit = parseInt(unt.floorNo)            
+              return intUnit !=i;
+              })
+          dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, unitsData));
+
           }
           for (var variable in state.form) {
             if (state.form.hasOwnProperty(variable) && variable.startsWith(`floorDetails_${i}`)) {
@@ -112,6 +121,7 @@ export const occupancy = {
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
       const dependentFields1 = ["annualRent"];
+      debugger;
       switch (value) {
         case "RENTED":
           setDependentFields(dependentFields1, dispatch, formKey, false);
