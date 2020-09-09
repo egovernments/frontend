@@ -3,7 +3,7 @@ import get from "lodash/get";
 import { getUserInfo, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-
+import set from "lodash/set";
 const tenantId = JSON.parse(getUserInfo()).permanentCity;
 
 const formConfig = {
@@ -120,12 +120,16 @@ const formConfig = {
     id: "addComplaint-submit-complaint",
   },
   afterInitForm: (action, store, dispatch) => {
+    
     try {
       let state = store.getState();
       const { localizationLabels } = state.app;
       const { cities, citiesByModule } = state.common;
       const { PGR } = citiesByModule || {};
       if (PGR) {
+        set(store.getState(), `screenConfiguration.preparedFinalObject.services[0].addressDetail.city`, "");
+        set(store.getState(), `common.prepareFormData.services[0].addressDetail.city`, "");
+        set(store.getState(), `common.prepareFormData.services[0].addressDetail.mohalla`, "");
         const tenants = PGR.tenants;
         const dd = tenants.reduce((dd, tenant) => {
           let selected = cities.find((city) => {
