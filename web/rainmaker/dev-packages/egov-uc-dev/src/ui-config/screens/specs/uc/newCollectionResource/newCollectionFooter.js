@@ -206,6 +206,10 @@ const createChallan = async(state,dispatch) =>{
     
     const mobileNumber = eChallans[0].citizen.mobileNumber;
     const consumerName = eChallans[0].citizen.consumerName;
+
+    set(eChallans[0], "payer.mobileNumber", mobileNumber);
+    set(eChallans[0], "payer.name", consumerName);
+
     //glcode
     for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping.length; i++) {
       if ((state.screenConfiguration.preparedFinalObject.Challan[0].serviceType === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].cb === state.screenConfiguration.preparedFinalObject.Challan[0].tenantId)) {
