@@ -367,6 +367,7 @@ class FormWizard extends Component {
         this.props.setFieldProperty("propertyAddress", "city", "disabled", true);
       } else{
         this.props.setFieldProperty("propertyAddress", "city", "disabled", false);
+        prepareFinalObject('OldProperty', null);
       }
       //---------------------------------------------
     } catch (e) {

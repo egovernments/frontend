@@ -101,7 +101,7 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         store.dispatch(toggleSnackbarAndSetText(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
         return;
     }
-    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
+    const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
     const propertyMethodAction = action;
     const currentAction = isEditInWorkflow ? 'CORRECTIONPENDING' : null;
     if (action === "_update") {
