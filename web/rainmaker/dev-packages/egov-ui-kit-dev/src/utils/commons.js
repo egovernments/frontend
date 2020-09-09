@@ -528,9 +528,64 @@ export const getTenantForLatLng = async (lat, lng) => {
   }
 };
 
+export const findLatestAssignee2 = (actionArray, employeeId) => {
+
+  let shortenedList = [];
+  for (let i = 0; i < actionArray.length; i++) {
+    if(actionArray[i].assignee == employeeId || (actionArray[i].by && actionArray[i].by.split(":")[0] == employeeId))
+      shortenedList.push(actionArray[i]);
+  }
+
+  if(shortenedList && shortenedList.length>0 && 
+    shortenedList[0].status == "assigned" && shortenedList[0].assignee == employeeId)  // Return only if the my latest action says assigned. Its should not be reassignrequested/resolved or something else.
+  {
+    return shortenedList[0].assignee;
+  }  
+  /*for (let i = 0; i < actionArray.length; i++) {
+    if (actionArray[i].status === "assigned" && actionArray[i].assignee == employeeId) {
+      return actionArray[i].assignee;
+    }
+  }*/
+  return null;
+};
+
+export const checkIfPartResolved = (actionArray, employeeId) => {
+  console.log("Check the action array for part resolved", actionArray, employeeId);
+  for (let i = 0; i < actionArray.length; i++) {
+    if (actionArray[i].status === "assigned" && actionArray[i].assignee == employeeId) { //If the latest status is assigned
+      return null;
+    }
+    else
+    if (actionArray[i].status === "partresolved" && actionArray[i].by && actionArray[i].by.split(":")[0] == employeeId) { //If the latest status is partresolved
+      return employeeId;
+    }
+  }
+  return null;
+};
+
+export const checkReassignRequestedByMe = (actionArray, employeeId) => {
+  console.log("checkReassignRequestedByMe", actionArray, employeeId);
+  for (let i = 0; i < actionArray.length; i++) {
+    if (actionArray[i].status === "assigned" && actionArray[i].assignee == employeeId) { //If the latest status is assigned
+      return null;
+    }
+    else
+    if (actionArray[i].by && actionArray[i].by.split(":")[0] == employeeId) { 
+      if(actionArray[i].status === "reassignrequested") 
+        return employeeId;
+      else
+        return null;
+    }
+  }
+  return null;
+};
+
+
 export const findLatestAssignee = (actionArray) => {
+  console.log("Check the action array ", actionArray);
   for (let i = 0; i < actionArray.length; i++) {
     if (actionArray[i].status === "assigned") {
+      console.log("Latest assignee is ",actionArray[i].assignee);
       return actionArray[i].assignee;
     }
   }
@@ -1033,7 +1088,7 @@ export const getModuleName = () => {
   else if (pathName.indexOf("dss") > -1) { return "rainmaker-dss"; }
   else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
-  else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1 || pathName.indexOf("citizen/feedback") > -1 || pathName.indexOf("resolve-success") > -1) { return "rainmaker-pgr"; }
+  else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1 || pathName.indexOf("citizen/feedback") > -1 || pathName.indexOf("resolve-success") > -1 || pathName.indexOf("reopen-acknowledgement") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("wns") > -1) { return "rainmaker-ws"; }
   else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1 || pathName.indexOf("rainmaker-tl") > -1||pathName.indexOf("/tradelicence/search") >-1||pathName.indexOf("/tradelicence/apply")>-1) { return "rainmaker-tl"; }
   else if (pathName.indexOf("hrms") > -1) { return "rainmaker-hr"; }
