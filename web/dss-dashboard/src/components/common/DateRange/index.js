@@ -13,6 +13,7 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import getFinancialYearObj from '../../../actions/getFinancialYearObj';
 import style from './style';
+import { get } from 'lodash';
 
 const year = (new Date()).getFullYear();
 let fYearObj = getFinancialYearObj('', true)
@@ -37,20 +38,50 @@ class DateRange extends React.Component {
       { key: "7", value: "Custom" },
       ],
       range: [{
-
-        startDate: moment(new Date(), "DD/MM/YYYY").startOf('day').unix(),
-        endDate: moment(addDays(new Date(), 7), "DD/MM/YYYY").startOf('day').unix(),
+        startDate: new Date(Number(`${get(fYearObj[1],'value.startDate',0)}000`)),
+        endDate: new Date(Number(`${get(fYearObj[1],'value.endDate',0)}000`)),
+        interval: get(fYearObj[1],'value.interval',""),
+        label:get(fYearObj[1],'title',""),
         key: 'selection'
-      }]
+      }],
+      staticRanges:[],dateRanges:[]
     }
   }
   handleCancel = () => {
     this.props.onClose();
   };
+componentDidMount(){
+  this.setDateRanges();
+}
+getTitle=(range=[])=>{
+let title=range&&Array.isArray(range)&&range.length>0&&range[0].label||"CUSTOM";
+if(title!="CUSTOM"){
+  const dateRanges=this.state.dateRanges;
+  let customTitle=false;
+  dateRanges.map(dateRange=>{
+    console.log(dateRange.range().startDate,range[0].startDate);
+  if(title==dateRange.label&&this.getDate(dateRange.range().startDate,true)==this.getDate(range[0].startDate,true)&&this.getDate(dateRange.range().endDate)==this.getDate(range[0].endDate)){
+    customTitle=true
+  }
+  })
+  if(!customTitle){
+    title='CUSTOM';
+  }
+}
 
+return title;
+
+
+}
+
+getDate=(date,isStart=false)=>{
+return isStart?moment(date || new Date(), "DD/MM/YYYY").endOf('day').unix():moment(date || new Date(), "DD/MM/YYYY").startOf('day').unix();
+}
   handleOk = () => {
     let { handleSelectedOk } = this.props;
-    handleSelectedOk(false, 'duration', this.getDateFilter(this.state.value))
+    const {range=[]}=this.state;
+    this.setState({title:this.getTitle(range)});
+    handleSelectedOk(false, 'duration', this.getDateFilter(range&&Array.isArray(range)&&range.length>0?range[0]:{}))
   };
 
   getDuration(startDate, endDate) {
@@ -71,7 +102,7 @@ class DateRange extends React.Component {
     let duration1 = this.getDuration(moment(selectionObj.startDate || new Date(), "DD/MM/YYYY"), moment(selectionObj.endDate || new Date(), "DD/MM/YYYY"))
 
     return {
-      title: "",
+      title: this.getTitle([selectionObj])||"CUSTOM",
       value: {
         startDate: moment(selectionObj.startDate || new Date(), "DD/MM/YYYY").startOf('day').unix(),
         endDate: moment(selectionObj.endDate || new Date(), "DD/MM/YYYY").endOf('day').unix(),
@@ -189,17 +220,86 @@ class DateRange extends React.Component {
     }
   }
 
+setDateRanges=()=>{
+  let financialYears = this.state.fYearObj.map(fy => {
 
+    return createStaticRanges([
+      {
+        label: fy.title,
+        range: () => ({
+          startDate: new Date(Number(`${fy.value.startDate}000`)),
+          endDate: new Date(Number(`${fy.value.endDate}000`)),
+          interval: fy.value.interval,
+          label:fy.title
+        })
+      }
+    ])[0]
+  })
+let dateRanges=[ {
+  label: 'Today',
+  range: () => ({
+    startDate: new Date(Number(`${moment().startOf('day').unix()}000`)),
+    endDate: new Date(Number(`${moment().endOf('day').unix()}000`)),
+    interval: 'day',
+    label:'Today'
+  })
+},
+{
+  label: 'This Week',
+  range: () => ({
+    startDate: new Date(Number(`${moment().startOf('week').unix()}000`)),
+    endDate: new Date(Number(`${moment().endOf('week').unix()}000`)),
+    interval: 'week',
+    label:'This Week'
+  })
+},
+{
+  label: 'This Month',
+  range: () => ({
+    startDate: new Date(Number(`${moment().startOf('month').unix()}000`)),
+    endDate: new Date(Number(`${moment().endOf('month').unix()}000`)),
+    interval: 'week',
+    label:'This Month'
+  })
+},
+{
+  label: 'This Quarter',
+  range: () => ({
+    startDate: new Date(Number(`${moment().startOf('quarter').unix()}000`)),
+    endDate: new Date(Number(`${moment().endOf('quarter').unix()}000`)),
+    interval: 'month',
+    label:'This Quarter'
+  })
+},...financialYears]
+
+  const staticRanges = [
+     ...createStaticRanges([
+     ...dateRanges
+    ]),
+    // ...financialYears
+  ];
+  this.setState({staticRanges,dateRanges})
+        // {
+      //   label: 'Last Quarter',
+      //   range: () => ({
+      //     startDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().startOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+      //     endDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().endOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+      //     interval: 'month',
+      //     label:'Last Quarter'
+      //   })
+      // },
+}
   onChange = (item) => {
     console.log("=======>", item)
     this.setState({
       range: [item.selection]
     })
 
-    let { handleSelectedOk } = this.props;
-    handleSelectedOk(false, 'duration', this.getDateFilter(item.selection))
-    console.log("======getDateFilter", this.getDateFilter(item.selection))
-    this.props.onClose();
+    // let { handleSelectedOk } = this.props;
+    // handleSelectedOk(false, 'duration', this.getDateFilter(item.selection))
+    // console.log("======getDateFilter", this.getDateFilter(item.selection))
+    // this.props.onClose();
+
     // if (target) {
     //   this.setState({
     //     [target]: value,
@@ -208,7 +308,7 @@ class DateRange extends React.Component {
   }
   render() {
     let { classes, open } = this.props;
-    let financialYears = this.state.fYearObj.map(fy => {
+/*     let financialYears = this.state.fYearObj.map(fy => {
 
       return createStaticRanges([
         {
@@ -216,34 +316,65 @@ class DateRange extends React.Component {
           range: () => ({
             startDate: new Date(Number(`${fy.value.startDate}000`)),
             endDate: new Date(Number(`${fy.value.endDate}000`)),
-            interval: fy.value.interval
+            interval: fy.value.interval,
+            label:fy.title
           })
         }
       ])[0]
     })
+
     const staticRanges = [
-      ...defaultStaticRanges,
-      ...createStaticRanges([
+       ...createStaticRanges([
+        {
+          label: 'Today',
+          range: () => ({
+            startDate: new Date(Number(`${moment().startOf('day').unix()}000`)),
+            endDate: new Date(Number(`${moment().endOf('day').unix()}000`)),
+            interval: 'day',
+            label:'Today'
+          })
+        },
+        {
+          label: 'This Week',
+          range: () => ({
+            startDate: new Date(Number(`${moment().startOf('week').unix()}000`)),
+            endDate: new Date(Number(`${moment().endOf('week').unix()}000`)),
+            interval: 'week',
+            label:'This Week'
+          })
+        },
+        {
+          label: 'This Month',
+          range: () => ({
+            startDate: new Date(Number(`${moment().startOf('month').unix()}000`)),
+            endDate: new Date(Number(`${moment().endOf('month').unix()}000`)),
+            interval: 'week',
+            label:'This Month'
+          })
+        },
         {
           label: 'This Quarter',
           range: () => ({
             startDate: new Date(Number(`${moment().startOf('quarter').unix()}000`)),
             endDate: new Date(Number(`${moment().endOf('quarter').unix()}000`)),
-            interval: 'month'
+            interval: 'month',
+            label:'This Quarter'
           })
         },
-        {
-          label: 'Last Quarter',
-          range: () => ({
-            startDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().startOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
-            endDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().endOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
-            interval: 'month'
-          })
-        },
+        // {
+        //   label: 'Last Quarter',
+        //   range: () => ({
+        //     startDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().startOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+        //     endDate: new Date(Number(`${moment(addMonths(new Date(Number(`${moment().endOf('quarter').unix()}000`)), -3), "DD/MM/YYYY").startOf('day').unix()}000`)),
+        //     interval: 'month',
+        //     label:'Last Quarter'
+        //   })
+        // },
         
       ]),
       ...financialYears
-    ];
+    ]; */
+    const staticRanges=this.state.staticRanges;
     return (
       <Dialog
         disableBackdropClick
@@ -296,9 +427,9 @@ class DateRange extends React.Component {
           <Button className={classes.cancelbtn} onClick={this.handleCancel.bind(this)}>
             {this.props.cancelBtn}
           </Button>
-          {/* <Button className={classes.okbtn} variant="contained" elevation={1} onMouseLeave={() => { this.setState({ buttonHovered: false }) }} onMouseEnter={() => { this.setState({ buttonHovered: true }) }} onClick={this.handleOk.bind(this)}>
+          <Button className={classes.okbtn} variant="contained" elevation={1} onMouseLeave={() => { this.setState({ buttonHovered: false }) }} onMouseEnter={() => { this.setState({ buttonHovered: true }) }} onClick={this.handleOk.bind(this)}>
             {this.props.selectBtn}
-          </Button> */}
+          </Button>
         </DialogActions>
       </Dialog>
     );
