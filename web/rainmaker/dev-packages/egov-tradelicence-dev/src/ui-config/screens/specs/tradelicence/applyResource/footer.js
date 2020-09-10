@@ -158,9 +158,10 @@ export const callBackForNext = async (state, dispatch) => {
     );
     let ownership = get(
       state.screenConfiguration.preparedFinalObject,
-      "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
       "INDIVIDUAL"
     );
+    ownership = ownership.split(".")[0];
     if (ownership === "INDIVIDUAL") {
       let ownersJsonPath =
         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
@@ -183,7 +184,7 @@ export const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let ownersJsonPath =
-        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainer.children";
+        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainerInstitutional.children";
       if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
     }
 
@@ -192,7 +193,13 @@ export const callBackForNext = async (state, dispatch) => {
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      ) === "INDIVIDUAL.MULTIPLEOWNERS" &&
+      ) === "INDIVIDUAL.MULTIPLEOWNERS" 
+      &&
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].tradeLicenseDetail.owners"
+      )
+      &&
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.owners"
