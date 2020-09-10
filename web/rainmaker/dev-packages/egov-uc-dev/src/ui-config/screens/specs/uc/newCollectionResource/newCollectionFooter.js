@@ -104,7 +104,7 @@ const processDemand = async (state, dispatch) => {
       );
       if (payload ) {
         const uuid = get(payload , "user[0].uuid");
-        dispatch(prepareFinalObject("Demands[0].payer.uuid" , uuid));
+        dispatch(prepareFinalObject("Demands[0].payer.uuid"));
         await createDemand(state, dispatch);
         allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
           "Demands[0].taxPeriodFrom",
@@ -146,9 +146,9 @@ const createDemand = async (state, dispatch) => {
     )
   );
 // Making payer object as null if it is empty object, later will changge in component.
-if(Object.keys(demands[0].payer).length === 0) {
-  demands[0].payer = null;
-}
+// if(Object.keys(demands[0].payer).length === 0) {
+//   demands[0].payer = null;
+// }
   set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {
