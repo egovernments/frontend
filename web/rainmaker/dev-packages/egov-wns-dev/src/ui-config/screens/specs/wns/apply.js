@@ -563,6 +563,7 @@ const screenConfig = {
     }
     prepareDocumentsUploadData(state, dispatch);
     set(action, "screenConfig.components.div.children.stepper.props.steps", stepperData());
+    set(action,'screenConfig.components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props.labelKey',getHeaderLabel());
     return action;
   },
 
