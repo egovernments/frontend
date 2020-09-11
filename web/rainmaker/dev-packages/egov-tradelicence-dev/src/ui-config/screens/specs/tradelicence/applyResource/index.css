@@ -69,10 +69,9 @@
   height: 150px;
   max-height: 150px;
   overflow-y: auto; }
-  #custom-containers-local-financialYear div p {
-    font-size: 14px; }
 
-  p[class^="MuiFormHelperText-root"] {
-    font-size: 14px !important; }
-   
-    
+p[class^="MuiFormHelperText-root"] {
+  font-size: 14px !important; }
+
+#custom-containers-local-financialYear div p {
+  font-size: 14px; }
