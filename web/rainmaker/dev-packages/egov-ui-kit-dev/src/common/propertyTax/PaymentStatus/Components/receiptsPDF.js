@@ -405,7 +405,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
               { text: "4. Assessment & Payment is subject to verification/Scrutiny by competitive authority. \n"},
               { text: "5. Please deposit property tax dues for earlier years also. Ignore, if already paid. \n"},
               { text: "6. Citizen for Online Payments please refer to the link "},
-              {text: "http://lgpunjab.gov.in/cms/pay-property-tax.php \n", bold: true, fontSize: 10, color: 'blue', decoration: 'underline'}
+              {text: "https://mseva.lgpunjab.gov.in/ \n", bold: true, fontSize: 10, color: 'blue', decoration: 'underline'}
             ],
             alignment: "left",
             style: "receipt-footer",
