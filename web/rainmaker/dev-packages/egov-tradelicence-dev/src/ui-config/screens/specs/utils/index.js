@@ -14,7 +14,7 @@ import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
-
+import cloneDeep from "lodash/cloneDeep";
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -770,6 +770,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
 };
 
 export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
+  console.log("fieldInfo",fieldInfo)
   try {
     const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
     const ownerNo = get(
@@ -2287,7 +2288,17 @@ export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
   }
 }
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
-  const tradeSubTypes = get( state, "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits", []);
+
+  const LicDataTemp = cloneDeep(get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.tradeUnits",
+    []
+  ));
+  console.log(cloneDeep(get(state.screenConfiguration.preparedFinalObject.Licenses[0])))
+  let tradeSubTypes = cloneDeep(LicDataTemp);
+  console.log(tradeSubTypes)
+   console.log("tradeSubTypes",tradeSubTypes)
+ // const tradeSubTypes = cloneDeep(get( state, "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits", []));
   if (tradeSubTypes.length > 0) {
     try {
       tradeSubTypes.forEach((tradeSubType, i) => {
