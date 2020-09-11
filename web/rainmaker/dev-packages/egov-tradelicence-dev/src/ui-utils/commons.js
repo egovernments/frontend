@@ -515,42 +515,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         };
       });
 
-      //Code to handle multi ownercard in single owner 
-      let tradeSubOwnershipCat = get(
-        state,
-        "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      );
-     
-        
-      if (tradeSubOwnershipCat === "INDIVIDUAL.SINGLEOWNER") {
-        const ownerInfoCards = get(
-          state.screenConfiguration.screenConfig.apply, //hardcoded to apply screen
-          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items"
-         );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-            "props.hasAddItem",
-            false
-          )
-        );
-      if (ownerInfoCards && ownerInfoCards.length > 1) {
-          const singleCard = ownerInfoCards.slice(0, 1); //get the first element if multiple cards present
-    
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
-              "props.items",
-              singleCard
-            )
-          );
-           
-        }
-      }
-         
-
 
       dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
       createOwnersBackup(dispatch, searchResponse);
