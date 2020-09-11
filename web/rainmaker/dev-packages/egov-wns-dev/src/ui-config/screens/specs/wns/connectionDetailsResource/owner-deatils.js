@@ -282,23 +282,42 @@ export const connectionHolderDetails={
 };
 
 export const connHolderDetailsSummary = () => {
-  return ({
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-      className: "common-div-css search-preview",
-      scheama: getCommonGrayCard({
-        div4: holderHeader,
-        connHoldDetail:getCommonContainer(connectionHolderDetails),
-      }),
-      items: [],
-      hasAddItem: false,
-      sourceJsonPath: "WaterConnection[0].connectionHolders",
-      prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
-      afterPrefixJsonPath: "children.value.children.key"
+  return getCommonGrayCard({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+            labelName: "Connection Holder Details"
+          })
+        }
+      }
     },
-    type: "array"
-  })
+    connHoldDetail: {
+      uiFramework: "custom-containers",
+      componentPath: "MultiItem",
+      props: {
+        scheama: getCommonGrayCard({
+          viewFive: getCommonContainer(connectionHolderDetails),
+        }),
+        items: [],
+        hasAddItem: false,
+        sourceJsonPath: "WaterConnection[0].connectionHolders",
+        prefixSourceJsonPath: "children.cardContent.children.connHoldDetail.children",
+        afterPrefixJsonPath: "children.value.children.key"
+      },
+      type: "array"
+    }
+  });
 }
 
 
@@ -312,22 +331,41 @@ export const connectionHolderSameAsOwnerDetails={
 } 
 
 export const connHolderDetailsSameAsOwnerSummary = () => {
-  return ({
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-      className: "common-div-css search-preview",
-      scheama: getCommonGrayCard({
-        div4: holderHeader,
-        sameAsOwnerDetails:getCommonContainer(connectionHolderSameAsOwnerDetails),
-      }),
-      items: [],
-      hasAddItem: false,
-      sourceJsonPath: "WaterConnection[0].sameAsPropertyAddress",
-      prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
-      afterPrefixJsonPath: "children.value.children.key"
+  return getCommonGrayCard({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelKey: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
+            labelName: "Connection Holder Details"
+          })
+        }
+      }
     },
-    type: "array"
-  })
+    connHoldDetail: {
+      uiFramework: "custom-containers",
+      componentPath: "MultiItem",
+      props: {
+        scheama: getCommonGrayCard({
+          sameAsOwnerDetails:getCommonContainer(connectionHolderSameAsOwnerDetails),
+        }),
+        items: [],
+        hasAddItem: false,
+        sourceJsonPath: "WaterConnection[0].sameAsPropertyAddress",
+        prefixSourceJsonPath: "children.cardContent.children.sameAsOwnerDetails.children",
+        afterPrefixJsonPath: "children.value.children.key"
+      },
+      type: "array"
+    }
+  });
 }
 
