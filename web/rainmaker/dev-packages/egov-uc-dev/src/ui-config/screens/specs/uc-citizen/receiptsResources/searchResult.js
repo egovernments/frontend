@@ -1,3 +1,4 @@
+import React from "react";
 import {
   sortByEpoch,
   getEpochForDate,
@@ -13,7 +14,13 @@ export const searchResult = {
     columns: [
       {
         labelName: "Receipt No.",
-        labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO"
+        labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta) => (
+              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
+          )
+        }
       },
       {
         labelName: "Payee Name",
@@ -54,14 +61,7 @@ export const searchResult = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        const receiptQueryString = [
-          { key: "receiptNumbers", value:  row[0]},
-          { key: "tenantId", value: row[6] }
-        ]
-        download(receiptQueryString);
-      }
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Date",
@@ -79,4 +79,12 @@ export const searchResult = {
       }
     }
   }
+};
+
+const onRowClick = rowData => {
+  const receiptQueryString = [
+    { key: "receiptNumbers", value:  rowData[0]},
+    { key: "tenantId", value: rowData[6] }
+  ]
+  download(receiptQueryString);
 };

@@ -11,7 +11,7 @@ export default class ListCard extends Component {
   state = {
     results: [],
     searchTerm: "",
-    selectedEmployeeId: [],
+    selectedEmployeeId: "",
     dataSource: [],
   };
 
@@ -158,12 +158,11 @@ export default class ListCard extends Component {
 
   changeClickedItem = (dataSource, id) => {
     // let _dataSource = dataSource.map((item) => ({ ...item }));
-    console.log("Clicked id is ",id);
     for (var i = 0; i < dataSource.length; i++) {
       if (dataSource[i].nestedItems) {
         this.changeClickedItem(dataSource[i].nestedItems, id);
       }
-      if (id.includes(dataSource[i].id)) {
+      if (dataSource[i].id === id) {
         dataSource[i] = {
           ...dataSource[i],
           style: { background: "#f8f8f8", borderLeft: "3px solid #fe7a51" },
@@ -175,7 +174,6 @@ export default class ListCard extends Component {
         };
       }
     }
-    console.log("dataSource is ", dataSource);
     return dataSource;
   };
 
@@ -208,6 +206,7 @@ export default class ListCard extends Component {
       const resultsAfterClick = this.changeClickedItem(realResults, selectedEmployeeId);
       this.setState({ results: resultsAfterClick });
     }
+
     const dataSourceAfterClick = this.changeClickedItem(rawDataSource, selectedEmployeeId);
     this.setState({ dataSource: dataSourceAfterClick });
   };
@@ -217,18 +216,10 @@ export default class ListCard extends Component {
     const isEmployeeDirectory = window.location.href.includes("employee-directory") ? true : false;
     if (item.toplevel !== "true" && !isEmployeeDirectory) {
       const isReassignScreen = window.location.href.includes("reassign-complaint") ? true : false;
-      //handleFieldChange("assignee", item.id);
+      handleFieldChange("assignee", item.id);
       const intent = isReassignScreen ? "reassign" : "assign";
-      //handleFieldChange("action", intent);
-      let { selectedEmployeeId } = this.state;
-      selectedEmployeeId.includes(item.id) ? selectedEmployeeId.splice(selectedEmployeeId.indexOf(item.id),1) : selectedEmployeeId.push(item.id);
-      let selectedEmployeeIdWithAction = [];
-      selectedEmployeeId.forEach(element => {
-        selectedEmployeeIdWithAction.push({"action":intent,"assignee":element});
-      });
-      handleFieldChange("assignee", selectedEmployeeIdWithAction);
-      this.setState({ selectedEmployeeId: selectedEmployeeId } , () => this.changeDataSourceAndResultsOnClick());
-      console.log("Employees set to : ",this.state);
+      handleFieldChange("action", intent);
+      this.setState({ selectedEmployeeId: item.id }, () => this.changeDataSourceAndResultsOnClick());
     }
   };
 
@@ -268,8 +259,6 @@ export default class ListCard extends Component {
   submitAssignee = (formKey, label, serviceRequestId) => {
     let { submitForm } = this.props;
     let { selectedEmployeeId } = this.state;
-    console.log("Selected Employee id : ",selectedEmployeeId);
-    //alert("submitting assignee");
     selectedEmployeeId && submitForm(formKey);
   };
 
