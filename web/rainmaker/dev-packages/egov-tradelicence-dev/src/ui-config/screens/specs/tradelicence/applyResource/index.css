@@ -30,8 +30,9 @@
 
 #custom-containers-local-tradeLocMohalla div p {
   font-size: 14px; }
-  #custom-containers-local-financialYear div p {
+#custom-containers-local-financialYear div p {
     font-size: 14px; }
+
 @media only screen and (max-width: 768px) {
   .tl-download-button {
     margin-left: 5px;
@@ -70,7 +71,5 @@
   height: 150px;
   max-height: 150px;
   overflow-y: auto; }
-
   p[class^="MuiFormHelperText-root"] {
     font-size: 14px !important; }
-   
