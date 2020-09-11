@@ -65,7 +65,8 @@ export const floorCount = {
 
             
               let unitsData =get(state.common.prepareFormData, "Properties[0].units", "");
-             unitsData = unitsData.filter(unt =>{
+
+             unitsData = unitsData && unitsData.filter(unt =>{
               let intUnit = parseInt(unt.floorNo)            
               return intUnit !=i;
               })

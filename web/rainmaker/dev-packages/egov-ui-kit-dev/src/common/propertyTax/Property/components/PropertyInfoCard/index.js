@@ -5,7 +5,6 @@ import "./index.css";
 class PropertyInfoCard extends Component {
   render() {
     const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items2 = [], items = [], subSection = [], hideSubsectionLabel = false } = this.props;
-    console.log(subSection,"subSectionsubSection");
     return (
       <div>
         {items && (
@@ -76,10 +75,8 @@ class PropertyInfoCard extends Component {
                 </div>
                 {subSection && (
                   <div>
-                    {Object.values(subSection).map((units, unitIndex) => {
-                      debugger;
-                      // console.log(units,"units");
-                      console.log(unitIndex,"unitIndex");
+                    {Object.keys(subSection).map((key) => {
+                     let units = subSection[key];
                       return (
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                           {!hideSubsectionLabel && (
@@ -91,7 +88,7 @@ class PropertyInfoCard extends Component {
                                 fontWeight: "400",
                                 lineHeight: "19px",
                               }}
-                              label={"PROPERTYTAX_FLOOR_" + unitIndex}
+                              label={"PROPERTYTAX_FLOOR_" + key.replace("-","_")}
                               fontSize="18px"
                             />
                           )}
