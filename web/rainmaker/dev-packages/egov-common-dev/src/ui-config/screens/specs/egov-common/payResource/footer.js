@@ -199,30 +199,42 @@ const moveToFailure = dispatch => {
 
 const getSelectedTabIndex = paymentType => {
   switch (paymentType) {
-    case "Cash":
+    case "CASH":
       return {
         selectedPaymentMode: "cash",
         selectedTabIndex: 0,
         fieldsToValidate: ["payeeDetails"]
       };
-    case "Cheque":
+    case "CHEQUE":
       return {
         selectedPaymentMode: "cheque",
         selectedTabIndex: 1,
         fieldsToValidate: ["payeeDetails", "chequeDetails"]
       };
-    case "DD":
-      return {
-        selectedPaymentMode: "demandDraft",
-        selectedTabIndex: 2,
-        fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
-      };
-    case "Card":
+    // case "DD":
+    //   return {
+    //     selectedPaymentMode: "demandDraft",
+    //     selectedTabIndex: 2,
+    //     fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
+    //   };
+    case "CARD":
       return {
         selectedPaymentMode: "card",
-        selectedTabIndex: 3,
+        selectedTabIndex: 2,
         fieldsToValidate: ["payeeDetails", "cardDetails"]
       };
+    case "OFFLINE_NEFT":
+        return {
+          selectedPaymentMode: "neftRtgs",
+          selectedTabIndex: 3,
+          fieldsToValidate: ["payeeDetails", "onlineDetails"]
+        };
+        case "OFFLINE_RTGS":
+        return {
+          selectedPaymentMode: "neftRtgs",
+          selectedTabIndex: 4,
+          fieldsToValidate: ["payeeDetails", "onlineDetails"]
+        };
     default:
       return {
         selectedPaymentMode: "cash",
