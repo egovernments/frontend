@@ -121,7 +121,6 @@ export const occupancy = {
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
       const dependentFields1 = ["annualRent"];
-      debugger;
       switch (value) {
         case "RENTED":
           setDependentFields(dependentFields1, dispatch, formKey, false);

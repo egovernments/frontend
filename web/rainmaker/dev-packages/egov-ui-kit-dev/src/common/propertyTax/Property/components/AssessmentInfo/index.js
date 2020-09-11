@@ -84,7 +84,6 @@ export const getUnitInfo = (units = [], propertyDetails) => {
   let floors = [];
 
   units.map((unit, index) => {
-    console.log("======units======", units);
     if(unit){
       let floor = [{
         key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
@@ -164,7 +163,6 @@ const getVasikaItems = (additionalDetails) => {
 }
 
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
-  console.log("popsdsdsdddddddddddddddd",properties);
 let hideSubsectionLabel=false;
   let assessmentItems = [];
   let subUnitItems = [];

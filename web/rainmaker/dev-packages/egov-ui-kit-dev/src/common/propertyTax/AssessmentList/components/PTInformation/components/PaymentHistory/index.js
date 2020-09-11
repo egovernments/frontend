@@ -51,7 +51,6 @@ class PaymentHistory extends Component {
         const { Payments = []} = this.props;
         const { activePayments = Payments.filter(pp => pp.paymentStatus != "CANCELLED") ,downloadReceipt} = this.props;
         const paymentHistoryItems = activePayments.map((payment, index) => {
-        debugger;
            const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
                 <div>
