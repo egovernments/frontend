@@ -108,7 +108,7 @@ const getLabel = (value, type = 'key') => {
     return label;
 }
 const getMultiCard = (items = [], color = 'grey') => {
-   
+   //console.log("card color---",color);
     let card = []
 
     items.map(item => {
@@ -186,6 +186,7 @@ const getCardWithHeader = (header, keyValue, color) => {
     return cardWithHeader;
 }
 const getMultiItemCard = (header, items, color = 'grey') => {
+    //color='white';
     let returnData = [];
     let cardWithHeader = [];
    
@@ -470,7 +471,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     nodeLength = ind;
                 }
             })
-            if (currentNode.startPosition.verticalRatio > 0.80 && currentNode.style == 'pdf-card-title') {
+            if (currentNode.startPosition.verticalRatio > 0.59 && currentNode.style == 'pdf-card-title') {
                 return true;
             }
             if (currentNode.startPosition.verticalRatio > 0.75 && currentNode.style == 'pdf-card-title' && nodeLength > 19) {
