@@ -108,6 +108,7 @@ const getLabel = (value, type = 'key') => {
     return label;
 }
 const getMultiCard = (items = [], color = 'grey') => {
+   //console.log("card color---",color);
     let card = []
 
     items.map(item => {
@@ -120,6 +121,7 @@ const getMultiCard = (items = [], color = 'grey') => {
             card.push(row);
         }
         const newCard = getCard(item.items, color);
+       
         card.push(...newCard.stack[0].table.body);
     })
 
@@ -184,13 +186,26 @@ const getCardWithHeader = (header, keyValue, color) => {
     return cardWithHeader;
 }
 const getMultiItemCard = (header, items, color = 'grey') => {
-    let cardWithHeader = header ? [{
+    //color='white';
+    let returnData = [];
+    let cardWithHeader = [];
+   
+      cardWithHeader = header ? [{
         "text": getLocaleLabels(header, header),
         "style": "pdf-card-title"
     }] : [];
-
-    cardWithHeader.push(getMultiCard(items, color))
-    return cardWithHeader;
+    // breaking items into multiple cards
+    items.map(item => {
+    cardWithHeader.push(getMultiCard([item], color))
+    returnData.push(cardWithHeader[0],cardWithHeader[1]);
+    cardWithHeader = header ? [{
+        "text": " ",
+        "style": "pdf-card-title"
+    }] : [];
+   
+    });
+    
+    return returnData;
 }
 
 export const getMultiItems = (preparedFinalObject, cardInfo, sourceArrayJsonPath) => {
@@ -382,7 +397,7 @@ const getHeaderCard = (applicationData, logo) => {
 
 }
 export const generatePDF = (logo, applicationData = {}, fileName) => {
- //   console.log("applicationData--",applicationData);
+     
     logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
@@ -456,7 +471,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     nodeLength = ind;
                 }
             })
-            if (currentNode.startPosition.verticalRatio > 0.80 && currentNode.style == 'pdf-card-title') {
+            if (currentNode.startPosition.verticalRatio > 0.59 && currentNode.style == 'pdf-card-title') {
                 return true;
             }
             if (currentNode.startPosition.verticalRatio > 0.75 && currentNode.style == 'pdf-card-title' && nodeLength > 19) {

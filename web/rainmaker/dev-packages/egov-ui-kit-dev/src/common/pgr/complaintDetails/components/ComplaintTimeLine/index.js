@@ -48,13 +48,6 @@ const statusResolvedIconStyle = {
   border: "solid 1px #22b25f",
 };
 
-const statusPartResolvedIconStyle = {
-  ...timelineIconCommonStyle,
-  backgroundColor: "#ffa104",
-  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.22)",
-  border: "solid 1px #ffa104",
-};
-
 const statusRejectedIconStyle = {
   ...timelineIconCommonStyle,
   backgroundColor: "#e74c3c",
@@ -90,11 +83,9 @@ const StatusIcon = ({ status }) => {
     case "rejected":
       return <Icon action="content" name="clear" style={statusRejectedIconStyle} color={"#FFFFFF"} />;
     case "resolved":
-      return <Icon action="action" name="done-all" style={statusResolvedIconStyle} color={"#FFFFFF"} />;
+      return <Icon action="action" name="done" style={statusResolvedIconStyle} color={"#FFFFFF"} />;
     case "closed":
       return <Icon action="action" name="stars" style={statusResolvedIconStyle} color={"#FFFFFF"} />;
-    case "partresolved":
-      return <Icon action="action" name="done" style={statusPartResolvedIconStyle} color={"#FFFFFF"} />;
   }
 };
 
@@ -104,7 +95,6 @@ var rejectStatusCount = 0;
 var resolveStatusCount = 0;
 var assigneeStatusCount = 0;
 var reassignRequestedCount = 0;
-var partResolvedStatusCount = 0;
 
 const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker }) => {
   var {
@@ -446,79 +436,6 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
         </div>
       );
 
-      case "partresolved":
-        partResolvedStatusCount++;
-        return (
-          <div className="complaint-timeline-content-section">
-            <Label labelClassName="rainmaker-small-font complaint-timeline-date" label={getDateFromEpoch(date)} />
-            <Label labelClassName="dark-color complaint-timeline-status" label="CS_COMPLAINT_DETAILS_COMPLAINT_PARTRESOLVED" />
-            {media && (
-              <div style={{ display: "flex" }}>
-                {media.map((image, index) => {
-                  return (
-                    isImage(image) && (
-                      <div
-                        style={{ marginRight: 8 }}
-                        className="complaint-detail-detail-section-padding-zero"
-                        id={`complaint-details-resolved-${resolveStatusCount}-image=${index}`}
-                        key={index}
-                      >
-                        <Image
-                          style={{
-                            width: "97px",
-                            height: "93px",
-                          }}
-                          size="medium"
-                          source={image}
-                          onClick={() => changeRoute.push(`/image?source=${image}`)}
-                        />
-                      </div>
-                    )
-                  );
-                })}
-              </div>
-            )}
-  
-            <Label labelClassName="rainmaker-small-font complaint-timeline-comments" containerStyle={{ width: "192px" }} label={comments} />
-            {currentStatus === "resolved" && (role === "citizen" || role === "csr") && resolveStatusCount === 1 && (
-              <div className="rainmaker-displayInline">
-                {role !== "csr" && (
-                  <div
-                    className="complaint-details-timline-button"
-                    onClick={(e) => {
-                      changeRoute.push(`/feedback/${encodeURIComponent(complaintNo)}`);
-                    }}
-                  >
-                    <Label
-                      label="CS_COMPLAINT_DETAILS_RATE"
-                      fontSize="12px"
-                      labelStyle={timelineButtonLabelStyle}
-                      containerStyle={timelineButtonContainerStyle}
-                    />
-                  </div>
-                )}
-                {isReopenValid && (
-                  <div
-                    className="complaint-details-timline-button"
-                    onClick={(e) => {
-                      role === "citizen"
-                        ? changeRoute.push(`/reopen-complaint/${encodeURIComponent(complaintNo)}`)
-                        : changeRoute.push(`/reopen-complaint/${encodeURIComponent(complaintNo)}`);
-                    }}
-                  >
-                    <Label
-                      label="CS_COMPLAINT_DETAILS_REOPEN"
-                      fontSize="12px"
-                      labelStyle={timelineButtonLabelStyle}
-                      containerStyle={timelineButtonContainerStyle}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        );
-
     case "closed":
       return (
         <div className="complaint-timeline-content-section">
@@ -579,7 +496,6 @@ class ComplaintTimeLine extends Component {
     resolveStatusCount = 0;
     assigneeStatusCount = 0;
     reassignRequestedCount = 0;
-    partResolvedStatusCount = 0;
     let { status, history, role, timeLine, feedback, rating, filedBy, filedUserMobileNumber, timelineSLAStatus, reopenValidChecker } = this.props;
     if (timeLine && timeLine.length === 1 && timeLine[0].status === "open") {
       timeLine = [{ status: "pending" }, ...timeLine];
