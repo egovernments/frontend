@@ -19,7 +19,7 @@ function SimpleTooltips(props) {
   return (
     <div {...rest}>
       <Tooltip title={translatedLabel}>
-        <Icon style={{ color: "rgba(0, 0, 0, 0.3799999952316284)" }}>
+        <Icon style={{ color: "rgba(0, 0, 0, 0.3799999952316284)",fontSize:"3em" }}>
           <i class="material-icons">info_circle</i>
         </Icon>
       </Tooltip>
