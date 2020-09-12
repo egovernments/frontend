@@ -2,6 +2,7 @@ import {
   getCommonCard,
   getCommonTitle,
   getTextField,
+  getSelectField,
   getDateField,
   getCommonContainer,
   getPattern
@@ -84,38 +85,30 @@ export const employeeDetails = getCommonCard({
       })
     },
     gender: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-hrms",
-      componentPath: "AutosuggestContainer",
-      jsonPath: "Employee[0].user.gender",
-      props: {
-        className: "hr-generic-selectfield autocomplete-dropdown",
-        data: [
-          {
-            code: "MALE",
-            name: "COMMON_GENDER_MALE"
-          },
-          {
-            code: "FEMALE",
-            name: "COMMON_GENDER_FEMALE"
-          }
-        ],
-        optionValue: "value",
-        optionLabel: "label",
+      ...getSelectField({
         label: { labelName: "Gender", labelKey: "HR_GENDER_LABEL" },
         placeholder: {
           labelName: "Select Gender",
           labelKey: "HR_GENDER_PLACEHOLDER"
         },
         required: true,
-        labelsFromLocalisation: true,
-      },
-      required: true,
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
+        jsonPath: "Employee[0].user.gender",
+        props: {
+          className: "hr-generic-selectfield",
+          data: [
+            {
+              value: "MALE",
+              label: "COMMON_GENDER_MALE"
+            },
+            {
+              value: "FEMALE",
+              label: "COMMON_GENDER_FEMALE"
+            }
+          ],
+          optionValue: "value",
+          optionLabel: "label"
+        }
+      })
     },
     dateOfBirth: {
       ...getDateField({
@@ -220,66 +213,70 @@ export const professionalDetails = getCommonCard(
         })
       },
       employmentType: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-hrms",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "Employee[0].employeeType",
-        props: {
-          optionLabel: "status",
-          optionValue: "code",
-          localePrefix: {
-            moduleName: "egov-hrms",
-            masterName: "EmployeeType"
-          },
-          label: {
-            labelName: "Employement Type",
-            labelKey: "HR_EMPLOYMENT_TYPE_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Employment Type",
-            labelKey: "HR_EMPLOYMENT_TYPE_PLACEHOLDER"
+        ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-hrms",
+          componentPath: "AutosuggestContainer",
+          jsonPath: "Employee[0].employeeType",
+          props: {
+            optionLabel: "status",
+            optionValue: "code",
+            localePrefix: {
+              moduleName: "egov-hrms",
+              masterName: "EmployeeType"
+            },
+            label: {
+              labelName: "Employement Type",
+              labelKey: "HR_EMPLOYMENT_TYPE_LABEL"
+            },
+            placeholder: {
+              labelName: "Select Employment Type",
+              labelKey: "HR_EMPLOYMENT_TYPE_PLACEHOLDER"
+            },
+            required: true,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
+            sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeType",
           },
           required: true,
-          labelsFromLocalisation: true,
-          className: "autocomplete-dropdown",
-          sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeType",
-        },
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        },
-      },
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
+          },
+        }),
+      },    
       status: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-hrms",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "Employee[0].employeeStatus",
-        props: {
-          optionLabel: "status",
-          optionValue: "code",
-          disabled: true,
-          value: "EMPLOYED",
-          localePrefix: {
-            moduleName: "egov-hrms",
-            masterName: "EmployeeStatus"
+        ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-hrms",
+          componentPath: "AutosuggestContainer",
+          jsonPath: "Employee[0].employeeStatus",
+          props: {
+            optionLabel: "status",
+            optionValue: "code",
+            disabled: true,
+            value: "EMPLOYED",
+            localePrefix: {
+              moduleName: "egov-hrms",
+              masterName: "EmployeeStatus"
+            },
+            label: { labelName: "Status", labelKey: "HR_STATUS_LABEL" },
+            placeholder: {
+              labelName: "Select Status",
+              labelKey: "HR_STATUS_PLACEHOLDER"
+            },
+            required: true,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
+            sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeStatus",
           },
-          label: { labelName: "Status", labelKey: "HR_STATUS_LABEL" },
-          placeholder: {
-            labelName: "Select Status",
-            labelKey: "HR_STATUS_PLACEHOLDER"
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            md: 6
           },
-          required: true,
-          labelsFromLocalisation: true,
-          className: "autocomplete-dropdown",
-          sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeStatus",
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
-        }, 
+        }),
       },
       role: {
         uiFramework: "custom-containers-local",

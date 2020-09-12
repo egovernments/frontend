@@ -1,7 +1,7 @@
 import { download,downloadAppFeeReceipt } from "egov-common/ui-utils/commons";
 import { dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { generateTLAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateTLAcknowledgement";
@@ -198,6 +198,36 @@ export const callBackForNext = async (state, dispatch) => {
     ) {
       isFormValid = false;
     }
+
+   //temp fix for multiowner dropdown
+    let ownershipSubType= get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    );
+   
+
+    if(ownershipSubType){
+     
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
+          "props.dropdownFields[1].defaultValue",
+          null
+        )
+      );
+
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
+          "props.dropdownFields[0].defaultValue",
+          null
+        )
+      );
+    }
+ //temp fix for multiowner dropdown ends
+
   }
 
   if (activeStep === 1) {

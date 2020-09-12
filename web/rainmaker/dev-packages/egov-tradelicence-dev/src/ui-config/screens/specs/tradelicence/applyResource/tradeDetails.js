@@ -244,7 +244,7 @@ const tradeUnitCard = {
               rootBlockSub : 'tradeUnits',
               filter: "[?(@.type=='TL')]",
               callBackEdit: updateMdmsDropDowns,
-              isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType",
+              //isDependency : "DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType",
               tenantId: getTLTenantId()
             }
           },
