@@ -5,6 +5,8 @@ import { getSelectField } from "../../ui-config/screens/specs/utils";
 import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
 import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg , getTLTenantId } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
+
+
 class DynamicMdmsContainer extends Component {
   componentDidMount = () => {
     let { state, moduleName, rootBlockSub } = this.props;
@@ -47,7 +49,7 @@ class DynamicMdmsContainer extends Component {
         this.triggerCallback(null, null, null);
       
         callBackEdit(state, dispatch);
-        updateStructureTypes(state, dispatch);
+        //updateStructureTypes(state, dispatch);
       }
     }
   }
