@@ -30,7 +30,7 @@ const styles = theme => ({
   },
   ac_valueContainer: {
     display: "flex",
-    // flexWrap: "wrap",
+    flexWrap: "wrap",
     flex: 1,
     alignItems: "center"
   },
@@ -209,6 +209,7 @@ class IntegrationReactSelect extends React.Component {
           font: "inherit"
         }
       })
+      
     };
     return (
       <div className={classes.root}>

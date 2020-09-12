@@ -113,6 +113,7 @@ export const otherDetails = getCommonCard({
                   xs: 12,
                   sm: 4
                 },
+                pattern: getPattern("Name"),
                 jsonPath: "Employee[0].education[0].university"
               })
             },

@@ -33,7 +33,13 @@ export const employeeDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "Employee[0].user.name"
+        jsonPath: "Employee[0].user.name",
+        props:{
+          inputProps:{
+            maxLength:50
+          }
+          
+        }
       })
     },
     mobileNumber: {
@@ -68,7 +74,13 @@ export const employeeDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "Employee[0].user.fatherOrHusbandName"
+        jsonPath: "Employee[0].user.fatherOrHusbandName",
+        props:{
+          inputProps:{
+            maxLength:50
+          }
+          
+        }
       })
     },
     gender: {
@@ -184,7 +196,13 @@ export const professionalDetails = getCommonCard(
             labelKey: "HR_EMPLOYEE_ID_PLACEHOLDER"
           },
           pattern: /^[a-zA-Z0-9-_]*$/i,
-          jsonPath: "Employee[0].code"
+          jsonPath: "Employee[0].code",
+          props:{
+            inputProps:{
+              maxLength:50
+            }
+            
+          }
         })
       },
       dateOfAppointment: {
@@ -282,6 +300,7 @@ export const professionalDetails = getCommonCard(
           suggestions: [],
           fullwidth: true,
           required: true,
+         
           inputLabelProps: {
             shrink: true
           },
@@ -294,6 +313,9 @@ export const professionalDetails = getCommonCard(
         gridDefination: {
           xs: 12,
           sm: 6
+        },
+        style:{
+          flexWrap:'wrap'
         }
       }
     })
