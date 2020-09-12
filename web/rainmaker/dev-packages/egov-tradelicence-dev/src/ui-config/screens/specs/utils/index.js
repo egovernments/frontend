@@ -898,7 +898,8 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           if (oldOwnersArr.length > 0) {
             currOwnersArr.push({
               ...oldOwnersArr[cardIndex],
-              userActive: false
+              userActive: false,
+             // isDeleted:false
             });
           }
           dispatch(
@@ -907,12 +908,12 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
               currOwnersArr
             )
           );
-          dispatch(
-            prepareFinalObject(
-              `Licenses[0].tradeLicenseDetail.owners[0].mobileNumber`,
-              ownerNo
-            )
-          );
+          // dispatch(
+          //   prepareFinalObject(
+          //     `Licenses[0].tradeLicenseDetail.owners[0].mobileNumber`,
+          //     ownerNo
+          //   )
+          // );
         }
       }
     }
