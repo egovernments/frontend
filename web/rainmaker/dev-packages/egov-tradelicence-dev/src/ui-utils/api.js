@@ -77,10 +77,16 @@ export const httpRequest = async (
       return response.data;
     }
   } catch (error) {
+   // console.log("error is--->",error);
     const { data, status } = error.response;
+  //  console.log("data is--->",data);
+  //  console.log("status is--->",status);
     if (status === 400 && data === "") {
       apiError = "INVALID_TOKEN";
-    } else {
+    } else if (status === 500) {
+      apiError = "INVALID_TOKEN";
+    }
+     else {
       apiError =
         (data.hasOwnProperty("Errors") &&
           data.Errors &&
