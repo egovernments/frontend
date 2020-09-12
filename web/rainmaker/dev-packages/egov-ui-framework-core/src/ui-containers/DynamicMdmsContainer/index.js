@@ -32,20 +32,24 @@ class DynamicMdmsContainer extends Component {
       dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, true ));
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
-      if(getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL") {
+     
+      if(getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" ){
+        
+        
         callBackEdit(state, dispatch);
-      } else {
+      }
+       else {
       dropdownFields && dropdownFields.forEach((entry, i) => {
           if(entry.defaultValue){
             let componentJSONPath = `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${entry.key}`;
             this.onFieldChange('', componentJSONPath, '', entry.defaultValue);
           }
         });
-        console.log("for initiation")
-        callBackEdit(state, dispatch);
-        await getMdmsJson(state, dispatch, reqObj);
-      this.triggerCallback(null, null, null);
-        callBackEdit(state, dispatch);
+       
+        //callBackEdit(state, dispatch);
+       // await getMdmsJson(state, dispatch, reqObj);
+     // this.triggerCallback(null, null, null);
+      callBackEdit(state, dispatch);
       }
     }
   }
