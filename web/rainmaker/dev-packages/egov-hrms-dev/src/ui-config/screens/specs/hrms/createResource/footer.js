@@ -28,6 +28,7 @@ export const callBackForNext = async (state, dispatch) => {
     0
   );
   let isFormValid = true;
+  console.info("isFormValid=",activeStep)
   if (activeStep === 0) {
     const isEmployeeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.employeeDetails.children.cardContent.children.employeeDetailsContainer.children",
@@ -116,7 +117,23 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
   if (activeStep === 4) {
-    moveToReview(dispatch);
+    const isDepartmentDetailsValid = validateFields(
+      "components.div.children.formwizardFifthStep.children.otherDetails.children.cardContent.children.departmentDetails.props.items[0].item0.children.cardContent.children.testsDetailsCardContainer.children",
+      state,
+      dispatch,
+      "create"
+    );
+    const isEducationQualificationDetailsValid = validateFields(
+      "components.div.children.formwizardFifthStep.children.otherDetails.children.cardContent.children.educationQualification.props.items[0].item0.children.cardContent.children.eduDetailsCardContainer.children",
+      state,
+      dispatch,
+      "create"
+    );
+    if (!(isDepartmentDetailsValid && isEducationQualificationDetailsValid)) {
+      isFormValid = false;
+    }
+    else
+      moveToReview(dispatch);
   }
   if (activeStep !== 4) {
     if (isFormValid) {
