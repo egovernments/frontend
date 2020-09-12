@@ -42,9 +42,12 @@ class DynamicMdmsContainer extends Component {
           }
         });
         console.log("for initiation")
+       
         await getMdmsJson(state, dispatch, reqObj);
-      this.triggerCallback(null, null, null);
+        this.triggerCallback(null, null, null);
+      
         callBackEdit(state, dispatch);
+        updateStructureTypes(state, dispatch);
       }
     }
   }
