@@ -4,6 +4,7 @@ import { fetchData } from "./citizenSearchResource/citizenFunctions";
 import { cityPicker } from "./citypicker";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
+import HelpIcon from "../../../../ui-atoms-local/Icons/HelpIcon";
 import "../utils/index.css";
 import { getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -38,7 +39,17 @@ const cardItems = [
     },
     icon: <FormIcon />,
     route: "my-applications"
+  },
+  {
+    label: {
+      labelKey: "TL_HOW_IT_WORKS",
+      labelName: "How It Works"
+    },
+    icon: <HelpIcon />,
+    route: "how-it-works"
   }
+
+
 ];
 
 const tradeLicenseSearchAndResult = {
@@ -73,7 +84,6 @@ const tradeLicenseSearchAndResult = {
             history: {}
           }
         }
-        // ,
         // listCard: {
         //   uiFramework: "custom-molecules-local",
         //   moduleName: "egov-tradelicence",

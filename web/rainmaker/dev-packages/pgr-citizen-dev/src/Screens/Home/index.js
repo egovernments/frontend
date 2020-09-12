@@ -43,6 +43,11 @@ class Home extends Component {
         dynamicArray: [updates.length],
         icon: <Icon style={iconStyle} action="custom" name="account-alert" />,
         route: "/my-complaints"
+      },
+      {
+        label: "CS_HOW_IT_WORKS",
+        icon: <Icon style={iconStyle} action="custom" name="help-circle" />,
+        route: "/howitworks"
       }
     ];
   };

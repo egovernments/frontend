@@ -43,6 +43,11 @@ const FeedbackAcknowledge = Loadable({
   loading: Loading
 });
 
+const HowItWorks = Loadable({
+  loader: () => import("../Screens/HowItWorks"),
+  loading: Loading
+});
+
 const routes = [
   {
     path: "user/register",
@@ -121,6 +126,18 @@ const routes = [
     options: {
       // isHomeScreen: true,
       title: "COMMON_BOTTOM_NAVIGATION_COMPLAINTS",
+      hideTitle: true,
+      redirectionUrl: "/user/register",
+      helpButton: true
+    }
+  },
+  {
+    path: "howitworks",
+    component: HowItWorks,
+    needsAuthentication: true,
+    options: {
+      // isHomeScreen: true,
+      title: "COMMON_BOTTOM_HOW_IT_WORKS",
       hideTitle: true,
       redirectionUrl: "/user/register",
       helpButton: true
