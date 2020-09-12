@@ -2294,10 +2294,10 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
     "Licenses[0].tradeLicenseDetail.tradeUnits",
     []
   ));
-  console.log(cloneDeep(get(state.screenConfiguration.preparedFinalObject.Licenses[0])))
+  
   let tradeSubTypes = cloneDeep(LicDataTemp);
   console.log(tradeSubTypes)
-   console.log("tradeSubTypes",tradeSubTypes)
+  
  // const tradeSubTypes = cloneDeep(get( state, "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits", []));
   if (tradeSubTypes.length > 0) {
     try {
@@ -2317,6 +2317,9 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
     } catch (e) {
       console.log(e);
     }
+  }
+  else{
+    //window.location.reload();
   }
 };
 export const updateStructureTypes = async ( state, dispatch ) => {
