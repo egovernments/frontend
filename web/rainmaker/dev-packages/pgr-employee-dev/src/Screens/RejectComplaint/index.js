@@ -48,6 +48,7 @@ class RejectComplaint extends Component {
       commentValue: e.target.value
     });
     this.concatComments(this.commentsValue);
+    //this.concatComments({textVal:e.target.value, radioValue:this.commentsValue.radioValue});
   };
   handleOptionsChange = (event, value) => {
     this.setState({ valueSelected: value });
@@ -70,7 +71,7 @@ class RejectComplaint extends Component {
   onSubmit = e => {
     const { valueSelected, commentValue } = this.state;
     const { toggleSnackbarAndSetText } = this.props;
-    if (valueSelected === "Other" && !commentValue) {
+    if (!valueSelected || (valueSelected === "Other" && !commentValue)) {
       e.preventDefault();
       toggleSnackbarAndSetText(
         true,
