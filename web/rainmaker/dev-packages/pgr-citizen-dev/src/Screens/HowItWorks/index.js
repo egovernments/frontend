@@ -3,12 +3,21 @@ import React from "react";
 const HowItWorks = (props) => {
   return (
     <div style={{ height: "100vh" }}>
-      <iframe
+      {/* <iframe
   
-        src="https://raw.githubusercontent.com/belegovgithub/egov-mdms-data/BEL-v2/data/pb/TLHelp/PGRUserManual.pdf#view=FitH&embedded=true"
+        //src="https://raw.githubusercontent.com/belegovgithub/egov-mdms-data/BEL-v2/data/pb/TLHelp/PGRUserManual.pdf#view=FitH&embedded=true"
+        src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://raw.githubusercontent.com/belegovgithub/egov-mdms-data/BEL-v2/data/pb/TLHelp/PGRUserManual.pdf#toolbar=0&scrollbar=0&view=FitH&embedded=true"
         style={{ width: "100%", height: "90%" }}
         frameborder="0"
-      />
+      /> */}
+    <iframe
+    src="https://docs.google.com/gview?embedded=true&url=https://raw.githubusercontent.com/belegovgithub/webaccess/master/pdf/PGRUserManual.pdf#toolbar=0&scrollbar=0"
+    frameBorder="0"
+    scrolling="auto"
+    height="100%"
+    width="100%"
+></iframe>
+      
       
       {/* <p>
         Your web browser doesn't have a PDF plugin. Instead you can{" "}
