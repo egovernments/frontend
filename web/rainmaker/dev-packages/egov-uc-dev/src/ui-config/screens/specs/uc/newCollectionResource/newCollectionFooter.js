@@ -96,8 +96,7 @@ const processChallan = async (state, dispatch) => {
     state,
     dispatch
   );
-  console.info("validate ucConsumerValid form==",ucConsumerValid);
-  console.info("validate ucServiceDetailValid form==",ucServiceDetailValid);
+ 
   if (
     !ucConsumerValid ||
     !ucServiceDetailValid 
@@ -176,8 +175,7 @@ const processChallan = async (state, dispatch) => {
 
 
 
-const createChallan = async(state,dispatch) =>{
-    console.info("creating challan");
+const createChallan = async(state,dispatch) =>{    
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
     let eChallans = JSON.parse(
       JSON.stringify(
@@ -219,7 +217,7 @@ const createChallan = async(state,dispatch) =>{
     //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
     const taxPeriodValid = isTaxPeriodValid(dispatch, eChallans[0], state);
     
-    console.info("echallan requ=",eChallans);
+    
     if (taxPeriodValid) {
       const url = "/echallan-services/eChallan/v1/_create";     
        try {

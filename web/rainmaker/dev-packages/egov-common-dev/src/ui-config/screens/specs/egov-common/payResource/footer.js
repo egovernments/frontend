@@ -121,9 +121,8 @@ export const callPGService = async (state, dispatch) => {
     } else {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
-        get(goToPaymentGateway, "Transaction.callbackUrl");
-         
-        console.log("Redirection URL ",redirectionUrl);
+        get(goToPaymentGateway, "Transaction.callbackUrl");         
+        
         try{
           const gatewayParam = JSON.parse(redirectionUrl);
           

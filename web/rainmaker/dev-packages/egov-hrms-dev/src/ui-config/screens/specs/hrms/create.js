@@ -16,7 +16,8 @@ import { jurisdictionDetails } from "./createResource/jurisdiction-details";
 import { otherDetails } from "./createResource/other-details";
 import { serviceDetails } from "./createResource/service-details";
 import { getEmployeeData } from "./viewResource/functions";
-
+//import { resetFields } from "../../../../../../egov-common-dev/src/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
@@ -242,11 +243,41 @@ const freezeEmployedStatus = (state, dispatch) => {
   }
 };
 
+export const resetFields = (state, dispatch) => {
+   
+  dispatch(
+    handleField(
+      "create",
+      "components.div.children.formwizardFirstStep.children.employeeDetails.children.cardContent.children.employeeDetailsContainer.children.employeeName",
+      "props.value",
+      ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "create",
+      "components.div.children.formwizardFirstStep.children.employeeDetails.children.cardContent.children.employeeDetailsContainer.children.mobileNumber",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "create",
+      "components.div.children.formwizardFirstStep.children.employeeDetails.children.cardContent.children.employeeDetailsContainer.children.fatherHusbandName",
+      "props.value",
+      ""
+    )
+  );
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "create",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    resetFields(state, dispatch);
     const pickedTenant = getQueryArg(window.location.href, "tenantId");
     pickedTenant &&
       dispatch(prepareFinalObject("Employee[0].tenantId", pickedTenant));

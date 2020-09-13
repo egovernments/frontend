@@ -120,9 +120,7 @@ const getData = async (action, state, dispatch, demandId) => {
     } else if (tenantId) {
       loadServiceType(tenantId, dispatch)
     }
-    // dispatch(
-    //   prepareFinalObject("Demands[0].tenantId", tenantId)
-    // );
+   
 
     const presentTenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):getTenantId();
       
@@ -132,7 +130,7 @@ const getData = async (action, state, dispatch, demandId) => {
         []
         ).filter(item =>item.code ==="UC");
     //console.info("my help url==",helpUrl);
-    console.info("my help url is set or mCollect==",helpUrl[0].URL);
+   // console.info("my help url is set or mCollect==",helpUrl[0].URL);
     
     dispatch(prepareFinalObject("helpFileUrl", helpUrl[0].URL));
 //Get Mohalla data
