@@ -964,15 +964,30 @@ class FormWizard extends Component {
         break;
       case 3:
         window.scrollTo(0, 0);
+        let isDocValid = true;
         const uploadedDocs = get(this.props, "documentsUploadRedux");
-        if (!isDocumentValid(uploadedDocs, requiredDocCount)) {
-          alert("Please upload all the required documents and documents type.")
-        } else {
-          this.setState({
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
-          });
-        }
+        if(uploadedDocs){
+          Object.values(uploadedDocs).map((doc)=>{
+            if(doc.documents && doc.documents[0].fileStoreId && doc.documents[0].fileUrl){
+                if(!(doc.dropdown && doc.dropdown.value)){
+                  isDocValid = false;
+              }
+            }
+            if(!isDocValid){
+              alert("Please select the type of document for uploaded document");
+
+            }
+            else {
+              this.setState({
+                selected: index,
+                formValidIndexArray: [...formValidIndexArray, selected]
+              });
+            }
+
+        })    
+      }  
+        
+
 
         break;
       // createAndUpdate(index);
