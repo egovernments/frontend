@@ -973,18 +973,19 @@ class FormWizard extends Component {
                   isDocValid = false;
               }
             }
-            if(!isDocValid){
-              alert("Please select the type of document for uploaded document");
+        })  
+        
+        if(!isDocValid){
+          alert("Please select the type of document for uploaded document");
 
-            }
-            else {
-              this.setState({
-                selected: index,
-                formValidIndexArray: [...formValidIndexArray, selected]
-              });
-            }
+        }
+        else {
+          this.setState({
+            selected: index,
+            formValidIndexArray: [...formValidIndexArray, selected]
+          });
+        }
 
-        })    
       }  
         
 
