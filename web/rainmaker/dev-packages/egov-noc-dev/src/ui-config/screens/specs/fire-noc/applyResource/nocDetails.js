@@ -107,15 +107,15 @@ const loadProvisionalNocData = async (state, dispatch) => {
   // );
 
   // Set provisional fire noc number
-  // dispatch(
-  //   prepareFinalObject(
-  //     "FireNOCs[0].provisionFireNOCNumber",
-  //     get(response, "FireNOCs[0].fireNOCNumber", "")
-  //   )
-  // );
+  dispatch(
+    prepareFinalObject(
+      "FireNOCs[0].provisionFireNOCNumber",
+      get(response, "FireNOCs[0].fireNOCNumber", "")
+    )
+  );
 
   // Set fire noc id to null
-  // dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
+  dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
 };
 
 export const loadProvisionalNocData2 = async (state, dispatch) => {

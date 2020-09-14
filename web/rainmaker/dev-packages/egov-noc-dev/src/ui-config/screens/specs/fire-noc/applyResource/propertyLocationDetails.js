@@ -415,16 +415,17 @@ export const propertyLocationDetails = getCommonCard(
       },
 
       district: {
-        uiFramework: "custom-containers",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-        fullwidth: true,
-        required: true,
+        ...getSelectField({
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          },
         props: {
           style: {
-            width: "100%",
+            // width: "100%",
             cursor: "pointer"
           },
+        },
           label: {
             labelName: "District Name",
             // labelKey: "NOC_DISTRICT_LABEL"
@@ -432,10 +433,6 @@ export const propertyLocationDetails = getCommonCard(
           placeholder: {
             labelName: "Select District",
             // labelKey: "NOC_DISTRICT_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "TENANT",
-            masterName: "TENANTS"
           },
           // sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
 
@@ -450,7 +447,7 @@ export const propertyLocationDetails = getCommonCard(
           inputLabelProps: {
             shrink: true
           }
-        },
+        }),
         beforeFieldChange: async (action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
