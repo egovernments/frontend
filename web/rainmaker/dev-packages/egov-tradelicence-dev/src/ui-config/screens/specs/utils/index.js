@@ -879,24 +879,24 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           );
 
           currOwnersArr[cardIndex] = userInfo;
-          if (oldOwnersArr.length > 0) {
-            currOwnersArr.push({
-              ...oldOwnersArr[cardIndex],
-              userActive: false
-            });
-          }
+          // if (oldOwnersArr.length > 0) {
+          //   currOwnersArr.push({
+          //     ...oldOwnersArr[cardIndex],
+          //     userActive: false
+          //   });
+          // }
           dispatch(
             prepareFinalObject(
               `Licenses[0].tradeLicenseDetail.owners`,
               currOwnersArr
             )
           );
-          dispatch(
-            prepareFinalObject(
-              `Licenses[0].tradeLicenseDetail.owners[0].mobileNumber`,
-              ownerNo
-            )
-          );
+          // dispatch(
+          //   prepareFinalObject(
+          //     `Licenses[0].tradeLicenseDetail.owners[0].mobileNumber`,
+          //     ownerNo
+          //   )
+          // );
           validateOwners(state, dispatch);
         }
       }

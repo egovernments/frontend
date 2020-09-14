@@ -159,6 +159,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const payload = await getSearchResults(queryObjectSearch);
     const length = payload && payload.Licenses.length > 0 ? get(payload, `Licenses`, []).length : 0;
     dispatch(prepareFinalObject("licenseCount", length));
+    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
+    ? setMultiOwnerForSV(action, true)
+    : setMultiOwnerForSV(action, false);
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
