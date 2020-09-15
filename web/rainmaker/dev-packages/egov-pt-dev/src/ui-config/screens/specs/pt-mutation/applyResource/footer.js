@@ -212,21 +212,40 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp;
   delete propertyPayload.ownershipCategoryTemp;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
-    let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT')?document.dropdown.value.split('.')[2]:document.dropdown.value;
-    return {
-      documentType: documentValue ,
-      fileStoreId: document.documents[0].fileStoreId,
-      documentUid: document.documents[0].fileStoreId,
-      auditDetails: null,
-      status: "ACTIVE"
+    let  documentValue;
+    if(document.dropdown){
+      documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT')?document.dropdown.value.split('.')[2]:document.dropdown.value;
+      return {
+        documentType: document.documents && documentValue ? documentValue : "",
+        fileStoreId: document.documents && document.documents[0].fileStoreId ? document.documents[0].fileStoreId : "",
+        documentUid: document.documents && document.documents[0].fileStoreId ? document.documents[0].fileStoreId : "",
+        auditDetails: null,
+        status: "ACTIVE"
+      }
     }
+
+
   })
   let oldDocuments=[];
   oldDocuments=propertyPayload.documents&&Array.isArray(propertyPayload.documents)&&propertyPayload.documents.filter(document=>{
     return (document.documentType.includes('USAGEPROOF')|| document.documentType.includes('OCCUPANCYPROOF')|| document.documentType.includes('CONSTRUCTIONPROOF'))
   })
   oldDocuments=oldDocuments||[];
-  propertyPayload.documents=[...newDocuments,...oldDocuments];
+  debugger;
+  console.log(newDocuments,"newDocuments");
+  debugger;
+  Object.keys(newDocuments).map((key) => {
+
+    if(key === undefined && fileStoreId.length)
+    {
+      propertyPayload.documents=[...newDocuments,...oldDocuments];
+
+    }
+    else{
+
+    }
+
+  })
 
   try {
     let queryObject = [
