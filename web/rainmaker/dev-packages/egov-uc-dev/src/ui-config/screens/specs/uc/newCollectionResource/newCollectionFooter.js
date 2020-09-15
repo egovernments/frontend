@@ -234,6 +234,7 @@ const createDemand = async (state, dispatch) => {
           "error"
         )
       );
+      throw e;
     }
   }
 };
