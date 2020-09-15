@@ -1,16 +1,11 @@
 import {
-  getTextField,
-  getSelectField,
   getCommonContainer,
   getDateField,
-  getPattern
+  getPattern, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
-
 import get from "lodash/get";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const onIconClick = (state, dispatch, index) => {
   const ifscCode = get(
@@ -84,7 +79,48 @@ export const payeeDetails = getCommonContainer({
       }
     ],
     jsonPath: "ReceiptTemp[0].Bill[0].payer",
-    required: true
+    required: true,
+    beforeFieldChange: (action, state, dispatch) => {
+      let tabIndex = 0;
+      let tabs = get(state.screenConfiguration.screenConfig, "pay.components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs", []);
+      let tabValue = get(tabs[tabIndex], "code", '').toLowerCase();
+      if (action.value === "COMMON_OTHER") {
+        dispatch(
+          handleField(
+            "pay",
+            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerName`,
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerMobileNo`,
+            "props.value",
+            ""
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "pay",
+            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerName`,
+            "props.value",
+            get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName", '')
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerMobileNo`,
+            "props.value",
+            get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber", '')
+          )
+        );
+      }
+    }
+
   }),
   payerName: getTextField({
     label: {
@@ -475,45 +511,45 @@ export const cash = getCommonContainer({
 });
 
 
-export const paymentMethods= [
+export const paymentMethods = [
   {
-    code : "CASH",
-    tabButton: "COMMON_CASH",    
+    code: "CASH",
+    tabButton: "COMMON_CASH",
     tabIcon: "Dashboard",
     tabContent: { cash }
   },
   {
-    code : "CHEQUE",
+    code: "CHEQUE",
     tabButton: "COMMON_CHEQUE",
     tabIcon: "Schedule",
     tabContent: { cheque }
   },
   {
-    code : "DD",
+    code: "DD",
     tabButton: "COMMON_DD",
     tabIcon: "Schedule",
     tabContent: { demandDraft }
   },
   {
-    code : "CARD",
+    code: "CARD",
     tabButton: "COMMON_CREDIT_DEBIT_CARD",
     tabIcon: "Schedule",
     tabContent: { card }
   },
   {
-    code : "OFFLINE_NEFT",
+    code: "OFFLINE_NEFT",
     tabButton: "COMMON_NEFT",
     tabIcon: "Schedule",
     tabContent: { neftRtgs }
   },
   {
-    code : "OFFLINE_RTGS",
+    code: "OFFLINE_RTGS",
     tabButton: "COMMON_RTGS",
     tabIcon: "Schedule",
     tabContent: { neftRtgs }
   },
   {
-    code : "POSTAL_ORDER",
+    code: "POSTAL_ORDER",
     tabButton: "COMMON_POSTAL_ORDER",
     tabIcon: "Schedule",
     tabContent: { postalOrder }
