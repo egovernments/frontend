@@ -32,9 +32,7 @@ export const searchResults = {
       {
         labelName: "Consumer Code",
         labelKey: "PAYMENT_COMMON_CONSUMER_CODE",
-        options: {
-          display: false
-        }
+         
       },
       {
         labelName: "Consumer Name",
