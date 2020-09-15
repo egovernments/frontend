@@ -27,6 +27,10 @@ const downloadprintMenu = (state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "ReceiptTemp[0].Bill[0].totalAmount"
       );
+      const billNo = get(
+        state.screenConfiguration.preparedFinalObject,
+        "ReceiptTemp[0].Bill[0].billNumber"
+      );
       const billDate = get(
         state.screenConfiguration.preparedFinalObject,
         "ReceiptTemp[0].Bill[0].billDate"
@@ -36,6 +40,12 @@ const downloadprintMenu = (state, dispatch) => {
         prepareFinalObject(
           "Challan.totalAmount",
           totalAmount
+        )
+      );
+      dispatch(
+        prepareFinalObject(
+          "Challan.billNo",
+           billNo
         )
       );
       dispatch(
