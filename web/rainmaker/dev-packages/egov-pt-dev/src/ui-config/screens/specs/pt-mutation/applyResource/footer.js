@@ -428,7 +428,29 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
-    isFormValid = moveToReview(state, dispatch);
+    let isDocValid = true;
+        const uploadedDocs = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux");
+        if(uploadedDocs){
+          Object.values(uploadedDocs).map((doc)=>{
+            if(doc.documents && doc.documents[0].fileStoreId && doc.documents[0].fileUrl){
+                if(!(doc.dropdown && doc.dropdown.value)){
+                  isDocValid = false;
+              }
+            }
+          })
+        }
+            if(!isDocValid){
+              alert("Please select the type of document for uploaded document");
+              isFormValid = moveToReview(state, dispatch);
+
+
+            }
+            else {
+            }
+
+            if (!isDocValid) {
+              isFormValid = false;
+            }
 
 
     const ownershipCategory = get(
@@ -498,8 +520,10 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 2) {
 
   }
-  if (activeStep !== 2) {
-    if (isFormValid) {
+  if (activeStep !== 2) 
+  {
+    if (isFormValid ) 
+    {
 
       if (activeStep === 0) {
         prepareDocumentsUploadData(state, dispatch);
