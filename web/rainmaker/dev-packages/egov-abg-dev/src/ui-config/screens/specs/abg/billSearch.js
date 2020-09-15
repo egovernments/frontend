@@ -159,7 +159,7 @@ const billSearchAndResult = {
                     ? `/egov-ui-framework/abg/groupBills`
                     : `/abg/groupBills`
               },
-              visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+              visible: false
             },
             howitWorksButton:{
               componentPath:"Button",
