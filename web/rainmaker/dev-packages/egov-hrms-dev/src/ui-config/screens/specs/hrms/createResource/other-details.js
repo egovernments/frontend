@@ -50,9 +50,9 @@ export const otherDetails = getCommonCard({
                 xs: 12,
                 sm: 4
               },
-              required:true,
+              required:false,
               props: {
-                required:true,
+                required:false,
                 jsonPath: "Employee[0].education[0].qualification",
                 sourceJsonPath: "createScreenMdmsData.egov-hrms.Degree",
                 className: "autocomplete-dropdown",
@@ -84,9 +84,9 @@ export const otherDetails = getCommonCard({
                 xs: 12,
                 sm: 4
               },
-              required:true,
+              required:false,
               props: {
-                required:true,
+                required:false,
                 className: "hr-generic-selectfield autocomplete-dropdown",
                 optionValue: "value",
                 optionLabel: "label",
@@ -130,9 +130,9 @@ export const otherDetails = getCommonCard({
                 xs: 12,
                 sm: 4
               },
-              required:true,
+              required:false,
               props: {
-                required:true,
+                required:false,
                 className: "hr-generic-selectfield autocomplete-dropdown",
                 localePrefix: {
                   moduleName: "egov-hrms",

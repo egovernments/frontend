@@ -1,5 +1,5 @@
 import commonConfig from "config/common.js";
-import { getCommonHeader,
+import { getCommonHeader,getCommonContainer,
   getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
@@ -13,6 +13,8 @@ import {newCollectionConsumerDetailsCard} from './newCollectionResource/neCollec
 import{newCollectionServiceDetailsCard} from './newCollectionResource/newCollectionServiceDetails';
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import './index.css';
+
 const header = getCommonHeader({
   labelName: "New Challan",
   labelKey: "UC_COMMON_HEADER"
@@ -64,8 +66,8 @@ const loadServiceType = async (tenantId, dispatch) => {
     console.log(e);
   }
 }
-const getData = async (action, state, dispatch, demandId) => {
-
+const getData = async (action, state, dispatch) => {
+  console.info("getData");
   let requestBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -129,8 +131,6 @@ const getData = async (action, state, dispatch, demandId) => {
         "MdmsRes.common-masters.Help",
         []
         ).filter(item =>item.code ==="UC");
-    //console.info("my help url==",helpUrl);
-   // console.info("my help url is set or mCollect==",helpUrl[0].URL);
     
     dispatch(prepareFinalObject("helpFileUrl", helpUrl[0].URL));
 //Get Mohalla data
@@ -201,29 +201,24 @@ try {
   } catch (e) {
     console.log(e);
   }
-  if (!demandId) {
-    try {
-      let payload = null;
-      payload = await httpRequest("post", "/egov-idgen/id/_generate", "", [], {
-        idRequests: [
-          {
-            idName: "",
-            format: "UC/[CY:dd-MM-yyyy]/[seq_uc_demand_consumer_code]",
-            tenantId: `${tenantId}`
-          }
-        ]
-      });
-      // dispatch(
-      //   prepareFinalObject(
-      //     "Demands[0].consumerCode",
-      //     get(payload, "idResponses[0].id", "")
-      //   )
-      // );
-      loadServiceType(tenantId, dispatch);
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  // if (!demandId) {
+  //   try {
+  //     let payload = null;
+  //     payload = await httpRequest("post", "/egov-idgen/id/_generate", "", [], {
+  //       idRequests: [
+  //         {
+  //           idName: "",
+  //           format: "UC/[CY:dd-MM-yyyy]/[seq_uc_demand_consumer_code]",
+  //           tenantId: `${tenantId}`
+  //         }
+  //       ]
+  //     });
+    
+  //     loadServiceType(tenantId, dispatch);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   // return action;
 };
@@ -232,31 +227,34 @@ const newCollection = {
   uiFramework: "material-ui",
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
-    const demandId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Demands[0].id",
-      null
-    );
-    const screenConfigForUpdate = get(
-      state.screenConfiguration,
-      "screenConfig.newCollection"
-    );
-    if (demandId) {
+    // const demandId = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "Demands[0].id",
+    //   null
+    // );
+    // const screenConfigForUpdate = get(
+    //   state.screenConfiguration,
+    //   "screenConfig.newCollection"
+    // );
+    // console.info("Demand id==",demandId);
+    // if (demandId) {
+    //   console.info("inside if condn==",demandId);
+    //   set(
+    //     screenConfigForUpdate,
+    //     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",
+    //     true
+    //   );
+    //   set(
+    //     screenConfigForUpdate,
+    //     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType.props.disabled",
+    //     true
+    //   );
+    //   action.screenConfig = screenConfigForUpdate;
+    // }
+    // console.info("getting data")
+    //!demandId && getData(action, state, dispatch, demandId);
 
-      set(
-        screenConfigForUpdate,
-        "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",
-        true
-      );
-      set(
-        screenConfigForUpdate,
-        "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType.props.disabled",
-        true
-      );
-      action.screenConfig = screenConfigForUpdate;
-    }
-    !demandId && getData(action, state, dispatch, demandId);
-
+    getData(action, state, dispatch);
     return action;
   },
 
@@ -269,30 +267,104 @@ const newCollection = {
         id: "newCollection"
       },
       children: {
-        headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
+        // headerDiv: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Container",
 
-          children: {
-            header: {
-              gridDefination: {
-                xs: 12,
-                sm: 6
-              },
-              ...header
-            },
-            buttonDiv: {
-              uiFramework: "custom-atoms",
-              componentPath: "Div",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
+        //   children: {
+        //     header: {
+        //       gridDefination: {
+        //         xs: 12,
+        //         sm: 6
+        //       },
+        //       ...header
+        //     },
+        //     buttonDiv: {
+        //       uiFramework: "custom-atoms",
+        //       componentPath: "Div",
+        //       gridDefination: {
+        //         xs: 12,
+        //         sm: 6,
+        //         align: "right"
+        //       },
+        //       children: {
+        //         searchAndPayBtn :{
+        //           componentPath: "Button",             
+        //           //visible: enableButton,
+        //           props: {
+        //             variant: "outlined",
+        //             color: "primary",
+        //             style: {
+        //               color: "primary",
+        //               borderRadius: "2px",
+        //               width: "250px",
+        //               height: "48px",
+        //               marginRight: "16px"
+        //             }
+        //           },
+        //           children: {
+        //             buttonLabel: getLabel({
+        //               labelName: "Search And Pay",
+        //               labelKey: "UC_SEARCHANDPAY_LABEL"
+        //             }),
+        //           },                  
+        //           onClickDefination: {
+        //             action: "condition",
+        //             callBack: (state, dispatch) => {
+        //               openPayBillForm(state, dispatch);
+        //             }
+        //           }
+        //         },
+        //         searchReceiptBtn:{
+        //           componentPath: "Button",             
+        //           //visible: enableButton,
+        //           props: {
+        //             variant: "outlined",
+        //             color: "primary",
+        //             style: {
+        //               color: "primary",
+        //               borderRadius: "2px",
+        //               width: "250px",
+        //               height: "48px",
+        //               marginRight: "16px"
+        //             }
+        //           },
+        //           children: {
+        //             buttonLabel: getLabel({
+        //               labelName: "Receipt Search",
+        //               labelKey: "UC_SEARCHRECEIPT_LABEL"
+        //             }),
+        //           },
+               
+        //           onClickDefination: {
+        //             action: "condition",
+        //             callBack: (state, dispatch) => {
+        //               openReceiptSearchForm(state, dispatch);
+        //             }
+        //           }
+        //         },
+        //       },            
+            
+        //     }
+        //   }
+        // },
+       
+        header :getCommonContainer({
+          header: getCommonHeader({
+            labelName: "New Challan",
+            labelKey: "UC_COMMON_HEADER"
+          }),
+        }),
+        buttonDiv : {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+              props: {
+                className: "searchreceipt-commonButton",
+                style: { textAlign: "right", display: "flex" }
               },
               children: {
                 searchAndPayBtn :{
                   componentPath: "Button",             
-                  //visible: enableButton,
                   props: {
                     variant: "outlined",
                     color: "primary",
@@ -302,7 +374,8 @@ const newCollection = {
                       width: "250px",
                       height: "48px",
                       marginRight: "16px"
-                    }
+                    },
+                    className: "uc-searchAndPayBtn-button"
                   },
                   children: {
                     buttonLabel: getLabel({
@@ -329,7 +402,8 @@ const newCollection = {
                       width: "250px",
                       height: "48px",
                       marginRight: "16px"
-                    }
+                    },
+                    className: "uc-search-button"
                   },
                   children: {
                     buttonLabel: getLabel({
@@ -345,12 +419,9 @@ const newCollection = {
                     }
                   }
                 },
-              },            
-            
-            }
-          }
+              },  
         },
-       // newCollectionDetailsCard,
+
         newCollectionConsumerDetailsCard,
         newCollectionServiceDetailsCard, 
         newCollectionFooter

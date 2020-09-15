@@ -15,7 +15,7 @@ import {
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import "../../uc/index.css";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -41,13 +41,14 @@ export const newCollectionFooter = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "45px",
+        borderRadius: "inherit"
       }
     },
     children: {
-      downloadReceiptButtonLabel: getLabel({
+      generateChallanButtonLabel: getLabel({
         labelName: "Generate Challan",
         labelKey: "UC_ECHALLAN"
       }),

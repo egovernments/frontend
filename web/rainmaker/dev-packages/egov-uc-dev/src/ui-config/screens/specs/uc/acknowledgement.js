@@ -19,7 +19,7 @@ const header = getCommonHeader({
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
  });
 
- const downloadprintMenu = (state, dispatch) => {
+const downloadprintMenu = (state, dispatch) => {
   let applicationDownloadObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
@@ -81,7 +81,12 @@ const header = getCommonHeader({
             label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "uc-download-button" },
+            props: { variant: "outlined", 
+            style: { 
+              height: "60px", color: "#FE7A51", 
+              marginRight: "5px" 
+            },
+            className: "uc-download-button" },
             menu: downloadMenu
           }
         }
@@ -95,7 +100,8 @@ const header = getCommonHeader({
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", 
-            style: { height: "60px", color: "#FE7A51" }, className: "uc-print-button" },
+            style: { height: "60px", color: "#FE7A51" },
+            className: "uc-print-button" },
             menu: printMenu
           }
         }
