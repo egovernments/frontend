@@ -466,11 +466,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if (!isEditFlow) {
-        //store.dispatch(toggleSpinner());
+        store.dispatch(toggleSpinner());
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
              Licenses: queryObject
            })
-           //store.dispatch(toggleSpinner());
+        store.dispatch(toggleSpinner());
       }
       //Renewal flow
 

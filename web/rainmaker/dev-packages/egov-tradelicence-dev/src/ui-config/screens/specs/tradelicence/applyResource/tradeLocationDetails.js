@@ -116,34 +116,7 @@ export const tradeLocationDetails = getCommonCard(
           }
         }
       },
-      tradeLocPropertyID: getTextField({
-        label: {
-          labelName: "Property ID",
-          labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Property ID",
-          labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
-        },
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              getDetailsFromProperty(state, dispatch);
-            }
-          }
-        },
-        title: {
-          value:
-            "If you have already assessed your property, then please search your property by your PAID",
-          key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
-        },
-        infoIcon: "info_circle",
-        jsonPath: "Licenses[0].propertyId"
-      }),
+       
       tradeLocDoorHouseNo: getTextField({
         label: {
           labelName: "Door/House No.",

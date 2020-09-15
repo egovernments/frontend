@@ -45,7 +45,7 @@ const downloadprintMenu = (state, dispatch) => {
         )
       );
       const { Challan } = state.screenConfiguration.preparedFinalObject;
-      downloadChallan(Challan);         
+      downloadChallan(Challan,"download");         
      // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);
     },
     leftIcon: "assignment"
@@ -54,7 +54,7 @@ const downloadprintMenu = (state, dispatch) => {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
       const { Challan } = state.screenConfiguration.preparedFinalObject;
-      downloadChallan(Challan);          
+      downloadChallan(Challan,"print");          
     },
     leftIcon: "assignment"
   };

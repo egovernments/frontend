@@ -159,8 +159,48 @@ const billSearchAndResult = {
                     ? `/egov-ui-framework/abg/groupBills`
                     : `/abg/groupBills`
               },
-              visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
-            }
+              visible: false
+            },
+            howitWorksButton:{
+              componentPath:"Button",
+              
+             
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right"
+              },
+              visible:process.env.REACT_APP_NAME === "Citizen" ? true : false,
+              props:{
+                //variant: "outlined",
+                color:"primary",                 
+                  style:{
+                  minWidth:"180px",
+                  height:"48px",
+                  marginRight:"45",
+                  borderRadius: "inherit"
+                }
+              },
+              onClickDefination: {
+                action: "page_change",
+                path:`/abg/how-it-works`
+              },
+              children:{
+                
+                helpButtonIcon:{
+                  uiFramework:"custom-atoms",
+                  componentPath:"Icon",
+                  props:{
+                    iconName:"help-circle"
+                  }
+                },
+                helpButtonLabel:getLabel({
+                  labelName:"Bill How it Works",
+                  labelKey:"ABG_HELP"
+                }),
+              },
+                          
+             }, 
           }
         },
         billSearchCard,
