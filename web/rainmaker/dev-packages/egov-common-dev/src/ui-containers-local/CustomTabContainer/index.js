@@ -19,9 +19,9 @@ class MultiItem extends React.Component {
     CHEQUE: "cheque",
     DD: "DD",
     CARD: "card",
-    OFFLINE_NEFT: "neftRtgs",
-    OFFLINE_RTGS: "neftRtgs",
-    POSTAL_ORDER: "postalOrder"
+    OFFLINE_NEFT: "offline_neft",
+    OFFLINE_RTGS: "offline_rtgs",
+    POSTAL_ORDER: "postal_order"
   }
 
   fieldsToReset = [

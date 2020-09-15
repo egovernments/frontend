@@ -365,14 +365,23 @@ export const cheque = getCommonContainer({
   chequeDetails
 });
 
+export const offline_neft = getCommonContainer({
+  payeeDetails,
+  onlineDetails:{...onlineDetails}
+});
+export const offline_rtgs = getCommonContainer({
+  payeeDetails,
+  onlineDetails:{...onlineDetails}
+});
+
 export const neftRtgs = getCommonContainer({
   payeeDetails,
   onlineDetails
 });
 
-export const postalOrder = getCommonContainer({
+export const postal_order = getCommonContainer({
   payeeDetails,
-  poDetails
+  poDetails:{...poDetails}
 });
 
 export const demandDraftDetails = getCommonContainer({
@@ -540,19 +549,19 @@ export const paymentMethods = [
     code: "OFFLINE_NEFT",
     tabButton: "COMMON_NEFT",
     tabIcon: "Schedule",
-    tabContent: { neftRtgs }
+    tabContent: { offline_neft }
   },
   {
     code: "OFFLINE_RTGS",
     tabButton: "COMMON_RTGS",
     tabIcon: "Schedule",
-    tabContent: { neftRtgs }
+    tabContent: { offline_rtgs }
   },
   {
     code: "POSTAL_ORDER",
     tabButton: "COMMON_POSTAL_ORDER",
     tabIcon: "Schedule",
-    tabContent: { postalOrder }
+    tabContent: { postal_order }
   }
 ]
 
