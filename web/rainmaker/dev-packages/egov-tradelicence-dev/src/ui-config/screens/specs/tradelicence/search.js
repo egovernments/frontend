@@ -21,6 +21,11 @@ const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
+const pageResetAndChange = (state, dispatch) => {
+  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+  dispatch(prepareFinalObject("LicensesTemp", []));
+  dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
+};
 const getMdmsData = async (dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -139,15 +144,16 @@ const tradeLicenseSearchAndResult = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                   
-                  showHideAdhocPopup(state, dispatch, 'search');
-                  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-                  dispatch(prepareFinalObject("LicensesTemp", []));
+                  pageResetAndChange(state, dispatch); 
+                 // showHideAdhocPopup(state, dispatch, 'search');
+                 // dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
+                 // dispatch(prepareFinalObject("LicensesTemp", []));
                 }
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                path : "tradelicence/search?action=showRequiredDocuments"
+                //path : "tradelicence/search?action=showRequiredDocuments"
+                path:"tradelicence/apply"
               }
             }
           }
