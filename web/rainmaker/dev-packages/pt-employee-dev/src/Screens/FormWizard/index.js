@@ -312,7 +312,7 @@ class FormWizard extends Component {
 
     let isAssesment = getQueryValue(search, "purpose") == 'assess';
     let isReassesment = getQueryValue(search, "purpose") == 'reassess';
-    const isModify = getQueryValue(search, "mode") == 'MODIFY';
+    const isModify = getQueryValue(search, "mode") == 'WORKFLOWEDIT';
     const isReasses = getQueryValue(search, "purpose") == 'reassess';
     const propertyId = getQueryValue(search, "propertyId");
 
@@ -1344,7 +1344,7 @@ class FormWizard extends Component {
     const assessmentId = getQueryValue(search, "assessmentId");
     const propertyMethodAction = !!propertyId ? "_update" : "_create";
     let prepareFormData = { ...this.props.prepareFormData };
-    const isModify = getQueryValue(search, "mode") == 'MODIFY';
+    const isModify = getQueryValue(search, "mode") == 'WORKFLOWEDIT';
     if (
       get(
         prepareFormData,

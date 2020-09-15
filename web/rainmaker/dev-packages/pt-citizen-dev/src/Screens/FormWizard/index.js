@@ -280,7 +280,7 @@ class FormWizard extends Component {
       const isReasses = getQueryValue(search, "purpose") == 'reassess';
       let isAssesment = getQueryValue(search, "purpose") == 'assess';
       let isReassesment = getQueryValue(search, "purpose") == 'reassess';
-      const isModify = getQueryValue(search, "mode") == 'MODIFY';
+      const isModify = getQueryValue(search, "mode") == 'WORKFLOWEDIT';
       const tenantId = getQueryValue(search, "tenantId");
       const propertyId = getQueryValue(search, "propertyId");
       const draftUuid = getQueryValue(search, "uuid");
@@ -590,7 +590,7 @@ class FormWizard extends Component {
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
-    const isModify = getQueryValue(search, "mode") == 'MODIFY';
+    const isModify = getQueryValue(search, "mode") == 'WORKFLOWEDIT';
     // const tenantId = getQueryValue(search, "tenantId");
     // const isCompletePayment = getQueryValue(search, "isCompletePayment");
     const propertyMethodAction = !!propertyId ? "_update" : "_create";

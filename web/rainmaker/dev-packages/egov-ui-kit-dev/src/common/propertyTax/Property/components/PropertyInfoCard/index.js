@@ -9,7 +9,7 @@ class PropertyInfoCard extends Component {
   render() {
     const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
 
-    const isModify = getQueryArg(window.location.href, "mode") == 'MODIFY';
+    const isModify = getQueryArg(window.location.href, "mode") == 'WORKFLOWEDIT';
     return (
       <div>
         {items && (

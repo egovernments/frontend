@@ -73,7 +73,7 @@ class LabelContainer extends React.Component {
 		
 		let isMode = getQueryArg(window.location.href, "mode");
 		isMode = (isMode) ? isMode.toUpperCase() : "";
-		let classname = (isMode === "MODIFY" && isVisibleLabel && labelValue && labelValue !== "NA") ? "show-label" :  "hide-label" ;   
+		let classname = (isMode === "WORKFLOWEDIT" && isVisibleLabel && labelValue && labelValue !== "NA") ? "show-label" :  "hide-label" ;   
 		return (
 			<React.Fragment>
 				<Label

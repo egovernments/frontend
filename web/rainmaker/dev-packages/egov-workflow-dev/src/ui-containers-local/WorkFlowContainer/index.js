@@ -336,7 +336,7 @@ class WorkFlowContainer extends React.Component {
       bservice = "PT"
     } else if (moduleName === "PT.CREATE") {
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${
-        propertyId}&tenantId=${tenant}&mode=MODIFY`
+        propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION"
     } else if (!baseUrl && !bservice) {
