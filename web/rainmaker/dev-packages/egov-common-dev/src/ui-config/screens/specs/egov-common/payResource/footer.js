@@ -10,9 +10,9 @@ import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../util
 import "./index.css";
 
 const checkAmount = (totalAmount, customAmount, businessService) => {
-  if(totalAmount !== 0 && customAmount === 0){
+  if (totalAmount !== 0 && customAmount === 0) {
     return true;
-  } else if(totalAmount === 0 && customAmount === 0 && (businessService === "WS" || businessService === "SW")) {
+  } else if (totalAmount === 0 && customAmount === 0 && (businessService === "WS" || businessService === "SW")) {
     return true;
   } else {
     return false;
@@ -27,11 +27,11 @@ export const callPGService = async (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
   );
-  
+
   const url = isPublicSearch() ? "withoutAuth/egov-common/paymentRedirectPage" : "egov-common/paymentRedirectPage";
   const redirectUrl = process.env.NODE_ENV === "production" ? `citizen/${url}` : url;
   // const businessService = getQueryArg(window.location.href, "businessService"); businessService
-  let callbackUrl = `${window.origin}/${redirectUrl}` ;
+  let callbackUrl = `${window.origin}/${redirectUrl}`;
   const { screenConfiguration = {} } = state;
   const { preparedFinalObject = {} } = screenConfiguration;
   const { ReceiptTemp = {} } = preparedFinalObject;
@@ -151,7 +151,7 @@ const moveToSuccess = (dispatch, receiptNumber) => {
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   let moduleName = "egov-common";
   if (businessService && businessService.indexOf("BPA") > -1) {
-    moduleName = "egov-bpa"	
+    moduleName = "egov-bpa"
   }
   const url = `${appendUrl}/${moduleName}/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=${"pay"}`;
   const ackSuccessUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
@@ -210,6 +210,13 @@ const getSelectedTabIndex = paymentType => {
   }
 };
 
+const validateString = (str = "") => {
+  str = str && str != null && str.trim() || "";
+  if (str.length > 0) {
+    return true;
+  }
+  return false;
+}
 const convertDateFieldToEpoch = (finalObj, jsonPath) => {
   const dateConvertedToEpoch = convertDateToEpoch(
     get(finalObj, jsonPath),
@@ -338,7 +345,7 @@ const callBackForPay = async (state, dispatch) => {
     );
   }
 
-  if (selectedPaymentType === "Card") {
+  if (selectedPaymentType === "CARD") {
     //Extra check - remove once clearing forms onTabChange is fixed
     if (
       get(finalReceiptData, "instrument.transactionNumber") !==
@@ -357,6 +364,30 @@ const callBackForPay = async (state, dispatch) => {
       return;
     }
   }
+  if (selectedPaymentType === "CHEQUE" || selectedPaymentType === "OFFLINE_NEFT" || selectedPaymentType === "OFFLINE_RTGS") {
+    //Extra check - to verify ifsc and bank details are populated 
+
+
+    let ifscCode = get(finalReceiptData, "instrument.ifscCode", "");
+    let branchName = get(finalReceiptData, "instrument.branchName", "");
+    let bankName = get(finalReceiptData, "instrument.bank.name", "");
+    if (
+      !validateString(ifscCode) || !validateString(branchName) || !validateString(bankName)
+    ) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Enter a Valid IFSC code !",
+            labelKey: "ERR_ENTER_VALID_IFSC"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+  }
+
 
   //------------- Form End ----------------//
 
@@ -378,7 +409,7 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].payer;
   ReceiptBodyNew.Payment["mobileNumber"] =
     finalReceiptData.Bill[0].payerMobileNumber;
-  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].paidBy?finalReceiptData.Bill[0].paidBy:(finalReceiptData.Bill[0].payerName||finalReceiptData.Bill[0].payer);
+  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].paidBy ? finalReceiptData.Bill[0].paidBy : (finalReceiptData.Bill[0].payerName || finalReceiptData.Bill[0].payer);
   if (finalReceiptData.instrument.transactionNumber) {
     ReceiptBodyNew.Payment["transactionNumber"] =
       finalReceiptData.instrument.transactionNumber;
