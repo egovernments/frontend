@@ -80,7 +80,7 @@ const downloadprintMenu = (state, dispatch) => {
      
     props: {
       className: "downloadprint-commonmenu",
-      style: { textAlign: "right", display: "flex" }
+      style: { textAlign: "right", display: "flex",paddingTop: "10px" }
     },
     children: {
       downloadMenu: {
