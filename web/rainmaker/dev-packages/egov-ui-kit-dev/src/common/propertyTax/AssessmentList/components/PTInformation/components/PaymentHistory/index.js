@@ -22,9 +22,13 @@ class PaymentHistory extends Component {
        let updatedBillDetails = billDetails.filter(billDetail=>billDetail.amount!=0);
 
         if(updatedBillDetails!=null && updatedBillDetails.length>0){
-            const billPeriod = getFormattedDate(updatedBillDetails[0].fromPeriod) + ' to ' + getFormattedDate(updatedBillDetails[0].toPeriod);
+            let billPeriod;
+            updatedBillDetails.map(unitBill=>{
+                billPeriod  = getFormattedDate(unitBill.fromPeriod) + ' to ' + getFormattedDate(unitBill.toPeriod);
+            })
             return billPeriod;
         }
+
         else{
             const billPeriod = getFormattedDate(billDetails[0].fromPeriod) + ' to ' + getFormattedDate(billDetails[0].toPeriod);
             return billPeriod; 
