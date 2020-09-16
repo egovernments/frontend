@@ -466,7 +466,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: (businessService === "NewWS1" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_FOR_CONNECTION"&& item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
