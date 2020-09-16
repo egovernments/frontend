@@ -1,58 +1,51 @@
+import commonConfig from "config/common.js";
 import {
-  getStepperObject,
-  getCommonHeader,
-  getCommonCard,
-  getCommonContainer,
-  getCommonTitle,
-  getCommonParagraph,
-  getBreak
+  getBreak, getCommonCard,
+  getCommonContainer, getCommonHeader,
+
+
+
+  getCommonParagraph, getCommonTitle, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import get from "lodash/get";
-import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { footer } from "./applyResource/footer";
-import { getPropertyIDDetails, propertyID, propertyHeader } from "./applyResource/propertyDetails";
-import { getPropertyDetails } from "./applyResource/property-locationDetails";
-import { getHolderDetails, sameAsOwner, holderHeader } from "./applyResource/connectionHolder";
-import { ownerDetailsHeader, getOwnerDetails, ownershipType } from "./applyResource/ownerDetails";
-import { additionDetails } from "./applyResource/additionalDetails";
-import { OwnerInfoCard } from "./applyResource/connectionDetails";
+import { set } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '../../../../ui-containers-local/CheckboxContainer/toggleFeilds';
 import { httpRequest } from "../../../../ui-utils";
 import {
-  prepareDocumentsUploadData,
-  getSearchResultsForSewerage,
-  getSearchResults,
-  getPropertyResults,
+  findAndReplace, getPropertyResults, getSearchResults, getSearchResultsForSewerage,
   handleApplicationNumberDisplay,
-  findAndReplace,
-  prefillDocuments,
   isActiveProperty,
-  showHideFieldsFirstStep,
   isModifyMode,
-  isModifyModeAction
+  isModifyModeAction, prefillDocuments, prepareDocumentsUploadData,
+  showHideFieldsFirstStep
 } from "../../../../ui-utils/commons";
-import commonConfig from "config/common.js";
-import { reviewDocuments } from "./applyResource/reviewDocuments";
-import { reviewOwner } from "./applyResource/reviewOwner";
-import { reviewConnectionDetails,snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
-import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '../../../../ui-containers-local/CheckboxContainer/toggleFeilds';
-import { set } from "lodash";
 import { triggerModificationsDisplay } from "./../utils/index";
+import { additionDetails } from "./applyResource/additionalDetails";
+import { OwnerInfoCard } from "./applyResource/connectionDetails";
+import { getHolderDetails, holderHeader, sameAsOwner } from "./applyResource/connectionHolder";
+import { footer } from "./applyResource/footer";
+import { getOwnerDetails, ownerDetailsHeader, ownershipType } from "./applyResource/ownerDetails";
+import { getPropertyDetails } from "./applyResource/property-locationDetails";
+import { getPropertyIDDetails, propertyHeader, propertyID } from "./applyResource/propertyDetails";
+import { reviewConnectionDetails, snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
+import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import cloneDeep from "lodash/cloneDeep";
+import { reviewOwner } from "./applyResource/reviewOwner";
 let isMode = isModifyMode();
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-  } 
-  else if(isModifyMode()){
+  }
+  else if (isModifyMode()) {
     return [{ labelKey: "WS_COMMON_PROPERTY_DETAILS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-  } else{
-      return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
-    }
+  } else {
+    return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_ADDN_DETAILS" }, { labelKey: "WS_COMMON_SUMMARY" }];
+  }
 }
-export const stepper = getStepperObject({ props: { activeStep: 0 ,classes:{root:"wns-stepper"}} }, stepperData());
+export const stepper = getStepperObject({ props: { activeStep: 0, classes: { root: "wns-stepper" } } }, stepperData());
 
 export const getHeaderLabel = () => {
   if (isModifyMode()) {
@@ -92,7 +85,7 @@ export const reviewOwnerDetails = reviewOwner(process.env.REACT_APP_NAME !== "Ci
 
 export const reviewDocumentDetails = reviewDocuments();
 
-export const reviewModificationsDetails = (isModifyMode())?reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen"):{};
+export const reviewModificationsDetails = (isModifyMode()) ? reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen") : {};
 
 const summaryScreenCitizen = getCommonCard({
   reviewConnDetails,
@@ -227,18 +220,18 @@ export const getMdmsData = async dispatch => {
 };
 
 const showHideFieldModifyConnection = (action) => {
-  let fieldsChanges = [ 
-    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard",false],
-    ["components.div.children.formwizardFourthStep.children.snackbarWarningMessage.children.clickHereLink",true],
-    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven" , false],
-    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight" , false],
-    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewNine" , false],
-    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen" , false],
+  let fieldsChanges = [
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard", false],
+    ["components.div.children.formwizardFourthStep.children.snackbarWarningMessage.children.clickHereLink", true],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven", false],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight", false],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewNine", false],
+    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen", false],
   ]
-  for(var i=0; i< fieldsChanges.length; i++){
+  for (var i = 0; i < fieldsChanges.length; i++) {
     set(
       action.screenConfig,
-      fieldsChanges[i][0]+".visible",
+      fieldsChanges[i][0] + ".visible",
       fieldsChanges[i][1]
     );
   }
@@ -252,7 +245,7 @@ export const getData = async (action, state, dispatch) => {
   const actionType = getQueryArg(window.location.href, "action");
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch);
-   if (applicationNo) {
+  if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
       { key: "tenantId", value: tenantId },
@@ -277,17 +270,20 @@ export const getData = async (action, state, dispatch) => {
         payloadWater.WaterConnection[0].sewerage = false;
         payloadWater.WaterConnection[0].service = "Water";
         dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
-        if(get(payloadWater,"WaterConnection[0].waterSource",null) && get(payloadWater,"WaterConnection[0].waterSubSource",null) ){
-          dispatch(prepareFinalObject("ws-services-masters.waterSource.selectedValues",[{waterSourceType: get(payloadWater,"WaterConnection[0].waterSource",null) ,
-          waterSubSource :get(payloadWater,"WaterConnection[0].waterSubSource",null)}]))
-         } else if(get(payloadWater,"WaterConnection[0].waterSource",null) ){
-          dispatch(prepareFinalObject("ws-services-masters.waterSource.selectedValues",[{waterSourceType: get(payloadWater,"WaterConnection[0].waterSource",null) ,
-          waterSubSource :get(payloadWater,"WaterConnection[0].waterSubSource",null)}]))
-         }
-
+        if (get(payloadWater, "WaterConnection[0].waterSource", null) && get(payloadWater, "WaterConnection[0].waterSubSource", null)) {
+          dispatch(prepareFinalObject("ws-services-masters.waterSource.selectedValues", [{
+            waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
+            waterSubSource: get(payloadWater, "WaterConnection[0].waterSubSource", null)
+          }]))
+        } else if (get(payloadWater, "WaterConnection[0].waterSource", null)) {
+          dispatch(prepareFinalObject("ws-services-masters.waterSource.selectedValues", [{
+            waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
+            waterSubSource: get(payloadWater, "WaterConnection[0].waterSubSource", null)
+          }]))
+        }
       }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
-      if (waterConnections.length > 0){
+      if (waterConnections.length > 0) {
         waterConnections[0].additionalDetails.locality = waterConnections[0].property.address.locality.code;
       }
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];
@@ -296,25 +292,25 @@ export const getData = async (action, state, dispatch) => {
       }
       let combinedArray = waterConnections.concat(sewerageConnections);
 
-      if(!isActiveProperty(combinedArray[0].property)){
-        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));     
-        showHideFieldsFirstStep(dispatch,"",false);
+      if (!isActiveProperty(combinedArray[0].property)) {
+        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${combinedArray[0].property.status}`, labelName: `Property Status is ${combinedArray[0].property.status}` }, "warning"));
+        showHideFieldsFirstStep(dispatch, "", false);
       }
       // For Modify connection details
-      if(isModifyMode() && !isModifyModeAction()) { 
+      if (isModifyMode() && !isModifyModeAction()) {
         // this delete for initiate modify connection 
-        delete combinedArray[0].id; combinedArray[0].documents = []; 
+        delete combinedArray[0].id; combinedArray[0].documents = [];
       }
-      if(isModifyMode() && isModifyModeAction()){
-          // ModifyEdit should not call create.
-          dispatch(prepareFinalObject("modifyAppCreated", true));
+      if (isModifyMode() && isModifyModeAction()) {
+        // ModifyEdit should not call create.
+        dispatch(prepareFinalObject("modifyAppCreated", true));
       }
-      
+
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       // For oldvalue display
       let oldcombinedArray = cloneDeep(combinedArray[0]);
       dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
-      if(combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA"){
+      if (combinedArray[0].connectionHolders && combinedArray[0].connectionHolders !== "NA") {
         combinedArray[0].connectionHolders[0].sameAsPropertyAddress = false;
         dispatch(prepareFinalObject("connectionHolders", combinedArray[0].connectionHolders));
         dispatch(
@@ -324,7 +320,7 @@ export const getData = async (action, state, dispatch) => {
             "props.isChecked",
             false
           )
-        ); 
+        );
         dispatch(
           handleField(
             "apply",
@@ -337,7 +333,7 @@ export const getData = async (action, state, dispatch) => {
           action.screenConfig,
           "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
           true
-        );       
+        );
       }
       let data = get(state.screenConfiguration.preparedFinalObject, "applyScreen")
       if (data.connectionType !== "Metered") {
@@ -443,15 +439,15 @@ export const getData = async (action, state, dispatch) => {
           );
         }
       }
-      if(propertyID){
+      if (propertyID) {
         let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-        getApplyPropertyDetails(queryObject,dispatch,propertyID)
+        getApplyPropertyDetails(queryObject, dispatch, propertyID)
       } else {
         let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
         dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
-      }  
+      }
       //For Modify Connection hide the connection details card
-      if(isModifyMode()){
+      if (isModifyMode()) {
         showHideFieldModifyConnection(action);
       }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
@@ -459,31 +455,31 @@ export const getData = async (action, state, dispatch) => {
     }
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-    getApplyPropertyDetails(queryObject,dispatch,propertyID)
+    getApplyPropertyDetails(queryObject, dispatch, propertyID)
   }
 };
 
-const getApplyPropertyDetails=async (queryObject,dispatch,propertyID)=>{
-    let payload = await getPropertyResults(queryObject, dispatch);
-    let propertyObj = payload.Properties[0];
-    if(!isActiveProperty(propertyObj)){
-      dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyObj.status}`, labelName: `Property Status is ${propertyObj.status}` }, "warning"));     
-      showHideFieldsFirstStep(dispatch,propertyObj.propertyId,false);
-    }
-    dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
-    dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
+const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
+  let payload = await getPropertyResults(queryObject, dispatch);
+  let propertyObj = payload.Properties[0];
+  if (!isActiveProperty(propertyObj)) {
+    dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyObj.status}`, labelName: `Property Status is ${propertyObj.status}` }, "warning"));
+    showHideFieldsFirstStep(dispatch, propertyObj.propertyId, false);
+  }
+  dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
+  dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
 }
 
 
-const propertyDetail = getPropertyDetails();
-const propertyIDDetails = getPropertyIDDetails();
-const ownerDetail = getOwnerDetails();
-const holderDetails = getHolderDetails();
+let propertyDetail = getPropertyDetails();
+let propertyIDDetails = getPropertyIDDetails();
+let ownerDetail = getOwnerDetails();
+let holderDetails = getHolderDetails();
 
-export const ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
-export const IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
-export const Details = getCommonCard({ propertyDetail });
-export const connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
+export let ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
+export let IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+export let Details = getCommonCard({ propertyDetail });
+export let connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
 
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
@@ -511,11 +507,14 @@ export const formwizardFourthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form4" },
-  children: {snackbarWarningMessage, summaryScreen },
+  children: { snackbarWarningMessage, summaryScreen },
   visible: false
 };
 
 const pageReset = (dispatch) => {
+  dispatch(handleField("apply",
+    "components",
+    "div", {}));
   dispatch(prepareFinalObject("WaterConnection", []));
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
@@ -523,6 +522,14 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("connectionHolders", []));
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", []));
+  propertyDetail = getPropertyDetails();
+  propertyIDDetails = getPropertyIDDetails();
+  ownerDetail = getOwnerDetails();
+  holderDetails = getHolderDetails();
+  ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
+  IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+  Details = getCommonCard({ propertyDetail });
+  connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
 }
 
 const screenConfig = {
@@ -588,14 +595,28 @@ const screenConfig = {
         toggleSewerageFeilds(action, false);
       }
     }
-    if (isModifyMode()){
+    if (isModifyMode()) {
       triggerModificationsDisplay(action, true);
     } else {
       triggerModificationsDisplay(action, false);
     }
     prepareDocumentsUploadData(state, dispatch);
     set(action, "screenConfig.components.div.children.stepper.props.steps", stepperData());
-    set(action,'screenConfig.components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props.labelKey',getHeaderLabel());
+    set(action, 'screenConfig.components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props.labelKey', getHeaderLabel());
+    dispatch(handleField("apply", "components", "div", get(action, "screenConfig.components.div", {})))
+    isMode = getQueryArg(window.location.href, "mode");
+    isMode = (isMode) ? isMode.toUpperCase() : "";
+    let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+    let action1 = getQueryArg(window.location.href, "action");
+    let modifyLink;
+    if (isMode === "MODIFY") {
+      modifyLink = `/wns/apply?applicationNumber=${applicationNumber}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=${action1}&mode=${isMode}`;
+    } else {
+      modifyLink = "/wns/apply"
+    }
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.url", modifyLink)
+    set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.isMode", isMode)
     return action;
   },
 
