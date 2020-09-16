@@ -191,7 +191,7 @@ class DynamicMdmsContainer extends Component {
           placeholder: {
             labelKey: moduleNameCaps + '_' + key.toUpperCase() + "_PLACEHOLDER"
           },
-          required: isRequired,
+          required: requiredValue,
           jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}` ,
           componentJsonpath : `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
           localePrefix: {

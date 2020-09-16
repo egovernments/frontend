@@ -336,14 +336,14 @@ export const newCollectionDetailsCard = getCommonCard(
                 fieldType : "autosuggest",
                 callBack : serviceCategoryChange,
                 className:"applicant-details-error autocomplete-dropdown",
-                isRequired : false
+                isRequired : true
               },
               {
                 key : 'serviceType',
                 callBack : serviceTypeChange,
                 fieldType : "autosuggest",
                 className:"applicant-details-error autocomplete-dropdown",
-                isRequired : false
+                isRequired : true
               }
             ],
             moduleName: "BillingService",
