@@ -354,8 +354,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "EDITRENEWAL" : "NewTL" }
+      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "edit" && get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "NEW" ? "NewTL": "EDITRENEWAL"}
     ];
+    console.log("===============",get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", ""));
+    debugger;
     if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
       // //Changing the format of FY
@@ -466,10 +468,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
         updatedTenant = get(updateResponse.Licenses[0], "tenantId");
         const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
+        debugger;
         const bsQueryObject = [
           { key: "tenantId", value: tenantId },
           { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
         ];
+        console.log("=======4==4=====", Licenses);
         setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
       } else {
         updatedApplicationNo = queryObject[0].applicationNumber;
