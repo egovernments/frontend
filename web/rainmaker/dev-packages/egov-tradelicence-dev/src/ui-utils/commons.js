@@ -354,7 +354,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "edit" && get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "NEW" ? "NewTL": "EDITRENEWAL"}
+      { key: "businessServices", value: getQueryArg(window.location.href, "action") === "EDITRENEWAL" ? "EDITRENEWAL" : "NewTL" }
     ];
     console.log("===============",get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", ""));
     debugger;
