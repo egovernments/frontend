@@ -101,6 +101,22 @@ export const payeeDetails = getCommonContainer({
             ""
           )
         );
+        dispatch(
+          handleField(
+            "pay",
+            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerName`,
+            "props.error",
+            false
+          )
+        );
+        dispatch(
+          handleField(
+            "pay",
+            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerMobileNo`,
+            "props.error",
+            false
+          )
+        );
       } else {
         dispatch(
           handleField(
