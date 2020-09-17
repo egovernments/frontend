@@ -8,7 +8,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject,
+  unMountScreen
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
@@ -135,7 +136,8 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
-
+  dispatch(unMountScreen("search"));
+  dispatch(unMountScreen("apply"));
   loadUlbLogo(tenantId);
 
   //Search details for given application Number
@@ -160,11 +162,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const length = payload && payload.Licenses.length > 0 ? get(payload, `Licenses`, []).length : 0;
     dispatch(prepareFinalObject("licenseCount", length));
     get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-    get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
-    ? setMultiOwnerForSV(action, true)
-    : setMultiOwnerForSV(action, false);
+      get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+        "."
+      )[0] === "INDIVIDUAL"
+      ? setMultiOwnerForSV(action, true)
+      : setMultiOwnerForSV(action, false);
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
