@@ -10,7 +10,7 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField ,unMountScreen} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setDocuments, setBusinessServiceDataToLocalStorage, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject, preparedFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, getSearchResultsForSewerage, waterEstimateCalculation, getDescriptionFromMDMS, findAndReplace, swEstimateCalculation, setWSDocuments, getWaterSource } from "../../../../ui-utils/commons";
@@ -92,6 +92,14 @@ const headerrow = getCommonContainer({
 });
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+  // dispatch(handleField("apply",
+  // "components",
+  // "div", {}));
+  // dispatch(handleField("search",
+  // "components",
+  // "div", {}));
+  dispatch(unMountScreen("apply"));
+  dispatch(unMountScreen("search"));
   const queryObj = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
@@ -652,6 +660,21 @@ const searchResults = async (action, state, dispatch, applicationNumber,processI
         dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
       }
     }
+
+    if(isModifyMode()){
+      let connectionNo= payload.WaterConnection[0].connectionNo;
+      let queryObjForSearchApplications=[{ key: "tenantId", value: tenantId },{ key: "connectionNumber", value: connectionNo }, { key: "isConnectionSearch", value: true }]
+      let oldApplicationPayload=await getSearchResults(queryObjForSearchApplications);
+      oldApplicationPayload.WaterConnection= oldApplicationPayload.WaterConnection.filter(row=>{
+        row.status=="Active"
+      })
+      if( oldApplicationPayload.WaterConnection.length>0){
+        dispatch(prepareFinalObject("WaterConnectionTemp",oldApplicationPayload.WaterConnection[0]))
+      }
+    }
+  
+
+
   } else if (service === serviceConst.SEWERAGE) {
     payload = [];
     payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
