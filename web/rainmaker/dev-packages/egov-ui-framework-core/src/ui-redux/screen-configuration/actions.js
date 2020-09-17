@@ -15,6 +15,13 @@ export const initScreen = (screenKey, screenConfig) => {
   };
 };
 
+export const unMountScreen = (screenKey) => {
+  return {
+    type: screenActionTypes.UNMOUNT_SCREEN,
+    screenKey
+  };
+};
+
 export const toggleSnackbar = (open, message, error) => {
   return {
     type: screenActionTypes.SHOW_NEW_TOAST,

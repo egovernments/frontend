@@ -7,6 +7,7 @@ import { localStorageGet, getTenantIdCommon } from "egov-ui-kit/utils/localStora
 import find from "lodash/find";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
+import { handleScreenConfigurationFieldChange as handleField ,unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -131,6 +132,14 @@ const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    // dispatch(handleField("apply",
+    // "components",
+    // "div", {}));
+    // dispatch(handleField("search-preview",
+    // "components",
+    // "div", {}));
+    dispatch(unMountScreen("apply"));
+    dispatch(unMountScreen("search-preview"));
     getMDMSData(action, dispatch);
     resetFieldsForConnection(state, dispatch);
     resetFieldsForApplication(state, dispatch);

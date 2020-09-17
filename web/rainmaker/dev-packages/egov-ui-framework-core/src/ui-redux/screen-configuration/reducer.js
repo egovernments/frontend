@@ -24,6 +24,14 @@ const screenConfiguration = (state = intialState, action) => {
           }
         }
       };
+    case screenActionTypes.UNMOUNT_SCREEN:
+      delete state.screenConfig[action.screenKey];
+      return {
+          ...state,
+          screenConfig: {
+            ...state.screenConfig,
+          }
+        };
     case screenActionTypes.HANDLE_SCREEN_CONFIGURATION_FIELD_CHANGE:
       const updatedScreenConfig = updateObjectWithComponentJsonPath(
         state.screenConfig[action.screenKey],

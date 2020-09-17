@@ -7,7 +7,7 @@ import {
 
   getCommonParagraph, getCommonTitle, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar ,unMountScreen} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { set } from "lodash";
 import cloneDeep from "lodash/cloneDeep";
@@ -515,6 +515,14 @@ const pageReset = (dispatch) => {
   dispatch(handleField("apply",
     "components",
     "div", {}));
+    // dispatch(handleField("search",
+    // "components",
+    // "div", {}));
+    // dispatch(handleField("search-preview",
+    // "components",
+    // "div", {}));
+    dispatch(unMountScreen("search"));
+    dispatch(unMountScreen("search-preview"));
   dispatch(prepareFinalObject("WaterConnection", []));
   dispatch(prepareFinalObject("SewerageConnection", []));
   dispatch(prepareFinalObject("applyScreen", {}));
