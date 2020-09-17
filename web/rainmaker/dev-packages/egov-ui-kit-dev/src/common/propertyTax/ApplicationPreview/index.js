@@ -23,6 +23,7 @@ import DocumentsInfo from "../Property/components/DocumentsInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import "./index.css";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 
 const innerDivStyle = {
@@ -69,7 +70,10 @@ class ApplicationPreview extends Component {
 
   componentDidMount = () => {
     this.setPropertyId();
-    const { location, fetchGeneralMDMSData, fetchProperties } = this.props;
+    const { location, fetchGeneralMDMSData, fetchProperties,fetchLocalizationLabel } = this.props;
+    const tenantId = getQueryValue(window.location.href, "tenantId");
+    fetchLocalizationLabel(locale, tenantId, tenantId);
+
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -124,7 +128,7 @@ class ApplicationPreview extends Component {
       "UsageCategoryDetail",
       "SubOwnerShipCategory",
     ]);
-    const tenantId = getQueryValue(window.location.href, "tenantId");
+    // const tenantId = getQueryValue(window.location.href, "tenantId");
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: this.getApplicationType().moduleName }
@@ -461,7 +465,7 @@ class ApplicationPreview extends Component {
 // }
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, ownProps) => {       
   const { common = {}, screenConfiguration = {} } = state;
   const { generalMDMSDataById } = common || {};
   const { propertiesById, loading, } = state.properties || {};
@@ -489,6 +493,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
+    fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
+
   };
 };
 
