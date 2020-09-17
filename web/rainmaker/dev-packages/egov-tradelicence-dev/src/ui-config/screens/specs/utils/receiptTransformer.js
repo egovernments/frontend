@@ -57,6 +57,7 @@ export const getMessageFromLocalization = code => {
 export const loadUlbLogo = tenantid => {
   var img = new Image();
   img.crossOrigin = "Anonymous";
+  var cbCode = tenantid.split(".")[1];
   img.onload = function() {
     var canvas = document.createElement("CANVAS");
     var ctx = canvas.getContext("2d");
@@ -66,7 +67,9 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  //img.src = `/pb-egov-assets/${tenantid}/logo.png`;
+  var imagePath = process.env.REACT_APP_IMAGE_PATH;
+  img.src = imagePath+`/${cbCode}/logo.png`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
