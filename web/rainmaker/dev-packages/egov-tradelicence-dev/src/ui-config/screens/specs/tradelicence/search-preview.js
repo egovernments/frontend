@@ -37,7 +37,7 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { adhocPopup } from "./applyResource/adhocPopup";
 
-const tenantId = getQueryArg(window.location.href, "tenantId");
+let tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
 
@@ -62,6 +62,7 @@ const getTradeTypeSubtypeDetails = payload => {
 };
 
 const searchResults = async (action, state, dispatch, applicationNo) => {
+ tenantId =  getQueryArg(window.location.href, "tenantId");
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNo }
@@ -138,7 +139,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
-
+  tenantId = getQueryArg(window.location.href, "tenantId");
   loadUlbLogo(tenantId);
 
   //Search details for given application Number
