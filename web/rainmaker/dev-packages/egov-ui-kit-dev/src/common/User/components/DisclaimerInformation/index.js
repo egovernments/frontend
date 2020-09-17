@@ -11,22 +11,22 @@ const DisclaimerInformation = () =>{
         <div className="DisclaimerInformation">
             <div>
                 <label style={{ color: 'red' }}>*</label>
-                <label style={{ font: '8px',fontFamily:'arial' }}>Website works well on these browser versions</label>
+                <label style={{ fontFamily:'Roboto',color:'whitesmoke' }}>Supported browser versions</label>
            
             <table className="tableStyle">
                 <tbody>
                     <tr>
                         <td className="tdStyle">
                         <img src={chrome} alt="Logo"/><br></br>
-                                <label> >V-81 </label>
+                                <label style={{color:'whitesmoke'}}> >V-81 </label>
                         </td>
                         <td className="tdStyle">
                         <img src={edge} alt="Logo" /><br></br>
-                        <label>>V-84 </label>
+                        <label style={{color:'whitesmoke'}}>>V-84 </label>
                         </td>
                         <td className="tdStyle">
                         <img src={firefox} alt="Logo" /><br></br>
-                        <label>>V-79 </label>
+                        <label style={{color:'whitesmoke'}}>>V-79 </label>
                         </td>
                         {/* <td className="tdStyle">
                         <img src={ie} alt="Logo"/> <br></br>
