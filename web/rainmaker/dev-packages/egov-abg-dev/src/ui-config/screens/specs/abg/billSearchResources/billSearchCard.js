@@ -81,10 +81,10 @@ export const billSearchCard = getCommonCard({
     labelName: "Search Bill",
     labelKey: "ABG_SEARCH_BILL_COMMON_HEADER"
   }),
-  subheader: getCommonSubHeader({
-    labelName: "Provide at least one parameter to search for an application",
-    labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
-  }),
+  // subheader: getCommonSubHeader({
+  //   labelName: "Provide at least one parameter to search for an application",
+  //   labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
+  // }),
   searchContainer: getCommonContainer({
     ulb: {
       uiFramework: "custom-containers-local",
@@ -185,6 +185,9 @@ export const billSearchCard = getCommonCard({
       placeholder: {
         labelName: "Enter Consumer Code",
         labelKey: "ABG_CONSUMER_CODE_PLACEHOLDER"
+      },
+      props:{
+        required: ifUserRoleExists("CITIZEN") ? true : false,   
       },
       required: ifUserRoleExists("CITIZEN") ? true : false,      
       visible: true,
