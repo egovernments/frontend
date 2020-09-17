@@ -32,11 +32,12 @@ class LanguageSelection extends Component {
        
         <div>
            <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
-        </div>               
+        </div>   
+         {/* <DisclaimerInformation/>             */}
       </Banner>
-      <div>
+       <div>
           <DisclaimerInformation/>
-      </div>
+      </div> 
       </div>     
     );
   }

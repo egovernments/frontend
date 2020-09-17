@@ -195,32 +195,9 @@ try {
 }
 //End of Mohalla data
 
-
-
-
   } catch (e) {
     console.log(e);
   }
-  // if (!demandId) {
-  //   try {
-  //     let payload = null;
-  //     payload = await httpRequest("post", "/egov-idgen/id/_generate", "", [], {
-  //       idRequests: [
-  //         {
-  //           idName: "",
-  //           format: "UC/[CY:dd-MM-yyyy]/[seq_uc_demand_consumer_code]",
-  //           tenantId: `${tenantId}`
-  //         }
-  //       ]
-  //     });
-    
-  //     loadServiceType(tenantId, dispatch);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
-
-  // return action;
 };
 
 const newCollection = {
