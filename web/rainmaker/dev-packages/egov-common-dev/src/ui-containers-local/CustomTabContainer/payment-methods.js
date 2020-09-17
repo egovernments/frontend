@@ -49,6 +49,12 @@ const onIconClick = (state, dispatch, index) => {
               bankBranch
             )
           );
+          dispatch(
+            prepareFinalObject(
+              "validIfscCode",
+              ifscCode
+            )
+          );
           dispatch(toggleSpinner());
         }
       })

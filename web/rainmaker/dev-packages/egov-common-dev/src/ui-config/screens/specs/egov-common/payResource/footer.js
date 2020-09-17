@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -372,8 +372,17 @@ const callBackForPay = async (state, dispatch) => {
     let branchName = get(finalReceiptData, "instrument.branchName", "");
     let bankName = get(finalReceiptData, "instrument.bank.name", "");
     if (
-      !validateString(ifscCode) || !validateString(branchName) || !validateString(bankName)
+      !validateString(ifscCode) || !validateString(branchName) || !validateString(bankName) || ifscCode!==get(
+        state.screenConfiguration.preparedFinalObject,
+        "validIfscCode",""
+      )
     ) {
+      dispatch(
+        prepareFinalObject("ReceiptTemp[0].instrument.bank.name", "")
+      );
+      dispatch(
+        prepareFinalObject("ReceiptTemp[0].instrument.branchName", "")
+      );
       dispatch(
         toggleSnackbar(
           true,
