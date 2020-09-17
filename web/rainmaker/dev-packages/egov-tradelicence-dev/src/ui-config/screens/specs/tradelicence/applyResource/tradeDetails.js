@@ -221,10 +221,12 @@ const tradeUnitCard = {
             props: {
               dropdownFields: [
                 {
+                  
                   key : 'tradeCategory',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
-                  callBack: tradeCategoryChange
+                  //callBack: tradeCategoryChange,
+                  defaultValue:"TRADE",
                 },
                 {
                   key : 'tradeType',
