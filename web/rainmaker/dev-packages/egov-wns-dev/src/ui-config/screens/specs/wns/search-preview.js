@@ -666,10 +666,10 @@ const searchResults = async (action, state, dispatch, applicationNumber,processI
       let queryObjForSearchApplications=[{ key: "tenantId", value: tenantId },{ key: "connectionNumber", value: connectionNo }, { key: "isConnectionSearch", value: true }]
       let oldApplicationPayload=await getSearchResults(queryObjForSearchApplications);
       oldApplicationPayload.WaterConnection= oldApplicationPayload.WaterConnection.filter(row=>{
-        row.status=="Active"
+        return row.applicationType!=="MODIFY_WATER_CONNECTION"
       })
       if( oldApplicationPayload.WaterConnection.length>0){
-        dispatch(prepareFinalObject("WaterConnectionTemp",oldApplicationPayload.WaterConnection[0]))
+        dispatch(prepareFinalObject("WaterConnectionTemp",oldApplicationPayload.WaterConnection))
       }
     }
   
