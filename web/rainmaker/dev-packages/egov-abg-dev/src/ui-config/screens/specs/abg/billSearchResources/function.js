@@ -42,8 +42,8 @@ export const searchApiCall = async (state, dispatch) => {
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill at least one field to start search",
-          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+          labelName: "Please fill valid fields to start search",
+          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
         },
         "warning"
       )
@@ -56,8 +56,8 @@ export const searchApiCall = async (state, dispatch) => {
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill at least one field to start search",
-          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+          labelName: "Please fill valid fields to start search",
+          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
         },
         "warning"
       )
