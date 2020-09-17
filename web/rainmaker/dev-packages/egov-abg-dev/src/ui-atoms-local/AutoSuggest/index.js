@@ -7,6 +7,8 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./index.css";
+import cloneDeep from "lodash/cloneDeep";
+
 
 const getSuggestions = suggestions => {
   return (
@@ -18,6 +20,7 @@ const getSuggestions = suggestions => {
     }))
   );
 };
+
 
 const styles = theme => ({
   ac_root: {
@@ -210,6 +213,17 @@ class IntegrationReactSelect extends React.Component {
         }
       })
     };
+    let suggestionArray = getSuggestions(suggestions)|| [] ;
+    try{
+      if(this.props.sort){
+        let suggs = cloneDeep(suggestionArray).sort((a,b) =>  a['label'].localeCompare(b['label']));
+        suggestionArray=suggs;   
+      }
+    } catch (error) {
+      console.error("Error in Sorting data",error);
+    }
+
+     
     return (
       <div className={classes.root}>
         <Select
@@ -224,7 +238,7 @@ class IntegrationReactSelect extends React.Component {
           menuProps={{
             className: className
           }}
-          options={getSuggestions(suggestions) || []}
+          options={suggestionArray || []}
           components={components}
           value={value }
           placeholder={placeholder}

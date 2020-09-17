@@ -142,6 +142,7 @@ export const billSearchCard = getCommonCard({
           masterName: "BusinessService"
         },
         sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
+        sort : true
       },
       required: true,
       jsonPath: "searchScreen.businesService",
