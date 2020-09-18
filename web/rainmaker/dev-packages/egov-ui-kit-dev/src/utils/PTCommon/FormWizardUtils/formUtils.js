@@ -176,7 +176,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.adhocExemptionReason = null;
   propertyDetails.adhocPenaltyReason = null;
   propertyDetails.owners = newProperty.owners;
-  propertyDetails.owners = propertyDetails.owners.filter((owner) => owner.status == 'ACTIVE')
+  propertyDetails.owners = propertyDetails.owners && propertyDetails.owners.filter((owner) => owner.status == 'ACTIVE')
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
@@ -194,7 +194,7 @@ export const convertToOldPTObject = (newObject) => {
     unit.unitArea = unit.constructionDetail.builtUpArea;
     return { ...unit }
   })
-  propertyDetails.units = propertyDetails.units.filter(unt=>unt.active);
+  propertyDetails.units = propertyDetails.units && propertyDetails.units.filter(unt=>unt.active);
 
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
