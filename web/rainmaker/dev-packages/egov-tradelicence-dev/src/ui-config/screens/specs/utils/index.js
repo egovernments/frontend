@@ -778,6 +778,19 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       `Licenses[0].tradeLicenseDetail.owners[${cardIndex}].mobileNumber`,
       ""
     );
+    if(!ownerNo){
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please enter Mobile Number to search !",
+            labelKey: "ERR_OWNER_NOT_ENTERED"
+          },
+          "error"
+        )
+      );
+      return;
+    }
     const owners = get(
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].tradeLicenseDetail.owners`,
