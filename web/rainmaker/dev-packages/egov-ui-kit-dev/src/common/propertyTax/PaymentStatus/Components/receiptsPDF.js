@@ -10,6 +10,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt, extraData) => {
   const state = store.getState();
+  debugger;
   if (extraData)
       {
         var stateCopy = JSON.parse(JSON.stringify(state));
@@ -320,6 +321,12 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
                     border: borderValue,
                   },
                 ],
+                [
+                  { text: "Remarks", border: borderKey, style: "receipt-table-key" },
+                  { text: details.propertyDetails[0].additionalDetails.remarks || "NA", border: borderValue },
+                  { text: " ", border: borderKey, style: "receipt-table-key" },
+                  { text: " ", border: borderValue },
+                ], 
               ],
             },
             layout: tableborder,
@@ -357,6 +364,36 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
             },
             layout: tableborder,
           },
+
+          { text: "ADDITIONAL PENALTY/REBATE REASON", style: "pt-reciept-citizen-subheader" },
+          {
+            style: "pt-reciept-citizen-table",
+            table: {
+              widths: receiptTableWidth,
+              body: [
+                [
+                  {
+                    text: "Penalty Reason",
+                    border: borderKey,
+                    style: "receipt-table-key"
+                  },
+                  { text: details.propertyDetails[0].adhocPenaltyReason || "NA", border: borderValue },
+                  {
+                    text: "Rebate Reason",
+                    border: borderKey,
+                    style: "receipt-table-key"
+                  },
+                  {
+                    text: details.propertyDetails[0].adhocExemptionReason || "NA",
+                    border: borderValue
+                  }
+                ]
+              ]
+            },
+            layout: tableborder
+          },
+
+
           { text: "PAYMENT INFORMATION", style: "pt-reciept-citizen-subheader" },
           {
             style: "pt-reciept-citizen-table",
@@ -374,8 +411,8 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
                   { text: receipts.payMode || "", border: borderValue },
                   // { text: "Transaction ID:", border: borderKey, style: "receipt-table-key" },
                   // { text: receipts.transactionId || "", border: borderValue },
-                  { text: "Bank Name:", border: borderKey, style: "receipt-table-key" },
-                  { text: receipts.bankName || "NA", border: borderValue },
+                  { text: "Bank/IFSC Code", border: borderKey, style: "receipt-table-key" },
+                  { text: receipts.bankName ||  receipts.ifscCode ?receipts.bankName + "/" + receipts.ifscCode :"NA", border: borderValue },
                 ],
                 [
                   { text: "Transaction ID/ Cheque/ DD No.:", border: borderKey, style: "receipt-table-key" },
@@ -405,7 +442,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
               { text: "4. Assessment & Payment is subject to verification/Scrutiny by competitive authority. \n"},
               { text: "5. Please deposit property tax dues for earlier years also. Ignore, if already paid. \n"},
               { text: "6. Citizen for Online Payments please refer to the link "},
-              {text: "https://mseva.lgpunjab.gov.in/ \n", bold: true, fontSize: 10, color: 'blue', decoration: 'underline'}
+              {text: "https://mseva.lgpunjab.gov.in/ \n", bold: true, fontSize: 8, color: 'blue', decoration: 'underline'}
             ],
             alignment: "left",
             style: "receipt-footer",
@@ -414,19 +451,19 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
         //define all the styles here
         styles: {
           "pt-reciept-citizen-subheader": {
-            fontSize: 10,
+            fontSize: 9,
             bold: true,
-            margin: [0, 16, 0, 8], //left top right bottom
+            margin: [0, 10, 0, 8], //left top right bottom
             color: "#484848",
           },
           "pt-reciept-citizen-table": {
-            fontSize: 10,
+            fontSize: 9,
             color: "#484848",
           },
           "receipt-assess-table": {
-            fontSize: 10,
+            fontSize: 9,
             color: "#484848",
-            margin: [0, 8, 0, 0],
+            margin: [0, 5, 0, 0],
           },
           "receipt-assess-table-header": {
             bold: true,
@@ -434,8 +471,8 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
             color: "#484848",
           },
           "receipt-header-details": {
-            fontSize: 9,
-            margin: [0, 0, 0, 8],
+            fontSize: 8,
+            margin: [0, 0, 0, 2],
             color: "#484848",
           },
           "receipt-table-key": {
@@ -447,7 +484,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
           },
           "receipt-logo-header": {
             color: "#484848",
-            fontSize: 16,
+            fontSize: 14,
             bold: true,
             decoration: "underline",
             // decorationStyle: "solid",
@@ -455,15 +492,15 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
           },
           "receipt-logo-sub-header": {
             color: "#484848",
-            fontSize: 13,
+            fontSize: 12,
             decoration: "underline",
             // decorationStyle: "solid",
             decorationColor: "#484848",
           },
           "receipt-footer": {
             color: "#484848",
-            fontSize: 8,
-            margin: [0, 0, 0, 5],
+            fontSize: 6,
+            margin: [0, 0, 0, 2],
           },
         },
       };

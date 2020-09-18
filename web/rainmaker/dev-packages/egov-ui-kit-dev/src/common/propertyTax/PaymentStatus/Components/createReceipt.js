@@ -116,6 +116,7 @@ const createReceiptDetails = (property, propertyDetails, receiptDetails, localiz
       AmountPaid: receiptDetails && get(receiptDetails, "Bill[0].billDetails[0].amountPaid").toString(),
       transactionId: receiptDetails && get(receiptDetails, "Bill[0].billDetails[0].receiptNumber"),
       bankName: receiptDetails && get(receiptDetails, "instrument.bank.name", "NA"),
+      ifscCode: receiptDetails && get(receiptDetails, "instrument.ifscCode","NA"),
       payMode: receiptDetails && get(receiptDetails, "instrument.instrumentType.name", "Net Banking"),
       pendingAmt: receiptDetails && (totalAmountToPay - totalAmountPaid).toString(),
       paymentDate: receiptDetails && getDateFromEpoch(get(receiptDetails, "Bill[0].billDetails[0].receiptDate")),
