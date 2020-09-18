@@ -89,7 +89,7 @@ const formConfig = {
         queryParams: [],
         requestBody: {},
         isDependent: true,
-        hierarchyType: "ADMIN",
+        hierarchyType: "REVENUE",
       },
 
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
