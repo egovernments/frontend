@@ -7,7 +7,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { propertySearchApiCall } from './functions';
-import { handlePropertySubUsageType, handleNA } from '../../utils';
+import { handlePropertySubUsageType, handleNA, resetFieldsForApplication } from '../../utils';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 let isMode = getQueryArg(window.location.href, "mode");
@@ -24,8 +24,22 @@ if(isMode==="MODIFY"){
   modifyLink="/wns/apply"
 }
 
+const resetScreen =()=>{
+   isMode = getQueryArg(window.location.href, "mode");
+isMode = (isMode) ? isMode.toUpperCase() : "";
+ applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+ connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+ tenantId = getQueryArg(window.location.href, "tenantId");
+ action = getQueryArg(window.location.href, "action");
 
+if(isMode==="MODIFY"){
+  modifyLink=`/wns/apply?applicationNumber=${applicationNumber}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=${action}&mode=${isMode}`;
+}else{
+  modifyLink="/wns/apply"
+}
+}
 export const propertyHeader = getCommonSubHeader({
+  lKey:resetScreen(),
   labelKey: "WS_COMMON_PROP_DETAIL",
   labelName: "Property Details"
 })
