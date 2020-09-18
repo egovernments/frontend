@@ -18,15 +18,15 @@ import { setServiceCategory } from "../../utils";
 const tenantId = getTenantId();
 
 
-const serviceTypeChange = (reqObj) => { 
+const serviceTypeChange = (reqObj) => {
   let { state, value, dispatch } = reqObj;
-  dispatch(prepareFinalObject('Demands[0].businessService',value));
+  dispatch(prepareFinalObject('Demands[0].businessService', value));
   const demandId = get(
     state.screenConfiguration.preparedFinalObject,
     "Demands[0].id",
     null
   );
- 
+
 
   if (!demandId && value) {
     const taxHeads = setTaxHeadFields(value, state, dispatch);
@@ -35,15 +35,15 @@ const serviceTypeChange = (reqObj) => {
 
 }
 
-const serviceCategoryChange = (reqObj) => { 
+const serviceCategoryChange = (reqObj) => {
   let { state, value, dispatch } = reqObj;
-  dispatch(prepareFinalObject('Demands[0].consumerType',value));
+  dispatch(prepareFinalObject('Demands[0].consumerType', value));
   const demandId = get(
     state.screenConfiguration.preparedFinalObject,
     "Demands[0].id",
     null
   );
-  resetTaxAmountFields(state,dispatch);
+  resetTaxAmountFields(state, dispatch);
   const serviceData = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
@@ -325,30 +325,32 @@ export const newCollectionDetailsCard = getCommonCard(
         //     }
         //   }
         // },
-        
-        dynamicMdmsServiceCategory : {
+
+        dynamicMdmsServiceCategory: {
           uiFramework: "custom-containers",
           componentPath: "DynamicMdmsContainer",
           props: {
             dropdownFields: [
               {
-                key : 'serviceCategory',
-                fieldType : "autosuggest",
-                callBack : serviceCategoryChange,
-                className:"applicant-details-error autocomplete-dropdown",
-                isRequired : false
+                key: 'serviceCategory',
+                fieldType: "autosuggest",
+                callBack: serviceCategoryChange,
+                className: "applicant-details-error autocomplete-dropdown",
+                isRequired: false,
+                requiredValue: true
               },
               {
-                key : 'serviceType',
-                callBack : serviceTypeChange,
-                fieldType : "autosuggest",
-                className:"applicant-details-error autocomplete-dropdown",
-                isRequired : false
+                key: 'serviceType',
+                callBack: serviceTypeChange,
+                fieldType: "autosuggest",
+                className: "applicant-details-error autocomplete-dropdown",
+                isRequired: false,
+                requiredValue: true
               }
             ],
             moduleName: "BillingService",
             masterName: "BusinessService",
-            rootBlockSub : 'serviceCategories',
+            rootBlockSub: 'serviceCategories',
             filter: "[?(@.type=='Adhoc')]"
           }
         },
@@ -427,7 +429,7 @@ export const newCollectionDetailsCard = getCommonCard(
   }
 );
 
-const resetTaxAmountFields = (state,dispatch)=>{
+const resetTaxAmountFields = (state, dispatch) => {
   const noOfPreviousTaxHeads = get(
     state.screenConfiguration,
     "preparedFinalObject.Demands[0].demandDetails",
