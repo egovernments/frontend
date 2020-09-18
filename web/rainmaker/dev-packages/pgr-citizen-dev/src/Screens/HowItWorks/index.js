@@ -11,11 +11,9 @@ const HowItWorks = (props) => {
         frameborder="0"
       /> */}
     <iframe
-    src="https://docs.google.com/gview?embedded=true&url=https://raw.githubusercontent.com/belegovgithub/webaccess/master/pdf/PGRUserManual.pdf#toolbar=0&scrollbar=0"
-    frameBorder="0"
-    scrolling="auto"
-    height="100%"
-    width="100%"
+    src="https://belegovgithub.github.io/webaccess/pdf/PGRUserManual.pdf#view=FitH&embedded=true"
+    style={{ width: "100%", height: "90%" }}
+    frameborder="0"
 ></iframe>
       
       

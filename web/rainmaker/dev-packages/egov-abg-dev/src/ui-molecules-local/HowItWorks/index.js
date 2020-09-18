@@ -19,11 +19,9 @@ const HowItWorks = (props) => {
         frameborder="0"
       /> */}
           <iframe
-    src="https://docs.google.com/gview?embedded=true&url=https://raw.githubusercontent.com/belegovgithub/webaccess/master/pdf/BillGenieUserManual_Citizen.pdf#toolbar=0&scrollbar=0"
-    frameBorder="0"
-    scrolling="auto"
-    height="100%"
-    width="100%"
+    src="https://belegovgithub.github.io/webaccess/pdf/BillGenieUserManual_Citizen.pdf#view=FitH&embedded=true.pdf"
+    style={{ width: "100%", height: "90%" }}
+    frameborder="0"
 ></iframe>
       {/* <p>
         Your web browser doesn't have a PDF plugin. Instead you can{" "}
