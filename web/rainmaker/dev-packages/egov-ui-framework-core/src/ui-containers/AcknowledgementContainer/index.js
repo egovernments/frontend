@@ -1,26 +1,28 @@
 import React from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { AckHeader, AckBody, AckFooter } from "../../ui-atoms";
-import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import "./index.css";
 
 class AcknowledgementContainer extends React.Component {
 
 	onclickFooter = (path)=>{
-		routeTo(path);
+		path &&	this.props.setRoute(path);
 	}
 
 	render() {
-		const { ackHeader, ackBody, ackFooter } = this.props;
+		const { header, body, footer } = this.props;
 
 		return (
 			<div className="common-div-css">
-				<AckHeader {...ackHeader}/>
+				<AckHeader {...header}/>
 				<div className="card-container">
-					<AckBody {...ackBody}/>
+					<AckBody {...body}/>
 				</div>
 				<div className="apply-wizard-footer">
 					{
-						ackFooter.map((config, index)=>{
+						footer.map((config, index)=>{
 							return <AckFooter 	
 								key={`act-footer-${index}`}
 								onClickFooter={this.onclickFooter}
@@ -37,4 +39,14 @@ class AcknowledgementContainer extends React.Component {
 		);
 	}
 }
-export default AcknowledgementContainer;
+
+const mapDispatchToProps = dispatch => {
+	return {
+		setRoute: route => dispatch(setRoute(route))
+	};
+  };
+
+export default connect(
+	null,
+	mapDispatchToProps
+  )(withRouter(AcknowledgementContainer));

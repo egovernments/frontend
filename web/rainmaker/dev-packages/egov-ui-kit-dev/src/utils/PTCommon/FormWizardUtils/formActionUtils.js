@@ -1,8 +1,7 @@
 
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { toggleSnackbarAndSetText, setRoute } from "egov-ui-kit/redux/app/actions";
 import { createPropertyPayload } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
-import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { hideSpinner } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getBusinessServiceNextAction } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
@@ -181,5 +180,7 @@ const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNum
 
 
 export const routeTo = (routeLink) => {
-    store.dispatch(setRoute(routeLink));
+    if(routeLink){
+        store.dispatch(setRoute(routeLink));
+    }
 }

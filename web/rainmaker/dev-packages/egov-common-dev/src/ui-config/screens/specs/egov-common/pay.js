@@ -11,7 +11,7 @@ import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
 import AmountToBePaid from "./payResource/amount-to-be-paid";
-import { prepareFinalObject ,handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject ,handleScreenConfigurationFieldChange as handleField, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
@@ -145,6 +145,7 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "pay",
     beforeInitScreen: (action, state, dispatch) => {
+        dispatch(unMountScreen("acknowledgement"));
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
