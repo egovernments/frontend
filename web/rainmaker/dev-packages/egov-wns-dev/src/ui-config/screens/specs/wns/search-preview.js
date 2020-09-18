@@ -669,7 +669,7 @@ const searchResults = async (action, state, dispatch, applicationNumber,processI
         return row.applicationType!=="MODIFY_WATER_CONNECTION"
       })
       if( oldApplicationPayload.WaterConnection.length>0){
-        dispatch(prepareFinalObject("WaterConnectionTemp",oldApplicationPayload.WaterConnection))
+        dispatch(prepareFinalObject("WaterConnectionOld",oldApplicationPayload.WaterConnection))
       }
     }
   

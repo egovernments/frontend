@@ -21,7 +21,7 @@ export const reviewModificationsEffectiveDate = {
     labelKey: "WS_OLD_LABEL_NAME"
   },
   {
-    jsonPath: "WaterConnectionTemp[0].dateEffectiveFrom",
+    jsonPath: "WaterConnectionOld[0].dateEffectiveFrom",
     callBack: convertEpochToDateAndHandleNA
   }
 )};
