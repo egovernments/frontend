@@ -938,7 +938,7 @@ export const tradeDetails = getCommonCard({
         labelName: "Enter No. Of Employee",
         labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
       },
-      pattern: getPattern("NoOfEmp"),
+      pattern:  /^ *[0-9]+ *$/,//getPattern("NoOfEmp"),
       jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
     })
   },
