@@ -195,12 +195,11 @@ const getMdmsData = async (state, dispatch, tenantId) => {
 const getYearsList = (startYear, state, dispatch) => {
   var currentYear = new Date().getFullYear(),
     years = [];
-  startYear = startYear || 1980;
-
+  startYear = startYear || 1980;  
   while (startYear <= currentYear) {
-    years.push({ code: (startYear++).toString(), name: (startYear++).toString() });
+    years.push({ code: (startYear).toString(), name: (startYear).toString() });
+    startYear++;
   }
-
   dispatch(prepareFinalObject("yearsList", years));
 };
 
