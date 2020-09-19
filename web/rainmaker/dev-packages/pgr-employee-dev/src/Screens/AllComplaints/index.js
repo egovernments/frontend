@@ -131,8 +131,12 @@ class AllComplaints extends Component {
               key: "status",
               value:
                 rawRole === "EMPLOYEE"
-                  ? "assigned,reassignrequested"
-                  : "assigned,open,reassignrequested"
+                  ? role === "csr"
+                    ? "assigned,open,reassignrequested"
+                    : "assigned,reassignrequested"
+                  : role === "csr"
+                    ? "assigned,open,reassignrequested"
+                    : "assigned,reassignrequested"
             }
           ],
           true,
