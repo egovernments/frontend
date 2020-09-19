@@ -1014,7 +1014,7 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
         "uomValue"
       ) {
         
-        if(getTLTenantId()==="pb.secunderabad"){
+        if(getTLTenantId()==="pb.secunderabad"||getTLTenantId()==="pb.testing"){
          
           const disabledValue = get(
             state.screenConfiguration.screenConfig["apply"],
