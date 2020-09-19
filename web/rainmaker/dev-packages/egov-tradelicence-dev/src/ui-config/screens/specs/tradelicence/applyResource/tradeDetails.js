@@ -901,7 +901,12 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
       },
       pattern: getPattern("GSTNo"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo"
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.gstNo",
+      title: {
+    value: "GST Format(2 digit state code >PAN Number> Entity number of Same PAN holder in state >Alphabet >Checksum digit(22AAAAA0000A1Z5)",
+    key: "TL_GST_FORMAT_TOOLTIP_MESSAGE"
+  },
+  infoIcon: "info_circle"
     }),
     tradeOperationalArea: getTextField({
       label: {
