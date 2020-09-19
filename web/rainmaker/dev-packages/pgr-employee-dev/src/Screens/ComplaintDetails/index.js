@@ -582,6 +582,7 @@ const mapStateToProps = (state, ownProps) => {
         action.employeeMobileNumber =
           assignee &&
           getPropertyFromObj(employeeById, assignee, "mobileNumber", "");
+        action.employeeName = getPropertyFromObj(employeeById, assignee, "name", "");
       }
     });
 

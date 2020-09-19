@@ -314,9 +314,9 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
               <Label
                 labelClassName="dark-color complaint-timeline-status"
                 containerStyle={statusContainerStyle}
-                label={`${"CS_COMMON_RE-ASSIGN REQUESTED"}`}
+                label={`${"CS_COMMON_RE-ASSIGN_REQUESTED_BY"}`}
               />
-
+              <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />
               <Label
                 labelClassName="rainmaker-small-font complaint-timeline-comments"
                 containerStyle={{ width: "192px" }}
