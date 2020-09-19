@@ -1,6 +1,19 @@
 import React from "react";
 
+const gethelpURL=()=>{
+  let hostname = window.location.hostname;
+  
+  if(hostname === 'localhost')
+    hostname  = "https://13.71.65.215.nip.io";
+  else  
+    hostname  = window.location.origin;
+  const url=new URL(hostname+"/filestore/v1/files/static?fileStoreId=PGRUserManual");
+  return url;
+
+}
+
 const HowItWorks = (props) => {
+  const helpURL =gethelpURL();
   return (
     <div style={{ height: "100vh" }}>
       {/* <iframe
@@ -11,7 +24,8 @@ const HowItWorks = (props) => {
         frameborder="0"
       /> */}
     <iframe
-    src="https://belegovgithub.github.io/webaccess/pdf/PGRUserManual.pdf#view=FitH&embedded=true"
+    // src="https://belegovgithub.github.io/webaccess/pdf/PGRUserManual.pdf#view=FitH&embedded=true"
+    src={helpURL}
     style={{ width: "100%", height: "90%" }}
     frameborder="0"
 ></iframe>
