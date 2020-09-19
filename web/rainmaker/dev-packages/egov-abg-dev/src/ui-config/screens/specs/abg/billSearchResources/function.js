@@ -43,7 +43,7 @@ export const searchApiCall = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill valid fields to start search",
-          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
+          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
         },
         "warning"
       )
@@ -57,7 +57,7 @@ export const searchApiCall = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill valid fields to start search",
-          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
+          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
         },
         "warning"
       )
