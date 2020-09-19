@@ -8,9 +8,22 @@ import React from "react";
 // import IconButton from "@material-ui/core/IconButton";
 // import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
 
+const gethelpURL=()=>{
+  let hostname = window.location.hostname;
+  
+  if(hostname === 'localhost')
+    hostname  = "https://13.71.65.215.nip.io";
+  else  
+    hostname  = window.location.origin;
+  const url=new URL(hostname+"/filestore/v1/files/static?fileStoreId=TLUserManual_Citizen");
+  return url;
 
+}
 
 const HowItWorks = (props) => {
+
+const helpURL =gethelpURL();
+
   return (
     <div style={{ height: "100vh" }}>
       {/* <iframe
@@ -18,10 +31,19 @@ const HowItWorks = (props) => {
         style={{ width: "100%", height: "90%" }}
         frameborder="0"
       /> */}
-          <iframe
+          {/* <iframe
     src="https://belegovgithub.github.io/webaccess/pdf/TLUserManual_Citizen.pdf#view=FitH&embedded=true"
-    style={{ width: "100%", height: "90%" }}
-    frameborder="0"
+    frameBorder="0"
+    scrolling="auto"
+    height="100%"
+    width="100%"
+></iframe>/filestore/v1/files/static?fileStoreId=TLUserManual_Citizen */}
+          <iframe
+    src = {helpURL}
+    frameBorder="0"
+    scrolling="auto"
+    height="100%"
+    width="100%"
 ></iframe>
       {/* <p>
         Your web browser doesn't have a PDF plugin. Instead you can{" "}
