@@ -3,6 +3,7 @@ import { Card, Image, Icon, Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import isEmpty from "lodash/isEmpty";
 import "./index.css";
+import LocationSearching from "@material-ui/icons/LocationSearching";
 
 const iconStyle = {
   marginRight: "13px",
@@ -32,6 +33,7 @@ class Details extends Component {
   };
 
   render() {
+    console.log("Check the props data ",this.props);
     const { status, complaint, applicationNo, description, submittedDate, address, addressDetail, mapAction, images, action, role } = this.props;
     const { houseNoAndStreetName, landmark, mohalla, city, locality } = addressDetail || "";
     const icon = {};
@@ -212,6 +214,15 @@ class Details extends Component {
                       labelStyle={{ color: "inherit" }}
                     />
                   </div>
+                )}
+                {addressDetail && addressDetail.latitude && addressDetail.longitude && (
+                    <div style={{display: 'flex',alignItems: 'center', paddingTop:"10px"}}>
+                      <LocationSearching style={{marginRight:"13px"}}/>
+                      <a href = {`https://maps.google.com/?q=${addressDetail.latitude},${addressDetail.longitude}`} 
+                        target="_blank" 
+                        style={{padding:"6px",borderRadius:"8px",backgroundColor:"#e2e2e2"}}>
+                          See location on map</a>
+                    </div> 
                 )}
                 {/* <div style={{ marginTop: 10 }}>
                   {mapAction && complaintLoc.lat && (
