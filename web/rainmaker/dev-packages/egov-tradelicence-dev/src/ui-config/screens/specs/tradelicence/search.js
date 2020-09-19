@@ -22,6 +22,7 @@ const tenant= getTenantId();
 const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
   dispatch(prepareFinalObject("LicensesTemp", []));
+  dispatch(prepareFinalObject("DynamicMdms", []));
   dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
 
