@@ -324,8 +324,6 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
       [],
       mdmsBody
     );
-    debugger;
-
     let OwnerTypeDocument = get(
       payload,
       "MdmsRes.PropertyTax.OwnerTypeDocument"

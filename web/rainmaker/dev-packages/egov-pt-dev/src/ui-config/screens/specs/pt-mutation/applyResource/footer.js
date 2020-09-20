@@ -213,7 +213,7 @@ const callBackForApply = async (state, dispatch) => {
   delete propertyPayload.ownershipCategoryTemp;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
     let  documentValue;
-    if(document.dropdown){
+    if(document.documents &&document.dropdown){
       documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT')?document.dropdown.value.split('.')[2]:document.dropdown.value;
       return {
         documentType: document.documents && documentValue ? documentValue : "",
@@ -224,28 +224,23 @@ const callBackForApply = async (state, dispatch) => {
       }
     }
 
-
   })
   let oldDocuments=[];
   oldDocuments=propertyPayload.documents&&Array.isArray(propertyPayload.documents)&&propertyPayload.documents.filter(document=>{
     return (document.documentType.includes('USAGEPROOF')|| document.documentType.includes('OCCUPANCYPROOF')|| document.documentType.includes('CONSTRUCTIONPROOF'))
   })
   oldDocuments=oldDocuments||[];
-  debugger;
-  console.log(newDocuments,"newDocuments");
-  debugger;
-  Object.keys(newDocuments).map((key) => {
-
-    if(key === undefined && fileStoreId.length)
+ let updatedData = Object.values(newDocuments).forEach(function (val) {
+  let tepfile=[];
+    if(val == undefined)
     {
-      propertyPayload.documents=[...newDocuments,...oldDocuments];
-
-    }
-    else{
-
-    }
-
-  })
+      return delete newDocuments[val];
+     }
+     else{
+      tepfile.push(val)
+     }
+     propertyPayload.documents=[...tepfile,...oldDocuments];
+   });    
 
   try {
     let queryObject = [
