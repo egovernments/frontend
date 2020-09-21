@@ -83,7 +83,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
   );
   let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
     let applicationDocument = {}
-    applicationDocuments.map(appDoc => {
+    applicationDocuments&&applicationDocuments.map(appDoc => {
       if (appDoc.documentType == mdmsDoc.documentType) {
         applicationDocument = { ...appDoc }
       }
@@ -312,6 +312,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     //------ removing null from document array ------
     let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
+    documents=documents.filter(item=> item.fileUrl&&item.fileName);
     set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
     //-----------------------------------------------
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");

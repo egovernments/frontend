@@ -270,7 +270,7 @@ export const callBackForNext = async (state, dispatch) => {
       setValidToFromVisibilityForApply(state, get(LicenseData, "licenseType"));
     }
 
-    const uploadedDocData = get(
+    let uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].tradeLicenseDetail.applicationDocuments",
       []
@@ -309,6 +309,7 @@ export const callBackForNext = async (state, dispatch) => {
         };
         dispatch(toggleSnackbar(true, updateMessage, "info"));
       }
+      uploadedDocData=uploadedDocData.filter(item=> item.fileUrl&&item.fileName)
       const reviewDocData =
         uploadedDocData &&
         uploadedDocData.map(item => {
