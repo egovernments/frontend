@@ -99,6 +99,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
       let borderKey = [true, true, false, true];
       let borderValue = [false, true, true, true];
       let receiptTableWidth = ["*", "*", "*", "*"];
+      let receiptTableWidthh = ["30%", "*"];
 
       let getOwnerDetails = (ownerArray, noOfColumns) => {
         const { propertyDetails } = details;
@@ -320,13 +321,20 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
                       : transform(propertyDetails[0].propertyType, "PropertyType"),
                     border: borderValue,
                   },
-                ],
+                ] 
+              ],
+            },
+            layout: tableborder,
+          },
+          {
+            style: "pt-reciept-citizen-table",
+            table: {
+              widths: receiptTableWidthh,
+              body: [
                 [
                   { text: "Remarks", border: borderKey, style: "receipt-table-key" },
-                  { text: details.propertyDetails[0].additionalDetails.remarks || "NA", border: borderValue },
-                  { text: " ", border: borderKey, style: "receipt-table-key" },
-                  { text: " ", border: borderValue },
-                ], 
+                  { text: details.propertyDetails[0].additionalDetails.remarks || "NA", border: borderValue }
+                ] 
               ],
             },
             layout: tableborder,
