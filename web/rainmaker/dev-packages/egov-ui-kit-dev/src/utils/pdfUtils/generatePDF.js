@@ -209,7 +209,7 @@ export const getMultiItems = (preparedFinalObject, cardInfo, sourceArrayJsonPath
     return multiItem;
 }
 export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER", hideHeader = false) => {
-    let multipleItems = itemsInfo[0].items.filter(item => item);
+    let multipleItems = (itemsInfo && itemsInfo.length && itemsInfo[0].items.filter(item => item)) || [];
     if (itemsInfo.length > 1) {
         let items = [];
         itemsInfo.map((item, index) => {
