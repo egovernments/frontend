@@ -557,7 +557,7 @@ export const ownerInfoInstitutional = {
           labelKey: "TL_NEW_OWNER_PHONE_PLACEHOLDER"
         },
         pattern: /^[0-9]{10,11}$/i,
-        required: true,
+        //required: true,
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber"
       }),
 
