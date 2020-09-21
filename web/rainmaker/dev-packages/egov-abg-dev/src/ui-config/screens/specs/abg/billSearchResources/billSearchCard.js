@@ -151,32 +151,32 @@ export const billSearchCard = getCommonCard({
         sm: 4
       },
 
-      beforeFieldChange: (action, state, dispatch) => {
-        const labelName = {
-          labelKey: `ABG_${action.value}_CONSUMER_CODE_LABEL`,
-          labelName: "Consumer Code"
-        }
-        const placeHolder = {
-          labelKey: `ABG_${action.value}_CONSUMER_CODE_PLACEHOLDER`,
-          labelName: "Enter Consumer Code"
-        }
-        dispatch(
-          handleField(
-            "billSearch",
-            "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
-            "props.label",
-            labelName
-          )
-        );
-        dispatch(
-          handleField(
-            "billSearch",
-            "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
-            "props.placeholders",
-            placeHolder
-          )
-        );
-      }
+      // beforeFieldChange: (action, state, dispatch) => {
+      //   const labelName = {
+      //     labelKey: `ABG_${action.value}_CONSUMER_CODE_LABEL`,
+      //     labelName: "Consumer Code"
+      //   }
+      //   const placeHolder = {
+      //     labelKey: `ABG_${action.value}_CONSUMER_CODE_PLACEHOLDER`,
+      //     labelName: "Enter Consumer Code"
+      //   }
+      //   dispatch(
+      //     handleField(
+      //       "billSearch",
+      //       "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
+      //       "props.label",
+      //       labelName
+      //     )
+      //   );
+      //   dispatch(
+      //     handleField(
+      //       "billSearch",
+      //       "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
+      //       "props.placeholders",
+      //       placeHolder
+      //     )
+      //   );
+      // }
     },
     consumerCode: getTextField({
       label: {
