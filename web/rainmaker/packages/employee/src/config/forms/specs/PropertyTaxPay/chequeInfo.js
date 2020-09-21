@@ -42,9 +42,9 @@ const formConfig = {
     BankName: {
       id: "BankName",
       required: true,
-      hideField: true,
+      hideField: false,
       type: "textfield",
-      disabled: true,
+      disabled: false,
       floatingLabelText: "TL_PAYMENT_BANK_LABEL",
       dropDownData: [{ label: "RBI", value: "10101" }],
       jsonPath: "Receipt[0].instrument.bank.name",
@@ -53,8 +53,8 @@ const formConfig = {
     BankBranch: {
       id: "BankBranch",
       required: true,
-      disabled: true,
-      hideField: true,
+      disabled: false,
+      hideField: false,
       type: "textfield",
       floatingLabelText: "PT_BANK_BRANCH",
       jsonPath: "Receipt[0].instrument.branchName",
