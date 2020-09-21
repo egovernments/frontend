@@ -671,6 +671,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       oldApplicationPayload.WaterConnection = oldApplicationPayload.WaterConnection.filter(row => {
         return row.applicationType !== "MODIFY_WATER_CONNECTION"
       })
+      const waterSource=oldApplicationPayload.WaterConnection[0].waterSource||'';
+      oldApplicationPayload.WaterConnection[0].waterSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[0];
+      oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
       if (oldApplicationPayload.WaterConnection.length > 0) {
         dispatch(prepareFinalObject("WaterConnectionOld", oldApplicationPayload.WaterConnection))
       }
