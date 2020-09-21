@@ -36,6 +36,8 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { adhocPopup } from "./applyResource/adhocPopup";
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
+import isEmpty from "lodash/isEmpty"; 
 
 let tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -167,17 +169,38 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-
-    if (status !== "FIELDINSPECTION") {
-      dispatch(
-       handleField(
-         "search-preview",
-         "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
-         "visible",
-         false
-       )
-     );
-   }
+    const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+    if (status === "FIELDINSPECTION"){
+    if (!isEmpty(businessServiceData)) {
+      const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+      const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
+      const state = states.filter(item => item.state === status);
+      const actions = state[0].actions;
+      for (var i = 0; i < actions.length; i++) {
+        if (actions[i].action === "ADHOC") {
+          dispatch(
+            handleField(
+              "search-preview",
+              "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+              "visible",
+              true
+            )
+          );
+          break;
+        }
+      }
+      }
+    } 
+  //   if (status !== "FIELDINSPECTION") {
+  //     dispatch(
+  //      handleField(
+  //        "search-preview",
+  //        "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+  //        "visible",
+  //        false
+  //      )
+  //    );
+  //  }
 
     const financialYear = get(
       state,
@@ -502,7 +525,7 @@ export const tradeReviewDetails = getCommonCard({
       rolePath: "user-info.roles",
       roles: ["TL_FIELD_INSPECTOR"]
     },
-    visible: (getQueryArg(window.location.href, "tenantId")==='pb.secunderabad')? true:false
+    visible: false
   },
   viewBreakupButton: getDialogButton(
     "VIEW BREAKUP",
