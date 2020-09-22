@@ -664,3 +664,14 @@ export const getAdminRole = state => {
     });
   return { hasAdminRole: hasAdminRole, configAdminRoles: configAdminRoles };
 };
+
+export const getMaxDateForDOB = ()=>{
+  var eighteenYearsAgo = new Date();
+  eighteenYearsAgo=eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear()-18);
+  var finDate = new Date(eighteenYearsAgo);
+  var month = finDate.getMonth() + 1;
+  month = month < 10 ? "0" + month : month;
+  var day = finDate.getDate() < 10 ? "0" + finDate.getDate() : finDate.getDate();
+  finDate = finDate.getFullYear() + "-" +month+ "-" + day;
+  return finDate;
+}
