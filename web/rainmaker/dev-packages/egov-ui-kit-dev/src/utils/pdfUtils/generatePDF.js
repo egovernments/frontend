@@ -602,22 +602,22 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     applicationData.cards.map(card => {
         switch (card.type) {
             case "singleItem":
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
                 break;
             case "multiItem":
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push(...getMultiItemCard(card.header, card.items, card.color));
                 }
                 break;
             case "estimate":
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push({ ...card.items });
                 }
                 break;
             default:
-                if (!card.hide) {
+                if (!card.hide && card.items && card.items.length) {
                     data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
         }
