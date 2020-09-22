@@ -276,7 +276,7 @@ const screenConfig = {
   name: "create",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
-    resetFields(state, dispatch);
+ //   resetFields(state, dispatch);
     const pickedTenant = getQueryArg(window.location.href, "tenantId");
     pickedTenant &&
       dispatch(prepareFinalObject("Employee[0].tenantId", pickedTenant));

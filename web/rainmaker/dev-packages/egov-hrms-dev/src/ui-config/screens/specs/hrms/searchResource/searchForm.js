@@ -209,36 +209,6 @@ export const searchForm = getCommonCard({
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
-      resetButton: {
-        componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-          // align: "center"
-        },
-        props: {
-          variant: "outlined",
-          style: {
-            color: "#FE7A51",
-            borderColor: "#FE7A51",
-            //   borderRadius: "2px",
-            width: "220px",
-            height: "48px",
-            margin: "8px",
-            float: "right"
-          }
-        },
-        children: {
-          buttonLabel: getLabel({
-            labelName: "Reset",
-            labelKey: "HRMS_SEARCH_RESET_BUTTON"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: resetFields
-        }
-      },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
@@ -254,7 +224,8 @@ export const searchForm = getCommonCard({
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
             width: "220px",
-            height: "48px"
+            height: "48px",
+            float: "right"
           }
         },
         children: {
@@ -267,7 +238,36 @@ export const searchForm = getCommonCard({
           action: "condition",
           callBack: searchApiCall
         }
-      }
+      },
+      resetButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+          // align: "center"
+        },
+        props: {
+          variant: "outlined",
+          style: {
+            color: "#FE7A51",
+            borderColor: "#FE7A51",
+            //   borderRadius: "2px",
+            width: "220px",
+            height: "48px",
+            margin: "8px"            
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Reset",
+            labelKey: "HRMS_SEARCH_RESET_BUTTON"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields
+        }
+      }      
     })
   })
 },{
