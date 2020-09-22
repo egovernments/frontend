@@ -8,7 +8,7 @@ const screenConfig = {
       moduleName: "egov-tradelicence",
       componentPath: "HowItWorks",
       props: {
-       // className: "payment-redirect-page"
+        className:  "common-div-css"
       }
     }
   }

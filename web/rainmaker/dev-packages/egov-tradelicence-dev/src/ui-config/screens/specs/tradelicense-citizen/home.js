@@ -46,7 +46,7 @@ const cardItems = [
       labelName: "How It Works"
     },
     icon: <HelpIcon />,
-    route: "how-it-works"
+    route: "how-it-works-tl"
   }
 
 
