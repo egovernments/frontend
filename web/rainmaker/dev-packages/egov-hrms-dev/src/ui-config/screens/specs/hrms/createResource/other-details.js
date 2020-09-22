@@ -5,6 +5,7 @@ import {
   getCommonSubHeader,
   getTextField,
   getCommonContainer,
+  getSelectField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
@@ -42,6 +43,7 @@ export const otherDetails = getCommonCard({
         eduDetailsCardContainer: getCommonContainer(
           {
             degree: {
+              ...getSelectField({
               uiFramework: "custom-containers-local",
               moduleName: "egov-hrms",
               componentPath: "AutosuggestContainer",
@@ -73,9 +75,10 @@ export const otherDetails = getCommonCard({
                 labelsFromLocalisation: true,
                 isClearable:true,
               },
-                
+            }), 
             },
             year: {
+              ...getSelectField({
               uiFramework: "custom-containers-local",
               moduleName: "egov-hrms",
               componentPath: "AutosuggestContainer",
@@ -102,6 +105,7 @@ export const otherDetails = getCommonCard({
                 labelsFromLocalisation: true,
                 isClearable:true,
               }
+            }),
             },
             university: {
               ...getTextField({
@@ -122,6 +126,7 @@ export const otherDetails = getCommonCard({
               })
             },
             stream: {
+              ...getSelectField({
               uiFramework: "custom-containers-local",
               moduleName: "egov-hrms",
               componentPath: "AutosuggestContainer",
@@ -150,6 +155,7 @@ export const otherDetails = getCommonCard({
                 labelsFromLocalisation: true,
                 isClearable:true,
               },
+            }),
             },
             remarks: {
               ...getTextField({
@@ -210,6 +216,7 @@ export const otherDetails = getCommonCard({
         testsDetailsCardContainer: getCommonContainer(
           {
             testName: {
+              ...getSelectField({
               uiFramework: "custom-containers-local",
               moduleName: "egov-hrms",
               componentPath: "AutosuggestContainer",
@@ -238,9 +245,10 @@ export const otherDetails = getCommonCard({
                 labelsFromLocalisation: true,
                 isClearable:true,
               },
-                
+            }),  
             },
             year: {
+              ...getSelectField({
               uiFramework: "custom-containers-local",
               moduleName: "egov-hrms",
               componentPath: "AutosuggestContainer",
@@ -267,6 +275,7 @@ export const otherDetails = getCommonCard({
                 labelsFromLocalisation: true,
                 isClearable:true,
               }
+            }),
             },
             remarks: {
               ...getTextField({
