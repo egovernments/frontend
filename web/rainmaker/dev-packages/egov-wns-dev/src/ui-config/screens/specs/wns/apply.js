@@ -271,14 +271,14 @@ export const getData = async (action, state, dispatch) => {
         payloadWater.WaterConnection[0].service = "Water";
         dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
         if (get(payloadWater, "WaterConnection[0].waterSource", null) && get(payloadWater, "WaterConnection[0].waterSubSource", null)) {
-          dispatch(prepareFinalObject("ws-services-masters.waterSource.selectedValues", [{
+          dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", [{
             waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
-            waterSubSource: get(payloadWater, "WaterConnection[0].waterSubSource", null)
+            waterSubSource: get(payloadWater, "WaterConnection[0].waterSourceSubSource", null)
           }]))
         } else if (get(payloadWater, "WaterConnection[0].waterSource", null)) {
-          dispatch(prepareFinalObject("ws-services-masters.waterSource.selectedValues", [{
+          dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", [{
             waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
-            waterSubSource: get(payloadWater, "WaterConnection[0].waterSubSource", null)
+            waterSubSource: get(payloadWater, "WaterConnection[0].waterSourceSubSource", null)
           }]))
         }
       }
