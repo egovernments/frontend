@@ -77,6 +77,7 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("searchScreen", {}));
     getMdmsData(dispatch);
     return action;
   },
