@@ -19,20 +19,11 @@ class PaymentHistory extends Component {
         };
     }
     getBillPeriod(billDetails = []) {
-       let updatedBillDetails = billDetails.filter(billDetail=>billDetail.amount!=0);
-
-        if(updatedBillDetails!=null && updatedBillDetails.length>0){
-            let billPeriod;
-            updatedBillDetails.map(unitBill=>{
-                billPeriod  = getFormattedDate(unitBill.fromPeriod) + ' to ' + getFormattedDate(unitBill.toPeriod);
-            })
-            return billPeriod;
-        }
-
-        else{
-            const billPeriod = getFormattedDate(billDetails[0].fromPeriod) + ' to ' + getFormattedDate(billDetails[0].toPeriod);
-            return billPeriod; 
-        }
+        debugger;
+        console.log(billDetails,"billDetails");
+        let latest = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
+        const billPeriod = getFormattedDate(latest[latest.length - 1].fromPeriod) + ' to ' + getFormattedDate(latest[0].toPeriod);
+        return billPeriod;
 
     }
     getTransformedPaymentHistory() {
@@ -55,7 +46,7 @@ class PaymentHistory extends Component {
         const { Payments = []} = this.props;
         const { activePayments = Payments.filter(pp => pp.paymentStatus != "CANCELLED") ,downloadReceipt} = this.props;
         const paymentHistoryItems = activePayments.map((payment, index) => {
-           const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
+            const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
                 <div>
                     {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
