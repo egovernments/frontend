@@ -169,13 +169,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
+    const workflowCode = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].workflowCode"
+    );
+
     const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
     if (status === "FIELDINSPECTION"){
     if (!isEmpty(businessServiceData)) {
-      const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+      const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode?workflowCode:"NewTL")
       const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
-      const state = states.filter(item => item.state === status);
-      const actions = state[0].actions;
+      const state = states && states.filter(item => item.state === status);
+      const actions = state && state[0].actions;
       for (var i = 0; i < actions.length; i++) {
         if (actions[i].action === "ADHOC") {
           dispatch(
