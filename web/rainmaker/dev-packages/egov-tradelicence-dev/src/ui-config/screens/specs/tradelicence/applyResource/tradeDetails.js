@@ -51,7 +51,6 @@ const tradeTypeChange = (reqObj) => {
     console.log(e);
   }
 }
-
 const tradeSubTypeChange = (reqObj) => {
   try {
      
@@ -69,7 +68,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
             "props.value",
             currentObject[0].uom
           )
@@ -83,7 +82,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.required",
             true
           )
@@ -91,7 +90,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.disabled",
             false
           )
@@ -100,7 +99,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.required",
             false
           )
@@ -109,7 +108,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.disabled",
             true
           )
@@ -118,7 +117,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
             "props.value",
             ""
           )
@@ -126,7 +125,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.value",
             ""
           )
@@ -147,7 +146,7 @@ const tradeSubTypeChange = (reqObj) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item0.children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOMValue",
             "props.error",
             false
           )
@@ -227,18 +226,25 @@ const tradeUnitCard = {
                   className:"applicant-details-error autocomplete-dropdown",
                   //callBack: tradeCategoryChange,
                   defaultValue:"TRADE",
+                  isRequired : false,
+                  requiredValue : true
                 },
                 {
                   key : 'tradeType',
                   fieldType : "autosuggest",
                   className:"applicant-details-error autocomplete-dropdown",
-                  callBack: tradeTypeChange
+                  callBack: tradeTypeChange,
+                  isRequired : false,
+                  requiredValue : true
                 },
                 {
                   key : 'tradeSubType',
                   callBack: tradeSubTypeChange,
                   className:"applicant-details-error autocomplete-dropdown",
-                  fieldType : "autosuggest"
+                  fieldType : "autosuggest",
+                  isRequired : false,
+                  requiredValue : true
+
                 }
               ],
               moduleName: "TradeLicense",
@@ -842,6 +848,8 @@ export const tradeDetails = getCommonCard({
             isDisabled:true,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            isRequired : false,
+            requiredValue : true
           },
           {
             defaultValue:"IMMOVABLE.PUCCA",
@@ -850,6 +858,8 @@ export const tradeDetails = getCommonCard({
             callBack : structureSubTypeChange,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            isRequired : false,
+            requiredValue : true
           }
         ],
         moduleName: "common-masters",
@@ -1013,40 +1023,12 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
         multiItemContent[variable].props.jsonPath.split(".").pop() ===
         "uomValue"
       ) {
-        
-        if(getTLTenantId()==="pb.secunderabad"||getTLTenantId()==="pb.testing"){
-         
-          const disabledValue = get(
-            state.screenConfiguration.screenConfig["apply"],
-            `${multiItemContent[variable].componentJsonpath}.props.disabled`,
-            false
-          );
-          multiItemContent[variable].props.disabled = disabledValue;
-
-          const requiredValue = get(
-            state.screenConfiguration.screenConfig["apply"],
-            `${multiItemContent[variable].componentJsonpath}.props.required`,
-            true
-          );
-          multiItemContent[variable].props.required = requiredValue;
-
-        }else{
-         
-          const disabledValue = get(
-            state.screenConfiguration.screenConfig["apply"],
-            `${multiItemContent[variable].componentJsonpath}.props.disabled`,
-            true
-          );
-          multiItemContent[variable].props.disabled = disabledValue;
-
-          const requiredValue = get(
-            state.screenConfiguration.screenConfig["apply"],
-            `${multiItemContent[variable].componentJsonpath}.props.required`,
-            false
-          );
-          multiItemContent[variable].props.required = requiredValue;
-        }
-       
+        const disabledValue = get(
+          state.screenConfiguration.screenConfig["apply"],
+          `${multiItemContent[variable].componentJsonpath}.props.disabled`,
+          true
+        );
+        multiItemContent[variable].props.disabled = disabledValue;
       }
     }
   }
