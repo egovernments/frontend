@@ -17,13 +17,13 @@ export const getQueryRedirectUrl = () => {
     returnUrl= modeaction?returnUrl+'&modeaction='+modeaction:returnUrl;
     return returnUrl;
   } else {
-    url = url + '?'
+    url =url.includes('?')?url: url + '?';
     let applicationNo = getQueryArg(window.location.href, "applicationNumber");
     const connectionNo = getQueryArg(window.location.href, "connectionNumber");
     const actionType = getQueryArg(window.location.href, "action");
-    url = applicationNo ? url + `&applicationNumber=${applicationNo}` : url;
-    url = connectionNo ? url + `&connectionNumber=${connectionNo}` : url;
-    url = actionType ? url + `&action=${actionType}` : url;
+    url = applicationNo &&!url.includes('applicationNumber') ? url + `&applicationNumber=${applicationNo}` : url;
+    url = connectionNo  &&!url.includes('connectionNumber')? url + `&connectionNumber=${connectionNo}` : url;
+    url = actionType  &&!url.includes('action')? url + `&action=${actionType}` : url;
     return url;
   }
 

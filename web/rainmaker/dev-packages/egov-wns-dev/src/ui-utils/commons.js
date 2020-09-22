@@ -141,6 +141,7 @@ export const getSearchResults = async queryObject => {
             return response;
         }
         let result = findAndReplace(response, null, "NA");
+        result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
@@ -1962,7 +1963,10 @@ export const isActiveProperty = (propertyObj) =>{
     }
     return true;
 }
-
+export const isEditAction = () =>{
+    let isMode = getQueryArg(window.location.href, "action");
+    return (isMode && isMode.toUpperCase() === 'EDIT');
+}
 export const isModifyMode = () =>{
     let isMode = getQueryArg(window.location.href, "mode");
     return (isMode && isMode.toUpperCase() === 'MODIFY');

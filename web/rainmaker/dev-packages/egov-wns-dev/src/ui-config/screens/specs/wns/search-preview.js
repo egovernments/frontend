@@ -98,6 +98,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   // "div", {}));
   dispatch(unMountScreen("apply"));
   dispatch(unMountScreen("search"));
+  dispatch(prepareFinalObject("WaterConnection",[]));
+  dispatch(prepareFinalObject("SewerageConnection",[]));
+  dispatch(prepareFinalObject("WaterConnectionOld",[]));
+  dispatch(prepareFinalObject("SewerageConnectionOld",[]));
   const queryObj = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
@@ -671,6 +675,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       oldApplicationPayload.WaterConnection = oldApplicationPayload.WaterConnection.filter(row => {
         return row.applicationType !== "MODIFY_WATER_CONNECTION"
       })
+      const waterSource=oldApplicationPayload.WaterConnection[0].waterSource||'';
+      oldApplicationPayload.WaterConnection[0].waterSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[0];
+      oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
       if (oldApplicationPayload.WaterConnection.length > 0) {
         dispatch(prepareFinalObject("WaterConnectionOld", oldApplicationPayload.WaterConnection))
       }
@@ -691,6 +698,18 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       } else {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", true);
+      }
+      if (isModifyMode()) {
+        let connectionNo = payload.SewerageConnections[0].connectionNo;
+        let queryObjForSearchApplications = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNo }, { key: "isConnectionSearch", value: true }]
+        let oldApplicationPayload = await getSearchResultsForSewerage(queryObjForSearchApplications,dispatch);
+        oldApplicationPayload.SewerageConnections = oldApplicationPayload.SewerageConnections.filter(row => {
+          return row.applicationType !== "MODIFY_SEWERAGE_CONNECTION"
+        })
+             if (oldApplicationPayload.SewerageConnections.length > 0) {
+          dispatch(prepareFinalObject("SewerageConnectionOld[0]", oldApplicationPayload.SewerageConnections[0]))
+          dispatch(prepareFinalObject("WaterConnectionOld[0]",oldApplicationPayload.SewerageConnections[0]));
+        }
       }
     }
     //connection number display

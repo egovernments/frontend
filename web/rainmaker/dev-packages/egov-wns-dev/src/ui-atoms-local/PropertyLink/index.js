@@ -27,9 +27,9 @@ class AddLinkForProperty extends React.Component {
       let applicationNo = getQueryArg(window.location.href, "applicationNumber");
       const connectionNo = getQueryArg(window.location.href, "connectionNumber");
       const actionType = getQueryArg(window.location.href, "action");
-      link = applicationNo ? link + `&applicationNumber=${applicationNo}` : link;
-      link = connectionNo ? link + `&connectionNumber=${connectionNo}` : link;
-      link = actionType ? link + `&action=${actionType}` : link;
+      link = applicationNo && !link.includes('applicationNumber') ? link + `&applicationNumber=${applicationNo}` : link;
+      link = connectionNo&& !link.includes('connectionNumber') ? link + `&connectionNumber=${connectionNo}` : link;
+      link = actionType && !link.includes('action')? link + `&action=${actionType}` : link;
     }
 
 
