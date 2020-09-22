@@ -617,9 +617,20 @@ const screenConfig = {
     let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
     let tenantId = getQueryArg(window.location.href, "tenantId");
     let action1 = getQueryArg(window.location.href, "action");
+
+let modeaction1 = getQueryArg(window.location.href, "modeaction");
+
+let mode = getQueryArg(window.location.href, "mode");
     let modifyLink;
     if (isMode === "MODIFY") {
-      modifyLink = `/wns/apply?applicationNumber=${applicationNumber}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=${action1}&mode=${isMode}`;
+      modifyLink = `/wns/apply?`;
+      modifyLink = applicationNumber ? modifyLink + `applicationNumber=${applicationNumber}` : modifyLink;
+      modifyLink = connectionNumber ? modifyLink + `&connectionNumber=${connectionNumber}` : modifyLink;
+      modifyLink = action1 ? modifyLink + `&action=${action1}` : modifyLink;
+      modifyLink = modeaction1 ? modifyLink + `&modeaction=${modeaction1}` : modifyLink;
+      modifyLink = isMode ? modifyLink + `&mode=${isMode}` : modifyLink;
+      modifyLink = tenantId ? modifyLink + `&tenantId=${tenantId}` : modifyLink;
+      
     } else {
       modifyLink = "/wns/apply"
     }
