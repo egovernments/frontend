@@ -54,7 +54,9 @@ margin-top: 0px !important;
   margin-top: 10px;
   background-color: white !important;
  }
-
+ .property-buttons{
+  display: block;
+}
  @media only screen and (max-width: 768px) {
   #material-ui-resetButton{
       float:none !important;
