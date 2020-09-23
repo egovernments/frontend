@@ -75,14 +75,16 @@ export const searchResults = {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Status",
         labelKey: "TL_COMMON_TABLE_COL_STATUS",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
 
