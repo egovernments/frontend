@@ -71,7 +71,9 @@
         display: contents;
         text-align: center;
     } 
-         
+    #custom-containers-genderRadioGroup{ div{
+        display: inline-flex!important;
+      }  } 
   }
   @media only screen and (min-width: 768px) {
   
@@ -80,9 +82,11 @@
         margin-top: -50px;
 
     }
-      
+    #custom-containers-genderRadioGroup{ div{
+        display: inline-flex!important;
+      }  }
   }
-  
+
   
   #material-ui-searchPropertyDetails div div div div div div button span span span span {
       font-size: 14px!important;
