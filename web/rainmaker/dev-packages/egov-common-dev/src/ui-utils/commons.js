@@ -10,6 +10,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import orderBy from "lodash/orderBy";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -525,20 +526,23 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
-      console.info("for pdf download==",payloadReceiptDetails);
+      
       var payments = [];
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
-        console.log("Could not find any receipts");
-        store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
+         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
           , "error"));
         return;
       }
-      else{
-        console.info("some payment details are present.")   
+      else{       
         //If payerName is null set the paidBy for payerName
         payloadReceiptDetails.Payments[0].payerName = !payloadReceiptDetails.Payments[0].payerName?payloadReceiptDetails.Payments[0].paidBy:payloadReceiptDetails.Payments[0].payerName;
+        //Added sorting for Receipt details
+        const billAccountDetailsSorted=  orderBy(
+          payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails,
+          ["amount"],
+          ["desc"]);       
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails = billAccountDetailsSorted;
         payments.push(payloadReceiptDetails.Payments[0]);
-
         const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
         if (oldFileStoreId) {
           downloadReceiptFromFilestoreID(oldFileStoreId, mode)

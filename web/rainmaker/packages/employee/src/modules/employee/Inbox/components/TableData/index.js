@@ -533,6 +533,7 @@ class TableData extends Component {
       });
       this.hideLoading()
     } catch (e) {
+      console.error('Error while loading:', e);
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
     prepareFinalObject("InboxData", [...inboxData]);
