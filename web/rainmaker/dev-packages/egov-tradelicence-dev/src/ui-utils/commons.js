@@ -174,7 +174,20 @@ export const updatePFOforSearchResults = async (
 
   if (payload && payload.Licenses) {
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
-  }
+    let structureType=get(payload,"Licenses[0].tradeLicenseDetail.structureType","")
+    let tradeUnits=get(payload,"Licenses[0].tradeLicenseDetail.tradeUnits",[]);
+
+    // GOODS.MANUFACTURE.TST-1
+    dispatch(prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues[0].structureType", structureType&&structureType.split('.')[0]));
+    dispatch(prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType",structureType));
+    tradeUnits.map((tradeUnit,ind)=>{
+
+      dispatch(prepareFinalObject(`DynamicMdms.TradeLicense.tradeUnits.selectedValues[${ind}].tradeCategory`, tradeUnit&&tradeUnit.tradeType&&tradeUnit.tradeType.split('.')[0]));
+      dispatch(prepareFinalObject(`DynamicMdms.TradeLicense.tradeUnits.selectedValues[${ind}].tradeType`, tradeUnit&&tradeUnit.tradeType&&tradeUnit.tradeType.split('.')[1]));
+      dispatch(prepareFinalObject(`DynamicMdms.TradeLicense.tradeUnits.selectedValues[${ind}].tradeSubType`,tradeUnit&&tradeUnit.tradeType));
+  
+    })
+      }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
   if (isEditRenewal) {

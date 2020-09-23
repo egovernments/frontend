@@ -350,11 +350,13 @@ const setSearchResponse = async (
   }
   generateBill(dispatch, applicationNumber, tenantId, status);
 };
-
+const beforeInitFn =async(tenantId)=>{
+  loadUlbLogo(tenantId);
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
-  beforeInitScreen: (action, state, dispatch) => {
+  beforeInitScreen:  (action, state, dispatch) => {
     let applicationNumber =
       getQueryArg(window.location.href, "applicationNumber") ||
       get(
@@ -362,7 +364,7 @@ const screenConfig = {
         "FireNOCs[0].fireNOCDetails.applicationNumber"
       );
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    loadUlbLogo(tenantId);
+  beforeInitFn(tenantId);
     generateBill(dispatch, applicationNumber, tenantId);
     const queryObject = [
       { key: "tenantId", value: tenantId },
