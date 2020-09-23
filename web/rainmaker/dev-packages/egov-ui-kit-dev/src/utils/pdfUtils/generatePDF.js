@@ -92,6 +92,18 @@ const getLabel = (value, type = 'key') => {
                 ]
             }
             break;
+        case 'nonZero':
+            label = {
+                "text": value ? value : '0',
+                "style": "pdf-card-value",
+                "border": [
+                    false,
+                    false,
+                    false,
+                    false
+                ]
+            }
+            break;
         default:
             label = {
                 "text": value ? value : ' ',
@@ -317,7 +329,7 @@ export const getEstimateCardDetails = (fees = [], color) => {
     fees.map(fee => {
         let row = []
         row.push(getLabel(getLocaleLabels(fee.name.labelName, fee.name.labelKey), 'value'))
-        row.push(getLabel(fee.value, 'value'))
+        row.push(getLabel(fee.value, 'nonZero'))
         row.push(getLabel(' ', 'value'))
         card.push(row);
     })
@@ -397,7 +409,6 @@ const getHeaderCard = (applicationData, logo) => {
 
 }
 export const generatePDF = (logo, applicationData = {}, fileName) => {
-     
     logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
