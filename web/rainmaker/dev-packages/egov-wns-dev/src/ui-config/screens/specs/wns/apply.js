@@ -41,6 +41,8 @@ import { triggerModificationsDisplay } from "./../utils/index";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
+
+import './index.css'
 let isMode = isModifyMode();
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {

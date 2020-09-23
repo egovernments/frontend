@@ -68,7 +68,16 @@ margin-top: 0px !important;
       display: contents;
       text-align: center;
   } 
-       
+  .wns-stepper{
+    div{
+      padding: 15px 0px 0px!important;
+    }
+  }   
+  .property-buttons{
+    display: flex;
+    flex-direction: column;
+  
+  }
 }
 @media only screen and (min-width: 768px) {
 
@@ -79,9 +88,18 @@ margin-top: 0px !important;
   }
   .wns-stepper{
     div{
-      padding: 15px 0px 0px;
+      padding: 15px 0px 0px!important;
     }
   }
+  #custom-containers-genderRadioGroup{ div{
+    display: inline-flex!important;
+  }
+}
+.property-buttons{
+  display: flex;
+  flex-direction: column;
+
+}
 }
 
 
