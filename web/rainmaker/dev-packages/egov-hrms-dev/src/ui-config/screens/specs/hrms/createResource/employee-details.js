@@ -7,7 +7,7 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTodaysDateInYMD } from "../../utils";
+import { getTodaysDateInYMD, getMaxDateForDOB } from "../../utils";
 
 export const employeeDetails = getCommonCard({
   header: getCommonTitle(
@@ -125,7 +125,8 @@ export const employeeDetails = getCommonCard({
         jsonPath: "Employee[0].user.dob",
         props: {
           inputProps: {
-            max: getTodaysDateInYMD()
+            //max: getTodaysDateInYMD()
+            max: getMaxDateForDOB()
           }
         }
       })

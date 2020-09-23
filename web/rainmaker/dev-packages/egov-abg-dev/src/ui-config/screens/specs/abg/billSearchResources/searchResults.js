@@ -71,49 +71,56 @@ export const searchResults = {
         labelKey: "BUSINESS_SERVICE",
         labelName: "Business Service",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelKey: "RECEIPT_KEY",
         labelName: "Receipt Key",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Bill Key",
         labelKey: "BILL_KEY",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Bill Id",
         labelKey: "BILL_ID",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Bill Search Url",
         labelKey: "BILL_SEARCH_URL",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Advance Payment",
         labelKey: "ADVANCE_PAYMENT",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       }
     ],

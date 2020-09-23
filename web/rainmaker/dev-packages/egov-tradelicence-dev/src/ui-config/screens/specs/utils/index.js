@@ -1443,11 +1443,13 @@ export const validateFields = (
       ) {
         isFormValid = false;
       } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
+        
         let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+        let {index=0}=fields[variable];
         dropdownFields.forEach((item, i) => {
           let isValid = get(
             state.screenConfiguration.preparedFinalObject ,
-            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[0].${item.key}`,
+            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${item.key}`,
             ''
           );
           if(isValid == '' || isValid == 'none') {

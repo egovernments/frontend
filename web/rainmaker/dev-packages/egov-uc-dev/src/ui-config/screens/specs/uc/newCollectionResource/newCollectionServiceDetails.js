@@ -444,8 +444,8 @@ const setTaxHeadFields = (action, state, dispatch) => {
       state.screenConfiguration,
       "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",
       {}
-    );
-    const matchingTaxHeads = taxHeadMasters.filter(
+    );    
+    const matchingTaxHeads = taxHeadMasters.filter(      
       item => item.service === action.value
     );
     if (matchingTaxHeads && matchingTaxHeads.length > 0) {
@@ -462,7 +462,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
       );
       const taxFieldKeys = Object.keys(taxFields).filter(item =>
         item.startsWith("taxheadField_")
-      );
+      );     
       if (noOfPreviousTaxHeads > 0) {
         for (let i = 0; i < taxFieldKeys.length; i++) {
           dispatch(
@@ -484,8 +484,8 @@ const setTaxHeadFields = (action, state, dispatch) => {
         }
         dispatch(prepareFinalObject(`Challan[0].amount`, []));
       }
-      //Show new tax head fields
-      matchingTaxHeads.forEach((item, index) => {
+      //Show new tax head fields      
+      matchingTaxHeads.forEach((item, index) => {       
         dispatch(
           prepareFinalObject(
             `Challan[0].amount[${index}].taxHeadCode`,
@@ -516,8 +516,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
                 .split(".")
                 .join("_")}`,
               required: item.isRequired || false,
-              //pattern: getPattern("NonZeroAmount"),
-               pattern:item.isRequired ? getPattern("NonZeroAmount"):getPattern("Amount"),
+              pattern:item.isRequired ? getPattern("NonZeroAmount"):getPattern("Amount"),
              
               errorMessage: "Invalid Amount", 
               visible: true,
