@@ -180,7 +180,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
             style: "pt-reciept-citizen-table",
             margin: [0, 0, 0, 18],
             table: {
-              widths: [50, "*", 100],
+              widths: [50, "*", 127],
               body: [
                 [
                   {
