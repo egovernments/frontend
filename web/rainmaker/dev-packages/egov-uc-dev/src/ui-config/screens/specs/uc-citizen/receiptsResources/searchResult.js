@@ -46,7 +46,8 @@ export const searchResult = {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       }
     ],
