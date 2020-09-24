@@ -148,10 +148,27 @@ export const callBackForNext = async (state, dispatch) => {
         };
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
         return;
-      }
-  
-      moveToReview(dispatch);
+      }     
     }
+
+    let testData = get(
+      state.screenConfiguration.preparedFinalObject.Employee[0],
+      "tests",
+      []
+    );
+
+    for (var j = 0; j < testData.length; j++) {
+      if (checkEmptyFieldsForTest(testData[j]) === false)
+      {
+        const errorMessage = {
+          labelName: "Please fill all fields.",
+          labelKey: "ERR_FILL_ALL_FIELDS"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return;
+      }      
+    }
+    moveToReview(dispatch);
   }
 }
   if (activeStep !== 4) {
@@ -409,6 +426,13 @@ const checkEmptyFields = (searchScreenObject) => {
   const university = get(searchScreenObject, 'university', null)
   if ((checkEmpty(qualification) && checkEmpty(stream) && checkEmpty(yearOfPassing) && checkEmpty(university)) ||
   (!checkEmpty(qualification) && !checkEmpty(stream) && !checkEmpty(yearOfPassing) && !checkEmpty(university))) { return true; }
+  return false;
+}
+const checkEmptyFieldsForTest = (searchScreenObject) => {
+  const test = get(searchScreenObject, 'test', null)
+  const yearOfPassing = get(searchScreenObject, 'yearOfPassing', null)
+  if ((checkEmpty(test) && checkEmpty(yearOfPassing)) ||
+  (!checkEmpty(test) && !checkEmpty(yearOfPassing) )) { return true; }
   return false;
 }
 const checkEmpty = (value) => {
