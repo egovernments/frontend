@@ -19,41 +19,45 @@ const header = getCommonHeader({
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
  });
 
+ const setDownloadPrintData = () =>{
+
+ }
+
 const downloadprintMenu = (state, dispatch) => {
   let applicationDownloadObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
-      const totalAmount = get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].Bill[0].totalAmount"
-      );
-      const billNo = get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].Bill[0].billNumber"
-      );
-      const billDate = get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].Bill[0].billDate"
-      );
+      // const totalAmount = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "ReceiptTemp[0].Bill[0].totalAmount"
+      // );
+      // const billNo = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "ReceiptTemp[0].Bill[0].billNumber"
+      // );
+      // const billDate = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "ReceiptTemp[0].Bill[0].billDate"
+      // );
       
-      dispatch(
-        prepareFinalObject(
-          "Challan.totalAmount",
-          totalAmount
-        )
-      );
-      dispatch(
-        prepareFinalObject(
-          "Challan.billNo",
-           billNo
-        )
-      );
-      dispatch(
-        prepareFinalObject(
-          "Challan.billDate",
-           billDate
-        )
-      );
+      // dispatch(
+      //   prepareFinalObject(
+      //     "Challan.totalAmount",
+      //     totalAmount
+      //   )
+      // );
+      // dispatch(
+      //   prepareFinalObject(
+      //     "Challan.billNo",
+      //      billNo
+      //   )
+      // );
+      // dispatch(
+      //   prepareFinalObject(
+      //     "Challan.billDate",
+      //      billDate
+      //   )
+      // );
       const { Challan } = state.screenConfiguration.preparedFinalObject;
       downloadChallan(Challan,"download");         
      // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);
@@ -131,10 +135,44 @@ const getAcknowledgementCard = (
  
  ) => {
    if(purpose === "challan" && status === "success"){
+    // const billNo = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "ReceiptTemp[0].Bill[0].billNumber"
+    // ); 
+    //Setting data for download and print
+    const totalAmount = get(
+      state.screenConfiguration.preparedFinalObject,
+      "ReceiptTemp[0].Bill[0].totalAmount"
+    );
     const billNo = get(
       state.screenConfiguration.preparedFinalObject,
       "ReceiptTemp[0].Bill[0].billNumber"
-    ); 
+    );
+    const billDate = get(
+      state.screenConfiguration.preparedFinalObject,
+      "ReceiptTemp[0].Bill[0].billDate"
+    );
+    
+    dispatch(
+      prepareFinalObject(
+        "Challan.totalAmount",
+        totalAmount
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "Challan.billNo",
+         billNo
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "Challan.billDate",
+         billDate
+      )
+    );
+
+    //End of data set
      return {     
       
       header :getCommonContainer({

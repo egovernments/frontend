@@ -8,6 +8,8 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import orderBy from "lodash/orderBy";
+
 
 export const getCommonApplyFooter = children => {
   return {
@@ -410,8 +412,17 @@ export const getTextToLocalMapping = label => {
 
 
 export const downloadChallan = async (Challan, mode = 'download') => {
-  console.info("Came to download challan",Challan);
+ 
   let tenantId = get(Challan, "tenantId");
+
+  //Added sorting for Challan details
+  const challanAmtSorted=  orderBy(
+    Challan.amount,
+    ["amount"],
+    ["desc"]);       
+    Challan.amount = challanAmtSorted;
+    
+
   const queryStr = [
     { key: "key", value:"mcollect-challan" },
     { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
