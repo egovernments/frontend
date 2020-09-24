@@ -132,9 +132,28 @@ export const callBackForNext = async (state, dispatch) => {
     if (!(isDepartmentDetailsValid && isEducationQualificationDetailsValid)) {
       isFormValid = false;
     }
-    else
+    else{
+    let educationData = get(
+      state.screenConfiguration.preparedFinalObject.Employee[0],
+      "education",
+      []
+    );
+
+    for (var j = 0; j < educationData.length; j++) {
+      if (checkEmptyFields(educationData[j]) === false)
+      {
+        const errorMessage = {
+          labelName: "Please fill all fields.",
+          labelKey: "ERR_FILL_ALL_FIELDS"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return;
+      }
+  
       moveToReview(dispatch);
+    }
   }
+}
   if (activeStep !== 4) {
     if (isFormValid) {
       changeStep(state, dispatch);
@@ -381,3 +400,21 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
+
+
+const checkEmptyFields = (searchScreenObject) => {
+  const qualification = get(searchScreenObject, 'qualification', null)
+  const stream = get(searchScreenObject, 'stream', null)
+  const yearOfPassing = get(searchScreenObject, 'yearOfPassing', null)
+  const university = get(searchScreenObject, 'university', null)
+  if ((checkEmpty(qualification) && checkEmpty(stream) && checkEmpty(yearOfPassing) && checkEmpty(university)) ||
+  (!checkEmpty(qualification) && !checkEmpty(stream) && !checkEmpty(yearOfPassing) && !checkEmpty(university))) { return true; }
+  return false;
+}
+const checkEmpty = (value) => {
+  value = typeof (value) == "string" ? value.trim() : value;
+  if (value && value != null && value.length > 0) {
+    return false;
+  }
+  return true;
+}
