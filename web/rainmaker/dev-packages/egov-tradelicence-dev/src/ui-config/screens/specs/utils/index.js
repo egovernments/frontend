@@ -960,9 +960,11 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
 }
 
 export const downloadCertificateForm = async(LicensesOld,applicationNumber,tenantId,mode='download') => {
- const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
+ const applicationType= LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"applicationType") : "NEW";
+ const workflowCode=LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"workflowCode"):"EDITRENEWAL";
+
   const queryStr = [
-    { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
+    { key: "key", value:workflowCode==="DIRECTRENEWAL"?"tlrenewalcertificate": "tlcertificate" },
     { key: "tenantId", value: "pb" }
   ]
   const DOWNLOADRECEIPT = {
