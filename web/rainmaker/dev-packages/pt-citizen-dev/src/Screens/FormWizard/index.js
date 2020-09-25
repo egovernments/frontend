@@ -65,7 +65,8 @@ class FormWizard extends Component {
     isAssesment: false,
     isReassesment: false,
     isCreate: true,
-    isUpdate: false
+    isUpdate: false,
+    nextButtonEnabled: true,
   }
 
   toggleTerms = () =>
@@ -733,7 +734,7 @@ class FormWizard extends Component {
     // utils
     const { pay, estimate, createAndUpdate } = this;
     const { selected, formValidIndexArray, estimation } = this.state;
-    const { displayFormErrorsAction, form, requiredDocCount } = this.props;
+    const { displayFormErrorsAction, form, requiredDocCount , showSpinner} = this.props;
     switch (selected) {
       //validating property address is validated
       case 0:
@@ -981,12 +982,18 @@ class FormWizard extends Component {
         } else {
           window.scrollTo(0, 0);
           if (isAssesment1) {
+            this.setState({ nextButtonEnabled: false });
+            showSpinner();
             createAndUpdate(index, 'assess');
             // this.props.history.push(`pt-acknowledgment?purpose=assessment&consumerCode=${propertyId1}&status=success&tenantId=${tenantId1}&FY=2019-20`);
           } else if (isReassesment) {
+            this.setState({ nextButtonEnabled: false });
+            showSpinner();
             createAndUpdate(index, 're-assess');
           }
           else {
+            this.setState({ nextButtonEnabled: false });
+            showSpinner();
             createAndUpdate(index, 'create');
           }
         }
