@@ -224,6 +224,7 @@ export const setOldPropertyData = async (search, prepareFinalObject) => {
       }
     ]
   );
+  searchPropertyResponse.Properties[0].owners.reverse(); // Owners are coming in reverse order
   const Property = convertToOldPTObject(searchPropertyResponse);
   const oldProperty = Object.create(Property);
   prepareFinalObject("OldProperty", oldProperty[0], null);
