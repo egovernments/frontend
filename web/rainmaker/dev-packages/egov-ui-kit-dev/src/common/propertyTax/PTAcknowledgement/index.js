@@ -71,6 +71,8 @@ class PTAcknowledgement extends React.Component {
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
     const { cities, generalMDMSDataById } = common;
+    const oldPropertyId =convertedResponse[0].oldPropertyId;
+    const applicationNo= convertedResponse[0].acknowldgementNumber;
     const header = getHeaderDetails(convertedResponse[0], cities, localizationLabels, true);
     let receiptDetails = {};
     receiptDetails = {
@@ -79,6 +81,8 @@ class PTAcknowledgement extends React.Component {
       owners,
       header,
       propertyId,
+      oldPropertyId,
+      applicationNo
     };
     AcknowledgementReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, null);
   };
@@ -131,8 +135,8 @@ class PTAcknowledgement extends React.Component {
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
-        generatePdfFromDiv("download", propertyId, "#property-review-form");
-        this.download();
+        //generatePdfFromDiv("download", propertyId, "#property-review-form");
+        //this.download();
         this.downloadAcknowledgementForm();
         console.log("Download");
       },
