@@ -6,7 +6,8 @@ import {
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import {
   acceptedFiles, getFileUrl,
-  getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage
+  getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage,
+  enableField, disableField
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
@@ -346,6 +347,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "NewTL" }
     ];
+    disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+    disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+   
     if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
       // //Changing the format of FY
@@ -464,6 +468,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
       }
+      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+      enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+      
       const updatedtradeUnits = get(
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
@@ -505,12 +512,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { Licenses: queryObject }
       );
       dispatch(prepareFinalObject("Licenses", response.Licenses));
+      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+      enableField('apply',"components.div.children.footer.children.payButton",dispatch);
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
     setApplicationNumberBox(state, dispatch);
     return true;
   } catch (error) {
+    enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+    enableField('apply',"components.div.children.footer.children.payButton",dispatch);
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
     console.log(error);
     return false;
