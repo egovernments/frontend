@@ -338,7 +338,8 @@ class WorkFlowContainer extends React.Component {
       return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${
         propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
-      bservice = "PT.MUTATION"
+      bservice = "PT.MUTATION";
+      baseUrl = "pt-mutation";
     } else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
@@ -424,6 +425,7 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
+    // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",

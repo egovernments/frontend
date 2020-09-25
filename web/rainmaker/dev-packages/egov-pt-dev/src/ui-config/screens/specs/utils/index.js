@@ -2,6 +2,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import set from "lodash/set";
 import {
   getQueryArg,
   getTransformedLocalStorgaeLabels,
@@ -1074,3 +1075,78 @@ export const prepareDocumentsView = async (state, dispatch) => {
   });
   dispatch(prepareFinalObject("documentsUploadRedux", documentsPreview));
 };
+
+export const setCardVisibility = (state, action, dispatch) => {
+  let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+  if (owners && owners.length > 0) {
+    owners.map(owner => {
+      if (owner.ownerType != 'NONE' && owner.status == "ACTIVE") {
+        set(
+          action.screenConfig,
+          "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
+          'block'
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.formwizardFirstStep.children.transferorDetails.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
+          'block'
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentID.props.style.display",
+          'block'
+        );
+        set(
+          action.screenConfig,
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.ownerContainer.children.ownerSpecialDocumentType.props.style.display",
+          'block'
+        );
+      }
+    })
+  }
+  if (
+    get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+      ""
+    ).includes("MULTIPLEOWNERS")
+  ) {
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+      { display: "none" }
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
+      {}
+    );
+  } else if (
+    get(
+      state,
+      "screenConfiguration.preparedFinalObject.Property.ownershipCategory",
+      ""
+    ).includes("INSTITUTIONAL")
+  ) {
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transferorDetails.props.style",
+      { display: "none" }
+    );
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.props.style",
+      { display: "none" }
+    );
+  } else {
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transferorInstitutionDetails.props.style",
+      { display: "none" }
+    );
+    set(
+      action.screenConfig, "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorInstitutionSummary.props.style",
+      { display: "none" }
+    );
+  }
+}

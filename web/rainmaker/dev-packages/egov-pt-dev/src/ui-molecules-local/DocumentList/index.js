@@ -17,6 +17,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
 import { AutosuggestContainer } from "../../ui-containers-local";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -132,6 +133,7 @@ class DocumentList extends Component {
       documentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
+    const isEdit = getQueryArg(window.location.href, "action") === "edit";
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -191,8 +193,23 @@ class DocumentList extends Component {
     prepareFinalObject(
       "documentsUploadRedux.2.dropdown.value",
       `${get(preparedFinalObject,'documentsUploadRedux.2.documentCode','')}.${get(preparedFinalObject,'Property.additionalDetails.reasonForTransfer','')}`
-    )  
+    ) 
+    if(isEdit){
+      this.prefillDocuments(documentsUploadRedux);
+    }
   };
+
+  prefillDocuments = (documentsUploadRedux) => {
+    const {preparedFinalObject} = this.props;
+    const propertyDocs = get(preparedFinalObject, 'Property.documents',[]);
+    Object.keys(documentsUploadRedux).map(keys=>{
+      propertyDocs.map(doc=>{
+        if(documentsUploadRedux[keys].documentCode === doc.documentType){
+          //documentsUploadRedux[keys]
+        }
+      })
+    })
+  }
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
