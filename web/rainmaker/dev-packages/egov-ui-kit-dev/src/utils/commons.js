@@ -1040,7 +1040,7 @@ export const getModuleName = () => {
   else if (pathName.indexOf("language-selection") > -1) { return "rainmaker-common"; }
   else if (pathName.indexOf("login") > -1) { return "rainmaker-common"; }
   else if (pathName.indexOf("pay") > -1) { return "rainmaker-noc"; }
-  else if (pathName.indexOf("abg") > -1) { return "rainmaker-abg,rainmaker-uc"; }
+  else if (pathName.indexOf("abg") > -1) { return "rainmaker-abg"; }
   else if (pathName.indexOf("uc") > -1) { return "rainmaker-uc"; }
   else if (pathName.indexOf("pgr-home") > -1 || pathName.indexOf("rainmaker-pgr") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("bpastakeholder") > -1 || pathName.indexOf("edcrscrutiny") > -1 ||
