@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -48,7 +48,25 @@ export const callPGService = async (state, dispatch) => {
     alert("Advance Payment is not allowed");
     return;
   }
-
+  let isFormValid = validateFields(
+    "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer.children",
+    state,
+    dispatch,
+    "pay"
+  );
+  if (!isFormValid) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Transaction numbers don't match !",
+          labelKey: "ERR_FILL_ALL_FIELDS"
+        },
+        "error"
+      )
+    );
+    return;
+  }
   if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), businessService)) {
     dispatch(
       toggleSnackbar(
@@ -177,30 +195,50 @@ const moveToFailure = dispatch => {
 
 const getSelectedTabIndex = paymentType => {
   switch (paymentType) {
-    case "Cash":
+    case "CASH":
       return {
         selectedPaymentMode: "cash",
         selectedTabIndex: 0,
         fieldsToValidate: ["payeeDetails"]
       };
-    case "Cheque":
+    case "CHEQUE":
       return {
         selectedPaymentMode: "cheque",
         selectedTabIndex: 1,
         fieldsToValidate: ["payeeDetails", "chequeDetails"]
       };
+
+    case "CARD":
+      return {
+        selectedPaymentMode: "card",
+        selectedTabIndex: 2,
+        fieldsToValidate: ["payeeDetails", "cardDetails"]
+      };
+    case "OFFLINE_NEFT":
+      return {
+        selectedPaymentMode: "offline_neft",
+        selectedTabIndex: 3,
+        fieldsToValidate: ["payeeDetails", "onlineDetails"]
+      };
+    case "OFFLINE_RTGS":
+      return {
+        selectedPaymentMode: "offline_rtgs",
+        selectedTabIndex: 4,
+        fieldsToValidate: ["payeeDetails", "onlineDetails"]
+      };
+    case "POSTAL_ORDER":
+      return {
+        selectedPaymentMode: "postal_order",
+        selectedTabIndex: 5,
+        fieldsToValidate: ["payeeDetails", "poDetails"]
+      };
     case "DD":
       return {
         selectedPaymentMode: "demandDraft",
-        selectedTabIndex: 2,
+        selectedTabIndex: 6,
         fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
       };
-    case "Card":
-      return {
-        selectedPaymentMode: "card",
-        selectedTabIndex: 3,
-        fieldsToValidate: ["payeeDetails", "cardDetails"]
-      };
+
     default:
       return {
         selectedPaymentMode: "cash",
@@ -356,7 +394,7 @@ const callBackForPay = async (state, dispatch) => {
           true,
           {
             labelName: "Transaction numbers don't match !",
-            labelKey: "ERR_TRANSACTION_NO_DONT_MATCH"
+            labelKey: "ERR_FILL_ALL_FIELDS"
           },
           "error"
         )
@@ -372,9 +410,9 @@ const callBackForPay = async (state, dispatch) => {
     let branchName = get(finalReceiptData, "instrument.branchName", "");
     let bankName = get(finalReceiptData, "instrument.bank.name", "");
     if (
-      !validateString(ifscCode) || !validateString(branchName) || !validateString(bankName) || ifscCode!==get(
+      !validateString(ifscCode) || !validateString(branchName) || !validateString(bankName) || ifscCode !== get(
         state.screenConfiguration.preparedFinalObject,
-        "validIfscCode",""
+        "validIfscCode", ""
       )
     ) {
       dispatch(
@@ -388,7 +426,7 @@ const callBackForPay = async (state, dispatch) => {
           true,
           {
             labelName: "Enter a Valid IFSC code !",
-            labelKey: "ERR_ENTER_VALID_IFSC"
+            labelKey: "ERR_FILL_ALL_FIELDS"
           },
           "error"
         )
@@ -517,7 +555,7 @@ const callBackForPay = async (state, dispatch) => {
           labelName: "Please fill all the mandatory fields",
           labelKey: "ERR_FILL_ALL_FIELDS"
         },
-        "warning"
+        "error"
       )
     );
   }
