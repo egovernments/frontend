@@ -36,7 +36,7 @@ class AddLinkForProperty extends React.Component {
 
     if (isMode === "MODIFY") {
       return (
-        <div style={styles}>
+        <div style={styles} className={"property-buttons"}>
           <a href="javascript:void(0)" onClick={() => routeTo(link)} ><LabelContainer
             style={clickHereStyles}
             labelKey="WS_SEARCH_PROPERTY" />

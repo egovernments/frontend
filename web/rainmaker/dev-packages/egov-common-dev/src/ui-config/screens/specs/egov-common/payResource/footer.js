@@ -1,12 +1,13 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar , prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
+import { paybuttonJsonpath } from "./constants";
 import "./index.css";
 
 const checkAmount = (totalAmount, customAmount, businessService) => {
@@ -90,7 +91,11 @@ export const callPGService = async (state, dispatch) => {
     billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
   });
+  const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
   try {
+    
+    dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
+  
     const requestBody = {
       Transaction: {
         tenantId,
@@ -145,7 +150,7 @@ export const callPGService = async (state, dispatch) => {
       window.location = redirectionUrl;
     }
   } catch (e) {
-
+    dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
     dispatch(
       toggleSnackbar(
         true,
@@ -511,6 +516,8 @@ const callBackForPay = async (state, dispatch) => {
 
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
+    const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
+    dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
     try {
       let response = await httpRequest(
         "post",
@@ -538,6 +545,8 @@ const callBackForPay = async (state, dispatch) => {
         receiptNumber
       );
     } catch (e) {
+      
+      dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
       dispatch(
         toggleSnackbar(
           true,

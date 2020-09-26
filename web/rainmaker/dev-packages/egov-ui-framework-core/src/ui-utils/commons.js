@@ -1,7 +1,7 @@
 import commonConfig from "config/common.js";
 import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import cloneDeep from "lodash/cloneDeep";
@@ -255,8 +255,8 @@ export const setDocuments = async (
   dispatch,
   businessService
 ) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
+  let uploadedDocData = get(payload, sourceJsonPath, []);
+  uploadedDocData = uploadedDocData && uploadedDocData.filter(document => document && Object.keys(document).length > 0 && document.active);
   const fileStoreIds =
     uploadedDocData &&
     uploadedDocData
@@ -811,7 +811,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
         {
           moduleName,
           masterDetails: [
-            { name,filter }
+            { name, filter }
           ]
         }
       ]
@@ -857,3 +857,21 @@ export const getTransformData = (object, getPath, transerPath) => {
   set(object, transerPath, transformedData);
   return object;
 };
+
+
+
+
+export const enableField = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(handleField(screenKey, jsonPath, "props.disabled", false));
+}
+export const disableField = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(handleField(screenKey, jsonPath, "props.disabled", true));
+}
+export const enableFieldAndHideSpinner = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(hideSpinner());
+  enableField(screenKey, jsonPath, dispatch);
+}
+export const disableFieldAndShowSpinner = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(showSpinner());
+  disableField(screenKey, jsonPath, dispatch);
+}
