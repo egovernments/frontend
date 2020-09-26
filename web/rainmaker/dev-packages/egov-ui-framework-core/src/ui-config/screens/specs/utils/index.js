@@ -484,7 +484,7 @@ export const getTab = (label, props = {}) => {
 export const getPattern = type => {
   switch (type) {
     case "Name":
-      return /^[-@.\/#&+\\p{L}\\p{M}\w\s]*$/;
+      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
@@ -494,12 +494,11 @@ export const getPattern = type => {
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":
-      return /^[-@.\/#&+\\p{L}\\p{M}\w\s,]{1,500}$/
-      //return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
-      return /^[-@.\/#&+\\p{L}\\p{M}\w\s]*$/
+      return /^[-@.\/#&+\w\s]*$/
       //return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
     case "Date":
       return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
