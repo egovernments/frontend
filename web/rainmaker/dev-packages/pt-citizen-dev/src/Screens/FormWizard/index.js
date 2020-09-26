@@ -1569,7 +1569,8 @@ class FormWizard extends Component {
       selected,
       ownerInfoArr,
       formValidIndexArray,
-      dialogueOpen, assessedPropertyDetails = {}
+      dialogueOpen, assessedPropertyDetails = {},
+      nextButtonEnabled
     } = this.state;
 
 
@@ -1606,6 +1607,7 @@ class FormWizard extends Component {
           dialogueOpen={dialogueOpen}
           history={history}
           onPayButtonClick={onPayButtonClick}
+          nextButtonEnabled={nextButtonEnabled}
         />
       </div>
     );
