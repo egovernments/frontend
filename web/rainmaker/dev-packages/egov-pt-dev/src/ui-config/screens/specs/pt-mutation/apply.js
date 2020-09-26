@@ -8,7 +8,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import { furnishNocResponse, getSearchResults, prepareDocumentsUploadData, setApplicationNumberBox } from "../../../../ui-utils/commons";
-import { getCurrentFinancialYear, showHideMutationDetailsCard, setCardVisibility } from "../utils";
+import { getCurrentFinancialYear, setCardVisibility, showHideMutationDetailsCard } from "../utils";
 import { footer } from "./applyResource/footer";
 import { mutationDetails } from "./applyResourceMutation/mutationDetails";
 import { documentDetails } from "./applyResourceMutation/mutationDocuments";
@@ -204,8 +204,7 @@ const getApplicationData = async (action, state, dispatch) => {
       "_search",
       queryObject,
     );
-    console.log("Mutation application data ", payload);
-    
+
     if (payload && payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
       let inActiveOwners = [];
       let activeOwners = [];
@@ -214,11 +213,10 @@ const getApplicationData = async (action, state, dispatch) => {
         owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
 
         if (owner.status == "ACTIVE") {
-          activeOwners.push(owner);
+          activeOwners.push({ ...owner, status: "INACTIVE" });
         } else {
-          inActiveOwners.push(owner);
+          inActiveOwners.push({ ...owner, status: "ACTIVE" });
         }
-
       });
 
       payload.Properties[0].owners = inActiveOwners;
@@ -229,6 +227,13 @@ const getApplicationData = async (action, state, dispatch) => {
     }
     // const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     // payload.Properties[0].additionalDetails = { previousPropertyUuid };
+
+    let documents = get(payload, 'Properties[0].documents', []);
+    documents = documents.map(document => {
+      return { ...document, documentType: document.documentType.includes('OWNER') ? document.documentType : `OWNER.TRANSFERREASONDOCUMENT.${document.documentType}` }
+    })
+    set(payload, 'Properties[0].documents', documents)
+    dispatch(prepareFinalObject("DocumentsPrefill", documents && Array.isArray(documents) && documents.length > 0 ? true : false));
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
     setCardVisibility(state, action, dispatch);
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
@@ -265,7 +270,7 @@ const getApplicationData = async (action, state, dispatch) => {
         payload.Properties[0].additionalDetails.reasonForTransfer
       )
     );
-    
+
   } catch (error) {
     console.log("mutation edit flow error ", error);
   }
