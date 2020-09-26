@@ -251,36 +251,6 @@ export const billSearchCard = getCommonCard({
         sm: 3
       }
     },
-    resetButton: {
-      componentPath: "Button",
-      gridDefination: {
-        xs: 12,
-        sm: 3
-        // align: "center"
-      },
-      props: {
-        variant: "outlined",
-        style: {
-          color: "#FE7A51",
-          // backgroundColor: "#FE7A51",
-          border: "#FE7A51 solid 1px",
-          borderRadius: "2px",
-          width: window.innerWidth > 480 ? "80%" : "100%",
-          height: "48px"
-        }
-      },
-      children: {
-        buttonLabel: getLabel({
-          labelName: "RESET",
-          labelKey: "ABG_RESET_BUTTON"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: resetFields
-      }
-    },
-
     searchButton: {
       componentPath: "Button",
       gridDefination: {
@@ -311,6 +281,35 @@ export const billSearchCard = getCommonCard({
         }
       }
     },
+    resetButton: {
+      componentPath: "Button",
+      gridDefination: {
+        xs: 12,
+        sm: 3
+        // align: "center"
+      },
+      props: {
+        variant: "outlined",
+        style: {
+          color: "#FE7A51",
+          // backgroundColor: "#FE7A51",
+          border: "#FE7A51 solid 1px",
+          borderRadius: "2px",
+          width: window.innerWidth > 480 ? "80%" : "100%",
+          height: "48px"
+        }
+      },
+      children: {
+        buttonLabel: getLabel({
+          labelName: "RESET",
+          labelKey: "ABG_RESET_BUTTON"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: resetFields
+      }
+    },    
 
     lastCont: {
       uiFramework: "custom-atoms",

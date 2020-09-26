@@ -217,12 +217,13 @@ class Details extends Component {
                 )}
                 {addressDetail && addressDetail.latitude && addressDetail.longitude && (
                     <div style={{display: 'flex',alignItems: 'center', paddingTop:"10px"}}>
-                      <LocationSearching style={{marginRight:"13px"}}/>
+                      <LocationSearching style={{marginRight:"0px"}}/>
+                      <Label className="col-sm-1" label={"CS_COMPLAINTDETAILS_ONMAP"} labelClassName="dark-heading"/>
                       <a href = {`https://maps.google.com/?q=${addressDetail.latitude},${addressDetail.longitude}`} 
-                        target="_blank" 
-                        style={{padding:"6px",borderRadius:"8px",backgroundColor:"#e2e2e2"}}>
-                          See location on map</a>
-                    </div> 
+                          target="_blank" 
+                          style={{padding:"6px",borderRadius:"8px",backgroundColor:"#e2e2e2"}}>
+                            {address? address : "Lat: "+addressDetail.latitude+" Long: "+addressDetail.longitude}</a>
+                    </div>
                 )}
                 {/* <div style={{ marginTop: 10 }}>
                   {mapAction && complaintLoc.lat && (

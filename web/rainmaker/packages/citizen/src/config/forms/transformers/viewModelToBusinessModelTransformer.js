@@ -160,7 +160,8 @@ const transformer = (formKey, form = {}, state = {}) => {
         const { latitude, longitude } = form.fields;
         let tenantIdFromAddress = "";
         if (get(form, "fields.address.value")) {
-          tenantIdFromAddress = await getTenantForLatLng(latitude.value, longitude.value);
+          //Temporarily the validation is removed. Till the geocoding works.
+          //tenantIdFromAddress = await getTenantForLatLng(latitude.value, longitude.value);
         }
         const tenantIdFromCity = get(formData, "services[0].addressDetail.city");
         if (tenantIdFromAddress === tenantIdFromCity || (!tenantIdFromAddress && tenantIdFromCity)) {
