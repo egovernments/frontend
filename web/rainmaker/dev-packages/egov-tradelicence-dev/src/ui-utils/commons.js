@@ -7,7 +7,7 @@ import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import {
   acceptedFiles, getFileUrl,
   getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage,
-  enableField, disableField
+  enableField, disableField ,enableFieldAndHideSpinner
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
@@ -60,6 +60,7 @@ export const getSearchResults = async queryObject => {
     );
     return response;
   } catch (error) {
+    enableFieldAndHideSpinner('search',"components.div.children.tradeLicenseApplication.children.cardContent.children.button.children.buttonContainer.children.searchButton",store.dispatch);
     store.dispatch(
       toggleSnackbar(
         true,
