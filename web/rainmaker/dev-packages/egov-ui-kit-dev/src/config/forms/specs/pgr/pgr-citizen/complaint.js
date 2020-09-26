@@ -83,6 +83,7 @@ const formConfig = {
       errorMessage: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
       boundary: true,
       dropDownData: [],
+      labelsFromLocalisation: true,
       dataFetchConfig: {
         url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
         action: "",
@@ -91,7 +92,6 @@ const formConfig = {
         isDependent: true,
         hierarchyType: "REVENUE",
       },
-
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       errorText: "",
     },
