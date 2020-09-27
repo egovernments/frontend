@@ -67,7 +67,6 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     properties[0].institution.nameOfAuthorizedPerson = properties[0].owners[0].name;
     properties[0].institution.tenantId = properties[0].tenantId;
   }
-  properties[0].creationReason = "NEWPROPERTY";
   properties[0].superBuiltUpArea = properties[0].buildUpArea && Number(properties[0].buildUpArea);
   properties[0].superBuiltUpArea = properties[0].superBuiltUpArea && Number(properties[0].superBuiltUpArea.toFixed(2));
 
