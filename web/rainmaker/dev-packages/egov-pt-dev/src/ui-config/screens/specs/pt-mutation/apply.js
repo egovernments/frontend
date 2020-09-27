@@ -155,7 +155,7 @@ const getPropertyData = async (action, state, dispatch) => {
 
     );
 
-    if (payload && payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+    if (payload && payload.Properties && payload.Properties[0] && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
 
       let owners = [];
       payload.Properties[0].owners.map(owner => {
@@ -205,7 +205,17 @@ const getApplicationData = async (action, state, dispatch) => {
       queryObject,
     );
 
-    if (payload && payload.Properties && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+    if (payload && payload.Properties && payload.Properties[0] && payload.Properties[0].owners && payload.Properties[0].owners.length > 0) {
+      let auditResponse = await getSearchResults([
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        { key: "propertyIds", value: payload.Properties[0].propertyId }, {
+          key: "audit",
+          value: true
+        }
+      ]);
       let inActiveOwners = [];
       let activeOwners = [];
       payload.Properties[0].owners.map(owner => {
@@ -224,9 +234,34 @@ const getApplicationData = async (action, state, dispatch) => {
       payload.Properties[0].ownersTemp = activeOwners;
       payload.Properties[0].ownershipCategoryInit = payload.Properties[0].ownershipCategory;
       payload.Properties[0].ownershipCategoryTemp = payload.Properties[0].ownershipCategory;
+
+      payload.Properties[0].institutionTemp = payload.Properties[0].institution;
+      payload.Properties[0].institutionInit = {};
+      payload.Properties[0].institution = {};
+
+      if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+        const propertiesAudit = get(auditResponse, "Properties", []);
+
+
+        const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+
+        payload.Properties[0].ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+        payload.Properties[0].ownershipCategory = previousActiveProperty.ownershipCategory;
+        if (payload.Properties[0].ownershipCategoryInit.startsWith("INSTITUTION")) {
+          payload.Properties[0].institutionInit = previousActiveProperty.institution;
+          payload.Properties[0].institution = previousActiveProperty.institution;
+        }
+        inActiveOwners = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+        payload.Properties[0].owners = inActiveOwners;
+        payload.Properties[0].ownersInit = inActiveOwners;
+      }
+
     }
+
+
     // const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     // payload.Properties[0].additionalDetails = { previousPropertyUuid };
+
 
     let documents = get(payload, 'Properties[0].documents', []);
     documents = documents.map(document => {

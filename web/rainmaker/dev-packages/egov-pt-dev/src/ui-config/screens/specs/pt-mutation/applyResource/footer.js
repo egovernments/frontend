@@ -8,6 +8,7 @@ import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils";
 import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter, validateFields } from "../../utils";
+import { onChangeTypeOfOwnership } from "../applyResourceMutation/transfereeDetails";
 import "./index.css";
 
 const setReviewPageRoute = (state, dispatch) => {
@@ -413,9 +414,9 @@ const callBackForNext = async (state, dispatch) => {
 
       errorMsg ? isFormValid = false : {};
     }
-
-
-
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      onChangeTypeOfOwnership({ value: get(state.screenConfiguration.preparedFinalObject, 'Property.ownershipCategoryTemp', '') }, state, dispatch)
+    }
   }
 
   if (activeStep === 1) {
