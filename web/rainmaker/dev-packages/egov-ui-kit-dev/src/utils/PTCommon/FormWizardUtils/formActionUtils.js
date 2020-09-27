@@ -116,7 +116,10 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         }
     }
     try {
-        propertyPayload.creationReason = action == '_create' ? 'CREATE' : isEditInWorkflow ? 'CREATE' : 'UPDATE';
+        if(!isEditInWorkflow){
+            propertyPayload.creationReason = action == '_create' ? 'CREATE' :  'UPDATE';
+        }
+        
         propertyPayload.additionalDetails?{...propertyPayload.additionalDetails,...propertyAdditionalDetails}:{...propertyAdditionalDetails};
         const propertyResponse = await httpRequest(
             `property-services/property/${propertyMethodAction}`,
