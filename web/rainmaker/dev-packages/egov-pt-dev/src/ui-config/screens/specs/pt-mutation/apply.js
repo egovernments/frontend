@@ -236,8 +236,8 @@ const getApplicationData = async (action, state, dispatch) => {
       payload.Properties[0].ownershipCategoryTemp = payload.Properties[0].ownershipCategory;
 
       payload.Properties[0].institutionTemp = payload.Properties[0].institution;
-      payload.Properties[0].institutionInit = {};
-      payload.Properties[0].institution = {};
+      payload.Properties[0].institutionInit = null;
+      payload.Properties[0].institution = null;
 
       if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
         const propertiesAudit = get(auditResponse, "Properties", []);
