@@ -90,11 +90,12 @@ export const payeeDetails = getCommonContainer({
       let tabIndex = 0;
       let tabs = get(state.screenConfiguration.screenConfig, "pay.components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs", []);
       let tabValue = get(tabs[tabIndex], "code", '').toLowerCase();
+      let componentPath = process.env.REACT_APP_NAME === "Citizen" ? "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer" : `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails`;
       if (action.value === "COMMON_OTHER") {
         dispatch(
           handleField(
             "pay",
-            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerName`,
+            `${componentPath}.children.payerName`,
             "props.value",
             ""
           )
@@ -102,7 +103,7 @@ export const payeeDetails = getCommonContainer({
         dispatch(
           handleField(
             "pay",
-            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerMobileNo`,
+            `${componentPath}.children.payerMobileNo`,
             "props.value",
             ""
           )
@@ -110,7 +111,7 @@ export const payeeDetails = getCommonContainer({
         dispatch(
           handleField(
             "pay",
-            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerName`,
+            `${componentPath}.children.payerName`,
             "props.error",
             false
           )
@@ -118,7 +119,7 @@ export const payeeDetails = getCommonContainer({
         dispatch(
           handleField(
             "pay",
-            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerMobileNo`,
+            `${componentPath}.children.payerMobileNo`,
             "props.error",
             false
           )
@@ -127,7 +128,7 @@ export const payeeDetails = getCommonContainer({
         dispatch(
           handleField(
             "pay",
-            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerName`,
+            `${componentPath}.children.payerName`,
             "props.value",
             get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName", '')
           )
@@ -135,7 +136,7 @@ export const payeeDetails = getCommonContainer({
         dispatch(
           handleField(
             "pay",
-            `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${tabIndex}].tabContent.${tabValue}.children.payeeDetails.children.payerMobileNo`,
+            `${componentPath}.children.payerMobileNo`,
             "props.value",
             get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber", '')
           )
@@ -389,11 +390,11 @@ export const cheque = getCommonContainer({
 
 export const offline_neft = getCommonContainer({
   payeeDetails,
-  onlineDetails:{...onlineDetails}
+  onlineDetails: { ...onlineDetails }
 });
 export const offline_rtgs = getCommonContainer({
   payeeDetails,
-  onlineDetails:{...onlineDetails}
+  onlineDetails: { ...onlineDetails }
 });
 
 export const neftRtgs = getCommonContainer({
@@ -403,7 +404,7 @@ export const neftRtgs = getCommonContainer({
 
 export const postal_order = getCommonContainer({
   payeeDetails,
-  poDetails:{...poDetails}
+  poDetails: { ...poDetails }
 });
 
 export const demandDraftDetails = getCommonContainer({
