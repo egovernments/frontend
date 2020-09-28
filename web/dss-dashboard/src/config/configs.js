@@ -14,10 +14,8 @@ const configs = {
     'MODULE_LEVEL':[
                     {'dashboard':null},
                     {'propertytax':{'services_name':'Property Tax','filterKey':'PT'}},
-                    {'tradelicense':{'services_name':'Trade licence','filterKey':'TL'}},
-                    {'pgr':{'services_name':'PGR','filterKey':'PGR'}},
-                    {'ws':{'services_name':'W&S','filterKey':'W&S'}}
+                    {'tradelicense':{'services_name':'Trade licence','filterKey':'TL'}}
                     ],
-    'SERVICES': ["Property Tax", "Trade licence","PGR"]
+    'SERVICES': ["Property Tax", "Trade licence"]
 }
 export default configs;
