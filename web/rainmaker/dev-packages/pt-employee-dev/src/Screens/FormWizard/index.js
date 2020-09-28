@@ -111,7 +111,7 @@ class FormWizard extends Component {
           }
         ]
       );
-      searchPropertyResponse.Properties[0].owners.reverse(); // Properties owners are coming in reverse order
+      // searchPropertyResponse.Properties[0].owners.reverse(); // Properties owners are coming in reverse order
       searchPropertyResponse = getCreatePropertyResponse(searchPropertyResponse);
       await prefillPTDocuments(
         searchPropertyResponse,
