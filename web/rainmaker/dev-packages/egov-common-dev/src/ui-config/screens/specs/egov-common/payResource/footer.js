@@ -80,8 +80,8 @@ export const callPGService = async (state, dispatch) => {
   }
 
   const user = {
-    name: get(billPayload, "Bill[0].payerName"),
-    mobileNumber: get(billPayload, "Bill[0].mobileNumber"),
+    name: get(billPayload, "Bill[0].paidBy",get(billPayload, "Bill[0].payerName")),
+    mobileNumber: get(billPayload, "Bill[0].payerMobileNumber",get(billPayload, "Bill[0].mobileNumber")),
     tenantId
   };
   let taxAndPayments = [];
