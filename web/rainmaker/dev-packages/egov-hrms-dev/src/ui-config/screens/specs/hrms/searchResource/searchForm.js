@@ -104,24 +104,24 @@ export const searchForm = getCommonCard({
       required: true,
     },
 
-    employeeName: getTextField({
-      label: {
-        labelName: "Employee Name",
-        labelKey: "HR_EMP_NAME_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Employee Name",
-        labelKey: "HR_EMP_NAME_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      pattern: getPattern("Name") || null,
-      errorMessage: "HR_EMP_NAME_ERR_MSG",
-      jsonPath: "searchScreen.names"
-    }),
+    // employeeName: getTextField({
+    //   label: {
+    //     labelName: "Employee Name",
+    //     labelKey: "HR_EMP_NAME_LABEL"
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Employee Name",
+    //     labelKey: "HR_EMP_NAME_PLACEHOLDER"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   required: false,
+    //   pattern: getPattern("Name") || null,
+    //   errorMessage: "HR_EMP_NAME_ERR_MSG",
+    //   jsonPath: "searchScreen.names"
+    // }),
 
     employeeID: getTextField({
       label: {
