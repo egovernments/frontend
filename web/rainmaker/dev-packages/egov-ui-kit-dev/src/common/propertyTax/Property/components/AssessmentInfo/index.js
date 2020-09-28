@@ -60,12 +60,12 @@ export const getRainWaterHarvestingInfo = (properties) => {
 }
 
 export const getUnitUsageTypeInfo = (unit, propertyDetails) => {
-  return unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails.usageCategoryMinor, localizationLabelsData) :
-  (unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor, localizationLabelsData) : "NA"));
+  return unit&&unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit&&unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails&&propertyDetails.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails&&propertyDetails.usageCategoryMinor, localizationLabelsData) :
+  (unit&&unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit&&unit.usageCategoryMajor, localizationLabelsData) : "NA"));
 }
 
 export const getOccupancyInfo = (unit) => {
-  return unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType, localizationLabelsData) : "NA";
+  return unit&&unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit&&unit.occupancyType, localizationLabelsData) : "NA";
 }
 
 export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properties, oldPropertydetails, OldProperty) => {
@@ -126,7 +126,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
-        oldValue: oldPropertydetails && oldPropertydetails.units && ((oldPropertydetails.units[index].unitArea * 9)+'') || "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({
