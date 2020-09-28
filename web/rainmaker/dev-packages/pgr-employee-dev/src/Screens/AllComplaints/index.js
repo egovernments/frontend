@@ -285,6 +285,8 @@ class AllComplaints extends Component {
     };
     return role === "ao" ? (
       <div>
+        <div className="spaceOccupier">
+        </div>
         <div
           className="sort-button rainmaker-displayInline"
           style={{ padding: "20px 20px 0px 0px", justifyContent: "flex-end" }}
