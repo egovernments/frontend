@@ -163,7 +163,7 @@ class DropDown extends Component {
           {(item.status === "Paid" || item.status === "Partially Paid") && (
             <MenuItem value="Re-Assess" primaryText={<Label label="PT_RE_ASSESS" />} />
           )}
-          {item.status === "Partially Paid" && <MenuItem value="Complete Payment" primaryText={<Label label="PT_COMPLETE_PAYMENT" />} />}
+          
         </SelectField>
       </div>
     );
