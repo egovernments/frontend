@@ -1388,10 +1388,7 @@ class FormWizard extends Component {
   };
 
   onPayButtonClick = async () => {
-    
-    if(window.appOverrides){
-       window.appOverrides.clearResetFields();
-    }
+   
     const {
       isFullPayment,
       partialAmountError,
