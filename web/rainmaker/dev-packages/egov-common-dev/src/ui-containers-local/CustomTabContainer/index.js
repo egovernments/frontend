@@ -82,14 +82,6 @@ class MultiItem extends React.Component {
               handleField(
                 "pay",
                 children[child].children[innerChild].componentJsonpath,
-                "props.error",
-                false
-              )
-            );
-            dispatch(
-              handleField(
-                "pay",
-                children[child].children[innerChild].componentJsonpath,
                 "isFieldValid",
                 true
               )
@@ -103,6 +95,14 @@ class MultiItem extends React.Component {
               )
             );
           }
+          dispatch(
+            handleField(
+              "pay",
+              children[child].children[innerChild].componentJsonpath,
+              "props.error",
+              false
+            )
+          );
         }
       }
     }

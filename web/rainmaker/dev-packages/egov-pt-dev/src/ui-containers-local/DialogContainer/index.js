@@ -1,14 +1,14 @@
 
-import React from "react";
-import { connect } from "react-redux";
-import get from "lodash/get";
 import { Dialog } from "@material-ui/core";
 import MuiDialogContent from "@material-ui/core/DialogContent";
-import { withStyles } from "@material-ui/core/styles";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from "@material-ui/core/styles";
 import CloseIcon from '@material-ui/icons/Close';
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import React from "react";
+import { connect } from "react-redux";
 
 
 class DialogContainer extends React.Component {
