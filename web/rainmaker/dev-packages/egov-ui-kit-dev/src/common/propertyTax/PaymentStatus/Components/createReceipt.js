@@ -49,13 +49,9 @@ const getTaxInfo = (billAccountDetails, totalAmount, localizationLabels) => {
         taxHeadContent[0] &&
         result[1].push({
           text: taxHeadContent[0]
-            ? taxHeadContent[0].amount
-              ? taxHeadContent[0].amount
-              : taxHeadContent[0].debitAmount
-              ? `-${taxHeadContent[0].debitAmount}`
-              : taxHeadContent[0].crAmountToBePaid
-              ? taxHeadContent[0].crAmountToBePaid
-              : "0"
+            ? taxHeadContent[0].adjustedAmount
+              ? taxHeadContent[0].adjustedAmount
+            : "0"
             : "NA",
         });
       return result;
@@ -105,7 +101,7 @@ const createReceiptDetails = (property, propertyDetails, receiptDetails, localiz
     header: getHeaderDetails(property, cities, localizationLabels),
     taxNew:
       receiptDetails &&
-      getTaxInfo(receiptDetails.Bill[0].billDetails[0].billAccountDetails, receiptDetails.Bill[0].billDetails[0].totalAmount, localizationLabels),
+      getTaxInfo(receiptDetails.Bill[0].billDetails[0].billAccountDetails, receiptDetails.Bill[0].billDetails[0].amountPaid, localizationLabels),
     tax: {
       AmountPaid: "100",
       fireCess: "10",
