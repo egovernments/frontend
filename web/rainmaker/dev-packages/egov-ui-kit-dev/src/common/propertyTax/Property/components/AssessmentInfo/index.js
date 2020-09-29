@@ -110,6 +110,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properti
 
 export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => {
   units = units || [];
+  units=units.filter(unit=>unit.active||unit.id==undefined);
   let floors = [];
   units.map((unit, index) => {
     if (unit) {
