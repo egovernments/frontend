@@ -121,21 +121,25 @@ class DropDown extends Component {
           acc += get(curr, "Bill[0].billDetails[0].amountPaid");
           return acc;
         }, 0);
+
+        
+      payload.Receipt.map(function (itemm, index){
       const receiptDetails =
         payload &&
         payload.Receipt &&
         createReceiptDetails(
           item.property,
           item.propertyDetails,
-          payload.Receipt[0],
+          itemm,
           item.localizationLabels,
           item.cities,
-          totalAmountToPay,
-          totalAmountPaid
+          itemm.Bill[0].billDetails[0].totalAmount,
+          itemm.Bill[0].billDetails[0].amountPaid
         );
         localStorageSet("rd-propertyId",item.propertyId);
         localStorageSet("rd-assessmentNumber",item.propertyDetails.assessmentNumber);
-      receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, {itemData: item, property: item.property, receipt: payload.Receipt});
+      receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, {itemData: item, property: item.property, receipt: itemm});
+    });
     } catch (e) {
       console.log(e);
     }
