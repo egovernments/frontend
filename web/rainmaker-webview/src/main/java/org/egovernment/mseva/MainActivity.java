@@ -10,6 +10,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -20,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -32,6 +34,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -40,6 +43,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
@@ -70,22 +75,27 @@ import java.io.OutputStream;
 
 import org.egovernment.mseva.BuildConfig;
 import org.egovernment.mseva.R;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
-
-
 	final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 	private static String URL   =BuildConfig.url;
 	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
 	public static String HOST	= getHost(URL);
+	static final int SEND_PYAMENT_INFORMATION = 2;
 
+	String ShowOrHideWebViewInitialUse = "show";
 	//Careful with these variable names if altering
     private WebView webView;
 
     private String asw_cam_message;
     private ValueCallback<Uri> asw_file_message;
     private ValueCallback<Uri[]> asw_file_path;
+
+    //progress bar
+	private ProgressBar spinner;
 
 
     // permissions code
@@ -106,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 	private static final String TAG = MainActivity.class.getSimpleName();
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -130,6 +143,30 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+				if (requestCode == SEND_PYAMENT_INFORMATION) {
+					// Make sure the request was successful
+					if (resultCode == RESULT_OK) {
+//						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+//
+//						Toast.makeText(getBaseContext(), "Sucess!" , Toast.LENGTH_SHORT ).show();
+						// The user picked a contact.
+						//call javascript bridge to update the status
+
+						// Do something with the contact here (bigger example below)
+						loadView("javascript:window.posOnSuccess()",false);
+					}
+					else
+					{
+//						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+//
+//						Toast.makeText(getBaseContext(), "Failure!" , Toast.LENGTH_SHORT ).show();
+
+						//call javascript bridge to update the status
+						loadView("javascript:window.posOnFailure()",false);
+					}
+					return;
+				}
+
             }
             asw_file_path.onReceiveValue(results);
             asw_file_path = null;
@@ -140,8 +177,11 @@ public class MainActivity extends AppCompatActivity {
                 asw_file_message.onReceiveValue(result);
                 asw_file_message = null;
             }
+
         }
     }
+
+
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
@@ -164,10 +204,13 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 
+		spinner = (ProgressBar)findViewById(R.id.progressBar);
+
         //Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
 		webView.addJavascriptInterface(proxy, "mSewaApp");
+
 
 		String versionName = "";
 		int versionCode = 0;
@@ -192,16 +235,35 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
+		//improve performance
+		webSettings.setLoadWithOverviewMode(true);
+		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+		webView.setScrollbarFadingEnabled(true);
+
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+			getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//            webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 			CookieManager cookieManager = CookieManager.getInstance();
 			cookieManager.setAcceptThirdPartyCookies(webView, true);
         } else if (Build.VERSION.SDK_INT >= 19) {
+			getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
+        else {
+			getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+				WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
         webView.setVerticalScrollBarEnabled(false);
         webView.setWebViewClient(new CustomWebView());
 		webView.getSettings().setGeolocationDatabasePath(getFilesDir().getPath());
@@ -213,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+						if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 							== PackageManager.PERMISSION_GRANTED) {
 							Log.v(TAG,"Permission is granted");
 							downloadDialog(url,userAgent,contentDisposition,mimeType);
@@ -237,20 +299,16 @@ public class MainActivity extends AppCompatActivity {
 			public void onDownloadStart(String url, String userAgent,
 										String contentDisposition, String mimetype,
 										long contentLength) {
-
 				//Checking runtime permission for devices above Marshmallow.
-
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 					if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 						== PackageManager.PERMISSION_GRANTED) {
 						Log.v(TAG,"Permission is granted");
 						downloadDialog(url,userAgent,contentDisposition,mimetype);
 					} else {
-
 						Log.v(TAG,"Permission is revoked");
 						//requesting permissions.
 						ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
 					}
 				}
 				else {
@@ -263,6 +321,8 @@ public class MainActivity extends AppCompatActivity {
 */
         //Rendering the default URL
         loadView(URL,false);
+
+
 
         webView.setWebChromeClient(new WebChromeClient() {
             // handling geolocation
@@ -307,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             //Handling input[type="file"] requests for android API 21+
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
 
 				if (asw_file_path != null) {
 					asw_file_path.onReceiveValue(null);
@@ -332,7 +392,6 @@ public class MainActivity extends AppCompatActivity {
             String path     = getIntent().getDataString();
             /*
             If you want to check or use specific directories or schemes or hosts
-
             Uri data        = getIntent().getData();
             String scheme   = data.getScheme();
             String host     = data.getHost();
@@ -341,9 +400,8 @@ public class MainActivity extends AppCompatActivity {
             */
             loadView(path,false);
         }
-
-
     }
+
 
 
 	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimetype)
@@ -352,7 +410,6 @@ public class MainActivity extends AppCompatActivity {
 			Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
 			.setData(Uri.parse(url.toString())));
 	}
-
 
 
     @Override
@@ -371,10 +428,19 @@ public class MainActivity extends AppCompatActivity {
     //Setting activity layout visibility
 	private class CustomWebView extends WebViewClient {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-
+			// only make it invisible the FIRST time the app is run
+			if (ShowOrHideWebViewInitialUse.equals("show")) {
+				webView.setVisibility(webView.INVISIBLE);
+			}
         }
 
         public void onPageFinished(WebView view, String url) {
+        	//removed pos related javascript
+			loadView("javascript:window.localStorage.setItem('isPOSmachine',true)",false);
+			ShowOrHideWebViewInitialUse = "hide";
+			spinner.setVisibility(View.GONE);
+			view.setVisibility(webView.VISIBLE);
+			super.onPageFinished(view, url);
         }
         //For android below API 23
 		@SuppressWarnings("deprecation")
@@ -430,6 +496,7 @@ public class MainActivity extends AppCompatActivity {
 
 			//Use this to open your apps page on google play store app :: href="rate:android"
 		} else if (url.startsWith("share:")) {
+
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("text/plain");
 			intent.putExtra(Intent.EXTRA_SUBJECT, view.getTitle());
@@ -757,6 +824,3 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
-
-
-
