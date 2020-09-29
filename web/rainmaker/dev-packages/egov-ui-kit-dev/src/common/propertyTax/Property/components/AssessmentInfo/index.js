@@ -116,23 +116,23 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
       let floor = [{
         key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
         value: getUnitUsageTypeInfo(unit, propertyDetails),
-        oldValue: oldPropertydetails && oldPropertydetails.units && getUnitUsageTypeInfo(oldPropertydetails.units[index], oldPropertydetails) || "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && getUnitUsageTypeInfo(oldPropertydetails.units[index], oldPropertydetails) || "NA",
       }, {
 
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
         value: getOccupancyInfo(unit),
-        oldValue: oldPropertydetails && oldPropertydetails.units && getOccupancyInfo(oldPropertydetails.units[index]) || "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units&&oldPropertydetails.units[index] && getOccupancyInfo(oldPropertydetails.units[index]) || "NA",
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
-        oldValue: oldPropertydetails && oldPropertydetails.units && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units&&oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({
           key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
           value: unit.arv ? unit.arv + '' : "NA",
-          oldValue: oldPropertydetails && oldPropertydetails.units && (oldPropertydetails.units[index].arv+'') || "NA",
+          oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index]&&(oldPropertydetails.units[index].arv+'') || "NA",
         })
       }
       if (!floors[unit['floorNo']]) {
