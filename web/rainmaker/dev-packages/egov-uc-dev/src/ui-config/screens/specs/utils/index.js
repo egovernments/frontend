@@ -416,25 +416,29 @@ export const downloadChallan = async (Challan, mode = 'download') => {
   let tenantId = get(Challan, "tenantId");
 
   //Added sorting for Challan details
-  const challanAmtSorted=  orderBy(
-    Challan.amount,
-    ["amount"],
-    ["desc"]);       
-    Challan.amount = challanAmtSorted;
+  // const challanAmtSorted=  orderBy(
+  //   Challan.amount,
+  //   ["amount"],
+  //   ["desc"]);       
+  //   Challan.amount = challanAmtSorted;
     
 
   const queryStr = [
     { key: "key", value:"mcollect-challan" },
-    { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
+   // { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
+    { key: "challanNo", value:get(Challan,"challanNo")},
+    { key: "tenantId", value:get(Challan, "tenantId") }
   ];
   const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
+    POST: {
+     // URL: "/pdf-service/v1/_create",
+      URL:"/filestore/v1/pdfData/_create",
       ACTION: "_get",
     },
   };
+ 
     try {
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Challan }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      httpRequest("post", DOWNLOADRECEIPT.POST.URL, DOWNLOADRECEIPT.POST.ACTION, queryStr,  { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           res.filestoreIds[0]
           if (res && res.filestoreIds && res.filestoreIds.length > 0) {
