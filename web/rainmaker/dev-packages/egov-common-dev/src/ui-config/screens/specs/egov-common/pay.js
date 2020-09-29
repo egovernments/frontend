@@ -157,6 +157,7 @@ const screenConfig = {
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", {}));
         fetchBill(action ,state, dispatch, consumerCode, tenantId, businessService);
         // fetchBill(action,state, dispatch, consumerCode, tenantId, businessService).then(
         //     response => {
