@@ -95,7 +95,7 @@ export const billSearchCard = getCommonCard({
           labelName: "ULB",
           labelKey: "ABG_ULB_LABEL"
         },
-        labelPrefix: {
+        localePrefix: {
           moduleName: "TENANT",
           masterName: "TENANTS"
         },
