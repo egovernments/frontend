@@ -2,7 +2,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { generateReciept } from "../../utils/recieptPdf";
 import { ifUserRoleExists } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 
@@ -78,8 +78,24 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
         state.screenConfiguration.preparedFinalObject,
         "Challan.serviceType"
       );
-      
+      if(businessService !=null && tenantId !=null && challanNo !=null ){
         getCommonPayUrl(dispatch, challanNo, tenantId, businessService);
+      }    
+      
+      else{
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "SEARCH & PAY BILL",
+              labelKey: "UC_SEARCHANDPAY_LABEL"
+            },
+            "warning"
+          )
+        );
+
+      }
+      
       }
     }
   }
