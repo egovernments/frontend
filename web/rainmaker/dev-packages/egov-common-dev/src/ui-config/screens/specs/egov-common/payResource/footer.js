@@ -508,7 +508,8 @@ export const footer = getCommonApplyFooter({
     //   roles: ["NOC_CEMP"],
     //   action: "PAY"
     // },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+    // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   posButton: {
     componentPath: "Button",
@@ -541,7 +542,7 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         dispatch(toggleSpinner());
         window.posOnSuccess=(posResponse={})=>{
-          dispatch(toggleSpinner());
+          // dispatch(toggleSpinner());
           callBackForPay(state,dispatch)
         }
 
