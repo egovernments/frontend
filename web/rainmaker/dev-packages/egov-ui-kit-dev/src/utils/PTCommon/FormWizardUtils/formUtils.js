@@ -2,6 +2,7 @@ import commonConfig from "config/common.js";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -189,6 +190,7 @@ export const convertToOldPTObject = (newObject) => {
     unit.unitArea = unit.constructionDetail.builtUpArea;
     return { ...unit }
   })
+  localStorageSet("previousFloorNo", newProperty.noOfFloors)
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
   return Properties;
