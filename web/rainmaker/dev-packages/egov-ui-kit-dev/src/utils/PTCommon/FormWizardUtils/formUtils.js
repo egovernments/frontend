@@ -154,6 +154,7 @@ export const convertToOldPTObject = (newObject) => {
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
     return { ...unit, ...getUsageCategory(unit.usageCategory) }
   });
+  propertyDetails.units = propertyDetails.units&& Array.isArray(propertyDetails.units)&&propertyDetails.units.filter(unit=>unit.active);
   propertyDetails.documents = newProperty.documents;
   propertyDetails.additionalDetails = newProperty.additionalDetails;
   propertyDetails.financialYear = null;
