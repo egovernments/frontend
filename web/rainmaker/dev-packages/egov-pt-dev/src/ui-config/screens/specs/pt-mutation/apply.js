@@ -273,38 +273,29 @@ const getApplicationData = async (action, state, dispatch) => {
     setCardVisibility(state, action, dispatch);
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     // Prefilling radio buttons
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup",
-        "props.value",
+    set(
+      action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
         payload.Properties[0].ownersTemp[0].gender
       )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationPendingRadioButton",
-        "props.value",
+    
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationPendingRadioButton.props.value",
         payload.Properties[0].additionalDetails.isMutationInCourt
       )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationStateAcquisitionRadioButton",
-        "props.value",
+    
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.mutationDetails.children.cardContent.children.mutationDetailsContainer.children.getMutationStateAcquisitionRadioButton.props.value",
         payload.Properties[0].additionalDetails.isPropertyUnderGovtPossession
       )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason",
-        "props.value",
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason.props.value",
         payload.Properties[0].additionalDetails.reasonForTransfer
       )
-    );
+    
 
   } catch (error) {
     console.log("mutation edit flow error ", error);
