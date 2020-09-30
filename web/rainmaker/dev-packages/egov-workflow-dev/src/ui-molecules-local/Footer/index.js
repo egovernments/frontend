@@ -80,6 +80,13 @@ class Footer extends React.Component {
         process.env.NODE_ENV === "development"
           ? item.buttonUrl
           : item.buttonUrl;
+
+          /* Quick fix for edit mutation application */
+      if(url.includes('pt-mutation/apply')){     
+        window.location.href=url.replace("/pt-mutation/",'');
+        return;
+      }
+      
       setRoute(url);
       return;
     }
