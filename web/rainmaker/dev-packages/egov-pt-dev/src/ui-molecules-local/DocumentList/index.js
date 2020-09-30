@@ -219,7 +219,7 @@ class DocumentList extends Component {
           if (get(documentsUploadRedux[keys], 'dropdown.value', null) == null) {
             documentsUploadRedux[keys] = { ...documentsUploadRedux[keys], dropdown: { value: doc.documentType } };
           } else if (get(documentsUploadRedux[keys], 'dropdown.value', null) !== doc.documentType) {
-            documentsUploadRedux[keys].documents = [];
+            delete documentsUploadRedux[keys].documents;
           }
         }
       })
