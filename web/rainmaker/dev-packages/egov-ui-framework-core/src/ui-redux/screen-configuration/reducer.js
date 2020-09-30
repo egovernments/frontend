@@ -25,7 +25,7 @@ const screenConfiguration = (state = intialState, action) => {
         }
       };
     case screenActionTypes.UNMOUNT_SCREEN:
-      delete state.screenConfig[action.screenKey];
+      state.screenConfig[action.screenKey]?delete state.screenConfig[action.screenKey]:{};
       return {
         ...state,
         screenConfig: {
