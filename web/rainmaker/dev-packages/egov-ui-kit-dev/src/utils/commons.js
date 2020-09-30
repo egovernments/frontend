@@ -953,6 +953,11 @@ export const isDocumentValid = (docUploaded, requiredDocCount) => {
           isValid = false;
           break;
         }
+      }else{
+        if (docUploaded[key].documents && (!docUploaded[key].dropdown || !docUploaded[key].dropdown.value)) {
+          isValid = false;
+          break;
+        }
       }
     }
     return isValid;
