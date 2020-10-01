@@ -355,7 +355,8 @@ class OwnerInfo extends Component {
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
     let oldPropertydetails = "";
     if(OldProperty && Object.keys(OldProperty).length > 0) {
-      oldPropertydetails = OldProperty.propertyDetails[0];
+      // oldPropertydetails = OldProperty.propertyDetails[0];
+      oldPropertydetails=null;
     }
     if (properties) {
       const { propertyDetails } = properties;
