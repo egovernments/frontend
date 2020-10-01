@@ -3,6 +3,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import get from "lodash/get";
@@ -12,7 +13,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
-import { hideSpinner , showSpinner } from "egov-ui-kit/redux/common/actions";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -212,7 +212,7 @@ class WorkFlowContainer extends React.Component {
       this.setState({
         open: false
       });
-      payload=payload==''?true:payload;
+      payload = payload == '' ? true : payload;
       if (payload) {
         let path = "";
         this.props.hideSpinner();
@@ -235,10 +235,10 @@ class WorkFlowContainer extends React.Component {
         const licenseNumber = get(payload, path, "");
         if (redirectQueryString) {
           this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
-        }else{
-        this.props.setRoute(`acknowledgement?${this.getPurposeString(
-          label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
+        } else {
+          this.props.setRoute(`acknowledgement?${this.getPurposeString(
+            label
+          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
         }
       }
     } catch (e) {
@@ -337,8 +337,7 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "PT") {
       bservice = "PT"
     } else if (moduleName === "PT.CREATE") {
-      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${
-        propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
+      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
       bservice = "PT.MUTATION";
       baseUrl = "pt-mutation";
@@ -395,7 +394,7 @@ class WorkFlowContainer extends React.Component {
       localStorageGet("businessServiceData")
     );
     const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
-    const nextState = data && data.length > 0 && find(data.states, { uuid: nextStateUUID });
+    const nextState = data && data.states && data.states.length > 0 && find(data.states, { uuid: nextStateUUID });
 
     const isLastState = data ? nextState && nextState.isTerminateState : false;
     return isLastState;
@@ -470,7 +469,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" ||businessService === "ModifyWSConnection" ||businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !==  "APPROVE_FOR_CONNECTION"&& item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
@@ -555,10 +554,10 @@ const mapDispacthToProps = dispatch => {
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
     setRoute: route => dispatch(setRoute(route)),
-    showSpinner:()=>
-    dispatch(showSpinner()),
-    hideSpinner:()=>
-    dispatch(hideSpinner())
+    showSpinner: () =>
+      dispatch(showSpinner()),
+    hideSpinner: () =>
+      dispatch(hideSpinner())
   };
 };
 
