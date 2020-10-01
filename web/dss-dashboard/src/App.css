@@ -373,7 +373,6 @@ h6 span {
     flex-direction: row;
     display: flex;
     margin-left: -8px;
-    position: absolute;
     padding-top: 15px;
 }
 
