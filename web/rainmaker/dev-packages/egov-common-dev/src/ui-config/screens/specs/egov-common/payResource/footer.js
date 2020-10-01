@@ -410,7 +410,7 @@ const callBackForPay = async (state, dispatch) => {
           true,
           {
             labelName: "Transaction numbers don't match !",
-            labelKey: "ERR_FILL_ALL_FIELDS"
+            labelKey: "ERR_TRANSACTION_NO_DONT_MATCH"
           },
           "error"
         )
@@ -442,7 +442,7 @@ const callBackForPay = async (state, dispatch) => {
           true,
           {
             labelName: "Enter a Valid IFSC code !",
-            labelKey: "ERR_FILL_ALL_FIELDS"
+            labelKey: "ERR_ENTER_VALID_IFSC"
           },
           "error"
         )

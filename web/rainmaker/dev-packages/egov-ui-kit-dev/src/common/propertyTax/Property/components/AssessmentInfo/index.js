@@ -38,12 +38,11 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 };
 
 export const getBuildingTypeInfo = (generalMDMSDataById, propertyDetails) => {
-  return generalMDMSDataById
-  ? propertyDetails.propertySubType
-    ? generalMDMSDataById["PropertySubType"] && generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType]
-      ? get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, "NA") : 'NA'
-    : generalMDMSDataById["PropertyType"] && generalMDMSDataById["PropertyType"][propertyDetails.propertyType]
-      ? get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA") : "NA" : "NA";
+  if (!generalMDMSDataById) {
+    return propertyDetails.propertySubType ? propertyDetails.propertySubType : propertyDetails.propertyType ? propertyDetails.propertyType : 'NA';
+  } else {
+    return get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA"))
+  }
 }
 
 export const getUsageTypeInfo = (propertyDetails) => {
@@ -52,7 +51,7 @@ export const getUsageTypeInfo = (propertyDetails) => {
 
 export const getPlotSizeInfo = (propertyDetails) => {
   return propertyDetails.propertySubType === "SHAREDPROPERTY"
-  ? "NA" : propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`;
+    ? "NA" : propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`;
 }
 
 export const getRainWaterHarvestingInfo = (properties) => {
@@ -60,12 +59,12 @@ export const getRainWaterHarvestingInfo = (properties) => {
 }
 
 export const getUnitUsageTypeInfo = (unit, propertyDetails) => {
-  return unit&&unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit&&unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails&&propertyDetails.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails&&propertyDetails.usageCategoryMinor, localizationLabelsData) :
-  (unit&&unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit&&unit.usageCategoryMajor, localizationLabelsData) : "NA"));
+  return unit && unit.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails && propertyDetails.usageCategoryMinor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails && propertyDetails.usageCategoryMinor, localizationLabelsData) :
+    (unit && unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMajor, localizationLabelsData) : "NA"));
 }
 
 export const getOccupancyInfo = (unit) => {
-  return unit&&unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit&&unit.occupancyType, localizationLabelsData) : "NA";
+  return unit && unit.occupancyType ? getTranslatedLabel('PROPERTYTAX_OCCUPANCYTYPE_' + unit && unit.occupancyType, localizationLabelsData) : "NA";
 }
 
 export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properties, oldPropertydetails, OldProperty) => {
@@ -110,6 +109,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properti
 
 export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => {
   units = units || [];
+  units = units && units.filter(unit => unit && (unit.active || unit.id == undefined));
   let floors = [];
   units.map((unit, index) => {
     if (unit) {
@@ -121,18 +121,18 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
 
         key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
         value: getOccupancyInfo(unit),
-        oldValue: oldPropertydetails && oldPropertydetails.units&&oldPropertydetails.units[index] && getOccupancyInfo(oldPropertydetails.units[index]) || "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && getOccupancyInfo(oldPropertydetails.units[index]) || "NA",
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
         value: unit.unitArea ? unit.unitArea + '' : "NA",
-        oldValue: oldPropertydetails && oldPropertydetails.units&&oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
+        oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({
           key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
           value: unit.arv ? unit.arv + '' : "NA",
-          oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index]&&(oldPropertydetails.units[index].arv+'') || "NA",
+          oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (oldPropertydetails.units[index].arv + '') || "NA",
         })
       }
       if (!floors[unit['floorNo']]) {
@@ -152,7 +152,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty
   let subUnitItems = [];
   let oldPropertydetails = '';
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
-  if(OldProperty && Object.keys(OldProperty).length > 0) {
+  if (OldProperty && Object.keys(OldProperty).length > 0) {
     oldPropertydetails = OldProperty.propertyDetails[0];
   }
   if (properties) {
