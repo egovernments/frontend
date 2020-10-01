@@ -267,15 +267,7 @@ import {
                     false
                   )
                 );
-                const challanId = get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "Challan[0].id",
-                  null
-                );
-                //Set tax head fields if there is no service type available
-                if (!challanId && serviceData[action.value]) {
-                  const taxHeads = setTaxHeadFields(action, state, dispatch);
-                }
+                
               }
             }
           }
@@ -319,16 +311,10 @@ import {
             }
           },
           beforeFieldChange: async (action, state, dispatch) => {
-                const challanId = get(
-                    state.screenConfiguration.preparedFinalObject,
-                    "Challan[0].id",
-                    null
-                  );
-                  if (!challanId && action.value) {
+                 
+                  console.log("BeforeFieldChange",action.value);
+                  if (action.value) {
                     const taxHeads = setTaxHeadFields(action, state, dispatch);
-                    console.log(taxHeads);
-                    console.info("selected subtype==",action.value);
-                    
                   }         
            }
         },
@@ -390,9 +376,6 @@ import {
           required: true,         
           props: {
             disabled: true,            
-            // inputProps: {
-            //   max: new Date().toISOString().slice(0,10)
-            // }           
           },
           pattern: getPattern("Date"),
           jsonPath: "Challan[0].taxPeriodTo",
