@@ -175,7 +175,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].workflowCode"
     );
-
+    const localePrefix = {
+      moduleName: tenantId,
+      masterName: "REVENUE"
+    };
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewTradeDetails.children.cardContent.children.viewFour.children.reviewMohalla.children.value.children.key",
+        "props.localePrefix",
+        localePrefix
+      )
+    );
     const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
     if (status === "FIELDINSPECTION"){
     if (!isEmpty(businessServiceData)) {
