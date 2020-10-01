@@ -4,8 +4,7 @@ import { getCommonHeader,getCommonContainer,
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import set from "lodash/set";
+import get from "lodash/get"; 
 import { setServiceCategory } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
@@ -20,52 +19,7 @@ const header = getCommonHeader({
   labelKey: "UC_COMMON_HEADER"
 });
 const tenantId = getTenantId();
-const loadServiceType = async (tenantId, dispatch) => {
-  let requestBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "BillingService",
-          masterDetails: [
-            {
-              name: "BusinessService",
-              filter: "[?(@.type=='Adhoc')]"
-            },
-            {
-              name: "TaxHeadMaster"
-            },
-            {
-              name: "TaxPeriod"
-            }
-          ]
-        }
-      ]
-    }
-  };
-  try {
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/egov-mdms-service/v1/_search",
-      "_search",
-      [],
-      requestBody
-    );
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.BillingService",
-        payload.MdmsRes.BillingService
-      )
-    );
-    setServiceCategory(
-      get(payload, "MdmsRes.BillingService.BusinessService", []),
-      dispatch
-    );
-  } catch (e) {
-    console.log(e);
-  }
-}
+
 const getData = async (action, state, dispatch) => {
   console.info("getData");
   let requestBody = {
@@ -85,6 +39,21 @@ const getData = async (action, state, dispatch) => {
           moduleName: "common-masters",
           masterDetails: [            
             { name: "Help" }
+          ]
+        },
+        {
+          moduleName: "BillingService",
+          masterDetails: [
+            {
+              name: "BusinessService",
+              filter: "[?(@.type=='Adhoc')]"
+            },
+            {
+              name: "TaxHeadMaster"
+            },
+            {
+              name: "TaxPeriod"
+            }
           ]
         }
       ]
@@ -109,20 +78,6 @@ const getData = async (action, state, dispatch) => {
         prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
       );
     }
-    const serviceCategories = get(
-      state.screenConfiguration,
-      "preparedFinalObject.searchScreenMdmsData.serviceCategory",
-      []
-    );
-    if (serviceCategories && serviceCategories.length !== 0) {
-      setServiceCategory(
-        serviceCategories,
-        dispatch
-      );
-    } else if (tenantId) {
-      loadServiceType(tenantId, dispatch)
-    }
-   
 
     const presentTenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):getTenantId();
       
@@ -204,33 +159,7 @@ const newCollection = {
   uiFramework: "material-ui",
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
-    // const demandId = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "Demands[0].id",
-    //   null
-    // );
-    // const screenConfigForUpdate = get(
-    //   state.screenConfiguration,
-    //   "screenConfig.newCollection"
-    // );
-    // console.info("Demand id==",demandId);
-    // if (demandId) {
-    //   console.info("inside if condn==",demandId);
-    //   set(
-    //     screenConfigForUpdate,
-    //     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",
-    //     true
-    //   );
-    //   set(
-    //     screenConfigForUpdate,
-    //     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType.props.disabled",
-    //     true
-    //   );
-    //   action.screenConfig = screenConfigForUpdate;
-    // }
-    // console.info("getting data")
-    //!demandId && getData(action, state, dispatch, demandId);
-
+    dispatch(prepareFinalObject("Challan", []));
     getData(action, state, dispatch);
     return action;
   },

@@ -37,7 +37,9 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { adhocPopup } from "./applyResource/adhocPopup";
 import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
-import isEmpty from "lodash/isEmpty"; 
+import isEmpty from "lodash/isEmpty";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils"; 
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 
 let tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -173,7 +175,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].workflowCode"
     );
-
+    const localePrefix = {
+      moduleName: tenantId,
+      masterName: "REVENUE"
+    };
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.tradeReviewDetails.children.cardContent.children.reviewTradeDetails.children.cardContent.children.viewFour.children.reviewMohalla.children.value.children.key",
+        "props.localePrefix",
+        localePrefix
+      )
+    );
     const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
     if (status === "FIELDINSPECTION"){
     if (!isEmpty(businessServiceData)) {
@@ -548,7 +561,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     //To set the application no. at the  top
     set(
       action.screenConfig,
