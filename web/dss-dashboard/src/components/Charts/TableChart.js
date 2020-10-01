@@ -160,7 +160,7 @@ class TableChart extends Component {
   getRequest(calledFrom, visualcode, active, filterList) {
 
     // this.getLastYearRequest(calledFrom, visualcode, active, filterList);
-
+    let tempFilterList = this.state.drilfiltersNew || [];
     filterList = filterList ? filterList : this.state.filterList;
     let filters = {}, ttest = [], tempFL;
     if (!_.isEmpty(filterList, true)) {
@@ -180,6 +180,33 @@ class TableChart extends Component {
         }
       });
     }
+
+        /*  Fix for passing Mutiple filters in the table for 3+ level drilldowns */
+    tempFilterList && Array.isArray(tempFilterList) && tempFilterList.map(filter => {
+      if (filters && filters[filter.key]) {
+
+      } else {
+        let filterValue = ''
+        if (filter.key == 'ulbId' && filter.column == 'ULB') {
+          let filteredList = Object.values(filterList).map(filList => filList.filter(boundaryList => {
+            return boundaryList && boundaryList[2] && boundaryList[2].column == "Boundary" && boundaryList[2].key == "tenantId"
+          }))
+          filterValue = filteredList && filteredList.length > 0 && filteredList[0] && filteredList[0].length > 0 && filteredList[0][0] && filteredList[0][0][4] || '';
+        } else if (filter.key == 'wardId' && filter.column == 'Ward') {
+          let filteredList = Object.values(filterList).map(filList => filList.filter(boundaryList => {
+            return boundaryList && boundaryList[2] && boundaryList[2].column == "Ward" && boundaryList[2].key == "wardId"
+          }))
+          filterValue = filteredList && filteredList.length > 0 && filteredList[0] && filteredList[0].length > 0 && filteredList[0][0] && filteredList[0][0][4] || '';
+        }
+          
+          if (filterValue != '') {
+            filters[filter.key] = filterValue
+          }
+
+        }
+      })
+
+
 
     var globalFilters = this.props.filters;
     globalFilters = { ...globalFilters, ...filters };
@@ -205,6 +232,7 @@ class TableChart extends Component {
           tempState.data = tempData;
           tempState.drillCode = drillCode;
           tempState.drilfilters = drilfilters;
+          tempState.drilfiltersNew = (response.data.responseData['filter'] && response.data.responseData['filter'].length > 0) ? response.data.responseData['filter'] : null;
           if (active)
             tempState.active = active.toUpperCase();
           if (drillCode != 'none' || calledFrom == 'clickFromTab')
@@ -347,7 +375,7 @@ class TableChart extends Component {
                   let text = null;
                   try {
                     text = strings["TENANT_TENANTS_" + label]
-                  } catch{
+                  } catch {
                     text = a.label;
                   }
                   if (!text) {
@@ -359,7 +387,7 @@ class TableChart extends Component {
                   let text = null;
                   try {
                     text = strings["TENANT_TENANTS_" + label]
-                  } catch{
+                  } catch {
                     text = a.strValue;
                   }
                   if (!text) {
@@ -421,7 +449,7 @@ class TableChart extends Component {
                     let text = null;
                     try {
                       text = strings["TENANT_TENANTS_" + label]
-                    } catch{
+                    } catch {
                       text = a.label;
                     }
                     if (!text) {
@@ -444,30 +472,30 @@ class TableChart extends Component {
 
 
       return (
-        <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column' ,marginTop: "10px"}}>
+        <div className={classes.tableChart} style={{ display: 'flex', flexDirection: 'column', marginTop: "10px" }}>
           <div className="tableHeading">
             <div className={"table-filters"}>
               <SwitchButton clickFromTab={this.clickFromTab} chartParent={chartParent} />
-              
+
             </div>
           </div>
           {(this.state.data && !_.isEmpty(this.state.filterList, true)) &&
-                <div className="row tableFilterChipWrap">
-                  <div className="filLabel">
-                    Filters Applied
+            <div className="row tableFilterChipWrap">
+              <div className="filLabel">
+                Filters Applied
               </div>
-                  {
-                    isMobile ?
-                      (<div class="cutome_label_chip">
-                        {_.map(this.state.filterList, (k, v) => {
-                          return this.renderChip(v, k)
-                        })}</div>) :
-                      _.map(this.state.filterList, (k, v) => {
-                        return this.renderChip(v, k)
-                      })
-                  }
-                </div>
+              {
+                isMobile ?
+                  (<div class="cutome_label_chip">
+                    {_.map(this.state.filterList, (k, v) => {
+                      return this.renderChip(v, k)
+                    })}</div>) :
+                  _.map(this.state.filterList, (k, v) => {
+                    return this.renderChip(v, k)
+                  })
               }
+            </div>
+          }
           {
             <UiTable
               column={this.state.data && this.state.data.filter && Array.isArray(this.state.data.filter) && this.state.data.filter.length > 0 && this.state.data.filter[0].column ? this.state.data.filter[0].column : (chartsData[chartKey] && Array.isArray(chartsData[chartKey].filter) && chartsData[chartKey].filter.length > 0 ? chartsData[chartKey].filter[0].column : '')}
