@@ -18,6 +18,7 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
+import { uniqBy } from "lodash";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -228,6 +229,7 @@ export const prepareDocumentsView = async (state, dispatch) => {
       `Document - ${index + 1}`;
     return doc;
   });
+  documentsPreview = uniqBy(documentsPreview, "fileStoreId");
   dispatch(prepareFinalObject("documentsPreview", documentsPreview));
   dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", documentsPreview));
 

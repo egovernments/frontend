@@ -12,7 +12,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
-
+import { hideSpinner , showSpinner } from "egov-ui-kit/redux/common/actions";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -106,9 +106,12 @@ class WorkFlowContainer extends React.Component {
       case "VERIFY_AND_FORWARD":
         return "purpose=forward&status=success";
       case "SEND_BACK_FOR_DOCUMENT_VERIFICATION":
+      case "SEND_BACK":
       case "SEND_BACK_FOR_FIELD_INSPECTION":
         return "purpose=sendback&status=success";
       case "APPROVE_FOR_CONNECTION":
+        return "purpose=approve&status=success";
+      case "APPROVE_CONNECTION":
         return "purpose=approve&status=success";
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
@@ -116,6 +119,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=application&status=revocated"
       case "VOID":
         return "purpose=application&status=voided"
+      case "REOPEN":
+        return "purpose=reopen&status=success";
     }
   };
 
@@ -126,6 +131,7 @@ class WorkFlowContainer extends React.Component {
       dataPath,
       moduleName,
       updateUrl,
+      redirectQueryString,
       beforeSubmitHook
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
@@ -176,7 +182,7 @@ class WorkFlowContainer extends React.Component {
           data.workflow.varificationDocuments[i].fileStore = data.workflow.varificationDocuments[i].fileStoreId
         }
       }
-      if(get(data, "workflow.comment")) {
+      if (get(data, "workflow.comment")) {
         data.workflow.comments = get(data, "workflow.comment");
       }
     }
@@ -190,29 +196,7 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      data = data[0];
-      data.assignees = [];
-      if (data.assignee) {
-        data.assignee.forEach(assigne => {
-          data.assignees.push({
-            uuid: assigne
-          })
-        })
-      }
-      data.processInstance = {
-        documents: data.wfDocuments,
-        assignes: data.assignees,
-        comment: data.comment,
-        action: data.action
-      }
-      data.waterSource = data.waterSource + "." + data.waterSubSource;
-    }
-
-    if (moduleName === "NewSW1") {
-      dataPath = "SewerageConnection";
-    }
-
+    this.props.showSpinner();
     try {
       if (beforeSubmitHook) {
         if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
@@ -231,7 +215,7 @@ class WorkFlowContainer extends React.Component {
 
       if (payload) {
         let path = "";
-
+        this.props.hideSpinner();
         if (moduleName == "PT.CREATE") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
@@ -249,16 +233,16 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
-        window.location.href = `acknowledgement?${this.getPurposeString(
+        if (redirectQueryString) {
+          this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
+        }else{
+        this.props.setRoute(`acknowledgement?${this.getPurposeString(
           label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-
-        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`);
         }
-
       }
     } catch (e) {
+      this.props.hideSpinner();
       if (moduleName === "BPA") {
         toggleSnackbar(
           true,
@@ -307,7 +291,7 @@ class WorkFlowContainer extends React.Component {
 
     if (isDocRequired) {
       let documents = get(data, "wfDocuments");
-      if( dataPath === "BPA") {
+      if (dataPath === "BPA") {
         documents = get(data, "workflow.varificationDocuments");
       }
       if (documents && documents.length > 0) {
@@ -327,13 +311,17 @@ class WorkFlowContainer extends React.Component {
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances } = this.props;
+    const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
+    const { PTApplication = {} } = preparedFinalObject;
+    const { propertyId } = PTApplication;
     let applicationStatus;
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
     }
-    let baseUrl = "";
-    let bservice = "";
+    // needs to remove this initialization if all other module integrated this changes.
+    let baseUrl = (baseUrlTemp) ? baseUrlTemp : ""
+    let bservice = (bserviceTemp) ? bserviceTemp : ""
+
     if (moduleName === "FIRENOC") {
       baseUrl = "fire-noc";
       bservice = "FIRENOC";
@@ -346,18 +334,15 @@ class WorkFlowContainer extends React.Component {
       } else {
         bservice = "BPA.LOW_RISK_PERMIT_FEE"
       }
-    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      baseUrl = "wns"
-      if (moduleName === "NewWS1") {
-        bservice = "WS.ONE_TIME_FEE"
-      } else {
-        bservice = "SW.ONE_TIME_FEE"
-      }
     } else if (moduleName === "PT") {
       bservice = "PT"
+    } else if (moduleName === "PT.CREATE") {
+      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${
+        propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
     } else if (moduleName === "PT.MUTATION") {
-      bservice = "PT.MUTATION"
-    } else {
+      bservice = "PT.MUTATION";
+      baseUrl = "pt-mutation";
+    } else if (!baseUrl && !bservice) {
       baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
       bservice = "TL"
     }
@@ -410,9 +395,9 @@ class WorkFlowContainer extends React.Component {
       localStorageGet("businessServiceData")
     );
     const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
-    // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
+    const nextState = data && data.length > 0 && find(data.states, { uuid: nextStateUUID });
 
-    const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
+    const isLastState = data ? nextState && nextState.isTerminateState : false;
     return isLastState;
   };
 
@@ -422,15 +407,15 @@ class WorkFlowContainer extends React.Component {
     );
     const data = find(businessServiceData, { businessService: moduleName });
     const nextState = find(data.states, { uuid: nextStateUUID });
-    return nextState.docUploadRequired;
+    return nextState && nextState.docUploadRequired;
   };
 
-  getActionIfEditable = (status, businessId, moduleName) => {
+  getActionIfEditable = (status, businessId, moduleName, applicationState) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
-    const state = find(data.states, { applicationStatus: status });
+    const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
     let actions = [];
     state.actions &&
       state.actions.forEach(item => {
@@ -442,13 +427,14 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
+    // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",
         moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
+        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
       };
     }
     return editAction;
@@ -465,6 +451,7 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
+    let applicationState = get(data[data.length - 1], "state.state");
     let filteredActions = [];
 
     filteredActions = get(data[data.length - 1], "nextActions", []).filter(
@@ -483,7 +470,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: (businessService === "NewWS1" ||businessService === "ModifyWSConnection" ||businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !==  "APPROVE_FOR_CONNECTION"&& item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
@@ -492,7 +479,8 @@ class WorkFlowContainer extends React.Component {
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
-      businessService
+      businessService,
+      applicationState
     );
     editAction.buttonLabel && actions.push(editAction);
     return actions;
@@ -525,17 +513,6 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
     let showFooter = true;
-    // if (moduleName === 'NewWS1' || moduleName === 'NewSW1') {
-    //   showFooter = true;
-    // } else if (moduleName == "PT.CREATE") {
-    //   showFooter = true;
-    // } else if (moduleName == "ASMT") {
-    //   showFooter = true;
-    // } else if (moduleName == "PT.MUTATION") {
-    //   showFooter = true;
-    // } else {
-    //   showFooter = process.env.REACT_APP_NAME === "Citizen" ? true : true;
-    // }
     if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
@@ -546,7 +523,7 @@ class WorkFlowContainer extends React.Component {
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName}/>
+          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName} />
         )}
         {showFooter &&
           <Footer
@@ -577,7 +554,11 @@ const mapDispacthToProps = dispatch => {
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
-    setRoute: route => dispatch(setRoute(route))
+    setRoute: route => dispatch(setRoute(route)),
+    showSpinner:()=>
+    dispatch(showSpinner()),
+    hideSpinner:()=>
+    dispatch(hideSpinner())
   };
 };
 

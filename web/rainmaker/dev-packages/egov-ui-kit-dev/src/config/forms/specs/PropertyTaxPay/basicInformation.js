@@ -12,8 +12,8 @@ import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
 const options = [
   
-  { value: "Yes", label: getLocaleLabels("Yes", "PT_COMMON_YES") },
-  { value: "No", label: getLocaleLabels("No", "PT_COMMON_NO") },
+  { value: true, label: getLocaleLabels("Yes", "PT_COMMON_YES") },
+  { value: false, label: getLocaleLabels("No", "PT_COMMON_NO") },
 ];
 const formConfig = {
   name: "basicInformation",
@@ -112,6 +112,8 @@ const formConfig = {
       masterTwo = get(state, "common.generalMDMSDataById.PropertySubType");
       set(action, "form.fields.typeOfBuilding.dropDownData", mergeMaster(masterOne, masterTwo, "propertyType"));
       set(action, "form.fields.rainwaterHarvesting.options",options);
+      set(action, "form.fields.rainwaterHarvesting.value", get(state.common.prepareFormData,'Properties[0].additionalDetails.isRainwaterHarvesting',false));
+      
       return action;
     } catch (e) {
       console.log(e);
