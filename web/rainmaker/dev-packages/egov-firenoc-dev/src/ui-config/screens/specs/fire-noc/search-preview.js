@@ -302,6 +302,8 @@ const setSearchResponse = async (
   // const response = sampleSingleSearch();
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]','');
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.comment','');
+  
+  set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments',[]);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
   // Set Institution/Applicant info card visibility
