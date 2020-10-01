@@ -237,7 +237,8 @@ const createChallan = async(state,dispatch) =>{
             "challans[0].businessService",
             businessService.split(".")[0]
           );
-          dispatch(prepareFinalObject("Challan", payload.challans[0]));          
+          dispatch(prepareFinalObject("Challan", payload.challans[0])); 
+         // dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&tenantId=${tenantId}&serviceCategory=${businessService}&challanNumber=${consumerCode}`));        
           await generateBill(consumerCode, tenantId, businessService, dispatch);
         } else {
           console.info("some error  happened while generating challan");
@@ -275,9 +276,10 @@ const generateBill = async (
       {}
     );
     if (payload && payload.Bill[0]) {
-      console.info("Prepareing Receipt Temp===");
+      console.info("Prepareing Receipt Temp===",payload.Bill[0].billNumber);
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));                
-      dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&challanNumber=${consumerCode}`));
+     // dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&challanNumber=${consumerCode}`));
+     dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&tenantId=${tenantId}&billNumber=${payload.Bill[0].billNumber}&serviceCategory=${businessService}&challanNumber=${consumerCode}`));        
     }
     else{     
       dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
