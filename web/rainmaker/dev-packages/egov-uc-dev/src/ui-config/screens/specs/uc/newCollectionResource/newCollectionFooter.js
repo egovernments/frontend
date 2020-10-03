@@ -150,7 +150,7 @@ const processChallan = async (state, dispatch) => {
         );
         const businessService = get(
           state.screenConfiguration.preparedFinalObject,
-          "Challan[0].serviceType"
+          "Challan[0].businessService"
         );
         //console.info("show common pay");
         //getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
@@ -185,7 +185,7 @@ const createChallan = async(state,dispatch) =>{
       )
     );
     
-    set(eChallans[0], "consumerType", eChallans[0].businessService);
+    //set(eChallans[0], "consumerType", eChallans[0].businessService);
     
     eChallans[0].amount &&
       eChallans[0].amount.forEach(item => {
@@ -194,8 +194,8 @@ const createChallan = async(state,dispatch) =>{
         }
       });
      
-    eChallans[0].serviceType &&
-      set(eChallans[0], "businessService", eChallans[0].serviceType);
+    // eChallans[0].serviceType &&
+    //   set(eChallans[0], "businessService", eChallans[0].serviceType);
     set(
       eChallans[0],
       "taxPeriodFrom",
@@ -212,7 +212,7 @@ const createChallan = async(state,dispatch) =>{
 
     //glcode
     for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping.length; i++) {
-      if ((state.screenConfiguration.preparedFinalObject.Challan[0].serviceType === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].cb === state.screenConfiguration.preparedFinalObject.Challan[0].tenantId)) {
+      if ((state.screenConfiguration.preparedFinalObject.Challan[0].businessService === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].cb === state.screenConfiguration.preparedFinalObject.Challan[0].tenantId)) {
         set(eChallans[0], "additionalDetail.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].glcode);
       }
     }
@@ -231,7 +231,7 @@ const createChallan = async(state,dispatch) =>{
           const businessService = get(payload, "challans[0].businessService");
           set(payload, "challans[0].mobileNumber", mobileNumber);
           set(payload, "challans[0].consumerName", consumerName);
-          set(payload, "challans[0].serviceType", businessService);
+          //set(payload, "challans[0].businessService", businessService);
           set(
             payload,
             "challans[0].businessService",

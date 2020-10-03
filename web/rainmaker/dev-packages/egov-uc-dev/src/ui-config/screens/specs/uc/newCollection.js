@@ -200,8 +200,8 @@ const getChallanSearchRes = async (action, state, dispatch) => {
           )
         );
       let bService = searchpayload.challans[0].businessService;
-      searchpayload.challans[0].serviceType = bService;
-      searchpayload.challans[0].businessService = bService.split(".")[0];
+      //searchpayload.challans[0].serviceType = bService;
+      searchpayload.challans[0].consumerType = bService.split(".")[0];
       searchpayload.challans[0].amount = [];
 
       dispatch(prepareFinalObject("Challan", searchpayload.challans));
@@ -211,6 +211,30 @@ const getChallanSearchRes = async (action, state, dispatch) => {
           "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.City",
           "props.value",
           tenantId
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory",
+          "props.disabled",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+          "props.disabled",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.toDate",
+          "props.disabled",
+          false
         )
       );
     } else {
@@ -225,6 +249,9 @@ const newCollection = {
   uiFramework: "material-ui",
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
+    console.log("Before init function");
+    //Flush previous data 
+    dispatch(prepareFinalObject("ChallanTaxHeads",[]))
     dispatch(prepareFinalObject("Challan", []));
     getData(action, state, dispatch);
     if (getQueryArg(window.location.href, "consumerCode") != null) {

@@ -76,7 +76,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       );
       const businessService = get(
         state.screenConfiguration.preparedFinalObject,
-        "Challan.serviceType"
+        "Challan.businessService"
       );
       if(businessService !=null && tenantId !=null && challanNo !=null ){
         getCommonPayUrl(dispatch, challanNo, tenantId, businessService);

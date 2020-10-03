@@ -56,6 +56,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             required: true,
             props: {
               required: true,
+              disabled: true,
             },
           }),
           beforeFieldChange: async (action, state, dispatch) => {
@@ -178,7 +179,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
         serviceCategory: {
           uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
-          jsonPath: "Challan[0].businessService",
+          jsonPath: "Challan[0].consumerType",
           gridDefination: {
             xs: 12,
             sm: 6,
@@ -203,7 +204,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             },
 
             visible: true,
-            jsonPath: "Challan[0].businessService",
+            jsonPath: "Challan[0].consumerType",
             sourceJsonPath: "applyScreenMdmsData.serviceCategories",
             labelsFromLocalisation: true,
             suggestions: [],
@@ -224,7 +225,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             if(editingMode!=null){
               selServiceType= get(
                   state.screenConfiguration,
-                  "preparedFinalObject.Challan[0].serviceType",
+                  "preparedFinalObject.Challan[0].businessService",
                   null
                 );
             }
@@ -277,7 +278,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
         serviceType: {
           uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
-          jsonPath: "Challan[0].serviceType",
+          jsonPath: "Challan[0].businessService",
           gridDefination: {
             xs: 12,
             sm: 6,
@@ -302,7 +303,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             },
 
             visible: true,
-            jsonPath: "Challan[0].serviceType",
+            jsonPath: "Challan[0].businessService",
             sourceJsonPath: "applyScreenMdmsData.serviceTypes",
             labelsFromLocalisation: true,
             suggestions: [],
@@ -336,6 +337,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Challan[0].taxPeriodFrom",
           beforeFieldChange: async (action, state, dispatch) => {
+            console.log("FROMDATEFIELDCHANGE");
             if (action.value) {
               dispatch(
                 handleField(
@@ -410,12 +412,6 @@ export const newCollectionServiceDetailsCard = getCommonCard(
 );
 
 const setTaxHeadFields = (action, state, dispatch) => {
-  console.log("Set Tax heads",action,state,dispatch);
-  const serviceData = get(
-    state.screenConfiguration,
-    `preparedFinalObject.applyScreenMdmsData.nestedServiceData`,
-    {}
-  );
   const taxHeadMasters = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",
@@ -424,14 +420,8 @@ const setTaxHeadFields = (action, state, dispatch) => {
   const matchingTaxHeads = taxHeadMasters.filter(
     (item) => item.service === action.value
   );
-  console.log("matchingTaxHeads",matchingTaxHeads);
   if (matchingTaxHeads && matchingTaxHeads.length > 0) {
     //Delete previous Tax Head fields
-    console.log("previous taxheads ",get(
-      state.screenConfiguration,
-      "preparedFinalObject.Challan[0].amount",
-      []
-    ));
     const noOfPreviousTaxHeads = get(
       state.screenConfiguration,
       "preparedFinalObject.Challan[0].amount",
@@ -443,8 +433,6 @@ const setTaxHeadFields = (action, state, dispatch) => {
       "screenConfig.newCollection.components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
       {}
     );
-    console.log("TaxFields",taxFields);
-    console.log("noOfPreviousTaxHeads",noOfPreviousTaxHeads);
     const taxFieldKeys = Object.keys(taxFields).filter((item) =>
       item.startsWith("taxheadField_")
     );
@@ -453,7 +441,6 @@ const setTaxHeadFields = (action, state, dispatch) => {
       "preparedFinalObject.Challan[0].id",
       null
     );
-    console.log("Editing Mode ",editingMode);
     if (noOfPreviousTaxHeads > 0   ) {
       for (let i = 0; i < taxFieldKeys.length; i++) {
         dispatch(
@@ -480,7 +467,6 @@ const setTaxHeadFields = (action, state, dispatch) => {
 
     //Show new tax head fields
     matchingTaxHeads.forEach((item, index) => {
-      console.log("item ",item, index);
       
         dispatch(
           prepareFinalObject(`Challan[0].amount[${index}].taxHeadCode`, item.code)

@@ -358,7 +358,7 @@ export const setServiceCategory = (businessServiceData, dispatch,state) => {
         "props.value",
         get(
           state.screenConfiguration,
-          "preparedFinalObject.Challan[0].businessService",
+          "preparedFinalObject.Challan[0].consumerType",
           null
         )
       )
