@@ -13,7 +13,6 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import commonConfig from "config/common.js";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import "../../../../../index.css";
@@ -34,23 +33,7 @@ const getCommonApplyFooter = children => {
     children
   };
 };
-
-export const footerReview = (
-  action,
-  state,
-  dispatch,
-  tenantId,
-  
-) => {
-  const editingMode = get(
-    state.screenConfiguration,
-    "preparedFinalObject.Challan[0].id",
-    null
-  )!=null ? true : false;
-
-  
-
-};
+ 
 export const newCollectionFooter = getCommonApplyFooter({
   nextButton: {
     componentPath: "Button",
@@ -77,7 +60,8 @@ export const newCollectionFooter = getCommonApplyFooter({
       callBack: (state, dispatch) => {      
           processChallan(state, dispatch,"CREATE");
       }
-    }
+    },
+    visible: false
   },
   
   cancelChallan: {
@@ -106,7 +90,7 @@ export const newCollectionFooter = getCommonApplyFooter({
         processChallan(state, dispatch,"CANCELLED");
       }
     },
-    visible: true
+    visible: false
   },
   updateChallan: {
     componentPath: "Button",
@@ -134,7 +118,7 @@ export const newCollectionFooter = getCommonApplyFooter({
         processChallan(state, dispatch,"UPDATE");
       }
     },
-    visible: true
+    visible: false
   } 
 });
 
@@ -153,9 +137,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
 
 
 const processChallan = async (state, dispatch,applicationStatus) => {
-
   let isFormValid = true;
-
   const ucConsumerValid = validateFields(
     "components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children",
     state,
@@ -180,14 +162,13 @@ const processChallan = async (state, dispatch,applicationStatus) => {
       let objToPush =prepareObj(state,dispatch);
       switch (applicationStatus) {
         case "CREATE": 
-          await createChallan(state, dispatch);       
+          await createChallan(state, dispatch,objToPush);       
           break;
         case "CANCELLED":
-          await cancelChallan(state, dispatch);  
+          await cancelChallan(state, dispatch,objToPush);  
           break;
         case "UPDATE":
-          prepareObj(state,dispatch);
-          await updateChallan(state, dispatch);  
+          await updateChallan(state, dispatch,objToPush);  
           break;
         
       }
@@ -203,7 +184,7 @@ const processChallan = async (state, dispatch,applicationStatus) => {
           labelName: "Please fill the required fields.",
           labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
         },
-        "info"
+        "warning"
       )
     );
   }
@@ -231,73 +212,79 @@ const prepareObj =(state,dispatch) =>{
     //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
     const taxPeriodValid = isTaxPeriodValid(dispatch, eChallans[0], state);
     if (taxPeriodValid) {
-      return eChallans;
+      return eChallans[0];
     }
     return null;
   
 };
  
-const postUpdate=(state,dispatch,payload) =>{
+const postUpdate=async(state,dispatch,payload,operation) =>{
   const consumerCode = get(payload, "challans[0].challanNo");
   const businessService = get(payload, "challans[0].businessService");
   set(payload, "challans[0].mobileNumber", get(payload, "challans[0].citizen.mobileNumber"));
   set(payload, "challans[0].consumerName", get(payload, "challans[0].citizen.name"));
-  set(payload,"challans[0].businessService",businessService.split(".")[0]);
-  dispatch(prepareFinalObject("Challan", payload.challans[0]));          
-  await generateBill(consumerCode, tenantId, businessService, dispatch);
+  //set(payload,"challans[0].businessService",businessService.split(".")[0]);
+  dispatch(prepareFinalObject("Challan", payload.challans[0]));         
+  let tenant=getTenantId(); 
+  await generateBill(consumerCode, tenant, businessService,operation, dispatch);
 }
 
 const createChallan = async(state,dispatch,challan) =>{
+  var operation="challan";
   try{
     if(challan!=null){
       const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_create", "", [], {
         Challan: challan
       });
       if (payload.challans.length > 0) {
-        postUpdate(state,dispatch,payload);
+        await postUpdate(state,dispatch,payload,operation);
       } else {
         console.info("some error  happened while generating challan");
-        dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+        dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
       }
     }
   }catch(e){
-    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+    dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
   }
 }
 
 const updateChallan = async(state,dispatch,challan) =>{
+  var operation="udpate";
   try{
     if(challan!=null){
       const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {
         Challan: challan
       });
       if (payload.challans.length > 0) {
-        postUpdate(state,dispatch,payload);
+        await postUpdate(state,dispatch,payload);
       } else {
-        console.info("some error  happened while generating challan");
-        dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+        console.info("some error  happened while updating challan");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
       }
     }
   }catch(e){
-    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+    dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
   }
 }
 
 const cancelChallan = async(state,dispatch,challan) =>{
+  var operation="cancel";
   try{
     if(challan!=null){
       const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {
         Challan: challan
       });
       if (payload.challans.length > 0) {
-        postUpdate(state,dispatch,payload);
+        const consumerCode = get(payload, "challans[0].challanNo");
+        const businessService = get(payload, "challans[0].businessService");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=success&tenantId=${getTenantId()}&serviceCategory=${businessService}&challanNumber=${consumerCode}`));
       } else {
-        console.info("some error  happened while generating challan");
-        dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+        console.info("some error  happened while cancelling challan");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
       }
     }
   }catch(e){
-    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+    dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
   }
 }
  
@@ -306,10 +293,11 @@ const generateBill = async (
   consumerCode,
   tenantId,
   businessService,
+  operation,
   dispatch
+  
 ) => {
   try {
-    console.info("came to generate bill");
     const payload = await httpRequest(
       "post",
       `/billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
@@ -318,16 +306,15 @@ const generateBill = async (
       {}
     );
     if (payload && payload.Bill[0]) {
-      console.info("Prepareing Receipt Temp===");
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));                
-      dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=success&challanNumber=${consumerCode}`));
+      dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=success&tenantId=${tenantId}&billNumber=${payload.Bill[0].billNumber}&serviceCategory=${businessService}&challanNumber=${consumerCode}`));
     }
     else{     
-      dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+      dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
     }
   } catch (e) {
     console.log(e);
-    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+    dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
   }
 };
 

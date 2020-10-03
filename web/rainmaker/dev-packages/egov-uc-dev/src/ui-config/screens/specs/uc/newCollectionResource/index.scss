@@ -1,15 +1,17 @@
 @media only screen and (min-width: 768px) {
     .update-challan-com{
-        width: 190px;
+        width: 200px;
         height: 48px;
         right: 19px;
+        margin-right: 16px;
         position: relative;
         border-radius: 0px ;
     }
     .gen-challan-btn{
-        width: 190px;
+        width: 200px;
         height: 48px;
         right: 19px;
+        margin-right: 16px;
         position: relative;
         border-radius: 0px ;
     }
@@ -20,6 +22,14 @@
     .update-challan-com{
         width: 100%;
         height: 48px;
+        position: relative;
+        border-radius: 0px ;
+  
+    }
+    .cancel-challan-com{
+        width: 100%;
+        height: 48px;
+        margin-bottom: 2px;
         position: relative;
         border-radius: 0px ;
   

@@ -127,6 +127,15 @@ const getData = async (action, state, dispatch) => {
             getTenantId()
           )
         );
+        dispatch(
+          handleField(
+            "newCollection",
+            "components.div.children.newCollectionFooter.children.nextButton",
+            "visible",
+            true
+          )
+        );
+
       }
     } catch (e) {
       console.log(e);
@@ -226,6 +235,23 @@ const getChallanSearchRes = async (action, state, dispatch) => {
           )
         );
       });
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionFooter.children.updateChallan",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionFooter.children.cancelChallan",
+          "visible",
+          true
+        )
+      );
+
     } else {
       dispatch(toggleSnackbar(true,{ labelName:"Unable to find Challan Detail. Please search with valid Challan Detail"}, "error"));
     }
