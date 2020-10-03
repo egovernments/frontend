@@ -1,79 +1,74 @@
 import {
-    getCommonCard,
-    getTextField,
-    getSelectField,
-    getCommonContainer,
-    getPattern,
-    getDateField,
-    getLabel,
-    getCommonTitle,
-  } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import {
-    getTransformedLocale
-  } from "egov-ui-framework/ui-utils/commons";
-  import { httpRequest } from "egov-ui-framework/ui-utils/api";
-  import {
-    handleScreenConfigurationFieldChange as handleField,
-    prepareFinalObject
-  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-  import {setServiceCategory,
-          downloadHelpFile
-  } from "../../utils"
-  import get from "lodash/get";
+  getCommonCard,
+  getTextField,
+  getSelectField,
+  getCommonContainer,
+  getPattern,
+  getDateField,
+  getLabel,
+  getCommonTitle,
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { setServiceCategory, downloadHelpFile } from "../../utils";
+import get from "lodash/get";
+import find from "lodash/find";
+const tenantId = getTenantId();
 
-  const tenantId = getTenantId();
-
-  export const newCollectionServiceDetailsCard = getCommonCard(
+export const newCollectionServiceDetailsCard = getCommonCard(
   {
     header: getCommonTitle(
-        {
-          labelName: "Service Details",
-          labelKey: "SERVICEDETAILS"
+      {
+        labelName: "Service Details",
+        labelKey: "SERVICEDETAILS",
+      },
+      {
+        style: {
+          marginBottom: 18,
         },
-        {
-          style: {
-            marginBottom: 18
-          }
-        }
-      ), 
-   
+      }
+    ),
+
     searchContainer: getCommonContainer(
       {
         City: {
           ...getSelectField({
             label: {
               labelName: "City",
-              labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+              labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL",
             },
             localePrefix: {
               moduleName: "TENANT",
-              masterName: "TENANTS"
+              masterName: "TENANTS",
             },
             optionLabel: "name",
             placeholder: {
               labelName: "Select City",
-              labelKey: "TL_SELECT_CITY"
+              labelKey: "TL_SELECT_CITY",
             },
-            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",           
+            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
             jsonPath: "Challan[0].tenantId",
             required: true,
             props: {
               required: true,
-              value: tenantId,
-              disabled: true
-            }
+            },
           }),
           beforeFieldChange: async (action, state, dispatch) => {
+            console.log("CityModuleChange");
             const citiesByModule = get(
               state,
               "common.citiesByModule.UC.tenants",
               []
             );
-            if (!citiesByModule.find(item => item.code === action.value)) {
+            if (!citiesByModule.find((item) => item.code === action.value)) {
               return action;
             }
-           
+
             let requestBody = {
               MdmsCriteria: {
                 tenantId: action.value.split(".")[0],
@@ -83,25 +78,24 @@ import {
                     masterDetails: [
                       {
                         name: "BusinessService",
-                        filter: "[?(@.type=='Adhoc')]"
+                        filter: "[?(@.type=='Adhoc')]",
                       },
                       {
-                        name: "TaxHeadMaster"
+                        name: "TaxHeadMaster",
                       },
                       {
-                        name: "TaxPeriod"
+                        name: "TaxPeriod",
                       },
                       {
-                        name:"ServiceGLCODEMapping",
-                      }
-                    ]
-                  }
-                ]
-              }
+                        name: "ServiceGLCODEMapping",
+                      },
+                    ],
+                  },
+                ],
+              },
             };
-            
+
             try {
-             
               let payload = null;
               payload = await httpRequest(
                 "post",
@@ -110,7 +104,7 @@ import {
                 [],
                 requestBody
               );
-             
+
               dispatch(
                 prepareFinalObject(
                   "applyScreenMdmsData.BillingService",
@@ -125,83 +119,89 @@ import {
               );
               setServiceCategory(
                 get(payload, "MdmsRes.BillingService.BusinessService", []),
-                dispatch
+                dispatch,
+                state
               );
-              
             } catch (e) {
               console.log(e);
             }
+            // const fetchbillPayload = await httpRequest(
+            //   "post",
+            //   `/billing-service/bill/v2/_fetchbill?consumerCode="CB-CH-2020-08-27-002702"&businessService="ENTFEE.VEH"&tenantId=${tenantId}`,
+            //    "",
+            //   [],
+            //   {}
+            // );
+            // console.log("fetchbillPayload",fetchbillPayload)
             return action;
-          }
+          },
         },
-        helpPdfButton:{
-            componentPath:"Button",
-            jsonPath:"Challan[0].ucCollection.pdf",
-               gridDefination: {
-              xs: 12,
-              sm: 6
+        helpPdfButton: {
+          componentPath: "Button",
+          jsonPath: "Challan[0].ucCollection.pdf",
+          gridDefination: {
+            xs: 12,
+            sm: 6,
+          },
+          props: {
+            //variant: "outlined",
+            color: "primary",
+            style: {
+              minWidth: "180px",
+              height: "48px",
+              marginRight: "45",
+              borderRadius: "inherit",
             },
-            props:{
-              //variant: "outlined",
-              color:"primary",             
-                style:{
-                minWidth:"180px",
-                height:"48px",
-                marginRight:"45",
-                borderRadius: "inherit"
-              }
+          },
+
+          onClickDefination: {
+            action: "condition",
+            callBack: (state, dispatch) => {
+              downloadHelpFile(state, dispatch);
             },
-            
-              onClickDefination: {
-                  action: "condition",
-                  callBack: (state, dispatch) => {
-                  downloadHelpFile(state, dispatch);
-                  }
-                },
-            children:{
-              
-              downloadButtonIcon:{
-                uiFramework:"custom-atoms",
-                componentPath:"Icon",
-                props:{
-                  iconName:"cloud_download"
-                }
+          },
+          children: {
+            downloadButtonIcon: {
+              uiFramework: "custom-atoms",
+              componentPath: "Icon",
+              props: {
+                iconName: "cloud_download",
               },
-              downloadButtonLabel:getLabel({
-                labelName:"Help ?",
-                labelKey:"UC_HELP_FILE"
-              }),
             },
-                        
-           },
-        
+            downloadButtonLabel: getLabel({
+              labelName: "Help ?",
+              labelKey: "UC_HELP_FILE",
+            }),
+          },
+        },
+
         serviceCategory: {
           uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
           jsonPath: "Challan[0].businessService",
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 6,
           },
           required: true,
           props: {
             style: {
               width: "100%",
-              cursor: "pointer"
+              cursor: "pointer",
             },
             label: {
               labelName: "Service Category",
-              labelKey: "UC_SERVICE_CATEGORY_LABEL"
+              labelKey: "UC_SERVICE_CATEGORY_LABEL",
             },
             placeholder: {
               labelName: "Select service Category",
-              labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
+              labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER",
             },
             localePrefix: {
               masterName: "BusinessService",
-              moduleName: "BillingService"
+              moduleName: "BillingService",
             },
-           
+
             visible: true,
             jsonPath: "Challan[0].businessService",
             sourceJsonPath: "applyScreenMdmsData.serviceCategories",
@@ -209,97 +209,98 @@ import {
             suggestions: [],
             fullwidth: true,
             inputLabelProps: {
-              shrink: true
-            }
+              shrink: true,
+            },
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
-
-            
-            if(state.screenConfiguration.preparedFinalObject.Challan[0].serviceType){
-              console.info("inside if");
-            dispatch(
-              handleField(
-                "newCollection",
-                "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                 "props.value",
-                  []
-              )
+            console.log("on service categor selection", action.value);
+            const editingMode = get(
+              state.screenConfiguration,
+              "preparedFinalObject.Challan[0].id",
+              null
             );
-              }
+            let selServiceType=null;
+            if(editingMode!=null){
+              selServiceType= get(
+                  state.screenConfiguration,
+                  "preparedFinalObject.Challan[0].serviceType",
+                  null
+                );
+            }
+            
+              
+              dispatch(
+                handleField(
+                  "newCollection",
+                  "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                  "props.value",
+                  selServiceType
+                )
+              );
+             
+
             //Set service type data and field if available.
             const serviceData = get(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
               {}
-            );
-            if (action.value) {  
-              console.info("Action value==",action.value) 
-             
+            ); 
+            if (action.value) {
+              console.info("Action value==", action.value);
+              let visibleFlag =false;
               if (
                 serviceData[action.value] &&
                 serviceData[action.value].child &&
                 serviceData[action.value].child.length > 0
               ) {
-                console.info("some condns", serviceData[action.value], serviceData[action.value].child)                     
-                
                 dispatch(
                   prepareFinalObject(
                     "applyScreenMdmsData.serviceTypes",
                     serviceData[action.value].child
                   )
                 );
-                dispatch(
-                  handleField(
-                    "newCollection",
-                    "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                    "visible",
-                    true
-                  )
-                );
-              } else {
-                console.info("else condition :(")
-                dispatch(
-                  handleField(
-                    "newCollection",
-                    "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                    "visible",
-                    false
-                  )
-                );
-                
-              }
+                visibleFlag=true;
+              }  
+              dispatch(
+                handleField(
+                  "newCollection",
+                  "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                  "visible",
+                  visibleFlag
+                )
+              );
             }
-          }
+          },
         },
 
         serviceType: {
-          uiFramework: "custom-containers",        
+          uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
           jsonPath: "Challan[0].serviceType",
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 6,
           },
           required: true,
           props: {
             style: {
               width: "100%",
-              cursor: "pointer"
+              cursor: "pointer",
             },
             label: {
               labelName: "Service Type",
-              labelKey: "UC_SERVICE_TYPE_LABEL"
+              labelKey: "UC_SERVICE_TYPE_LABEL",
             },
             placeholder: {
               labelName: "Select service Type",
-              labelKey: "UC_SERVICE_TYPE_PLACEHOLDER"
+              labelKey: "UC_SERVICE_TYPE_PLACEHOLDER",
             },
             localePrefix: {
               masterName: "BusinessService",
-              moduleName: "BillingService"
+              moduleName: "BillingService",
             },
-            
+
             visible: true,
             jsonPath: "Challan[0].serviceType",
             sourceJsonPath: "applyScreenMdmsData.serviceTypes",
@@ -307,45 +308,41 @@ import {
             suggestions: [],
             fullwidth: true,
             inputLabelProps: {
-              shrink: true
-            }
+              shrink: true,
+            },
           },
           beforeFieldChange: async (action, state, dispatch) => {
-                 
-                  console.log("BeforeFieldChange",action.value);
-                  if (action.value) {
-                    const taxHeads = setTaxHeadFields(action, state, dispatch);
-                  }         
-           }
+            console.log("serviceTypeFieldhange", action.value);
+            if (action.value) {
+              setTaxHeadFields(action, state, dispatch);
+            }
+          },
         },
 
-
-
-       
         fromDate: getDateField({
           label: {
             labelName: "From Date",
-            labelKey: "UC_FROM_DATE_LABEL"
+            labelKey: "UC_FROM_DATE_LABEL",
           },
           placeholder: {
             labelName: "Enter from Date",
-            labelKey: "UC_SELECT_FROM_DATE_PLACEHOLDER"
+            labelKey: "UC_SELECT_FROM_DATE_PLACEHOLDER",
           },
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 6,
           },
           required: true,
           pattern: getPattern("Date"),
           jsonPath: "Challan[0].taxPeriodFrom",
-          beforeFieldChange: async (action, state, dispatch) => {            
-            if (action.value) {              
+          beforeFieldChange: async (action, state, dispatch) => {
+            if (action.value) {
               dispatch(
                 handleField(
                   "newCollection",
                   "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.toDate",
                   "props.disabled",
-                   false
+                  false
                 )
               );
               dispatch(
@@ -357,161 +354,180 @@ import {
                 )
               );
             }
-           
-          }
+          },
         }),
         toDate: getDateField({
           label: {
             labelName: "To Date",
-            labelKey: "UC_TO_DATE_LABEL"
+            labelKey: "UC_TO_DATE_LABEL",
           },
           placeholder: {
             labelName: "Enter to Date",
-            labelKey: "UC_SELECT_TO_DATE_PLACEHOLDER"
+            labelKey: "UC_SELECT_TO_DATE_PLACEHOLDER",
           },
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 6,
           },
-          required: true,         
+          required: true,
           props: {
-            disabled: true,            
+            disabled: true,
           },
           pattern: getPattern("Date"),
           jsonPath: "Challan[0].taxPeriodTo",
-          
-        }),     
-        
+        }),
       },
       {
         style: {
-          overflow: "visible"
-        }
+          overflow: "visible",
+        },
       }
     ),
     commentsContainer: getCommonContainer({
       comments: getTextField({
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 6,
         },
         label: {
           labelName: "Comments",
-          labelKey: "UC_COMMENT_LABEL"
+          labelKey: "UC_COMMENT_LABEL",
         },
         placeholder: {
           labelName: "Enter Comment ",
-          labelKey: "UC_COMMENT_PLACEHOLDER"
+          labelKey: "UC_COMMENT_PLACEHOLDER",
         },
         Required: false,
-        jsonPath: "Challan[0].additionalDetail.comment"
-      }),    
-      
-      
-    }),    
+        jsonPath: "Challan[0].additionalDetail.comment",
+      }),
+    }),
   },
   {
     style: {
-      overflow: "visible"
-    }
+      overflow: "visible",
+    },
   }
 );
 
 const setTaxHeadFields = (action, state, dispatch) => {
-    const serviceData = get(
+  console.log("Set Tax heads",action,state,dispatch);
+  const serviceData = get(
+    state.screenConfiguration,
+    `preparedFinalObject.applyScreenMdmsData.nestedServiceData`,
+    {}
+  );
+  const taxHeadMasters = get(
+    state.screenConfiguration,
+    "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",
+    {}
+  );
+  const matchingTaxHeads = taxHeadMasters.filter(
+    (item) => item.service === action.value
+  );
+  console.log("matchingTaxHeads",matchingTaxHeads);
+  if (matchingTaxHeads && matchingTaxHeads.length > 0) {
+    //Delete previous Tax Head fields
+    console.log("previous taxheads ",get(
       state.screenConfiguration,
-      "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
+      "preparedFinalObject.Challan[0].amount",
+      []
+    ));
+    const noOfPreviousTaxHeads = get(
+      state.screenConfiguration,
+      "preparedFinalObject.Challan[0].amount",
+      []
+    ).length;
+    console.log("noOfPreviousTaxHeads ",noOfPreviousTaxHeads);
+    const taxFields = get(
+      state.screenConfiguration,
+      "screenConfig.newCollection.components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
       {}
     );
-    const taxHeadMasters = get(
-      state.screenConfiguration,
-      "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",
-      {}
-    );    
-    const matchingTaxHeads = taxHeadMasters.filter(      
-      item => item.service === action.value
+    console.log("TaxFields",taxFields);
+    console.log("noOfPreviousTaxHeads",noOfPreviousTaxHeads);
+    const taxFieldKeys = Object.keys(taxFields).filter((item) =>
+      item.startsWith("taxheadField_")
     );
-    if (matchingTaxHeads && matchingTaxHeads.length > 0) {
-      //Delete previous Tax Head fields
-      const noOfPreviousTaxHeads = get(
-        state.screenConfiguration,
-        "preparedFinalObject.Challan[0].amount",
-        []
-      ).length;
-      const taxFields = get(
-        state.screenConfiguration,
-        "screenConfig.newCollection.components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
-        {}
-      );
-      const taxFieldKeys = Object.keys(taxFields).filter(item =>
-        item.startsWith("taxheadField_")
-      );     
-      if (noOfPreviousTaxHeads > 0) {
-        for (let i = 0; i < taxFieldKeys.length; i++) {
-          dispatch(
-            handleField(
-              "newCollection",
-              "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
-              `${taxFieldKeys[i]}.props.value`,
-              ""
-            )
-          );
-          dispatch(
-            handleField(
-              "newCollection",
-              "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
-              `${taxFieldKeys[i]}.visible`,
-              false
-            )
-          );
-        }
-        dispatch(prepareFinalObject(`Challan[0].amount`, []));
-      }
-      //Show new tax head fields      
-      matchingTaxHeads.forEach((item, index) => {       
+    const editingMode = get(
+      state.screenConfiguration,
+      "preparedFinalObject.Challan[0].id",
+      null
+    );
+    console.log("Editing Mode ",editingMode);
+    if (noOfPreviousTaxHeads > 0   ) {
+      for (let i = 0; i < taxFieldKeys.length; i++) {
         dispatch(
-          prepareFinalObject(
-            `Challan[0].amount[${index}].taxHeadCode`,
-            item.code
-          )
-        );
-        dispatch(
-          prepareFinalObject(
-            `Challan[0].amount[${index}].collectionAmount`,
-            0
+          handleField(
+            "newCollection",
+            "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
+            `${taxFieldKeys[i]}.props.value`,
+            ""
           )
         );
         dispatch(
           handleField(
             "newCollection",
             "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
-            `taxheadField_${item.code.split(".").join("_")}`,
-            getTextField({
-              label: {
-                labelName: "Tax Amount",
-                labelKey: `${getTransformedLocale(item.code)}`
-              },
-              placeholder: {
-                labelName: "Enter Tax Amount",
-                labelKey: "UC_AMOUNT_TO_BE_COLLECTED_PLACEHOLDER"
-              },
-              componentJsonpath: `components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.taxheadField_${item.code
-                .split(".")
-                .join("_")}`,
-              required: item.isRequired || false,
-              pattern:item.isRequired ? getPattern("NonZeroAmount"):getPattern("Amount"),
-             
-              errorMessage: "Invalid Amount", 
-              visible: true,
-              // required: true,
-              props: {
-                // required: true                
-              },
-              jsonPath: `Challan[0].amount[${index}].amount`
-            })
+            `${taxFieldKeys[i]}.visible`,
+            false
           )
         );
-      });
-
+      }
+      if(editingMode== null){
+        dispatch(prepareFinalObject(`Challan[0].amount`, []));
+      }
     }
-  };
+
+    //Show new tax head fields
+    matchingTaxHeads.forEach((item, index) => {
+      console.log("item ",item, index);
+      
+        dispatch(
+          prepareFinalObject(`Challan[0].amount[${index}].taxHeadCode`, item.code)
+        );
+        let prevCollection =get(
+          state.screenConfiguration,
+          "preparedFinalObject.ChallanTaxHeads",
+          []
+        );
+        let colAmount =get(find(prevCollection,{"taxHeadCode" : item.code}),"amount","");
+        dispatch(
+          prepareFinalObject(`Challan[0].amount[${index}].amount`, colAmount)
+        );
+ 
+      
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
+          `taxheadField_${item.code.split(".").join("_")}`,
+          getTextField({
+            label: {
+              labelName: "Tax Amount",
+              labelKey: `${getTransformedLocale(item.code)}`,
+            },
+            placeholder: {
+              labelName: "Enter Tax Amount",
+              labelKey: "UC_AMOUNT_TO_BE_COLLECTED_PLACEHOLDER",
+            },
+            componentJsonpath: `components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.taxheadField_${item.code
+              .split(".")
+              .join("_")}`,
+            required: item.isRequired || false,
+            pattern: item.isRequired
+              ? getPattern("NonZeroAmount")
+              : getPattern("Amount"),
+
+            errorMessage: "Invalid Amount",
+            visible: true,
+            // required: true,
+            props: {
+              // required: true
+            },
+            jsonPath: `Challan[0].amount[${index}].amount`,
+          })
+        )
+      );
+    });
+  }
+};
