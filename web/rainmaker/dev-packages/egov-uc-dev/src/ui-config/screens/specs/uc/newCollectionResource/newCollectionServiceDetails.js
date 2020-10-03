@@ -400,7 +400,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
           labelKey: "UC_COMMENT_PLACEHOLDER",
         },
         Required: false,
-        jsonPath: "Challan[0].additionalDetail.comment",
+        jsonPath: "Challan[0].description",
       }),
     }),
   },
@@ -427,7 +427,6 @@ const setTaxHeadFields = (action, state, dispatch) => {
       "preparedFinalObject.Challan[0].amount",
       []
     ).length;
-    console.log("noOfPreviousTaxHeads ",noOfPreviousTaxHeads);
     const taxFields = get(
       state.screenConfiguration,
       "screenConfig.newCollection.components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",

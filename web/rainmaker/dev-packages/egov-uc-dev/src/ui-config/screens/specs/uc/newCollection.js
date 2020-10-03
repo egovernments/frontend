@@ -4,29 +4,24 @@ import {
   getCommonContainer,
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
 import { newCollectionConsumerDetailsCard } from "./newCollectionResource/neCollectionConsumerDetails";
 import { newCollectionServiceDetailsCard } from "./newCollectionResource/newCollectionServiceDetails";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject , toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
-
-const header = getCommonHeader({
-  labelName: "New Challan",
-  labelKey: "UC_COMMON_HEADER",
-});
-const tenantId = getTenantId();
-
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 const getData = async (action, state, dispatch) => {
-  console.info("getData");
+  
+  const tenantId = getTenantId();
+  console.info("getData",tenantId);
   let requestBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: tenantId,
       moduleDetails: [
         {
           moduleName: "tenant",
@@ -40,22 +35,7 @@ const getData = async (action, state, dispatch) => {
         {
           moduleName: "common-masters",
           masterDetails: [{ name: "Help" }],
-        },
-        {
-          moduleName: "BillingService",
-          masterDetails: [
-            {
-              name: "BusinessService",
-              filter: "[?(@.type=='Adhoc')]",
-            },
-            {
-              name: "TaxHeadMaster",
-            },
-            {
-              name: "TaxPeriod",
-            },
-          ],
-        },
+        } 
       ],
     },
   };
@@ -75,8 +55,6 @@ const getData = async (action, state, dispatch) => {
       const citymodule = get(payload, "MdmsRes.tenant.citymodule");
       const liveTenants =
         citymodule && citymodule.filter((item) => item.code === "UC");
-      console.log("Live tenants", liveTenants);
-      console.log("citymodule", citymodule);
       dispatch(
         prepareFinalObject(
           "applyScreenMdmsData.tenant.citiesByModule",
@@ -88,7 +66,6 @@ const getData = async (action, state, dispatch) => {
     let helpUrl = get(payload, "MdmsRes.common-masters.Help", []).filter(
       (item) => item.code === "UC"
     );
-
     dispatch(prepareFinalObject("helpFileUrl", helpUrl[0].URL));
 
     try {
@@ -153,10 +130,12 @@ const getData = async (action, state, dispatch) => {
       }
     } catch (e) {
       console.log(e);
+      dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
     }
     //End of Mohalla data
   } catch (e) {
     console.error("Unable to fetch detail", e);
+    dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
   }
 };
 //for up data challan
@@ -165,7 +144,6 @@ const getChallanSearchRes = async (action, state, dispatch) => {
     let challanNo = getQueryArg(window.location.href, "consumerCode");
     let tenantId = getQueryArg(window.location.href, "tenantId");
     let businessService = getQueryArg(window.location.href, "businessService");
-
     const searchpayload = await httpRequest(
       "post",
       `/echallan-services/eChallan/v1/_search?challanNo=${challanNo}&tenantId=${tenantId}&businessService=${businessService}`,
@@ -175,7 +153,7 @@ const getChallanSearchRes = async (action, state, dispatch) => {
     );
     if (
       searchpayload &&
-      searchpayload.challans &&
+      searchpayload.challans.length >0 &&
       searchpayload.challans[0].applicationStatus === "ACTIVE"
     ) {
       const fetchbillPayload = await httpRequest(
@@ -185,8 +163,6 @@ const getChallanSearchRes = async (action, state, dispatch) => {
         [],
         {}
       );
-      let amounts = [];
-
       //Set the bill detail
       fetchbillPayload &&
         dispatch(
@@ -200,11 +176,11 @@ const getChallanSearchRes = async (action, state, dispatch) => {
           )
         );
       let bService = searchpayload.challans[0].businessService;
-      //searchpayload.challans[0].serviceType = bService;
       searchpayload.challans[0].consumerType = bService.split(".")[0];
       searchpayload.challans[0].amount = [];
 
       dispatch(prepareFinalObject("Challan", searchpayload.challans));
+      //Update the field status
       dispatch(
         handleField(
           "newCollection",
@@ -237,11 +213,25 @@ const getChallanSearchRes = async (action, state, dispatch) => {
           false
         )
       );
+
+      let consumerDetailsDisableFldList =["ConsumerName","ConsumerMobileNo","ConsumerHouseNo","ConsumerBuilidingName","ConsumerStreetName","ConsumerLocMohalla","ConsumerPinCode"];
+      consumerDetailsDisableFldList.forEach(item =>{
+        console.log("consumerDetailsDisableFldList_Item ",item);
+        dispatch(
+          handleField(
+            "newCollection",
+            `components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children.${item}`,
+            "props.disabled",
+            true
+          )
+        );
+      });
     } else {
-      alert("INVALID CHALLAN DETAIL");
+      dispatch(toggleSnackbar(true,{ labelName:"Unable to find Challan Detail. Please search with valid Challan Detail"}, "error"));
     }
   } catch (e) {
     console.error("Unable to fetch detail", e);
+    dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
   }
 };
 
@@ -250,6 +240,9 @@ const newCollection = {
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
     console.log("Before init function");
+    const tenantId = getTenantId();
+    const locale = getLocale() || "en_IN";
+    dispatch(fetchLocalizationLabel(locale, tenantId, tenantId));
     //Flush previous data 
     dispatch(prepareFinalObject("ChallanTaxHeads",[]))
     dispatch(prepareFinalObject("Challan", []));
@@ -385,7 +378,7 @@ export default newCollection;
 //for update rediredt
 
 const openUpdateForm = (state, dispatch) => {
-  window.location.href = `/uc/newCollection?consumerCode=CH-CB-AGRA-2020-001384&tenantId=${tenantId}&businessService=ENTFEE.PARK`;
+  window.location.href = `/uc/newCollection?consumerCode=CH-CB-AGRA-2020-001384&tenantId=${getTenantId()}&businessService=ENTFEE.PARK`;
 };
 const openReceiptSearchForm = (state, dispatch) => {
   // dispatch(prepareFinalObject("Demands", []));

@@ -7,14 +7,15 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import cloneDeep from "lodash/cloneDeep";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import "./index.css";
 import "../../../../../index.css";
 
 const tenantId = getTenantId();
@@ -34,19 +35,29 @@ const getCommonApplyFooter = children => {
   };
 };
 
+export const footerReview = (
+  action,
+  state,
+  dispatch,
+  tenantId,
+  
+) => {
+  const editingMode = get(
+    state.screenConfiguration,
+    "preparedFinalObject.Challan[0].id",
+    null
+  )!=null ? true : false;
+
+  
+
+};
 export const newCollectionFooter = getCommonApplyFooter({
   nextButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
       color: "primary",
-      //className:"gen-challan-btn",
-      // style: {
-      //   minWidth: "180px",
-      //   height: "48px",
-      //   marginRight: "45px",
-      //   borderRadius: "inherit"
-      // }
+      className:"gen-challan-btn",
     },
     children: {
       generateChallanButtonLabel: getLabel({
@@ -64,10 +75,67 @@ export const newCollectionFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {      
-          processChallan(state, dispatch);
+          processChallan(state, dispatch,"CREATE");
       }
     }
-  }
+  },
+  
+  cancelChallan: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      className: "update-challan-com", 
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Cancel Challan",
+        labelKey: "UC_CANCEL_CHALLAN"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {      
+        processChallan(state, dispatch,"CANCELLED");
+      }
+    },
+    visible: true
+  },
+  updateChallan: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      className: "update-challan-com", 
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Update RECEIPT",
+        labelKey: "UC_UPDATE_CHALLAN"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {      
+        processChallan(state, dispatch,"UPDATE");
+      }
+    },
+    visible: true
+  } 
 });
 
 const convertDateFieldToEpoch = (finalObj, jsonPath) => {
@@ -84,7 +152,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
 };
 
 
-const processChallan = async (state, dispatch) => {
+const processChallan = async (state, dispatch,applicationStatus) => {
 
   let isFormValid = true;
 
@@ -109,56 +177,22 @@ const processChallan = async (state, dispatch) => {
   if (isFormValid) {
     try {
       dispatch(toggleSpinner());
-      const mobileNumber = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Challan[0].citizen.mobileNumber"
-      );
-
-      let payload = await httpRequest(
-        "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
-        "_search",
-        [],
-        {
-          tenantId: commonConfig.tenantId,
-          userName: mobileNumber
-        }
-      );
-
-
-      if (payload ) {
-        const uuid = get(payload , "user[0].uuid");        
-        if(uuid){          
-          dispatch(prepareFinalObject("Challan[0].accountId" , uuid));
-        }
-        // else{          
-        //   dispatch(prepareFinalObject("Challan[0].accountId" , ));
-        // }
-             
-        await createChallan(state, dispatch);       
-        allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
-          "Challan[0].taxPeriodFrom",
-          "Challan[0].taxPeriodTo"
-        ]);
-        const applicationNumber = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Challan[0].challanNo"
-        );
-        const tenantId = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Challan[0].tenantId"
-        );
-        const businessService = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Challan[0].businessService"
-        );
-        //console.info("show common pay");
-        //getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
-       // getAcknowledgementCard(dispatch, applicationNumber, tenantId, businessService);
+      let objToPush =prepareObj(state,dispatch);
+      switch (applicationStatus) {
+        case "CREATE": 
+          await createChallan(state, dispatch);       
+          break;
+        case "CANCELLED":
+          await cancelChallan(state, dispatch);  
+          break;
+        case "UPDATE":
+          prepareObj(state,dispatch);
+          await updateChallan(state, dispatch);  
+          break;
+        
       }
       dispatch(toggleSpinner());
     } catch (error) {
-
       dispatch(toggleSpinner());
     }
   } else {
@@ -174,42 +208,20 @@ const processChallan = async (state, dispatch) => {
     );
   }
 };
-
-
-
-const createChallan = async(state,dispatch) =>{    
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-    let eChallans = JSON.parse(
-      JSON.stringify(
-        get(state.screenConfiguration.preparedFinalObject, "Challan")
-      )
-    );
-    
-    //set(eChallans[0], "consumerType", eChallans[0].businessService);
-    
-    eChallans[0].amount &&
-      eChallans[0].amount.forEach(item => {
-        if (!item.amount) {
-          item.amount = 0;
-        }
-      });
-     
-    // eChallans[0].serviceType &&
-    //   set(eChallans[0], "businessService", eChallans[0].serviceType);
-    set(
-      eChallans[0],
-      "taxPeriodFrom",
-      convertDateToEpoch(eChallans[0].taxPeriodFrom)
-    );
-    
+ 
+const prepareObj =(state,dispatch) =>{
+  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
+  let eChallans =cloneDeep (get(state.screenConfiguration.preparedFinalObject, "Challan"));  
+  eChallans[0].amount &&
+    eChallans[0].amount.forEach(item => {
+      if (!item.amount) {
+        item.amount = 0;
+      }
+    });
+    set(eChallans[0],"taxPeriodFrom", convertDateToEpoch(eChallans[0].taxPeriodFrom));
     set(eChallans[0], "taxPeriodTo", convertDateToEpoch(eChallans[0].taxPeriodTo));
-    
-    const mobileNumber = eChallans[0].citizen.mobileNumber;
-    const consumerName = eChallans[0].citizen.consumerName;
-
-    set(eChallans[0], "payer.mobileNumber", mobileNumber);
-    set(eChallans[0], "payer.name", consumerName);
-
+    set(eChallans[0], "payer.mobileNumber", eChallans[0].citizen.mobileNumber);
+    set(eChallans[0], "payer.name",  eChallans[0].citizen.name);
     //glcode
     for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping.length; i++) {
       if ((state.screenConfiguration.preparedFinalObject.Challan[0].businessService === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].cb === state.screenConfiguration.preparedFinalObject.Challan[0].tenantId)) {
@@ -218,46 +230,77 @@ const createChallan = async(state,dispatch) =>{
     }
     //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
     const taxPeriodValid = isTaxPeriodValid(dispatch, eChallans[0], state);
-    
-    
     if (taxPeriodValid) {
-      const url = "/echallan-services/eChallan/v1/_create";     
-       try {
-          const payload = await httpRequest("post", url, "", [], {
-          Challan: eChallans[0]
-        });
-        if (payload.challans.length > 0) {
-          const consumerCode = get(payload, "challans[0].challanNo");
-          const businessService = get(payload, "challans[0].businessService");
-          set(payload, "challans[0].mobileNumber", mobileNumber);
-          set(payload, "challans[0].consumerName", consumerName);
-          //set(payload, "challans[0].businessService", businessService);
-          set(
-            payload,
-            "challans[0].businessService",
-            businessService.split(".")[0]
-          );
-          dispatch(prepareFinalObject("Challan", payload.challans[0]));          
-          await generateBill(consumerCode, tenantId, businessService, dispatch);
-        } else {
-          console.info("some error  happened while generating challan");
-          dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
-        }
-      } catch (e) {
-        console.log(e.message);
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: e.message,
-              labelKey: e.message
-            },
-            "error"
-          )
-        );
-      }    
-    } 
+      return eChallans;
+    }
+    return null;
+  
+};
+ 
+const postUpdate=(state,dispatch,payload) =>{
+  const consumerCode = get(payload, "challans[0].challanNo");
+  const businessService = get(payload, "challans[0].businessService");
+  set(payload, "challans[0].mobileNumber", get(payload, "challans[0].citizen.mobileNumber"));
+  set(payload, "challans[0].consumerName", get(payload, "challans[0].citizen.name"));
+  set(payload,"challans[0].businessService",businessService.split(".")[0]);
+  dispatch(prepareFinalObject("Challan", payload.challans[0]));          
+  await generateBill(consumerCode, tenantId, businessService, dispatch);
 }
+
+const createChallan = async(state,dispatch,challan) =>{
+  try{
+    if(challan!=null){
+      const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_create", "", [], {
+        Challan: challan
+      });
+      if (payload.challans.length > 0) {
+        postUpdate(state,dispatch,payload);
+      } else {
+        console.info("some error  happened while generating challan");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+      }
+    }
+  }catch(e){
+    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+  }
+}
+
+const updateChallan = async(state,dispatch,challan) =>{
+  try{
+    if(challan!=null){
+      const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {
+        Challan: challan
+      });
+      if (payload.challans.length > 0) {
+        postUpdate(state,dispatch,payload);
+      } else {
+        console.info("some error  happened while generating challan");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+      }
+    }
+  }catch(e){
+    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+  }
+}
+
+const cancelChallan = async(state,dispatch,challan) =>{
+  try{
+    if(challan!=null){
+      const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {
+        Challan: challan
+      });
+      if (payload.challans.length > 0) {
+        postUpdate(state,dispatch,payload);
+      } else {
+        console.info("some error  happened while generating challan");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+      }
+    }
+  }catch(e){
+    dispatch(setRoute(`/uc/acknowledgement?purpose=challan&status=failure`));
+  }
+}
+ 
 
 const generateBill = async (
   consumerCode,
