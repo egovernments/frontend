@@ -249,7 +249,7 @@ const createChallan = async(state,dispatch,challan) =>{
 }
 
 const updateChallan = async(state,dispatch,challan) =>{
-  var operation="udpate";
+  var operation="update";
   try{
     if(challan!=null){
       const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {

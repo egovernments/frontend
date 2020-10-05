@@ -403,7 +403,7 @@ export default newCollection;
 //for update rediredt
 
 const openUpdateForm = (state, dispatch) => {
-  window.location.href = `/uc/newCollection?consumerCode=CH-CB-AGRA-2020-001384&tenantId=${getTenantId()}&businessService=ENTFEE.PARK`;
+  window.location.href = `/uc/newCollection?consumerCode=CH-CB-SECU-2020-001395&tenantId=${getTenantId()}&businessService=OTHFEE.DUMP_GRBG`;
 };
 const openReceiptSearchForm = (state, dispatch) => {
   // dispatch(prepareFinalObject("Demands", []));

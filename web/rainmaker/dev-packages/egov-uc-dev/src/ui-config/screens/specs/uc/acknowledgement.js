@@ -159,31 +159,7 @@ const getAcknowledgementCard = (
       }),
       headerdownloadprint:downloadprintMenu(state, dispatch),  
       applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_GENERATED_SUCCESS_MESSAGE","create","UC_BILL_GENERATION_MESSAGE_SUB","createsuccessmsg",billNumber),
-      // applicationSuccessCard: {
-      //   uiFramework: "custom-atoms",
-      //   componentPath: "Div",
-          
-      //   children: {
-      //     card: acknowledgementCard({
-      //       icon: "done",
-      //       backgroundColor: "#39CB74",
-      //       header: {
-      //         labelName: "Bill Generated Successfully!",
-      //         labelKey: "UC_BILL_GENERATED_SUCCESS_MESSAGE"
-      //       },
-      //       body: {
-      //         labelName:
-      //           "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-      //         labelKey: "UC_BILL_GENERATION_MESSAGE_SUB"
-      //       },
-      //       tailText: {
-      //         labelName: "Bill No.",
-      //         labelKey: "UC_BILL_NO_LABEL"
-      //       },
-      //       number: billNumber
-      //     })
-      //   }
-      // },
+      
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
@@ -191,7 +167,7 @@ const getAcknowledgementCard = (
       applicationSuccessFooter: acknowledgementSuccesFooter
     };
   }
-  else if(purpose === "challan" && status === "update"){     
+  else if(purpose === "update" && status === "success"){     
     return {      
      header :getCommonContainer({
        header:header,
@@ -199,31 +175,7 @@ const getAcknowledgementCard = (
      }),
      headerdownloadprint:downloadprintMenu(state, dispatch),  
      applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_UPDATED_SUCCESS_MESSAGE","update","UC_BILL_GENERATION_MESSAGE_SUB","updatesuccessmsg",billNumber),
-     // applicationSuccessCard: {
-     //   uiFramework: "custom-atoms",
-     //   componentPath: "Div",
-         
-     //   children: {
-     //     card: acknowledgementCard({
-     //       icon: "done",
-     //       backgroundColor: "#39CB74",
-     //       header: {
-     //         labelName: "Bill Generated Successfully!",
-     //         labelKey: "UC_BILL_GENERATED_SUCCESS_MESSAGE"
-     //       },
-     //       body: {
-     //         labelName:
-     //           "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-     //         labelKey: "UC_BILL_GENERATION_MESSAGE_SUB"
-     //       },
-     //       tailText: {
-     //         labelName: "Bill No.",
-     //         labelKey: "UC_BILL_NO_LABEL"
-     //       },
-     //       number: billNumber
-     //     })
-     //   }
-     // },
+     
      iframeForPdf: {
        uiFramework: "custom-atoms",
        componentPath: "Div"
@@ -231,37 +183,13 @@ const getAcknowledgementCard = (
      applicationSuccessFooter: acknowledgementSuccesFooter
    };
  }
- else if (purpose === "challan" && status === "cancel") {
+ else if (purpose === "cancel" && status === "success") {
    return{
     header :getCommonContainer({
       header:header        
     }),
     applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
-     // applicationSuccessCard: {
-     //   uiFramework: "custom-atoms",
-     //   componentPath: "Div",
-         
-     //   children: {
-     //     card: acknowledgementCard({
-     //       icon: "done",
-     //       backgroundColor: "#39CB74",
-     //       header: {
-     //         labelName: "Bill Generated Successfully!",
-     //         labelKey: "UC_BILL_GENERATED_SUCCESS_MESSAGE"
-     //       },
-     //       body: {
-     //         labelName:
-     //           "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-     //         labelKey: "UC_BILL_GENERATION_MESSAGE_SUB"
-     //       },
-     //       tailText: {
-     //         labelName: "Bill No.",
-     //         labelKey: "UC_BILL_NO_LABEL"
-     //       },
-     //       number: billNumber
-     //     })
-     //   }
-     // },
+     
      iframeForPdf: {
        uiFramework: "custom-atoms",
        componentPath: "Div"
@@ -269,46 +197,22 @@ const getAcknowledgementCard = (
      paymentFailureFooter: acknowledgementFailureFooter
    }
  }
-  else if (purpose === "challan" && status === "failure") {
-    return{
-      header :getCommonContainer({
-        header:header        
-      }),
-      applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_FAILURE_MESSAGE","failure","UC_FAILURE_MESSAGE_BODY","failuremsg",null),
+  // else if (purpose === "challan" && status === "failure") {
+  //   return{
+  //     header :getCommonContainer({
+  //       header:header        
+  //     }),
+  //     applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_FAILURE_MESSAGE","failure","UC_FAILURE_MESSAGE_BODY","failuremsg",null),
        
-       iframeForPdf: {
-         uiFramework: "custom-atoms",
-         componentPath: "Div"
-       },
-       paymentFailureFooter: acknowledgementFailureFooter
-     }
-  
-    // return {
-    //   header: getCommonHeader({
-    //     labelName: `mCollect`,
-    //     labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
-    //   }),
-    //   applicationSuccessCard: {
-    //     uiFramework: "custom-atoms",
-    //     componentPath: "Div",
-    //     children: {
-    //       card: acknowledgementCard({
-    //         icon: "close",
-    //         backgroundColor: "#E54D42",
-    //         header: {
-    //           labelName: "Sorry Bill generation failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE"
-    //         },
-    //         body: {
-    //           labelName: "Sorry Bill generation has been failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE_BODY"
-    //         }
-    //       })
-    //     }
-    //   },
-    //   paymentFailureFooter: acknowledgementFailureFooter
-    // };
-  }
+  //      iframeForPdf: {
+  //        uiFramework: "custom-atoms",
+  //        componentPath: "Div"
+  //      },
+  //      paymentFailureFooter: acknowledgementFailureFooter
+  //    }   
+  // }
+
+  //For all kinds of failures irrespective of create/update/cancel
   else {
     return{
       header :getCommonContainer({
@@ -323,31 +227,7 @@ const getAcknowledgementCard = (
        paymentFailureFooter: acknowledgementFailureFooter
      }
   
-    // return {
-    //   header: getCommonHeader({
-    //     labelName: `mCollect`,
-    //     labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
-    //   }),
-    //   applicationSuccessCard: {
-    //     uiFramework: "custom-atoms",
-    //     componentPath: "Div",
-    //     children: {
-    //       card: acknowledgementCard({
-    //         icon: "close",
-    //         backgroundColor: "#E54D42",
-    //         header: {
-    //           labelName: "Sorry Bill generation failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE"
-    //         },
-    //         body: {
-    //           labelName: "Sorry Bill generation has been failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE_BODY"
-    //         }
-    //       })
-    //     }
-    //   },
-    //   paymentFailureFooter: acknowledgementFailureFooter
-    // };
+    
   }
   
 };
