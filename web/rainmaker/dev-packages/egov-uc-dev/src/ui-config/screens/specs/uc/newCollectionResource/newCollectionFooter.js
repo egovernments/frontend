@@ -165,6 +165,7 @@ const processChallan = async (state, dispatch,applicationStatus) => {
           await createChallan(state, dispatch,objToPush);       
           break;
         case "CANCELLED":
+          objToPush.applicationStatus=applicationStatus;
           await cancelChallan(state, dispatch,objToPush);  
           break;
         case "UPDATE":
