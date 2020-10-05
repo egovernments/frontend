@@ -6,7 +6,7 @@ import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/sc
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import "../../../../../index.css";
 
 const getCommonApplyFooter = children => {
   return {
@@ -27,13 +27,16 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
   goToHomeButton: {
     componentPath: "Button",
     props: {
-      variant: "contained",
+      // variant: "contained",
+      // color: "primary",
+      variant: "outlined",
       color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      className:"gen-challan-btn"
+      // style: {
+      //   minWidth: "200px",
+      //   height: "48px",
+      //   marginRight: "16px"
+      // }
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
@@ -53,11 +56,12 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      className:"gen-challan-btn"
+      // style: {
+      //   minWidth: "200px",
+      //   height: "48px",
+      //   marginRight: "16px"
+      // }
     },
     children: {
         payButtonLabel: getLabel({

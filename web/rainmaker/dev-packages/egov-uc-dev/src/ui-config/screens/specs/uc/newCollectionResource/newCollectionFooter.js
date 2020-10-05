@@ -67,9 +67,12 @@ export const newCollectionFooter = getCommonApplyFooter({
   cancelChallan: {
     componentPath: "Button",
     props: {
-      variant: "contained",
+      // variant: "contained",
+      // color: "primary",
+      variant: "outlined",
       color: "primary",
-      className: "update-challan-com", 
+     // className: "update-challan-com",
+     className:"gen-challan-btn" ,
     },
     children: {
       submitButtonLabel: getLabel({
@@ -97,7 +100,7 @@ export const newCollectionFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className: "update-challan-com", 
+      className: "gen-challan-btn", 
     },
     children: {
       submitButtonLabel: getLabel({
