@@ -14,12 +14,12 @@ class PropertyInfoCard extends Component {
             textChildren={
               <div>
                 <div >
-                  {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 20 }}>
+                  {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 10 }}>
                     {header && (
                       <Label
-                        labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                        labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "15px" }}
                         label={header}
-                        fontSize="18px"
+                        fontSize="15px"
                       />
                     )}
                     {{ editIcon } && <span style={{ position: "absolute", right: "25px" }}>{editIcon}</span>}
@@ -28,7 +28,7 @@ class PropertyInfoCard extends Component {
                     if (item) {
                       return (
                         <div>
-                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 4, marginTop: 1 }}>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
@@ -38,9 +38,9 @@ class PropertyInfoCard extends Component {
                             </div>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "15px" }}
                                 label={item.value ? item.value : "NA"}
-                                fontSize="16px"
+                                fontSize="14px"
                               />
                             </div>
                           </div>
@@ -52,19 +52,19 @@ class PropertyInfoCard extends Component {
                     if (item) {
                       return (
                         <div>
-                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 4, marginTop: 1 }}>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
                                 label={item.key ? item.key : "NA"}
-                                fontSize="12px"
+                                fontSize="10px"
                               />
                             </div>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "15px" }}
                                 label={item.value ? item.value : "NA"}
-                                fontSize="16px"
+                                fontSize="14px"
                               />
                             </div>
                           </div>
@@ -83,10 +83,10 @@ class PropertyInfoCard extends Component {
                             <Label
                               labelStyle={{
                                 letterSpacing: "0.67px",
-                                marginTop: 15,
+                                marginTop: 10,
                                 color: "rgba(0, 0, 0, 0.87)",
                                 fontWeight: "400",
-                                lineHeight: "19px",
+                                lineHeight: "15px",
                               }}
                               label={"PROPERTYTAX_FLOOR_" + key.replace("-","_")}
                               fontSize="18px"
