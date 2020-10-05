@@ -1,4 +1,3 @@
-import commonConfig from "config/common.js";
 import {
   getCommonHeader,
   getCommonContainer,

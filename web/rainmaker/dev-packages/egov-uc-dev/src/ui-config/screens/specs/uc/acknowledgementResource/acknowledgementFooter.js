@@ -5,6 +5,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 
 const getCommonApplyFooter = children => {
   return {
@@ -66,34 +68,41 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-       const challanNo = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Challan.challanNo"
-      );
-      const tenantId = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Challan.tenantId"
-      );
-      const businessService = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Challan.businessService"
-      );
+      //  const challanNo = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "Challan.challanNo"
+      // );
+      // const tenantId = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "Challan.tenantId"
+      // );
+      // const businessService = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   "Challan.serviceType"
+      // );
+     
+    const challanNo = getQueryArg(window.location.href, "challanNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const businessService = getQueryArg(window.location.href,"serviceCategory");
+    console.info("businessService=",businessService,"tenantId=",tenantId,"challanNo=",challanNo);
       if(businessService !=null && tenantId !=null && challanNo !=null ){
         getCommonPayUrl(dispatch, challanNo, tenantId, businessService);
       }    
       
       else{
-        dispatch(
-          toggleSnackbar(
-            true,
-            {
-              labelName: "SEARCH & PAY BILL",
-              labelKey: "UC_SEARCHANDPAY_LABEL"
-            },
-            "warning"
-          )
-        );
-
+        // dispatch(
+        //   toggleSnackbar(
+        //     true,
+        //     {
+        //       labelName: "SEARCH & PAY BILL",
+        //       labelKey: "UC_SEARCHANDPAY_LABEL"
+        //     },
+        //     "warning"
+        //   )
+        // );
+        //dispatch(setRoute(`${getRedirectionURL()}`));
+        //alert("go to home");
+        dispatch(setRoute(`/uc/newCollection`));
       }
       
       }
@@ -129,8 +138,7 @@ const viewReceipt = (state, dispatch) => {
   generateReciept(state, dispatch);
 };
 
-const goToHome = (state, dispatch) => {
- // dispatch(prepareFinalObject("Demands", []));
+const goToHome = (state, dispatch) => { 
   dispatch(prepareFinalObject("Challan", []));
   dispatch(setRoute(`${getRedirectionURL()}`));
 };
