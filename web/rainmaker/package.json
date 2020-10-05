@@ -13,11 +13,11 @@
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
     "prod:employee": "yarn run go_employee && cd packages/employee && yarn run build",
     "dev:employee-mcs": "cd dev-packages/egov-uc-dev &&  yarn start",
-    "prod:employee-mcs": "yarn run go_employee_mcs && cd dev-packages/egov-uc-dev && yarn build",
+    "prod:employee-mcs": "yarn run go_employee_mcs && cd dev-packages/egov-uc-dev && yarn && yarn build",
     "transpile-citizen-modules": "run-p pgr-citizen pt-citizen",
     "transpile-employee-modules": "run-p pgr-employee pt-employee egov-hrms",
     "transpile-common-modules": "run-p egov-ui-kit egov-ui-framework egov-workflow egov-tradelicence egov-uc egov-noc",
-    "transpile-common-modules-mcs": "run-p egov-ui-framework",
+    "transpile-common-modules-mcs": "run-p egov-ui-kit egov-ui-framework",
     "egov-ui-kit-config": "babel dev-packages/egov-ui-kit-dev/src/config --out-dir packages/lib/egov-ui-kit/config --copy-files",
     "egov-ui-kit-components": "babel dev-packages/egov-ui-kit-dev/src/components --out-dir packages/lib/egov-ui-kit/components --copy-files",
     "egov-ui-kit-redux": "babel dev-packages/egov-ui-kit-dev/src/redux --out-dir packages/lib/egov-ui-kit/redux --copy-files",
@@ -60,7 +60,7 @@
     "egov-noc": "babel dev-packages/egov-noc-dev/src --out-dir packages/lib/egov-noc --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",
     "go_employee": "yarn && yarn run build-css-employee  && yarn run build-css-common && yarn run transpile-common-modules  && yarn run transpile-employee-modules && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-noc-dev",
-    "go_employee_mcs": "yarn && yarn run build-css-common-mcs && yarn run transpile-common-modules-mcs && lerna bootstrap --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore rainmaker-employee --ignore pgr-citizen --ignore pgr-employee --ignore pt-citizen --ignore pt-employee --ignore egov-workflow --ignore egov-tradelicence --ignore egov-workflow --ignore egov-noc --ignore egov-ui-kit  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-noc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev",
+    "go_employee_mcs": "yarn && yarn run build-css-common-mcs && yarn run transpile-common-modules-mcs && lerna bootstrap --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore rainmaker-employee --ignore pgr-citizen --ignore pgr-employee --ignore pt-citizen --ignore pt-employee --ignore egov-workflow --ignore egov-tradelicence --ignore egov-workflow --ignore egov-noc --ignore  egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-noc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev",
     "go_citizen": "yarn  && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules  && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-employee --ignore pgr-employee --ignore pt-employee --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-hrms --ignore egov-noc-dev"
   },
   "devDependencies": {
