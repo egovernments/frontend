@@ -151,8 +151,8 @@ class PTInformation extends React.Component {
                   viewHistory={true}
                   propertiesAudit={propertiesAudit}
                 ></OwnerInfo>
-                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 <div id="property-assess-form">
+                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                   <AssessmentHistory></AssessmentHistory>
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
