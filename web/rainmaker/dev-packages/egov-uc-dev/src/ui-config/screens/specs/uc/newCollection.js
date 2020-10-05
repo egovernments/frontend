@@ -192,6 +192,14 @@ const getChallanSearchRes = async (action, state, dispatch) => {
       dispatch(
         handleField(
           "newCollection",
+          "components.div.children.header.children.header.children.key",
+          "props.labelKey",
+          "UC_EDIT_CHALLAN_HEADER"
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
           "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.City",
           "props.value",
           tenantId
