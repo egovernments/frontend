@@ -17,6 +17,7 @@ import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/a
 import "./index.css";
 import "../../../../../index.css";
 
+import { confirmationDialog } from "../confirmationDialog";
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/pay" : "/inbox";
@@ -33,7 +34,17 @@ const getCommonApplyFooter = children => {
     children
   };
 };
- 
+//to show up confirmation dialog on click of cancel button
+export const showHideConfirmationPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.div.children.cancelConfirmationDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.div.children.cancelConfirmationDialog", "props.open", !toggle)
+  );
+};
 export const newCollectionFooter = getCommonApplyFooter({
   nextButton: {
     componentPath: "Button",
@@ -84,13 +95,37 @@ export const newCollectionFooter = getCommonApplyFooter({
         }
       }
     },
+  
     onClickDefination: {
       action: "condition",
-      callBack: (state, dispatch) => {      
-        processChallan(state, dispatch,"CANCELLED");
+      callBack: (state, dispatch) => {
+        showHideConfirmationPopup(state, dispatch, "newCollection");
       }
+    
     },
     visible: false
+  },
+  //dialog to have yes or no button,popup contents present in confirmationDialog
+  cancelConfirmationDialog: {
+    componentPath: "Dialog",
+    props: {
+      open: false,
+      maxWidth: "md"
+    },
+    children: {
+      dialogContent: {
+        componentPath: "DialogContent",
+        props: {
+          classes: {
+            root: "city-picker-dialog-style"
+          }
+          // style: { minHeight: "180px", minWidth: "365px" }
+        },
+        children: {
+          popup: confirmationDialog
+        }
+      }
+    }
   },
   updateChallan: {
     componentPath: "Button",
@@ -136,7 +171,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
 };
 
 
-const processChallan = async (state, dispatch,applicationStatus) => {
+export const processChallan = async (state, dispatch,applicationStatus) => {
   let isFormValid = true;
   const ucConsumerValid = validateFields(
     "components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children",
