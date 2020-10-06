@@ -36,13 +36,13 @@ const getCommonApplyFooter = children => {
 };
 //to show up confirmation dialog on click of cancel button
 export const showHideConfirmationPopup = (state, dispatch, screenKey) => {
-  let toggle = get(
+   let toggle = get(
     state.screenConfiguration.screenConfig[screenKey],
-    "components.div.children.cancelConfirmationDialog.props.open",
+    "components.div.children.newCollectionFooter.children.cancelConfirmationDialog.props.open",
     false
   );
   dispatch(
-    handleField(screenKey, "components.div.children.cancelConfirmationDialog", "props.open", !toggle)
+    handleField(screenKey, "components.div.children.newCollectionFooter.children.cancelConfirmationDialog", "props.open", !toggle)
   );
 };
 export const newCollectionFooter = getCommonApplyFooter({
