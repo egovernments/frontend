@@ -11,9 +11,9 @@ import commonConfig from "config/common";
 import redirectionLink from "egov-ui-kit/config/smsRedirectionLinks";
 import routes from "./Routes";
 import { LoadingIndicator } from "components";
-import { getLocale,setModule } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
-import { getQueryArg,getModuleName } from "egov-ui-kit/utils/commons";
+import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get"
 
@@ -69,7 +69,6 @@ class App extends Component {
       },
     };
     // can be combined into one mdms call
-    setModule(getModuleName());
     fetchLocalizationLabel(getLocale() || "en_IN");
     // current location
     fetchCurrentLocation();
