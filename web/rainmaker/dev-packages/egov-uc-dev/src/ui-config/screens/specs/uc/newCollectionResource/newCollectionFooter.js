@@ -78,9 +78,12 @@ export const newCollectionFooter = getCommonApplyFooter({
   cancelChallan: {
     componentPath: "Button",
     props: {
-      variant: "contained",
+      // variant: "contained",
+      // color: "primary",
+      variant: "outlined",
       color: "primary",
-      className: "update-challan-com", 
+     // className: "update-challan-com",
+     className:"gen-challan-btn" ,
     },
     children: {
       submitButtonLabel: getLabel({
@@ -132,7 +135,7 @@ export const newCollectionFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className: "update-challan-com", 
+      className: "gen-challan-btn", 
     },
     children: {
       submitButtonLabel: getLabel({
@@ -200,6 +203,7 @@ export const processChallan = async (state, dispatch,applicationStatus) => {
           await createChallan(state, dispatch,objToPush);       
           break;
         case "CANCELLED":
+          objToPush.applicationStatus=applicationStatus;
           await cancelChallan(state, dispatch,objToPush);  
           break;
         case "UPDATE":
@@ -284,14 +288,14 @@ const createChallan = async(state,dispatch,challan) =>{
 }
 
 const updateChallan = async(state,dispatch,challan) =>{
-  var operation="udpate";
+  var operation="update";
   try{
     if(challan!=null){
       const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {
         Challan: challan
       });
       if (payload.challans.length > 0) {
-        await postUpdate(state,dispatch,payload);
+        await postUpdate(state,dispatch,payload,operation);
       } else {
         console.info("some error  happened while updating challan");
         dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
@@ -391,31 +395,5 @@ const isTaxPeriodValid = (dispatch, challan, state) => {
     );
     return false;
   }
-
-  //Validation against MDMS Tax periods not required as of now.
-  let found =
-    taxPeriods.length > 0 &&
-    taxPeriods.find(item => {
-      const fromDate = new Date(item.fromDate);
-      const toDate = new Date(item.toDate);
-      return (
-        item.service === demand.businessService &&
-        fromDate <= selectedFrom &&
-        toDate >= selectedTo
-      );
-    });
-  if (found) return true;
-  else {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please select the right tax period",
-          labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
-        },
-        "warning"
-      )
-    );
-    return false;
-  }
+ 
 };

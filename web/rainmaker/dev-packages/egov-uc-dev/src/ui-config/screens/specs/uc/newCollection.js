@@ -1,4 +1,3 @@
-import commonConfig from "config/common.js";
 import {
   getCommonHeader,
   getCommonContainer,
@@ -190,6 +189,14 @@ const getChallanSearchRes = async (action, state, dispatch) => {
 
       dispatch(prepareFinalObject("Challan", searchpayload.challans));
       //Update the field status
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.header.children.header.children.key",
+          "props.labelKey",
+          "UC_EDIT_CHALLAN_HEADER"
+        )
+      );
       dispatch(
         handleField(
           "newCollection",
@@ -404,7 +411,7 @@ export default newCollection;
 //for update rediredt
 
 const openUpdateForm = (state, dispatch) => {
-  window.location.href = `/uc/newCollection?consumerCode=CH-CB-AGRA-2020-001384&tenantId=${getTenantId()}&businessService=ENTFEE.PARK`;
+  window.location.href = `/uc/newCollection?consumerCode=CH-CB-SECU-2020-001395&tenantId=${getTenantId()}&businessService=OTHFEE.DUMP_GRBG`;
 };
 const openReceiptSearchForm = (state, dispatch) => {
   // dispatch(prepareFinalObject("Demands", []));
