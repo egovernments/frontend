@@ -4,7 +4,7 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 

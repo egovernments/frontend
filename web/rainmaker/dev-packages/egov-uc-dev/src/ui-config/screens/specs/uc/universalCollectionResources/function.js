@@ -1,6 +1,6 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTransformedLocale, transformById } from "egov-ui-framework/ui-utils/commons";
-import { getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization, getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validateFields } from "../../utils";

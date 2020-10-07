@@ -11,7 +11,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import get from "lodash/get";
 import { setServiceCategory } from "../../utils";
 

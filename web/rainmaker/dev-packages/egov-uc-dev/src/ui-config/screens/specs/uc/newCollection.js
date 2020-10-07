@@ -2,7 +2,7 @@ import commonConfig from "config/common.js";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { setServiceCategory } from "../utils";
