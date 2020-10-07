@@ -57,7 +57,7 @@ export const getLocale = () => {
 };
 
 export const isPublicSearch = () => {
-  return location && location.pathname && location.pathname.includes("/withoutAuth");
+  return window.location && window.location.pathname && window.location.pathname.includes("/withoutAuth");
 }
 
 function globalConfigExists() {
