@@ -7,7 +7,7 @@ import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/ut
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { epochToDate, getApplicationType } from "egov-ui-kit/utils/commons";
+import { epochToDate, getApplicationType } from "egov-ui-framework-core/ui-utils/commons.js";
 import { localStorageSet } from "../../ui-utils/localStorageUtils/index";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
