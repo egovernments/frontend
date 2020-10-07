@@ -163,18 +163,20 @@ const callBackForApply = async (state, dispatch) => {
   })
   propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
     propertyPayload.additionalDetails.documentDate);
-
   if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
+      //owner.ownerType = 'NONE';
+
     })
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
+
       owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
+    //  owner.ownerType = 'NONE';
+      
     })
     propertyPayload.institution = null;
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
@@ -253,6 +255,7 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
+    debugger;
     propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(
@@ -263,6 +266,8 @@ const callBackForApply = async (state, dispatch) => {
       { Property: propertyPayload }
 
     );
+    
+    console.log("=======123=========",queryObject);
     // dispatch(prepareFinalObject("Properties", payload.Properties));
     // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
     if (payload) {
