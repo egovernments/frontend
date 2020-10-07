@@ -3,7 +3,7 @@ import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDo
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "./localStorageUtils/index";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
