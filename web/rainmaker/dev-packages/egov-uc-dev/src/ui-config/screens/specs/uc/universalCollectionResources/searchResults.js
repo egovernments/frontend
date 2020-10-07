@@ -4,8 +4,236 @@ import {
   getEpochForDate
 } from "../../utils";
 // import {download} from "egov-common/ui-utils/commons"
+import get from "lodash/get";
+// import { httpRequest } from "../../../../ui-utils";
+import store from "ui-redux/store";
+import axios from "axios";
+
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+  toggleSnackbar,
+  toggleSpinner
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
+const instance = axios.create({
+  baseURL: window.location.origin,
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
 
 
+export const addQueryArg = (url, queries = []) => {
+  const urlParts = url.split("?");
+  const path = urlParts[0];
+  let queryParts = urlParts.length > 1 ? urlParts[1].split("&") : [];
+  queries.forEach(query => {
+    const key = query.key;
+    const value = query.value;
+    const newQuery = `${key}=${value}`;
+    queryParts.push(newQuery);
+  });
+  const newUrl = path + "?" + queryParts.join("&");
+  return newUrl;
+};
+export const localStorageGet = (key, path) => {
+  const appName = process.env.REACT_APP_NAME;
+  let value = null;
+  if (path) {
+    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+    value = get(data, path);
+  } else {
+    value = window.localStorage.getItem(appName + "." + key) || null;
+  }
+  return value;
+};
+export const getAccessToken = () => {
+  return localStorageGet(`token`);
+};
+
+export const getLocale = () => {
+  return localStorage.getItem("locale");
+};
+
+export const isPublicSearch = () => {
+  return location && location.pathname && location.pathname.includes("/withoutAuth");
+}
+
+function globalConfigExists() {
+  return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
+}
+
+const wrapRequestBody = (requestBody, action) => {
+  const authToken = getAccessToken();
+  let RequestInfo = {
+    apiId: "Mihy",
+    ver: ".01",
+    // ts: getDateInEpoch(),
+    action: action,
+    did: "1",
+    key: "",
+    msgId: `20170310130900|${getLocale()}`,
+    requesterId: "",
+    authToken: authToken
+  };
+  if(isPublicSearch()) delete RequestInfo.authToken;
+  return Object.assign(
+    {},
+    {
+      RequestInfo
+    },
+    requestBody
+  );
+};
+
+
+const commonConfig = {
+  MAP_API_KEY: globalConfigExists() ? window.globalConfigs.getConfig("GMAPS_API_KEY") : process.env.REACT_APP_GMAPS_API_KEY,
+  tenantId: globalConfigExists() ? window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID") : process.env.REACT_APP_DEFAULT_TENANT_ID,
+  forgotPasswordTenant: "pb.amritsar",
+};
+
+export const httpRequest = async (
+  method = "get",
+  endPoint,
+  action,
+  queryObject = [],
+  requestBody = {},
+  headers = []
+) => {
+  store.dispatch(toggleSpinner());
+  let apiError = "Api Error";
+
+  if (headers)
+    instance.defaults = Object.assign(instance.defaults, {
+      headers
+    });
+
+  endPoint = addQueryArg(endPoint, queryObject);
+  var response;
+  try {
+    switch (method) {
+      case "post":
+        response = await instance.post(
+          endPoint,
+          wrapRequestBody(requestBody, action)
+        );
+        break;
+      default:
+        response = await instance.get(endPoint);
+    }
+    const responseStatus = parseInt(response.status, 10);
+    store.dispatch(toggleSpinner());
+    if (responseStatus === 200 || responseStatus === 201) {
+      return response.data;
+    }
+  } catch (error) {
+    const { data, status } = error.response;
+    if (status === 400 && data === "") {
+      apiError = "INVALID_TOKEN";
+    } else {
+      apiError =
+        (data.hasOwnProperty("Errors") &&
+          data.Errors &&
+          data.Errors.length &&
+          data.Errors[0].message) ||
+        (data.hasOwnProperty("error") &&
+          data.error.fields &&
+          data.error.fields.length &&
+          data.error.fields[0].message) ||
+        (data.hasOwnProperty("error_description") && data.error_description) ||
+        apiError;
+    }
+
+    store.dispatch(toggleSpinner());
+  }
+  // unhandled error
+  throw new Error(apiError);
+};
+
+
+export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
+  const queryObject = [
+    { key: "tenantId", value: tenantId || commonConfig.tenantId },
+    { key: "fileStoreIds", value: fileStoreId }
+  ];
+  try {
+    const fileUrl = await httpRequest(
+      "get",
+      "/filestore/v1/files/url",
+      "",
+      queryObject
+    );
+    return fileUrl;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const downloadPdf = (link, openIn = '_blank') => {
+  var win = window.open(link, openIn);
+  if (win) {
+    win.focus();
+  }
+}
+
+export const printPdf = async (link) => {
+  var response = await axios.get(link, {
+    responseType: "arraybuffer",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/pdf"
+    }
+  });
+  const file = new Blob([response.data], { type: "application/pdf" });
+  const fileURL = URL.createObjectURL(file);
+  var myWindow = window.open(fileURL);
+  if (myWindow != undefined) {
+    myWindow.addEventListener("load", event => {
+      myWindow.focus();
+      myWindow.print();
+    });
+  }
+}
+
+
+export const openPdf = async (link, openIn = '_blank') => {
+  if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp()) {
+    downloadPdf(link, '_self');
+  } else {
+    var response = await axios.get(link, {
+      responseType: "arraybuffer",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/pdf"
+      }
+    });
+    const file = new Blob([response.data], { type: "application/pdf" });
+    const fileURL = URL.createObjectURL(file);
+    var myWindow = window.open(fileURL, openIn);
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", event => {
+        myWindow.focus();
+      });
+    }
+  }
+}
+
+
+
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
+  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
+    if (mode === 'download') {
+      downloadPdf(fileRes[fileStoreId]);
+    } else if (mode === 'open') {
+      openPdf(fileRes[fileStoreId], '_self')
+    }
+    else {
+      printPdf(fileRes[fileStoreId]);
+    }
+  });
+}
 export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
