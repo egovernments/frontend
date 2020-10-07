@@ -564,6 +564,10 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
           mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
         };
       }
+       if(payloadReceiptDetails.Payments[0].paymentMode=="CASH")
+      {
+        payloadReceiptDetails.Payments[0].instrumentDate=null;
+      }
       if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
         payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
         // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
