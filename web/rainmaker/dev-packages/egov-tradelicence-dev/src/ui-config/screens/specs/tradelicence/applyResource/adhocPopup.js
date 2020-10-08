@@ -326,16 +326,16 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "TL_ADHOC_PENDING_DUES"
+              code: "Pending Dues from earlier"
             },
             {
-              code: "TL_ADHOC_MISCALCULATION"
+              code: "Miscalculation of Earlier Assessment"
             },
             {
-              code: "TL_ADHOC_ONE_TIME_PENALTY"
+              code: "One Time Penalty"
             },
             {
-              code: "TL_ADHOC_OTHER"
+              code: "Others"
             }
           ],
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
@@ -414,16 +414,16 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "TL_REBATE_ADVANCED_PAID"
+              code: "Advance paid by citizen earlier"
             },
             {
-              code: "TL_REBATE_BY_COMMISSIONER"
+              code: "Rebate provided by commissioner/EO"
             },
             {
-              code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
+              code: "Additional amount charged from the citizen"
             },
             {
-              code: "TL_ADHOC_OTHER"
+              code: "Others"
             }
           ],
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
