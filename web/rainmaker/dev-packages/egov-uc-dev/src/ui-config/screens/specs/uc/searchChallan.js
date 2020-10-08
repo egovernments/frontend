@@ -12,6 +12,7 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import "./index.css";
   
   const tenantId = getTenantId();
@@ -98,7 +99,49 @@ import {
                 },
                 ...header 
               },
-   
+              newChallanButton: {
+                componentPath: "Button",
+                gridDefination: {
+                  xs: 12,
+                  sm: 6,
+                  align: "right"
+                },
+                visible: enableButton,
+                props: {
+                  variant: "contained",
+                  color: "primary",
+                  style: {
+                    color: "white",
+                    borderRadius: "2px",
+                    width: "250px",
+                    height: "48px"
+                  }
+                },
+  
+                children: {
+                  plusIconInsideButton: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Icon",
+                    props: {
+                      iconName: "add",
+                      style: {
+                        fontSize: "24px"
+                      }
+                    }
+                  },
+  
+                  buttonLabel: getLabel({
+                    labelName: "NEW CHALLAN",
+                    labelKey: "NEW_CHALLAN_BUTTON"
+                  })
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: (state, dispatch) => {
+                    openNewChallanForm(state, dispatch);
+                  }
+                }
+              }
             }
           },
           SearchChallanCard,
@@ -109,6 +152,13 @@ import {
     }
   };
   
+
+  const openNewChallanForm = (state, dispatch) => {
+    dispatch(prepareFinalObject("Challan", []));
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
+    dispatch(setRoute(`/uc/newCollection`));
+  };
+
   export default SearchChallanAndResult;
   
   
