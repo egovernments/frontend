@@ -337,35 +337,35 @@ const newCollection = {
                 },
               },
             },
-            searchReceiptBtn: {
-              componentPath: "Button",
-              //visible: enableButton,
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  color: "primary",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px",
-                  marginRight: "16px",
-                },
-                className: "uc-search-button",
-              },
-              children: {
-                buttonLabel: getLabel({
-                  labelName: "Receipt Search",
-                  labelKey: "UC_SEARCHRECEIPT_LABEL",
-                }),
-              },
+            // searchReceiptBtn: {
+            //   componentPath: "Button",
+            //   //visible: enableButton,
+            //   props: {
+            //     variant: "outlined",
+            //     color: "primary",
+            //     style: {
+            //       color: "primary",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px",
+            //       marginRight: "16px",
+            //     },
+            //     className: "uc-search-button",
+            //   },
+            //   children: {
+            //     buttonLabel: getLabel({
+            //       labelName: "Receipt Search",
+            //       labelKey: "UC_SEARCHRECEIPT_LABEL",
+            //     }),
+            //   },
 
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  openReceiptSearchForm(state, dispatch);
-                },
-              },
-            },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       openReceiptSearchForm(state, dispatch);
+            //     },
+            //   },
+            // },
             EditBtn: {
               componentPath: "Button",
               //visible: enableButton,

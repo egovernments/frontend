@@ -29,6 +29,7 @@ const getData = async (action, state, dispatch) => {
 };
 
 const getMDMSData = async (action, state, dispatch) => {
+  
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -62,6 +63,8 @@ const getMDMSData = async (action, state, dispatch) => {
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
     ); 
+    console.info("setting uiCommonConfig",payload);
+    console.info("data=",get(payload.MdmsRes ,"common-masters.uiCommonPay"));
     dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
     } catch (e) {
     console.log(e);
