@@ -529,6 +529,12 @@ class GlobalFilter extends Component {
 
     render() {
         let { classes, globalFilterData, ulbFilter, mdmsData, GFilterData, ulbFilters, ulbOverViewFilters } = this.props;
+       
+        let tempdata = mdmsData.values;
+        let result = tempdata && tempdata.filter( number=> number !=="Testing-DDR" &&  number !=="Uttarkhand-DDR"); 
+      
+        mdmsData.values = result; 
+
         let { strings } = this.props;
         let role = this.props.dashboardConfigData && Array.isArray(this.props.dashboardConfigData) && this.props.dashboardConfigData.length > 0 && this.props.dashboardConfigData[0].roleName && this.props.dashboardConfigData[0].roleName
 
