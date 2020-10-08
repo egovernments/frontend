@@ -156,7 +156,7 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
         },
-        pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*“”‘’]{1,64}$/i,
+        // pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*“”‘’]{1,64}$/i,
         jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo"
       }),
       tradeLocBuilidingName: getTextField({
