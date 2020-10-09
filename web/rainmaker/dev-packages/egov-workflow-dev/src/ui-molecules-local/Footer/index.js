@@ -16,7 +16,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import "./index.css";
-let status =null
+ 
 class Footer extends React.Component {
   state = {
     open: false,
@@ -60,7 +60,8 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async item => {
-    const { handleFieldChange, setRoute, dataPath } = this.props;
+    const { handleFieldChange, setRoute, dataPath,state } = this.props;
+    
     let employeeList = [];
 
     if (dataPath === "BPA") {
@@ -69,14 +70,28 @@ class Footer extends React.Component {
     } else {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);
-      switch(status){
+      const tlAppStatus = get(
+        state,
+        `screenConfiguration.preparedFinalObject.Licenses[0].status`,null
+      );
+
+      switch(tlAppStatus){
         case 'PENDINGAPPROVAL':
-          handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.cbrnNumber`, null);
-          handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.cbrnDate`, null);
-          break;
+            handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.cbrnNumber`, get(state,
+              `screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.cbrnNumber`,
+              null
+            ));
+            handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.cbrnDate`, get(state,
+              `screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate`,
+              null
+            ));
+            break;
           case 'FIELDINSPECTION': 
-         handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.tradeSubType`, null);
-          break;
+            handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.tradeSubType`, get(state,
+              `screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType`,
+              null
+            ));
+            break;
           case 'APPLIED':
             break;
       }
@@ -188,7 +203,7 @@ class Footer extends React.Component {
       });
 
     if (moduleName === "NewTL") {
-      status = get(
+      const status = get(
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].status`
       );
