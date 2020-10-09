@@ -920,7 +920,7 @@ export const downloadCertificateForm = async(oldProperties, pdfcode, tenantId,ap
     { key: "acknowledgementIds", value: applicationNumber }
   ]);
   const Properties= get(response, "Properties", oldProperties);
-  const document=get(Properties[0],"documents").filter(item=>item.documentType=="PTMUTATION");
+  const document=get(Properties[0],"documents") && get(Properties[0],"documents").filter(item=>item.documentType=="PTMUTATION");
   const oldFileStoreId=document&& get(document[0],"fileStoreId")
   if(oldFileStoreId){
     downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
