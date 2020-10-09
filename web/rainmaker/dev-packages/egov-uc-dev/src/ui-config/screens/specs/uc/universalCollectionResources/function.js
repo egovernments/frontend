@@ -162,11 +162,8 @@ export const searchApiCall = async (state, dispatch) => {
   }
 };
 export const searchChallanApiCall = async(state,dispatch)=>{
-  
-   
   showHideTable(false, dispatch);
   let queryObject = [];
-  
    queryObject = [
     {
       key: "tenantId",
@@ -174,16 +171,11 @@ export const searchChallanApiCall = async(state,dispatch)=>{
     },
     { key: "offset", value: "0" }
   ];
-
- 
-
   let challanSearchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "challanSearchScreen",
     {}
   );
-
-  
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children",
      state,
@@ -221,7 +213,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
   }
   else {
     for (var key in challanSearchScreenObject) {
-      if (challanSearchScreenObject.hasOwnProperty(key) && key === "businessServices" && challanSearchScreenObject['businessServices'] != null) {
+      if (challanSearchScreenObject.hasOwnProperty(key) && key === "businessService" && challanSearchScreenObject['businessService'] != null) {
         queryObject.push({ key: key, value: challanSearchScreenObject[key] });
       } else if (
         challanSearchScreenObject.hasOwnProperty(key) && challanSearchScreenObject[key] &&
@@ -257,9 +249,8 @@ export const searchChallanApiCall = async(state,dispatch)=>{
       response[i] = {
         challanNo: challans[i].challanNo,
         serviceType: serviceTypeLabel,
-       consumerName : challans[i].citizen.name,
+        consumerName : challans[i].citizen.name,
         status: challans[i].applicationStatus,
-       // businessService: getTransformedLocale(challans[i].businessService),
         tenantId: challans[i].tenantId,
         businessService: challans[i].businessService
       };
@@ -271,10 +262,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
         ['UC_CHALLAN_NO_LABEL']: item.challanNo || "-",
         ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.consumerName || "-",
         ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-       // ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
-       // ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
         ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
-       // ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-",
         ["BUSINESS_SERVICE"]: item.businessService || "-",
       }));
@@ -310,7 +298,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
 
 const checkEmptyFields = (searchScreenObject) => {
   
-  const businessServices = get(searchScreenObject, 'businessServices', null)
+  const businessServices = get(searchScreenObject, 'businessService', null)
   const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
   const consumerCodes = get(searchScreenObject,'challanNo',null)

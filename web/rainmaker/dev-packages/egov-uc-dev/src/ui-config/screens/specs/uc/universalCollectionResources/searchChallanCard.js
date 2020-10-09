@@ -57,7 +57,10 @@ import {
       labelName: "Search Challan",
       labelKey: "ACTION_TEST_CHALLAN_SEARCH"
     }),
-   
+    // subheader: getCommonSubHeader({
+    //   labelName: "Provide at least one parameter to search for an application",
+    //   labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
+    // }),
     searchContainer: getCommonContainer({
     
       challanNo: getTextField({
@@ -122,7 +125,7 @@ import {
             selectedCategory.child.length > 0) ?
             selectedCategory.child.map(item => item.code) : selectedCategory.code);
           dispatch(
-            prepareFinalObject("challanSearchScreen.businessServices", serviceTypes)
+            prepareFinalObject("challanSearchScreen.businessService", serviceTypes)
           );
           return action;
         }

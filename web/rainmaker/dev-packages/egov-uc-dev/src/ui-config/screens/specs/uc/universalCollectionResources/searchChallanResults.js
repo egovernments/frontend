@@ -1,10 +1,6 @@
 import React from "react";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
+
 import { getLocaleLabels, getStatusKey} from "egov-ui-framework/ui-utils/commons";
 
 export const SearchChallanResults = {
