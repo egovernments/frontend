@@ -1357,7 +1357,8 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
      ...amountPaid,
      ...paymentInformation,
      ...process.env.REACT_APP_NAME !== "Citizen"? generatedApprovedBy : citizengeneratedApprovedBy,
-     ...disclaimers
+     ...disclaimers,{
+      text:"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", bold: true, fontSize: 8, color: 'blue', decoration: 'underline'}
     ],
     footer: [],
     "styles":{

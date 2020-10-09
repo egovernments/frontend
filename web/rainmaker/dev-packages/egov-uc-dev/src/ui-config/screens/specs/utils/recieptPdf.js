@@ -674,7 +674,9 @@ const getReceiptData = transformedData => {
             text:"Comments: "+transformedData.comments,
             style: "pt-reciept-citizen-subheader"
      }
-       ,
+       , {
+        text:"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", bold: true, fontSize: 8, color: 'blue', decoration: 'underline'}
+   ,
       {
         text: "",
         style: "pt-reciept-citizen-subheader"
@@ -980,7 +982,9 @@ const getReceiptData = transformedData => {
         {
           text:"Comments: "+transformedData.comments,
           style: "pt-reciept-citizen-subheader"
-        },
+        },{
+          text:"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", bold: true, fontSize: 8, color: 'blue', decoration: 'underline'}
+     ,
       {
         text: "",
         style: "pt-reciept-citizen-subheader"

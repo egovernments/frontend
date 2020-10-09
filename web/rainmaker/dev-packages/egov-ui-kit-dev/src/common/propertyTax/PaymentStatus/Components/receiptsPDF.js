@@ -454,7 +454,8 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
             ],
             alignment: "left",
             style: "receipt-footer",
-          },
+          },{
+            text:"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", bold: true, fontSize: 8, color: 'blue', decoration: 'underline'}
         ],
         //define all the styles here
         styles: {
