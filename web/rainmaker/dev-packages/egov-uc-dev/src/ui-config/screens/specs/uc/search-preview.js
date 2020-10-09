@@ -140,7 +140,7 @@ import {
           },
           ...getCommonSubHeader({
             labelName: "Consumer Details",
-            labelKey: "TL_COMMON_OWN_DETAILS",
+            labelKey: "CONSUMERDETAILS",
           }),
         },
       },
@@ -149,29 +149,62 @@ import {
       consumerName: getLabelWithValue(
         {
           labelName: "Consumer Name",
-          labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL",
+          labelKey: "UC_CONS_NAME_LABEL",
         },
   
-        { jsonPath: "Demands[0].consumerName" }
-      ),
-      consumerAddress: getLabelWithValue(
-        {
-          labelName: "Consumer Address",
-          labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL",
-        },
-  
-        { jsonPath: "Demands[0].consumerAddress" }
+        { jsonPath: "challan[0].citizen.name" }
       ),
       consumerMobileNo: getLabelWithValue(
         {
           labelName: "Mobile No",
-          labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL",
+          labelKey: "UC_MOBILE_NO_LABEL",
         },
   
-        { jsonPath: "Demands[0].mobileNumber" }
+        { jsonPath: "challan[0].citizen.mobileNumber" }
       ),
+      ConsumerHouseNo:getLabelWithValue(
+         {
+          labelName: "Door/House No.",
+          labelKey: "UC_DOOR_NO_LABEL"
+        },
+        { jsonPath: "challan[0].address.doorNo" }
+      ),
+      ConsumerBuilidingName:getLabelWithValue(
+        {
+         labelName: "Building/Colony Name",
+         labelKey: "UC_BLDG_NAME_LABEL"
+       },
+       { jsonPath: "challan[0].address.buildingName" }
+     ),
+     ConsumerStreetName:getLabelWithValue(
+      {
+       labelName: "Street Name",
+       labelKey: "UC_SRT_NAME_LABEL"
+     },
+     { jsonPath: "challan[0].address.street" }
+   ),
+   ConsumerLocMohalla:getLabelWithValue(
+     {
+    
+      labelName: "Mohalla",
+      labelKey: "UC_MOHALLA_LABEL"
+    },
+    {
+    jsonPath: "challan[0].address.locality.code" ,
+    localePrefix: {
+      moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : getTenantId().replace('.', '_').toUpperCase(),
+      masterName: "REVENUE"
+    },callBack: checkValueForNA
+    }
+   )
+
+
     }),
   });
+
+  export const checkValueForNA = value => {
+    return value ? value : "NA";
+  };
   const headerrow = getCommonContainer({});
   
   
@@ -192,7 +225,7 @@ import {
           },
           ...getCommonSubHeader({
             labelName: "Service Details",
-            labelKey: "UC_COMMON_SERVICE_DETAILS",
+            labelKey: "SERVICEDETAILS",
           }),
         },
       },
@@ -201,38 +234,25 @@ import {
       serviceName: getLabelWithValue(
         {
           labelName: "Service Name",
-          labelKey: "UC_SERVICE_NAME_LABEL",
-        },
-  
-        {
-          jsonPath: "Demands[0].businessService",
-          localePrefix: {
-            moduleName: "BillingService",
-            masterName: "BusinessService",
-          },
-        }
-      ),
-      categoryName: getLabelWithValue(
-        {
-          labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL",
         },
   
         {
-          jsonPath: "Demands[0].serviceType",
+          jsonPath: "challan[0].businessService",
           localePrefix: {
             moduleName: "BillingService",
             masterName: "BusinessService",
           },
         }
       ),
+    
       fromDate: getLabelWithValue(
         {
           labelName: "From Date",
           labelKey: "UC_FROM_DATE_LABEL",
         },
   
-        { jsonPath: "Demands[0].taxPeriodFrom", callBack: convertEpochToDate }
+        { jsonPath: "challan[0].taxPeriodFrom", callBack: convertEpochToDate }
       ),
       toDate: getLabelWithValue(
         {
@@ -240,7 +260,19 @@ import {
           labelKey: "UC_TO_DATE_LABEL",
         },
   
-        { jsonPath: "Demands[0].taxPeriodTo", callBack: convertEpochToDate }
+        { jsonPath: "challan[0].taxPeriodTo", callBack: convertEpochToDate }
+      ),
+      
+       applicationStatus: getLabelWithValue(
+        {
+          labelName: "Application Status",
+          labelKey: "CS_INBOX_STATUS_FILTER",
+        },
+  
+        {
+          jsonPath: "challan[0].applicationStatus",
+         
+        }
       ),
     }),
   });
