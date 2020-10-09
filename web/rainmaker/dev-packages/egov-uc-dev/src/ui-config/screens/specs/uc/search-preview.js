@@ -20,8 +20,8 @@ import {
   import set from "lodash/set";
   import { getFeesEstimateCard,
            convertEpochToDate, 
-           getCommonApplyFooter } from "../../utils";
-  import { httpRequest } from "../../../../../ui-utils";
+           getCommonApplyFooter } from "../utils";
+  import { httpRequest } from "../../../../ui-utils";
   import {
     prepareFinalObject,
     handleScreenConfigurationFieldChange as handleField,
@@ -29,12 +29,61 @@ import {
   import orderBy from "lodash/orderBy";
   import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
   import { download, downloadBill } from "egov-common/ui-utils/commons";
-  
+  import { getChallanSearchResult } from "../../../../ui-utils/commons";
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let businessService = getQueryArg(window.location.href, "businessService");
-  
+  const searchResults = async (action, state, dispatch) => {
+
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+    let businessService = getQueryArg(window.location.href, "businessService");
+    let challanNo = getQueryArg(window.location.href, "applicationNumber");
+    let queryObject = [];
+    queryObject = [
+     {
+       key: "tenantId",
+       value: tenantId
+     },
+     {
+       key: "challanNo",
+       value: challanNo
+     },
+     {
+    key: "businessService", 
+     value: businessService
+   }
+   
+   ];
+
+
+   const challanresponse = await getChallanSearchResult(queryObject);
+   dispatch(prepareFinalObject("challan[0]", challanresponse.challans[0]));
+   const isActive = get(state.screenConfiguration.preparedFinalObject , "challan[0].applicationStatus"); 
+ if(isActive==="ACTIVE"){
+   dispatch(
+     handleField(
+       "search-preview",
+       "components.div.children.preview.children.cardContent.children.footer.children.cancelButton",
+       "visible",
+       true
+     )
+   );
+   dispatch(
+     handleField(
+       "search-preview",
+       "components.div.children.preview.children.cardContent.children.footer.children.editButton",
+       "visible",
+       true
+     )
+   );
+ }
+
+  }
   const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+    let tenantId = getQueryArg(window.location.href, "tenantId");
+    let businessService = getQueryArg(window.location.href, "businessService");
+    let challanNo = getQueryArg(window.location.href, "applicationNumber");
+    searchResults(action, state, dispatch, applicationNumber)
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Challan Number:",
@@ -47,6 +96,9 @@ import {
           componentPath: "ApplicationNoContainer",
           props: {
             number: applicationNumber,
+            label: {
+              labelKey:   "PAYMENT_UC_CONSUMER_CODE",
+          },
           },
         },
       }),
@@ -65,7 +117,6 @@ import {
       businessService
     );
     
-  
     
   };
   const estimate = getCommonGrayCard({
@@ -531,7 +582,7 @@ import {
             serviceDetails,
             userDetails,
             footer: getCommonApplyFooter({
-              previousButton: {
+              cancelButton: {
                 componentPath: "Button",
                 props: {
                   variant: "outlined",
@@ -544,22 +595,22 @@ import {
                   },
                 },
                 children: {
-                  previousButtonIcon: {
+                  cancelButtonIcon: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
                     props: {
                       iconName: "keyboard_arrow_left",
                     },
                   },
-                  previousButtonLabel: getLabel({
-                    labelName: "Previous Step",
-                    labelKey: "TL_COMMON_BUTTON_PREV_STEP",
+                  cancelButtonLabel: getLabel({
+                    labelName: "Cancel Challan",
+                    labelKey: "CHALLAN_CANCEL_BUTTON",
                   }),
                 },
   
                 visible: false,
               },
-              payButton: {
+              editButton: {
                 componentPath: "Button",
                 props: {
                   variant: "contained",
@@ -572,16 +623,16 @@ import {
                   },
                 },
                 children: {
-                  payButtonLabel: getLabel({
-                    labelName: "Pay",
-                    labelKey: "UC_PAY_BUTTON",
+                  editButtonLabel: getLabel({
+                    labelName: "Edit Challan",
+                    labelKey: "CHALLAN_EDIT_BUTTON",
                   }),
                 },
                 onClickDefination: {
                   action: "condition",
-                  callBack: callBackForPay,
+                  //callBack: callBackForPay,
                 },
-                // visible: false
+                 visible: false
               },
             }),
           }),

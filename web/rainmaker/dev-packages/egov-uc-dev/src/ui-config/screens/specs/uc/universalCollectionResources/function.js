@@ -261,6 +261,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
         status: challans[i].applicationStatus,
        // businessService: getTransformedLocale(challans[i].businessService),
         tenantId: challans[i].tenantId,
+        businessService: challans[i].businessService
       };
     }
     
@@ -274,7 +275,8 @@ export const searchChallanApiCall = async(state,dispatch)=>{
        // ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
         ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
        // ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
-        ["TENANT_ID"]: item.tenantId || "-"
+        ["TENANT_ID"]: item.tenantId || "-",
+        ["BUSINESS_SERVICE"]: item.businessService || "-",
       }));
      
       dispatch(

@@ -154,8 +154,7 @@ import {
   
 
   const openNewChallanForm = (state, dispatch) => {
-    dispatch(prepareFinalObject("Challan", []));
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
+   
     dispatch(setRoute(`/uc/newCollection`));
   };
 
