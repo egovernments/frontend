@@ -154,7 +154,7 @@ import {
           labelKey: "UC_CONS_NAME_LABEL",
         },
   
-        { jsonPath: "challan[0].citizen.name" }
+        { jsonPath: "Challan.citizen.name" }
       ),
       consumerMobileNo: getLabelWithValue(
         {
@@ -162,28 +162,28 @@ import {
           labelKey: "UC_MOBILE_NO_LABEL",
         },
   
-        { jsonPath: "challan[0].citizen.mobileNumber" }
+        { jsonPath: "Challan.citizen.mobileNumber" }
       ),
       ConsumerHouseNo:getLabelWithValue(
          {
           labelName: "Door/House No.",
           labelKey: "UC_DOOR_NO_LABEL"
         },
-        { jsonPath: "challan[0].address.doorNo" }
+        { jsonPath: "Challan.address.doorNo" }
       ),
       ConsumerBuilidingName:getLabelWithValue(
         {
          labelName: "Building/Colony Name",
          labelKey: "UC_BLDG_NAME_LABEL"
        },
-       { jsonPath: "challan[0].address.buildingName" }
+       { jsonPath: "Challan.address.buildingName" }
      ),
      ConsumerStreetName:getLabelWithValue(
       {
        labelName: "Street Name",
        labelKey: "UC_SRT_NAME_LABEL"
      },
-     { jsonPath: "challan[0].address.street" }
+     { jsonPath: "Challan.address.street" }
    ),
    ConsumerLocMohalla:getLabelWithValue(
      {
@@ -192,7 +192,7 @@ import {
       labelKey: "UC_MOHALLA_LABEL"
     },
     {
-    jsonPath: "challan[0].address.locality.code" ,
+    jsonPath: "Challan.address.locality.code" ,
     localePrefix: {
       moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : getTenantId().replace('.', '_').toUpperCase(),
       masterName: "REVENUE"
@@ -240,7 +240,7 @@ import {
         },
   
         {
-          jsonPath: "challan[0].businessService",
+          jsonPath: "Challan.businessService",
           localePrefix: {
             moduleName: "BillingService",
             masterName: "BusinessService",
@@ -254,7 +254,7 @@ import {
           labelKey: "UC_FROM_DATE_LABEL",
         },
   
-        { jsonPath: "challan[0].taxPeriodFrom", callBack: convertEpochToDate }
+        { jsonPath: "Challan.taxPeriodFrom", callBack: convertEpochToDate }
       ),
       toDate: getLabelWithValue(
         {
@@ -262,7 +262,7 @@ import {
           labelKey: "UC_TO_DATE_LABEL",
         },
   
-        { jsonPath: "challan[0].taxPeriodTo", callBack: convertEpochToDate }
+        { jsonPath: "Challan.taxPeriodTo", callBack: convertEpochToDate }
       ),
       
        applicationStatus: getLabelWithValue(
@@ -272,7 +272,7 @@ import {
         },
   
         {
-          jsonPath: "challan[0].applicationStatus",
+          jsonPath: "Challan.applicationStatus",
          
         }
       ),
