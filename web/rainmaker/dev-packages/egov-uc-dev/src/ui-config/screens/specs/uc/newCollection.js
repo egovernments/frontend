@@ -250,14 +250,14 @@ const getChallanSearchRes = async (action, state, dispatch) => {
           true
         )
       );
-      dispatch(
-        handleField(
-          "newCollection",
-          "components.div.children.newCollectionFooter.children.cancelChallan",
-          "visible",
-          true
-        )
-      );
+      // dispatch(
+      //   handleField(
+      //     "newCollection",
+      //     "components.div.children.newCollectionFooter.children.cancelChallan",
+      //     "visible",
+      //     true
+      //   )
+      // );
 
     } else {
       dispatch(toggleSnackbar(true,{ labelName:"Unable to find Challan Detail. Please search with valid Challan Detail"}, "error"));
@@ -366,35 +366,35 @@ const newCollection = {
             //     },
             //   },
             // },
-            EditBtn: {
-              componentPath: "Button",
-              //visible: enableButton,
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  color: "primary",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px",
-                  marginRight: "16px",
-                },
-                className: "uc-edit-button",
-              },
-              children: {
-                buttonLabel: getLabel({
-                  labelName: "Edit",
-                  labelKey: "UC_EDIT_LABEL",
-                }),
-              },
+            // EditBtn: {
+            //   componentPath: "Button",
+            //   //visible: enableButton,
+            //   props: {
+            //     variant: "outlined",
+            //     color: "primary",
+            //     style: {
+            //       color: "primary",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px",
+            //       marginRight: "16px",
+            //     },
+            //     className: "uc-edit-button",
+            //   },
+            //   children: {
+            //     buttonLabel: getLabel({
+            //       labelName: "Edit",
+            //       labelKey: "UC_EDIT_LABEL",
+            //     }),
+            //   },
 
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  openUpdateForm(state, dispatch);
-                },
-              },
-            },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       openUpdateForm(state, dispatch);
+            //     },
+            //   },
+            // },
           },
         },
 
