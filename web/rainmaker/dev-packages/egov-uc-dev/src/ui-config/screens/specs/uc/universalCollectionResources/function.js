@@ -13,7 +13,7 @@ export const searchApiCall = async (state, dispatch) => {
   
   showHideTable(false, dispatch);
   let queryObject = [];
-  console.info("query obj0=",queryObject);
+  
    queryObject = [
     {
       key: "tenantId",
@@ -22,7 +22,7 @@ export const searchApiCall = async (state, dispatch) => {
     { key: "offset", value: "0" }
   ];
 
- console.info("query obj1==",queryObject);
+
 
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -30,14 +30,14 @@ export const searchApiCall = async (state, dispatch) => {
     {}
   );
 
-  console.info("searchScreenObject==>",searchScreenObject);
+  
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children",
     state,
     dispatch,
     "search"
   );
-  console.info("search receipt valid??==",isSearchBoxFirstRowValid);
+
   if (!isSearchBoxFirstRowValid) {
     dispatch(
       toggleSnackbar(
@@ -89,7 +89,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
-    console.info("query obj2==",queryObject);
+
     const responseFromAPI = await getSearchResults(queryObject);
     dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
     const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
@@ -162,11 +162,11 @@ export const searchApiCall = async (state, dispatch) => {
   }
 };
 export const searchChallanApiCall = async(state,dispatch)=>{
-  console.info("search for challans");
+  
    
   showHideTable(false, dispatch);
   let queryObject = [];
-  console.info("query obj0=",queryObject);
+  
    queryObject = [
     {
       key: "tenantId",
@@ -175,7 +175,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
     { key: "offset", value: "0" }
   ];
 
- console.info("query obj1==",queryObject);
+ 
 
   let challanSearchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -183,15 +183,16 @@ export const searchChallanApiCall = async(state,dispatch)=>{
     {}
   );
 
-  console.info("challanSearchScreenObject==>",challanSearchScreenObject);
+  
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children",
      state,
     dispatch,
     "searchChallan" //screen name
   );
-  console.info("isSearchBoxFirstRowValid??==",isSearchBoxFirstRowValid);
+ 
   if (!isSearchBoxFirstRowValid) {
+   
     dispatch(
       toggleSnackbar(
         true,
@@ -242,17 +243,17 @@ export const searchChallanApiCall = async(state,dispatch)=>{
       }
     }
 
-    console.info("query obj2==",queryObject);
+   
     const responseFromAPI = await getChallanSearchResult(queryObject);
-    console.info("got response from api=",responseFromAPI);
+    
     dispatch(prepareFinalObject("challanSearchResponse", responseFromAPI));
      const challans = (responseFromAPI && responseFromAPI.challans) || [];
-     console.info("challans=",challans);
+    
      const response = [];
      for (let i = 0; i < challans.length; i++) {
        
        const serviceTypeLabel = getTransformedLocale(challans[i].businessService);
-      console.info("serviceTypeLabel=",serviceTypeLabel);
+      
       response[i] = {
         challanNo: challans[i].challanNo,
         serviceType: serviceTypeLabel,
@@ -262,7 +263,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
         tenantId: challans[i].tenantId,
       };
     }
-    console.log("Response===",response);
+    
     // const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.uiCommonConfig");
     try {
       let data = response.map(item => ({
@@ -275,7 +276,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
        // ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-"
       }));
-      console.info("Data to display in table=",data);
+     
       dispatch(
         handleField(
           "searchChallan",
@@ -306,13 +307,18 @@ export const searchChallanApiCall = async(state,dispatch)=>{
 };
 
 const checkEmptyFields = (searchScreenObject) => {
+  
   const businessServices = get(searchScreenObject, 'businessServices', null)
   const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  const consumerCodes = get(searchScreenObject,'consumerCodes',null)
+  const consumerCodes = get(searchScreenObject,'challanNo',null)
   const fromDate = get(searchScreenObject,'fromDate',null)
   const toDate = get(searchScreenObject,'toDate',null)
-  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)&& checkEmpty(consumerCodes)&& checkEmpty(fromDate)&& checkEmpty(toDate)) { return true; }
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)&& checkEmpty(consumerCodes)&& checkEmpty(fromDate)&& checkEmpty(toDate)) {
+    
+    return true; 
+    
+    }
   return false;
 }
 const checkEmpty = (value) => {

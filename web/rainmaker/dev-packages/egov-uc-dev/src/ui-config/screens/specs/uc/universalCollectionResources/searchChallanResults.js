@@ -41,7 +41,7 @@ export const SearchChallanResults = {
           customBodyRender: value => (
             <LabelContainer
               style={
-                value.includes("PAID") ? { color: "green" } : { color: "red" }
+                value.includes("CANCELLED") ?  { color: "red" } :{ color: "green" } 
               }
               labelKey={getStatusKey(value).labelKey}
               labelName={getStatusKey(value).labelName}
@@ -78,15 +78,13 @@ export const SearchChallanResults = {
 };
 
 const onRowClick = rowData => {
-  console.info("row data==",rowData,"::",rowData[3]);
+  console.info("row data==",rowData,"::BS=",rowData[2]);
   switch (rowData[3]) {
     case "Active":
-      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[2]}&tenantId=${
-        rowData[4]
-      }`;
+      window.location.href = `universalCollectionResources/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[4]}`;
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[2]}&tenantId=${rowData[4]}`;
+      window.location.href = `search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[4]}`;
       break;
   }
 };

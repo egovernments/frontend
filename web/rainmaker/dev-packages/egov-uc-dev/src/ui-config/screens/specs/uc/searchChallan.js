@@ -25,57 +25,57 @@ import {
   let enableButton = true;
   enableButton = hasButton && hasButton === "false" ? false : true;
   
-//   const getData = async (action, state, dispatch) => {
-//     await getMDMSData(action, state, dispatch);
-//   };
+  const getData = async (action, state, dispatch) => {
+    await getMDMSData(action, state, dispatch);
+  };
   
-//   const getMDMSData = async (action, state, dispatch) => {
-//     let mdmsBody = {
-//       MdmsCriteria: {
-//         tenantId: tenantId,
-//         moduleDetails: [
-//           {
-//             moduleName: "BillingService",
-//             masterDetails: [
-//               { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" }
-//             ]
-//           },
-//           {
-//             moduleName: "common-masters",
-//             masterDetails: [
-//               {
-//                 name: "uiCommonPay"
-//               }
-//             ]
-//           },
-//         ]
-//       }
-//     };
-//     try {
-//       const payload = await httpRequest(
-//         "post",
-//         "/egov-mdms-service/v1/_search",
-//         "_search",
-//         [],
-//         mdmsBody
-//       );
-//       setServiceCategory(
-//         get(payload, "MdmsRes.BillingService.BusinessService", []),
-//         dispatch
-//       ); 
-//       dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
-//       } catch (e) {
-//       console.log(e);
+  const getMDMSData = async (action, state, dispatch) => {
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+        moduleDetails: [
+          {
+            moduleName: "BillingService",
+            masterDetails: [
+              { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" }
+            ]
+          },
+          {
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "uiCommonPay"
+              }
+            ]
+          },
+        ]
+      }
+    };
+    try {
+      const payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      setServiceCategory(
+        get(payload, "MdmsRes.BillingService.BusinessService", []),
+        dispatch
+      ); 
+      dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
+      } catch (e) {
+      console.log(e);
       
-//     }
-//   };
+    }
+  };
   
   const SearchChallanAndResult = {
     uiFramework: "material-ui",
     name: "searchChallan",
     beforeInitScreen: (action, state, dispatch) => {
       dispatch(prepareFinalObject("searchChallanScreen", {}));
-    //  getData(action, state, dispatch);
+      getData(action, state, dispatch);
       return action;
     },
     components: {

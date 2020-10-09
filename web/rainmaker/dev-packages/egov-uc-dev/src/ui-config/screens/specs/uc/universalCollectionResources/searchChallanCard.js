@@ -23,14 +23,7 @@ import {
   enableButton = hasButton && hasButton === "false" ? false : true;
   
   const resetFields = (state, dispatch) => {
-    dispatch(
-      handleField(
-        "searchChallan",
-        "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children.receiptNumber",
-        "props.value",
-        ""
-      )
-    );
+   
       dispatch(
         handleField(
           "searchChallan",
@@ -47,26 +40,12 @@ import {
         ""
       )
     );
+   
+   
     dispatch(
       handleField(
         "searchChallan",
-        "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children.fromDate",
-        "props.value",
-        ""
-      )
-    );
-    dispatch(
-      handleField(
-        "searchChallan",
-        "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children.toDate",
-        "props.value",
-        ""
-      )
-    );
-    dispatch(
-      handleField(
-        "searchChallan",
-        "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children.consumerCodes",
+        "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children.challanNo",
         "props.value",
         ""
       )
@@ -81,7 +60,7 @@ import {
    
     searchContainer: getCommonContainer({
     
-      consumerCodes: getTextField({
+      challanNo: getTextField({
         label: {
           labelName: "Challan Number.",
           labelKey: "UC_CHALLAN_NO_LABEL"
@@ -102,7 +81,7 @@ import {
         uiFramework: "custom-containers-local",
         moduleName: "egov-uc",
         componentPath: "AutosuggestContainer",
-        visible: false,
+        visible: true,
         props: {
           className: "autocomplete-dropdown",
           label: {
@@ -121,10 +100,10 @@ import {
          
           isClearable: true,
           labelsFromLocalisation: true,
-          sourceJsonPath: "applyScreenMdmsData.serviceCategories",
-          jsonPath: "searchScreenMdmsData.businessServiceSelected",
+          sourceJsonPath: "applyScreenMdmsData.serviceCategories",         
+          jsonPath:"challanSearchScreen.businessServiceSelected",
         },
-        jsonPath: "searchScreenMdmsData.businessServiceSelected",
+        jsonPath:"challanSearchScreen.businessServiceSelected",
         gridDefination: {
           xs: 12,
           sm: 4
