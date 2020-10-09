@@ -44,7 +44,7 @@ export const addQueryArg = (url, queries = []) => {
   const urlParts = url.split("?");
   const path = urlParts[0];
   let queryParts = urlParts.length > 1 ? urlParts[1].split("&") : [];
-  queries.forEach(query => {
+  queries && queries.forEach(query => {
     const key = query.key;
     const value = query.value;
     const newQuery = `${key}=${value}`;
@@ -615,7 +615,7 @@ export const getUserDataFromUuid = async bodyObject => {
 };
 
 export const getCommonPayUrl = (dispatch, applicationNo, tenantId, businessService) => {
-  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
+  const url = `pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
   dispatch(setRoute(url));
 };
 
@@ -706,7 +706,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      // "/egov-mdms-service/v1/_search",
       "_search",
       [],
       mdmsBody
@@ -821,7 +821,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      // "/egov-mdms-service/v1/_search",
       "_search",
       [],
       mdmsBody
@@ -835,11 +835,12 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
     );
     payload = getTransformData(payload, setPath, setTransformPath);
     dispatch(prepareFinalObject(dispatchPath, get(payload, dispatchPath, [])));
-    //dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
-    dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));
+    // dispatch(prepareFinalObject(dispatchPath, payload.DynamicMdms));
+    debugger;
+    // dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));
   } catch (e) {
     console.log(e);
-    dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));
+    // dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, false));
   }
 };
 export const epochToDate = et => {

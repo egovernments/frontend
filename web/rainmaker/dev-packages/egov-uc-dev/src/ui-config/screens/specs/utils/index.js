@@ -7,6 +7,9 @@ import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "
 import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
+
 
 export const getCommonApplyFooter = children => {
   return {
@@ -319,6 +322,212 @@ export const getEmployeeName = async queryObject => {
     console.log(e.message);
   }
 };
+
+
+export const getBill = async (queryObject,dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      // toggleSnackbar(
+      //   true,
+      //   { labelName: error.message, labelKey: error.message },
+      //   "error"
+      // )
+    );
+    console.log(error,'fetxh');
+  }
+};
+
+
+export const getBusinessServiceMdmsData = async (dispatch,  tenantId) => {
+
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "BillingService",
+          masterDetails: [{ name: "BusinessService" }]
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [{ name: "uiCommonPay" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("businessServiceMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+
+// const generateBill = async (
+//   consumerCode,
+//   tenantId,
+//   businessService,
+//   dispatch
+// ) => {
+//   try {
+//     const payload = await httpRequest(
+//       "post",
+//       `/billing-service/bill/_generate?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
+//       "",
+//       [],
+//       {}
+//     );
+//     if (payload && payload.Bill[0]) {
+//       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+//       const estimateData = createEstimateData(payload.Bill[0]);
+//       estimateData &&
+//         estimateData.length &&
+//         dispatch(
+//           prepareFinalObject(
+//             "applyScreenMdmsData.estimateCardData",
+//             estimateData
+//           )
+//         );
+//       dispatch(
+//         prepareFinalObject("applyScreenMdmsData.consumerCode", consumerCode)
+//       );
+//       dispatch(
+//         prepareFinalObject(
+//           "applyScreenMdmsData.businessService",
+//           businessService
+//         )
+//       );
+//       dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
+//     }
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
+
+// const createEstimateData = billObject => {
+//   const billDetails = billObject && billObject.billDetails;
+//   let fees =
+//     billDetails &&
+//     billDetails[0].billAccountDetails &&
+//     billDetails[0].billAccountDetails.map(item => {
+//       return {
+//         name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+//         value: item.amount,
+//         info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+//       };
+//     });
+//   return fees;
+// };
+
+
+export const createEstimateData = (billObject, totalAmount) => {
+  let billDetails = billObject && billObject.billDetails;
+
+  let forward = 0;
+  if (totalAmount < 0) {
+    billDetails.forEach(e => {
+      e.billAccountDetails.forEach(cur => {
+        if (cur.taxHeadCode.indexOf("ADVANCE_CARRYFORWARD") > -1) {
+          forward = forward + cur.amount
+        }
+      });
+    }); 
+
+    let keyExist = false;
+    billDetails[0].billAccountDetails.forEach(cur => {
+      if (cur.taxHeadCode.indexOf("ADVANCE_CARRYFORWARD") > -1) {
+        cur.amount = forward;
+        keyExist = true;
+      }
+    });
+    if(!keyExist){
+      billDetails[0].billAccountDetails.push({
+        amount: forward,
+        taxHeadCode: "ADVANCE_CARRYFORWARD",
+        order: 2,
+        value: "Please put some description in mdms for this key"
+      })
+    }
+  }
+
+  let fees =
+    billDetails &&
+    billDetails[0].billAccountDetails &&
+    billDetails[0].billAccountDetails.map(item => {
+      return {
+        name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+        value: item.amount,
+        info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+      };
+    });
+  return fees;
+};
+
+
+export const generateBill = async (dispatch, consumerCode, tenantId, businessService) => {
+  try {
+    if (consumerCode && tenantId) {
+      const queryObj = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "consumerCode",
+          value: consumerCode
+        }
+      ];
+      if(businessService){
+        queryObj.push({
+          key: "businessService",
+          value: businessService
+        });
+      }
+      const payload = await getBill(queryObj,dispatch);
+      // let payload = sampleGetBill();
+      if (payload && payload.Bill[0]) {
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+        debugger;
+        const estimateData = createEstimateData(payload.Bill[0], payload.Bill[0].totalAmount);
+        estimateData &&
+          estimateData.length &&
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.estimateCardData",
+              estimateData
+            )
+          );
+      }
+    }
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "error"
+      )
+    );
+    console.log(e);
+  }
+};
+
+
 
 export const setServiceCategory = (businessServiceData, dispatch) => {
   let nestedServiceData = {};

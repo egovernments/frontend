@@ -11,8 +11,9 @@ import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
+import { generateBill } from "../../utils/index"; 
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
-
+import fetchBill from "../pay";
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/pay" : "/inbox";
@@ -92,11 +93,11 @@ const processDemand = async (state, dispatch) => {
       );
       let payload = await httpRequest(
         "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        `/user/_search?tenantId=${"pb"}`,
         "_search",
         [],
         {
-          tenantId: commonConfig.tenantId,
+          tenantId: "pb",
           userName: mobileNumber
         }
       );
@@ -120,7 +121,7 @@ const processDemand = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "Demands[0].serviceType"
         );
-        getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
+        getCommonPayUrl(dispatch, applicationNumber, "pb.testing", businessService);
       }
     } catch (error) { }
   } else {
@@ -148,7 +149,7 @@ const createDemand = async (state, dispatch) => {
   if (Object.keys(demands[0].payer).length === 0) {
     demands[0].payer = null;
   }
-  // set(demands[0], "consumerType", demands[0].businessService);
+  set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {
       if (!item.taxAmount) {
@@ -191,7 +192,7 @@ const createDemand = async (state, dispatch) => {
         Demands: demands
       });
       if (payload.Demands.length > 0) {
-        //const consumerCode = get(payload, "Demands[0].consumerCode");
+        const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
@@ -202,7 +203,14 @@ const createDemand = async (state, dispatch) => {
           businessService.split(".")[0]
         );
         dispatch(prepareFinalObject("Demands", payload.Demands));
-        //await generateBill(consumerCode, tenantId, businessService, dispatch);
+        // let consumerCode = getQueryArg(window.location.href, "consumerCode");
+        // let tenantId = getQueryArg(window.location.href, "tenantId");
+        // let businessService = getQueryArg(window.location.href, "businessService");
+        //  fetchBill(state, dispatch, consumerCode, tenantId, businessService);
+
+        await generateBill(dispatch, consumerCode, tenantId, businessService);
+
+        
       } else {
         alert("Empty response!!");
         dispatch(
@@ -239,61 +247,61 @@ const createDemand = async (state, dispatch) => {
   }
 };
 
-const generateBill = async (
-  consumerCode,
-  tenantId,
-  businessService,
-  dispatch
-) => {
-  try {
-    const payload = await httpRequest(
-      "post",
-      `/billing-service/bill/_generate?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
-      "",
-      [],
-      {}
-    );
-    if (payload && payload.Bill[0]) {
-      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-      const estimateData = createEstimateData(payload.Bill[0]);
-      estimateData &&
-        estimateData.length &&
-        dispatch(
-          prepareFinalObject(
-            "applyScreenMdmsData.estimateCardData",
-            estimateData
-          )
-        );
-      dispatch(
-        prepareFinalObject("applyScreenMdmsData.consumerCode", consumerCode)
-      );
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.businessService",
-          businessService
-        )
-      );
-      dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
+// const generateBill = async (
+//   consumerCode,
+//   tenantId,
+//   businessService,
+//   dispatch
+// ) => {
+//   try {
+//     const payload = await httpRequest(
+//       "post",
+//       `/billing-service/bill/_generate?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
+//       "",
+//       [],
+//       {}
+//     );
+//     if (payload && payload.Bill[0]) {
+//       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+//       const estimateData = createEstimateData(payload.Bill[0]);
+//       estimateData &&
+//         estimateData.length &&
+//         dispatch(
+//           prepareFinalObject(
+//             "applyScreenMdmsData.estimateCardData",
+//             estimateData
+//           )
+//         );
+//       dispatch(
+//         prepareFinalObject("applyScreenMdmsData.consumerCode", consumerCode)
+//       );
+//       dispatch(
+//         prepareFinalObject(
+//           "applyScreenMdmsData.businessService",
+//           businessService
+//         )
+//       );
+//       dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
+//     }
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
-const createEstimateData = billObject => {
-  const billDetails = billObject && billObject.billDetails;
-  let fees =
-    billDetails &&
-    billDetails[0].billAccountDetails &&
-    billDetails[0].billAccountDetails.map(item => {
-      return {
-        name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
-        value: item.amount,
-        info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
-      };
-    });
-  return fees;
-};
+// const createEstimateData = billObject => {
+//   const billDetails = billObject && billObject.billDetails;
+//   let fees =
+//     billDetails &&
+//     billDetails[0].billAccountDetails &&
+//     billDetails[0].billAccountDetails.map(item => {
+//       return {
+//         name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+//         value: item.amount,
+//         info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+//       };
+//     });
+//   return fees;
+// };
 
 const isTaxPeriodValid = (dispatch, demand, state) => {
   const taxPeriods = get(

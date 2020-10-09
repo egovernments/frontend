@@ -31,7 +31,7 @@ const getData = async (action, state, dispatch) => {
 const getMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: "pb.testing",
       moduleDetails: [
         {
           moduleName: "BillingService",

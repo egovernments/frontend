@@ -14,7 +14,6 @@ const mapStateToProps = (state, ownProps) => {
   const { preparedFinalObject } = state.screenConfiguration || {};
   const { applyScreenMdmsData } = preparedFinalObject || {};
   let { estimateCardData } = applyScreenMdmsData || [];
-
   estimateCardData = estimateCardData.map(fees => {
     if (fees.name && fees.name.labelKey)
       fees.name.labelKey = getTransformedLocale(fees.name.labelKey);

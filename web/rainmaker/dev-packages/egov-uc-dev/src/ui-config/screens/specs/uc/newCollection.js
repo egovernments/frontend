@@ -13,7 +13,7 @@ const header = getCommonHeader({
   labelName: "New Collection",
   labelKey: "UC_COMMON_HEADER"
 });
-const tenantId = getTenantId();
+const tenantId = "pb.testing";
 const loadServiceType = async (tenantId, dispatch) => {
   let requestBody = {
     MdmsCriteria: {
@@ -64,7 +64,7 @@ const getData = async (action, state, dispatch, demandId) => {
 
   let requestBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: "pb.testing",
       moduleDetails: [
         {
           moduleName: "tenant",
