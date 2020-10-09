@@ -653,6 +653,13 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     //     ? data.bankName + ", " + data.branchName
     //     : get(data, "bankName", "NA")
     // );
+     data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
+    data.branchName = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.branchName", null);
+    data.bankAndBranch = nullToNa(
+    data.bankName && data.branchName
+        ? data.bankName + ", " + data.branchName
+        : get(data, "bankName", "NA")
+     );
     data.paymentDate = nullToNa(
       epochToDate(
         get(response, "Payments[0].transactionDate", 0)
