@@ -14,7 +14,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
   import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-  import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+  import { getLocale,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import get from "lodash/get";
   import set from "lodash/set";
@@ -30,6 +30,8 @@ import {
   import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
   import { download, downloadBill } from "egov-common/ui-utils/commons";
   import { getChallanSearchResult } from "../../../../ui-utils/commons";
+  import { confirmationDialog } from "./confirmationDialog";
+  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let businessService = getQueryArg(window.location.href, "businessService");
@@ -57,8 +59,8 @@ import {
 
 
    const challanresponse = await getChallanSearchResult(queryObject);
-   dispatch(prepareFinalObject("challan[0]", challanresponse.challans[0]));
-   const isActive = get(state.screenConfiguration.preparedFinalObject , "challan[0].applicationStatus"); 
+   dispatch(prepareFinalObject("Challan", challanresponse.challans[0]));
+   const isActive = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus"); 
  if(isActive==="ACTIVE"){
    dispatch(
      handleField(
@@ -248,6 +250,58 @@ import {
   export const callBackForPay = (state, dispatch) => {
     getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
   };
+
+  export const showHideConfirmationPopup = (state, dispatch, screenKey) => {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["search-preview"],
+     "components.div.children.preview.children.cardContent.children.footer.children.cancelConfirmationDialog.props.open",
+     ""
+   );
+   dispatch(
+     handleField("search-preview", "components.div.children.preview.children.cardContent.children.footer.children.cancelConfirmationDialog", "props.open", !toggle)
+   );
+ };
+
+ export const cancelChallan = async(state,dispatch,status) =>{
+  var operation="cancel";
+  let estimateData = get(state.screenConfiguration.preparedFinalObject , "Demands[0].estimateCardData");
+  estimateData && estimateData.forEach((item, index) => {
+    dispatch(
+      prepareFinalObject(`Challan.amount[${index}].taxHeadCode`, item.info.labelName)
+    );
+    dispatch(
+      prepareFinalObject(`Challan.amount[${index}].amount`, item.value)
+    );
+    });
+  const challan = get(state.screenConfiguration.preparedFinalObject , "Challan");
+  challan.applicationStatus = status;
+ 
+  try{
+    if(challan!=null){
+      const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {
+        Challan: challan
+      });
+      if (payload.challans.length > 0) {
+        const consumerCode = get(payload, "challans[0].challanNo");
+        const businessService = get(payload, "challans[0].businessService");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=success&tenantId=${getTenantId()}&serviceCategory=${businessService}&challanNumber=${consumerCode}`));
+      } else {
+        console.info("some error  happened while cancelling challan");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
+      }
+    }
+  }catch(e){
+    console.error("error:::"+e);
+    dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
+  }
+}
+
+ const openUpdateForm = (state, dispatch) => {
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let businessService = getQueryArg(window.location.href, "businessService");
+  let consumerCode = getQueryArg(window.location.href, "applicationNumber");
+  window.location.href = `/uc/newCollection?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`;
+};
   
   const formatTaxHeaders = (billDetail = {}) => {
     let formattedFees = [];
@@ -257,6 +311,7 @@ import {
       ["amount"],
       ["asce"]
     );
+    
     formattedFees = billAccountDetailsSorted.map((taxHead) => {
       return {
         info: {
@@ -289,7 +344,7 @@ import {
         value: consumerCode,
       },
       {
-        key: "businessService",
+        key: "service",
         value: billBusinessService,
       },
     ];
@@ -303,8 +358,7 @@ import {
   
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
     //let estimateData = formatTaxHeaders(payload.billDetails[0]);
-  
-    set(estimateData, "payStatus", isPAID);
+    set(estimateData[0], "payStatus", isPAID);
     dispatch(
       handleField(
         "search-preview",
@@ -321,13 +375,15 @@ import {
       "components.div.children.headerDiv.children.helpSection.children",
       showDownloadMenu
     )
-  
+    
+     
+
   };
   export const getBill = async (queryObject) => {
     try {
       const response = await httpRequest(
         "post",
-        "/billing-service/bill/v2/_fetchbill",
+        "/billing-service/bill/v2/_search",
         "",
         queryObject
       );
@@ -585,7 +641,7 @@ import {
               cancelButton: {
                 componentPath: "Button",
                 props: {
-                  variant: "outlined",
+                  variant: "contained",
                   color: "primary",
                   style: {
                     minWidth: "180px",
@@ -595,19 +651,18 @@ import {
                   },
                 },
                 children: {
-                  cancelButtonIcon: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                    props: {
-                      iconName: "keyboard_arrow_left",
-                    },
-                  },
                   cancelButtonLabel: getLabel({
                     labelName: "Cancel Challan",
-                    labelKey: "CHALLAN_CANCEL_BUTTON",
+                    labelKey: "UC_CANCEL_CHALLAN",
                   }),
                 },
-  
+                onClickDefination: {
+                  action: "condition",
+                  callBack: (state, dispatch) => {
+                    showHideConfirmationPopup(state, dispatch, "search-preview");
+                  }
+                
+                },
                 visible: false,
               },
               editButton: {
@@ -625,14 +680,42 @@ import {
                 children: {
                   editButtonLabel: getLabel({
                     labelName: "Edit Challan",
-                    labelKey: "CHALLAN_EDIT_BUTTON",
+                    labelKey: "UC_UPDATE_CHALLAN",
                   }),
                 },
                 onClickDefination: {
                   action: "condition",
                   //callBack: callBackForPay,
                 },
-                 visible: false
+                 visible: false,
+                 onClickDefination: {
+                  action: "condition",
+                  callBack: (state, dispatch) => {
+                    openUpdateForm(state, dispatch);
+                  }
+                
+                },
+              },
+              cancelConfirmationDialog: {
+                componentPath: "Dialog",
+                props: {
+                  open: false,
+                  maxWidth: "md"
+                },
+                children: {
+                  dialogContent: {
+                    componentPath: "DialogContent",
+                    props: {
+                      classes: {
+                        root: "city-picker-dialog-style"
+                      }
+                      // style: { minHeight: "180px", minWidth: "365px" }
+                    },
+                    children: {
+                      popup: confirmationDialog
+                    }
+                  }
+                }
               },
             }),
           }),

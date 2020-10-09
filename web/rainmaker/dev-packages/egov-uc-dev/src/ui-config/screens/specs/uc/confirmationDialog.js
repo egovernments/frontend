@@ -3,15 +3,15 @@ import {
   getCommonContainer,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { processChallan, showHideConfirmationPopup } from "./newCollectionResource/newCollectionFooter";
-
+import { processChallan } from "./newCollectionResource/newCollectionFooter";
+import {cancelChallan, showHideConfirmationPopup } from "./search-preview";
 export const confirmationDialog = getCommonContainer({
-  header: getCommonHeader({
-    labelName: "Do u really want to cancel challan",
-    labelKey: "Do u really want to cancel challan?"
-  }),
+  
   confirmationContents: getCommonContainer({
-
+    header: getCommonHeader({
+      labelName: "Do you really want to cancel challan",
+      labelKey: "Do you really want to cancel challan?"
+    }),
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
@@ -37,7 +37,7 @@ export const confirmationDialog = getCommonContainer({
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              processChallan(state, dispatch, "CANCELLED");
+              cancelChallan(state, dispatch, "CANCELLED");
             }
           }
         },
