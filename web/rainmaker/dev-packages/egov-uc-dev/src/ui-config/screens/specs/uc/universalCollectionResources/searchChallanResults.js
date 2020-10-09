@@ -57,6 +57,14 @@ export const SearchChallanResults = {
           viewColumns  :false
         }
       },
+      {
+        labelName: "BusinessService",
+        labelKey: "BUSINESS_SERVICE",
+        options: {
+          display: false,
+          viewColumns  :false
+        }
+      },
      
 
     ],
@@ -81,12 +89,12 @@ const onRowClick = rowData => {
   console.info("row data==",rowData,"::",rowData[3]);
   switch (rowData[3]) {
     case "Active":
-      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[2]}&tenantId=${
+      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[5]}&tenantId=${
         rowData[4]
       }`;
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[2]}&tenantId=${rowData[4]}`;
+      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[5]}&tenantId=${rowData[4]}`;
       break;
   }
 };
