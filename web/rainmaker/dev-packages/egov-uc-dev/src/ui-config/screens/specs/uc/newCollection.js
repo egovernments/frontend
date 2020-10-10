@@ -2,13 +2,25 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+// import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
+import { getTenantId } from "../../../../ui-utils/localStorageUtils/index";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { setServiceCategory } from "../utils";
-import commonConfig from "config/common.js";
+// import commonConfig from "config/common.js";
 import get from "lodash/get";
 import set from "lodash/set";
+
+
+const commonConfig = {
+  MAP_API_KEY: globalConfigExists() ? window.globalConfigs.getConfig("GMAPS_API_KEY") : process.env.REACT_APP_GMAPS_API_KEY,
+  tenantId: globalConfigExists() ? window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID") : process.env.REACT_APP_DEFAULT_TENANT_ID,
+  forgotPasswordTenant: "pb.amritsar",
+};
+
+
+function globalConfigExists() {
+  return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
+}
 
 const header = getCommonHeader({
   labelName: "New Collection",
@@ -20,7 +32,7 @@ const getData = async (action, state, dispatch, demandId) => {
 
   let requestBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: "pb",
       moduleDetails: [
         {
           moduleName: "tenant",
@@ -30,11 +42,18 @@ const getData = async (action, state, dispatch, demandId) => {
             },
             { name: "citymodule" }
           ]
-        }
+        },       {
+          moduleName: "BillingService",
+          masterDetails: [
+            {
+              name: "BusinessService"
+            }
+          ]
+        },
       ]
     }
   };
-
+    debugger;
   try {
     let payload = null;
     payload = await httpRequest(
@@ -44,7 +63,8 @@ const getData = async (action, state, dispatch, demandId) => {
       [],
       requestBody
     );
-    
+    debugger;
+    console.log(payload,"payloadpayload");
     if(payload){
       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
       const citymodule = get(payload , "MdmsRes.tenant.citymodule"); 
@@ -55,7 +75,7 @@ const getData = async (action, state, dispatch, demandId) => {
     }
     const serviceCategories = get(
       state.screenConfiguration,
-      "preparedFinalObject.searchScreenMdmsData.serviceCategory",
+      "preparedFinalObject.applyScreenMdmsData.serviceCategory",
       []
     );
     if (serviceCategories && serviceCategories.length) {
@@ -120,6 +140,7 @@ const newCollection = {
       );
       action.screenConfig = screenConfigForUpdate;
     }
+
     !demandId && getData(action, state, dispatch, demandId);
     return action;
   },

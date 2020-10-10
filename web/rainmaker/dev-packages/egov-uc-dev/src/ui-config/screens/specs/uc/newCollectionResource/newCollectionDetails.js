@@ -14,12 +14,12 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "../../../../../ui-utils/localStorageUtils/index";
 import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
 import {consumerAddresss} from "../ImpelExtendedFeature/fields";
 
-const tenantId = getTenantId();
+const tenantId = "pb";
 
 export const newCollectionDetailsCard = getCommonCard(
   {
@@ -46,7 +46,7 @@ export const newCollectionDetailsCard = getCommonCard(
             required: true,
             props: {
               required: true,
-              value: tenantId,
+              value: "pb.testing",
               disabled: true
             }
           }),
@@ -61,7 +61,7 @@ export const newCollectionDetailsCard = getCommonCard(
             }
             let requestBody = {
               MdmsCriteria: {
-                tenantId: action.value,
+                tenantId: "pb.testing",
                 moduleDetails: [
                   {
                     moduleName: "BillingService",

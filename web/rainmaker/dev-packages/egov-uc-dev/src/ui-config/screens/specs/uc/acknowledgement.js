@@ -6,7 +6,7 @@ import {
   acknowledgementFailureFooter
 } from "./acknowledgementResource/acknowledgementFooter";
 import set from "lodash/set";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "../../../../ui-utils/localStorageUtils/index";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 

@@ -6,7 +6,7 @@ import {
   getTranslatedLabel,
   transformById
 } from "../../ui-config/screens/specs/utils/index";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocalization } from "../../ui-utils/localStorageUtils/index";
 
 const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {

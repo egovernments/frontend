@@ -4,7 +4,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import {download} from "egov-common/ui-utils/commons"
+// import {download} from "egov-common/ui-utils/commons"
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -23,7 +23,7 @@ export const searchResults = {
                   { key: "receiptNumbers", value:  tableMeta.rowData[0]},
                   { key: "tenantId", value: tableMeta.rowData[7] }
                 ]
-                download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
+                // download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
               }}>
               {value}
             </div>
@@ -52,7 +52,7 @@ export const searchResults = {
     ],
     options: {
       filter: false,
-      download: false,
+      // download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,

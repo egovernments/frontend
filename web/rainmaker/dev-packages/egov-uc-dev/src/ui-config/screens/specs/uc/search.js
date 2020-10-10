@@ -11,9 +11,9 @@ import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "../../../../ui-utils/localStorageUtils/index";
 
-const tenantId = getTenantId();
+const tenantId = "pb.testing";
 const header = getCommonHeader({
   labelName: "Universal Collection",
   labelKey: "UC_COMMON_HEADER_SEARCH"
@@ -30,7 +30,7 @@ const getData = async (action, state, dispatch) => {
 const getMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: "pb.testing",
       moduleDetails: [
         {
           moduleName: "BillingService",

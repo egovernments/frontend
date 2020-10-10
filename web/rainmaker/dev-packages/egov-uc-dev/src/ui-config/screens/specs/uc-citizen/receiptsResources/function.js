@@ -14,7 +14,7 @@ import {
 import {
   getTenantId,
   getLocalization
-} from "egov-ui-kit/utils/localStorageUtils";
+} from "../../../../../ui-utils/localStorageUtils/index";
 import {
   getLocaleLabels,
   transformById,
