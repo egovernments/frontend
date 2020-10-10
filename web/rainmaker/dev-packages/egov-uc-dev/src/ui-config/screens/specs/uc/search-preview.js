@@ -284,11 +284,11 @@ import {
     getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
   };
 
-  export const showHideConfirmationPopup = (state, dispatch, screenKey) => {
+  export const showHideConfirmationPopup = (state, dispatch) => {
     let toggle = get(
       state.screenConfiguration.screenConfig["search-preview"],
      "components.div.children.preview.children.cardContent.children.footer.children.cancelConfirmationDialog.props.open",
-     ""
+     false
    );
    dispatch(
      handleField("search-preview", "components.div.children.preview.children.cardContent.children.footer.children.cancelConfirmationDialog", "props.open", !toggle)
@@ -695,7 +695,7 @@ import {
                 onClickDefination: {
                   action: "condition",
                   callBack: (state, dispatch) => {
-                    showHideConfirmationPopup(state, dispatch, "search-preview");
+                    showHideConfirmationPopup(state, dispatch);
                   }
                 
                 },
