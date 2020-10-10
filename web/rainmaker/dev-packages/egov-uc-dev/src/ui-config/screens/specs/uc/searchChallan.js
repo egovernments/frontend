@@ -74,7 +74,7 @@ import {
     uiFramework: "material-ui",
     name: "searchChallan",
     beforeInitScreen: (action, state, dispatch) => {
-      dispatch(prepareFinalObject("searchChallanScreen", {}));
+      dispatch(prepareFinalObject("challanSearchScreen", {}));
       getData(action, state, dispatch);
       return action;
     },
@@ -110,6 +110,7 @@ import {
                 props: {
                   variant: "contained",
                   color: "primary",
+                  className:"gen-challan-btn",
                   style: {
                     color: "white",
                     borderRadius: "2px",

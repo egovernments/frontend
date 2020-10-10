@@ -391,7 +391,7 @@ import {
   
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
     //let estimateData = formatTaxHeaders(payload.billDetails[0]);
-    set(estimateData[0], "payStatus", isPAID);
+    set(estimateData, "payStatus", isPAID);
     dispatch(
       handleField(
         "search-preview",
@@ -677,8 +677,9 @@ import {
               cancelButton: {
                 componentPath: "Button",
                 props: {
-                  variant: "contained",
+                  variant: "outlined",
                   color: "primary",
+                  className:"gen-challan-btn",
                   style: {
                     minWidth: "180px",
                     height: "48px",
@@ -706,6 +707,7 @@ import {
                 props: {
                   variant: "contained",
                   color: "primary",
+                  className:"gen-challan-btn",
                   style: {
                     minWidth: "180px",
                     height: "48px",
@@ -736,7 +738,7 @@ import {
                 componentPath: "Dialog",
                 props: {
                   open: false,
-                  maxWidth: "md"
+                  maxWidth: "sm"
                 },
                 children: {
                   dialogContent: {

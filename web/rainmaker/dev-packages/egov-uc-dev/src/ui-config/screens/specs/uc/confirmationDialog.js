@@ -1,7 +1,8 @@
 import {
   getCommonHeader,
   getCommonContainer,
-  getLabel
+  getLabel,
+  getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { processChallan } from "./newCollectionResource/newCollectionFooter";
 import {cancelChallan, showHideConfirmationPopup } from "./search-preview";
@@ -10,11 +11,43 @@ export const confirmationDialog = getCommonContainer({
   confirmationContents: getCommonContainer({
     header: getCommonHeader({
       labelName: "Do you really want to cancel challan",
-      labelKey: "Do you really want to cancel challan?"
+      labelKey: "Cancel challan"
+    },
+    {
+      style: {
+        fontSize: "20px"
+      }
+    }
+    ),
+    commentsField: getTextField({
+      label: {
+        labelName: "Enter Comments",
+        labelKey: "CANCEL_COMMENT_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Comments",
+        labelKey: "CANCEL_COMMENT_LABEL"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 12
+      },
+      props: {
+        style: {
+          width: "90%"
+        }
+      },
+      jsonPath: "Challan.description"
     }),
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
+      props: {
+        style: {
+          width: "90%",
+          textAlign: "center"
+        }
+      },
       children: {
         yesButton: {
           componentPath: "Button",

@@ -19,7 +19,7 @@ const getCommonApplyFooter = children => {
   };
 };
 export const getRedirectionURL = () => {
-  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/newCollection" : "/inbox";
+  const redirectionURL = ifUserRoleExists("CITIZEN") ? "/inbox" : "/uc/searchChallan" ;
 
   return redirectionURL;
 };
@@ -123,7 +123,8 @@ export const acknowledgementFailureFooter = getCommonApplyFooter({
         minWidth: "200px",
         height: "48px",
         marginRight: "16px"
-      }
+      },
+      className:"gen-challan-btn"
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
