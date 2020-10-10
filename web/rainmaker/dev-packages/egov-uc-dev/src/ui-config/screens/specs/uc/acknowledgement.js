@@ -25,7 +25,7 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
     link: () => {  
       //const { Challan } = state.screenConfiguration.preparedFinalObject;
       const Challan = [
-        { key: "consumerCodes", value: applicationNumber },
+        { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
       console.info("in ackmt==data got=",Challan);
@@ -38,7 +38,7 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
     link: () => {
       //const { Challan } = state.screenConfiguration.preparedFinalObject;
       const Challan = [
-        { key: "consumerCodes", value: applicationNumber },
+        { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
       downloadChallan(Challan,"print");          
