@@ -11,7 +11,7 @@ const styles = {
   verticalAlign: "middle",
   lineHeight: "35px",
   fontSize: "16px",
-  height: "35px",
+  height: "fit-content"
 };
 
 // function ApplicationNoContainer(props) {
