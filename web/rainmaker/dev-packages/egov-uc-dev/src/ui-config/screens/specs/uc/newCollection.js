@@ -47,6 +47,12 @@ const getData = async (action, state, dispatch, demandId) => {
           masterDetails: [
             {
               name: "BusinessService"
+            },
+            {
+              name: "TaxHeadMaster"
+            },
+            {
+              name: "TaxPeriod"
             }
           ]
         },
@@ -73,6 +79,12 @@ const getData = async (action, state, dispatch, demandId) => {
         prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
       );
     }
+    setServiceCategory(
+      get(payload, "MdmsRes.BillingService.BusinessService", []),
+      dispatch
+    );
+
+
     const serviceCategories = get(
       state.screenConfiguration,
       "preparedFinalObject.applyScreenMdmsData.serviceCategory",

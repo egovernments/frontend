@@ -105,11 +105,11 @@ const processDemand = async (state, dispatch) => {
       );
       let payload = await httpRequest(
         "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        `/user/_search?tenantId=pb`,
         "_search",
         [],
         {
-          tenantId: commonConfig.tenantId,
+          tenantId: "pb",
           userName: mobileNumber
         }
       );

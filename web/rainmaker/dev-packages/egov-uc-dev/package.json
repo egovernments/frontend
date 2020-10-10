@@ -14,6 +14,7 @@
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "egov-ui-kit": "^0.0.1",
+    "egov-common": "^0.0.2",
     "egov-ui-framework": "0.1.41",
     "html2canvas": "^1.0.0-alpha.12",
     "jquery": "^3.3.1",
@@ -51,7 +52,8 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "style-loader": "^0.21.0"
+    "style-loader": "^0.21.0",
+    "react-scripts": "^1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

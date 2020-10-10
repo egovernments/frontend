@@ -90,6 +90,7 @@ export const newCollectionDetailsCard = getCommonCard(
                 [],
                 requestBody
               );
+              debugger;
               dispatch(
                 prepareFinalObject(
                   "applyScreenMdmsData.BillingService",
@@ -202,12 +203,14 @@ export const newCollectionDetailsCard = getCommonCard(
             );
               }
             //Set service type data and field if available.
+            debugger;
             const serviceData = get(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
               {}
             );
             if (action.value) {
+              debugger;
               if (
                 serviceData[action.value] &&
                 serviceData[action.value].child &&
@@ -373,6 +376,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
     "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",
     {}
   );
+  debugger;
   const matchingTaxHeads = taxHeadMasters.filter(
     item => item.service === action.value
   );
@@ -509,13 +513,5 @@ const setTaxHeadFields = (action, state, dispatch) => {
 //       nestedServiceData
 //     )
 //   );
-//   let serviceCategories = Object.values(nestedServiceData).filter(
-//     item => item.code
-//   );
-//   dispatch(
-//     prepareFinalObject(
-//       "applyScreenMdmsData.serviceCategories",
-//       serviceCategories
-//     )
-//   );
+
 // };

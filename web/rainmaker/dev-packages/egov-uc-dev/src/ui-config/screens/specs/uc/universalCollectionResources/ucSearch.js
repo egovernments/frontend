@@ -123,6 +123,7 @@ export const UCSearchCard = getCommonCard({
           state.screenConfiguration,
           "preparedFinalObject.applyScreenMdmsData.serviceCategories"
         );
+        console.log(serviceCategory,"serviceCategoryserviceCategory");
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value
         );

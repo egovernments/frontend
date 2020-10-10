@@ -153,6 +153,7 @@ export default ucSearchAndResult;
 
 const openNewCollectionForm = (state, dispatch) => {
   dispatch(prepareFinalObject("Demands", []));
+  debugger;
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/uc/newCollection`
