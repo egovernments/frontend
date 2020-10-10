@@ -8,37 +8,39 @@ import {
   acknowledgementFailureFooter
 } from "./acknowledgementResource/acknowledgementFooter";
 import set from "lodash/set";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
 import { downloadChallan } from "../utils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import './index.css';
 const header = getCommonHeader({
   labelName: `mCollect`,
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
  });
 
- const setDownloadPrintData = () =>{
 
- }
 
-const downloadprintMenu = (state, dispatch) => {
+const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
   let applicationDownloadObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {  
-      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      //const { Challan } = state.screenConfiguration.preparedFinalObject;
+      const Challan = [
+        { key: "consumerCodes", value: applicationNumber },
+        { key: "tenantId", value: tenantId }
+      ]
+      console.info("in ackmt==data got=",Challan);
       downloadChallan(Challan,"download");         
-     // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
-      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      //const { Challan } = state.screenConfiguration.preparedFinalObject;
+      const Challan = [
+        { key: "consumerCodes", value: applicationNumber },
+        { key: "tenantId", value: tenantId }
+      ]
       downloadChallan(Challan,"print");          
     },
     leftIcon: "assignment"
@@ -148,7 +150,8 @@ const getAcknowledgementCard = (
   purpose,
   status,
   billNumber,
-  challanNumber  
+  challanNumber ,
+  tenantId
  
  ) => {
    if(purpose === "challan" && status === "success"){     
@@ -157,7 +160,7 @@ const getAcknowledgementCard = (
         header:header,
         consumerCode : consumerCode(challanNumber),    
       }),
-      headerdownloadprint:downloadprintMenu(state, dispatch),  
+      headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
       applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_GENERATED_SUCCESS_MESSAGE","create","UC_BILL_GENERATION_MESSAGE_SUB","createsuccessmsg",billNumber),
       
       iframeForPdf: {

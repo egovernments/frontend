@@ -20,7 +20,8 @@ import {
   import set from "lodash/set";
   import { getFeesEstimateCard,
            convertEpochToDate, 
-           getCommonApplyFooter } from "../utils";
+           getCommonApplyFooter,
+          downloadChallan } from "../utils";
   import { httpRequest } from "../../../../ui-utils";
   import {
     prepareFinalObject,
@@ -88,8 +89,8 @@ import {
     searchResults(action, state, dispatch, applicationNumber)
     const headerrow = getCommonContainer({
       header: getCommonHeader({
-        labelName: "Challan Number:",
-        labelKey: "UC_CHALLAN_NUMBER",
+        labelName: "Challan Details:",
+        labelKey: "CHALLAN_DETAILS",
       }),
       challanNumberContainer: getCommonContainer({
         challanNumber: {
@@ -453,7 +454,7 @@ import {
           { key: "tenantId", value: tenantId }
         ]
         download(receiptQueryString , "download" ,receiptKey,state );
-        // generateReceipt(state, dispatch, "receipt_download");
+        
       },
       leftIcon: "receipt"
     };
@@ -470,29 +471,30 @@ import {
       leftIcon: "receipt"
     };
     let applicationDownloadObject = {
-      label: { labelName: "Challan", labelKey: "COMMON_CHALLAN" },
+      label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
       link: () => {
         const receiptQueryString = [
           {
-            key: 'consumerCode',
+            key: 'challanNo',
             value: applicationNumber
           },
-          { key: 'tenantId', value: tenantId },
-          {
-            key: "businessService", value: businessService
-          }
+          { key: 'tenantId', value: tenantId }
       ]
-        //downloadBill(applicationNumber,tenantId);
+        downloadChallan(receiptQueryString,"download");
       },
       leftIcon: "assignment"
     };
     let applicationPrintObject = {
-      label: { labelName: "Challan", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
       link: () => {
-        const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-        const documents = LicensesTemp[0].reviewDocData;
-        set(Licenses[0],"additionalDetails.documents",documents)
-        downloadAcknowledgementForm(Licenses,'print');
+        const receiptQueryString = [
+          {
+            key: 'challanNo',
+            value: applicationNumber
+          },
+          { key: 'tenantId', value: tenantId }
+      ]
+        downloadChallan(receiptQueryString,'print');
       },
       leftIcon: "assignment"
     };
@@ -500,11 +502,13 @@ import {
   
     if(isPaid){
     downloadMenu=[receiptDownloadObject,applicationDownloadObject];
-    printMenu = [receiptPrintObject];
+    printMenu = [receiptPrintObject,applicationPrintObject];
     }
     else{
       //Download challan option
+      console.info("download challan");
       downloadMenu=[applicationDownloadObject];
+      printMenu = [applicationPrintObject];
     }
     return{
       test1:{
@@ -577,7 +581,7 @@ import {
         applicationNumber
       );
       
-      //downloadprintMenu(state,applicationNumber,tenantId),
+      
       beforeInitFn(action, state, dispatch, applicationNumber);
   
       return action;
