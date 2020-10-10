@@ -16,7 +16,7 @@ import {
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import get from "lodash/get";
   import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
-
+  import "../index.css";
 
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
@@ -218,18 +218,13 @@ import {
         gridDefination: {
           xs: 12,
           sm: 3
-          // align: "center"
+         
         },
         props: {
           variant: "outlined",
-          style: {
-            color: "#FE7A51",
-            // backgroundColor: "#FE7A51",
-            border: "#FE7A51 solid 1px",
-            borderRadius: "2px",
-            width: window.innerWidth > 480 ? "80%" : "100%",
-            height: "48px"
-          }
+          className:"searchChallan-btn",
+          color: "primary",
+          
         },
         children: {
           buttonLabel: getLabel({
@@ -248,16 +243,16 @@ import {
         gridDefination: {
           xs: 12,
           sm: 3
-          // align: "center"
+         
         },
         props: {
           variant: "contained",
+          className:"searchChallan-btn",
+          
           style: {
             color: "white",
             backgroundColor: "#696969",
-            borderRadius: "2px",
-            width: window.innerWidth > 480 ? "80%" : "100%",
-            height: "48px"
+        
           }
         },
         children: {

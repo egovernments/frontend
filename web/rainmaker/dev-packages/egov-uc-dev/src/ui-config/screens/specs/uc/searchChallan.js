@@ -113,7 +113,7 @@ import {
                   style: {
                     color: "white",
                     borderRadius: "2px",
-                    width: "250px",
+                    width: "170px",
                     height: "48px"
                   }
                 },

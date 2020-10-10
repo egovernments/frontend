@@ -50,6 +50,13 @@
   div#custom-atoms-rightdiv {
     width: 100%;
   }
+  .searchChallan-btn{
+    width: 100%;
+    height: 48px;
+    position: relative;
+    border-radius: 0px ;
+    margin-top: 5px;
+}
 }
 
 @media only screen and (min-width: 768px) {
@@ -61,6 +68,16 @@
     margin-left: 5px;
     width: 150px;
   }
+  .searchChallan-btn{
+    width: 200px;
+    height: 48px;
+    right: 19px;
+    margin-right: 16px;
+    position: relative;
+    border-radius: 0px ;
+    margin-top: 5px;
+}
+
 }
 
 .autocomplete-dropdown {
