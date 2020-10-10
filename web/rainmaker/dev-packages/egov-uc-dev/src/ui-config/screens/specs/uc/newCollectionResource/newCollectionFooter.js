@@ -74,62 +74,6 @@ export const newCollectionFooter = getCommonApplyFooter({
     },
     visible: false
   },
-  
-  cancelChallan: {
-    componentPath: "Button",
-    props: {
-      // variant: "contained",
-      // color: "primary",
-      variant: "outlined",
-      color: "primary",
-     // className: "update-challan-com",
-     className:"gen-challan-btn" ,
-    },
-    children: {
-      submitButtonLabel: getLabel({
-        labelName: "Cancel Challan",
-        labelKey: "UC_CANCEL_CHALLAN"
-      }),
-      submitButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-  
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        showHideConfirmationPopup(state, dispatch, "newCollection");
-      }
-    
-    },
-    visible: false
-  },
-  //dialog to have yes or no button,popup contents present in confirmationDialog
-  cancelConfirmationDialog: {
-    componentPath: "Dialog",
-    props: {
-      open: false,
-      maxWidth: "md"
-    },
-    children: {
-      dialogContent: {
-        componentPath: "DialogContent",
-        props: {
-          classes: {
-            root: "city-picker-dialog-style"
-          }
-          // style: { minHeight: "180px", minWidth: "365px" }
-        },
-        children: {
-          popup: confirmationDialog
-        }
-      }
-    }
-  },
   updateChallan: {
     componentPath: "Button",
     props: {
