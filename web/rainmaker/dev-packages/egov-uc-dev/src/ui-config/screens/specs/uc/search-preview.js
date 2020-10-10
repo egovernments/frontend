@@ -2,17 +2,11 @@ import {
     getCommonHeader,
     getCommonCard,
     getCommonGrayCard,
-    getCommonTitle,
     getCommonSubHeader,
-    getTextField,
     getLabelWithValue,
-    getDateField,
-    getSelectField,
     getCommonContainer,
-    getPattern,
     getLabel,
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-
   import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
   import { getLocale,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -29,10 +23,12 @@ import {
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import orderBy from "lodash/orderBy";
   import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
-  import { download, downloadBill } from "egov-common/ui-utils/commons";
+  import { download } from "egov-common/ui-utils/commons";
   import { getChallanSearchResult } from "../../../../ui-utils/commons";
   import { confirmationDialog } from "./confirmationDialog";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+  import './index.css';
+  
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let businessService = getQueryArg(window.location.href, "businessService");
@@ -92,7 +88,7 @@ import {
         labelName: "Challan Details:",
         labelKey: "CHALLAN_DETAILS",
       }),
-      challanNumberContainer: getCommonContainer({
+      //challanNumberContainer: getCommonContainer({
         challanNumber: {
           uiFramework: "custom-atoms-local",
           moduleName: "egov-uc",
@@ -104,7 +100,20 @@ import {
           },
           },
         },
-      }),
+        helpSection: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          props: {
+            color: "primary",
+            style: { justifyContent: "flex-end" }
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            align: "right"
+          }
+        }
+      //}),
     });
     set(
       action.screenConfig,
@@ -405,7 +414,7 @@ import {
     const showDownloadMenu = downloadprintMenu(state,consumerCode,tenantId);
     set(
       action.screenConfig,
-      "components.div.children.headerDiv.children.helpSection.children",
+      "components.div.children.headerDiv.children.header1.children.headertop.children.helpSection.children",
       showDownloadMenu
     )
     
@@ -443,11 +452,11 @@ import {
   export const downloadprintMenu=(state,applicationNumber,tenantId)=>{
     let downloadMenu = [];
       let printMenu = [];
-    const isPaid = get(state.screenConfiguration.preparedFinalObject , "Demands[0].estimateCardData.payStatus");
+    const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus");
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     const receiptKey = get(uiCommonPayConfig, "receiptKey")
     let receiptDownloadObject = {
-      label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+      label: { labelName: "Receipt", labelKey: "UC_RECEIPT" },
       link: () => {
         const receiptQueryString = [
           { key: "consumerCodes", value: applicationNumber },
@@ -460,7 +469,7 @@ import {
     };
   
     let receiptPrintObject = {
-      label: { labelName: "PRINT RECEIPT", labelKey: "COMMON_PRINT_RECEIPT" },
+      label: { labelName: "PRINT RECEIPT", labelKey: "UC_RECEIPT" },
       link: () => {
           const receiptQueryString = [
               { key: "consumerCodes", value: applicationNumber },
@@ -500,7 +509,7 @@ import {
     };
   
   
-    if(isPaid){
+    if(isPaid=="PAID"){
     downloadMenu=[receiptDownloadObject,applicationDownloadObject];
     printMenu = [receiptPrintObject,applicationPrintObject];
     }
@@ -516,7 +525,7 @@ import {
       componentPath: "Div",
       props: {
         className: "downloadprint-commonmenu",
-        style: { textAlign: "right", display: "flex" },
+        style: { textAlign: "right", display: "flex",paddingTop: "10px" },
       },
       children: {
         downloadMenu: {
@@ -529,8 +538,9 @@ import {
               rightIcon: "arrow_drop_down",
               props: {
                 variant: "outlined",
-                style: { height: "60px", color: "#FE7A51" },
-                className: "tl-download-button",
+                style: { height: "60px", color: "#FE7A51" ,
+                marginRight: "5px" },
+                className: "uc-download-button",
               },
               menu: downloadMenu,
             },
@@ -547,7 +557,7 @@ import {
               props: {
                 variant: "outlined",
                 style: { height: "60px", color: "#FE7A51" },
-                className: "tl-print-button",
+                className: "uc-print-button",
               },
               menu: printMenu,
             },
@@ -602,70 +612,14 @@ import {
               header1: {
                 gridDefination: {
                   xs: 12,
-                  sm: 8,
+                  sm: 12,
                 },
   
                 ...headerrow,
               },
   
-              helpSection: {
-                uiFramework: "custom-atoms",
-                componentPath: "Container",
-                props: {
-                  color: "primary",
-                  style: { justifyContent: "flex-end" }
-                },
-                gridDefination: {
-                  xs: 12,
-                  sm: 4,
-                  align: "right"
-                }
-              }
-            //  downloadSection,
-              // helpSection: {
-              //   uiFramework: "custom-atoms",
-              //   componentPath: "Div",
-              //   props: {
-              //     className: "downloadprint-commonmenu",
-              //     style: { textAlign: "right", display: "flex" },
-              //   },
-              //   children: {
-              //     downloadMenu: {
-              //       uiFramework: "custom-molecules",
-              //       componentPath: "DownloadPrintButton",
-              //       props: {
-              //         data: {
-              //           label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-              //           leftIcon: "cloud_download",
-              //           rightIcon: "arrow_drop_down",
-              //           props: {
-              //             variant: "outlined",
-              //             style: { height: "60px", color: "#FE7A51" },
-              //             className: "tl-download-button",
-              //           },
-              //           menu: downloadMenu,
-              //         },
-              //       },
-              //     },
-              //     printMenu: {
-              //       uiFramework: "custom-molecules",
-              //       componentPath: "DownloadPrintButton",
-              //       props: {
-              //         data: {
-              //           label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-              //           leftIcon: "print",
-              //           rightIcon: "arrow_drop_down",
-              //           props: {
-              //             variant: "outlined",
-              //             style: { height: "60px", color: "#FE7A51" },
-              //             className: "tl-print-button",
-              //           },
-              //           menu: printMenu,
-              //         },
-              //       },
-              //     },
-              //   },
-              // },
+              
+            
             },
           },
   
