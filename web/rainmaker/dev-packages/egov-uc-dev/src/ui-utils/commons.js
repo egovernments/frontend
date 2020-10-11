@@ -26,7 +26,7 @@ import {
   getQueryArg,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+// import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage ,getFileUrl} from "egov-ui-framework/ui-utils/commons";
 
 export const updateTradeDetails = async requestBody => {
@@ -326,7 +326,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "tradeLicenseDetail.address.tenantId",
       ""
     );
-    const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
+    const tenantId = ifUserRoleExists("CITIZEN") ? cityId : "pb.testing";
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessService", value: "newTL" }

@@ -6,7 +6,7 @@ import {
   acknowledgementFailureFooter
 } from "./acknowledgementResource/acknowledgementFooter";
 import set from "lodash/set";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+// import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -122,7 +122,7 @@ const screenConfig = {
       window.location.href,
       "serviceCategory"
     );
-    const tenantId = getTenantId();
+    const tenantId = "pb.testing";
     const queryObject = [
       {
         key: "tenantId",

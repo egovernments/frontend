@@ -3,10 +3,10 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import store from "../../../../ui-redux/store";
 import { getEmployeeName } from "../utils/index";
 import { getMdmsData } from "../utils";
-import {
-  getLocalization,
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+// import {
+//   getLocalization,
+//   getLocale
+// } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getUlbGradeLabel,
   getTranslatedLabel,
@@ -14,7 +14,7 @@ import {
   getTransformedLocale,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+// import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -49,6 +49,17 @@ export const loadUlbLogo = tenantid => {
   };
   img.src = `/pb-egov-assets/${tenantid}/logo.png`;
 };
+
+
+
+
+export const getLocalization = (key) => {
+  return localStorage.getItem(key);
+};
+export const getLocale = () => {
+  return localStorage.getItem("locale");
+};
+
 
 export const loadReceiptData = async response => {
   let data = {};
@@ -117,7 +128,7 @@ export const loadReceiptData = async response => {
         key: "tenantId",
         value:
           process.env.REACT_APP_NAME === "Employee"
-            ? getTenantId()
+            ? "pb.testing"
             : response.tenantId
       }
     ];

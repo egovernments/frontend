@@ -11,19 +11,45 @@ import {
   convertEpochToDate,
   convertDateToEpoch
 } from "../../utils";
-import {
-  getTenantId,
-  getLocalization
-} from "egov-ui-kit/utils/localStorageUtils";
+// import {
+//   getTenantId,
+// } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getLocaleLabels,
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 
+
+
+export const localStorageGet = (key, path) => {
+  const appName = process.env.REACT_APP_NAME;
+  let value = null;
+  if (path) {
+    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+    value = get(data, path);
+  } 
+  else if(key==="businessServiceData")
+  {
+    value = window.localStorage.getItem(key) || null;
+
+  }
+  else {
+    value = window.localStorage.getItem(appName + "." + key) || null;
+  }
+  return value;
+};
+
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
+export const getTenantId = () => {
+  return localStorageGet("tenant-id");
+};
 const tenantId = getTenantId();
+
+export const getLocalization = (key) => {
+  return localStorage.getItem(key);
+};
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);

@@ -8,7 +8,32 @@ import {
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+// import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
+
+
+export const localStorageGet = (key, path) => {
+  const appName = process.env.REACT_APP_NAME;
+  let value = null;
+  if (path) {
+    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+    value = get(data, path);
+  } 
+  else if(key==="businessServiceData")
+  {
+    value = window.localStorage.getItem(key) || null;
+
+  }
+  else {
+    value = window.localStorage.getItem(appName + "." + key) || null;
+  }
+  return value;
+};
+
+
+
+export const getLocalization = (key) => {
+  return localStorage.getItem(key);
+};
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");

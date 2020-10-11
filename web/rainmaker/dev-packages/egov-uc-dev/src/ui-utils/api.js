@@ -1,14 +1,16 @@
 import axios from "axios";
+import get from "lodash/get";
+
 import {
   // fetchFromLocalStorage,
   addQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import store from "../ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getAccessToken
-  //getTenantId
-} from "egov-ui-kit/utils/localStorageUtils";
+// import {
+//   getAccessToken
+//   //getTenantId
+// } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -16,6 +18,29 @@ const instance = axios.create({
     "Content-Type": "application/json"
   }
 });
+
+
+export const getAccessToken = () => {
+  return localStorageGet(`token`);
+};
+
+export const localStorageGet = (key, path) => {
+  const appName = process.env.REACT_APP_NAME;
+  let value = null;
+  if (path) {
+    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+    value = get(data, path);
+  } 
+  else if(key==="businessServiceData")
+  {
+    value = window.localStorage.getItem(key) || null;
+
+  }
+  else {
+    value = window.localStorage.getItem(appName + "." + key) || null;
+  }
+  return value;
+};
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();

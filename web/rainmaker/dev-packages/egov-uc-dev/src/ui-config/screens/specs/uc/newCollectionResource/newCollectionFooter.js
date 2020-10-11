@@ -6,14 +6,48 @@ import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+// import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
-import commonConfig from "config/common.js";
+// import commonConfig from "config/common.js";
+
+
+
+export const localStorageGet = (key, path) => {
+  const appName = process.env.REACT_APP_NAME;
+  let value = null;
+  if (path) {
+    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+    value = get(data, path);
+  } 
+  else if(key==="businessServiceData")
+  {
+    value = window.localStorage.getItem(key) || null;
+
+  }
+  else {
+    value = window.localStorage.getItem(appName + "." + key) || null;
+  }
+  return value;
+};
+
+export const getTenantId = () => {
+  return localStorageGet("tenant-id");
+};
+const commonConfig = {
+  MAP_API_KEY: globalConfigExists() ? window.globalConfigs.getConfig("GMAPS_API_KEY") : process.env.REACT_APP_GMAPS_API_KEY,
+  tenantId: globalConfigExists() ? window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID") : process.env.REACT_APP_DEFAULT_TENANT_ID,
+  forgotPasswordTenant: "pb.amritsar",
+};
+
+function globalConfigExists() {
+  return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
+}
+
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {

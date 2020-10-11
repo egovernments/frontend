@@ -11,19 +11,25 @@ import {
   convertEpochToDate,
   convertDateToEpoch
 } from "../../utils";
-import {
-  getTenantId,
-  getLocalization
-} from "egov-ui-kit/utils/localStorageUtils";
+// import {
+//   getTenantId,
+//   getLocalization
+// } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getLocaleLabels,
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 
+export const getLocalization = (key) => {
+  return localStorage.getItem(key);
+};
+
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
-const tenantId = getTenantId();
+const tenantId = "pb.testing";
+
+
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);

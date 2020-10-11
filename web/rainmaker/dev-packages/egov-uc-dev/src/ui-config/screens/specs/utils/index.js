@@ -1,6 +1,6 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+// import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -10,10 +10,44 @@ import {
   getCommonCard,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
+// import {
+//   getLocaleLabels,
+//   getTransformedLocalStorgaeLabels
+// } from "egov-ui-framework/ui-utils/commons";
+
+
+
+export const getLocalization = (key) => {
+  return localStorage.getItem(key);
+};
+export const getLocale = () => {
+  return localStorage.getItem("locale");
+};
+
+export const getLocaleLabels = (label, labelKey, localizationLabels) => {
+  if (!localizationLabels)
+    localizationLabels = transformById(
+      JSON.parse(getLocalization(`localization_${getLocale()}`)),
+      "code"
+    );
+  if (labelKey) {
+    let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
+    if (!translatedLabel || labelKey === translatedLabel) {
+      return translatedLabel;
+    } else {
+      return translatedLabel;
+    }
+  } else {
+    return label;
+  }
+};
+
+export const getTransformedLocalStorgaeLabels = () => {
+  const localeLabels = JSON.parse(
+    getLocalization(`localization_${getLocale()}`)
+  );
+  return transformById(localeLabels, "code");
+};
 
 export const getCommonApplyFooter = children => {
   return {
@@ -24,6 +58,28 @@ export const getCommonApplyFooter = children => {
     },
     children
   };
+};
+
+export const localStorageGet = (key, path) => {
+  const appName = process.env.REACT_APP_NAME;
+  let value = null;
+  if (path) {
+    const data = JSON.parse(window.localStorage.getItem(appName + "." + key)) || null;
+    value = get(data, path);
+  } 
+  else if(key==="businessServiceData")
+  {
+    value = window.localStorage.getItem(key) || null;
+
+  }
+  else {
+    value = window.localStorage.getItem(appName + "." + key) || null;
+  }
+  return value;
+};
+
+export const getUserInfo = () => {
+  return localStorageGet("user-info");
 };
 
 export const transformById = (payload, id) => {
