@@ -26,7 +26,7 @@ import {
   getQueryArg,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/commons";
 import { setBusinessServiceDataToLocalStorage ,getFileUrl} from "egov-ui-framework/ui-utils/commons";
 
 export const updateTradeDetails = async requestBody => {

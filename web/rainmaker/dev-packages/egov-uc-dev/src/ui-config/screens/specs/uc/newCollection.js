@@ -3,7 +3,7 @@ import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionD
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { setServiceCategory } from "../utils";
 import commonConfig from "config/common.js";

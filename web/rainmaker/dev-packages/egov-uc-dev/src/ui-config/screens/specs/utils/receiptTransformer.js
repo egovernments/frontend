@@ -6,7 +6,7 @@ import { getMdmsData } from "../utils";
 import {
   getLocalization,
   getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+} from "egov-ui-framework/ui-utils/commons";
 import {
   getUlbGradeLabel,
   getTranslatedLabel,
@@ -14,7 +14,7 @@ import {
   getTransformedLocale,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-framework/ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
