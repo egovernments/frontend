@@ -11,7 +11,7 @@ import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framewo
 import orderBy from "lodash/orderBy";
 import get from "lodash/get";
 import set from "lodash/set";
-import commonConfig from "config/common.js";
+//import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
@@ -715,3 +715,73 @@ export const lSRemoveItem = (key) => {
   const appName = process.env.REACT_APP_NAME;
   window.localStorage.removeItem(appName + "." + key);
 };
+
+
+export const commonConfig = {
+  MAP_API_KEY: globalConfigExists() ? window.globalConfigs.getConfig("GMAPS_API_KEY") : process.env.REACT_APP_GMAPS_API_KEY,
+  tenantId: globalConfigExists() ? window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID") : process.env.REACT_APP_DEFAULT_TENANT_ID,
+  forgotPasswordTenant: "pb.amritsar",
+};
+
+function globalConfigExists() {
+  return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
+}
+
+export const transformById = (payload, id) => {
+  return (
+    payload &&
+    payload.reduce((result, item) => {
+      if (!item.hasOwnProperty("active") || (item.hasOwnProperty("active") && item.active)) {
+        result[item[id]] = {
+          ...item,
+        };
+      }
+
+      return result;
+    }, {})
+  );
+};
+
+
+export const getTransformedDropdown = (MDMSdata, dataKeys) => {
+  dataKeys.forEach(dataKey=>{
+    if (MDMSdata && MDMSdata.hasOwnProperty(dataKey)) {
+      let keys = MDMSdata[dataKey] && Object.keys(MDMSdata[dataKey]);
+      let tempObj = {};
+      if(keys && keys.length > 0){
+        if(dataKey !== "UsageCategory"){
+          MDMSdata[dataKey] = getSingleCodeObject(dataKey, tempObj, MDMSdata, keys);
+        } else {
+          MDMSdata = {...MDMSdata, ...getUsageCategory(dataKey, tempObj, MDMSdata, keys)};
+        }
+      }
+    }
+  });
+  return MDMSdata;
+  }  
+
+  export const getSingleCodeObject = (dataKey, tempObj, MDMSdata, keys) => {
+    keys.forEach(key=>{
+      let splittedKey = key.split(".");
+      tempObj[splittedKey[splittedKey.length-1]] = MDMSdata[dataKey][key];
+      tempObj[splittedKey[splittedKey.length-1]].code = splittedKey[splittedKey.length-1];
+    })
+    return tempObj;
+  }
+  
+  export const getUsageCategory = (dataKey, tempObj, MDMSdata, keys) => {
+    keys.forEach(key=>{
+      let splittedKey = key.split(".");
+      let categoryCode = splittedKey.pop();
+      if(splittedKey.length === 0) {
+        tempObj["UsageCategoryMajor"] = {...tempObj["UsageCategoryMajor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key)};
+      } else if (splittedKey.length === 1) {
+        tempObj["UsageCategoryMinor"] = {...tempObj["UsageCategoryMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMajor", splittedKey[splittedKey.length-1])};
+      } else if (splittedKey.length === 2) {
+        tempObj["UsageCategorySubMinor"] = {...tempObj["UsageCategorySubMinor"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategoryMinor", splittedKey[splittedKey.length-1])};
+      } else if (splittedKey.length === 3) {
+        tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length-1])};
+      }
+    });
+    return tempObj;
+  }

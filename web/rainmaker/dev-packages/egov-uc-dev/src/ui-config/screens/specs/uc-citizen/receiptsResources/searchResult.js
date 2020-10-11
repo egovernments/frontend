@@ -3,7 +3,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import {download} from "egov-common/ui-utils/commons"
+//import {download} from "egov-common/ui-utils/commons"
 
 export const searchResult = {
   uiFramework: "custom-molecules",
@@ -36,7 +36,7 @@ export const searchResult = {
           { key: "receiptNumbers", value:  row[0]},
           { key: "tenantId", value: row[6] }
         ]
-        download(receiptQueryString);
+        //download(receiptQueryString);
       }
     },
     customSortColumn: {

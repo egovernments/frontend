@@ -1,4 +1,6 @@
 import * as actionTypes from "./actionTypes";
+import { transformById, getTransformedDropdown } from "egov-ui-framework/ui-utils/common";
+
 
 const initialState = {
   name: "MIHY",
@@ -15,6 +17,25 @@ const appReducer = (state = initialState, action) => {
           ? window.location.pathname
           : state.previousRoute,
         route: action.route
+      };
+      case actionTypes.GENERAL_MDMS_FETCH_SUCCESS:
+      const { masterArray, key } = action;
+      const generalMDMSDataById = masterArray.reduce((result, masterName) => {
+        result[masterName] = transformById(action.payload.MdmsRes[action.moduleName][masterName], key ? key : "code");
+        return result;
+      }, {});
+      return {
+        ...state,
+        loading: false,
+        generalMDMSDataById: getTransformedDropdown(generalMDMSDataById, ["PropertyType", "OwnerShipCategory", "UsageCategory"]),
+      };
+
+    case actionTypes.GENERAL_MDMS_FETCH_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
       };
     // case actionTypes.SHOW_TOAST:
     //   return {

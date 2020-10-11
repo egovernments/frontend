@@ -13,7 +13,7 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
-import commonConfig from "config/common.js";
+import commonConfig from "egov-ui-framework/ui-utils/commons";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
