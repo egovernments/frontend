@@ -9,11 +9,14 @@ import { setServiceCategory } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest} from "../../../../ui-utils";
+import { getTenantId } from "../../../../ui-utils/commons";
 
-const tenantId = getTenantId();
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+//import { getTenantId } from "egov-ui-framework/ui-utils/commons";
+
+const tenantId = "pb.punjab"
+console.log("prasad getTenantId", tenantId);
 const header = getCommonHeader({
   labelName: "Universal Collection",
   labelKey: "UC_COMMON_HEADER_SEARCH"

@@ -10,10 +10,11 @@ import {
   getCommonCard,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
+import {  
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
+  getLocalization,
+  getLocale
+} from "../../../../ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -398,4 +399,11 @@ export const getTextToLocalMapping = label => {
       localisationLabels
     );
   }
+};
+
+export const getTransformedLocalStorgaeLabels = () => {
+  const localeLabels = JSON.parse(
+    getLocalization(`localization_${getLocale()}`)
+  );
+  return transformById(localeLabels, "code");
 };

@@ -14,7 +14,8 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "../../../../../ui-utils/commons";
+
 import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
 import {consumerAddresss} from "../ImpelExtendedFeature/fields";

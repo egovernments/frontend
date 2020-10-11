@@ -14,7 +14,8 @@ import {
   getTransformedLocale,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "../../../../ui-utils/commons";
+
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");

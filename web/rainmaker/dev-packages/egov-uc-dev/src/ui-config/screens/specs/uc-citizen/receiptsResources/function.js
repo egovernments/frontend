@@ -12,16 +12,19 @@ import {
   convertDateToEpoch
 } from "../../utils";
 import {
-  getTenantId,
-  getLocalization
-} from "egov-ui-framework/ui-utils/commons";
-import {
+  getLocalization,
   getLocaleLabels,
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 
+import { getTenantId } from "../../../../../ui-utils/commons";
+
+
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
+
+console.log("prasad localizationLabels",localizationLabels);
+
 const transfomedKeys = transformById(localizationLabels, "code");
 const tenantId = getTenantId();
 

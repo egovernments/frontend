@@ -6,7 +6,8 @@ import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "../../../../../ui-utils/commons";
+
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,

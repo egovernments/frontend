@@ -727,7 +727,7 @@ function globalConfigExists() {
   return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
 }
 
-export const transformById = (payload, id) => {
+/* export const transformById = (payload, id) => {
   return (
     payload &&
     payload.reduce((result, item) => {
@@ -740,7 +740,7 @@ export const transformById = (payload, id) => {
       return result;
     }, {})
   );
-};
+}; */
 
 
 export const getTransformedDropdown = (MDMSdata, dataKeys) => {
@@ -783,5 +783,13 @@ export const getTransformedDropdown = (MDMSdata, dataKeys) => {
         tempObj["UsageCategoryDetail"] = {...tempObj["UsageCategoryDetail"], ...getCategoryObject(categoryCode, MDMSdata, dataKey, key, "usageCategorySubMinor", splittedKey[splittedKey.length-1])};
       }
     });
+    return tempObj;
+  }
+
+  export const getCategoryObject = (categoryCode, MDMSdata, dataKey, key, parentKey, parentKeyValue) => {
+    let tempObj = {}
+    tempObj[categoryCode] = MDMSdata[dataKey][key];
+    tempObj[categoryCode].code = categoryCode;
+    tempObj[categoryCode][parentKey] = parentKeyValue;
     return tempObj;
   }

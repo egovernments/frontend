@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
-import { httpRequest } from "ui-utils/api";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+
 
 export const setProcessInstances = payload => {
   return {

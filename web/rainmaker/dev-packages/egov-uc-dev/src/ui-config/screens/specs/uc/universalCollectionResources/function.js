@@ -14,12 +14,12 @@ import {
 import {
   getTenantId,
   getLocalization
-} from "egov-ui-framework/ui-utils/commons";
+} from "../../../../../ui-utils/commons";
 import {
   getLocaleLabels,
   transformById,
   getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+} from "../../../../../ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
