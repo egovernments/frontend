@@ -223,7 +223,7 @@ class TableChart extends Component {
                       }
                       newrowData[a.name] = [a.label,text]
                   } else {
-                      let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], false);
+                      let val = NFormatterFun(a.value, a.symbol, this.props.GFilterData['Denomination'], true);
                       newrowData[a.name] = val
                   }
                 }

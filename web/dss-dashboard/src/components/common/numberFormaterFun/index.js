@@ -1,3 +1,4 @@
+import _ from 'lodash';
 export default function NFormatterTest(value, type, symbol, commaSeparated = false) {
 
     var SI_SYMBOL = ["Unit", "Lac", "Cr"];
@@ -9,6 +10,7 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
             currency: 'INR'
         })
         // return value;
+        value = Math.round(value * 100) / 100   
     switch (type) {
         case "amount":
         case "Amount":

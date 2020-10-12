@@ -17,6 +17,9 @@ export default function NFormatter(props) {
             style: 'currency',
             currency: 'INR'
         })
+     /* let data = _.cloneDeep(props);   
+       data.value = Math.round(data.value * 100) / 100      
+     */    
         switch (props.nType) {
             case "amount":
             case "Amount":
