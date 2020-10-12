@@ -39,7 +39,7 @@ class TableChart extends Component {
       _.map(filterList, (k,v) => { 
         if(filterList[v] && filterList[v].length >0){
           tempFL = filterList[v][filterList[v].length - 1];
-            if(tempFL[2]['column'] == 'DDRs'){
+            if(tempFL[2]['column'] == 'Districts'){
               let tempDDR = this.props.mdmsData['master'][tempFL[4]];
                   for (var j = 0; j < tempDDR.length; j++) {
                     ttest.push(tempDDR[j]);
