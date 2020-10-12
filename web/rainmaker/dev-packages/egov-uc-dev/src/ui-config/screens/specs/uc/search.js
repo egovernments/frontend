@@ -11,7 +11,7 @@ import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { getTenantId } from "ui-utils/localStorageUtils";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({

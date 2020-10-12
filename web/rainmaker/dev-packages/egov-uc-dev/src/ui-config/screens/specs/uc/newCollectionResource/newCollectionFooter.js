@@ -7,7 +7,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { getTenantId } from "ui-utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,

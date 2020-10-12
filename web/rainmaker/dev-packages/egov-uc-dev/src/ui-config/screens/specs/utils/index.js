@@ -1,6 +1,6 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { getUserInfo } from "ui-utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";

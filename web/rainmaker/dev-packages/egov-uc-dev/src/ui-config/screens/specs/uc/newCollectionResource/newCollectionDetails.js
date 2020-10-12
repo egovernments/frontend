@@ -15,7 +15,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { getTenantId } from "ui-utils/localStorageUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   getTransformedLocalStorgaeLabels,
