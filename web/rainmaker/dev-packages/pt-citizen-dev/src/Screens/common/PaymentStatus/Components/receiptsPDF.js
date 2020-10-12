@@ -249,7 +249,7 @@ const generateReceipt = (role, details, generalMDMSDataById) => {
             },
             layout: tableborder,
           },
-          { text: "PAYABLE AMOUNT", style: "pt-reciept-citizen-subheader" },
+          { text: "PAID AMOUNT", style: "pt-reciept-citizen-subheader" },
           {
             style: "receipt-assess-table",
             table: {
@@ -265,6 +265,19 @@ const generateReceipt = (role, details, generalMDMSDataById) => {
             layout: tableborder,
           },
           { text: "PAYMENT INFORMATION", style: "pt-reciept-citizen-subheader" },
+          {
+            style: "pt-reciept-citizen-table",
+            table: {
+              widths: ["30%", "41.5%"],
+              body: [
+                [
+                  { text: "Total Property Tax", border: borderKey, style: "receipt-table-key" },
+                  { text: receipts.totalAmount || "NA", border: borderValue , style: "receipt-table-value" }
+                ] 
+              ],
+            },
+            layout: tableborder,
+          },
           {
             style: "pt-reciept-citizen-table",
             table: {

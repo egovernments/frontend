@@ -95,6 +95,9 @@ const DropDown = ({ history, item }) => {
       >
         <MenuItem value="Download Receipt" primaryText="Download Receipt" />
         <MenuItem value="Re-Assess" primaryText="Re-Assess" />
+        {item.status === "Partially Paid" && (
+          <MenuItem value="Complete Payment" primaryText="Complete Payment" />
+        )}
        </SelectField>
     </div>
   );

@@ -74,7 +74,8 @@ const createReceiptDetails = (property, propertyDetails, receiptDetails, localiz
       rebate: "10",
       total: "100",
     },
-    receipts: {
+    receipts: {     
+      totalAmount: totalAmountToPay,
       AmountPaid: receiptDetails && get(receiptDetails, "Bill[0].billDetails[0].amountPaid").toString(),
       transactionId: receiptDetails && get(receiptDetails, "Bill[0].billDetails[0].receiptNumber"),
       bankName: "AXIS",
