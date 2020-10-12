@@ -10,7 +10,7 @@ import {
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { downloadChallan } from "../utils";
+import { downloadChallan } from  "egov-common/ui-utils/commons";;
 import './index.css';
 const header = getCommonHeader({
   labelName: `mCollect`,
@@ -176,7 +176,7 @@ const getAcknowledgementCard = (
        header:header,
        consumerCode : consumerCode(challanNumber),    
      }),
-     headerdownloadprint:downloadprintMenu(state, dispatch),  
+     headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
      applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_UPDATED_SUCCESS_MESSAGE","update","UC_BILL_GENERATION_MESSAGE_SUB","updatesuccessmsg",billNumber),
      
      iframeForPdf: {

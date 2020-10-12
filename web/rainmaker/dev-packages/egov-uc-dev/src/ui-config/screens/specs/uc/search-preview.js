@@ -15,7 +15,8 @@ import {
   import { getFeesEstimateCard,
            convertEpochToDate, 
            getCommonApplyFooter,
-          downloadChallan } from "../utils";
+           } from "../utils";
+
   import { httpRequest } from "../../../../ui-utils";
   import {
     prepareFinalObject,
@@ -28,7 +29,8 @@ import {
   import { confirmationDialog } from "./confirmationDialog";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import './index.css';
-  
+  import {  downloadChallan } from "egov-common/ui-utils/commons";
+
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let businessService = getQueryArg(window.location.href, "businessService");
@@ -453,6 +455,7 @@ import {
     let downloadMenu = [];
       let printMenu = [];
     const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus");
+    console.info("isPaid----",isPaid);
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     const receiptKey = get(uiCommonPayConfig, "receiptKey")
     let receiptDownloadObject = {
@@ -508,10 +511,10 @@ import {
       leftIcon: "assignment"
     };
   
-  
-    if(isPaid=="PAID"){
-    downloadMenu=[receiptDownloadObject,applicationDownloadObject];
-    printMenu = [receiptPrintObject,applicationPrintObject];
+    
+    if(isPaid==="PAID"){
+      downloadMenu=[applicationDownloadObject,receiptDownloadObject];
+      printMenu = [applicationPrintObject,receiptPrintObject];
     }
     else{
       //Download challan option
