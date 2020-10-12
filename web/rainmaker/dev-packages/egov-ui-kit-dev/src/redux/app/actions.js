@@ -41,7 +41,9 @@ export const toggleSnackbarAndSetText = (open, message = {}, error) => {
 
 export const fetchLocalizationLabel = (locale, module, tenantId) => {
   return async (dispatch) => {
-    const commonModules = "rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-dss";
+    debugger;
+     const commonModules = window.location.href.includes("whatsapp") ? "rainmaker-chatbot" : "rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-dss";
+  
     try {
       const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
         { key: "module", value: commonModules },
