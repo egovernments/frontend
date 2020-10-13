@@ -980,15 +980,17 @@ export const downloadAcknowledgementForm = (Licenses, mode = "download") => {
 
 export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   let tenantId = get(Licenses[0], "tenantId");
-  let applicationNumber = get(Licenses[0], "applicationNumber")
+  let applicationNumber = get(Licenses[0], "applicationNumber");
+  console.log("certificate 1--");
   const applicationType = Licenses && Licenses.length > 0 ? get(Licenses[0], "applicationType") : "NEW";
   const queryStr = [
     { key: "key", value: applicationType === "RENEWAL" ? "tlrenewalcertificate" : "tlcertificate" },
     { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
   ]
+  //console.log("queryStr 1--",queryStr);
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/egov-pdf/download/TL/"+queryStr[0].value,
       ACTION: "_get",
     },
   };
@@ -999,15 +1001,15 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
       value: applicationNumber
     }
   ];
-  const LicensesPayload = await getSearchResults(queryObject);
+ /* const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
-  }
-  else {
+  }*/
+  //else {
     try {
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryObject, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           res.filestoreIds[0]
           if (res && res.filestoreIds && res.filestoreIds.length > 0) {
@@ -1021,7 +1023,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
     } catch (exception) {
       alert('Some Error Occured while downloading Acknowledgement form!');
     }
-  }
+ // }
 }
 
 export const prepareDocumentTypeObj = documents => {

@@ -340,7 +340,7 @@ export const callBackForNext = async (state, dispatch) => {
       setValidToFromVisibilityForApply(state, get(LicenseData, "licenseType"));
     }
 
-    const uploadedDocData = get(
+    let  uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].tradeLicenseDetail.applicationDocuments",
       []
@@ -379,6 +379,7 @@ export const callBackForNext = async (state, dispatch) => {
         };
         dispatch(toggleSnackbar(true, updateMessage, "info"));
       }
+      uploadedDocData=uploadedDocData.filter(item=> item.fileUrl&&item.fileName)
       const reviewDocData =
         uploadedDocData &&
         uploadedDocData.map(item => {
@@ -987,7 +988,7 @@ export const footerReviewTop = (
 
 
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "download", receiptKey, state);
@@ -1001,7 +1002,7 @@ export const footerReviewTop = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "print", receiptKey, state);
@@ -1017,6 +1018,7 @@ export const footerReviewTop = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
+      //console.log("receiptQueryString source---",receiptQueryString);
       downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
     },
     leftIcon: "receipt"
@@ -1198,7 +1200,7 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "download", receiptKey);
@@ -1223,6 +1225,7 @@ export const downloadPrintContainer = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
+     // console.log("receiptQueryString source 1---",receiptQueryString);
       downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
     },
     leftIcon: "receipt"

@@ -17,9 +17,11 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
             const receiptQueryString = [
-                { key: "receiptNumbers", value: applicationNumber },
+              //  { key: "receiptNumbers", value: applicationNumber },
+              { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
                 { key: "tenantId", value: tenantId }
             ]
+           // console.log("source 3--",receiptQueryString);
             if(licence && licence[0].action && licence[0].action==="APPLY")
             downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt",state);
          
