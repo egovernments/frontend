@@ -416,12 +416,13 @@ class GlobalFilter extends Component {
     renderComponents(object) {
         let type = object.type;
         let label = object.label;
+        console.log("prasad lablel", label);
         switch (type) {
             case "dropdown":
                 switch (label) {
                     case "ULBS":
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ulbs, object.values, '')
-                    case "DDRs":
+                    case "Districts":
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values, '')
                     case "Services":
                         return this.renderSimpleSelect(object.label, CONFIG.SERVICES, this.handleChanges)
