@@ -43,16 +43,9 @@ export const loginDetailsCard = getCommonCard(
             type:"password"
           }
         }),
-        city:{
-          uiFramework: "custom-containers",
-          componentPath: "AutosuggestContainer",
-          jsonPath: "login.tenantId",
-          required: true,
-          props: {
-            style: {
-              width: "100%",
-              cursor: "pointer"
-            },
+        city: {
+          ...getSelectField({
+            
             label: {
               labelName: "City",
               labelKey: "CORE_COMMON_CITY"
@@ -61,21 +54,12 @@ export const loginDetailsCard = getCommonCard(
               labelName: "Select City",
               labelKey: "CORE_COMMON_CITY_PLACEHOLDER"
             },
-            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-            labelsFromLocalisation: true,
-            suggestions: [],
-            fullwidth: true,
             required: true,
-            inputLabelProps: {
-              shrink: true
-            }
-            // className: "tradelicense-mohalla-apply"
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          }
-        }
+            jsonPath: "login.tenantId",
+            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+          }),
+          
+        },
       },
       {
         style: {
