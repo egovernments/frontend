@@ -30,7 +30,7 @@ for(var i=0; i<localVal.length;i++){
     } 
 }
 return {
-    label: "DDRs",
+    label: "Districts",
     type: "dropdown",
     values : tempDDRs,
     master : tempDRRsObj,

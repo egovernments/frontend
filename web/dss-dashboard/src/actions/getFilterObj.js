@@ -7,8 +7,8 @@ export default function getFilterObj(GFilterData, mdmsData, page) {
     let tempValue = [],
         filters = {};
     if (newGFilterData) {
-        if (!_.isEmpty(mdmsData, true) &&  newGFilterData['DDRs'] && newGFilterData['DDRs'].length > 0) {
-            let tvalue = newGFilterData['DDRs'];
+        if (!_.isEmpty(mdmsData, true) &&  newGFilterData['Districts'] && newGFilterData['Districts'].length > 0) {
+            let tvalue = newGFilterData['Districts'];
             let tempDDR = []
             for (var i = 0; i < tvalue.length; i++) {
                 tempDDR = mdmsData['master'][tvalue[i]];
