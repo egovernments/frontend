@@ -71,9 +71,11 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     });
     if (index > -1) {
         dispatch(prepareFinalObject("commonPayInfo", commonPayDetails[index]));
+        dispatch(prepareFinalObject("isArrears", get(commonPayDetails[index], "arrears", true)));
     } else {
         const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
         dispatch(prepareFinalObject("commonPayInfo", details));
+        dispatch(prepareFinalObject("isArrears", get(details[0], "arrears", true)));
     }
 
     let header = getHeader(state);
