@@ -126,14 +126,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             } catch (e) {
               console.log(e);
             }
-            // const fetchbillPayload = await httpRequest(
-            //   "post",
-            //   `/billing-service/bill/v2/_fetchbill?consumerCode="CB-CH-2020-08-27-002702"&businessService="ENTFEE.VEH"&tenantId=${tenantId}`,
-            //    "",
-            //   [],
-            //   {}
-            // );
-            // console.log("fetchbillPayload",fetchbillPayload)
+            
             return action;
           },
         },

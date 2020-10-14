@@ -146,7 +146,7 @@ const getData = async (action, state, dispatch) => {
     dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
   }
 };
-//for up data challan
+//for update challan
 const getChallanSearchRes = async (action, state, dispatch) => {
   try {
     let challanNo = getQueryArg(window.location.href, "consumerCode");
@@ -337,64 +337,7 @@ const newCollection = {
                 },
               },
             },
-            // searchReceiptBtn: {
-            //   componentPath: "Button",
-            //   //visible: enableButton,
-            //   props: {
-            //     variant: "outlined",
-            //     color: "primary",
-            //     style: {
-            //       color: "primary",
-            //       borderRadius: "2px",
-            //       width: "250px",
-            //       height: "48px",
-            //       marginRight: "16px",
-            //     },
-            //     className: "uc-search-button",
-            //   },
-            //   children: {
-            //     buttonLabel: getLabel({
-            //       labelName: "Receipt Search",
-            //       labelKey: "UC_SEARCHRECEIPT_LABEL",
-            //     }),
-            //   },
-
-            //   onClickDefination: {
-            //     action: "condition",
-            //     callBack: (state, dispatch) => {
-            //       openReceiptSearchForm(state, dispatch);
-            //     },
-            //   },
-            // },
-            // EditBtn: {
-            //   componentPath: "Button",
-            //   //visible: enableButton,
-            //   props: {
-            //     variant: "outlined",
-            //     color: "primary",
-            //     style: {
-            //       color: "primary",
-            //       borderRadius: "2px",
-            //       width: "250px",
-            //       height: "48px",
-            //       marginRight: "16px",
-            //     },
-            //     className: "uc-edit-button",
-            //   },
-            //   children: {
-            //     buttonLabel: getLabel({
-            //       labelName: "Edit",
-            //       labelKey: "UC_EDIT_LABEL",
-            //     }),
-            //   },
-
-            //   onClickDefination: {
-            //     action: "condition",
-            //     callBack: (state, dispatch) => {
-            //       openUpdateForm(state, dispatch);
-            //     },
-            //   },
-            // },
+            
           },
         },
 
@@ -410,19 +353,19 @@ export default newCollection;
 
 //for update rediredt
 
-const openUpdateForm = (state, dispatch) => {
-  window.location.href = `/uc/newCollection?consumerCode=CH-CB-SECU-2020-001395&tenantId=${getTenantId()}&businessService=OTHFEE.DUMP_GRBG`;
-};
-const openReceiptSearchForm = (state, dispatch) => {
-  // dispatch(prepareFinalObject("Demands", []));
-  dispatch(prepareFinalObject("Challan", []));
-  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-  const path =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/uc/search`
-      : `/uc/search`;
-  dispatch(setRoute(path));
-};
+// const openUpdateForm = (state, dispatch) => {
+//   window.location.href = `/uc/newCollection?consumerCode=CH-CB-SECU-2020-001395&tenantId=${getTenantId()}&businessService=OTHFEE.DUMP_GRBG`;
+// };
+// const openReceiptSearchForm = (state, dispatch) => {
+//   // dispatch(prepareFinalObject("Demands", []));
+//   dispatch(prepareFinalObject("Challan", []));
+//   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
+//   const path =
+//     process.env.REACT_APP_SELF_RUNNING === "true"
+//       ? `/egov-ui-framework/uc/search`
+//       : `/uc/search`;
+//   dispatch(setRoute(path));
+// };
 
 const openPayBillForm = (state, dispatch) => {
   const path = `/abg/billSearch`;

@@ -462,7 +462,7 @@ import {
       label: { labelName: "Receipt", labelKey: "UC_RECEIPT" },
       link: () => {
         const receiptQueryString = [
-          { key: "consumerCodes", value: applicationNumber },
+          { key: "consumerCode", value: applicationNumber },
           { key: "tenantId", value: tenantId }
         ]
         download(receiptQueryString , "download" ,receiptKey,state );
@@ -475,7 +475,7 @@ import {
       label: { labelName: "PRINT RECEIPT", labelKey: "UC_RECEIPT" },
       link: () => {
           const receiptQueryString = [
-              { key: "consumerCodes", value: applicationNumber },
+              { key: "consumerCode", value: applicationNumber },
               { key: "tenantId", value: tenantId }
           ]
           download(receiptQueryString  ,"print" , receiptKey ,state);

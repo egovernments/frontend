@@ -72,18 +72,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-      //  const challanNo = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   "Challan.challanNo"
-      // );
-      // const tenantId = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   "Challan.tenantId"
-      // );
-      // const businessService = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   "Challan.serviceType"
-      // );
+      
      
     const challanNo = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -94,18 +83,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       }    
       
       else{
-        // dispatch(
-        //   toggleSnackbar(
-        //     true,
-        //     {
-        //       labelName: "SEARCH & PAY BILL",
-        //       labelKey: "UC_SEARCHANDPAY_LABEL"
-        //     },
-        //     "warning"
-        //   )
-        // );
-        //dispatch(setRoute(`${getRedirectionURL()}`));
-        //alert("go to home");
+        
         dispatch(setRoute(`/uc/newCollection`));
       }
       
