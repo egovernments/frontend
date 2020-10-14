@@ -392,12 +392,23 @@ import {
         value: billBusinessService,
       },
     ];
+    const queryObj = [
+      { key: "tenantId", value: tenantId },
+      {
+        key: "consumerCodes",
+        value: consumerCode
+      },
+      {
+        key: "businessService",
+        value: billBusinessService
+      }
+    ];
     const fetchBillResponse = await getBill(getBillQueryObj);
     let payload1 =
       fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
      const isPAID = payload1.totalAmount == 0 ? true : false;
     // // let estimateData = payload;
-   let payload = isPAID? await getReceipt(getBillQueryObj.filter(item => item.key !== "businessService"))
+   let payload = isPAID? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
   
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
