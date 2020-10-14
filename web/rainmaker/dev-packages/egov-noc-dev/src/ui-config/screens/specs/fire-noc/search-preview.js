@@ -143,8 +143,8 @@ const prepareUoms = (state, dispatch) => {
   buildings.forEach((building, index) => {
     let uoms = get(building, "uoms", []);
     let uomsMap = {};
-    uoms.forEach(uom => {
-      uomsMap[uom.code] = uom.value;
+    uoms.forEach(uom => {if(uom.active==true){
+      uomsMap[uom.code] = uom.value;}
     });
     dispatch(
       prepareFinalObject(

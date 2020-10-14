@@ -187,8 +187,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.buildings = buildings.map(building => {
       let uoms = get(building, "uoms", []);
       let uomsObject = {};
-      uoms.forEach(uom => {
-        uomsObject[uom.code] = uom.value;
+      uoms.forEach(uom => { if(uom.active==true){
+        uomsObject[uom.code] = uom.value;}
       });
       return {
         name: get(building, "name", "NA"),
