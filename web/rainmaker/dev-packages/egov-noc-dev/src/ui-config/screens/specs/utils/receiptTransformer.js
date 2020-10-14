@@ -654,7 +654,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     //     : get(data, "bankName", "NA")
     // );
      data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
-    data.branchName = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.branchName", null);
+    data.branchName = get(response, "Receipt[0].instrument.branchName", "NA");
     data.bankAndBranch = nullToNa(
     data.bankName && data.branchName
         ? data.bankName + ", " + data.branchName
