@@ -571,7 +571,8 @@ const getReceiptData = (transformedData, ulbLogo) => {
         text:
           "Note:\n1. Payment received by cheque/demand draft shall be subject to realization.\n2. This document is not a proof of Property Ownership.\n3. This is a computer generated document, hence requires no signature.",
         style: "receipt-footer"
-      }
+      },{
+        text:"Now log a complaint from WhatsApp, give a missed call on 8750975975 or send a Hi message on WhatsApp to this number", bold: true, fontSize: 8, color: 'blue', decoration: 'underline',margin: [30, 2, 0, 0]}
     ],
     styles: {
       "tl-head": {
