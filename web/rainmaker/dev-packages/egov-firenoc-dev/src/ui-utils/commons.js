@@ -247,7 +247,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       otherDocuments
     );
     disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-    disableField('summary',"components.div.children.footer.children.submitButton",dispatch);
+    // disableField('summary',"components.div.children.footer.children.submitButton",dispatch);
 
     // Set Channel and Financial Year
     process.env.REACT_APP_NAME === "Citizen"
@@ -276,7 +276,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       );
       response = furnishNocResponse(response);
       enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-      enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
+      // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
@@ -289,7 +289,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       );
       response = furnishNocResponse(response);
       enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-      enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
+      // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
     }
 
