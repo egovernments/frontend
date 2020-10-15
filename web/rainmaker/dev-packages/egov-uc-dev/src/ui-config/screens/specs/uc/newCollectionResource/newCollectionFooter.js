@@ -123,12 +123,14 @@ export const processChallan = async (state, dispatch,applicationStatus) => {
   const ucConsumerValid = validateFields(
     "components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children",
     state,
-    dispatch
+    dispatch,
+    "newCollection"
   );  
   const ucServiceDetailValid = validateFields(
     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children",
     state,
-    dispatch
+    dispatch,
+    "newCollection"
   );
  
   if (

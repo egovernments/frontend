@@ -191,6 +191,7 @@ const getAcknowledgementCard = (
     header :getCommonContainer({
       header:header        
     }),
+    headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),
     applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
      
      iframeForPdf: {
