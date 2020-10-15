@@ -1,10 +1,50 @@
 import React from "react";
 import {
-  sortByEpoch,
-  getEpochForDate,
-  getTextToLocalMapping
-} from "../../utils";
-//import {download} from "egov-common/ui-utils/commons"
+  getTransformedLocalStorgaeLabels,
+  getLocaleLabels
+} from "ui-utils/commons";
+
+const getLocalTextFromCode = localCode => {
+  return JSON.parse(getLocalization("localization_en_IN")).find(
+    item => item.code === localCode
+  );
+};
+
+export const textToLocalMapping = {
+  "Receipt No.": getLocaleLabels(
+    "Receipt No",
+    "UC_COMMON_TABLE_COL_RECEIPT_NO",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Payee Name": getLocaleLabels(
+    "Consumer Name",
+    "UC_COMMON_TABLE_COL_PAYEE_NAME",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Service Type": getLocaleLabels(
+    "Service Category",
+    "UC_SERVICE_TYPE_LABEL",
+    getTransformedLocalStorgaeLabels()
+  ),
+  Date: getLocaleLabels(
+    "Receipt Date",
+    "UC_COMMON_TABLE_COL_DATE",
+    getTransformedLocalStorgaeLabels()
+  ),
+  "Amount[INR]": getLocaleLabels(
+    "Amount Paid[INR]",
+    "UC_COMMON_TABLE_COL_AMOUNT",
+    getTransformedLocalStorgaeLabels()
+  ),
+
+  Status: getLocaleLabels(
+    "Status",
+    "UC_COMMON_TABLE_COL_STATUS",
+    getTransformedLocalStorgaeLabels()
+  )
+
+  //Download button
+};
 
 export const searchResults = {
   uiFramework: "custom-molecules",

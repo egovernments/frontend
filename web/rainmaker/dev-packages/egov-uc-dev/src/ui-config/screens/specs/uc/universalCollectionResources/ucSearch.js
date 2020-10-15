@@ -98,6 +98,7 @@ export const UCSearchCard = getCommonCard({
     }),
     serviceType: {
       ...getSelectField({
+        // componentPath: "AutosuggestContainer",
         label: {
           labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL"

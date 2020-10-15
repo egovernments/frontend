@@ -14,14 +14,15 @@ const header = getCommonHeader({
   labelName: "New Collection",
   labelKey: "UC_COMMON_HEADER"
 });
-//const tenantId = getTenantId();
-const tenantId = "pb.testing";
+const tenantId = getTenantId();
+// const tenantId = "pb.testing";
+
 
 const getData = async (action, state, dispatch, demandId) => {
-
+  // dispatch(toggleSpinner())
   let requestBody = {
     MdmsCriteria: {
-      tenantId: "pb",
+      tenantId: tenantId,
       moduleDetails: [
         {
           moduleName: "tenant",
@@ -90,8 +91,7 @@ const getData = async (action, state, dispatch, demandId) => {
       console.log(e);
     }
   }
-  
-  // return action;
+  // dispatch(toggleSpinner())
 };
 
 const newCollection = {
