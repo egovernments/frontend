@@ -227,8 +227,10 @@ let tenantId=get(
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_print");
-    },
+      const receiptQueryString = [
+        { key: "tenantId", value: tenantId },  { key: "consumerCodes", value: applicationNumber },
+    ]
+    download(receiptQueryString , "print" , "consolidatedreceipt", state);    },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {
