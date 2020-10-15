@@ -26,7 +26,7 @@ import {
   getQueryArg,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "ui-utils/localStorageUtils";
+import { getTenantId,getLocalization,getLocale } from "ui-utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 
 export const updateTradeDetails = async requestBody => {
@@ -193,6 +193,41 @@ export const getBoundaryData = async (
     }
   } catch (e) {
     console.log(e);
+  }
+};
+export const getTransformedLocalStorgaeLabels = () => {
+  const localeLabels = JSON.parse(
+    getLocalization(`localization_${getLocale()}`)
+  );
+  return transformById(localeLabels, "code");
+};
+export const transformById = (payload, id) => {
+  return (
+    payload &&
+    payload.reduce((result, item) => {
+      result[item[id]] = {
+        ...item
+      };
+
+      return result;
+    }, {})
+  );
+};
+export const getLocaleLabels = (label, labelKey, localizationLabels) => {
+  if (!localizationLabels)
+    localizationLabels = transformById(
+      JSON.parse(getLocalization(`localization_${getLocale()}`)),
+      "code"
+    );
+  if (labelKey) {
+    let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
+    if (!translatedLabel || labelKey === translatedLabel) {
+      return translatedLabel;
+    } else {
+      return translatedLabel;
+    }
+  } else {
+    return label;
   }
 };
 

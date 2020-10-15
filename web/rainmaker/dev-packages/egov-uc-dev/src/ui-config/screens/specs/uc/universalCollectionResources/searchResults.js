@@ -7,7 +7,8 @@ import { generateReciept } from "../../utils/recieptPdf";
 import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
+} from "ui-utils/commons";
+
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
     item => item.code === localCode

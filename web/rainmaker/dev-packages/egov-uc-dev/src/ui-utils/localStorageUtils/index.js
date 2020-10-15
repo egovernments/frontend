@@ -51,6 +51,7 @@ export const clearUserDetails = () => {
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {
+  debugger;
   const appName = process.env.REACT_APP_NAME;
   let value = null;
   if (path) {
