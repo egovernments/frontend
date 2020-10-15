@@ -21,7 +21,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,download } from "../../../../ui-utils/commons";
 import { searchBill, generateBill ,createBill} from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -143,8 +143,8 @@ const prepareUoms = (state, dispatch) => {
   buildings.forEach((building, index) => {
     let uoms = get(building, "uoms", []);
     let uomsMap = {};
-    uoms.forEach(uom => {
-      uomsMap[uom.code] = uom.value;
+    uoms.forEach(uom => {if(uom.active==true){
+      uomsMap[uom.code] = uom.value;}
     });
     dispatch(
       prepareFinalObject(
@@ -189,6 +189,15 @@ const setDownloadMenu = (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
   );
+let applicationNumber=get(
+  state,
+  "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
+);
+let tenantId=get(
+  state,
+  "screenConfiguration.preparedFinalObject.FireNOCs[0].tenantId"
+);
+
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -208,15 +217,20 @@ const setDownloadMenu = (state, dispatch) => {
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_download");
+      const receiptQueryString = [
+        { key: "tenantId", value: tenantId },  { key: "consumerCodes", value: applicationNumber },
+    ]
+    download(receiptQueryString , "download" , "consolidatedreceipt", state);
     },
     leftIcon: "receipt"
   };
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
     link: () => {
-      generatePdf(state, dispatch, "receipt_print");
-    },
+      const receiptQueryString = [
+        { key: "tenantId", value: tenantId },  { key: "consumerCodes", value: applicationNumber },
+    ]
+    download(receiptQueryString , "print" , "consolidatedreceipt", state);    },
     leftIcon: "receipt"
   };
   let applicationDownloadObject = {

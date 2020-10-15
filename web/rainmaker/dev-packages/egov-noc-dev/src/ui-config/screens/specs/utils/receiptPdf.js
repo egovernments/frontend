@@ -955,7 +955,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
     {
       style: "noc-table",
       table: {
-        widths: ["*", "*"],
+        widths: ["*", "*","*"],
         body: [
           [
             {
@@ -969,6 +969,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, true, true, true],
               style: "receipt-table-value",
               alignment: "center"
+            }, {
+              text: "Bank Name & Branch",
+              border: [true, true, true, true],
+              style: "receipt-table-value",
+              alignment: "center"
             }
           ],
           [
@@ -979,6 +984,11 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
             },
             {
               text: transformedData.transactionNumber,
+              border: [true, true, true, true],
+              alignment: "center"
+            },
+            {
+              text: transformedData.bankAndBranch,
               border: [true, true, true, true],
               alignment: "center"
             }

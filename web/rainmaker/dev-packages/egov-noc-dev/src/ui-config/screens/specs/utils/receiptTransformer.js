@@ -187,8 +187,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.buildings = buildings.map(building => {
       let uoms = get(building, "uoms", []);
       let uomsObject = {};
-      uoms.forEach(uom => {
-        uomsObject[uom.code] = uom.value;
+      uoms.forEach(uom => { if(uom.active==true){
+        uomsObject[uom.code] = uom.value;}
       });
       return {
         name: get(building, "name", "NA"),
@@ -653,6 +653,13 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     //     ? data.bankName + ", " + data.branchName
     //     : get(data, "bankName", "NA")
     // );
+     data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
+    data.branchName = get(response, "Receipt[0].instrument.branchName", "NA");
+    data.bankAndBranch = nullToNa(
+    data.bankName && data.branchName
+        ? data.bankName + ", " + data.branchName
+        : get(data, "bankName", "NA")
+     );
     data.paymentDate = nullToNa(
       epochToDate(
         get(response, "Payments[0].transactionDate", 0)

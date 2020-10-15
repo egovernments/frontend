@@ -373,6 +373,8 @@ const createProperty = async (Properties, action, props) => {
     }
   }
   try {
+     propertyPayload.units.map(function (item, index){
+    if(item.occupancyType != "RENTED" && item.arv){delete item.arv;}});
     propertyPayload.creationReason = action == '_create' ? 'CREATE' : 'UPDATE';
     const propertyResponse = await httpRequest(
       `property-services/property/${propertyMethodAction}`,

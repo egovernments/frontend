@@ -72,17 +72,44 @@ const screenConfig = {
         state.screenConfiguration.preparedFinalObject,
         "FireNOCs[0].tenantId"
       );
+      let uomsObject = {};
+      let buildings = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
+        []
+      );
+      
+      buildings.forEach((building, index) => { uomsObject={};
+        let uoms = get(building, "uoms", []);
+        if(uoms){ 
+        uoms.forEach(uom => {
+          if(uom.active==true){
+            uomsObject[uom.code] = uom.value;}
+        });} else {
+          uomsObject = get(
+            state.screenConfiguration.preparedFinalObject,
+            "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
+           );
+        }   
+          
+        set(state,"prepareFinalObject.FireNOCs[0].fireNOCDetails.buildings["+index+"].uomsMap",uomsObject);
 
-    let uomsObject = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
-    );
-    if (uomsObject) {
+        dispatch(
+          prepareFinalObject(
+            `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap`,
+            uomsObject
+          )
+        );
+          });
+       //set(state,"prepareFinalObject.FireNOCs[0].fireNOCDetails.buildings[0].uomsMap",uomsObject);
+    //dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.buildings[0].uomsMap",uomsObject));
+
+    if(uomsObject) {
       for (const [key, value] of Object.entries(uomsObject)) {
         let labelElement = getLabelWithValue(
           {
             labelName: key,
-            labelKey: `NOC_PROPERTY_DETAILS_${key}_LABEL`
+            labelKey: `NOC_PROPERTY_DETAILS_${key}_LABEL`,
           },
           {
             jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${key}`
@@ -92,8 +119,9 @@ const screenConfig = {
           action,
           `screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children.${key}`,
           labelElement
-        );
-      }
+        ); 
+       
+             }
     }
 
     // Set Institution/Applicant info card visibility
