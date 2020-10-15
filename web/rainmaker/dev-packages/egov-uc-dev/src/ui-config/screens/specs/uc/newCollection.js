@@ -16,8 +16,9 @@ const header = getCommonHeader({
 });
 const tenantId = getTenantId();
 
+
 const getData = async (action, state, dispatch, demandId) => {
-  dispatch(toggleSpinner())
+  // dispatch(toggleSpinner())
   let requestBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -90,7 +91,7 @@ const getData = async (action, state, dispatch, demandId) => {
       console.log(e);
     }
   }
-  dispatch(toggleSpinner())
+  // dispatch(toggleSpinner())
 };
 
 const newCollection = {

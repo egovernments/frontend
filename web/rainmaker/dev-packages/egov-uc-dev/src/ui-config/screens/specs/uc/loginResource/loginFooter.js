@@ -9,7 +9,7 @@ import { validateFields } from "../../utils";
 import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+debugger;
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -55,7 +55,7 @@ export const loginFooter = getCommonApplyFooter({
   }
 });
 
-
+debugger;
 
 const login =async (state, dispatch) => {
   const isFormValid = validateFields(
@@ -64,8 +64,9 @@ const login =async (state, dispatch) => {
     dispatch,
     "login"
   );
+  debugger;
   if (isFormValid) {
-    dispatch(toggleSpinner())
+    //dispatch(toggleSpinner())
     //login call
     try {
       let formResponse = await loginRequest(
@@ -78,10 +79,10 @@ const login =async (state, dispatch) => {
       );
       dispatch(authenticated(formResponse));
       dispatch(setRoute("search"))
-      dispatch(toggleSpinner())
+      //dispatch(toggleSpinner())
     } catch (e) {
       console.log(e);
-      dispatch(toggleSpinner())
+     // dispatch(toggleSpinner())
       dispatch(
         toggleSnackbar(
           true,
