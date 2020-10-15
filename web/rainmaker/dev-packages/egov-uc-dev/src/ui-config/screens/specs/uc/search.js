@@ -18,7 +18,7 @@ const header = getCommonHeader({
   labelName: "Universal Collection",
   labelKey: "UC_COMMON_HEADER_SEARCH"
 });
-
+////reverted 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
