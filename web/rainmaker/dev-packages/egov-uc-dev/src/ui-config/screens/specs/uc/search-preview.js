@@ -344,7 +344,7 @@ import {
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let businessService = getQueryArg(window.location.href, "businessService");
   let consumerCode = getQueryArg(window.location.href, "applicationNumber");
-  window.location.href = `/uc/newCollection?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`;
+  dispatch(setRoute(`/uc/newCollection?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`));
 };
   
   const formatTaxHeaders = (billDetail = {}) => {
