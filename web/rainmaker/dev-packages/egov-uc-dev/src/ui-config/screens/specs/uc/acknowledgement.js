@@ -8,37 +8,39 @@ import {
   acknowledgementFailureFooter
 } from "./acknowledgementResource/acknowledgementFooter";
 import set from "lodash/set";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
-import { downloadChallan } from "../utils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { downloadChallan } from  "egov-common/ui-utils/commons";;
 import './index.css';
 const header = getCommonHeader({
   labelName: `mCollect`,
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
  });
 
- const setDownloadPrintData = () =>{
 
- }
 
-const downloadprintMenu = (state, dispatch) => {
+const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
   let applicationDownloadObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {  
-      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      //const { Challan } = state.screenConfiguration.preparedFinalObject;
+      const Challan = [
+        { key: "challanNo", value: applicationNumber },
+        { key: "tenantId", value: tenantId }
+      ]
+      console.info("in ackmt==data got=",Challan);
       downloadChallan(Challan,"download");         
-     // generateTLAcknowledgement(state.screenConfiguration.preparedFinalObject, `tl-acknowledgement-${Challan.id}`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
-      const { Challan } = state.screenConfiguration.preparedFinalObject;
+      //const { Challan } = state.screenConfiguration.preparedFinalObject;
+      const Challan = [
+        { key: "challanNo", value: applicationNumber },
+        { key: "tenantId", value: tenantId }
+      ]
       downloadChallan(Challan,"print");          
     },
     leftIcon: "assignment"
@@ -148,7 +150,8 @@ const getAcknowledgementCard = (
   purpose,
   status,
   billNumber,
-  challanNumber  
+  challanNumber ,
+  tenantId
  
  ) => {
    if(purpose === "challan" && status === "success"){     
@@ -157,33 +160,9 @@ const getAcknowledgementCard = (
         header:header,
         consumerCode : consumerCode(challanNumber),    
       }),
-      headerdownloadprint:downloadprintMenu(state, dispatch),  
+      headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
       applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_GENERATED_SUCCESS_MESSAGE","create","UC_BILL_GENERATION_MESSAGE_SUB","createsuccessmsg",billNumber),
-      // applicationSuccessCard: {
-      //   uiFramework: "custom-atoms",
-      //   componentPath: "Div",
-          
-      //   children: {
-      //     card: acknowledgementCard({
-      //       icon: "done",
-      //       backgroundColor: "#39CB74",
-      //       header: {
-      //         labelName: "Bill Generated Successfully!",
-      //         labelKey: "UC_BILL_GENERATED_SUCCESS_MESSAGE"
-      //       },
-      //       body: {
-      //         labelName:
-      //           "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-      //         labelKey: "UC_BILL_GENERATION_MESSAGE_SUB"
-      //       },
-      //       tailText: {
-      //         labelName: "Bill No.",
-      //         labelKey: "UC_BILL_NO_LABEL"
-      //       },
-      //       number: billNumber
-      //     })
-      //   }
-      // },
+      
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
@@ -191,39 +170,15 @@ const getAcknowledgementCard = (
       applicationSuccessFooter: acknowledgementSuccesFooter
     };
   }
-  else if(purpose === "challan" && status === "update"){     
+  else if(purpose === "update" && status === "success"){     
     return {      
      header :getCommonContainer({
        header:header,
        consumerCode : consumerCode(challanNumber),    
      }),
-     headerdownloadprint:downloadprintMenu(state, dispatch),  
+     headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
      applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_UPDATED_SUCCESS_MESSAGE","update","UC_BILL_GENERATION_MESSAGE_SUB","updatesuccessmsg",billNumber),
-     // applicationSuccessCard: {
-     //   uiFramework: "custom-atoms",
-     //   componentPath: "Div",
-         
-     //   children: {
-     //     card: acknowledgementCard({
-     //       icon: "done",
-     //       backgroundColor: "#39CB74",
-     //       header: {
-     //         labelName: "Bill Generated Successfully!",
-     //         labelKey: "UC_BILL_GENERATED_SUCCESS_MESSAGE"
-     //       },
-     //       body: {
-     //         labelName:
-     //           "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-     //         labelKey: "UC_BILL_GENERATION_MESSAGE_SUB"
-     //       },
-     //       tailText: {
-     //         labelName: "Bill No.",
-     //         labelKey: "UC_BILL_NO_LABEL"
-     //       },
-     //       number: billNumber
-     //     })
-     //   }
-     // },
+     
      iframeForPdf: {
        uiFramework: "custom-atoms",
        componentPath: "Div"
@@ -231,37 +186,14 @@ const getAcknowledgementCard = (
      applicationSuccessFooter: acknowledgementSuccesFooter
    };
  }
- else if (purpose === "challan" && status === "cancel") {
+ else if (purpose === "cancel" && status === "success") {
    return{
     header :getCommonContainer({
       header:header        
     }),
+    headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),
     applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
-     // applicationSuccessCard: {
-     //   uiFramework: "custom-atoms",
-     //   componentPath: "Div",
-         
-     //   children: {
-     //     card: acknowledgementCard({
-     //       icon: "done",
-     //       backgroundColor: "#39CB74",
-     //       header: {
-     //         labelName: "Bill Generated Successfully!",
-     //         labelKey: "UC_BILL_GENERATED_SUCCESS_MESSAGE"
-     //       },
-     //       body: {
-     //         labelName:
-     //           "A notification regarding Payment Collection has been sent to the consumer at registered Mobile No.",
-     //         labelKey: "UC_BILL_GENERATION_MESSAGE_SUB"
-     //       },
-     //       tailText: {
-     //         labelName: "Bill No.",
-     //         labelKey: "UC_BILL_NO_LABEL"
-     //       },
-     //       number: billNumber
-     //     })
-     //   }
-     // },
+     
      iframeForPdf: {
        uiFramework: "custom-atoms",
        componentPath: "Div"
@@ -269,46 +201,22 @@ const getAcknowledgementCard = (
      paymentFailureFooter: acknowledgementFailureFooter
    }
  }
-  else if (purpose === "challan" && status === "failure") {
-    return{
-      header :getCommonContainer({
-        header:header        
-      }),
-      applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_FAILURE_MESSAGE","failure","UC_FAILURE_MESSAGE_BODY","failuremsg",null),
+  // else if (purpose === "challan" && status === "failure") {
+  //   return{
+  //     header :getCommonContainer({
+  //       header:header        
+  //     }),
+  //     applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_FAILURE_MESSAGE","failure","UC_FAILURE_MESSAGE_BODY","failuremsg",null),
        
-       iframeForPdf: {
-         uiFramework: "custom-atoms",
-         componentPath: "Div"
-       },
-       paymentFailureFooter: acknowledgementFailureFooter
-     }
-  
-    // return {
-    //   header: getCommonHeader({
-    //     labelName: `mCollect`,
-    //     labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
-    //   }),
-    //   applicationSuccessCard: {
-    //     uiFramework: "custom-atoms",
-    //     componentPath: "Div",
-    //     children: {
-    //       card: acknowledgementCard({
-    //         icon: "close",
-    //         backgroundColor: "#E54D42",
-    //         header: {
-    //           labelName: "Sorry Bill generation failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE"
-    //         },
-    //         body: {
-    //           labelName: "Sorry Bill generation has been failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE_BODY"
-    //         }
-    //       })
-    //     }
-    //   },
-    //   paymentFailureFooter: acknowledgementFailureFooter
-    // };
-  }
+  //      iframeForPdf: {
+  //        uiFramework: "custom-atoms",
+  //        componentPath: "Div"
+  //      },
+  //      paymentFailureFooter: acknowledgementFailureFooter
+  //    }   
+  // }
+
+  //For all kinds of failures irrespective of create/update/cancel
   else {
     return{
       header :getCommonContainer({
@@ -323,31 +231,7 @@ const getAcknowledgementCard = (
        paymentFailureFooter: acknowledgementFailureFooter
      }
   
-    // return {
-    //   header: getCommonHeader({
-    //     labelName: `mCollect`,
-    //     labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
-    //   }),
-    //   applicationSuccessCard: {
-    //     uiFramework: "custom-atoms",
-    //     componentPath: "Div",
-    //     children: {
-    //       card: acknowledgementCard({
-    //         icon: "close",
-    //         backgroundColor: "#E54D42",
-    //         header: {
-    //           labelName: "Sorry Bill generation failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE"
-    //         },
-    //         body: {
-    //           labelName: "Sorry Bill generation has been failed!",
-    //           labelKey: "UC_BILL_GENERATED_FAILURE_MESSAGE_BODY"
-    //         }
-    //       })
-    //     }
-    //   },
-    //   paymentFailureFooter: acknowledgementFailureFooter
-    // };
+    
   }
   
 };

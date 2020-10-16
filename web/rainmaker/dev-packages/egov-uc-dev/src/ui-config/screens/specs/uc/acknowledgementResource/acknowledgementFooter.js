@@ -6,7 +6,7 @@ import { prepareFinalObject,toggleSnackbar } from "egov-ui-framework/ui-redux/sc
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import "../../../../../index.css";
 
 const getCommonApplyFooter = children => {
   return {
@@ -19,7 +19,7 @@ const getCommonApplyFooter = children => {
   };
 };
 export const getRedirectionURL = () => {
-  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/newCollection" : "/inbox";
+  const redirectionURL = ifUserRoleExists("CITIZEN") ? "/inbox" : "/uc/searchChallan" ;
 
   return redirectionURL;
 };
@@ -27,13 +27,16 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
   goToHomeButton: {
     componentPath: "Button",
     props: {
-      variant: "contained",
+      // variant: "contained",
+      // color: "primary",
+      variant: "outlined",
       color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      className:"gen-challan-btn"
+      // style: {
+      //   minWidth: "200px",
+      //   height: "48px",
+      //   marginRight: "16px"
+      // }
     },
     children: {
       downloadReceiptButtonLabel: getLabel({
@@ -53,11 +56,12 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
+      className:"gen-challan-btn"
+      // style: {
+      //   minWidth: "200px",
+      //   height: "48px",
+      //   marginRight: "16px"
+      // }
     },
     children: {
         payButtonLabel: getLabel({
@@ -68,18 +72,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-      //  const challanNo = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   "Challan.challanNo"
-      // );
-      // const tenantId = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   "Challan.tenantId"
-      // );
-      // const businessService = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   "Challan.serviceType"
-      // );
+      
      
     const challanNo = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -90,18 +83,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       }    
       
       else{
-        // dispatch(
-        //   toggleSnackbar(
-        //     true,
-        //     {
-        //       labelName: "SEARCH & PAY BILL",
-        //       labelKey: "UC_SEARCHANDPAY_LABEL"
-        //     },
-        //     "warning"
-        //   )
-        // );
-        //dispatch(setRoute(`${getRedirectionURL()}`));
-        //alert("go to home");
+        
         dispatch(setRoute(`/uc/newCollection`));
       }
       
@@ -119,7 +101,8 @@ export const acknowledgementFailureFooter = getCommonApplyFooter({
         minWidth: "200px",
         height: "48px",
         marginRight: "16px"
-      }
+      },
+      className:"gen-challan-btn"
     },
     children: {
       downloadReceiptButtonLabel: getLabel({

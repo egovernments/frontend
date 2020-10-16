@@ -2,7 +2,7 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { getTransformedLocale, transformById } from "egov-ui-framework/ui-utils/commons";
 import { getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import { getSearchResults,getChallanSearchResult } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validateFields } from "../../utils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
@@ -13,7 +13,7 @@ export const searchApiCall = async (state, dispatch) => {
   
   showHideTable(false, dispatch);
   let queryObject = [];
-  console.info("query obj0=",queryObject);
+  
    queryObject = [
     {
       key: "tenantId",
@@ -22,7 +22,7 @@ export const searchApiCall = async (state, dispatch) => {
     { key: "offset", value: "0" }
   ];
 
- console.info("query obj1==",queryObject);
+
 
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -30,14 +30,14 @@ export const searchApiCall = async (state, dispatch) => {
     {}
   );
 
-  console.info("searchScreenObject==>",searchScreenObject);
+  
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children",
     state,
     dispatch,
     "search"
   );
-  console.info("isSearchBoxFirstRowValid??==",isSearchBoxFirstRowValid);
+
   if (!isSearchBoxFirstRowValid) {
     dispatch(
       toggleSnackbar(
@@ -89,7 +89,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
-    console.info("query obj2==",queryObject);
+
     const responseFromAPI = await getSearchResults(queryObject);
     dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
     const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
@@ -161,13 +161,154 @@ export const searchApiCall = async (state, dispatch) => {
     // }
   }
 };
+export const searchChallanApiCall = async(state,dispatch)=>{
+  showHideTable(false, dispatch);
+  let queryObject = [];
+   queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "offset", value: "0" }
+  ];
+  let challanSearchScreenObject = get(
+    state.screenConfiguration.preparedFinalObject,
+    "challanSearchScreen",
+    {}
+  );
+  const isSearchBoxFirstRowValid = validateFields(
+    "components.div.children.SearchChallanCard.children.cardContent.children.searchContainer.children",
+     state,
+    dispatch,
+    "searchChallan" //screen name
+  );
+ 
+  if (!isSearchBoxFirstRowValid) {
+   
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to start search",
+          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
+        },
+        "warning"
+      )
+    );
+  }
+  else if (
+    Object.keys(challanSearchScreenObject).length == 0 ||
+    checkEmptyFields(challanSearchScreenObject)
+  ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to start search",
+          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
+        },
+        "warning"
+      )
+    );
+  }
+  else {
+    for (var key in challanSearchScreenObject) {
+      if (challanSearchScreenObject.hasOwnProperty(key) && key === "businessService" && challanSearchScreenObject['businessService'] != null) {
+        queryObject.push({ key: key, value: challanSearchScreenObject[key] });
+      } else if (
+        challanSearchScreenObject.hasOwnProperty(key) && challanSearchScreenObject[key] &&
+        challanSearchScreenObject[key].trim() !== ""
+      ) {
+        if (key === "fromDate") {
+          queryObject.push({
+            key: key,
+            value: convertDateToEpoch(challanSearchScreenObject[key], "daystart")
+          });
+        } else if (key === "toDate") {
+          queryObject.push({
+            key: key,
+            value: convertDateToEpoch(challanSearchScreenObject[key], "dayend")
+          });
+        } else {
+          queryObject.push({ key: key, value: challanSearchScreenObject[key].trim() });
+        }
+      }
+    }
+
+   
+    const responseFromAPI = await getChallanSearchResult(queryObject);
+    
+    dispatch(prepareFinalObject("challanSearchResponse", responseFromAPI));
+     const challans = (responseFromAPI && responseFromAPI.challans) || [];
+    
+     const response = [];
+     for (let i = 0; i < challans.length; i++) {
+       
+       const serviceTypeLabel = getTransformedLocale(challans[i].businessService);
+      
+      response[i] = {
+        challanNo: challans[i].challanNo,
+        serviceType: serviceTypeLabel,
+        consumerName : challans[i].citizen.name,
+        status: challans[i].applicationStatus,
+        tenantId: challans[i].tenantId,
+        businessService: challans[i].businessService
+      };
+    }
+    
+    // const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.uiCommonConfig");
+    try {
+      let data = response.map(item => ({
+        ['UC_CHALLAN_NO_LABEL']: item.challanNo || "-",
+        ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.consumerName || "-",
+        ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ["TENANT_ID"]: item.tenantId || "-",
+        ["BUSINESS_SERVICE"]: item.businessService || "-",
+      }));
+     
+      dispatch(
+        handleField(
+          "searchChallan",
+          "components.div.children.SearchChallanResults",
+          "props.data",
+          data
+        )
+      );
+      dispatch(
+        handleField(
+          "searchChallan",
+          "components.div.children.SearchChallanResults",
+          "props.rows",
+          data.length
+        )
+      );
+
+      dispatch(
+        handleField("searchChallan", "components.div.children.SearchChallanResults")
+      );
+      showHideTable(true, dispatch);
+    } catch (error) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
+    }
+    
+  }
+};
 
 const checkEmptyFields = (searchScreenObject) => {
-  const businessServices = get(searchScreenObject, 'businessServices', null)
+  
+  const businessServices = get(searchScreenObject, 'businessService', null)
   const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  const consumerCodes = get(searchScreenObject,'consumerCodes',null)
-  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)&& checkEmpty(consumerCodes)) { return true; }
+  const consumerCodes = get(searchScreenObject,'challanNo',null)
+  const fromDate = get(searchScreenObject,'fromDate',null)
+  const toDate = get(searchScreenObject,'toDate',null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)&& checkEmpty(consumerCodes)&& checkEmpty(fromDate)&& checkEmpty(toDate)) {
+    
+    return true; 
+    
+    }
   return false;
 }
 const checkEmpty = (value) => {
@@ -179,10 +320,11 @@ const checkEmpty = (value) => {
 }
 
 const showHideTable = (booleanHideOrShow, dispatch) => {
+ 
   dispatch(
     handleField(
-      "search",
-      "components.div.children.searchResults",
+      "searchChallan",
+      "components.div.children.SearchChallanResults",
       "visible",
       booleanHideOrShow
     )

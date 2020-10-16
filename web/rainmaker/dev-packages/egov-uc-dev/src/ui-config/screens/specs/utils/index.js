@@ -35,6 +35,19 @@ export const transformById = (payload, id) => {
   );
 };
 
+export const getFeesEstimateCard = props => {
+  const { sourceJsonPath, ...rest } = props;
+  return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-uc",
+    componentPath: "EstimateCardContainer",
+    props: {
+      sourceJsonPath,
+      ...rest
+    }
+  };
+};
+
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
   let translatedLabel = null;
   if (localizationLabels && localizationLabels.hasOwnProperty(labelKey)) {
@@ -53,15 +66,16 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
+  screen
   //screen = "apply"
-  screen = "newCollection"
+ // screen = "newCollection"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
     {}
   );
- 
+ console.info("children==",fields);
   let isFormValid = true;
   for (var variable in fields) {
     
@@ -304,7 +318,7 @@ export const getEmployeeName = async queryObject => {
   }
 };
 
-export const setServiceCategory = (businessServiceData, dispatch) => {
+export const setServiceCategory = (businessServiceData, dispatch,state) => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
     if (item.code && item.code.indexOf(".") > 0) {
@@ -328,6 +342,7 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
       set(nestedServiceData, `${item.code}`, item);
     }
   });
+  console.log("nestedServiceData",nestedServiceData);
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.nestedServiceData",
@@ -343,8 +358,39 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
       serviceCategories
     )
   );
+  const editingMode = get(
+    state.screenConfiguration,
+    "preparedFinalObject.Challan[0].id",
+    null
+  );
+  if(editingMode!=null){
+    console.log("Business Service")
+    dispatch(
+      handleField(
+        "newCollection",
+        "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory",
+        "props.value",
+        get(
+          state.screenConfiguration,
+          "preparedFinalObject.Challan[0].consumerType",
+          null
+        )
+      )
+    );
+    // dispatch(
+    //   handleField(
+    //     "newCollection",
+    //     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+    //     "props.value",
+    //     get(
+    //       state.screenConfiguration,
+    //       "preparedFinalObject.Challan[0].serviceType",
+    //       null
+    //     )
+    //   )
+    // );
+  }
 };
-
 
 
 export const downloadHelpFile = async (state, dispatch) => {  
@@ -410,43 +456,3 @@ export const getTextToLocalMapping = label => {
   }
 };
 
-
-export const downloadChallan = async (Challan, mode = 'download') => {
- 
-  let tenantId = get(Challan, "tenantId");
-
-  //Added sorting for Challan details
-  const challanAmtSorted=  orderBy(
-    Challan.amount,
-    ["amount"],
-    ["desc"]);       
-    Challan.amount = challanAmtSorted;
-    
-
-  const queryStr = [
-    { key: "key", value:"mcollect-challan" },
-    { key: "tenantId", value: tenantId ? tenantId.split(".")[0] : commonConfig.tenantId }
-  ];
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-    try {
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Challan }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-        .then(res => {
-          res.filestoreIds[0]
-          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-            res.filestoreIds.map(fileStoreId => {
-              downloadReceiptFromFilestoreID(fileStoreId, mode)
-            })
-          } else {
-            console.log("Error In Acknowledgement form Download");
-          }
-        });
-    } catch (exception) {
-      alert('Some Error Occured while downloading Acknowledgement form!');
-    }
-  
-}

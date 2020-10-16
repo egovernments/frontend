@@ -57,7 +57,30 @@ import { setBusinessServiceDataToLocalStorage ,getFileUrl} from "egov-ui-framewo
 //   }
 // };
 
+export const getChallanSearchResult = async queryObject =>{
+  try{
+    const response = await httpRequest(
+      "post",
+      "echallan-services/eChallan/v1/_search",
+      "",
+      queryObject
+    );
+
+    return response;
+  }
+  catch(error){
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+}
+
 export const getSearchResults = async queryObject => {
+  console.info("query for search receipt=",queryObject);
   try {
     const response = await httpRequest(
       "post",
@@ -65,7 +88,7 @@ export const getSearchResults = async queryObject => {
       "",
       queryObject
     );
-
+      console.info("got receipt response==",response);
     return response;
   } catch (error) {
     console.error(error);

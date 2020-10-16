@@ -4,7 +4,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import { download, downloadBill } from "egov-common/ui-utils/commons";
+import { download, downloadChallan } from "egov-common/ui-utils/commons";
 import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 
 export const searchResults = {
@@ -21,7 +21,14 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <a href="javascript:void(0)"
               onClick={() => {
-                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
+                const receiptQueryString = [
+                  {
+                    key: 'challanNo',
+                    value: tableMeta.rowData[1]
+                  },
+                  { key: 'tenantId', value: tableMeta.rowData[10] }];
+                  downloadChallan(receiptQueryString,"download");
+               // downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
               }}
             >
               {value}
