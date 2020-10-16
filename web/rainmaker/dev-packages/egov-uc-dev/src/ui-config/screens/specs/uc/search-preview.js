@@ -59,8 +59,8 @@ import {
 
    const challanresponse = await getChallanSearchResult(queryObject);
    dispatch(prepareFinalObject("Challan", challanresponse.challans[0]));
-   const isActive = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus"); 
-   if(isActive==="ACTIVE"){
+   dispatch(prepareFinalObject("challanStatus", challanresponse.challans[0].applicationStatus));
+   if(challanresponse.challans[0].applicationStatus==="ACTIVE"){
       dispatch(
         handleField(
           "search-preview",
@@ -344,7 +344,7 @@ import {
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let businessService = getQueryArg(window.location.href, "businessService");
   let consumerCode = getQueryArg(window.location.href, "applicationNumber");
-  window.location.href = `/uc/newCollection?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`;
+  dispatch(setRoute(`/uc/newCollection?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`));
 };
   
   const formatTaxHeaders = (billDetail = {}) => {
@@ -455,8 +455,8 @@ import {
   
   export const downloadprintMenu=(state,applicationNumber,tenantId)=>{
     let downloadMenu = [];
-      let printMenu = [];
-    const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus",null);
+    let printMenu = [];
+    const isPaid = get(state.screenConfiguration.preparedFinalObject , "challanStatus",null);
     console.info("isPaid----",isPaid);
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     const receiptKey = get(uiCommonPayConfig, "receiptKey")
