@@ -344,7 +344,7 @@ import {
   let tenantId = getQueryArg(window.location.href, "tenantId");
   let businessService = getQueryArg(window.location.href, "businessService");
   let consumerCode = getQueryArg(window.location.href, "applicationNumber");
-  dispatch(setRoute(`/uc/newCollection?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`));
+  window.location.href = `/uc/newCollection?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`;
 };
   
   const formatTaxHeaders = (billDetail = {}) => {
@@ -407,12 +407,10 @@ import {
     let payload1 =
       fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
      const isPAID = payload1.totalAmount == 0 ? true : false;
-    // // let estimateData = payload;
+   
    let payload = isPAID? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
-  
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
-    //let estimateData = formatTaxHeaders(payload.billDetails[0]);
     set(estimateData, "payStatus", isPAID);
     dispatch(
       handleField(
@@ -473,7 +471,7 @@ import {
       label: { labelName: "Receipt", labelKey: "UC_RECEIPT" },
       link: () => {
         const receiptQueryString = [
-          { key: "consumerCode", value: applicationNumber },
+          { key: "billIds", value: get(state.screenConfiguration.preparedFinalObject , "Bill[0].id") },
           { key: "tenantId", value: tenantId }
         ]
         download(receiptQueryString , "download" ,receiptKey,state );
@@ -486,7 +484,7 @@ import {
       label: { labelName: "PRINT RECEIPT", labelKey: "UC_RECEIPT" },
       link: () => {
           const receiptQueryString = [
-              { key: "consumerCode", value: applicationNumber },
+              { key: "billIds", value:  get(state.screenConfiguration.preparedFinalObject , "Bill[0].id")  },
               { key: "tenantId", value: tenantId }
           ]
           download(receiptQueryString  ,"print" , receiptKey ,state);
