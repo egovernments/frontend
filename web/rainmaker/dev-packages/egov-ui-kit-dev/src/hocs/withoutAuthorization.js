@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 // import AppBar from "@material-ui/core/AppBar";
 import "./index.css";
-import { getLocale, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, getUserInfo,setModule } from "egov-ui-kit/utils/localStorageUtils";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
 import Label from "egov-ui-kit/utils/translationNode";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
@@ -12,6 +12,7 @@ import { DropDown, AppBar } from "components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
 import msevaLogo from "egov-ui-kit/assets/images/logo_black.png";
+import { getModuleName } from "egov-ui-kit/utils/commons";
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {
@@ -179,6 +180,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
       hasLocalisation = stateInfoById[0].hasLocalisation;
       defaultUrl = stateInfoById[0].defaultUrl;
     }
+    setModule(getModuleName());
     let languages = get(stateInfoById, "0.languages", []);
 
     return { authenticated, hasLocalisation, defaultUrl, isOpenLink, ulbLogo, ulbName, defaultTitle, languages };

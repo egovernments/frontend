@@ -250,16 +250,11 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
-        // window.location.href = `acknowledgement?${this.getPurposeString(
-        //   label
-        // )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
+        window.location.href = `acknowledgement?${this.getPurposeString(
+          label
+        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
        
-        this.props.setRoute(
-          `/tradelicence/acknowledgement?${this.getPurposeString(
-            label
-          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`
-        ); 
-        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+       if (moduleName === "NewWS1" || moduleName === "NewSW1") {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
         }
 
@@ -312,7 +307,9 @@ class WorkFlowContainer extends React.Component {
 
 
     set(data, `${appendToPath}action`, label);
-
+    const tlAppStatus = get(preparedFinalObject,
+      `Licenses[0].status`,null
+    );
     if (isDocRequired) {
       let documents = get(data, "wfDocuments");
       if( dataPath === "BPA") {
@@ -327,17 +324,13 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    } else {
-      const { Licenses } = preparedFinalObject;
-      const status = Licenses[0].status;
-    
-      switch(status){
+    } else if(tlAppStatus!=null) {
+      switch(tlAppStatus){
         case "FIELDINSPECTION":
           const tradeSubType = get(
             preparedFinalObject,
             `Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType`,
-            //"screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType",
-            []
+            null
           );
           if (tradeSubType == null ||tradeSubType == "")  {
             toggleSnackbar(
@@ -354,14 +347,12 @@ class WorkFlowContainer extends React.Component {
          const  cbrnDate = get(
             preparedFinalObject,
             `Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate`,
-            // "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate",
-            []
+            null
           );
          const cbrnNumber = get(
             preparedFinalObject,
             `Licenses[0].tradeLicenseDetail.additionalDetail.cbrnNumber`,
-            // "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.cbrnNumber",
-            []
+            null
           );
           if (cbrnDate == null || cbrnNumber == null||cbrnDate == ""|| cbrnNumber == "") {
             toggleSnackbar(
@@ -377,15 +368,16 @@ class WorkFlowContainer extends React.Component {
               "error"
             );
           }
-          
           else {
-          this.wfUpdate(label);
+            this.wfUpdate(label);
           }
           break;
-          default :
+        default :
           this.wfUpdate(label);
 
       }
+    }else{
+      this.wfUpdate(label);
     }
   };
 

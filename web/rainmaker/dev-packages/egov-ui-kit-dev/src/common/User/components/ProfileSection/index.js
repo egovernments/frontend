@@ -22,7 +22,7 @@ const cardStyles = {
   flexDirection: "column",
   alignItems: "center",
   margin: "0 auto",
-  paddingTop: 30,
+  paddingTop: 90,
   paddingBottom: 30,
   backgroundColor: "#e0e0e0",
 };

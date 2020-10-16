@@ -168,715 +168,239 @@ class ActionDialog extends React.Component {
     } else {
       wfDocumentsPath = `${dataPath}.wfDocuments`
     }
+    let showSubTradeField=false;
+    let showSubTradeFields =false;
     const status = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].status`
+      state ,
+      `screenConfiguration.preparedFinalObject.Licenses[0].status`,
+      null
     );
-    switch (status) {
-      case "APPLIED":
-      case "APPROVED":
-        return (
-          <Dialog
-            fullScreen={fullscreen}
-            open={open}
-            onClose={onClose}
-            maxWidth={false}
-            style={{ zIndex: 2000 }}
-            disableBackdropClick={true}
-          >
-            <DialogContent
-              children={
-                <Container
-                  children={
-                    <Grid
-                      container="true"
-                      spacing={12}
-                      marginTop={16}
-                      className="action-container"
-                    >
-                      <Grid
-                        style={{
-                          alignItems: "center",
-                          display: "flex"
-                        }}
-                        item
-                        sm={10}
-                      >
-                        <Typography component="h2" variant="subheading">
-                          <LabelContainer {...dialogHeader} />
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        sm={2}
-                        style={{
-                          textAlign: "right",
-                          cursor: "pointer",
-                          position: "absolute",
-                          right: "16px",
-                          top: "16px"
-                        }}
-                        onClick={onClose}
-                      >
-                        <CloseIcon />
-                      </Grid>
-                      {showEmployeeList && (
-                        <Grid
-                          item
-                          sm="12"
-                          style={{
-                            marginTop: 16
-                          }}
-                        >
-                          <TextFieldContainer
-                            select={true}
-                            style={{ marginRight: "15px" }}
-                            label={fieldConfig.approverName.label}
-                            placeholder={fieldConfig.approverName.placeholder}
-                            data={dropDownData}
-                            optionValue="value"
-                            optionLabel="label"
-                            hasLocalization={false}
-                            //onChange={e => this.onEmployeeClick(e)}
-                            onChange={e =>
-                              handleFieldChange(
-                                assigneePath,
-                                e.target.value
-                              )
-                            }
-                            jsonPath={assigneePath}
-                          />
-                        </Grid>
-                      )}
-                      <Grid item sm="12">
-                        <TextFieldContainer
-                          InputLabelProps={{ shrink: true }}
-                          label={fieldConfig.comments.label}
-                          onChange={e =>
-                            handleFieldChange(`${dataPath}.comment`, e.target.value)
-                          }
-                          jsonPath={`${dataPath}.comment`}
-                          placeholder={fieldConfig.comments.placeholder}
-                        />
-                      </Grid>
-
-                      <Grid item sm="12">
-                        <Typography
-                          component="h3"
-                          variant="subheading"
-                          style={{
-                            color: "rgba(0, 0, 0, 0.8700000047683716)",
-                            fontFamily: "Roboto",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            lineHeight: "20px",
-                            marginBottom: "8px"
-                          }}
-                        >
-                          <div className="rainmaker-displayInline">
-                            <LabelContainer
-                              labelName="Supporting Documents"
-                              labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                            />
-                            {isDocRequired && (
-                              <span style={{ marginLeft: 5, color: "red" }}>*</span>
-                            )}
-                          </div>
-                        </Typography>
-                        <div
-                          style={{
-                            color: "rgba(0, 0, 0, 0.60)",
-                            fontFamily: "Roboto",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            lineHeight: "20px"
-                          }}
-                        >
-                          <LabelContainer
-                            labelName="Only .jpg and .pdf files. 5MB max file size."
-                            labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
-                          />
-                        </div>
-                        <UploadMultipleFiles
-                          maxFiles={4}
-                          inputProps={{
-                            accept: "image/*, .pdf, .png, .jpeg"
-                          }}
-                          buttonLabel={{ labelName: "UPLOAD FILES", labelKey: "TL_UPLOAD_FILES_BUTTON" }}
-                          jsonPath={`${dataPath}.wfDocuments`}
-                          maxFileSize={5000}
-                        />
-                        <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
-                          <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            style={{
-                              minWidth: "200px",
-                              height: "48px"
-                            }}
-                            className="bottom-button"
-                            onClick={() =>
-                              onButtonClick(buttonLabel, isDocRequired)
-                            }
-                          >
-                            <LabelContainer
-                              labelName={getButtonLabelName(buttonLabel)}
-                              labelKey={
-                                moduleName
-                                  ? `WF_${moduleName.toUpperCase()}_${buttonLabel}`
-                                  : ""
-                              }
-                            />
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  }
-                />
-              }
-            />
-          </Dialog>
-        );
-        break;
-      case "FIELDINSPECTION":
-        return (
-          <Dialog
-            fullScreen={fullscreen}
-            open={open}
-            onClose={onClose}
-            maxWidth={false}
-            style={{ zIndex: 2000 }}
-            disableBackdropClick={true}
-          >
-            <DialogContent
-              children={
-                <Container
-                  children={
-                    <Grid
-                      container="true"
-                      spacing={12}
-                      marginTop={16}
-                      className="action-container"
-                    >
-                      <Grid
-                        style={{
-                          alignItems: "center",
-                          display: "flex"
-                        }}
-                        item
-                        sm={10}
-                      >
-                        <Typography component="h2" variant="subheading">
-                          <LabelContainer {...dialogHeader} />
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        sm={2}
-                        style={{
-                          textAlign: "right",
-                          cursor: "pointer",
-                          position: "absolute",
-                          right: "16px",
-                          top: "16px"
-                        }}
-                        onClick={onClose}
-                      >
-                        <CloseIcon />
-                      </Grid>
-                      {showEmployeeList && (
-                        <Grid
-                          item
-                          sm="12"
-                          style={{
-                            marginTop: 16
-                          }}
-                        >
-                          <TextFieldContainer
-                            select={true}
-                            style={{ marginRight: "15px" }}
-                            label={fieldConfig.approverName.label}
-                            placeholder={fieldConfig.approverName.placeholder}
-                            data={dropDownData}
-                            optionValue="value"
-                            optionLabel="label"
-                            hasLocalization={false}
-                            //onChange={e => this.onEmployeeClick(e)}
-                            onChange={e =>
-                              handleFieldChange(
-                                assigneePath,
-                                e.target.value
-                              )
-                            }
-                            jsonPath={assigneePath}
-                          />
-                        </Grid>
-                      )}
-                      <Grid item sm="12">
-                        <TextFieldContainer
-                          InputLabelProps={{ shrink: true }}
-                          label={fieldConfig.comments.label}
-                          onChange={e =>
-                            handleFieldChange(`${dataPath}.comment`, e.target.value)
-                          }
-                          jsonPath={`${dataPath}.comment`}
-                          placeholder={fieldConfig.comments.placeholder}
-                        />
-                      </Grid>
-                      <Grid item sm="12">
-                        <TextFieldContainer
-                          InputLabelProps={{ shrink: true }}
-                          label={fieldConfig.tradeSubType.label}
-                          onChange={e =>
-                            handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.tradeSubType`, e.target.value)
-                          }
-                          required={true}
-                          // roleDefination={{ rolePath: "user-info.roles", roles: ["TL_DOC_VERIFIER"] }} 
-                          jsonPath={`${dataPath}.tradeLicenseDetail.additionalDetail.tradeSubType`}
-                          placeholder={fieldConfig.tradeSubType.placeholder}
-
-                        />
-                      </Grid>
-
-
-
-
-
-                      <Grid item sm="12">
-                        <Typography
-                          component="h3"
-                          variant="subheading"
-                          style={{
-                            color: "rgba(0, 0, 0, 0.8700000047683716)",
-                            fontFamily: "Roboto",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            lineHeight: "20px",
-                            marginBottom: "8px"
-                          }}
-                        >
-                          <div className="rainmaker-displayInline">
-                            <LabelContainer
-                              labelName="Supporting Documents"
-                              labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                            />
-                            {isDocRequired && (
-                              <span style={{ marginLeft: 5, color: "red" }}>*</span>
-                            )}
-                          </div>
-                        </Typography>
-                        <div
-                          style={{
-                            color: "rgba(0, 0, 0, 0.60)",
-                            fontFamily: "Roboto",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            lineHeight: "20px"
-                          }}
-                        >
-                          <LabelContainer
-                            labelName="Only .jpg and .pdf files. 5MB max file size."
-                            labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
-                          />
-                        </div>
-                        <UploadMultipleFiles
-                          maxFiles={4}
-                          inputProps={{
-                            accept: "image/*, .pdf, .png, .jpeg"
-                          }}
-                          buttonLabel={{ labelName: "UPLOAD FILES", labelKey: "TL_UPLOAD_FILES_BUTTON" }}
-                          jsonPath={`${dataPath}.wfDocuments`}
-                          maxFileSize={5000}
-                        />
-                        <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
-                          <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            style={{
-                              minWidth: "200px",
-                              height: "48px"
-                            }}
-                            className="bottom-button"
-                            onClick={() =>
-                              onButtonClick(buttonLabel, isDocRequired)
-                            }
-                          >
-                            <LabelContainer
-                              labelName={getButtonLabelName(buttonLabel)}
-                              labelKey={
-                                moduleName
-                                  ? `WF_${moduleName.toUpperCase()}_${buttonLabel}`
-                                  : ""
-                              }
-                            />
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  }
-                />
-              }
-            />
-          </Dialog>
-        );
-        break;
-      case "PENDINGAPPROVAL":
-        return (
-          <Dialog
-            fullScreen={fullscreen}
-            open={open}
-            onClose={onClose}
-            maxWidth={false}
-            style={{ zIndex: 2000 }}
-            disableBackdropClick={true}
-          >
-            <DialogContent
-              children={
-                <Container
-                  children={
-                    <Grid
-                      container="true"
-                      spacing={12}
-                      marginTop={16}
-                      className="action-container"
-                    >
-                      <Grid
-                        style={{
-                          alignItems: "center",
-                          display: "flex"
-                        }}
-                        item
-                        sm={10}
-                      >
-                        <Typography component="h2" variant="subheading">
-                          <LabelContainer {...dialogHeader} />
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        sm={2}
-                        style={{
-                          textAlign: "right",
-                          cursor: "pointer",
-                          position: "absolute",
-                          right: "16px",
-                          top: "16px"
-                        }}
-                        onClick={onClose}
-                      >
-                        <CloseIcon />
-                      </Grid>
-                      {showEmployeeList && (
-                        <Grid
-                          item
-                          sm="12"
-                          style={{
-                            marginTop: 16
-                          }}
-                        >
-
-                          <TextFieldContainer
-                            select={true}
-                            style={{ marginRight: "15px" }}
-                            label={fieldConfig.approverName.label}
-                            placeholder={fieldConfig.approverName.placeholder}
-                            data={dropDownData}
-                            optionValue="value"
-                            optionLabel="label"
-                            hasLocalization={false}
-                            //onChange={e => this.onEmployeeClick(e)}
-                            onChange={e =>
-                              handleFieldChange(
-                                assigneePath,
-                                e.target.value
-                              )
-                            }
-                            jsonPath={assigneePath}
-                          />
-                        </Grid>
-                      )}
-                      <Grid item sm="12">
-                        <TextFieldContainer
-                          InputLabelProps={{ shrink: true }}
-                          label={fieldConfig.comments.label}
-
-                          onChange={e =>
-                            handleFieldChange(`${dataPath}.comment`, e.target.value)
-                          }
-                          jsonPath={`${dataPath}.comment`}
-                          placeholder={fieldConfig.comments.placeholder}
-                        />
-
-                      </Grid>
-
-
-                      <Grid item sm="12">
-                        <TextFieldContainer
-                        
-                          InputLabelProps={{ shrink: true }}
-                          label={fieldConfig.cbrnNumber.label}
-                          required={true}
-                          onChange={(e, value) => {
-                            let num = JSON.stringify({ 'cbrnNumber': e.target.value })
-                           //console.log("num>>>>",e.target.value)
-                            handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnNumber`, e.target.value)
-                          }
-                          }
-                          jsonPath={`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnNumber`}
-                          placeholder={fieldConfig.cbrnNumber.placeholder}
-                        />
-                      </Grid>
-                      <Grid item sm="12">
-                        <TextFieldContainer
-                          id="datetime-local"
-                          label={fieldConfig.cbrnDate.label}
-                          //label="Date"
-                          type="date"
-                          required={true}
-                          InputProps={{ inputProps: { max: new Date().toISOString().slice(0,10)} }}
-                          //format={'DD/MM/YYYY'}
-                          // formatDate={(date) => moment(date).format('DD/MM/YYYY')}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          onChange={(e, value) => {
-                            // let num = JSON.stringify({ 'cbrnDate': e.target.value })
-                            //let num = Date.parse(e.target.value)
-                            // console.log("num>>>>", Date.parse(e.target.value))
-                            //console.log("num>>>>", num.toString())
-
-                            handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnDate`, Date.parse(e.target.value))
-                          }
-                          }
-                          jsonPath={`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnDate`}
-
-                        />
-                      </Grid>
-
-                      <Grid item sm="12">
-                        <Typography
-                          component="h3"
-                          variant="subheading"
-                          style={{
-                            color: "rgba(0, 0, 0, 0.8700000047683716)",
-                            fontFamily: "Roboto",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            lineHeight: "20px",
-                            marginBottom: "8px"
-                          }}
-                        >
-                          <div className="rainmaker-displayInline">
-                            <LabelContainer
-                              labelName="Supporting Documents"
-                              labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                            />
-                            {isDocRequired && (
-                              <span style={{ marginLeft: 5, color: "red" }}>*</span>
-                            )}
-                          </div>
-                        </Typography>
-                        <div
-                          style={{
-                            color: "rgba(0, 0, 0, 0.60)",
-                            fontFamily: "Roboto",
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            lineHeight: "20px"
-                          }}
-                        >
-                          <LabelContainer
-                            labelName="Only .jpg and .pdf files. 5MB max file size."
-                            labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
-                          />
-                        </div>
-                        <UploadMultipleFiles
-                          maxFiles={4}
-                          inputProps={{
-                            accept: "image/*, .pdf, .png, .jpeg"
-                          }}
-                          buttonLabel={{ labelName: "UPLOAD FILES", labelKey: "TL_UPLOAD_FILES_BUTTON" }}
-                          jsonPath={`${dataPath}.wfDocuments`}
-                          maxFileSize={5000}
-                        />
-                        <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
-                          <Button
-                            variant={"contained"}
-                            color={"primary"}
-                            style={{
-                              minWidth: "200px",
-                              height: "48px"
-                            }}
-                            className="bottom-button"
-                            onClick={() =>
-                              onButtonClick(buttonLabel, isDocRequired)
-                            }
-                          >
-                            <LabelContainer
-                              labelName={getButtonLabelName(buttonLabel)}
-                              labelKey={
-                                moduleName
-                                  ? `WF_${moduleName.toUpperCase()}_${buttonLabel}`
-                                  : ""
-                              }
-                            />
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  }
-                />
-              }
-            />
-          </Dialog>
-        );
-        break;
-        case "PENDINGPAYMENT":
-          return (
-            <Dialog
-              fullScreen={fullscreen}
-              open={open}
-              onClose={onClose}
-              maxWidth={false}
-              style={{ zIndex: 2000 }}
-              disableBackdropClick={true}
-            >
-              <DialogContent
-                children={
-                  <Container
-                    children={
-                      <Grid
-                        container="true"
-                        spacing={12}
-                        marginTop={16}
-                        className="action-container"
-                      >
-                      
-                        <Grid
-                          item
-                          sm={2}
-                          style={{
-                            textAlign: "right",
-                            cursor: "pointer",
-                            position: "absolute",
-                            right: "16px",
-                            top: "16px"
-                          }}
-                          onClick={onClose}
-                        >
-                          <CloseIcon />
-                        </Grid>
-                     
-  
-                        <Grid item sm="12">
-                          
-                          
-                          
-                          <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
-                            <Button
-                              variant={"contained"}
-                              color={"primary"}
-                              style={{
-                                minWidth: "200px",
-                                height: "48px"
-                              }}
-                              className="bottom-button"
-                              onClick={() =>
-                                onButtonClick(buttonLabel, isDocRequired)
-                              }
-                            >
-                              <LabelContainer
-                                labelName={getButtonLabelName(buttonLabel)}
-                                labelKey={
-                                  moduleName
-                                    ? `WF_${moduleName.toUpperCase()}_${buttonLabel}`
-                                    : ""
-                                }
-                              />
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    }
-                  />
-                }
-              />
-            </Dialog>
-          );
-          break;
-          default:
-            return (
-              <Dialog
-                fullScreen={fullscreen}
-                open={open}
-                onClose={onClose}
-                maxWidth={false}
-                style={{ zIndex: 2000 }}
-                disableBackdropClick={true}
-              >
-                <DialogContent
-                  children={
-                    <Container
-                      children={
-                        <Grid
-                          container="true"
-                          spacing={12}
-                          marginTop={16}
-                          className="action-container"
-                        >
-                        
-                          <Grid
-                            item
-                            sm={2}
-                            style={{
-                              textAlign: "right",
-                              cursor: "pointer",
-                              position: "absolute",
-                              right: "16px",
-                              top: "16px"
-                            }}
-                            onClick={onClose}
-                          >
-                            <CloseIcon />
-                          </Grid>
-                       
-    
-                          <Grid item sm="12">
-                            
-                            
-                            
-                            <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
-                              <Button
-                                variant={"contained"}
-                                color={"primary"}
-                                style={{
-                                  minWidth: "200px",
-                                  height: "48px"
-                                }}
-                                className="bottom-button"
-                                onClick={() =>
-                                  onButtonClick(buttonLabel, isDocRequired)
-                                }
-                              >
-                                <LabelContainer
-                                  labelName={getButtonLabelName(buttonLabel)}
-                                  labelKey={
-                                    moduleName
-                                      ? `WF_${moduleName.toUpperCase()}_${buttonLabel}`
-                                      : ""
-                                  }
-                                />
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      }
-                    />
-                  }
-                />
-              </Dialog>
-            );
+    if(status!=null){
+      if(status=="FIELDINSPECTION"){
+          showSubTradeField=true;
+      }else if(status=="PENDINGAPPROVAL"){
+          showSubTradeFields=true;
+      }
     }
+    
+    
+
+    return (
+      <Dialog
+        fullScreen={fullscreen}
+        open={open}
+        onClose={onClose}
+        maxWidth={false}
+        style={{zIndex:2000}}
+      >
+        <DialogContent
+          children={
+            <Container
+              children={
+                <Grid
+                  container="true"
+                  spacing={12}
+                  marginTop={16}
+                  className="action-container"
+                >
+                  <Grid
+                    style={{
+                      alignItems: "center",
+                      display: "flex"
+                    }}
+                    item
+                    sm={10}
+                  >
+                    <Typography component="h2" variant="subheading">
+                      <LabelContainer {...dialogHeader} />
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    sm={2}
+                    style={{
+                      textAlign: "right",
+                      cursor: "pointer",
+                      position: "absolute",
+                      right: "16px",
+                      top: "16px"
+                    }}
+                    onClick={onClose}
+                  >
+                    <CloseIcon />
+                  </Grid>
+                  {showEmployeeList && (
+                    <Grid
+                      item
+                      sm="12"
+                      style={{
+                        marginTop: 16
+                      }}
+                    >
+                      <TextFieldContainer
+                        select={true}
+                        style={{ marginRight: "15px" }}
+                        label={fieldConfig.approverName.label}
+                        placeholder={fieldConfig.approverName.placeholder}
+                        data={dropDownData}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        //onChange={e => this.onEmployeeClick(e)}
+                        onChange={e =>
+                          handleFieldChange(
+                            assigneePath,
+                            e.target.value
+                          )
+                        }
+                        jsonPath={assigneePath}
+                      />
+                    </Grid>
+                  )}
+                  <Grid item sm="12">
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label={fieldConfig.comments.label}
+                      onChange={e =>
+                        handleFieldChange(`${dataPath}.comment`, e.target.value)
+                      }
+                      jsonPath={`${dataPath}.comment`}
+                      placeholder={fieldConfig.comments.placeholder}
+                    />
+                  </Grid>
+                  {showSubTradeField &&
+                  <Grid item sm="12">
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label={fieldConfig.tradeSubType.label}
+                      onChange={e =>
+                        handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.tradeSubType`, e.target.value)
+                      }
+                      required={true}
+                      jsonPath={`${dataPath}.tradeLicenseDetail.additionalDetail.tradeSubType`}
+                      placeholder={fieldConfig.tradeSubType.placeholder}
+                    />
+                  </Grid>
+
+                  }   
+                  {showSubTradeFields &&
+                    <Grid item sm="12">
+                    <TextFieldContainer
+                    
+                      InputLabelProps={{ shrink: true }}
+                      label={fieldConfig.cbrnNumber.label}
+                      required={true}
+                      onChange={(e, value) => {
+                        let num = JSON.stringify({ 'cbrnNumber': e.target.value })
+                        handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnNumber`, e.target.value)
+                      }
+                      }
+                      jsonPath={`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnNumber`}
+                      placeholder={fieldConfig.cbrnNumber.placeholder}
+                    />
+                  </Grid>}
+                  {showSubTradeFields &&
+                  <Grid item sm="12">
+                    <TextFieldContainer
+                      id="datetime-local"
+                      label={fieldConfig.cbrnDate.label}
+                      //label="Date"
+                      type="date"
+                      required={true}
+                      InputProps={{ inputProps: { max: new Date().toISOString().slice(0,10)} }}
+                      //format={'DD/MM/YYYY'}
+                      // formatDate={(date) => moment(date).format('DD/MM/YYYY')}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={(e, value) => {
+                        handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnDate`, Date.parse(e.target.value))
+                      }
+                      }
+                      jsonPath={`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnDate`}
+
+                    />
+                  </Grid>
+
+                  } 
+
+                  <Grid item sm="12">
+                    <Typography
+                      component="h3"
+                      variant="subheading"
+                      style={{
+                        color: "rgba(0, 0, 0, 0.8700000047683716)",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px",
+                        marginBottom: "8px"
+                      }}
+                    >
+                      <div className="rainmaker-displayInline">
+                        <LabelContainer
+                          labelName="Supporting Documents"
+                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
+                        />
+                        {isDocRequired && (
+                          <span style={{ marginLeft: 5, color: "red" }}>*</span>
+                        )}
+                      </div>
+                    </Typography>
+                    <div
+                      style={{
+                        color: "rgba(0, 0, 0, 0.60)",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px"
+                      }}
+                    >
+                      <LabelContainer
+                        labelName="Only .jpg and .pdf files. 5MB max file size."
+                        labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
+                      />
+                    </div>
+                    <UploadMultipleFiles
+                      maxFiles={4}
+                      inputProps={{
+                        accept: "image/*, .pdf, .png, .jpeg"
+                      }}
+                      buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
+                      jsonPath={wfDocumentsPath}
+                      maxFileSize={5000}
+                    />
+                    <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
+                      <Button
+                        variant={"contained"}
+                        color={"primary"}
+                        style={{
+                          minWidth: "200px",
+                          height: "48px"
+                        }}
+                        className="bottom-button"
+                        onClick={() =>
+                          onButtonClick(buttonLabel, isDocRequired)
+                        }
+                      >
+                        <LabelContainer
+                          labelName={getButtonLabelName(buttonLabel)}
+                          labelKey={
+                            moduleName
+                              ? `WF_${moduleName.toUpperCase()}_${buttonLabel}`
+                              : ""
+                          }
+                        />
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              }
+            />
+          }
+        />
+      </Dialog>
+    );
   }
 }
 export default withStyles(styles)(ActionDialog);

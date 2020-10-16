@@ -357,11 +357,12 @@ export const tradeLocationDetails = {
     },
     {
       jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
-      localePrefix: {
+      // localePrefix: {
       
-        moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : getTenantId().replace('.', '_').toUpperCase(),
-        masterName: "REVENUE"
-      }, callBack: checkValueForNA
+      //   moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : getTenantId().replace('.', '_').toUpperCase(),
+      //   masterName: "REVENUE"
+      // },
+       callBack: checkValueForNA
     }
   ),
   reviewPincode: getLabelWithValue(
