@@ -4,14 +4,14 @@ import set from "lodash/set";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertDateToEpoch } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
 import { getTenantId } from "ui-utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
-  toggleSnackbar
+  // toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const tenantId = getTenantId();
@@ -92,21 +92,21 @@ const processDemand = (state, dispatch) => {
       "Demands[0].taxPeriodTo"
     ]);
   } else {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill the required fields.",
-          labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
-        },
-        "error"
-      )
-    );
+    // dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     {
+    //       labelName: "Please fill the required fields.",
+    //       labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
+    //     },
+    //     "error"
+    //   )
+    // );
   }
 };
 
 const createDemand = async (state, dispatch) => {
-  dispatch(toggleSpinner());
+  // dispatch(toggleSpinner());
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
@@ -127,6 +127,8 @@ const createDemand = async (state, dispatch) => {
     convertDateToEpoch(demands[0].taxPeriodFrom)
   );
   set(demands[0], "taxPeriodTo", convertDateToEpoch(demands[0].taxPeriodTo));
+  set(demands[0], "tenantId", 'pb.testing');
+
   const mobileNumber = demands[0].mobileNumber;
   const consumerName = demands[0].consumerName;
   //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
@@ -150,6 +152,8 @@ const createDemand = async (state, dispatch) => {
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
         set(payload, "Demands[0].serviceType", businessService);
+
+
         set(
           payload,
           "Demands[0].businessService",
@@ -160,24 +164,24 @@ const createDemand = async (state, dispatch) => {
       } else {
         alert("Empty response!!");
       }
-      dispatch(toggleSpinner());
+      // dispatch(toggleSpinner());
     } catch (e) {
       console.log(e.message);
-      dispatch(toggleSpinner());
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: e.message,
-            labelKey: e.message
-          },
-          "error"
-        )
-      );
+      // dispatch(toggleSpinner());
+      // dispatch(
+      //   toggleSnackbar(
+      //     true,
+      //     {
+      //       labelName: e.message,
+      //       labelKey: e.message
+      //     },
+      //     "error"
+      //   )
+      // );
     }
   }
   else {
-      dispatch(toggleSpinner());
+      // dispatch(toggleSpinner());
   }
 };
 
@@ -190,13 +194,15 @@ const generateBill = async (
   try {
     const payload = await httpRequest(
       "post",
-      `/billing-service/bill/_generate?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
+      `/billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
       "",
       [],
       {}
     );
     if (payload && payload.Bill[0]) {
+      debugger;
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+      debugger;
       const estimateData = createEstimateData(payload.Bill[0]);
       estimateData &&
         estimateData.length &&
@@ -227,6 +233,7 @@ const generateBill = async (
 };
 
 const createEstimateData = billObject => {
+  debugger;
   const billDetails = billObject && billObject.billDetails;
   let fees =
     billDetails &&
@@ -252,16 +259,16 @@ const isTaxPeriodValid = (dispatch, demand, state) => {
   if (selectedFrom <= selectedTo) {
     return true;
   } else {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please select the right tax period",
-          labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
-        },
-        "warning"
-      )
-    );
+    // dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     {
+    //       labelName: "Please select the right tax period",
+    //       labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
+    //     },
+    //     "warning"
+    //   )
+    // );
     return false;
   }
 
@@ -279,16 +286,16 @@ const isTaxPeriodValid = (dispatch, demand, state) => {
     });
   if (found) return true;
   else {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please select the right tax period",
-          labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
-        },
-        "warning"
-      )
-    );
+    // dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     {
+    //       labelName: "Please select the right tax period",
+    //       labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
+    //     },
+    //     "warning"
+    //   )
+    // );
     return false;
   }
 };

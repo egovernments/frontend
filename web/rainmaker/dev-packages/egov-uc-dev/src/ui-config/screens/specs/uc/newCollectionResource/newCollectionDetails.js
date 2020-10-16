@@ -105,18 +105,18 @@ export const newCollectionDetailsCard = getCommonCard(
             return action;
           }
         },
-        dummyDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          },
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-          props: {
-            disabled: true
-          }
-        },
+        // dummyDiv: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Div",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6
+        //   },
+        //   visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+        //   props: {
+        //     disabled: true
+        //   }
+        // },
         ConsumerMobileNo: getTextField({
           label: {
             labelName: "Mobile No",
@@ -152,36 +152,9 @@ export const newCollectionDetailsCard = getCommonCard(
           errorMessage: "Invalid Name.",
           jsonPath: "Demands[0].consumerName"
         }),
-        city: {
-          ...getSelectField({
+        // city: {
+        //   ...getSelectField({
             
-            label: {
-              labelName: "Service Category",
-              labelKey: "UC_SERVICE_CATEGORY_LABEL"
-            },
-            placeholder: {
-              labelName: "Select service Category",
-              labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
-            },
-            required: true,
-            jsonPath: "Demands[0].businessService",
-            sourceJsonPath: "applyScreenMdmsData.serviceCategories",
-          }),
-          
-        },
-        // serviceCategory: {
-        //   uiFramework: "custom-containers",
-        //   componentPath: "AutosuggestContainer",
-        //   jsonPath: "Demands[0].businessService",
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 6
-        //   },
-        //   props: {
-        //     style: {
-        //       width: "100%",
-        //       cursor: "pointer"
-        //     },
         //     label: {
         //       labelName: "Service Category",
         //       labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -190,81 +163,119 @@ export const newCollectionDetailsCard = getCommonCard(
         //       labelName: "Select service Category",
         //       labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
         //     },
-        //     localePrefix: {
-        //       masterName: "BusinessService",
-        //       moduleName: "BillingService"
-        //     },
         //     required: true,
-        //     visible: true,
         //     jsonPath: "Demands[0].businessService",
         //     sourceJsonPath: "applyScreenMdmsData.serviceCategories",
-        //     labelsFromLocalisation: true,
-        //     suggestions: [],
-        //     fullwidth: true,
-        //     inputLabelProps: {
-        //       shrink: true
-        //     }
-        //   },
-        //   beforeFieldChange: async (action, state, dispatch) => {
-        //     //Reset service type value, if any
-        //     dispatch(
-        //       handleField(
-        //         "newCollection",
-        //         "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-        //         "props.value",
-        //         null
-        //       )
-        //     );
-        //     //Set service type data and field if available.
-        //     const serviceData = get(
-        //       state.screenConfiguration,
-        //       "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
-        //       {}
-        //     );
-        //     if (action.value) {
-        //       if (
-        //         serviceData[action.value] &&
-        //         serviceData[action.value].child &&
-        //         serviceData[action.value].child.length > 0
-        //       ) {
-        //         dispatch(
-        //           prepareFinalObject(
-        //             "applyScreenMdmsData.serviceTypes",
-        //             serviceData[action.value].child
-        //           )
-        //         );
-        //         dispatch(
-        //           handleField(
-        //             "newCollection",
-        //             "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-        //             "visible",
-        //             true
-        //           )
-        //         );
-        //       } else {
-        //         dispatch(
-        //           handleField(
-        //             "newCollection",
-        //             "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-        //             "visible",
-        //             false
-        //           )
-        //         );
-        //         const demandId = get(
-        //           state.screenConfiguration.preparedFinalObject,
-        //           "Demands[0].id",
-        //           null
-        //         );
-        //         //Set tax head fields if there is no service type available
-        //         if (!demandId && serviceData[action.value]) {
-        //           const taxHeads = setTaxHeadFields(action, state, dispatch);
-        //         }
-        //       }
-        //     }
-        //   }
+        //   }),
+          
         // },
+        serviceCategory: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
+          componentPath: "AutosuggestContainer",
+          jsonPath: "Demands[0].businessService",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          props: {
+            style: {
+              width: "100%",
+              cursor: "pointer"
+            },
+            label: {
+              labelName: "Service Category",
+              labelKey: "UC_SERVICE_CATEGORY_LABEL"
+            },
+            placeholder: {
+              labelName: "Select service Category",
+              labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
+            },
+            localePrefix: {
+              masterName: "BusinessService",
+              moduleName: "BillingService"
+            },
+            required: true,
+            visible: true,
+            jsonPath: "Demands[0].businessService",
+            sourceJsonPath: "applyScreenMdmsData.serviceCategories",
+            labelsFromLocalisation: true,
+            suggestions: [],
+            fullwidth: true,
+            inputLabelProps: {
+              shrink: true
+            }
+          },
+          // afterFieldChange: (action, state, dispatch) => {
+          //   getConditionsInPermitList(action, state, dispatch);
+          // }
+          beforeFieldChange: async (action, state, dispatch) => {
+            //Reset service type value, if any
+            if (get(state, 'screenConfiguration.preparedFinalObject.Demands[0].serviceType', null)) {
+              dispatch(
+                handleField(
+                  "newCollection",
+                  "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                  "props.value",
+                  null
+                )
+              );
+            }
+            //Set service type data and field if available.
+            const serviceData = get(
+              state.screenConfiguration,
+              "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
+              {}
+            );
+            if (action.value) {
+              if (
+                serviceData[action.value] &&
+                serviceData[action.value].child &&
+                serviceData[action.value].child.length > 0
+              ) {
+                dispatch(
+                  prepareFinalObject(
+                    "applyScreenMdmsData.serviceTypes",
+                    serviceData[action.value].child
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "newCollection",
+                    "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                    "visible",
+                    true
+                  )
+                );
+              } else {
+                dispatch(
+                  handleField(
+                    "newCollection",
+                    "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                    "visible",
+                    false
+                  )
+                );
+                const demandId = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  "Demands[0].id",
+                  null
+                );
+                debugger;
+                //Set tax head fields if there is no service type available
+                if (!demandId && serviceData[action.value]) {
+                  debugger;
+                  const taxHeads = setTaxHeadFields(action, state, dispatch);
+                }
+              }
+            }
+          }
+        },
         serviceType: {
-          ...getSelectField({
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-uc",
+          componentPath: "AutosuggestContainer",
+          props: {
             label: {
               labelName: "Service Type",
               labelKey: "UC_SERVICE_TYPE_LABEL"
@@ -279,20 +290,25 @@ export const newCollectionDetailsCard = getCommonCard(
             },
             required: true,
             visible: false,
+            labelsFromLocalisation: true,
+            className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.serviceTypes",
-            jsonPath: "Demands[0].serviceType",
-            gridDefination: {
-              xs: 12,
-              sm: 6
-            }
-          }),
+          },
+          required: true,
+          jsonPath: "Demands[0].serviceType",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
           beforeFieldChange: async (action, state, dispatch) => {
             const demandId = get(
               state.screenConfiguration.preparedFinalObject,
               "Demands[0].id",
               null
             );
+            debugger;
             if (!demandId && action.value) {
+              debugger;
               const taxHeads = setTaxHeadFields(action, state, dispatch);
               console.log(taxHeads);
             }
@@ -332,18 +348,18 @@ export const newCollectionDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
         }),
-        dummyDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          },
-          visible: true,
-          props: {
-            disabled: true
-          }
-        }
+        // dummyDiv: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Div",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6
+        //   },
+        //   visible: true,
+        //   props: {
+        //     disabled: true
+        //   }
+        // }
       },
       {
         style: {
@@ -386,6 +402,7 @@ export const newCollectionDetailsCard = getCommonCard(
 );
 
 const setTaxHeadFields = (action, state, dispatch) => {
+  debugger;
   const serviceData = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
@@ -457,7 +474,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
           getTextField({
             label: {
               labelName: "Tax Amount",
-              labelKey: `${getTransformedLocale(item.code)}`
+              // labelKey: `${getTransformedLocale(item.code)}`
             },
             placeholder: {
               labelName: "Enter Tax Amount",

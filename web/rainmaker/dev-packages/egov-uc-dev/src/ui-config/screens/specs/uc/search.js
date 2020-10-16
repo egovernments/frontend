@@ -16,7 +16,6 @@ import { getTenantId } from "ui-utils/localStorageUtils";
 const tenantId = getTenantId();
 // const tenantId = "pb.testing";
 
-debugger;
 const header = getCommonHeader({
   labelName: "Universal Collection",
   labelKey: "UC_COMMON_HEADER_SEARCH"
@@ -45,7 +44,6 @@ const getMDMSData = async (action, state, dispatch) => {
     }
   };
   try {
-    debugger;
     const payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",

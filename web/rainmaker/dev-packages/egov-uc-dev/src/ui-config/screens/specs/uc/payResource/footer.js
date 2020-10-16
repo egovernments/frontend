@@ -1,12 +1,11 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-import { getSelectedTabIndex } from "egov-ui-framework/ui-utils/commons";
+// import { getSelectedTabIndex } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  toggleSnackbar,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -94,8 +93,43 @@ export const footer = getCommonApplyFooter({
     }
   }
 });
+ const getSelectedTabIndex = paymentType => {
+  switch (paymentType) {
+    case "Cash":
+      return {
+        selectedPaymentMode: "cash",
+        selectedTabIndex: 0,
+        fieldsToValidate: ["payeeDetails"]
+      };
+    case "Cheque":
+      return {
+        selectedPaymentMode: "cheque",
+        selectedTabIndex: 1,
+        fieldsToValidate: ["payeeDetails", "chequeDetails"]
+      };
+    case "DD":
+      return {
+        selectedPaymentMode: "demandDraft",
+        selectedTabIndex: 2,
+        fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
+      };
+    case "Card":
+      return {
+        selectedPaymentMode: "card",
+        selectedTabIndex: 3,
+        fieldsToValidate: ["payeeDetails", "cardDetails"]
+      };
+    default:
+      return {
+        selectedPaymentMode: "cash",
+        selectedTabIndex: 0,
+        fieldsToValidate: ["payeeDetails"]
+      };
+  }
+};
 
 const callBackForPay = async (state, dispatch) => {
+  debugger;
   const { href } = window.location;
   let isFormValid = true;
 
@@ -219,16 +253,16 @@ const callBackForPay = async (state, dispatch) => {
       get(finalReceiptData, "instrument.transactionNumber") !==
       get(finalReceiptData, "instrument.transactionNumberConfirm")
     ) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Transaction numbers don't match !",
-            labelKey: "ERR_TRASACTION_NUMBERS_DONT_MATCH"
-          },
-          "error"
-        )
-      );
+      // dispatch(
+      //   toggleSnackbar(
+      //     true,
+      //     {
+      //       labelName: "Transaction numbers don't match !",
+      //       labelKey: "ERR_TRASACTION_NUMBERS_DONT_MATCH"
+      //     },
+      //     "error"
+      //   )
+      // );
       return;
     }
   }
@@ -236,18 +270,18 @@ const callBackForPay = async (state, dispatch) => {
   //------------- Form End ----------------//
 
   let ReceiptBody = {
-    Receipt: []
+    Payment: []
   };
 
-  ReceiptBody.Receipt.push(finalReceiptData);
+  ReceiptBody.Payment.push(finalReceiptData);
 
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
     try {
-      dispatch(toggleSpinner());
+      // dispatch(toggleSpinner());
       let response = await httpRequest(
         "post",
-        "collection-services/receipts/_create",
+        "collection-services/payments/_create",
         "_create",
         [],
         ReceiptBody,
@@ -272,24 +306,24 @@ const callBackForPay = async (state, dispatch) => {
           ? `/egov-ui-framework/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
           : `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`;
       dispatch(setRoute(`${path}`));
-      dispatch(toggleSpinner());
+      // dispatch(toggleSpinner());
     } catch (e) {
-      dispatch(toggleSpinner());
-      dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
+      // dispatch(toggleSpinner());
+      // dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
       console.log(e);
     }
   } else {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName:
-            "Please fill all mandatory fields and upload the documents !",
-          labelKey: "ERR_FILL_MANDATORY_FIELDS"
-        },
-        "warning"
-      )
-    );
+    // dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     {
+    //       labelName:
+    //         "Please fill all mandatory fields and upload the documents !",
+    //       labelKey: "ERR_FILL_MANDATORY_FIELDS"
+    //     },
+    //     "warning"
+    //   )
+    // );
   }
 };
 

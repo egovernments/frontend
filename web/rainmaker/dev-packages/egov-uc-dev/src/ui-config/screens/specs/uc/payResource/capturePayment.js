@@ -14,7 +14,7 @@ export const capturePayment = getCommonGrayCard({
     }
   ),
   tabSection: {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
     moduleName: "egov-uc",
     componentPath: "CustomTabContainer",
     props: {
