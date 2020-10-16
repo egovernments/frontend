@@ -112,12 +112,6 @@ import {
                   variant: "contained",
                   color: "primary",
                   className:"gen-challan-btn",
-                  style: {
-                    color: "white",
-                    borderRadius: "2px",
-                    width: "170px",
-                    height: "48px"
-                  }
                 },
   
                 children: {

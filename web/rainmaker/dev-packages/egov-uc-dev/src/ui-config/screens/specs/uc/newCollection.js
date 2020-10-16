@@ -302,45 +302,6 @@ const newCollection = {
             labelKey: "UC_COMMON_HEADER",
           }),
         }),
-        buttonDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          props: {
-            className: "searchreceipt-commonButton",
-            style: { textAlign: "right", display: "flex" },
-          },
-          children: {
-            searchAndPayBtn: {
-              componentPath: "Button",
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  color: "primary",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px",
-                  marginRight: "16px",
-                },
-                className: "uc-searchAndPayBtn-button",
-              },
-              children: {
-                buttonLabel: getLabel({
-                  labelName: "Search And Pay",
-                  labelKey: "UC_SEARCHANDPAY_LABEL",
-                }),
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  openPayBillForm(state, dispatch);
-                },
-              },
-            },
-            
-          },
-        },
-
         newCollectionConsumerDetailsCard,
         newCollectionServiceDetailsCard,
         newCollectionFooter,

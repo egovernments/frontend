@@ -59,8 +59,10 @@ import {
 
    const challanresponse = await getChallanSearchResult(queryObject);
    dispatch(prepareFinalObject("Challan", challanresponse.challans[0]));
-   const isActive = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus"); 
-   if(isActive==="ACTIVE"){
+   const isActive = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus");    
+   dispatch(prepareFinalObject("challanStatus", challanresponse.challans[0].applicationStatus));
+   //if(isActive==="ACTIVE"){
+    if(challanresponse.challans[0].applicationStatus==="ACTIVE"){
       dispatch(
         handleField(
           "search-preview",
@@ -456,8 +458,9 @@ import {
   export const downloadprintMenu=(state,applicationNumber,tenantId)=>{
     let downloadMenu = [];
       let printMenu = [];
-    const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus",null);
-    console.info("isPaid----",isPaid);
+    // const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus");
+    const isPaid = get(state.screenConfiguration.preparedFinalObject , "challanStatus");
+     console.info("isPaid----",isPaid);
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     const receiptKey = get(uiCommonPayConfig, "receiptKey")
     let receiptDownloadObject = {
