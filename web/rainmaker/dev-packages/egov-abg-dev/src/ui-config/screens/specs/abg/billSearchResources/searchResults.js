@@ -176,8 +176,7 @@ const getActionButton = (value, tableMeta) => {
             : "employee";
         if (tableMeta.rowData[5] === "PAID") {
           const receiptQueryString = [
-           // { key: "billIds", value: tableMeta.rowData[11] },
-           {key:"consumerCode",value:tableMeta.rowData[1]},
+            { key: "billIds", value: tableMeta.rowData[11] },
             { key: "tenantId", value: tableMeta.rowData[10] }
           ];
           download(receiptQueryString , "download" ,tableMeta.rowData[8]);

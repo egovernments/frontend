@@ -503,14 +503,52 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
 
 
 export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
-  console.info("receiptQueryString=>",receiptQueryString);
-          const DOWNLOADRECEIPT = {
-          GET: {
-            URL: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-            ACTION: "_get",
-          },
-        };
-         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, receiptQueryString, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+  
+  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
+    configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
+  }
+  const FETCHRECEIPT = {
+    GET: {
+      URL: "/collection-services/payments/_search",
+      ACTION: "_get",
+    },
+  };
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+      const queryStr = [
+        { key: "key", value: configKey },
+        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+      ]
+      
+      var payments = [];
+      if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
+         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
+          , "error"));
+        return;
+      }
+      else{       
+        //If payerName is null set the paidBy for payerName
+        payloadReceiptDetails.Payments[0].payerName = !payloadReceiptDetails.Payments[0].payerName?payloadReceiptDetails.Payments[0].paidBy:payloadReceiptDetails.Payments[0].payerName;
+        //Added sorting for Receipt details
+        const billAccountDetailsSorted=  orderBy(
+          payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails,
+          ["amount"],
+          ["desc"]);       
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails = billAccountDetailsSorted;
+        payments.push(payloadReceiptDetails.Payments[0]);
+        const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+        if (oldFileStoreId) {
+          downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+        }
+        else {
+          httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
               res.filestoreIds[0]
               if (res && res.filestoreIds && res.filestoreIds.length > 0) {
@@ -523,79 +561,35 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
                   , "error"));
               }
             });
-
-
-
-  ///////////////////////////////
-  // if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
-  //   const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
-  //   configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
-  // }
-  // const FETCHRECEIPT = {
-  //   GET: {
-  //     URL: "/collection-services/payments/_search",
-  //     ACTION: "_get",
-  //   },
-  // };
-  // const DOWNLOADRECEIPT = {
-  //   GET: {
-  //     URL: "/pdf-service/v1/_create",
-  //     ACTION: "_get",
-  //   },
-  // };
-  // try {
-  //   httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-  //     const queryStr = [
-  //       { key: "key", value: configKey },
-  //       { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-  //     ]
+        }
       
-  //     var payments = [];
-  //     if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
-  //        store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
-  //         , "error"));
-  //       return;
-  //     }
-  //     else{       
-  //       //If payerName is null set the paidBy for payerName
-  //       payloadReceiptDetails.Payments[0].payerName = !payloadReceiptDetails.Payments[0].payerName?payloadReceiptDetails.Payments[0].paidBy:payloadReceiptDetails.Payments[0].payerName;
-  //       //Added sorting for Receipt details
-  //       const billAccountDetailsSorted=  orderBy(
-  //         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails,
-  //         ["amount"],
-  //         ["desc"]);       
-  //       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails = billAccountDetailsSorted;
-  //       payments.push(payloadReceiptDetails.Payments[0]);
-  //       const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-  //       if (oldFileStoreId) {
-  //         downloadReceiptFromFilestoreID(oldFileStoreId, mode)
-  //       }
-  //       else {
-  //         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-  //           .then(res => {
-  //             res.filestoreIds[0]
-  //             if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-  //               res.filestoreIds.map(fileStoreId => {
-  //                 downloadReceiptFromFilestoreID(fileStoreId, mode)
-  //               })
-  //             } else {
-  //               console.log('Some Error Occured while downloading Receipt!');
-  //               store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-  //                 , "error"));
-  //             }
-  //           });
-  //       }
-      
-  //     }
-      
+      }
+      // Setting the Payer and mobile from Bill to reflect it in PDF
+      // state = state ? state : {};
+      // let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
+
+      // if((billDetails && !billDetails.payerName) || !billDetails){
+      //   billDetails = {
+      //     payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
+      //     mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
+      //   };
+      // }
+      // if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
+      //   const paidByTest = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
+      //   console.info("paidBy ==",paidByTest);
+      //   payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
+      //   payloadReceiptDetails.Payments[0].paidBy = payloadReceiptDetails.Payments[0].paidBy === "ANONYMOUS"?billDetails.payerName:payloadReceiptDetails.Payments[0].paidBy;
+      //   payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
+      //   console.info("setting payer details===",payloadReceiptDetails);
+      // }
 
      
-  //   })
-  // } catch (exception) {
-  //   console.log('Some Error Occured while downloading Receipt!');
-  //   store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-  //     , "error"));
-  // }
+    })
+  } catch (exception) {
+    console.log('Some Error Occured while downloading Receipt!');
+    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
+      , "error"));
+  }
 }
 
 //For Application fee receipt
