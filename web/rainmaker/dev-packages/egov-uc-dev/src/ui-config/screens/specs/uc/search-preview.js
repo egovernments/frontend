@@ -60,31 +60,38 @@ import {
    const challanresponse = await getChallanSearchResult(queryObject);
    dispatch(prepareFinalObject("Challan", challanresponse.challans[0]));
    const isActive = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus"); 
- if(isActive==="ACTIVE"){
-   dispatch(
-     handleField(
-       "search-preview",
-       "components.div.children.preview.children.cardContent.children.footer.children.cancelButton",
-       "visible",
-       true
-     )
-   );
-   dispatch(
-     handleField(
-       "search-preview",
-       "components.div.children.preview.children.cardContent.children.footer.children.editButton",
-       "visible",
-       true
-     )
-   );
- }
-
+   if(isActive==="ACTIVE"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.footer.children.cancelButton",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.footer.children.editButton",
+          "visible",
+          true
+        )
+      );
+    }
+    fetchBill(
+      action,
+      state,
+      dispatch,
+      challanNo,
+      tenantId,
+      businessService
+    );
   }
   const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let tenantId = getQueryArg(window.location.href, "tenantId");
     let businessService = getQueryArg(window.location.href, "businessService");
     let challanNo = getQueryArg(window.location.href, "applicationNumber");
-    await searchResults(action, state, dispatch, applicationNumber)
+    searchResults(action, state, dispatch, applicationNumber)
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Challan Details:",
@@ -122,14 +129,7 @@ import {
       "components.div.children.headerDiv.children.header1.children.headertop",
       headerrow
     );
-    fetchBill(
-      action,
-      state,
-      dispatch,
-      applicationNumber,
-      tenantId,
-      businessService
-    );
+
     
     
   };
