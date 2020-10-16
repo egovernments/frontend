@@ -17,8 +17,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
             const receiptQueryString = [
-               // { key: "receiptNumbers", value: applicationNumber },
-                {key:"consumerCode",value:applicationNumber},
+                { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
             if(licence && licence[0].action && licence[0].action==="APPLY")

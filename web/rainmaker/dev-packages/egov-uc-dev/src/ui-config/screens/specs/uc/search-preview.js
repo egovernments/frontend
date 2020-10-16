@@ -84,7 +84,7 @@ import {
     let tenantId = getQueryArg(window.location.href, "tenantId");
     let businessService = getQueryArg(window.location.href, "businessService");
     let challanNo = getQueryArg(window.location.href, "applicationNumber");
-    searchResults(action, state, dispatch, applicationNumber)
+    await searchResults(action, state, dispatch, applicationNumber)
     const headerrow = getCommonContainer({
       header: getCommonHeader({
         labelName: "Challan Details:",
@@ -412,14 +412,7 @@ import {
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
     set(estimateData, "payStatus", isPAID);
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.preview.children.cardContent.children.footer.children.payButton",
-        "visible",
-        !isPAID
-      )
-    );
+    
     dispatch(prepareFinalObject("Bill[0]", payload));
     dispatch(prepareFinalObject("Demands[0].estimateCardData", estimateData));
     const showDownloadMenu = downloadprintMenu(state,consumerCode,tenantId);
@@ -463,7 +456,7 @@ import {
   export const downloadprintMenu=(state,applicationNumber,tenantId)=>{
     let downloadMenu = [];
       let printMenu = [];
-    const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus");
+    const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus",null);
     console.info("isPaid----",isPaid);
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     const receiptKey = get(uiCommonPayConfig, "receiptKey")
@@ -590,20 +583,7 @@ import {
     beforeInitScreen: (action, state, dispatch) => {
       applicationNumber = getQueryArg(window.location.href, "applicationNumber");
       const tenantId = getQueryArg(window.location.href, "tenantId");
-      const businessService = getQueryArg(
-        window.location.href,
-        "businessService"
-      );
-     
       dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-      //To set the application no. at the  top
-      set(
-        action.screenConfig,
-        "components.div.children.headerDiv.children.header1.children.headertop.children.challanNumberContainer.children.challanNumber",
-        applicationNumber
-      );
-      
-      
       beforeInitFn(action, state, dispatch, applicationNumber);
   
       return action;
