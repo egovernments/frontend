@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { FeesEstimateCard } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+// import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+
+const getTransformedLocale = label => {
+  return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+};
 
 class EstimateCardContainer extends Component {
   render() {
@@ -15,7 +19,7 @@ const mapStateToProps = (state, ownProps) => {
   const { applyScreenMdmsData } = preparedFinalObject || {};
   let { estimateCardData } = applyScreenMdmsData || [];
 
-  estimateCardData = estimateCardData.map(fees => {
+  estimateCardData = estimateCardData && estimateCardData.map(fees => {
     if (fees.name && fees.name.labelKey)
       fees.name.labelKey = getTransformedLocale(fees.name.labelKey);
     if (fees.info && fees.info.labelKey)

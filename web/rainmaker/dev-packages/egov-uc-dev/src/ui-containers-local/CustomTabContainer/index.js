@@ -116,7 +116,7 @@ class MultiItem extends React.Component {
     ];
 
     keyToIndexMapping.forEach(item => {
-      const objectJsonPath = `components.div.children.body.children.cardContent.children.capturePayment.children.cardContent.children.tabSection.props.tabs[${
+      const objectJsonPath = `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${
         item.index
       }].tabContent[${item.key}].children`;
       const children = get(
