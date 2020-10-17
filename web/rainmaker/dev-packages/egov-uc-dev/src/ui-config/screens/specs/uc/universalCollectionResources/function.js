@@ -5,16 +5,11 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import {
-  validateFields,
-  getTextToLocalMapping,
-  convertEpochToDate,
-  convertDateToEpoch
-} from "../../utils";
-import {
-  getTenantId,
-  getLocalization
-} from "../../../../../ui-utils/commons";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
+// import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { textToLocalMapping } from "./searchResults";
+import { validateFields } from "../../utils";
+import { getTenantId } from "ui-utils/localStorageUtils";
 import {
   getLocaleLabels,
   transformById,
@@ -47,33 +42,39 @@ export const searchApiCall = async (state, dispatch) => {
     "search"
   );
   if (!isSearchBoxFirstRowValid) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to start search",
-          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
-        },
-        "warning"
-      )
-    );
-  }
-  else if (
+    // dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     {
+    //       labelName: "Please fill valid fields to start search",
+    //       labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
+    //     },
+    //     "warning"
+    //   )
+    // );
+  } else if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill at least one field to start search",
-          labelKey: "UC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
-        },
-        "warning"
-      )
-    );
-  }   
-  else {
+    // dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     {
+    //       labelName: "Please fill at least one field to start search",
+    //       labelKey: "UC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+    //     },
+    //     "warning"
+    //   )
+    // );
+  } else if (
+    (searchScreenObject["fromDate"] === undefined ||
+      searchScreenObject["fromDate"].length === 0) &&
+    searchScreenObject["toDate"] !== undefined &&
+    searchScreenObject["toDate"].length !== 0
+  ) {
+    // dispatch(toggleSnackbar(true, "Please fill From Date", "warning"));
+  } else {
+    //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
         queryObject.push({ key: key, value: searchScreenObject[key] });
@@ -148,22 +149,22 @@ export const searchApiCall = async (state, dispatch) => {
         );
         showHideTable(true, dispatch);
       } catch (error) {
-        dispatch(toggleSnackbar(true, error.message, "error"));
+        // dispatch(toggleSnackbar(true, error.message, "error"));
         console.log(error);
       }
-    // } else {
-    //   dispatch(
-    //     toggleSnackbar(
-    //       true,
-    //       {
-    //         labelName:
-    //           "Please fill atleast one more field apart from service category !",
-    //         labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
-    //       },
-    //       "warning"
-    //     )
-    //   );
-    // }
+    } else {
+      // dispatch(
+      //   toggleSnackbar(
+      //     true,
+      //     {
+      //       labelName:
+      //         "Please fill atleast one more field apart from service category !",
+      //       labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
+      //     },
+      //     "warning"
+      //   )
+      // );
+    }
   }
 };
 
