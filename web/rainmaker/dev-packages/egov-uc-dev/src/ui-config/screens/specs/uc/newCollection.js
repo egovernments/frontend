@@ -345,14 +345,15 @@ const newCollection = {
               props: {
                 variant: "outlined",
                 color: "primary",
-                style: {
-                  color: "primary",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px",
-                  marginRight: "16px",
-                },
-                className: "uc-searchAndPayBtn-button",
+                className:"gen-challan-btn",
+                // style: {
+                //   color: "primary",
+                //   borderRadius: "2px",
+                //   width: "250px",
+                //   height: "48px",
+                //   marginRight: "16px",
+                // },
+                //className: "uc-searchAndPayBtn-button",
               },
               children: {
                 buttonLabel: getLabel({
