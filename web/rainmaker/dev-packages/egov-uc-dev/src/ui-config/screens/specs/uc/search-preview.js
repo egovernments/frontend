@@ -77,7 +77,37 @@ import {
           true
         )
       );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.cancellComment",
+          "visible",
+          false
+        )
+      );
     }
+    
+    else if(isActive==="CANCELLED"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.cancellComment",
+          "visible",
+          true
+        )
+      );
+    }
+    else{
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.cancellComment",
+          "visible",
+          false
+        )
+      ); 
+    }
+    
     fetchBill(
       action,
       state,
@@ -216,6 +246,11 @@ import {
     }),
   });
 
+  export const checkChallanStatus = value => {
+    console.info("value==",value);
+    return value==="CANCELLED" ? value : "NA";
+  };
+
   export const checkValueForNA = value => {
     return value ? value : "NA";
   };
@@ -225,6 +260,7 @@ import {
   
   
   const serviceDetails = getCommonGrayCard({
+   
     headerDiv1: {
       uiFramework: "custom-atoms",
       componentPath: "Container",
@@ -288,9 +324,25 @@ import {
          
         }
       ),
+      cancellComment:getLabelWithValue(
+        
+        {
+          labelName: "Reason for Cancellation",
+          labelKey: "UC_CANCELL_COMMENT",
+        },
+  
+        {
+          jsonPath: "Challan.additionalDetail.cancellComment",
+          callBack: checkValueForNA
+        }
+       
+      ),
+
     }),
   });
   
+ 
+
   export const callBackForPay = (state, dispatch) => {
     getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
   };
@@ -408,11 +460,12 @@ import {
       fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
      const isPAID = payload1.totalAmount == 0 ? true : false;
    
-   let payload = isPAID? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
+    let payload = isPAID? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
+                            : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
-    set(estimateData, "payStatus", isPAID);
-    
+    const challanStatus = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus",null);
+    //Set paystatus = true for PAID for active and cancelled as false. Used in search-preveiw to display paid/not paid
+    set(estimateData, "payStatus", challanStatus==="PAID"?true:false);
     dispatch(prepareFinalObject("Bill[0]", payload));
     dispatch(prepareFinalObject("Demands[0].estimateCardData", estimateData));
     const showDownloadMenu = downloadprintMenu(state,consumerCode,tenantId);

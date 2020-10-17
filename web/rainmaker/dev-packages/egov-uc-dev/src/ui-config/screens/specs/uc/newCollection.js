@@ -326,14 +326,14 @@ const newCollection = {
               },
               children: {
                 buttonLabel: getLabel({
-                  labelName: "Search And Pay",
-                  labelKey: "UC_SEARCHANDPAY_LABEL",
+                  labelName: "Challan Search",
+                  labelKey: "ACTION_TEST_CHALLAN_SEARCH",
                 }),
               },
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  openPayBillForm(state, dispatch);
+                  openChallanSearchForm(state, dispatch);
                 },
               },
             },
@@ -351,23 +351,9 @@ const newCollection = {
 
 export default newCollection;
 
-//for update rediredt
 
-// const openUpdateForm = (state, dispatch) => {
-//   window.location.href = `/uc/newCollection?consumerCode=CH-CB-SECU-2020-001395&tenantId=${getTenantId()}&businessService=OTHFEE.DUMP_GRBG`;
-// };
-// const openReceiptSearchForm = (state, dispatch) => {
-//   // dispatch(prepareFinalObject("Demands", []));
-//   dispatch(prepareFinalObject("Challan", []));
-//   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-//   const path =
-//     process.env.REACT_APP_SELF_RUNNING === "true"
-//       ? `/egov-ui-framework/uc/search`
-//       : `/uc/search`;
-//   dispatch(setRoute(path));
-// };
 
-const openPayBillForm = (state, dispatch) => {
-  const path = `/abg/billSearch`;
+const openChallanSearchForm = (state, dispatch) => {
+  const path = `/uc/searchChallan`;
   dispatch(setRoute(path));
 };

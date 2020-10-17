@@ -19,7 +19,7 @@ const getCommonApplyFooter = children => {
   };
 };
 export const getRedirectionURL = () => {
-  const redirectionURL = ifUserRoleExists("CITIZEN") ? "/inbox" : "/uc/searchChallan" ;
+  const redirectionURL = ifUserRoleExists("CITIZEN") ? "/inbox" : "/uc/newCollection" ;
 
   return redirectionURL;
 };
@@ -105,7 +105,7 @@ export const acknowledgementFailureFooter = getCommonApplyFooter({
       className:"gen-challan-btn"
     },
     children: {
-      downloadReceiptButtonLabel: getLabel({
+      goToHomeButtonLabel: getLabel({
         labelName: "Go To Home",
         labelKey: "UC_BUTTON_GO_TO_HOME"
       })

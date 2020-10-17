@@ -192,7 +192,7 @@ const getAcknowledgementCard = (
       header:header        
     }),
     headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),
-    applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
+    applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
      
      iframeForPdf: {
        uiFramework: "custom-atoms",
@@ -267,21 +267,7 @@ const screenConfig = {
     const challanNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const businessService = getQueryArg(window.location.href,"serviceCategory");
-   // const tenantId = getTenantId();
-
-   // generateBill(challanNumber, tenantId, businessService,state, dispatch);
-
-    // const queryObject = [
-    //   {
-    //     key: "tenantId",
-    //     value: tenantId
-    //   },
-    //   { key: "offset", value: "0" },     
-    //   {
-    //     key: "businessServices",
-    //     value: serviceCategory
-    //   }
-    // ];
+  
     const data = getAcknowledgementCard(
       state,
       dispatch,
