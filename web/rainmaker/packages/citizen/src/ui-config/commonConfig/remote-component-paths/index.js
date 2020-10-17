@@ -28,13 +28,13 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-common/ui-containers-local");
       }
       break;
-    case "egov-noc":
+    case "egov-firenoc":
       if (path === "ui-atoms-local") {
-        component = import("egov-noc/ui-atoms-local");
+        component = import("egov-firenoc/ui-atoms-local");
       } else if (path === "ui-molecules-local") {
-        component = import("egov-noc/ui-molecules-local");
+        component = import("egov-firenoc/ui-molecules-local");
       } else if (path === "ui-containers-local") {
-        component = import("egov-noc/ui-containers-local");
+        component = import("egov-firenoc/ui-containers-local");
       }
       break;
     case "egov-uc":
@@ -80,6 +80,15 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-wns/ui-molecules-local");
       } else if (path === "ui-containers-local") {
         component = import("egov-wns/ui-containers-local");
+      }
+      break;
+    case "egov-noc":
+      if (path === "ui-atoms-local") {
+        component = import("egov-noc/ui-atoms-local");
+      } else if (path === "ui-molecules-local") {
+        component = import("egov-noc/ui-molecules-local");
+      } else if (path === "ui-containers-local") {
+        component = import("egov-noc/ui-containers-local");
       }
       break;
     default:
