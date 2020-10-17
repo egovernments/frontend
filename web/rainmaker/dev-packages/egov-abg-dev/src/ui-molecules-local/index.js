@@ -42,11 +42,6 @@ const FeesEstimateCard = Loadable({
   loading: () => <Loading />
 });
 
-const HowItWorks = Loadable({
-  loader: () => import("./HowItWorks"),
-  loading: () => <Loading />
-});
-
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -55,6 +50,5 @@ export {
   UploadSingleFile,
   MapLocator,
   FeesEstimateCard,
-  DividerWithLabel,
-  HowItWorks
+  DividerWithLabel
 };
