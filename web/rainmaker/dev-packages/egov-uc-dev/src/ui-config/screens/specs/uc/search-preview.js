@@ -87,7 +87,7 @@ import {
       );
     }
     
-    else if(isActive==="CANCELLED"){
+    else if(challanresponse.challans[0].applicationStatus==="CANCELLED"){
       dispatch(
         handleField(
           "search-preview",
