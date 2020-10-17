@@ -192,6 +192,23 @@ const getChallanSearchRes = async (action, state, dispatch) => {
       dispatch(
         handleField(
           "newCollection",
+          "components.div.children.header.children.challanNumber",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.header.children.challanNumber",
+          "props.number",
+          challanNo
+        )
+      );
+      
+      dispatch(
+        handleField(
+          "newCollection",
           "components.div.children.header.children.header.children.key",
           "props.labelKey",
           "UC_EDIT_CHALLAN_HEADER"
@@ -301,7 +318,20 @@ const newCollection = {
             labelName: "New Challan",
             labelKey: "UC_COMMON_HEADER",
           }),
+          challanNumber: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-uc",
+            componentPath: "ApplicationNoContainer",
+            props: {
+              number: "NA",
+              label: {
+                labelKey:   "PAYMENT_UC_CONSUMER_CODE",
+              }
+            },
+            visible: false
+          },
         }),
+        
         buttonDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
