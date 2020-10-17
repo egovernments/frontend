@@ -91,11 +91,30 @@ export const getCommonValue = (value, props = {}) => {
   return getCommonHeader(value, { variant: "body2", ...props });
 };
 
+
+export const getCommonLabelWithValue = (paragraph, value, props = {}) => {
+  return getCommonLabelValue(paragraph, value, { variant: "caption", ...props });
+}
+
+export const getCommonLabelValue = (header, value, props) => {
+  return {
+    componentPath: "Typography",
+    props: {
+      variant: "headline",
+      ...props
+    },
+    children: {
+      // [header]: getLabel(header)
+      key: getLabelForModify(header, value),
+    }
+  };
+};
+
 export const getCommonCard = (children, cardProps = {}, cardContentProps = {}) => {
   return {
     componentPath: "Card",
     props: {
-      ...cardProps
+      ...cardProps  
     },
     children: {
       cardContent: {
@@ -177,6 +196,18 @@ export const getLabel = (label, labelKey, props = {}) => {
     componentPath: "LabelContainer",
     props: {
       ...label,
+      ...props
+    }
+  };
+};
+
+export const getLabelForModify = (label, jsonPath, props = {}) => {
+  return {
+    uiFramework: "custom-containers",
+    componentPath: "ModifyLabelConatiner",
+    props: {
+      ...label,
+      ...jsonPath,
       ...props
     }
   };
@@ -431,14 +462,42 @@ export const getLabelWithValue = (label, value, props = {}) => {
   };
 };
 
+export const getLabelWithValueForModifiedLabel = (label, value, label2, value2,  props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 3
+    },
+    props: {
+      style: {
+        marginBottom: "16px",
+        wordBreak: "break-word"
+      },
+      ...props
+    },
+    children: {
+      label1: getCommonCaption(label),
+      value1: getCommonValue(value),
+      label2: getCommonLabelWithValue(label2, value2)
+    }
+  };
+};
+
 export const convertEpochToDate = dateEpoch => {
-  const dateFromApi = new Date(dateEpoch);
-  let month = dateFromApi.getMonth() + 1;
-  let day = dateFromApi.getDate();
-  let year = dateFromApi.getFullYear();
-  month = (month > 9 ? "" : "0") + month;
-  day = (day > 9 ? "" : "0") + day;
-  return `${day}/${month}/${year}`;
+  // Returning null in else case because new Date(null) returns initial date from calender
+  if(dateEpoch){
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  } else {
+    return null;
+  }
 };
 
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
@@ -532,9 +591,9 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9-]*$/i;
     case "consumerNo":
       return /^[a-zA-Z0-9/-]*$/i;
-      case "AadharNo":
-        //return /^\d{4}\s\d{4}\s\d{4}$/;
-        return /^([0-9]){12}$/;
+    case "AadharNo":
+      //return /^\d{4}\s\d{4}\s\d{4}$/;
+      return /^([0-9]){12}$/;
   }
 };
 

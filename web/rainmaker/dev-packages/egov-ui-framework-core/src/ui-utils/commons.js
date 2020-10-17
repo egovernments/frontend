@@ -1,7 +1,7 @@
 import commonConfig from "config/common.js";
 import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import cloneDeep from "lodash/cloneDeep";
@@ -10,7 +10,7 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
-import store from "redux/store";
+
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
     if (components.hasOwnProperty(componentKey)) {
@@ -203,24 +203,21 @@ export const replaceStrInPath = (inputString, search, replacement) => {
   return inputString.replaceAll(search, replacement);
 };
 
-export const getFileUrlFromAPI = async (fileStoreId, tenantId,dispatch) => {
+export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
   const queryObject = [
     { key: "tenantId", value: tenantId || commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
-    store.dispatch(toggleSpinner());
     const fileUrl = await httpRequest(
       "get",
       "/filestore/v1/files/url",
       "",
       queryObject
     );
-    store.dispatch(toggleSpinner());
     return fileUrl;
   } catch (e) {
     console.log(e);
-    store.dispatch(toggleSpinner());
   }
 };
 
@@ -258,8 +255,8 @@ export const setDocuments = async (
   dispatch,
   businessService
 ) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
+  let uploadedDocData = get(payload, sourceJsonPath, []);
+  // uploadedDocData = uploadedDocData && uploadedDocData.filter(document => document && Object.keys(document).length > 0 && document.active);
   const fileStoreIds =
     uploadedDocData &&
     uploadedDocData
@@ -631,6 +628,16 @@ export const getTodaysDateInYMD = () => {
   return date;
 };
 
+export const getMaxDate = (yr) => {
+  let date = new Date();
+  let year = date.getFullYear() - yr;
+  let month = date.getMonth() + 1;
+  month = month < 10 ? `0${month}` : month;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${year}-${month}-${day}`;
+  return date;
+};
+
 export const isPublicSearch = () => {
   return location && location.pathname && location.pathname.includes("/withoutAuth");
 }
@@ -735,6 +742,7 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
     case "FireNoc":
       return (state, dispatch) => {
         dispatch(prepareFinalObject("FireNOCs", []));
+        dispatch(prepareFinalObject("DynamicMdms", {}));
         dispatch(prepareFinalObject("documentsUploadRedux", {}));
         const applyUrl =
           process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
@@ -760,7 +768,7 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
         return (state, dispatch) => {
           dispatch(prepareFinalObject("Licenses", []));
           dispatch(prepareFinalObject("LicensesTemp", []));
-          dispatch(prepareFinalObject("DynamicMdms", []));
+          dispatch(prepareFinalObject("DynamicMdms", {}));
           const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
           dispatch(
             handleField("search", "components.adhocDialog", "props.open", false)
@@ -771,7 +779,6 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
   }
 }
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
-
   let toggle = get(
     state.screenConfiguration.screenConfig[screenKey],
     "components.adhocDialog.props.open",
@@ -811,7 +818,8 @@ export const getTLTenantId = () =>{
 };
 
 export const getMdmsJson = async (state, dispatch, reqObj) => {
-  let { setPath, setTransformPath, dispatchPath, moduleName, name, type, tenantId } = reqObj;
+  let { setPath, setTransformPath, dispatchPath, moduleName, name, filter, tenantId  } = reqObj;
+  console.log("getaMdmsJson",reqObj,commonConfig.tenantId,tenantId);
   tenantId = tenantId ? tenantId : commonConfig.tenantId;
   let mdmsBody = {
     MdmsCriteria: {
@@ -820,7 +828,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
         {
           moduleName,
           masterDetails: [
-            { name }
+            { name, filter }
           ]
         }
       ]
@@ -836,11 +844,11 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
       mdmsBody
     );
     let result = get(payload, `MdmsRes.${moduleName}.${name}`, []);
-    let filterResult = type ? result.filter(item => item.type == type) : result;
+    // let filterResult = type ? result.filter(item => item.type == type) : result;
     set(
       payload,
       setPath,
-      filterResult
+      result
     );
     payload = getTransformData(payload, setPath, setTransformPath);
     dispatch(prepareFinalObject(dispatchPath, get(payload, dispatchPath, [])));
@@ -866,3 +874,21 @@ export const getTransformData = (object, getPath, transerPath) => {
   set(object, transerPath, transformedData);
   return object;
 };
+
+
+
+
+export const enableField = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(handleField(screenKey, jsonPath, "props.disabled", false));
+}
+export const disableField = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(handleField(screenKey, jsonPath, "props.disabled", true));
+}
+export const enableFieldAndHideSpinner = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(hideSpinner());
+  enableField(screenKey, jsonPath, dispatch);
+}
+export const disableFieldAndShowSpinner = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(showSpinner());
+  disableField(screenKey, jsonPath, dispatch);
+}

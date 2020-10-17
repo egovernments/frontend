@@ -1,78 +1,66 @@
+import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSelectField } from "../../ui-config/screens/specs/utils";
-import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
-import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg , getTLTenantId } from "egov-ui-framework/ui-utils/commons";
-import get from "lodash/get";
 class DynamicMdmsContainer extends Component {
   componentDidMount = () => {
     let { state, moduleName, rootBlockSub } = this.props;
-    const isMdmsApiTrigger = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
-    const isMdmsData = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
+    const isMdmsApiTrigger = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
+    const isMdmsData = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   triggerInitilaApi = async () => {
-	let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0 ,tenantId } = this.props;
-    if(moduleName ==="TradeLicense" && masterName ==="TradeType"){
-      tenantId=getTLTenantId();
-    }
-    const isDependencyCheck = isDependency ? get( state.screenConfiguration.preparedFinalObject , isDependency, false ) : true;
-    if(isDependencyCheck){
+    let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0 } = this.props;
+    const isDependencyCheck = isDependency ? get(state.screenConfiguration.preparedFinalObject, isDependency, false) : true;
+    if (isDependencyCheck) {
       let reqObj = {
-        setPath : `DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`  , 
-        setTransformPath : `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}Transformed`, 
-        dispatchPath : `DynamicMdms.${moduleName}.${rootBlockSub}`,
+        setPath: `DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`,
+        setTransformPath: `DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}Transformed`,
+        dispatchPath: `DynamicMdms.${moduleName}.${rootBlockSub}`,
         moduleName,
-        name : masterName,
+        name: masterName,
         rootBlockSub,
-        filter,
-        tenantId :tenantId
+        filter
       }
-      dispatch(prepareFinalObject( `DynamicMdms.apiTriggered`, true ));
+      dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, true));
       await getMdmsJson(state, dispatch, reqObj);
       this.triggerCallback(null, null, null);
-     
-      if(getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL" ){
-        
-        
+      if (getQueryArg(window.location.href, "action") == "edit" || getQueryArg(window.location.href, "action") == "EDITRENEWAL") {
         callBackEdit(state, dispatch);
-      }
-       else {
-      dropdownFields && dropdownFields.forEach((entry, i) => {
-          if(entry.defaultValue){
+      } else {
+        dropdownFields && dropdownFields.forEach((entry, i) => {
+          if (entry.defaultValue) {
             let componentJSONPath = `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${entry.key}`;
             this.onFieldChange('', componentJSONPath, '', entry.defaultValue);
           }
         });
-       
-        //callBackEdit(state, dispatch);
-       // await getMdmsJson(state, dispatch, reqObj);
-     // this.triggerCallback(null, null, null);
-      callBackEdit(state, dispatch);
       }
     }
   }
-  componentWillUpdate () {
+  componentWillUpdate() {
     let { state, moduleName, rootBlockSub } = this.props;
-    const isMdmsApiTrigger = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
-    const isMdmsData = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
+    const isMdmsApiTrigger = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.apiTriggered`);
+    const isMdmsData = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.MdmsJson`);
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
-  onFieldChange = ( screenKey, componentJsonpath, property, value ) => {
-    let { dispatch, dropdownFields, moduleName, rootBlockSub, index= 0 } = this.props;
-    dispatch(prepareFinalObject( componentJsonpath , value ));
+  onFieldChange = (screenKey, componentJsonpath, property, value) => {
+    let { dispatch, dropdownFields, moduleName, rootBlockSub, index = 0 } = this.props;
+    value = value === null ? "none" : value;
+    dispatch(prepareFinalObject(componentJsonpath, value));
     let isIndex = null;
-    if(componentJsonpath){
+    if (componentJsonpath) {
       let last = componentJsonpath.substring(componentJsonpath.lastIndexOf(".") + 1, componentJsonpath.length);
       isIndex = dropdownFields && dropdownFields.findIndex((row) => {
         return row.key == last;
       });
-      dropdownFields && dropdownFields.forEach((entry, i) => { 
+      dropdownFields && dropdownFields.forEach((entry, i) => {
         let { key } = entry;
-        if(isIndex < i){
+        if (isIndex < i) {
           let removeValuePath = `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`;
-          dispatch(prepareFinalObject( removeValuePath , 'none' ));
+          dispatch(prepareFinalObject(removeValuePath, 'none'));
         }
       });
       this.triggerCallback(componentJsonpath, value, isIndex);
@@ -80,29 +68,39 @@ class DynamicMdmsContainer extends Component {
   }
   getValueByKey = (key) => {
     let { state, rootBlockSub, moduleName } = this.props;
-    if(key){
-      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}${key}`);
+    if (key) {
+      return get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}${key}`);
     } else {
-      return get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}Transformed`, []);
+      return get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${rootBlockSub}Transformed`, []);
     }
-   
+
   }
   setValueByKey = (key, dropdownData) => {
     let { rootBlockSub, moduleName, dispatch, index = 0 } = this.props;
-    dispatch(prepareFinalObject( `DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed.allDropdown[${index}]`, dropdownData ));
+    dispatch(prepareFinalObject(`DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed.allDropdown[${index}]`, dropdownData));
   }
   triggerValueByKey = (keyValue, index) => {
     let { dropdownFields } = this.props;
     let dropdownData = [];
     let transformedData = this.getValueByKey(keyValue);
-    dropdownData = (dropdownFields.length - 1 ==  index ) ? getObjectValues(transformedData) : getObjectKeys(transformedData);
-    this.setValueByKey(dropdownFields[index].key, dropdownData);
+    if (keyValue && keyValue.match(/\./g).length == index - 1) {
+      transformedData = undefined;
+    }
+    dropdownData = (dropdownFields.length - 1 == index) ? getObjectValues(transformedData) : getObjectKeys(transformedData);
+    if (transformedData == undefined) {
+      for (let j = index; j < dropdownFields.length; j++) {
+        this.setValueByKey(dropdownFields[j].key, transformedData);
+      }
+    } else {
+      this.setValueByKey(dropdownFields[index].key, dropdownData);
+    }
+
   }
   getSelectedPathValues = () => {
     let { dropdownFields, rootBlockSub, moduleName, state, dispatch, index = 0 } = this.props;
-    let allValues = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}]`);
+    let allValues = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}]`);
     let pathValues = [];
-    allValues && dropdownFields && dropdownFields.forEach((entry, i) => { 
+    allValues && dropdownFields && dropdownFields.forEach((entry, i) => {
       allValues[entry.key] && allValues[entry.key] != 'none' && pathValues.push(allValues[entry.key]);
     });
     return pathValues.join(".");
@@ -111,45 +109,45 @@ class DynamicMdmsContainer extends Component {
     let { dropdownFields, rootBlockSub, moduleName, state, dispatch, index = 0 } = this.props;
     let keyValue = null;
     let transformedValue = this.getSelectedPathValues();
-    if(isIndex == 0 || isIndex) {
+    if (isIndex == 0 || isIndex) {
       keyValue = `Transformed.${transformedValue}`;
-    } else{ 
+    } else {
       this.triggerValueByKey(null, 0);
     }
-    if(componentJsonpath) {
-      (dropdownFields.length > isIndex + 1 ) && this.triggerValueByKey(keyValue, isIndex + 1);
+    if (componentJsonpath) {
+      (dropdownFields.length > isIndex + 1) && this.triggerValueByKey(keyValue, isIndex + 1);
       let reqObj = {
         moduleName, rootBlockSub, keyValue, value, state, dispatch, index
       }
       typeof dropdownFields[isIndex].callBack == "function" && dropdownFields[isIndex].callBack(reqObj);
-    }  
+    }
   }
   checkValueExists = (path) => {
     let { state } = this.props;
-    let isValid = get( state, `screenConfiguration.preparedFinalObject.${path}`, '');
-    if(isValid == '' || isValid == 'none') {  
+    let isValid = get(state, `screenConfiguration.preparedFinalObject.${path}`, '');
+    if (isValid == '' || isValid == 'none') {
       return true;
     }
     return false;
   }
   formDropDown = () => {
-    let { dropdownFields, moduleName, masterName, rootBlockSub, index = 0 , state} = this.props;
-    let allObj = {} ;
+    let { dropdownFields, moduleName, masterName, rootBlockSub, index = 0, state } = this.props;
+    let allObj = {};
     let moduleNameCaps = moduleName.toUpperCase();
     let masterNameCaps = masterName.toUpperCase();
-    let gridSm = ( 12 / dropdownFields.length ) <= 4 ? 4 : 6;
-    dropdownFields && dropdownFields.forEach((entry, i) => {  
-      let { key, fieldType, isDisabled, className, isRequired = false,requiredValue=false  } = entry;
+    let gridSm = (12 / dropdownFields.length) <= 4 ? 4 : 6;
+    dropdownFields && dropdownFields.forEach((entry, i) => {
+      let { key, fieldType, isDisabled, className, isRequired = false, requiredValue = false } = entry;
       isRequired = isRequired ? this.checkValueExists(`DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`) : false;
-      requiredValue =  requiredValue==false?isRequired:requiredValue;
-      allObj[key] = (fieldType == "autosuggest") ? 
-      {
+      requiredValue = requiredValue == false ? isRequired : requiredValue;
+      allObj[key] = (fieldType == "autosuggest") ?
+        {
           uiFramework: "custom-containers",
           componentPath: "AutosuggestContainer",
-          jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}` ,
-          componentJsonpath : `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
-          required: requiredValue,
-          helperText : isRequired ? "Required" : "",
+          jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
+          componentJsonpath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
+          required: isRequired,
+          helperText: isRequired ? "Required" : "",
           gridDefination: {
             xs: 12,
             sm: gridSm
@@ -163,7 +161,7 @@ class DynamicMdmsContainer extends Component {
             label: {
               labelKey: moduleNameCaps + '_' + key.toUpperCase() + '_LABEL'
             },
-            disabled: isDisabled ? isDisabled : false,
+
             placeholder: {
               labelKey: moduleNameCaps + '_' + key.toUpperCase() + "_PLACEHOLDER"
             },
@@ -176,54 +174,56 @@ class DynamicMdmsContainer extends Component {
               masterName: masterNameCaps
             },
             fullwidth: true,
+            isClearable: true,
             required: isRequired,
-            helperText : isRequired ? "Required" : '',
+            required: requiredValue,
+            helperText: isRequired ? "Required" : '',
             inputLabelProps: {
               shrink: true
             }
           }
-      } :
-      {   
-        ...getSelectField({
-          label: {
-            labelKey: moduleNameCaps + '_' + key.toUpperCase() + '_LABEL'
-          },
-          placeholder: {
-            labelKey: moduleNameCaps + '_' + key.toUpperCase() + "_PLACEHOLDER"
-          },
-          required: isRequired,
-          jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}` ,
-          componentJsonpath : `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
-          localePrefix: {
+        } :
+        {
+          ...getSelectField({
+            label: {
+              labelKey: moduleNameCaps + '_' + key.toUpperCase() + '_LABEL'
+            },
+            placeholder: {
+              labelKey: moduleNameCaps + '_' + key.toUpperCase() + "_PLACEHOLDER"
+            },
+            required: requiredValue,
+            jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
+            componentJsonpath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
+            localePrefix: {
+              moduleName: moduleNameCaps,
+              masterName: masterNameCaps
+            },
             moduleName: moduleNameCaps,
-            masterName: masterNameCaps
-          },
-          moduleName : moduleNameCaps ,
-          props: {
-            setDataInField: true,
-            className:"applicant-details-error",
-            disabled: isDisabled ? isDisabled : false
-          },
-          sourceJsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed.allDropdown[${index}]`,
-          gridDefination: {
-            xs: 12,
-            sm: gridSm
-          }
-        })
-      };
+            props: {
+              setDataInField: true,
+              className: "applicant-details-error",
+              disabled: isDisabled ? isDisabled : false
+            },
+            sourceJsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed.allDropdown[${index}]`,
+            gridDefination: {
+              xs: 12,
+              sm: gridSm
+            }
+          })
+        };
       //Populate first drop down data if not available 
-      if(i == 0) {
-        let isCheckData = get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed.allDropdown[${index}]`);
+      if (i == 0) {
+        let isCheckData = get(state, `screenConfiguration.preparedFinalObject.DynamicMdms.${moduleName}.${rootBlockSub}.${key}Transformed.allDropdown[${index}]`);
         !isCheckData && this.triggerValueByKey(null, 0);
       }
     });
-    return allObj; 
+    return allObj;
   }
   render() {
     return (
       <RenderScreen
         components={this.formDropDown()}
-        onFieldChange = {this.onFieldChange}
+        onFieldChange={this.onFieldChange}
       />
     );
   }
@@ -231,8 +231,10 @@ class DynamicMdmsContainer extends Component {
 
 
 const mapStateToProps = (state, ownprops) => {
-  
-  return { state };
+  const { screenConfiguration } = state;
+  const { preparedFinalObject } = screenConfiguration;
+  const { DynamicMdms } = preparedFinalObject;
+  return { state, DynamicMdms };
 };
 
 export default connect(
