@@ -122,7 +122,6 @@ class ActionMenuComp extends Component {
         searchText: "",
       });
     }
- 
     /**
      * Reset menu after arraylist changes
      */

@@ -2,6 +2,7 @@ import commonConfig from "config/common.js";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -154,6 +155,7 @@ export const convertToOldPTObject = (newObject) => {
     unit.floorNo = unit.floorNo || unit.floorNo === 0 ? unit.floorNo.toString() : unit.floorNo
     return { ...unit, ...getUsageCategory(unit.usageCategory) }
   });
+  propertyDetails.units = propertyDetails.units&& Array.isArray(propertyDetails.units)&&propertyDetails.units.filter(unit=>unit.active);
   propertyDetails.documents = newProperty.documents;
   propertyDetails.additionalDetails = newProperty.additionalDetails;
   propertyDetails.financialYear = null;
@@ -171,6 +173,7 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.adhocPenaltyReason = null;
   propertyDetails.owners = newProperty.owners;
   propertyDetails.owners = propertyDetails.owners.filter((owner) => owner.status == 'ACTIVE')
+  propertyDetails.owners= propertyDetails.owners&&Array.isArray( propertyDetails.owners)&& propertyDetails.owners.sort((owner1,owner2)=>owner1.name.localeCompare(owner2.name));
   propertyDetails.auditDetails = newProperty.auditDetails;
   propertyDetails.calculation = null;
   propertyDetails.channel = newProperty.channel;
@@ -188,6 +191,7 @@ export const convertToOldPTObject = (newObject) => {
     unit.unitArea = unit.constructionDetail.builtUpArea;
     return { ...unit }
   })
+  localStorageSet("previousFloorNo", newProperty.noOfFloors)
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
   return Properties;
@@ -211,6 +215,7 @@ export const PROPERTY_FORM_PURPOSE = {
   ASSESS: 'assess',
   CREATE: 'create',
   UPDATE: 'update',
+  SENDFOREDIT: 'sendforedit',
   DEFAULT: 'create'
 }
 
@@ -245,6 +250,16 @@ export const formWizardConstants = {
     canEditOwner: false,
     isEstimateDetails: false
   },
+  [PROPERTY_FORM_PURPOSE.SENDFOREDIT]: {
+    header: 'PT_CREATE_PROPERTY',
+    parentButton: 'PT_UPDATE',
+    isSubHeader: false,
+    isFinancialYear: false,
+    buttonLabel: 'PT_UPDATE_PROPERTY_BUTTON',
+    isEditButton: true,
+    canEditOwner: true,
+    isEstimateDetails: false
+  },
   [PROPERTY_FORM_PURPOSE.CREATE]: {
     header: 'PT_CREATE_PROPERTY',
     parentButton: 'PT_CREATE',
@@ -262,7 +277,7 @@ export const routeToCommonPay = (propertyId, tenantId, businessService = 'PT') =
   routeTo(routeLink)
 }
 
-export const propertySubmitAction = (Properties, action, props) => {
+export const propertySubmitAction = (Properties, action, props, isModify, preparedFinalObject) => {
   const purpose = getPurpose()
   switch (purpose) {
     case PROPERTY_FORM_PURPOSE.REASSESS:
@@ -272,9 +287,12 @@ export const propertySubmitAction = (Properties, action, props) => {
       assessProperty("_create", props);
       break;
     case PROPERTY_FORM_PURPOSE.UPDATE:
-      createProperty(Properties, '_update', props);
+      createProperty(Properties, '_update', props, isModify, preparedFinalObject);
       break;
     case PROPERTY_FORM_PURPOSE.CREATE:
+      createProperty(Properties, '_create', props);
+      break;
+    case PROPERTY_FORM_PURPOSE.SENDFOREDIT:
       createProperty(Properties, '_create', props);
       break;
     default:

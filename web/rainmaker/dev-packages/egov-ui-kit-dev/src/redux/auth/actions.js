@@ -133,24 +133,9 @@ export const logout = () => {
   return async () => {
     try {
       const authToken = getAccessToken();
-
       if (authToken) {
-        let requestBody =
-          { "access_token": authToken }
-
-          ;
-        console.log("requestBody", requestBody)
-        const response = await httpRequest(
-          AUTH.LOGOUT.URL,
-          AUTH.LOGOUT.ACTION,
-          [],
-          requestBody,
-
-        );
-        // const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
-      }
-      //const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, []); 
-      else {
+        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
+      } else {
         clearUserDetails();
         process.env.REACT_APP_NAME === "Citizen"
           ? window.location.replace(`${window.basename}/user/register`)

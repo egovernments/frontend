@@ -32,11 +32,6 @@ const style = {
     width: "120px",
     marginBottom: "24px",
   },
-    baseTenantStyle: {
-    marginRight: "30px",
-    width: "120px",
-    marginBottom: "24px",
-  },
 };
 class ProfileSection extends React.Component {
   state = {
@@ -52,18 +47,13 @@ class ProfileSection extends React.Component {
     this.props.setRoute("/");
   };
 
-  onTenantChange = (event, index, value,tenantIdsList) => {
-    //checking for multi-tenancy in Employee profile edit
-    //if multiple tenants are present in dropdown then only redirect to inbox page
-    if(tenantIdsList != undefined){
-      console.info("i have multi tenancy");
-      if (location.pathname.includes("/inbox")) {
-        this.setState({ ...this.state, tenantSelected: value });
-        setTenantId(value);
-        this.props.setRoute("/");
-      } else {
-        this.setState({ ...this.state, open: true, tempTenantSelected: value });
-      }
+  onTenantChange = (event, index, value) => {
+    if (location.pathname.includes("/inbox")) {
+      this.setState({ ...this.state, tenantSelected: value });
+      setTenantId(value);
+      this.props.setRoute("/");
+    } else {
+      this.setState({ ...this.state, open: true, tempTenantSelected: value });
     }
   };
 
@@ -119,7 +109,7 @@ class ProfileSection extends React.Component {
               bold={true}
             />
           )}
-          {/* {process.env.REACT_APP_NAME === "Employee"&& (
+          {process.env.REACT_APP_NAME === "Employee" && (
             <DropDown
               className="tenant-dropdown"
               onChange={this.onTenantChange}
@@ -131,7 +121,7 @@ class ProfileSection extends React.Component {
               iconStyle={{ right: "-15px", top: "-7px",fill: "#484848" }}
               underlineStyle={{ borderBottom: "none" }}
             />
-          )} */}
+          )}
           {process.env.REACT_APP_NAME === "Citizen" && location && <Label id="profile-location" className="loc-Profile" labelPosition="after" label={location} style={locationStyle} />}
           {emailId && <Label id="profile-emailid" className="loc-Profile" label={emailId} style={emailIdStyle} />}
           <LogoutDialog

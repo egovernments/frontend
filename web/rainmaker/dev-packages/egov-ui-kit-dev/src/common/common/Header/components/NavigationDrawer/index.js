@@ -12,8 +12,7 @@ import LanguageSelection from "./LanguageSelection";
 // import menuItems from "./menuItems";
 import { ActionMenu } from "modules/common";
 import logoMseva from "egov-ui-kit/assets/images/logo_black.png";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
-import logoBig from "egov-ui-kit/assets/images/logo_black2.png";
+import logo from "egov-ui-kit/assets/images/logo_black2.png";
 
 const styles = {
   // listInnerDivStyle: {
@@ -109,7 +108,7 @@ const NavigationDrawer = ({
 
         <div className="rainmaker-displayInline" style={{ justifyContent: "left" ,marginLeft:"25px"}}>
           <div style={{ marginTop: "10px" }}>
-            <img  src={logoBig} height="34px" width="205px"/>
+            <img  src={logo} height="34px" width="205px"/>
           </div >
         </div>
       </div>
