@@ -9,7 +9,6 @@ import { validateFields } from "../../utils";
 import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-debugger;
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -55,7 +54,6 @@ export const loginFooter = getCommonApplyFooter({
   }
 });
 
-debugger;
 
 const login =async (state, dispatch) => {
   const isFormValid = validateFields(

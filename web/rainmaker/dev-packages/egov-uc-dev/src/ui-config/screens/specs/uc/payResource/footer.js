@@ -194,6 +194,9 @@ const callBackForPay = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "ReceiptTemp[0]"
   );
+
+  // console.log(ReceiptDataTemp,"ReceiptDataTemp");
+  // debugger;
   let finalReceiptData = cloneDeep(ReceiptDataTemp);
 
   allDateToEpoch(finalReceiptData, [
@@ -207,6 +210,17 @@ const callBackForPay = async (state, dispatch) => {
       get(finalReceiptData, "instrument.transactionDateInput")
     );
   }
+  ////tenant hard cording
+
+  set(
+    finalReceiptData,
+    "Bill[0].tenantId",
+    get(
+      state.screenConfiguration,
+      "preparedFinalObject.ReceiptTemp[0].tenantId",
+      ""
+    )
+  );
 
   //Add payerName and Mobile no
   set(
@@ -270,13 +284,63 @@ const callBackForPay = async (state, dispatch) => {
   //------------- Form End ----------------//
 
   let ReceiptBody = {
-    Payment: []
+    Receipt: []
   };
 
-  ReceiptBody.Payment.push(finalReceiptData);
+  let ReceiptBodyNew = {
+    Payment: { paymentDetails: [] }
+  };
+    
+  console.log(finalReceiptData,"finalreceipt");
+  ReceiptBody.Receipt.push(finalReceiptData);
+
+  ReceiptBodyNew.Payment["tenantId"] = finalReceiptData.tenantId;
+ ReceiptBodyNew.Payment["totalDue"] = totalAmount;
+
+ ReceiptBodyNew.Payment["paymentMode"] =
+ finalReceiptData.instrument.instrumentType.name;
+ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].paidBy;
+ReceiptBodyNew.Payment["mobileNumber"] =
+ finalReceiptData.Bill[0].payerMobileNumber;
+ ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].paidBy?finalReceiptData.Bill[0].paidBy:(finalReceiptData.Bill[0].payerName||finalReceiptData.Bill[0].payer);
+ if(finalReceiptData.instrument.transactionNumber){
+ ReceiptBodyNew.Payment["transactionNumber"] =
+   finalReceiptData.instrument.transactionNumber;
+
+ }
+
+
+  const totalAmount = Number(finalReceiptData.Bill[0].totalAmount);
+  console.log(totalAmount,"111111111111111111111111111");
+  let amtPaid =
+    state.screenConfiguration.preparedFinalObject.AmountType ===
+    "partial_amount"
+      ? state.screenConfiguration.preparedFinalObject.AmountPaid
+      : finalReceiptData.Bill[0].totalAmount;
+      console.log(amtPaid,"22222222222222222222222222222");
+
+      amtPaid = amtPaid ? Number(amtPaid) : totalAmount;
+      console.log(amtPaid,"33333333333333333333333333333");
+
+    console.log(ReceiptBody,"ReceiptBodydata");
+
+
+    ReceiptBodyNew.Payment.paymentDetails.push({
+      manualReceiptDate:
+        finalReceiptData.Bill[0].billDetails[0].manualReceiptDate,
+      manualReceiptNumber:
+        finalReceiptData.Bill[0].billDetails[0].manualReceiptNumber,
+      businessService: finalReceiptData.Bill[0].businessService,
+      billId: finalReceiptData.Bill[0].id,
+      totalDue: totalAmount,
+      totalAmountPaid: amtPaid
+    });
+
+    ReceiptBodyNew.Payment["totalAmountPaid"] = amtPaid;
 
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
+
     try {
       // dispatch(toggleSpinner());
       let response = await httpRequest(
@@ -284,7 +348,7 @@ const callBackForPay = async (state, dispatch) => {
         "collection-services/payments/_create",
         "_create",
         [],
-        ReceiptBody,
+        ReceiptBodyNew,
         [],
         {}
       );

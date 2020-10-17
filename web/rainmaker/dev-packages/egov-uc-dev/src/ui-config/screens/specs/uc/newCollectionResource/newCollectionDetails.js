@@ -36,18 +36,28 @@ export const newCollectionDetailsCard = getCommonCard(
       {
         City: {
           ...getSelectField({
-            
             label: {
               labelName: "City",
-              labelKey: "CORE_COMMON_CITY"
+              labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
             },
+            localePrefix: {
+              moduleName: "TENANT",
+              masterName: "TENANTS"
+            },
+            optionLabel: "name",
             placeholder: {
               labelName: "Select City",
-              labelKey: "CORE_COMMON_CITY_PLACEHOLDER"
+              labelKey: "TL_SELECT_CITY"
             },
-            // required: true,
-            jsonPath: "login.tenantId",
-            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+            // sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
+            // "applyScreenMdmsData.common-masters.citiesByModule.UC.tenants",
+            jsonPath: "Demands[0].tenantId",
+            required: true,
+            props: {
+              required: true,
+              value: tenantId,
+              disabled: true
+            }
           }),
           beforeFieldChange: async (action, state, dispatch) => {
             const citiesByModule = get(

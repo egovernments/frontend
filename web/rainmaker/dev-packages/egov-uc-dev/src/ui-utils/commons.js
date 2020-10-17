@@ -40,7 +40,7 @@ export const updateTradeDetails = async requestBody => {
     );
     return payload;
   } catch (error) {
-    store.dispatch(toggleSnackbar(true, error.message, "error"));
+    // store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
 
@@ -69,13 +69,13 @@ export const getSearchResults = async queryObject => {
     return response;
   } catch (error) {
     console.error(error);
-    store.dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelCode: error.message },
-        "error"
-      )
-    );
+    // store.dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     { labelName: error.message, labelCode: error.message },
+    //     "error"
+    //   )
+    // );
   }
 };
 
