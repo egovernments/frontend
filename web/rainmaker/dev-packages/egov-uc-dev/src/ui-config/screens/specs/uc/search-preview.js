@@ -313,6 +313,17 @@ import {
         { jsonPath: "Challan.taxPeriodTo", callBack: convertEpochToDate }
       ),
       
+      description:getLabelWithValue(
+        {
+          labelName: "Description",
+          labelKey: "UC_COMMENT_LABEL",
+        },
+        {
+          jsonPath: "Challan.description",
+          callBack: checkValueForNA
+        }
+      ),
+
        applicationStatus: getLabelWithValue(
         {
           labelName: "Application Status",

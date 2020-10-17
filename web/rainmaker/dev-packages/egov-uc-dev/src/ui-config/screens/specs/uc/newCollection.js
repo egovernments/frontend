@@ -340,7 +340,7 @@ const newCollection = {
             style: { textAlign: "right", display: "flex" },
           },
           children: {
-            searchAndPayBtn: {
+            searchChallan: {
               componentPath: "Button",
               props: {
                 variant: "outlined",
@@ -368,6 +368,34 @@ const newCollection = {
                 },
               },
             },
+            searchAndPayBtn :{
+                  componentPath: "Button",             
+                  //visible: enableButton,
+                  props: {
+                    variant: "outlined",
+                    color: "primary",
+                    className:"gen-challan-btn",
+                    // style: {
+                    //   color: "primary",
+                    //   borderRadius: "2px",
+                    //   width: "250px",
+                    //   height: "48px",
+                    //   marginRight: "16px"
+                    // }
+                  },
+                  children: {
+                    buttonLabel: getLabel({
+                      labelName: "Search And Pay",
+                      labelKey: "UC_SEARCHANDPAY_LABEL"
+                    }),
+                  },                  
+                  onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                      openPayBillForm(state, dispatch);
+                    }
+                  }
+                },
             
           },
         },
@@ -388,3 +416,8 @@ const openChallanSearchForm = (state, dispatch) => {
   const path = `/uc/searchChallan`;
   dispatch(setRoute(path));
 };
+
+const openPayBillForm = (state, dispatch) => {  
+  const path = `/abg/billSearch`;
+  dispatch(setRoute(path));
+ };
