@@ -34,7 +34,7 @@ class VerticalLinearStepper extends React.Component {
                       labelName={getCurrentStatus(item.state.applicationStatus)}
                       labelKey={
                         item.businessService
-                          ? `WF_${item.businessService.toUpperCase()}_HISTORYSTATUS_${
+                          ? `WF_${item.businessService.toUpperCase()}_${
                               item.state.applicationStatus
                             }`
                           : ""
