@@ -4,7 +4,6 @@ import {
   getLabel,
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { processChallan } from "./newCollectionResource/newCollectionFooter";
 import {cancelChallan, showHideConfirmationPopup } from "./search-preview";
 export const confirmationDialog = getCommonContainer({
   
@@ -37,7 +36,7 @@ export const confirmationDialog = getCommonContainer({
           width: "90%"
         }
       },
-      jsonPath: "Challan.description"
+      jsonPath: "Challan.additionalDetail.cancellComment"
     }),
     div: {
       uiFramework: "custom-atoms",

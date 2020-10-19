@@ -192,6 +192,23 @@ const getChallanSearchRes = async (action, state, dispatch) => {
       dispatch(
         handleField(
           "newCollection",
+          "components.div.children.header.children.challanNumber",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "newCollection",
+          "components.div.children.header.children.challanNumber",
+          "props.number",
+          challanNo
+        )
+      );
+      
+      dispatch(
+        handleField(
+          "newCollection",
           "components.div.children.header.children.header.children.key",
           "props.labelKey",
           "UC_EDIT_CHALLAN_HEADER"
@@ -301,7 +318,88 @@ const newCollection = {
             labelName: "New Challan",
             labelKey: "UC_COMMON_HEADER",
           }),
+          challanNumber: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-uc",
+            componentPath: "ApplicationNoContainer",
+            props: {
+              number: "NA",
+              label: {
+                labelKey:   "PAYMENT_UC_CONSUMER_CODE",
+              }
+            },
+            visible: false
+          },
         }),
+        
+        buttonDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          props: {
+            className: "searchreceipt-commonButton",
+            style: { textAlign: "right", display: "flex" },
+          },
+          children: {
+            searchChallan: {
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                className:"gen-challan-btn",
+                // style: {
+                //   color: "primary",
+                //   borderRadius: "2px",
+                //   width: "250px",
+                //   height: "48px",
+                //   marginRight: "16px",
+                // },
+                //className: "uc-searchAndPayBtn-button",
+              },
+              children: {
+                buttonLabel: getLabel({
+                  labelName: "Challan Search",
+                  labelKey: "ACTION_TEST_CHALLAN_SEARCH",
+                }),
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  openChallanSearchForm(state, dispatch);
+                },
+              },
+            },
+            searchAndPayBtn :{
+                  componentPath: "Button",             
+                  //visible: enableButton,
+                  props: {
+                    variant: "outlined",
+                    color: "primary",
+                    className:"gen-challan-btn",
+                    // style: {
+                    //   color: "primary",
+                    //   borderRadius: "2px",
+                    //   width: "250px",
+                    //   height: "48px",
+                    //   marginRight: "16px"
+                    // }
+                  },
+                  children: {
+                    buttonLabel: getLabel({
+                      labelName: "Search And Pay",
+                      labelKey: "UC_SEARCHANDPAY_LABEL"
+                    }),
+                  },                  
+                  onClickDefination: {
+                    action: "condition",
+                    callBack: (state, dispatch) => {
+                      openPayBillForm(state, dispatch);
+                    }
+                  }
+                },
+            
+          },
+        },
+
         newCollectionConsumerDetailsCard,
         newCollectionServiceDetailsCard,
         newCollectionFooter,
@@ -312,23 +410,14 @@ const newCollection = {
 
 export default newCollection;
 
-//for update rediredt
 
-// const openUpdateForm = (state, dispatch) => {
-//   window.location.href = `/uc/newCollection?consumerCode=CH-CB-SECU-2020-001395&tenantId=${getTenantId()}&businessService=OTHFEE.DUMP_GRBG`;
-// };
-// const openReceiptSearchForm = (state, dispatch) => {
-//   // dispatch(prepareFinalObject("Demands", []));
-//   dispatch(prepareFinalObject("Challan", []));
-//   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-//   const path =
-//     process.env.REACT_APP_SELF_RUNNING === "true"
-//       ? `/egov-ui-framework/uc/search`
-//       : `/uc/search`;
-//   dispatch(setRoute(path));
-// };
 
-const openPayBillForm = (state, dispatch) => {
-  const path = `/abg/billSearch`;
+const openChallanSearchForm = (state, dispatch) => {
+  const path = `/uc/searchChallan`;
   dispatch(setRoute(path));
 };
+
+const openPayBillForm = (state, dispatch) => {  
+  const path = `/abg/billSearch`;
+  dispatch(setRoute(path));
+ };

@@ -53,14 +53,14 @@ import {
   };
   
   export const SearchChallanCard = getCommonCard({
-    header: getCommonHeader({
-      labelName: "Search Challan",
-      labelKey: "ACTION_TEST_CHALLAN_SEARCH"
-    }),
-    // subheader: getCommonSubHeader({
-    //   labelName: "Provide at least one parameter to search for an application",
-    //   labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
+    // header: getCommonHeader({
+    //   labelName: "Search Challan",
+    //   labelKey: "ACTION_TEST_CHALLAN_SEARCH"
     // }),
+    subheader: getCommonSubHeader({
+      labelName: "Provide at least one parameter to search for an application",
+      labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
+    }),
     searchContainer: getCommonContainer({
     
       challanNo: getTextField({
