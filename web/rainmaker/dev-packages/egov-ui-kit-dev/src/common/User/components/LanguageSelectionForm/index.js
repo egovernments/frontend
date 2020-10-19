@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonGroup, Card, Image } from "components";
+import { ButtonGroup, Card, Image } from "egov-ui-kit/components";
 import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";

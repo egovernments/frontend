@@ -1,5 +1,5 @@
-import { Card } from "components";
-import commonConfig from "config/common.js";
+import { Card } from "egov-ui-kit/components";
+import commonConfig from "egov-ui-kit/config/common.js";
 import { getRequiredDocuments } from "egov-pt/ui-config/screens/specs/pt-mutation/requiredDocuments/reqDocs";
 import DialogContainer from 'egov-pt/ui-containers-local/DialogContainer';
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";

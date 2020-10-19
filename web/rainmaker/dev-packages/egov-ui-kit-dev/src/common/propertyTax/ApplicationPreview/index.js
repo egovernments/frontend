@@ -1,5 +1,5 @@
-import { Card } from "components";
-import commonConfig from "config/common.js";
+import { Card } from "egov-ui-kit/components";
+import commonConfig from "egov-ui-kit/config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import Screen from "egov-ui-kit/common/common/Screen";

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card } from "components";
+import { Card } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import OldValueLabelContainer from "../../../../../common/common/OldValueLabelContainer";

@@ -4,7 +4,7 @@ import { searchUser } from "egov-ui-kit/redux/auth/actions";
 import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
 import { fetchpgrConstants } from "egov-ui-kit/redux/common/actions";
 import { fetchUiCommonConfig, fetchUiCommonConstants } from "egov-ui-kit/redux/app/actions";
-import commonConfig from "config/common";
+import commonConfig from "egov-ui-kit/config/common";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";

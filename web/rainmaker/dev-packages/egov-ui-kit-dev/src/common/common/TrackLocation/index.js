@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { MapLocation, Button, Icon } from "components";
+import { MapLocation, Button, Icon } from "egov-ui-kit/components";
 import pinIcon from "egov-ui-kit/assets/Location_pin.svg";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import Label from "egov-ui-kit/utils/translationNode";

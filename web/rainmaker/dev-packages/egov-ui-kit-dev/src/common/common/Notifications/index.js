@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Icon } from "components";
+import { Card, Icon } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import ReadMore from "../ReadMore";
 import Grid from "@material-ui/core/Grid";

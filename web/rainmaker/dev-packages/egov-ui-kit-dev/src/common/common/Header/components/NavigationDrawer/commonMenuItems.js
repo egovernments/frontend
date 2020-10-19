@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "components";
+import { Icon } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 
 export const CommonMenuItems = [

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card } from "components";
+import { Card } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import DownloadFileContainer from "../../../../common/DownloadFileContainer";
 

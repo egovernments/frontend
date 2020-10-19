@@ -1,5 +1,5 @@
-import { Button } from "components";
-import commonConfig from "config/common.js";
+import { Button } from "egov-ui-kit/components";
+import commonConfig from "egov-ui-kit/config/common.js";
 import Screen from "egov-ui-kit/common/common/Screen";
 import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
 import { Icon } from "egov-ui-kit/components";

@@ -1,5 +1,5 @@
-import { Card } from "components";
-import commonConfig from "config/common.js";
+import { Card } from "egov-ui-kit/components";
+import commonConfig from "egov-ui-kit/config/common.js";
 import Label from "egov-ui-kit/utils/translationNode";
 import { businessServiceInfo } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, TimeLine, Icon, Image } from "components";
+import { Card, TimeLine, Icon, Image } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 import { getDateFromEpoch, isImage } from "egov-ui-kit/utils/commons";
