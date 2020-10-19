@@ -26,7 +26,7 @@ import {
   getQueryArg,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId,getLocalization,getLocale } from "ui-utils/localStorageUtils";
+// import { getTenantId,getLocalization,getLocale } from "ui-utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 
 export const updateTradeDetails = async requestBody => {
@@ -43,6 +43,18 @@ export const updateTradeDetails = async requestBody => {
     store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
+
+
+export const getFileUrl = (linkText="") => {
+  const linkList = linkText.split(",");
+  let fileURL = '';
+  linkList&&linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {
@@ -618,13 +630,13 @@ export const setReturnUrl = (url) => {
 };
 
 //Remove Items (LOGOUT)
-export const clearUserDetails = () => {
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith(appName)) {
-      window.localStorage.removeItem(key);
-    }
-  });
-};
+// export const clearUserDetails = () => {
+//   Object.keys(localStorage).forEach((key) => {
+//     if (key.startsWith(appName)) {
+//       window.localStorage.removeItem(key);
+//     }
+//   });
+// };
 
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {
@@ -759,20 +771,20 @@ export const getTransformedLocale = label => {
 };
 //GET methods
 
-export const getLocaleLabels = (label, labelKey, localizationLabels) => {
-  if (!localizationLabels)
-    localizationLabels = transformById(
-      JSON.parse(getLocalization(`localization_${getLocale()}`)),
-      "code"
-    );
-  if (labelKey) {
-    let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
-    if (!translatedLabel || labelKey === translatedLabel) {
-      return translatedLabel;
-    } else {
-      return translatedLabel;
-    }
-  } else {
-    return label;
-  }
-};
+// export const getLocaleLabels = (label, labelKey, localizationLabels) => {
+//   if (!localizationLabels)
+//     localizationLabels = transformById(
+//       JSON.parse(getLocalization(`localization_${getLocale()}`)),
+//       "code"
+//     );
+//   if (labelKey) {
+//     let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
+//     if (!translatedLabel || labelKey === translatedLabel) {
+//       return translatedLabel;
+//     } else {
+//       return translatedLabel;
+//     }
+//   } else {
+//     return label;
+//   }
+// };
