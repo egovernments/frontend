@@ -17,7 +17,7 @@ const tenantId = getTenantId();
 const getData = async (action, state, dispatch) => {
   let requestBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: tenantId,
       moduleDetails: [
         {
           moduleName: "tenant",
