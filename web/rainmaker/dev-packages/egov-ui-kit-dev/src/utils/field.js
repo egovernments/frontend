@@ -38,7 +38,7 @@ const styles = {
 
 const Field = ({ fieldKey, handleFieldChange, field = {}, disabled, onTextFieldIconClick, ...rest }) => {
   const renderField = () => {
-    const { type, tooltip, label, hideField, Icon, iconRedirectionURL, ...fieldProps } = field;
+    const { type, tooltip, label, hideField, Icon, iconRedirectionURL, visible, ...fieldProps } = field;
     if (fieldProps.dropDownData && fieldProps.dropDownData.length > 0) {
       fieldProps.dropDownData.map((data, key) => {
         fieldProps.dropDownData[key].code = data.value;
@@ -100,7 +100,8 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, disabled, onTextFieldI
         );
       case "radioButton":
         return (
-          <RadioButton
+          <div>
+            {visible !== false ? <RadioButton
             {...rest}
             {...fieldProps}
             style={styles.radioButtonStyle}
@@ -115,7 +116,9 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, disabled, onTextFieldI
             handleChange={(e, value) => {
               handleFieldChange(fieldKey, value);
             }}
-          ></RadioButton>
+          ></RadioButton> : ""}
+          </div>
+          
         );
 
       case "AutocompleteDropdown":
