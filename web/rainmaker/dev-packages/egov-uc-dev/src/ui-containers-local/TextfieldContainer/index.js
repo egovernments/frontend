@@ -7,7 +7,7 @@ import {
   getTranslatedLabel,
   transformById
 } from "../../ui-config/screens/specs/utils";
-import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { getLocalization } from "egov-ui-framework/ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 

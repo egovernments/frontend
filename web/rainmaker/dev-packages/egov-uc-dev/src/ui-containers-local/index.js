@@ -13,7 +13,14 @@ const LabelContainer = Loadable({
   loading: () => <Loading />
 });
 
-
+const CheckboxContainer = Loadable({
+  loader: () => import("./CheckboxContainer"),
+  loading: () => <Loading />
+});
+const DownloadFileContainer = Loadable({
+  loader: () => import("./DownloadFileContainer"),
+  loading: () => <Loading />
+});
 const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
@@ -28,14 +35,24 @@ const PaymentRedirectPage = Loadable({
   loading: () => <Loading />
 });
 
+const DialogContainer = Loadable({
+  loader: () => import("./DialogContainer"),
+  loading: () => <Loading />
+});
 
-
-
+const ViewBreakupContainer = Loadable({
+  loader: () => import("./ViewbreakupDialogContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
   LabelContainer,
+  CheckboxContainer,
+  DownloadFileContainer,
   EstimateCardContainer,
   AutosuggestContainer,
-  PaymentRedirectPage
+  PaymentRedirectPage,
+  ViewBreakupContainer,
+  DialogContainer
 };

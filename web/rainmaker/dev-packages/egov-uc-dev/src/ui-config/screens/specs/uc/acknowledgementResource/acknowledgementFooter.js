@@ -15,11 +15,7 @@ const getCommonApplyFooter = children => {
   };
 };
 export const getRedirectionURL = () => {
-  const path =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/uc/search`
-      : `/uc/search`;
-  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? path : (process.env.REACT_APP_SELF_RUNNING === "true"?path:"/inbox");
+  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/search" : "/inbox";
 
   return redirectionURL;
 };

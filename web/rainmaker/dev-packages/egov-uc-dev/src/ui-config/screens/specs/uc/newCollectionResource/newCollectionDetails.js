@@ -5,7 +5,6 @@ import {
   getCommonContainer,
   getPattern,
   getDateField
-  // getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getTransformedLocale
@@ -15,19 +14,12 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {
-  getTransformedLocalStorgaeLabels,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
-import {setServiceCategory} from "../../utils"
-import set from "lodash/set";
-import get from "lodash/get";
+import { getTenantId } from "../../../../../ui-utils/commons";
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+import {setServiceCategory} from "../../utils"
+import get from "lodash/get";
+import {consumerAddresss} from "../ImpelExtendedFeature/fields";
+
 const tenantId = getTenantId();
 
 export const newCollectionDetailsCard = getCommonCard(
@@ -49,8 +41,7 @@ export const newCollectionDetailsCard = getCommonCard(
               labelName: "Select City",
               labelKey: "TL_SELECT_CITY"
             },
-            // sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-            sourceJsonPath: "applyScreenMdmsData.ucCities",
+            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
             // "applyScreenMdmsData.common-masters.citiesByModule.UC.tenants",
             jsonPath: "Demands[0].tenantId",
             required: true,
@@ -63,7 +54,7 @@ export const newCollectionDetailsCard = getCommonCard(
           beforeFieldChange: async (action, state, dispatch) => {
             const citiesByModule = get(
               state,
-              "applyScreenMdmsData.ucCities",
+              "common.citiesByModule.UC.tenants",
               []
             );
             if (!citiesByModule.find(item => item.code === action.value)) {
@@ -107,7 +98,7 @@ export const newCollectionDetailsCard = getCommonCard(
                 )
               );
               setServiceCategory(
-                get(payload.MdmsRes, "BillingService.BusinessService", []),
+                get(payload, "MdmsRes.BillingService.BusinessService", []),
                 dispatch
               );
             } catch (e) {
@@ -201,14 +192,16 @@ export const newCollectionDetailsCard = getCommonCard(
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
+            if(state.screenConfiguration.preparedFinalObject.Demands[0].serviceType){
             dispatch(
               handleField(
                 "newCollection",
                 "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                "props.value",
-                null
+               "props.value",
+                  null
               )
             );
+              }
             //Set service type data and field if available.
             const serviceData = get(
               state.screenConfiguration,
@@ -326,18 +319,31 @@ export const newCollectionDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
         }),
-        dummyDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          gridDefination: {
-            xs: 12,
-            sm: 6
+        commentsContainer:getTextField({
+          label: {
+            labelName: "Comments",
+            labelKey: "UC_COMMENT_LABEL"
           },
-          visible: true,
-          props: {
-            disabled: true
-          }
-        }
+          placeholder: {
+            labelName: "Enter Comment ",
+            labelKey: "UC_COMMENT_PLACEHOLDER"
+          },
+          Required: false,
+          jsonPath: "Demands[0].additionalDetails.comment"
+        }),
+        ...consumerAddresss,
+        // dummyDiv: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Div",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6
+        //   },
+        //   visible: true,
+        //   props: {
+        //     disabled: true
+        //   }
+        // }
       },
       {
         style: {
@@ -345,33 +351,11 @@ export const newCollectionDetailsCard = getCommonCard(
         }
       }
     ),
-    commentsContainer: getCommonContainer({
-      comments: getTextField({
-        label: {
-          labelName: "Comments",
-          labelKey: "UC_COMMENT_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Comment ",
-          labelKey: "UC_COMMENT_PLACEHOLDER"
-        },
-        Required: false,
-        jsonPath: "Demands[0].additionalDetails.comment"
-      }),
-      address: getTextField({
-        label: {
-          labelName: "Address",
-          labelKey: "UC_ADDRESS_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Address ",
-          labelKey: "UC_ADDRESS_PLACEHOLDER"
-        },
-        Required: false,
-        jsonPath: "Demands[0].additionalDetails.address"
-      })
-    })
+    
   },
+    //})
+
+ //},
   {
     style: {
       overflow: "visible"
@@ -388,7 +372,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
   const taxHeadMasters = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.BillingService.TaxHeadMaster",
-    []
+    {}
   );
   const matchingTaxHeads = taxHeadMasters.filter(
     item => item.service === action.value
@@ -473,5 +457,66 @@ const setTaxHeadFields = (action, state, dispatch) => {
         )
       );
     });
+    // dispatch(
+    //   handleField(
+    //     "newCollection",
+    //     "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
+    //     `comment`,
+    //     getTextField({
+    //       label: {
+    //         labelName: "Comments",
+    //         labelKey: "UC_COMMENT_LABEL"
+    //       },
+    //       placeholder: {
+    //         labelName: "Enter Comment ",
+    //         labelKey: "UC_COMMENT_PLACEHOLDER"
+    //       },
+    //       Required: false,
+    //       jsonPath: "Demands[0].comment",
+    //       componentJsonpath: `components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.comment`
+    //     })
+    //   )
+    // );
   }
 };
+
+// const setServiceCategory = (businessServiceData, dispatch) => {
+//   let nestedServiceData = {};
+//   businessServiceData.forEach(item => {
+//     if (item.code && item.code.indexOf(".") > 0) {
+//       if (nestedServiceData[item.code.split(".")[0]]) {
+//         let child = get(
+//           nestedServiceData,
+//           `${item.code.split(".")[0]}.child`,
+//           []
+//         );
+//         child.push(item);
+//         set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
+//       } else {
+//         set(
+//           nestedServiceData,
+//           `${item.code.split(".")[0]}.code`,
+//           item.code.split(".")[0]
+//         );
+//         set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
+//       }
+//     } else {
+//       set(nestedServiceData, `${item.code}`, item);
+//     }
+//   });
+//   dispatch(
+//     prepareFinalObject(
+//       "applyScreenMdmsData.nestedServiceData",
+//       nestedServiceData
+//     )
+//   );
+//   let serviceCategories = Object.values(nestedServiceData).filter(
+//     item => item.code
+//   );
+//   dispatch(
+//     prepareFinalObject(
+//       "applyScreenMdmsData.serviceCategories",
+//       serviceCategories
+//     )
+//   );
+// };

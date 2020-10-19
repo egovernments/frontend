@@ -1,12 +1,12 @@
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
-import { prepareFinalObject,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import { fetchGeneralMDMSData } from "egov-ui-framework/ui-redux/common/actions";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchGeneralMDMSData } from "egov-ui-framework/ui-redux/app/actions";
+import { getTenantId } from "../../../../ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { setServiceCategory } from "../utils";
-import commonConfig from "config/common.js";
+import commonConfig from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 
@@ -14,57 +14,57 @@ const header = getCommonHeader({
   labelName: "New Collection",
   labelKey: "UC_COMMON_HEADER"
 });
-const tenantId = getTenantId();
+//const tenantId = getTenantId();
+const tenantId = "pb.testing";
 
 const getData = async (action, state, dispatch, demandId) => {
-  dispatch(toggleSpinner())
+
   let requestBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: "pb",
       moduleDetails: [
         {
           moduleName: "tenant",
           masterDetails: [
-            // {
-            //   name: "tenants"
-            // },
             {
-              name: "citymodule",
-              filter: "[?(@.code=='UC')]"
-            }
-          ]
-        },
-        {
-          moduleName: "BillingService",
-          masterDetails: [
-            { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" },
-            {
-              name: "TaxHeadMaster"
+              name: "tenants"
             },
-            {
-              name: "TaxPeriod"
-            }
+            { name: "citymodule" }
           ]
         }
       ]
     }
   };
+
   try {
-    let payload = await httpRequest(
+    let payload = null;
+    payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
       "_search",
       [],
       requestBody
     );
-
-    let ucCities=get(payload.MdmsRes, "tenant.citymodule[0].tenants", []);
-    set(payload.MdmsRes,"ucCities",ucCities);
-    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    setServiceCategory(
-      get(payload.MdmsRes, "BillingService.BusinessService", []),
-      dispatch
+    
+    if(payload){
+      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+      const citymodule = get(payload , "MdmsRes.tenant.citymodule"); 
+      const liveTenants =  citymodule && citymodule.filter(item => item.code === "UC" );
+      dispatch(
+        prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
+      );
+    }
+    const serviceCategories = get(
+      state.screenConfiguration,
+      "preparedFinalObject.searchScreenMdmsData.serviceCategory",
+      []
     );
+    if (serviceCategories && serviceCategories.length) {
+      setServiceCategory(
+        serviceCategories,
+        dispatch
+      );
+    }
   } catch (e) {
     console.log(e);
   }
@@ -90,31 +90,25 @@ const getData = async (action, state, dispatch, demandId) => {
       console.log(e);
     }
   }
-  dispatch(toggleSpinner())
+  
+  // return action;
 };
 
 const newCollection = {
   uiFramework: "material-ui",
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
-    const hasReceipt = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Demands[0].hasReceipt",
-      false
-    );
-    if (hasReceipt) {
-      dispatch(prepareFinalObject("Demands", [{ hasReceipt: false }]));
-    }
     const demandId = get(
       state.screenConfiguration.preparedFinalObject,
       "Demands[0].id",
       null
     );
+    const screenConfigForUpdate = get(
+      state.screenConfiguration,
+      "screenConfig.newCollection"
+    );
     if (demandId) {
-      const screenConfigForUpdate = get(
-        state.screenConfiguration,
-        "screenConfig.newCollection"
-      );
+     
       set(
         screenConfigForUpdate,
         "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory.props.disabled",

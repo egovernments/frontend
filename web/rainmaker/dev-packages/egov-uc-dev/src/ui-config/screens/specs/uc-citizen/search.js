@@ -11,7 +11,8 @@ import { searchResult } from "./receiptsResources/searchResult";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { getTenantId } from "../../../../ui-utils/commons";
+
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -49,17 +50,11 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    let serviceCategories = setServiceCategory(
+        setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
     );
-    dispatch(
-      prepareFinalObject(
-        "searchScreenMdmsData.serviceCategory",
-        serviceCategories
-      )
-    );
+   
   } catch (e) {
     console.log(e);
   }

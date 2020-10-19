@@ -7,11 +7,13 @@ import remoteComponents from "ui-config/commonConfig/remote-component-paths";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
-import { localStorageGet } from "../../ui-utils/localStorageUtils";
+import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getModuleName } from "./moduleConfig";
+
 class ComponentInterface extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { module: null };
+    this.state = { module: null,error: null, errorInfo: null };
   }
   componentDidMount() {
     const { componentPath, uiFramework, moduleName } = this.props;
@@ -98,6 +100,15 @@ class ComponentInterface extends React.Component {
     this.setState({ module: LoadableComponent });
   }
 
+  componentDidCatch(error, errorInfo) {
+    // Catch errors in any components below and re-render with error message
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    })
+    // You can also log error messages to an error reporting service here
+  }
+
   render() {
     const { module: Component } = this.state; // Assigning to new variable names @see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
     let {
@@ -108,27 +119,21 @@ class ComponentInterface extends React.Component {
       gridDefination,
       visible = true,
       roleDefination = {},
-      applicationStatus
+      applicationStatus,
+      menu,
+      bpaTradeType
     } = this.props;
-    //console.log("props applicationStatus is....", applicationStatus);
 
-    // if (visible && !isEmpty(roleDefination)) {
-    //   const splitList = get(roleDefination, "rolePath").split(".");
-    //   const localdata = JSON.parse(localStorageGet(splitList[0]));
-    //   const localRoles = get(
-    //     localdata,
-    //     splitList.slice(1).join("."),
-    //     localdata
-    //   );
+    if (this.state.errorInfo) {
+      // Error path
+      console.error("Egov-ui-framework-error",this.state.error && this.state.error.toString());
+      console.error("Egov-ui-framework-errorInfo",this.state.errorInfo.componentStack);
+      console.error("Egov-ui-framework-component-details",this.props);
 
-    //   const roleCodes = localRoles.map(elem => {
-    //     return get(elem, "code");
-    //   });
-    //   const roles = get(roleDefination, "roles");
-    //   let found = roles.some(elem => roleCodes.includes(elem));
-    //   visible = found;
-    // }
 
+       return null;
+    }
+    
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
       const localdata = JSON.parse(localStorageGet(splitList[0]));
@@ -137,20 +142,29 @@ class ComponentInterface extends React.Component {
         splitList.slice(1).join("."),
         localdata
       );
-      const roleCodes = localRoles.map(elem => {
-        return get(elem, "code");
-      });
+      const roleCodes =
+        localRoles &&
+        localRoles.map(elem => {
+          return get(elem, "code");
+        });
       if (get(roleDefination, "roles")) {
         const roles = get(roleDefination, "roles");
         let found = roles.some(elem => roleCodes.includes(elem));
         visible = found;
+      } else if (get(roleDefination, "path")) {
+        let isApplicable =
+          menu &&
+          menu.find(item => {
+            return item.navigationURL == get(roleDefination, "path");
+          });
+        visible = isApplicable ? isApplicable : false;
       } else if (get(roleDefination, "action")) {
         const businessServiceData = JSON.parse(
           localStorageGet("businessServiceData")
         );
-        const data = find(businessServiceData, { businessService: "NewTL" });
-        //let found = actions.some(item => roleCodes.includes(item));
-
+        const data = find(businessServiceData, {
+          businessService: getModuleName(window.location.pathname, bpaTradeType)
+        });
         const filteredData =
           data &&
           data.states &&
@@ -206,9 +220,29 @@ class ComponentInterface extends React.Component {
 
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
+  const menu = get(state.app, "menu", []);
   const { preparedFinalObject } = screenConfiguration;
-  const applicationStatus = get(preparedFinalObject, "Licenses[0].status");
-  return { applicationStatus };
+  const moduleName = getModuleName(window.location.pathname);
+  let jsonPath = "";
+  if (moduleName === "FIRENOC") {
+    jsonPath = "FireNOCs[0].fireNOCDetails.status";
+  } else if (moduleName === "NewTL") {
+    jsonPath = "Licenses[0].status";
+  } else if ((moduleName === "BPA") || (moduleName === "BPA_LOW")) {
+    jsonPath = "BPA.status";
+  } else {
+    jsonPath = "Licenses[0].status";
+  }
+  const applicationStatus = get(preparedFinalObject, jsonPath);
+  let bpaTradeType = "";
+  if (window.location.pathname.includes("bpastakeholder")) {
+    bpaTradeType = get(
+      preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+      ""
+    );
+  }
+  return { applicationStatus, menu, bpaTradeType };
 };
 
 export default connect(

@@ -1,15 +1,20 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-framework/ui-utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import {
   getCommonCard,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {  
+  getLocaleLabels,
+  getLocalization,
+  getLocale
+} from "../../../../ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -301,7 +306,7 @@ export const getEmployeeName = async queryObject => {
   }
 };
 
-export const setServiceCategory = (businessServiceData, dispatch,screenKey="applyScreenMdmsData") => {
+export const setServiceCategory = (businessServiceData, dispatch) => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
     if (item.code && item.code.indexOf(".") > 0) {
@@ -327,7 +332,7 @@ export const setServiceCategory = (businessServiceData, dispatch,screenKey="appl
   });
   dispatch(
     prepareFinalObject(
-      `${screenKey}.nestedServiceData`,
+      "applyScreenMdmsData.nestedServiceData",
       nestedServiceData
     )
   );
@@ -336,8 +341,69 @@ export const setServiceCategory = (businessServiceData, dispatch,screenKey="appl
   );
   dispatch(
     prepareFinalObject(
-      `${screenKey}.serviceCategories`,
+      "applyScreenMdmsData.serviceCategories",
       serviceCategories
     )
   );
+};
+
+export const getTextToLocalMapping = label => {
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  switch (label) {
+    case "Receipt No.":
+      return getLocaleLabels(
+        "Receipt No",
+        "UC_COMMON_TABLE_COL_RECEIPT_NO",
+        localisationLabels
+      );
+    case "Payee Name":
+      return getLocaleLabels(
+        "Consumer Name",
+        "UC_COMMON_TABLE_COL_PAYEE_NAME",
+        localisationLabels
+      );
+    case "Service Type":
+      return getLocaleLabels(
+        "Service Category",
+        "UC_SERVICE_TYPE_LABEL",
+        localisationLabels
+      );
+    case "Date":
+      return getLocaleLabels(
+        "Receipt Date",
+        "UC_COMMON_TABLE_COL_DATE",
+        localisationLabels
+      );
+    case "Amount[INR]":
+      return getLocaleLabels(
+        "Amount Paid[INR]",
+        "UC_COMMON_TABLE_COL_AMOUNT",
+        localisationLabels
+      );
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "UC_COMMON_TABLE_COL_STATUS",
+        localisationLabels
+      );
+    case "BILLINGSERVICE_BUSINESSSERVICE_PT":
+      return getLocaleLabels(
+        "Property Tax",
+        "BILLINGSERVICE_BUSINESSSERVICE_PT",
+        localisationLabels
+      );
+    default : 
+    return getLocaleLabels(
+      label,
+      label,
+      localisationLabels
+    );
+  }
+};
+
+export const getTransformedLocalStorgaeLabels = () => {
+  const localeLabels = JSON.parse(
+    getLocalization(`localization_${getLocale()}`)
+  );
+  return transformById(localeLabels, "code");
 };

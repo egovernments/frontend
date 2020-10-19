@@ -1,20 +1,25 @@
 import get from "lodash/get";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject,
+  toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { textToLocalMapping } from "./searchResults";
-import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
+import {
+  validateFields,
+  getTextToLocalMapping,
+  convertEpochToDate,
+  convertDateToEpoch
+} from "../../utils";
+import {
+  getTenantId,
+  getLocalization
+} from "../../../../../ui-utils/commons";
 import {
   getLocaleLabels,
   transformById,
   getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
-import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
+} from "../../../../../ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -28,7 +33,6 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: tenantId
     },
-    // { key: "limit", value: "10" },
     { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
@@ -53,7 +57,8 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } else if (
+  }
+  else if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
@@ -67,17 +72,10 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } else if (
-    (searchScreenObject["fromDate"] === undefined ||
-      searchScreenObject["fromDate"].length === 0) &&
-    searchScreenObject["toDate"] !== undefined &&
-    searchScreenObject["toDate"].length !== 0
-  ) {
-    dispatch(toggleSnackbar(true, "Please fill From Date", "warning"));
-  } else {
-    //  showHideProgress(true, dispatch);
+  }   
+  else {
     for (var key in searchScreenObject) {
-      if (searchScreenObject.hasOwnProperty(key) && key === "businessCodes") {
+      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices") {
         queryObject.push({ key: key, value: searchScreenObject[key] });
       } else if (
         searchScreenObject.hasOwnProperty(key) &&
@@ -98,40 +96,35 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-
-    if (queryObject.length > 3) {
       const responseFromAPI = await getSearchResults(queryObject);
       dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
-      const Receipt = (responseFromAPI && responseFromAPI.Receipt) || [];
+      const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
       const response = [];
-      for (let i = 0; i < Receipt.length; i++) {
+      for (let i = 0; i < Payments.length; i++) {
         const serviceTypeLabel = getTransformedLocale(
-          get(Receipt[i], `Bill[0].billDetails[0].businessService`)
+          get(Payments[i], `paymentDetails[0].bill.businessService`)
         );
         response[i] = {
-          receiptNumber: get(Receipt[i], `receiptNumber`),
-          payeeName: get(Receipt[i], `Bill[0].payerName`),
-          serviceType: getLocaleLabels(
-            "",
-            `BILLINGSERVICE_BUSINESSSERVICE_${serviceTypeLabel}`,
-            transfomedKeys
-          ),
-          date: Receipt[i].receiptDate,
-          amount: Receipt[i].Bill[0].billDetails[0].amountPaid,
-          status: Receipt[i].Bill[0].billDetails[0].status
-        };
+        receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
+        payeeName: get(Payments[i], `payerName`),
+        serviceType: serviceTypeLabel,
+        receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
+        amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
+        status: get(Payments[i], `paymentDetails[0].bill.status`),
+        businessService : get(Payments[i], `paymentDetails[0].bill.businessService`),
+        tenantId : get(Payments[i], `tenantId`),        };
       }
-
+      const uiConfigs = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.uiCommonConfig");
       try {
         let data = response.map(item => ({
-          [get(textToLocalMapping, "Receipt No.")]: item.receiptNumber || "-",
-          [get(textToLocalMapping, "Payee Name")]: item.payeeName || "-",
-          [get(textToLocalMapping, "Service Type")]: item.serviceType || "-",
-          [get(textToLocalMapping, "Date")]:
-            convertEpochToDate(item.date) || "-",
-          [get(textToLocalMapping, "Amount[INR]")]: item.amount || "-",
-          [get(textToLocalMapping, "Status")]: item.status || "-",
-          tenantId: item.tenantId
+          [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
+          [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
+          [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+          [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
+          [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
+          [getTextToLocalMapping("Status")]: item.status || "-",
+          ["receiptKey"]:  get(uiConfigs.filter(item => item.code === item.businessService) , "0.receiptKey" , "consolidatedreceipt"),
+          ["tenantId"]: item.tenantId || "-"
         }));
         dispatch(
           handleField(
@@ -158,19 +151,19 @@ export const searchApiCall = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, error.message, "error"));
         console.log(error);
       }
-    } else {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName:
-              "Please fill atleast one more field apart from service category !",
-            labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
-          },
-          "warning"
-        )
-      );
-    }
+    // } else {
+    //   dispatch(
+    //     toggleSnackbar(
+    //       true,
+    //       {
+    //         labelName:
+    //           "Please fill atleast one more field apart from service category !",
+    //         labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
+    //       },
+    //       "warning"
+    //     )
+    //   );
+    // }
   }
 };
 
