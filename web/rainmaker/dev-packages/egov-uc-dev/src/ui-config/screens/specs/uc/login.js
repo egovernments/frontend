@@ -13,11 +13,10 @@ const header = getCommonHeader({
   labelKey: "CORE_COMMON_LOGIN"
 });
 const tenantId = getTenantId();
-
 const getData = async (action, state, dispatch) => {
   let requestBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: "pb",
       moduleDetails: [
         {
           moduleName: "tenant",
