@@ -9,7 +9,8 @@ import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 // import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
-import { getTenantId } from "ui-utils/localStorageUtils";
+import { getTenantId,getLocalization } from "ui-utils/localStorageUtils";
+import {getTextToLocalMapping} from "../../utils/index"
 import {
   getLocaleLabels,
   transformById,
