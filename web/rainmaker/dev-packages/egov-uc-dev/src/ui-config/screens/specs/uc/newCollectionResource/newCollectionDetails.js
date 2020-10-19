@@ -14,7 +14,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "../../../../../ui-utils/commons";
+import { getTenantId } from "ui-utils/localStorageUtils";
 
 import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
