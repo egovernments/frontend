@@ -117,7 +117,12 @@ export const createProperty = async (Properties, action, props, isModify, prepar
     }
     try {
         if(!isEditInWorkflow){
-            propertyPayload.creationReason = action == '_create' ? 'CREATE' :  'UPDATE';
+            // propertyPayload.creationReason = action == '_create' ? 'CREATE' :  'UPDATE';
+            if(action == '_create') {
+                propertyPayload.creationReason = get(propertyPayload, "creationReason", 'CREATE');
+            } else {
+                propertyPayload.creationReason = 'UPDATE'
+            }
         }
         
         propertyPayload.additionalDetails?{...propertyPayload.additionalDetails,...propertyAdditionalDetails}:{...propertyAdditionalDetails};

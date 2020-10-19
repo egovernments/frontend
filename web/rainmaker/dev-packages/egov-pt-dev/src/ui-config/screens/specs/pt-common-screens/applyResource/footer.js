@@ -207,7 +207,11 @@ const callBackForApply = async (state, dispatch) => {
       ]
     }
     set(propertyPayload, "channel", "SYSTEM");
-    set(propertyPayload, "source", "MUNICIPAL_RECORDS");
+    if(window.location.href.includes("register-property?redirectUrl=/wns/apply")) { 
+      set(propertyPayload, "source", "WATER_CHARGES");
+    } else {
+      set(propertyPayload, "source", "MUNICIPAL_RECORDS");
+    }
     set(propertyPayload, "noOfFloors", 1);
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;
