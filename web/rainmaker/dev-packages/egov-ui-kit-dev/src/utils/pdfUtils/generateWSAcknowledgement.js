@@ -32,7 +32,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
      activateDetail = generateKeyValue(preparedFinalObject, activateDetailsNonMeter);   
     }
     
-
+    let tenantId = get(preparedFinalObject, 'WaterConnection[0].tenantId', '');
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
     let WaterConnection = get(preparedFinalObject, 'WaterConnection[0]', {});
 
@@ -50,19 +50,20 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     
 
     let pdfData = {
-        header: WaterConnection.applicationNo.includes("WS")?"PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER":"PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER", tenantId: "pb.amritsar",
+        header: WaterConnection.applicationNo.includes("WS")?"PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER":"PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER", 
+        tenantId: tenantId,
         applicationNoHeader:WaterConnection.applicationNo.includes("WS")?'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER_APPLICATION':'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_SEWERAGE_APPLICATION',
-        additionalHeader: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPLICATION_NO', additionalHeaderValue: WaterConnection.applicationNo,
+        additionalHeader: 'WS_ACKNO_APP_NO_LABEL', additionalHeaderValue: WaterConnection.applicationNo,
         cards: [
-            { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_DETAILS_HEADER", items: propertyDetail },
-            { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCATION_DETAILS_HEADER", items: locationDetail },
-            { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail, type: ownerDetailInfo.length > 1 ? 'multiItem' : 'singleItem'  },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_CONNECTION_DETAILS_HEADER', items: connectionDetail },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_DOCUMENTS_DETAILS_HEADER', items: documentCard },
+            { header: "WS_COMMON_PROP_DETAIL_HEADER", items: propertyDetail },
+            { header: "WS_COMMON_PROP_LOC_DETAIL_HEADER", items: locationDetail },
+            { header: "WS_TASK_PROP_OWN_HEADER", items: ownerDetail, type: ownerDetailInfo.length > 1 ? 'multiItem' : 'singleItem'  },
+            { header: 'WS_COMMON_CONNECTION_DETAILS', items: connectionDetail },
+            { header: 'WS_COMMON_DOCS', items: documentCard },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ADDITIONAL_CONNECTION_HEADER', items: additionDetail },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLUMBER_DETAILS_HEADER', items: plumberDetail },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetail },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ACTIVATION_DETAILS_HEADER', items: activateDetail }  
+            { header: 'WS_COMMON_PLUMBER_DETAILS', items: plumberDetail },
+            { header: 'WS_ROAD_CUTTING_CHARGE_DETAILS', items: roadDetail },
+            { header: 'WS_ACTIVATION_DETAILS', items: activateDetail }  
             ]
     }
 
