@@ -148,23 +148,26 @@ export const searchApiCall = async (state, dispatch) => {
           handleField("search", "components.div.children.searchResults")
         );
         showHideTable(true, dispatch);
-      } catch (error) {
+      } 
+      catch (error) {
         // dispatch(toggleSnackbar(true, error.message, "error"));
         console.log(error);
       }
-    } else {
-      // dispatch(
-      //   toggleSnackbar(
-      //     true,
-      //     {
-      //       labelName:
-      //         "Please fill atleast one more field apart from service category !",
-      //       labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
-      //     },
-      //     "warning"
-      //   )
-      // );
-    }
+    //} 
+    
+    // else {
+    //   // dispatch(
+    //   //   toggleSnackbar(
+    //   //     true,
+    //   //     {
+    //   //       labelName:
+    //   //         "Please fill atleast one more field apart from service category !",
+    //   //       labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
+    //   //     },
+    //   //     "warning"
+    //   //   )
+    //   // );
+    // }
   }
 };
 
