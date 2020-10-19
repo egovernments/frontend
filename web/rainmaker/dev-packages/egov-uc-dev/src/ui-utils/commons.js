@@ -200,18 +200,18 @@ export const getTransformedLocalStorgaeLabels = () => {
   );
   return transformById(localeLabels, "code");
 };
-export const transformById = (payload, id) => {
-  return (
-    payload &&
-    payload.reduce((result, item) => {
-      result[item[id]] = {
-        ...item
-      };
+// export const transformById = (payload, id) => {
+//   return (
+//     payload &&
+//     payload.reduce((result, item) => {
+//       result[item[id]] = {
+//         ...item
+//       };
 
-      return result;
-    }, {})
-  );
-};
+//       return result;
+//     }, {})
+//   );
+// };
 export const getLocaleLabels = (label, labelKey, localizationLabels) => {
   if (!localizationLabels)
     localizationLabels = transformById(
