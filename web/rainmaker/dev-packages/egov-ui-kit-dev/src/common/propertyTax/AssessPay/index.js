@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BreadCrumbs, Icon } from "components";
+import { BreadCrumbs, Icon } from "egov-ui-kit/components";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import Screen from "egov-ui-kit/common/common/Screen";

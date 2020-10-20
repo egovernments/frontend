@@ -4,7 +4,7 @@ import { COMPLAINT, CATEGORY } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import difference from "lodash/difference";
 import uniq from "lodash/uniq";
-import commonConfig from "config/common.js";
+import commonConfig from "egov-ui-kit/config/common.js";
 
 import {  toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 

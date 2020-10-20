@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextField, Card } from "components";
+import { Button, TextField, Card } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 

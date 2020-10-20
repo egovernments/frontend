@@ -1,12 +1,12 @@
 import React from "react";
-import { Image, Drawer, List } from "components";
+import { Image, Drawer, List } from "egov-ui-kit/components";
 import UserProfile from "./UserProfile";
 import MenuItem from "material-ui/MenuItem";
 import { CommonMenuItems } from "./commonMenuItems";
 import Divider from "@material-ui/core/Divider";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
 
-// import { Icon } from "components";
+// import { Icon } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import LanguageSelection from "./LanguageSelection";
 // import menuItems from "./menuItems";

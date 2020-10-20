@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "components";
+import { Button } from "egov-ui-kit/components";
 // import { Question } from "modules/common";
 // import { TextArea } from "modules/common";
 import Question from "../Question";

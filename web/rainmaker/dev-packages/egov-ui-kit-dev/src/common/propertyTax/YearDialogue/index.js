@@ -1,5 +1,5 @@
-import { Button, Dialog } from "components";
-import commonConfig from "config/common.js";
+import { Button, Dialog } from "egov-ui-kit/components";
+import commonConfig from "egov-ui-kit/config/common.js";
 import formHoc from "egov-ui-kit/hocs/form";
 import { fetchGeneralMDMSData, prepareFormData, toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import { removeForm } from "egov-ui-kit/redux/form/actions";

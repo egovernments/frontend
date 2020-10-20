@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { List, Icon, AutoSuggest } from "components";
+import { List, Icon, AutoSuggest } from "egov-ui-kit/components";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getNestedObjFormat } from "./complaintTypeDataMaker";

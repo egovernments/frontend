@@ -1,5 +1,5 @@
 import React from "react";
-import { ImageModal } from "components";
+import { ImageModal } from "egov-ui-kit/components";
 
 const ImageModalDisplay = ({ history, location }) => {
   // very bad way to do it!! temp fix only

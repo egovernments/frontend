@@ -1,6 +1,6 @@
 
 import React from "react";
-import { List, Card } from "components";
+import { List, Card } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 

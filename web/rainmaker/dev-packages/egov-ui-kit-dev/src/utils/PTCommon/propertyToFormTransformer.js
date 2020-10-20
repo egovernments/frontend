@@ -13,7 +13,7 @@ import set from "lodash/set";
 const propertyAddress =
   process.env.REACT_APP_NAME === "Citizen"
     ? require("egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyAddress").default
-    : require("config/forms/specs/PropertyTaxPay/propertyAddress").default;
+    : require("egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyAddress").default;
 
 const addData = (config, currentForm) => {
   let res = { ...config };

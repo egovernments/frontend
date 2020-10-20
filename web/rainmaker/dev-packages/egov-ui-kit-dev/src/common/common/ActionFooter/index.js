@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "components";
+import { Button } from "egov-ui-kit/components";
 import Label from "../../../utils/translationNode";
 import "./index.css";
 

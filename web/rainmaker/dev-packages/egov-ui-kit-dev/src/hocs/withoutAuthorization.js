@@ -8,7 +8,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { DropDown, AppBar } from "components";
+import { DropDown, AppBar } from "egov-ui-kit/components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
 import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
