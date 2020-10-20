@@ -2,7 +2,7 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 
 import React from "react";
 import Label from "egov-ui-kit/utils/translationNode";
-import { Card } from "egov-ui-kit/components";
+import { Card } from "components";
 import './index.css'
 const AcknowledgementCard = (props) => {
   const {acknowledgeType='success', messageHeader='',message='',receiptHeader='PT_APPLICATION_NO_LABEL',receiptNo=''} = props;

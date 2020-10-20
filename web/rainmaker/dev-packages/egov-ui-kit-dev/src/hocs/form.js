@@ -1,5 +1,5 @@
 import React from "react";
-import { LoadingIndicator } from "egov-ui-kit/components";
+import { LoadingIndicator } from "components";
 import { connect } from "react-redux";
 import { handleFieldChange, initForm, submitForm, deleteForm } from "egov-ui-kit/redux/form/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";

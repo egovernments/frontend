@@ -1,4 +1,4 @@
-import { Button } from "egov-ui-kit/components";
+import { Button } from "components";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";

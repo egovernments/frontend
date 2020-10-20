@@ -1,5 +1,5 @@
 import React from "react";
-import { TextArea } from "egov-ui-kit/components";
+import { TextArea } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const hintStyle = {

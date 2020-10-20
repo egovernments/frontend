@@ -1,5 +1,5 @@
 import axios from "axios";
-import commonConfig from "egov-ui-kit/config/common.js";
+import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";

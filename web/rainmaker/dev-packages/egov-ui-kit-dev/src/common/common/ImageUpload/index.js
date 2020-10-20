@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { FilePicker, Icon, Image, LoadingIndicator } from "egov-ui-kit/components";
+import { FilePicker, Icon, Image, LoadingIndicator } from "components";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import { getFileSize, isFileImage } from "egov-ui-kit/utils/commons";
 import Label from "egov-ui-kit/utils/translationNode";

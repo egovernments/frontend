@@ -1,4 +1,4 @@
-import { AutoSuggestDropdown, DropDown, Label, MobileNumberField, SingleCheckbox, TextField, TextFieldIcon } from "egov-ui-kit/components";
+import { AutoSuggestDropdown, DropDown, Label, MobileNumberField, SingleCheckbox, TextField, TextFieldIcon } from "components";
 import { AutosuggestContainer } from "egov-ui-framework/ui-containers";
 import React from "react";
 import { RadioButton } from "../components";

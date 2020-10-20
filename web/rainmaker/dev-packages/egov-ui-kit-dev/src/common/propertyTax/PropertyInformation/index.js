@@ -11,7 +11,7 @@ import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import PropertyInformation from "./components/PropertyInformation";
 import isEqual from "lodash/isEqual";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import commonConfig from "egov-ui-kit/config/common.js";
+import commonConfig from "config/common.js";
 
 const innerDivStyle = {
   padding: "20px 56px 20px 50px",

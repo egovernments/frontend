@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 //import { withRouter } from "react-router";
-import { Icon, Button } from "egov-ui-kit/components";
+import { Icon, Button } from "components";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import { Screen } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";

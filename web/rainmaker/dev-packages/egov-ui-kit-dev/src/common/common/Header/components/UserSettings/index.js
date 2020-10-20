@@ -1,4 +1,4 @@
-import { DropDown, Icon, Image, List } from "egov-ui-kit/components";
+import { DropDown, Icon, Image, List } from "components";
 import { getTransformedLocale, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
 import { getLocale, getTenantId, setTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";

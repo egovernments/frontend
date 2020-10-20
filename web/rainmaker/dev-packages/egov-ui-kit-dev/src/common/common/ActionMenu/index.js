@@ -5,7 +5,7 @@ import ActionMenuComp from "../ActionMenu/components";
 import "./index.css";
 import { fetchActionItems, updateActiveRoute } from "egov-ui-kit/redux/app/actions";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import commonConfig from "egov-ui-kit/config/common.js";
+import commonConfig from "config/common.js";
 
 class ActionMenu extends Component {
   componentDidMount = async () => {

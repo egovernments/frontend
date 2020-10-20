@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, Ratings, Checkbox, TextArea, Button, Icon } from "egov-ui-kit/components";
+import { Dialog, Ratings, Checkbox, TextArea, Button, Icon } from "components";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import Label from "egov-ui-kit/utils/translationNode";
 
