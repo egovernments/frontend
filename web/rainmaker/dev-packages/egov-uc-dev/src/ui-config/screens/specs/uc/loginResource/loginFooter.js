@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { loginRequest } from "egov-ui-framework/ui-utils/api";
+import { loginRequest } from "ui-utils/api";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { authenticated } from "egov-ui-framework/ui-redux/auth/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -80,17 +80,18 @@ const login =async (state, dispatch) => {
       //dispatch(toggleSpinner())
     } catch (e) {
       console.log(e);
+      alert("Invalid Credentials!")
      // dispatch(toggleSpinner())
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Invalid Credentials!",
-            labelKey: "Invalid Credentials!"
-          },
-          "error"
-        )
-      );
+      // dispatch(
+      //   toggleSnackbar(
+      //     true,
+      //     {
+      //       labelName: "Invalid Credentials!",
+      //       labelKey: "Invalid Credentials!"
+      //     },
+      //     "error"
+      //   )
+      // );
     } finally {
 
     }

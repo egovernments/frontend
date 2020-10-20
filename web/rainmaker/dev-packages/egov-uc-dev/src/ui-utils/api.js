@@ -9,8 +9,17 @@ import store from "../ui-redux/store";
   getAccessToken
   //getTenantId
 } from "egov-ui-framework/ui-utils/commons"; */
-import { getAccessToken } from "ui-utils/commons";
-
+// import { getAccessToken } from "ui-utils/commons";
+import {
+  setTenantId,
+  getAccessToken,
+  setUserInfo,
+  setAccessToken,
+  setRefreshToken,
+  localStorageSet,
+  localStorageGet,
+  clearUserDetails,
+} from "./localStorageUtils/index";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -100,15 +109,57 @@ export const httpRequest = async (
   throw new Error(apiError);
 };
 
-export const loginRequest = async (username = null, password = null) => {
+// export const authenticated = (payload = {}) => {
+//   const userInfo = fixUserDob(payload["UserRequest"]);
+//   const accessToken = payload.access_token;
+//   const refreshToken = payload.refresh_token;
+//   const expiresIn = payload.expires_in;
+//   const lastLoginTime = new Date().getTime();
+
+//   setUserInfo(JSON.stringify(userInfo));
+//   setAccessToken(accessToken);
+//   setRefreshToken(refreshToken);
+//   setTenantId(userInfo.tenantId);
+//   localStorageSet("expires-in", expiresIn);
+//   localStorageSet("last-login-time", lastLoginTime);
+
+//   return { type: authType.AUTHENTICATED, userInfo, accessToken };
+// };
+
+export const loginRequest = async (username = null, password = null, refreshToken = "", grantType = "password", tenantId = "", userType) => {
+  tenantId = tenantId;
+  const loginInstance = axios.create({
+    baseURL: window.location.origin,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0",
+    },
+  });
+
   let apiError = "Api Error";
+  var params = new URLSearchParams();
+  username && params.append("username", username);
+  password && params.append("password", password);
+  refreshToken && params.append("refresh_token", refreshToken);
+  params.append("grant_type", grantType);
+  params.append("scope", "read");
+  params.append("tenantId", tenantId);
+  userType && params.append("userType", userType);
+
   try {
-    // api call for login
-    alert("Logged in");
-    return;
-  } catch (e) {
-    apiError = e.message;
-    // alert(e.message);
+    const response = await loginInstance.post("/user/oauth/token", params);
+    const responseStatus = parseInt(response.status, 10);
+    // setAccessToken(accessToken);
+    setAccessToken(response.data.access_token);
+    if (responseStatus === 200 || responseStatus === 201) 
+    {
+      return response.data;
+    }
+  } catch (error) {
+    const { data, status } = error.response;
+    if (status === 400) {
+      apiError = (data.hasOwnProperty("error_description") && data.error_description) || apiError;
+    }
   }
 
   throw new Error(apiError);
