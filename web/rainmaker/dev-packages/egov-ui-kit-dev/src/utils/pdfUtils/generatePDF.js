@@ -1,4 +1,4 @@
-import commonConfig from "config/common.js";
+import commonConfig from "egov-ui-kit/config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "egov-ui-framework/ui-redux/store";
 import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Image, Icon, Button } from "components";
+import { Card, Image, Icon, Button } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import isEmpty from "lodash/isEmpty";
 import "./index.css";

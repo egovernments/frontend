@@ -2,7 +2,7 @@ import * as actionTypes from "./actionTypes";
 import { LOCALATION, ACTIONMENU, MDMS, EVENTSCOUNT, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/utils/commons";
-import commonConfig from "config/common";
+import commonConfig from "egov-ui-kit/config/common";
 import { debug } from "util";
 import { setLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { getModule } from "../../utils/localStorageUtils";

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Icon } from "components";
+import { Icon } from "egov-ui-kit/components";
 import { compose } from "redux";
 import withData from "./withData";
 import { Header } from "modules/common";

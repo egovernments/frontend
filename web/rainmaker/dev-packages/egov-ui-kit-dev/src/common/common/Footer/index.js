@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { BottomNavigation, Icon } from "components";
+import { BottomNavigation, Icon } from "egov-ui-kit/components";
 import { navigationItems } from "./navigationItems";
 import { setBottomNavigationIndex } from "egov-ui-kit/redux/app/actions";
 import Label from "egov-ui-kit/utils/translationNode";

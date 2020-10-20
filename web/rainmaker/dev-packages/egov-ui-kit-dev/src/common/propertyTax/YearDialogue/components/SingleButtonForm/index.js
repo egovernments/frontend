@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "components";
+import { Button } from "egov-ui-kit/components";
 import "./index.css";
 
 const SingleButtonForm = ({ label, form, handleFieldChange, history, urlToAppend }) => {

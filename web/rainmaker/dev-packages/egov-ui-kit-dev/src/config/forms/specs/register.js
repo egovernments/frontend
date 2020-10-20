@@ -1,4 +1,4 @@
-import commonConfig from "config/common.js";
+import commonConfig from "egov-ui-kit/config/common.js";
 
 const formConfig = {
   name: "register",

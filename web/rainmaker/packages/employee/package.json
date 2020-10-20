@@ -19,6 +19,7 @@
     "datatables.net-buttons-bs": "^1.5.3",
     "react-jquery-datatables": "^1.0.0",
     "egov-abg": "1.2.0",
+    "egov-billamend":"0.0.1",
     "egov-bpa": "1.2.0",
     "egov-common": "1.2.0",
     "egov-hrms": "1.2.0",

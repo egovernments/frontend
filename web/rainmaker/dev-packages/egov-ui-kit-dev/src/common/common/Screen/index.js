@@ -1,5 +1,5 @@
 import React from "react";
-import { LoadingIndicator } from "components";
+import { LoadingIndicator } from "egov-ui-kit/components";
 
 const Screen = ({ children, className = "", loading }) => {
   return (

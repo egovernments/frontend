@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, ToolTipUi, Icon } from "components";
+import { Card, ToolTipUi, Icon } from "egov-ui-kit/components";
 import Field from "egov-ui-kit/utils/field";
 import "./index.css";
 

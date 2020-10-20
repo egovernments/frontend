@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, Button } from "components";
+import { Icon, Button } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import PTList from "./components/PTList";
 import PTInformation from "./components/PTInformation";

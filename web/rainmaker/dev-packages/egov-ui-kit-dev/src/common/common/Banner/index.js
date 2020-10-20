@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
-import { Icon, Image } from "components";
+import { Icon, Image } from "egov-ui-kit/components";
 import logo from "egov-ui-kit/assets/images/punjab-logo.png";
 import "./index.css";
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { List, Dialog, AutoSuggest } from "components";
+import { List, Dialog, AutoSuggest } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 
 class CityPickerDialog extends Component {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ButtonGroup, Icon } from "components";
+import { ButtonGroup, Icon } from "egov-ui-kit/components";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
