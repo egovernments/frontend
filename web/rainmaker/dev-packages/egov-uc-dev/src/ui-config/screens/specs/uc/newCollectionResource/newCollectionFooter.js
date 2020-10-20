@@ -198,6 +198,8 @@ const createDemand = async (state, dispatch) => {
       if (payload.Demands.length > 0) {
         const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
+        const tenantId = get(payload, "Demands[0].tenantId");
+
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
         set(payload, "Demands[0].serviceType", businessService);
