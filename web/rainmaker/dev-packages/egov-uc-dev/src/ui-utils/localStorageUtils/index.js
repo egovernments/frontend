@@ -51,13 +51,13 @@ export const clearUserDetails = () => {
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {
-  const appName = "Employee";
+ // const appName = "Employee";
   let value = null;
   if (path) {
     const data = JSON.parse(window.localStorage.getItem(appName?appName + "." + key:key)) || null;
     value = get(data, path);
   } else {
-    value = window.localStorage.getItem(appName?appName + "." + key:key) || null;
+    value = window.localStorage.getItem("Employee" + "." + key);
   }
   return value;
 };
