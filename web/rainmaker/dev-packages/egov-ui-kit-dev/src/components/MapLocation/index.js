@@ -3,7 +3,7 @@ import _ from "lodash";
 import SearchBox from "react-google-maps/lib/components/places/SearchBox";
 import "./index.css";
 import Icon from "../Icon";
-import commonConfig from "egov-ui-kit/config/common";
+import commonConfig from "config/common";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const styles = [

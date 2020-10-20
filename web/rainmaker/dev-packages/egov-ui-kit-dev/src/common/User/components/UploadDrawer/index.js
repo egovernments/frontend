@@ -1,5 +1,5 @@
 import React from "react";
-import { UploadDrawer } from "egov-ui-kit/components";
+import { UploadDrawer } from "components";
 
 const UploadDrawerLabelStyle = {
   fontFamily: "Roboto",

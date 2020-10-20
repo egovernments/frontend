@@ -1,4 +1,4 @@
-import { Button, Dialog } from "egov-ui-kit/components";
+import { Button, Dialog } from "components";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";

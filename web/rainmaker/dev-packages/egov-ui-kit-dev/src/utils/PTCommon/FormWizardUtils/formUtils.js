@@ -1,4 +1,4 @@
-import commonConfig from "egov-ui-kit/config/common.js";
+import commonConfig from "config/common.js";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Card, Icon } from "egov-ui-kit/components";
+import { Image, Card, Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";

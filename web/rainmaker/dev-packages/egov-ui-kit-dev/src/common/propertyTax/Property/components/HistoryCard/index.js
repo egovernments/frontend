@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, Divider } from "egov-ui-kit/components";
+import { Card, Button, Divider } from "components";
 import { Icon } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 const IconStyle = {

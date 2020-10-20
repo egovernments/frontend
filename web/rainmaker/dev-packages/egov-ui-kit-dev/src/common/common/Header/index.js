@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import IconButton from "material-ui/IconButton";
-import { Icon } from "egov-ui-kit/components";
+import { Icon } from "components";
 import AppBar from "./components/AppBar";
 import LogoutDialog from "./components/LogoutDialog";
 import SortDialog from "./components/SortDialog";

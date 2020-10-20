@@ -1,4 +1,4 @@
-import { Button } from "egov-ui-kit/components";
+import { Button } from "components";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";

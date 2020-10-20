@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Screen } from "modules/common";
-import { Card, Icon, MapLocation } from "egov-ui-kit/components";
+import { Card, Icon, MapLocation } from "components";
 import { connect } from "react-redux";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getAccessToken } from "egov-ui-kit/utils/localStorageUtils";

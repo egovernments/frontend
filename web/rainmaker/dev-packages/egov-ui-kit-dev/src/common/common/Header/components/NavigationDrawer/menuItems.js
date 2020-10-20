@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "egov-ui-kit/components";
+import { Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const items = {

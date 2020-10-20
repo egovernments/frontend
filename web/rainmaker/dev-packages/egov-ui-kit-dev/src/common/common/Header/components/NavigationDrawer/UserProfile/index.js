@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileSection } from "egov-ui-kit/components";
+import { ProfileSection } from "components";
 import { getCityNameByCode } from "egov-ui-kit/utils/commons";
 import { connect } from "react-redux";
 import get from "lodash/get";
