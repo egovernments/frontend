@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
+import "./index.css";
 
 const getSuggestions = suggestions => {
   return (
@@ -47,9 +48,10 @@ const styles = theme => ({
     color: "rgba(162, 162, 162, 0.77)"
   },
   ac_paper: {
-    width: "80%",
-    maxHeight: "200px",
-    overflowY: "scroll",
+    position: "absolute",
+    zIndex: 1105,
+    left: 0,
+    right: 0,
     marginTop: theme.spacing.unit
   },
   ac_divider: {
@@ -141,10 +143,11 @@ function ValueContainer(props) {
 }
 
 function Menu(props) {
+  const { className } = props.selectProps.menuProps;
   return (
     <Paper
       square
-      className={props.selectProps.classes.ac_paper}
+      className={className ? className : props.selectProps.classes.ac_paper}
       {...props.innerProps}
       style={{}}
     >
@@ -176,10 +179,11 @@ class IntegrationReactSelect extends React.Component {
   };
 
   handleChange = name => value => {
+    let isValue = value === null ? { value: "" } : value;
     this.setState({
       [name]: value
     });
-    this.props.onSelect(value);
+    this.props.onSelect(isValue);
   };
 
   render() {
@@ -192,6 +196,8 @@ class IntegrationReactSelect extends React.Component {
       fullwidth = true,
       required = true,
       value,
+      className,
+      disabled = false,
       inputLabelProps = {
         shrink: true
       },
@@ -217,6 +223,10 @@ class IntegrationReactSelect extends React.Component {
             required: required,
             fullWidth: fullwidth
           }}
+          menuProps={{
+            className: className
+          }}
+          isDisabled={disabled}
           options={getSuggestions(suggestions) || []}
           components={components}
           value={value ? value : this.state.single}

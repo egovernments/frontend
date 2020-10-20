@@ -18,12 +18,95 @@ const tenantId = getTenantId();
 // const tenantId = "pb.testing";
 
 
+// const getData = async (action, state, dispatch, demandId) => {
+
+//   const tenantData = get(
+//     state.screenConfiguration,
+//     "preparedFinalObject.login.tenantId",
+//     ""
+//   );
+//   // dispatch(toggleSpinner())
+//   let requestBody = {
+//     MdmsCriteria: {
+//       tenantId: tenantData,
+//       moduleDetails: [
+//         {
+//           moduleName: "tenant",
+//           masterDetails: [
+//             {
+//               name: "tenants"
+//             },
+//             { name: "citymodule" }
+//           ]
+//         }
+//       ]
+//     }
+//   };
+
+//   try {
+//     let payload = null;
+//     payload = await httpRequest(
+//       "post",
+//       "/egov-mdms-service/v1/_search",
+//       "_search",
+//       [],
+//       requestBody
+//     );
+    
+//     if(payload){
+//       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+//       const citymodule = get(payload , "MdmsRes.tenant.citymodule"); 
+//       const liveTenants =  citymodule && citymodule.filter(item => item.code === "UC" );
+//       dispatch(
+//         prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
+//       );
+//     }
+//     const serviceCategories = get(
+//       state.screenConfiguration,
+//       "preparedFinalObject.searchScreenMdmsData.serviceCategory",
+//       []
+//     );
+//     if (serviceCategories && serviceCategories.length) {
+//       setServiceCategory(
+//         serviceCategories,
+//         dispatch
+//       );
+//     }
+//   } catch (e) {
+//     console.log(e);
+//   }
+//   if (!demandId) {
+//     try {
+//       let payload = null;
+//       payload = await httpRequest("post", "/egov-idgen/id/_generate", "", [], {
+//         idRequests: [
+//           {
+//             idName: "",
+//             format: "UC/[CY:dd-MM-yyyy]/[seq_uc_demand_consumer_code]",
+//             tenantId: tenantData
+//           }
+//         ]
+//       });
+//       dispatch(
+//         prepareFinalObject(
+//           "Demands[0].consumerCode",
+//           get(payload, "idResponses[0].id", "")
+//         )
+//       );
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   }
+//   // dispatch(toggleSpinner())
+// };
+
+
 const getData = async (action, state, dispatch, demandId) => {
 
-  const tenantData = get(
+    const tenantData = get(
     state.screenConfiguration,
     "preparedFinalObject.login.tenantId",
-    {}
+    ""
   );
   // dispatch(toggleSpinner())
   let requestBody = {
@@ -33,45 +116,46 @@ const getData = async (action, state, dispatch, demandId) => {
         {
           moduleName: "tenant",
           masterDetails: [
+            // {
+            //   name: "tenants"
+            // },
             {
-              name: "tenants"
+              name: "citymodule",
+              filter: "[?(@.code=='UC')]"
+            }
+          ]
+        },
+        {
+          moduleName: "BillingService",
+          masterDetails: [
+            { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" },
+            {
+              name: "TaxHeadMaster"
             },
-            { name: "citymodule" }
+            {
+              name: "TaxPeriod"
+            }
           ]
         }
       ]
     }
   };
-
   try {
-    let payload = null;
-    payload = await httpRequest(
+    let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
       "_search",
       [],
       requestBody
     );
-    
-    if(payload){
-      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-      const citymodule = get(payload , "MdmsRes.tenant.citymodule"); 
-      const liveTenants =  citymodule && citymodule.filter(item => item.code === "UC" );
-      dispatch(
-        prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
-      );
-    }
-    const serviceCategories = get(
-      state.screenConfiguration,
-      "preparedFinalObject.searchScreenMdmsData.serviceCategory",
-      []
+
+    let ucCities=get(payload.MdmsRes, "tenant.citymodule[0].tenants", []);
+    set(payload.MdmsRes,"ucCities",ucCities);
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    setServiceCategory(
+      get(payload.MdmsRes, "BillingService.BusinessService", []),
+      dispatch
     );
-    if (serviceCategories && serviceCategories.length) {
-      setServiceCategory(
-        serviceCategories,
-        dispatch
-      );
-    }
   } catch (e) {
     console.log(e);
   }

@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { AutoSuggest } from "../../ui-atoms-local";
+import  IntegrationReactSelect from "../../ui-atoms-local/AutoSuggest/index";
 import { findItemInArrayOfObject } from "../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   transformById,
-  getLocaleLabels
+  appendModulePrefix
 } from "egov-ui-framework/ui-utils/commons";
+import {getLocaleLabels,getLocalization} from "../../ui-utils/commons";
 import get from "lodash/get";
-import { getLocalization } from "egov-ui-framework/ui-utils/commons";
+import isEmpty from "lodash/isEmpty";
+// import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
-
 class AutoSuggestor extends Component {
   onSelect = value => {
     const { onChange } = this.props;
@@ -27,25 +28,28 @@ class AutoSuggestor extends Component {
       label,
       placeholder,
       suggestions,
+      className,
+      localizationLabels,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
       label.labelName,
       label.labelKey,
-      transfomedKeys
+      localizationLabels
     );
     let translatedPlaceholder = getLocaleLabels(
       placeholder.labelName,
       placeholder.labelKey,
-      transfomedKeys
+      localizationLabels
     );
     //For multiSelect to be enabled, pass isMultiSelect=true in props.
     return (
       <div>
-        <AutoSuggest
+        <IntegrationReactSelect
           onSelect={this.onSelect}
           suggestions={suggestions}
           value={value}
+          className={className}
           label={translatedLabel}
           placeholder={translatedPlaceholder}
           {...rest}
@@ -71,12 +75,14 @@ const getLocalisedSuggestions = suggestions => {
 };
 
 const mapStateToProps = (state, ownprops) => {
+  const { localizationLabels } = state.app;
   let {
     jsonPath,
     value,
     sourceJsonPath,
     labelsFromLocalisation,
-    data
+    data,
+    localePrefix
   } = ownprops;
   let suggestions =
     data && data.length > 0
@@ -88,7 +94,9 @@ const mapStateToProps = (state, ownprops) => {
   //To fetch corresponding labels from localisation for the suggestions, if needed.
   if (labelsFromLocalisation) {
     suggestions = getLocalisedSuggestions(
-      JSON.parse(JSON.stringify(suggestions))
+      JSON.parse(JSON.stringify(suggestions)),
+      localePrefix,
+      localizationLabels
     );
   }
   //To find correct option object as per the value (for showing the selected value).
@@ -102,7 +110,7 @@ const mapStateToProps = (state, ownprops) => {
     value = { label: selectedItem.name, value: selectedItem.code };
   }
   // console.log(value, suggestions);
-  return { value, jsonPath, suggestions };
+  return { value, jsonPath, suggestions, localizationLabels };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -94,13 +94,19 @@ const processDemand = async (state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "Demands[0].mobileNumber"
       );
+
+      const tenantIdData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Demands[0].tenantId"
+      );
+      
       let payload = await httpRequest(
         "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        `/user/_search?tenantId=${"pb"}`,
         "_search",
         [],
         {
-          tenantId: commonConfig.tenantId,
+          tenantId: "pb",
           userName: mobileNumber
         }
       );
@@ -190,7 +196,7 @@ const createDemand = async (state, dispatch) => {
         Demands: demands
       });
       if (payload.Demands.length > 0) {
-        //const consumerCode = get(payload, "Demands[0].consumerCode");
+        const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
@@ -203,7 +209,7 @@ const createDemand = async (state, dispatch) => {
           businessService.split(".")[0]
         );
         dispatch(prepareFinalObject("Demands", payload.Demands));
-        //await generateBill(consumerCode, tenantId, businessService, dispatch);
+        await generateBill(consumerCode, tenantId, businessService, dispatch);
       } else {
         alert("Empty response!!");
       }
@@ -264,7 +270,12 @@ const generateBill = async (
           businessService
         )
       );
-      dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
+
+      const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`
+          : `/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`;
+      dispatch(setRoute(`${path}`));
     }
   } catch (e) {
     console.log(e);

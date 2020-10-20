@@ -621,7 +621,7 @@ export const getUserDataFromUuid = async bodyObject => {
 };
 
 export const getCommonPayUrl = (dispatch, applicationNo, tenantId ,businessService) => {
-  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
+  const url = `pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
   dispatch(setRoute(url));
 };
 
