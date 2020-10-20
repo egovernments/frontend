@@ -14,7 +14,7 @@ import {
   import set from "lodash/set";
   import { getFeesEstimateCard,
            convertEpochToDate, 
-           getCommonApplyFooter,
+           //getCommonApplyFooter,
            } from "../utils";
 
   import { httpRequest } from "../../../../ui-utils";
@@ -29,6 +29,7 @@ import {
   import { confirmationDialog } from "./confirmationDialog";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import './index.css';
+  import "../../../../index.css";
   import {  downloadChallan } from "egov-common/ui-utils/commons";
 
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -168,6 +169,16 @@ import {
       sourceJsonPath: "Demands[0].estimateCardData",
     }),
   });
+  export const getCommonApplyFooter = children => {
+    return {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        className: "apply-wizard-footer"
+      },
+      children
+    };
+  };
   
   const userDetails = getCommonGrayCard({
     headerDiv: {
@@ -689,13 +700,13 @@ import {
                 props: {
                   variant: "outlined",
                   color: "primary",
-                  className:"gen-challan-btn",
-                  style: {
-                    minWidth: "180px",
-                    height: "48px",
-                    marginRight: "16px",
-                    borderRadius: "inherit",
-                  },
+                  className:"preview-challan-btn",
+                  // style: {
+                  //   minWidth: "180px",
+                  //   height: "48px",
+                  //   marginRight: "16px",
+                  //   borderRadius: "inherit",
+                  // },
                 },
                 children: {
                   cancelButtonLabel: getLabel({
@@ -717,13 +728,8 @@ import {
                 props: {
                   variant: "contained",
                   color: "primary",
-                  className:"gen-challan-btn",
-                  style: {
-                    minWidth: "180px",
-                    height: "48px",
-                    marginRight: "16px",
-                    borderRadius: "inherit",
-                  },
+                  className:"preview-challan-btn",
+                
                 },
                 children: {
                   editButtonLabel: getLabel({
@@ -766,6 +772,8 @@ import {
                 }
               },
             }),
+          
+           
           }),
         },
       },
