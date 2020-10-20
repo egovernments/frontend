@@ -19,10 +19,16 @@ const tenantId = getTenantId();
 
 
 const getData = async (action, state, dispatch, demandId) => {
+
+  const tenantData = get(
+    state.screenConfiguration,
+    "preparedFinalObject.login.tenantId",
+    {}
+  );
   // dispatch(toggleSpinner())
   let requestBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: tenantData,
       moduleDetails: [
         {
           moduleName: "tenant",
@@ -77,7 +83,7 @@ const getData = async (action, state, dispatch, demandId) => {
           {
             idName: "",
             format: "UC/[CY:dd-MM-yyyy]/[seq_uc_demand_consumer_code]",
-            tenantId: `${tenantId}`
+            tenantId: tenantData
           }
         ]
       });
