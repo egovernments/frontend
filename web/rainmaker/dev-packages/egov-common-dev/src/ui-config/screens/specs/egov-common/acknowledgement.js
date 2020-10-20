@@ -13,12 +13,13 @@ import { getHeader } from "./pay";
 const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig) => {
    const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
    const licence = get(state.screenConfiguration.preparedFinalObject , "Licenses");
+   console.log("applicationNumber-",applicationNumber);
     let receiptDownloadObject = {
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
             const receiptQueryString = [
-              //  { key: "receiptNumbers", value: applicationNumber },
-              { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+                { key: "receiptNumbers", value: applicationNumber },
+              //{ key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
                 { key: "tenantId", value: tenantId }
             ]
            // console.log("source 3--",receiptQueryString);
