@@ -1,4 +1,4 @@
-import { Card, Image } from "egov-ui-kit/components";
+import { Card, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import "./index.css";

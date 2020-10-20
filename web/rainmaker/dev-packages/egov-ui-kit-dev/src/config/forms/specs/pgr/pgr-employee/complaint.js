@@ -3,7 +3,7 @@ import get from "lodash/get";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import commonConfig from "egov-ui-kit/config/common.js";
+import commonConfig from "config/common.js";
 
 const tenantId = getTenantId();
 

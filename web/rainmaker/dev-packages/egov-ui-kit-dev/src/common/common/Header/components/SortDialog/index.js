@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Dialog, Button } from "egov-ui-kit/components";
+import { Dialog, Button } from "components";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
-import { RadioButton } from "egov-ui-kit/components";
+import { RadioButton } from "components";
 import { getComplaintDisplayOrder } from "egov-ui-kit/redux/complaints/actions";
 
 const styles = {

@@ -1,4 +1,4 @@
-import { Button, Card } from "egov-ui-kit/components";
+import { Button, Card } from "components";
 import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";

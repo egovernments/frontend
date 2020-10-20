@@ -1,5 +1,5 @@
 import { compose } from "recompose";
-import { Button } from "egov-ui-kit/components";
+import { Button } from "components";
 import { withRouter } from "react-router-dom";
 import React, { Component } from "react";
 import { connect } from "react-redux";

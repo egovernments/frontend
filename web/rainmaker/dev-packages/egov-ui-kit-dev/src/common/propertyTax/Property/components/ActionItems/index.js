@@ -1,6 +1,6 @@
 import React from "react";
 import HistoryIcon from "@material-ui/icons/History";
-import { Button } from "egov-ui-kit/components";
+import { Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 

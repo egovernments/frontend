@@ -1,5 +1,5 @@
 // import React, { Component } from "react";
-// import { Dialog } from "egov-ui-kit/components";
+// import { Dialog } from "components";
 // import PropertyInformation from "../PropertyInformation";
 
 // class ReceiptDialog extends Component {

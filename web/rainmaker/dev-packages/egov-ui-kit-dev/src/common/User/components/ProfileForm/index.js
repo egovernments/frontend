@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TextField } from "egov-ui-kit/components";
+import { Button, TextField } from "components";
 import CityPicker from "../../../common/CityPicker";
 import Label from "egov-ui-kit/utils/translationNode";
 
