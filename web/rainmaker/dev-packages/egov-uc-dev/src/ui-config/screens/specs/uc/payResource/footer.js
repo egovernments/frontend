@@ -354,12 +354,12 @@ ReceiptBodyNew.Payment["mobileNumber"] =
       );
       let receiptNumber = get(
         response,
-        "Receipt[0].Bill[0].billDetails[0].receiptNumber",
+        "Payments[0].paymentDetails[0].receiptNumber",
         null
       );
       let serviceCategory = get(
         response,
-        "Receipt[0].Bill[0].billDetails[0].businessService",
+        "Payments[0].paymentDetails[0].bill.consumerCode",
         ""
       );
       console.log(receiptNumber, response);
