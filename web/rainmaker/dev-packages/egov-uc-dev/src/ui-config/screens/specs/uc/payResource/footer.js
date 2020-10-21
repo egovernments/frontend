@@ -59,7 +59,116 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         goBack(state, dispatch);
       }
-    }
+    },
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+
+  },
+  posButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        width: "379px",
+        height: "48px ",
+        right: "19px ",
+        position: "relative",
+        borderRadius: "0px "
+      }
+    },
+    children: {
+      downloadReceiptButtonLabel: getLabel({
+        labelName: "POS COLLECT",
+        labelKey: "UC_BUTTON_POS_COLLECT"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        // dispatch(toggleSpinner());
+        window.posOnSuccess=(posResponse={})=>{
+          // dispatch(toggleSpinner());
+          callBackForPay(state,dispatch)
+        }
+
+        window.posOnFailure=(posResponse={})=>
+        {
+          // dispatch(toggleSpinner());
+          // dispatch(
+          //   toggleSnackbar(
+          //     true,
+          //     {
+          //       labelName: "Payment failure",
+          //       labelKey: "ERR_FILL_POS_PAYMENT_FAILURE"
+          //     },
+          //     "danger"
+          //   )
+          // );
+        }
+        const paymentData={
+          instrumentType:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentType.name"
+          ),
+          paymentAmount:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.amount"
+          ),
+          customerName:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].paidBy"
+          ),
+          customerMobile:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].payerMobileNumber"
+          ),
+          message:"Pos payment",
+          emailId:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].payerEmail"
+          ),
+          amountDetails:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails"
+          ),
+          billNumber:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails[0].billNumber"
+          ),
+          consumerCode:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails[0].consumerCode"
+          ),
+          businessService:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].Bill[0].billDetails[0].businessService"
+          ),
+          collectorName:"",
+          collectorId:"",
+          instrumentDate:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentDate"
+          ),
+          instrumentNumber:get(
+            state.screenConfiguration.preparedFinalObject,
+            "ReceiptTemp[0].instrument.instrumentNumber"
+          )
+        }
+        try {
+          window.mSewaApp && window.mSewaApp.sendPaymentData("paymentData",JSON.stringify(paymentData));
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    },
+    // visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   nextButton: {
     componentPath: "Button",
@@ -91,7 +200,9 @@ export const footer = getCommonApplyFooter({
         callBackForPay(state, dispatch);
       }
     }
-  }
+  },
+  // visible: process.env.REACT_APP_NAME === "Citizen" || JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+
 });
  const getSelectedTabIndex = paymentType => {
   switch (paymentType) {
