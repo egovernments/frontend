@@ -43,23 +43,39 @@ export const loginDetailsCard = getCommonCard(
             type:"password"
           }
         }),
-        city: {
-          ...getSelectField({
-            
+        city:{
+          uiFramework: "custom-containers-local",
+          componentPath: "AutosuggestContainer",
+          jsonPath: "login.tenantId",
+          required: true,
+          props: {
+            style: {
+              width: "100%",
+              cursor: "pointer"
+            },
             label: {
               labelName: "City",
-              labelKey: "CORE_COMMON_CITY"
+              // labelKey: "CORE_COMMON_CITY"
             },
             placeholder: {
               labelName: "Select City",
-              labelKey: "CORE_COMMON_CITY_PLACEHOLDER"
+              // labelKey: "CORE_COMMON_CITY_PLACEHOLDER"
             },
-            required: true,
-            jsonPath: "login.tenantId",
             sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-          }),
-          
-        },
+            labelsFromLocalisation: true,
+            suggestions: [],
+            fullwidth: true,
+            required: true,
+            inputLabelProps: {
+              shrink: true
+            }
+            // className: "tradelicense-mohalla-apply"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          }
+        }
       },
       {
         style: {
