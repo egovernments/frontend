@@ -33,7 +33,11 @@ class EGFFinance extends Component {
       erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
    } else if (hostname.search("uat.lgpunjab.gov.in") != -1) {
      //subdomainurl = hostname.substring(hostname.search('uat'),hostname.length);
-     subdomainurl = "fin-uat.lgpunjab.gov.in";
+     if (getTenantId().split(".")[1] == "mohali") {
+	subdomainurl = "prod.lgpunjab.gov.in";
+     } else {
+	subdomainurl = "fin-uat.lgpunjab.gov.in";
+     }
      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
    } else if (hostname.search("uat") != -1) {
      subdomainurl = "uat.egovernments.org";
