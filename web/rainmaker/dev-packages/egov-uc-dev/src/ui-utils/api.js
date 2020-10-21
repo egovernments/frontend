@@ -149,7 +149,7 @@ export const loginRequest = async (username = null, password = null, refreshToke
   try {
     const response = await loginInstance.post("/user/oauth/token", params);
     const responseStatus = parseInt(response.status, 10);
-    // setAccessToken(accessToken);
+    setTenantId(response.data.UserRequest.tenantId);
     setAccessToken(response.data.access_token);
     if (responseStatus === 200 || responseStatus === 201) 
     {
