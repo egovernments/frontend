@@ -4,7 +4,7 @@ import { Card } from "components";
 // import moment from "moment";
 import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
-
+import "./index.css";
 // import { connect } from "react-redux";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
