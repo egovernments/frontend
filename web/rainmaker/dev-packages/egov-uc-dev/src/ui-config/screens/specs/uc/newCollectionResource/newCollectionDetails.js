@@ -169,11 +169,11 @@ export const newCollectionDetailsCard = getCommonCard(
             },
             label: {
               labelName: "Service Category",
-              labelKey: "UC_SERVICE_CATEGORY_LABEL"
+              // labelKey: "UC_SERVICE_CATEGORY_LABEL"
             },
             placeholder: {
               labelName: "Select service Category",
-              labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
+              // labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
             },
             localePrefix: {
               masterName: "BusinessService",

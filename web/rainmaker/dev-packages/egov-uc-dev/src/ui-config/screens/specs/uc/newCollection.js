@@ -111,7 +111,7 @@ const getData = async (action, state, dispatch, demandId) => {
   // dispatch(toggleSpinner())
   let requestBody = {
     MdmsCriteria: {
-      tenantId: tenantData,
+      tenantId: tenantId,
       moduleDetails: [
         {
           moduleName: "tenant",
@@ -167,7 +167,7 @@ const getData = async (action, state, dispatch, demandId) => {
           {
             idName: "",
             format: "UC/[CY:dd-MM-yyyy]/[seq_uc_demand_consumer_code]",
-            tenantId: tenantData
+            tenantId: tenantId
           }
         ]
       });
