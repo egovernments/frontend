@@ -100,28 +100,29 @@ export const searchForm = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
+        isClearable: true,
       },
       required: true,
     },
 
-    // employeeName: getTextField({
-    //   label: {
-    //     labelName: "Employee Name",
-    //     labelKey: "HR_EMP_NAME_LABEL"
-    //   },
-    //   placeholder: {
-    //     labelName: "Enter Employee Name",
-    //     labelKey: "HR_EMP_NAME_PLACEHOLDER"
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4
-    //   },
-    //   required: false,
-    //   pattern: getPattern("Name") || null,
-    //   errorMessage: "HR_EMP_NAME_ERR_MSG",
-    //   jsonPath: "searchScreen.names"
-    // }),
+    employeeName: getTextField({
+      label: {
+        labelName: "Employee Name",
+        labelKey: "HR_EMP_NAME_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Employee Name",
+        labelKey: "HR_EMP_NAME_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: getPattern("Name") || null,
+      errorMessage: "HR_EMP_NAME_ERR_MSG",
+      jsonPath: "searchScreen.names"
+    }),
 
     employeeID: getTextField({
       label: {
@@ -209,36 +210,6 @@ export const searchForm = getCommonCard({
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
-      searchButton: {
-        componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-          // align: "center"
-        },
-        props: {
-          variant: "contained",
-          style: {
-            color: "white",
-            margin: "8px",
-            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
-            borderRadius: "2px",
-            width: "220px",
-            height: "48px",
-            float: "right"
-          }
-        },
-        children: {
-          buttonLabel: getLabel({
-            labelName: "Search",
-            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: searchApiCall
-        }
-      },
       resetButton: {
         componentPath: "Button",
         gridDefination: {
@@ -254,7 +225,8 @@ export const searchForm = getCommonCard({
             //   borderRadius: "2px",
             width: "220px",
             height: "48px",
-            margin: "8px"            
+            margin: "8px",
+            float: "right"
           }
         },
         children: {
@@ -267,7 +239,36 @@ export const searchForm = getCommonCard({
           action: "condition",
           callBack: resetFields
         }
-      }      
+      },
+      searchButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+          // align: "center"
+        },
+        props: {
+          variant: "contained",
+          style: {
+            color: "white",
+            margin: "8px",
+            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderRadius: "2px",
+            width: "220px",
+            height: "48px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Search",
+            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: searchApiCall
+        }
+      }
     })
   })
 },{
