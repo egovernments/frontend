@@ -1,6 +1,6 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-framework/ui-utils/commons";
+import { getUserInfo,getLocaleLabels} from "ui-utils/commons";
 import get from "lodash/get";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -11,10 +11,9 @@ import {
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {  
-  getLocaleLabels,
   getLocalization,
   getLocale
-} from "../../../../ui-utils/commons";
+} from "ui-utils/localStorageUtils";
 
 export const getCommonApplyFooter = children => {
   return {
