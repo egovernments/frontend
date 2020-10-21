@@ -33,19 +33,22 @@ class EGFFinance extends Component {
       erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
    } else if (hostname.search("uat.lgpunjab.gov.in") != -1) {
      //subdomainurl = hostname.substring(hostname.search('uat'),hostname.length);
-     if (getTenantId().split(".")[1] == "mohali") {
-	subdomainurl = "prod.lgpunjab.gov.in";
-     } else {
-	subdomainurl = "fin-uat.lgpunjab.gov.in";
-     }
+     subdomainurl = "fin-uat.lgpunjab.gov.in";
      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
    } else if (hostname.search("uat") != -1) {
      subdomainurl = "uat.egovernments.org";
      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
-   } else {
+   } else if (hostname.search("staging") != -1) {
       subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
       erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl + menuUrl;
-    }
+   } else {
+      subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
+      if (getTenantId().split(".")[1] == "jagraon") {
+        erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-prod" + "." + subdomainurl + menuUrl;
+      } else {
+        erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl + menuUrl;
+      }
+   }
 
     // let erp_url='http://jalandhar.test.egov.com:8080'+menuUrl;
     console.log("ERP URL : " + erp_url);
