@@ -237,7 +237,7 @@ export const billSearchCard = getCommonCard({
       },
       required: false,
       pattern: getPattern("MobileNo"),
-      errorMessage: "Invalid Mobile No..",
+      errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
       jsonPath: "searchScreen.mobileNumber"
     })
   }),
