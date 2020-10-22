@@ -117,7 +117,7 @@ export const footer = getCommonApplyFooter({
             state.screenConfiguration.preparedFinalObject,
             "ReceiptTemp[0].instrument.instrumentType.name"
           ),
-          paymentAmount:get(
+          totalAmount:get(
             state.screenConfiguration.preparedFinalObject,
             "ReceiptTemp[0].Bill[0].totalAmount"
           ),

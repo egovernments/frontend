@@ -51,9 +51,9 @@ export const textToLocalMapping = {
 };
 
 export const searchResults = {
-  uiFramework: "custom-molecules-local",
+  uiFramework: "custom-molecules",
   componentPath: "Table",
-  moduleName:"egov-uc",
+  // moduleName:"egov-uc",
   visible: false,
   props: {
     columns: [
