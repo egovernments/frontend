@@ -10,7 +10,7 @@ export const confirmationDialog = getCommonContainer({
   confirmationContents: getCommonContainer({
     header: getCommonHeader({
       labelName: "Do you really want to cancel challan",
-      labelKey: "Cancel challan"
+      labelKey: "CANCEL_CHALLAN_HEADER"
     },
     {
       style: {
@@ -63,7 +63,7 @@ export const confirmationDialog = getCommonContainer({
           children: {
             previousButtonLabel: getLabel({
               labelName: "YES",
-              labelKey: "YES"
+              labelKey: "CANCEL_YES"
             })
           },
           onClickDefination: {
@@ -88,7 +88,7 @@ export const confirmationDialog = getCommonContainer({
           children: {
             previousButtonLabel: getLabel({
               labelName: "NO",
-              labelKey: "NO"
+              labelKey: "CANCEL_NO"
             })
           },
           onClickDefination: {

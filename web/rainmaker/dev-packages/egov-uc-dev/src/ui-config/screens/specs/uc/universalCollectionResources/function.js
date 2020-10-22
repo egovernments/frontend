@@ -218,7 +218,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
   }
   else {
     for (var key in challanSearchScreenObject) {
-      if (challanSearchScreenObject.hasOwnProperty(key) && key === "businessService" && challanSearchScreenObject['businessService'] != null) {
+      if (challanSearchScreenObject.hasOwnProperty(key) && key === "businessService" && challanSearchScreenObject['businessService'] != "") {
         queryObject.push({ key: key, value: challanSearchScreenObject[key] });
       } else if (
         challanSearchScreenObject.hasOwnProperty(key) && challanSearchScreenObject[key] &&
