@@ -37,6 +37,11 @@ const FeesEstimateCard = Loadable({
   loading: () => <Loading />
 });
 
+const Table = Loadable({
+  loader: () => import("./Table"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -44,5 +49,6 @@ export {
   CustomTab,
   UploadSingleFile,
   FeesEstimateCard,
-  DividerWithLabel
+  DividerWithLabel,
+  Table
 };
