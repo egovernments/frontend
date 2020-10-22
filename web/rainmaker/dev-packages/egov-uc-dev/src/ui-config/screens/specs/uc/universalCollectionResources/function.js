@@ -8,6 +8,10 @@ import { convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validate
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
 const tenantId = getTenantId();
+import {
+ 
+  toggleSpinner
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const searchApiCall = async (state, dispatch) => {
   
@@ -162,6 +166,7 @@ export const searchApiCall = async (state, dispatch) => {
   }
 };
 export const searchChallanApiCall = async(state,dispatch)=>{
+  
   showHideTable(false, dispatch);
   let queryObject = [];
    queryObject = [
@@ -235,11 +240,12 @@ export const searchChallanApiCall = async(state,dispatch)=>{
       }
     }
 
-   
+    dispatch(toggleSpinner());
     const responseFromAPI = await getChallanSearchResult(queryObject);
     
     dispatch(prepareFinalObject("challanSearchResponse", responseFromAPI));
-     const challans = (responseFromAPI && responseFromAPI.challans) || [];
+    dispatch(toggleSpinner()); 
+    const challans = (responseFromAPI && responseFromAPI.challans) || [];
     
      const response = [];
      for (let i = 0; i < challans.length; i++) {
