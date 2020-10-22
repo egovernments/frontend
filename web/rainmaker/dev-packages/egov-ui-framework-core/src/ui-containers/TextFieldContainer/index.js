@@ -78,7 +78,7 @@ class TextFieldContainer extends React.Component {
         )
       : "";
     if (dropdownData.length > 0) {
-      
+      dropdownData=dropdownData.sort((e1,e2)=>e1.label.localeCompare(e2.label))
       return (
         <TextfieldWithIcon
           label={translatedLabel}

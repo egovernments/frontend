@@ -72,7 +72,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
         transfomedKeys
       );
       return option;
-    })
+    }).sort((e1,e2)=>e1.name.localeCompare(e2.name))
   );
 };
 
