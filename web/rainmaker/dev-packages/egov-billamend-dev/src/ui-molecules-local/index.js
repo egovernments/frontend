@@ -8,6 +8,12 @@ const TestMolecules = Loadable({
   loading: () => <Loading />
 });
 
+const FeeEstimateCard =Loadable({
+  loader: () => import("./FeeEstimateCard"),
+  loading: () => <Loading />
+});
+
 export {
-  TestMolecules
+  TestMolecules,
+  FeeEstimateCard
 };

@@ -5,11 +5,11 @@ import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 const Loading = () => <LinearProgress />;
 
 
-const TestContainer = Loadable({
-  loader: () => import("./TestContainer"),
+const EstimateCardContainer = Loadable({
+  loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
 });
 
 export {
-  TestContainer
+  EstimateCardContainer
 };
