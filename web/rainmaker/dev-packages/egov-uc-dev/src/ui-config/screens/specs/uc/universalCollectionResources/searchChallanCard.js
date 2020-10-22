@@ -150,7 +150,7 @@ import {
         },
         required: false,
         pattern: getPattern("MobileNo"),
-        errorMessage: "Invalid Mobile No..",
+        errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
         jsonPath: "challanSearchScreen.mobileNumber"
       }),
   

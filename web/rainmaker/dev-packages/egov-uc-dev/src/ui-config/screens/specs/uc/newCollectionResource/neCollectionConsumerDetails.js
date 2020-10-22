@@ -37,7 +37,7 @@ import {
                 required: true,
                 visible: true,
                 pattern: getPattern("Name"),
-                errorMessage: "Invalid Name.",
+               // errorMessage: "Invalid Name.",
                 jsonPath: "Challan[0].citizen.name"
               }),
               ConsumerMobileNo: getTextField({
@@ -56,7 +56,7 @@ import {
                 required: true,
                 visible: true,
                 pattern: getPattern("MobileNo"),
-                errorMessage: "Invalid Mobile No.",
+                errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
                 jsonPath: "Challan[0].citizen.mobileNumber"
               }),
               ConsumerHouseNo: getTextField({
