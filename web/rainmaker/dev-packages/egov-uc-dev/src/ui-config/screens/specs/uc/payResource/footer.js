@@ -402,7 +402,7 @@ const callBackForPay = async (state, dispatch) => {
     Payment: { paymentDetails: [] }
   };
     
-  console.log(finalReceiptData,"finalreceipt");
+  // console.log(finalReceiptData,"finalreceipt");
   ReceiptBody.Receipt.push(finalReceiptData);
 
   ReceiptBodyNew.Payment["tenantId"] = finalReceiptData.tenantId;
@@ -422,18 +422,18 @@ ReceiptBodyNew.Payment["mobileNumber"] =
 
 
   const totalAmount = Number(finalReceiptData.Bill[0].totalAmount);
-  console.log(totalAmount,"111111111111111111111111111");
+  // console.log(totalAmount,"111111111111111111111111111");
   let amtPaid =
     state.screenConfiguration.preparedFinalObject.AmountType ===
     "partial_amount"
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : finalReceiptData.Bill[0].totalAmount;
-      console.log(amtPaid,"22222222222222222222222222222");
+      // console.log(amtPaid,"22222222222222222222222222222");
 
       amtPaid = amtPaid ? Number(amtPaid) : totalAmount;
-      console.log(amtPaid,"33333333333333333333333333333");
+      // console.log(amtPaid,"33333333333333333333333333333");
 
-    console.log(ReceiptBody,"ReceiptBodydata");
+    // console.log(ReceiptBody,"ReceiptBodydata");
 
 
     ReceiptBodyNew.Payment.paymentDetails.push({
@@ -473,7 +473,7 @@ ReceiptBodyNew.Payment["mobileNumber"] =
         "Payments[0].paymentDetails[0].bill.consumerCode",
         ""
       );
-      console.log(receiptNumber, response);
+      // console.log(receiptNumber, response);
       dispatch(prepareFinalObject("receiptSearchResponse", response));
       // moveToSuccess(href, dispatch, receiptNumber);
       const path =

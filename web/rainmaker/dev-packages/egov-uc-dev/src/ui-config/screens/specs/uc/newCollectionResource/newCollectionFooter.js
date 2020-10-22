@@ -251,9 +251,7 @@ const generateBill = async (
       {}
     );
     if (payload && payload.Bill[0]) {
-      debugger;
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-      debugger;
       const estimateData = createEstimateData(payload.Bill[0]);
       estimateData &&
         estimateData.length &&
@@ -285,7 +283,6 @@ const generateBill = async (
 };
 
 const createEstimateData = billObject => {
-  debugger;
   const billDetails = billObject && billObject.billDetails;
   let fees =
     billDetails &&
