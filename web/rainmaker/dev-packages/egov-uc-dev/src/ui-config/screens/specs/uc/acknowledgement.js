@@ -190,7 +190,8 @@ const getAcknowledgementCard = (
  else if (purpose === "cancel" && status === "success") {
    return{
     header :getCommonContainer({
-      header:header        
+      header:header,
+      consumerCode : consumerCode(challanNumber),     
     }),
     headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),
     applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
