@@ -63,10 +63,8 @@ class PaymentRedirect extends Component {
       );
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
-      //Need to check flow for Pending Tx 
-      //set(pgUpdateResponse,"Transaction[0].txnStatus","PENDING");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
-      	let bservice=search.split('&')[0];
+        let bservice=search.split('&')[0];
       	console.log("bservice  --> ",bservice);
         bservice= bservice.substr(1);
         const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}&${bservice}`;

@@ -12,16 +12,14 @@ import { getHeader } from "./pay";
 
 const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig) => {
    const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
-   const licence = get(state.screenConfiguration.preparedFinalObject , "Licenses");
-    let receiptDownloadObject = {
+   const licence = get(state.screenConfiguration.preparedFinalObject , "Licenses"); 
+   let receiptDownloadObject = {
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
             const receiptQueryString = [
-              //  { key: "receiptNumbers", value: applicationNumber },
-              { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+                { key: "receiptNumbers", value: applicationNumber },
                 { key: "tenantId", value: tenantId }
             ]
-           // console.log("source 3--",receiptQueryString);
             if(licence && licence[0].action && licence[0].action==="APPLY")
             downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt",state);
          
@@ -39,10 +37,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
                 { key: "tenantId", value: tenantId }
             ]
             if(licence && licence[0].action && licence[0].action==="APPLY")
-             downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt",state);
-          
-            else
-             download(receiptQueryString, "print", receiptKey, state);
+            downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt",state);
+         
+           else
+            download(receiptQueryString, "print", receiptKey, state);
         },
         leftIcon: "receipt"
     };
@@ -115,23 +113,14 @@ const getAcknowledgementCard = (
                     card: acknowledgementCard({
                         icon: "done",
                         backgroundColor: "#39CB74",
-                        // header: {
-                        //     labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE`
-                        // },
-                        // body: {
-                        //     labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
-                        // },
-                        // tailText: {
-                        //     labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`
-                        // },
                         header: {
-                            labelKey:"SUCCESS_PAYMENT_MESSAGE"
+                            labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE`
                         },
                         body: {
-                            labelKey: "SUCCESS_PAYMENT_MESSAGE_DETAIL"
+                            labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
                         },
                         tailText: {
-                            labelKey: "SUCCESS_PAYMENT_RECEIPT_NO"
+                            labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`
                         },
                         number: receiptNumber
                     })
@@ -149,12 +138,6 @@ const getAcknowledgementCard = (
                     card: acknowledgementCard({
                         icon: "close",
                         backgroundColor: "#E54D42",
-                        // header: {
-                        //     labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE`
-                        // },
-                        // body: {
-                        //     labelKey: roleExists ? `CITIZEN_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_FAILURE_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
-                        // }
                         header: {
                             labelKey:  "FAILURE_PAYMENT_MESSAGE"
                         },
@@ -166,7 +149,7 @@ const getAcknowledgementCard = (
             },
             paymentFooter: paymentFooter(state, consumerCode, tenant, status, businessService)
         };
-    } else if (status === "pending") {
+    }else if(status ==="pending"){
         return {
             header,
             applicationSuccessCard: {
@@ -227,57 +210,6 @@ const screenConfig = {
             tenant
         );
         set(action, "screenConfig.components.div.children", data);
-
-        // const script = document.createElement("script");
-        // script.src = "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/ulb-overrides-uat-20191226.js";
-        // script.async = true;
-        // script.onload = () =>{
-        //     var ret = window.isMobileView();
-        //     if(ret === true){
-        //         const ReceiptDataTemp = get(
-        //             state.screenConfiguration.preparedFinalObject,
-        //             "ReceiptTemp[0]"
-        //           );
-                  
-                 
-        //           var receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDate);
-        //           var receiptAmount = ReceiptDataTemp.instrument.amount;
-        //           var paymentMode = ReceiptDataTemp.instrument.instrumentType.name;
-                 
-        //           var fromPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].fromPeriod);
-        //           var toPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].toPeriod);
-        //           var consumerName = ReceiptDataTemp.Bill[0].payerName;
-        //           var localizedULBName = document.getElementsByClassName("rainmaker-displayInline")[0].textContent;
-        //           var collectorName = ""; 
-        //           if (window.isEmployee()) {
-        //             var empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
-        //             collectorName = empInfo.name;
-        //           }
-
-
-        //           var UCminiReceiptData = {
-        //             ulbType: localizedULBName,
-        //             receiptNumber: receiptNumber,
-        //             tenantid: tenant,
-        //             consumerName: consumerName,
-        //             receiptDate: receiptDateFormatted,
-        //             businessService: businessService,
-        //             fromPeriod: fromPeriod,
-        //             toPeriod: toPeriod,
-        //             receiptAmount: receiptAmount,
-        //             paymentMode: paymentMode,
-        //             collectorName: collectorName
-        //           };  
-
-        //         var UCreceiptURL = window.UCminiReceiptBuilder(UCminiReceiptData);
-        //         alert(UCreceiptURL);
-        //         window.loadUCMiniReceiptButton(UCreceiptURL);
-                
-        //     }
-              
-        // };
-        // document.body.appendChild(script);
-
         return action;
     }
 };
