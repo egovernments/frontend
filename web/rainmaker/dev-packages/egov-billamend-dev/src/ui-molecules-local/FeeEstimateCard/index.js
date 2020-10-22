@@ -54,9 +54,10 @@ function FeesEstimateCard(props) {
   const { classes, estimate } = props;
   const total = totalAmount(estimate.fees);
   return (
+ 
     <Grid container>
       <Grid xs={12} sm={7}>
-        <Typography variant="subheading">{estimate.header}</Typography>
+        <Typography variant="subheading">{estimate.header.labelName}</Typography>
         <div style={{ marginTop: 48, maxWidth: 400 }}>
           <Grid container>
             {estimate.fees.map((fee, key) => {
@@ -67,7 +68,7 @@ function FeesEstimateCard(props) {
               );
               let textLeft = fee.name ? (
                 <Grid container xs={8}>
-                  <Typography>{fee.name}</Typography>
+                  <Typography>{fee.name.labelName}</Typography>
                   {tooltip}
                 </Grid>
               ) : (

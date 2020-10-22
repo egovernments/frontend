@@ -11,6 +11,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 const headerrow = getCommonContainer({
 });
+
 export const getFeesEstimateCard = props => {
     const { sourceJsonPath, ...rest } = props;
     return {
@@ -23,6 +24,7 @@ export const getFeesEstimateCard = props => {
       }
     };
   };
+  
 const screenConfig = {
     uiFramework: "material-ui",
     name: "search-preview",
@@ -31,7 +33,7 @@ const screenConfig = {
             uiFramework: "custom-atoms",
             componentPath: "Div",
             props: {
-                className: "common-div-css search-preview"
+              className: "common-div-css search-preview"
             },
             children: {
                 headerDiv: {
@@ -65,18 +67,13 @@ const screenConfig = {
                     grayDiv: getCommonGrayCard({
                         title: getCommonTitle({ labelName: "Amount Details" }),
                         divider: getDivider(),
-                        feeContainer:getFeesEstimateCard({})
-                        // adjustmentAmountContainer: getCommonContainer({
-                        //     title: getCommonTitle({ labelName: "Adjustment Amount Details", style: { fontSize: "0.8375rem"} }),
-                        //     // estimate : get
-                        //     feeContianer:getFeesEstimateCard({}),
-                        // })
-
-
+                    estimate :getCommonGrayCard({
+                        estimateSection: getFeesEstimateCard({
+                          sourceJsonPath: "LicensesTemp[0].estimateCardData"
+                        })
+                      })
                     })
                 }),
-                // feeContianer:getFeesEstimateCard({}),
-
 
 
             }
