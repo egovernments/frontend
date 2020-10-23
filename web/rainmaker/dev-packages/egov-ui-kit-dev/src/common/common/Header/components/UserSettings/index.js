@@ -53,7 +53,6 @@ class UserSettings extends Component {
       background: "#ffffff",
       height: "65px",
       marginRight: "30px",
-    //  width: "102px",
       width: "120px",
       marginBottom: "24px",
     },
@@ -71,17 +70,13 @@ class UserSettings extends Component {
     this.props.setRoute("/");
   };
 
-  onTenantChange = (event, index, value,tenantIdsList) => {
-    //If multi-tenancy present then only show the dialog box
-    if(tenantIdsList != undefined){
-      console.info("I have multi-tenancy enabled,so select other tenants");
-      if (location.pathname.includes("/inbox")) {
-        this.setState({ ...this.state, tenantSelected: value });
-        setTenantId(value);
-        this.props.setRoute("/");
-      } else {
-        this.setState({ ...this.state, open: true, tempTenantSelected: value });
-      }
+  onTenantChange = (event, index, value) => {
+    if (location.pathname.includes("/inbox")) {
+      this.setState({ ...this.state, tenantSelected: value });
+      setTenantId(value);
+      this.props.setRoute("/");
+    } else {
+      this.setState({ ...this.state, open: true, tempTenantSelected: value });
     }
   };
 

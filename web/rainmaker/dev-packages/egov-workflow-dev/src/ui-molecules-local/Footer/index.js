@@ -16,7 +16,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import "./index.css";
- 
+
 class Footer extends React.Component {
   state = {
     open: false,
@@ -61,9 +61,13 @@ class Footer extends React.Component {
 
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath,state } = this.props;
-    
-    let employeeList = [];
 
+    let employeeList = [];
+    if(item.buttonLabel === "ACTIVATE_CONNECTION"){
+      if(item.moduleName === "NewWS1" || item.moduleName === "NewSW1"){
+        item.showEmployeeList = false;
+      }
+    }
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
       handleFieldChange(`${dataPath}.assignees`, "");
@@ -96,12 +100,20 @@ class Footer extends React.Component {
             break;
       }
     }
-    
+
     if (item.isLast) {
-      const url =
+      let url =
         process.env.NODE_ENV === "development"
           ? item.buttonUrl
           : item.buttonUrl;
+
+          /* Quick fix for edit mutation application */
+      if(url.includes('pt-mutation/apply')){   
+        url=url+'&mode=MODIFY' ; 
+        window.location.href=url.replace("/pt-mutation/",'');
+        return;
+      }
+      
       setRoute(url);
       return;
     }
@@ -278,14 +290,16 @@ class Footer extends React.Component {
         };    
         if(responseLength > 1 ){
           if(applicationType !== "NEW"){
+            //BEL : Based on user input
             downloadMenu && downloadMenu.push(editButton);
-           // downloadMenu && downloadMenu.push(submitButton);
+          // downloadMenu && downloadMenu.push(submitButton);
           }
 
         }
         else if(responseLength === 1){
          
             downloadMenu && downloadMenu.push(editButton);
+            //BEL : Based on user input
             //downloadMenu && downloadMenu.push(submitButton);
           }
 

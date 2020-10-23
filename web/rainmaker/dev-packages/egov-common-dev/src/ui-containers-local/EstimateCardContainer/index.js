@@ -63,7 +63,7 @@ if(totalAmount>0){
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
     fees,
     totalAmount,
-   // arrears
+    //arrears
   };
   return { estimate };
 };
