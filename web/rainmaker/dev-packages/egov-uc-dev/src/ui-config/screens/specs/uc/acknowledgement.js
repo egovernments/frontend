@@ -29,7 +29,8 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
         { key: "tenantId", value: tenantId }
       ]
       console.info("in ackmt==data got=",Challan);
-      downloadChallan(Challan,"download");         
+      //downloadChallan(Challan,"download");         
+      download(Challan, "download", "mcollect-challan");
     },
     leftIcon: "assignment"
   };
@@ -41,7 +42,8 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
         { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
-      downloadChallan(Challan,"print");          
+      //downloadChallan(Challan,"print");          
+      download(Challan, "print", "mcollect-challan");
     },
     leftIcon: "assignment"
   };
