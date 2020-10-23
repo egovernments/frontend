@@ -99,10 +99,10 @@ const getSearchData = async (dispatch, queryObj) => {
       dispatch(
         prepareFinalObject("receiptSearchResponse.Receipt", response.Receipt)
       );
-      // if (window.appOverrides && window.appOverrides.validateForm)
-      //  {
-      //   window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Receipt})
-      //  }
+      if (window.appOverrides && window.appOverrides.validateForm)
+       {
+        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Receipt})
+       }
     }
 };
 
