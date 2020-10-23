@@ -88,12 +88,12 @@ import {
         props: {
           className: "autocomplete-dropdown",
           label: {
-            labelName: "Service Category",
-            labelKey: "UC_SERVICE_CATEGORY_LABEL"
+            labelName: "Service Type",
+            labelKey: "UC_SERVICE_TYPE_LABEL",
           },
           placeholder: {
-            labelName: "Select Service Category",
-            labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
+            labelName: "Select service Type",
+            labelKey: "UC_SERVICE_TYPE_PLACEHOLDER",
           },
           localePrefix: {
             masterName: "BusinessService",
@@ -150,7 +150,7 @@ import {
         },
         required: false,
         pattern: getPattern("MobileNo"),
-        errorMessage: "Invalid Mobile No..",
+        errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
         jsonPath: "challanSearchScreen.mobileNumber"
       }),
   

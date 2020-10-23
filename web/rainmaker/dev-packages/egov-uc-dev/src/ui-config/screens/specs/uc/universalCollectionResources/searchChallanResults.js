@@ -82,14 +82,6 @@ export const SearchChallanResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[3]) {
-    case "Active":
-      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[5]}&tenantId=${
-        rowData[4]
-      }`;
-      break;
-    default:
-      window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[5]}&tenantId=${rowData[4]}`;
-      break;
-  }
+  window.location.href = `search-preview?applicationNumber=${rowData[0]}&businessService=${rowData[5]}&tenantId=${rowData[4]}&status=${rowData[3]}`;
+
 };

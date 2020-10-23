@@ -14,6 +14,8 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import {toggleSpinner} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 const getData = async (action, state, dispatch) => {
   
   const tenantId = getTenantId();
@@ -289,6 +291,7 @@ const newCollection = {
   uiFramework: "material-ui",
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(toggleSpinner());
     console.log("Before init function");
     const tenantId = getTenantId();
     const locale = getLocale() || "en_IN";
@@ -300,8 +303,10 @@ const newCollection = {
     if (getQueryArg(window.location.href, "consumerCode") != null) {
       getChallanSearchRes(action, state, dispatch);
     }
-
+    dispatch(toggleSpinner());
     return action;
+
+    
   },
 
   components: {
