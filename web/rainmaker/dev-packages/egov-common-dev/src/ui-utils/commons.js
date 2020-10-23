@@ -509,7 +509,42 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
   
-  if(configKey === "consolidatedreceipt")
+  switch(configKey){
+    case 'consolidatedreceipt' : 
+          DOWNLOADRECEIPT = {
+            GET: {
+              URL: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
+              ACTION: "_get",
+            },
+          };
+    break;
+    case 'mcollect-receipt' : 
+        DOWNLOADRECEIPT = {
+          GET: {
+            URL: "/egov-pdf/download/UC/mcollect-receipt",
+            ACTION: "_get",
+          },
+        };
+      
+    break;
+    case 'mcollect-challan':
+      DOWNLOADRECEIPT = {
+        GET: {
+          URL: "/egov-pdf/download/UC/mcollect-challan",
+          ACTION: "_get",
+        },
+      };
+    break;
+    default:
+      DOWNLOADRECEIPT = {
+        GET: {
+          URL: "/egov-pdf/download/TL/tlreceipt",
+          ACTION: "_get",
+        },
+    };
+  }
+
+ /* if(configKey === "consolidatedreceipt")
   {
     DOWNLOADRECEIPT = {
       GET: {

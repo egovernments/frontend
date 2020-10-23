@@ -15,7 +15,7 @@ const getSuggestions = suggestions => {
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name
-    }))
+    })).sort((a,b) =>  a['label'].localeCompare(b['label']))
   );
 };
 

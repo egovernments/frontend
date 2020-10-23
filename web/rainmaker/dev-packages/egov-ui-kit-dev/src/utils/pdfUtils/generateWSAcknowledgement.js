@@ -42,8 +42,6 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     } else {
         activateDetail = generateKeyValue(preparedFinalObject, activateDetailsNonMeter);
     }
-
-
     let UlbLogoForPdf = get(preparedFinalObject, 'UlbLogoForPdf', '');
     let WaterConnection = get(preparedFinalObject, 'WaterConnection[0]', {});
     let isMode = (WaterConnection.applicationType !== null) ? WaterConnection.applicationType.split("_")[0] : "";
@@ -101,6 +99,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_MODIFY_EFFECTIVE_DATE_HEADER', items: reviewModificationsEffective, hide: reviewModificationsEffective.length === 0 },
 
         ]
+ 
     }
 
     generatePDF(UlbLogoForPdf, pdfData, fileName);

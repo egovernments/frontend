@@ -10,7 +10,7 @@ import {
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { downloadChallan } from  "egov-common/ui-utils/commons";;
+import { download } from  "egov-common/ui-utils/commons";;
 import './index.css';
 const header = getCommonHeader({
   labelName: `mCollect`,
@@ -29,19 +29,20 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
         { key: "tenantId", value: tenantId }
       ]
       console.info("in ackmt==data got=",Challan);
-      downloadChallan(Challan,"download");         
+      download(Challan,"download" ,"mcollect-challan",state);          
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
-      //const { Challan } = state.screenConfiguration.preparedFinalObject;
+      
       const Challan = [
         { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
-      downloadChallan(Challan,"print");          
+     // downloadChallan(Challan,"print");   
+      download(Challan,"print" ,"mcollect-challan",state);        
     },
     leftIcon: "assignment"
   };
@@ -189,10 +190,11 @@ const getAcknowledgementCard = (
  else if (purpose === "cancel" && status === "success") {
    return{
     header :getCommonContainer({
-      header:header        
+      header:header,
+      consumerCode : consumerCode(challanNumber),     
     }),
     headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),
-    applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
+    applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
      
      iframeForPdf: {
        uiFramework: "custom-atoms",
@@ -267,21 +269,7 @@ const screenConfig = {
     const challanNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const businessService = getQueryArg(window.location.href,"serviceCategory");
-   // const tenantId = getTenantId();
-
-   // generateBill(challanNumber, tenantId, businessService,state, dispatch);
-
-    // const queryObject = [
-    //   {
-    //     key: "tenantId",
-    //     value: tenantId
-    //   },
-    //   { key: "offset", value: "0" },     
-    //   {
-    //     key: "businessServices",
-    //     value: serviceCategory
-    //   }
-    // ];
+  
     const data = getAcknowledgementCard(
       state,
       dispatch,

@@ -14,7 +14,7 @@ import {
   import set from "lodash/set";
   import { getFeesEstimateCard,
            convertEpochToDate, 
-           getCommonApplyFooter,
+           //getCommonApplyFooter,
            } from "../utils";
 
   import { httpRequest } from "../../../../ui-utils";
@@ -29,7 +29,8 @@ import {
   import { confirmationDialog } from "./confirmationDialog";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import './index.css';
-  import {  downloadChallan } from "egov-common/ui-utils/commons";
+  import "../../../../index.css";
+
 
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let tenantId = getQueryArg(window.location.href, "tenantId");
@@ -59,10 +60,8 @@ import {
 
    const challanresponse = await getChallanSearchResult(queryObject);
    dispatch(prepareFinalObject("Challan", challanresponse.challans[0]));
-   const isActive = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus");    
    dispatch(prepareFinalObject("challanStatus", challanresponse.challans[0].applicationStatus));
-   //if(isActive==="ACTIVE"){
-    if(challanresponse.challans[0].applicationStatus==="ACTIVE"){
+   if(challanresponse.challans[0].applicationStatus==="ACTIVE"){
       dispatch(
         handleField(
           "search-preview",
@@ -79,7 +78,37 @@ import {
           true
         )
       );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.cancellComment",
+          "visible",
+          false
+        )
+      );
     }
+    
+    else if(challanresponse.challans[0].applicationStatus==="CANCELLED"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.cancellComment",
+          "visible",
+          true
+        )
+      );
+    }
+    else{
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.preview.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.cancellComment",
+          "visible",
+          false
+        )
+      ); 
+    }
+    
     fetchBill(
       action,
       state,
@@ -93,6 +122,7 @@ import {
     let tenantId = getQueryArg(window.location.href, "tenantId");
     let businessService = getQueryArg(window.location.href, "businessService");
     let challanNo = getQueryArg(window.location.href, "applicationNumber");
+    let status = getQueryArg(window.location.href, "status");
     searchResults(action, state, dispatch, applicationNumber)
     const headerrow = getCommonContainer({
       header: getCommonHeader({
@@ -111,6 +141,7 @@ import {
           },
           },
         },
+    
         helpSection: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
@@ -122,9 +153,11 @@ import {
             xs: 12,
             sm: 12,
             align: "right"
-          }
+          },
+          children:downloadprintMenu(state, dispatch,challanNo,tenantId,status)
+          
         }
-      //}),
+      
     });
     set(
       action.screenConfig,
@@ -135,11 +168,141 @@ import {
     
     
   };
+
+  const downloadprintMenu = (state, dispatch,applicationNumber,tenantId,status) => {
+    let applicationDownloadObject = {
+      label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
+      link: () => {  
+        const Challan = [
+          { key: "challanNo", value: applicationNumber },
+          { key: "tenantId", value: tenantId }
+        ]
+        console.info("in ackmt==data got=",Challan);
+        //downloadChallan(Challan,"download");         
+        download(Challan,"download" ,"mcollect-challan",state)
+      },
+      leftIcon: "assignment"
+    };
+    let applicationPrintObject = {
+      label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
+      link: () => {
+        const Challan = [
+          { key: "challanNo", value: applicationNumber },
+          { key: "tenantId", value: tenantId }
+        ]
+        download(Challan,"print" ,"mcollect-challan",state);          
+      },
+      leftIcon: "assignment"
+    };
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+    console.info("uiCommonPayConfig--",uiCommonPayConfig);
+    const receiptKey = get(uiCommonPayConfig, "receiptKey")
+    let receiptDownloadObject = {
+      label: { labelName: "Receipt", labelKey: "UC_RECEIPT" },
+      link: () => {
+        const receiptQueryString = [
+          { key: "consumerCode", value: applicationNumber},
+          { key: "tenantId", value: tenantId }
+        ]
+        download(receiptQueryString , "download" ,"mcollect-receipt",state );
+        
+      },
+      leftIcon: "receipt"
+    };
+  
+    let receiptPrintObject = {
+      label: { labelName: "PRINT RECEIPT", labelKey: "UC_RECEIPT" },
+      link: () => {
+          const receiptQueryString = [
+              { key: "consumerCode", value: applicationNumber  },
+              { key: "tenantId", value: tenantId }
+          ]
+          download(receiptQueryString , "download" ,"mcollect-receipt",state );
+      },
+      leftIcon: "receipt"
+    };
+
+    let downloadMenu = [];
+    let printMenu = [];
+
+    if(status==="PAID"){
+      console.info("download challan, for PAID case");
+      downloadMenu=[applicationDownloadObject,receiptDownloadObject];
+      printMenu = [applicationPrintObject,receiptPrintObject];
+    }
+    else{
+      //Download challan option
+      console.info("download challan, for cancel and active case");
+      downloadMenu=[applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+    }
+
+  
+    return {
+      test1:{
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          className: "downloadprint-commonmenu",
+          style: { textAlign: "right", display: "flex",paddingTop: "10px" },
+        },
+        children: {
+          downloadMenu: {
+            uiFramework: "custom-molecules",
+            componentPath: "DownloadPrintButton",
+            props: {
+              data: {
+                label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
+                leftIcon: "cloud_download",
+                rightIcon: "arrow_drop_down",
+                props: {
+                  variant: "outlined",
+                  style: { height: "60px", color: "#FE7A51" ,
+                  marginRight: "5px" },
+                  className: "uc-download-button",
+                },
+                menu: downloadMenu,
+              },
+            },
+          },
+          printMenu: {
+            uiFramework: "custom-molecules",
+            componentPath: "DownloadPrintButton",
+            props: {
+              data: {
+                label: { labelName: "PRINT", labelKey: "TL_PRINT" },
+                leftIcon: "print",
+                rightIcon: "arrow_drop_down",
+                props: {
+                  variant: "outlined",
+                  style: { height: "60px", color: "#FE7A51" },
+                  className: "uc-print-button",
+                },
+                menu: printMenu,
+              },
+            },
+          },
+        },
+  
+      },
+    }
+  
+  }
   const estimate = getCommonGrayCard({
     estimateSection: getFeesEstimateCard({
       sourceJsonPath: "Demands[0].estimateCardData",
     }),
   });
+  export const getCommonApplyFooter = children => {
+    return {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        className: "apply-wizard-footer"
+      },
+      children
+    };
+  };
   
   const userDetails = getCommonGrayCard({
     headerDiv: {
@@ -218,6 +381,11 @@ import {
     }),
   });
 
+  export const checkChallanStatus = value => {
+    console.info("value==",value);
+    return value==="CANCELLED" ? value : "NA";
+  };
+
   export const checkValueForNA = value => {
     return value ? value : "NA";
   };
@@ -227,6 +395,7 @@ import {
   
   
   const serviceDetails = getCommonGrayCard({
+   
     headerDiv1: {
       uiFramework: "custom-atoms",
       componentPath: "Container",
@@ -279,6 +448,17 @@ import {
         { jsonPath: "Challan.taxPeriodTo", callBack: convertEpochToDate }
       ),
       
+      description:getLabelWithValue(
+        {
+          labelName: "Description",
+          labelKey: "UC_COMMENT_LABEL",
+        },
+        {
+          jsonPath: "Challan.description",
+          callBack: checkValueForNA
+        }
+      ),
+
        applicationStatus: getLabelWithValue(
         {
           labelName: "Application Status",
@@ -290,9 +470,25 @@ import {
          
         }
       ),
+      cancellComment:getLabelWithValue(
+        
+        {
+          labelName: "Reason for Cancellation",
+          labelKey: "UC_CANCELL_COMMENT",
+        },
+  
+        {
+          jsonPath: "Challan.additionalDetail.cancellComment",
+          callBack: checkValueForNA
+        }
+       
+      ),
+
     }),
   });
   
+ 
+
   export const callBackForPay = (state, dispatch) => {
     getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
   };
@@ -374,7 +570,7 @@ import {
     formattedFees.reverse();
     return formattedFees;
   };
-  //const showDownloadMenu;
+
   const fetchBill = async (
     action,
     state,
@@ -410,20 +606,17 @@ import {
       fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
      const isPAID = payload1.totalAmount == 0 ? true : false;
    
-   let payload = isPAID? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
+    let payload = isPAID? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
+                            : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
-    set(estimateData, "payStatus", isPAID);
-    
+    const challanStatus = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus",null);
+    //Set paystatus = true for PAID for active and cancelled as false. Used in search-preveiw to display paid/not paid
+    set(estimateData, "payStatus", challanStatus==="PAID"?true:false);
     dispatch(prepareFinalObject("Bill[0]", payload));
     dispatch(prepareFinalObject("Demands[0].estimateCardData", estimateData));
-    const showDownloadMenu = downloadprintMenu(state,consumerCode,tenantId);
-    set(
-      action.screenConfig,
-      "components.div.children.headerDiv.children.header1.children.headertop.children.helpSection.children",
-      showDownloadMenu
-    )
-    
+   
+
+
      
 
   };
@@ -454,131 +647,7 @@ import {
       console.log(error);
     }
   };
-  
-  export const downloadprintMenu=(state,applicationNumber,tenantId)=>{
-    let downloadMenu = [];
-      let printMenu = [];
-    // const isPaid = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus");
-    const isPaid = get(state.screenConfiguration.preparedFinalObject , "challanStatus");
-     console.info("isPaid----",isPaid);
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
-    const receiptKey = get(uiCommonPayConfig, "receiptKey")
-    let receiptDownloadObject = {
-      label: { labelName: "Receipt", labelKey: "UC_RECEIPT" },
-      link: () => {
-        const receiptQueryString = [
-          { key: "billIds", value: get(state.screenConfiguration.preparedFinalObject , "Bill[0].id") },
-          { key: "tenantId", value: tenantId }
-        ]
-        download(receiptQueryString , "download" ,receiptKey,state );
-        
-      },
-      leftIcon: "receipt"
-    };
-  
-    let receiptPrintObject = {
-      label: { labelName: "PRINT RECEIPT", labelKey: "UC_RECEIPT" },
-      link: () => {
-          const receiptQueryString = [
-              { key: "billIds", value:  get(state.screenConfiguration.preparedFinalObject , "Bill[0].id")  },
-              { key: "tenantId", value: tenantId }
-          ]
-          download(receiptQueryString  ,"print" , receiptKey ,state);
-      },
-      leftIcon: "receipt"
-    };
-    let applicationDownloadObject = {
-      label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
-      link: () => {
-        const receiptQueryString = [
-          {
-            key: 'challanNo',
-            value: applicationNumber
-          },
-          { key: 'tenantId', value: tenantId }
-      ]
-        downloadChallan(receiptQueryString,"download");
-      },
-      leftIcon: "assignment"
-    };
-    let applicationPrintObject = {
-      label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
-      link: () => {
-        const receiptQueryString = [
-          {
-            key: 'challanNo',
-            value: applicationNumber
-          },
-          { key: 'tenantId', value: tenantId }
-      ]
-        downloadChallan(receiptQueryString,'print');
-      },
-      leftIcon: "assignment"
-    };
-  
-    
-    if(isPaid==="PAID"){
-      downloadMenu=[applicationDownloadObject,receiptDownloadObject];
-      printMenu = [applicationPrintObject,receiptPrintObject];
-    }
-    else{
-      //Download challan option
-      console.info("download challan");
-      downloadMenu=[applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-    }
-    return{
-      test1:{
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        className: "downloadprint-commonmenu",
-        style: { textAlign: "right", display: "flex",paddingTop: "10px" },
-      },
-      children: {
-        downloadMenu: {
-          uiFramework: "custom-molecules",
-          componentPath: "DownloadPrintButton",
-          props: {
-            data: {
-              label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
-              leftIcon: "cloud_download",
-              rightIcon: "arrow_drop_down",
-              props: {
-                variant: "outlined",
-                style: { height: "60px", color: "#FE7A51" ,
-                marginRight: "5px" },
-                className: "uc-download-button",
-              },
-              menu: downloadMenu,
-            },
-          },
-        },
-        printMenu: {
-          uiFramework: "custom-molecules",
-          componentPath: "DownloadPrintButton",
-          props: {
-            data: {
-              label: { labelName: "PRINT", labelKey: "TL_PRINT" },
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: {
-                variant: "outlined",
-                style: { height: "60px", color: "#FE7A51" },
-                className: "uc-print-button",
-              },
-              menu: printMenu,
-            },
-          },
-        },
-      },
-  
-    }
-    }
-  
-  
-  
-  }
+
   
   const screenConfig = {
     uiFramework: "material-ui",
@@ -612,9 +681,6 @@ import {
   
                 ...headerrow,
               },
-  
-              
-            
             },
           },
   
@@ -628,13 +694,7 @@ import {
                 props: {
                   variant: "outlined",
                   color: "primary",
-                  className:"gen-challan-btn",
-                  style: {
-                    minWidth: "180px",
-                    height: "48px",
-                    marginRight: "16px",
-                    borderRadius: "inherit",
-                  },
+                  className:"preview-challan-btn",
                 },
                 children: {
                   cancelButtonLabel: getLabel({
@@ -656,13 +716,8 @@ import {
                 props: {
                   variant: "contained",
                   color: "primary",
-                  className:"gen-challan-btn",
-                  style: {
-                    minWidth: "180px",
-                    height: "48px",
-                    marginRight: "16px",
-                    borderRadius: "inherit",
-                  },
+                  className:"preview-challan-btn",
+                
                 },
                 children: {
                   editButtonLabel: getLabel({
@@ -705,6 +760,8 @@ import {
                 }
               },
             }),
+          
+           
           }),
         },
       },

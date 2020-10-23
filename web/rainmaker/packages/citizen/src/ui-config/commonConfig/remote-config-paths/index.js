@@ -44,6 +44,10 @@ const remoteConfigPath = (path, screenKey) => {
       break;
     case "noc":
       config = require(`egov-noc/ui-config/screens/specs/${path}/${screenKey}`).default;
+    case "lams":
+    case "lams-citizen":
+    case "lams-employee":
+      config = require(`egov-lams/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;

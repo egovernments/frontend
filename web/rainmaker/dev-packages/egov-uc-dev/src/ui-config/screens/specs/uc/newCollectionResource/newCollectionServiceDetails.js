@@ -496,7 +496,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
               ? getPattern("NonZeroAmount")
               : getPattern("Amount"),
 
-            errorMessage: "Invalid Amount",
+            //errorMessage: "Invalid Amount",
             visible: true,
             // required: true,
             props: {
