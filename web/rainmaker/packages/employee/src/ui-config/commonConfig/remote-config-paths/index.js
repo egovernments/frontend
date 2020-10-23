@@ -1,5 +1,6 @@
 const remoteConfigPath = (path, screenKey) => {
   let config = {};
+  alert("Hey the path is "+path+" Key is"+screenKey);
   switch (path) {
     case "tradelicence":
     case "tradelicense-citizen":
@@ -34,6 +35,13 @@ const remoteConfigPath = (path, screenKey) => {
     case "wns":
     case "wns-citizen":
       config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
+    case "lams":
+    case "egov-lams":
+    case "lams-citizen":
+    case "lams-employee":
+      config = require(`egov-lams/ui-config/screens/specs/${path}/${screenKey}`).default;
+      console.log("Config is ", config);
       break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;

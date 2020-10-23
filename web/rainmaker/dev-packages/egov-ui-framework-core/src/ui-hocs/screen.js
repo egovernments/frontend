@@ -8,6 +8,7 @@ import {
 import { setRoute } from "../ui-redux/app/actions";
 import getConfig from "ui-config/commonConfig/remote-config-paths";
 import cloneDeep from "lodash/cloneDeep";
+import { property } from "lodash";
 
 const screenHoc = ({
   path = "",
@@ -55,6 +56,7 @@ const screenHoc = ({
       value
     ) => {
       const { handleScreenConfigurationFieldChange } = this.props;
+      console.log("Test 2 ",screenKey, componentJsonpath, property, value);
       handleScreenConfigurationFieldChange(
         screenKey,
         componentJsonpath,
