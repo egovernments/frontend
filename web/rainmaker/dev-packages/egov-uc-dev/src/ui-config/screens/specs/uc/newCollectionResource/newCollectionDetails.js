@@ -41,7 +41,7 @@ export const newCollectionDetailsCard = getCommonCard(
               labelName: "Select City",
               labelKey: "TL_SELECT_CITY"
             },
-            // sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
+            sourceJsonPath: "applyScreenMdmsData.ucCities",
             // "applyScreenMdmsData.common-masters.citiesByModule.UC.tenants",
             jsonPath: "Demands[0].tenantId",
             required: true,
