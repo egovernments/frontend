@@ -42,6 +42,11 @@ const remoteConfigPath = (path, screenKey) => {
     case "wns-citizen":
       config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "lams":
+    case "lams-citizen":
+    case "lams-employee":
+      config = require(`egov-lams/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
