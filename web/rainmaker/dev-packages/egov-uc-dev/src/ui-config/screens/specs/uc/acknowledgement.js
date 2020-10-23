@@ -91,17 +91,18 @@ const getAcknowledgementCard = (
 };
 
 const getSearchData = async (dispatch, queryObj) => {
+  debugger;
   const response = await getSearchResults(queryObj);
   if (response &&
-    response.Receipt &&
-    response.Receipt.length > 0)
+    response.Payments &&
+    response.Payments.length > 0)
     {
       dispatch(
-        prepareFinalObject("receiptSearchResponse.Receipt", response.Receipt)
+        prepareFinalObject("receiptSearchResponse.Receipt", response.Payments[0].paymentDetails[0])
       );
       if (window.appOverrides && window.appOverrides.validateForm)
        {
-        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Receipt})
+        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Payments[0].paymentDetails[0]})
        }
     }
 };
@@ -144,7 +145,7 @@ const screenConfig = {
         value: serviceCategory
       }
     ];
-
+    debugger;
     getSearchData(dispatch, queryObject);
 
     const data = getAcknowledgementCard(
