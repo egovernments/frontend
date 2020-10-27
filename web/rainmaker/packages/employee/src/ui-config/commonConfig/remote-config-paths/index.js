@@ -1,6 +1,5 @@
 const remoteConfigPath = (path, screenKey) => {
   let config = {};
-  alert("Hey the path is "+path+" Key is"+screenKey);
   switch (path) {
     case "tradelicence":
     case "tradelicense-citizen":
