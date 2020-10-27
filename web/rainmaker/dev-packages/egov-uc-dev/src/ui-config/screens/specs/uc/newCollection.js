@@ -19,7 +19,7 @@ import {toggleSpinner} from "egov-ui-framework/ui-redux/screen-configuration/act
 const getData = async (action, state, dispatch) => {
   
   const tenantId = getTenantId();
-  console.info("getData",tenantId);
+
   let requestBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -251,7 +251,7 @@ const getChallanSearchRes = async (action, state, dispatch) => {
 
       let consumerDetailsDisableFldList =["ConsumerName","ConsumerMobileNo","ConsumerHouseNo","ConsumerBuilidingName","ConsumerStreetName","ConsumerLocMohalla","ConsumerPinCode"];
       consumerDetailsDisableFldList.forEach(item =>{
-        console.log("consumerDetailsDisableFldList_Item ",item);
+
         dispatch(
           handleField(
             "newCollection",
@@ -292,7 +292,7 @@ const newCollection = {
   name: "newCollection",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(toggleSpinner());
-    console.log("Before init function");
+    
     const tenantId = getTenantId();
     const locale = getLocale() || "en_IN";
     dispatch(fetchLocalizationLabel(locale, tenantId, tenantId));

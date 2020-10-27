@@ -60,7 +60,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             },
           }),
           beforeFieldChange: async (action, state, dispatch) => {
-            console.log("CityModuleChange");
+      
             const citiesByModule = get(
               state,
               "common.citiesByModule.UC.tenants",
@@ -208,7 +208,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
-            console.log("on service categor selection", action.value);
+          
             const editingMode = get(
               state.screenConfiguration,
               "preparedFinalObject.Challan[0].id",
@@ -241,7 +241,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
               {}
             ); 
             if (action.value) {
-              console.info("Action value==", action.value);
+          
               let visibleFlag =false;
               if (
                 serviceData[action.value] &&
@@ -306,7 +306,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             },
           },
           beforeFieldChange: async (action, state, dispatch) => {
-            console.log("serviceTypeFieldhange", action.value);
+         
             if (action.value) {
               setTaxHeadFields(action, state, dispatch);
             }
@@ -330,7 +330,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Challan[0].taxPeriodFrom",
           beforeFieldChange: async (action, state, dispatch) => {
-            console.log("FROMDATEFIELDCHANGE");
+       
             if (action.value) {
               dispatch(
                 handleField(
