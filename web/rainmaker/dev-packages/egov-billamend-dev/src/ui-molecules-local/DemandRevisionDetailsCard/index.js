@@ -8,6 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Tooltip } from "egov-ui-framework/ui-molecules";
 import ErrorIcon from "@material-ui/icons/Error";
+import { getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { Label } from "react-bootstrap";
 
 const styles = {
     card: {
@@ -43,9 +45,9 @@ const styles = {
         letterSpacing: "1.42px",
         lineHeight: "41px"
     },
-    leftIcon:{
-        color:"grey",
-        marginRight:4
+    leftIcon: {
+        color: "grey",
+        marginRight: 4
     }
 };
 
@@ -55,7 +57,7 @@ function totalAmount(arr) {
         .reduce((prev, next) => prev + next, 0);
 }
 
-function FeesEstimateCard(props) {
+function DemandRevisionDetailsCard(props) {
     console.log(props, "fees props")
     const { classes, estimate } = props;
     const total = totalAmount(estimate.fees);
@@ -63,16 +65,10 @@ function FeesEstimateCard(props) {
 
         <Grid container>
             <Grid xs={12} sm={7}>
-                <div style={{ marginTop: 48, maxWidth: 400 }}>
+
+                
                     <Grid container >
-                        <Grid container style={{ marginBottom: 10 }}>
-                            <Grid container xs={6}>
-                                <Typography variant="body2" style={{ fontWeight: "bold" }}>Tax heads</Typography>
-                            </Grid>
-                            <Grid xs={6} align="right">
-                                <Typography variant="body2" style={{ fontWeight: "bold" }}>Reduced Amount(Rs)</Typography>
-                            </Grid>
-                        </Grid>
+
                         {estimate.fees.map((fee, key) => {
                             let tooltip = fee.info ? (
                                 <Tooltip val={fee.info.labelName} icon={"info_circle"} />
@@ -96,8 +92,7 @@ function FeesEstimateCard(props) {
                                 );
                             return (
                                 <Grid container>
-                                    {textLeft}
-                                    {textRight}
+                                    <Label>ddd</Label>
                                 </Grid>
                             );
                         })}
@@ -111,7 +106,7 @@ function FeesEstimateCard(props) {
                             <Typography variant="body2">{total}</Typography>
                         </Grid>
                     </Grid>
-                </div>
+                
             </Grid>
             <Grid xs={12} sm={5}>
                 <Typography variant="body2" align="right">
@@ -161,10 +156,10 @@ function FeesEstimateCard(props) {
     );
 }
 
-FeesEstimateCard.propTypes = {
+DemandRevisionDetailsCard.propTypes = {
     header: PropTypes.string.isRequired,
     fees: PropTypes.array.isRequired,
     extra: PropTypes.array.isRequired
 };
 
-export default withStyles(styles)(FeesEstimateCard);
+export default withStyles(styles)(DemandRevisionDetailsCard);

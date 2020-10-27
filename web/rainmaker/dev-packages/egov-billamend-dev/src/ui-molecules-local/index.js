@@ -12,8 +12,17 @@ const FeeEstimateCard =Loadable({
   loader: () => import("./FeeEstimateCard"),
   loading: () => <Loading />
 });
-
+const DemandRevisionDetailsCard =Loadable({
+  loader: () => import("./DemandRevisionDetailsCard"),
+  loading: () => <Loading />
+});
+const DividerWithLabel =Loadable({
+  loader: () => import("./DividerWithLabel"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
-  FeeEstimateCard
+  FeeEstimateCard,
+  DemandRevisionDetailsCard,
+  DividerWithLabel
 };
