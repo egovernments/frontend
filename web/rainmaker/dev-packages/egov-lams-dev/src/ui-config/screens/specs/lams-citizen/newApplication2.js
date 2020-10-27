@@ -20,8 +20,6 @@ import {getMdmsData, loadMdmsData} from "../lams-utils/utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import {applicationDetailsCard} from "./applicationDetailsCard";
-import {newApplicationFooter} from "./newApplicationFooter";
 import { value } from "jsonpath";
 import {viewDocuments} from "./viewDocuments";
 
