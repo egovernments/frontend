@@ -40,16 +40,16 @@ const getHeader = label => {
 
 const headerrow = getCommonContainer({
     header: getCommonHeader({
-        labelName: "Trade License Application (2018-2019)",
-        labelKey: "Generate Note"
-    }),
+        labelName: "Generate Note",
+        labelKey: "BILL_GENERATE_NOTE"
+    }), 
     applicationNumber: {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-billamend",
         componentPath: "ConsumerNo",
         props: {
             number: "WS-2018-PB-246464",
-            label:{labelValue:"Consumer No.",labelKey:"Consumer No."}
+            label: { labelValue: "Consumer No.", labelKey: "BILL_CONSUMER_NO" }
         }
     },
 });
@@ -102,27 +102,30 @@ const screenConfig = {
                     }
                 },
                 bodyDiv: getCommonCard({
-                    title: getCommonTitle({ labelName: "Summary" }),
+                    title: getCommonTitle({ labelName: "Summary",labelKey:"BILL_SUMMARY" }),
                     grayDiv: getCommonGrayCard({
-                        title: getCommonTitle({ labelName: "Amount Details" }),
+                        title: getCommonTitle({
+                            labelName: "Amount Details",
+                            labelKey: "BILL_AMOUNT_DETAILS"
+                        }),
                         subtitle: getHeader({
-                            labelName: "Basic Details",
-                            labelKey: "Adjustment Amount Details"
+                            labelName: "Adjustment Amount Details",
+                            labelKey: "BILL_ADJUSTMENT_AMOUNT_DETAILS"
                         }),
                         estimate:
                             getFeesEstimateCard({
                                 sourceJsonPath: "LicensesTemp[0].estimateCardData"
                             }),
                         bpaBasicDetailsContainer: getHeader({
-                            labelName: "Basic Details",
-                            labelKey: "Basic Details"
+                            labelName: "Demand Revision Basis Details",
+                            labelKey: "BILL_DEMAND_REVISION_BASIS_DETAILS"
                         }),
                         break1: getBreak(),
                         basicDetailsContainer: getCommonContainer({
                             scrutinynumber: getLabelWithValue(
                                 {
-                                    labelName: "Building plan scrutiny number",
-                                    labelKey: "Demand Revision Basis"
+                                    labelName: "Demand Revision Basis",
+                                    labelKey: "BILL_DEMAND_REVISION_BASIS"
                                 },
                                 {
                                     jsonPath: "BPA.edcrNumber",
@@ -131,8 +134,8 @@ const screenConfig = {
                             ),
                             occupancy: getLabelWithValue(
                                 {
-                                    labelName: "occupancy",
-                                    labelKey: "Counter Order No."
+                                    labelName: "Court Order No.",
+                                    labelKey: "BILL_COURT_ORDER_NO"
                                 },
                                 {
                                     jsonPath:
@@ -142,14 +145,10 @@ const screenConfig = {
                             ),
                             applicationtype: getLabelWithValue(
                                 {
-                                    labelName: "Application Type",
-                                    labelKey: "Date Effective From"
+                                    labelName: "Date Effective From",
+                                    labelKey: "BILL_DATE_EFFECTIVE_FROM"
                                 },
                                 {
-                                    localePrefix: {
-                                        moduleName: "WF",
-                                        masterName: "BPA"
-                                    },
                                     jsonPath:
                                         "BPA.applicationType",
                                     // callBack: checkValueForNA

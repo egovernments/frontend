@@ -9,11 +9,7 @@ const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
 });
-const DownloadFileContainer = Loadable({
-  loader: () => import("./DownloadFileContainer"),
-  loading: () => <Loading />
-});
+
 export {
   EstimateCardContainer,
-  DownloadFileContainer
 };
