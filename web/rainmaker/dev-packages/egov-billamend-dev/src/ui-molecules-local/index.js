@@ -8,6 +8,24 @@ const TestMolecules = Loadable({
   loading: () => <Loading />
 });
 
+const DocumentList = Loadable({
+  loader: () => import("./DocumentList"),
+  loading: () => <Loading />
+});
+
+const UploadSingleFile = Loadable({
+  loader: () => import("./UploadSingleFile"),
+  loading: () => <Loading />
+});
+
+// const TaxHeadsList = Loadable({
+//   loader: () => import("./TaxHeadsList"),
+//   loading: () => <Loading />
+// });
+
 export {
-  TestMolecules
+  TestMolecules,
+  DocumentList,
+  UploadSingleFile,
+  // TaxHeadsList
 };
