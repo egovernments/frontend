@@ -217,7 +217,7 @@ import {
               { key: "consumerCode", value: applicationNumber  },
               { key: "tenantId", value: tenantId }
           ]
-          download(receiptQueryString , "download" ,"mcollect-receipt",state );
+          download(receiptQueryString , "print" ,"mcollect-receipt",state );
       },
       leftIcon: "receipt"
     };
