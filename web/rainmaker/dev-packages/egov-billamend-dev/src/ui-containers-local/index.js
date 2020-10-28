@@ -15,6 +15,12 @@ const DocumentListContainer = Loadable({
   loading: () => <Loading />
 });
 
+const TestContainer = Loadable({
+  loader: () => import("./TestContainer"),
+  loading: () => <Loading />
+});
+
+
 // const AdjustmentAmountContainer = Loadable({
 //   loader: () => import("./AdjustmentAmountContainer"),
 //   loading: () => <Loading />
