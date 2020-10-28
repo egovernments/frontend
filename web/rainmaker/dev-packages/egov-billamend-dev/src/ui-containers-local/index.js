@@ -10,6 +10,21 @@ const EstimateCardContainer = Loadable({
   loading: () => <Loading />
 });
 
+const DocumentListContainer = Loadable({
+  loader: () => import("./DocumentListContainer"),
+  loading: () => <Loading />
+});
+
+// const AdjustmentAmountContainer = Loadable({
+//   loader: () => import("./AdjustmentAmountContainer"),
+//   loading: () => <Loading />
+// });
 export {
+
   EstimateCardContainer,
+
+  TestContainer,
+  DocumentListContainer,
+  // AdjustmentAmountContainer
+
 };

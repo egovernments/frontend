@@ -8,6 +8,7 @@ const TestMolecules = Loadable({
   loading: () => <Loading />
 });
 
+
 const FeeEstimateCard =Loadable({
   loader: () => import("./FeeEstimateCard"),
   loading: () => <Loading />
@@ -20,9 +21,26 @@ const DividerWithLabel =Loadable({
   loader: () => import("./DividerWithLabel"),
   loading: () => <Loading />
 });
+const DocumentList = Loadable({
+  loader: () => import("./DocumentList"),
+  loading: () => <Loading />
+});
+
+const UploadSingleFile = Loadable({
+  loader: () => import("./UploadSingleFile"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   FeeEstimateCard,
   DemandRevisionDetailsCard,
-  DividerWithLabel
+  DividerWithLabel,
+  DocumentList,
+  UploadSingleFile
+
+
+
+
+
 };
