@@ -156,41 +156,62 @@ export const newCollectionDetailsCard = getCommonCard(
           jsonPath: "Demands[0].consumerName"
         }),
         serviceCategory: {
-          uiFramework: "custom-containers-local",
-          componentPath: "AutosuggestContainer",
-          jsonPath: "Demands[0].businessService",
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          },
-          props: {
-            style: {
-              width: "100%",
-              cursor: "pointer"
-            },
+          ...getSelectField({
             label: {
               labelName: "Service Category",
-              // labelKey: "UC_SERVICE_CATEGORY_LABEL"
+              labelKey: "UC_SERVICE_CATEGORY_LABEL"
             },
             placeholder: {
-              labelName: "Select service Category",
-              // labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
+              labelName: "Select Service Category",
+              labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
             },
             localePrefix: {
               masterName: "BusinessService",
               moduleName: "BillingService"
             },
-            required: true,
-            visible: true,
+            required: false,
             jsonPath: "Demands[0].businessService",
-            sourceJsonPath: "applyScreenMdmsData.serviceCategories",
-            labelsFromLocalisation: true,
-            suggestions: [],
-            fullwidth: true,
-            inputLabelProps: {
-              shrink: true
-            }
-          },
+            gridDefination: {
+              xs: 12,
+              sm: 6
+            },
+            sourceJsonPath: "applyScreenMdmsData.serviceCategories"
+          }),
+          // uiFramework: "custom-containers-local",
+          // componentPath: "AutosuggestContainer",
+          // jsonPath: "Demands[0].businessService",
+          // gridDefination: {
+          //   xs: 12,
+          //   sm: 6
+          // },
+          // props: {
+          //   style: {
+          //     width: "100%",
+          //     cursor: "pointer"
+          //   },
+          //   label: {
+          //     labelName: "Service Category",
+          //     labelKey: "UC_SERVICE_CATEGORY_LABEL"
+          //   },
+          //   placeholder: {
+          //     labelName: "Select service Category",
+          //     labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
+          //   },
+          //   localePrefix: {
+          //     masterName: "BusinessService",
+          //     moduleName: "BillingService"
+          //   },
+          //   required: true,
+          //   visible: true,
+          //   jsonPath: "Demands[0].businessService",
+          //   sourceJsonPath: "applyScreenMdmsData.serviceCategories",
+          //   labelsFromLocalisation: true,
+          //   suggestions: [],
+          //   fullwidth: true,
+          //   inputLabelProps: {
+          //     shrink: true
+          //   }
+          // },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
             if(state.screenConfiguration.preparedFinalObject.Demands[0].serviceType){
