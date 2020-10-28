@@ -1,12 +1,12 @@
-import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { fetchGeneralMDMSData } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
+import { fetchGeneralMDMSData } from "egov-ui-framework-core/ui-redux/app/actions";
 import { getTenantId } from "ui-utils/localStorageUtils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { httpRequest } from "egov-ui-framework-core/ui-utils/api";
 import { setServiceCategory } from "../utils";
-import commonConfig from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "egov-ui-framework-core/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 

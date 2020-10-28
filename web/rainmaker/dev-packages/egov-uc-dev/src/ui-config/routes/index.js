@@ -1,6 +1,6 @@
 import React from "react";
 import Loadable from 'react-loadable';
-import LoadingIndicator from 'egov-ui-framework/ui-molecules/LoadingIndicator';
+import LoadingIndicator from 'egov-ui-framework-core/ui-molecules/LoadingIndicator';
 import * as mainRouteConstants from "./route-names";
 
 const Loading = () => <LoadingIndicator/>;

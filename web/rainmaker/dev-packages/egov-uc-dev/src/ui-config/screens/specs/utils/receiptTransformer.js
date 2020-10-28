@@ -1,5 +1,5 @@
 // import get from "lodash/get";
-// import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 // import store from "../../../../ui-redux/store";
 // import { getEmployeeName } from "../utils/index";
 // import { getMdmsData } from "../utils";
@@ -13,7 +13,7 @@
 //   transformById,
 //   getTransformedLocale,
 //   getLocaleLabels
-// } from "egov-ui-framework/ui-utils/commons";
+// } from "egov-ui-framework-core/ui-utils/commons";
 // import { getTenantId } from "../../../../ui-utils/commons";
 
 

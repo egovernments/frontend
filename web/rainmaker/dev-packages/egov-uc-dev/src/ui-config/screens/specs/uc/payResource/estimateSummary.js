@@ -5,8 +5,8 @@ import {
   getCommonSubHeader,
   getLabel,
   getLabelWithValue
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
+import { setRoute } from "egov-ui-framework-core/ui-redux/app/actions";
 
 export const estimateSummary = getCommonGrayCard({
   estimateCard: {

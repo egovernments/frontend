@@ -1,7 +1,7 @@
 // import React, { Component } from "react";
 // import { connect } from "react-redux";
 // import { AutoSuggest } from "../../ui-atoms-local";
-// import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 
 // // import "./index.scss";
 

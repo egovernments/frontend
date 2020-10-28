@@ -1,10 +1,10 @@
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { httpRequest } from "egov-ui-framework-core/ui-utils/api";
 import { convertDateToEpoch } from "../../utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-// import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework-core/ui-redux/app/actions";
+// import { toggleSpinner } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
 import { validateFields } from "../../utils";
 import { getTenantId } from "../../../../../ui-utils/commons";
@@ -13,9 +13,9 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   // toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
-import commonConfig from "egov-ui-framework/ui-utils/commons";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
+import { getCommonPayUrl } from "egov-ui-framework-core/ui-utils/commons";
+import commonConfig from "egov-ui-framework-core/ui-utils/commons";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -273,7 +273,7 @@ const generateBill = async (
 
       const path =
         process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`
+          ? `/egov-ui-framework-core/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`
           : `/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`;
       dispatch(setRoute(`${path}`));
     }

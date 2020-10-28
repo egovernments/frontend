@@ -2,15 +2,15 @@ import {
   getCommonHeader,
   getLabel,
   getBreak
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { setServiceCategory } from "../utils";
 import { UCSearchCard } from "./receiptsResources/ucSearch";
-//import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+//import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
 import { searchResult } from "./receiptsResources/searchResult";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
 import { getTenantId } from "../../../../ui-utils/commons";
 
 

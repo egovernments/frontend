@@ -3,13 +3,13 @@ import {
   getCommonHeader,
   getCommonContainer
   //getCommonTitle
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import { estimateSummary } from "./payResource/estimateSummary";
 import { capturePayment } from "./payResource/capturePayment";
 import { G8ReceiptDetails } from "./payResource/G8ReceiptDetails";
 import { footer } from "./payResource/footer";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
 import get from "lodash/get";
 
 const header = getCommonContainer({

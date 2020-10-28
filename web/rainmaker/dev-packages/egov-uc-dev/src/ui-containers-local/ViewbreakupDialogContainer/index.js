@@ -1,6 +1,6 @@
 import React from "react";
-import { Label } from "egov-ui-framework/ui-atoms";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { Label } from "egov-ui-framework-core/ui-atoms";
+import { LabelContainer } from "egov-ui-framework-core/ui-containers";
 import { withStyles } from "@material-ui/core/styles";
 import get from "lodash/get";
 import Dialog from "@material-ui/core/Dialog";
@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import { connect } from "react-redux";
 import Divider from "@material-ui/core/Divider";
 import Icon from "@material-ui/core/Icon";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 
 const styles = theme => ({
   root: {

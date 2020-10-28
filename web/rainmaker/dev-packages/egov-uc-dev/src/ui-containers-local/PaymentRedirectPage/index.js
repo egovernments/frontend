@@ -19,12 +19,12 @@ class PaymentRedirect extends Component {
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       //let txnAmount = get(pgUpdateResponse, "Transaction[0].txnAmount");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
-        // window.location.href = `/employee-tradelicence/egov-ui-framework/tradelicence/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${moduleId}&tenantId=${tenantId}`;
+        // window.location.href = `/employee-tradelicence/egov-ui-framework-core/tradelicence/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${moduleId}&tenantId=${tenantId}`;
         window.location.href = `/tradelicence/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${moduleId}&tenantId=${tenantId}`;
       } else {
         let transactionId = get(pgUpdateResponse, "Transaction[0].txnId");
 
-        // window.location.href = `/employee-tradelicence/egov-ui-framework/tradelicence/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${moduleId}&tenantId=${tenantId}&secondNumber=${transactionId}`;
+        // window.location.href = `/employee-tradelicence/egov-ui-framework-core/tradelicence/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${moduleId}&tenantId=${tenantId}&secondNumber=${transactionId}`;
         window.location.href = `/tradelicence/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${moduleId}&tenantId=${tenantId}&secondNumber=${transactionId}`;
       }
     } catch (e) {

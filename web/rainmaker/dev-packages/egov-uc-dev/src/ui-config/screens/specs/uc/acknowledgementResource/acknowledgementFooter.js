@@ -1,8 +1,8 @@
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import { generateReciept } from "../../utils/recieptPdf";
 import { ifUserRoleExists } from "../../utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework-core/ui-redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 
 const getCommonApplyFooter = children => {
   return {
@@ -17,7 +17,7 @@ const getCommonApplyFooter = children => {
 export const getRedirectionURL = () => {
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/uc/search`
+      ? `/egov-ui-framework-core/uc/search`
       : `/uc/search`;
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? path : (process.env.REACT_APP_SELF_RUNNING === "true"?path:"/inbox");
 

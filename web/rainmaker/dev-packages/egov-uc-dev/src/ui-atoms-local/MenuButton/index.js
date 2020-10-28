@@ -9,7 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import { withStyles } from "@material-ui/core/styles";
 //import Icon from "@material-ui/core/Icon";
-import Icon from "egov-ui-framework/ui-atoms/Icon";
+import Icon from "egov-ui-framework-core/ui-atoms/Icon";
 
 const styles = theme => ({
   root: {

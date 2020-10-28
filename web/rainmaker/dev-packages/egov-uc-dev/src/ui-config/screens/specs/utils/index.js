@@ -1,15 +1,15 @@
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { setRoute } from "egov-ui-framework-core/ui-redux/app/actions";
+import { validate } from "egov-ui-framework-core/ui-redux/screen-configuration/utils";
 import { getUserInfo,getLocaleLabels} from "ui-utils/commons";
 import get from "lodash/get";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework-core/ui-utils/api";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import {
   getCommonCard,
   getCommonCaption
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import {  
   getLocalization,
   getLocale
@@ -222,7 +222,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     : ``;
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/abg/apply?step=${step}${applicationNumberQueryString}`
+      ? `/egov-ui-framework-core/abg/apply?step=${step}${applicationNumberQueryString}`
       : `/abg/apply?step=${step}${applicationNumberQueryString}`;
   dispatch(setRoute(applyUrl));
 };

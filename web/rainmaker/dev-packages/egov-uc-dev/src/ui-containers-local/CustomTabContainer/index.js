@@ -1,10 +1,10 @@
 import React from "react";
-import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
+import RenderScreen from "egov-ui-framework-core/ui-molecules/RenderScreen";
 import CustomTab from "../../ui-molecules-local/CustomTab";
 import { connect } from "react-redux";
-import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { addComponentJsonpath } from "egov-ui-framework-core/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 

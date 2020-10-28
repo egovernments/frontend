@@ -12,22 +12,22 @@ import {
 import {
   prepareFinalObject,
   toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
   //updateDropDowns,
   ifUserRoleExists
 } from "../ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import store from "../ui-redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
   getQueryArg,
   getFileUrlFromAPI
-} from "egov-ui-framework/ui-utils/commons";
+} from "egov-ui-framework-core/ui-utils/commons";
 // import { getTenantId,getLocalization,getLocale } from "ui-utils/localStorageUtils";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework-core/ui-utils/commons";
 
 export const updateTradeDetails = async requestBody => {
   try {

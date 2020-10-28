@@ -1,4 +1,4 @@
-import { getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTextField } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 
 export const consumerAddresss = {
   address: getTextField({

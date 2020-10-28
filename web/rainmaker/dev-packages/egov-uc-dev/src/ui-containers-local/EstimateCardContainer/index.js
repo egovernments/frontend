@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FeesEstimateCard } from "../../ui-molecules-local";
 import { connect } from "react-redux";
 import get from "lodash/get";
-// import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+// import { getTransformedLocale } from "egov-ui-framework-core/ui-utils/commons";
 
 const getTransformedLocale = label => {
   return label.toUpperCase().replace(/[.:-\s\/]/g, "_");

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import { Dialog, DialogContent } from "@material-ui/core";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 
 class DialogContainer extends React.Component {
   handleClose = () => {

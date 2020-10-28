@@ -3,7 +3,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import {
   validateFields,
@@ -16,7 +16,7 @@ import {
   getLocaleLabels,
   transformById,
   getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+} from "egov-ui-framework-core/ui-utils/commons";
 
 import { getTenantId } from "../../../../../ui-utils/commons";
 

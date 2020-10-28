@@ -3,7 +3,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import store from "../../../../ui-redux/store";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
 import {
   loadReceiptData,
   loadUlbLogo,
