@@ -82,7 +82,7 @@ class Inbox extends Component {
         {Loading&&isLoading&&<LoadingIndicator></LoadingIndicator>}
           <div className="rainmaker-topHeader flex">
             <Label className="landingPageHeader flex-child" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
-            <Label className="landingPageUser flex-child" label={name} />,
+            <Label className="landingPageUser flex-child" label={name} />
           </div>
           <div className="quick-action-button">
             {downloadMenu.length!=0 &&<MenuButton data={buttonItems} />}
