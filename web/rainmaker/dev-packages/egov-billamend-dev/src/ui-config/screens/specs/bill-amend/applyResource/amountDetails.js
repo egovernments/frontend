@@ -269,48 +269,48 @@ export const onDemandRevisionBasis = async (action, state, dispatch) => {
     }
 }
 
-// export const AddAdjustmentAmount = getCommonCard({
-//     header: getCommonTitle(
-//         {
-//             labelName: "Add Adjustment Amount",
-//             labelKey: "BILL_ADJUSTMENT_AMOUNT_TITLE"
-//         },
-//         {
-//             style: {
-//                 marginBottom: 18
-//             }
-//         }
-//     ),
-//     subText: getCommonParagraph({
-//         labelName: "Please mention the adjustment amount against from respective Tax Head for generation of Credit/Debit Note.",
-//         labelKey: "BILL_ADJUSTMENT_AMOUNT_SUBTEXT"
-//     }),
-//     break: getBreak(),
-//     AddAdjustmentAmountContainer: getCommonGrayCard({
-//         uploadedfile: {
-//             uiFramework: "custom-containers-local",
-//             moduleName: "egov-billamend",
-//             componentPath: "AdjustmentAmountContainer",
-//             // gridDefination: {
-//             //   xs: 12,
-//             //   sm: 12,
-//             //   md: 12
-//             // },
-//             props: {
-//                 label: {
-//                   labelName: "Uploaded Diagram",
-//                   labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM"
-//                 },
-//                 linkDetail: {
-//                   labelName: "uploadedDiagram.dxf",
-//                   labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF"
-//                 },
-//                 jsonPath: "scrutinyDetails.updatedDxfFile",
-//             },
-//             type: "array"
-//           },
-//     })
-// });
+export const AddAdjustmentAmount = getCommonCard({
+    header: getCommonTitle(
+        {
+            labelName: "Add Adjustment Amount",
+            labelKey: "BILL_ADJUSTMENT_AMOUNT_TITLE"
+        },
+        {
+            style: {
+                marginBottom: 18
+            }
+        }
+    ),
+    subText: getCommonParagraph({
+        labelName: "Please mention the adjustment amount against from respective Tax Head for generation of Credit/Debit Note.",
+        labelKey: "BILL_ADJUSTMENT_AMOUNT_SUBTEXT"
+    }),
+    break: getBreak(),
+    AddAdjustmentAmountContainer: getCommonGrayCard({
+        uploadedfile: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-billamend",
+            componentPath: "AdjustmentAmountContainer",
+            // gridDefination: {
+            //   xs: 12,
+            //   sm: 12,
+            //   md: 12
+            // },
+            props: {
+                label: {
+                  labelName: "Uploaded Diagram",
+                  labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM"
+                },
+                linkDetail: {
+                  labelName: "uploadedDiagram.dxf",
+                  labelKey: "BPA_BASIC_DETAILS_UPLOADED_DIAGRAM_DXF"
+                },
+                jsonPath: "scrutinyDetails.updatedDxfFile",
+            },
+            type: "array"
+          },
+    })
+});
 
 export const AddDemandRevisionBasis = getCommonCard({
     header: getCommonTitle(
