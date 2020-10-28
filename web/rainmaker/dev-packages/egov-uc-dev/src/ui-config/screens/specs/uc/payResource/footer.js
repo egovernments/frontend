@@ -1,14 +1,14 @@
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-// import { getSelectedTabIndex } from "egov-ui-framework/ui-utils/commons";
+// import { getSelectedTabIndex } from "egov-ui-framework-core/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { httpRequest } from "egov-ui-framework-core/ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
-// import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+// import { toggleSpinner } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import {
   prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework-core/ui-redux/app/actions";
 import get from "lodash/get";
 import set from "lodash/set";
 
@@ -478,7 +478,7 @@ ReceiptBodyNew.Payment["mobileNumber"] =
       // moveToSuccess(href, dispatch, receiptNumber);
       const path =
         process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
+          ? `/egov-ui-framework-core/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
           : `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`;
       dispatch(setRoute(`${path}`));
       // dispatch(toggleSpinner());

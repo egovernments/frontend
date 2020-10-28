@@ -4,7 +4,7 @@ import {
   getTextField,
   getPattern,
   getDateField
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
 
 export const G8ReceiptDetails = getCommonGrayCard({
   header: {

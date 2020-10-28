@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Tooltip from "@material-ui/core/Tooltip";
 import Icon from "@material-ui/core/Icon";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { LabelContainer } from "egov-ui-framework-core/ui-containers";
 
 const styles = {
   card: {

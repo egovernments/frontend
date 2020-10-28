@@ -1,14 +1,14 @@
-import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { loginRequest } from "ui-utils/api";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { authenticated } from "egov-ui-framework/ui-redux/auth/actions";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework-core/ui-redux/app/actions";
+import { authenticated } from "egov-ui-framework-core/ui-redux/auth/actions";
+import { toggleSpinner } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import {
   toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",

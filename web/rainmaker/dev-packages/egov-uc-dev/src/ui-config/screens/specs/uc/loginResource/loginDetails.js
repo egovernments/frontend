@@ -4,7 +4,7 @@ import {
   getSelectField,
   getCommonContainer
   // getCommonTitle
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
 
 export const loginDetailsCard = getCommonCard(
   {

@@ -1,10 +1,10 @@
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
 import { generateCitizenReciept } from "../utils/recieptPdf";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   prepareFinalObject,
   toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 
 const fetchAndGenerate = async (dispatch, receiptNo, tenantId) => {
   const queryObj = [

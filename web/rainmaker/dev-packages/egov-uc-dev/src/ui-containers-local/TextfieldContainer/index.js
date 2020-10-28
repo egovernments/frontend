@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { TextfieldWithIcon } from "egov-ui-framework/ui-molecules";
+import { TextfieldWithIcon } from "egov-ui-framework-core/ui-molecules";
 import MenuItem from "@material-ui/core/MenuItem";
 import get from "lodash/get";
 import {
   getTranslatedLabel,
   transformById
 } from "../../ui-config/screens/specs/utils";
-import { getLocalization } from "egov-ui-framework/ui-utils/commons";
+import { getLocalization } from "egov-ui-framework-core/ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 

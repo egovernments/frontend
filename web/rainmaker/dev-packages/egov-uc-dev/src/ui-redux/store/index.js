@@ -1,8 +1,8 @@
 import rootReducer from "./reducer";
 import { createStore, applyMiddleware,combineReducers,compose } from "redux";
 import thunk from "redux-thunk";
-import screenConfigurationMiddleware from "egov-ui-framework/ui-redux/screen-configuration/middlewares";
-import authMiddleware from "egov-ui-framework/ui-redux/auth/middlewares";
+import screenConfigurationMiddleware from "egov-ui-framework-core/ui-redux/screen-configuration/middlewares";
+import authMiddleware from "egov-ui-framework-core/ui-redux/auth/middlewares";
 
 let middlewares = [];
 

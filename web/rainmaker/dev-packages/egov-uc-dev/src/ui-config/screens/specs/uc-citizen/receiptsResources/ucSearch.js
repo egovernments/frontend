@@ -8,13 +8,13 @@ import {
   getDateField,
   getCommonHeader,
   getCommonSubHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
 import { searchApiCall } from "./function";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");

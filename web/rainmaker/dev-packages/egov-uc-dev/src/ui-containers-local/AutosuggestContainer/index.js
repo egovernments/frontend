@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import  IntegrationReactSelect from "../../ui-atoms-local/AutoSuggest/index";
 import { findItemInArrayOfObject } from "../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import {
   transformById,
   appendModulePrefix
-} from "egov-ui-framework/ui-utils/commons";
+} from "egov-ui-framework-core/ui-utils/commons";
 import {getLocaleLabels,getLocalization} from "../../ui-utils/commons";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";

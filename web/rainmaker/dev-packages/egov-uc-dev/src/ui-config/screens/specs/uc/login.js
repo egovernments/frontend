@@ -1,9 +1,9 @@
-import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import { loginDetailsCard } from "./loginResource/loginDetails";
 import { loginFooter } from "./loginResource/loginFooter";
-import { prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import { getTenantId } from "ui-utils/localStorageUtils";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { httpRequest } from "egov-ui-framework-core/ui-utils/api";
 import commonConfig from "config/common.js";
 import get from "lodash/get";
 import set from "lodash/set";

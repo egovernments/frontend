@@ -12,15 +12,15 @@ import {
   Typegraphy,
   Icon,
   Main
-} from "egov-ui-framework/ui-atoms";
+} from "egov-ui-framework-core/ui-atoms";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
-import RenderRoutes from "egov-ui-framework/ui-molecules/RenderRoutes";
+import RenderRoutes from "egov-ui-framework-core/ui-molecules/RenderRoutes";
 import appRoutes from "../../ui-config/routes/mihy";
 import styles from "./css";
 import { compose } from "recompose";
 import { connect } from "react-redux";
-import { logout } from "egov-ui-framework/ui-redux/auth/actions";
+import { logout } from "egov-ui-framework-core/ui-redux/auth/actions";
 
 class Landing extends React.Component {
   state = {

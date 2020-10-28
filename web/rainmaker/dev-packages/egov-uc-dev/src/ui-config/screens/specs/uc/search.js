@@ -2,18 +2,18 @@ import {
   getCommonHeader,
   getLabel,
   getBreak
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import { UCSearchCard } from "./universalCollectionResources/ucSearch";
 import get from "lodash/get";
 import { setServiceCategory } from "../utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { setRoute } from "egov-ui-framework-core/ui-redux/app/actions";
 import { searchResults } from "./universalCollectionResources/searchResults";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import { httpRequest} from "../../../../ui-utils";
 import { getTenantId } from "ui-utils/localStorageUtils";
 
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-//import { getTenantId } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
+//import { getTenantId } from "egov-ui-framework-core/ui-utils/commons";
 
 const tenantId = getTenantId();
 // const tenantId = "pb.testing";
@@ -159,7 +159,7 @@ const openNewCollectionForm = (state, dispatch) => {
   dispatch(prepareFinalObject("Demands", []));
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/uc/newCollection`
+      ? `/egov-ui-framework-core/uc/newCollection`
       : `/uc/newCollection`;
   dispatch(setRoute(path));
 };

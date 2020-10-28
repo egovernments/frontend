@@ -1,6 +1,6 @@
-import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonHeader } from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework-core/ui-utils/commons";
 import {
   acknowledgementSuccesFooter,
   acknowledgementFailureFooter
@@ -8,7 +8,7 @@ import {
 import set from "lodash/set";
 import { getTenantId } from "ui-utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 
 const getAcknowledgementCard = (
   state,

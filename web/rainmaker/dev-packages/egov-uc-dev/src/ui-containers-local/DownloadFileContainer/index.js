@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MultiDownloadCard } from "egov-ui-framework/ui-molecules";
+import { MultiDownloadCard } from "egov-ui-framework-core/ui-molecules";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import "./index.scss";

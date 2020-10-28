@@ -5,15 +5,15 @@ import {
   getCommonContainer,
   getPattern,
   getDateField
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+} from "egov-ui-framework-core/ui-config/screens/specs/utils";
 import {
   getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+} from "egov-ui-framework-core/ui-utils/commons";
+import { httpRequest } from "egov-ui-framework-core/ui-utils/api";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+} from "egov-ui-framework-core/ui-redux/screen-configuration/actions";
 import { getTenantId } from "ui-utils/localStorageUtils";
 
 import {setServiceCategory} from "../../utils"
