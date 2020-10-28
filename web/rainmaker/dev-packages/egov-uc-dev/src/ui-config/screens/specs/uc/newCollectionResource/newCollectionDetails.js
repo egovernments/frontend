@@ -6,9 +6,10 @@ import {
   getPattern,
   getDateField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+// import {
+//   getTransformedLocale
+// } from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale } from "../../../../../ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -107,18 +108,18 @@ export const newCollectionDetailsCard = getCommonCard(
             return action;
           }
         },
-        // dummyDiv: {
-        //   uiFramework: "custom-atoms",
-        //   componentPath: "Div",
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 6
-        //   },
-        //   visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-        //   props: {
-        //     disabled: true
-        //   }
-        // },
+        dummyDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          gridDefination: {
+            xs: 12,
+            sm: 6
+          },
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            disabled: true
+          }
+        },
         ConsumerMobileNo: getTextField({
           label: {
             labelName: "Mobile No",
@@ -320,6 +321,19 @@ export const newCollectionDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
         }),
+        commentsContainer:getTextField({
+          label: {
+            labelName: "Comments",
+            labelKey: "UC_COMMENT_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Comment ",
+            labelKey: "UC_COMMENT_PLACEHOLDER"
+          },
+          Required: false,
+          jsonPath: "Demands[0].additionalDetails.comment"
+        }),
+        ...consumerAddresss,
         // dummyDiv: {
         //   uiFramework: "custom-atoms",
         //   componentPath: "Div",
@@ -424,7 +438,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
           getTextField({
             label: {
               labelName: "Tax Amount",
-              // labelKey: `${getTransformedLocale(item.code)}`
+              labelKey: `${getTransformedLocale(item.code)}`
             },
             placeholder: {
               labelName: "Enter Tax Amount",

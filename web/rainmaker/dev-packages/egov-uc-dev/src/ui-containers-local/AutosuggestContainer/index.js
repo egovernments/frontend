@@ -66,7 +66,7 @@ const getLocalisedSuggestions = suggestions => {
     suggestions.map((option, key) => {
       option.name = getLocaleLabels(
         option.code,
-        `NOC_${option.code}`,
+        `${option.code}`,
         transfomedKeys
       );
       return option;
