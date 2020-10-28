@@ -8,6 +8,12 @@ const TestAtoms = Loadable({
   loading: () => <Loading />
 });
 
+const ConsumerNo = Loadable({
+  loader: () => import("./ConsumerNo"),
+  loading: () => <Loading />
+});
+
 export {
-  TestAtoms
+  TestAtoms,
+  ConsumerNo
 };
