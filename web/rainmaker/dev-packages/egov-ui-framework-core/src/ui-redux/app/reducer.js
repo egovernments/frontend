@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { transformById, getTransformedDropdown } from "egov-ui-framework/ui-utils/common";
+import { transformById, getTransformedDropdown } from "ui-utils/commons";
 
 
 const initialState = {

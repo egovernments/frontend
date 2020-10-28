@@ -7,8 +7,8 @@ import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/ut
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { epochToDate, getApplicationType } from "egov-ui-kit/utils/commons";
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { epochToDate, getApplicationType } from "ui-utils/commons";
+import { localStorageSet } from "ui-utils/localStorageUtils";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
 import React from "react";
@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import Label from "../../ui-containers/LabelContainer";
 import "./index.css";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "ui-utils/localStorageUtils";
 const styles = {
   card: {
     marginLeft: 8,
