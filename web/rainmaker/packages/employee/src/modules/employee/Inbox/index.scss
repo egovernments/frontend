@@ -1,6 +1,6 @@
 @media only screen and (max-width: 768px){
 .flex{
-    display: flex;
+    display: grid;
    
 }
 .inbox-service-list{
@@ -15,14 +15,16 @@
 }
 .landingPageHeader .label-text {
      padding-top: 5px  !important;
+     padding-bottom: 8px;
+     text-align: center;
     
   }
   .landingPageUser .label-text {
     color: rgba(0, 0, 0, 0.8700000047683716);
     font-size: 24px !important;
     padding-top: 5px  !important;
-    padding-left: 8px  !important;
     padding-bottom: 5px;
+    text-align: center;
   }
 }
 
