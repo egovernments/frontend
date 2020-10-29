@@ -19,7 +19,7 @@ import {
             },
             ...getCommonSubHeader({
               labelName: "Documents",
-              labelKey: "TL_COMMON_DOCS"
+              labelKey: "BILL_DOCUMENTS"
             })
           },
           editSection: {
@@ -43,7 +43,7 @@ import {
               },
               buttonLabel: getLabel({
                 labelName: "Edit",
-                labelKey: "TL_SUMMARY_EDIT"
+                labelKey: "BILL_SUMMARY_EDIT"
               })
             },
             // onClickDefination: {

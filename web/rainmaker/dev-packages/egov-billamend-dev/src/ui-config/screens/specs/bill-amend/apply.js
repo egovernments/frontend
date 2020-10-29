@@ -25,12 +25,13 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { documentDetails } from "./applyResource/documentDetails";
 import { footer } from "./applyResource/footer";
 import { AddDemandRevisionBasis } from "./applyResource/amountDetails";
+import  summary from "./applyResource/summary"
 import commonConfig from "config/common.js";
 
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
-  { labelName: "Summary", labelKey: "BILL_STEPPER_SUMMARY_HEADER" }
+  { labelName: "Summary", labelKey: "BILL_STEPPER_SUMMARY_HEADER" },
 ];
 
 export const stepper = getStepperObject(
@@ -85,7 +86,7 @@ export const formwizardThirdStep = {
     id: "apply_form3"
   },
   children: {
-
+    summary
   },
   visible: false
 };
@@ -134,7 +135,12 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     dispatch(prepareFinalObject("BILL", {}));
-
+    dispatch(prepareFinalObject("bill-amend-review-document-data",
+    [{ "title": "Court Order", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "JPEG.jpeg" },
+    { "title": "Self Declaration", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "JPEG.jpeg" },
+    { "title": "Past Bills", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "JPEG.jpeg" }
+    ]
+))
     getData(action, state, dispatch).then(responseAction => {
 
     });
@@ -152,7 +158,7 @@ const screenConfig = {
       let formWizardNames = [
         "formwizardFirstStep",
         "formwizardSecondStep",
-        "formwizardThirdStep"
+        "formwizardThirdStep",
       ];
       for (let i = 0; i < 3; i++) {
         set(
