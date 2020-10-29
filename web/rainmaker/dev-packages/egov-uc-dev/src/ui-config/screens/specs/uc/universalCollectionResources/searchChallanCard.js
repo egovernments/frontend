@@ -223,10 +223,14 @@ import {
         },
         props: {
           variant: "outlined",
-          className:"searchChallan-btn",
           color: "primary",
           style: {
             width: window.innerWidth > 480 ? "80%" : "100%",
+            color: "#FE7A51",
+          border: "#FE7A51 solid 1px",
+          borderRadius: "2px",
+          height: "48px",
+          margin:"5px"
           }
           
         },
@@ -251,12 +255,13 @@ import {
         },
         props: {
           variant: "contained",
-          className:"searchChallan-btn",
-          
           style: {
             color: "white",
             backgroundColor: "#696969",
             width: window.innerWidth > 480 ? "80%" : "100%",
+            borderRadius: "2px",
+            height: "48px",
+            margin:"5px"
           }
         },
         children: {
