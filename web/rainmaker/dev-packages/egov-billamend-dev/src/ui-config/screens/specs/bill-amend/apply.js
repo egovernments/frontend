@@ -24,8 +24,8 @@ import jp from "jsonpath";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { documentDetails } from "./applyResource/documentDetails";
 import { footer } from "./applyResource/footer";
-import { AddDemandRevisionBasis } from "./applyResource/amountDetails";
 import  summary from "./applyResource/summary"
+import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 
 export const stepsData = [
@@ -62,7 +62,7 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    // AddAdjustmentAmount,
+    AddAdjustmentAmount,
     AddDemandRevisionBasis
   }
 };
