@@ -1964,9 +1964,9 @@ export const getDomainLink = () => {
 }
 
 export const isActiveProperty = (propertyObj) => {
-    if (propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW') {
+    /*if (propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW') {
         return false;
-    }
+    }*/
     return true;
 }
 export const isEditAction = () => {
