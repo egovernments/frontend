@@ -225,6 +225,9 @@ import {
           variant: "outlined",
           className:"searchChallan-btn",
           color: "primary",
+          style: {
+            width: window.innerWidth > 480 ? "80%" : "100%",
+          }
           
         },
         children: {
@@ -253,7 +256,7 @@ import {
           style: {
             color: "white",
             backgroundColor: "#696969",
-        
+            width: window.innerWidth > 480 ? "80%" : "100%",
           }
         },
         children: {
