@@ -1791,7 +1791,7 @@ export const businessServiceData = [
       "tenantId": "pb.agra",
       "uuid": "fdb95498-99fd-43b3-9ab7-d76f6ab6a36c",
       "businessService": "NewLAMS_LR",
-      "business": "tl-services",
+      "business": "lams-services",
       "businessServiceSla": 2592000000,
       "states": [
         {

@@ -43,6 +43,18 @@ const TaskStatusContainer = Loadable({
   loader: () => import("./TaskStatusContainer"),
   loading: () => <Loading />
 });
+const TableData = Loadable({
+  loader: () => import("./TableData"),
+  loading: () => <Loading />
+});
+const Table = Loadable({
+  loader: () => import("./Table"),
+  loading: () => <Loading />
+});
+const Filter = Loadable({
+  loader: () => import("./Filter"),
+  loading: () => <Loading />
+});
 
 export {
   TestContainer,
@@ -52,5 +64,8 @@ export {
   CustomTabContainer,
   TestTabs,
   WorkFlowContainer,
-  TaskStatusContainer
+  TaskStatusContainer,
+  TableData,
+  Table,
+  Filter
 };
