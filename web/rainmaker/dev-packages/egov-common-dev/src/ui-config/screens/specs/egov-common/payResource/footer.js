@@ -406,8 +406,8 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment["totalAmountPaid"] = amtPaid;
 
   //---------------- Create Receipt ------------------//
-  const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
   if (isFormValid) {
+    const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
     try {
       let response = await httpRequest(

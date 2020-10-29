@@ -18,7 +18,7 @@ import {
 import {
   getLocaleLabels,
   transformById,
-  getTransformedLocale
+  getTransformedLocale, disableFieldAndShowSpinner, enableFieldAndHideSpinner
 } from "egov-ui-framework/ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
@@ -96,6 +96,7 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
+    disableFieldAndShowSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
       const responseFromAPI = await getSearchResults(queryObject);
       dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
       const Payments = (responseFromAPI && responseFromAPI.Payments) || [];

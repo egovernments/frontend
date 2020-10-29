@@ -1,19 +1,15 @@
-import isEmpty from "lodash/isEmpty";
-import { httpRequest, uploadFile } from "./api.js";
-import cloneDeep from "lodash/cloneDeep";
-import {
-  localStorageSet,
-  localStorageGet,
-  getLocalization,
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import orderBy from "lodash/orderBy";
-import get from "lodash/get";
-import set from "lodash/set";
 import commonConfig from "config/common.js";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import cloneDeep from "lodash/cloneDeep";
+import get from "lodash/get";
+import isEmpty from "lodash/isEmpty";
+import orderBy from "lodash/orderBy";
+import set from "lodash/set";
+import { httpRequest, uploadFile } from "./api.js";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -259,8 +255,8 @@ export const setDocuments = async (
   dispatch,
   businessService
 ) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
+  let uploadedDocData = get(payload, sourceJsonPath, []);
+  uploadedDocData = uploadedDocData && uploadedDocData.filter(document => document && Object.keys(document).length > 0 && document.active);
   const fileStoreIds =
     uploadedDocData &&
     uploadedDocData
@@ -630,3 +626,18 @@ export const getTodaysDateInYMD = () => {
   date = `${date.getFullYear()}-${month}-${day}`;
   return date;
 };
+
+export const enableField = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(handleField(screenKey, jsonPath, "props.disabled", false));
+}
+export const disableField = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(handleField(screenKey, jsonPath, "props.disabled", true));
+}
+export const enableFieldAndHideSpinner = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(hideSpinner());
+  enableField(screenKey, jsonPath, dispatch);
+}
+export const disableFieldAndShowSpinner = (screenKey, jsonPath = 'components', dispatch) => {
+  dispatch(showSpinner());
+  disableField(screenKey, jsonPath, dispatch);
+}

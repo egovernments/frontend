@@ -232,9 +232,8 @@ class WorkFlowContainer extends React.Component {
       });
 
       if (payload) {
-        this.props.hideSpinner();
         let path = "";
-
+        this.props.hideSpinner();
         if (moduleName == "PT.CREATE") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
@@ -611,7 +610,6 @@ const mapDispacthToProps = dispatch => {
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
-    setRoute: route => dispatch(setRoute(route)),
     setRoute: route => dispatch(setRoute(route)),
     showSpinner:()=>
     dispatch(showSpinner()),

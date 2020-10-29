@@ -27,7 +27,7 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { setBusinessServiceDataToLocalStorage ,getFileUrl} from "egov-ui-framework/ui-utils/commons";
+import { setBusinessServiceDataToLocalStorage ,getFileUrl, enableFieldAndHideSpinner} from "egov-ui-framework/ui-utils/commons";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -68,6 +68,7 @@ export const getSearchResults = async queryObject => {
 
     return response;
   } catch (error) {
+    enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
     console.error(error);
     store.dispatch(
       toggleSnackbar(

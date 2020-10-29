@@ -1,5 +1,5 @@
 import * as screenActionTypes from "./actionTypes";
-import { updateObjectWithComponentJsonPath, prepareFinalObject } from "./utils";
+import { prepareFinalObject, updateObjectWithComponentJsonPath } from "./utils";
 
 const intialState = {
   screenConfig: {},
@@ -64,6 +64,16 @@ const screenConfiguration = (state = intialState, action) => {
       return {
         ...state,
         spinner: !state.spinner
+      };
+      case screenActionTypes.SHOW_LOADER:
+      return {
+        ...state,
+        spinner: true
+      };
+    case screenActionTypes.HIDE_LOADER:
+      return {
+        ...state,
+        spinner: false
       };
     default:
       return state;
