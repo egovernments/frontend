@@ -139,6 +139,46 @@ export const searchApiCall = async (state, dispatch) => {
         ["BILL_SEARCH_URL"]: searchScreenObject.url,
         ["ADVANCE_PAYMENT"]: isAdvancePayment
       }));
+
+      data=[{
+        ['BILL_COMMON_SERVICE_TYPE']: 'WATER' || "-",
+        ["BILL_COMMON_APPLICATION_NO"]: 'NA',
+        ["PAYMENT_COMMON_CONSUMER_CODE"]: 'WS/107/2020-21/000041' || "-",
+        
+        ['BILL_COMMON_TABLE_COL_CONSUMER_NAME']: 'Anand' || "-",
+        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']: 'Patiala Road - Area1, amritsar' || "-",
+        ['BILL_COMMON_TABLE_COL_BILL_DATE']:
+          "-",
+        ['BILL_COMMON_TABLE_COL_BILL_AMOUNT']:  "-",
+        ['BILL_COMMON_TABLE_COL_STATUS']: "APPROVED" || "-",
+        ['BILL_COMMON_TABLE_COL_ACTION']: "-",
+        ["BUSINESS_SERVICE"]: '',
+        ["RECEIPT_KEY"]:'',
+        ["BILL_KEY"]:'',
+        ["TENANT_ID"]: '',
+        ["BILL_ID"]:'',
+        ["BILL_SEARCH_URL"]: '',
+        ["ADVANCE_PAYMENT"]: false
+      },{
+        ['BILL_COMMON_SERVICE_TYPE']: 'WATER' || "-",
+        ["BILL_COMMON_APPLICATION_NO"]: 'WS/107/2020-21/000037',
+        ["PAYMENT_COMMON_CONSUMER_CODE"]: 'WS/107/2020-21/000037' || "-",
+        
+        ['BILL_COMMON_TABLE_COL_CONSUMER_NAME']: 'Karthikeyan' || "-",
+        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']: 'Ajit Nagar - Area1, amritsar' || "-",
+        ['BILL_COMMON_TABLE_COL_BILL_DATE']:
+          "-",
+        ['BILL_COMMON_TABLE_COL_BILL_AMOUNT']:  "-",
+        ['BILL_COMMON_TABLE_COL_STATUS']: "APPROVED" || "-",
+        ['BILL_COMMON_TABLE_COL_ACTION']: "-",
+        ["BUSINESS_SERVICE"]: '',
+        ["RECEIPT_KEY"]:'',
+        ["BILL_KEY"]:'',
+        ["TENANT_ID"]: '',
+        ["BILL_ID"]:'',
+        ["BILL_SEARCH_URL"]: '',
+        ["ADVANCE_PAYMENT"]: false
+      }]
       dispatch(
         handleField(
           "search",
