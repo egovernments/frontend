@@ -15,22 +15,22 @@ const DocumentListContainer = Loadable({
   loading: () => <Loading />
 });
 
-const TestContainer = Loadable({
-  loader: () => import("./TestContainer"),
+const AdjustmentAmountContainer = Loadable({
+  loader: () => import("./AdjustmentAmountContainer"),
   loading: () => <Loading />
 });
 
+const CheckBoxContainer = Loadable({
+  loader: () => import("./CheckBoxContainer"),
+  loading: () => <Loading />
+});
 
-// const AdjustmentAmountContainer = Loadable({
-//   loader: () => import("./AdjustmentAmountContainer"),
-//   loading: () => <Loading />
-// });
 export {
 
   EstimateCardContainer,
 
   TestContainer,
   DocumentListContainer,
-  // AdjustmentAmountContainer
-
+  AdjustmentAmountContainer,
+  CheckBoxContainer
 };
