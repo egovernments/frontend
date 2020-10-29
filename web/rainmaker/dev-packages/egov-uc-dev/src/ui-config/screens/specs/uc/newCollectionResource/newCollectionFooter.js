@@ -229,7 +229,16 @@ const createChallan = async(state,dispatch,challan) =>{
       }
     }
   }catch(e){
-    dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
+    console.info("error in challan creation==",e);
+    console.error("Test==",e.message)
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message },
+        "error"
+      )
+    );
+    //dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
   }
 }
 
