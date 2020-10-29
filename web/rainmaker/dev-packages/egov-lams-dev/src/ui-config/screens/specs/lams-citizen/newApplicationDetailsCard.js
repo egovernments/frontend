@@ -13,7 +13,6 @@ import {
     getLabelWithValue
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-  import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 
   import { getQueryArg , getTodaysDateInYMD , getTLTenantId  } from "egov-ui-framework/ui-utils/commons";
 
@@ -21,6 +20,8 @@ import {
   import {documentListContainer} from "./documentListContainer";
 
   import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
+  import {leaseDetailsCard} from "./leaseDetailsCard";
 
 import PropTypes from "prop-types";
 
@@ -52,88 +53,7 @@ import PropTypes from "prop-types";
     //alert(locationChanged);
   }
 
-  export const leaseDetailsCard = getCommonGrayCard({
-    
-    header: getCommonSubHeader(
-      {
-        labelName: "Lease Details ",
-        labelKey: "LAMS_DETAILS_HEADER"
-      },
-      {
-        style: {
-          marginBottom: 18
-        }
-      }
-    ),
-    leaseDetailsContainer: getCommonContainer(
-      {
-        termNo: getLabelWithValue(
-          {
-            labelName: "Term Number",
-            labelKey: "LAMS_TERMNO"
-          },
-          {
-            jsonPath: "lamsStore.selectedSurveyDetails.termNo",
-            //callBack: convertEpochToDate
-          }
-        ),
-        area: getLabelWithValue(
-          {
-            labelName: "Area ",
-            labelKey: "LAMS_AREA"
-          },
-          {
-            jsonPath: "lamsStore.selectedSurveyDetails.area",
-            //callBack: convertEpochToDate
-          }
-        ),
-        termExpiryDate:getLabelWithValue(
-          {
-            labelName: "Term Number",
-            labelKey: "LAMS_TERMNO"
-          },
-          {
-            jsonPath: "lamsStore.selectedSurveyDetails.termExpiryDate",
-            callBack: convertEpochToDate
-          }
-        ),
-        annualRent:getLabelWithValue(
-          {
-            labelName: "Annual Rent",
-            labelKey: "LAMS_ANN_RENT"
-          },
-          {
-            jsonPath: "lamsStore.selectedSurveyDetails.annualRent",
-            //callBack: convertEpochToDate
-          }
-        ),
-      },
-      {
-        style: {
-          overflow: "visible"
-        }
-      }
-    ),
-    leaseDetailsContainer2: getCommonContainer(
-      {
-        leaseAsPerGLR: getLabelWithValue(
-          {
-            labelName: "Lease as per GLR",
-            labelKey: "LAMS_AS_PER_GLR"
-          },
-          {
-            jsonPath: "lamsStore.selectedSurveyDetails.leaseAsPerGLR",
-            //callBack: convertEpochToDate
-          }
-        )
-      },
-      {
-        style: {
-          overflow: "visible"
-        }
-      }
-    ),
-  });
+  
 
   export const newApplicationDetailsCard = getCommonCard(
       {

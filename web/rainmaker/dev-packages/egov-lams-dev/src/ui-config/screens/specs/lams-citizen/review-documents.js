@@ -19,7 +19,7 @@ export const getReviewDocuments = (isEditable = true) => {
           },
           ...getCommonSubHeader({
             labelName: "Documents",
-            labelKey: "TL_COMMON_DOCS"
+            labelKey: "LAMS_COMMON_DOCS"
           })
         },
         editSection: {

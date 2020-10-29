@@ -33,6 +33,16 @@ const fieldConfig = {
       labelKey: "WF_ASSIGNEE_NAME_PLACEHOLDER"
     }
   },
+  fileNo: {
+    label: {
+      labelName: "File Number",
+      labelKey: "LAMS_FILE_NO"
+    },
+    placeholder: {
+      labelName: "Enter the file number",
+      labelKey: "LAMS_FILE_NO_PLACEHOLDER"
+    }
+  },
   comments: {
     label: {
       labelName: "Comments",
@@ -73,6 +83,15 @@ const fieldConfig = {
     label: {
       labelName: "cbrnDate",
       labelKey: "TL_NEW_TRADE_DETAILS_CBRNDATE_LABEL"
+    }
+
+    //})
+  },
+  issueDate: {
+    // getDateField({
+    label: {
+      labelName: "issueData",
+      labelKey: "LAMS_ISSUE_DATE"
     }
 
     //})
@@ -172,8 +191,12 @@ class ActionDialog extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       `Licenses[0].status`
     );
+    //alert("The status is "+status);
     switch (status) {
       case "APPLIED":
+      case "PDDEEXAMINATION":
+      case "DGDEEXAMINATION":
+      case "MODEXAMINATION":
       case "APPROVED":
         return (
           <Dialog
@@ -220,34 +243,44 @@ class ActionDialog extends React.Component {
                       >
                         <CloseIcon />
                       </Grid>
-                      {showEmployeeList && (
-                        <Grid
-                          item
-                          sm="12"
-                          style={{
-                            marginTop: 16
+                      <Grid item sm="12">
+                        <TextFieldContainer
+                          InputLabelProps={{ shrink: true }}
+                          label={fieldConfig.fileNo.label}
+                          onChange={e =>
+                            handleFieldChange(`${dataPath}.fileNo`, e.target.value)
+                          }
+                          jsonPath={`${dataPath}.fileNo`}
+                          placeholder={fieldConfig.fileNo.placeholder}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item sm="12">
+                        <TextFieldContainer
+                          id="datetime-local"
+                          label={fieldConfig.issueDate.label}
+                          //label="Date"
+                          type="date"
+                          required={true}
+                          InputProps={{ inputProps: { max: new Date().toISOString().slice(0,10)} }}
+                          //format={'DD/MM/YYYY'}
+                          // formatDate={(date) => moment(date).format('DD/MM/YYYY')}
+                          InputLabelProps={{
+                            shrink: true,
                           }}
-                        >
-                          <TextFieldContainer
-                            select={true}
-                            style={{ marginRight: "15px" }}
-                            label={fieldConfig.approverName.label}
-                            placeholder={fieldConfig.approverName.placeholder}
-                            data={dropDownData}
-                            optionValue="value"
-                            optionLabel="label"
-                            hasLocalization={false}
-                            //onChange={e => this.onEmployeeClick(e)}
-                            onChange={e =>
-                              handleFieldChange(
-                                assigneePath,
-                                e.target.value
-                              )
-                            }
-                            jsonPath={assigneePath}
-                          />
-                        </Grid>
-                      )}
+                          onChange={(e, value) => {
+                            // let num = JSON.stringify({ 'cbrnDate': e.target.value })
+                            //let num = Date.parse(e.target.value)
+                            // console.log("num>>>>", Date.parse(e.target.value))
+                            //console.log("num>>>>", num.toString())
+
+                            handleFieldChange(`${dataPath}.issueDate`, Date.parse(e.target.value))
+                          }
+                          }
+                          jsonPath={`${dataPath}.issueDate`}
+
+                        />
+                      </Grid>
                       <Grid item sm="12">
                         <TextFieldContainer
                           InputLabelProps={{ shrink: true }}

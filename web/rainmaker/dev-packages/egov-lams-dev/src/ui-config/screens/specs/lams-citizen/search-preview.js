@@ -2,7 +2,7 @@ import {
   getCommonCardWithHeader,
   getLabel,
   getCommonCard,
-
+  getDivider,
 
   getCommonContainer, getCommonGrayCard, getCommonHeader,getCommonSubHeader,
 
@@ -16,25 +16,29 @@ import set from "lodash/set";
 import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
-
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import {getMdmsData, loadMdmsData} from "../lams-utils/utils";
 import {workflowCode, businessService} from "../lams-utils/utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg , setDocuments} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import {newApplicationDetailsCard, newApplicationDocumentsCard} from "./newApplicationDetailsCard";
-import {newApplicationFooter} from "./newApplicationFooter";
 import { value } from "jsonpath";
 import { validateForm } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { validateFields } from "../utils";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner , toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {documentList} from "./documentList";
 import {popup} from "./popup"
 import {showHideAdhocPopup, getDialogButton} from "../utils"
 import { getReviewDocuments } from "./review-documents";
-import { workflowMasterData, leaseData , licenseData, LicensesTemp} from "./sampleData";
+import {userDetailsCard} from "./userDetailsCard";
+import {leaseDetailsCardReview} from "./leaseDetailsCardReview";
+
+import { workflowMasterData, leaseData , 
+  licenseData, 
+  licenseDataPDDE, licenseDataDGDE, licenseDataMOD, licenseDataApproved,
+  LicensesTemp,  businessServiceData, sampleSearchResponse} from "./sampleData";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
@@ -91,44 +95,94 @@ const headerrow = getCommonContainer({
 });
 
 
-let titleText= "View ";
+let titleText= "Application Details ";
 let title = getCommonTitle({ labelName: titleText });
 const reviewDocumentDetails = getReviewDocuments(false, false);
 
-export const tradeReviewDetails = getCommonCard({
+export const leaseRenewalReviewDetails = getCommonCard({
   title,
   //estimate,
-  addPenaltyRebateButton: {
-    componentPath: "Button",
-    props: {
-      color: "primary",
-      style: {}
-    },
-    children: {
-      previousButtonLabel: getLabel({
-        labelName: "ADD GARBAGE CHARGES",
-        labelKey: "TL_PAYMENT_ADD_RBT_PEN"
-      })
-    },
-     onClickDefination: {
-       action: "condition",
-       callBack: showHideAdhocPopup
-     },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: ["TL_FIELD_INSPECTOR"]
-    },
-    visible: false
-  },
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
+  // addPenaltyRebateButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     color: "primary",
+  //     style: {}
+  //   },
+  //   children: {
+  //     previousButtonLabel: getLabel({
+  //       labelName: "ADD GARBAGE CHARGES",
+  //       labelKey: "TL_PAYMENT_ADD_RBT_PEN"
+  //     })
+  //   },
+  //    onClickDefination: {
+  //      action: "condition",
+  //      callBack: showHideAdhocPopup
+  //    },
+  //   roleDefination: {
+  //     rolePath: "user-info.roles",
+  //     roles: ["TL_FIELD_INSPECTOR"]
+  //   },
+  //   visible: false
+  // },
+  // viewBreakupButton: getDialogButton(
+  //   "VIEW BREAKUP",
+  //   "TL_PAYMENT_VIEW_BREAKUP",
+  //   "search-preview"
+  // ),
   //reviewTradeDetails,
   //reviewOwnerDetails,
+  userDetailsCard,
+  leaseDetailsCardReview,
   reviewDocumentDetails
 });
+
+let loadLeaseDetails = async () => {
+  alert("Trying to search ");
+  try{
+    //dispatch(toggleSpinner());
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryParams = [{ key: "applicationNumber", value: applicationNumber },
+      { key: "tenantId", value: tenantId }
+    ];
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "lams-services/v1/_search",
+      "_search",
+      queryParams,
+      {}
+    );
+    //dispatch(toggleSpinner());
+    return payload;
+  }
+  catch(e)
+  {
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Could not load lease Details",
+        labelKey: "LAMS_API_ERROR"
+      },
+      "error"
+    );
+  }
+  return null;
+}
+
+let setDocumentsInfo = async (action, state, dispatch) => {
+
+  //Set correct documents value
+  let data = get(state, "screenConfiguration.preparedFinalObject");
+  if (get(data, "lamsStore.Lease[0].leaseDetails.applicationDocuments")) {
+    await setDocuments(
+      data,
+      "lamsStore.Lease[0].leaseDetails.applicationDocuments",
+      "lamsStore.LeaseTemp[0].reviewDocData",
+      dispatch, 'LAMS'
+    );
+  }
+}
 
 const searchPreview = {
   uiFramework: "material-ui",
@@ -136,29 +190,49 @@ const searchPreview = {
   beforeInitScreen:(action, state, dispatch) => {
     //const queryValue = getQueryArg(window.location.href, "applicationNumber");
     alert("In the search preview "+applicationNumber);
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", workflowCode));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].action", "APPLY"));
+
+    let response = loadLeaseDetails();
+    if(response && response.length > 0 && response.leases)
+      dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
+
+    //toberemoved
+    dispatch(prepareFinalObject("lamsStore.Lease", sampleSearchResponse.leases));
+
+    setDocumentsInfo(action, state, dispatch);
+
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", workflowCode));
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].action", "APPLY"));
 
     //dispatch(prepareFinalObject("lamsStore.allTenants", [{code:"Agra", name:"Agra", active: true, id:"pb.agra"},{code: "Pune",name: "Pune", active: true, id:"pb.pune"}, {name: "Lucknow", code:"Lucknow", active: true, id:"pb.lucknow"}]));
     //dispatch(prepareFinalObject("lamsStore.lamsLocation", [{code:"withinCB", name:"Within CB ", active: true, id:"pb.agra"},{code: "outside CB",name: "Outside CB", active: true, id:"pb.pune"}]));
     //dispatch(prepareFinalObject("lamsStore.lamsSurveyNumber", [{code:"131-212-A", name:"131-212-A", active: true, id:"pb.agra"},{code: "131-16",name: "131-16", active: true, id:"pb.pune"},{code: "131-145",name: "131-145", active: true, id:"pb.lucknow"}]));
-    dispatch(prepareFinalObject("lamsStore.requiredDocuments", [{applicationDocuments:documentList}]));
+    //dispatch(prepareFinalObject("lamsStore.requiredDocuments", [{applicationDocuments:documentList}]));
     
-    let sampleDoc = [{
-      "title":"TL_ELECTBILL",
-      "link":"https://13.71.65.215.nip.io/filestore/v1/files/id?fileStoreId=beb21a2a-63d2-4e36-b32c-35670007f89c&tenantId=pb",
-      "linkText":"View",
-      "name":"Document - 1",
-    }];
+    // let sampleDoc = [{
+    //   "title":"TL_ELECTBILL",
+    //   "link":"https://13.71.65.215.nip.io/filestore/v1/files/id?fileStoreId=beb21a2a-63d2-4e36-b32c-35670007f89c&tenantId=pb",
+    //   "linkText":"View",
+    //   "name":"Document - 1",
+    // }];
 
-    dispatch(prepareFinalObject("lamsStore.LeaseTemp[0].reviewDocData", sampleDoc));
-    dispatch(prepareFinalObject("lamsStore.Leases", leaseData))
-    dispatch(prepareFinalObject("Licenses", licenseData))
+    //dispatch(prepareFinalObject("lamsStore.LeaseTemp[0].reviewDocData", sampleDoc));
+    //dispatch(prepareFinalObject("lamsStore.Leases", leaseData))
     dispatch(prepareFinalObject("LicensesTemp", LicensesTemp))
+    localStorageSet("businessServiceData", JSON.stringify(businessServiceData));
+
+    const testAt = getQueryArg(window.location.href, "testAt");
+    switch(testAt)
+    {
+      case "CEODEO":     dispatch(prepareFinalObject("Licenses", licenseData)); break;//licenseData, licenseDataCEODEO, licenseDataPDDE      ; break;
+      case "PDDE":    dispatch(prepareFinalObject("Licenses", licenseDataPDDE)); break;//licenseData, licenseDataCEODEO, licenseDataPDDE      ; break;
+      case "DGDE" : dispatch(prepareFinalObject("Licenses", licenseDataDGDE)); break;
+      case "MOD" : dispatch(prepareFinalObject("Licenses", licenseDataMOD)); break;
+      case "approved" :  dispatch(prepareFinalObject("Licenses", licenseDataApproved)); break;
+    }
     return action;
   },
+
   components: {
     div: {
       uiFramework: "custom-atoms",
@@ -176,9 +250,7 @@ const searchPreview = {
                 xs: 12,
                 sm: 8
               },
-
               ...headerrow
-
             },
             helpSection: {
               uiFramework: "custom-atoms",
@@ -201,9 +273,9 @@ const searchPreview = {
           moduleName: "egov-lams",//"egov-workflow",//"egov-lams",
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "Licenses",
-            moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            dataPath: "lamsStore.Lease",
+            moduleName: "NewLAMS_LR",  //tobechanged
+            updateUrl: "/lams-services/v1/_update"
           }
         },
         // actionDialog: {
@@ -214,11 +286,11 @@ const searchPreview = {
         //   props: {
         //     open: true,
         //     dataPath: "Licenses",
-        //     moduleName: "NewTL",
+        //     moduleName: "NewLAMS_LR",
         //     updateUrl: "/tl-services/v1/_update",
         //     data: {
         //       buttonLabel: "RESUBMIT",
-        //       moduleName: "NewTL",
+        //       moduleName: "NewLAMS_LR",
         //       isLast: false,
         //       dialogHeader: {
         //         labelName: "RESUBMIT Application",
@@ -230,7 +302,7 @@ const searchPreview = {
         //     }
         //   }
         // },
-        tradeReviewDetails
+        leaseRenewalReviewDetails,
       }
     },
     //footer,
