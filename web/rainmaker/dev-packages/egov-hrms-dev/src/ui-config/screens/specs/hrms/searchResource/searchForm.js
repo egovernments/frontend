@@ -210,7 +210,7 @@ export const searchForm = getCommonCard({
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
-      resetButton: {
+      hrmsResetButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
@@ -223,9 +223,9 @@ export const searchForm = getCommonCard({
             color: "#FE7A51",
             borderColor: "#FE7A51",
             //   borderRadius: "2px",
-            width: "220px",
+            // width: "220px",
             height: "48px",
-            margin: "8px",
+            // margin: "8px",
             float: "right"
           }
         },
@@ -240,7 +240,7 @@ export const searchForm = getCommonCard({
           callBack: resetFields
         }
       },
-      searchButton: {
+      hrmsSearchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
@@ -251,10 +251,10 @@ export const searchForm = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            // margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            // width: "220px",
             height: "48px"
           }
         },
