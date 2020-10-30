@@ -103,7 +103,8 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "BillAmendment",
           masterDetails: [
-            { name: "documentObj" }
+            { name: "documentObj" },
+            { name: "DemandRevisionBasis" }
           ]
         },
         {
