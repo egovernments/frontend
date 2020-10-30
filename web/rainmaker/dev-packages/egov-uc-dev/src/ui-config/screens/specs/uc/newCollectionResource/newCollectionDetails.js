@@ -9,7 +9,7 @@ import {
 // import {
 //   getTransformedLocale
 // } from "egov-ui-framework/ui-utils/commons";
-import { getTransformedLocale } from "../../../../../ui-utils/commons";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -42,7 +42,7 @@ export const newCollectionDetailsCard = getCommonCard(
               labelName: "Select City",
               labelKey: "TL_SELECT_CITY"
             },
-            sourceJsonPath: "applyScreenMdmsData.ucCities",
+            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
             // "applyScreenMdmsData.common-masters.citiesByModule.UC.tenants",
             jsonPath: "Demands[0].tenantId",
             required: true,
@@ -85,7 +85,7 @@ export const newCollectionDetailsCard = getCommonCard(
             };
             try {
               let payload = null;
-              payload = await httpRequest(
+             /* payload = await httpRequest(
                 "post",
                 "/egov-mdms-service/v1/_search",
                 "_search",
@@ -101,7 +101,7 @@ export const newCollectionDetailsCard = getCommonCard(
               setServiceCategory(
                 get(payload, "MdmsRes.BillingService.BusinessService", []),
                 dispatch
-              );
+              );*/
             } catch (e) {
               console.log(e);
             }
