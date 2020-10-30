@@ -6,6 +6,7 @@ import {
 } from "../../utils";
 import { download, downloadBill } from "egov-common/ui-utils/commons";
 import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
+import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -16,12 +17,20 @@ export const searchResults = {
       {
         labelName: "Bill No.",
         labelKey: "BILL_COMMON_SERVICE_TYPE",
+      },
+      {
+        labelName: "Consumer Code",
+        labelKey: "BILL_COMMON_APPLICATION_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
             <a href="javascript:void(0)"
               onClick={() => {
                 console.log('CLICKED');
+                let link = `/bill-amend/search-preview`;
+                let link1 = `/bill-amend/apply`;
+                link=value=='NA'?link1:link;
+                routeTo(link);
                 // downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
               }}
             >
@@ -32,13 +41,24 @@ export const searchResults = {
       },
       {
         labelName: "Consumer Code",
-        labelKey: "BILL_COMMON_APPLICATION_NO",
-
-      },
-      {
-        labelName: "Consumer Code",
         labelKey: "PAYMENT_COMMON_CONSUMER_CODE",
-
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <a href="javascript:void(0)"
+              onClick={() => {
+                console.log('CLICKED');
+                let link2=`/wns/connection-details?connectionNumber=WS/107/2020-21/000037&tenantId=pb.amritsar&service=WATER&connectionType=Metered`;
+                let link = `/wns/connection-details?connectionNumber=WS/107/2020-21/000041&tenantId=pb.amritsar&service=WATER&connectionType=Non%20Metered`;
+                link=value=='WS/107/2020-21/000037'?link2:link;
+                routeTo(link);
+                // downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
+              }}
+            >
+              {value}
+            </a>
+          )
+        }
       },
       {
         labelName: "Consumer Name",
