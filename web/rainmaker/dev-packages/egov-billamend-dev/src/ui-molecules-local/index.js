@@ -38,9 +38,4 @@ export {
   DividerWithLabel,
   DocumentList,
   UploadSingleFile
-
-
-
-
-
 };

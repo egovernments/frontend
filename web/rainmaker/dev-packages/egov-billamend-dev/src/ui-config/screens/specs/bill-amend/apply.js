@@ -27,6 +27,7 @@ import { footer } from "./applyResource/footer";
 import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
+import { docdata } from "./applyResource/docData";
 
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
@@ -103,7 +104,8 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "BillAmendment",
           masterDetails: [
-            { name: "documentObj" }
+            { name: "documentObj" },
+            { name: "DemandRevisionBasis" }
           ]
         },
         {
@@ -124,6 +126,9 @@ export const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    // if(!payload.MdmsRes.BillAmendment){
+    //   payload.MdmsRes.BillAmendment=docdata.BillAmendment;
+    // }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);

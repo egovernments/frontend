@@ -28,7 +28,6 @@ const CheckBoxContainer = Loadable({
 export {
 
   EstimateCardContainer,
-  TestContainer,
   DocumentListContainer,
   AdjustmentAmountContainer,
   CheckBoxContainer

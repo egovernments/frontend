@@ -340,35 +340,7 @@ export const AddDemandRevisionBasis = getCommonCard({
                 labelKey: "BILL_DEMAND_REVISON_BASIS_PLACEHOLDER"
             },
             jsonPath: "Bill.demandRevisionBasis",
-            // sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
-            optionValue: "code",
-            optionLabel: "label",
-            data: [
-                {
-                    code: "COURTCASESETTLEMENT",
-                    label: "COURT_CASE_SETTLEMENT"
-                },
-                {
-                    code: "ARREARSWRITEOFF",
-                    label: "ARREARS_WRITE_OFF"
-                },
-                {
-                    code: "DCBCORRECTION",
-                    label: "DCB_CORRECTION"
-                },
-                {
-                    code: "ONETIMESETTLEMENT",
-                    label: "ONE_TIME_SETTLEMENT"
-                },
-                {
-                    code: "REMISSIONFORPT",
-                    label: "REMISSION_FORPT"
-                },
-                {
-                    code: "OTHERS",
-                    label: "OTHERS"
-                }
-            ],
+            sourceJsonPath: "applyScreenMdmsData.BillAmendment.DemandRevisionBasis",
             required: true,
             gridDefination: {
                 xs: 12,
