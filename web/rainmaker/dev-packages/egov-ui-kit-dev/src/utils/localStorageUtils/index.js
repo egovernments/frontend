@@ -21,6 +21,13 @@ export const getLocale = () => {
 export const getModule = () => {
   return localStorage.getItem("module");
 };
+export const getLocalizationLabels = () =>{
+  return localStorage.getItem(`localization_${getLocale()}`);
+};
+export const getStoredModulesList = () =>{
+  return localStorage.getItem("storedModulesList");
+};
+ 
 
 //SET methods
 export const setUserInfo = (userInfo) => {
@@ -44,6 +51,12 @@ export const setModule = (moduleName) => {
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
 };
+ 
+export const setStoredModulesList =(storedModuleList) =>{
+  localStorage.setItem("storedModulesList", storedModuleList);
+};
+  
+ 
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
