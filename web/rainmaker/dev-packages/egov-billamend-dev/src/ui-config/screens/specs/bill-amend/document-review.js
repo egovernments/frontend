@@ -4,7 +4,7 @@ import {
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
-//   import { changeStep } from "./footer";
+
   
   export const getReviewDocuments = (isEditable = true) => {
     return getCommonGrayCard({
