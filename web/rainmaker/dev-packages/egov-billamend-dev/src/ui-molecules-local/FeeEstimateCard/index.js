@@ -8,6 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { Tooltip } from "egov-ui-framework/ui-molecules";
 import ErrorIcon from "@material-ui/icons/Error";
+import { getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 const styles = {
     card: {
@@ -43,9 +45,9 @@ const styles = {
         letterSpacing: "1.42px",
         lineHeight: "41px"
     },
-    leftIcon:{
-        color:"grey",
-        marginRight:4
+    leftIcon: {
+        color: "grey",
+        marginRight: 4
     }
 };
 
@@ -67,10 +69,10 @@ function FeesEstimateCard(props) {
                     <Grid container >
                         <Grid container style={{ marginBottom: 10 }}>
                             <Grid container xs={6}>
-                                <Typography variant="body2" style={{ fontWeight: "bold" }}>Tax heads</Typography>
+                                <LabelContainer labelName="Tax Heads" labelKey="BILL_TAX_HEADS" style={{fontWeight:"bold"}}/>
                             </Grid>
                             <Grid xs={6} align="right">
-                                <Typography variant="body2" style={{ fontWeight: "bold" }}>Reduced Amount(Rs)</Typography>
+                            <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_REDUCED_AMOUNT" style={{fontWeight:"bold"}}/>
                             </Grid>
                         </Grid>
                         {estimate.fees.map((fee, key) => {
@@ -105,7 +107,7 @@ function FeesEstimateCard(props) {
                     <Divider style={{ marginBottom: 5 }} />
                     <Grid container>
                         <Grid item xs={6}>
-                            <Typography variant="body2">Total</Typography>
+                        <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_ADJUSTMENT_AMOUNT_TOTAL" style={{fontWeight:"bold"}}/>
                         </Grid>
                         <Grid item xs={6} align="right" style={{ paddingRight: 0 }}>
                             <Typography variant="body2">{total}</Typography>

@@ -43,7 +43,7 @@ import {
               },
               buttonLabel: getLabel({
                 labelName: "Edit",
-                labelKey: "BILL_SUMMARY_EDIT"
+                labelKey: "BILL_DOCUMENTS_EDIT"
               })
             },
             // onClickDefination: {
