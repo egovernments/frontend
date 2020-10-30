@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./index.css";
+import { sortDropdownLabels } from "egov-ui-framework/ui-utils/commons";
 
 const getSuggestions = suggestions => {
   return (
@@ -16,7 +17,7 @@ const getSuggestions = suggestions => {
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name
-    })).sort((e1,e2)=>e1&&e1.label&&e1.label.localeCompare(e2&&e2.label&&e2.label||''))
+    })).sort(sortDropdownLabels)
   );
 };
 
