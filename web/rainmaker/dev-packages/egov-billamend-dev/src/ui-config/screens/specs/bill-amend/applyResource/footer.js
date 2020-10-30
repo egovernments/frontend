@@ -283,10 +283,10 @@ export const footer = getCommonApplyFooter({
     //   action: "condition",
     //   callBack: submitApplication
     // },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      action: "APPLY"
-    },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action: "APPLY"
+    // },
     visible: false
   }
 });
