@@ -1271,7 +1271,7 @@ const isApplicationPaid = (currentStatus, workflowCode) => {
   // if (currentStatus === "CITIZENACTIONREQUIRED") {
   //   return isPAID;
   // }
-  if(currentStatus==="CITIZENACTIONREQUIRED"  || (currentStatus!=="APPROVED" && currentStatus!=="CANCELLED") ){
+  if(currentStatus==="CITIZENACTIONREQUIRED"  || (currentStatus!=="APPROVED" && currentStatus!=="CANCELLED" && currentStatus!=="EXPIRED") ){
     return isPAID;
  }
 

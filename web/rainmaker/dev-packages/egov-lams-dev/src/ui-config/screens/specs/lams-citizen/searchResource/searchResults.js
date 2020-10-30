@@ -110,15 +110,15 @@ export const searchResults = {
 
 const onRowClick = rowData => {
   switch (rowData[7]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[8]
-      }`;
-      break;
+    // case "INITIATED":
+    //   window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
+    //     rowData[6]
+    //   }`;
+    //   break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[8]}`;
+      }&tenantId=${rowData[6]}`;
       break;
   }
 };
