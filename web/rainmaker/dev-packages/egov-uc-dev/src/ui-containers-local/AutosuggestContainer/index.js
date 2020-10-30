@@ -9,6 +9,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
+import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 
 class AutoSuggestor extends Component {
   onSelect = value => {
@@ -68,7 +69,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
         transfomedKeys
       );
       return option;
-    }).sort((e1,e2)=>e1&&e1.name&&e1.name.localeCompare(e2&&e2.name&&e2.name||''))
+    }).sort(sortDropdownNames)
   );
 };
 

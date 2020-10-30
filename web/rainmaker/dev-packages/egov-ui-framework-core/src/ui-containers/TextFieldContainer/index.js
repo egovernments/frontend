@@ -10,6 +10,7 @@ import {
   getLocaleLabels,
   appendModulePrefix
 } from "../../ui-utils/commons";
+import { sortDropdownLabels } from "egov-ui-framework/ui-utils/commons";
 
 class TextFieldContainer extends React.Component {
   componentDidMount() {
@@ -78,7 +79,7 @@ class TextFieldContainer extends React.Component {
         )
       : "";
     if (dropdownData.length > 0) {
-      dropdownData=dropdownData.sort((e1,e2)=>e1&&e1.label&&e1.label.localeCompare(e2&&e2.label&&e2.label||''))
+      dropdownData=dropdownData.sort(sortDropdownLabels)
       return (
         <TextfieldWithIcon
           label={translatedLabel}

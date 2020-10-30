@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { AutoSuggest } from "../../ui-atoms";
-import { findItemInArrayOfObject } from "../../ui-utils/commons";
+import { findItemInArrayOfObject, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   transformById,
@@ -81,7 +81,8 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
         transfomedKeys
       );
       return option;
-    }).sort((e1,e2)=>e1&&e1.name&&e1.name.localeCompare(e2&&e2.name&&e2.name||''))
+    }).sort(sortDropdownNames)
+    
   );
 };
 
