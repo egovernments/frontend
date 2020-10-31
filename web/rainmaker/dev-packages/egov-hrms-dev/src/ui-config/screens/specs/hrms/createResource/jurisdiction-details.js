@@ -7,7 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 const arrayCrawler = (arr, n) => {
   if (n == 1) {
     return arr.map(item => {
@@ -209,8 +209,8 @@ const jurisdictionDetailsCard = {
               required: true,
               jsonPath: "Employee[0].jurisdictions[0].boundary",
               localePrefix:{
-                moduleName:"TENANT",
-                masterName:"TENANTS"
+                moduleName:getTenantId(),
+                masterName:  "REVENUE"
               },
               props: {
                 className: "hr-generic-selectfield",

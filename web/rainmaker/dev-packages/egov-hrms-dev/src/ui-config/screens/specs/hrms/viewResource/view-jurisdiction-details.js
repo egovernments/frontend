@@ -6,7 +6,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
@@ -49,8 +49,8 @@ const jurisdictionCard = {
           {
             jsonPath: "Employee[0].jurisdictions[0].boundary",
             localePrefix: {
-              moduleName: "TENANT",
-              masterName: "TENANTS"
+              moduleName:getTenantId(),
+                masterName:  "REVENUE"
             }
           }
         )
