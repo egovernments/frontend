@@ -47,6 +47,7 @@ const remoteConfigPath = (path, screenKey) => {
     case "lams":
     case "lams-citizen":
     case "lams-employee":
+    case "lams-common":
       config = require(`egov-lams/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     default:

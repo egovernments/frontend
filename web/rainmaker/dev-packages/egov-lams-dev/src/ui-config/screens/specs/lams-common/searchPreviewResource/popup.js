@@ -9,11 +9,11 @@ import {
     getCommonTitle,
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-import {showHideAdhocPopup} from "../utils";
+import {showHideAdhocPopup} from "../../utils";
   import get from "lodash/get";
   import { httpRequest } from "egov-ui-framework/ui-utils/api";
   import cloneDeep from "lodash/cloneDeep";
-  import { createEstimateData } from "../utils";
+  import { createEstimateData } from "../../utils";
   import {
     prepareFinalObject,
     toggleSnackbar

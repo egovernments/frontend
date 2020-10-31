@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import {sampleSearchResponse} from "../sampleData";
+import {sampleSearchResponse} from "../../lams-utils/sampleData";
 
 import {
   convertEpochToDate,

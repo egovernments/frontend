@@ -28,72 +28,21 @@ import { validateForm } from "egov-ui-framework/ui-redux/screen-configuration/ut
 import { validateFields } from "../utils";
 import { toggleSpinner , toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import {documentList} from "./documentList";
-import {popup} from "./popup"
+import {popup} from "./searchPreviewResource/popup"
 import {showHideAdhocPopup, getDialogButton} from "../utils"
-import { getReviewDocuments } from "./review-documents";
-import {userDetailsCard} from "./userDetailsCard";
-import {leaseDetailsCardReview} from "./leaseDetailsCardReview";
+import { getReviewDocuments } from "./searchPreviewResource/review-documents";
+import {userDetailsCard} from "./searchPreviewResource/userDetailsCard";
+import {leaseDetailsCardReview} from "./searchPreviewResource/leaseDetailsCardReview";
 
 import { workflowMasterData, leaseData , 
   licenseData, 
   licenseDataPDDE, licenseDataDGDE, licenseDataMOD, licenseDataApproved,
-  LicensesTemp,  businessServiceData, sampleSearchResponse} from "./sampleData";
+  LicensesTemp,  businessServiceData, sampleSearchResponse} from "../lams-utils/sampleData";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
-const getCommonApplyFooter = children => {
-  return {
-    uiFramework: "custom-atoms",
-    componentPath: "Div",
-    props: {
-      className: "apply-wizard-footer"
-    },
-    children
-  };
-};
-
-const callBackSubmit =() => {
-  alert("In the call back submit ");
-}
-
-export const footer = getCommonApplyFooter({
-  previousButton: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        minWidth: "180px",
-        height: "48px",
-        marginRight: "16px",
-        borderRadius: "inherit"
-      }
-    },
-    children: {
-      previousButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      },
-      previousButtonLabel: getLabel({
-        labelName: "Previous Step",
-        labelKey: "LAMS_COMMON_SUBMIT"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackSubmit
-    },
-    visible: true
-  }
-});
-
 const headerrow = getCommonContainer({
 });
-
 
 let titleText= "Application Details ";
 let title = getCommonTitle({ labelName: titleText });
@@ -101,43 +50,12 @@ const reviewDocumentDetails = getReviewDocuments(false, false);
 
 export const leaseRenewalReviewDetails = getCommonCard({
   title,
-  //estimate,
-  // addPenaltyRebateButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     color: "primary",
-  //     style: {}
-  //   },
-  //   children: {
-  //     previousButtonLabel: getLabel({
-  //       labelName: "ADD GARBAGE CHARGES",
-  //       labelKey: "TL_PAYMENT_ADD_RBT_PEN"
-  //     })
-  //   },
-  //    onClickDefination: {
-  //      action: "condition",
-  //      callBack: showHideAdhocPopup
-  //    },
-  //   roleDefination: {
-  //     rolePath: "user-info.roles",
-  //     roles: ["TL_FIELD_INSPECTOR"]
-  //   },
-  //   visible: false
-  // },
-  // viewBreakupButton: getDialogButton(
-  //   "VIEW BREAKUP",
-  //   "TL_PAYMENT_VIEW_BREAKUP",
-  //   "search-preview"
-  // ),
-  //reviewTradeDetails,
-  //reviewOwnerDetails,
   userDetailsCard,
   leaseDetailsCardReview,
   reviewDocumentDetails
 });
 
 let loadLeaseDetails = async () => {
-  alert("Trying to search ");
   try{
     //dispatch(toggleSpinner());
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -170,8 +88,38 @@ let loadLeaseDetails = async () => {
   return null;
 }
 
-let setDocumentsInfo = async (action, state, dispatch) => {
+let loadWorkflowMasterData = async () => {
+  try{
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryParams = [
+      //{ key: "businessServices", value: "LAMS_NewLR" },//"NewLAMS_LR"
+      { key: "tenantId", value: tenantId }
+    ];
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/businessservice/_search",
+      "_search",
+      queryParams,
+      {}
+    );
+    return payload;
+  }
+  catch(e)
+  {
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Could not load Workflow Master Details",
+        labelKey: "LAMS_API_ERROR"
+      },
+      "error"
+    );
+  }
+  return null;
+};
 
+let setDocumentsInfo = async (action, state, dispatch) => {
   //Set correct documents value
   let data = get(state, "screenConfiguration.preparedFinalObject");
   if (get(data, "lamsStore.Lease[0].leaseDetails.applicationDocuments")) {
@@ -219,8 +167,14 @@ const searchPreview = {
     //dispatch(prepareFinalObject("lamsStore.LeaseTemp[0].reviewDocData", sampleDoc));
     //dispatch(prepareFinalObject("lamsStore.Leases", leaseData))
     dispatch(prepareFinalObject("LicensesTemp", LicensesTemp))
+
+    //tobechanged  uncomment below code
+    //let businessServiceData = loadWorkflowMasterData();
+    //localStorageSet("businessServiceData", JSON.stringify(businessServiceData.BusinessServices));
+
     localStorageSet("businessServiceData", JSON.stringify(businessServiceData));
 
+    //tobechanged  remove the below code
     const testAt = getQueryArg(window.location.href, "testAt");
     switch(testAt)
     {
@@ -305,7 +259,6 @@ const searchPreview = {
         leaseRenewalReviewDetails,
       }
     },
-    //footer,
     breakUpDialog: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-tradelicence",

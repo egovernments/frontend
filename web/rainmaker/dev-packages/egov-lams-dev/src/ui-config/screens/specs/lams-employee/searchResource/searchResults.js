@@ -6,6 +6,7 @@ import {
   getTextToLocalMapping
 } from "../../utils";
 import { getLocaleLabels, getStatusKey} from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -116,9 +117,13 @@ const onRowClick = rowData => {
     //   }`;
     //   break;
     default:
-      window.location.href = `search-preview?applicationNumber=${
+      window.location.href = `/lams-common/search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`;
+      }&tenantId=${rowData[5]}`;
       break;
+      //setRoute(`/lams-common/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
+      //break;
+      
+      
   }
 };
