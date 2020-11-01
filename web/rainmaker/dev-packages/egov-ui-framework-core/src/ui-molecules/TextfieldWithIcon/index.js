@@ -12,34 +12,34 @@ function InputWithIcon(props) {
     !isEmpty(iconObj) &&
     (iconObj.position === "end"
       ? {
-        InputProps: {
-          endAdornment: (
-            <InputAdornment position="end">
-              {iconObj.onClick ? (
-                <IconButton>
-                  <span
-                    onClick={() => {
-                      iconObj.onClick();
-                    }}
-                    style={{
-                      color: iconObj.color
-                        ? iconObj.color
-                        : "rgba(0, 0, 0, 0.60"
-                    }}
-                  >
-                    {iconObj.iconName && <Icon iconName={iconObj.iconName} />}
+          InputProps: {
+            endAdornment: (
+              <InputAdornment position="end">
+                {iconObj.onClick ? (
+                  <IconButton>
                     <span
-                      style={
-                        iconObj.iconName
-                          ? { position: "relative", top: "-7px" }
-                          : {}
-                      }
+                      onClick={() => {
+                        iconObj.onClick();
+                      }}
+                      style={{
+                        color: iconObj.color
+                          ? iconObj.color
+                          : "rgba(0, 0, 0, 0.60"
+                      }}
                     >
-                      {iconObj.label && iconObj.label}
+                      {iconObj.iconName && <Icon iconName={iconObj.iconName} />}
+                      <span
+                        style={
+                          iconObj.iconName
+                            ? { position: "relative", top: "-7px" }
+                            : {}
+                        }
+                      >
+                        {iconObj.label && iconObj.label}
+                      </span>
                     </span>
-                  </span>
-                </IconButton>
-              ) : (
+                  </IconButton>
+                ) : (
                   <span
                     style={{
                       color: iconObj.color
@@ -59,36 +59,19 @@ function InputWithIcon(props) {
                     </span>
                   </span>
                 )}
-            </InputAdornment>
-          )
+              </InputAdornment>
+            )
+          }
         }
-      }
       : {
-        InputProps: {
-          startAdornment: (
-            <InputAdornment position="start" style={{ position: "relative", top: "2px", flex: "none" }}>
-              {
-                iconObj.onClick ?
+          InputProps: {
+            startAdornment: (
+              <InputAdornment position="start">
+                {
+                  iconObj.onClick?
                   <IconButton onClick={() => {
                     iconObj.onClick()
                   }}>
-                    <span
-                      style={{
-                        color: iconObj.color ? iconObj.color : "rgba(0, 0, 0, 0.60"
-                      }}
-                    >
-                      {iconObj.iconName && <Icon iconName={iconObj.iconName} />}
-                      <span
-                        style={
-                          iconObj.iconName
-                            ? { position: "relative", top: "-7px" }
-                            : {}
-                        }
-                      >
-                        {iconObj.label && iconObj.label}
-                      </span>
-                    </span>
-                  </IconButton> :
                   <span
                     style={{
                       color: iconObj.color ? iconObj.color : "rgba(0, 0, 0, 0.60"
@@ -105,11 +88,28 @@ function InputWithIcon(props) {
                       {iconObj.label && iconObj.label}
                     </span>
                   </span>
-              }
-            </InputAdornment>
-          )
-        }
-      });
+                  </IconButton>:
+                  <span
+                    style={{
+                      color: iconObj.color ? iconObj.color : "rgba(0, 0, 0, 0.60"
+                    }}
+                  >
+                    {iconObj.iconName && <Icon iconName={iconObj.iconName} />}
+                    <span
+                      style={
+                        iconObj.iconName
+                          ? { position: "relative", top: "-7px" }
+                          : {}
+                      }
+                    >
+                      {iconObj.label && iconObj.label}
+                    </span>
+                  </span>
+                }
+              </InputAdornment>
+            )
+          }
+        });
 
   return <TextField label={label} {...extraProps} {...rest} />;
 }

@@ -23,7 +23,6 @@ import { getTenantId } from "../../../../../ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 
-console.log("prasad localizationLabels",localizationLabels);
 
 const transfomedKeys = transformById(localizationLabels, "code");
 const tenantId = getTenantId();

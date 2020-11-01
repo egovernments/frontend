@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { TextfieldWithIcon, Tooltip } from "../../ui-molecules";
 import MenuItem from "@material-ui/core/MenuItem";
 import get from "lodash/get";
-import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import {
   epochToYmd,
@@ -78,8 +77,8 @@ class TextFieldContainer extends React.Component {
         )
       : "";
     if (dropdownData.length > 0) {
-      
       return (
+        <div>
         <TextfieldWithIcon
           label={translatedLabel}
           placeholder={translatedPlaceholder}
@@ -111,7 +110,12 @@ class TextFieldContainer extends React.Component {
                   )}
                 </MenuItem>
               ))}
+
         </TextfieldWithIcon>
+                {title && !isEmpty(title) && infoIcon && (
+            <Tooltip val={title} icon={infoIcon} />
+          )}
+        </div>
       );
     } else {
       return this.props.select ? (
@@ -167,9 +171,7 @@ const mapStateToProps = (state, ownprops) => {
     data,
     optionValue,
     optionLabel,
-    sourceJsonPath,
-    cityDropdown,
-    autoSelect
+    sourceJsonPath
   } = ownprops;
   const { screenConfiguration, app } = state;
   const { localizationLabels } = app;
@@ -191,19 +193,10 @@ const mapStateToProps = (state, ownprops) => {
     };
     if (data && data.length > 0) {
       dropdownData = constructDropdown(data || []);
-      // if autoSelect is true and dropDownData is one, then select the value by default
-      if( data.length ==1 && autoSelect){
-        fieldValue = dropdownData[0].value;
-        if(!get(preparedFinalObject,jsonPath)){
-            set(preparedFinalObject,jsonPath,fieldValue);
-        }
-     }
     } else if (sourceJsonPath) {
       dropdownData = constructDropdown(
         get(preparedFinalObject, sourceJsonPath, [])
       );
-    } else if (cityDropdown) {
-      dropdownData = constructDropdown(get(state, cityDropdown, []));
     }
   }
 

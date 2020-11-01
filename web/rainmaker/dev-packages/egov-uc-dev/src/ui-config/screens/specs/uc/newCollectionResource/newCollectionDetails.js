@@ -27,8 +27,29 @@ export const newCollectionDetailsCard = getCommonCard(
   {
     searchContainer: getCommonContainer(
       {
-        City: {
-          ...getSelectField({
+        City: getTextField({
+          label: {
+            labelName: "CITY Name",
+            labelKey: "UC_CONS_NAME_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Consumer Name",
+            labelKey: "UC _CONS_NAME_LABEL_PLACEHOLDER"
+          },
+          props: {
+            required: true,
+            value: tenantId,
+            disabled: true
+          },
+          required: true,
+          visible: true,
+          pattern: getPattern("Name"),
+          errorMessage: "Invalid Name.",
+          jsonPath: "Demands[0].tenantId",
+        }),
+        
+   /*  City: {
+       ...getSelectField({
             label: {
               labelName: "City",
               labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
@@ -101,14 +122,14 @@ export const newCollectionDetailsCard = getCommonCard(
               setServiceCategory(
                 get(payload, "MdmsRes.BillingService.BusinessService", []),
                 dispatch
-              );*/
+              );
             } catch (e) {
               console.log(e);
             }
             return action;
           }
-        },
-        dummyDiv: {
+      },*/
+      dummyDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
           gridDefination: {
@@ -155,7 +176,7 @@ export const newCollectionDetailsCard = getCommonCard(
           errorMessage: "Invalid Name.",
           jsonPath: "Demands[0].consumerName"
         }),
-        serviceCategory: {
+          serviceCategory: {
           ...getSelectField({
             label: {
               labelName: "Service Category",
@@ -271,7 +292,7 @@ export const newCollectionDetailsCard = getCommonCard(
               }
             }
           }
-        },
+        }, 
         serviceType: {
           ...getSelectField({
             label: {
