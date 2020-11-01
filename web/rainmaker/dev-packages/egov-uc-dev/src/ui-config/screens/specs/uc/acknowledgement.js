@@ -91,7 +91,6 @@ const getAcknowledgementCard = (
 };
 
 const getSearchData = async (dispatch, queryObj) => {
-  debugger;
   const response = await getSearchResults(queryObj);
   if (response &&
     response.Payments &&
@@ -145,7 +144,6 @@ const screenConfig = {
         value: serviceCategory
       }
     ];
-    debugger;
     getSearchData(dispatch, queryObject);
 
     const data = getAcknowledgementCard(

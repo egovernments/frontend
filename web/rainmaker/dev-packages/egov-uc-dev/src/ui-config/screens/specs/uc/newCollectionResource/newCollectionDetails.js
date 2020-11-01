@@ -387,7 +387,6 @@ export const newCollectionDetailsCard = getCommonCard(
 );
 
 const setTaxHeadFields = (action, state, dispatch) => {
-  debugger;
   const serviceData = get(
     state.screenConfiguration,
     "preparedFinalObject.applyScreenMdmsData.nestedServiceData",

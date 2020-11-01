@@ -240,7 +240,6 @@ export const footer = getCommonApplyFooter({
 };
 
 const callBackForPay = async (state, dispatch) => {
-  debugger;
   const { href } = window.location;
   let isFormValid = true;
 

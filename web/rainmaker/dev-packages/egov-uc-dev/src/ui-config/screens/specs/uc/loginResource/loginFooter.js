@@ -62,7 +62,6 @@ const login =async (state, dispatch) => {
     dispatch,
     "login"
   );
-  debugger;
   if (isFormValid) {
     //dispatch(toggleSpinner())
     //login call
