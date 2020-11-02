@@ -13,7 +13,7 @@ import {
   import { getQueryArg , getTodaysDateInYMD , getTLTenantId  } from "egov-ui-framework/ui-utils/commons";
 
   import {updateMdmsDropDowns} from "../lams-utils/utils"
-  import {documentList} from "./documentList";
+  import {documentList} from "../lams-common/documentList";
 
 import PropTypes from "prop-types";
 

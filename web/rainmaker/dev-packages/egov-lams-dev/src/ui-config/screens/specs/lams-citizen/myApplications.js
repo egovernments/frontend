@@ -11,8 +11,7 @@ import {getMdmsData, loadMdmsData} from "../lams-utils/utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import {newApplicationDetailsCard, newApplicationDocumentsCard} from "./newApplicationDetailsCard";
-import {newApplicationFooter} from "./newApplicationFooter";
+import {newApplicationDetailsCard} from "./newApplicationDetailsCard";
 import { value } from "jsonpath";
 
 
@@ -62,7 +61,7 @@ const newCollection = {
   },
   components: {
     newApplicationDetailsCard,
-    newApplicationDocumentsCard,
+    //newApplicationDocumentsCard,
     //newApplicationFooter
   }
 };
