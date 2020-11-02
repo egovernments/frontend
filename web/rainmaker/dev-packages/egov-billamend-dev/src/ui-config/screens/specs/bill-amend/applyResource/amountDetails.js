@@ -151,7 +151,7 @@ export const onDemandRevisionBasis = async (action, state, dispatch) => {
                     "apply",
                     "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
                     "visible",
-                    false
+                    true
                 )
             );
             dispatch(
