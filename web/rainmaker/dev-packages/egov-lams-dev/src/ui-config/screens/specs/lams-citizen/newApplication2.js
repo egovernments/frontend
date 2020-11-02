@@ -21,7 +21,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { value } from "jsonpath";
-import {viewDocuments} from "./viewDocuments";
+import {viewDocuments} from "../lams-common/searchPreviewResource/viewDocuments";
 
 
 const getData = async (action, state, dispatch, tenantId) => {

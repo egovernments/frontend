@@ -21,7 +21,7 @@ import {
 
   import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-  import {leaseDetailsCard} from "./leaseDetailsCard";
+  import {leaseDetailsCard} from "../lams-common/leaseDetailsCard";
 
 import PropTypes from "prop-types";
 

@@ -11,10 +11,9 @@ import {getMdmsData, loadMdmsData} from "../lams-utils/utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import {newApplicationDetailsCard, newApplicationDocumentsCard} from "./newApplicationDetailsCard";
-import {newApplicationFooter} from "./newApplicationFooter";
+import {newApplicationDetailsCard} from "./newApplicationDetailsCard";
 import { value } from "jsonpath";
-import {documentList} from "./documentList";
+import {documentList} from "../lams-common/documentList";
 
 
 const getData = async (action, state, dispatch, tenantId) => {
@@ -66,7 +65,7 @@ const apply = {
   },
   components: {
     newApplicationDetailsCard,
-    newApplicationDocumentsCard,
+    //newApplicationDocumentsCard,
     //newApplicationFooter
   }
 };

@@ -3,7 +3,8 @@ import {
   getCommonContainer,
   getCommonTitle,
   getTextField,
-  getSelectField
+  getSelectField,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   prepareFinalObject
@@ -164,7 +165,8 @@ export const propertyLocationDetails = getCommonCard({
         sm: 6
       },
       required: true,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+     // pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: getPattern("DoorHouseNo"),
       errorMessage: "PT_COMMON_ERR_INVALID_DOOR_NO",
       jsonPath: "Property.address.doorNo"
     }),
@@ -180,7 +182,8 @@ export const propertyLocationDetails = getCommonCard({
         sm: 6
       },
       required: true,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+     // pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: getPattern("BuildingStreet"),
       errorMessage: "PT_COMMON_ERR_INVALID_BUILDING_COLONY",
       jsonPath: "Property.address.buildingName"
     })

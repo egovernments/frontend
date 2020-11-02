@@ -3,13 +3,13 @@ import {
     getLabel,
     getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { tradeLicenseApplication } from "./searchResource/leaseRenewalApplicationSearch";
+  import { tradeLicenseApplication } from "../lams-employee/searchResource/leaseRenewalApplicationSearch";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   //import { pendingApprovals } from "./searchResource/pendingApprovals";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   // import { progressStatus } from "./searchResource/progressStatus";
-  import { searchResults } from "./searchResource/searchResults";
+  import { searchResults } from "../lams-employee/searchResource/searchResults";
   import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import find from "lodash/find";

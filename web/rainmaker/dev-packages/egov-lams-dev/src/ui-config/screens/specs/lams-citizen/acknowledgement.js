@@ -8,20 +8,10 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
 
-import {getMdmsData, loadMdmsData} from "../lams-utils/utils";
-import {workflowCode, businessService} from "../lams-utils/utils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import {newApplicationDetailsCard, newApplicationDocumentsCard} from "./newApplicationDetailsCard";
-import {newApplicationFooter} from "./newApplicationFooter";
-import { value } from "jsonpath";
-import { validateForm } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { validateFields } from "../utils";
+
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import {documentList} from "./documentList";
+
 import acknowledgementCard from "./acknowledgementUtils";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
