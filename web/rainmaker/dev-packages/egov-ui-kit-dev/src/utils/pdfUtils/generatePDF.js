@@ -7,6 +7,7 @@ import { set } from "lodash";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
+import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 
 
 
@@ -257,14 +258,26 @@ export const getDocumentsCard = (documentsUploadRedux) => {
 }
 
 
-
 export const generateKeyValue = (preparedFinalObject, containerObject) => {
     let keyValue = []
     Object.keys(containerObject).map(keys => {
-        const labelObject = containerObject[keys].children.label.children.key.props;
+        const labelObject = getFromObject(containerObject[keys],'children.label.children.key.props', getFromObject(containerObject[keys],'children.label1.children.key.props',{}));
         const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
-        const valueObject = containerObject[keys].children.value.children.key.props;
-        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        const valueObject = getFromObject(containerObject[keys],'children.value.children.key.props',getFromObject(containerObject[keys],'children.value1.children.key.props',{}));
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(getFromObject(preparedFinalObject, valueObject.jsonPath, '')) : getFromObject(preparedFinalObject, valueObject.jsonPath, '');
+        value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
+        value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
+        keyValue.push({ key, value });
+    })
+    return keyValue;
+}
+export const generateKeyValueForModify = (preparedFinalObject, containerObject) => {
+    let keyValue = []
+    Object.keys(containerObject).map(keys => {
+        const labelObject = containerObject[keys].children.label1.children.key.props;
+        const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
+        const valueObject = containerObject[keys].children.value1.children.key.props;
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(getFromObject(preparedFinalObject, valueObject.jsonPath, '')) : getFromObject(preparedFinalObject, valueObject.jsonPath, '');
         value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
         value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
         keyValue.push({ key, value });
