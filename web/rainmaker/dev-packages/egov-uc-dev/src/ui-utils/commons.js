@@ -769,6 +769,11 @@ export const getTransformedDropdown = (MDMSdata, dataKeys) => {
 export const getTransformedLocale = label => {
   return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
+
+export const transformLocalizationLabels = (localizationLabels) => {
+  let labelsById = transformById(localizationLabels, "code");
+  return labelsById;
+};
 //GET methods
 
 // export const getLocaleLabels = (label, labelKey, localizationLabels) => {

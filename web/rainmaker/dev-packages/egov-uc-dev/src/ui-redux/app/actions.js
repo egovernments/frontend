@@ -3,7 +3,7 @@ import { LOCALATION, ACTIONMENU, MDMS } from "egov-ui-framework/ui-utils/endPoin
 import { setLocale, localStorageSet } from "egov-ui-framework/ui-utils/localStorageUtils";
 import { httpRequest } from "../../ui-utils/api";
 import commonConfig from "config/common";
-import { transformLocalizationLabels } from "egov-ui-framework/ui-utils/commons";
+import { transformLocalizationLabels } from "ui-utils/commons";
 import {
   getLocale,
   getAccessToken,
