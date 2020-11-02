@@ -100,7 +100,7 @@ export const getUnitInfo = (units = [], propertyDetails) => {
       },
       {
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-        value: unit.unitArea ? unit.unitArea + '' : "NA",
+        value: unit.unitArea ? Math.round(unit.unitArea * 9) + '' : "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({
