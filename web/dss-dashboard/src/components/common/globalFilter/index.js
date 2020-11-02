@@ -392,6 +392,7 @@ class GlobalFilter extends Component {
     }
 
     renderAutoComplete(target, hndlslected, defaultV, data, type) {
+        data = data && data.filter( number=> number !=="Testing" &&  number !=="Uttarkhand"); 
         return (<AutoComplete
             logo={target}
             handleSelected={hndlslected}
@@ -416,7 +417,6 @@ class GlobalFilter extends Component {
     renderComponents(object) {
         let type = object.type;
         let label = object.label;
-        console.log("prasad lablel", label);
         switch (type) {
             case "dropdown":
                 switch (label) {
@@ -530,10 +530,9 @@ class GlobalFilter extends Component {
 
     render() {
         let { classes, globalFilterData, ulbFilter, mdmsData, GFilterData, ulbFilters, ulbOverViewFilters } = this.props;
-       
         let tempdata = mdmsData.values;
-        let result = tempdata && tempdata.filter( number=> number !=="Testing-DDR" &&  number !=="Uttarkhand-DDR"); 
-      
+        let result = tempdata && tempdata.filter( number=> number !=="Testing" &&  number !=="Uttarkhand"); 
+        
         mdmsData.values = result; 
 
         let { strings } = this.props;
@@ -640,7 +639,7 @@ class GlobalFilter extends Component {
                                             {(this.state.pageId === 'ulb-overview' && ro.label === 'Wards') ? <div></div> : <div className={classes.filterHead}>{strings[ro.label_locale] || ro.label_locale}</div>}
 
                                             <div>
-                                                {this.renderUlbFilters(ro)}
+                                            {this.renderUlbFilters(ro)}
                                             </div>
                                         </div>
                                     );
