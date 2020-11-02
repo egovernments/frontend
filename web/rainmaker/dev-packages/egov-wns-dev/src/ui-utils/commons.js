@@ -1797,6 +1797,11 @@ export const downloadApp = async (inpuString, type, mode, dispatch) => {
               res.filestoreIds[0]
               if (res && res.filestoreIds && res.filestoreIds.length > 0) {
                 res.filestoreIds.map(fileStoreId => {
+                    if (type === "ws-sanctionletter") {
+                        store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.sanctionFileStoreId", fileStoreId));
+                    } else if (type === "ws-estimationnotice") {
+                        store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.estimationFileStoreId", fileStoreId));
+                    }
                   downloadReceiptFromFilestoreID(fileStoreId, mode)
                 })
               } else {
