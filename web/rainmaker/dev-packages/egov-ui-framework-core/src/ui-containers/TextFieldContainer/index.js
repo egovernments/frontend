@@ -182,7 +182,7 @@ const mapStateToProps = (state, ownprops) => {
   let dropdownData = [];
   if (select) {
     const constructDropdown = dt => {
-      return dt.map(d => {
+      return dt.filter(d => typeof d === 'object' && d !== null).map(d => {
         return {
           value: d[optionValue],
           label: d[optionLabel]
