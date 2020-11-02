@@ -178,14 +178,6 @@ export const onDemandRevisionBasis = async (action, state, dispatch) => {
                     ""
                 )
             );
-            dispatch(
-                handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children.toDate",
-                    "props.value",
-                    ""
-                )
-            );
             break;
         case "DCBCORRECTION":
         case "REMISSIONFORPT":
