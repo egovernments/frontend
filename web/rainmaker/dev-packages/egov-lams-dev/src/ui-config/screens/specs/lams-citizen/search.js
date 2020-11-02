@@ -9,7 +9,7 @@ import {
   //import { pendingApprovals } from "./searchResource/pendingApprovals";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   // import { progressStatus } from "./searchResource/progressStatus";
-  import { searchResults } from "./searchResource/searchResults";
+  import { searchResults } from "../lams-employee/searchResource/searchResults";
   import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import find from "lodash/find";
