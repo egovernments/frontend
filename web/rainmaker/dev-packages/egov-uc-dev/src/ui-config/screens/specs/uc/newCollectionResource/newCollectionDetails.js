@@ -329,7 +329,7 @@ export const newCollectionDetailsCard = getCommonCard(
           }
         },
 
-        fromDate: getDateField({
+      /*  fromDate: getDateField({
           label: {
             labelName: "From Date",
             labelKey: "UC_FROM_DATE_LABEL"
@@ -362,7 +362,7 @@ export const newCollectionDetailsCard = getCommonCard(
           required: true,
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
-        }),
+        }),*/
         commentsContainer:getTextField({
           label: {
             labelName: "Comments",
