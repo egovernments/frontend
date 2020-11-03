@@ -238,12 +238,12 @@ const mapStateToProps = (state, ownProps) => {
   let current = 0;
   let arrears=0;
 
-  const finalData=getFinalData();
 
-  const latestYear = finalData[0].fromDate;
   if(businesService=="PT")
   {
+    const finalData=getFinalData();
 
+    const latestYear = finalData[0].fromDate;
   /* for (let i = 0; billDetails && i<billDetails.length;i++) {
       for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
       {
