@@ -111,6 +111,7 @@ export const employeeDetails = getCommonCard({
         required: true,
         isClearable: true,
         labelsFromLocalisation: true,
+        jsonPath: "Employee[0].user.gender",
       },
       required: true,
       gridDefination: {
@@ -249,6 +250,7 @@ export const professionalDetails = getCommonCard(
           labelsFromLocalisation: true,
           className: "autocomplete-dropdown",
           sourceJsonPath: "createScreenMdmsData.egov-hrms.EmployeeType",
+          jsonPath: "Employee[0].employeeType",
         },
         required: true,
         gridDefination: {
