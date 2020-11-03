@@ -227,12 +227,64 @@ class EnhancedTable extends React.Component {
   }
 
   render() {
-    const { data, columnData, Gfilter, noPage, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
+    let { data, columnData, Gfilter, noPage, classes, tableType, needCheckBox, needHash, needSearch, needExport, excelName } = this.props
     // const { tableData, order, orderBy, selected } = this.state
+  
 
+     if (this.props.excelName ==='DSS_TL_TAX_HEAD_BREAKUP')
+     {
+       for (let i=0; i<data.length;i++)
+       {
+        data[i]['Adhoc Rebate'] = Math.abs(data[i]['Adhoc Rebate'])
+
+       }
+     }
+     
     // const { data, columnData, totalCount, classes, tableType, needCheckBox, needHash, needSearch } = this.props;
-    const { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
-    var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
+
+    let { tableData, order, orderBy, totalCount = data.length, selected, rowsPerPage, page } = this.state;
+
+    if(this.props.excelName ==='DSS_TL_STATUS_BOUNDARY')
+    {
+            let newdata = [];
+            let newcolumndata = [];   
+          
+            
+             for (let i=0; i<tableData.length;i++)
+            {
+              _.set(newdata, `[${i}][Districts]`, data[i]['Districts']);     
+              _.set(newdata, `[${i}][INITIATED]`, data[i]['INITIATED']);       
+              _.set(newdata, `[${i}][APPLIED]`, data[i]['APPLIED']);
+              _.set(newdata, `[${i}][CITIZENACTIONREQUIRED]`, data[i]['CITIZENACTIONREQUIRED']);           
+              _.set(newdata, `[${i}][PENDINGAPPROVAL]`, data[i]['PENDINGAPPROVAL']);
+               _.set(newdata, `[${i}][PENDINGPAYMENT]`, data[i]['PENDINGPAYMENT']);
+               _.set(newdata, `[${i}][APPROVED]`, data[i]['APPROVED']);        
+              _.set(newdata, `[${i}][REJECTED]`, data[i]['REJECTED']);
+            } 
+
+            for (let i=0; i<newdata.length;i++)
+            {
+              tableData[i] = newdata[i];      
+            }
+              
+            newcolumndata[0]=columnData[0]
+            newcolumndata[1]=columnData[3]
+            newcolumndata[2]=columnData[2]
+            newcolumndata[3]=columnData[5]
+            newcolumndata[4]=columnData[6]
+            newcolumndata[5]=columnData[7]
+            newcolumndata[6]=columnData[1]
+            newcolumndata[7]=columnData[4]
+          
+            for (let i=0; i<newcolumndata.length;i++)
+            {
+              columnData[i] = newcolumndata[i];
+            }  
+             
+    
+    }
+
+   var columnType = _.chain(columnData).find(i => i.id === orderBy).get('numeric').value() || false;
     let { strings } = this.props;
     let expData = _.cloneDeep(tableData);
     // iterate here for Excel download
