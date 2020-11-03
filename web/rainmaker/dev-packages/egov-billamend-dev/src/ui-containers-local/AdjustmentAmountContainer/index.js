@@ -17,6 +17,7 @@ const styles = theme => ({
   textField: {
   },
 input: {
+    padding: "10px 0px 2px 10px !important",
     "&:before": {
       border: "2px solid rgba(0, 0, 0, 0.42) !important",
       height: "40px !important",
