@@ -9,6 +9,8 @@ import {
   getAccessToken,
   getTenantId
 } from "egov-ui-framework/ui-utils/localStorageUtils";
+import data from "../../localization"; 
+
 
 
 const setLocalizationLabels = (locale, localizationLabels) => {
@@ -28,7 +30,7 @@ export const fetchLocalizationLabel = (locale, module="", tenantId="") => {
       //   { key: "locale", value: locale },
       //   { key: "tenantId", value: commonConfig.tenantId },
       // ]);
-      const payload = module
+     /*  const payload = module
         ? await httpRequest("post",LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
             { key: "module", value: `${module}` },
             { key: "locale", value: locale },
@@ -38,10 +40,13 @@ export const fetchLocalizationLabel = (locale, module="", tenantId="") => {
           { key: "module", value: commonModules },
           { key: "locale", value: locale },
           { key: "tenantId", value: "pb" },
-        ]);
+        ]); */
       //let resultArray = [...payload1.messages, ...payload2.messages];
 
-      let resultArray = payload.messages || [];
+
+      //let resultArray = payload.messages || [];
+      let resultArray = data || [];
+
       // let resultArray = [...payload1.messages];
       // if (payload2 && payload2.messages) {
       //   resultArray = [...resultArray, ...payload2.messages];
