@@ -69,7 +69,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
                 ? () => {
                     window.open(iconRedirectionURL);
                   }
-                : () => onTextFieldIconClick()
+                : () => onTextFieldIconClick && onTextFieldIconClick()
             }
             onChange={(e, value) => handleFieldChange(fieldKey, value)}
           />
