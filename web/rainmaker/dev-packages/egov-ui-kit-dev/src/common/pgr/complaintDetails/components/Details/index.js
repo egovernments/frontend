@@ -28,7 +28,8 @@ class Details extends Component {
   };
 
   onImageClick = (source) => {
-    this.props.history.push(`/image?source=${source}`);
+    let imageUrls = source.split(',')
+    window.open(imageUrls[0]);
   };
 
   render() {
