@@ -182,7 +182,7 @@ class WhatsAppLocality extends React.Component {
             items={this.getListItems(this.state.data)}
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
-              const number = this.state.phone || 918744960111;
+              const number = this.state.phone || 918744060444;
               const name=item.primaryText.props.label;
               const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink
