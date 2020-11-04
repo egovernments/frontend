@@ -12,7 +12,9 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import commonConfig from "config/common.js";
-import store from "../ui-redux/store"
+import store from "../ui-redux/store";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -575,6 +577,11 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 export const transformLocalizationLabels = (localizationLabels) => {
   let labelsById = transformById(localizationLabels, "code");
   return labelsById;
+};
+
+export const getCommonPayUrl = (dispatch, applicationNo, tenantId ,businessService) => {
+  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
+  dispatch(setRoute(url));
 };
 
 

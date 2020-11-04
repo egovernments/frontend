@@ -1,15 +1,19 @@
-import { getLabel,convertDateToEpoch,ifUserRoleExists,validateFields } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils/index";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validateFields } from "egov-ui-framework/ui-config/screens/specs/utils/index";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import {
-  // handleScreenConfigurationFieldChange as handleField,
+  handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "config/common.js";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -75,7 +79,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
   });
 };
 
-const processDemand = (state, dispatch) => {
+const processDemand = async (state, dispatch) => {
   const isFormValid = validateFields(
     "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
     state,
@@ -83,11 +87,46 @@ const processDemand = (state, dispatch) => {
     "newCollection"
   );
   if (isFormValid) {
-    createDemand(state, dispatch);
-    allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
-      "Demands[0].taxPeriodFrom",
-      "Demands[0].taxPeriodTo"
-    ]);
+    try {
+      const mobileNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Demands[0].mobileNumber"
+      );
+      let payload = await httpRequest(
+        "post",
+        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        "_search",
+        [],
+        {
+          tenantId: commonConfig.tenantId,
+          userName: mobileNumber
+        }
+      );
+      if (payload ) {
+        const uuid = get(payload , "user[0].uuid");
+        dispatch(prepareFinalObject("Demands[0].payer.uuid"));
+        await createDemand(state, dispatch);
+        allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
+          "Demands[0].taxPeriodFrom",
+          "Demands[0].taxPeriodTo"
+        ]);
+        const applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].consumerCode"
+        );
+        const tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].tenantId"
+        );
+        const businessService = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].serviceType"
+        );
+        getCommonPayUrl(dispatch, applicationNumber, "pb.testing", businessService);
+      }
+    } catch (error) {
+      console.log("error is "+error);
+    }
   } else {
     dispatch(
       toggleSnackbar(
@@ -96,19 +135,22 @@ const processDemand = (state, dispatch) => {
           labelName: "Please fill the required fields.",
           labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
         },
-        "error"
+        "info"
       )
     );
   }
 };
 
 const createDemand = async (state, dispatch) => {
-  dispatch(toggleSpinner());
   let demands = JSON.parse(
     JSON.stringify(
       get(state.screenConfiguration.preparedFinalObject, "Demands")
     )
   );
+// Making payer object as null if it is empty object, later will changge in component.
+// if(Object.keys(demands[0].payer).length === 0) {
+//   demands[0].payer = null;
+// }
   set(demands[0], "consumerType", demands[0].businessService);
   demands[0].demandDetails &&
     demands[0].demandDetails.forEach(item => {
@@ -126,6 +168,9 @@ const createDemand = async (state, dispatch) => {
   set(demands[0], "taxPeriodTo", convertDateToEpoch(demands[0].taxPeriodTo));
   const mobileNumber = demands[0].mobileNumber;
   const consumerName = demands[0].consumerName;
+
+  set(demands[0], "payer.mobileNumber", mobileNumber);
+  set(demands[0], "payer.name", consumerName);
   //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
   const taxPeriodValid = isTaxPeriodValid(dispatch, demands[0], state);
 
@@ -142,7 +187,7 @@ const createDemand = async (state, dispatch) => {
         Demands: demands
       });
       if (payload.Demands.length > 0) {
-        const consumerCode = get(payload, "Demands[0].consumerCode");
+        //const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
@@ -153,14 +198,12 @@ const createDemand = async (state, dispatch) => {
           businessService.split(".")[0]
         );
         dispatch(prepareFinalObject("Demands", payload.Demands));
-        await generateBill(consumerCode, tenantId, businessService, dispatch);
+        //await generateBill(consumerCode, tenantId, businessService, dispatch);
       } else {
         alert("Empty response!!");
       }
-      dispatch(toggleSpinner());
     } catch (e) {
       console.log(e.message);
-      dispatch(toggleSpinner());
       dispatch(
         toggleSnackbar(
           true,
@@ -172,9 +215,6 @@ const createDemand = async (state, dispatch) => {
         )
       );
     }
-  }
-  else {
-      dispatch(toggleSpinner());
   }
 };
 
@@ -212,11 +252,7 @@ const generateBill = async (
           businessService
         )
       );
-      const path =
-        process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`
-          : `/uc/pay?tenantId=${tenantId}&consumerCode=${consumerCode}`;
-      dispatch(setRoute(`${path}`));
+      dispatch(setRoute(`/uc/pay?tenantId=${tenantId}`));
     }
   } catch (e) {
     console.log(e);
@@ -239,11 +275,11 @@ const createEstimateData = billObject => {
 };
 
 const isTaxPeriodValid = (dispatch, demand, state) => {
-  // const taxPeriods = get(
-  //   state.screenConfiguration,
-  //   "preparedFinalObject.applyScreenMdmsData.BillingService.TaxPeriod",
-  //   []
-  // );
+  const taxPeriods = get(
+    state.screenConfiguration,
+    "preparedFinalObject.applyScreenMdmsData.BillingService.TaxPeriod",
+    []
+  );
   const selectedFrom = new Date(demand.taxPeriodFrom);
   const selectedTo = new Date(demand.taxPeriodTo);
   if (selectedFrom <= selectedTo) {
@@ -263,29 +299,29 @@ const isTaxPeriodValid = (dispatch, demand, state) => {
   }
 
   //Validation against MDMS Tax periods not required as of now.
-  // let found =
-  //   taxPeriods.length > 0 &&
-  //   taxPeriods.find(item => {
-  //     const fromDate = new Date(item.fromDate);
-  //     const toDate = new Date(item.toDate);
-  //     return (
-  //       item.service === demand.businessService &&
-  //       fromDate <= selectedFrom &&
-  //       toDate >= selectedTo
-  //     );
-  //   });
-  // if (found) return true;
-  // else {
-  //   dispatch(
-  //     toggleSnackbar(
-  //       true,
-  //       {
-  //         labelName: "Please select the right tax period",
-  //         labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
-  //       },
-  //       "warning"
-  //     )
-  //   );
-  //   return false;
-  // }
+  let found =
+    taxPeriods.length > 0 &&
+    taxPeriods.find(item => {
+      const fromDate = new Date(item.fromDate);
+      const toDate = new Date(item.toDate);
+      return (
+        item.service === demand.businessService &&
+        fromDate <= selectedFrom &&
+        toDate >= selectedTo
+      );
+    });
+  if (found) return true;
+  else {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please select the right tax period",
+          labelKey: "UC_NEW_COLLECTION_WRONG_TAX_PERIOD_MSG"
+        },
+        "warning"
+      )
+    );
+    return false;
+  }
 };
