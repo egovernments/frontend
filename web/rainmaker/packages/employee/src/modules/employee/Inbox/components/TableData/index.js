@@ -122,6 +122,7 @@ class TableData extends Component {
     initialInboxData: [{ headers: [], rows: [] }],
     moduleName: "",
     loaded: false,
+    showLocality:!Boolean(localStorage.getItem('disableLocality')),
     color: "rgb(53,152,219)",
     timeoutForTyping: false
   };
@@ -293,18 +294,24 @@ class TableData extends Component {
   prepareInboxDataRows = async (data, all) => {
     const { toggleSnackbarAndSetText } = this.props;
     if (isEmpty(data)) return [];
+    let businessServices=[]
     const businessIds = data.map((item) => {
+      businessServices.push(item.moduleName);
       return item.businessId;
     });
-    const businessServiceData = this.getBussinessServiceData();
-    const modules =
-      businessServiceData &&
-      businessServiceData.map((item, index) => {
-        return item.business;
-      });
-    const uniqueModules = uniq(modules)
+    // const businessServiceData = this.getBussinessServiceData();
+    // const modules =this.state.showLocality&&
+    //   businessServiceData &&
+    //   businessServiceData.map((item, index) => {
+    //     return item.business;
+    //   })||[];
 
+
+
+    // const uniqueModules = uniq(modules)
+    const uniqueModules = uniq(businessServices)
     let localitymap = [];
+    if(this.state.showLocality){
     try {
       for (var i = 0; i < uniqueModules.length; i++) {
         try {
@@ -350,13 +357,14 @@ class TableData extends Component {
         "error"
       );
     }
+  }
     let localityDropdownList = [];
     let moduleDropdownList = [];
     let statusDropdownList = [];
 
 
     const initialData = data.map((item) => {
-      const locality = localitymap.find(locality => {
+      const locality =this.state.showLocality&& localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
       })
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
