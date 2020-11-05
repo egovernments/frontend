@@ -1,15 +1,18 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
+import { getUserInfo,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {set,get} from "lodash";
+
 import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { httpRequest } from "../../../../ui-utils";
 
+import { httpRequest } from "../../../../ui-utils";
+import commonConfig from "config/common.js";
+import {getRequiredDocuments} from "../../../../ui-containers-local/RequiredDocuments/reqDocs";
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -232,7 +235,88 @@ export const showHideAdhocPopup = (state, dispatch) => {
     handleField("search", "components.adhocDialog", "props.open", !toggle)
   );
 };
+export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId:commonConfig.tenantId,
+      moduleDetails: moduleDetails
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    const moduleName = moduleDetails[0].moduleName;
+    let documents = get(
+      payload.MdmsRes,
+      `${moduleName}.documentObj`,
+      []
+    );
 
+    if (moduleName === "PropertyTax") {
+      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+    }
+    const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName, closePopUp));
+    set(
+      action,
+      "screenConfig.components.adhocDialog.children.popup",
+      reqDocuments
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    return { payload, reqDocuments };
+  } catch (e) {
+    console.log(e);
+  }
+};
+const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
+  const tenant = getTenantId();
+  switch (moduleName) {
+    case "FireNoc":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("FireNOCs", []));
+        dispatch(prepareFinalObject("DynamicMdms", {}));
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
+        dispatch(setRoute(applyUrl));
+      };
+    case "PropertyTax":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl = `/property-tax/assessment-form`;
+        dispatch(setRoute(applyUrl));
+      };
+    case "ws-services-masters":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("WaterConnection", []));
+        dispatch(prepareFinalObject("SewerageConnection", []));
+        dispatch(prepareFinalObject("applyScreen", {}));
+        dispatch(prepareFinalObject("searchScreen", {}));
+        const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
+        dispatch(setRoute(applyUrl));
+      };
+    case 'TradeLicense':
+      if (closePopUp) {
+        return (state, dispatch) => {
+          dispatch(prepareFinalObject("Licenses", []));
+          dispatch(prepareFinalObject("LicensesTemp", []));
+          dispatch(prepareFinalObject("DynamicMdms", {}));
+          const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
+          dispatch(
+            handleField("search", "components.adhocDialog", "props.open", false)
+          );
+          dispatch(setRoute(applyUrl));
+        };
+      }
+  }
+}
 export const getCommonGrayCard = children => {
   return {
     uiFramework: "custom-atoms",
