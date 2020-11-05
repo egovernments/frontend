@@ -7,7 +7,7 @@ import {
 } from "./acknowledgementResource/acknowledgementFooter";
 import set from "lodash/set";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
-import { getSearchResults } from "egov-ui-framework/ui-utils/commons";
+import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const getAcknowledgementCard = (
@@ -93,15 +93,15 @@ const getAcknowledgementCard = (
 const getSearchData = async (dispatch, queryObj) => {
   const response = await getSearchResults(queryObj);
   if (response &&
-    response.Receipt &&
-    response.Receipt.length > 0)
+    response.Payments &&
+    response.Payments.length > 0)
     {
       dispatch(
-        prepareFinalObject("receiptSearchResponse.Receipt", response.Receipt)
+        prepareFinalObject("receiptSearchResponse.Receipt", response.Payments[0].paymentDetails[0])
       );
       if (window.appOverrides && window.appOverrides.validateForm)
        {
-        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Receipt})
+        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Payments[0].paymentDetails[0]})
        }
     }
 };
@@ -144,7 +144,6 @@ const screenConfig = {
         value: serviceCategory
       }
     ];
-
     getSearchData(dispatch, queryObject);
 
     const data = getAcknowledgementCard(

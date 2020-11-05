@@ -1,5 +1,6 @@
 import { getLabel ,ifUserRoleExists} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { generateReciept } from "../../utils/recieptPdf";
+//import {  } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -29,9 +30,9 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        // minWidth: "200px",
+        minWidth: "200px",
         height: "48px",
-        marginRight: "13px"
+        marginRight: "16px"
       }
     },
     children: {
@@ -56,7 +57,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "13px"
+        marginRight: "16px"
       }
     },
     children: {

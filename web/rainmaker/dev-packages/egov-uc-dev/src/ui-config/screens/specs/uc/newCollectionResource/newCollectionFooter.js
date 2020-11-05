@@ -14,6 +14,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
+import {ifUserRoleExists } from "egov-ui-framework/ui-config/screens/specs/utils/index";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -122,7 +123,15 @@ const processDemand = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "Demands[0].serviceType"
         );
-        getCommonPayUrl(dispatch, applicationNumber, "pb.testing", businessService);
+        //const url = `egov-uif-ramework/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}&businessService=${businessService}`;
+        //getCommonPayUrl(dispatch, applicationNumber, "pb.testing", businessService);
+        
+        const path =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=${businessService}`
+          : `uc/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=${businessService}`;
+      dispatch(setRoute(`${path}`));
+        //dispatch(setRoute(`egov-ui-framework/uc/pay?tenantId=${tenantId}`));
       }
     } catch (error) {
       console.log("error is "+error);
@@ -198,6 +207,7 @@ const createDemand = async (state, dispatch) => {
           businessService.split(".")[0]
         );
         dispatch(prepareFinalObject("Demands", payload.Demands));
+       
         //await generateBill(consumerCode, tenantId, businessService, dispatch);
       } else {
         alert("Empty response!!");

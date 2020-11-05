@@ -1,18 +1,19 @@
 import React from "react";
-// import { Link } from "react-router-dom";
-import get from "lodash/get";
-import { sortByEpoch, getEpochForDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-// import { getLocalization } from "egov-ui-framework/ui-utils/localStorageUtils";
-import { generateReciept } from "../../utils/recieptPdf";
 import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-// const getLocalTextFromCode = localCode => {
-//   return JSON.parse(getLocalization("localization_en_IN")).find(
-//     item => item.code === localCode
-//   );
-// };
+
+
+import {getLocalization} from "egov-ui-framework/ui-utils/localStorageUtils";
+
+import {sortByEpoch,getEpochForDate} from "egov-ui-framework/ui-utils/index";
+import {getTextToLocalMapping} from '../../../specs/utils';
+const getLocalTextFromCode = localCode => {
+  return JSON.parse(getLocalization("localization_en_IN")).find(
+    item => item.code === localCode
+  );
+};
 
 export const textToLocalMapping = {
   "Receipt No.": getLocaleLabels(
@@ -52,35 +53,48 @@ export const textToLocalMapping = {
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-uc",
   componentPath: "Table",
   visible: false,
   props: {
-    // data: [],
-    columns: {
-      [get(textToLocalMapping, "Receipt No.")]: {
-        format: rowData => {
-          return (
-            <span
-              style={{
-                color: "#FE7A51",
-                cursor: "pointer",
-                textDecoration: "underline"
-              }}
-              onClick={() => generateReciept(rowData)}
-            >
-              {rowData[get(textToLocalMapping, "Receipt No.")]}
-            </span>
-            // <span style="cursor:pointer">pointer</span>
-          );
+    columns: [
+
+      {
+        name : getTextToLocalMapping("Receipt No."),
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <div onClick={value => {
+                const receiptQueryString = [
+                  { key: "receiptNumbers", value:  tableMeta.rowData[0]},
+                  { key: "tenantId", value: tableMeta.rowData[7] }
+                ]
+              //  download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
+              }}>
+              {value}
+            </div>
+          )
         }
       },
-      [get(textToLocalMapping, "Payee Name")]: {},
-      [get(textToLocalMapping, "Service Type")]: {},
-      [get(textToLocalMapping, "Date")]: {},
-      [get(textToLocalMapping, "Amount[INR]")]: {},
-      [get(textToLocalMapping, "Status")]: {}
-    },
+
+      
+      getTextToLocalMapping("Payee Name"),
+      getTextToLocalMapping("Service Type"),
+      getTextToLocalMapping("Date"),
+      getTextToLocalMapping("Amount[INR]"),
+      getTextToLocalMapping("Status"),
+      {
+        name: "receiptKey",
+        options: {
+          display: false
+        }
+      },
+      {
+        name: "tenantId",
+        options: {
+          display: false
+        }
+      }
+    ],
     options: {
       filter: false,
       download: false,
@@ -88,9 +102,6 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-        generateReciept(row);
-      }
     },
     customSortColumn: {
       column: "Date",

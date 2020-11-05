@@ -9,7 +9,7 @@ import {
   getCommonHeader,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-// import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchApiCall } from "./function";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -17,7 +17,9 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 
-// const hasButton = getQueryArg(window.location.href, "hasButton");
+const hasButton = getQueryArg(window.location.href, "hasButton");
+let enableButton = true;
+enableButton = hasButton && hasButton === "false" ? false : true;
 
 const resetFields = (state, dispatch) => {
   dispatch(
@@ -30,7 +32,7 @@ const resetFields = (state, dispatch) => {
   );
   get(
     state.screenConfiguration,
-    "preparedFinalObject.searchScreen.businessCodes",
+    "preparedFinalObject.searchScreen.businessServices",
     null
   ) &&
     dispatch(
@@ -44,7 +46,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNumber",
       "props.value",
       ""
     )
@@ -89,7 +91,6 @@ export const UCSearchCard = getCommonCard({
       required: false,
       visible: true,
       jsonPath: "searchScreen.receiptNumbers",
-      // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -97,7 +98,7 @@ export const UCSearchCard = getCommonCard({
     }),
     serviceType: {
       ...getSelectField({
-        componentPath: "AutosuggestContainer",
+        // componentPath: "AutosuggestContainer",
         label: {
           labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -106,7 +107,7 @@ export const UCSearchCard = getCommonCard({
           labelName: "Select Service Category",
           labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
         },
-        required: true,
+        // required: true,
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
         localePrefix: {
           masterName: "BusinessService",
@@ -116,18 +117,12 @@ export const UCSearchCard = getCommonCard({
           xs: 12,
           sm: 4
         },
-        sourceJsonPath: "searchScreenMdmsData.serviceCategories",
-        props: {
-          menuPortalTarget:document.querySelector('body'),
-          setDataInField: true,
-        labelsFromLocalisation: true
-          // hasLocalization: false
-        }
+        sourceJsonPath: "applyScreenMdmsData.serviceCategories"
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
-          state.screenConfiguration.preparedFinalObject,
-          "searchScreenMdmsData.serviceCategories"
+          state.screenConfiguration,
+          "preparedFinalObject.applyScreenMdmsData.serviceCategories"
         );
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value
@@ -137,12 +132,12 @@ export const UCSearchCard = getCommonCard({
           selectedCategory.child &&
           selectedCategory.child.map(item => item.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessCodes", serviceTypes)
+          prepareFinalObject("searchScreen.businessServices", serviceTypes)
         );
         return action;
       }
     },
-    mobileNo: getTextField({
+    mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",
         labelKey: "UC_MOBILE_NO_LABEL"
@@ -162,7 +157,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNo"
+      jsonPath: "searchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({

@@ -2,11 +2,11 @@ import {
   getCommonGrayCard,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { cash, demandDraft, cheque, card } from "./paymentMethod";
 
-export const capturePayment = getCommonGrayCard({
+import {cash, demandDraft, cheque, card} from "./paymentMethod";
+const capturePaymentDetails = getCommonGrayCard({
   header: getCommonSubHeader(
-    { labelName: "Capture Payment", labelKey: "TL_PAYMENT_CAP_PMT" },
+    { labelName: "Capture Payment", labelKey: "NOC_PAYMENT_CAP_PMT" },
     {
       style: {
         marginBottom: "8px"
@@ -14,38 +14,36 @@ export const capturePayment = getCommonGrayCard({
     }
   ),
   tabSection: {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
     moduleName: "egov-uc",
     componentPath: "CustomTabContainer",
     props: {
-      tabs: [
+       tabs: [
         {
-          tabButton: { labelName: "CASH", labelKey: "TL_PAYMENT_CASH" },
+          tabButton: "COMMON_CASH",
           tabIcon: "Dashboard",
           tabContent: { cash }
         },
         {
-          tabButton: { labelName: "CHEQUE", labelKey: "TL_PAYMENT_CHQ" },
+          tabButton: "COMMON_CHEQUE",
           tabIcon: "Schedule",
           tabContent: { cheque }
         },
         {
-          tabButton: { labelName: "DD", labelKey: "TL_PAYMENT_DD" },
+          tabButton: "COMMON_DD",
           tabIcon: "Schedule",
           tabContent: { demandDraft }
         },
         {
-          tabButton: {
-            labelName: "Credit/Debit Card",
-            labelKey: "TL_PAYMENT_DEBT_CARD"
-          },
+          tabButton: "COMMON_CREDIT_DEBIT_CARD",
           tabIcon: "Schedule",
           tabContent: { card }
         }
-      ]
+      ],
+      jsonPath : "businessServiceInfo"
     },
     type: "array"
   }
 });
 
-export default capturePayment;
+export default capturePaymentDetails;
