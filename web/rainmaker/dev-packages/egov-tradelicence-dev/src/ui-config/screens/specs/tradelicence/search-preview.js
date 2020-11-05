@@ -186,12 +186,22 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-    if (get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments")) {
+    let appDocuments=get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
+    if (appDocuments) {
+      appDocuments=appDocuments.filter(document=>document);
+      
+      let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
+      if(removedDocs.length>0){
+          removedDocs.map(removedDoc=>{
+            appDocuments=appDocuments.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
+          })             
+      }
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",appDocuments));
       await setDocuments(
-        data,
+        get(state, "screenConfiguration.preparedFinalObject"),
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
         "LicensesTemp[0].reviewDocData",
-        dispatch,'TL'
+        dispatch, 'TL'
       );
     }
 
@@ -219,7 +229,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         [],
         mdmsBody
       );
-      console.log("payload...",payload)
+      dispatch(prepareFinalObject("renewalPeriod", get(payload.MdmsRes, "TradeLicense.TradeRenewal[0].renewalPeriod")));
       dispatch(prepareFinalObject("uiCommonConfig", get(payload.MdmsRes , "common-masters.uiCommonPay[0]")));
     } catch (e) {
       console.log(e);
