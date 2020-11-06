@@ -94,7 +94,7 @@ export const searchResults = {
 const onRowClick = rowData => {
   const receiptQueryString = [
     { key: "receiptNumbers", value:  rowData[0]},
-    { key: "tenantId", value: rowData[6] }
+    { key: "tenantId", value: rowData[7] }
   ]
   download(receiptQueryString);
 };
