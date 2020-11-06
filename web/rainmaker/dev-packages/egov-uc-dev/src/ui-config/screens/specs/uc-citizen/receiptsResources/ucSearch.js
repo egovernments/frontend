@@ -110,12 +110,12 @@ export const UCSearchCard = getCommonCard({
     }),
     consumerCodes: getTextField({
       label: {
-        labelName: "Challan Number.",
-        labelKey: "UC_CHALLAN_NO_LABEL"
+        labelName: "Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL"
       },
       placeholder: {
-        labelName: "Enter Challan No.",
-        labelKey: "UC_CHALLAN_NO_LABEL_PLACEHOLDER"
+        labelName: "Enter Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL_PLACEHOLDER"
       },
       required: false,
       visible: true,
@@ -182,7 +182,7 @@ export const UCSearchCard = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4
-      },
+      }, 
       iconObj: {
         label: "+91 |",
         position: "start"

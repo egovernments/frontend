@@ -76,10 +76,10 @@ export const UCSearchCard = getCommonCard({
     labelName: "Search Receipt",
     labelKey: "UC_SEARCH_COMMON_HEADER"
   }),
-  subheader: getCommonSubHeader({
-    labelName: "Provide at least one parameter to search for an application",
-    labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
-  }),
+  // subheader: getCommonSubHeader({
+  //   labelName: "Provide at least one parameter to search for an application",
+  //   labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
+  // }),
   searchContainer: getCommonContainer({
     receiptNumber: getTextField({
       label: {
@@ -100,12 +100,12 @@ export const UCSearchCard = getCommonCard({
     }),
     consumerCodes: getTextField({
       label: {
-        labelName: "Challan Number.",
-        labelKey: "UC_CHALLAN_NO_LABEL"
+        labelName: "Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL"
       },
       placeholder: {
-        labelName: "Enter Challan No.",
-        labelKey: "UC_CHALLAN_NO_LABEL_PLACEHOLDER"
+        labelName: "Enter Consumer code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL_PLACEHOLDER"
       },
       required: false,
       visible: true,

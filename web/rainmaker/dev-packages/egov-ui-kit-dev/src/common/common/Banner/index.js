@@ -5,6 +5,7 @@ import logo from "egov-ui-kit/assets/images/punjab-logo.png";
 import "./index.css";
 
 const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bannerUrl }) => {
+
   return (
     <div>
       <div className={`${className} user-screens-wrapper`}>
@@ -16,7 +17,11 @@ const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bann
               {<Image className="mseva-logo" source={logoUrl?logoUrl:logo} /> }
               <Label label="" />
             </div> */}
-            <div className="banner-form-cont">{children}</div>
+             {/* <div className="banner-form-cont">{children}</div>  */}
+             <div className={window.location.pathname==='/language-selection'?"banner-form-cont-langselection":"banner-form-cont"}>
+               {children}
+            </div> 
+            
           </div>
         </div>
       </div>

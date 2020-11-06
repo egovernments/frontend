@@ -167,26 +167,26 @@ const propertyDetails = getCommonContainer({
 
     }
   ),
-  numberOfFloors: getLabelWithValue(
-    {
-      labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL",
-      labelName: "Number Of Floors"
-    },
-    {
-      jsonPath: "applyScreen.property.noOfFloors",
-      callBack: handleNA
-    }
-  ),
-  rainwaterHarvestingFacility: getLabelWithValue(
-    {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rainwater Harvesting Facility"
-    },
-    {
-      jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
-      callBack: handleNA
-    }
-  )
+  // numberOfFloors: getLabelWithValue(
+  //   {
+  //     labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL",
+  //     labelName: "Number Of Floors"
+  //   },
+  //   {
+  //     jsonPath: "applyScreen.property.noOfFloors",
+  //     callBack: handleNA
+  //   }
+  // ),
+  // rainwaterHarvestingFacility: getLabelWithValue(
+  //   {
+  //     labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+  //     labelName: "Rainwater Harvesting Facility"
+  //   },
+  //   {
+  //     jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
+  //     callBack: handleNA
+  //   }
+  // )
 })
 
 
