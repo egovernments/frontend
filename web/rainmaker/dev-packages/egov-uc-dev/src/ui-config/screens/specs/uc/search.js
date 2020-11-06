@@ -16,8 +16,8 @@ import "./index.css";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
-  labelName: "Universal Collection",
-  labelKey: "UC_COMMON_HEADER_SEARCH"
+  labelName: "Receipt",
+  labelKey: "UC_RECEIPT"
 });
 
 const hasButton = getQueryArg(window.location.href, "hasButton");

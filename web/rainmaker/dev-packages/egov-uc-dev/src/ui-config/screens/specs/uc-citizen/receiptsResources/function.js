@@ -116,6 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
       );
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
+        consumerCode:get(Payments[i],`paymentDetails[0].bill.consumerCode`),
         payeeName: get(Payments[i], `paidBy`), // changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
@@ -128,6 +129,7 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       let data = response.map(item => ({
         ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['UC_COMMON_TABLE_COL_CONSUMERCODE']:item.consumerCode || "-",
         ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
         ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
         ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
