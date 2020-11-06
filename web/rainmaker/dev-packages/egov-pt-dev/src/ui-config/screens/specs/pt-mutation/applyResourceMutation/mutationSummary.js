@@ -9,8 +9,7 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { checkValueForNA } from "../../utils";
 
-const mutationDetails =  getCommonGrayCard({
-  mutationDetailsContainer:getCommonContainer({
+export const mutationSummaryDetails =  {
     transferReason: getLabelWithValue(
       {
         labelName: "Reason for Transfer",
@@ -52,7 +51,10 @@ const mutationDetails =  getCommonGrayCard({
           callBack: checkValueForNA
       }
     )
-  })
+};
+
+const mutationDetails = getCommonGrayCard({
+  mutationDetailsContainer: getCommonContainer(mutationSummaryDetails)
 });
 
 

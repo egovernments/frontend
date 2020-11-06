@@ -142,16 +142,22 @@ const getCard = (keyValues = [], color = 'grey') => {
     let card = []
     let keys = [];
     let values = [];
-    keyValues.map(keyValue => {
-        keys.push(getLabel(keyValue.key, 'key'));
-        values.push(getLabel(keyValue.value, 'value'))
-        if (keys.length == 4 && values.length == 4) {
-            card.push([...keys]);
-            card.push([...values]);
-            keys = [];
-            values = [];
-        }
-    })
+    if(keyValues && keyValues.length > 0) {
+        keyValues.map(keyValue => {
+            keys.push(getLabel(keyValue.key, 'key'));
+            values.push(getLabel(keyValue.value, 'value'))
+            if (keys.length == 4 && values.length == 4) {
+                card.push([...keys]);
+                card.push([...values]);
+                keys = [];
+                values = [];
+            }
+        })
+    }
+    else {
+        keys.push(getLabel('NA', 'key'));
+        values.push(getLabel('NA', 'value'));
+    }
     if (keys.length != 0 && values.length != 0) {
         for (let i = keys.length; i < 4; i++) {
             keys.push(getLabel(' ', 'key'));
@@ -237,15 +243,15 @@ export const getDocumentsCard = (documentsUploadRedux) => {
 
 export const generateKeyValue = (preparedFinalObject, containerObject) => {
     let keyValue = []
-    // Object.keys(containerObject).map(keys => {
-    //     const labelObject = containerObject[keys].children.label.children.key.props;
-    //     const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
-    //     const valueObject = containerObject[keys].children.value.children.key.props;
-    //     let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
-    //     value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
-    //     value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
-    //     keyValue.push({ key, value });
-    // })
+    Object.keys(containerObject).map(keys => {
+        const labelObject = containerObject[keys].children.label.children.key.props;
+        const key = getLocaleLabels(labelObject.labelName, labelObject.labelKey)
+        const valueObject = containerObject[keys].children.value.children.key.props;
+        let value = valueObject.callBack && typeof valueObject.callBack == "function" ? valueObject.callBack(get(preparedFinalObject, valueObject.jsonPath, '')) : get(preparedFinalObject, valueObject.jsonPath, '');
+        value = value !== 'NA' && valueObject.localePrefix ? appendModulePrefix(value, valueObject.localePrefix) : value;
+        value = containerObject[keys].localiseValue ? getLocaleLabels(value, value) : value;
+        keyValue.push({ key, value });
+    })
     return keyValue;
 }
 let tableborder = {
@@ -398,7 +404,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
         },
     };
 
-
+    
     let borderKey = [true, true, false, true];
     let borderValue = [false, true, true, true];
     let receiptTableWidth = ["*", "*", "*", "*"];
