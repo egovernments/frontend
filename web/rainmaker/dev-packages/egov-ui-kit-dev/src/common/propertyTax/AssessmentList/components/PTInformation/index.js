@@ -138,7 +138,12 @@ class PTInformation extends React.Component {
                     <div style={{ display: "flex" }}>
                       <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
                       <Label label={`: ${get(properties, "propertyId")}`} fontSize="20px" />
-                    </div>
+                      <Label label="PT_APPLICATION_NO" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
+                      <Label label={`: ${get(properties, "acknowldgementNumber")}`} fontSize="20px" />
+                      <Label label="Date" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
+                      <Label label={`: ${get(properties.auditDetails, "createdTime")}`} fontSize="20px" />
+                      </div>
+                    
                     {/* <div style={{display : "flex"}}>
                       <Label label="Property ID :" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
                       <Label label="PT-JLD-2018-09-145323" fontSize="20px"/>

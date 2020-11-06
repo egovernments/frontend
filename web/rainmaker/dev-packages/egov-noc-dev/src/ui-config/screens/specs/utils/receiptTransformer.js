@@ -70,8 +70,8 @@ export const loadUlbLogo = utenantId => {
     );
     canvas = null;
   };
- //img.src = `/pb-egov-assets/${utenantId}/logo.png`; 
- img.src = '/pb-egov-assets/pb/Punjab_FS_logo.jpg'; 
+ img.src = `/pb-egov-assets/${utenantId}/logo.png`; 
+ //img.src = '/pb-egov-assets/pb/Punjab_FS_logo.jpg'; 
 };
 
 export const loadApplicationData = async (applicationNumber, tenant) => {
@@ -337,6 +337,15 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       )
     );
 
+    let lat = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.latitude", "NA")
+    );
+
+    let long = nullToNa(
+      get(response, "FireNOCs[0].fireNOCDetails.propertyDetails.address.longitude", "NA")
+    );
+
+    data.mapLoc=lat+","+long;
     let district_value = nullToNa(  
       get(  
          response,  
@@ -486,7 +495,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     data.gis = nullToNa(
       get(
         response,
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
+        "FireNOCs[0].fireNOCDetails.propertyDetails.address.latitude",
         "NA"
       )
     );
