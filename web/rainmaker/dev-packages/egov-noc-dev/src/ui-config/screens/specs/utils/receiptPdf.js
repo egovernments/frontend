@@ -621,7 +621,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
             },
 
              {
-              text: transformedData.gis,
+              text: transformedData.mapLoc,
               style: "receipt-table-value",
              border: [false, false, true, false]
 

@@ -1802,10 +1802,18 @@ export const getDocList = (state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
   );
 
+  let applicationType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].applicationType", ""
+  );
+
   const documentObj = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.TradeLicense.documentObj");
   const documentTypes = get(state.screenConfiguration.preparedFinalObject , "applyScreenMdmsData.common-masters.DocumentType");
 
-  const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" : "NEW";
+  if(applicationType !== "RENEWAL") {
+    applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" : "NEW";
+  }
+  
   const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
   
   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc , item , index) => {
