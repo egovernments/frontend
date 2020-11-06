@@ -92,7 +92,7 @@ let loadWorkflowMasterData = async () => {
   try{
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryParams = [
-      //{ key: "businessServices", value: "LAMS_NewLR" },//"NewLAMS_LR"
+      //{ key: "businessServices", value: "LAMS_NewLR" },//"LAMS_NewLR"
       { key: "tenantId", value: tenantId }
     ];
     let payload = null;
@@ -228,7 +228,7 @@ const searchPreview = {
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "lamsStore.Lease",
-            moduleName: "NewLAMS_LR",  //tobechanged
+            moduleName: "LAMS_NewLR",  //tobechanged
             updateUrl: "/lams-services/v1/_update"
           }
         },
@@ -240,11 +240,11 @@ const searchPreview = {
         //   props: {
         //     open: true,
         //     dataPath: "Licenses",
-        //     moduleName: "NewLAMS_LR",
+        //     moduleName: "LAMS_NewLR",
         //     updateUrl: "/tl-services/v1/_update",
         //     data: {
         //       buttonLabel: "RESUBMIT",
-        //       moduleName: "NewLAMS_LR",
+        //       moduleName: "LAMS_NewLR",
         //       isLast: false,
         //       dialogHeader: {
         //         labelName: "RESUBMIT Application",

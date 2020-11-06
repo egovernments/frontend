@@ -13,6 +13,7 @@ import {
     getLabelWithValue
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
+  import get from "lodash/get";
 
   import { getQueryArg , getTodaysDateInYMD , getTLTenantId  } from "egov-ui-framework/ui-utils/commons";
 
@@ -49,6 +50,26 @@ import PropTypes from "prop-types";
   const surveyNoChanged = (action, state, dispatch) => {
     getSurveyDetails(action, state, dispatch);
   }
+  const onCategoryChanged = (action, state, dispatch) => {
+    
+    const selectedCategory = get(
+      state.screenConfiguration.preparedFinalObject,
+      "lamsStore.Lease[0].category"
+    );
+    //alert("Selected Category is "+selectedCategory);
+    if(selectedCategory.toLowerCase() ==   "cantonment")
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.newApplicationDetailsCard.children.cardContent.children.cantonment",
+          "visible",
+          true
+        )
+      );
+    }
+  }
+  
   const locationChanged = () =>{
     //alert(locationChanged);
   }
@@ -116,7 +137,29 @@ import PropTypes from "prop-types";
               },
             ],
             jsonPath: "lamsStore.Lease[0].category",
-            autoSelect: true
+            autoSelect: true,
+            beforeFieldChange: (action, state, dispatch) => {
+             
+            },
+            afterFieldChange: (action, state, dispatch) => {
+              onCategoryChanged(action, state, dispatch);
+            },
+          }),
+          cantonment: getSelectField({
+            label: {
+              labelName: "Select Cantonment",
+              labelKey: "LAMS_APPL_CANT"
+            },
+            placeholder: {
+              labelName: "Select Cantonment",
+              labelKey: "LAMS_APPL_CANT_PLACEHOLDER"
+            },
+            required: true,
+            //data: null,
+            sourceJsonPath:"lamsStore.allTenants",
+            jsonPath: "lamsStore.Lease[0].tenantId",
+            autoSelect: true,
+            visible: false,
           }),
           located: {
             ...getSelectField({
