@@ -13,7 +13,7 @@
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
     "prod:employee": "yarn run go_employee && cd packages/employee && yarn run build",
     "dev:employee-mcs": "cd dev-packages/egov-uc-dev &&  yarn start",
-    "prod:employee-mcs": "yarn run go && yarn run go_employee_mcs && cd dev-packages/egov-uc-dev && yarn build",
+    "prod:employee-mcs": "yarn run go_employee_mcs && cd dev-packages/egov-uc-dev && yarn build",
     "transpile-citizen-modules": "run-p pgr-citizen pt-citizen",
     "transpile-employee-modules": "run-p pgr-employee pt-employee egov-hrms",
     "transpile-common-modules": "run-p egov-ui-kit egov-ui-framework egov-workflow egov-tradelicence egov-uc egov-noc egov-common",
