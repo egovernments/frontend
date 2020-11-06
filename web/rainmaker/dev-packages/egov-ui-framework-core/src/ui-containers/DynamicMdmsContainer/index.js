@@ -1,9 +1,10 @@
 import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg, getTLTenantId } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import cloneDeep from "lodash/cloneDeep";
 import { getSelectField } from "../../ui-config/screens/specs/utils";
 class DynamicMdmsContainer extends Component {
   componentDidMount = () => {
@@ -13,7 +14,10 @@ class DynamicMdmsContainer extends Component {
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   triggerInitilaApi = async () => {
-    let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0 } = this.props;
+    let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0 , tenantId=null} = this.props;
+    if(moduleName ==="TradeLicense" && masterName ==="TradeType"){
+      tenantId=getTLTenantId();
+    }
     const isDependencyCheck = isDependency ? get(state.screenConfiguration.preparedFinalObject, isDependency, false) : true;
     if (isDependencyCheck) {
       let reqObj = {
@@ -23,7 +27,8 @@ class DynamicMdmsContainer extends Component {
         moduleName,
         name: masterName,
         rootBlockSub,
-        filter
+        filter,
+        tenantId :tenantId
       }
       dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, true));
       await getMdmsJson(state, dispatch, reqObj);

@@ -666,6 +666,7 @@ export const tradeDetails = getCommonCard({
             labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
           },
           required: true,
+          isClearable: true,
           jsonPath: "Licenses[0].financialYear",
           sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
           inputLabelProps: {
