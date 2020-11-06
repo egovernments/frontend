@@ -661,10 +661,7 @@ export const footer = getCommonApplyFooter({
             )
           );
         }
-        const instrumentType = get(
-          state.screenConfiguration.preparedFinalObject,
-          "ReceiptTemp[0].instrument.instrumentType.name"
-        );
+
         const paymentData={
           instrumentType:get(
             state.screenConfiguration.preparedFinalObject,
@@ -715,7 +712,7 @@ export const footer = getCommonApplyFooter({
         }
       }
     },
-    visible: instrumentType =='Card' && (process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true)
+    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   generateReceipt: {
     componentPath: "Button",
