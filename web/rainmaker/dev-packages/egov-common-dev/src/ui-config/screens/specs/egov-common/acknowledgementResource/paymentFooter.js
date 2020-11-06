@@ -7,6 +7,40 @@ import './acknowledgementUtils.css';
 const getHomeButtonPath = (item) => {
     return isPublicSearch() ? "/withoutAuth/pt-mutation/public-search" : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
 }
+const isMiniReceiptBtnVisible =()=>{
+    if((process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine'))  === false)
+    && status != "failure"){
+        return true;
+       
+    }
+    else 
+    return false;
+
+}
+const UCminiReceiptBuilder=(h)=> {
+    var NEXTLINE = "&&";
+    receiptString = "     " + h["ulbType"];
+    receiptString = receiptString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
+    receiptString = receiptString + "******************************************" + NEXTLINE; // receiptString = receiptString + " PTR UID       : " + h["propertyId"] + NEXTLINE;
+  
+    receiptString = receiptString + " Receipt No    : " + h["receiptNumber"] + NEXTLINE;
+    receiptString = receiptString + " Receipt Date  : " + h["receiptDate"] + NEXTLINE;
+    receiptString = receiptString + " Consumer Name : " + h["consumerName"] + NEXTLINE; // receiptString = receiptString + " Financial Year: " + h["financialYear"] + NEXTLINE;
+    // receiptString = receiptString + " Owner Name    : " + h["ownerName"] + NEXTLINE;
+    // receiptString = receiptString + " Mobile Number : " + h["mobileNumber"] + NEXTLINE;
+    // receiptString = receiptString + " Property Type : " + h["propertyType"] + NEXTLINE;
+    // receiptString = receiptString + " Plot Size     : " + h["plotSize"] + " sq. yards" + NEXTLINE;
+  
+    receiptString = receiptString + " Category      : " + h["businessService"] + NEXTLINE;
+    receiptString = receiptString + " From Period   : " + h["fromPeriod"] + NEXTLINE;
+    receiptString = receiptString + " To Period     : " + h["toPeriod"] + NEXTLINE;
+    receiptString = receiptString + " Paid Amount   : Rs." + h["receiptAmount"] + NEXTLINE;
+    receiptString = receiptString + " Payment Mode  : " + h["paymentMode"] + NEXTLINE;
+    receiptString = receiptString + " Collector Name: " + h["collectorName"] + NEXTLINE;
+    receiptString = receiptString + "******************************************" + NEXTLINE; //console.log(receiptString.replace(/&&/g, "\n"));
+  
+    return "egov://print/" + receiptString;
+  }
 
 const getCommonApplyFooter = children => {
     return {
@@ -96,6 +130,70 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
     })
     return getCommonApplyFooter({
         ...footer,
+        printMiniReceiptButton: {
+            componentPath: "Button",
+            props: {
+                variant: "contained",
+                color: "primary",
+                // className: "apply-wizard-footer-right-button",
+                className: "common-footer-mobile",
+                style: {
+                    minWidth: "200px",
+                    height: "48px",
+                    marginRight: "16px",
+                    marginLeft: "40px",
+                }
+                // disabled: true
+            },
+            children: {
+                printFormButtonLabel: getLabel({
+                    labelName: "PRINT MINI RECEIPT",
+                    labelKey: "COMMON_PRINT_MINI_RECEIPT"
+                })
+            },
+            onClickDefination: {
+                action: "condition",
+                callBack: () => {
+
+                    const ReceiptDataTemp = get(
+                        state.screenConfiguration.preparedFinalObject,
+                        "ReceiptTemp[0]"
+                      );
+                      
+                     
+                      var receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDate);
+                      var receiptAmount = ReceiptDataTemp.instrument.amount;
+                      var paymentMode = ReceiptDataTemp.instrument.instrumentType.name;
+                     
+                      var fromPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].fromPeriod);
+                      var toPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].toPeriod);
+                      var consumerName = ReceiptDataTemp.Bill[0].payerName;
+                      var localizedULBName = document.getElementsByClassName("rainmaker-displayInline")[0].textContent;
+                      var collectorName = ""; 
+                      if (window.isEmployee()) {
+                        var empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
+                        collectorName = empInfo.name;
+                      }
+    
+    
+                      var UCminiReceiptData = {
+                        ulbType: localizedULBName,
+                        receiptNumber: receiptNumber,
+                        tenantid: tenant,
+                        consumerName: consumerName,
+                        receiptDate: receiptDateFormatted,
+                        businessService: businessService,
+                        fromPeriod: fromPeriod,
+                        toPeriod: toPeriod,
+                        receiptAmount: receiptAmount,
+                        paymentMode: paymentMode,
+                        collectorName: collectorName
+                      };  
+                      UCminiReceiptBuilder(UCminiReceiptData);
+                }
+            },
+            visible: isMiniReceiptBtnVisible()
+        },
         retryButton: {
             componentPath: "Button",
             props: {
@@ -121,5 +219,6 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
             },
             visible: status === "failure" ? true : false
         }
+
     });
 };

@@ -713,9 +713,8 @@ export const footer = getCommonApplyFooter({
         }
       }
     },
-    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) ? true : false
+    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
-  //&& !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   generateReceipt: {
     componentPath: "Button",
     props: {

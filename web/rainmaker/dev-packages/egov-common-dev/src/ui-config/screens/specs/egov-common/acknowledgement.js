@@ -60,9 +60,11 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
     return {
         uiFramework: "custom-atoms",
         componentPath: "Div",
+        visible:JSON.parse(window.localStorage.getItem('isPOSmachine'))? false : true,
         props: {
             className: "downloadprint-commonmenu",
-            style: { textAlign: "right", display: "flex" }
+            style: { textAlign: "right", display: "flex" },
+           
         },
         children: {
             downloadMenu: {
@@ -73,9 +75,10 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
                         label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
                         leftIcon: "cloud_download",
                         rightIcon: "arrow_drop_down",
-                        props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button" },
+                        props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button"},
                         menu: downloadMenu
-                    }
+                    },
+                    
                 }
             },
             printMenu: {
@@ -217,54 +220,54 @@ const screenConfig = {
             tenant
         );
 
-        const script = document.createElement("script");
-        script.src = "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/ulb-overrides-uat-20191226.js";
-        script.async = true;
-        script.onload = () =>{
-            //var ret = window.isMobileView();
-            if(true === JSON.parse(window.localStorage.getItem('isPOSmachine'))){
-                const ReceiptDataTemp = get(
-                    state.screenConfiguration.preparedFinalObject,
-                    "ReceiptTemp[0]"
-                  );
+        // const script = document.createElement("script");
+        // script.src = "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/ulb-overrides-uat-20191226.js";
+        // script.async = true;
+        // script.onload = () =>{
+        //     //var ret = window.isMobileView();
+        //     if(true === JSON.parse(window.localStorage.getItem('isPOSmachine'))){
+        //         const ReceiptDataTemp = get(
+        //             state.screenConfiguration.preparedFinalObject,
+        //             "ReceiptTemp[0]"
+        //           );
                   
                  
-                  var receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDate);
-                  var receiptAmount = ReceiptDataTemp.instrument.amount;
-                  var paymentMode = ReceiptDataTemp.instrument.instrumentType.name;
+        //           var receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDate);
+        //           var receiptAmount = ReceiptDataTemp.instrument.amount;
+        //           var paymentMode = ReceiptDataTemp.instrument.instrumentType.name;
                  
-                  var fromPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].fromPeriod);
-                  var toPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].toPeriod);
-                  var consumerName = ReceiptDataTemp.Bill[0].payerName;
-                  var localizedULBName = document.getElementsByClassName("rainmaker-displayInline")[0].textContent;
-                  var collectorName = ""; 
-                  if (window.isEmployee()) {
-                    var empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
-                    collectorName = empInfo.name;
-                  }
+        //           var fromPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].fromPeriod);
+        //           var toPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].toPeriod);
+        //           var consumerName = ReceiptDataTemp.Bill[0].payerName;
+        //           var localizedULBName = document.getElementsByClassName("rainmaker-displayInline")[0].textContent;
+        //           var collectorName = ""; 
+        //           if (window.isEmployee()) {
+        //             var empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
+        //             collectorName = empInfo.name;
+        //           }
 
 
-                  var UCminiReceiptData = {
-                    ulbType: localizedULBName,
-                    receiptNumber: receiptNumber,
-                    tenantid: tenant,
-                    consumerName: consumerName,
-                    receiptDate: receiptDateFormatted,
-                    businessService: businessService,
-                    fromPeriod: fromPeriod,
-                    toPeriod: toPeriod,
-                    receiptAmount: receiptAmount,
-                    paymentMode: paymentMode,
-                    collectorName: collectorName
-                  };  
+        //           var UCminiReceiptData = {
+        //             ulbType: localizedULBName,
+        //             receiptNumber: receiptNumber,
+        //             tenantid: tenant,
+        //             consumerName: consumerName,
+        //             receiptDate: receiptDateFormatted,
+        //             businessService: businessService,
+        //             fromPeriod: fromPeriod,
+        //             toPeriod: toPeriod,
+        //             receiptAmount: receiptAmount,
+        //             paymentMode: paymentMode,
+        //             collectorName: collectorName
+        //           };  
 
-                var UCreceiptURL = window.UCminiReceiptBuilder(UCminiReceiptData);
-                window.loadUCMiniReceiptButton(UCreceiptURL);
+        //         var UCreceiptURL = window.UCminiReceiptBuilder(UCminiReceiptData);
+        //         window.loadUCMiniReceiptButton(UCreceiptURL);
                 
-            }
+        //     }
               
-        };
-        document.body.appendChild(script);
+        // };
+        // document.body.appendChild(script);
 
 
 
