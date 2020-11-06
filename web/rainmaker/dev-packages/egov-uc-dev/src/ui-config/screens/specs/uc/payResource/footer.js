@@ -569,7 +569,7 @@ export const footer = getCommonApplyFooter({
           ),
           paymentAmount:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].instrument.amount"
+            "ReceiptTemp[0].Bill[0].totalAmount"
           ),
           customerName:get(
             state.screenConfiguration.preparedFinalObject,
@@ -590,21 +590,21 @@ export const footer = getCommonApplyFooter({
           ),
           billNumber:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billDetails[0].billNumber"
+            "ReceiptTemp[0].Bill[0].billNumber"
           ),
           consumerCode:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billDetails[0].consumerCode"
+            "ReceiptTemp[0].Bill[0].consumerCode"
           ),
           businessService:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billDetails[0].businessService"
+            "ReceiptTemp[0].Bill[0].businessService"
           ),
           collectorName:"",
           collectorId:"",
           instrumentDate:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].instrument.instrumentDate"
+            "ReceiptTemp[0].Bill[0].billDate"
           ),
           instrumentNumber:get(
             state.screenConfiguration.preparedFinalObject,
