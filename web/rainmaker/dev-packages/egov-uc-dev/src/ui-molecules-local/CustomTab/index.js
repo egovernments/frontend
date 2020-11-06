@@ -4,7 +4,7 @@ import React from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
-
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tabs from "@material-ui/core/Tabs";
@@ -45,7 +45,10 @@ class NavPills extends React.Component {
         {tabs.map((prop, key) => {
           return (
             <Tab
-              label={prop.tabButton}
+            label={<LabelContainer
+              labelName={prop.tabButton}
+              labelKey={prop.tabButton}
+            />}
               key={key}
               classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
             />
