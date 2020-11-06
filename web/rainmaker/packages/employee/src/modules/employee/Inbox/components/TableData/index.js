@@ -312,9 +312,6 @@ class TableData extends Component {
     //   businessServiceData.map((item, index) => {
     //     return item.business;
     //   })||[];
-
-
-
     // const uniqueModules = uniq(modules)
     const uniqueModules = uniq(businessServices)
     let localitymap = [];
@@ -333,14 +330,10 @@ class TableData extends Component {
           endpoints.push(`egov-searcher/locality/${uniqueModule}/_get`)
         })
         const resp = await multiHttpRequest(endpoints, "search", queries, requestBodies)
-        console.log(resp, 'localitymap=resp');
         resp && resp.map(res => {
           let locality = res.Localities;
           localitymap = [...localitymap, ...locality];
         });
-
-        console.log(localitymap, 'localitymap');
-
         /* for (var i = 0; i < uniqueModules.length; i++) {
           try {
             if (uniqueModules[i] != 'PT') {
