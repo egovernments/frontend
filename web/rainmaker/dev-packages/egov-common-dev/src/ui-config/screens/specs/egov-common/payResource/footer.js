@@ -615,6 +615,7 @@ export const getCommonApplyFooter = children => {
 };
 
 export const footer = getCommonApplyFooter({
+
   posButton: {
     componentPath: "Button",
     props: {
@@ -712,8 +713,9 @@ export const footer = getCommonApplyFooter({
         }
       }
     },
-    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) ? true : false
   },
+  //&& !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   generateReceipt: {
     componentPath: "Button",
     props: {
