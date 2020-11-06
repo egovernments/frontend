@@ -1,5 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
+import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import { ifUserRoleExists } from "../../utils";
 import './acknowledgementUtils.css';
@@ -110,11 +111,13 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                 variant: "contained",
                 color: "primary",
                 className: "common-footer-mobile",
+
                 style: {
                     minWidth: "200px",
                     height: "48px",
                     marginRight: "16px",
-                    marginLeft: "40px"
+                    marginLeft: "40px",
+                    marginTop: "5px"
                 }
             },
             children: {
@@ -142,6 +145,7 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                     height: "48px",
                     marginRight: "16px",
                     marginLeft: "40px",
+                    marginTop: "5px"
                 }
                 // disabled: true
             },
@@ -168,7 +172,12 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                       var fromPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].fromPeriod);
                       var toPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].toPeriod);
                       var consumerName = ReceiptDataTemp.Bill[0].payerName;
-                      var localizedULBName = document.getElementsByClassName("rainmaker-displayInline")[0].textContent;
+                      let id = getQueryArg(window.location.href, "tenantId"); 
+                      if(id != null){
+                       id =  id.split(".")[1];
+                       localizedULBName =  id[0].toUpperCase() + id.slice(1);
+                        
+                      };
                       var collectorName = ""; 
                       if (window.isEmployee()) {
                         var empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));

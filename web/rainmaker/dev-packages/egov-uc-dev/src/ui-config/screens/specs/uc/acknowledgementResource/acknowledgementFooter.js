@@ -51,6 +51,72 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
       }
     }
   },
+  printMiniChallanButton: {
+    componentPath: "Button",
+    props: {
+        variant: "contained",
+        color: "primary",
+        // className: "apply-wizard-footer-right-button",
+        className:"gen-challan-btn"
+
+        // disabled: true
+    },
+    children: {
+        printFormButtonLabel: getLabel({
+            labelName: "PRINT MINI CHALLAN",
+            labelKey: "COMMON_PRINT_MINI_CHALLAN"
+        })
+    },
+    onClickDefination: {
+        action: "condition",
+        callBack: () => {
+            const ReceiptDataTemp = get(
+                state.screenConfiguration.preparedFinalObject,
+                "Challan"
+              );
+              
+              const todayDate = new Date();
+              const challanDateFormatted = todayDate.toString;           
+              const fromPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodFrom);
+              const toPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodTo);
+              const consumerName = ReceiptDataTemp.consumerName;
+              let id = getQueryArg(window.location.href, "tenantId"); 
+              if(id != null){
+               id =  id.split(".")[1];
+               localizedULBName =  id[0].toUpperCase() + id.slice(1);
+                
+              }
+              var collectorName = ""; 
+              if (window.isEmployee()) {
+                var empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
+                collectorName = empInfo.name;
+              }
+              const businessService = getQueryArg(window.location.href,"serviceCategory");
+              const totalAmt = ReceiptDataTemp.amount.reduce(function(total, arr) { 
+                // return the sum with previous value
+                return total + arr.amount;
+              
+                // set initial value as 0
+              },0);
+
+              var UCminiChallanData = {
+                ulbType: localizedULBName,
+                receiptNumber: getQueryArg(window.location.href, "challanNumber"),
+                tenantid: getQueryArg(window.location.href, "tenantId"),
+                consumerName: consumerName,
+                receiptDate: receiptDateFormatted,
+                businessService: businessService,
+                fromPeriod: fromPeriod,
+                toPeriod: toPeriod,
+                receiptAmount: totalAmt,
+                challanDate:challanDateFormatted,
+                collectorName:collectorName
+              };  
+              UCminiChallanBuilder(UCminiChallanData);
+        }
+    },
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) 
+  },
     payButton: {
     componentPath: "Button",
     props: {
@@ -124,4 +190,29 @@ const viewReceipt = (state, dispatch) => {
 const goToHome = (state, dispatch) => { 
   dispatch(prepareFinalObject("Challan", []));
   dispatch(setRoute(`${getRedirectionURL()}`));
+};
+
+const UCminiChallanBuilder=(h)=> {
+  var NEXTLINE = "&&";
+  challanString = "     " + h["ulbType"];
+  challanString = challanString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
+  challanString = challanString + "******************************************" + NEXTLINE; // challanString = challanString + " PTR UID       : " + h["propertyId"] + NEXTLINE;
+
+  challanString = challanString + " Receipt No    : " + h["receiptNumber"] + NEXTLINE;
+  challanString = challanString + " Receipt Date  : " + h["receiptDate"] + NEXTLINE;
+  challanString = challanString + " Consumer Name : " + h["consumerName"] + NEXTLINE; // challanString = challanString + " Financial Year: " + h["financialYear"] + NEXTLINE;
+  // challanString = challanString + " Owner Name    : " + h["ownerName"] + NEXTLINE;
+  // challanString = challanString + " Mobile Number : " + h["mobileNumber"] + NEXTLINE;
+  // challanString = challanString + " Property Type : " + h["propertyType"] + NEXTLINE;
+  // challanString = challanString + " Plot Size     : " + h["plotSize"] + " sq. yards" + NEXTLINE;
+
+  challanString = challanString + " Category      : " + h["businessService"] + NEXTLINE;
+  challanString = challanString + " From Period   : " + h["fromPeriod"] + NEXTLINE;
+  challanString = challanString + " To Period     : " + h["toPeriod"] + NEXTLINE;
+  challanString = challanString + " Paid Amount   : Rs." + h["receiptAmount"] + NEXTLINE;
+  challanString = challanString + " Payment Mode  : " + h["paymentMode"] + NEXTLINE;
+  challanString = challanString + " Collector Name: " + h["collectorName"] + NEXTLINE;
+  challanString = challanString + "******************************************" + NEXTLINE; //console.log(challanString.replace(/&&/g, "\n"));
+
+  return "egov://print/" + challanString;
 };

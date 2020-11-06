@@ -55,6 +55,7 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
+    visible:!JSON.parse(window.localStorage.getItem('isPOSmachine')),
      
     props: {
       className: "downloadprint-commonmenu",
