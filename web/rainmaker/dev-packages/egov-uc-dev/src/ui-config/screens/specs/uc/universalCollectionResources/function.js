@@ -205,7 +205,7 @@ export const searchChallanApiCall = async(state,dispatch)=>{
   }
   else if (
     Object.keys(challanSearchScreenObject).length == 0 ||
-    checkEmptyFields(challanSearchScreenObject)
+    checkSearchChallanEmptyFields(challanSearchScreenObject)
   ) {
     dispatch(
       toggleSnackbar(
@@ -303,6 +303,16 @@ export const searchChallanApiCall = async(state,dispatch)=>{
     
   }
 };
+
+const checkSearchChallanEmptyFields = (searchScreenObject) => {
+  const businessServices = get(searchScreenObject, 'businessService', null)
+  const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
+  const consumerCodes = get(searchScreenObject,'challanNo',null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(consumerCodes)) {
+    return true; 
+    }
+  return false;
+}
 
 const checkEmptyFields = (searchScreenObject) => {
   
