@@ -73,6 +73,16 @@ class PTInformation extends React.Component {
       // ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0], "city.ulbGrade")}` : "MUNICIPAL CORPORATION";
       ulbGrade= "MUNICIPAL CORPORATION";
     }
+    let propertyExist = properties.hasOwnProperty('propertyDetails');
+    if(propertyExist) {
+      if(properties.propertyDetails[0].status != null || properties.propertyDetails[0].status != undefined) {
+        properties.propertyDetails[0].units && properties.propertyDetails[0].units.length > 0 && properties.propertyDetails[0].units.map( unit => {
+          if(unit.constructionDetail.builtUpArea && unit.constructionDetail.builtUpArea === unit.unitArea) {
+            unit.unitArea = Math.round(unit.unitArea * 9);
+          }
+        })
+      }
+    }
     if (properties.status == "INWORKFLOW") {
       const updatedOnwerInfo=this.updateProperty();
       properties.propertyDetails[0].owners = updatedOnwerInfo.owners;
