@@ -15,7 +15,7 @@ import {
 
 export const searchApiCall = async (state, dispatch) => {
   
-  showHideTable(false, dispatch);
+  showHideReceiptTable(false, dispatch);
   let queryObject = [];
   
    queryObject = [
@@ -104,6 +104,7 @@ export const searchApiCall = async (state, dispatch) => {
       );
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
+        consumerCode:get(Payments[i],`paymentDetails[0].bill.consumerCode`),
         payeeName: get(Payments[i], `paidBy`), // Changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
@@ -114,15 +115,16 @@ export const searchApiCall = async (state, dispatch) => {
       };
     }
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.uiCommonConfig");
-    try {
+    try {      
       let data = response.map(item => ({
         ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['UC_COMMON_TABLE_COL_CONSUMERCODE']:item.consumerCode || "-",
         ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
         ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
         ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
         ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
         ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
+        //["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-"
       }));
       dispatch(
@@ -145,7 +147,7 @@ export const searchApiCall = async (state, dispatch) => {
       dispatch(
         handleField("search", "components.div.children.searchResults")
       );
-      showHideTable(true, dispatch);
+      showHideReceiptTable(true, dispatch);
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);
@@ -307,7 +309,7 @@ const checkEmptyFields = (searchScreenObject) => {
   const businessServices = get(searchScreenObject, 'businessService', null)
   const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  const consumerCodes = get(searchScreenObject,'challanNo',null)
+  const consumerCodes = get(searchScreenObject,'consumerCodes',null)
   const fromDate = get(searchScreenObject,'fromDate',null)
   const toDate = get(searchScreenObject,'toDate',null)
   if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)&& checkEmpty(consumerCodes)&& checkEmpty(fromDate)&& checkEmpty(toDate)) {
@@ -331,6 +333,18 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     handleField(
       "searchChallan",
       "components.div.children.SearchChallanResults",
+      "visible",
+      booleanHideOrShow
+    )
+  );
+};
+
+const showHideReceiptTable = (booleanHideOrShow, dispatch) => {
+ 
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.searchResults",
       "visible",
       booleanHideOrShow
     )

@@ -23,6 +23,10 @@ export const searchResult = {
         }
       },
       {
+        labelName: "Consumer Code",
+        labelKey: "UC_COMMON_TABLE_COL_CONSUMERCODE"
+      },
+      {
         labelName: "Payee Name",
         labelKey: "UC_COMMON_TABLE_COL_PAYEE_NAME"
       },
@@ -40,7 +44,11 @@ export const searchResult = {
       },
       {
         labelName: "Status",
-        labelKey: "UC_COMMON_TABLE_COL_STATUS"
+        labelKey: "UC_COMMON_TABLE_COL_STATUS",
+        options: {
+          display: false,
+          viewColumns  :false
+        }
       },
       {
         labelName: "Tenant Id",
