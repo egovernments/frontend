@@ -20,7 +20,7 @@ const isMiniReceiptBtnVisible =()=>{
 }
 const UCminiReceiptBuilder=(h)=> {
     var NEXTLINE = "&&";
-    receiptString = "     " + h["ulbType"];
+    let receiptString = "     " + h["ulbType"];
     receiptString = receiptString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
     receiptString = receiptString + "******************************************" + NEXTLINE; // receiptString = receiptString + " PTR UID       : " + h["propertyId"] + NEXTLINE;
   
@@ -165,24 +165,25 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                       );
                       
                      
-                      var receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDate);
-                      var receiptAmount = ReceiptDataTemp.instrument.amount;
-                      var paymentMode = ReceiptDataTemp.instrument.instrumentType.name;
+                      let receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDate);
+                      let receiptAmount = ReceiptDataTemp.instrument.amount;
+                      let paymentMode = ReceiptDataTemp.instrument.instrumentType.name;
                      
-                      var fromPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].fromPeriod);
-                      var toPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].toPeriod);
-                      var consumerName = ReceiptDataTemp.Bill[0].payerName;
+                      let fromPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].fromPeriod);
+                      let toPeriod = getDateFromEpoch(ReceiptDataTemp.Bill[0].billDetails[0].toPeriod);
+                      let consumerName = ReceiptDataTemp.Bill[0].payerName;
                       let id = getQueryArg(window.location.href, "tenantId"); 
+                      let localizedULBName = "";
                       if(id != null){
                        id =  id.split(".")[1];
                        localizedULBName =  id[0].toUpperCase() + id.slice(1);
                         
                       };
-                      var collectorName = ""; 
-                      if (window.isEmployee()) {
-                        var empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
-                        collectorName = empInfo.name;
-                      }
+                      let collectorName = ""; 
+                      
+                    let empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
+                    collectorName = empInfo.name;
+                      
     
     
                       var UCminiReceiptData = {
