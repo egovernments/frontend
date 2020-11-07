@@ -55,7 +55,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
   printMiniChallanButton: {
     componentPath: "Button",
     props: {
-        variant: "contained",
+        variant: "outlined",
         color: "primary",
         // className: "apply-wizard-footer-right-button",
         className:"gen-challan-btn"
@@ -74,7 +74,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
           generateMiniChallan(state, dispatch);
         }
     },
-    visible: !JSON.parse(window.localStorage.getItem('isPOSmachine')) 
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) 
   },
     payButton: {
     componentPath: "Button",
