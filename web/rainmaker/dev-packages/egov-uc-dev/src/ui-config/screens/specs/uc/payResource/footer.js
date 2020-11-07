@@ -602,10 +602,10 @@ export const footer = getCommonApplyFooter({
           ),
           collectorName:"",
           collectorId:"",
-          instrumentDate:get(
+          instrumentDate: convertEpochToDate(get(
             state.screenConfiguration.preparedFinalObject,
-            convertEpochToDate("ReceiptTemp[0].Bill[0].billDate")
-          ),
+           "ReceiptTemp[0].Bill[0].billDate"
+          )),
           instrumentNumber:get(
             state.screenConfiguration.preparedFinalObject,
             "ReceiptTemp[0].instrument.instrumentNumber"
