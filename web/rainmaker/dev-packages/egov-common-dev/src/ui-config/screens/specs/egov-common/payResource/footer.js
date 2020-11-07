@@ -9,6 +9,7 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import { paybuttonJsonpath } from "./constants";
 import "./index.css";
+import $ from 'jquery';
 
 const checkAmount = (totalAmount, customAmount, businessService) => {
   if (totalAmount !== 0 && customAmount === 0) {
@@ -180,10 +181,10 @@ export const callPGService = async (state, dispatch) => {
          newForm.submit();
         }catch (e) {
           console.log("Error in payment redirect ",e);
-          window.location = redirectionUrl;
+          //window.location = redirectionUrl;
         }
       get(goToPaymentGateway, "Transaction.callbackUrl");
-      window.location = redirectionUrl;
+      //window.location = redirectionUrl;
     }
   } catch (e) {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
