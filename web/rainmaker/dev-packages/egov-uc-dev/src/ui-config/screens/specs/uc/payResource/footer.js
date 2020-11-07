@@ -6,7 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { convertDateToEpoch, validateFields,ifUserRoleExists } from "egov-ui-framework/ui-config/screens/specs/utils/index";
+import { convertDateToEpoch, validateFields,ifUserRoleExists,convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils/index";
 
 //import "./index.css";
 import { prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -604,7 +604,7 @@ export const footer = getCommonApplyFooter({
           collectorId:"",
           instrumentDate:get(
             state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billDate"
+            convertEpochToDate("ReceiptTemp[0].Bill[0].billDate")
           ),
           instrumentNumber:get(
             state.screenConfiguration.preparedFinalObject,
