@@ -92,7 +92,7 @@ let loadWorkflowMasterData = async () => {
   try{
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryParams = [
-      //{ key: "businessServices", value: "LAMS_NewLR" },//"LAMS_NewLR"
+      { key: "businessServices", value: "LAMS_NewLR_V2" },//"LAMS_NewLR_V2"
       { key: "tenantId", value: tenantId }
     ];
     let payload = null;
@@ -169,10 +169,10 @@ const searchPreview = {
     dispatch(prepareFinalObject("LicensesTemp", LicensesTemp))
 
     //tobechanged  uncomment below code
-    //let businessServiceData = loadWorkflowMasterData();
-    //localStorageSet("businessServiceData", JSON.stringify(businessServiceData.BusinessServices));
+    let businessServiceData = loadWorkflowMasterData();
+    localStorageSet("businessServiceData", JSON.stringify(businessServiceData.BusinessServices));
 
-    localStorageSet("businessServiceData", JSON.stringify(businessServiceData));
+    //localStorageSet("businessServiceData", JSON.stringify(businessServiceData));
 
     //tobechanged  remove the below code
     const testAt = getQueryArg(window.location.href, "testAt");
@@ -228,7 +228,7 @@ const searchPreview = {
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "lamsStore.Lease",
-            moduleName: "LAMS_NewLR",  //tobechanged
+            moduleName: "LAMS_NewLR_V2",  //tobechanged
             updateUrl: "/lams-services/v1/_update"
           }
         },
@@ -240,11 +240,11 @@ const searchPreview = {
         //   props: {
         //     open: true,
         //     dataPath: "Licenses",
-        //     moduleName: "LAMS_NewLR",
+        //     moduleName: "LAMS_NewLR_V2",
         //     updateUrl: "/tl-services/v1/_update",
         //     data: {
         //       buttonLabel: "RESUBMIT",
-        //       moduleName: "LAMS_NewLR",
+        //       moduleName: "LAMS_NewLR_V2",
         //       isLast: false,
         //       dialogHeader: {
         //         labelName: "RESUBMIT Application",

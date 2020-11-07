@@ -1,9 +1,9 @@
 export const getWFConfig = (module, businessService) => {
   alert("The module is "+module);
   switch (module.toUpperCase()) {
-    case "LAMS-SERVICES":
+    case "LAMS-LR-SERVICES":
       return {
-          CITIZEN: "/lams-common/newApplication", //tobechanged  If Citizen has to resubmit the documents.
+          CITIZEN: "/lams-common/search-preview", //tobechanged  If Citizen has to resubmit the documents.
           DEFAULT: "/lams-common/search-preview",
       };
     case "TL-SERVICES":

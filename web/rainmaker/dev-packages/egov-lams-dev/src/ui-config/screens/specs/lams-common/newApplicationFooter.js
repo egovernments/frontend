@@ -15,6 +15,7 @@ import {
   import { httpRequest } from "egov-ui-framework/ui-utils/api";
   import get from "lodash/get";
   import set from "lodash/set";
+  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 import PropTypes from "prop-types";
 
@@ -76,6 +77,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
      
     } 
     catch (error) {
+      console.log(error)
       dispatch(toggleSpinner());
       dispatch(toggleSnackbar(
         true,
