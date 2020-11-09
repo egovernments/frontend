@@ -148,16 +148,16 @@ const generateDocument = ( item, modulePrifx ) => {
   }
 
   // Add description to individual grey cards
-  // let subParagraph = item.description
-  //   ? getCommonParagraph(
-  //       {
-  //         labelKey: getTransformedLocale(`${modulePrifx}_${item.description}_NOTE`)
-  //       },
-  //       {
-  //         style: styles.description
-  //       }
-  //     )
-  //   : {};
+  let subParagraph = item.description
+    ? getCommonParagraph(
+        {
+          labelKey: getTransformedLocale(`${modulePrifx}_${item.description}_NOTE`)
+        },
+        {
+          style: styles.description
+        }
+      )
+    : {}; 
 
   // let subParagraph1 = getCommonParagraph(
   //   {
