@@ -164,7 +164,13 @@ export const convertToOldPTObject = (newObject) => {
   propertyDetails.additionalDetails = newProperty.additionalDetails;
   propertyDetails.financialYear = null;
   propertyDetails.propertyType = extractFromString(newProperty.propertyType, 0);
-  propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
+  if(newProperty.propertyType === "VACANT") {
+    propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 0);
+    }
+    else {
+      propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
+    }
+  // propertyDetails.propertySubType = extractFromString(newProperty.propertyType, 1);
   propertyDetails.assessmentNumber = 0;
   propertyDetails.assessmentDate = null;
   propertyDetails.usageCategoryMajor = extractFromString(newProperty.usageCategory, 0);

@@ -451,7 +451,7 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
           {
             key: getTranslatedLabel("PT_ASSESMENT_INFO_TYPE_OF_BUILDING", localizationLabelsData),
             value: generalMDMSDataById
-              ? propertyDetails.propertySubType
+              ? propertyDetails.propertySubType !== "VACANT"
                 ? generalMDMSDataById["PropertySubType"]
                   ? generalMDMSDataById["PropertySubType"][propertyDetails.propertySubType].name
                   : "NA"
