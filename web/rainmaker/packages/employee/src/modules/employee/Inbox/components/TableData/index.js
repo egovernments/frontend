@@ -299,10 +299,14 @@ class TableData extends Component {
     const uuid = get(this.props, "userInfo.uuid");
     if (isEmpty(data)) return [];
     let businessServices = [];
-    let businessIds = []
+    let businessIds = [];
+    let ptApplicationNo = []
     if (this.state.showLocality && this.state.loadLocalityForInitialData) {
       businessIds = data.map((item) => {
         businessServices.push(item.moduleName);
+        if (item.moduleName == 'PT') {
+          ptApplicationNo.push(item.businessId);
+        }
         return item.businessId;
       });
     }
@@ -321,18 +325,43 @@ class TableData extends Component {
         let endpoints = []
         let queries = []
         uniqueModules.map((uniqueModule, ind) => {
-          requestBodies.push({
-            searchCriteria: {
-              "referenceNumber": businessIds
+          if (uniqueModule == "PT") {
+            const acknowledgementIds = [...ptApplicationNo];
+            for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
+              let acknowledgementId = acknowledgementIds.splice(0, 50);
+              if (acknowledgementId && acknowledgementId.length > 0) {
+                const query = [{ key: "tenantId", value: getTenantId() },
+                { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
+                requestBodies.push(undefined)
+                queries.push(query)
+                endpoints.push("property-services/property/_search")
+              }
             }
-          })
-          queries.push([])
-          endpoints.push(`egov-searcher/locality/${uniqueModule}/_get`)
+          } else {
+            requestBodies.push({
+              searchCriteria: {
+                "referenceNumber": businessIds
+              }
+            })
+            queries.push([])
+            endpoints.push(`egov-searcher/locality/${uniqueModule}/_get`)
+          }
+
         })
         const resp = await multiHttpRequest(endpoints, "search", queries, requestBodies)
         resp && resp.map(res => {
-          let locality = res.Localities;
-          localitymap = [...localitymap, ...locality];
+          if (res && res.Localities) {
+            let locality = res.Localities;
+            localitymap = [...localitymap, ...locality];
+          } else if (res && res.Properties) {
+            const localities = res.Properties.map(property => {
+              return {
+                "referencenumber": property.acknowldgementNumber,
+                "locality": property.address.locality.code
+              }
+            })
+            localitymap = [...localitymap, ...localities];
+          }
         });
         /* for (var i = 0; i < uniqueModules.length; i++) {
           try {
@@ -512,7 +541,7 @@ class TableData extends Component {
   };
 
   componentDidMount = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;   
+    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
     this.loadAllData();
@@ -571,7 +600,7 @@ class TableData extends Component {
     prepareFinalObject("InboxData", [...inboxData]);
     this.getMaxSLA();
   };
-  
+
   loadAllData = async () => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const tenantId = getTenantId();
