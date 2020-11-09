@@ -332,7 +332,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     //------ removing null from document array ------
     let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");
-    set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
+    //set(queryObject[0], "tradeLicenseDetail.applicationDocuments", documents);
+
+    //Added by DC
+    let nonEmptyDocs = documents.filter(docObj => Object.keys(docObj).length > 0);
+    console.log("nonEmptyDocs===",nonEmptyDocs); 
+    set(queryObject[0], "tradeLicenseDetail.applicationDocuments", nonEmptyDocs);
+    set(queryObject[0], "wfDocuments", nonEmptyDocs);
     //-----------------------------------------------
     // let documents = get(queryObject[0], "tradeLicenseDetail.applicationDocuments");
     set(
@@ -340,7 +346,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "validFrom",
       convertDateToEpoch(queryObject[0].validFrom, "dayend")
     );
-    set(queryObject[0], "wfDocuments", documents);
+    //set(queryObject[0], "wfDocuments", documents);
     set(
       queryObject[0],
       "validTo",
