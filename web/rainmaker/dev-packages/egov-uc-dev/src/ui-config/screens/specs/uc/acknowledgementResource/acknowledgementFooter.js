@@ -71,7 +71,12 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
     onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
-          generateMiniChallan(state, dispatch);
+          const challanData = generateMiniChallan(state, dispatch);
+          try {
+            window.Android && window.Android.sendPrintData("printData",JSON.stringify(challanData));
+          } catch (e) {
+            console.log(e);
+          }
         }
     },
     visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) 
@@ -193,27 +198,28 @@ const generateMiniChallan = (state, dispatch) => {
     challanDate:challanDateFormatted,
     collectorName:collectorName
   };  
-  UCminiChallanBuilder(UCminiChallanData);
+  return UCminiChallanData;
+ // return UCminiChallanBuilder(UCminiChallanData);
 };
 
 
-const UCminiChallanBuilder=(h)=> {
-  var NEXTLINE = "&&";
-  let challanString = "     " + h["ulbType"];
-  challanString = challanString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
-  challanString = challanString + "******************************************" + NEXTLINE;
+// const UCminiChallanBuilder=(h)=> {
+//   var NEXTLINE = "&&";
+//   let challanString = "     " + h["ulbType"];
+//   challanString = challanString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
+//   challanString = challanString + "******************************************" + NEXTLINE;
 
-  challanString = challanString + " Receipt No    : " + h["receiptNumber"] + NEXTLINE;
-  challanString = challanString + " Receipt Date  : " + h["challanDate"] + NEXTLINE;
-  challanString = challanString + " Consumer Name : " + h["consumerName"] + NEXTLINE; 
+//   challanString = challanString + " Receipt No    : " + h["receiptNumber"] + NEXTLINE;
+//   challanString = challanString + " Receipt Date  : " + h["challanDate"] + NEXTLINE;
+//   challanString = challanString + " Consumer Name : " + h["consumerName"] + NEXTLINE; 
 
-  challanString = challanString + " Category      : " + h["businessService"] + NEXTLINE;
-  challanString = challanString + " From Period   : " + h["fromPeriod"] + NEXTLINE;
-  challanString = challanString + " To Period     : " + h["toPeriod"] + NEXTLINE;
-  challanString = challanString + " Paid Amount   : Rs." + h["receiptAmount"] + NEXTLINE;
-  challanString = challanString + " Created By: " + h["collectorName"] + NEXTLINE;
-  challanString = challanString + "******************************************" + NEXTLINE; 
-  //console.log(challanString.replace(/&&/g, "\n"));
+//   challanString = challanString + " Category      : " + h["businessService"] + NEXTLINE;
+//   challanString = challanString + " From Period   : " + h["fromPeriod"] + NEXTLINE;
+//   challanString = challanString + " To Period     : " + h["toPeriod"] + NEXTLINE;
+//   challanString = challanString + " Paid Amount   : Rs." + h["receiptAmount"] + NEXTLINE;
+//   challanString = challanString + " Created By: " + h["collectorName"] + NEXTLINE;
+//   challanString = challanString + "******************************************" + NEXTLINE; 
+//   //console.log(challanString.replace(/&&/g, "\n"));
 
-  return "egov://print/" + challanString;
-};
+//   return "egov://print/" + challanString;
+// };
