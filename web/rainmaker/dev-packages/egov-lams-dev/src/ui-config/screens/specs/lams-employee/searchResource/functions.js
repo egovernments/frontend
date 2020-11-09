@@ -105,8 +105,12 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
-    //const response = await getSearchResults(queryObject); //tobechanged
-    const response = sampleSearchResponse; //tobechanged
+    let response = await getSearchResults(queryObject); //tobechanged
+    if(!response || !response.leases)
+    {
+      alert("Search did not return full data. Showing sample data only for testing.");
+      response = sampleSearchResponse; //tobechanged
+    }
     try {
       
       let data = response.leases.map(item => ({

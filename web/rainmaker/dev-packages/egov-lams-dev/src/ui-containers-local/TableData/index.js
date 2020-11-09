@@ -454,6 +454,7 @@ class TableData extends Component {
   getMaxSLA() {
     const businessServiceData = this.getBussinessServiceData();
     let businessServiceSla = {}
+    console.log("Check the business service data", businessServiceData);
     businessServiceData.map(eachRow => {
       businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
     })
@@ -504,20 +505,21 @@ class TableData extends Component {
     //tobechanged remove employee role here.
     let jpExpression = "$.roles[?(@.code=='LR_APPROVER')].code";
     let lamsRoles = jp.query(userInfo, jpExpression );
-    //tobechanged remove the below code
-    //lamsRoles.push("CEO");
     console.log("Check Lams Roles  ", lamsRoles);
     
     const assignedData = orderBy(
       filter(responseData.ProcessInstances, (item) => {
         let currentState = get(item,'state.state');
+        if(currentState != "APPLIED")  //List in this tab only if the status is "APPLIED"
+          return false;
+
         let eligibleRolesToTakeAction = jp.query(businessServiceData, "$[?(@.businessService== 'LAMS_NewLR_V2')].states[?(@.state=='"+
           currentState+"' )].actions[*].roles[*]" );
-        console.log("Check first ",eligibleRolesToTakeAction);
+        //console.log("Check first ",eligibleRolesToTakeAction);
         let eligibleRolesToTakeActionUnique = eligibleRolesToTakeAction.filter((v, i, a) => a.indexOf(v) === i); 
-        console.log("Check Eligible roles to take action ", eligibleRolesToTakeActionUnique);
+        //console.log("Check Eligible roles to take action ", eligibleRolesToTakeActionUnique);
         let isAssignedToMe = this.checkIfAssignedToMe(lamsRoles, eligibleRolesToTakeActionUnique);
-        alert("IsAssigned to me is "+isAssignedToMe);
+        //alert("IsAssigned to me is "+isAssignedToMe);
         return isAssignedToMe;
       }),
       ["businesssServiceSla"]
@@ -552,7 +554,7 @@ class TableData extends Component {
       //   }),
       //   ["businesssServiceSla"]
       // );
-      alert("Calling 1");
+
       const assignedData = this.getAssignedData(responseData);
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
 

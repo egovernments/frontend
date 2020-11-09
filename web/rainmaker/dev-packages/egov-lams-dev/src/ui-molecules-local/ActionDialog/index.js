@@ -189,15 +189,18 @@ class ActionDialog extends React.Component {
     }
     const status = get(
       state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].status`
+      `lamsStore.Lease[0].status`
     );
     //alert("The status is "+status);
     switch (status) {
       case "APPLIED":
-      case "PDDEEXAMINATION":
-      case "DGDEEXAMINATION":
-      case "MODEXAMINATION":
       case "APPROVED":
+      case "REJECTED":
+      case "CEO-EXAMINATION":
+      case "DEO-EXAMINATION":
+      case "PDDE-EXAMINATION":
+      case "DGDE-EXAMINATION":
+      case "MOD-EXAMINATION":
         return (
           <Dialog
             fullScreen={fullscreen}
@@ -371,7 +374,147 @@ class ActionDialog extends React.Component {
           </Dialog>
         );
         break;
-      case "FIELDINSPECTION":
+      
+      case "CITIZEN-REVIEW":
+        return (
+          <Dialog
+            fullScreen={fullscreen}
+            open={open}
+            onClose={onClose}
+            maxWidth={false}
+            style={{ zIndex: 2000 }}
+            disableBackdropClick={true}
+          >
+            <DialogContent
+              children={
+                <Container
+                  children={
+                    <Grid
+                      container="true"
+                      spacing={12}
+                      marginTop={16}
+                      className="action-container"
+                    >
+                      <Grid
+                        style={{
+                          alignItems: "center",
+                          display: "flex"
+                        }}
+                        item
+                        sm={10}
+                      >
+                        <Typography component="h2" variant="subheading">
+                          <LabelContainer {...dialogHeader} />
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        sm={2}
+                        style={{
+                          textAlign: "right",
+                          cursor: "pointer",
+                          position: "absolute",
+                          right: "16px",
+                          top: "16px"
+                        }}
+                        onClick={onClose}
+                      >
+                        <CloseIcon />
+                      </Grid>
+                      
+                      <Grid item sm="12">
+                        <TextFieldContainer
+                          InputLabelProps={{ shrink: true }}
+                          label={fieldConfig.comments.label}
+                          onChange={e =>
+                            handleFieldChange(`${dataPath}.comment`, e.target.value)
+                          }
+                          jsonPath={`${dataPath}.comment`}
+                          placeholder={fieldConfig.comments.placeholder}
+                        />
+                      </Grid>
+
+                      <Grid item sm="12">
+                        <Typography
+                          component="h3"
+                          variant="subheading"
+                          style={{
+                            color: "rgba(0, 0, 0, 0.8700000047683716)",
+                            fontFamily: "Roboto",
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            lineHeight: "20px",
+                            marginBottom: "8px"
+                          }}
+                        >
+                          <div className="rainmaker-displayInline">
+                            <LabelContainer
+                              labelName="Supporting Documents"
+                              labelKey="WF_APPROVAL_UPLOAD_HEAD"
+                            />
+                            {isDocRequired && (
+                              <span style={{ marginLeft: 5, color: "red" }}>*</span>
+                            )}
+                          </div>
+                        </Typography>
+                        <div
+                          style={{
+                            color: "rgba(0, 0, 0, 0.60)",
+                            fontFamily: "Roboto",
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            lineHeight: "20px"
+                          }}
+                        >
+                          <LabelContainer
+                            labelName="Only .jpg and .pdf files. 5MB max file size."
+                            labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
+                          />
+                        </div>
+                        <UploadMultipleFiles
+                          maxFiles={4}
+                          inputProps={{
+                            accept: "image/*, .pdf, .png, .jpeg"
+                          }}
+                          buttonLabel={{ labelName: "UPLOAD FILES", labelKey: "TL_UPLOAD_FILES_BUTTON" }}
+                          jsonPath={`${dataPath}.wfDocuments`}
+                          maxFileSize={5000}
+                        />
+                        <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
+                          <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            style={{
+                              minWidth: "200px",
+                              height: "48px"
+                            }}
+                            className="bottom-button"
+                            onClick={() =>
+                              onButtonClick(buttonLabel, isDocRequired)
+                            }
+                          >
+                            <LabelContainer
+                              labelName={getButtonLabelName(buttonLabel)}
+                              labelKey={
+                                moduleName
+                                  ? `WF_${moduleName.toUpperCase()}_${buttonLabel}`
+                                  : ""
+                              }
+                            />
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  }
+                />
+              }
+            />
+          </Dialog>
+        );
+        break;
+
+      //Below are the statuses of the TL Workflows. This should be removed.
+      case "FIELDINSPECTION2":
         return (
           <Dialog
             fullScreen={fullscreen}
@@ -553,7 +696,7 @@ class ActionDialog extends React.Component {
           </Dialog>
         );
         break;
-      case "PENDINGAPPROVAL":
+      case "PENDINGAPPROVAL2":
         return (
           <Dialog
             fullScreen={fullscreen}
@@ -764,7 +907,7 @@ class ActionDialog extends React.Component {
           </Dialog>
         );
         break;
-        case "PENDINGPAYMENT":
+      case "PENDINGPAYMENT2":
           return (
             <Dialog
               fullScreen={fullscreen}

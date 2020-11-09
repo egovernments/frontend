@@ -55,7 +55,7 @@ export const leaseRenewalReviewDetails = getCommonCard({
   reviewDocumentDetails
 });
 
-let loadLeaseDetails = async () => {
+let loadLeaseDetails = async (action, state, dispatch) => {
   try{
     //dispatch(toggleSpinner());
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -71,7 +71,6 @@ let loadLeaseDetails = async () => {
       queryParams,
       {}
     );
-    //dispatch(toggleSpinner());
     return payload;
   }
   catch(e)
@@ -88,7 +87,7 @@ let loadLeaseDetails = async () => {
   return null;
 }
 
-let loadWorkflowMasterData = async () => {
+let loadWorkflowMasterData = async (action, state, dispatch) => {
   try{
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryParams = [
@@ -103,7 +102,8 @@ let loadWorkflowMasterData = async () => {
       queryParams,
       {}
     );
-    return payload;
+    let businessServiceData = payload;
+    localStorageSet("businessServiceData", JSON.stringify(businessServiceData.BusinessServices));
   }
   catch(e)
   {
@@ -135,55 +135,34 @@ let setDocumentsInfo = async (action, state, dispatch) => {
 const searchPreview = {
   uiFramework: "material-ui",
   name: "searchPreview",
-  beforeInitScreen:(action, state, dispatch) => {
-    //const queryValue = getQueryArg(window.location.href, "applicationNumber");
-    alert("In the search preview "+applicationNumber);
+  beforeInitScreen: (action, state, dispatch) => {
 
-    let response = loadLeaseDetails();
-    if(response && response.length > 0 && response.leases)
-      dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
+    loadLeaseDetails(action, state, dispatch).then((response)=>{
+      if(response && response.length > 0 && response.leases)
+      {
+        dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
+      }
+      
+      //toberemoved
+      if(!response.leases || response.leases.length == 0 || 
+        (response.leases && response.leases.length>0 && response.leases[0].userDetails && response.leases[0].userDetails.length == 0) ||
+        (response.leases && response.leases.length>0 && !response.leases[0].leaseDetails))
+      {
+        alert("Some values missing! Showing Default values");
+        dispatch(prepareFinalObject("lamsStore.Lease", sampleSearchResponse.leases));
+      }
 
-    //toberemoved
-    dispatch(prepareFinalObject("lamsStore.Lease", sampleSearchResponse.leases));
-
-    setDocumentsInfo(action, state, dispatch);
-
-    //dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
-    //dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", workflowCode));
-    //dispatch(prepareFinalObject("lamsStore.Lease[0].action", "APPLY"));
-
-    //dispatch(prepareFinalObject("lamsStore.allTenants", [{code:"Agra", name:"Agra", active: true, id:"pb.agra"},{code: "Pune",name: "Pune", active: true, id:"pb.pune"}, {name: "Lucknow", code:"Lucknow", active: true, id:"pb.lucknow"}]));
-    //dispatch(prepareFinalObject("lamsStore.lamsLocation", [{code:"withinCB", name:"Within CB ", active: true, id:"pb.agra"},{code: "outside CB",name: "Outside CB", active: true, id:"pb.pune"}]));
-    //dispatch(prepareFinalObject("lamsStore.lamsSurveyNumber", [{code:"131-212-A", name:"131-212-A", active: true, id:"pb.agra"},{code: "131-16",name: "131-16", active: true, id:"pb.pune"},{code: "131-145",name: "131-145", active: true, id:"pb.lucknow"}]));
-    //dispatch(prepareFinalObject("lamsStore.requiredDocuments", [{applicationDocuments:documentList}]));
+      setDocumentsInfo(action, state, dispatch);
+    });
+ 
     
-    // let sampleDoc = [{
-    //   "title":"TL_ELECTBILL",
-    //   "link":"https://13.71.65.215.nip.io/filestore/v1/files/id?fileStoreId=beb21a2a-63d2-4e36-b32c-35670007f89c&tenantId=pb",
-    //   "linkText":"View",
-    //   "name":"Document - 1",
-    // }];
-
-    //dispatch(prepareFinalObject("lamsStore.LeaseTemp[0].reviewDocData", sampleDoc));
-    //dispatch(prepareFinalObject("lamsStore.Leases", leaseData))
     dispatch(prepareFinalObject("LicensesTemp", LicensesTemp))
 
     //tobechanged  uncomment below code
-    let businessServiceData = loadWorkflowMasterData();
-    localStorageSet("businessServiceData", JSON.stringify(businessServiceData.BusinessServices));
+    loadWorkflowMasterData(action, state, dispatch);
 
     //localStorageSet("businessServiceData", JSON.stringify(businessServiceData));
 
-    //tobechanged  remove the below code
-    const testAt = getQueryArg(window.location.href, "testAt");
-    switch(testAt)
-    {
-      case "CEODEO":     dispatch(prepareFinalObject("Licenses", licenseData)); break;//licenseData, licenseDataCEODEO, licenseDataPDDE      ; break;
-      case "PDDE":    dispatch(prepareFinalObject("Licenses", licenseDataPDDE)); break;//licenseData, licenseDataCEODEO, licenseDataPDDE      ; break;
-      case "DGDE" : dispatch(prepareFinalObject("Licenses", licenseDataDGDE)); break;
-      case "MOD" : dispatch(prepareFinalObject("Licenses", licenseDataMOD)); break;
-      case "approved" :  dispatch(prepareFinalObject("Licenses", licenseDataApproved)); break;
-    }
     return action;
   },
 
