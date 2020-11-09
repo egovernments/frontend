@@ -129,7 +129,7 @@ class InboxData extends React.Component {
     workflowHistory: [],
     sortOrder: "asc",
     isSorting: false,
-    wfSlaConfig: [], 
+    wfSlaConfig: [],
     page: 0,
     rowsPerPage: 100,
   };
@@ -368,7 +368,7 @@ class InboxData extends React.Component {
                 count={data.rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                labelRowsPerPage={ <Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
+                labelRowsPerPage={<Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActionsWrapped}
@@ -443,11 +443,11 @@ class InboxData extends React.Component {
                   <div className={'inbox-table-pagination-sm'}>
                     <TablePagination
                       colSpan={6}
+                      rowsPerPageOptions={[25, 50, 100]}
                       count={data.rows.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
-                      labelRowsPerPage={ <Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
-                      rowsPerPageOptions={[50, 100, 25]}
+                      labelRowsPerPage={<Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
                       onChangePage={this.handleChangePage}
                       onChangeRowsPerPage={this.handleChangeRowsPerPage}
                       ActionsComponent={TablePaginationActionsWrapped}
