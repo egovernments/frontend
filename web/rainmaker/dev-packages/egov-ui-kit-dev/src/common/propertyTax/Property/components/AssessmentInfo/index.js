@@ -100,7 +100,11 @@ export const getUnitInfo = (units = [], propertyDetails) => {
       },
       {
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-        value: unit.unitArea ? Math.round(unit.unitArea * 9) + '' : "NA",
+        value: unit.unitArea ? unit.unitArea + '' : "NA",
+      },
+      {
+        key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
+        value: units.length>0? `${units[0].floorNo}` : "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({
@@ -163,6 +167,7 @@ const getVasikaItems = (additionalDetails) => {
 }
 
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
+  debugger;
 let hideSubsectionLabel=false;
   let assessmentItems = [];
   let subUnitItems = [];

@@ -73,6 +73,16 @@ class PTInformation extends React.Component {
       // ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0], "city.ulbGrade")}` : "MUNICIPAL CORPORATION";
       ulbGrade= "MUNICIPAL CORPORATION";
     }
+    let propertyExist = properties.hasOwnProperty('propertyDetails');
+    if(propertyExist) {
+      if(properties.propertyDetails[0].status != null || properties.propertyDetails[0].status != undefined) {
+        properties.propertyDetails[0].units && properties.propertyDetails[0].units.length > 0 && properties.propertyDetails[0].units.map( unit => {
+          if(unit.constructionDetail.builtUpArea && unit.constructionDetail.builtUpArea === unit.unitArea) {
+            unit.unitArea = Math.round(unit.unitArea * 9);
+          }
+        })
+      }
+    }
     if (properties.status == "INWORKFLOW") {
       const updatedOnwerInfo=this.updateProperty();
       properties.propertyDetails[0].owners = updatedOnwerInfo.owners;
@@ -128,7 +138,12 @@ class PTInformation extends React.Component {
                     <div style={{ display: "flex" }}>
                       <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
                       <Label label={`: ${get(properties, "propertyId")}`} fontSize="20px" />
-                    </div>
+                      <Label label="PT_APPLICATION_NO" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
+                      <Label label={`: ${get(properties, "acknowldgementNumber")}`} fontSize="20px" />
+                      <Label label="Date" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
+                      <Label label={`: ${get(properties.auditDetails, "createdTime")}`} fontSize="20px" />
+                      </div>
+                    
                     {/* <div style={{display : "flex"}}>
                       <Label label="Property ID :" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
                       <Label label="PT-JLD-2018-09-145323" fontSize="20px"/>

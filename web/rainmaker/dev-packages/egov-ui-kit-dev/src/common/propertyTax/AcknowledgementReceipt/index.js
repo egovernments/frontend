@@ -14,9 +14,27 @@ pdfMake.fonts = {
   },
 };
 
+let ulbLogo=null;
+
+export const loadUlbLogo = utenantId => {
+  var img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.onload = function() {
+    var canvas = document.createElement("CANVAS");
+    var ctx = canvas.getContext("2d");
+    canvas.height = this.height;
+    canvas.width = this.width;
+    ctx.drawImage(this, 0, 0);
+    ulbLogo= canvas.toDataURL();
+    canvas = null;
+  };
+ img.src = `/pb-egov-assets/${utenantId}/logo.png`; 
+ //img.src = '/pb-egov-assets/pb/Punjab_FS_logo.jpg'; 
+};
 export const AcknowledgementReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
   console.log("details--" , details);
   //console.log(generalMDMSDataById);
+  loadUlbLogo(address.tenantId);
   let data;
   let { owners, address, propertyDetails, header, propertyId } = details;
   let dateArray = new Date().toDateString().split(" ");
@@ -233,7 +251,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
               body: [
                 [
                   {
-                    image: receiptImageUrl || msevaLogo,
+                    image: ulbLogo || msevaLogo,
                     width: 40,
                     margin: [10, 10, 10, 10],
                   },
@@ -241,17 +259,9 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
                     //stack is used here to give multiple sections one after another in same body
                     stack: [
                       {
-                        text:
-                          getLocaleLabels(
-                            ("TENANT_TENANTS_" + address.tenantId.replace(".", "_")).toUpperCase(),
-                            ("TENANT_TENANTS_" + address.tenantId.replace(".", "_")).toUpperCase()
-                          ) +
-                          " " +
-                          getLocaleLabels(
-                            ("CORPORATION", "PT_ACK_CORPORATION_HEADER").toUpperCase(),
-                            ("CORPORATION", "PT_ACK_CORPORATION_HEADER").toUpperCase()
-                          ),
+                        text:header.header,
                         style: "receipt-logo-header",
+                        
                       },
                       {
                         text: getLocaleLabels("PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT", "PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT") || "",
@@ -505,7 +515,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
           },
           "receipt-logo-header": {
             color: "#484848",
-            fontSize: 16,
+            fontSize: 14,
             bold: true,
             // decoration: "underline",
             // decorationStyle: "solid",

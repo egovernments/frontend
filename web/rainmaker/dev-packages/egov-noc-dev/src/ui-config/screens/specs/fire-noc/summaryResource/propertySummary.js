@@ -336,7 +336,7 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       {
         jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.latitude"+","+"FireNOCs[0].fireNOCDetails.propertyDetails.address.longitude",
           callBack: checkValueForNA
       }
     ),

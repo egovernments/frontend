@@ -3,7 +3,7 @@ import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/common
 import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
 
-export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
+export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {  
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
@@ -69,7 +69,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     properties[0].institution.tenantId = properties[0].tenantId;
   }
   properties[0].creationReason = "NEWPROPERTY";
-  properties[0].superBuiltUpArea = properties[0].buildUpArea;
+  properties[0].superBuiltUpArea = (Math.round(properties[0].buildUpArea * 100) / 100).toFixed(2);
 
   properties[0].propertyType =
     properties[0].propertySubType === "SHAREDPROPERTY" || properties[0].propertySubType === "INDEPENDENTPROPERTY"

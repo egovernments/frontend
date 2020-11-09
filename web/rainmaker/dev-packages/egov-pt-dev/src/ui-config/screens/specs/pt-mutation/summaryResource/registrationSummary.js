@@ -10,8 +10,7 @@ import { gotoApplyWithStep } from "../../utils/index";
 import { checkValueForNA } from "../../utils";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 
-const registrationDetails =  getCommonGrayCard({
-  propertyLocationContainer:getCommonContainer({
+export const registrationSummaryDetails = {
     transferReason: getLabelWithValue(
       {
         labelName: "Reason for Transfer",
@@ -79,7 +78,10 @@ const registrationDetails =  getCommonGrayCard({
           callBack: checkValueForNA
       }
     )
-  })
+};
+
+const registrationDetails = getCommonGrayCard({
+  propertyLocationContainer: getCommonContainer(registrationSummaryDetails)
 });
 
 
