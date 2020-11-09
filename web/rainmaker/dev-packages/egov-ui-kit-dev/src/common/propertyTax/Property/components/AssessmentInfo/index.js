@@ -167,7 +167,6 @@ const getVasikaItems = (additionalDetails) => {
 }
 
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
-  debugger;
 let hideSubsectionLabel=false;
   let assessmentItems = [];
   let subUnitItems = [];

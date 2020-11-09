@@ -53,7 +53,7 @@ const formConfig = {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", subTypeObject.propertyType));
         } else {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", field.value));
-          dispatch(prepareFormData("Properties[0].propertyDetails[0].propertySubType", null));
+          dispatch(prepareFormData("Properties[0].propertyDetails[0].propertySubType", field.value));
         }
       },
       dropDownData: [],
