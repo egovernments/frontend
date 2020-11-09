@@ -41,6 +41,7 @@ class TastStatusContainer extends React.Component {
 
   render() {
     const { classes, ProcessInstances, moduleName} = this.props;
+    console.log("Check the values here ",ProcessInstances,moduleName);
     let currentObj =
       ProcessInstances && ProcessInstances[ProcessInstances.length - 1];
       if(currentObj && currentObj.businessService && currentObj.businessService === "BPA"){

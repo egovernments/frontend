@@ -179,7 +179,7 @@ export const tradeLicenseApplication = getCommonCard({
         required: false,
         localePrefix: {
           moduleName: "WF",
-          masterName: "LAMS_NewLR"
+          masterName: "LAMS_NewLR_V2"
         },
         className: "autocomplete-dropdown",
         labelsFromLocalisation: true,

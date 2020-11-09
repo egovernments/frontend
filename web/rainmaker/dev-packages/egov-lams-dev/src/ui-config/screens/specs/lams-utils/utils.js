@@ -7,7 +7,7 @@ import commonConfig from "config/common.js";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getLocaleLabels, getQueryArg, getTodaysDateInYMD, getTransformedLocalStorgaeLabels, getObjectKeys, getObjectValues, } from "egov-ui-framework/ui-utils/commons";
 
-export const workflowCode = "LAMS_NewLR";
+export const workflowCode = "LAMS_NewLR_V2";
 
 export const businessService = "LAMS";
 

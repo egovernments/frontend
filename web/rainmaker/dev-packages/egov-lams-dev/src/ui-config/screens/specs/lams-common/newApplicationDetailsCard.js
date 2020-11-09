@@ -122,6 +122,10 @@ import PropTypes from "prop-types";
               labelKey: "LAMS_APPL_CATEGORY_PLACEHOLDER"
             },
             required: true,
+            localePrefix: {
+              moduleName: "LAMS",
+              masterName: "CATEGORY"
+            },
             data: [
               {
                 code: "cantonment",
@@ -156,6 +160,10 @@ import PropTypes from "prop-types";
             },
             required: true,
             //data: null,
+            localePrefix: {
+              moduleName: "TENANT",
+              masterName: "TENANTS"
+            },
             sourceJsonPath:"lamsStore.allTenants",
             jsonPath: "lamsStore.Lease[0].tenantId",
             autoSelect: true,
@@ -170,6 +178,10 @@ import PropTypes from "prop-types";
               placeholder: {
                 labelName: "Select Location Type",
                 labelKey: "LAMS_APPL_LOC_PLACEHOLDER"
+              },
+              localePrefix: {
+                moduleName: "LAMS",
+                masterName: "LOCATED"
               },
               required: true,
               data: [

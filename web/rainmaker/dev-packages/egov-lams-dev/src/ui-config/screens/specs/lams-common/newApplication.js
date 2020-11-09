@@ -18,6 +18,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import {newApplicationDetailsCard, newApplicationDocumentsCard} from "./newApplicationDetailsCard";
 import {footer} from "./newApplicationFooter";
 import {documentList} from "./documentList";
+import { ifUserRoleExists } from "../utils";
 
 
 const getData = async (action, state, dispatch, tenantId) => {
@@ -58,6 +59,12 @@ const newApplication = {
     dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
     dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", workflowCode));
     dispatch(prepareFinalObject("lamsStore.Lease[0].action", "APPLY"));
+    
+    //tobechanged
+    let tenantId2 = process.env.REACT_APP_NAME === "Citizen"? getQueryArg(window.location.href, "tenantId") : state.auth.userInfo.tenantId;
+    if(!ifUserRoleExists("CITIZEN")) //Only for employee directly set the tenantId
+      dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", state.auth.userInfo.tenantId));
+
     //dispatch(prepareFinalObject("lamsStore.allTenants", [{code:"Agra", name:"Agra", active: true, id:"pb.agra"},{code: "Pune",name: "Pune", active: true, id:"pb.pune"}, {name: "Lucknow", code:"Lucknow", active: true, id:"pb.lucknow"}]));
     //dispatch(prepareFinalObject("lamsStore.lamsLocation", [{code:"withinCB", name:"Within CB ", active: true, id:"pb.agra"},{code: "outside CB",name: "Outside CB", active: true, id:"pb.pune"}]));
     //dispatch(prepareFinalObject("lamsStore.lamsSurveyNumber", [{code:"131-212-A", name:"131-212-A", active: true, id:"pb.agra"},{code: "131-16",name: "131-16", active: true, id:"pb.pune"},{code: "131-145",name: "131-145", active: true, id:"pb.lucknow"}]));
