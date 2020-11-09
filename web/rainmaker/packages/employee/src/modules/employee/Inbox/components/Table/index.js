@@ -368,6 +368,7 @@ class InboxData extends React.Component {
                 count={data.rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
+                labelRowsPerPage={ <Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActionsWrapped}
@@ -445,6 +446,7 @@ class InboxData extends React.Component {
                       count={data.rows.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
+                      labelRowsPerPage={ <Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
                       rowsPerPageOptions={[50, 100, 25]}
                       onChangePage={this.handleChangePage}
                       onChangeRowsPerPage={this.handleChangeRowsPerPage}
