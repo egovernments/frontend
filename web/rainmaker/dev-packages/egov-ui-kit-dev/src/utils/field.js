@@ -142,6 +142,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, disabled, onTextFieldI
             errorStyle={fieldProps.errorStyle}
             pattern={fieldProps.pattern}
             value={fieldProps.value}
+            defaultSort={fieldProps.defaultSort}
             canFetchValueFromJsonpath={false}
             formName={fieldProps.formName}
             isClearable={true}
