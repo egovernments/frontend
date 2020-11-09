@@ -426,7 +426,7 @@ class TableData extends Component {
         text: item.state ? (
           <Label
             label={`WF_${item.businessService.toUpperCase()}_${item.state.state}`}
-            defaultLabel={getWFstatus(item.state.state)}
+            defaultLabel={`WF_${item.businessService.toUpperCase()}_${item.state.state}`}
             color="#000000"
           />
         ) : (
