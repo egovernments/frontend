@@ -31,7 +31,6 @@ import acknowledgementCard from "./acknowledgementUtils";
 
 
 const getData = async (action, state, dispatch, tenantId) => {
-  alert("Trying to get mdms data..");
   await getMdmsData(action, state, dispatch);
   dispatch(
     prepareFinalObject(
@@ -63,32 +62,23 @@ const getClasses = () =>{
   return PropTypes.object.isRequired;
 }
 const handleFileUpload = () =>{
-  alert("handlingFileUpload");
 }
 const onButtonClick = () =>{
-  alert("Button clicked");
 }
 const tradeCategoryChange = () =>{
-  alert("Trade Category Change");
 }
 const tradeTypeChange = () =>{
-  alert("Trade Type changed");
 }
 const tradeSubTypeChange = () =>{
-  alert("In trade sub type change");
 }
 const cbChanged = () => {
-  //alert("Cant Board Changed");
 }
 const locationChanged = () =>{
-  //alert(locationChanged);
 }
 
 const tab1Click = () =>{
-  //alert(locationChanged);
 }
 const tab2Click = () =>{
-  //alert(locationChanged);
 }
 const onRowClick = rowData => {
   const receiptQueryString = [
@@ -218,7 +208,6 @@ const applicationDetails = {
     return action;
   },
   afterInitForm:(action, state, dispatch) => {
-    alert("Hey in the after init screen");
   },
   components: {
     div: {

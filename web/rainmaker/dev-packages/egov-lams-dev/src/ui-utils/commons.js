@@ -569,24 +569,17 @@ export const handleFileUpload = (event, handleDocument, props) => {
       }
       try{
       if (uploadDocument) {
-        //alert("Uploading document");
         store.dispatch(toggleSpinner());
-        //alert("Test 1");
         if (file.type.match(/^image\//)) {
-          //alert("Test 2");
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,
             moduleName,
             file,
             commonConfig.tenantId
           );
-          //alert("Upload Success")
           store.dispatch(toggleSpinner());
-          //alert("Handling document")
           handleDocument(file, fileStoreId);
-          //alert("Done");
         } else {
-          //alert("Test 3");
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,
             moduleName,

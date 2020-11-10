@@ -21,25 +21,18 @@ import PropTypes from "prop-types";
     return PropTypes.object.isRequired;
   }
   const handleFileUpload = () =>{
-    alert("handlingFileUpload");
   }
   const onButtonClick = () =>{
-    alert("Button clicked");
   }
   const tradeCategoryChange = () =>{
-    alert("Trade Category Change");
   }
   const tradeTypeChange = () =>{
-    alert("Trade Type changed");
   }
   const tradeSubTypeChange = () =>{
-    alert("In trade sub type change");
   }
   const cbChanged = () => {
-    //alert("Cant Board Changed");
   }
   const locationChanged = () =>{
-    //alert(locationChanged);
   }
   export const newApplicationDetailsCard = getCommonCard(
       {

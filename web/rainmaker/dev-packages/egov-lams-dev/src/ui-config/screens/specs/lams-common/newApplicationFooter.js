@@ -32,8 +32,6 @@ const checkIfFormIsValid = async (state, dispatch) => {
 
   isFormValid = isLeaseDetailsValid;
 
-  alert("Form Valid "+isFormValid);
-
   if (isFormValid) {
     try {
       dispatch(toggleSpinner());
@@ -48,7 +46,6 @@ const checkIfFormIsValid = async (state, dispatch) => {
       
       dispatch(toggleSpinner());
       //ToBeRemoved
-      alert("Trying to post");
       payload = await httpRequest(
         "post",
         "lams-services/v1/_create",
@@ -58,7 +55,6 @@ const checkIfFormIsValid = async (state, dispatch) => {
           leases: [lease],
         }
       );
-      alert("Posted");
       dispatch(toggleSpinner());
       console.log("Response is ", payload);
       //toBeRemoved

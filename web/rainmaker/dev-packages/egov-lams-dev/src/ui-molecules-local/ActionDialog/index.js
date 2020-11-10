@@ -191,7 +191,6 @@ class ActionDialog extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       `lamsStore.Lease[0].status`
     );
-    //alert("The status is "+status);
     switch (status) {
       case "APPLIED":
       case "APPROVED":

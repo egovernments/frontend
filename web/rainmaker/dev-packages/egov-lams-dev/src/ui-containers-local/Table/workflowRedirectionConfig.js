@@ -1,5 +1,4 @@
 export const getWFConfig = (module, businessService) => {
-  alert("The module is "+module);
   switch (module.toUpperCase()) {
     case "LAMS-LR-SERVICES":
       return {

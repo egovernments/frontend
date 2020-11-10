@@ -21,8 +21,6 @@ export const loadSurveyNumbers = async (action, state, dispatch) => {
 
   console.log("Check values now ", applicationType, category, located);
 
-  alert("Check now");
-
   const queryParams = [{ key: "applicationType", value: applicationType },
     { key: "category", value: category },
     { key: "located", value: located }
@@ -102,7 +100,6 @@ export const getMdmsData = async (action, state, dispatch) => {
     };
     try {
       let payload = null;
-      alert("Payload set");
       payload = await httpRequest(
         "post",
         "/egov-mdms-service/v1/_search",
@@ -110,7 +107,6 @@ export const getMdmsData = async (action, state, dispatch) => {
         [],
         mdmsBody
       );
-      alert("Payload posted");
       console.log("Payload now is ",payload);
       const localities = get(
         state.screenConfiguration,
@@ -195,7 +191,6 @@ export const loadMdmsData = async (action, state, dispatch) => {
 }
 
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
-  alert("In the update mdms drop downs");
   const structType = get(
     state,
     "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.structureType"

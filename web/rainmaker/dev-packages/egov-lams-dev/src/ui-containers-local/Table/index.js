@@ -106,8 +106,8 @@ class InboxData extends React.Component {
     // if (processInstances && processInstances.length > 0) {
     //   await addWflowFileUrl(processInstances, prepareFinalObject);
     // }
-    console.log("Check now ");
-    console.log(getWFConfig(row[0].hiddenText, row[0].subtext));
+    //console.log("Check now ");
+    //console.log(getWFConfig(row[0].hiddenText, row[0].subtext));
 
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText, row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText, row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;

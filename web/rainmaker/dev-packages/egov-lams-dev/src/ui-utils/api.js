@@ -102,11 +102,9 @@ export const loginRequest = async (username = null, password = null) => {
   let apiError = "Api Error";
   try {
     // api call for login
-    alert("Logged in");
     return;
   } catch (e) {
     apiError = e.message;
-    // alert(e.message);
   }
 
   throw new Error(apiError);
@@ -115,7 +113,6 @@ export const loginRequest = async (username = null, password = null) => {
 export const logoutRequest = async () => {
   let apiError = "Api Error";
   try {
-    alert("Logged out");
     return;
   } catch (e) {
     apiError = e.message;

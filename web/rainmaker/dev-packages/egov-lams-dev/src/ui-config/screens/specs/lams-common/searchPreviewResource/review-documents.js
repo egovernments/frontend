@@ -50,7 +50,6 @@ export const getReviewDocuments = (isEditable = true) => {
             action: "condition",
             callBack: (state, dispatch) => {
               //changeStep(state, dispatch, "", 2);
-              alert("In the change");
             }
           }
         },

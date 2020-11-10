@@ -25,8 +25,11 @@ const styles = {
   }
 };
 
-
 class SingleApplication extends React.Component {
+
+  componentDidMount = () => {
+    
+  };
 
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbar } = this.props;
@@ -47,7 +50,27 @@ class SingleApplication extends React.Component {
   };
 
   onCardClick = async (item) => {
+    console.log("The item is ", item);
     const { moduleName, toggleSnackbar, setRoute } = this.props;
+    if(moduleName === "LAMS")
+    {
+      switch(item.status)
+      {
+        case "APPLIED":
+        case "APPROVED":
+        case "REJECTED":
+        case "CEO-EXAMINATION":
+        case "DEO-EXAMINATION":
+        case "PDDE-EXAMINATION":
+        case "DGDE-EXAMINATION":
+        case "MOD-EXAMINATION":
+        case "CITIZEN-REVIEW":
+        default:
+          setRoute(`/lams-common/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+          break;
+      }
+    }
+    else //Rest of the modules can be removed.
     if (moduleName === "TL") {
       const wfCode = get(item, "workflowCode");
       const businessServiceQueryObject = [
@@ -162,12 +185,15 @@ class SingleApplication extends React.Component {
     } else {
       LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath, ""))}` : `${get(item, content.jsonPath, "")}`;
     }
+    if(content.isDate)
+    {
+      LabelKey = `${epochToDate(get(item, content.jsonPath, ""))}`;
+    }
     return LabelKey;
   };
 
   render() {
     const { searchResults, classes, contents, moduleName, setRoute } = this.props;
-    alert("Hey i am in the render");
 
     return (
       <div className="application-card">
@@ -238,7 +264,7 @@ class SingleApplication extends React.Component {
                       // setRoute(url);
                     }}>
                       <Label
-                        labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
+                        labelKey={"LAMS_VIEW_DETAILS"}
                         textTransform={"uppercase"}
                         style={{
                           color: "#fe7a51",

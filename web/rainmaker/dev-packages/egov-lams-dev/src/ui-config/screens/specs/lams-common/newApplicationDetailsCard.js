@@ -30,19 +30,16 @@ import PropTypes from "prop-types";
     return PropTypes.object.isRequired;
   }
   const handleFileUpload = () =>{
-    alert("handlingFileUpload");
+
   }
   const onButtonClick = () =>{
-    alert("Button clicked");
+
   }
   const tradeCategoryChange = () =>{
-    alert("Trade Category Change");
   }
   const tradeTypeChange = () =>{
-    alert("Trade Type changed");
   }
   const tradeSubTypeChange = () =>{
-    alert("In trade sub type change");
   }
   const onLocatedChanged = (action, state, dispatch) =>{
     loadSurveyNumbers(action, state, dispatch);
@@ -56,7 +53,6 @@ import PropTypes from "prop-types";
       state.screenConfiguration.preparedFinalObject,
       "lamsStore.Lease[0].category"
     );
-    //alert("Selected Category is "+selectedCategory);
     if(selectedCategory.toLowerCase() ==   "cantonment")
     {
       dispatch(
@@ -71,7 +67,6 @@ import PropTypes from "prop-types";
   }
   
   const locationChanged = () =>{
-    //alert(locationChanged);
   }
 
   

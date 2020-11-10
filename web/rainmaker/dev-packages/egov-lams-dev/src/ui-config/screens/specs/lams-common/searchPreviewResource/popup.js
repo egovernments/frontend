@@ -21,7 +21,6 @@ import {showHideAdhocPopup} from "../../utils";
   import set from "lodash/set";
 
   const updateAdhoc = (state, dispatch) => {
-      alert("In updateAdhoc");
   };
 
 export const popup = getCommonContainer({

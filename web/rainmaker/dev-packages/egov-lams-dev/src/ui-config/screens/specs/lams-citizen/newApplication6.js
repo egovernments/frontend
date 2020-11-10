@@ -31,7 +31,6 @@ import acknowledgementCard from "./acknowledgementUtils";
 
 
 const getData = async (action, state, dispatch, tenantId) => {
-  alert("Trying to get mdms data..");
   await getMdmsData(action, state, dispatch);
   dispatch(
     prepareFinalObject(
@@ -63,32 +62,23 @@ const getClasses = () =>{
   return PropTypes.object.isRequired;
 }
 const handleFileUpload = () =>{
-  alert("handlingFileUpload");
 }
 const onButtonClick = () =>{
-  alert("Button clicked");
 }
 const tradeCategoryChange = () =>{
-  alert("Trade Category Change");
 }
 const tradeTypeChange = () =>{
-  alert("Trade Type changed");
 }
 const tradeSubTypeChange = () =>{
-  alert("In trade sub type change");
 }
 const cbChanged = () => {
-  //alert("Cant Board Changed");
 }
 const locationChanged = () =>{
-  //alert(locationChanged);
 }
 
 const tab1Click = () =>{
-  //alert(locationChanged);
 }
 const tab2Click = () =>{
-  //alert(locationChanged);
 }
 const onRowClick = rowData => {
   const receiptQueryString = [
@@ -225,12 +215,11 @@ const applicationDetails = {
         name:"Document - 2"
       }]
     ));
-    dispatch(prepareFinalObject("searchResults",[{comment:null,id:'620bcc64-789c-4add-b0e6-ea10af8d86c8',tenantId:'pb.secunderabad',businessService:'TL',licenseType:'PERMANENT',applicationType:'NEW',workflowCode:'LAMS_NewLR',licenseNumber:'TL-CB-SECU-2020-001470',applicationNumber:'TL-APP-SECU-2020-10-14-004135',oldLicenseNumber:null,propertyId:null,oldPropertyId:null,accountId:null,tradeName:'Dhaba',applicationDate:1602665894343,commencementDate:1602700199000,issuedDate:1602668186092,financialYear:'2019-20',validFrom:1554076799000,validTo:1585679399000,action:'PAY',assignee:null,wfDocuments:null,status:'APPROVED'},{comment:null,id:'620bcc64-789c-4add-b0e6-ea10af8d86c8',tenantId:'pb.secunderabad',businessService:'TL',licenseType:'PERMANENT',applicationType:'NEW',workflowCode:'LAMS_NewLR',licenseNumber:'TL-CB-SECU-2020-001470',applicationNumber:'TL-APP-SECU-2020-10-14-004135',oldLicenseNumber:null,propertyId:null,oldPropertyId:null,accountId:null,tradeName:'Dhaba',applicationDate:1602665894343,commencementDate:1602700199000,issuedDate:1602668186092,financialYear:'2019-20',validFrom:1554076799000,validTo:1585679399000,action:'PAY',assignee:null,wfDocuments:null,status:'APPROVED'}]));
+    dispatch(prepareFinalObject("searchResults",[{comment:null,id:'620bcc64-789c-4add-b0e6-ea10af8d86c8',tenantId:'pb.secunderabad',businessService:'TL',licenseType:'PERMANENT',applicationType:'NEW',workflowCode:'LAMS_NewLR_V2',licenseNumber:'TL-CB-SECU-2020-001470',applicationNumber:'TL-APP-SECU-2020-10-14-004135',oldLicenseNumber:null,propertyId:null,oldPropertyId:null,accountId:null,tradeName:'Dhaba',applicationDate:1602665894343,commencementDate:1602700199000,issuedDate:1602668186092,financialYear:'2019-20',validFrom:1554076799000,validTo:1585679399000,action:'PAY',assignee:null,wfDocuments:null,status:'APPROVED'},{comment:null,id:'620bcc64-789c-4add-b0e6-ea10af8d86c8',tenantId:'pb.secunderabad',businessService:'TL',licenseType:'PERMANENT',applicationType:'NEW',workflowCode:'LAMS_NewLR_V2',licenseNumber:'TL-CB-SECU-2020-001470',applicationNumber:'TL-APP-SECU-2020-10-14-004135',oldLicenseNumber:null,propertyId:null,oldPropertyId:null,accountId:null,tradeName:'Dhaba',applicationDate:1602665894343,commencementDate:1602700199000,issuedDate:1602668186092,financialYear:'2019-20',validFrom:1554076799000,validTo:1585679399000,action:'PAY',assignee:null,wfDocuments:null,status:'APPROVED'}]));
     const applicationNumber = "dummyApplicationNumber";
     return action;
   },
   afterInitForm:(action, state, dispatch) => {
-    alert("Hey in the after init screen");
   },
   components: {
     div: {

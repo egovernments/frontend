@@ -61,5 +61,6 @@ export {
   Stepper,
   TaskDialog,
   TaskStatusComponents,
-  ActionDialog
+  ActionDialog,
+  SingleApplication
 };

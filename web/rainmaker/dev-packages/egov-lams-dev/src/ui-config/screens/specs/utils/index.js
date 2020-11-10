@@ -242,7 +242,6 @@ export const getDialogButton = (name, key, screenKey) => {
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        alert("ShowHideBreakuppopup");
         //showHideBreakupPopup(state, dispatch, screenKey);
       }
     }

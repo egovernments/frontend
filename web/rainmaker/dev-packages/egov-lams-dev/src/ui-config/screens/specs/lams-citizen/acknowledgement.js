@@ -20,9 +20,6 @@ const acknowledgement = {
   uiFramework: "material-ui",
   name: "acknowledgement",
   beforeInitScreen:(action, state, dispatch) => {
-    //alert("Acknowledgement screen");
-    
-    alert("Application number is "+applicationNumber);
     dispatch(toggleSpinner());
     return action;
   },

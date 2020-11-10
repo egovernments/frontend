@@ -25,7 +25,6 @@ import {viewDocuments} from "../lams-common/searchPreviewResource/viewDocuments"
 
 
 const getData = async (action, state, dispatch, tenantId) => {
-  alert("Trying to get mdms data..");
   await getMdmsData(action, state, dispatch);
   dispatch(
     prepareFinalObject(
@@ -57,25 +56,18 @@ const getClasses = () =>{
   return PropTypes.object.isRequired;
 }
 const handleFileUpload = () =>{
-  alert("handlingFileUpload");
 }
 const onButtonClick = () =>{
-  alert("Button clicked");
 }
 const tradeCategoryChange = () =>{
-  alert("Trade Category Change");
 }
 const tradeTypeChange = () =>{
-  alert("Trade Type changed");
 }
 const tradeSubTypeChange = () =>{
-  alert("In trade sub type change");
 }
 const cbChanged = () => {
-  //alert("Cant Board Changed");
 }
 const locationChanged = () =>{
-  //alert(locationChanged);
 }
 
 const applicationDetails = {

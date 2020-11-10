@@ -71,7 +71,6 @@ class WorkFlowContainer extends React.Component {
         );
 
         console.log(processInstances);
-        alert("Check process instance now");
         addWflowFileUrl(processInstances, prepareFinalObject);
       } else {
         toggleSnackbar(
@@ -316,7 +315,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   createWorkFLow = async (label, isDocRequired) => {
-    alert("Creating workflow");
+    //alert("Creating workflow");
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
 
@@ -358,7 +357,7 @@ class WorkFlowContainer extends React.Component {
       const { lamsStore } = preparedFinalObject;
       const status = lamsStore.Lease[0].status;
     
-      alert("Status checko "+status);
+      //alert("Status checko "+status);
       switch(status){
         
         //Below are TL Specific code. PENDINGAPPROVAL and FIELDINSPECTION. To be removed later.
@@ -535,7 +534,6 @@ class WorkFlowContainer extends React.Component {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    alert("AHey chekc and edit the data in New TL in the businessServiceData");
     const data = find(businessServiceData, { businessService: moduleName });
     const state = find(data.states, { applicationStatus: status });
     console.log("data.states ",data.states, status);

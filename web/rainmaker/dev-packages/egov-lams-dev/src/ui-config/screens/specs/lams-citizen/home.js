@@ -53,19 +53,6 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
-    alert("In the home page 1");
-    //dispatch(prepareFinalObject('citiesByModule.citizenTenantId', ''))
-    alert("In the home page 2");
-    //fetchData(action, state, dispatch);
-    const moduleDetails = [
-      {
-        moduleName: 'TradeLicense',
-        masterDetails: [{ name: 'Documents' }]
-      }
-    ];
-    alert("In the home page 3");
-    //getRequiredDocData(action, dispatch, moduleDetails,state);
-    alert("In the home page 4");
     return action;
   },
   components: {

@@ -17,7 +17,6 @@ import {documentList} from "../lams-common/documentList";
 
 
 const getData = async (action, state, dispatch, tenantId) => {
-  alert("Trying to get mdms data..");
   await getMdmsData(action, state, dispatch);
   dispatch(
     prepareFinalObject(

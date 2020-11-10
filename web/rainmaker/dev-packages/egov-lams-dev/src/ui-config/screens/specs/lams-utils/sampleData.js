@@ -2121,7 +2121,7 @@ export const sampleSearchResponse = {
       "applicationType": "RENEWAL",
       "workflowCode": "LAMS_NewLR_V2",
       "applicationNumber": "LR-APP-AGRA-2020-10-19-004161",
-      "applicationDate": 1603081340442,
+      "applicationDate": 1604996601979,
       "action": "FORWARD",
       "assignee": null,
       "wfDocuments": null,
