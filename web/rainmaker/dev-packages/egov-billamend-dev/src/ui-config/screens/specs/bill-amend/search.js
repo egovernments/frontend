@@ -1,11 +1,11 @@
-import { getBreak, getCommonHeader, getLabel ,getCommonSubHeader} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonHeader, getLabel, getCommonSubHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg,} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { searchCard } from "./searchResources/searchCard";
 import { searchResults } from "./searchResources/searchResults";
-import {getRequiredDocData,showHideAdhocPopup} from "../utils"
+import { getRequiredDocData, showHideAdhocPopup } from "../utils"
 import "./index.css";
 
 const header = getCommonHeader({
@@ -36,11 +36,11 @@ const getMDMSData = async (action, state, dispatch) => {
           ]
         },
         {
-          moduleName: "BillAmendment", 
+          moduleName: "BillAmendment",
           masterDetails: [
             { name: "documentObj" }
-           ] 
-         },
+          ]
+        },
         {
           moduleName: "common-masters",
           masterDetails: [
@@ -62,10 +62,10 @@ const getMDMSData = async (action, state, dispatch) => {
   };
   try {
     getRequiredDocData(action, dispatch, [{
-      moduleName: "BillAmendment", 
+      moduleName: "BillAmendment",
       masterDetails: [
         { name: "documentObj" }
-       ] 
+      ]
     }])
     const payload = await httpRequest(
       "post",
@@ -135,13 +135,6 @@ const screenConfig = {
                 sm: 12
               },
               ...header
-            },
-            subHeader: {
-              gridDefination: {
-                xs: 12,
-                sm: 12
-              },
-              ...subHeader
             },
             newApplicationButton: {
               componentPath: "Button",
@@ -225,6 +218,19 @@ const screenConfig = {
               },
               visible: false
             }
+          }
+        },
+        subHeaderDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          children: {
+            subHeader: {
+              gridDefination: {
+                xs: 12,
+                sm: 12
+              },
+              ...subHeader
+            },
           }
         },
         searchCard,
