@@ -277,45 +277,6 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
 };
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
   const tenant = getTenantId();
-  switch (moduleName) {
-    case "FireNoc":
-      return (state, dispatch) => {
-        dispatch(prepareFinalObject("FireNOCs", []));
-        dispatch(prepareFinalObject("DynamicMdms", {}));
-        dispatch(prepareFinalObject("documentsUploadRedux", {}));
-        const applyUrl =
-          process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
-        dispatch(setRoute(applyUrl));
-      };
-    case "PropertyTax":
-      return (state, dispatch) => {
-        dispatch(prepareFinalObject("documentsUploadRedux", {}));
-        const applyUrl = `/property-tax/assessment-form`;
-        dispatch(setRoute(applyUrl));
-      };
-    case "ws-services-masters":
-      return (state, dispatch) => {
-        dispatch(prepareFinalObject("WaterConnection", []));
-        dispatch(prepareFinalObject("SewerageConnection", []));
-        dispatch(prepareFinalObject("applyScreen", {}));
-        dispatch(prepareFinalObject("searchScreen", {}));
-        const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
-        dispatch(setRoute(applyUrl));
-      };
-    case 'TradeLicense':
-      if (closePopUp) {
-        return (state, dispatch) => {
-          dispatch(prepareFinalObject("Licenses", []));
-          dispatch(prepareFinalObject("LicensesTemp", []));
-          dispatch(prepareFinalObject("DynamicMdms", {}));
-          const applyUrl = `/tradelicence/apply?tenantId=${tenant}`;
-          dispatch(
-            handleField("search", "components.adhocDialog", "props.open", false)
-          );
-          dispatch(setRoute(applyUrl));
-        };
-      }
-  }
 }
 export const getCommonGrayCard = children => {
   return {
