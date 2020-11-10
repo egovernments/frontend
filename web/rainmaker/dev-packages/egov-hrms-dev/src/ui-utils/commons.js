@@ -18,6 +18,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
+import { getphotoFileStoreId } from"egov-ui-kit/utils/localStorageUtils/index";
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {
@@ -41,6 +42,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
       "",
       queryObject
     );
+    response.Employees[0].user.photo= getphotoFileStoreId();
     return response;
   } catch (error) {
     dispatch(

@@ -21,6 +21,9 @@ export const getLocale = () => {
 export const getModule = () => {
   return localStorage.getItem("module");
 };
+export const getphotoFileStoreId =() =>{
+  return localStorage.getItem("photofileStoreId");
+};
 
 //SET methods
 export const setUserInfo = (userInfo) => {
@@ -44,6 +47,9 @@ export const setModule = (moduleName) => {
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
 };
+export const setphotoFileStoreId=(filestoreId) =>{
+  localStorageSet("photofileStoreId",filestoreId);
+} 
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {

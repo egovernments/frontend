@@ -4,6 +4,7 @@ import { httpRequest, loginRequest, uploadFile } from "egov-ui-kit/utils/api";
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 import { validateForm } from "./utils";
 import transformer from "config/forms/transformers";
+import { setphotoFileStoreId } from"/egov-ui-kit/utils/localStorageUtils/index";
 
 export const initForm = (form, recordData) => {
   return {
@@ -126,6 +127,9 @@ export const fileUpload = (formKey, fieldKey, fileObject, ulbLevel) => {
     dispatch(fileUploadPending(formKey, fieldKey, fileObject));
     try {
       const fileStoreId = await uploadFile(FILE_UPLOAD.POST.URL, fileObject.module, fileObject.file, ulbLevel);
+      if(fieldKey=="photo"){
+        setphotoFileStoreId(fileStoreId);
+      }
       dispatch(fileUploadCompleted(formKey, fieldKey, fileStoreId, fileName));
     } catch (error) {
       dispatch(fileUploadError(formKey, fieldKey, error.message, fileName));
