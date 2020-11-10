@@ -71,7 +71,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
     //Add onClickDefination and RoleDefination later
     onClickDefination: {
       action: "page_change",
-      path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=TL`
+      path:`search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`,
       //    /egov-common/pay?consumerCode=PB-TL-2020-09-03-023202&tenantId=pb.mohali&businessService=TL
      
       // process.env.REACT_APP_SELF_RUNNING === "true"
