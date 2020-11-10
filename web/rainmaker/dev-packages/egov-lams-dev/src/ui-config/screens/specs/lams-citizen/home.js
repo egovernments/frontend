@@ -35,7 +35,7 @@ const cardItems = [
       labelName: "My Applications"
     },
     icon: <FormIcon />,
-    route: "my-applications"
+    route: "myApplications"
   }
   // ,{
   //   label: {

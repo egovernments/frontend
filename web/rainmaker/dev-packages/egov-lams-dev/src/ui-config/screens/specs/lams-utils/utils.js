@@ -7,10 +7,6 @@ import commonConfig from "config/common.js";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getLocaleLabels, getQueryArg, getTodaysDateInYMD, getTransformedLocalStorgaeLabels, getObjectKeys, getObjectValues, } from "egov-ui-framework/ui-utils/commons";
 
-export const workflowCode = "LAMS_NewLR_V2";
-
-export const businessService = "LAMS";
-
 export const loadSurveyNumbers = async (action, state, dispatch) => {
   let requestBody = {};
   let payload = null;
@@ -174,9 +170,6 @@ export const loadMdmsData = async (action, state, dispatch) => {
     );
     console.log("Mdms Data Recieved is ",payload);
     if (payload) {
-      const tenants = get(payload, "MdmsRes.tenant.tenants");
-      dispatch(prepareFinalObject("lamsStore.allTenants", tenants));
-
       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
       const citymodule = get(payload, "MdmsRes.tenant.citymodule");
       const liveTenants = citymodule && citymodule.filter(item => item.code === "UC");
@@ -184,6 +177,7 @@ export const loadMdmsData = async (action, state, dispatch) => {
         prepareFinalObject("applyScreenMdmsData.tenant.citiesByModule", get(liveTenants[0], "tenants"))
       );
     }
+    return payload;
   }
   catch (e) {
     console.log(e);
