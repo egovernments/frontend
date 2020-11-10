@@ -73,7 +73,7 @@ export const callPGService = async (state, dispatch) => {
           callbackUrl
         }
       };
-      debugger;
+      
       const goToPaymentGateway = await httpRequest(
         "post",
         "pg-service/transaction/v1/_create",

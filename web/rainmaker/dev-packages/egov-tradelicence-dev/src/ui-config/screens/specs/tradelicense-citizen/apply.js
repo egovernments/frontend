@@ -72,7 +72,7 @@ const updateSearchResults = async (
         )
       )
     );
-    debugger;
+  
     dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
     dispatch(
       handleField(

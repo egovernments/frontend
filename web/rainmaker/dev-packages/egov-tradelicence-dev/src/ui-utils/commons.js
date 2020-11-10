@@ -469,7 +469,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
         updatedTenant = get(updateResponse.Licenses[0], "tenantId");
         const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
-        debugger;
+  
         const bsQueryObject = [
           { key: "tenantId", value: tenantId },
           { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }

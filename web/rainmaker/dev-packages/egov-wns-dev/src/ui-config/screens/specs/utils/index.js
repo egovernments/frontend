@@ -1617,7 +1617,7 @@ export const updateDropDowns = async (
   //   "applyScreenMdmsData.TradeLicense.TradeType",
   //   []
   // );
-  // // debugger;
+  // // 
   // const tradeTypeDropdownData =
   //   tradeTypes &&
   //   Object.keys(tradeTypes).map(item => {

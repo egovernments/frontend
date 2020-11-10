@@ -92,7 +92,7 @@ export const searchResults = {
 const onRowClick = rowData => {
   console.log("=====rowData[7]===",rowData[6].props.children);
 
-  debugger;
+ 
   if(rowData[6].props.children === "Renewal" && rowData[9]==="INITIATED"){
     window.location.href = `apply?applicationNumber=${rowData[0]}&licenseNumber=${rowData[1]}&tenantId=${
       rowData[8]

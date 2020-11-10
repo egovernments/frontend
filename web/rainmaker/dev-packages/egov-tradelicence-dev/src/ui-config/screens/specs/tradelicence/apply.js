@@ -271,7 +271,7 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-      debugger;
+     
       console.log("========renewal=====");
       dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
      

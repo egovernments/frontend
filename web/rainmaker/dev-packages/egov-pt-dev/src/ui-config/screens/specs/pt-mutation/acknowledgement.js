@@ -77,7 +77,7 @@ export const header = getCommonContainer({
   const applicationDownloadObject = {
     label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
     link: () => {
-      debugger;
+      
       // generatePdfFromDiv("download" ,applicationNumber, "#print-mutation-application-pdf" )
       generatePTMAcknowledgement(get(
         state,

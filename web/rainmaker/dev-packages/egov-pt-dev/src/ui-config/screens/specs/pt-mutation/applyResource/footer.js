@@ -255,7 +255,7 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
-    debugger;
+  
     propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(

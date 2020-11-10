@@ -6498,7 +6498,7 @@ const generatePdf = async (state, dispatch, type) => {
       application_data && pdfMake.createPdf(application_data).print();
       break;
     case "receipt_download":
-      debugger;
+     
       fileName = `noc_receipt_${transformedData.receiptNumber}`;
       application_data = await getApplicationData(
         transformedData,
