@@ -24,11 +24,16 @@ const CheckBoxContainer = Loadable({
   loader: () => import("./CheckBoxContainer"),
   loading: () => <Loading />
 });
+const DialogContainer = Loadable({
+  loader: () => import("./DialogContainer"),
+  loading: () => <Loading />
+});
+
 
 export {
-
   EstimateCardContainer,
   DocumentListContainer,
   AdjustmentAmountContainer,
-  CheckBoxContainer
+  CheckBoxContainer,
+  DialogContainer
 };

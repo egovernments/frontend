@@ -18,24 +18,24 @@ import "./index.css";
 
 
 
-const getTradeTypeSubtypeDetails = payload => {
-  const tradeUnitsFromApi = get(
-    payload,
-    "Licenses[0].tradeLicenseDetail.tradeUnits",
-    []
-  );
-  const tradeUnitDetails = [];
-  tradeUnitsFromApi.forEach(tradeUnit => {
-    const { tradeType } = tradeUnit;
-    const tradeDetails = tradeType.split(".");
-    tradeUnitDetails.push({
-      trade: get(tradeDetails, "[0]", ""),
-      tradeType: get(tradeDetails, "[1]", ""),
-      tradeSubType: get(tradeDetails, "[2]", "")
-    });
-  });
-  return tradeUnitDetails;
-};
+// const getTradeTypeSubtypeDetails = payload => {
+//   const tradeUnitsFromApi = get(
+//     payload,
+//     "Licenses[0].tradeLicenseDetail.tradeUnits",
+//     []
+//   );
+//   const tradeUnitDetails = [];
+//   tradeUnitsFromApi.forEach(tradeUnit => {
+//     const { tradeType } = tradeUnit;
+//     const tradeDetails = tradeType.split(".");
+//     tradeUnitDetails.push({
+//       trade: get(tradeDetails, "[0]", ""),
+//       tradeType: get(tradeDetails, "[1]", ""),
+//       tradeSubType: get(tradeDetails, "[2]", "")
+//     });
+//   });
+//   return tradeUnitDetails;
+// };
 
 // const searchResults = async (dispatch, applicationNo, tenantId) => {
 //   let queryObject = [

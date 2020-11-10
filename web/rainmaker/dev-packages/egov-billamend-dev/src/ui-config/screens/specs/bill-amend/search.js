@@ -1,10 +1,11 @@
 import { getBreak, getCommonHeader, getLabel ,getCommonSubHeader} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,} from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { searchCard } from "./searchResources/searchCard";
 import { searchResults } from "./searchResources/searchResults";
+import {getRequiredDocData,showHideAdhocPopup} from "../utils"
 import "./index.css";
 
 const header = getCommonHeader({
@@ -35,6 +36,12 @@ const getMDMSData = async (action, state, dispatch) => {
           ]
         },
         {
+          moduleName: "BillAmendment", 
+          masterDetails: [
+            { name: "documentObj" }
+           ] 
+         },
+        {
           moduleName: "common-masters",
           masterDetails: [
             {
@@ -54,6 +61,12 @@ const getMDMSData = async (action, state, dispatch) => {
     }
   };
   try {
+    getRequiredDocData(action, dispatch, [{
+      moduleName: "BillAmendment", 
+      masterDetails: [
+        { name: "documentObj" }
+       ] 
+    }])
     const payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
@@ -130,7 +143,55 @@ const screenConfig = {
               },
               ...subHeader
             },
-            
+            newApplicationButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right"
+              },
+              visible: enableButton,
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px"
+                }
+              },
+
+              children: {
+                plusIconInsideButton: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "add",
+                    style: {
+                      fontSize: "24px"
+                    }
+                  }
+                },
+
+                buttonLabel: getLabel({
+                  labelName: "Add New Property",
+                  labelKey: "BILL_ADD_NEW"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  showHideAdhocPopup(state, dispatch, "search");
+
+                }
+              },
+              // roleDefination: {
+              //   rolePath: "user-info.roles",
+              //   path : "tradelicence/apply"
+
+              // }
+            },
             groupBillButton: {
               componentPath: "Button",
               gridDefination: {
@@ -169,6 +230,18 @@ const screenConfig = {
         searchCard,
         breakAfterSearch: getBreak(),
         searchResults
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: "search"
+      },
+      children: {
+        popup: {}
       }
     }
   }
