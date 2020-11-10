@@ -32,9 +32,8 @@ export const loadUlbLogo = utenantId => {
  //img.src = '/pb-egov-assets/pb/Punjab_FS_logo.jpg'; 
 };
 export const AcknowledgementReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
-  console.log("details--" , details);
   //console.log(generalMDMSDataById);
-  loadUlbLogo(address.tenantId);
+  loadUlbLogo(details.address.tenantId);
   let data;
   let { owners, address, propertyDetails, header, propertyId } = details;
   let dateArray = new Date().toDateString().split(" ");
