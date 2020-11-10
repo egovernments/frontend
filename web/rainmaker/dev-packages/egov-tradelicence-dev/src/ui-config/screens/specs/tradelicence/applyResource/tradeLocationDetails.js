@@ -186,7 +186,7 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Street Name",
           labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
         },
-        pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*“”‘’]{1,64}$/i,
+        pattern: /^[^\$\"'?\\\\~`!@$%^+={}\[\]*“”‘’]{1,300}$/i,
         jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
       }),
       tradeLocMohalla: {
