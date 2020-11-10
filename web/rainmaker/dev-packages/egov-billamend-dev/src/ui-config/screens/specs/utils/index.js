@@ -263,6 +263,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     if (moduleName === "PropertyTax") {
       payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
     }
+   
     const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName, closePopUp));
     set(
       action,
@@ -277,6 +278,15 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
 };
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
   const tenant = getTenantId();
+  switch (moduleName) {
+   
+    case "BillAmendment":
+      return (state, dispatch) => {
+        // dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl = `/bill-amend/apply`;
+        dispatch(setRoute(applyUrl));
+      };
+    }
 }
 export const getCommonGrayCard = children => {
   return {
