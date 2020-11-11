@@ -143,10 +143,10 @@ class PTAcknowledgement extends React.Component {
       leftIcon: "assignment",
     };
 
-    let tlCertificatePrintObject = {
+    let applicationPrintObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
-      link: () => {
-       generatePdfFromDiv("print", propertyId, "#property-review-form");
+      link: () => {        
+      //generatePdfFromDiv("print", propertyId, "#property-review-form");
        this.print();
         console.log("Print");
       },
@@ -154,7 +154,7 @@ class PTAcknowledgement extends React.Component {
     };
 
     downloadMenu.push(applicationDownloadObject);
-    printMenu.push(tlCertificatePrintObject);
+    printMenu.push(applicationPrintObject);
     let icon;
     let iconColor;
     if (acknowledgeType == "success") {

@@ -3,6 +3,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+
 pdfMake.vfs = pdfFonts.vfs;
 
 pdfMake.fonts = {
@@ -32,9 +34,8 @@ export const loadUlbLogo = utenantId => {
  //img.src = '/pb-egov-assets/pb/Punjab_FS_logo.jpg'; 
 };
 export const AcknowledgementReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
-  console.log("details--" , details);
   //console.log(generalMDMSDataById);
-  loadUlbLogo(address.tenantId);
+  loadUlbLogo(details.address.tenantId);
   let data;
   let { owners, address, propertyDetails, header, propertyId } = details;
   let dateArray = new Date().toDateString().split(" ");
@@ -163,10 +164,11 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
         const { institution } = propertyDetails[0] || {};
         const isInstitution =
           propertyDetails && propertyDetails.length
-            ? propertyDetails[0].ownershipCategory === "INSTITUTIONALPRIVATE" || propertyDetails[0].ownershipCategory === "INSTITUTIONALGOVERNMENT"
+            ? propertyDetails[0].ownershipCategory.includes("INSTITUTIONALPRIVATE") || propertyDetails[0].ownershipCategory.includes("INSTITUTIONALGOVERNMENT")
             : false;
         const transformedArray = ownerArray.map((item, index) => {
-          return [
+          return !isInstitution?[
+             [
             {
               text:
                 getLocaleLabels("Owner", "PT_ACK_LOCALIZATION_OWNER") + ownerArray.length > 1
@@ -188,7 +190,83 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
               style: "receipt-table-key",
             },
             {
-              text: item.fatherOrHusbandName || "",
+              text: item.fatherOrHusbandName || "NA",
+              border: borderValue,
+            }
+          ],[
+            {
+              text:"Gender",
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: item.gender || "NA",
+              border: borderValue,
+            },
+            {
+              text:"Date of Birth",
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: convertEpochToDate(item.dob)|| "NA",
+              border: borderValue,
+            }
+          ],[
+            {
+              text:"Mobile Number",
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: item.mobileNumber || "NA",
+              border: borderValue,
+            },
+            {
+              text:"Email Id",
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: item.emailId || "NA",
+              border: borderValue,
+            }
+          ],[
+            {
+              text:"Owner Type",
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: item.ownerType || "NA",
+              border: borderValue,
+            },
+            {
+              text:"Corresspondence Address",
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: item.permanentAddress || "NA",
+              border: borderValue,
+            }
+          ]]: [
+            {
+              text: getLocaleLabels("Institution Name", "PT_ACK_LOCALIZATION_INSTITUTION_NAME"),
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: institution.name || "",
+              border: borderValue,
+            },
+            {
+              text: getLocaleLabels("Authorised Person", "PT_ACK_LOCALIZATION_AUTHORISED_PERSON"),
+              border: borderKey,
+              style: "receipt-table-key",
+            },
+            {
+              text: ownerArray[0].name || "",
               border: borderValue,
             },
           ];
@@ -232,7 +310,64 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
                   text: ownerArray[0].name || "",
                   border: borderValue,
                 },
-              ],
+              ],[
+                {
+                  text:"Designation",
+                  border: borderKey,
+                  style: "receipt-table-key",
+                },
+                {
+                  text: institution.designation || "NA",
+                  border: borderValue,
+                },
+                {
+                  text: "Institution Type",
+                  border: borderKey,
+                  style: "receipt-table-key",
+                },
+                {
+                  text: institution.type  || "NA",
+                  border: borderValue,
+                },
+              ],[
+                {
+                  text: "Mobile Number",
+                  border: borderKey,
+                  style: "receipt-table-key",
+                },
+                {
+                  text: ownerArray[0].mobileNumber || "NA",
+                  border: borderValue,
+                },
+                {
+                  text: "Email Id",
+                  border: borderKey,
+                  style: "receipt-table-key",
+                },
+                {
+                  text: ownerArray[0].emailId|| "NA",
+                  border: borderValue,
+                },
+              ],[
+                {
+                  text: "Telephone Number",
+                  border: borderKey,
+                  style: "receipt-table-key",
+                },
+                {
+                  text: ownerArray[0].altContactNumber || "NA",
+                  border: borderValue,
+                },
+                {
+                  text: "Correspondence Address",
+                  border: borderKey,
+                  style: "receipt-table-key",
+                },
+                {
+                  text: ownerArray[0].correspondenceAddress || "NA",
+                  border: borderValue,
+                },
+              ]
             ]
           : newArray;
       };
@@ -244,7 +379,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
         content: [
           {
             style: "pt-reciept-citizen-table",
-            margin: [0, 0, 0, 18],
+            margin: [0, 0, 0, 8],
             table: {
               widths: ["15%", "85%"],
               alignment: "left",
@@ -269,7 +404,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
                       },
                     ],
                     alignment: "left",
-                    margin: [0, 5, 0, 0],
+                    margin: [0, 3, 0, 0],
                   },
                 ],
               ],
@@ -483,7 +618,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
           "pt-reciept-citizen-subheader": {
             fontSize: 12,
             bold: true,
-            margin: [0, 16, 0, 8], //left top right bottom
+            margin: [0, 10, 0, 8], //left top right bottom
             color: "#484848",
           },
           "pt-reciept-citizen-table": {
@@ -494,7 +629,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
           "receipt-assess-table": {
             fontSize: 12,
             color: "#484848",
-            margin: [0, 8, 0, 0],
+            margin: [0, 6, 0, 0],
           },
           "receipt-assess-table-header": {
             bold: true,
@@ -515,7 +650,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
           },
           "receipt-logo-header": {
             color: "#484848",
-            fontSize: 14,
+            fontSize: 12,
             bold: true,
             // decoration: "underline",
             // decorationStyle: "solid",
@@ -523,7 +658,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
           },
           "receipt-logo-sub-header": {
             color: "#484848",
-            fontSize: 13,
+            fontSize: 12,
             // decoration: "underline",
             // decorationStyle: "solid",
             decorationColor: "#484848",

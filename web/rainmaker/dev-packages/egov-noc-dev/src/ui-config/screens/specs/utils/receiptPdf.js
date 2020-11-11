@@ -589,7 +589,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: "Door/House No.",
+              text: "Plot/Survey No.",
               border: [false, false, false, false]
             },
 
@@ -1691,7 +1691,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: "Door/House No.",
+              text: "Plot/Survey No.",
               border: [false, false, false, false]
             },
 
@@ -3301,7 +3301,7 @@ const renewgetApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: "Door/House No.",
+              text: "Plot/Survey No.",
               border: [false, false, false, false]
             },
 
@@ -4918,7 +4918,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, false, false, false]
             },
             {
-              text: "Door/House No.",
+              text: "Plot/Survey No.",
               border: [false, false, false, false]
             },
 

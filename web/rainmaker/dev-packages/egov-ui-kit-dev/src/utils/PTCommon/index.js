@@ -503,7 +503,7 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);
     } else if (action === "print") {
-      doc.autoPrint();
+      //doc.autoPrint();
       window.open(doc.output("bloburl"), "_blank");
     }
   });
