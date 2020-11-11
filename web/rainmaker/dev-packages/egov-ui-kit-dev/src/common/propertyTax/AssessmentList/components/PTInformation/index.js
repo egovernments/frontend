@@ -11,7 +11,8 @@ import PaymentHistory from "./components/PaymentHistory";
 import ApplicationHistory from "./components/ApplicationHistory";
 import DocumentsInfo from "../../../Property/components/DocumentsInfo";
 import get from "lodash/get";
-import "./index.css"
+import "./index.css";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const logoStyle = {
   height: "61px",
@@ -64,6 +65,7 @@ class PTInformation extends React.Component {
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
+    let datecraeted=convertEpochToDate(get(properties.auditDetails, "createdTime"));
     if (get(properties, "tenantId")) {
       let tenantid=get(properties, "tenantId");
      // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
@@ -137,11 +139,11 @@ class PTInformation extends React.Component {
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div style={{ display: "flex" }}>
                       <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
-                      <Label label={`: ${get(properties, "propertyId")}`} fontSize="20px" />
+                      <Label label={`${get(properties, "propertyId")}`} fontSize="20px" />
                       <Label label="PT_APPLICATION_NO" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
-                      <Label label={`: ${get(properties, "acknowldgementNumber")}`} fontSize="20px" />
+                      <Label label={`${get(properties, "acknowldgementNumber")}`} fontSize="20px" />
                       <Label label="Date" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
-                      <Label label={`: ${get(properties.auditDetails, "createdTime")}`} fontSize="20px" />
+                      <Label label={`: ${datecraeted}`} fontSize="20px" />
                       </div>
                     
                     {/* <div style={{display : "flex"}}>
