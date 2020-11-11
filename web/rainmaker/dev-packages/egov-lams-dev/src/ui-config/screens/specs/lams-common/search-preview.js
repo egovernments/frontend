@@ -136,11 +136,11 @@ const searchPreview = {
   uiFramework: "material-ui",
   name: "searchPreview",
   beforeInitScreen: (action, state, dispatch) => {
-
     loadLeaseDetails(action, state, dispatch).then((response)=>{
-      if(response && response.length > 0 && response.leases)
+      if(response && response.leases && response.leases.length > 0)
       {
         dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
+        alert("Lease Details Loaded Successfully ");
       }
       
       //toberemoved

@@ -119,7 +119,7 @@ export const searchApiCall = async (state, dispatch) => {
         ['LAMS_TABLE_COL_APPLCNT_NAME']: item.userDetails[0].name || "-",
         ['LAMS_TABLE_COL_APP_DATE']: convertEpochToDate(item.applicationDate) || "-",
           ['LAMS_TABLE_COL_APP_TYPE']:
-          `LAMS_TYPE_${item.applicationType}`  || "NEW",
+          `LAMS_APPLICATIONTYPE_${item.applicationType}`  || "NEW",
         ['LAMS_TABLE_COL_STATUS']: item.status || "-",
         ["TENANT_ID"]: item.tenantId,
         ["LAMS_TABLE_COL_STATUS"]: item.status || "-"

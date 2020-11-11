@@ -1,6 +1,6 @@
 export const getWFConfig = (module, businessService) => {
   switch (module.toUpperCase()) {
-    case "LAMS-LR-SERVICES":
+    case "LAMS":
       return {
           CITIZEN: "/lams-common/search-preview", //tobechanged  If Citizen has to resubmit the documents.
           DEFAULT: "/lams-common/search-preview",
