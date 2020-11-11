@@ -114,20 +114,14 @@ let totalAmount = (estimateCardData) => {
   return tlTax;
 }
 const updateAdhoc = (state, dispatch) => {
-  const adhocAmount = parseFloat(get(
+  const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocPenalty", 
-  ) ? get(
+    "Licenses[0].tradeLicenseDetail.adhocPenalty"
+  );
+  const rebateAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocPenalty", 
-  ) : 0 );
-  const rebateAmount = parseFloat(get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocExemption", 
-  ) ? get(
-    state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.adhocExemption", 
-  ) : 0);
+    "Licenses[0].tradeLicenseDetail.adhocExemption"
+  );
   
   if (adhocAmount || rebateAmount) {
     let flag = true;
@@ -144,45 +138,47 @@ const updateAdhoc = (state, dispatch) => {
           "warning"
         )
       );
-    }    
-   
-    if (adhocAmount % 1 != 0) {
-      flag=false;
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Adhoc Penalty amount should not be a decimal value.",
-            labelKey: "ERR_PENALTY_NOT_DECIMAL"
-          },
-          "warning"
-        )
-      );
-      dispatch(prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
-    }
-    if (rebateAmount % 1 != 0) {
-      flag=false;
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Adhoc Rebate amount should not be a decimal value.",
-            labelKey: "ERR_REBATE_NOT_DECIMAL"
-          },
-          "warning"
-        )
-      );
-      dispatch(prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
-    }
-    if(flag) {
-      if (rebateAmount && rebateAmount > 0) {
-        dispatch(prepareFinalObject(
-          "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
-      }
+    }  else{
       getEstimateDataAfterAdhoc(state, dispatch);
-    }
+    }  
+   
+    // if (adhocAmount % 1 != 0) {
+    //   flag=false;
+    //   dispatch(
+    //     toggleSnackbar(
+    //       true,
+    //       {
+    //         labelName: "Adhoc Penalty amount should not be a decimal value.",
+    //         labelKey: "ERR_PENALTY_NOT_DECIMAL"
+    //       },
+    //       "warning"
+    //     )
+    //   );
+    //   dispatch(prepareFinalObject(
+    //     "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    // }
+    // if (rebateAmount % 1 != 0) {
+    //   flag=false;
+    //   dispatch(
+    //     toggleSnackbar(
+    //       true,
+    //       {
+    //         labelName: "Adhoc Rebate amount should not be a decimal value.",
+    //         labelKey: "ERR_REBATE_NOT_DECIMAL"
+    //       },
+    //       "warning"
+    //     )
+    //   );
+    //   dispatch(prepareFinalObject(
+    //     "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    // }
+    // if(flag) {
+    //   if (rebateAmount && rebateAmount > 0) {
+    //     dispatch(prepareFinalObject(
+    //       "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
+    //   }
+    //   // getEstimateDataAfterAdhoc(state, dispatch);
+    // }
   } else {
     dispatch(
       toggleSnackbar(
