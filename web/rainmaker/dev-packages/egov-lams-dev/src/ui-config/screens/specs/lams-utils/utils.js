@@ -35,7 +35,7 @@ export const loadSurveyNumbers = async (action, state, dispatch) => {
   catch(e)
   {
     //toBeRemoved
-    payload = {"leases":[{"leaseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 1","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123","termNo":"456","area":"12344","termExpiryDate":659989800000,"annualRent":15234},{"leaseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 2","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"456","termNo":"456","area":"23414","termExpiryDate":659989800000,"annualRent":1234}]};
+    payload = {"leases":[{"leaseAsPerGLR": "Mst.Ram Dulari d/o Sital Persad 1","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"1234512","termNo":"1234514","area":"12344","termExpiryDate":659989800000,"annualRent":15234},{"leaseAsPerGLR": "Mst.Ram Dulari d/o Sital Persad 2","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123451224","termNo":"12345214","area":"23414","termExpiryDate":659989800000,"annualRent":1234},{"leaseAsPerGLR": "Mst.Ram Dulari d/o Sital Persad 3 Test","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123451342","termNo":"123451124","area":"23434","termExpiryDate":659989800000,"annualRent":12524}]};
   }
   console.log("Survey numbers recieved...",payload);
   if(payload.leases)
