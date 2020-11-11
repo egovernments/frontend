@@ -18,30 +18,30 @@ const isMiniReceiptBtnVisible =()=>{
     return false;
 
 }
-const UCminiReceiptBuilder=(h)=> {
-    var NEXTLINE = "&&";
-    let receiptString = "     " + h["ulbType"];
-    receiptString = receiptString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
-    receiptString = receiptString + "******************************************" + NEXTLINE; // receiptString = receiptString + " PTR UID       : " + h["propertyId"] + NEXTLINE;
+// const UCminiReceiptBuilder=(h)=> {
+//     var NEXTLINE = "&&";
+//     let receiptString = "     " + h["ulbType"];
+//     receiptString = receiptString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
+//     receiptString = receiptString + "******************************************" + NEXTLINE; // receiptString = receiptString + " PTR UID       : " + h["propertyId"] + NEXTLINE;
   
-    receiptString = receiptString + " Receipt No    : " + h["receiptNumber"] + NEXTLINE;
-    receiptString = receiptString + " Receipt Date  : " + h["receiptDate"] + NEXTLINE;
-    receiptString = receiptString + " Consumer Name : " + h["consumerName"] + NEXTLINE; // receiptString = receiptString + " Financial Year: " + h["financialYear"] + NEXTLINE;
-    // receiptString = receiptString + " Owner Name    : " + h["ownerName"] + NEXTLINE;
-    // receiptString = receiptString + " Mobile Number : " + h["mobileNumber"] + NEXTLINE;
-    // receiptString = receiptString + " Property Type : " + h["propertyType"] + NEXTLINE;
-    // receiptString = receiptString + " Plot Size     : " + h["plotSize"] + " sq. yards" + NEXTLINE;
+//     receiptString = receiptString + " Receipt No    : " + h["receiptNumber"] + NEXTLINE;
+//     receiptString = receiptString + " Receipt Date  : " + h["receiptDate"] + NEXTLINE;
+//     receiptString = receiptString + " Consumer Name : " + h["consumerName"] + NEXTLINE; // receiptString = receiptString + " Financial Year: " + h["financialYear"] + NEXTLINE;
+//     // receiptString = receiptString + " Owner Name    : " + h["ownerName"] + NEXTLINE;
+//     // receiptString = receiptString + " Mobile Number : " + h["mobileNumber"] + NEXTLINE;
+//     // receiptString = receiptString + " Property Type : " + h["propertyType"] + NEXTLINE;
+//     // receiptString = receiptString + " Plot Size     : " + h["plotSize"] + " sq. yards" + NEXTLINE;
   
-    receiptString = receiptString + " Category      : " + h["businessService"] + NEXTLINE;
-    receiptString = receiptString + " From Period   : " + h["fromPeriod"] + NEXTLINE;
-    receiptString = receiptString + " To Period     : " + h["toPeriod"] + NEXTLINE;
-    receiptString = receiptString + " Paid Amount   : Rs." + h["receiptAmount"] + NEXTLINE;
-    receiptString = receiptString + " Payment Mode  : " + h["paymentMode"] + NEXTLINE;
-    receiptString = receiptString + " Collector Name: " + h["collectorName"] + NEXTLINE;
-    receiptString = receiptString + "******************************************" + NEXTLINE; //console.log(receiptString.replace(/&&/g, "\n"));
+//     receiptString = receiptString + " Category      : " + h["businessService"] + NEXTLINE;
+//     receiptString = receiptString + " From Period   : " + h["fromPeriod"] + NEXTLINE;
+//     receiptString = receiptString + " To Period     : " + h["toPeriod"] + NEXTLINE;
+//     receiptString = receiptString + " Paid Amount   : Rs." + h["receiptAmount"] + NEXTLINE;
+//     receiptString = receiptString + " Payment Mode  : " + h["paymentMode"] + NEXTLINE;
+//     receiptString = receiptString + " Collector Name: " + h["collectorName"] + NEXTLINE;
+//     receiptString = receiptString + "******************************************" + NEXTLINE; //console.log(receiptString.replace(/&&/g, "\n"));
   
-    return "egov://print/" + receiptString;
-  }
+//     return "egov://print/" + receiptString;
+//   }
 
 const getCommonApplyFooter = children => {
     return {
@@ -183,10 +183,7 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                       
                     let empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
                     collectorName = empInfo.name;
-                      
-    
-    
-                      var UCminiReceiptData = {
+                      let UCminiReceiptData = {
                         ulbType: localizedULBName,
                         receiptNumber: receiptNumber,
                         tenantid: tenant,
@@ -199,7 +196,12 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                         paymentMode: paymentMode,
                         collectorName: collectorName
                       };  
-                      UCminiReceiptBuilder(UCminiReceiptData);
+                      try {
+                        window.Android && window.Android.sendPrintData("printData",JSON.stringify(UCminiReceiptData));
+                      } catch (e) {
+                        console.log(e);
+                      }
+                     // UCminiReceiptBuilder(UCminiReceiptData);
                 }
             },
             visible: isMiniReceiptBtnVisible()

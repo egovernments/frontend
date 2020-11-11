@@ -33,6 +33,7 @@
         android:allowBackup="true"
         android:icon="@string/launcher_icon"
         android:label="@string/app_name"
+		tools:node="merge"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme"
         tools:ignore="AllowBackup">
@@ -60,14 +61,28 @@
             android:name="org.egovernment.mseva.MainActivity"
             android:screenOrientation="portrait" > <!-- remove or alter as your apps requirement -->
             <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
+				<action android:name="android.intent.action.SEND"/>
+				<action android:name="android.intent.action.PICK"/>
+				<action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+				<data android:mimeType="text/plain"/>
                 <data android:scheme="https"
-                    android:host="egov-micro-dev.egovernments.org"
+                    android:host="https://13.71.65.215.nip.io/"
                     android:pathPrefix="/" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
             </intent-filter>
         </activity>
+		<provider
+			android:name="com.ezetap.sdk.EzetapFileProvider"
+			android:grantUriPermissions="true"
+			android:exported="false"
+			android:authorities="${applicationId}.EzetapFileProvider">
+
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/provider_paths"/>
+
+		</provider>
 		<meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

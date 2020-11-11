@@ -10,6 +10,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -20,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -32,6 +34,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -40,6 +43,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +63,7 @@ import android.app.DownloadManager;
 import android.os.AsyncTask;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.FileOutputStream;
@@ -70,6 +75,18 @@ import java.io.OutputStream;
 
 import org.egovernment.mseva.BuildConfig;
 import org.egovernment.mseva.R;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.eze.api.EzeAPI;
+import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_CASH_TXN;
+import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_CLOSE;
+import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_SALE_TXN;
+import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_UPI;
+import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_INITIALIZE;
+import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_GET_INCOMPLETE_TXN;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -79,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 	private static String URL   =BuildConfig.url;
 	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
 	public static String HOST	= getHost(URL);
+//	static final int SEND_PYAMENT_INFORMATION = 2;
 
 	//Careful with these variable names if altering
     private WebView webView;
@@ -111,37 +129,195 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            Uri[] results = null;
-            if (resultCode == Activity.RESULT_OK) {
-                if (requestCode == asw_file_req) {
-                    if (null == asw_file_path) {
-                        return;
-                    }
-                    if (intent == null || intent.getFlags() == 0) {
-                        if (asw_cam_message != null) {
-                            results = new Uri[]{Uri.parse(asw_cam_message)};
-                        }
-                    } else {
-                        String dataString = intent.getDataString();
-                        if (dataString != null) {
-                            results = new Uri[]{ Uri.parse(dataString) };
-                        }
-                    }
-                }
-            }
-            asw_file_path.onReceiveValue(results);
-            asw_file_path = null;
-        } else {
-            if (requestCode == asw_file_req) {
-                if (null == asw_file_message) return;
-                Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-                asw_file_message.onReceiveValue(result);
-                asw_file_message = null;
-            }
-        }
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+			Uri[] results = null;
+			if (resultCode == Activity.RESULT_OK && requestCode == asw_file_req) {
+
+				if (null == asw_file_path) {
+					return;
+				}
+				if (intent == null || intent.getFlags() == 0) {
+					if (asw_cam_message != null) {
+						results = new Uri[]{Uri.parse(asw_cam_message)};
+					}
+				} else {
+					String dataString = intent.getDataString();
+					if (dataString != null) {
+						results = new Uri[]{Uri.parse(dataString)};
+					}
+				}
+				asw_file_path.onReceiveValue(results);
+				asw_file_path = null;
+			} else {
+				if (requestCode == asw_file_req) {
+					if (null == asw_file_message) return;
+					Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+					asw_file_message.onReceiveValue(result);
+					asw_file_message = null;
+				}
+			}
+			//  Log.d("SampleAppLogs", "requestCode = " + requestCode + "resultCode = " + resultCode);
+			try {
+				if (intent != null && intent.hasExtra("response")) {
+					//Toast.makeText(this, intent.getStringExtra("response"), Toast.LENGTH_LONG).show();
+					Log.d("SampleAppLogs", intent.getStringExtra("response"));
+				}
+
+				if (intent != null) {
+					if (requestCode == REQUEST_CODE_SALE_TXN) {
+						//  Intent sendAckIntent;
+						if (resultCode == RESULT_OK) {
+
+							Log.v("JSONRST", intent.getStringExtra("response"));
+							JSONObject response = new JSONObject(intent.getStringExtra("response"));
+							// JSONObject mainObject = new JSONObject(intent.getStringExtra("response"));
+							response = response.getJSONObject("result");
+							response = response.getJSONObject("txn");
+							String strTxnId = response.getString("txnId");
+							String stramount = response.getString("amount");
+							String strsettlementStatus = response.getString("settlementStatus");
+							// Log.v("SETTLEMENTSTATUS", settlementStatus);
+
+							loadView("javascript:window.posOnSuccess()",false);
+							closeEzeTap();
+
+
+						} else if (resultCode == RESULT_CANCELED) {
+							// JSONObject response = new JSONObject(intent.getStringExtra("response"));
+							// response = response.getJSONObject("error");
+							// String errorCode = response.getString("code");
+							// String errorMessage = response.getString("message");
+							loadView("javascript:window.posOnFailure()",false);
+							closeEzeTap();
+						}
+					}
+
+					if (requestCode == REQUEST_CODE_CASH_TXN) {
+						Intent sendAckIntent;
+						if (resultCode == RESULT_OK) {
+							Log.v("JSONRST", intent.getStringExtra("response"));
+							JSONObject response = new JSONObject(intent.getStringExtra("response"));
+							JSONObject mainObject = new JSONObject(intent.getStringExtra("response"));
+							response = response.getJSONObject("result");
+							response = response.getJSONObject("txn");
+							String strTxnId = response.getString("txnId");
+							String stramount = response.getString("amount");
+							String strsettlementStatus = response.getString("settlementStatus");
+//                    Log.v("SETTLEMENTSTATUS", settlementStatus);
+
+							loadView("javascript:window.posOnSuccess()",false);
+							closeEzeTap();
+						} else {
+							System.out.println("------------------------api cashbackCallback-------4");
+							JSONObject response = new JSONObject(intent.getStringExtra("response"));
+							response = response.getJSONObject("error");
+							// String errorCode = response.getString("code");
+							// String errorMessage = response.getString("message");
+							loadView("javascript:window.posOnFailure()",false);
+							closeEzeTap();
+						}
+					}
+					if (requestCode == REQUEST_CODE_GET_INCOMPLETE_TXN) {
+						JSONObject response = new JSONObject(intent.getStringExtra("response"));
+						if (resultCode == RESULT_OK) {
+							response = response.getJSONObject("result");
+						} else {
+							response = response.getJSONObject("error");
+							String message = response.getString("message");
+							Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+						}
+
+						loadView("javascript:window.posOnFailure()",false);
+
+					}
+				}
+
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+
+//				if (requestCode == SEND_PYAMENT_INFORMATION) {
+//					// Make sure the request was successful
+//					if (resultCode == RESULT_OK) {
+////						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+////
+////						Toast.makeText(getBaseContext(), "Sucess!" , Toast.LENGTH_SHORT ).show();
+//						// The user picked a contact.
+//						//call javascript bridge to update the status
+//
+//						// Do something with the contact here (bigger example below)
+//						loadView("javascript:window.posOnSuccess()",false);
+//					}
+//					else
+//					{
+////						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+////
+////						Toast.makeText(getBaseContext(), "Failure!" , Toast.LENGTH_SHORT ).show();
+//
+//						//call javascript bridge to update the status
+//						loadView("javascript:window.posOnFailure()",false);
+//					}
+//				}
+
+		}
+
+
     }
+
+	public class WebAppInterface {
+		Context mContext;
+		HashMap<String, JSONObject> mObjectsFromJS = new HashMap<String, JSONObject>();
+
+		/**
+		 * Instantiate the interface and set the context
+		 */
+		WebAppInterface(Context c) {
+			mContext = c;
+		}
+
+		/**
+		 * Show a toast from the web page
+		 */
+		@JavascriptInterface
+		public void sendPaymentData(String name, String json) throws JSONException {
+//			mObjectsFromJS.put(name, new JSONObject(json));
+//			JSONObject paymentData = mObjectsFromJS.get("paymentData");
+		//	Toast.makeText(mContext, json, Toast.LENGTH_SHORT).show();
+			//call call back function with paymentDataMap
+//			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
+//			sendPaymentIntent.setClassName("ritika.com.myapplication", "ritika.com.myapplication.MainActivity");
+//			sendPaymentIntent.setType("text/plain");
+//
+//			sendPaymentIntent.putExtra(name, json);
+//
+//			startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
+
+
+			doInitializeEzeTap();
+			doCheckIncompleteTxn();
+			JSONObject jsonObject = new JSONObject(json);
+			String modeOfPayment = jsonObject.getString("instrumentType");
+			if(modeOfPayment.equalsIgnoreCase("Cash"))
+			{
+				onCash(json);
+			}
+			else if(modeOfPayment.equalsIgnoreCase("Card")){
+				onCard(json);
+			}
+			else if(modeOfPayment.equalsIgnoreCase("UPI")){
+				onUPI(json);
+			}
+			else{
+				closeEzeTap();
+
+				return;
+			}
+		}
+
+	}
 
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
@@ -167,7 +343,8 @@ public class MainActivity extends AppCompatActivity {
         //Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
-		webView.addJavascriptInterface(proxy, "mSewaApp");
+//		webView.addJavascriptInterface(proxy, "mSewaApp");
+		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
 		String versionName = "";
 		int versionCode = 0;
@@ -192,6 +369,12 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setDomStorageEnabled(true);
 		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
+		//improve performance
+		webSettings.setLoadWithOverviewMode(true);
+		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+		webView.setScrollbarFadingEnabled(true);
+
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -202,6 +385,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
+        else {
+			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
         webView.setVerticalScrollBarEnabled(false);
         webView.setWebViewClient(new CustomWebView());
 		webView.getSettings().setGeolocationDatabasePath(getFilesDir().getPath());
@@ -213,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+						if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 							== PackageManager.PERMISSION_GRANTED) {
 							Log.v(TAG,"Permission is granted");
 							downloadDialog(url,userAgent,contentDisposition,mimeType);
@@ -307,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             //Handling input[type="file"] requests for android API 21+
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
 
 				if (asw_file_path != null) {
 					asw_file_path.onReceiveValue(null);
@@ -375,6 +561,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onPageFinished(WebView view, String url) {
+			loadView("javascript:window.localStorage.setItem('isPOSmachine',true)",false);
         }
         //For android below API 23
 		@SuppressWarnings("deprecation")
@@ -445,10 +632,19 @@ public class MainActivity extends AppCompatActivity {
 
 			//Use to do download support
 		}
+		else if(url.startsWith("egov://print/"))
+		{
+			Intent sendPrintIntent = new Intent(Intent.ACTION_SEND);
+			sendPrintIntent.setClassName("com.example.bluetoothprinting", "com.example.bluetoothprinting.MainActivity");
+			sendPrintIntent.setType("text/plain");
+
+			sendPrintIntent.putExtra("printdata", url);
+			startActivity(sendPrintIntent);
+		}
 //		else if (url.contains("98jf4")) {
 //			loadView(url, true);
 //			//Opening external URLs in android default web browser
-//		} 
+//		}
 		else if (!getHost(url).equals(HOST)) {
 			try {
 				Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
@@ -754,6 +950,268 @@ public class MainActivity extends AppCompatActivity {
 		}
 		return true;
 	}
+
+	private void doInitializeEzeTap() {
+		/**********************************************
+		 {
+		 "demoAppKey": "your demo app key",
+		 "prodAppKey": "your prod app key",
+		 "merchantName": "your merchant name",
+		 "userName": "your user name",
+		 "currencyCode": "INR",
+		 "appMode": "DEMO/PROD",
+		 "captureSignature": "true/false",
+		 "prepareDevice": "true/false"
+		 }
+		 **********************************************/
+		JSONObject jsonRequest = new JSONObject();
+		try {
+//            jsonRequest.put("demoAppKey", "1a1e3805-394e-4928-a95e-1d1f61085677");
+//            jsonRequest.put("prodAppKey", "1a1e3805-394e-4928-a95e-1d1f61085677");
+//            jsonRequest.put("merchantName", "your organization name");
+//            jsonRequest.put("userName", "PUNJAB_MUNICIPAL");
+//            jsonRequest.put("currencyCode", "INR");
+//            jsonRequest.put("appMode", "Demo");
+//            jsonRequest.put("captureSignature", "true");
+//            jsonRequest.put("prepareDevice", "false");
+
+			jsonRequest.put("demoAppKey", "94416339-08f9-45b4-a5d2-b150f49842f5");
+			jsonRequest.put("prodAppKey", "94416339-08f9-45b4-a5d2-b150f49842f5");
+			jsonRequest.put("merchantName", "BHARAT_ELECTRONICS_LIMITE");
+			jsonRequest.put("userName", "9611039988");
+			jsonRequest.put("currencyCode", "INR");
+			jsonRequest.put("appMode", "Demo");
+			jsonRequest.put("captureSignature", "true");
+			jsonRequest.put("prepareDevice", "false");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		EzeAPI.initialize(this, REQUEST_CODE_INITIALIZE, jsonRequest);
+	}
+
+	void onCash(String json) {
+		//TODO implement
+		try {
+			//  REQUEST
+
+			JSONObject jsonObject = new JSONObject(json);
+
+
+			JSONObject jsonRequest = new JSONObject();
+			JSONObject jsonOptionalParams = new JSONObject();
+			JSONObject jsonReferences = new JSONObject();
+			JSONObject jsonCustomer = new JSONObject();
+
+			//Building Customer Object
+			jsonCustomer.put("name", jsonObject.getString("customerName"));
+			jsonCustomer.put("mobileNo",jsonObject.getString("customerMobile"));
+			// jsonCustomer.put("email", et_email_adrs.getText().toString().trim());
+
+			//int refNo = SharedPrefrences.getRefNo(PaymentoptionActivity.this);
+			jsonReferences.put("reference1", "" + UUID.randomUUID());
+			//SharedPrefrences.setReferenceNo(PaymentoptionActivity.this, (refNo + 1));
+
+			//Passing Additional References
+			JSONArray array = new JSONArray();
+			array.put("addRef_xx1");
+			array.put("addRef_xx2");
+			jsonReferences.put("additionalReferences", array);
+
+			//Building Optional params Object
+			//Cannot have amount cashback in cash transaction.
+			jsonOptionalParams.put("amountCashback", "0.00");
+			jsonOptionalParams.put("amountTip", "0.00");
+			jsonOptionalParams.put("references", jsonReferences);
+			jsonOptionalParams.put("customer", jsonCustomer);
+
+
+			//Building final request object
+			jsonRequest.put("amount",jsonObject.getString("paymentAmount"));
+			jsonRequest.put("options", jsonOptionalParams);
+
+			doCashTxn(jsonRequest);
+
+			//EzeAPI.cashTransaction(this, REQUESTCODE_, jsonRequest);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	private void doCashTxn(JSONObject jsonRequest) {
+		/******************************************
+		 {
+		 "amount": "123",
+		 "options": {
+		 "references": {
+		 "reference1": "1234",
+		 "additionalReferences": [
+		 "addRef_xx1",
+		 "addRef_xx2"
+		 ]
+		 },
+		 "customer": {
+		 "name": "xyz",
+		 "mobileNo": "1234567890",
+		 "email": "abc@xyz.com"
+		 }
+		 }
+		 }
+		 ******************************************/
+
+		EzeAPI.cashTransaction(this, REQUEST_CODE_CASH_TXN, jsonRequest);
+	}
+
+
+	void onCard(String json) {
+
+
+		JSONObject jsonRequest = new JSONObject();
+		try {
+			JSONObject jsonObject = new JSONObject(json);
+			jsonRequest = new JSONObject();
+			JSONObject jsonOptionalParams = new JSONObject();
+			JSONObject jsonReferences = new JSONObject();
+			JSONObject josnAdtionakRefrence = new JSONObject();
+
+			// Building References Object
+			jsonReferences.put("reference1", "ref" +  UUID.randomUUID());
+
+
+			// Passing Additional References
+			JSONArray array = new JSONArray();
+			array.put("addRef_xx1");
+			array.put("addRef_xx2");
+			jsonReferences.put("additionalReferences", array);
+
+			jsonOptionalParams.put("amountCashback", "0");// Cannot
+			// have
+			// amount cashback in SALE transaction.
+			jsonOptionalParams.put("amountTip", 0.00);
+			jsonOptionalParams.put("references", jsonReferences);
+
+
+			JSONObject jsonCustomer = new JSONObject();
+
+			// Building Customer Object
+			jsonCustomer.put("name", jsonObject.getString("customerName"));
+			jsonCustomer.put("mobileNo",jsonObject.getString("customerMobile"));
+			//  jsonCustomer.put("email", et_email_adrs.getText().toString().trim());
+
+			jsonRequest.put("amount",jsonObject.getString("paymentAmount"));
+			jsonRequest.put("options", jsonOptionalParams);
+
+			jsonRequest.put("references", jsonReferences);
+			jsonRequest.put("additionalReferences", josnAdtionakRefrence);
+			jsonRequest.put("mode", "SALE");//Card payment Mode
+			doSaleTxn(jsonRequest);
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	private void doSaleTxn(JSONObject jsonRequest) {
+		/******************************************
+		 {
+		 "amount": "123",
+		 "options": {
+		 "amountCashback": 0,
+		 "amountTip": 0,
+		 "references": {
+		 "reference1": "1234",
+		 "additionalReferences": [
+		 "addRef_xx1",
+		 "addRef_xx2"
+		 ]
+		 },
+		 "customer": {
+		 "name": "xyz",
+		 "mobileNo": "1234567890",
+		 "email": "abc@xyz.com"
+		 }
+		 },
+		 "mode": "SALE"
+		 }
+		 ******************************************/
+
+		EzeAPI.cardTransaction(this, REQUEST_CODE_SALE_TXN, jsonRequest);
+	}
+	void onUPI(String json) {
+
+
+		try {
+			//  REQUEST
+			JSONObject jsonObject = new JSONObject(json);
+
+			JSONObject jsonRequest = new JSONObject();
+			JSONObject jsonOptionalParams = new JSONObject();
+			JSONObject jsonReferences = new JSONObject();
+			JSONObject jsonCustomer = new JSONObject();
+
+			// Building Customer Object
+			jsonCustomer.put("name", jsonObject.getString("customerName"));
+			jsonCustomer.put("mobileNo",jsonObject.getString("customerMobile"));
+			// jsonCustomer.put("email", et_email_adrs.getText().toString().trim());
+
+			//int refNo = SharedPrefrences.getRefNo(PaymentoptionActivity.this);
+			jsonReferences.put("reference1", "" + UUID.randomUUID());
+			//SharedPrefrences.setReferenceNo(PaymentoptionActivity.this, (refNo + 1));
+
+			//Passing Additional References
+			JSONArray array = new JSONArray();
+			array.put("addRef_xx1");
+			array.put("addRef_xx2");
+			jsonReferences.put("additionalReferences", array);
+
+			//Building Optional params Object
+			//Cannot have amount cashback in cash transaction.
+			jsonOptionalParams.put("amountCashback", "0.00");
+			jsonOptionalParams.put("amountTip", "0.00");
+			jsonOptionalParams.put("references", jsonReferences);
+			jsonOptionalParams.put("customer", jsonCustomer);
+
+
+			//Building final request object
+			jsonRequest.put("amount",jsonObject.getString("paymentAmount"));
+			jsonRequest.put("options", jsonOptionalParams);
+			doUPITxn(jsonRequest);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void doUPITxn(JSONObject jsonRequest) {
+		/******************************************
+		 {
+		 "amount": "123",
+		 "options": {
+		 "references": {
+		 "reference1": "1234",
+		 "additionalReferences": [
+		 "addRef_xx1",
+		 "addRef_xx2"
+		 ]
+		 },
+		 "customer": {
+		 "name": "xyz",
+		 "mobileNo": "1234567890",
+		 "email": "abc@xyz.com"
+		 }
+		 }
+		 }
+		 ******************************************/
+
+		EzeAPI.upiTransaction(this, REQUEST_CODE_UPI, jsonRequest);
+	}
+	private void doCheckIncompleteTxn() {
+		EzeAPI.checkForIncompleteTransaction(this, REQUEST_CODE_GET_INCOMPLETE_TXN);
+	}
+	private void closeEzeTap() {
+		EzeAPI.close(this, REQUEST_CODE_CLOSE);
+	}
+
 
 
 }

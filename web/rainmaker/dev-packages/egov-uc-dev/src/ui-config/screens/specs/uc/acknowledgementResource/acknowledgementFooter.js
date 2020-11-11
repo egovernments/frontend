@@ -161,8 +161,12 @@ const generateMiniChallan = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,"Challan"
   );
   
-  const todayDate = new Date();
-  const challanDateFormatted = todayDate.toString;           
+
+  const challanDateFormatted = new Date().toLocaleDateString('en-GB', {
+    day : 'numeric',
+    month : 'short',
+    year : 'numeric'
+  }).split(' ').join('-');           
   const fromPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodFrom);
   const toPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodTo);
   const consumerName = ReceiptDataTemp.consumerName;
@@ -196,7 +200,8 @@ const generateMiniChallan = (state, dispatch) => {
     toPeriod: toPeriod,
     receiptAmount: totalAmt,
     challanDate:challanDateFormatted,
-    collectorName:collectorName
+    collectorName:collectorName,
+    challanStatus:"Active"
   };  
   return UCminiChallanData;
  // return UCminiChallanBuilder(UCminiChallanData);

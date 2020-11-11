@@ -28,6 +28,7 @@ import {
   import { getChallanSearchResult } from "../../../../ui-utils/commons";
   import { confirmationDialog } from "./confirmationDialog";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+  import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
   import './index.css';
   import "../../../../index.css";
 
@@ -145,6 +146,7 @@ import {
         helpSection: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
+
           props: {
             color: "primary",
             style: { justifyContent: "flex-end" }
@@ -242,6 +244,7 @@ import {
       test1:{
         uiFramework: "custom-atoms",
         componentPath: "Div",
+        visible:!JSON.parse(window.localStorage.getItem('isPOSmachine')),
         props: {
           className: "downloadprint-commonmenu",
           style: { textAlign: "right", display: "flex",paddingTop: "10px" },
@@ -285,6 +288,79 @@ import {
         },
   
       },
+      posbuttons:{
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        visible:JSON.parse(window.localStorage.getItem('isPOSmachine')),
+
+        children: {
+          printMiniReceiptButton: {
+            componentPath: "Button",
+            props: {
+                variant: "outlined",
+                color: "primary",
+                 className: "preview-challan-btn",
+                //className:"gen-challan-btn"
+
+                // disabled: true
+            },
+            children: {
+                printFormButtonLabel: getLabel({
+                    labelName: "PRINT MINI RECEIPT",
+                    labelKey: "COMMON_PRINT_MINI_RECEIPT"
+                })
+            },
+            visible:status==="PAID"?true:false,
+            onClickDefination: {
+                action: "condition",
+                callBack: () => {
+
+                  const receiptData = generateMiniReceipt(state);
+                  console.log("Mini Receipt:",JSON.stringify(receiptData));
+                  try {
+                    window.Android && window.Android.sendPrintData("printData",JSON.stringify(receiptData));
+                  } catch (e) {
+                    console.log(e);
+                  }
+
+                }
+            },
+
+              
+            },
+            printMiniChallanButton: {
+              componentPath: "Button",
+              props: {
+                  variant: "outlined",
+                  color: "primary",
+                  className: "preview-challan-btn",
+
+                  // disabled: true
+              },
+              children: {
+                  printFormButtonLabel: getLabel({
+                      labelName: "PRINT MINI CHALLAN",
+                      labelKey: "COMMON_PRINT_MINI_CHALLAN"
+                  })
+              },
+              onClickDefination: {
+                  action: "condition",
+                  callBack: () => {
+                    const challanData = generateMiniChallan(state);
+                    try {
+                      console.log("printData",JSON.stringify(challanData));
+                      window.Android && window.Android.sendPrintData("printData",JSON.stringify(challanData));
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  }
+              },
+        }
+
+        },
+  
+      },
+      
     }
   
   }
@@ -610,15 +686,14 @@ import {
                             : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
     let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
     const challanStatus = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus",null);
+    
+    let receipt = challanStatus==="PAID"?await getReceipt(queryObj.filter(item => item.key !== "businessService")):fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
+    const paymentMode = receipt && receipt.Payments && receipt.Payments.length > 0? receipt.Payments[0].paymentMode:""
     //Set paystatus = true for PAID for active and cancelled as false. Used in search-preveiw to display paid/not paid
     set(estimateData, "payStatus", challanStatus==="PAID"?true:false);
     dispatch(prepareFinalObject("Bill[0]", payload));
     dispatch(prepareFinalObject("Demands[0].estimateCardData", estimateData));
-   
-
-
-     
-
+    dispatch(prepareFinalObject("paymentMode", paymentMode));
   };
   export const getBill = async (queryObject) => {
     try {
@@ -648,7 +723,114 @@ import {
     }
   };
 
+  const generateMiniReceipt = (state) => { 
+
+    const ReceiptDataTemp = get(
+      state.screenConfiguration.preparedFinalObject,"Bill[0]"
+    );
+    const paymentMode = get(
+      state.screenConfiguration.preparedFinalObject,"paymentMode"
+    );
   
+      let receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.billDate);
+      let receiptAmount = ReceiptDataTemp.totalAmount;           
+      let fromPeriod = getDateFromEpoch(ReceiptDataTemp.billDetails[0].fromPeriod);
+      let toPeriod = getDateFromEpoch(ReceiptDataTemp.billDetails[0].toPeriod);
+      let consumerName = ReceiptDataTemp.payerName;
+      let id = getQueryArg(window.location.href, "tenantId"); 
+      let localizedULBName = "";
+      if(id != null){
+        id =  id.split(".")[1];
+        localizedULBName =  id[0].toUpperCase() + id.slice(1);
+        
+      };
+      let collectorName = ""; 
+      
+    let empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
+    collectorName = empInfo.name;
+
+    let UCminiReceiptData = {
+      ulbType: localizedULBName,
+      receiptNumber: getQueryArg(window.location.href, "applicationNumber"),
+      tenantid:  getQueryArg(window.location.href, "tenantId"),
+      consumerName: consumerName,
+      receiptDate: receiptDateFormatted,
+      businessService: getQueryArg(window.location.href,"businessService"),
+      fromPeriod: fromPeriod,
+      toPeriod: toPeriod,
+      receiptAmount: receiptAmount,
+      paymentMode: paymentMode,
+      collectorName: collectorName
+    };  
+
+      return UCminiReceiptData;
+
+    }
+
+  const generateMiniChallan = (state) => { 
+    const ReceiptDataTemp = get(
+      state.screenConfiguration.preparedFinalObject,"Challan"
+    );
+    const status = get(
+      state.screenConfiguration.preparedFinalObject,"challanStatus"
+    );
+    
+   // const todayDate = new Date();
+    const challanDateFormatted = new Date().toLocaleDateString('en-GB', {
+      day : 'numeric',
+      month : 'short',
+      year : 'numeric'
+    }).split(' ').join('-');
+    //const challanDateFormatted = todayDate.toString();           
+    const fromPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodFrom);
+    const toPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodTo);
+    const consumerName = ReceiptDataTemp.consumerName;
+    let id = getQueryArg(window.location.href, "tenantId"); 
+    let localizedULBName = "";
+    if(id != null){
+     id =  id.split(".")[1];
+     localizedULBName =  id[0].toUpperCase() + id.slice(1);
+      
+    }
+    let collectorName = ""; 
+    
+     let empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
+     collectorName = empInfo.name;
+  
+    const businessService = getQueryArg(window.location.href,"businessService");
+
+    let estimateData = get(state.screenConfiguration.preparedFinalObject , "Demands[0].estimateCardData");
+    let amount = [];
+    estimateData && estimateData.forEach((item, index) => {
+      amount.push(item.value);
+    });
+    let totalAmt = 0;
+    if(amount.length != 0){
+      totalAmt = amount.reduce(function(total, arr) { 
+        // return the sum with previous value
+        return total + arr.amount;
+      
+        // set initial value as 0
+      },0);
+    }
+
+  
+    let UCminiChallanData = {
+      ulbType: localizedULBName,
+      receiptNumber: getQueryArg(window.location.href, "applicationNumber"),
+      tenantid: getQueryArg(window.location.href, "tenantId"),
+      consumerName: consumerName,
+      businessService: businessService,
+      fromPeriod: fromPeriod,
+      toPeriod: toPeriod,
+      receiptAmount: totalAmt,
+      challanDate:challanDateFormatted,
+      collectorName:collectorName,
+      challanStatus:status
+    };  
+    return UCminiChallanData;
+   // return UCminiChallanBuilder(UCminiChallanData);
+  };
   const screenConfig = {
     uiFramework: "material-ui",
     name: "search-preview",
@@ -767,6 +949,9 @@ import {
       },
     },
   };
+
+
+
   
   export default screenConfig;
   
