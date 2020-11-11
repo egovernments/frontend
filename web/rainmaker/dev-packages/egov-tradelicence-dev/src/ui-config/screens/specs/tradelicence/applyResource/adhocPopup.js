@@ -138,47 +138,45 @@ const updateAdhoc = (state, dispatch) => {
           "warning"
         )
       );
-    }  else{
-      getEstimateDataAfterAdhoc(state, dispatch);
-    }  
+    }    
    
-    // if (adhocAmount % 1 != 0) {
-    //   flag=false;
-    //   dispatch(
-    //     toggleSnackbar(
-    //       true,
-    //       {
-    //         labelName: "Adhoc Penalty amount should not be a decimal value.",
-    //         labelKey: "ERR_PENALTY_NOT_DECIMAL"
-    //       },
-    //       "warning"
-    //     )
-    //   );
-    //   dispatch(prepareFinalObject(
-    //     "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
-    // }
-    // if (rebateAmount % 1 != 0) {
-    //   flag=false;
-    //   dispatch(
-    //     toggleSnackbar(
-    //       true,
-    //       {
-    //         labelName: "Adhoc Rebate amount should not be a decimal value.",
-    //         labelKey: "ERR_REBATE_NOT_DECIMAL"
-    //       },
-    //       "warning"
-    //     )
-    //   );
-    //   dispatch(prepareFinalObject(
-    //     "Licenses[0].tradeLicenseDetail.adhocExemption", null));
-    // }
-    // if(flag) {
-    //   if (rebateAmount && rebateAmount > 0) {
-    //     dispatch(prepareFinalObject(
-    //       "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
-    //   }
-    //   // getEstimateDataAfterAdhoc(state, dispatch);
-    // }
+    if (adhocAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Penalty amount should not be a decimal value.",
+            labelKey: "ERR_PENALTY_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    }
+    if (rebateAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Rebate amount should not be a decimal value.",
+            labelKey: "ERR_REBATE_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
+    if(flag) {
+      if (rebateAmount && rebateAmount > 0) {
+        dispatch(prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
+      }
+      getEstimateDataAfterAdhoc(state, dispatch);
+    }
   } else {
     dispatch(
       toggleSnackbar(
