@@ -300,10 +300,11 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
     Object.values(fileStoreIdByAction).join(",")
   );
   const processInstances = cloneDeep(ProcessInstances);
-  processInstances.map(item => {
+    processInstances.map(item => {
     if (item.documents && item.documents.length > 0) {
+      let nonEmptyDoc = [];
       item.documents.forEach(i => {
-        if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
+        if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {        
           i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
           i.title = `TL_${i.documentType}`;
           i.name = decodeURIComponent(
@@ -314,10 +315,12 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
               .slice(13)
           );
           i.linkText = "View";
-        }
+          nonEmptyDoc.push(i);
+        }        
       });
+      item.documents = nonEmptyDoc;
     }
-  });
+  });  
   prepareFinalObject("workflow.ProcessInstances", processInstances);
 };
 
