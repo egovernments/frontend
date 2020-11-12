@@ -1,23 +1,15 @@
 import {
-  getLabel,
-    getCommonContainer,
-    getPattern,
-    getCommonTitle,
-    getSelectField
+  getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-  import { getQueryArg , getTodaysDateInYMD , getTLTenantId  } from "egov-ui-framework/ui-utils/commons";
-  import {updateMdmsDropDowns} from "../lams-utils/utils"
+  import {
+    prepareFinalObject
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
   import { validateFields } from "../utils";
-  import { value } from "jsonpath";
-  import { validateForm } from "egov-ui-framework/ui-redux/screen-configuration/utils";
   import { toggleSpinner , toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { httpRequest } from "egov-ui-framework/ui-utils/api";
   import get from "lodash/get";
-  import set from "lodash/set";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
-import PropTypes from "prop-types";
 
 const checkIfFormIsValid = async (state, dispatch) => {
 
@@ -35,6 +27,13 @@ const checkIfFormIsValid = async (state, dispatch) => {
   if (isFormValid) {
     try {
       dispatch(toggleSpinner());
+
+      const wfDocuments = get(
+        state.screenConfiguration.preparedFinalObject,
+        "lamsStore.Lease[0].wfDocuments"
+      );
+      dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.applicationDocuments", wfDocuments));
+
       const lease = get(
         state.screenConfiguration.preparedFinalObject,
         "lamsStore.Lease[0]"

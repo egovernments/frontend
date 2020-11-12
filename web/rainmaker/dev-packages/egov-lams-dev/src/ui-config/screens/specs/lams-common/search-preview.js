@@ -140,7 +140,7 @@ const searchPreview = {
       if(response && response.leases && response.leases.length > 0)
       {
         dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
-        alert("Lease Details Loaded Successfully ");
+        //alert("Lease Details Loaded Successfully ");
       }
       
       //toberemoved
