@@ -561,17 +561,16 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
   const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-      const queryStr = [
-        { key: "key", value: configKey },
-        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-      ]
+     
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
           , "error"));
         return;
       }
-
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
+        configKey="tradelicense-receipt";}
+    
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
     
         const details = {
@@ -579,10 +578,14 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
              }
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
 
-    }
+    } 
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+    ]
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
-         if(payloadReceiptDetails.Payments[0].paymentMode=="CHEQUE" || payloadReceiptDetails.Payments[0].paymentMode=="DD" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_NEFT" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_RTGS" ){
+         if(payloadReceiptDetails.Payments[0].paymentMode=="CHEQUE" || payloadReceiptDetails.Payments[0].paymentMode=="DD" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_NEFT" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_RTGS" || payloadReceiptDetails.Payments[0].paymentMode=="ONLINE"){
         let ifsc = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.ifscCode", null);
         let branchName = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.branchName", null);
         let bank = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.bank.name", null);
