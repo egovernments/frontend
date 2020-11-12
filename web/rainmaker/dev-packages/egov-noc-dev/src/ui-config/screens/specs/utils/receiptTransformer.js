@@ -662,7 +662,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     //     ? data.bankName + ", " + data.branchName
     //     : get(data, "bankName", "NA")
     // );
-     data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
+    data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
     data.branchName = get(response, "Receipt[0].instrument.branchName", "NA");
     data.bankAndBranch = nullToNa(
     data.bankName && data.branchName
