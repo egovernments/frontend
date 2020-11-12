@@ -650,18 +650,18 @@ export const footer = getCommonApplyFooter({
           callBackForPay(state,dispatch)
         }
 
-        window.posOnFailure=(posResponse={})=>
+        window.posOnFailure=()=>
         {
-          dispatch(
-            toggleSnackbar(
-              true,
-              {
-                labelName: "Payment failure",
-                labelKey: "ERR_FILL_POS_PAYMENT_FAILURE"
-              },
-              "danger"
-            )
-          );
+          // dispatch(
+          //   toggleSnackbar(
+          //     true,
+          //     {
+          //       labelName: "Payment failure",
+          //       labelKey: "ERR_POS_PAYMENT_FAILURE"
+          //     },
+          //     "danger"
+          //   )
+          // );
         }
         const paymentMode = get(
           state.screenConfiguration.preparedFinalObject,
