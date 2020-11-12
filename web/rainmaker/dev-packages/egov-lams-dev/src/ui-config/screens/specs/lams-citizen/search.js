@@ -71,7 +71,7 @@ import {
   
   const header = getCommonHeader({
     labelName: "Lease Renewal/Extension",
-    labelKey: "LAMS_COMMON"
+    labelKey: "LAMS_COMMON_SEARCH"
   });
   const tradeLicenseSearchAndResult = {
     uiFramework: "material-ui",

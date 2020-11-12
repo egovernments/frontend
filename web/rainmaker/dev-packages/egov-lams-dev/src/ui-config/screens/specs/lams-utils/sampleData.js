@@ -3,7 +3,7 @@ export const workflowMasterData = {
       {
           "tenantId": "pb.secunderabad",
           "businessService": "LAMS_NewLR_V2",
-          "business": "LAMS-LR-services",
+          "business": "LAMS",
           "businessServiceSla": 2592000000,
           "states": [
               {
