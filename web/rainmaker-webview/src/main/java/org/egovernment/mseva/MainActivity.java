@@ -86,6 +86,9 @@ import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_SALE_TXN;
 import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_UPI;
 import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_INITIALIZE;
 import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_GET_INCOMPLETE_TXN;
+import static org.egovernment.mseva.utils.Constant.MERCHANT_NAME;
+import static org.egovernment.mseva.utils.Constant.API_KEY;
+import static org.egovernment.mseva.utils.Constant.USER_NAME;
 
 
 
@@ -226,9 +229,10 @@ public class MainActivity extends AppCompatActivity {
 							response = response.getJSONObject("error");
 							String message = response.getString("message");
 							Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+//							if(!response.getString("code").equalsIgnoreCase("NONCE_NOT_FOUND"))
+//								loadView("javascript:window.posOnFailure()",false);
 						}
 
-						loadView("javascript:window.posOnFailure()",false);
 
 					}
 				}
@@ -975,10 +979,10 @@ public class MainActivity extends AppCompatActivity {
 //            jsonRequest.put("captureSignature", "true");
 //            jsonRequest.put("prepareDevice", "false");
 
-			jsonRequest.put("demoAppKey", "94416339-08f9-45b4-a5d2-b150f49842f5");
-			jsonRequest.put("prodAppKey", "94416339-08f9-45b4-a5d2-b150f49842f5");
-			jsonRequest.put("merchantName", "BHARAT_ELECTRONICS_LIMITE");
-			jsonRequest.put("userName", "9611039988");
+			jsonRequest.put("demoAppKey", API_KEY);
+			jsonRequest.put("prodAppKey", API_KEY);
+			jsonRequest.put("merchantName", MERCHANT_NAME);
+			jsonRequest.put("userName", USER_NAME);
 			jsonRequest.put("currencyCode", "INR");
 			jsonRequest.put("appMode", "Demo");
 			jsonRequest.put("captureSignature", "true");

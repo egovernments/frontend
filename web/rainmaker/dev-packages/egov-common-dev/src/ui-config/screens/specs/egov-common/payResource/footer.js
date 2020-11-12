@@ -663,55 +663,66 @@ export const footer = getCommonApplyFooter({
             )
           );
         }
+        const paymentMode = get(
+          state.screenConfiguration.preparedFinalObject,
+          "ReceiptTemp[0].instrument.instrumentType.name"
+        )
+        if(paymentMode === "CARD"){
+          const paymentData={
+            instrumentType:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].instrument.instrumentType.name"
+            ),
+            paymentAmount:get(
+              state.screenConfiguration.preparedFinalObject,
+              "AmountPaid"
+            ),
+            customerName:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].Bill[0].payerName"
+            ),
+            customerMobile:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].Bill[0].mobileNumber"
+            ),
+            message:"Pos payment",
+            emailId:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].Bill[0].payerEmail"
+            ),
+            amountDetails:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].Bill[0].billDetails"
+            ),
+            billNumber:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].Bill[0].billNumber"
+            ),
+            consumerCode:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].Bill[0].consumerCode"
+            ),
+            businessService:get(
+              state.screenConfiguration.preparedFinalObject,
+              "ReceiptTemp[0].Bill[0].businessService"
+            ),
+            collectorName:"",
+            collectorId:"",
+            instrumentDate:"",
+            instrumentNumber:""
+          }
+          try {
+            window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
+          } catch (e) {
+            console.log(e);
+          }
 
-        const paymentData={
-          instrumentType:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].instrument.instrumentType.name"
-          ),
-          paymentAmount:get(
-            state.screenConfiguration.preparedFinalObject,
-            "AmountPaid"
-          ),
-          customerName:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].payerName"
-          ),
-          customerMobile:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].mobileNumber"
-          ),
-          message:"Pos payment",
-          emailId:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].payerEmail"
-          ),
-          amountDetails:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billDetails"
-          ),
-          billNumber:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].billNumber"
-          ),
-          consumerCode:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].consumerCode"
-          ),
-          businessService:get(
-            state.screenConfiguration.preparedFinalObject,
-            "ReceiptTemp[0].Bill[0].businessService"
-          ),
-          collectorName:"",
-          collectorId:"",
-          instrumentDate:"",
-          instrumentNumber:""
         }
-        try {
-          window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
-        } catch (e) {
-          console.log(e);
+        else{
+          callBackForPay(state,dispatch);
         }
+
+
       }
     },
     visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
