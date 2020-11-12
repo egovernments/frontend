@@ -132,7 +132,7 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 12
+                sm: 6
               },
               ...header
             },
