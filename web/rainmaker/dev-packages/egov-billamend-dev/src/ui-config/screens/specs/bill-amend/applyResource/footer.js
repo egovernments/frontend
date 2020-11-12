@@ -10,6 +10,7 @@ import { getQueryArg, getFileUrlFromAPI, getTransformedLocale } from "egov-ui-fr
 import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
+import "./index.css"
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);

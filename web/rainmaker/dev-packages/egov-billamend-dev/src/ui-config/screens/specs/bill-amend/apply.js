@@ -28,7 +28,6 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
-import "../../../../index.css"
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
