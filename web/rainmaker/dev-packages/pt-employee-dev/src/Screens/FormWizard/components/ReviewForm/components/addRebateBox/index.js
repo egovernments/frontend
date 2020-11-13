@@ -191,19 +191,28 @@ class AddRebateExemption extends React.Component {
       }
     }
   };
-  resetFields = () => {    
+  resetFields = () => {
     this.props.prepareFinalObject('adhocExemptionPenalty', {});
     var updatedTaxHeadEstimate =[];
-    var taxHeadEstimate = this.props.estimateResponse[0].taxHeadEstimates;
-    taxHeadEstimate.map(taxHead=> {
-      if(taxHead.taxHeadCode !== 'PT_ADHOC_PENALTY' && taxHead.taxHeadCode !== 'PT_ADHOC_REBATE'){
-        updatedTaxHeadEstimate.push(taxHead);
-      }else{
+    var customEstimateResponse = this.props.estimateResponse[0];
+    var taxHeadEstimates = customEstimateResponse.taxHeadEstimates;
+    let adhocPenalty = 0;
+    let adhocExemption = 0;
+
+    taxHeadEstimates.map(taxHead=> {      
+      if(taxHead.taxHeadCode === 'PT_ADHOC_PENALTY'){        
         taxHead.estimateAmount=0;
-        updatedTaxHeadEstimate.push(taxHead);
+        
+      } else if( taxHead.taxHeadCode === 'PT_ADHOC_REBATE'){
+        taxHead.estimateAmount=0;
+        
       }
     });
-    this.props.prepareFinalObject('estimateResponse[0].taxHeadEstimates', updatedTaxHeadEstimate);
+   
+    var getEstimateResponse = getFormattedEstimate([customEstimateResponse], adhocExemption, adhocPenalty)
+    this.props.prepareFinalObject('estimateResponse', [...getEstimateResponse]);
+
+  // this.props.prepareFinalObject('estimateResponse[0].taxHeadEstimates', updatedTaxHeadEstimate);
     
   }
   componentDidMount = () => {
