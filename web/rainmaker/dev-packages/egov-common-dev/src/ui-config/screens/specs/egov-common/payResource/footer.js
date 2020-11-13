@@ -646,6 +646,7 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
+        dispatch(toggleSpinner());
         window.posOnSuccess=(posResponse={})=>{
           callBackForPay(state,dispatch)
         }
@@ -662,6 +663,7 @@ export const footer = getCommonApplyFooter({
           //     "danger"
           //   )
           // );
+          dispatch(toggleSpinner());
         }
         const paymentMode = get(
           state.screenConfiguration.preparedFinalObject,
@@ -712,8 +714,10 @@ export const footer = getCommonApplyFooter({
             instrumentNumber:""
           }
           try {
+            dispatch(toggleSpinner());
             window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
           } catch (e) {
+            dispatch(toggleSpinner());
             console.log(e);
           }
 
