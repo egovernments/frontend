@@ -131,7 +131,8 @@ class InboxData extends React.Component {
     isSorting: false,
     wfSlaConfig: [],
     page: 0,
-    rowsPerPage: 100,
+    rowsPerPage: 0,
+    rowsPerPageOptions: []
   };
 
   componentDidMount = async () => {
@@ -144,6 +145,9 @@ class InboxData extends React.Component {
             masterDetails: [
               {
                 name: "wfSlaConfig"
+              },
+              {
+                name: "TablePaginationOptions"
               }
             ]
           }
@@ -159,7 +163,9 @@ class InboxData extends React.Component {
       );
       if (payload) {
         this.setState({
-          wfSlaConfig: get(payload.MdmsRes, "common-masters.wfSlaConfig")
+          wfSlaConfig: get(payload.MdmsRes, "common-masters.wfSlaConfig"),
+          rowsPerPage: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue"),
+          rowsPerPageOptions: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].rowsPerPageOptions")
         })
       }
     } catch (e) {
@@ -266,7 +272,7 @@ class InboxData extends React.Component {
     const { data, ProcessInstances, classes } = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
     const { isSorting, sortOrder } = this.state;
-    const { rows, rowsPerPage, page } = this.state;
+    const { rows, rowsPerPage, page, rowsPerPageOptions } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.rows.length - page * rowsPerPage);
 
     if (isSorting) {
@@ -364,7 +370,7 @@ class InboxData extends React.Component {
               )} */}
             <TableFooter>
               <TablePagination
-                rowsPerPageOptions={[25, 50, 100]}
+                rowsPerPageOptions={rowsPerPageOptions}
                 count={data.rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
@@ -443,7 +449,7 @@ class InboxData extends React.Component {
                   <div className={'inbox-table-pagination-sm'}>
                     <TablePagination
                       colSpan={6}
-                      rowsPerPageOptions={[25, 50, 100]}
+                      rowsPerPageOptions={rowsPerPageOptions}
                       count={data.rows.length}
                       rowsPerPage={rowsPerPage}
                       page={page}

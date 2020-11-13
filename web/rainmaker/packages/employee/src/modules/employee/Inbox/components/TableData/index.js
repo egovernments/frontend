@@ -20,6 +20,7 @@ import { connect } from "react-redux";
 import { Taskboard } from "../actionItems";
 import Filter from "../Filter";
 import InboxData from "../Table";
+import commonConfig from "config/common.js";
 import "./index.css";
 
 const getWFstatus = (status) => {
@@ -549,7 +550,10 @@ class TableData extends Component {
     try {
       this.showLoading();
       this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
-      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: 100 }];
+      const mdmsBody = { MdmsCriteria: { tenantId: commonConfig.tenantId, moduleDetails: [{moduleName: "common-masters", masterDetails: [{ name: "TablePaginationOptions" }]}]}};
+      const payload = await httpRequest( "/egov-mdms-service/v1/_search", "_search",[], mdmsBody );
+      let limitVlaue = get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue", "") ;
+      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: limitVlaue }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       // const assignedData = orderBy(
       //   filter(responseData.ProcessInstances, (item) => {
