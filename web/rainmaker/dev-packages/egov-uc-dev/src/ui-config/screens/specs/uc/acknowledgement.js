@@ -10,7 +10,7 @@ import {
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { download } from  "egov-common/ui-utils/commons";;
+import { download,downloadChallan } from  "egov-common/ui-utils/commons";;
 import './index.css';
 const header = getCommonHeader({
   labelName: `mCollect`,
@@ -29,7 +29,7 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
         { key: "tenantId", value: tenantId }
       ]
       console.info("in ackmt==data got=",Challan);
-      download(Challan,"download" ,"mcollect-challan",state);          
+      downloadChallan(Challan,"download" ,"mcollect-challan",state);          
     },
     leftIcon: "assignment"
   };
@@ -42,7 +42,7 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
         { key: "tenantId", value: tenantId }
       ]
      // downloadChallan(Challan,"print");   
-      download(Challan,"print" ,"mcollect-challan",state);        
+     downloadChallan(Challan,"print" ,"mcollect-challan",state);        
     },
     leftIcon: "assignment"
   };

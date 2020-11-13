@@ -331,14 +331,17 @@ export const loadReceiptData = async (consumerCode, tenant) => {
         }
       }
     }
+    
     if (isAppFeeReqd) {
       for (var i = 0; i < response.Payments.length; i++) {
         for (var j = 0; j < response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails.length; j++) {
           if ((response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].taxHeadCode === "TL_APP_FEE")) {
-            if (response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].amount > 0 && (response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].amount==response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].amountPaid)) {
+            if ((response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].amount > 0) && (response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].amount==response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].adjustedAmount)  ) {
               data.applicationReceiptNo = response.Payments[i].paymentDetails[0].receiptNumber
+              console.log("applicationReceiptNo",response.Payments[i].paymentDetails[0].receiptNumber)
             } else {
               data.licenceReceiptNo = response.Payments[i].paymentDetails[0].receiptNumber
+              console.log("licenceReceiptNo",response.Payments[i].paymentDetails[0].receiptNumber)
             }
           }
         }

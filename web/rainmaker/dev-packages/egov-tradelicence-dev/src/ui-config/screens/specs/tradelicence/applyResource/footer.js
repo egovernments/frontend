@@ -1,4 +1,4 @@
-import { download,downloadAppFeeReceipt } from "egov-common/ui-utils/commons";
+import { download} from "egov-common/ui-utils/commons";
 import { dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -1019,7 +1019,7 @@ export const footerReviewTop = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       console.log("receiptQueryString source---",receiptQueryString);
-      downloadAppFeeReceipt(receiptQueryString , "download" , "consolidatedreceipt");
+      download(receiptQueryString , "download" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1031,7 +1031,7 @@ export const footerReviewTop = (
         { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      downloadAppFeeReceipt(receiptQueryString , "print" , "consolidatedreceipt");
+      download(receiptQueryString , "print" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1227,7 +1227,7 @@ export const downloadPrintContainer = (
       ]
      
   console.log("receiptQueryString source 1---",receiptQueryString);
-      downloadAppFeeReceipt(receiptQueryString , "download" , "consolidatedreceipt");
+      download(receiptQueryString , "download" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1239,7 +1239,7 @@ export const downloadPrintContainer = (
         { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      downloadAppFeeReceipt(receiptQueryString , "print" , "consolidatedreceipt");
+      download(receiptQueryString , "print" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };

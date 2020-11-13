@@ -505,48 +505,16 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
 export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
   let DOWNLOADRECEIPT = {}
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
-    console.log("in here--");
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt");
   }
-
-  switch (configKey) {
-
-    case 'consolidatedreceipt':
-      DOWNLOADRECEIPT = {
-        GET: {
-          URL: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-          ACTION: "_get",
-        },
-      };
-      break;
-    case 'mcollect-receipt':
-      DOWNLOADRECEIPT = {
-        GET: {
-          URL: "/egov-pdf/download/UC/mcollect-receipt",
-          ACTION: "_get",
-        },
-      };
-
-      break;
-    case 'mcollect-challan':
-      DOWNLOADRECEIPT = {
-        GET: {
-          URL: "/egov-pdf/download/UC/mcollect-challan",
-          ACTION: "_get",
-        },
-      };
-      break;
-    default:
-      DOWNLOADRECEIPT = {
-        GET: {
-          URL: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-          // URL: "/egov-pdf/download/TL/tlreceipt",
-          ACTION: "_get",
-        },
-      };
-  }
-
+  DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
+      ACTION: "_get",
+    },
+  };
+  
 
   try {
 
@@ -572,46 +540,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   }
 }
 
-//For Application fee receipt
-export const downloadAppFeeReceipt = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
-  let DOWNLOADRECEIPT = {};
-  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
-    configKey = get(uiCommonPayConfig, "receiptKey")
-  }
 
-  if (configKey === "consolidatedreceipt") {
-    DOWNLOADRECEIPT = {
-      GET: {
-        URL: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
-        ACTION: "_get",
-      },
-    };
-  }
-
-  const queryStr = [
-    { key: "receiptNumbers", value: receiptQueryString[0].value },
-    { key: "tenantId", value: receiptQueryString[1].value }
-  ]
-
-  try {
-
-    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-      .then(res => {
-        res.filestoreIds[0]
-        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-          res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId, mode)
-          })
-        } else {
-          console.log("Error In Receipt Download");
-        }
-      });
-
-  } catch (exception) {
-    alert('Some Error Occured while downloading Receipt!');
-  }
-}
 
 export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
   const searchCriteria = {
@@ -683,4 +612,19 @@ export const downloadChallan = async (queryStr, mode = 'download') => {
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 
+}
+
+export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, tenantId) => {
+  getFileUrlFromAPI(fileStoreIds.join(','), tenantId).then(async (fileRes) => {
+    fileStoreIds.map(fileStoreId => {
+      if (mode === 'download') {
+        downloadPdf(fileRes[fileStoreId]);
+      } else if (mode === 'open') {
+        openPdf(fileRes[fileStoreId], '_self')
+      }
+      else {
+        printPdf(fileRes[fileStoreId]);
+      }
+    })
+  });
 }
