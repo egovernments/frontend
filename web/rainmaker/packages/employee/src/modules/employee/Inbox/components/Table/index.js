@@ -164,8 +164,8 @@ class InboxData extends React.Component {
       if (payload) {
         this.setState({
           wfSlaConfig: get(payload.MdmsRes, "common-masters.wfSlaConfig"),
-          rowsPerPage: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue"),
-          rowsPerPageOptions: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].rowsPerPageOptions")
+          rowsPerPage: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue",100),
+          rowsPerPageOptions: get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].rowsPerPageOptions",[25,50,100])
         })
       }
     } catch (e) {

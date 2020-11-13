@@ -295,14 +295,14 @@ class TableData extends Component {
       initialInboxData: tempObject
     });
   }
-  prepareInboxDataRows = async (data, all) => {
+  prepareInboxDataRows = async (data, all ,loadLocality=false) => {
     const { toggleSnackbarAndSetText } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     if (isEmpty(data)) return [];
     let businessServices = [];
     let businessIds = [];
     let ptApplicationNo = []
-    if (this.state.showLocality && this.state.loadLocalityForInitialData) {
+    if (this.state.showLocality && loadLocality) {
       businessIds = data.map((item) => {
         businessServices.push(item.moduleName);
         if (item.moduleName == 'PT') {
@@ -320,7 +320,7 @@ class TableData extends Component {
     // const uniqueModules = uniq(modules)
     const uniqueModules = uniq(businessServices)
     let localitymap = [];
-    if (this.state.showLocality && this.state.loadLocalityForInitialData) {
+    if (this.state.showLocality && loadLocality) {
       try {
         let requestBodies = []
         let endpoints = []
@@ -338,6 +338,8 @@ class TableData extends Component {
                 endpoints.push("property-services/property/_search")
               }
             }
+          } else  if (uniqueModule == "pt-services" || uniqueModule == "pgr-services"  ) {
+
           } else {
             requestBodies.push({
               searchCriteria: {
@@ -552,8 +554,8 @@ class TableData extends Component {
       this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       const mdmsBody = { MdmsCriteria: { tenantId: commonConfig.tenantId, moduleDetails: [{moduleName: "common-masters", masterDetails: [{ name: "TablePaginationOptions" }]}]}};
       const payload = await httpRequest( "/egov-mdms-service/v1/_search", "_search",[], mdmsBody );
-      let limitVlaue = get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue", "") ;
-      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: limitVlaue }];
+      let limitValue = get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue", 100) ;
+      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: limitValue }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       // const assignedData = orderBy(
       //   filter(responseData.ProcessInstances, (item) => {
@@ -612,10 +614,13 @@ class TableData extends Component {
     const inboxData = [{ headers: [], rows: [] }];
     try {
       // this.showLoading();
-      const requestBody = [{ key: "tenantId", value: tenantId }];
+      const requestBody1 = [{ key: "tenantId", value: tenantId }];
+      let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
+      maxCount=maxCount || 10000;
+      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
-      const convertedData = await this.prepareInboxDataRows(allData, true)
+      const convertedData = await this.prepareInboxDataRows(allData, true,true)
       const allDataRows = convertedData.allData;
       const assignedDataRows = convertedData.assignedToMe;
 
