@@ -549,8 +549,7 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      true
-      //false
+      false
     );
     return action;
   },
