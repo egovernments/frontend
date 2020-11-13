@@ -5,6 +5,7 @@ import { getFormattedEstimate } from "egov-ui-kit/utils/PTCommon/FormWizardUtils
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import { connect } from "react-redux";
+import "./index.css"
 
 const labelStyle = {
   fontFamily: "Roboto",
@@ -24,7 +25,7 @@ class AddRebateExemption extends React.Component {
     initialTaxValue: 0,
     isTaxValueInitialized: false
   };
-  validateForm = () => {
+  validateForm = () => {  
     const { adhocPenalty,
       adhocPenaltyReason, adhocOtherPenaltyReason,
       adhocExemption,
@@ -42,10 +43,10 @@ class AddRebateExemption extends React.Component {
     }
     return true;
   }
-  onChangePenaltyField = value => {
+  onChangePenaltyField = value => {    
     let show = false;
-    const { setFieldProperty } = this.props;
-    if (value === "Others") {
+   // const { setFieldProperty } = this.props;
+    if (value === "Others" && !this.props.adhocOtherPenaltyReason) {
       show = true;
       setFieldProperty(
         "additionalRebate",
@@ -53,24 +54,33 @@ class AddRebateExemption extends React.Component {
         "required",
         true
       );
-    } else {
-      show = false;
-      setFieldProperty(
+    } else if (value === "Others" && this.props.adhocOtherPenaltyReason){      
+        show = true;
+        setFieldProperty(
         "additionalRebate",
         "otherPenaltyReason",
         "required",
-        false
+         true
       );
-    }
+      } else{
+        show = false;
+        setFieldProperty(
+          "additionalRebate",
+          "otherPenaltyReason",
+          "required",
+          false
+        );
+      }
     this.setState({
       showExtraPenaltyField: show
     });
     this.props.prepareFinalObject("adhocExemptionPenalty.adhocPenaltyReason", value);
   };
-  onChangeExemptField = value => {
+  onChangeExemptField = value => {    
     let show = false;
-    const { setFieldProperty } = this.props;
-    if (value === "Others") {
+    // const { setFieldProperty } = this.props;
+    
+    if (value === "Others" && !this.props.adhocOtherExemptionReason) {
       show = true;
       setFieldProperty(
         "additionalRebate",
@@ -78,22 +88,30 @@ class AddRebateExemption extends React.Component {
         "required",
         true
       );
+    } else if (value === "Others" && this.props.adhocOtherExemptionReason) {
+      show = true;
+        setFieldProperty(
+          "additionalRebate",
+          "otherExemptionReason",
+          "required",
+          true
+        );
     } else {
-      show = false;
-      setFieldProperty(
-        "additionalRebate",
-        "otherExemptionReason",
-        "required",
-        false
-      );
-    }
+        show = false;
+        setFieldProperty(
+          "additionalRebate",
+          "otherExemptionReason",
+          "required",
+          false
+        );
+      }
     this.setState({
       showExtraExemptField: show
     });
     this.props.prepareFinalObject("adhocExemptionPenalty.adhocExemptionReason", value);
   };
 
-  updateValueToEstimate = () => {
+  updateValueToEstimate = () => {    
     let {
 
       adhocPenalty,
@@ -120,7 +138,7 @@ class AddRebateExemption extends React.Component {
     prepareFinalObject('estimateResponse', [...estimateResponse]);
   }
 
-  onSubmit = () => {
+  onSubmit = () => {    
     const {
       handleClose,
       displayFormErrors,
@@ -137,11 +155,11 @@ class AddRebateExemption extends React.Component {
         totalAmount = taxHead.estimateAmount;
       }
     });
-
+    
 
 
     if (adhocExemption >= 0) {
-      if (adhocExemption > totalAmount) {
+      if (adhocExemption > totalAmount) {        
         if (this.validateForm(additionalRebate)) {
           alert(
             "Adhoc Exemption cannot be greater than the estimated tax for the given property"
@@ -150,7 +168,7 @@ class AddRebateExemption extends React.Component {
         } else {
           displayFormErrors("additionalRebate");
         }
-      } else {
+      } else {        
         if (this.validateForm(additionalRebate)) {
           // exemptValue !== null &&
           // this.props.handleFieldChange("adhocExemption", exemptValue);
@@ -173,11 +191,30 @@ class AddRebateExemption extends React.Component {
       }
     }
   };
-  resetFields = () => {
+  resetFields = () => {    
     this.props.prepareFinalObject('adhocExemptionPenalty', {});
+    var updatedTaxHeadEstimate =[];
+    var taxHeadEstimate = this.props.estimateResponse[0].taxHeadEstimates;
+    taxHeadEstimate.map(taxHead=> {
+      if(taxHead.taxHeadCode !== 'PT_ADHOC_PENALTY' && taxHead.taxHeadCode !== 'PT_ADHOC_REBATE'){
+        updatedTaxHeadEstimate.push(taxHead);
+      }else{
+        taxHead.estimateAmount=0;
+        updatedTaxHeadEstimate.push(taxHead);
+      }
+    });
+    this.props.prepareFinalObject('estimateResponse[0].taxHeadEstimates', updatedTaxHeadEstimate);
+    
   }
   componentDidMount = () => {
-    this.resetFields();
+          
+    if (this.props.adhocExemptionReason === "Others"){
+      this.onChangeExemptField(this.props.adhocExemptionReason);
+    }
+    if (this.props.adhocPenaltyReason === "Others"){
+      this.onChangePenaltyField(this.props.adhocPenaltyReason);
+    }
+    
   }
 
   render() {
@@ -219,7 +256,7 @@ class AddRebateExemption extends React.Component {
       sessionStorage.setItem('taxValue', totalAmount)
     }
     if (!this.state.isTaxValueInitialized) {
-
+          
       this.setState({
         isTaxValueInitialized: true,
         initialTaxValue: totalAmount
@@ -266,6 +303,7 @@ class AddRebateExemption extends React.Component {
                 fullWidth={true}
                 {...otherPenaltyReasonForm}
                 value={adhocOtherPenaltyReason}
+                required
               />
             </div>
           )}
@@ -299,11 +337,25 @@ class AddRebateExemption extends React.Component {
                 {...
                 otherExemptionReasonForm}
                 value={adhocOtherExemptionReason}
+                required
               />
             </div>
           )}
         </div>
         <div className="pt-rebate-box-btn">
+        <Button
+            style={{
+              boxShadow:
+                "0 2px 5px 0 rgba(100, 100, 100, 0.5), 0 2px 10px 0 rgba(167, 167, 167, 0.5)"
+            }}
+            className="reset-rebate-action-button"
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+            buttonStyle={{ border: "1px solid #fe7a51" }}
+            style={{ lineHeight: "auto", marginRight: "10%" }}
+            onClick={this.resetFields}
+            buttonLabel={true}
+            label={<Label label="CS_COMMON_RESET" buttonLabel={true} />}
+          />
           <Button
             primary={true}
             style={{
