@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar , prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar ,showSpinner,hideSpinner, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -646,10 +646,11 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        dispatch(toggleSpinner());
+        dispatch(showSpinner());
         window.posOnSuccess=(posResponse={})=>{
           callBackForPay(state,dispatch)
         }
+        dispatch(hideSpinner());
 
         window.posOnFailure=()=>
         {
@@ -663,7 +664,7 @@ export const footer = getCommonApplyFooter({
           //     "danger"
           //   )
           // );
-          dispatch(toggleSpinner());
+          dispatch(hideSpinner());
         }
         const paymentMode = get(
           state.screenConfiguration.preparedFinalObject,
@@ -714,15 +715,17 @@ export const footer = getCommonApplyFooter({
             instrumentNumber:""
           }
           try {
-            dispatch(toggleSpinner());
+            dispatch(showSpinner());
             window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
+            dispatch(hideSpinner());
           } catch (e) {
-            dispatch(toggleSpinner());
+            dispatch(hideSpinner());
             console.log(e);
           }
 
         }
         else{
+          dispatch(hideSpinner());
           callBackForPay(state,dispatch);
         }
 
