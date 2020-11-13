@@ -108,7 +108,7 @@ export const searchApiCall = async (state, dispatch) => {
         payeeName: get(Payments[i], `paidBy`), // Changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
-        amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
+        amount: get(Payments[i], `paymentDetails[0].totalAmountPaid`),
         status: get(Payments[i], `paymentDetails[0].bill.status`),
         businessService: get(Payments[i], `paymentDetails[0].bill.businessService`),
         tenantId: get(Payments[i], `tenantId`),
