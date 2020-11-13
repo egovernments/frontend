@@ -316,40 +316,29 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
-      specialCategoryDocumentType: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-pt",
-        componentPath: "AutosuggestContainer",
-        props: {
-          label: {
-            labelName: "Document Type",
-            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
-          },
-          placeholder: {
-            labelName: "Enter Document Type.",
-            labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
-          },
-          localePrefix: {
-            moduleName: "PropertyTax",
-            masterName: "ReasonForTransfer"
-          },
-          className: "applicant-details-error autocomplete-dropdown",
-          required: true,
-          isClearable: true,
-          labelsFromLocalisation: true,
-          jsonPath: "Property.ownersTemp[0].documentType",
-          sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
+      specialCategoryDocumentType: getSelectField({
+        label: {
+          labelName: "Document Type",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_LABEL"
         },
-        required: true,
-        visible: false,
+        placeholder: {
+          labelName: "Enter Document Type.",
+          labelKey: "PT_MUTATION_TRANSFEREE_SPECIAL_CATEGORY_DOCUMENT_TYPE_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "PropertyTax",
+          masterName: "ReasonForTransfer"
+        },
         jsonPath: "Property.ownersTemp[0].documentType",
         sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
+        required: true,
+        visible: false,
         gridDefination: {
           xs: 12,
           sm: 12,
           md: 6
         }
-      },
+      }),
       specialCategoryDocument: getTextField({
         label: {
           labelName: "Document Id No.",
