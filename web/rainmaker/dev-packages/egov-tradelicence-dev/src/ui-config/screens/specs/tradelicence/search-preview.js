@@ -182,15 +182,21 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     const obj = setStatusBasedValue(status);
     let appDocuments=get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]);
     if (appDocuments) {
-      appDocuments=appDocuments.filter(document=>document);
+      let applicationDocs = [];
+      appDocuments.forEach(doc => {
+        if(doc.length !== 0) {
+          applicationDocs.push(doc);
+        }
+      })
+      applicationDocs=applicationDocs.filter(document=>document);
       
       let removedDocs=get(data, "LicensesTemp[0].removedDocs",[]);
       if(removedDocs.length>0){
           removedDocs.map(removedDoc=>{
-            appDocuments=appDocuments.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
+            applicationDocs=applicationDocs.filter(appDocument=>!(appDocument.documentType===removedDoc.documentType&&appDocument.fileStoreId===removedDoc.fileStoreId))
           })             
       }
-      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",appDocuments));
+      dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments",applicationDocs));
       await setDocuments(
         get(state, "screenConfiguration.preparedFinalObject"),
         "Licenses[0].tradeLicenseDetail.applicationDocuments",
