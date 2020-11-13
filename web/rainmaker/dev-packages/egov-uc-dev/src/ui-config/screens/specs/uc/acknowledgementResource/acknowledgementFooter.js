@@ -185,7 +185,7 @@ const generateMiniChallan = (state, dispatch) => {
   const businessService = getQueryArg(window.location.href,"serviceCategory");
   const totalAmt = ReceiptDataTemp.amount.reduce(function(total, arr) { 
     // return the sum with previous value
-    return total + arr.amount;
+    return total + arr;
   
     // set initial value as 0
   },0);
@@ -199,9 +199,9 @@ const generateMiniChallan = (state, dispatch) => {
     fromPeriod: fromPeriod,
     toPeriod: toPeriod,
     receiptAmount: totalAmt,
-    challanDate:challanDateFormatted,
+    receiptDate:challanDateFormatted,
     collectorName:collectorName,
-    challanStatus:"Active"
+    status:"Active"
   };  
   return UCminiChallanData;
  // return UCminiChallanBuilder(UCminiChallanData);

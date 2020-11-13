@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
 							// response = response.getJSONObject("error");
 							// String errorCode = response.getString("code");
 							// String errorMessage = response.getString("message");
+							Toast.makeText(this, "Paymemnt Failure", Toast.LENGTH_LONG).show();
 							loadView("javascript:window.posOnFailure()",false);
 							closeEzeTap();
 						}
@@ -229,8 +230,11 @@ public class MainActivity extends AppCompatActivity {
 							response = response.getJSONObject("error");
 							String message = response.getString("message");
 							Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-//							if(!response.getString("code").equalsIgnoreCase("NONCE_NOT_FOUND"))
-//								loadView("javascript:window.posOnFailure()",false);
+							if(!response.getString("code").equalsIgnoreCase("NONCE_NOT_FOUND")){
+								Toast.makeText(this, "Paymemnt Failure", Toast.LENGTH_LONG).show();
+								loadView("javascript:window.posOnFailure()",false);
+							}
+
 						}
 
 
@@ -300,25 +304,61 @@ public class MainActivity extends AppCompatActivity {
 //			startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
 
 
-			doInitializeEzeTap();
-			doCheckIncompleteTxn();
-			JSONObject jsonObject = new JSONObject(json);
-			String modeOfPayment = jsonObject.getString("instrumentType");
-			if(modeOfPayment.equalsIgnoreCase("Cash"))
-			{
-				onCash(json);
-			}
-			else if(modeOfPayment.equalsIgnoreCase("Card")){
-				onCard(json);
-			}
-			else if(modeOfPayment.equalsIgnoreCase("UPI")){
-				onUPI(json);
-			}
-			else{
-				closeEzeTap();
+			if(name.equals("paymentData")) {
+				doInitializeEzeTap();
+				//doCheckIncompleteTxn();
+				JSONObject jsonObject = new JSONObject(json);
+				String modeOfPayment = jsonObject.getString("instrumentType");
+				if (modeOfPayment.equalsIgnoreCase("Cash")) {
+					onCash(json);
+				} else if (modeOfPayment.equalsIgnoreCase("Card")) {
+					onCard(json);
+				} else {
+					closeEzeTap();
 
-				return;
+					return;
+				}
 			}
+		}
+
+
+		@JavascriptInterface
+		public void sendPrintData(String name, String json) throws JSONException {
+			if(name.equals("printData")){
+				try{
+					JSONObject jsonObject = new JSONObject(json);
+					String NEXTLINE = "&&";
+					String receiptString = "     " + jsonObject.getString("ulbType");
+					receiptString = receiptString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
+					receiptString = receiptString + "******************************************" + NEXTLINE;
+
+					receiptString = receiptString + " Receipt No    : " + jsonObject.getString("receiptNumber") + NEXTLINE;
+					if(jsonObject.has("receiptDate")){
+						receiptString = receiptString + " Receipt Date  : " + jsonObject.getString("receiptDate") + NEXTLINE;
+					}
+					receiptString = receiptString + " Consumer Name : " + jsonObject.getString("consumerName") + NEXTLINE;
+
+
+					receiptString = receiptString + " Category      : " + jsonObject.getString("businessService") + NEXTLINE;
+					receiptString = receiptString + " From Period   : " + jsonObject.getString("fromPeriod") + NEXTLINE;
+					receiptString = receiptString + " To Period     : " + jsonObject.getString("toPeriod") + NEXTLINE;
+					receiptString = receiptString + " Paid Amount   : ₹" + jsonObject.getString("receiptAmount") + NEXTLINE;
+					if(jsonObject.has("paymentMode")) {
+						receiptString = receiptString + " Payment Mode  : " + jsonObject.getString("paymentMode") + NEXTLINE;
+					}
+					receiptString = receiptString + " Collector Name: " + jsonObject.getString("collectorName")+ NEXTLINE;
+					receiptString = receiptString + "******************************************" + NEXTLINE;
+
+					Toast.makeText(mContext, receiptString, Toast.LENGTH_SHORT).show();
+
+
+				}catch (JSONException e) {
+
+					e.printStackTrace();
+				}
+
+			}
+
 		}
 
 	}
@@ -1141,74 +1181,7 @@ public class MainActivity extends AppCompatActivity {
 
 		EzeAPI.cardTransaction(this, REQUEST_CODE_SALE_TXN, jsonRequest);
 	}
-	void onUPI(String json) {
 
-
-		try {
-			//  REQUEST
-			JSONObject jsonObject = new JSONObject(json);
-
-			JSONObject jsonRequest = new JSONObject();
-			JSONObject jsonOptionalParams = new JSONObject();
-			JSONObject jsonReferences = new JSONObject();
-			JSONObject jsonCustomer = new JSONObject();
-
-			// Building Customer Object
-			jsonCustomer.put("name", jsonObject.getString("customerName"));
-			jsonCustomer.put("mobileNo",jsonObject.getString("customerMobile"));
-			// jsonCustomer.put("email", et_email_adrs.getText().toString().trim());
-
-			//int refNo = SharedPrefrences.getRefNo(PaymentoptionActivity.this);
-			jsonReferences.put("reference1", "" + UUID.randomUUID());
-			//SharedPrefrences.setReferenceNo(PaymentoptionActivity.this, (refNo + 1));
-
-			//Passing Additional References
-			JSONArray array = new JSONArray();
-			array.put("addRef_xx1");
-			array.put("addRef_xx2");
-			jsonReferences.put("additionalReferences", array);
-
-			//Building Optional params Object
-			//Cannot have amount cashback in cash transaction.
-			jsonOptionalParams.put("amountCashback", "0.00");
-			jsonOptionalParams.put("amountTip", "0.00");
-			jsonOptionalParams.put("references", jsonReferences);
-			jsonOptionalParams.put("customer", jsonCustomer);
-
-
-			//Building final request object
-			jsonRequest.put("amount",jsonObject.getString("paymentAmount"));
-			jsonRequest.put("options", jsonOptionalParams);
-			doUPITxn(jsonRequest);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void doUPITxn(JSONObject jsonRequest) {
-		/******************************************
-		 {
-		 "amount": "123",
-		 "options": {
-		 "references": {
-		 "reference1": "1234",
-		 "additionalReferences": [
-		 "addRef_xx1",
-		 "addRef_xx2"
-		 ]
-		 },
-		 "customer": {
-		 "name": "xyz",
-		 "mobileNo": "1234567890",
-		 "email": "abc@xyz.com"
-		 }
-		 }
-		 }
-		 ******************************************/
-
-		EzeAPI.upiTransaction(this, REQUEST_CODE_UPI, jsonRequest);
-	}
 	private void doCheckIncompleteTxn() {
 		EzeAPI.checkForIncompleteTransaction(this, REQUEST_CODE_GET_INCOMPLETE_TXN);
 	}

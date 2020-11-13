@@ -291,7 +291,7 @@ import {
       posbuttons:{
         uiFramework: "custom-atoms",
         componentPath: "Div",
-        visible:JSON.parse(window.localStorage.getItem('isPOSmachine')),
+       // visible:JSON.parse(window.localStorage.getItem('isPOSmachine')),
 
         children: {
           printMiniReceiptButton: {
@@ -760,7 +760,8 @@ import {
       toPeriod: toPeriod,
       receiptAmount: receiptAmount,
       paymentMode: paymentMode,
-      collectorName: collectorName
+      collectorName: collectorName,
+      status:"Paid"
     };  
 
       return UCminiReceiptData;
@@ -784,7 +785,7 @@ import {
     //const challanDateFormatted = todayDate.toString();           
     const fromPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodFrom);
     const toPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodTo);
-    const consumerName = ReceiptDataTemp.consumerName;
+    const consumerName = ReceiptDataTemp.citizen.name;
     let id = getQueryArg(window.location.href, "tenantId"); 
     let localizedULBName = "";
     if(id != null){
@@ -805,10 +806,11 @@ import {
       amount.push(item.value);
     });
     let totalAmt = 0;
+
     if(amount.length != 0){
       totalAmt = amount.reduce(function(total, arr) { 
         // return the sum with previous value
-        return total + arr.amount;
+        return total + arr;
       
         // set initial value as 0
       },0);
@@ -824,12 +826,11 @@ import {
       fromPeriod: fromPeriod,
       toPeriod: toPeriod,
       receiptAmount: totalAmt,
-      challanDate:challanDateFormatted,
+      receiptDate:challanDateFormatted,
       collectorName:collectorName,
-      challanStatus:status
+      status:status
     };  
     return UCminiChallanData;
-   // return UCminiChallanBuilder(UCminiChallanData);
   };
   const screenConfig = {
     uiFramework: "material-ui",

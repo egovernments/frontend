@@ -194,7 +194,8 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                         toPeriod: toPeriod,
                         receiptAmount: receiptAmount,
                         paymentMode: paymentMode,
-                        collectorName: collectorName
+                        collectorName: collectorName,
+                        status:"Paid"
                       };  
                       try {
                         window.Android && window.Android.sendPrintData("printData",JSON.stringify(UCminiReceiptData));
