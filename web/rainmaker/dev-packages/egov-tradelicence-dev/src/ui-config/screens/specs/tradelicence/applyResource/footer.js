@@ -959,7 +959,7 @@ export const footerReviewTop = (
   let printMenu = [];
   let licenseNumber = get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
-  const receiptKey = get(uiCommonConfig, "receiptKey");
+  const receiptKey ="consolidatedreceipt" //get(uiCommonConfig, "receiptKey");
   const responseLength = get(
     state.screenConfiguration.preparedFinalObject,
     `licenseCount`,
@@ -988,7 +988,7 @@ export const footerReviewTop = (
 
 
       const receiptQueryString = [
-        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "download", receiptKey, state);
@@ -1002,7 +1002,7 @@ export const footerReviewTop = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "print", receiptKey, state);
@@ -1015,11 +1015,11 @@ export const footerReviewTop = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      //console.log("receiptQueryString source---",receiptQueryString);
-      downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
+      console.log("receiptQueryString source---",receiptQueryString);
+      downloadAppFeeReceipt(receiptQueryString , "download" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1028,10 +1028,10 @@ export const footerReviewTop = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt");
+      downloadAppFeeReceipt(receiptQueryString , "print" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1200,7 +1200,7 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "download", receiptKey);
@@ -1211,7 +1211,7 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "print", receiptKey);
@@ -1222,11 +1222,12 @@ export const downloadPrintContainer = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-     // console.log("receiptQueryString source 1---",receiptQueryString);
-      downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
+     
+  console.log("receiptQueryString source 1---",receiptQueryString);
+      downloadAppFeeReceipt(receiptQueryString , "download" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1235,10 +1236,10 @@ export const downloadPrintContainer = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt");
+      downloadAppFeeReceipt(receiptQueryString , "print" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
