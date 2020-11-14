@@ -73,13 +73,14 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
         callBack: (state, dispatch) => {
           const challanData = generateMiniChallan(state, dispatch);
           try {
+            console.log("printData",JSON.stringify(challanData));
             window.Android && window.Android.sendPrintData("printData",JSON.stringify(challanData));
           } catch (e) {
             console.log(e);
           }
         }
     },
-    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) 
+    //visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) 
   },
     payButton: {
     componentPath: "Button",
@@ -185,7 +186,7 @@ const generateMiniChallan = (state, dispatch) => {
   const businessService = getQueryArg(window.location.href,"serviceCategory");
   const totalAmt = ReceiptDataTemp.amount.reduce(function(total, arr) { 
     // return the sum with previous value
-    return total + arr;
+    return total + arr.amount;
   
     // set initial value as 0
   },0);
@@ -203,6 +204,7 @@ const generateMiniChallan = (state, dispatch) => {
     collectorName:collectorName,
     status:"Active"
   };  
+
   return UCminiChallanData;
  // return UCminiChallanBuilder(UCminiChallanData);
 };
