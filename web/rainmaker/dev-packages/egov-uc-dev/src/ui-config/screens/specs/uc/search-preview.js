@@ -297,7 +297,7 @@ import {
       posbuttons:{
         uiFramework: "custom-atoms",
         componentPath: "Div",
-       // visible:JSON.parse(window.localStorage.getItem('isPOSmachine')),
+        visible:JSON.parse(window.localStorage.getItem('isPOSmachine')),
 
         children: {
           printMiniReceiptButton: {
@@ -686,7 +686,6 @@ import {
     const fetchBillResponse = await getBill(getBillQueryObj);
     const paymentObject = await getReceipt(queryObj);
     let bill = get(paymentObject, "Payments[0].paymentDetails[0].bill", null);
-    const paymentMode = get(paymentObject, "Payments[0].paymentMode", "");
     if (bill == null) {
       bill = get(fetchBillResponse, "Bill[0]", {});
     } 
@@ -699,11 +698,9 @@ import {
     set(estimateData, "payStatus", challanStatus === "PAID" ? true : false);
     dispatch(prepareFinalObject("Bill[0]", bill));
     dispatch(prepareFinalObject("Demands[0].estimateCardData", estimateData));
-    dispatch(prepareFinalObject("paymentMode", paymentMode));
     dispatch(
       prepareFinalObject("Payments", get(paymentObject, "Payments", null))
     );
-    return paymentMode;
   };
   export const getBill = async (queryObject) => {
     try {
@@ -736,16 +733,12 @@ import {
   const generateMiniReceipt = (state) => { 
 
     const ReceiptDataTemp = get(
-      state.screenConfiguration.preparedFinalObject,"Bill[0]"
+      state.screenConfiguration.preparedFinalObject,"Payments[0]"
     );
-    const paymentMode = get(
-      state.screenConfiguration.preparedFinalObject,"paymentMode"
-    );
-  
-      let receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.billDate);
-      let receiptAmount = ReceiptDataTemp.totalAmount;           
-      let fromPeriod = getDateFromEpoch(ReceiptDataTemp.billDetails[0].fromPeriod);
-      let toPeriod = getDateFromEpoch(ReceiptDataTemp.billDetails[0].toPeriod);
+      let receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.transactionDate);
+      let receiptAmount = ReceiptDataTemp.totalAmountPaid;           
+      let fromPeriod = getDateFromEpoch(ReceiptDataTemp.paymentDetails[0].bill.billDetails[0].fromPeriod);
+      let toPeriod = getDateFromEpoch(ReceiptDataTemp.paymentDetails[0].bill.billDetails[0].toPeriod);
       let consumerName = ReceiptDataTemp.payerName;
       let id = getQueryArg(window.location.href, "tenantId"); 
       let localizedULBName = "";
@@ -758,6 +751,7 @@ import {
       
     let empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
     collectorName = empInfo.name;
+    const paymentMode = ReceiptDataTemp.paymentMode;
 
     let UCminiReceiptData = {
       ulbType: localizedULBName,
