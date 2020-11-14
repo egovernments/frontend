@@ -1,5 +1,5 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
+import { isPublicSearch,getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import { ifUserRoleExists } from "../../utils";
@@ -185,11 +185,11 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                     collectorName = empInfo.name;
                       let UCminiReceiptData = {
                         ulbType: localizedULBName,
-                        receiptNumber: receiptNumber,
-                        tenantid: tenant,
+                        receiptNumber: getQueryArg(window.location.href, "receiptNumber"),
+                        tenantid: getQueryArg(window.location.href, "tenantId"),
                         consumerName: consumerName,
                         receiptDate: receiptDateFormatted,
-                        businessService: businessService,
+                        businessService: getQueryArg(window.location.href, "businessService"),
                         fromPeriod: fromPeriod,
                         toPeriod: toPeriod,
                         receiptAmount: receiptAmount,
@@ -198,6 +198,7 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
                         status:"Paid"
                       };  
                       try {
+                          console.log("Receipt",JSON.stringify(UCminiReceiptData));
                         window.Android && window.Android.sendPrintData("printData",JSON.stringify(UCminiReceiptData));
                       } catch (e) {
                         console.log(e);
