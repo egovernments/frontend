@@ -531,6 +531,8 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
     configKey = get(uiCommonPayConfig, "receiptKey")
   }
  
+  const userNameObject = get(state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
+  const userName = get(userNameObject, "auditorName")
 
   const FETCHRECEIPT = {
     GET: {
@@ -547,10 +549,11 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
   };
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let tenantId = getQueryArg(window.location.href, "tenantId");
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
   let queryObject = [
     { key: "tenantId", value:tenantId },
-    { key: "applicationNumber", value: consumerCode }
+    { key: "applicationNumber", value: consumerCode?consumerCode:applicationNumber}
   ];
   const FETCHFIREDETAILS = {
     GET: {
@@ -558,6 +561,13 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       ACTION: "_get",
     },
   };
+  const FETCHTRADEDETAILS = {
+    GET: {
+      URL: "/tl-services/v1/_search",
+      ACTION: "_get",
+    },
+  };
+  const responseForTrade = await httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
   const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
@@ -568,8 +578,21 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
           , "error"));
         return;
       }
+      const detailsCollectedBy = {
+        "collectedBy": userName
+        }
+      payloadReceiptDetails.Payments[0].additionalDetails=detailsCollectedBy;
+
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
-        configKey="tradelicense-receipt";}
+        configKey="tradelicense-receipt";
+        
+        const details = {
+          "address": responseForTrade.Licenses[0].tradeLicenseDetail.address.locality.code
+          }
+    payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
+
+
+      }
     
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
     
