@@ -93,6 +93,12 @@ const getAcknowledgementCard = (
     const transBusinessService = businessService ? businessService.toUpperCase().replace(/[._:-\s\/]/g, "_") : "DEFAULT";
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     if (status === "success") {
+        if(businessService=="PT"){
+            if (window.appOverrides && window.appOverrides.validateForm)
+            {
+             window.appOverrides.validateForm("PTReceiptAvailable", {extraData: state.properties});
+            }
+        }
         return {
             header,
             headerdownloadprint:downloadprintMenu(state,receiptNumber,tenant,uiCommonPayConfig),
