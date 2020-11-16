@@ -544,7 +544,7 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         dispatch(toggleSpinner());
         window.posOnSuccess=(posResponse={})=>{
-          // dispatch(toggleSpinner());
+           dispatch(toggleSpinner());
           callBackForPay(state,dispatch)
         }
 
