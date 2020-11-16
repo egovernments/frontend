@@ -101,7 +101,7 @@ const getSearchData = async (dispatch, queryObj) => {
       );
       if (window.appOverrides && window.appOverrides.validateForm)
        {
-        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Payments[0].paymentDetails[0]})
+        window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt: response.Payments[0]})
        }
     }
 };
