@@ -678,7 +678,7 @@ export const resetFields = (state, dispatch) => {
 };
 
 export const getRequiredDocData = async (action, state, dispatch) => {
-  let tenantId = process.env.REACT_APP_NAME === "Citizen" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity ;
+  let tenantId = "pb" ;
 
   let mdmsBody = {
     MdmsCriteria: {
