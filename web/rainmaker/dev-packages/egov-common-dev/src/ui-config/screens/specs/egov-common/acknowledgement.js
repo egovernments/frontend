@@ -93,7 +93,7 @@ const getAcknowledgementCard = (
     const transBusinessService = businessService ? businessService.toUpperCase().replace(/[._:-\s\/]/g, "_") : "DEFAULT";
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     if (status === "success") {
-        
+       let extraData= {...state.properties, 'payment':state.screenConfiguration.paymentDetails}
         return {
             header,
             headerdownloadprint:downloadprintMenu(state,receiptNumber,tenant,uiCommonPayConfig),
@@ -113,12 +113,12 @@ const getAcknowledgementCard = (
                             tailText: {
                                 labelKey : roleExists ? `CITIZEN_SUCCESS_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_PAYMENT_RECEIPT_NO`
                             },
-                        number: receiptNumber,
-                        extraData: {...state.properties, 'payment':state.screenConfiguration.paymentDetails}
+                        number: receiptNumber
+                        
                     })
                 }
             },
-            paymentFooter: paymentFooter(state,consumerCode, tenant, status)
+            paymentFooter: paymentFooter(state,consumerCode, tenant, status,extraData)
         };
     } else if (status === "failure") {
         return {
@@ -139,7 +139,7 @@ const getAcknowledgementCard = (
                     })
                 }
             },
-            paymentFooter: paymentFooter(state,consumerCode, tenant,status)
+            paymentFooter: paymentFooter(state,consumerCode, tenant,status,null)
         };
     }
 };
@@ -162,15 +162,14 @@ const screenConfig = {
         const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
-        const paymentDetails=getQueryArg(window.location.href, "paymentDetails");
         const data = getAcknowledgementCard(
             state,
             dispatch,
             status,
             receiptNumber,
             consumerCode,
-            tenant,
-            paymentDetails
+            tenant
+          
         );
         set(action, "screenConfig.components.div.children", data);        
         return action;

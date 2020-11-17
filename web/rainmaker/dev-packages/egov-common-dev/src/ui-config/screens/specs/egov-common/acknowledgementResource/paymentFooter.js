@@ -28,13 +28,30 @@ const defaultValues = {
     ]
   }
 
-export const paymentFooter = (state,consumerCode, tenant,status) => {
+export const paymentFooter = (state,consumerCode, tenant,status,extraData) => {
 
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo" , defaultValues);
     const  buttons  = get(uiCommonPayConfig,"buttons");
     const redirectionURL = "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
-    
+    if(extraData!=null){
+        if(extraData.payment.paymentDetails[0].businessService=="PT"){
+          if (window.appOverrides && window.appOverrides.validateForm)
+          {
+           window.appOverrides.validateForm("PTReceiptAvailable", {extraData: extraData});
+          }
+      }
+      
+      let isUCPayment=extraData.payment.paymentDetails[0].businessService!="PT"
+      &&extraData.payment.paymentDetails[0].businessService!="TL"&&
+      extraData.payment.paymentDetails[0].businessService!="FIRENOC";
+      if(isUCPayment){
+        if (window.appOverrides && window.appOverrides.validateForm)
+        {
+         window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt:extraData.payment });
+        } 
+      }
+      }
     // gotoHome: {
     //     componentPath: "Button",
     //     props: {
