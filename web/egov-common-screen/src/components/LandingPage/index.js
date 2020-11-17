@@ -135,18 +135,22 @@ class LandingPage extends React.Component {
               }}
             >
               <img
-                className="header-logo"
+                className="header-logo-right"
                 src={stateLogoUrl}
                 alt="company-logo"
                 width="20%"
-                style={{ float: 'left' }}
+                style={{ float: 'left',
+                height: "61px",
+                width: "75px",
+                marginTop: "-7px",
+                marginLeft: "174px" }}
               />
               <img
-                className="header-logo"
+                className="header-logo-left"
                 src={logoUrl}
                 alt="company-logo"
                 width="20%"
-                style={{ float: 'right' }}
+                style={{ float: 'right', marginRight: "173px" }}
               />
             </Grid>
           </Grid>
