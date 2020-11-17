@@ -7,7 +7,7 @@ import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplicatio
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
 import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -78,6 +78,8 @@ const tradeLicenseSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("searchScreen", {}));
+    dispatch(unMountScreen("apply"));
+    dispatch(unMountScreen("search-preview"));
     getMdmsData(dispatch);
     return action;
   },

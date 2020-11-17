@@ -199,33 +199,61 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     }
 
-   //temp fix for multiowner dropdown
-    let ownershipSubType= get(
+    let ownership = get(
       state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+      "INDIVIDUAL"
     );
+    // ownership = ownership.split(".")[0];
+    let subOwnerShipCategoryType = ownership.split(".")[1];
+      if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.hasAddItem",
+            true
+          )
+        );
+      }else {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.hasAddItem",
+            false
+          )
+        );
+      }
+
+
+   //temp fix for multiowner dropdown
+    // let ownershipSubType= get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    // );
    
 
-    if(ownershipSubType){
+    // if(ownershipSubType){
      
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
-          "props.dropdownFields[1].defaultValue",
-          null
-        )
-      );
+    //   dispatch(
+    //     handleField(
+    //       "apply",
+    //       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
+    //       "props.dropdownFields[1].defaultValue",
+    //       null
+    //     )
+    //   );
 
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
-          "props.dropdownFields[0].defaultValue",
-          null
-        )
-      );
-    }
+    //   dispatch(
+    //     handleField(
+    //       "apply",
+    //       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
+    //       "props.dropdownFields[0].defaultValue",
+    //       null
+    //     )
+    //   );
+    // }
  //temp fix for multiowner dropdown ends
 
   }
@@ -240,9 +268,10 @@ export const callBackForNext = async (state, dispatch) => {
     );
     let ownership = get(
       state.screenConfiguration.preparedFinalObject,
-      "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
       "INDIVIDUAL"
     );
+    ownership = ownership.split(".")[0];
     if (ownership === "INDIVIDUAL") {
       let ownersJsonPath =
         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
@@ -274,7 +303,12 @@ export const callBackForNext = async (state, dispatch) => {
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      ) === "INDIVIDUAL.MULTIPLEOWNERS" &&
+      ) === "INDIVIDUAL.MULTIPLEOWNERS"  &&
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].tradeLicenseDetail.owners"
+      )
+      &&
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.owners"
