@@ -14,13 +14,13 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
+import set from "lodash/set";
 import uniq from "lodash/uniq";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Taskboard } from "../actionItems";
 import Filter from "../Filter";
 import InboxData from "../Table";
-import commonConfig from "config/common.js";
 import "./index.css";
 
 const getWFstatus = (status) => {
@@ -115,6 +115,7 @@ class TableData extends Component {
     },
     showFilter: false,
     value: 0,
+    totalRowCount: 0,
     tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
       , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
     taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(171,211,237)", baseColor: "rgb(53,152,219)" },
@@ -205,7 +206,7 @@ class TableData extends Component {
   applyFilter = (inboxData) => {
     this.showLoading();
     let initialInboxData = inboxData ? cloneDeep(inboxData) : cloneDeep(this.state.initialInboxData);
-    const { filter, searchFilter, taskboardLabel } = this.state;
+    const { filter, searchFilter, taskboardLabel, totalRowCount } = this.state;
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
     let totalRows = []
@@ -246,11 +247,12 @@ class TableData extends Component {
 
 
     let { taskboardData, tabData } = this.state;
-    taskboardData[0].head = totalRows.length;
-    taskboardData[1].head = NEARING_SLA.length;
-    taskboardData[2].head = ESCALATED_SLA.length;
+
+    taskboardData[0].head = totalRowCount;
+    taskboardData[1].head = totalRows.length == totalRowCount ? NEARING_SLA.length : 'LOADING';
+    taskboardData[2].head = totalRows.length == totalRowCount ? ESCALATED_SLA.length : 'LOADING';
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
-    tabData[1].dynamicArray = [initialInboxData[1].rows.length];
+    tabData[1].dynamicArray = [totalRowCount];
     this.hideLoading();
     return {
       inboxData: initialInboxData,
@@ -295,7 +297,7 @@ class TableData extends Component {
       initialInboxData: tempObject
     });
   }
-  prepareInboxDataRows = async (data, all ,loadLocality=false) => {
+  prepareInboxDataRows = async (data, all, loadLocality = false) => {
     const { toggleSnackbarAndSetText } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     if (isEmpty(data)) return [];
@@ -338,7 +340,7 @@ class TableData extends Component {
                 endpoints.push("property-services/property/_search")
               }
             }
-          } else  if (uniqueModule == "pt-services" || uniqueModule == "pgr-services"  ) {
+          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
 
           } else {
             requestBodies.push({
@@ -519,7 +521,7 @@ class TableData extends Component {
   getMaxSLA() {
     const businessServiceData = this.getBussinessServiceData();
     let businessServiceSla = {}
-    businessServiceData.map(eachRow => {
+    businessServiceData && Array.isArray(businessServiceData) && businessServiceData.map(eachRow => {
       businessServiceSla[eachRow.businessService.toUpperCase()] = this.convertMillisecondsToDays(eachRow.businessServiceSla);
     })
     this.setState({ businessServiceSla });
@@ -544,33 +546,30 @@ class TableData extends Component {
   };
 
   componentDidMount = async () => {
+    this.loadInitialData();
+    this.getMaxSLA();
+  };
+  loadInitialData = async () => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
-    this.loadAllData();
     const inboxData = [{ headers: [], rows: [] }];
     try {
       this.showLoading();
-      this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
-      const mdmsBody = { MdmsCriteria: { tenantId: commonConfig.tenantId, moduleDetails: [{moduleName: "common-masters", masterDetails: [{ name: "TablePaginationOptions" }]}]}};
-      const payload = await httpRequest( "/egov-mdms-service/v1/_search", "_search",[], mdmsBody );
-      let limitValue = get(payload.MdmsRes, "common-masters.TablePaginationOptions[0].defaultValue", 100) ;
-      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: limitValue }];
+      const requestBody1 = [{ key: "tenantId", value: tenantId }];
+      let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
+      maxCount = maxCount || 10000;
+      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? Math.round(maxCount / 3) : maxCount }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
-      // const assignedData = orderBy(
-      //   filter(responseData.ProcessInstances, (item) => {
-      //     let assignes = get(item, 'assignes');
-      //     return get(assignes ? assignes[0] : {}, "uuid") === uuid
-      //   }),
-      //   ["businesssServiceSla"]
-      // );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
-      // const assignedDataRows = await this.prepareInboxDataRows(assignedData);
-      // const allDataRows = await this.prepareInboxDataRows(allData, true);
-      const convertedData = await this.prepareInboxDataRows(allData, true)
+      if (maxCount > 500) {
+        this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: Math.round(maxCount / 3) }, { key: "limit", value: Math.round(maxCount / 3) * 2 + 2 }], responseData)
+      } else {
+        this.loadLocalityForAllData(allData);
+      }
+      const convertedData = await this.prepareInboxDataRows(allData, true, false)
       const allDataRows = convertedData.allData;
       const assignedDataRows = convertedData.assignedToMe;
-      this.setState({ loadLocalityForInitialData: true });
 
       let headersList = [
         "WF_INBOX_HEADER_APPLICATION_NO",
@@ -597,6 +596,7 @@ class TableData extends Component {
 
       this.setState({
         loaded: true,
+        totalRowCount: maxCount,
         inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
       this.hideLoading()
@@ -605,22 +605,19 @@ class TableData extends Component {
     }
     prepareFinalObject("InboxData", [...inboxData]);
     this.getMaxSLA();
-  };
-
-  loadAllData = async () => {
+  }
+  loadRemainingData = async (requestBody = [], response) => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
-    const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
     const inboxData = [{ headers: [], rows: [] }];
     try {
-      // this.showLoading();
-      const requestBody1 = [{ key: "tenantId", value: tenantId }];
-      let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
-      maxCount=maxCount || 10000;
-      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      set(responseData, "ProcessInstances", [...responseData.ProcessInstances, ...response.ProcessInstances]);
+
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
-      const convertedData = await this.prepareInboxDataRows(allData, true,true)
+      this.loadLocalityForAllData(allData);
+
+      const convertedData = await this.prepareInboxDataRows(allData, true, false)
       const allDataRows = convertedData.allData;
       const assignedDataRows = convertedData.assignedToMe;
 
@@ -651,7 +648,48 @@ class TableData extends Component {
         loaded: true,
         inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
-      // this.hideLoading()
+    } catch (e) {
+      toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
+    }
+    prepareFinalObject("InboxData", [...inboxData]);
+    this.getMaxSLA();
+  }
+  loadLocalityForAllData = async (allData) => {
+    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
+    let { taskboardData, tabData } = this.state;
+    const inboxData = [{ headers: [], rows: [] }];
+    try {
+      const convertedData = await this.prepareInboxDataRows(allData, true, true)
+      const allDataRows = convertedData.allData;
+      const assignedDataRows = convertedData.assignedToMe;
+
+      let headersList = [
+        "WF_INBOX_HEADER_APPLICATION_NO",
+        "WF_INBOX_HEADER_LOCALITY",
+        "WF_INBOX_HEADER_STATUS",
+        "WF_INBOX_HEADER_CURRENT_OWNER",
+        "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+      ];
+      inboxData[0].headers = headersList;
+      inboxData[0].rows = assignedDataRows;
+
+      tabData[0].dynamicArray = [assignedDataRows.length];
+      tabData[1].dynamicArray = [allDataRows.length];
+      inboxData.push({
+        headers: headersList,
+        rows: allDataRows,
+      });
+      let NEARING_SLA = [];
+      let ESCALATED_SLA = [];
+      const taskCount = allDataRows.length;
+      taskboardData[0].head = taskCount;
+      taskboardData[1].head = NEARING_SLA.length;
+      taskboardData[2].head = ESCALATED_SLA.length;
+
+      this.setState({
+        loaded: true,
+        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
+      });
     } catch (e) {
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
