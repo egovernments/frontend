@@ -17,7 +17,8 @@ import axios from 'axios';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   getUserDataFromUuid,
-} from "egov-ui-framework/ui-utils/commons";
+} from "../ui-config/screens/specs/utils";
+import commonConfig from "config/common.js";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -528,7 +529,7 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   });
 }
 
-export const loadUserNameData = async uuid => {
+export const loadUserNameData = async (uuid,tenantId) => {
   let data = {};
   let bodyObject = {
     uuid: [uuid]
@@ -583,25 +584,25 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
   };
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-      loadUserNameData(payloadReceiptDetails.Payments[0].paymentDetails[0].bill.auditDetails.createdBy);
+      loadUserNameData(payloadReceiptDetails.Payments[0].auditDetails.createdBy,tenantId);
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
           , "error"));
         return;
       }
-      const userNameObject = get(state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
-      const userName = get(userNameObject, "auditorName");
+      // const userNameObject = get(state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
+      // const userName = get(userNameObject, "auditorName");
 
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL")async()=>{
         configKey="tradelicense-receipt";
     
         const responseForTrade = await httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
 
-        const detailsCollectedBy = {
-          "collectedBy": userName
-          }
-        payloadReceiptDetails.Payments[0].additionalDetails=detailsCollectedBy;
+        // const detailsCollectedBy = {
+        //   "collectedBy": userName
+        //   }
+        // payloadReceiptDetails.Payments[0].additionalDetails=detailsCollectedBy;
   
         const details = {
           "address": responseForTrade.Licenses[0].tradeLicenseDetail.address.locality.code
