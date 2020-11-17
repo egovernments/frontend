@@ -92,6 +92,7 @@ class ShowField extends Component {
     const reportHeader = reportDetails.hasOwnProperty("reportHeader") ? reportDetails.reportHeader : [];
     const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
     let reportTitle = this.getReportTitle();
+    let xlsTitle = this.getXlsReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
 
     const buttons = [
@@ -118,7 +119,7 @@ class ShowField extends Component {
         extend: "excel",
         text: "XLS",
         filename: _this.state.reportName,
-        title: reportTitle,
+        title: xlsTitle,
         messageTop: tabLabel,
         footer: true,
         className: "report-excel-button",
@@ -641,6 +642,26 @@ class ShowField extends Component {
     }
     return reportTitle;
   };
+
+  getXlsReportTitle = (rptName) => {
+    let reportName = rptName || this.state.reportName;
+    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
+    let reportTitle = "";
+    if (reportTitleArr) {
+      reportTitle = reportTitleArr.map((char) => {
+        if (char.length == 1) {
+          reportTitle = char + "";
+        } else if(typeof char === "object") {
+          reportTitle = char.text + "";
+        } else {
+          reportTitle = " " + char;
+        }
+        return reportTitle;
+      });
+    }
+    return reportTitle;
+  };
+  
 
   render() {
     let { isTableShow, metaData, reportResult } = this.props;
