@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar ,setPaymentDetails} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -103,6 +103,14 @@ export const callPGService = async (state, dispatch) => {
         "Payments[0].paymentDetails[0].receiptNumber"
       );
 
+      let  paymentDetails= get(
+        response,
+        "Payments[0]",
+        null
+      );
+      
+      dispatch(setPaymentDetails(paymentDetails))
+      
       dispatch(
         setRoute(
           `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
@@ -131,7 +139,7 @@ export const callPGService = async (state, dispatch) => {
   }
 };
 
-const moveToSuccess = (dispatch, receiptNumber) => {
+const moveToSuccess = (dispatch, receiptNumber,paymentDetails) => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const businessService = getQueryArg(window.location, "businessService");
@@ -140,7 +148,7 @@ const moveToSuccess = (dispatch, receiptNumber) => {
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}`
+      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&paymentDetails=${paymentDetails}`
     )
   );
 };
@@ -425,6 +433,14 @@ const callBackForPay = async (state, dispatch) => {
         null
       );
 
+      let  paymentDetails= get(
+        response,
+        "Payments[0]",
+        null
+      );
+      
+      dispatch(setPaymentDetails(paymentDetails))
+
       // Search NOC application and update action to PAY
       const consumerCode = getQueryArg(window.location, "consumerCode");
       const tenantId = getQueryArg(window.location, "tenantId");
@@ -433,7 +449,8 @@ const callBackForPay = async (state, dispatch) => {
         dispatch,
         consumerCode,
         tenantId,
-        receiptNumber
+        receiptNumber,
+        paymentDetails
       );
     } catch (e) {
       dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));

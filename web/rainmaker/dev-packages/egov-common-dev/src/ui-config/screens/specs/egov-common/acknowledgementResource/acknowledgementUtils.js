@@ -45,8 +45,29 @@ const acknowledgementCard = ({
   header,
   body,
   tailText,
-  number
+  number,
+  businessService,
+  extraData
+
 } = {}) => {
+if(extraData!=null){
+  if(extraData.payment.paymentDetails[0].businessService=="PT"){
+    if (window.appOverrides && window.appOverrides.validateForm)
+    {
+     window.appOverrides.validateForm("PTReceiptAvailable", {extraData: extraData});
+    }
+}
+
+let isUCPayment=extraData.payment.paymentDetails[0].businessService!="PT"
+&&extraData.payment.paymentDetails[0].businessService!="TL"&&
+extraData.payment.paymentDetails[0].businessService!="FIRENOC";
+if(isUCPayment){
+  if (window.appOverrides && window.appOverrides.validateForm)
+  {
+   window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt:extraData.payment });
+  } 
+}
+}
   const tail =
     tailText && number && number !== "null"
       ? {

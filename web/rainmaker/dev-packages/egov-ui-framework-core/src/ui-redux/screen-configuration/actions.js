@@ -124,3 +124,10 @@ export const submitForm = (
     }
   };
 };
+
+export const setPaymentDetails=(paymentDetails)=>{
+  return {
+    type:screenActionTypes.SET_PAYMENT_DETAILS,
+    paymentDetails
+  }
+}
