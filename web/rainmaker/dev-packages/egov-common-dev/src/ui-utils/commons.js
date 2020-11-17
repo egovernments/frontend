@@ -590,7 +590,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
           , "error"));
         return;
       }
-      const userNameObject = get(state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
+      const userNameObject = get(state && state.screenConfiguration &&  state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
       const userName = get(userNameObject, "auditorName");
 
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL")async()=>{
