@@ -34,7 +34,7 @@ import PlotDetails from "./components/Forms/PlotDetails";
 import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
-
+import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 
 class FormWizard extends Component {
   state = {
@@ -291,6 +291,9 @@ class FormWizard extends Component {
       const tenantId = getQueryValue(search, "tenantId");
       const propertyId = getQueryValue(search, "propertyId");
       const draftUuid = getQueryValue(search, "uuid");
+      // fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+      // let requestBody = generalMDMSDataRequestObj(commonConfig.tenantId);
+      // fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName()); 
       const documentTypeMdms = await getDocumentTypes();
       if (!!documentTypeMdms) fetchMDMDDocumentTypeSuccess(documentTypeMdms);
       this.unlisten = history.listen((location, action) => {

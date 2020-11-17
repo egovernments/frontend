@@ -35,6 +35,7 @@ import ReviewForm from "./components/ReviewForm";
 import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
+import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -90,6 +91,7 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
     const tenantId = getQueryValue(search, "tenantId");
+
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     getImportantDates(this);
     try {
@@ -296,6 +298,9 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
 
     const tenantId = getQueryValue(search, "tenantId");
+    // let requestBody = generalMDMSDataRequestObj(commonConfig.tenantId);
+    // fetchGeneralMDMSData(requestBody, "PropertyTax", getGeneralMDMSDataDropdownName()); 
+    // this.loadUlbLogo(tenantId)
     const draftUuid = getQueryValue(search, "uuid");
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");

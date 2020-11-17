@@ -37,14 +37,8 @@ class App extends Component {
             moduleName: "common-masters",
             masterDetails: [
               {
-                name: "Department",
-              },
-              {
-                name: "Designation",
-              },
-              {
                 name: "StateInfo",
-              },
+              }
             ],
           },
           {
