@@ -303,7 +303,7 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
   processInstances.map(item => {
     if (item.documents && item.documents.length > 0) {
       item.documents.forEach(i => {
-        if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
+        if (i.fileStoreId && fileUrlPayload && fileUrlPayload[i.fileStoreId]) {
           i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
           i.title = `TL_${i.documentType}`;
           i.name = decodeURIComponent(

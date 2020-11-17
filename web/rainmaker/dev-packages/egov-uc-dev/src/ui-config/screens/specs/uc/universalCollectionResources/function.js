@@ -96,7 +96,7 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-    disableFieldAndShowSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
+    // disableFieldAndShowSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
       const responseFromAPI = await getSearchResults(queryObject);
       dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
       const Payments = (responseFromAPI && responseFromAPI.Payments) || [];

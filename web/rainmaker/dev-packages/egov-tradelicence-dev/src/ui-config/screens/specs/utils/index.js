@@ -1303,7 +1303,7 @@ export const createEstimateData = async (
       value: businessService
     }
   ];
-  const currentStatus = LicenseData.status;
+  const currentStatus = LicenseData && LicenseData.status;
   const isPAID = isApplicationPaid(currentStatus,workflowCode);
   const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID

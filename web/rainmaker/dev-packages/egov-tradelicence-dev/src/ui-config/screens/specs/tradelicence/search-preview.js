@@ -129,7 +129,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
         getTradeTypeSubtypeDetails(payload)
       )
     );
-  const LicenseData = payload.Licenses[0];
+  const LicenseData = payload && payload.Licenses && payload.Licenses[0];
   const fetchFromReceipt = sts !== "pending_payment";
 
     
