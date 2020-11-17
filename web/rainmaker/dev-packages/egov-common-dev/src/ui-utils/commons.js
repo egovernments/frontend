@@ -15,10 +15,7 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import axios from 'axios';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {
-  getUserDataFromUuid,
-} from "../ui-config/screens/specs/utils";
-import commonConfig from "config/common.js";
+
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -529,18 +526,6 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   });
 }
 
-export const loadUserNameData = async (uuid,tenantId) => {
-  let data = {};
-  let bodyObject = {
-    uuid: [uuid]
-  };
-  let response = await getUserDataFromUuid(bodyObject);
-
-  if (response && response.user && response.user.length > 0) {
-    data.auditorName = get(response, "user[0].name", "NA");
-  }
-  store.dispatch(prepareFinalObject("userDataForReceipt", data));
-};
 export const download = async (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
   if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
@@ -584,7 +569,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
   };
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-      loadUserNameData(payloadReceiptDetails.Payments[0].auditDetails.createdBy,tenantId);
+     // loadUserNameData(payloadReceiptDetails.Payments[0].auditDetails.createdBy,tenantId);
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
