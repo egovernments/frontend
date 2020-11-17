@@ -522,7 +522,7 @@ export const mohalla = {
   mohalla: {
     id: "mohalla",
     jsonPath: "Properties[0].address.locality.code",
-    type: "singleValueList",
+    type: "SelectDropDown",
     floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     fullWidth: true,
