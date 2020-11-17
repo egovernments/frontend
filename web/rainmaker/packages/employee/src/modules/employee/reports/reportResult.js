@@ -634,8 +634,6 @@ class ShowField extends Component {
       reportTitle = reportTitleArr.map((char) => {
         if (char.length == 1) {
           reportTitle = char + "";
-        } else if(typeof char === "object") {
-          reportTitle = char.text + "";
         } else {
           reportTitle = " " + char;
         }
