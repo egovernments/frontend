@@ -15,6 +15,10 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import axios from 'axios';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {
+  getUserDataFromUuid,
+} from "egov-ui-framework/ui-utils/commons";
+
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
   let modifiedArray = originalArray.filter(element => {
@@ -524,15 +528,25 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   });
 }
 
+export const loadUserNameData = async uuid => {
+  let data = {};
+  let bodyObject = {
+    uuid: [uuid]
+  };
+  let response = await getUserDataFromUuid(bodyObject);
 
+  if (response && response.user && response.user.length > 0) {
+    data.auditorName = get(response, "user[0].name", "NA");
+  }
+  store.dispatch(prepareFinalObject("userDataForReceipt", data));
+};
 export const download = async (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
   if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey")
   }
  
-  const userNameObject = get(state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
-  const userName = get(userNameObject, "auditorName")
+
 
   const FETCHRECEIPT = {
     GET: {
@@ -567,25 +581,28 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       ACTION: "_get",
     },
   };
-  const responseForTrade = await httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
-  const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-     
+      loadUserNameData(payloadReceiptDetails.Payments[0].paymentDetails[0].bill.auditDetails.createdBy);
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
           , "error"));
         return;
       }
-      const detailsCollectedBy = {
-        "collectedBy": userName
-        }
-      payloadReceiptDetails.Payments[0].additionalDetails=detailsCollectedBy;
+      const userNameObject = get(state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
+      const userName = get(userNameObject, "auditorName");
 
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL")async()=>{
         configKey="tradelicense-receipt";
-        
+    
+        const responseForTrade = await httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
+
+        const detailsCollectedBy = {
+          "collectedBy": userName
+          }
+        payloadReceiptDetails.Payments[0].additionalDetails=detailsCollectedBy;
+  
         const details = {
           "address": responseForTrade.Licenses[0].tradeLicenseDetail.address.locality.code
           }
@@ -594,8 +611,9 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
 
       }
     
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
-    
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC")async()=>{
+        const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+
         const details = {
              "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
              }
