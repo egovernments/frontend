@@ -80,7 +80,7 @@ export const nocSummary = getCommonGrayCard({
         labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].provisionFireNOCNumber",
+        jsonPath: "FireNOCs[0].fireNOCNumber",
         callBack: checkValueForNA
       }
     ),
