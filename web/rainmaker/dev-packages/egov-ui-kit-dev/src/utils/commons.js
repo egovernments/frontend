@@ -971,3 +971,9 @@ export const getMohallaData = (payload, tenantId) => {
 			  return result;
       }, []);
 }
+
+
+export const convertLocalDate=(date=Date())=>{
+  let convertedDate=new Date(date).toLocaleDateString().split('/');
+  return convertedDate&&Array.isArray(convertedDate)&&convertedDate.length>2&&`${convertedDate[1]}-${convertedDate[0]}-${convertedDate[2]}`;
+}
