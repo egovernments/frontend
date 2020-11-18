@@ -58,7 +58,7 @@ const myApplications = {
 
     getMyLeaseApplications().then((response)=>{
       console.log("Response is ", response);
-      dispatch(prepareFinalObject("searchResults",response));
+      dispatch(prepareFinalObject("searchResults",response.leases));
 
       //toberemoved
       if(!response || (response && !response.leases))
@@ -125,7 +125,7 @@ const myApplications = {
                         {
                           label: "LAMS_TABLE_COL_STATUS",
                           jsonPath: "status",
-                          prefix: "WF_LAMSLR_"
+                          prefix: "WF_CITIZEN_LAMS_NEWLR_V2_"
                         }
                       ],
                       moduleName: "LAMS",
