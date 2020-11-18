@@ -169,6 +169,7 @@ export const updatePFOforSearchResults = async (
   //   (await setDocsForEditFlow(state, dispatch));
 
   if (payload && payload.Licenses) {
+    set(payload,'Licenses[0].tradeLicenseDetail.accessories',get(payload,'Licenses[0].tradeLicenseDetail.accessories',[])||[])
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   }
 
