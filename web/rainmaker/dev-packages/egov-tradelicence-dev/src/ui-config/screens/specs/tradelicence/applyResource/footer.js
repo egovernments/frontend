@@ -1,4 +1,4 @@
-import { download,downloadAppFeeReceipt } from "egov-common/ui-utils/commons";
+import { download} from "egov-common/ui-utils/commons";
 import { dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -199,33 +199,61 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     }
 
-   //temp fix for multiowner dropdown
-    let ownershipSubType= get(
+    let ownership = get(
       state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+      "INDIVIDUAL"
     );
+    // ownership = ownership.split(".")[0];
+    let subOwnerShipCategoryType = ownership.split(".")[1];
+      if (subOwnerShipCategoryType === "MULTIPLEOWNERS") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.hasAddItem",
+            true
+          )
+        );
+      }else {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.hasAddItem",
+            false
+          )
+        );
+      }
+
+
+   //temp fix for multiowner dropdown
+    // let ownershipSubType= get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    // );
    
 
-    if(ownershipSubType){
+    // if(ownershipSubType){
      
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
-          "props.dropdownFields[1].defaultValue",
-          null
-        )
-      );
+    //   dispatch(
+    //     handleField(
+    //       "apply",
+    //       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
+    //       "props.dropdownFields[1].defaultValue",
+    //       null
+    //     )
+    //   );
 
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
-          "props.dropdownFields[0].defaultValue",
-          null
-        )
-      );
-    }
+    //   dispatch(
+    //     handleField(
+    //       "apply",
+    //       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.dynamicMdmsOwnerShip",
+    //       "props.dropdownFields[0].defaultValue",
+    //       null
+    //     )
+    //   );
+    // }
  //temp fix for multiowner dropdown ends
 
   }
@@ -240,9 +268,10 @@ export const callBackForNext = async (state, dispatch) => {
     );
     let ownership = get(
       state.screenConfiguration.preparedFinalObject,
-      "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
       "INDIVIDUAL"
     );
+    ownership = ownership.split(".")[0];
     if (ownership === "INDIVIDUAL") {
       let ownersJsonPath =
         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
@@ -274,7 +303,12 @@ export const callBackForNext = async (state, dispatch) => {
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      ) === "INDIVIDUAL.MULTIPLEOWNERS" &&
+      ) === "INDIVIDUAL.MULTIPLEOWNERS"  &&
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "Licenses[0].tradeLicenseDetail.owners"
+      )
+      &&
       get(
         state.screenConfiguration.preparedFinalObject,
         "Licenses[0].tradeLicenseDetail.owners"
@@ -959,7 +993,7 @@ export const footerReviewTop = (
   let printMenu = [];
   let licenseNumber = get(state.screenConfiguration.preparedFinalObject.Licenses[0], "licenseNumber")
   const uiCommonConfig = get(state.screenConfiguration.preparedFinalObject, "uiCommonConfig");
-  const receiptKey = get(uiCommonConfig, "receiptKey");
+  const receiptKey ="consolidatedreceipt" //get(uiCommonConfig, "receiptKey");
   const responseLength = get(
     state.screenConfiguration.preparedFinalObject,
     `licenseCount`,
@@ -988,7 +1022,7 @@ export const footerReviewTop = (
 
 
       const receiptQueryString = [
-        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "download", receiptKey, state);
@@ -1002,7 +1036,7 @@ export const footerReviewTop = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "print", receiptKey, state);
@@ -1015,11 +1049,11 @@ export const footerReviewTop = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      //console.log("receiptQueryString source---",receiptQueryString);
-      downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
+      console.log("receiptQueryString source---",receiptQueryString);
+      download(receiptQueryString , "download" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1028,10 +1062,10 @@ export const footerReviewTop = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt");
+      download(receiptQueryString , "print" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1200,7 +1234,7 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "applicationNumber", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "download", receiptKey);
@@ -1211,7 +1245,7 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "licenceReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString, "print", receiptKey);
@@ -1222,11 +1256,12 @@ export const downloadPrintContainer = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-     // console.log("receiptQueryString source 1---",receiptQueryString);
-      downloadAppFeeReceipt(receiptQueryString , "download" , "tradelicense-appl-receipt");
+     
+  console.log("receiptQueryString source 1---",receiptQueryString);
+      download(receiptQueryString , "download" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };
@@ -1235,10 +1270,10 @@ export const downloadPrintContainer = (
     label: { labelName: "Application FEE Receipt", labelKey: "TL_APPFEE_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "receiptNumbers", value: get(state.screenConfiguration.preparedFinalObject.receiptDataForReceipt, "applicationReceiptNo") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      downloadAppFeeReceipt(receiptQueryString , "print" , "tradelicense-appl-receipt");
+      download(receiptQueryString , "print" , "consolidatedreceipt");
     },
     leftIcon: "receipt"
   };

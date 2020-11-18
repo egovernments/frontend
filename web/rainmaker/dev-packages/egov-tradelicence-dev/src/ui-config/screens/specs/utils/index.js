@@ -908,13 +908,13 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           );
 
           currOwnersArr[cardIndex] = userInfo;
-          if (oldOwnersArr.length > 0) {
-            currOwnersArr.push({
-              ...oldOwnersArr[cardIndex],
-              userActive: false,
-             // isDeleted:false
-            });
-          }
+          // if (oldOwnersArr.length > 0) {
+          //   currOwnersArr.push({
+          //     ...oldOwnersArr[cardIndex],
+          //     userActive: false,
+          //    // isDeleted:false
+          //   });
+          // }
           dispatch(
             prepareFinalObject(
               `Licenses[0].tradeLicenseDetail.owners`,
@@ -927,6 +927,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           //     ownerNo
           //   )
           // );
+          validateOwners(state, dispatch);
         }
       }
     }
@@ -934,6 +935,75 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     dispatch(toggleSnackbar(true, e.message, "info"));
   }
 };
+
+export const validateOwners = (state, dispatch)=>{
+  let ownersJsonPath = "";
+  let owners = [];
+  let ownership = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+    "INDIVIDUAL"
+  );
+  ownership = ownership.split(".")[0];
+  if(ownership==="INDIVIDUAL"){
+    ownersJsonPath = "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
+    owners = get(
+      state.screenConfiguration.screenConfig.apply,
+      ownersJsonPath,
+      []
+    );
+    for(let i =0;i<owners.length;i++){
+      let obj = owners[i]["item"+i].children.cardContent.children.tradeUnitCardContainer.children;
+      applyRequiredValidation(obj, state, dispatch);
+    }
+  } else {
+    ownersJsonPath = "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional";
+    owners = get(
+      state.screenConfiguration.screenConfig.apply,
+      ownersJsonPath,
+      []
+    );
+    let obj = owners.children.cardContent.children.tradeUnitCardContainerInstitutional.children;
+    applyRequiredValidation(obj, state, dispatch);
+  }
+}
+
+export const applyRequiredValidation = (obj, state, dispatch) => {
+  Object.keys(obj).map((item)=>{
+    let jsonPath = obj[item].jsonPath;
+    let componentJsonpath = obj[item].componentJsonpath;
+    let isFieldValid = obj[item].isFieldValid;
+    let value = get(state.screenConfiguration.preparedFinalObject, jsonPath, null);
+    if(value && !isFieldValid){
+      dispatch(
+        handleField(
+          "apply",
+          componentJsonpath,
+          "props.error",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          componentJsonpath,
+          "props.helperText",
+          ""
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          componentJsonpath,
+          "isFieldValid",
+          true
+        )
+      );
+    }
+  })
+}
+
+
 
 const getStatementForDocType = docType => {
   switch (docType) {

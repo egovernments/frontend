@@ -18,7 +18,8 @@ import {
   getTransformedLocale,
   getUserDataFromUuid
 } from "egov-ui-framework/ui-utils/commons";
-
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
+import isEmpty from "lodash/isEmpty";
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
 };
@@ -315,7 +316,39 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     data.tlRebate = "NA";
     data.tlAdhocPenalty = tlAdhocPenalty;
     data.tlAdhocRebate = tlAdhocRebate;
+
     /** END */
+    
+    const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+    let isAppFeeReqd = false;
+    if (!isEmpty(businessServiceData)) {
+      const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+      const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
+      for (var i = 0; i < states.length; i++) {
+        if (states[i].state === "PENDINGAPPLFEE") {
+          isAppFeeReqd = true;
+          break;
+        }
+      }
+    }
+    
+    if (isAppFeeReqd) {
+      for (var i = 0; i < response.Payments.length; i++) {
+        for (var j = 0; j < response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails.length; j++) {
+          if ((response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].taxHeadCode === "TL_APP_FEE")) {
+            if ((response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].amount > 0) && (response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].amount==response.Payments[i].paymentDetails[0].bill.billDetails[0].billAccountDetails[j].adjustedAmount)  ) {
+              data.applicationReceiptNo = response.Payments[i].paymentDetails[0].receiptNumber
+              console.log("applicationReceiptNo",response.Payments[i].paymentDetails[0].receiptNumber)
+            } else {
+              data.licenceReceiptNo = response.Payments[i].paymentDetails[0].receiptNumber
+              console.log("licenceReceiptNo",response.Payments[i].paymentDetails[0].receiptNumber)
+            }
+          }
+        }
+      }
+    } else {
+      data.licenceReceiptNo = response.Payments[0].paymentDetails[0].receiptNumber
+    }
   }
   store.dispatch(prepareFinalObject("receiptDataForReceipt", data));
 };

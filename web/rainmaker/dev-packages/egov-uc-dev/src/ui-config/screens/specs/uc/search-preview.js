@@ -171,6 +171,21 @@ import {
     
   };
 
+  const downloadReceipt = async (mode = 'download',state) => {
+    const receiptNumber = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Payments[0].paymentDetails[0].receiptNumber",
+      null
+    );
+    if(receiptNumber){
+      const receiptQueryString = [
+        { key: "receiptNumbers", value: receiptNumber },
+        { key: "tenantId", value: tenantId },
+      ];
+      download(receiptQueryString, mode, "consolidatedreceipt", state);
+    }
+  };
+
   const downloadprintMenu = (state, dispatch,applicationNumber,tenantId,status) => {
     let applicationDownloadObject = {
       label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
@@ -202,12 +217,7 @@ import {
     let receiptDownloadObject = {
       label: { labelName: "Receipt", labelKey: "UC_RECEIPT" },
       link: () => {
-        const receiptQueryString = [
-          { key: "consumerCode", value: applicationNumber},
-          { key: "tenantId", value: tenantId }
-        ]
-        download(receiptQueryString , "download" ,"mcollect-receipt",state );
-        
+        downloadReceipt("download",state);
       },
       leftIcon: "receipt"
     };
@@ -215,11 +225,7 @@ import {
     let receiptPrintObject = {
       label: { labelName: "PRINT RECEIPT", labelKey: "UC_RECEIPT" },
       link: () => {
-          const receiptQueryString = [
-              { key: "consumerCode", value: applicationNumber  },
-              { key: "tenantId", value: tenantId }
-          ]
-          download(receiptQueryString , "print" ,"mcollect-receipt",state );
+          downloadReceipt("print",state); 
       },
       leftIcon: "receipt"
     };
@@ -678,22 +684,23 @@ import {
       }
     ];
     const fetchBillResponse = await getBill(getBillQueryObj);
-    let payload1 =
-      fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
-     const isPAID = payload1.totalAmount == 0 ? true : false;
-   
-    let payload = isPAID? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-                            : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
-    let estimateData =isPAID? payload && payload.Payments && payload.Payments.length > 0 && formatTaxHeaders(payload.Payments[0].paymentDetails[0].bill.billDetails[0]): formatTaxHeaders(payload.billDetails[0]);
-    const challanStatus = get(state.screenConfiguration.preparedFinalObject , "Challan.applicationStatus",null);
-    
-    let receipt = challanStatus==="PAID"?await getReceipt(queryObj.filter(item => item.key !== "businessService")):fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
-    const paymentMode = receipt && receipt.Payments && receipt.Payments.length > 0? receipt.Payments[0].paymentMode:""
-    //Set paystatus = true for PAID for active and cancelled as false. Used in search-preveiw to display paid/not paid
-    set(estimateData, "payStatus", challanStatus==="PAID"?true:false);
-    dispatch(prepareFinalObject("Bill[0]", payload));
+    const paymentObject = await getReceipt(queryObj);
+    let bill = get(paymentObject, "Payments[0].paymentDetails[0].bill", null);
+    if (bill == null) {
+      bill = get(fetchBillResponse, "Bill[0]", {});
+    } 
+    let estimateData = formatTaxHeaders(bill.billDetails[0]);
+    const challanStatus = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Challan.applicationStatus",
+      null
+    );
+    set(estimateData, "payStatus", challanStatus === "PAID" ? true : false);
+    dispatch(prepareFinalObject("Bill[0]", bill));
     dispatch(prepareFinalObject("Demands[0].estimateCardData", estimateData));
-    dispatch(prepareFinalObject("paymentMode", paymentMode));
+    dispatch(
+      prepareFinalObject("Payments", get(paymentObject, "Payments", null))
+    );
   };
   export const getBill = async (queryObject) => {
     try {
@@ -726,16 +733,12 @@ import {
   const generateMiniReceipt = (state) => { 
 
     const ReceiptDataTemp = get(
-      state.screenConfiguration.preparedFinalObject,"Bill[0]"
+      state.screenConfiguration.preparedFinalObject,"Payments[0]"
     );
-    const paymentMode = get(
-      state.screenConfiguration.preparedFinalObject,"paymentMode"
-    );
-  
-      let receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.billDate);
-      let receiptAmount = ReceiptDataTemp.totalAmount;           
-      let fromPeriod = getDateFromEpoch(ReceiptDataTemp.billDetails[0].fromPeriod);
-      let toPeriod = getDateFromEpoch(ReceiptDataTemp.billDetails[0].toPeriod);
+      let receiptDateFormatted = getDateFromEpoch(ReceiptDataTemp.transactionDate);
+      let receiptAmount = ReceiptDataTemp.totalAmountPaid;           
+      let fromPeriod = getDateFromEpoch(ReceiptDataTemp.paymentDetails[0].bill.billDetails[0].fromPeriod);
+      let toPeriod = getDateFromEpoch(ReceiptDataTemp.paymentDetails[0].bill.billDetails[0].toPeriod);
       let consumerName = ReceiptDataTemp.payerName;
       let id = getQueryArg(window.location.href, "tenantId"); 
       let localizedULBName = "";
@@ -748,6 +751,7 @@ import {
       
     let empInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
     collectorName = empInfo.name;
+    const paymentMode = ReceiptDataTemp.paymentMode;
 
     let UCminiReceiptData = {
       ulbType: localizedULBName,
@@ -760,7 +764,8 @@ import {
       toPeriod: toPeriod,
       receiptAmount: receiptAmount,
       paymentMode: paymentMode,
-      collectorName: collectorName
+      collectorName: collectorName,
+      status:"Paid"
     };  
 
       return UCminiReceiptData;
@@ -784,7 +789,7 @@ import {
     //const challanDateFormatted = todayDate.toString();           
     const fromPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodFrom);
     const toPeriod = getDateFromEpoch(ReceiptDataTemp.taxPeriodTo);
-    const consumerName = ReceiptDataTemp.consumerName;
+    const consumerName = ReceiptDataTemp.citizen.name;
     let id = getQueryArg(window.location.href, "tenantId"); 
     let localizedULBName = "";
     if(id != null){
@@ -805,10 +810,11 @@ import {
       amount.push(item.value);
     });
     let totalAmt = 0;
+
     if(amount.length != 0){
       totalAmt = amount.reduce(function(total, arr) { 
         // return the sum with previous value
-        return total + arr.amount;
+        return total + arr;
       
         // set initial value as 0
       },0);
@@ -824,12 +830,11 @@ import {
       fromPeriod: fromPeriod,
       toPeriod: toPeriod,
       receiptAmount: totalAmt,
-      challanDate:challanDateFormatted,
+      receiptDate:challanDateFormatted,
       collectorName:collectorName,
-      challanStatus:status
+      status:status
     };  
     return UCminiChallanData;
-   // return UCminiChallanBuilder(UCminiChallanData);
   };
   const screenConfig = {
     uiFramework: "material-ui",
