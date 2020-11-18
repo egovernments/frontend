@@ -14,6 +14,8 @@ import { connectionDetailsFooter } from "./connectionDetailsResource/connectionD
 import { connHolderDetailsSameAsOwnerSummary, connHolderDetailsSummary, getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
+import { getRequiredDocData, showHideAdhocPopup } from "egov-billamend/ui-config/screens/specs/utils"
+
 
 const tenantId = getQueryArg(window.location.href, "tenantId")
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -204,7 +206,7 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
-const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
+const getConnectionDetailsFooterAction =  connectionDetailsFooter
 
 export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails, connectionHolders, connectionHoldersSameAsOwner });
 
@@ -214,6 +216,12 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let connectionNo = getQueryArg(window.location.href, "connectionNumber")
     beforeInitFn(action, state, dispatch, connectionNo);
+    getRequiredDocData(action, dispatch, [{
+      moduleName: "BillAmendment",
+      masterDetails: [
+        { name: "documentObj" }
+      ]
+    }])
     set(
       action,
       "screenConfig.components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",
@@ -263,6 +271,18 @@ const screenConfig = {
         },
         connectionDetails,
         getConnectionDetailsFooterAction
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: false,
+        screenKey: "connection-details"
+      },
+      children: {
+        popup: {}
       }
     }
   }

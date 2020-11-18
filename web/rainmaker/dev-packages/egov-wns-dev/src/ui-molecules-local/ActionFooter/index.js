@@ -9,7 +9,8 @@ import get from "lodash/get";
 import {getWorkFlowData, getDomainLink, isWorkflowExists } from "../../ui-utils/commons"
 import { httpRequest } from "../../ui-utils/api";
 import store from "ui-redux/store";
-
+import { showHideAdhocPopup } from "../../ui-config/screens/specs/utils";
+// import { getRequiredDocData, showHideAdhocPopup } from "egov-billamend/ui-config/screens/specs/utils"
 class Footer extends React.Component {
   state = {
     open: false
@@ -60,9 +61,56 @@ class Footer extends React.Component {
           store.dispatch(setRoute(`/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`));
        }
       };
+      const BillAmendment = {
+        label: "Edit",
+        labelKey: "WS_BILL_AMENDMENT_BUTTON",
+        link: async () => {
+
+          // checking for the due amount
+         
+          showHideAdhocPopup(this.props.state, store.dispatch, "connection-details");
+          // let due = getQueryArg(window.location.href, "due");
+          // let errLabel = (applicationNo && applicationNo.includes("WS"))?"WS_DUE_AMOUNT_SHOULD_BE_ZERO":"SW_DUE_AMOUNT_SHOULD_BE_ZERO";
+          // if(due && (parseInt(due) > 0)){            
+          //   toggleSnackbar(
+          //     true,
+          //     {
+          //       labelName: "Due Amount should be zero!",
+          //       labelKey: errLabel
+          //     },
+          //     "error"
+          //   );
+
+          //   return false;
+          // }
+
+          // check for the WF Exists
+          const queryObj = [
+            { key: "businessIds", value: applicationNos },
+            { key: "tenantId", value: tenantId }
+          ];        
+          
+          // let isApplicationApproved = await isWorkflowExists(queryObj);
+          // if(!isApplicationApproved){
+          //   toggleSnackbar(
+          //     true,
+          //     {
+          //       labelName: "WorkFlow already Initiated",
+          //       labelKey: "WS_WORKFLOW_ALREADY_INITIATED"
+          //     },
+          //     "error"
+          //   );
+          //   return false;
+          // }   
+          // store.dispatch(setRoute(`/wns/apply?applicationNumber=${applicationNo}&connectionNumber=${connectionNumber}&tenantId=${tenantId}&action=edit&mode=MODIFY`));
+       }
+      };
     //if(applicationType === "MODIFY"){
     downloadMenu && downloadMenu.push(editButton);
+    downloadMenu && downloadMenu.push(BillAmendment);
+
     //}
+    console.log("wns",downloadMenu)
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
