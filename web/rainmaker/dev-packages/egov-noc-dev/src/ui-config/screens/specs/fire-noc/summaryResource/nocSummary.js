@@ -90,7 +90,8 @@ export const nocSummary = getCommonGrayCard({
         // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
       },
       {
-        jsonPath: "FireNOCs[0].oldFireNOCNumber"
+        jsonPath: "FireNOCs[0].oldFireNOCNumber",
+        callBack: checkValueForNA
         // callBack: value => {
         //   return value.split(".")[1];
         // }
