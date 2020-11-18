@@ -17,7 +17,7 @@ class Footer extends React.Component {
   }
   render() {
     let downloadMenu = [];
-    const { connectionNumber, tenantId, toggleSnackbar,applicationNo, applicationNos } = this.props;
+    const { connectionNumber, tenantId, toggleSnackbar,applicationNo, applicationNos,businessService } = this.props;
 
     const editButton = {
         label: "Edit",
@@ -107,10 +107,11 @@ class Footer extends React.Component {
       };
     //if(applicationType === "MODIFY"){
     downloadMenu && downloadMenu.push(editButton);
-    downloadMenu && downloadMenu.push(BillAmendment);
+    if(businessService.includes("ws-services-calculation") || businessService.includes("sw-services-calculation")){
+      downloadMenu && downloadMenu.push(BillAmendment);
+    }
 
     //}
-    console.log("wns",downloadMenu)
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
@@ -154,6 +155,7 @@ const mapStateToProps = state => {
     "applicationNos",
     []
   );
+  let connectDetailsData = get(state.screenConfiguration.preparedFinalObject,"connectDetailsData")
 
   if(connectionObj.length === 0 ){
     connectionObj = get(
@@ -163,8 +165,8 @@ const mapStateToProps = state => {
     );
   }
   const applicationNo = (connectionObj && connectionObj.length > 0)?connectionObj[0].applicationNo:""
-
-  return { state, applicationNo, applicationNos };
+  const businessService = connectDetailsData.BillingService.BusinessService.map(item=>{return item.businessService})
+  return { state, applicationNo, applicationNos,businessService };
 };
 
 const mapDispatchToProps = dispatch => {

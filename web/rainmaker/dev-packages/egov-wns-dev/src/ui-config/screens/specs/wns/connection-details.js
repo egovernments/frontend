@@ -14,7 +14,11 @@ import { connectionDetailsFooter } from "./connectionDetailsResource/connectionD
 import { connHolderDetailsSameAsOwnerSummary, connHolderDetailsSummary, getOwnerDetails } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
-import { getRequiredDocData, showHideAdhocPopup } from "egov-billamend/ui-config/screens/specs/utils"
+import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils"
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils/api";
+
+
 
 
 const tenantId = getQueryArg(window.location.href, "tenantId")
@@ -206,15 +210,78 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
-const getConnectionDetailsFooterAction =  connectionDetailsFooter
+const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
 
 export const connectionDetails = getCommonCard({ serviceDetails, propertyDetails, ownerDetails, connectionHolders, connectionHoldersSameAsOwner });
-
+const getMDMSData = async (action, state, dispatch) => {
+  const tenantId = getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "BillingService",
+          masterDetails: [
+            {
+              name: "BusinessService"
+            }
+          ]
+        },
+        {
+          moduleName: "BillAmendment",
+          masterDetails: [
+            { name: "documentObj" }
+          ]
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "uiCommonPay"
+            }
+          ]
+        },
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    getRequiredDocData(action, dispatch, [{
+      moduleName: "BillAmendment",
+      masterDetails: [
+        { name: "documentObj" }
+      ]
+    }])
+    const payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL);
+    // console.log(payload.MdmsRes,"nishant")
+    dispatch(prepareFinalObject("connectDetailsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const getDataForBillAmendment = async (action, state, dispatch) => {
+  await getMDMSData(action, state, dispatch);
+};
 const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
     let connectionNo = getQueryArg(window.location.href, "connectionNumber")
+    getDataForBillAmendment(action, state, dispatch);
     beforeInitFn(action, state, dispatch, connectionNo);
     getRequiredDocData(action, dispatch, [{
       moduleName: "BillAmendment",
