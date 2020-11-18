@@ -56,7 +56,7 @@ export const paymentFooter = (state,consumerCode, tenant,status,extraData) => {
         } 
       }
       };
-    },4000);
+    },2000);
     
     // gotoHome: {
     //     componentPath: "Button",
