@@ -35,7 +35,7 @@ export const loadSurveyNumbers = async (action, state, dispatch) => {
   catch(e)
   {
     //toBeRemoved
-    payload = {"leases":[{"leaseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 1","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123","termNo":"456","area":"12344","termExpiryDate":659989800000,"annualRent":15234},{"leaseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 2","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"456","termNo":"456","area":"23414","termExpiryDate":659989800000,"annualRent":1234}]};
+    payload = {"leases":[{"lesseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 1","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123","termNo":"456","area":"12344","termExpiryDate":659989800000,"annualRent":15234},{"lesseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 2","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"456","termNo":"456","area":"23414","termExpiryDate":659989800000,"annualRent":1234}]};
   }
   console.log("Survey numbers recieved...",payload);
   if(payload.leases)
@@ -54,7 +54,12 @@ export const getSurveyDetails = (action, state, dispatch) => {
   const selectedSurveyNo = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"surveyNo"); 
   const selectedSurveyDetails = jp.query(allSurveyDetails, "$[?(@.surveyNo == "+selectedSurveyNo+")]" );
   if(selectedSurveyDetails && selectedSurveyDetails.length>0 )
+  {
     dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails", selectedSurveyDetails[0]));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termExpiryDate", selectedSurveyDetails[0].termExpiryDate));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.annualRent", selectedSurveyDetails[0].annualRent));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termNo", selectedSurveyDetails[0].termNo));
+  }
 }
 
 export const getMdmsData = async (action, state, dispatch) => {
