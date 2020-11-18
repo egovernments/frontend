@@ -3,7 +3,9 @@ import { ifUserRoleExists } from "../../utils";
 import get from "lodash/get";
 import './acknowledgementUtils.css'
 
-const getCommonApplyFooter = children => {
+const getCommonApplyFooter = (children) => {
+
+    
     return {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -11,7 +13,8 @@ const getCommonApplyFooter = children => {
             className: "apply-wizard-footer common-footer-mobile"
         },
         children
-    };
+    } 
+    
 };
 
 const defaultValues = {
@@ -34,6 +37,26 @@ export const paymentFooter = (state,consumerCode, tenant,status,extraData) => {
     const  buttons  = get(uiCommonPayConfig,"buttons");
     const redirectionURL = "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
+
+    setTimeout(function(){if(extraData!=null){
+        if(extraData.payment.paymentDetails[0].businessService=="PT"){
+          if (window.appOverrides && window.appOverrides.validateForm)
+          {
+           window.appOverrides.validateForm("PTReceiptAvailable", {extraData: extraData});
+          }
+      }
+      
+      let isUCPayment=extraData.payment.paymentDetails[0].businessService!="PT"
+      &&extraData.payment.paymentDetails[0].businessService!="TL"&&
+      extraData.payment.paymentDetails[0].businessService!="FIRENOC";
+      if(isUCPayment){
+        if (window.appOverrides && window.appOverrides.validateForm)
+        {
+         window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt:extraData.payment });
+        } 
+      }
+      };
+    },4000);
     
     // gotoHome: {
     //     componentPath: "Button",
@@ -89,24 +112,7 @@ export const paymentFooter = (state,consumerCode, tenant,status,extraData) => {
             },
         }
     })
-    if(extraData!=null){
-        if(extraData.payment.paymentDetails[0].businessService=="PT"){
-          if (window.appOverrides && window.appOverrides.validateForm)
-          {
-           window.appOverrides.validateForm("PTReceiptAvailable", {extraData: extraData});
-          }
-      }
-      
-      let isUCPayment=extraData.payment.paymentDetails[0].businessService!="PT"
-      &&extraData.payment.paymentDetails[0].businessService!="TL"&&
-      extraData.payment.paymentDetails[0].businessService!="FIRENOC";
-      if(isUCPayment){
-        if (window.appOverrides && window.appOverrides.validateForm)
-        {
-         window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt:extraData.payment });
-        } 
-      }
-      }
+    
     return getCommonApplyFooter({
         ...footer,
         retryButton: {
