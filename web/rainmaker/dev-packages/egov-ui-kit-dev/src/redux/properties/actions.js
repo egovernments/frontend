@@ -5,12 +5,12 @@ import { transformById } from "egov-ui-kit/utils/commons";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
-import FileSaver from 'file-saver';
+// import FileSaver from 'file-saver';
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
-import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
+// import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 
 // const FileDownload = require('js-file-download');
 // const reset_property_reset = () => {

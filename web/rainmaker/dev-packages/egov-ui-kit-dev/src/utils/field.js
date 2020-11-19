@@ -1,6 +1,7 @@
 import React from "react";
 // import moment from 'moment';
 import { TextField, MobileNumberField, SingleCheckbox, DropDown,DatePicker, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
+import { convertLocalDate } from "./commons";
 import ReactSelectDropdown from "egov-ui-kit/components/ReactSelectDropdown";
 
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
@@ -48,7 +49,7 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
         case "date":
           return (
             <DatePicker
-            formatDate={(date) => date.toISOString().split('T')[0]}
+            formatDate={(date) => convertLocalDate(date)}
             onChange={(e, value) => handleFieldChange(fieldKey,value)}
             autoOk={true}
             {...rest}
