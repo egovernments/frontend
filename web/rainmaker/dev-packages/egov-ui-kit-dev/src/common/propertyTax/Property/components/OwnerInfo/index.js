@@ -17,6 +17,7 @@ import { withRouter } from "react-router-dom";
 import { TransferOwnership, ViewHistory } from "../ActionItems";
 import PendingAmountDialog from "../PendingAmountDue";
 import PropertyInfoCard from "../PropertyInfoCard";
+import TransferOwnerShipDialog from "../TransferOwnerShipDialog";
 import ViewHistoryDialog from "../ViewHistory";
 import "./index.css";
 const locale = getLocale() || "en_IN";
@@ -316,7 +317,7 @@ class OwnerInfo extends Component {
       console.log(e);
     }
   }
-
+  
   openDialog = async (dialogName) => {
     const { properties } = this.props;
     const { propertyId, tenantId } = properties;
@@ -329,15 +330,15 @@ class OwnerInfo extends Component {
         );
       } else {
         // this.openApplyDocsUI();
-        // this.setState({ docRequired: true });
-        let link = `/pt-mutation/apply-document?consumerCode=${propertyId}&tenantId=${tenantId}`;
+        this.setState({ docRequired: true });
+        // let link = `/pt-mutation/apply-document?consumerCode=${propertyId}&tenantId=${tenantId}`;
 
         // let moduleName = process.env.REACT_APP_NAME === "Citizen" ? '/citizen' : '/employee';
         // window.location.href =
         //   process.env.NODE_ENV === "production"
         //     ? moduleName + link
         //     : link;
-        this.props.history.push(link);
+        // this.props.history.push(link);
       }
     } else if (dialogName === "viewHistory") {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
@@ -427,10 +428,17 @@ class OwnerInfo extends Component {
           />
         )}
         {this.state.docRequired && (
-          <DialogContainer open={true}
-            maxWidth={false}
-            screenKey={"property"}>{}
-          </DialogContainer>
+          <TransferOwnerShipDialog
+          open={this.state.docRequired}
+          amount={totalBillAmountDue}
+          tenantId={properties.tenantId}
+          consumerCode={properties.propertyId}
+          documents = {mdmsMutationDocuments}
+          closeDialogue={() => this.closeDialogue("docRequired")}
+          routeUrl={`/pt-mutation/apply?consumerCode=${this.props.properties.propertyId}&tenantId=${this.props.properties.tenantId}`
+        }
+          ></TransferOwnerShipDialog>
+
         )}
         {this.state.pendingAmountDue && (
           <PendingAmountDialog
