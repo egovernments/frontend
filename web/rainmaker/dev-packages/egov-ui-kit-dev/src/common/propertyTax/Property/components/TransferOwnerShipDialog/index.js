@@ -5,8 +5,10 @@ import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import "./index.css";
-// import { mak } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+
+
 
 const bodyStyle = {
   backgroundColor: "#FFFFFF",
@@ -15,28 +17,29 @@ const bodyStyle = {
   height: "240px !important"
 }
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1,
-//   },
-//   paper: {
-//     height: 140,
-//     // width: 100,
-//   },
-//   control: {
-//     padding: theme.spacing(2),
-//   },
-// }));
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    height: 140,
+    width: 100,
+  },
+  control: {
+    padding: theme.spacing.unit * 2,
+  },
+});
 
 const contentStyle = {
   width: "90%",
   maxWidth: "fit-content",
-  }
+}
 const TransferOwnerShipDialog = (props) => {
   // class TransferOwnerShipDialog extends Component { 
   // const classes = useStyles();
   const navigateToRouteUrl = (envURL) => {
-      props.closeDialogue();
+    props.closeDialogue();
     // routeToCommonPay(this.props.consumerCode, this.props.tenantId);
     props.history.push(envURL);
   }
@@ -44,15 +47,16 @@ const TransferOwnerShipDialog = (props) => {
   // dialogContent = (amount) => {
   //   return getLocaleLabels("PT_YOU_HAVE", "PT_YOU_HAVE") + " " + getLocaleLabels("PT_MUTATION_RS", "PT_MUTATION_RS") + "<b>" + amount + "</b>" + " " + getLocaleLabels("PT_PENDING_AMOUNT", "PT_PENDING_AMOUNT") + "<br/>" + getLocaleLabels("PT_INORDER_TO_TRANSFER", "PT_INORDER_TO_TRANSFER");
   // }
-  const { open, closeDialogue, amount ,routeUrl} = props;
+  const { open, closeDialogue, amount, routeUrl } = props;
+  console.log(props.documents,"documents")
   const printDiv = () => {
     let content = document.getElementById("documents-div").innerHTML;
     let printWindow = window.open("", "Print");
-  
+
     printWindow.document.write("<html><body >");
     printWindow.document.write(content);
     printWindow.document.write("</body></html>");
-  
+
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
@@ -63,24 +67,34 @@ const TransferOwnerShipDialog = (props) => {
       open={open}
       scroll="paper"
       children={[
-        <div style={{overflow:"hidden"}}>
-          <div style={{margin:"16px"}}>
-          <Label label="PT_REQIURED_DOC_TRANSFER_OWNERSHIP" fontSize="20px" labelClassName="pending-amount-due" />
+        <div style={{ overflow: "hidden" }}>
+          <div style={{ margin: "16px",marginBottom:"0" }}>
+            <Label label="PT_REQIURED_DOC_TRANSFER_OWNERSHIP" fontSize="20px" labelClassName="pending-amount-due" />
           </div>
           <br />
-          <div className="dialog-content transfer-ownership-dialog-content" id="documents-div" style={{margin:"16px"}}>
+          <div className="dialog-content transfer-ownership-dialog-content" id="documents-div" style={{ margin: "16px" ,marginTop:"0"}}>
 
             {props.documents.map(item1 =>
               <div className="pt-custom-dialog-gray-card">
-                <Label className="document-header" fontSize="16px" label={item1.code} />
-                <div className="pt-custom-dialog-container">
-                  {item1.dropdownData.map((item2, index) =>
-                    <div className="pt-custom-dialog-item">
-                      <Label className="document-header" indexNumber={index + 1} fontSize="16px" label={item2.code} />
-                    </div>
-                  )}
+                <div style={{marginBottom:"12px"}}>
+                <Label className="document-header" fontSize="16px" color="rgba(0, 0, 0, 0.87"  label={item1.code} />
                 </div>
-
+                <div className="pt-custom-dialog-container">
+                  <Grid container className={props.classes.root} spacing={16}>
+                    <Grid item xs={12}>
+                      <Grid container className={props.classes.demo} spacing={32}>
+                        {item1.dropdownData.map((item2, index) =>
+                          <Grid key={item2.code} item>
+                            <Label className="document-header" indexNumber={index + 1} fontSize="12px" label={item2.code} />
+                          </Grid>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </div>
+                <div>
+                <Label className="document-header" fontSize="12px" color="rgba(0, 0, 0, 0.87"  label={item1.description} />
+                </div>
               </div>
             )}
 
@@ -88,18 +102,18 @@ const TransferOwnerShipDialog = (props) => {
 
           <div className="transfer-ownership-dialog-footer" style={{ marginTop: 10 }}>
             <Button
-              label={<Label buttonLabel={true} label="Print" fontSize="16px" color="#fe7a51" padding="0" labelClassName="footer-button-label" />}
-              buttonStyle={{ border: "1px solid #fe7a51",padding:0 }}
+              label={<Label buttonLabel={true} label="Print" fontSize="16px" color="#fe7a51" padding="0" lineHeight="25px !important" labelClassName="footer-button-label" />}
+              buttonStyle={{ border: "1px solid #fe7a51", padding: 0 }}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
               className="footer-button"
-              onClick={() => { printDiv()}}
+              onClick={() => { printDiv() }}
             />
             <Button
-              label={<Label buttonLabel={true} label="Transfer Ownership" fontSize="16px" labelClassName="footer-button-label" />}
+              label={<Label buttonLabel={true} label="Transfer Ownership" fontSize="16px" lineHeight="25px !important" labelClassName="footer-button-label" />}
               primary={true}
               className="footer-button"
-              buttonStyle={{padding:0 }}
-
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51",lineHeight:"20px" }}
+              buttonStyle={{ padding: 0 }}
               onClick={() => { navigateToRouteUrl(routeUrl) }}
             />
           </div>
@@ -117,4 +131,4 @@ const TransferOwnerShipDialog = (props) => {
 
 };
 
-export default withRouter(TransferOwnerShipDialog);
+export default withStyles(styles)(withRouter(TransferOwnerShipDialog));
