@@ -2,8 +2,10 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getFileUrl, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { convertToOldPTObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import get from "lodash/get";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {  
+export const createPropertyPayload = (properties, documentsUploadRedux, newProperties = []) => {
+  let oldUnits=properties&&properties[0]&&properties[0].units||[];
   properties[0] = {
     ...properties[0],
     ...properties[0].propertyDetails[0],
@@ -48,8 +50,22 @@ export const createPropertyPayload = (properties, documentsUploadRedux, newPrope
     delete unit.usageCategorySubMinor;
     delete unit.unitArea;
   });
-
-
+  if(getQueryArg(window.location.href,  "purpose") == 'update'){
+    let oldUnit={};
+    oldUnits&&oldUnits.map(unit=>{
+      oldUnit[unit.id]=unit;
+    })
+    let newUnit={};
+    properties[0].units&&properties[0].units.map(unit=>{
+      newUnit[unit.id]=unit;
+    })
+    let newUnitKeys=Object.keys(newUnit);
+    Object.keys(oldUnit).map(unitId=>{
+       if(!newUnitKeys.includes(unitId)){
+        properties[0].units.push({...oldUnit[unitId],active:false});
+       }
+    })
+  }
   if (documentsUploadRedux && Object.keys(documentsUploadRedux) && Object.keys(documentsUploadRedux).length) {
     properties[0].documents = [];
     Object.keys(documentsUploadRedux).map((key) => {

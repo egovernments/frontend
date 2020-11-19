@@ -7,6 +7,7 @@ import { getBusinessServiceNextAction } from "egov-ui-kit/utils/PTCommon/FormWiz
 import { get } from "lodash";
 import store from "ui-redux/store";
 import cloneDeep from "lodash/cloneDeep";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -200,8 +201,9 @@ export const convertToOldPTObject = (newObject) => {
     unit.unitArea = unit.constructionDetail.builtUpArea;
     return { ...unit }
   })
-  propertyDetails.units = propertyDetails.units && propertyDetails.units.filter(unt=>unt.active);
+  propertyDetails.units = propertyDetails.units && propertyDetails.units.filter(unit=>unit.active);
 
+  localStorageSet("previousFloorNo", newProperty.noOfFloors);
   property["propertyDetails"] = [propertyDetails];
   Properties[0] = { ...newProperty, ...property };
   return Properties;
