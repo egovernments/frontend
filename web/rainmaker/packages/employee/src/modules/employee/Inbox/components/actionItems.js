@@ -20,7 +20,8 @@ export class Taskboard extends React.Component{
             style={{backgroundColor : item.color ,borderTop:  item.baseColor === color ?  `4px solid ${color}`  : ""}}
             textChildren={
               <div>
-                <div className="head">{item.head}</div>
+                {item.head != 'LOADING' && <div className="head">{item.head}</div>}
+                {item.head == 'LOADING' && <Label labelClassName="inbox-taskboard-subtext" label={`CS_${item.head}`} />}
                 <Label labelClassName="inbox-taskboard-subtext" label={item.body} />
               </div>
             }

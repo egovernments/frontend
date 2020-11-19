@@ -63,6 +63,7 @@ class TablePaginationActions extends React.Component {
 
     return (
       <div className={classes.root}>
+        <Hidden only={["xs"]}>
         <IconButton
           onClick={this.handleFirstPageButtonClick}
           disabled={page === 0}
@@ -70,6 +71,7 @@ class TablePaginationActions extends React.Component {
         >
           {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
         </IconButton>
+        </Hidden>
         <IconButton
           onClick={this.handleBackButtonClick}
           disabled={page === 0}
@@ -77,6 +79,7 @@ class TablePaginationActions extends React.Component {
         >
           {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
         </IconButton>
+        <Hidden only={["xs"]}>
         <IconButton
           onClick={this.handleNextButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
@@ -84,6 +87,7 @@ class TablePaginationActions extends React.Component {
         >
           {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
         </IconButton>
+        </Hidden>
         <IconButton
           onClick={this.handleLastPageButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
@@ -258,6 +262,7 @@ class InboxData extends React.Component {
         sortOrder: order,
         isSorting: true,
       });
+      this.props.data.rows=this.props.data.rows.reverse();
     }
   };
   handleChangePage = (event, page) => {
@@ -276,7 +281,7 @@ class InboxData extends React.Component {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.rows.length - page * rowsPerPage);
 
     if (isSorting) {
-      data.rows.reverse();
+    //  data.rows.reverse();
     }
     return (
       <div>
