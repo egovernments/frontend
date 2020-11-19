@@ -23,6 +23,7 @@ import Filter from "../Filter";
 import InboxData from "../Table";
 import "./index.css";
 import jp from "jsonpath";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 
@@ -526,7 +527,7 @@ class TableData extends Component {
   }
 
   componentDidMount = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
+    const { showBusy, toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
@@ -537,6 +538,7 @@ class TableData extends Component {
       //this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() },{ key: "businessServices", value: "LAMS_NewLR_V2" }]);
       const requestBody = [{ key: "tenantId", value: tenantId }];
+      showBusy();
       let responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
 
       //tobechanged
@@ -591,6 +593,7 @@ class TableData extends Component {
         loaded: true,
         inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
+      showBusy();
       this.hideLoading()
     } catch (e) {
       console.error('Error while loading:', e);
@@ -721,6 +724,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+    showBusy:() => dispatch(toggleSpinner())
   };
 };
 
