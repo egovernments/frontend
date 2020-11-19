@@ -343,7 +343,11 @@ class OwnerInfo extends Component {
     } else if (dialogName === "viewHistory") {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
 
-    } else {
+    }
+    else if(this.props.totalBillAmountDue !== 0){
+      this.setState({ pendingAmountDue: true });
+    }
+     else {
       this.setState({ [dialogName]: true });
     }
   };
