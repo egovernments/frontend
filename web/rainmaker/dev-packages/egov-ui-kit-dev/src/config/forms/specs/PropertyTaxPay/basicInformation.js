@@ -66,7 +66,7 @@ const formConfig = {
   beforeInitForm: (action, store) => {
     try {
       let state = store.getState();
-      localStorageSet("previousFloorNo", -1);
+      // localStorageSet("previousFloorNo", -1);
       var masterOne = get(state, "common.generalMDMSDataById.UsageCategoryMajor");
       var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
       const mergedMaster = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");

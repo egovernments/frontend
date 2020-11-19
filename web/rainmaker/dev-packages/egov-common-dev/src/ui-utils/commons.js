@@ -567,6 +567,9 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       ACTION: "_get",
     },
   };
+  const responseForTrade = await  httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
+  const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
      // loadUserNameData(payloadReceiptDetails.Payments[0].auditDetails.createdBy,tenantId);
@@ -577,14 +580,11 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
         return;
       }
 
-      const userNameObject = get(state && state.screenConfiguration &&  state.screenConfiguration.preparedFinalObject , "userDataForReceipt");
-      const userName = get(userNameObject, "auditorName");
 
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL")async()=>{
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
+
         configKey="tradelicense-receipt";
     
-        const responseForTrade = await httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
-
         // const detailsCollectedBy = {
         //   "collectedBy": userName
         //   }
@@ -598,8 +598,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
 
       }
     
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC")async()=>{
-        const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
 
         const details = {
              "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
