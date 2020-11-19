@@ -670,6 +670,12 @@ export const footer = getCommonApplyFooter({
           state.screenConfiguration.preparedFinalObject,
           "ReceiptTemp[0].instrument.instrumentType.name"
         )
+        let id = getQueryArg(window.location.href, "tenantId"); 
+        let localizedULBName = "";
+        if(id != null){
+         id =  id.split(".")[1];
+         localizedULBName =  id[0].toUpperCase() + id.slice(1);         
+        }
         if(paymentMode === "CARD"){
           const paymentData={
             instrumentType:get(
@@ -712,7 +718,9 @@ export const footer = getCommonApplyFooter({
             collectorName:"",
             collectorId:"",
             instrumentDate:"",
-            instrumentNumber:""
+            instrumentNumber:"",
+            tenant:localizedULBName
+
           }
           try {
             dispatch(showSpinner());
