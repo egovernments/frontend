@@ -230,39 +230,6 @@ const setSearchResponse = async (
   }
 
 
-
-  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
-    const propertiesAudit = get(auditResponse, "Properties", []);
-
-
-    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
-
-
-    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
-    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
-      property.institutionInit = previousActiveProperty.institution;
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.body.children.cardContent.children.transferorSummary",
-          "visible",
-          false
-        )
-      );
-    } else {
-      
-      dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
-          "visible",
-          false
-        )
-      );
-    }
-    property.ownersInit = previousActiveProperty.owners;
-  }
-
   let transfereeOwners = get(
     property,
     "ownersTemp", []
@@ -322,6 +289,39 @@ const setSearchResponse = async (
     );
 
   }
+
+  if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
+    const propertiesAudit = get(auditResponse, "Properties", []);
+
+
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+
+
+    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+      property.institutionInit = previousActiveProperty.institution;
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.transferorSummary",
+          "visible",
+          false
+        )
+      );
+    } else {
+
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.transferorInstitutionSummary",
+          "visible",
+          false
+        )
+      );
+    }
+  }
+
 
   // auditResponse
   dispatch(prepareFinalObject("Property", property));

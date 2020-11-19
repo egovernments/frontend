@@ -1,6 +1,6 @@
 import { convertDateToEpoch, dispatchMultipleFieldChangeAction, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import compact from "lodash/compact";
 import get from "lodash/get";
@@ -122,7 +122,7 @@ const callBackForApply = async (state, dispatch) => {
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
-  consumerCode = consumerCode == null ? propertyPayload.propertyId : consumerCode;
+    consumerCode=consumerCode==null?propertyPayload.propertyId:consumerCode;
 
   if (process.env.REACT_APP_NAME === "Citizen" && propertyPayload && !propertyPayload.declaration) {
     const errorMessage = {
@@ -154,7 +154,7 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.workflow = {
     "businessService": "PT.MUTATION",
     tenantId,
-    "action": getQueryArg(window.location.href, "action") === "edit" ? "REOPEN" : "OPEN",
+    "action": getQueryArg(window.location.href, "action") === "edit"?"REOPEN":"OPEN",
     "moduleName": "PT"
   },
     propertyPayload.owners.map(owner => {
@@ -241,22 +241,6 @@ const callBackForApply = async (state, dispatch) => {
   })
   oldDocuments = oldDocuments || [];
   propertyPayload.documents = [...newDocuments, ...oldDocuments];
-  let ownerObject = {}
-  propertyPayload.owners.map(owner => {
-    if (ownerObject[owner.mobileNumber] && ownerObject[owner.mobileNumber].status == 'INACTIVE') {
-      ownerObject[owner.mobileNumber] = { ...ownerObject[owner.mobileNumber], ...owner }
-    } else if (ownerObject[owner.mobileNumber] && ownerObject[owner.mobileNumber].status == 'ACTIVE') {
-      ownerObject[owner.mobileNumber] = { ...owner, ...ownerObject[owner.mobileNumber] }
-    } else {
-      ownerObject[owner.mobileNumber] = { ...owner }
-    }
-  }
-  )
-  propertyPayload.owners = Object.values(ownerObject);
-
-
-  delete propertyPayload.ownersInit;
-  delete propertyPayload.ownershipCategoryInit
 
   try {
     let queryObject = [
@@ -269,6 +253,7 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
+    propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
     propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(
@@ -319,19 +304,19 @@ const validateMobileNumber = (state) => {
   if (ownershipCategoryTemp.includes('INSTITUTIONAL')) {
     const newOwners = [get(state, 'screenConfiguration.preparedFinalObject.Property.institutionTemp', {})];
     const owners = get(state, 'screenConfiguration.preparedFinalObject.Property.owners');
-    // const names = owners.map(owner => {
-    //   return owner.name
+    const names = owners.map(owner => {
+      return owner.name
+    })
+    // const mobileNumbers = owners.map(owner => {
+    //   if (owner.status == "ACTIVE") {
+    //     return owner.mobileNumber;
+    //   }
     // })
-    // // const mobileNumbers = owners.map(owner => {
-    // //   if (owner.status == "ACTIVE") {
-    // //     return owner.mobileNumber;
-    // //   }
-    // // })
-    // // // newOwners.map(owner => {
-    // // //   if (mobileNumbers.includes(owner.mobileNumber)) {
-    // // //     err = "OWNER_NUMBER_SAME";
-    // // //   }
-    // // // })
+    // newOwners.map(owner => {
+    //   if (mobileNumbers.includes(owner.mobileNumber)) {
+    //     err = "OWNER_NUMBER_SAME";
+    //   }
+    // })
   } else {
 
     let newOwners = get(state, 'screenConfiguration.preparedFinalObject.Property.ownersTemp');
@@ -433,10 +418,10 @@ const callBackForNext = async (state, dispatch) => {
       errorMsg ? isFormValid = false : {};
     }
     if (getQueryArg(window.location.href, "action") === "edit") {
-      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel", 'props.labelKey', "PT_COMMON_BUTTON_RESUBMIT"))
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_RESUBMIT"))
       onChangeTypeOfOwnership({ value: get(state.screenConfiguration.preparedFinalObject, 'Property.ownershipCategoryTemp', '') }, state, dispatch)
-    } else {
-      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel", 'props.labelKey', "PT_COMMON_BUTTON_SUBMIT"))
+    }else{
+      dispatch(handleField('apply', "components.div.children.footer.children.payButton.children.submitButtonLabel",'props.labelKey',"PT_COMMON_BUTTON_SUBMIT"))
     }
   }
 

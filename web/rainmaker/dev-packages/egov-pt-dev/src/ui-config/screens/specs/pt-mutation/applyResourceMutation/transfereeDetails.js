@@ -549,7 +549,7 @@ const institutionInformation = () => {
     })
 };
 
-export const onChangeTypeOfOwnership = (action, state, dispatch) => {
+export const onChangeTypeOfOwnership = (action, state, dispatch,addItemMultiOwner=true) => {
   let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
 
 
@@ -612,8 +612,10 @@ export const onChangeTypeOfOwnership = (action, state, dispatch) => {
     //   dispatch(handleField("apply", "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[1]", "item1", owner1.item0))
 
     // }
-
-    addItemInMultiselect(state, dispatch);
+    if(addItemMultiOwner){
+      addItemInMultiselect(state, dispatch);
+    }
+    
 
   }
 }
