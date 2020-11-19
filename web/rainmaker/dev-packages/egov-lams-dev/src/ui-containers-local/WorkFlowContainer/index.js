@@ -548,6 +548,10 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
+
+    return editAction;
+
+    //tobechanged
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",
