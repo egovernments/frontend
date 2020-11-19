@@ -82,6 +82,12 @@ export const floorCount = {
           units=units&&units.filter(unit=>unit&&unit.floorNo&&unit.floorNo!="undefined"&&unit.floorNo!=i)
           dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, units));
         }
+        let floorNos=[];
+        let newUnits=get(state,'form.prepareFormData.Properties[0].propertyDetails[0].units',[])
+        newUnits&&newUnits.map(unit=>floorNos.push(unit.floorNo));
+        floorNos=floorNos.slice(0,field.value);
+        newUnits=newUnits&&newUnits.filter(unit=>unit&&unit.floorNo&&unit.floorNo!="undefined"&&floorNos.includes(unit.floorNo))
+        dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, newUnits));
       }
     },
   },
