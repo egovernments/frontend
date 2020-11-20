@@ -466,9 +466,9 @@ class WorkFlowContainer extends React.Component {
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
-    const state = find(data.states, { applicationStatus: status });
+    const state = find(data && data.states, { applicationStatus: status });
     let actions = [];
-    state.actions &&
+    state && state.actions &&
       state.actions.forEach(item => {
         actions = [...actions, ...item.roles];
       });
@@ -478,7 +478,7 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
-    if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
+    if (state && state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",
         moduleName: moduleName,
