@@ -101,6 +101,11 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         return;
     }
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
+
+  if(getQueryValue(search, "purpose") == 'update'){
+    propertyPayload.owners=get(newProperties[0],'owners',get(propertyPayload,'owners',[]))
+    propertyPayload.institution=get(newProperties[0],'institution',get(propertyPayload,'institution',[]))
+  }
     const propertyMethodAction = action;
     const currentAction = isEditInWorkflow ? 'CORRECTIONPENDING' : null;
     if (action === "_update") {
