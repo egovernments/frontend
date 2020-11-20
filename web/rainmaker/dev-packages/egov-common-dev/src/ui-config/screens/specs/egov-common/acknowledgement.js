@@ -93,12 +93,7 @@ const getAcknowledgementCard = (
     const transBusinessService = businessService ? businessService.toUpperCase().replace(/[._:-\s\/]/g, "_") : "DEFAULT";
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     if (status === "success") {
-        if(businessService=="PT"){
-            if (window.appOverrides && window.appOverrides.validateForm)
-            {
-             window.appOverrides.validateForm("PTReceiptAvailable", {extraData: state.properties});
-            }
-        }
+       let extraData= {...state.properties, 'payment':state.screenConfiguration.paymentDetails}
         return {
             header,
             headerdownloadprint:downloadprintMenu(state,receiptNumber,tenant,uiCommonPayConfig),
@@ -119,10 +114,11 @@ const getAcknowledgementCard = (
                                 labelKey : roleExists ? `CITIZEN_SUCCESS_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_PAYMENT_RECEIPT_NO`
                             },
                         number: receiptNumber
+                        
                     })
                 }
             },
-            paymentFooter: paymentFooter(state,consumerCode, tenant, status)
+            paymentFooter: paymentFooter(state,consumerCode, tenant, status,extraData)
         };
     } else if (status === "failure") {
         return {
@@ -143,7 +139,7 @@ const getAcknowledgementCard = (
                     })
                 }
             },
-            paymentFooter: paymentFooter(state,consumerCode, tenant,status)
+            paymentFooter: paymentFooter(state,consumerCode, tenant,status,null)
         };
     }
 };
@@ -173,6 +169,7 @@ const screenConfig = {
             receiptNumber,
             consumerCode,
             tenant
+          
         );
         set(action, "screenConfig.components.div.children", data);        
         return action;

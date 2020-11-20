@@ -431,7 +431,7 @@ class WorkFlowContainer extends React.Component {
         });
     } else {
       const states = find(data.states, { uuid: nextAction });
-      states.actions &&
+      states && states.actions &&
         states.actions.forEach(action => {
           roles = [...roles, ...action.roles];
         });

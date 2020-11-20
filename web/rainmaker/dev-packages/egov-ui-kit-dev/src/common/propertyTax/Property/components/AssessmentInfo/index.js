@@ -9,6 +9,7 @@ import "./index.css";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import PropertyInfoCard from "../PropertyInfoCard";
+import { convertLocalDate } from "egov-ui-kit/utils/commons";
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
 const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
@@ -81,6 +82,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
 };
 export const getUnitInfo = (units = [], propertyDetails) => {
   units = units || [];
+  units=units.filter(unit=>unit.active||unit.id==undefined);
   let floors = [];
 
   units.map((unit, index) => {
@@ -124,9 +126,9 @@ export const getUnitInfo = (units = [], propertyDetails) => {
 }
 const getVasikaItems = (additionalDetails) => {
 
-  let vasika_date=(additionalDetails && additionalDetails.vasikaDate) ? new Date(additionalDetails.vasikaDate).toISOString().split('T')[0]:null;
-  // var vasika_date =(additionalDetails && additionalDetails.vasikaDate)?additionalDetails.vasikaDate.toISOString():null;
- var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? new Date(additionalDetails.allotmentDate).toISOString().split('T')[0]:null;
+  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)? convertLocalDate( additionalDetails.vasikaDate):null;
+ var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? convertLocalDate( additionalDetails.allotmentDate):null;
+
   return (
     additionalDetails && [
           {
@@ -155,11 +157,11 @@ const getVasikaItems = (additionalDetails) => {
           },
           {
             key: "PT_COMMON_HEIGHT_OF_PROPERTY",
-            value: additionalDetails.inflammableMaterial === true ? "Yes" : "No",
+            value: additionalDetails.inflammable === true ? "Yes" : "No",
           },
           {
             key: "PT_COMMON_INFLAMMABLE_MATERIAL_PROPERTY",
-            value:  additionalDetails.heightOfProperty === true ? "Yes" : "No",
+            value:  additionalDetails.heightAbove36Feet === true ? "Yes" : "No",
           },
 
         ]

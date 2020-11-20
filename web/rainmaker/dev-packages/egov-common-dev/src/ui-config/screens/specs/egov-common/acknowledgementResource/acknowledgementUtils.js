@@ -46,7 +46,10 @@ const acknowledgementCard = ({
   body,
   tailText,
   number
+
+
 } = {}) => {
+
   const tail =
     tailText && number && number !== "null"
       ? {

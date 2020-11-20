@@ -501,8 +501,8 @@ export const getMultiUnits = multiUnits => {
   let mergedUnits =
     multiUnits &&
     multiUnits.reduce((result, item) => {
-      hasTradeType = item.hasOwnProperty("tradeType");
-      hasAccessoryType = item.hasOwnProperty("accessoryCategory");
+      hasTradeType = item && item !== null && item.hasOwnProperty("tradeType");
+      hasAccessoryType = item && item !== null && item.hasOwnProperty("accessoryCategory");
       if (item && item !== null && (hasTradeType || hasAccessoryType)) {
         if (item.hasOwnProperty("id")) {
           if (item.hasOwnProperty("active") && item.active) {
