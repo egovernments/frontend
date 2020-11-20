@@ -300,7 +300,7 @@ class TableData extends Component {
   prepareInboxDataRows = async (data, all, loadLocality = false) => {
     const { toggleSnackbarAndSetText } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
-    if (isEmpty(data)) return [];
+    if (isEmpty(data)) return{ allData: [], assignedToMe: [] };
     let businessServices = [];
     let businessIds = [];
     let ptApplicationNo = []
@@ -558,7 +558,7 @@ class TableData extends Component {
       this.showLoading();
       const requestBody1 = [{ key: "tenantId", value: tenantId }];
       let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
-      maxCount = maxCount || 10000;
+      maxCount = maxCount ;
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? Math.round(maxCount / 3) : maxCount }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
@@ -601,6 +601,7 @@ class TableData extends Component {
       });
       this.hideLoading()
     } catch (e) {
+      this.hideLoading();
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
     prepareFinalObject("InboxData", [...inboxData]);
@@ -649,6 +650,7 @@ class TableData extends Component {
         inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
     } catch (e) {
+      this.hideLoading();
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
     prepareFinalObject("InboxData", [...inboxData]);
@@ -691,6 +693,7 @@ class TableData extends Component {
         inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
       });
     } catch (e) {
+      this.hideLoading();
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
     prepareFinalObject("InboxData", [...inboxData]);
