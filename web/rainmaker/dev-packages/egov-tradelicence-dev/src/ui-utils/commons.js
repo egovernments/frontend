@@ -187,6 +187,16 @@ export const updatePFOforSearchResults = async (
 
   if (payload && payload.Licenses) {
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+    const structureTypes=get(payload,'Licenses[0].tradeLicenseDetail.structureType','').split('.')||[];
+    const structureType=structureTypes&&Array.isArray(structureTypes)&&structureTypes.length>0&&structureTypes[0]||'none';
+    const selectedValues=[{
+      structureType:structureType,
+      structureSubType:get(payload,'Licenses[0].tradeLicenseDetail.structureType','')||'none'
+    }]
+    dispatch(
+      prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
+    dispatch(
+      prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
