@@ -649,9 +649,9 @@ export const footer = getCommonApplyFooter({
         dispatch(showSpinner());
         window.posOnSuccess=(posResponse)=>{
           if(posResponse != null){          
-            const res = JSON.parse(posResponse);  
-            dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.instrumentNumber", res.cardNumber));
-            dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.transactionNumber", res.tranactionid));
+            const res = JSON.parse(posResponse);
+            dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentNumber", res.cardNumber));
+            dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", res.tranactionid));
           }
           callBackForPay(state,dispatch)     
         }
@@ -738,6 +738,7 @@ export const footer = getCommonApplyFooter({
 
         }
         else{
+
           dispatch(hideSpinner());
           callBackForPay(state,dispatch);
         }
@@ -745,7 +746,7 @@ export const footer = getCommonApplyFooter({
 
       }
     },
-    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+   //visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   generateReceipt: {
     componentPath: "Button",
