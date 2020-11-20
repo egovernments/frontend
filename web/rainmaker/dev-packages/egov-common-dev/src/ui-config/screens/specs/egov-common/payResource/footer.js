@@ -746,7 +746,7 @@ export const footer = getCommonApplyFooter({
 
       }
     },
-   //visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+   visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   generateReceipt: {
     componentPath: "Button",
