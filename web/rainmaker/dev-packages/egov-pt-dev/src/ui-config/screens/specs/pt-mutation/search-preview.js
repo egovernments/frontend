@@ -252,8 +252,6 @@ const setSearchResponse = async (
   ]);
   const propertAudits = get(propertyAuditRes, "Properties", []);
   const propertyAudit = (propertAudits && propertAudits.length > 0 && propertAudits[propertAudits.length -1]) || {};
-  const propertyInstitution = propertyAudit.institution;
-  property.institution = propertyInstitution;
   
   if (!property.workflow) {
     let workflow = {
@@ -292,8 +290,11 @@ const setSearchResponse = async (
   }
   property.ownershipCategoryTemp = property.ownershipCategory;
   property.ownershipCategoryInit = propertyAudit.ownershipCategory || "N/A";
-  if(propertyAudit.ownershipCategory.startsWith("INSTITUTION"))
+  if(propertyAudit.ownershipCategory.startsWith("INSTITUTION")){
+  property.institution = propertyAudit.institution;
   property.ownershipCategoryInit = propertyAudit.ownershipCategory.split(".")[0] || "N/A";
+
+  }
   // Set Institution/Applicant info card visibility
   if (
     get(
