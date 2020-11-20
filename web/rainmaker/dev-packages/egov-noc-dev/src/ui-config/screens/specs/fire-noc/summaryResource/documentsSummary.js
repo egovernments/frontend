@@ -25,39 +25,39 @@ export const documentsSummary = getCommonGrayCard({
           labelKey: "NOC_SUMMARY_DOCUMENTS_HEADER﻿"
         })
       },
-      editSection: {
-        componentPath: "Button",
-        props: {
-          color: "primary",
-          style: {
-            marginTop: "-10px",
-            marginRight: "-18px"
-          }
-        },
-        gridDefination: {
-          xs: 4,
-          align: "right"
-        },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 3);
-          }
-        }
-      }
+      // editSection: {
+      //   componentPath: "Button",
+      //   props: {
+      //     color: "primary",
+      //     style: {
+      //       marginTop: "-10px",
+      //       marginRight: "-18px"
+      //     }
+      //   },
+      //   gridDefination: {
+      //     xs: 4,
+      //     align: "right"
+      //   },
+      //   children: {
+      //     editIcon: {
+      //       uiFramework: "custom-atoms",
+      //       componentPath: "Icon",
+      //       props: {
+      //         iconName: "edit"
+      //       }
+      //     },
+      //     buttonLabel: getLabel({
+      //       labelName: "Edit",
+      //       labelKey: "NOC_SUMMARY_EDIT"
+      //     })
+      //   },
+      //   onClickDefination: {
+      //     action: "condition",
+      //     callBack: (state, dispatch) => {
+      //       gotoApplyWithStep(state, dispatch, 3);
+      //     }
+      //   }
+      // }
     }
   },
   body: {
