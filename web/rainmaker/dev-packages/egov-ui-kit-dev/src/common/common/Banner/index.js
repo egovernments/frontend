@@ -18,7 +18,7 @@ const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bann
               <Label label="" />
             </div> */}
              {/* <div className="banner-form-cont">{children}</div>  */}
-             <div className={window.location.pathname==='/language-selection'?"banner-form-cont-langselection":"banner-form-cont"}>
+             <div className={window.location.pathname.includes('/language-selection')?"banner-form-cont-langselection":"banner-form-cont"}>
                {children}
             </div> 
             
