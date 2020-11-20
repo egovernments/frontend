@@ -647,8 +647,10 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         dispatch(showSpinner());
-        window.posOnSuccess=(posResponse={})=>{
-          callBackForPay(state,dispatch)
+        window.posOnSuccess=(posResponse)=>{
+          let res = JSON.parse(posResponse);
+          dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.instrumentNumber", res.cardNumber));
+          dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.transactionNumber", res.tranactionid));     
         }
         dispatch(hideSpinner());
 
