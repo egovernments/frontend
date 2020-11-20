@@ -274,11 +274,11 @@ class InboxData extends React.Component {
   };
 
   render() {
-    const { data, ProcessInstances, classes } = this.props;
+    const { data={rows:[],headers:[]}, ProcessInstances, classes } = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
     const { isSorting, sortOrder } = this.state;
     const { rows, rowsPerPage, page, rowsPerPageOptions } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.rows.length - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data&&data.rows&&data.rows.length - page * rowsPerPage);
 
     if (isSorting) {
       // data.rows.reverse();
@@ -289,7 +289,7 @@ class InboxData extends React.Component {
           <Table>
             <TableHead style={{ backgroundColor: "white", borderBottom: "1px solid rgb(211, 211, 211)" }}>
               <TableRow>
-                {data.headers.map((item, index) => {
+                {data&&data.headers&&data.headers.map((item, index) => {
                   let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
                   return (
                     <TableCell className={classNames}>
@@ -490,7 +490,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-export const Taskboard = ({ data }) => {
+export const Taskboard = ({ data=[] }) => {
   return (
     <div>
       {data.map((item, i) => (
