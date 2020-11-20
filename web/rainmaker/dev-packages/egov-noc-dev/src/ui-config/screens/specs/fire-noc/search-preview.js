@@ -91,7 +91,7 @@ const prepareDocumentsView = async (state, dispatch) => {
   );
   let applicantDocuments = jp.query(
     firenoc,
-    "$.fireNOCDetails.applicantDetails.additionalDetail.documents.*"
+    "$.fireNOCDetails.applicantDetails.additionalDetail..ownerAuditionalDetail.documents.*"
   );
   let otherDocuments = jp.query(
     firenoc,
