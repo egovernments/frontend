@@ -241,6 +241,20 @@ const setSearchResponse = async (
   const properties = get(response, "Properties", []);
   let property = (properties && properties.length > 0 && properties[0]) || {};
 
+  const propertyAuditRes = await getSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "propertyIds", value: property.propertyId },
+    { key: "audit", value: true }
+
+  ]);
+  const propertAudits = get(propertyAuditRes, "Properties", []);
+  const propertyAudit = (propertAudits && propertAudits.length > 0 && propertAudits[propertAudits.length -1]) || {};
+  const propertyInstitution = propertyAudit.institution;
+  property.institution = propertyInstitution;
+  
   if (!property.workflow) {
     let workflow = {
       id: null,
@@ -277,7 +291,9 @@ const setSearchResponse = async (
     property.ownersTemp = ownersTemp;
   }
   property.ownershipCategoryTemp = property.ownershipCategory;
-  property.ownershipCategoryInit = 'NA';
+  property.ownershipCategoryInit = propertyAudit.ownershipCategory || "N/A";
+  if(propertyAudit.ownershipCategory.startsWith("INSTITUTION"))
+  property.ownershipCategoryInit = propertyAudit.ownershipCategory.split(".")[0] || "N/A";
   // Set Institution/Applicant info card visibility
   if (
     get(
