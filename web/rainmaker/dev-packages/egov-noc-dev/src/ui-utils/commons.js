@@ -14,6 +14,8 @@ import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import axios from 'axios';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
   let modifiedArray = originalArray.filter(element => {
@@ -29,7 +31,7 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 };
 
 
-export const download = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
+export const download = async(receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
   
   const FETCHRECEIPT = {
     GET: {
@@ -43,11 +45,28 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
       ACTION: "_get",
     },
   };
+
+  let consumerCode = getQueryArg(window.location.href, "consumerCode");
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+  let queryObject = [
+    { key: "tenantId", value:tenantId },
+    { key: "applicationNumber", value: consumerCode?consumerCode:applicationNumber}
+  ];
+  const FETCHFIREDETAILS = {
+    GET: {
+      URL: "/firenoc-services/v1/_search",
+      ACTION: "_get",
+    },
+  };
+  const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
-        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        { key: "tenantId", value: receiptQueryString[0].value.split('.')[0] }
       ]
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
@@ -55,6 +74,16 @@ export const download = (receiptQueryString, mode = "download" ,configKey = "con
           , "error"));
         return;
       }
+
+      
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
+
+        const details = {
+             "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
+             }
+       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
+
+    } 
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
          if(payloadReceiptDetails.Payments[0].paymentMode=="CHEQUE" || payloadReceiptDetails.Payments[0].paymentMode=="DD" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_NEFT" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_RTGS" ){
