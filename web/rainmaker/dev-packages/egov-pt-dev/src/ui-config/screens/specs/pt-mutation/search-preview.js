@@ -293,11 +293,13 @@ const setSearchResponse = async (
   if (auditResponse && Array.isArray(get(auditResponse, "Properties", [])) && get(auditResponse, "Properties", []).length > 0) {
     const propertiesAudit = get(auditResponse, "Properties", []);
 
-
-    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[0];
+    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
+    const previousActiveProperty = propertiesAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
 
 
     property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+
     if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
       property.institutionInit = previousActiveProperty.institution;
 
