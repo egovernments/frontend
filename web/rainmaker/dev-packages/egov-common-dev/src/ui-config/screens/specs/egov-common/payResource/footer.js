@@ -648,6 +648,7 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) => {
         dispatch(showSpinner());
         window.posOnSuccess=(posResponse)=>{
+          dispatch(hideSpinner());
           if(posResponse != null){          
             const res = JSON.parse(posResponse);
             dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentNumber", res.cardNumber));
@@ -655,7 +656,7 @@ export const footer = getCommonApplyFooter({
           }
           callBackForPay(state,dispatch)     
         }
-        dispatch(hideSpinner());
+        
 
         window.posOnFailure=()=>
         {
