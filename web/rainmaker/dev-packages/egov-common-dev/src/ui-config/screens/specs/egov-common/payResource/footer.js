@@ -675,13 +675,21 @@ export const footer = getCommonApplyFooter({
           state.screenConfiguration.preparedFinalObject,
           "ReceiptTemp[0].instrument.instrumentType.name"
         )
+        const instrumentNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "ReceiptTemp[0].instrument.instrumentNumber"
+        )
+        const txnNum = get(
+          state.screenConfiguration.preparedFinalObject,
+          "ReceiptTemp[0].instrument.transactionNumber"
+        )
         let id = getQueryArg(window.location.href, "tenantId"); 
         let localizedULBName = "";
         if(id != null){
          id =  id.split(".")[1];
          localizedULBName =  id[0].toUpperCase() + id.slice(1);         
         }
-        if(paymentMode === "CARD"){
+        if(paymentMode === "CARD" && instrumentNumber == null && txnNum == null ){
           const paymentData={
             instrumentType:get(
               state.screenConfiguration.preparedFinalObject,
@@ -730,6 +738,7 @@ export const footer = getCommonApplyFooter({
           try {
             dispatch(showSpinner());
             window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
+           // dispatch(hideSpinner());
            
           } catch (e) {
             dispatch(hideSpinner());
