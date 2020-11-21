@@ -176,7 +176,7 @@ const callBackForApply = async (state, dispatch) => {
   if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL")) {
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
-      owner.ownerType = 'NONE';
+      // owner.ownerType = 'NONE';
     })
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;

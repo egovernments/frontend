@@ -8,7 +8,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { checkValueForNA } from "../../utils";
 import { getLabelIfNotNull } from "../../utils/index";
-
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const showComponent = (dispatch, componentJsonPath, display) => {
   let displayProps = display ? {} : { display: "none" };
@@ -312,11 +312,14 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_OWNERSHIP_INSTI_TYPE"
       },
       {
-        jsonPath: "Property.institutionTemp.institutionName",
-        callBack: checkValueForNA
-        // callBack: value => {
-        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-        // }
+        jsonPath: "Property.institutionTemp.institutionType",
+        // callBack: checkValueForNA
+        callBack: value => {
+          if(!value){
+            return 'NA';
+          }
+          return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        }
       }, {
       labelKey: "PTM_OLD_LABEL_NAME"
     },
