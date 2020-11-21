@@ -563,7 +563,7 @@ export const tradeOwnerDetails = getCommonCard({
     },
     
   },
-  {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit" &&  process.env.REACT_APP_NAME != "Citizen"? {"pointer-events":"none"}:{}}
+  // {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit" &&  process.env.REACT_APP_NAME != "Citizen"? {"pointer-events":"none"}:{}}
   ),
   
   OwnerInfoCard,

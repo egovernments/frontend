@@ -308,9 +308,9 @@ export const tradeLocationDetails = getCommonCard(
           "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
       })
     },
-    {
-      style:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit"? {"pointer-events":"none"}:{} 
-    }
+    // {
+    //   style:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit"? {"pointer-events":"none"}:{} 
+    // }
     ),
     mapsDialog: {
       componentPath: "Dialog",

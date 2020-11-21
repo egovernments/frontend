@@ -415,13 +415,14 @@ class WorkFlowContainer extends React.Component {
     };
   };
 
-  getEmployeeRoles = (nextAction, currentAction, moduleName) => {
+  getEmployeeRoles = (nextAction, currentAction, moduleName, states) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
     let roles = [];
     if (nextAction === currentAction) {
+      console.log("============================",states);
       states &&
       data.states &&
         data.states.forEach(state => {

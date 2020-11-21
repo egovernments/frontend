@@ -966,7 +966,7 @@ export const tradeDetails = getCommonCard({
       },
       props:{
         className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit" ? true:false,
+        // disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit" ? true:false,
       }, 
       placeholder: {
         labelName: "Example Diljit Da Dhaba",
