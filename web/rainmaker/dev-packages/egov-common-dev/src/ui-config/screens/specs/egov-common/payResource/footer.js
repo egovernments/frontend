@@ -730,7 +730,7 @@ export const footer = getCommonApplyFooter({
           try {
             dispatch(showSpinner());
             window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
-            dispatch(hideSpinner());
+           
           } catch (e) {
             dispatch(hideSpinner());
             console.log(e);
