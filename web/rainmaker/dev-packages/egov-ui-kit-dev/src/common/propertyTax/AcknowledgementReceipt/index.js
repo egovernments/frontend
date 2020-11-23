@@ -142,7 +142,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
               if (unit.occupancyType === "RENTED") {
                 dataRow.push(unit.arv || "");
               } else {
-                dataRow.push(`${Math.round(unit.unitArea * 9)}` || "");
+                dataRow.push(`${Math.round(unit.unitArea)}` || "");
               }
 
               bodyData.push(dataRow);
@@ -618,7 +618,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
           "pt-reciept-citizen-subheader": {
             fontSize: 12,
             bold: true,
-            margin: [0, 10, 0, 8], //left top right bottom
+            margin: [0, 5, 0, 5], //left top right bottom
             color: "#484848",
           },
           "pt-reciept-citizen-table": {
