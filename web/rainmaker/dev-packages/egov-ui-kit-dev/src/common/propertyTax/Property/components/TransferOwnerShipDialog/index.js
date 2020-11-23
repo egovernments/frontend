@@ -14,7 +14,6 @@ const bodyStyle = {
   backgroundColor: "#FFFFFF",
   border: "0.5px solid rgba(0, 0, 0, 0)",
   boxShadow: "0 24px 24px 0 rgba(0, 0, 0, 0.3), 0 0 24px 0 rgba(0, 0, 0, 0.22)",
-  height: "240px !important"
 }
 
 

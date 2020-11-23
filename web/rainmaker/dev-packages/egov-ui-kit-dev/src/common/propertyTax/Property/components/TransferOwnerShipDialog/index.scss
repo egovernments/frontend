@@ -6,7 +6,7 @@
     width: 90%; }
   
   .transfer-ownership-dialog-content {
-    max-height: 400px;
+    max-height:calc(100vh - 240px);
     overflow-y: scroll; 
   overflow-x:hidden}
   
