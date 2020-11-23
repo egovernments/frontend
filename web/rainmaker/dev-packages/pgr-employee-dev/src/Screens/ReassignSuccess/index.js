@@ -5,7 +5,7 @@ import { SuccessMessage } from "modules/common";
 
 class ReassignSuccess extends Component {
   continueComplaintSubmit = () => {
-    this.props.history.push("/all-complaints");
+    this.props.history.push("/all-complaints-gro");
   };
   render() {
     return (

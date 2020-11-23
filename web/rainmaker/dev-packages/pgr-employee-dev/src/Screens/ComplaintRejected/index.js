@@ -6,7 +6,7 @@ import { SuccessMessage } from "modules/common";
 
 class ComplaintRejected extends Component {
   handleComplaintReassigned = () => {
-    this.props.history.push("/all-complaints");
+    this.props.history.push("/all-complaints-gro");
   };
 
   render() {
