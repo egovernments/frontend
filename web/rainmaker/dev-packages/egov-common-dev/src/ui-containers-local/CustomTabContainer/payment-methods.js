@@ -252,7 +252,7 @@ export const chequeDetails = getCommonContainer({
     },
     required: true,
     props: {
-      disabled: true
+      style:{"pointer-events":"none"} 
     },
     jsonPath: "ReceiptTemp[0].instrument.bank.name"
   }),
@@ -267,7 +267,7 @@ export const chequeDetails = getCommonContainer({
     },
     required: true,
     props: {
-      disabled: true
+      style:{"pointer-events":"none"} 
     },
     jsonPath: "ReceiptTemp[0].instrument.branchName"
   })
