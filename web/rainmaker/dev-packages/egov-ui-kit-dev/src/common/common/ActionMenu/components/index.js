@@ -15,7 +15,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions"
 import { getModuleName } from "egov-ui-kit/utils/commons";
-import { localStorageSet, localStorageGet, setModule, getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageSet, localStorageGet, setModule, getTenantId, getLocale, getStoredModulesList, setStoredModulesList } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const styles = {
@@ -79,9 +79,18 @@ class ActionMenuComp extends Component {
   }
 
   fetchLocales = ()=>{
-    setModule(getModuleName());
-    const tenantId = getTenantId();
-    this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+    var storedModuleList=[];
+    if(getStoredModulesList()!==null){
+       storedModuleList =JSON.parse(getStoredModulesList());
+    }
+    if (storedModuleList.includes(getModuleName())===false) {
+      storedModuleList.includes(getModuleName());
+      var newList =JSON.stringify(storedModuleList);
+      setStoredModulesList(newList);
+      setModule(getModuleName());
+      const tenantId = getTenantId();
+      this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+    }
   }
 
   componentDidMount() {
