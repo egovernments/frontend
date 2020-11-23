@@ -106,6 +106,48 @@ const routes = [
     }
   },
   {
+    path: "all-complaints-ro",
+    component: AllComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_OPEN_COMPLAINTS_HEADER",
+      hideTitle: false,
+      redirectionUrl,
+      hideFor: "ao",
+      customFor: "csr",
+      customTitle: "ES_ALL_COMPLAINTS_HEADER"
+    }
+  },
+  {
+    path: "all-complaints-gro",
+    component: AllComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_OPEN_COMPLAINTS_HEADER",
+      hideTitle: false,
+      redirectionUrl,
+      hideFor: "ao",
+      customFor: "csr",
+      customTitle: "ES_ALL_COMPLAINTS_HEADER"
+    }
+  },
+  {
+    path: "all-complaints-csr",
+    component: AllComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_OPEN_COMPLAINTS_HEADER",
+      hideTitle: false,
+      redirectionUrl,
+      hideFor: "ao",
+      customFor: "csr",
+      customTitle: "ES_ALL_COMPLAINTS_HEADER"
+    }
+  },
+  {
     path: "search-complaint",
     component: SearchScreen,
     needsAuthentication: true,
@@ -133,7 +175,57 @@ const routes = [
     }
   },
   {
+    path: "complaint-details-gro/:serviceRequestId",
+    component: ComplaintSummary,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_HEADER_COMPLAINT_SUMMARY",
+      redirectionUrl
+    }
+  },
+  {
+    path: "complaint-details-ro/:serviceRequestId",
+    component: ComplaintSummary,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_HEADER_COMPLAINT_SUMMARY",
+      redirectionUrl
+    }
+  },
+  {
+    path: "complaint-details-csr/:serviceRequestId",
+    component: ComplaintSummary,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_HEADER_COMPLAINT_SUMMARY",
+      redirectionUrl
+    }
+  },
+  {
     path: "closed-complaints",
+    component: ClosedComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_CLOSED_COMPLAINTS_HEADER",
+      redirectionUrl
+    }
+  },
+  {
+    path: "closed-complaints-ro",
+    component: ClosedComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_CLOSED_COMPLAINTS_HEADER",
+      redirectionUrl
+    }
+  },
+  {
+    path: "closed-complaints-gro",
     component: ClosedComplaints,
     needsAuthentication: true,
     options: {

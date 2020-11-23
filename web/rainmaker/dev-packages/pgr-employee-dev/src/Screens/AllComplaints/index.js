@@ -12,7 +12,7 @@ import orderby from "lodash/orderBy";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import isEmpty from "lodash/isEmpty";
 import isEqual from "lodash/isEqual";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import CountDetails from "./components/CountDetails";
 import "./index.css";
 
@@ -40,7 +40,8 @@ class AllComplaints extends Component {
       numCSRComplaint,
       numEmpComplaint,
       renderCustomTitle,
-      prepareFinalObject
+      prepareFinalObject,
+      pathNameRole
     } = this.props;
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
@@ -55,17 +56,21 @@ class AllComplaints extends Component {
         {
           key: "status",
           value:
-            role === "csr"
+            pathNameRole === "csr"   //role === "csr"
               ? "assigned,open,reassignrequested"
               : "assigned,reassignrequested"
         }
       ];
+      if(pathNameRole === "ro")
+        complaintCountRequest.push({ key: "assignedTo", value: JSON.parse(getUserInfo()).id })
+
+
       let payloadCount = await httpRequest(
         "rainmaker-pgr/v1/requests/_count",
         "_search",
         complaintCountRequest
       );
-      if (role === "csr") {
+      if (pathNameRole === "csr") {//role === "csr"
         payloadCount
           ? payloadCount.count
             ? renderCustomTitle(payloadCount.count)
@@ -103,7 +108,7 @@ class AllComplaints extends Component {
         employeeTotalComplaints: payloadCount.count
       });
 
-      if (role === "ao") {
+      if (pathNameRole === "gro") {//role === "ao"  //Changed by Srikanth
         fetchComplaints(
           [
             {
@@ -124,17 +129,41 @@ class AllComplaints extends Component {
           true,
           false
         );
-      } else {
+      } else
+      if (pathNameRole === "ro") {//Added by Srikanth
         fetchComplaints(
           [
             {
               key: "status",
               value:
                 rawRole === "EMPLOYEE"
-                  ? role === "csr"
+                  ? pathNameRole === "csr"//role === "csr" //tobechanged
                     ? "assigned,open,reassignrequested"
                     : "assigned,reassignrequested"
-                  : role === "csr"
+                  : pathNameRole === "csr"//role === "csr"
+                    ? "assigned,open,reassignrequested"
+                    : "assigned,reassignrequested"
+            },
+            {
+              key: "assignedTo",
+              value: JSON.parse(getUserInfo()).id
+            }
+          ],
+          true,
+          true
+        );
+      }
+      else {
+        fetchComplaints(
+          [
+            {
+              key: "status",
+              value:
+                rawRole === "EMPLOYEE"
+                  ? pathNameRole === "csr"//role === "csr"
+                    ? "assigned,open,reassignrequested"
+                    : "assigned,reassignrequested"
+                  : pathNameRole === "csr"//role === "csr"
                     ? "assigned,open,reassignrequested"
                     : "assigned,reassignrequested"
             }
@@ -155,7 +184,7 @@ class AllComplaints extends Component {
   };
 
   componentWillReceiveProps = nextProps => {
-    const { role, renderCustomTitle } = this.props;
+    const { role, renderCustomTitle, pathNameRole } = this.props;
     if (
       !isEqual(
         this.props.transformedComplaints,
@@ -165,7 +194,7 @@ class AllComplaints extends Component {
       const numberOfComplaints =
         role === "employee"
           ? 0
-          : role === "csr"
+          : pathNameRole === "csr" //role === "csr"
           ? nextProps.numCSRComplaint
           : 0;
       renderCustomTitle(numberOfComplaints);
@@ -185,7 +214,10 @@ class AllComplaints extends Component {
   };
 
   onComplaintClick = complaintNo => {
-    this.props.history.push(`/complaint-details/${complaintNo}`);
+    const pathNameRole = window.location.pathname.indexOf("all-complaints-gro")>-1?"gro":
+      window.location.pathname.indexOf("all-complaints-ro")>-1?"ro":
+      window.location.pathname.indexOf("all-complaints-csr")>-1?"csr":"na";
+    this.props.history.push(`/complaint-details-${pathNameRole}/${complaintNo}`);
   };
 
   onComplaintChange = e => {
@@ -274,8 +306,10 @@ class AllComplaints extends Component {
       searchFilterEmployeeComplaints,
       assignedTotalComplaints,
       unassignedTotalComplaints,
-      employeeTotalComplaints
+      employeeTotalComplaints,
+      pathNameRole
     } = this.props;
+    console.log("Check the complaints ", employeeComplaints, searchFilterEmployeeComplaints);
     const hintTextStyle = {
       letterSpacing: "0.7px",
       textOverflow: "ellipsis",
@@ -283,7 +317,8 @@ class AllComplaints extends Component {
       width: "90%",
       overflow: "hidden"
     };
-    return role === "ao" ? (
+    //alert("The role is "+role+" and "+pathNameRole);
+    return (pathNameRole === "gro") ? (  //(role === "ao")
       <div>
         <div className="spaceOccupier">
         </div>
@@ -439,7 +474,7 @@ class AllComplaints extends Component {
           ]}
         />
       </div>
-    ) : role === "csr" ? (
+    ) : (pathNameRole === "csr") ? (  //role === "csr"
       <Screen loading={loading}>
         <div className="form-without-button-cont-generic">
 
@@ -786,6 +821,9 @@ const mapStateToProps = state => {
       : roleFromUserInfo(userInfo.roles, "CSR")
       ? "csr"
       : "employee";
+  const pathNameRole = window.location.pathname.indexOf("all-complaints-gro")>-1?"gro":
+    window.location.pathname.indexOf("all-complaints-ro")>-1?"ro":
+    window.location.pathname.indexOf("all-complaints-csr")>-1?"csr":"na";
   let transformedComplaints = transformComplaintForComponent(
     complaints,
     role,
@@ -818,7 +856,7 @@ const mapStateToProps = state => {
     complaint => complaint.complaintStatus === "UNASSIGNED"
   );
 
-  if (role === "ao") {
+  if (pathNameRole === "gro") {  //role === "ao"
     if (order === "Old to New") {
       assignedComplaints = orderby(
         filteredAssignedComplaints,
@@ -853,7 +891,7 @@ const mapStateToProps = state => {
         ["desc"]
       );
     }
-  } else if (role === "csr") {
+  } else if (pathNameRole === "csr") {//role === "csr"
     if (order === "Old to New") {
       csrComplaints = orderby(
         transformedComplaints,
@@ -910,7 +948,8 @@ const mapStateToProps = state => {
     searchFilterEmployeeComplaints,
     assignedTotalComplaints,
     unassignedTotalComplaints,
-    employeeTotalComplaints
+    employeeTotalComplaints,
+    pathNameRole
   };
 };
 
