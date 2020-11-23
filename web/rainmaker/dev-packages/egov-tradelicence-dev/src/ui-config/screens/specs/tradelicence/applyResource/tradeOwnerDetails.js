@@ -371,7 +371,7 @@ export const ownerInfoInstitutional = {
           labelKey: "TL_NEW_OWNER_OFF_ADDR_PLACEHOLDER"
         },
         required: true,
-        pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}\[\]*:;“”‘’]{1,300}$/i,
+        pattern: /^[^\$\"<>?\\\\~!@$%^+={}\[\]*:;“”‘’]{1,300}$/i,
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
       })
     })

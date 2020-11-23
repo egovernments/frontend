@@ -973,7 +973,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
       },
       required: true,
-      pattern: /^[^\$\"'?\\\\~`!@$%^+={}\[\]*“”‘’]{1,300}$/i,
+      pattern: /^[^\$\"?\\\\~`!@$%^+={}\[\]*“”‘’]{1,300}$/i,
       jsonPath: "Licenses[0].tradeName"
     }),
     tradeFromDate: {
