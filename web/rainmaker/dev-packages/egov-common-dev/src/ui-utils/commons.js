@@ -547,8 +547,8 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       ACTION: "_get",
     },
   };
-  let consumerCode = getQueryArg(window.location.href, "consumerCode");
-  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let consumerCode = getQueryArg(window.location.href, "consumerCode")?getQueryArg(window.location.href, "consumerCode"):receiptQueryString[0].value;
+  let tenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):receiptQueryString[1].value;
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
   let queryObject = [
@@ -639,7 +639,11 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
         // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
         payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
       }
-
+      if((payloadReceiptDetails.Payments[0].payerName==null || payloadReceiptDetails.Payments[0].mobileNumber==null)  && payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC" && process.env.REACT_APP_NAME === "Citizen")
+      {
+        payloadReceiptDetails.Payments[0].payerName=response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name;
+        payloadReceiptDetails.Payments[0].mobileNumber= response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber;
+      }
       const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
       if (oldFileStoreId) {
         downloadReceiptFromFilestoreID(oldFileStoreId, mode)

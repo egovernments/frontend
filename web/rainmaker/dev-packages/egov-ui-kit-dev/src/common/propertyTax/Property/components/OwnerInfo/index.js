@@ -40,7 +40,7 @@ const checkDocument = (owner) => {
 
 export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   const isInstitution =
-    latestPropertyDetails.ownershipCategory.split('.')[0] === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory.split('.')[0] === "INSTITUTIONALGOVERNMENT";
+  latestPropertyDetails && latestPropertyDetails.ownershipCategory.split('.')[0] === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory.split('.')[0] === "INSTITUTIONALGOVERNMENT";
   const { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
   let owner = [];
   if (ownerDetails && ownerDetails.length > 0) {
