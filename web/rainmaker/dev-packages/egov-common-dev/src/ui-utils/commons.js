@@ -489,6 +489,10 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
+    if(fileRes && !fileRes[fileStoreId]){
+      console.error('ERROR IN DOWNLOADING RECEIPT');
+      return ;
+    }
     if (mode === 'download') {
       downloadPdf(fileRes[fileStoreId]);
     } else if (mode === 'open') {

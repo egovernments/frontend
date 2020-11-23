@@ -682,16 +682,38 @@ export const downloadReceipt = (receiptQueryString) => {
       // dispatch(downloadReceiptPending());
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
-        const queryStr = [
-          { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-        ]
+  
         const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-        if (oldFileStoreId) {
+        const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
+        if (oldFileStoreId && paymentStatus!="CANCELLED") {
           downloadReceiptFromFilestoreID(oldFileStoreId, "download")
         }
+        else if(oldFileStoreId && paymentStatus=="CANCELLED"){
+          getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
+            if(fileRes&&fileRes[oldFileStoreId]){
+            var win = window.open(fileRes[oldFileStoreId], '_blank');
+            win.focus();}
+            else{
+              download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+            }
+          });
+        }
         else {
-          httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+          download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+        }
+      } catch (error) {
+        dispatch(downloadReceiptError(error.message));
+      }
+    }
+  }
+}
+
+const download =(Payments,tenant)=>{
+  const queryStr = [
+    { key: "key", value: "consolidatedreceipt" },
+    { key: "tenantId", value:tenant }
+  ]
+  httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
               getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
                 var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
@@ -699,10 +721,4 @@ export const downloadReceipt = (receiptQueryString) => {
               });
 
             });
-        }
-      } catch (error) {
-        dispatch(downloadReceiptError(error.message));
-      }
-    }
-  }
 }
