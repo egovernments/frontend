@@ -310,12 +310,12 @@ const propertyLocationDetails = getCommonGrayCard({
         jsonPath:
           "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
         callBack: value => {
-
+          
           let mtenanatId = get(
             state.screenConfiguration.preparedFinalObject,
             "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
           ); 
-          let res = value.replace("-", "_");
+          let res = value && value.replace("-", "_");
           return `${getTransformedLocale(mtenanatId)}_REVENUE_${res}`;
         }
       }
