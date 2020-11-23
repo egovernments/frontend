@@ -547,8 +547,8 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       ACTION: "_get",
     },
   };
-  let consumerCode = getQueryArg(window.location.href, "consumerCode");
-  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let consumerCode = getQueryArg(window.location.href, "consumerCode")?getQueryArg(window.location.href, "consumerCode"):receiptQueryString[0].value;
+  let tenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):receiptQueryString[1].value;
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
   let queryObject = [
