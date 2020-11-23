@@ -18,6 +18,11 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
+import axios from "axios";
+import {
+  getFileUrl
+} from "egov-ui-framework/ui-utils/commons";
+
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {
@@ -318,3 +323,76 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
     }
   }
 };
+
+
+export const convertToFilestoreid = async (link) => {
+  const FILESTORE = {
+    endPoint: "filestore/v1/files"
+  };
+  
+  var response = await axios.get(getFileUrl(link), {
+    responseType: "arraybuffer",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/*"
+    }
+  });
+  // var response1 = await axios.get(getFileUrl(link), {
+  //   responseType: "blob",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Accept: "application/*"
+  //   }
+  // });
+  const base64=Buffer.from(response.data, 'binary').toString('base64');
+
+
+  const fileStoreId = await uploadFile(
+    FILESTORE.endPoint,
+    'rainmaker-pgr',
+    base64,
+    commonConfig.tenantId
+  );
+  return fileStoreId;
+  // var img = new Image();
+  // img.crossOrigin = "Anonymous";
+  // img.onload = function () {
+  //     var canvas = document.createElement("CANVAS");
+  //     var ctx = canvas.getContext("2d");
+  //     canvas.height = this.height;
+  //     canvas.width = this.width;
+  //     ctx.drawImage(this, 0, 0);
+  // };
+  // img.src = link;
+  // const file = new Blob([response.data], { type: "application/jpeg" });
+  // console.log(file,'file');
+  // const fileStoreId = await uploadFile(
+  //   FILESTORE.endPoint,
+  //   'rainmaker-pgr',
+  //   file,
+  //   commonConfig.tenantId
+  // );
+
+  // const fileStoreId1 = await uploadFile(
+  //   FILESTORE.endPoint,
+  //   'rainmaker-pgr',
+  //   img,
+  //   commonConfig.tenantId
+  // );
+  // const fileStoreId23 = await uploadFile(
+  //   FILESTORE.endPoint,
+  //   'rainmaker-pgr',
+  //   response1,
+  //   commonConfig.tenantId
+  // );
+  // console.log(fileStoreId,base64,'fileStoreId',fileStoreId1,fileStoreId2,fileStoreId23);
+
+  // const fileURL = URL.createObjectURL(file);
+  // var myWindow = window.open(fileURL);
+  // if (myWindow != undefined) {
+  //   myWindow.addEventListener("load", event => {
+  //     myWindow.focus();
+  //     myWindow.print();
+  //   });
+  // }
+}
