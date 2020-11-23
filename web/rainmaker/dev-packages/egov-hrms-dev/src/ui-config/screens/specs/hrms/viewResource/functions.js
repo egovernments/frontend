@@ -6,6 +6,7 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import {
+  convertToFilestoreid,
   createEmployee,
   getSearchResults,
   updateEmployee
@@ -365,12 +366,21 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     }
   } else if (action === "UPDATE") {
     try {
+      
+      // const fileStoreid=await convertToFilestoreid(get(employeeObject[0],'user.photo'));
+
+      // set(employeeObject[0],'user.photo',fileStoreid);
+      if(get(employeeObject[0],'user.photo',null)){
+        set(employeeObject[0],'user.photo',get(employeeObject[0],'user.identificationMark',null));
+      }
+
       let response = await updateEmployee(
         queryObject,
         employeeObject,
         dispatch
       );
       let employeeId = response && get(response, "Employees[0].code");
+     
       const acknowledgementUrl =
         process.env.REACT_APP_SELF_RUNNING === "true"
           ? `/egov-ui-framework/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`
