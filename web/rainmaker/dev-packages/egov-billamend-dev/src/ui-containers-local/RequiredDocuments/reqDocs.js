@@ -41,7 +41,8 @@ const styles = {
     fontSize: "12px",
     fontWeight: 400,
     letterSpacing: "0.6px",
-    lineHeight: "14px"
+    lineHeight: "14px",
+    marginBottom:"1rem"
   }
 };
 
@@ -108,7 +109,6 @@ const getHeader = (modulePrifx)=>{
 
 
 const generateDocument = ( item, modulePrifx ) => {
-  
   // Add header to individual grey cards
   let subHeader = getCommonTitle(
       {
@@ -148,16 +148,15 @@ const generateDocument = ( item, modulePrifx ) => {
   }
 
   // Add description to individual grey cards
-  let subParagraph = item.description
-    ? getCommonParagraph(
+  let subParagraph = 
+     getCommonParagraph(
         {
-          labelKey: getTransformedLocale(`${modulePrifx}_${item.description}_NOTE`)
+          labelKey: getTransformedLocale(`${modulePrifx}_DOCUMENT_NOTE`)
         },
         {
           style: styles.description
         }
-      )
-    : {}; 
+     ); 
 
   // let subParagraph1 = getCommonParagraph(
   //   {
@@ -171,10 +170,11 @@ const generateDocument = ( item, modulePrifx ) => {
   return getCommonGrayCard({
     subHeader: subHeader,
     break: getBreak(),
-    // subParagraph1: modulePrifx === "TradeLicense" ? {} : subParagraph1,
-    // break1: modulePrifx === "TradeLicense" ? {} : getBreak(),
+    subParagraph: subParagraph,
+    break: getBreak(),
+    // / break1: modulePrifx === "TradeLicense" ? {} : getBreak(),
     docs: getCommonContainer({ ...docs }),
-    // subParagraph: subParagraph
+   
   });
 };
 
