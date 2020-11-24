@@ -44,6 +44,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +80,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.eze.api.EzeAPI;
+//import com.eze.api.EzeAPI;
+import com.mosambee.lib.ResultData;
+
 import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_CASH_TXN;
 import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_CLOSE;
 import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_SALE_TXN;
@@ -92,7 +95,7 @@ import static org.egovernment.mseva.utils.Constant.USER_NAME;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
 
 	final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
 	//Careful with these variable names if altering
     private WebView webView;
+	private FrameLayout container;
 
     private String asw_cam_message;
     private ValueCallback<Uri> asw_file_message;
@@ -117,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 	private final static int sms_receive_perm = 4;
 
 
+
 	private SecureRandom random = new SecureRandom();
 
 
@@ -127,8 +132,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 	private static final String TAG = MainActivity.class.getSimpleName();
+	private String strTxnId = null;
 
-    @Override
+	private static Context context;
+	final MosambeeImplementation mosambeeClass = new MosambeeImplementation();
+	String resjson = null;
+
+
+	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -181,8 +192,14 @@ public class MainActivity extends AppCompatActivity {
 							String stramount = response.getString("amount");
 							String strsettlementStatus = response.getString("settlementStatus");
 							// Log.v("SETTLEMENTSTATUS", settlementStatus);
+							JSONObject cardRes =  new JSONObject();
+							cardRes = response.getJSONObject("card ");
+							String cardNO = cardRes.getString("maskedCardNo");
 
-							loadView("javascript:window.posOnSuccess()",false);
+							JSONObject resultjson = new JSONObject();
+							resultjson.put("tranactionid",strTxnId);
+							resultjson.put("cardNumber",cardNO.substring(cardNO.length() - 4));
+							loadView("javascript:window.posOnSuccess('"+resjson+"')",false);
 							closeEzeTap();
 
 
@@ -197,31 +214,31 @@ public class MainActivity extends AppCompatActivity {
 						}
 					}
 
-					if (requestCode == REQUEST_CODE_CASH_TXN) {
-						Intent sendAckIntent;
-						if (resultCode == RESULT_OK) {
-							Log.v("JSONRST", intent.getStringExtra("response"));
-							JSONObject response = new JSONObject(intent.getStringExtra("response"));
-							JSONObject mainObject = new JSONObject(intent.getStringExtra("response"));
-							response = response.getJSONObject("result");
-							response = response.getJSONObject("txn");
-							String strTxnId = response.getString("txnId");
-							String stramount = response.getString("amount");
-							String strsettlementStatus = response.getString("settlementStatus");
-//                    Log.v("SETTLEMENTSTATUS", settlementStatus);
-
-							loadView("javascript:window.posOnSuccess()",false);
-							closeEzeTap();
-						} else {
-							System.out.println("------------------------api cashbackCallback-------4");
-							JSONObject response = new JSONObject(intent.getStringExtra("response"));
-							response = response.getJSONObject("error");
-							// String errorCode = response.getString("code");
-							// String errorMessage = response.getString("message");
-							loadView("javascript:window.posOnFailure()",false);
-							closeEzeTap();
-						}
-					}
+//					if (requestCode == REQUEST_CODE_CASH_TXN) {
+//						Intent sendAckIntent;
+//						if (resultCode == RESULT_OK) {
+//							Log.v("JSONRST", intent.getStringExtra("response"));
+//							JSONObject response = new JSONObject(intent.getStringExtra("response"));
+//							JSONObject mainObject = new JSONObject(intent.getStringExtra("response"));
+//							response = response.getJSONObject("result");
+//							response = response.getJSONObject("txn");
+//							String strTxnId = response.getString("txnId");
+//							String stramount = response.getString("amount");
+//							String strsettlementStatus = response.getString("settlementStatus");
+////                    Log.v("SETTLEMENTSTATUS", settlementStatus);
+//
+//							loadView("javascript:window.posOnSuccess()",false);
+//							closeEzeTap();
+//						} else {
+//							System.out.println("------------------------api cashbackCallback-------4");
+//							JSONObject response = new JSONObject(intent.getStringExtra("response"));
+//							response = response.getJSONObject("error");
+//							// String errorCode = response.getString("code");
+//							// String errorMessage = response.getString("message");
+//							loadView("javascript:window.posOnFailure()",false);
+//							closeEzeTap();
+//						}
+//					}
 					if (requestCode == REQUEST_CODE_GET_INCOMPLETE_TXN) {
 						JSONObject response = new JSONObject(intent.getStringExtra("response"));
 						if (resultCode == RESULT_OK) {
@@ -275,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
 	public class WebAppInterface {
 		Context mContext;
 		HashMap<String, JSONObject> mObjectsFromJS = new HashMap<String, JSONObject>();
@@ -305,16 +323,21 @@ public class MainActivity extends AppCompatActivity {
 
 
 			if(name.equals("paymentData")) {
-				doInitializeEzeTap();
-				//doCheckIncompleteTxn();
 				JSONObject jsonObject = new JSONObject(json);
+				String cbType = jsonObject.getString("tenant");
+			//	doInitializeEzeTap(cbType);
+				intializeMOS("test");
+				//doCheckIncompleteTxn();
+
 				String modeOfPayment = jsonObject.getString("instrumentType");
 				if (modeOfPayment.equalsIgnoreCase("Cash")) {
 					onCash(json);
 				} else if (modeOfPayment.equalsIgnoreCase("Card")) {
-					onCard(json);
+					//onCard(json);
+					onMosambeePayment(json);
 				} else {
-					closeEzeTap();
+					//closeEzeTap();
+					//closeMosambee();
 
 					return;
 				}
@@ -342,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
 					receiptString = receiptString + " Category      : " + jsonObject.getString("businessService") + NEXTLINE;
 					receiptString = receiptString + " From Period   : " + jsonObject.getString("fromPeriod") + NEXTLINE;
 					receiptString = receiptString + " To Period     : " + jsonObject.getString("toPeriod") + NEXTLINE;
-					receiptString = receiptString + " Paid Amount   : ₹" + jsonObject.getString("receiptAmount") + NEXTLINE;
+					receiptString = receiptString + " Paid Amount   : ₹ " + jsonObject.getString("receiptAmount") + NEXTLINE;
 					if(jsonObject.has("paymentMode")) {
 						receiptString = receiptString + " Payment Mode  : " + jsonObject.getString("paymentMode") + NEXTLINE;
 					}
@@ -363,7 +386,48 @@ public class MainActivity extends AppCompatActivity {
 
 	}
 
-    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
+	private void onMosambeePayment(String json) {
+
+		JSONObject jsonRequest = new JSONObject();
+		try {
+			Date today = new Date();
+			JSONObject jsonObject = new JSONObject(json);
+			String customerNo = jsonObject.getString("customerMobile");
+			String customerEmail = "";
+			String transType = "SALE";
+			String invoiceDate = today.toString();
+			String orderId = jsonObject.getString("billNumber");
+			String amount =jsonObject.getString("paymentAmount");
+
+			mosambeeClass.startProcess(container,customerNo,customerEmail,transType,invoiceDate,orderId,amount,this);
+
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+
+	private void intializeMOS(String cbType) {
+    	String username = null;
+    	String password = null;
+		switch(cbType) {
+			case "Secunderabad":
+			{
+				break;
+			}
+			default:
+			{
+				username = getString(R.string.MOS_UNAME);
+				password = getString(R.string.MOS_PSWD);
+			}
+		}
+		mosambeeClass.init(username,password);
+
+	}
+
+	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -389,6 +453,8 @@ public class MainActivity extends AppCompatActivity {
 		webView = (WebView) findViewById(R.id.webview);
 //		webView.addJavascriptInterface(proxy, "mSewaApp");
 		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
+
+		container = (FrameLayout) findViewById(R.id.frameContainer);
 
 		String versionName = "";
 		int versionCode = 0;
@@ -571,7 +637,9 @@ public class MainActivity extends AppCompatActivity {
             */
             loadView(path,false);
         }
-
+		context = getApplicationContext();
+		mosambeeClass.setContext(context);
+		mosambeeClass.setActivity(MainActivity.this);
 
     }
 
@@ -915,6 +983,7 @@ public class MainActivity extends AppCompatActivity {
 							.show();
 					finish();
 				}
+
 			}
 			break;
 			case MY_PERMISSIONS_REQUEST_LOCATION : {
@@ -958,6 +1027,16 @@ public class MainActivity extends AppCompatActivity {
 		if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE) || !addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
 			permissionsNeeded.add("Read/Write Files");
 
+		if (!addPermission(permissionsList, Manifest.permission.READ_PHONE_STATE))
+			permissionsNeeded.add("Read Phone State");
+
+		if (!addPermission(permissionsList, Manifest.permission.BLUETOOTH) )
+			permissionsNeeded.add("Bluetooth");
+
+		if(!addPermission(permissionsList, Manifest.permission.BLUETOOTH_ADMIN))
+			permissionsNeeded.add("Bluetooth Admin");
+
+
 
 		if (permissionsList.size() > 0) {
 			if (permissionsNeeded.size() > 0) {
@@ -995,7 +1074,7 @@ public class MainActivity extends AppCompatActivity {
 		return true;
 	}
 
-	private void doInitializeEzeTap() {
+	private void doInitializeEzeTap(String cbType) {
 		/**********************************************
 		 {
 		 "demoAppKey": "your demo app key",
@@ -1018,10 +1097,27 @@ public class MainActivity extends AppCompatActivity {
 //            jsonRequest.put("appMode", "Demo");
 //            jsonRequest.put("captureSignature", "true");
 //            jsonRequest.put("prepareDevice", "false");
+			String apikey = "";
+			String merchantName = "";
 
-			jsonRequest.put("demoAppKey", API_KEY);
+			switch(cbType) {
+				case "Secunderabad":
+				{
+					apikey = getString(R.string.SEC_API);
+					merchantName = getString(R.string.SEC_MERCHANT_NAME);
+
+					break;
+				}
+				default:
+				{
+					apikey = getString(R.string.TEST_API);
+					merchantName = getString(R.string.TEST_MERCHANT_NAME);
+				}
+			}
+
+			jsonRequest.put("demoAppKey", apikey);
 			jsonRequest.put("prodAppKey", API_KEY);
-			jsonRequest.put("merchantName", MERCHANT_NAME);
+			jsonRequest.put("merchantName", merchantName);
 			jsonRequest.put("userName", USER_NAME);
 			jsonRequest.put("currencyCode", "INR");
 			jsonRequest.put("appMode", "Demo");
@@ -1030,11 +1126,11 @@ public class MainActivity extends AppCompatActivity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		EzeAPI.initialize(this, REQUEST_CODE_INITIALIZE, jsonRequest);
+		//EzeAPI.initialize(this, REQUEST_CODE_INITIALIZE, jsonRequest);
 	}
 
 	void onCash(String json) {
-		//TODO implement
+
 		try {
 			//  REQUEST
 
@@ -1103,7 +1199,7 @@ public class MainActivity extends AppCompatActivity {
 		 }
 		 ******************************************/
 
-		EzeAPI.cashTransaction(this, REQUEST_CODE_CASH_TXN, jsonRequest);
+		//EzeAPI.cashTransaction(this, REQUEST_CODE_CASH_TXN, jsonRequest);
 	}
 
 
@@ -1179,15 +1275,90 @@ public class MainActivity extends AppCompatActivity {
 		 }
 		 ******************************************/
 
-		EzeAPI.cardTransaction(this, REQUEST_CODE_SALE_TXN, jsonRequest);
+	//	EzeAPI.cardTransaction(this, REQUEST_CODE_SALE_TXN, jsonRequest);
 	}
 
 	private void doCheckIncompleteTxn() {
-		EzeAPI.checkForIncompleteTransaction(this, REQUEST_CODE_GET_INCOMPLETE_TXN);
+		//EzeAPI.checkForIncompleteTransaction(this, REQUEST_CODE_GET_INCOMPLETE_TXN);
 	}
 	private void closeEzeTap() {
-		EzeAPI.close(this, REQUEST_CODE_CLOSE);
+		//EzeAPI.close(this, REQUEST_CODE_CLOSE);
 	}
+	private void closeMosambee() {
+		mosambeeClass.stopProcess();
+	}
+
+	public void setData(final ResultData result) throws JSONException {
+		if (result == null|| (result != null && result.getResult() == false) ) {
+			Toast.makeText(context, "Paymemnt Failure", Toast.LENGTH_LONG).show();
+			if(result.getResult() == false )
+			{
+				String msg = "Result: " + result.getResult()
+						+ "\nReason code: "
+						+ result.getReasonCode() + "\nReason: "
+						+ result.getReason() + "\nTranaction Id: "
+						+ result.getTransactionId()
+						+ "\nTransactin amount: "
+						+ result.getAmount()
+						+ "\nTransactin data: "
+						+ result.getTransactionData();
+				Toast.makeText(context, result.getReason(), Toast.LENGTH_LONG).show();
+			}
+			//loadView("javascript:window.posOnFailure()",false);
+			webView.post(new Runnable() {
+				@Override
+				public void run() {
+					webView.loadUrl("javascript:window.posOnFailure()");
+				}
+			});
+		} else {
+//			Log.d("Result","Result: " + result.getResult()
+//					+ "\nReason code: "
+//					+ result.getReasonCode() + "\nReason: "
+//					+ result.getReason() + "\nTranaction Id: "
+//					+ result.getTransactionId()
+//					+ "\nTransactin amount: "
+//					+ result.getAmount()
+//					+ "\nTransactin data: "
+//					+ result.getTransactionData());
+
+			String msg = "Result: " + result.getResult()
+					+ "\nReason code: "
+					+ result.getReasonCode() + "\nReason: "
+					+ result.getReason() + "\nTranaction Id: "
+					+ result.getTransactionId()
+					+ "\nTransactin amount: "
+					+ result.getAmount()
+					+ "\nTransactin data: "
+					+ result.getTransactionData();
+			Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+			JSONObject txnObject = new JSONObject(result.getTransactionData());
+			String cardNO = txnObject.getString("cardNumber");
+
+			JSONObject resultjson = new JSONObject();
+			resultjson.put("tranactionid",result.getTransactionId());
+			resultjson.put("cardNumber",cardNO.substring(cardNO.length() - 4));
+//			resultjson.put("tranactionid","123456");
+//			resultjson.put("cardNumber","1234");
+			resjson = resultjson.toString();
+		//	Toast.makeText(context, resjson, Toast.LENGTH_LONG).show();
+
+
+			webView.post(new Runnable() {
+				@Override
+				public void run() {
+					webView.loadUrl("javascript:window.posOnSuccess('"+resjson+"')");
+				}
+			});
+		}
+
+		//closeMosambee();
+	}
+
+	public void setCommand(final String command) {
+		Toast.makeText(context, command, Toast.LENGTH_LONG).show();
+	}
+
 
 
 
