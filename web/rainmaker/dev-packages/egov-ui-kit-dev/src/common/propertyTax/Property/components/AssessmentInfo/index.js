@@ -156,13 +156,14 @@ const getVasikaItems = (additionalDetails) => {
             value:  additionalDetails.remrks || "NA",
           },
           {
-            key: "PT_COMMON_HEIGHT_OF_PROPERTY",
-            value: additionalDetails.inflammable === true ? "Yes" : "No",
+            key: "PT_COMMON_INFLAMMABLE_MATERIAL_PROPERTY",
+            value:  additionalDetails.inflammable === true ? "Yes" : "No",
           },
           {
-            key: "PT_COMMON_INFLAMMABLE_MATERIAL_PROPERTY",
-            value:  additionalDetails.heightAbove36Feet === true ? "Yes" : "No",
+            key: "PT_COMMON_HEIGHT_OF_PROPERTY",
+            value: additionalDetails.heightAbove36Feet=== true ? "Yes" : "No",
           },
+          
 
         ]
       );
