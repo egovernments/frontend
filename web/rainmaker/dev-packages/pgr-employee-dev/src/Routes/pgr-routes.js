@@ -336,7 +336,18 @@ const routes = [
   },
 
   {
-    path: "request-reassign/:serviceRequestId?",
+    path: "request-reassign-ro/:serviceRequestId?",
+    component: RequestReAssign,
+    needsAuthentication: true,
+    options: {
+      title: "CS_HEADER_REQUEST_REASSIGN",
+      titleBackground: true, // Use this if you need white background for title in web version
+      hideFooter: true,
+      redirectionUrl
+    }
+  },
+  {
+    path: "request-reassign-gro/:serviceRequestId?",
     component: RequestReAssign,
     needsAuthentication: true,
     options: {

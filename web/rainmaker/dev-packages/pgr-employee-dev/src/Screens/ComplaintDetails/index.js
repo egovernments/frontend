@@ -156,13 +156,17 @@ class ComplaintDetails extends Component {
 
   btnOneOnClick = (complaintNo, label) => {
     //Action for first button
-    let { history } = this.props;
+    let { history , pathNameRole} = this.props;
     switch (label) {
       case "ES_REJECT_BUTTON":
         history.push(`/reject-complaint/${complaintNo}`);
         break;
       case "ES_REQUEST_REQUEST_RE_ASSIGN":
-        history.push(`/request-reassign/${complaintNo}`);
+        if(pathNameRole === "gro")
+          history.push(`/request-reassign-gro/${complaintNo}`);
+        else
+        if(pathNameRole === "ro")
+          history.push(`/request-reassign-ro/${complaintNo}`);
         break;
     }
   };
