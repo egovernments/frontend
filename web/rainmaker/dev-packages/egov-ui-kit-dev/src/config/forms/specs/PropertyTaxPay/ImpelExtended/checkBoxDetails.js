@@ -24,15 +24,15 @@ const formConfig = {
             fullWidth: true,
         }
     },
-    beforeInitForm: (action, store) => {
-        try {
-          let state = store.getState();
-          set(action, "form.fields.heightAbove36Feet.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.heightAbove36Feet", ""));
-          set(action, "form.fields.inflammable.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.inflammable", ""));
-          return action;
-        } catch (e) {
-          console.log(e);
-        }
-      },
+    // beforeInitForm: (action, store) => {
+    //     try {
+    //       let state = store.getState();
+    //       set(action, "form.fields.heightAbove36Feet.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.heightAbove36Feet", ""));
+    //       set(action, "form.fields.inflammable.value", get(state.common.prepareFormData, "Properties[0].additionalDetails.inflammable", ""));
+    //       return action;
+    //     } catch (e) {
+    //       console.log(e);
+    //     }
+    //   },
 }
 export default formConfig;

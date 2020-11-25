@@ -138,7 +138,7 @@ const formConfig = {
       const tenant = get(state, 'form.propertyAddress.fields.city.value', null);
       const mohallaDropDownData = get(state, 'form.propertyAddress.fields.mohalla.dropDownData', []);
 
-      if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
+      if (process.env.REACT_APP_NAME === "Citizen" && tenant ) {
         const dataFetchConfig = {
           url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
           action: "",
