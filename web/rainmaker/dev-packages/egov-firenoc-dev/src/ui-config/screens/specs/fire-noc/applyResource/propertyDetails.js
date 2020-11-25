@@ -248,16 +248,18 @@ const commonBuildingData = buildingType => {
         dropdownFields: [
           {
             key : 'buildingUsageType',
-            isRequired: true,
+            isRequired: false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            requiredValue : true,
             callBack: buildingUsageTypeChange
           },
           {
             key : 'buildingSubUsageType',
-            isRequired: true,
+            isRequired: false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
+            requiredValue : true,
             callBack: buildingSubUsageTypeChange
           }
         ],
