@@ -15,6 +15,7 @@ import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import store from "ui-redux/store";
 import cloneDeep from "lodash/cloneDeep";
+import filter from "lodash/filter";
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -1845,22 +1846,88 @@ export const getTransformedStatus = status => {
   }
 };
 
+export const prepareDocumentTypeObj1 = documents => {
+  let documentsArr =
+    documents.length > 0
+      ? documents.reduce((documentsArr, item, ind) => {
+        if(item==="OLDLICENCENO"){
+        documentsArr.push({
+          name: item,
+          required: false,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+        }
+        else
+        {
+          documentsArr.push({
+            name: item,
+            required: true,
+            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+            statement: getStatementForDocType(item)
+          });
+          return documentsArr;
+        }
+      }, [])
+      : [];
+  return documentsArr;
+};
+
 export const getDocList = (state, dispatch) => {
   const tradeUnits = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.tradeUnits[0]"
+    "Licenses[0].tradeLicenseDetail.tradeUnits"
   );
+  // let tradeSubTypes = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "Licenses[0].tradeLicenseDetail.tradeUnits"
+  // );
+  const tradeSubTypes=tradeUnits.filter(item => item.isDeleted === undefined || item.isDeleted !== false);
+  console.log("tradeSubTypes",tradeSubTypes)
+  const applicationType = get(state.screenConfiguration.preparedFinalObject ,"Licenses[0].applicationType" );
+  let tradeSubCategories=[]
+   tradeSubCategories = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.MdmsTradeType"
+  );
+  let selectedTypes = [];
+  tradeSubTypes && tradeSubTypes.forEach(tradeSubType => {
+    selectedTypes.push(filter(tradeSubCategories, {
+        code: tradeSubType.tradeType
+      })
+    );
+  });
+
+  let applicationDocArray1 = [];
+  selectedTypes && selectedTypes.forEach(tradeSubTypeDoc => {
+   const  applicationarrayTemp= getQueryArg(window.location.href , "action") === "EDITRENEWAL" || applicationType==="RENEWAL" ? tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "RENEWAL")[0].documentList : tradeSubTypeDoc[0].applicationDocument.filter(item => item.applicationType === "NEW")[0].documentList;
+
+    applicationDocArray1 = [
+      ...applicationDocArray1,
+      ...applicationarrayTemp
+    ];
+  });
+
+  function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+  applicationDocArray1 = applicationDocArray1.filter(onlyUnique);
+  console.log("applicationDocArray");
+  
+  let docLIst = prepareDocumentTypeObj1(applicationDocArray1);
+console.log(docLIst);
 
   const documentObj = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.TradeLicense.documentObj");
   const documentTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.common-masters.DocumentType");
 
-  const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
-  get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
-  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits.tradeType.split(".")[0]);
+  //const applicationType = getQueryArg(window.location.href , "action") === "EDITRENEWAL" ? "RENEWAL" :
+ // get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "NEW");
+  const documentObjArray = documentObj && documentObj.filter(item => item.tradeType === tradeUnits[0].tradeType.split(".")[0]);
 
-   const filteredDocTypes = documentObjArray[0].allowedDocs.reduce((acc, item, index) => {
+   const filteredDocTypes = docLIst.reduce((acc, item, index) => {
     documentTypes.find((document, index) => {
-      if (document.code === item.documentType)
+      if (document.code === item.name)
        { 
          acc.push(
           documentTypes[index]
@@ -1869,11 +1936,11 @@ export const getDocList = (state, dispatch) => {
     });
     return acc;
   }, []) 
-  const applicationDocArray = filteredDocTypes && filteredDocTypes.reduce((result, item) => {
-    const transformedDocObj = documentObjArray[0].allowedDocs.filter(docObj => docObj.documentType === item.code)[0];
+  let applicationDocument = filteredDocTypes && filteredDocTypes.reduce((result, item,ind) => {
+    const transformedDocObj = docLIst.filter(docObj => docObj.name === item.code)[0];
     if(transformedDocObj)
     {
-    if (transformedDocObj.applicationType.includes(applicationType)) {
+    //if (transformedDocObj.applicationType.includes(applicationType)) {
       result.push(
         {
           code: item.code,
@@ -1882,15 +1949,19 @@ export const getDocList = (state, dispatch) => {
           formatProps: {
             accept: item.allowedFormat.join(",")
           },
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
           description: `COMMON_${item.code}_DESCRIPTION`,
-          statement: `COMMON_${item.code}_STATEMENT`
+         // statement: `COMMON_${item.code}_STATEMENT`
         }
       )
-    }
+    //}
   }
     return result;
   }, [])
-  let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
+  console.log("applicationDocument");
+
+  console.log(applicationDocument);
+  //let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject(
       "LicensesTemp[0].applicationDocuments",
@@ -1904,7 +1975,30 @@ export const getDocList = (state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
     []
   );
-  let applicationDocsReArranged =
+  let remDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "LicensesTemp[0].deactivatedDocs",
+    []
+  );
+
+  let oldDocs = [];
+  oldDocs= remDocs &&
+  remDocs.length &&
+    applicationDocument.reduce((acc, item) => {
+      const index = remDocs.findIndex(
+        i => i.documentType === item.code
+      );
+      if (index > - 1) {
+        remDocs[index].active=true;
+        acc.push(remDocs[index])
+      }
+      
+      return acc;
+    });
+    console.log("oldDocs",oldDocs);
+    applicationDocs = applicationDocs  && [...applicationDocs,...oldDocs];
+console.log("final docs:",applicationDocs);
+  const applicationDocsReArranged =
     applicationDocs &&
     applicationDocs.length &&
     applicationDocument.reduce((acc, item) => {
@@ -1912,10 +2006,35 @@ export const getDocList = (state, dispatch) => {
         i => i.documentType === item.code
       );
       if (index > - 1) {
+        console.log(applicationDocs[index]);
         acc.push(applicationDocs[index])
       }
+      
       return acc;
-    }, [])
+    }, []);
+
+    // let removedDocs = applicationDocs.reduce((acc, item) => {
+    //   const index1 = applicationDocsReArranged.findIndex(
+    //     i => i.documentType !== item.documentType
+    //   );
+    //   if (index1 > - 1) {
+    //     applicationDocs[index1].active= false;
+    //     acc.push(applicationDocs[index1])
+    //   }
+      
+    //   return acc;
+    // }, []);
+    console.log(applicationDocsReArranged,"applicationDocsReArranged");
+    const result = applicationDocs &&
+    applicationDocs.length && applicationDocs.filter(function(o1){
+      return !applicationDocsReArranged.some(function(o2){    
+         return o1.documentType == o2.documentType;         
+       });
+     },[]);
+     result && result.forEach((item, index) => item.active=false);
+     console.log(result,"result");
+     dispatch(prepareFinalObject("LicensesTemp[0].deactivatedDocs", result));
+ 
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
