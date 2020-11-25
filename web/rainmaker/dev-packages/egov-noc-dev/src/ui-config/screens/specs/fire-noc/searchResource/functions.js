@@ -79,7 +79,7 @@ export const searchApiCall = async (state, dispatch) => {
     dispatch(
       toggleSnackbar(
         true,
-        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
+        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE_DEFAULT_NUMBER" },
         "warning"
       )
     );
