@@ -20,8 +20,9 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
+  prepareFinalObject,
   toggleSnackbar,
-  prepareFinalObject
+  toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import html2canvas from "html2canvas";
@@ -612,21 +613,29 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
   set(licences[0], "applicationType", "RENEWAL");
   set(licences[0],"financialYear" ,nextFinancialYear);
 
-const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
-    Licenses: licences
-  })
-   const renewedapplicationNo = get(
-    response,
-    `Licenses[0].applicationNumber`
-  );
-  const licenseNumber = get(
-    response,
-    `Licenses[0].licenseNumber`
-  );
-  dispatch(
-    setRoute(
-      `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
-    ));
+  try { 
+     dispatch(toggleSpinner()); 
+      const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
+          Licenses: licences
+        })
+        const renewedapplicationNo = get(
+          response,
+          `Licenses[0].applicationNumber`
+        );
+        const licenseNumber = get(
+          response,
+          `Licenses[0].licenseNumber`
+        );
+        dispatch(
+          setRoute(
+            `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
+          ));
+      }
+      catch(e)
+      {
+        dispatch(toggleSpinner());
+        console.log(e);
+      }
 };
 
 export const footerReview = (

@@ -11,7 +11,8 @@ import {
 } from "../ui-config/screens/specs/utils";
 import {
   prepareFinalObject,
-  toggleSnackbar
+  toggleSnackbar,
+  toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
@@ -40,6 +41,7 @@ import commonConfig from "config/common.js";
 export const updateTradeDetails = async requestBody => {
   console.log("=======3=======");
   try {
+    dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       "/tl-services/v1/_update",
@@ -48,7 +50,10 @@ export const updateTradeDetails = async requestBody => {
       requestBody
     );
     return payload;
+    dispatch(toggleSpinner());
+
   } catch (error) {
+    dispatch(toggleSpinner());
     store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
@@ -455,55 +460,65 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
          if(queryObject[0].applicationType === "RENEWAL" && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")
          {
          }
-        else{
-          updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-            Licenses: queryObject
-           })
+        else 
+          {
+            try {
+              dispatch(toggleSpinner());
+            updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
+              Licenses: queryObject
+            })
+            dispatch(toggleSpinner());
+          //Renewal flow
+          
+          let updatedApplicationNo = "";
+          let updatedTenant = "";
+          if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
+            updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
+            updatedTenant = get(updateResponse.Licenses[0], "tenantId");
+            const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
+      
+            const bsQueryObject = [
+              { key: "tenantId", value: tenantId },
+              { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
+            ];
+            setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
+          } else {
+            updatedApplicationNo = queryObject[0].applicationNumber;
+            updatedTenant = queryObject[0].tenantId;
+          }
+          let searchQueryObject = [
+            { key: "tenantId", value: updatedTenant },
+            { key: "applicationNumber", value: updatedApplicationNo }
+          ];
+          let searchResponse = await getSearchResults(searchQueryObject);
+          if (isEditFlow) {
+            searchResponse = { Licenses: queryObject };
+          } else {
+            dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+          }
+          enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+          enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+          const updatedtradeUnits = get(
+            searchResponse,
+            "Licenses[0].tradeLicenseDetail.tradeUnits"
+          );
+          const tradeTemp = updatedtradeUnits.map((item, index) => {
+            return {
+              tradeSubType: item.tradeType.split(".")[1],
+              tradeType: item.tradeType.split(".")[0]
+            };
+          });
+          dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
+          createOwnersBackup(dispatch, searchResponse);
+             }
+            catch(e)
+            {
+              dispatch(toggleSpinner());
+              console.log(e);
+            }
+          }
          }
-
-      }
-      //Renewal flow
-    
-      let updatedApplicationNo = "";
-      let updatedTenant = "";
-      if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
-        updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
-        updatedTenant = get(updateResponse.Licenses[0], "tenantId");
-        const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
-  
-        const bsQueryObject = [
-          { key: "tenantId", value: tenantId },
-          { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
-        ];
-        setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
-      } else {
-        updatedApplicationNo = queryObject[0].applicationNumber;
-        updatedTenant = queryObject[0].tenantId;
-      }
-      let searchQueryObject = [
-        { key: "tenantId", value: updatedTenant },
-        { key: "applicationNumber", value: updatedApplicationNo }
-      ];
-      let searchResponse = await getSearchResults(searchQueryObject);
-      if (isEditFlow) {
-        searchResponse = { Licenses: queryObject };
-      } else {
-        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
-      }
-      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-      enableField('apply',"components.div.children.footer.children.payButton",dispatch);
-      const updatedtradeUnits = get(
-        searchResponse,
-        "Licenses[0].tradeLicenseDetail.tradeUnits"
-      );
-      const tradeTemp = updatedtradeUnits.map((item, index) => {
-        return {
-          tradeSubType: item.tradeType.split(".")[1],
-          tradeType: item.tradeType.split(".")[0]
-        };
-      });
-      dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
-      createOwnersBackup(dispatch, searchResponse);
+ 
     } else {
       let accessories = get(queryObject[0], "tradeLicenseDetail.accessories")? get(queryObject[0], "tradeLicenseDetail.accessories"):[];
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
@@ -524,18 +539,29 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
       if (!queryObject[0].applicationNumber)
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
-      const response = await httpRequest(
-        "post",
-        "/tl-services/v1/_create",
-        "",
-        [],
-        { Licenses: queryObject }
-      );
-      dispatch(prepareFinalObject("Licenses", response.Licenses));
-      enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-      enableField('apply',"components.div.children.footer.children.payButton",dispatch);
-      createOwnersBackup(dispatch, response);
-    }
+        try{
+            dispatch(toggleSpinner());      
+              const response = await httpRequest(
+                "post",
+                "/tl-services/v1/_create",
+                "",
+                [],
+                { Licenses: queryObject });
+             dispatch(prepareFinalObject("Licenses", response.Licenses));
+          enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+          enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+          createOwnersBackup(dispatch, response);
+          dispatch(toggleSpinner());      
+
+              }
+          catch(e)
+            {
+                dispatch(toggleSpinner());      
+                console.log(e)
+            }
+         
+     
+      }
     /** Application no. box setting */
     setApplicationNumberBox(state, dispatch);
     return true;

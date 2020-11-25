@@ -133,6 +133,16 @@ const searchApiCall = async (state, dispatch, index) => {
     "searchScreen",
     {}
   );
+   if (searchScreenObject.mobileNumber === "9999999999" ) {
+     dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE_DEFAULT_NUMBER" },
+        "warning"
+      )
+    ); 
+    return;
+  } 
   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(

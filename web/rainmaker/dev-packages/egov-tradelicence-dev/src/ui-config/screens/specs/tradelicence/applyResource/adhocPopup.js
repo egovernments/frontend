@@ -13,7 +13,8 @@ import cloneDeep from "lodash/cloneDeep";
 import { createEstimateData } from "../../utils";
 import {
   prepareFinalObject,
-  toggleSnackbar
+  toggleSnackbar,
+  toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 
@@ -22,22 +23,33 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     get(state.screenConfiguration.preparedFinalObject, "Licenses")
   );
   set(TLRequestBody[0], "action", "ADHOC");
-  const TLpayload = await httpRequest(
-    "post",
-    "/tl-services/v1/_update",
-    "",
-    [],
-    { Licenses: TLRequestBody }
-  );
+  try{
+        dispatch(toggleSpinner());
+      const TLpayload = await httpRequest(
+        "post",
+        "/tl-services/v1/_update",
+        "",
+        [],
+        { Licenses: TLRequestBody }
+      );
+      dispatch(toggleSpinner());
+      const billPayload = await createEstimateData(
+        TLpayload.Licenses[0],
+        "LicensesTemp[0].estimateCardData",
+        dispatch,
+        window.location.href
+      );
+
+    }
+    catch(e)
+    {
+      dispatch(toggleSpinner());
+      console.log(e)
+    }
 
   // clear data from form
 
-  const billPayload = await createEstimateData(
-    TLpayload.Licenses[0],
-    "LicensesTemp[0].estimateCardData",
-    dispatch,
-    window.location.href
-  );
+ 
 
   //get deep copy of bill in redux - merge new bill after adhoc
   // const billInRedux = cloneDeep(
