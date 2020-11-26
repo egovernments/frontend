@@ -12,7 +12,7 @@ class EstimateCardContainer extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
-  const fees = JSON.parse(`[{ "name": { "labelName": "TL_RENEWAL_TAX", "labelKey": "TL_RENEWAL_TAX" }, "value": 250, "info": "" }, { "name": { "labelName": "TL_RENEWAL_REBATE", "labelKey": "TL_RENEWAL_REBATE" }, "value": -25, "info": "" }, { "name": { "labelName": "TL_RENEWAL_PENALTY", "labelKey": "TL_RENEWAL_PENALTY" }, "value": 0, "info": "" }]`);
+  const fees = JSON.parse(`[{ "name": { "labelName": "WATER_TAX", "labelKey": "WATER_TAX" }, "value": 1000, "info": "" }, { "name": { "labelName": "WATER_CESS", "labelKey": "WATER_CESS" }, "value": 200, "info": "" }, { "name": { "labelName": "INTEREST", "labelKey": "INTEREST" }, "value": 100, "info": "" },{ "name": { "labelName": "PENALTY", "labelKey": "PENALTY" }, "value": 100, "info": "" }]`);
   
   const estimate = {
     fees,

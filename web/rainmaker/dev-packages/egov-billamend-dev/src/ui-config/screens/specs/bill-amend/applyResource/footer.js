@@ -11,6 +11,7 @@ import { toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChang
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import "./index.css"
+import store from "../../../../../ui-redux/store"
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
@@ -196,6 +197,9 @@ export const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "previous");
 };
 
+export const submitApplication=(state,dispatch)=>{
+  dispatch(setRoute("/bill-amend/acknowledgement?purpose=apply&status=success")) 
+}
 export const footer = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
@@ -280,10 +284,10 @@ export const footer = getCommonApplyFooter({
         }
       }
     },
-    // onClickDefination: {
-    //   action: "condition",
-    //   callBack: submitApplication
-    // },
+    onClickDefination: {
+      action: "condition",
+      callBack: submitApplication
+    },
     // roleDefination: {
     //   rolePath: "user-info.roles",
     //   action: "APPLY"
