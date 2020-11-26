@@ -197,9 +197,6 @@ class AdjustmentAmountContainer extends Component {
       {
         "taxHeads": "Penalty"
       },
-      {
-        "taxHeads": "Arrears"
-      }
     ]
     return (
       <div>

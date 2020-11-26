@@ -219,16 +219,7 @@ class DocumentList extends Component {
                     {document.required && (
                       <sup style={{ color: "#E54D42" }}>*</sup>
                     )}
-                    <Typography variant="caption">
-                      <LabelContainer
-                        labelKey={document.statement}
-                      />
-                    </Typography>
-                    <Typography variant="caption">
-                      <LabelContainer
-                     labelKey={document.description}
-                      />
-                    </Typography>
+                  
                   </Grid>
                   <Grid item={true} xs={12} sm={5} align="right">
                     <UploadSingleFile

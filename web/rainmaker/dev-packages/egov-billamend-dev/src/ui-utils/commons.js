@@ -46,6 +46,13 @@ export const handleFileUpload = (event, handleDocument, props) => {
   }
 };
 
+export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (conditionCheckerFn(arr[i])) {
+      return arr[i];
+    }
+  }
+};
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
   return (

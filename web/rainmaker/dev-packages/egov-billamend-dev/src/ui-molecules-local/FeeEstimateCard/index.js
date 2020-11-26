@@ -11,6 +11,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 import { getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 
+
 const styles = {
     card: {
         backgroundColor: "rgb(242, 242, 242)",
@@ -23,6 +24,7 @@ const styles = {
         marginTop: 24,
         boxShadow: "none",
         borderRadius: 0,
+        display:"flex"
     },
     whiteCardText: {
         padding: 8,
@@ -123,13 +125,13 @@ function FeesEstimateCard(props) {
                     Rs {total}
                 </Typography>
                 <Card className={classes.whiteCard}>
-                    <Grid container>
+                    <Grid container style={{display:"flex"}}>
                         <Grid item><ErrorIcon className={classes.leftIcon} /></Grid>
                         <Grid>
                             {estimate.extra.map((item, key) => {
                                 let textLeft, textRight;
-                                let colLeft = item.textRight ? 6 : 12;
-                                let colRight = item.textLeft ? 6 : 12;
+                                let colLeft = item.textRight ? 6 : 10;
+                                let colRight = item.textLeft ? 6 : 10;
                                 if (item.textLeft) {
                                     textLeft = (
                                         <Grid xs={colLeft}>
@@ -149,7 +151,7 @@ function FeesEstimateCard(props) {
                                     textRight = <Grid xs={colRight} />;
                                 }
                                 return (
-                                    <Grid container>
+                                    <Grid>
                                         {textLeft}
                                         {textRight}
                                     </Grid>
