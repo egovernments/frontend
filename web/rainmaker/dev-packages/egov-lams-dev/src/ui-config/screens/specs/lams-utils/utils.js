@@ -14,19 +14,22 @@ export const loadSurveyNumbers = async (action, state, dispatch) => {
   const applicationType = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"applicationType");
   const category = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"category");
   const located = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located");
+  const tenantId = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"tenantId");
 
-  console.log("Check values now ", applicationType, category, located);
+  console.log("Check values now ", applicationType, category, located, tenantId);
 
-  const queryParams = [{ key: "applicationType", value: applicationType },
-    { key: "category", value: category },
-    { key: "located", value: located }
+  const queryParams = [
+    //{ key: "applicationType", value: applicationType },  //tobechanged
+    //{ key: "category", value: category },
+    //{ key: "located", value: located },
+    { key: "tenantId", value: tenantId }  
     ];
   
   try
   {
     payload = await httpRequest(
       "post",
-      "/lams-services/v1/getLeaseDetails",
+      "/lams-services/v1/_getLeaseDetails",
       "getLeaseDetails",
       queryParams,
       requestBody
@@ -35,7 +38,7 @@ export const loadSurveyNumbers = async (action, state, dispatch) => {
   catch(e)
   {
     //toBeRemoved
-    payload = {"leases":[{"leaseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 1","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123","termNo":"456","area":"12344","termExpiryDate":659989800000,"annualRent":15234},{"leaseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 2","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"456","termNo":"456","area":"23414","termExpiryDate":659989800000,"annualRent":1234}]};
+    payload = {"leases":[{"lesseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 1","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123","termNo":"456","area":"12344","termExpiryDate":659989800000,"annualRent":15234},{"lesseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 2","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"456","termNo":"456","area":"23414","termExpiryDate":659989800000,"annualRent":1234}]};
   }
   console.log("Survey numbers recieved...",payload);
   if(payload.leases)
@@ -54,7 +57,16 @@ export const getSurveyDetails = (action, state, dispatch) => {
   const selectedSurveyNo = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"surveyNo"); 
   const selectedSurveyDetails = jp.query(allSurveyDetails, "$[?(@.surveyNo == "+selectedSurveyNo+")]" );
   if(selectedSurveyDetails && selectedSurveyDetails.length>0 )
+  {
     dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails", selectedSurveyDetails[0]));
+    
+    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termExpiryDate", 1605697485)); //selectedSurveyDetails[0].termExpiryDate)); //tobechanged
+    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.annualRent", 9999));//selectedSurveyDetails[0].annualRent));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termNo", 34)); //selectedSurveyDetails[0].termNo));
+    dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.termExpiryDate", 1605697485)); //selectedSurveyDetails[0].termExpiryDate)); //tobechanged
+    dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.annualRent", 9999));//selectedSurveyDetails[0].annualRent));
+    dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.termNo", 34)); //selectedSurveyDetails[0].termNo));
+  }
 }
 
 export const getMdmsData = async (action, state, dispatch) => {

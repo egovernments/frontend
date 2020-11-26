@@ -242,7 +242,7 @@ import PropTypes from "prop-types";
               sm: 6
             }
           }, 
-          LeaseAsPerGLR2: getTextField({
+          lesseAsPerGLR2: getTextField({
             label: {
               labelName: "Lease as per GLR",
               labelKey: "LAMS_ASPERGLR_LABEL"
@@ -256,7 +256,7 @@ import PropTypes from "prop-types";
             visible: true,
             pattern: getPattern("Name"),
             errorMessage: "",
-            jsonPath: "Lease[0].LeaseAsPerGLR2"
+            jsonPath: "Lease[0].lesseAsPerGLR2"
           }),
 
           leaseDetailsContainer : getCommonContainer({

@@ -156,13 +156,17 @@ class ComplaintDetails extends Component {
 
   btnOneOnClick = (complaintNo, label) => {
     //Action for first button
-    let { history } = this.props;
+    let { history , pathNameRole} = this.props;
     switch (label) {
       case "ES_REJECT_BUTTON":
         history.push(`/reject-complaint/${complaintNo}`);
         break;
       case "ES_REQUEST_REQUEST_RE_ASSIGN":
-        history.push(`/request-reassign/${complaintNo}`);
+        if(pathNameRole === "gro")
+          history.push(`/request-reassign-gro/${complaintNo}`);
+        else
+        if(pathNameRole === "ro")
+          history.push(`/request-reassign-ro/${complaintNo}`);
         break;
     }
   };
@@ -259,7 +263,8 @@ class ComplaintDetails extends Component {
       serviceRequestId,
       history,
       isAssignedToEmployee,
-      reopenValidChecker
+      reopenValidChecker,
+      pathNameRole
     } = this.props;
     let btnOneLabel = "";
     let btnTwoLabel = "";
@@ -269,7 +274,7 @@ class ComplaintDetails extends Component {
       complaintLoc = { lat: complaint.latitude, lng: complaint.longitude };
     }
     if (complaint) {
-      if (role === "ao") {
+      if (pathNameRole === "gro") { //role === "ao"  Changed by Srikanth
         if (complaint.complaintStatus.toLowerCase() === "unassigned") {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_COMMON_ASSIGN";
@@ -279,7 +284,7 @@ class ComplaintDetails extends Component {
         } else if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnTwoLabel = "ES_COMMON_REASSIGN";
         }
-      } else if (role === "employee") {
+      } else if (pathNameRole === "ro") { //role === "employee" Changed by Srikanth
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
@@ -334,9 +339,9 @@ class ComplaintDetails extends Component {
                 />
               </div>
               <div>
-                {(role === "ao" &&
+                {( pathNameRole === "gro" &&  //role === "ao" //Changed By Srikanth
                   complaint.complaintStatus.toLowerCase() !== "closed") ||
-                (role === "employee" &&
+                ( pathNameRole === "ro" &&  //role === "employee"  //Changed By Srikanth
                   isAssignedToEmployee &&
                   complaint.complaintStatus.toLowerCase() === "assigned" &&
                   complaint.complaintStatus.toLowerCase() !== "closed") ? (
@@ -469,6 +474,10 @@ const mapStateToProps = (state, ownProps) => {
       : roleFromUserInfo(userInfo.roles, "CSR")
       ? "csr"
       : "employee";
+
+  const pathNameRole = window.location.pathname.indexOf("complaint-details-gro")>-1?"gro":
+    window.location.pathname.indexOf("complaint-details-ro")>-1?"ro":
+    window.location.pathname.indexOf("complaint-details-csr")>-1?"csr":"na";
 
   let isAssignedToEmployee = true;
   if (selectedComplaint) {
@@ -603,7 +612,8 @@ const mapStateToProps = (state, ownProps) => {
       serviceRequestId,
       isAssignedToEmployee,
       complaintTypeLocalised,
-      reopenValidChecker
+      reopenValidChecker,
+      pathNameRole
     };
   } else {
     return {
@@ -612,7 +622,8 @@ const mapStateToProps = (state, ownProps) => {
       role,
       serviceRequestId,
       isAssignedToEmployee,
-      reopenValidChecker
+      reopenValidChecker,
+      pathNameRole
     };
   }
 };

@@ -647,10 +647,16 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         dispatch(showSpinner());
-        window.posOnSuccess=(posResponse={})=>{
-          callBackForPay(state,dispatch)
+        window.posOnSuccess=(posResponse)=>{
+          dispatch(hideSpinner());
+          if(posResponse != null){          
+            const res = JSON.parse(posResponse);
+            dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentNumber", res.cardNumber));
+            dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", res.tranactionid));
+          }
+          callBackForPay(state,dispatch)     
         }
-        dispatch(hideSpinner());
+        
 
         window.posOnFailure=()=>
         {
@@ -670,7 +676,21 @@ export const footer = getCommonApplyFooter({
           state.screenConfiguration.preparedFinalObject,
           "ReceiptTemp[0].instrument.instrumentType.name"
         )
-        if(paymentMode === "CARD"){
+        const instrumentNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "ReceiptTemp[0].instrument.instrumentNumber"
+        )
+        const txnNum = get(
+          state.screenConfiguration.preparedFinalObject,
+          "ReceiptTemp[0].instrument.transactionNumber"
+        )
+        let id = getQueryArg(window.location.href, "tenantId"); 
+        let localizedULBName = "";
+        if(id != null){
+         id =  id.split(".")[1];
+         localizedULBName =  id[0].toUpperCase() + id.slice(1);         
+        }
+        if(paymentMode === "CARD" && instrumentNumber == null && txnNum == null ){
           const paymentData={
             instrumentType:get(
               state.screenConfiguration.preparedFinalObject,
@@ -712,12 +732,15 @@ export const footer = getCommonApplyFooter({
             collectorName:"",
             collectorId:"",
             instrumentDate:"",
-            instrumentNumber:""
+            instrumentNumber:"",
+            tenant:localizedULBName
+
           }
           try {
             dispatch(showSpinner());
             window.Android && window.Android.sendPaymentData("paymentData",JSON.stringify(paymentData));
             dispatch(hideSpinner());
+           
           } catch (e) {
             dispatch(hideSpinner());
             console.log(e);
@@ -725,6 +748,7 @@ export const footer = getCommonApplyFooter({
 
         }
         else{
+
           dispatch(hideSpinner());
           callBackForPay(state,dispatch);
         }
@@ -732,7 +756,7 @@ export const footer = getCommonApplyFooter({
 
       }
     },
-    visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
+   visible: process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine')) ? false : true
   },
   generateReceipt: {
     componentPath: "Button",

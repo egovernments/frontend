@@ -1,13 +1,13 @@
 import commonConfig from "config/common.js";
 import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import { getBoundaryData, updatePFOforSearchResults } from "../../../../ui-utils/commons";
-import { getAllDataFromBillingSlab, getCurrentFinancialYear, pageResetAndChange } from "../utils";
+import { getAllDataFromBillingSlab, getCurrentFinancialYear, pageResetAndChange,commonTransform } from "../utils";
 import { documentList } from "./applyResource/documentList";
 import { footer } from "./applyResource/footer";
 import { tradeDetails } from "./applyResource/tradeDetails";
@@ -79,6 +79,7 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "TradeLicense",
           masterDetails: [
+            { name: "TradeType", filter: `[?(@.type == "TL")]` },
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" },
             { name: "documentObj" }
@@ -117,6 +118,12 @@ export const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    set(
+      payload,
+      "MdmsRes.TradeLicense.MdmsTradeType",
+      get(payload, "MdmsRes.TradeLicense.TradeType", [])
+    );
+    payload = commonTransform(payload, "MdmsRes.TradeLicense.TradeType");
     const localities = get(
       state.screenConfiguration,
       "preparedFinalObject.applyScreenMdmsData.tenant.localities",
@@ -291,6 +298,8 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     // let { isRequiredDocuments } = state.screenConfiguration.preparedFinalObject;
+    dispatch(unMountScreen("search"));
+    dispatch(unMountScreen("search-preview"));
     const tenantId = getTenantId();
     const URL = window.location.href
     const URLsplit = URL.split("/")

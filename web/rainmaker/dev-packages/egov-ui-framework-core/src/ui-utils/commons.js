@@ -504,21 +504,23 @@ export const getMultiUnits = multiUnits => {
   let mergedUnits =
     multiUnits &&
     multiUnits.reduce((result, item) => {
-      hasTradeType = item.hasOwnProperty("tradeType");
-      hasAccessoryType = item.hasOwnProperty("accessoryCategory");
-      if (item && item !== null && (hasTradeType || hasAccessoryType)) {
-        if (item.hasOwnProperty("id")) {
-          if (item.hasOwnProperty("active") && item.active) {
-            if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-              set(item, "active", false);
-              result.push(item);
-            } else {
+      if(item ){ 
+        hasTradeType = item.hasOwnProperty("tradeType");
+        hasAccessoryType = item.hasOwnProperty("accessoryCategory");
+        if (item && item !== null && (hasTradeType || hasAccessoryType)) {
+          if (item.hasOwnProperty("id")) {
+            if (item.hasOwnProperty("active") && item.active) {
+              if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
+                set(item, "active", false);
+                result.push(item);
+              } else {
+                result.push(item);
+              }
+            }
+          } else {
+            if (!item.hasOwnProperty("isDeleted")) {
               result.push(item);
             }
-          }
-        } else {
-          if (!item.hasOwnProperty("isDeleted")) {
-            result.push(item);
           }
         }
       }

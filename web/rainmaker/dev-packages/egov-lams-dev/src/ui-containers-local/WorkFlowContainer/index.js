@@ -278,18 +278,18 @@ class WorkFlowContainer extends React.Component {
         // window.location.href = `acknowledgement?${this.getPurposeString(
         //   label
         // )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-       
+        let label="updated";
         this.props.setRoute(
-          `/tradelicence/acknowledgement?${this.getPurposeString(
+          `/lams-common/updateAcknowledgement?${this.getPurposeString(
             label
-          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`
+          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&moduleName=${moduleName}`
         ); 
         if (moduleName === "NewWS1" || moduleName === "NewSW1") {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
         }
 
       }
-      toggleSpinner();
+      //toggleSpinner();
     } catch (e) {
       toggleSpinner();
       if (moduleName === "BPA") {
@@ -548,6 +548,10 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
+
+    return editAction;
+
+    //tobechanged
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",

@@ -62,7 +62,12 @@ class SearchScreen extends Component {
   };
 
   onComplaintClick = complaintNo => {
-    this.props.history.push(`/complaint-details/${complaintNo}`);
+    const pathNameRole = window.location.pathname.indexOf("all-complaints-gro")>-1?"gro":
+      window.location.pathname.indexOf("all-complaints-ro")>-1?"ro":
+      window.location.pathname.indexOf("all-complaints-csr")>-1?"csr":
+      window.location.pathname.indexOf("search-complaint-gro")>-1?"gro":
+      "na";
+    this.props.history.push(`/complaint-details-${pathNameRole}/${complaintNo}`);
   };
 
   onComplaintChange = e => {

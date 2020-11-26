@@ -99,13 +99,13 @@ import {
     ),
     leaseDetailsContainer2: getCommonContainer(
       {
-        leaseAsPerGLR: getLabelWithValue(
+        lesseAsPerGLR: getLabelWithValue(
           {
             labelName: "Lease as per GLR",
             labelKey: "LAMS_AS_PER_GLR"
           },
           {
-            jsonPath: "lamsStore.Lease[0].leaseDetails.leaseAsPerGLR",
+            jsonPath: "lamsStore.Lease[0].leaseDetails.lesseAsPerGLR",
             //callBack: convertEpochToDate
           }
         )

@@ -2133,7 +2133,7 @@ export const sampleSearchResponse = {
         "area": "1234",
         "termExpiryDate": 659989800000,
         "annualRent": 12345,
-        "leaseAsPerGLR": "Mst. Test d/o Test",
+        "lesseAsPerGLR": "Mst. Test d/o Test",
         "category":"Military Station - Test",
         "located" : "Outside Civil Area - Test",
         "applicationDocuments": [

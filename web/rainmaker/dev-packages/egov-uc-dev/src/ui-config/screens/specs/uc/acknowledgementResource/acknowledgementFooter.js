@@ -80,7 +80,7 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
           }
         }
     },
-    //visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) 
+    visible: JSON.parse(window.localStorage.getItem('isPOSmachine')) 
   },
     payButton: {
     componentPath: "Button",

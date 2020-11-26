@@ -53,7 +53,7 @@ import {
         termExpiryDate:getLabelWithValue(
           {
             labelName: "Term Number",
-            labelKey: "LAMS_TERMNO"
+            labelKey: "LAMS_TERM_EXP_DATE"
           },
           {
             jsonPath: "lamsStore.selectedSurveyDetails.termExpiryDate",
@@ -79,13 +79,13 @@ import {
     ),
     leaseDetailsContainer2: getCommonContainer(
       {
-        leaseAsPerGLR: getLabelWithValue(
+        lesseAsPerGLR: getLabelWithValue(
           {
             labelName: "Lease as per GLR",
             labelKey: "LAMS_AS_PER_GLR"
           },
           {
-            jsonPath: "lamsStore.selectedSurveyDetails.leaseAsPerGLR",
+            jsonPath: "lamsStore.selectedSurveyDetails.lesseAsPerGLR",
             //callBack: convertEpochToDate
           }
         )

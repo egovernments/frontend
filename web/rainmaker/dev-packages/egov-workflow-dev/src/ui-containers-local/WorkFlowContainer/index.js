@@ -143,6 +143,11 @@ class WorkFlowContainer extends React.Component {
           "LicensesTemp[0].removedDocs",
           []
         );
+        const deactivatedDocs = get(
+          preparedFinalObject,
+          "LicensesTemp[0].deactivatedDocs",
+          []
+        );
         if (data[0] && data[0].commencementDate) {
           data[0].commencementDate = convertDateToEpoch(
             data[0].commencementDate,
@@ -154,7 +159,8 @@ class WorkFlowContainer extends React.Component {
         set(data[0], "tradeLicenseDetail.owners", owners);
         set(data[0], "tradeLicenseDetail.applicationDocuments", [
           ...get(data[0], "tradeLicenseDetail.applicationDocuments", []),
-          ...removedDocs
+          ...removedDocs,
+          ...deactivatedDocs
         ]);
 
         // Accessories issue fix by Gyan

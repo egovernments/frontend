@@ -171,7 +171,7 @@ const applicationDetails = {
               sm: 6
             }
           }, 
-          LeaseAsPerGLR2: getTextField({
+          lesseAsPerGLR2: getTextField({
             label: {
               labelName: "Lease as per GLR",
               labelKey: "LAMS_ASPERGLR_LABEL"
@@ -185,7 +185,7 @@ const applicationDetails = {
             visible: true,
             pattern: getPattern("Name"),
             errorMessage: "",
-            jsonPath: "lamsStore.Lease[0].LeaseAsPerGLR2"
+            jsonPath: "lamsStore.Lease[0].lesseAsPerGLR2"
           }),
     
           leaseDetailsContainer : getCommonContainer({

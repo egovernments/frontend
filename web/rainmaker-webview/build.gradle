@@ -24,10 +24,10 @@ allprojects {
 }
 
 android {
-	compileSdkVersion 26
+	compileSdkVersion 29
 	buildTypes {
 		release {
-			minifyEnabled true
+			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 			applicationVariants.all { variant ->
 				variant.outputs.all {
@@ -46,17 +46,23 @@ android {
 	}
 
 	signingConfigs {
-		Citizen {
-			keyAlias 'mseva.punjab.citizen'
-			keyPassword 'egov123'
-			storeFile file('keystore/citizen/keystore')
-			storePassword 'egov123'
-		}
+//		Citizen {
+//			keyAlias 'mseva.punjab.citizen'
+//			keyPassword 'egov123'
+//			storeFile file('keystore/citizen/keystore')
+//			storePassword 'egov123'
+//		}
+//		Employee {
+//			keyAlias 'mseva.punjab.employee'
+//			keyPassword 'egov123'
+//			storeFile file('keystore/employee/keystore')
+//			storePassword 'egov123'
+//		}
 		Employee {
-			keyAlias 'mseva.punjab.employee'
-			keyPassword 'egov123'
-			storeFile file('keystore/employee/keystore')
-			storePassword 'egov123'
+			keyAlias 'eChhawani'
+			keyPassword 'bel123'
+			storeFile file('/keystore/employee/keystore.jks')
+			storePassword 'bel123'
 		}
 	}
 
@@ -65,13 +71,13 @@ android {
 		CitizenProd {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.citizen'
-			targetSdkVersion 26
+			targetSdkVersion 29
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
-			signingConfig signingConfigs.Citizen
+		//	signingConfig signingConfigs.Citizen
 
 			// Production
 			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/citizen/user/register"'
@@ -79,7 +85,7 @@ android {
 		EmployeeProd {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.employee'
-			targetSdkVersion 26
+			targetSdkVersion 29
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
@@ -93,13 +99,13 @@ android {
 		CitizenUAT {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.citizen'
-			targetSdkVersion 26
+			targetSdkVersion 29
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
-			signingConfig signingConfigs.Citizen
+		//	signingConfig signingConfigs.Citizen
 
 			// QA
 //			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/citizen/user/register"'
@@ -111,9 +117,9 @@ android {
 			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/citizen/user/register"'
 		}
 		EmployeeUAT {
-			minSdkVersion 19
+			minSdkVersion 21
 			applicationId 'org.egovernment.mseva.employee'
-			targetSdkVersion 26
+			targetSdkVersion 29
 			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
@@ -140,4 +146,5 @@ dependencies {
 	implementation 'com.android.support:appcompat-v7:26.1.0'
 	implementation 'com.google.android.gms:play-services-base:15.0.1'
 	implementation (name: 'ezetapandroidsdk_2_20', ext: 'aar')
+	implementation files('libs/mosambeelib_v1.0.0.091.jar')
 }

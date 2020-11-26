@@ -9,7 +9,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject, unMountScreen
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
@@ -143,7 +143,10 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+  
   tenantId = getQueryArg(window.location.href, "tenantId");
+  dispatch(unMountScreen("search"));
+  dispatch(unMountScreen("apply"));
   loadUlbLogo(tenantId);
 
   //Search details for given application Number

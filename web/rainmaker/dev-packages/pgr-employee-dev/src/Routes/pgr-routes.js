@@ -106,7 +106,55 @@ const routes = [
     }
   },
   {
+    path: "all-complaints-ro",
+    component: AllComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_OPEN_COMPLAINTS_HEADER",
+      hideTitle: false,
+      redirectionUrl,
+      hideFor: "ao",
+      customFor: "csr",
+      customTitle: "ES_ALL_COMPLAINTS_HEADER"
+    }
+  },
+  {
+    path: "all-complaints-gro",
+    component: AllComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_OPEN_COMPLAINTS_HEADER",
+      hideTitle: false,
+      redirectionUrl,
+      hideFor: "ao",
+      customFor: "csr",
+      customTitle: "ES_ALL_COMPLAINTS_HEADER"
+    }
+  },
+  {
+    path: "all-complaints-csr",
+    component: AllComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_OPEN_COMPLAINTS_HEADER",
+      hideTitle: false,
+      redirectionUrl,
+      hideFor: "ao",
+      customFor: "csr",
+      customTitle: "ES_ALL_COMPLAINTS_HEADER"
+    }
+  },
+  {
     path: "search-complaint",
+    component: SearchScreen,
+    needsAuthentication: true,
+    options: { hideFooter: true, title: "CORE_COMMON_SEARCH_COMPLAINT" }
+  },
+  {
+    path: "search-complaint-gro",
     component: SearchScreen,
     needsAuthentication: true,
     options: { hideFooter: true, title: "CORE_COMMON_SEARCH_COMPLAINT" }
@@ -133,7 +181,57 @@ const routes = [
     }
   },
   {
+    path: "complaint-details-gro/:serviceRequestId",
+    component: ComplaintSummary,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_HEADER_COMPLAINT_SUMMARY",
+      redirectionUrl
+    }
+  },
+  {
+    path: "complaint-details-ro/:serviceRequestId",
+    component: ComplaintSummary,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_HEADER_COMPLAINT_SUMMARY",
+      redirectionUrl
+    }
+  },
+  {
+    path: "complaint-details-csr/:serviceRequestId",
+    component: ComplaintSummary,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_HEADER_COMPLAINT_SUMMARY",
+      redirectionUrl
+    }
+  },
+  {
     path: "closed-complaints",
+    component: ClosedComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_CLOSED_COMPLAINTS_HEADER",
+      redirectionUrl
+    }
+  },
+  {
+    path: "closed-complaints-ro",
+    component: ClosedComplaints,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_CLOSED_COMPLAINTS_HEADER",
+      redirectionUrl
+    }
+  },
+  {
+    path: "closed-complaints-gro",
     component: ClosedComplaints,
     needsAuthentication: true,
     options: {
@@ -244,7 +342,18 @@ const routes = [
   },
 
   {
-    path: "request-reassign/:serviceRequestId?",
+    path: "request-reassign-ro/:serviceRequestId?",
+    component: RequestReAssign,
+    needsAuthentication: true,
+    options: {
+      title: "CS_HEADER_REQUEST_REASSIGN",
+      titleBackground: true, // Use this if you need white background for title in web version
+      hideFooter: true,
+      redirectionUrl
+    }
+  },
+  {
+    path: "request-reassign-gro/:serviceRequestId?",
     component: RequestReAssign,
     needsAuthentication: true,
     options: {

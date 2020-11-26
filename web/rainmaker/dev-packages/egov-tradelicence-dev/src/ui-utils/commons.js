@@ -93,20 +93,20 @@ const setDocsForEditFlow = async (state, dispatch) => {
     "applyScreenMdmsData.TradeLicense.documentObj[0].allowedDocs",
     []
   );
-  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
-    let applicationDocument = {}
-    applicationDocuments && applicationDocuments.map(appDoc => {
-      if (appDoc.documentType == mdmsDoc.documentType) {
-        applicationDocument = { ...appDoc }
-      }
-    })
-    return applicationDocument;
-  }
-  ).filter(docObj => Object.keys(docObj).length > 0)
-  applicationDocuments = [...orderedApplicationDocuments];
-  dispatch(
-    prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", applicationDocuments)
-  );
+  // let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+  //   let applicationDocument = {}
+  //   applicationDocuments && applicationDocuments.map(appDoc => {
+  //     if (appDoc.documentType == mdmsDoc.documentType) {
+  //       applicationDocument = { ...appDoc }
+  //     }
+  //   })
+  //   return applicationDocument;
+  // }
+  // ).filter(docObj => Object.keys(docObj).length > 0)
+  // applicationDocuments = [...orderedApplicationDocuments];
+  // dispatch(
+  //   prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", applicationDocuments)
+  // );
 
   let uploadedDocuments = {};
   let fileStoreIds =
@@ -187,6 +187,16 @@ export const updatePFOforSearchResults = async (
 
   if (payload && payload.Licenses) {
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+    const structureTypes=get(payload,'Licenses[0].tradeLicenseDetail.structureType','').split('.')||[];
+    const structureType=structureTypes&&Array.isArray(structureTypes)&&structureTypes.length>0&&structureTypes[0]||'none';
+    const selectedValues=[{
+      structureType:structureType,
+      structureSubType:get(payload,'Licenses[0].tradeLicenseDetail.structureType','')||'none'
+    }]
+    dispatch(
+      prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
+    dispatch(
+      prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -373,7 +383,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value:  workflowCode ? workflowCode : "NewTL" }
     ];
-    if (process.env.REACT_APP_NAME === "Citizen") {
+    //if (process.env.REACT_APP_NAME === "Citizen") {
       // let currentFinancialYr = getCurrentFinancialYear();
       // //Changing the format of FY
       // let fY1 = currentFinancialYr.split("-")[1];
@@ -381,7 +391,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
       // set(queryObject[0], "financialYear", currentFinancialYr);
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-    }
+    //}
 
     set(queryObject[0], "tenantId", tenantId);
     // set(queryObject[0], "workflowCode", "NewTL");
@@ -442,7 +452,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
         ];
         const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
+        console.log(renewalResponse,"renewalResponse==");
+        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments")?  get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments",[]) : queryObject[0].wfDocuments;;
         for (let i = 1; i <= documents.length; i++) {
           if (i > renewalDocuments.length) {
             renewalDocuments.push(documents[i - 1])
@@ -464,6 +475,22 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
 
         }
 
+        
+        // if(queryObject[0].licenseNumber!==null)
+        // {
+        // for (let i = 1; i <= documents.length; i++) {
+        //   if (i > renewalDocuments.length) {
+        //     renewalDocuments.push(documents[i-1])
+        //   }
+        //   else{
+        //      if(!documents[i-1].hasOwnProperty("id")){
+        //      renewalDocuments[i-1].active=false;
+        //      renewalDocuments.push(documents[i-1])
+        //      }
+        //   }
+        //  }
+        // }
+        console.log(renewalDocuments,"renewalDocuments---");
         dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", renewalDocuments));
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", renewalDocuments);
 
@@ -472,11 +499,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       let updateResponse = [];
       if (!isEditFlow) {
+        console.log(queryObject[0],"query obj--")
+        if(queryObject[0].applicationType === "RENEWAL" && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")
+        {
+        }
+        else{
         store.dispatch(toggleSpinner());
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
              Licenses: queryObject
            })
         store.dispatch(toggleSpinner());
+          }
       }
       //Renewal flow
 
@@ -499,14 +532,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { key: "tenantId", value: updatedTenant },
         { key: "applicationNumber", value: updatedApplicationNo }
       ];
-      let searchResponse = await getSearchResults(searchQueryObject);
-      if (isEditFlow) {
+      let searchResponse = updateResponse;
+      if (isEditFlow || (isEditRenewal && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")) {
         searchResponse = { Licenses: queryObject };
       } 
-      else if(isEditRenewal){
-        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
-        dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", queryObject[0].tradeLicenseDetail.applicationDocuments));
-      }
+      // else if(isEditRenewal){
+      //   dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+      //   //dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", queryObject[0].tradeLicenseDetail.applicationDocuments));
+      // }
       else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
       }

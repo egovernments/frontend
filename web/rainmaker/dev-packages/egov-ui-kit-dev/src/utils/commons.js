@@ -1038,7 +1038,7 @@ export const getModuleName = () => {
   else if (pathName.indexOf("dss") > -1) { return "rainmaker-dss"; }
   else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("rainmaker-pt") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
-  else if (pathName.indexOf("complaint") > -1  || pathName.indexOf("pgr") > -1  ||  pathName.indexOf("resolve-success") > -1 || pathName.indexOf("employee-directory") > -1 || pathName.indexOf("reopen-acknowledgement") > -1|| pathName.indexOf("feedback") > -1|| pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1 || pathName.indexOf("citizen/feedback") > -1) { return "rainmaker-pgr"; }
+  else if (pathName.indexOf("complaint") > -1  || pathName.indexOf("pgr") > -1  ||  pathName.indexOf("resolve-success") > -1 || pathName.indexOf("employee-directory") > -1 || pathName.indexOf("reopen-acknowledgement") > -1|| pathName.indexOf("feedback") > -1|| pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1 || pathName.indexOf("citizen/feedback") > -1 || (pathName.indexOf("map") > -1 && window.location.href.indexOf("complaint"))){ return "rainmaker-pgr"; }
   else if (pathName.indexOf("wns") > -1) { return "rainmaker-ws,rainmaker-pdf"; }
   else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("rainmaker-tl") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
   else if (pathName.indexOf("lams") > -1) { return "rainmaker-lams"; }
