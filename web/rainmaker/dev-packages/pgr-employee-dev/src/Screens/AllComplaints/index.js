@@ -347,7 +347,7 @@ class AllComplaints extends Component {
           <div
             className="rainmaker-displayInline"
             style={{ cursor: "pointer" }}
-            onClick={() => history.push("search-complaint")}
+            onClick={() => history.push("search-complaint-gro")}
           >
             <Label
               label="ES_SEARCH_BUTTON"

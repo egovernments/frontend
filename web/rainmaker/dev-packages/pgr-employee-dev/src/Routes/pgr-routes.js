@@ -154,6 +154,12 @@ const routes = [
     options: { hideFooter: true, title: "CORE_COMMON_SEARCH_COMPLAINT" }
   },
   {
+    path: "search-complaint-gro",
+    component: SearchScreen,
+    needsAuthentication: true,
+    options: { hideFooter: true, title: "CORE_COMMON_SEARCH_COMPLAINT" }
+  },
+  {
     path: "complaint-resolved/:serviceRequestId?",
     component: ComplaintResolved,
     needsAuthentication: true,

@@ -177,13 +177,13 @@ class Details extends Component {
                         id="complaint-details-complaint-location"
                         labelStyle={{ color: "inherit" }}
                       />
-                      <Label
+                      {locality && (<Label
                         label={","}
                         className="comma-style"
                         id="complaint-details-complaint-location"
                         labelStyle={{ color: "inherit" }}
                         fontSize="16px"
-                      />
+                      />)}
                       <Label
                         label={`TENANT_TENANTS_${city.toUpperCase().replace(/[.]/g, "_")}`}
                         className="status-result-color"

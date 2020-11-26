@@ -5,7 +5,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 const ComplaintCreated = (props) => {
   return (
     <ComplaintSubmited
-      homeRoute="/all-complaints"
+      homeRoute="/inbox"
       lastLabel={<Label id="complaint-submitted-success-message" label="ES_COMPLAINT_SUCCESS_LASTLABEL" />}
       removeGreeting={true}
       {...props}
