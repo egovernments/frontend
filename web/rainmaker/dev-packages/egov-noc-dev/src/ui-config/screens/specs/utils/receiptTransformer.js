@@ -166,6 +166,10 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       get(response, "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea", "NA")
     );
 
+    data.oldFireNOCNumber=nullToNa(
+      get(response, "FireNOCs[0].oldFireNOCNumber", "NA")
+    );
+    
     data.leftSurrounding = nullToNa(
       get(response, "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding", "NA")
     );
