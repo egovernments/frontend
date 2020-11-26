@@ -10,7 +10,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
-  toggleSnackbar
+  toggleSnackbar,toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
@@ -181,9 +181,11 @@ const createDemand = async (state, dispatch) => {
       ? "/billing-service/demand/_update"
       : "/billing-service/demand/_create";
     try {
+      dispatch(toggleSpinner());
       const payload = await httpRequest("post", url, "", [], {
         Demands: demands
       });
+      dispatch(toggleSpinner());
       if (payload.Demands.length > 0) {
         //const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
