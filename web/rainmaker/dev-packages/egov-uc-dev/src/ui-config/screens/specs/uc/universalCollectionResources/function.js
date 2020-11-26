@@ -27,7 +27,6 @@ const tenantId = getTenantId();
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
-
   let queryObject = [
     {
       key: "tenantId",
@@ -54,6 +53,15 @@ export const searchApiCall = async (state, dispatch) => {
           labelName: "Please fill valid fields to start search",
           labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
         },
+        "warning"
+      )
+    );
+  }
+  else if (searchScreenObject["mobileNumber"] === "9999999999") {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE_DEFAULT_NUMBER" },
         "warning"
       )
     );
