@@ -88,7 +88,7 @@ class DocumentList extends Component {
         index > -1 && (acc[ind] = [simplified[index]]);
         return acc;
       }, {});
-
+      console.log(uploadedDocumentsArranged,"uploadedDocumentsArranged====");
       const uploadedIndex = Object.keys(uploadedDocumentsArranged).reduce(
         (res, curr) => {
           if (uploadedDocumentsArranged[curr].length > 0) {
@@ -98,18 +98,19 @@ class DocumentList extends Component {
         },
         []
       );
-       
+      this.setState({
+        uploadedDocuments: uploadedDocumentsArranged,
+        uploadedIndex
+      });
+      console.log(uploadedDocuments,"uploadedDocuments==")
     getQueryArg(window.location.href, "action") !== "edit" &&
-      Object.values(uploadedDocuments).forEach((item, index) => {
-        prepareFinalObject(
+      Object.values(uploadedDocumentsArranged).forEach((item, index) => {
+          prepareFinalObject(
           `Licenses[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
           { ...item[0] }
         );
       });
-    this.setState({
-        uploadedDocuments: uploadedDocumentsArranged,
-        uploadedIndex
-      });
+    
     }
   };
 
