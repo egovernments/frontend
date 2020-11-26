@@ -136,55 +136,6 @@ const screenConfig = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
-
-                buttonLabel: getLabel({
-                  labelName: "Add New Property",
-                  labelKey: "BILL_ADD_NEW"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "search");
-
-                }
-              },
-              // roleDefination: {
-              //   rolePath: "user-info.roles",
-              //   path : "tradelicence/apply"
-
-              // }
-            },
             groupBillButton: {
               componentPath: "Button",
               gridDefination: {
