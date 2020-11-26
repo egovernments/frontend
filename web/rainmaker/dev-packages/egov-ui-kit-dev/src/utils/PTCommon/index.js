@@ -346,6 +346,8 @@ export const transformPropertyDataToAssessInfo = (data) => {
   const propertySubType = data["Properties"][0]["propertyDetails"][0]["propertySubType"];
   const usageCategoryMajor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMajor"];
   const usageCategoryMinor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMinor"];
+  const heightOfProperty = data["Properties"][0].additionalDetails.heightAbove36Feet;
+  const inflammableMaterial = data["Properties"][0].additionalDetails.inflammable;
   const propType = propertySubType === null ? propertyType : propertySubType;
   const propUsageType = usageCategoryMinor == null ? usageCategoryMajor : usageCategoryMinor;
   const formConfigPath = getPlotAndFloorFormConfigPath(propUsageType, propType);
@@ -355,10 +357,16 @@ export const transformPropertyDataToAssessInfo = (data) => {
 
   let customSelectconfig = require(`egov-ui-kit/config/forms/specs/PropertyTaxPay/customSelect.js`).default;
   let basicInfoConfig = require(`egov-ui-kit/config/forms/specs/PropertyTaxPay/basicInformation.js`).default;
+  let checkBoxDetailsConfig = require(`egov-ui-kit/config/forms/specs/PropertyTaxPay/ImpelExtended/checkBoxDetails.js`).default;
+  
   let configPlot = null,
     configFloor = null;
 
   basicInfoConfig = cloneDeep(basicInfoConfig);
+
+  set(checkBoxDetailsConfig, "fields.heightOfProperty.value", heightOfProperty);
+  set(checkBoxDetailsConfig, "fields.inflammableMaterial.value", inflammableMaterial);
+
   set(basicInfoConfig, "fields.typeOfUsage.value", propUsageType);
   set(basicInfoConfig, "fields.typeOfBuilding.value", propType);
   if (propType === "SHAREDPROPERTY") {
@@ -427,7 +435,7 @@ export const transformPropertyDataToAssessInfo = (data) => {
   //   console.log(jsonPath, valueInJSON, basicInfoConfig["fields"][item].value);
   // });
   // console.log(basicInfoConfig);
-  return { basicInformation: basicInfoConfig, plotDetails: configPlot, ...dictFloor, ...dictCustomSelect };
+  return { basicInformation: basicInfoConfig, checkBoxDetails: checkBoxDetailsConfig, plotDetails: configPlot, ...dictFloor, ...dictCustomSelect };
 };
 
 const prepareUniqueFloorIndexObj = (units) => {
