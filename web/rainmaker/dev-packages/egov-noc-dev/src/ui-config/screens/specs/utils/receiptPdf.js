@@ -484,7 +484,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [true, true, false, false]
             },
             {
-              text: "Provisional NOC No.",
+              text: transformedData.nocType=="RENEWAL"?"Old Fire NOC No.":"Provisional NOC No.",
               border: [false, true, false, false]
             },
             {
@@ -499,7 +499,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               style: "receipt-table-value"
             },
             {
-              text: transformedData.provisionalNocNumber,
+              text: transformedData.nocType=="RENEWAL"?transformedData.oldFireNOCNumber:transformedData.provisionalNocNumber,
               border: [false, false, false, true],
               style: "receipt-table-value"
             },

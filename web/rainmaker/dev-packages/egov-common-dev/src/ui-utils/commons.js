@@ -12,7 +12,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
-import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { convertEpochToDate, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import axios from 'axios';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
@@ -578,6 +578,30 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
         store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
           , "error"));
         return;
+      }
+
+      let assessmentYear="";
+      let count=0;
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
+        
+        if(element.amount >0 || element.amountPaid>0)
+        { count=count+1;
+          let toDate=convertEpochToDate(element.toPeriod).split("/")[2];
+          let fromDate=convertEpochToDate(element.fromPeriod).split("/")[2];
+          assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
+       }});
+      if(count==0){
+        let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
+        let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
+        assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
+      }
+        
+        const details = {
+          "assessmentYears": assessmentYear
+          }
+          payloadReceiptDetails.Payments[0].additionalDetails=details; 
+
       }
 
 
