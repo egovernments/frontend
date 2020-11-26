@@ -24,7 +24,7 @@ import {
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import orderBy from "lodash/orderBy";
   import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
-  import { download } from "egov-common/ui-utils/commons";
+  import { download,downloadChallan } from "egov-common/ui-utils/commons";
   import { getChallanSearchResult } from "../../../../ui-utils/commons";
   import { confirmationDialog } from "./confirmationDialog";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -195,8 +195,8 @@ import {
           { key: "tenantId", value: tenantId }
         ]
         console.info("in ackmt==data got=",Challan);
-        //downloadChallan(Challan,"download");         
-        download(Challan,"download" ,"mcollect-challan",state)
+        downloadChallan(Challan,"download");         
+        //download(Challan,"download" ,"mcollect-challan",state)
       },
       leftIcon: "assignment"
     };
@@ -207,7 +207,8 @@ import {
           { key: "challanNo", value: applicationNumber },
           { key: "tenantId", value: tenantId }
         ]
-        download(Challan,"print" ,"mcollect-challan",state);          
+        downloadChallan(Challan,"download"); 
+        //download(Challan,"print" ,"mcollect-challan",state);          
       },
       leftIcon: "assignment"
     };
