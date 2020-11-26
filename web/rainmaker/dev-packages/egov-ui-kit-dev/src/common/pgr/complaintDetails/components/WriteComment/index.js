@@ -5,12 +5,12 @@ import emptyFace from "egov-ui-kit/assets/images/download.png";
 import "./index.css";
 
 const iconStyle = {
-  marginLeft: "20px",
+  marginLeft: "7px",//Changed by Srikanth
   height: "20px",
   width: "20px",
-  transform: "rotate(-15deg)",
+  transform: "rotate(-4deg)",//Changed by Srikanth
   marginBottom: "5px",
-  position: "absolute",
+  //position: "absolute", //Changed by Srikanth
   right: 16,
   top: 12,
 };
