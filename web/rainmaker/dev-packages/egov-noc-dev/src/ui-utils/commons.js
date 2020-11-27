@@ -12,7 +12,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
-import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { convertEpochToDate,getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import axios from 'axios';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
@@ -75,15 +75,26 @@ export const download = async(receiptQueryString, mode = "download" ,configKey =
         return;
       }
 
-      
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
-
-        const details = {
-             "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
-             }
-       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
-
-    } 
+        let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
+        let year=receiptDate.split("/")[2];
+        var nextyear=year++;
+        var lastyear=year-1;
+        let month=receiptDate.split("/")[1];
+        let from=null,to=null;
+        if(month<=3){ from=convertDateToEpoch("04/01/"+lastyear);
+        to=convertDateToEpoch("03/31/"+year);}
+        else{from=convertDateToEpoch("04/01/"+year);
+        to=convertDateToEpoch("03/31/"+nextyear);}
+          const details = {
+               "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
+               }
+         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
+         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod=from;
+         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod=to; 
+   
+  
+      } 
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
          if(payloadReceiptDetails.Payments[0].paymentMode=="CHEQUE" || payloadReceiptDetails.Payments[0].paymentMode=="DD" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_NEFT" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_RTGS" ){

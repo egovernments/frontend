@@ -583,6 +583,21 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       let assessmentYear="";
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
+if(get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason"))
+{
+  const adhocPenaltyReason = get(
+    state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
+  const adhocRebateReason = get(
+      state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
+  
+
+  const reasonss = {
+    "adhocPenaltyReason": adhocPenaltyReason,
+    "adhocRebateReason":adhocRebateReason
+    }
+    payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
+
+  }
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
         
         if(element.amount >0 || element.amountPaid>0)
@@ -600,7 +615,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
         const details = {
           "assessmentYears": assessmentYear
           }
-          payloadReceiptDetails.Payments[0].additionalDetails=details; 
+          payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
 
       }
 
@@ -609,11 +624,6 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
 
         configKey="tradelicense-receipt";
     
-        // const detailsCollectedBy = {
-        //   "collectedBy": userName
-        //   }
-        // payloadReceiptDetails.Payments[0].additionalDetails=detailsCollectedBy;
-  
         const details = {
           "address": responseForTrade.Licenses[0].tradeLicenseDetail.address.locality.code
           }
@@ -623,11 +633,25 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       }
     
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
-
+      let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
+      let year=receiptDate.split("/")[2];
+      year++;
+      var nextyear=year;
+      year--;
+      var lastyear=year-1;
+      let month=receiptDate.split("/")[1];
+      let from=null,to=null;
+      if(month<=3){ from=convertDateToEpoch("04/01/"+lastyear);
+      to=convertDateToEpoch("03/31/"+year);}
+      else{from=convertDateToEpoch("04/01/"+year);
+      to=convertDateToEpoch("03/31/"+nextyear);}
         const details = {
              "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
              }
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
+       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod=from;
+       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod=to; 
+ 
 
     } 
     const queryStr = [
