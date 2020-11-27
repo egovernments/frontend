@@ -207,7 +207,7 @@ import {
           { key: "challanNo", value: applicationNumber },
           { key: "tenantId", value: tenantId }
         ]
-        downloadChallan(Challan,"download"); 
+        downloadChallan(Challan,"print"); 
         //download(Challan,"print" ,"mcollect-challan",state);          
       },
       leftIcon: "assignment"
