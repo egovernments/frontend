@@ -7,6 +7,8 @@ import { fetchComplaints } from "egov-ui-kit/redux/complaints/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import { localStorageGet , getLocalization} from "egov-ui-kit/utils/localStorageUtils";
+import jp from "jsonpath";
 import "./index.css";
 
 const RejectComplaintHOC = formHOC({
@@ -29,15 +31,15 @@ class RejectComplaint extends Component {
 
   options = [
     {
-      value: "Not a valid complaint",
+      value: "ES_REASSIGN_OPTION_ONE",
       label: <Label label="ES_REASSIGN_OPTION_ONE" />
     },
     {
-      value: "Out of operational scope",
+      value: "ES_REJECT_OPTION_TWO",
       label: <Label label="ES_REJECT_OPTION_TWO" />
     },
     // { value: "Operation already underway", label: <Label label="ES_REJECT_OPTION_THREE" /> },
-    { value: "Other", label: <Label label="ES_REJECT_OPTION_FOUR" /> }
+    { value: "ES_REJECT_OPTION_FOUR", label: <Label label="ES_REJECT_OPTION_FOUR" /> }
   ];
 
   commentsValue = {};
@@ -59,7 +61,14 @@ class RejectComplaint extends Component {
     let com1 = "";
     let com2 = "";
     if (val.radioValue) {
-      com1 = val.radioValue + ";";
+      let initialValue = val.radioValue;
+      let localisationStoreKey = localStorageGet("locale") === "hi_IN" ? "localization_hi_IN":"localization_en_IN"
+      let allLocalizationValues = JSON.parse(getLocalization(localisationStoreKey));
+      let localizedValue = jp.query(allLocalizationValues,"$[?(@.code=='"+initialValue+"')]")
+      if(localizedValue && localizedValue.length > 0 && localizedValue[0].message)
+      {
+        com1 = localizedValue[0].message + ";";
+      }
     }
     if (val.textVal) {
       com2 = val.textVal;
