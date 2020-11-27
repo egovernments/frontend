@@ -9,7 +9,7 @@ class Maintenance extends React.Component {
             <article>
                 <h1>We&rsquo;ll be back soon!</h1>
                 <div>
-                    <p>Our website is down for scheduled maintenance right now. This will be up and running from 7th September 2020!</p>
+                    <p>Our website is down for scheduled maintenance right now. This will be up and running from 30th November 2020!</p>
                 </div>
             </article>
 
