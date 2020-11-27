@@ -29,15 +29,15 @@ class RequestReAssign extends Component {
   }
   options = [
     {
-      value: "Not a valid complaint",
+      value: "ES_REASSIGN_OPTION_ONE",
       label: <Label label="ES_REASSIGN_OPTION_ONE" />
     },
     {
-      value: "Not my responsibility",
+      value: "ES_REASSIGN_OPTION_TWO",
       label: <Label label="ES_REASSIGN_OPTION_TWO" />
     },
     {
-      value: "Absent or on leave",
+      value: "ES_REASSIGN_OPTION_THREE",
       label: <Label label="ES_REASSIGN_OPTION_THREE" />
     },
     { value: "Other", label: <Label label="ES_REASSIGN_OPTION_FOUR" /> }
@@ -53,8 +53,8 @@ class RequestReAssign extends Component {
     this.concatComments(this.commentsValue);
   };
   handleOptionsChange = (event, value) => {
-    this.setState({ valueSelected: value });
-    this.commentsValue.radioValue = value;
+    this.setState({ valueSelected: localizedValue });
+    this.commentsValue.radioValue = localizedValue;
     this.concatComments(this.commentsValue);
   };
   concatComments = val => {
