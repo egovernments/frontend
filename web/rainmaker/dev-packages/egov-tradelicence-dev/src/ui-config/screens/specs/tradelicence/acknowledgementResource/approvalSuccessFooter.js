@@ -1,5 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generateReceipt from "../../utils/receiptPdf";
+import { downloadCertificateForm } from "../../utils";
+import { getTenantId }  from "egov-ui-kit/utils/localStorageUtils";
 
 const getCommonApplyFooter = children => {
   return {
@@ -34,53 +36,53 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       action: "page_change",
       path: `/inbox`
     }
+  },
+  downloadLicenseButton: {
+    componentPath: "Button",
+    props: {
+      variant: "outlined",
+      color: "primary",
+      style: {
+        width: "250px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      downloadLicenseButtonLabel: getLabel({
+        labelName: "DOWNLOAD TRADE LICENSE",
+        labelKey: "TL_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+       downloadCertificateForm(null, state.screenConfiguration.preparedFinalObject.applicationDataForReceipt.applicationNumber,getTenantId());
+      }
+    }
+  },
+  printLicenseButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        width: "250px",
+        height: "48px",
+        marginRight: "40px"
+      }
+    },
+    children: {
+      printLicenseButtonLabel: getLabel({
+        labelName: "PRINT TRADE LICENSE",
+        labelKey: "TL_APPROVAL_CHECKLIST_PRINT_LIC"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        downloadCertificateForm(null, state.screenConfiguration.preparedFinalObject.applicationDataForReceipt.applicationNumber,getTenantId(),"print");
+      }
+    }
   }
-  // downloadLicenseButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "outlined",
-  //     color: "primary",
-  //     style: {
-  //       width: "250px",
-  //       height: "48px",
-  //       marginRight: "16px"
-  //     }
-  //   },
-  //   children: {
-  //     downloadLicenseButtonLabel: getLabel({
-  //       labelName: "DOWNLOAD TRADE LICENSE",
-  //       labelKey: "TL_APPROVAL_CHECKLIST_BUTTON_DOWN_LIC"
-  //     })
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: (state, dispatch) => {
-  //       generateReceipt(state, dispatch, "certificate_download");
-  //     }
-  //   }
-  // },
-  // printLicenseButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "contained",
-  //     color: "primary",
-  //     style: {
-  //       width: "250px",
-  //       height: "48px",
-  //       marginRight: "40px"
-  //     }
-  //   },
-  //   children: {
-  //     printLicenseButtonLabel: getLabel({
-  //       labelName: "PRINT TRADE LICENSE",
-  //       labelKey: "TL_APPROVAL_CHECKLIST_PRINT_LIC"
-  //     })
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: (state, dispatch) => {
-  //       generateReceipt(state, dispatch, "certificate_print");
-  //     }
-  //   }
-  // }
 });
