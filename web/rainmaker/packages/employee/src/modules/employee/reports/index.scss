@@ -120,3 +120,16 @@
     overflow: scroll;
   }
 }
+//added for dwopdown to show multi line
+.autocomplete-dropdown {
+  min-width: 100%;
+  position: absolute;
+  z-index: 1900;
+  max-height: 150px;
+  overflow: hidden;
+}
+.autocomplete-dropdown div {
+min-width: 100%;
+max-height: 150px;
+  overflow: auto;
+}

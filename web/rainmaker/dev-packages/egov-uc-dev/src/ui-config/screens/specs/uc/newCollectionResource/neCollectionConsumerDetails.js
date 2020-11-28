@@ -106,6 +106,7 @@ import {
                     width: "100%",
                     cursor: "pointer"
                   },
+                  className :"autocomplete-dropdown",
                   hasZindex:true,
                   label: {
                     labelName: "Mohalla",

@@ -183,7 +183,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
               width: "100%",
               cursor: "pointer",
             },
-            className :"autocomplete-dropdown div",
+            className :"autocomplete-dropdown",
             label: {
               labelName: "Service Category",
               labelKey: "UC_SERVICE_CATEGORY_LABEL",
@@ -283,7 +283,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
               width: "100%",
               cursor: "pointer",
             },
-            className :"autocomplete-dropdown div",
+            className :"autocomplete-dropdown",
             label: {
               labelName: "Service Type",
               labelKey: "UC_SERVICE_TYPE_LABEL",
