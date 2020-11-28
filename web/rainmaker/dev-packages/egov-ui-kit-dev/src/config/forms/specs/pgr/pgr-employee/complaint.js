@@ -92,6 +92,7 @@ const formConfig = {
       floatingLabelText: "CS_CREATECOMPLAINT_MOHALLA",
       hintText: "CS_CREATECOMPLAINT_MOHALLA_PLACEHOLDER",
       errorMessage: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
+      labelsFromLocalisation: true,
       boundary: true,
       dropDownData: [],
       dataFetchConfig: {
