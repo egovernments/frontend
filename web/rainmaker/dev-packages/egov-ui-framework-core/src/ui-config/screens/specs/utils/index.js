@@ -587,6 +587,8 @@ export const getPattern = type => {
       return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
     case "eventDescription":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+    case "cancelChallan":
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "FireNOCNo":
       return /^[a-zA-Z0-9-]*$/i;
     case "consumerNo":

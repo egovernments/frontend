@@ -2,8 +2,11 @@ import {
   getCommonHeader,
   getCommonContainer,
   getLabel,
-  getTextField
+  getTextField,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
 import {cancelChallan, showHideConfirmationPopup } from "./search-preview";
 export const confirmationDialog = getCommonContainer({
   
@@ -36,6 +39,9 @@ export const confirmationDialog = getCommonContainer({
           width: "90%"
         }
       },
+      pattern: getPattern("cancelChallan"),
+      required: true,
+      visible: true,
       jsonPath: "Challan.additionalDetail.cancellComment"
     }),
     div: {
@@ -69,7 +75,15 @@ export const confirmationDialog = getCommonContainer({
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              cancelChallan(state, dispatch, "CANCELLED");
+              let cancelComment = get(state.screenConfiguration.preparedFinalObject , "Challan.additionalDetail.cancellComment");
+              if(cancelComment.length<=100)
+              {
+                cancelChallan(state, dispatch, "CANCELLED");
+              }
+              else
+              {
+                dispatch(toggleSnackbar(true,{ labelName:"Comment should be less then 100 characters"}, "error"));
+              }
             }
           }
         },
