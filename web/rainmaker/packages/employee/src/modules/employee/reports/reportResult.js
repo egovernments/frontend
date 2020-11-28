@@ -16,7 +16,7 @@ import "datatables.net-responsive-dt";
 import JSZip from "jszip/dist/jszip";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+//import pdfFonts from "pdfmake/build/vfs_fonts";
 import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
 import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
 import "datatables.net-buttons/js/buttons.colVis.min.js";
@@ -26,8 +26,25 @@ import commonConfig from "config/common.js";
 import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-window.JSZip = JSZip;
+import pdfFonts from "./vfs_fonts";
+const vfs = { ...pdfFonts.vfs }
+const font = {
+    Camby: {
+        normal: 'Cambay-Regular.ttf',
+        bold: 'Cambay-Regular.ttf',
+        italics: 'Cambay-Regular.ttf',
+        bolditalics: 'Cambay-Regular.ttf',
+
+    }
+};
+pdfMake.vfs = vfs;
+pdfMake.fonts = font;
+
+
+
+
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
+ window.JSZip = JSZip;
 
 var sumColumn = [];
 var footerexist = false;
@@ -108,6 +125,7 @@ class ShowField extends Component {
         pageSize: pageSize,
         footer: true,
         customize: function(doc) {
+          doc.defaultStyle.font = 'Camby';
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "eChhawani System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
