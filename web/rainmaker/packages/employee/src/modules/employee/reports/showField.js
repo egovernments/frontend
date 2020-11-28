@@ -150,7 +150,6 @@ export default class ShowField extends Component {
             <AutoSuggestDropdown
             dataSource={dropDownData}
             value={typeof obj.value === undefined ? "" : getDropdownLabel(obj.value, dropDownData)}
-            className ="autocomplete-dropdown"
             hintText="Select"
             hintStyle={{fontSize: "14px",color: "#767676"}}
             floatingLabelText={
@@ -208,7 +207,6 @@ export default class ShowField extends Component {
           <Grid item xs={12} sm={4} md={4} lg={4}>
             <SelectField
               // className="custom-form-control-for-select"
-              className ="autocomplete-dropdown"
               hintText={<Label label="PT_COMMONS_SELECT_PLACEHOLDER" />}
               id={obj.label.split(".").join("-")}
               fullWidth={true}
