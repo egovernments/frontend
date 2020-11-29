@@ -5,6 +5,7 @@ import {
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
+import { sendBackSuccessFooter } from "./acknowledgementResource/sendBackSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
@@ -466,7 +467,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      sendBackSuccessFooter
     };
   }else if (purpose === "sendbacktocitizen" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
@@ -510,7 +511,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      sendBackSuccessFooter
     };
   }  else if (purpose === "application" && status === "rejected") {
     return {
