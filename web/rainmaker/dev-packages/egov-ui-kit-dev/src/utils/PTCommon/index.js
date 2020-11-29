@@ -358,7 +358,7 @@ export const transformPropertyDataToAssessInfo = (data) => {
   let customSelectconfig = require(`egov-ui-kit/config/forms/specs/PropertyTaxPay/customSelect.js`).default;
   let basicInfoConfig = require(`egov-ui-kit/config/forms/specs/PropertyTaxPay/basicInformation.js`).default;
   let checkBoxDetailsConfig = require(`egov-ui-kit/config/forms/specs/PropertyTaxPay/ImpelExtended/checkBoxDetails.js`).default;
-  console.log("=======11=====checkBoxDetailsConfig=",checkBoxDetailsConfig);
+  // console.log("=======11=====checkBoxDetailsConfig=",checkBoxDetailsConfig);
   let configPlot = null,
     configFloor = null;
 
@@ -366,8 +366,8 @@ export const transformPropertyDataToAssessInfo = (data) => {
 
   set(checkBoxDetailsConfig, "fields.heightOfProperty.value", heightOfProperty);
   set(checkBoxDetailsConfig, "fields.inflammableMaterial.value", inflammableMaterial);
-  console.log("====22========checkBoxDetailsConfig=",set(checkBoxDetailsConfig, "fields.heightOfProperty.value", heightOfProperty));
-  console.log("=======33=====checkBoxDetailsConfig=",set(checkBoxDetailsConfig, "fields.inflammableMaterial.value", inflammableMaterial));
+  // console.log("====22========checkBoxDetailsConfig=",set(checkBoxDetailsConfig, "fields.heightOfProperty.value", heightOfProperty));
+  // console.log("=======33=====checkBoxDetailsConfig=",set(checkBoxDetailsConfig, "fields.inflammableMaterial.value", inflammableMaterial));
 
 
   set(basicInfoConfig, "fields.typeOfUsage.value", propUsageType);

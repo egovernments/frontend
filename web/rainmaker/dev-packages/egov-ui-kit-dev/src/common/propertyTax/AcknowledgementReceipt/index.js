@@ -73,7 +73,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
   const transform = (value, masterName) => {
     // console.log(generalMDMSDataById);
     if (value) {
-      return generalMDMSDataById && generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][value].code : "NA";
+      return generalMDMSDataById && generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][value] && generalMDMSDataById[masterName][value].code : "NA";
     } else {
       return "NA";
     }
@@ -583,21 +583,21 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
               body: [
                  [
                    { text: "Vasika No.:", border: borderKey, style: "receipt-table-key" },
-                   { text: propertyDetails[0].additionalDetails.vasikaNo|| "NA", border: borderValue },
+                   { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.vasikaNo && propertyDetails[0].additionalDetails.vasikaNo|| "NA", border: borderValue },
                    { text: "Vasika Date:", border: borderKey, style: "receipt-table-key" },
-                   { text: propertyDetails[0].additionalDetails.vasikaDate|| "NA", border: borderValue },
+                   { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.vasikaDate && propertyDetails[0].additionalDetails.vasikaDate|| "NA", border: borderValue },
                  ],
                  [
                   { text: "Allotment Letter No.:", border: borderKey, style: "receipt-table-key" },
-                  { text: propertyDetails[0].additionalDetails.allotmentNo|| "NA", border: borderValue },
+                  { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.allotmentNo && propertyDetails[0].additionalDetails.allotmentNo|| "NA", border: borderValue },
                   { text: "Allotment Letter Date:", border: borderKey, style: "receipt-table-key" },
-                  { text: propertyDetails[0].additionalDetails.allotmentDate|| "NA", border: borderValue },
+                  { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.allotmentDate && propertyDetails[0].additionalDetails.allotmentDate|| "NA", border: borderValue },
                 ],
                  [
                    { text: "Firm/Business Name:", border: borderKey, style: "receipt-table-key" },
-                   { text: propertyDetails[0].additionalDetails.businessName || "NA", border: borderValue },
+                   { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.businessName && propertyDetails[0].additionalDetails.businessName || "NA", border: borderValue },
                    { text: "Remarks", border: borderKey, style: "receipt-table-key" },
-                   { text: propertyDetails[0].additionalDetails.remrks || "NA", border: borderValue },
+                   { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.remrks && propertyDetails[0].additionalDetails.remrks || "NA", border: borderValue },
                  ],
                ],
              },
