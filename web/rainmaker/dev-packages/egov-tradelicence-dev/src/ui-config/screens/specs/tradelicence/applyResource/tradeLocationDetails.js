@@ -173,6 +173,7 @@ export const tradeLocationDetails = getCommonCard(
             width: "100%",
             cursor: "pointer"
           },
+          className:"autocomplete-dropdown",
           label: {
             labelName: "Mohalla",
             labelKey: "TL_NEW_TRADE_DETAILS_MOHALLA_LABEL"
