@@ -1,24 +1,20 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Row, Col, Table } from "react-bootstrap";
 import Grid from '@material-ui/core/Grid';
-import { Card, Button } from "components";
-import { CardHeader, CardText } from "material-ui/Card";
-import { brown500, red500, white, orange800 } from "material-ui/styles/colors";
-import RaisedButton from "material-ui/RaisedButton";
-import { commonApiPost } from "egov-ui-kit/utils/api";
-import ShowField from "./showField";
-import get from "lodash/get";
-//import { translate } from "../../common/common";
-import { translate } from "./commons/common";
-import Label from "egov-ui-kit/utils/translationNode";
+import { Card } from "components";
+import commonConfig from "config/common.js";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { commonApiPost } from "egov-ui-kit/utils/api";
+import { getTenantId, localStorageGet, localStorageSet, setReturnUrl } from "egov-ui-kit/utils/localStorageUtils";
+import Label from "egov-ui-kit/utils/translationNode";
 import jp from "jsonpath";
 import _ from "lodash";
+import get from "lodash/get";
+import RaisedButton from "material-ui/RaisedButton";
+import React, { Component } from "react";
+import { Row } from "react-bootstrap";
+import { connect } from "react-redux";
 import { getResultUrl } from "./commons/url";
-import commonConfig from "config/common.js";
-import { getTenantId, setReturnUrl, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
+import ShowField from "./showField";
 
 class ShowForm extends Component {
   state = {
@@ -435,14 +431,13 @@ class ShowForm extends Component {
         mandatoryfields.push(param.name);
       }
     });
-    let filledMandatoryFieldsCount=searchForm ? Object.keys(searchForm)
-    .filter(param => mandatoryfields.includes(param)).length:0;
-    if(filledMandatoryFieldsCount!=mandatoryfields.length)
-    { 
-      toggleSnackbarAndSetText(true,{labelKey:"COMMON_MANDATORY_MISSING_ERROR",labelName:"Please fill all mandatory fields to search"},
+    let filledMandatoryFieldsCount = searchForm ? Object.keys(searchForm)
+    .filter(param => mandatoryfields.includes(param)).length : 0;
+  if (filledMandatoryFieldsCount != mandatoryfields.length) {
+    toggleSnackbarAndSetText(true, { labelKey: "COMMON_MANDATORY_MISSING_ERROR", labelName: "Please fill all mandatory fields to search" },
       "error");
-      return;
-    }
+    return;
+  }
     if (!isDrilldown) {
       const displayOnlyFields = this.getDisplayOnlyFields(metaData);
       
@@ -503,7 +498,25 @@ class ShowForm extends Component {
           searchParams.push({ name: variable, input });
         }
       }
-
+      let fromDate = 0;
+      let toDate = 0;
+      if (searchParams && Array.isArray(searchParams) && searchParams.length > 2) {
+        searchParams.map(searchParam => {
+          if (searchParam.name == 'fromDate') {
+            fromDate = searchParam.input;
+          }
+          if (searchParam.name == 'toDate') {
+            toDate = searchParam.input;
+          }
+        })
+        if ((toDate - fromDate) / (60 * 60 * 24 * 1000) > 7 && this.props.match.params.moduleName == 'rainmaker-pt') {
+          {
+            toggleSnackbarAndSetText(true, { labelKey: "COMMON_MANDATORY_SEVEN_ERROR", labelName: "Please fill all mandatory fields to ERROR" },
+              "error");
+            return;
+          }
+        }
+      }
       setSearchParams(searchParams);
 
       clearReportHistory();
