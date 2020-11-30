@@ -118,7 +118,7 @@ import PropTypes from "prop-types";
               },
             ],
             jsonPath: "lamsStore.Lease[0].applicationType",
-            autoSelect: true
+            autoSelect: true,
           }),
           category: getSelectField({
             label: {
@@ -150,6 +150,7 @@ import PropTypes from "prop-types";
             ],
             jsonPath: "lamsStore.Lease[0].category",
             autoSelect: true,
+            visible: false,
             beforeFieldChange: (action, state, dispatch) => {
              
             },
@@ -175,7 +176,7 @@ import PropTypes from "prop-types";
             sourceJsonPath:"lamsStore.allTenants",
             jsonPath: "lamsStore.Lease[0].tenantId",
             autoSelect: true,
-            visible: false,
+            visible: true,
           }),
           located: {
             ...getSelectField({
