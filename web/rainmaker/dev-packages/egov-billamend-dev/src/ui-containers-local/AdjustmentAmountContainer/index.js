@@ -15,6 +15,7 @@ import CheckBoxContainer from "../CheckBoxContainer";
 const styles = theme => ({
 
   textField: {
+    maxWidth:"90%",
   },
 input: {
     padding: "10px 0px 2px 10px !important",
@@ -174,8 +175,6 @@ class AdjustmentAmountContainer extends Component {
               }}
               />
           </Grid>
-          <Grid item={true} xs={4} sm={4} md={4}>
-          </Grid>
         </Grid>
       </React.Fragment>
     );
@@ -218,8 +217,7 @@ class AdjustmentAmountContainer extends Component {
               labelKey="BILL_ADDITIONAL_AMOUNT_RS"
             />
           </Grid>
-          <Grid item={true} xs={4} sm={4} md={4}>
-          </Grid>
+        
         </Grid>
         <div>
           {data && data.length > 0 && data.map((card, index) => {
