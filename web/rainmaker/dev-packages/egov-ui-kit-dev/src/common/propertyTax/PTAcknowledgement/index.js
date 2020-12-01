@@ -542,7 +542,7 @@ class PTAcknowledgement extends React.Component {
                           onClick={Button3.buttonClick}
                           label={<Label buttonLabel={true} label={Button3.name} fontSize="16px" />}
                           primary={true}
-                          style={{ lineHeight: "auto", minWidth: "inherit", width: "200px", backgroundColor: "white" }}
+                          style={{ marginLeft :"20px",lineHeight: "auto", minWidth: "inherit", width: "200px", backgroundColor: "white" }}
                         />
                       )}
                     </div>
@@ -564,14 +564,14 @@ class PTAcknowledgement extends React.Component {
           />
         </div>
         <div className="print-application-conainer" style={{ position: "fixed", opacity: 0, zIndex: -9999, height: "100%" }}>
-          {properties && (
+ {/*          {properties && (
             <PTInformation
               properties={properties}
               generalMDMSDataById={generalMDMSDataById}
               documentsUploaded={this.props.documentsUploaded}
               totalBillAmountDue={this.props.totalBillAmountDue}
             />
-          )}
+          )} */}
         </div>
       </div>
     );

@@ -1305,7 +1305,7 @@ class FormWizardDataEntry extends Component {
                         errorCode = "ERR07_DEMAND_ENTER_THE_DATA";
                       }
 
-                      if(collectedAmount<=0)
+                      if(collectedAmount<0)
                       {
                         errorCode = "ERR08_DEMAND_ENTER_THE_DATA";
                       }
@@ -1331,6 +1331,18 @@ class FormWizardDataEntry extends Component {
                       previousKey = key;
                     }
 
+                     if (data.demand[data1][data2].PT_TAXHEAD === "PT_TIME_REBATE" &&  data.demand[data1][data2].PT_DEMAND ==='0') 
+                    {  
+                    hasPropertyTax = true;  
+                      data.demand[data1][data2].PT_DEMAND = -0;                   
+                     
+                    } 
+                    if (data.demand[data1][data2].PT_TAXHEAD === "PT_PROMOTIONAL_REBATE" && data.demand[data1][data2].PT_DEMAND ==='0') 
+                    {  
+                      hasPropertyTax = true;  
+                        data.demand[data1][data2].PT_DEMAND = -0;                   
+                     } 
+                    
                     // }
                   }
                 });                

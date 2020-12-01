@@ -10,7 +10,7 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 
 
-const getAddressItems = (properties) => {
+export const getAddressItems = (properties) => {
   const { address, propertyDetails,tenantId } = properties;
 
   const { additionalDetails } = Boolean(propertyDetails) && propertyDetails[0];
@@ -57,8 +57,8 @@ const getAddressItems = (properties) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
-        value: additionalDetails && additionalDetails.thana && getTranslatedLabel(('PROPERTYTAX_THANA_' + additionalDetails.thana.replace('-', '_')).toUpperCase(), localizationLabelsData) || "NA",
-      }
+        value: additionalDetails && additionalDetails.thana && getTranslatedLabel(('PROPERTYTAX_THANA_' + tenantId.replace(".", "_").toUpperCase() + "_" + additionalDetails.thana.toUpperCase()), localizationLabelsData) || "NA",
+      } 
     ]
   );
 }
