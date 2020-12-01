@@ -259,7 +259,7 @@ const assignmentDetailsCard = {
           if (isCurrentAssignment && key === "currentAssignment") {
             set(muliItemContent[key], "props.disabled", false);
           } else {
-            set(muliItemContent[key], "props.disabled", true);
+            // set(muliItemContent[key], "props.disabled", true);
           }
         });
       } else {
