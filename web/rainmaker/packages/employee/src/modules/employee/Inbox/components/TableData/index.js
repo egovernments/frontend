@@ -129,7 +129,8 @@ class TableData extends Component {
     showLocality: !Boolean(localStorage.getItem('disableLocality')),
     color: "rgb(53,152,219)",
     timeoutForTyping: false,
-    loadLocalityForInitialData: false
+    loadLocalityForInitialData: false,
+    showLoadingTaskboard:false
   };
 
   getUniqueList = (list = []) => {
@@ -246,11 +247,14 @@ class TableData extends Component {
 
 
 
-    let { taskboardData, tabData } = this.state;
-
+    let { taskboardData, tabData , showLoadingTaskboard } = this.state;
+if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
+  
+  this.setState({showLoadingTaskboard:true})
+}
     taskboardData[0].head = totalRowCount;
-    taskboardData[1].head = totalRows.length == totalRowCount ? NEARING_SLA.length : 'LOADING';
-    taskboardData[2].head = totalRows.length == totalRowCount ? ESCALATED_SLA.length : 'LOADING';
+    taskboardData[1].head = totalRows.length == totalRowCount || showLoadingTaskboard ? NEARING_SLA.length : 'LOADING';
+    taskboardData[2].head = totalRows.length == totalRowCount || showLoadingTaskboard ? ESCALATED_SLA.length : 'LOADING';
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [totalRowCount];
     this.hideLoading();
@@ -534,6 +538,9 @@ class TableData extends Component {
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
+     if(e&&e.message&&e.message.includes('setItem')){
+
+     }else{
       toggleSnackbarAndSetText(
         true,
         {
@@ -542,6 +549,8 @@ class TableData extends Component {
         },
         "error"
       );
+     }
+   
     }
   };
 
