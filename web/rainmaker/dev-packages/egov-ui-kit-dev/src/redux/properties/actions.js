@@ -10,6 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import {  getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 // import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 
 // const FileDownload = require('js-file-download');
@@ -686,6 +687,29 @@ export const downloadReceipt = (receiptQueryString) => {
         const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId");
         const businessModule=get(payloadReceiptDetails.Payments[0].paymentDetails[0],"businessService");
         console.log("businee serice"+ businessModule);
+
+        let assessmentYear="";
+      let count=0;
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
+        
+        if(element.amount >0 || element.amountPaid>0)
+        { count=count+1;
+          let toDate=convertEpochToDate(element.toPeriod).split("/")[2];
+          let fromDate=convertEpochToDate(element.fromPeriod).split("/")[2];
+          assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
+       }});
+      if(count==0){
+        let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
+        let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
+        assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
+      }
+        
+        const details = {
+          "assessmentYears": assessmentYear
+          }
+          payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
+      }
       if(oldFileStoreId){
         downloadReceiptFromFilestoreID(oldFileStoreId,"download")
       }

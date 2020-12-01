@@ -78,7 +78,9 @@ export const download = async(receiptQueryString, mode = "download" ,configKey =
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
         let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
         let year=receiptDate.split("/")[2];
-        var nextyear=year++;
+        year++;
+        var nextyear=year;
+        year--;
         var lastyear=year-1;
         let month=receiptDate.split("/")[1];
         let from=null,to=null;
