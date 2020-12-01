@@ -509,7 +509,7 @@ class ShowForm extends Component {
             toDate = searchParam.input;
           }
         })
-        if ((toDate - fromDate) / (60 * 60 * 24 * 1000) > 7 && this.props.match.params.moduleName == 'rainmaker-pt') {
+        if ((toDate - fromDate) / (60 * 60 * 24 * 1000) > 7 && this.props.match.params.moduleName == 'rainmaker-pt' && this.props.match.params.reportName=='ReceiptRegister_V2') {
           {
             toggleSnackbarAndSetText(true, { labelKey: "COMMON_MANDATORY_SEVEN_ERROR", labelName: "Please fill all mandatory fields to ERROR" },
               "error");
