@@ -484,7 +484,7 @@ export const getTab = (label, props = {}) => {
 export const getPattern = type => {
   switch (type) {
     case "Name":
-      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
+      return /^[^\$\"?\\\\~`!@$%^+={}\[\]*“”‘’]{1,300}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
