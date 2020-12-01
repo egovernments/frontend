@@ -269,7 +269,7 @@ class ActionDialog extends React.Component {
                       placeholder={fieldConfig.comments.placeholder}
                     />
                   </Grid>
-                  {showSubTradeField &&
+                  {(showSubTradeField || showSubTradeFields) &&
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
