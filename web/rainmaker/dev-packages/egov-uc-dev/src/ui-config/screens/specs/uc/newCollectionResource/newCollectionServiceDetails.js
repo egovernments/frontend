@@ -497,12 +497,14 @@ const setTaxHeadFields = (action, state, dispatch) => {
             pattern: item.isRequired
               ? getPattern("NonZeroAmount")
               : getPattern("Amount"),
+           
 
             //errorMessage: "Invalid Amount",
             visible: true,
             // required: true,
             props: {
               // required: true
+              type:"number"
             },
             jsonPath: `Challan[0].amount[${index}].amount`,
           })

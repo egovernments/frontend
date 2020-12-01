@@ -547,9 +547,9 @@ export const getPattern = type => {
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
-      return /^[0-9]{0,9}$/i;
+      return /^[0-9]{0,8}$/i;
     case "NonZeroAmount":
-      return /^[1-9][0-9]*$/i;  
+      return /^[1-9][0-9]{0,7}$/i;  
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":

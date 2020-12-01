@@ -106,7 +106,7 @@ export const billSearchCard = getCommonCard({
         },
         required: true,
         labelsFromLocalisation: true,
-        // isClearable: true,
+        isClearable: true,
         className: "autocomplete-dropdown",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         jsonPath: "searchScreen.tenantId",
@@ -135,7 +135,7 @@ export const billSearchCard = getCommonCard({
         required: true,
         labelsFromLocalisation: true,
         className: "autocomplete-dropdown",
-        // isClearable: true,
+        isClearable: true,
         jsonPath: "searchScreen.businesService",
         localePrefix: {
           moduleName: "BillingService",
