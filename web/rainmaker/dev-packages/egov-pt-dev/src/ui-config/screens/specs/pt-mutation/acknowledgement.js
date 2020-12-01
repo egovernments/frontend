@@ -93,8 +93,11 @@ export const header = getCommonContainer({
       // const documents = LicensesTemp[0].reviewDocData;
       // set(Licenses[0],"additionalDetails.documents",documents)
       // downloadAcknowledgementForm(Licenses,'print');
-generatePdfFromDiv("print" , applicationNumber, "#print-mutation-application-pdf")
-     
+//generatePdfFromDiv("print" , applicationNumber, "#print-mutation-application-pdf")
+generatePTMAcknowledgement(get(
+  state,
+  "screenConfiguration.preparedFinalObject", {}), `print`);
+  
     },
     leftIcon: "assignment"
   };
