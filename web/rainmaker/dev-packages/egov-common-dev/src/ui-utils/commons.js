@@ -579,11 +579,13 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
           , "error"));
         return;
       }
+      payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].payerName.trim();
+      payloadReceiptDetails.Payments[0].paidBy=payloadReceiptDetails.Payments[0].paidBy.trim();
 
       let assessmentYear="";
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
-if(get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason"))
+if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
 {
   const adhocPenaltyReason = get(
     state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");

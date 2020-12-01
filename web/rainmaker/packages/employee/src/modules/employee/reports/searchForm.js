@@ -500,7 +500,7 @@ class ShowForm extends Component {
       }
       let fromDate = 0;
       let toDate = 0;
-      if (searchParams && Array.isArray(searchParams) && searchParams.length > 2) {
+      if (searchParams && Array.isArray(searchParams) && searchParams.length > 1) {
         searchParams.map(searchParam => {
           if (searchParam.name == 'fromDate') {
             fromDate = searchParam.input;
