@@ -252,11 +252,11 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
   
   this.setState({showLoadingTaskboard:true})
 }
-    taskboardData[0].head = totalRowCount;
+    taskboardData[0].head = showLoadingTaskboard?totalRows.length: totalRowCount;
     taskboardData[1].head = totalRows.length == totalRowCount || showLoadingTaskboard ? NEARING_SLA.length : 'LOADING';
     taskboardData[2].head = totalRows.length == totalRowCount || showLoadingTaskboard ? ESCALATED_SLA.length : 'LOADING';
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
-    tabData[1].dynamicArray = [totalRowCount];
+    tabData[1].dynamicArray = [showLoadingTaskboard?totalRows.length: totalRowCount];
     this.hideLoading();
     return {
       inboxData: initialInboxData,
