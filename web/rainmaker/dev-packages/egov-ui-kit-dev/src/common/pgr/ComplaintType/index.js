@@ -33,6 +33,7 @@ class ComplaintType extends Component {
 
   generateDataSource = () => {
     const { categories } = this.props;
+    console.log("categories inside cc" ,categories)
     const categoryList = getNestedObjFormat(categories);
     const transformedDataSource = [];
     this.generateResultsForAutoComplete(categoryList, transformedDataSource);
