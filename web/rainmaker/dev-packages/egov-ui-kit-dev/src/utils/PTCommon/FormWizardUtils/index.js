@@ -349,7 +349,7 @@ export const getInstituteInfo = (self) => {
   const instiObj = {};
   Object.keys(institutionAuthority.fields).map((field) => {
     const jsonPath = institutionAuthority.fields[field].jsonPath;
-    ownerObj[jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
+    ownerObj[jsonPath && jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
       get(institutionAuthority, `fields.${field}.value`, undefined) || null;
   });
   Object.keys(institutionDetails.fields).map((field) => {
