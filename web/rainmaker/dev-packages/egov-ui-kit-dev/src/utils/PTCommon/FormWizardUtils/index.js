@@ -347,7 +347,7 @@ export const getInstituteInfo = (self) => {
   const { institutionAuthority, institutionDetails } = self.props.form;
   const ownerObj = {};
   const instiObj = {};
-  debugger;
+  
   Object.keys(institutionAuthority.fields).map((field) => {
     const jsonPath = institutionAuthority.fields[field].jsonPath;
     ownerObj[jsonPath && jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
