@@ -342,7 +342,7 @@ const newCollection = {
           componentPath: "Div",
           props: {
             className: "searchreceipt-commonButton",
-            style: { textAlign: "right", display: "flex" },
+            style: { textAlign: "right", display: "block" },
           },
           children: {
             searchChallan: {

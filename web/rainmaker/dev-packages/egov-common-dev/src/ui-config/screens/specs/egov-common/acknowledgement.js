@@ -63,7 +63,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
         visible:JSON.parse(window.localStorage.getItem('isPOSmachine'))? false : true,
         props: {
             className: "downloadprint-commonmenu",
-            style: { textAlign: "right", display: "flex" },
+            style: { textAlign: "right", display: "flex",paddingTop:"10px" },
            
         },
         children: {
