@@ -24,7 +24,7 @@ const PTList = ({ items, label, onItemClick, innerDivStyle, hoverColor }) => {
           <List
             innerDivStyle={innerDivStyle}
             items={items}
-            listItemStyle={{ padding: "0px 20px", borderWidth: "10px 10px 0px" }}
+            listItemStyle={{ padding: "0px 6px", borderWidth: "10px 10px 0px" }}
             nestedListStyle={{ padding: "0px" }}
             primaryTogglesNestedList={true}
             onItemClick={onItemClick}
