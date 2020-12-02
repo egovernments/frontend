@@ -647,19 +647,23 @@ class ShowField extends Component {
     let reportName = rptName || this.state.reportName;
     let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
     let reportTitle = "";
+    let reportHeaderName = "";
     if (reportTitleArr) {
       reportTitle = reportTitleArr.map((char) => {
         if (char.length == 1) {
           reportTitle = char + "";
+          reportHeaderName += char;
         } else if(typeof char === "object") {
           reportTitle = char.text + "";
         } else {
           reportTitle = " " + char;
+          reportHeaderName = reportHeaderName + " " + char
         }
         return reportTitle;
       });
     }
-    return reportTitle;
+    // return reportTitle;
+    return [reportHeaderName];
   };
   
 
