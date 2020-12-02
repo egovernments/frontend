@@ -117,19 +117,19 @@ class PTInformation extends React.Component {
                         totalBillAmountDue={totalBillAmountDue}
                       />
                     }
-                    style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
+                    style={{ backgroundColor: "rgb(255,255,255)", boxShadow: "none" }}
                   />
                 )}
                 <div className="pdf-header" id="pdf-header">
                   <Card
-                    style={{ display: "flex", backgroundColor: "rgb(242, 242, 242)", minHeight: "120px", alignItems: "center", paddingLeft: "10px" }}
+                    style={{ display: "flex", backgroundColor: "rgb(255,255,255)", minHeight: "50px", alignItems: "center", paddingLeft: "10px" }}
                     textChildren={
                       <div style={{ display: "flex" }}>
                         <Image  id="image-id" style={logoStyle} source={logoUrl} />
                         <div style={{ marginLeft: 30 }}>
-                          <div style={{ display: "flex", marginBottom: 5 }}>
-                            <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{ marginRight: 10, textTransform: "uppercase" }} />
-                            <Label label={ulbGrade} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" />
+                          <div style={{ display: "flex", marginBottom: 1 }}>
+                            <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgb(0, 0, 0)" containerStyle={{ marginRight: 10, textTransform: "uppercase" }} />
+                            <Label label={ulbGrade} fontSize="20px" fontWeight="500" color="rgb(0, 0, 0)" />
                           </div>
                           <Label label={"PT_PDF_SUBHEADER"} fontSize="16px" fontWeight="500" />
                         </div>
@@ -138,11 +138,11 @@ class PTInformation extends React.Component {
                   />
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div style={{ display: "flex" }}>
-                      <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
+                      <Label label="PT_PROPERTY_ID" color="rgb(0, 0, 0)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
                       <Label label={`${get(properties, "propertyId")}`} fontSize="20px" />
-                      <Label label="PT_APPLICATION_NO" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
+                      <Label label="PT_APPLICATION_NO" color="rgb(0, 0, 0)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
                       <Label label={`${get(properties, "acknowldgementNumber")}`} fontSize="20px" />
-                      <Label label="Date" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
+                      <Label label="Date" color="rgb(0, 0, 0)" fontSize="20px" containerStyle={{ marginLeft: 100 }} />
                       <Label label={`: ${datecraeted}`} fontSize="20px" />
                       </div>
                     
