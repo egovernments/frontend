@@ -25,7 +25,7 @@ export const setBottomNavigationIndex = (bottomNavigationIndex) => {
   return { type: actionTypes.CHANGE_BOTTOM_NAVIGATION_INDEX, bottomNavigationIndex };
 };
 
-const setLocalizationLabels = (locale, localizationLabels) => {
+export const setLocalizationLabels = (locale, localizationLabels) => {
   window.localStorage.setItem(`localization_${locale}`, JSON.stringify(localizationLabels));
   setLocale(locale);
   return { type: actionTypes.ADD_LOCALIZATION, locale, localizationLabels };
