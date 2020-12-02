@@ -501,8 +501,8 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
 
     // doc.addImage(data, "PNG", 5, 10 + position, imgWidth, imgHeight);
     var data = canvas.toDataURL("image/jpeg", 1);
-    var imgWidth = 200;
-    var pageHeight = 295;
+    var imgWidth = 165;
+    var pageHeight = 300;
     var imgHeight = (canvas.height * imgWidth) / canvas.width;
     var heightLeft = imgHeight;
     var doc = new jsPDF("p", "mm");

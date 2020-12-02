@@ -347,14 +347,15 @@ export const getInstituteInfo = (self) => {
   const { institutionAuthority, institutionDetails } = self.props.form;
   const ownerObj = {};
   const instiObj = {};
+  
   Object.keys(institutionAuthority.fields).map((field) => {
     const jsonPath = institutionAuthority.fields[field].jsonPath;
-    ownerObj[jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
+    ownerObj[jsonPath && jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
       get(institutionAuthority, `fields.${field}.value`, undefined) || null;
   });
   Object.keys(institutionDetails.fields).map((field) => {
     const jsonPath = institutionDetails.fields[field].jsonPath;
-    instiObj[jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
+    instiObj[jsonPath && jsonPath.substring(jsonPath.lastIndexOf(".") + 1, jsonPath.length)] =
       get(institutionDetails, `fields.${field}.value`, undefined) || null;
   });
   instiObj.designation = get(institutionAuthority, "fields.designation.value", "");

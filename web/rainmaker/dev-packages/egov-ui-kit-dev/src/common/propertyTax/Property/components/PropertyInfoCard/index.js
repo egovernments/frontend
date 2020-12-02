@@ -4,7 +4,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 class PropertyInfoCard extends Component {
   render() {
-    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items2 = [], items = [], subSection = [], hideSubsectionLabel = false } = this.props;
+    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242,242,242)", items2 = [], items = [], subSection = [], hideSubsectionLabel = false } = this.props;
     return (
       <div>
         {items && (
@@ -14,12 +14,12 @@ class PropertyInfoCard extends Component {
             textChildren={
               <div>
                 <div >
-                  {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 10 }}>
+                  {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 0.2}}>
                     {header && (
                       <Label
-                        labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "15px" }}
+                        labelStyle={{ letterSpacing: "0.67px", color: "rgb(0, 0, 0)", fontWeight: "400", lineHeight: "0px" }}
                         label={header}
-                        fontSize="15px"
+                        fontSize="16px"
                       />
                     )}
                     {{ editIcon } && <span style={{ position: "absolute", right: "25px" }}>{editIcon}</span>}
@@ -28,17 +28,17 @@ class PropertyInfoCard extends Component {
                     if (item) {
                       return (
                         <div>
-                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 4, marginTop: 1 }}>
+                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 0.2, marginTop: 0.2 }}>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgb(0, 0, 0)", fontWeight: "400", lineHeight: "0em" }}
                                 label={item.key ? item.key : "NA"}
-                                fontSize="12px"
+                                fontSize="13px"
                               />
                             </div>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "15px" }}
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgb(0, 0, 0)", fontWeight: "400", lineHeight: "0px" }}
                                 label={item.value ? item.value : "NA"}
                                 fontSize="14px"
                               />
@@ -52,17 +52,17 @@ class PropertyInfoCard extends Component {
                     if (item) {
                       return (
                         <div>
-                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 4, marginTop: 1 }}>
+                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 0.2, marginTop: 0.2 }}>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgb(0, 0, 0)", fontWeight: "400", lineHeight: "0em" }}
                                 label={item.key ? item.key : "NA"}
-                                fontSize="10px"
+                                fontSize="13px"
                               />
                             </div>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "15px" }}
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgb(0, 0, 0)", fontWeight: "400", lineHeight: "0px" }}
                                 label={item.value ? item.value : "NA"}
                                 fontSize="14px"
                               />
@@ -81,14 +81,15 @@ class PropertyInfoCard extends Component {
                           {!hideSubsectionLabel && (
                             <Label
                               labelStyle={{
-                                letterSpacing: "0.67px",
-                                marginTop: 10,
-                                color: "rgba(0, 0, 0, 0.87)",
+                                letterSpacing: "0.5px",
+                                marginTop: 0,
+                                marginBottom:0,
+                                color: "rgb(0, 0, 0)",
                                 fontWeight: "400",
-                                lineHeight: "15px",
+                                lineHeight: "1px",
                               }}
                               label={"PROPERTYTAX_FLOOR_" + Object.keys(subSection)[unitIndex]}
-                              fontSize="18px"
+                              fontSize="15px"
                             />
                           )}
                           {units.map((unit, index) => {
