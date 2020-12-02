@@ -58,7 +58,6 @@ const checkUsers = (dispatch, state, actionHistory, hasUsers, tenantId) => {
           ? [...uniq(difference(userIds, cachedUserIds)), auth.userInfo.id]
           : [...uniq(difference(userIds, cachedUserIds))];
       if (id.length)
-      console.log(JSON.parse(getUserInfo()),"userINfo in fetch citizens")
         dispatch(commonActions.fetchCitizens({ tenantId: JSON.parse(getUserInfo()).tenantId, userName: JSON.parse(getUserInfo()).userName, id: id }));
     }
   }
