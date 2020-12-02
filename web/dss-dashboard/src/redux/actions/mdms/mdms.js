@@ -10,6 +10,7 @@ export default class MdmsAPI extends API {
         this.type = C.MDMS;
         this.path = path;
         this.mdmsData = {};
+        this.configData={};
         this.body = reqBody;
     }
 
@@ -17,7 +18,11 @@ export default class MdmsAPI extends API {
 
     processResponse(res) {
         super.processResponse(res);
-        if (res) {            
+        if (res) {    
+            localStorage.setItem('MODULE_LEVEL',JSON.stringify(res.MdmsRes['dss-dashboard'].MODULE_LEVEL))
+            localStorage.setItem('CHART_COLOR_CODE',JSON.stringify(res.MdmsRes['dss-dashboard'].CHART_COLOR_CODE))
+            localStorage.setItem('SERVICES',JSON.stringify(res.MdmsRes['dss-dashboard'].SERVICES))  
+            this.configData=res.MdmsRes.PropertyTax;      
             res = getMDMSData(res.MdmsRes.tenant.tenants);
             this.mdmsData = res;
             return true
@@ -37,7 +42,19 @@ export default class MdmsAPI extends API {
            },
            "MdmsCriteria": {
                "tenantId": tenent,
-               "moduleDetails": [
+               "moduleDetails": [   {
+                "moduleName": "dss-dashboard",
+                "masterDetails": [
+                    {
+                        "name": "MODULE_LEVEL"
+                    },
+                    {
+                        "name": "SERVICES"
+                    }, {
+                        "name": "CHART_COLOR_CODE"
+                    } 
+                ]
+            },
                 {
                 "moduleName": "tenant",
                 "masterDetails": [
