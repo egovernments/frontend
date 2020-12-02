@@ -21,7 +21,7 @@ const styles = {
   };
 
 const CheckBoxContainer = (props) => {
-  const { classes, content, labelName, labelKey } = props;
+  const { classes, content, labelName, labelKey,checked,name,changeMethod } = props;
   
   return (
         <FormGroup row>
@@ -29,13 +29,14 @@ const CheckBoxContainer = (props) => {
               classes={{ label: "checkbox-label" }}
               control={
                 <Checkbox
-                  // checked={this.state.checkedG}
-                  // onChange={this.handleChange("checkedG")}
+                  checked={checked?false:true}
+                  onChange={(event)=>changeMethod(event.target.name)}
                   // value={this.state.checkedG}
                   classes={{
                     root: classes.root,
                     checked: classes.checked
                   }}
+                  name={name}
                 />
               }
               label={
