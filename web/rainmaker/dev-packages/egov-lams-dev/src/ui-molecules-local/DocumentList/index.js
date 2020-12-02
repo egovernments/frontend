@@ -65,19 +65,20 @@ const documentTitle = {
 };
 
 class DocumentList extends Component {
+  
   state = {
     uploadedDocIndex: 0,
     uploadedIndex: [],
     uploadedDocuments: []
   };
 
-  componentDidMount = () => {
+  initialSetup = (nextPropsUploadedDocsInRedux) => {
     let {
       prepareFinalObject,
       uploadedDocsInRedux: uploadedDocuments,
       documents
     } = this.props;
- 
+    uploadedDocuments = nextPropsUploadedDocsInRedux?nextPropsUploadedDocsInRedux:uploadedDocuments; //Just a temp fix.
     if (uploadedDocuments && Object.keys(uploadedDocuments).length) {
       let simplified = Object.values(uploadedDocuments).map(item => item[0]);
       let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
@@ -111,12 +112,29 @@ class DocumentList extends Component {
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    // Any time props.uploadedDocsInRedux changes, update state.
+    if (nextProps.uploadedDocsInRedux !== this.props.uploadedDocsInRedux) {
+      //this.setState(nextProps);
+      this.initialSetup(nextProps.uploadedDocsInRedux);
+    }
+  }
+
+  componentDidUpdate = (prevProps)  => {
+
+  }
+
+  componentDidMount = () => {
+    this.initialSetup();
+  };
+
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex, uploadedDocuments } = this.state;
+    console.log("Check now ", uploadedDocIndex, uploadedDocuments);
     const { prepareFinalObject, documents, tenantId } = this.props;
     const { jsonPath, code } = documents[uploadedDocIndex];
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
@@ -135,6 +153,7 @@ class DocumentList extends Component {
     prepareFinalObject("lamsStore.uploadedDocsInRedux", {
       ...uploadedDocuments
     });
+    //alert(1);
     prepareFinalObject(jsonPath, {
       fileName: file.name,
       fileStoreId,
@@ -142,20 +161,22 @@ class DocumentList extends Component {
       documentType: code,
       tenantId
     });
+    //alert(2);
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(true, uploadedDocIndex);
+
   };
 
   removeDocument = remDocIndex => {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
    // console.log("current docs--",get(preparedFinalObject, "Licenses[0].tradeLicenseDetail.applicationDocuments", []));
-    let currentDocs = get(preparedFinalObject, "Lease[0].applicationDocuments", []);
+    let currentDocs = get(preparedFinalObject, "lamsStore.Lease[0].applicationDocuments", []);
 
    (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" )&&
       uploadedDocuments[remDocIndex][0].id &&
-      prepareFinalObject("LicensesTemp[0].removedDocs", [
-        ...get(preparedFinalObject, "LicensesTemp[0].removedDocs", []),
+      prepareFinalObject("lamsStore.removedDocs", [
+        ...get(preparedFinalObject, "lamsStore.removedDocs", []),
         {
           ...uploadedDocuments[remDocIndex][0],
           active: false
@@ -173,13 +194,17 @@ class DocumentList extends Component {
       
     //  uploadedDocuments.splice(remDocIndex,1);
    // uploadedDocuments[remDocIndex] = [];
-    prepareFinalObject("Lease[0].applicationDocuments", currentDocs);
+    prepareFinalObject("lamsStore.Lease[0].applicationDocuments", currentDocs);
     prepareFinalObject(
       "lamsStore.uploadedDocsInRedux",
       res
     );
     this.setState({ res });
     this.getFileUploadStatus(false, remDocIndex);
+    
+    let {uploadedDocIndex } = this.state;
+    console.log("Check now 2", uploadedDocIndex, uploadedDocuments);
+    //this.initialSetup();
   };
 
   getFileUploadStatus = (status, index) => {

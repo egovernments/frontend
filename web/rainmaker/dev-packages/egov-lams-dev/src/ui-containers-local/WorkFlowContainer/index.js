@@ -162,7 +162,7 @@ class WorkFlowContainer extends React.Component {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
           preparedFinalObject,
-          "LicensesTemp[0].removedDocs",
+          "lamsStore.removedDocs",
           []
         );
         if (data[0] && data[0].commencementDate) {
@@ -413,7 +413,6 @@ class WorkFlowContainer extends React.Component {
           break;
 
         case "APPLIED":
-        case "CITIZEN-REVIEW":
         case "APPROVED":
         case "REJECTED":
         case "CEO-EXAMINATION":
@@ -421,13 +420,27 @@ class WorkFlowContainer extends React.Component {
         case "PDDE-EXAMINATION":
         case "DGDE-EXAMINATION":
         case "MOD-EXAMINATION":
-        
+          this.wfUpdate(label);
+          break;
+        case "CITIZEN-REVIEW":
+          this.editApplication();
+          break;  
         default :
           this.wfUpdate(label);
-
       }
     }
   };
+
+  editApplication = () => {
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+    const tenant = getQueryArg(window.location.href, "tenantId");
+    this.props.setRoute(
+      `/lams-common/newApplication?&applicationNumber=${applicationNumber}&tenantId=${tenant}&purpose=CITIZEN-REVIEW&action=edit`
+    ); 
+  }
 
   getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
@@ -467,12 +480,18 @@ class WorkFlowContainer extends React.Component {
       bservice = "TL"
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+
+    baseUrl = "lams-common/newApplication";
+    let redirectUrl = "";
     switch (action) {
-      case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
-      case "EDIT": return isAlreadyEdited
-        ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      // case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
+      // case "EDIT": return isAlreadyEdited
+      //   ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+      //   : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      case "APPLY":
+        redirectUrl =  `/${baseUrl}?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`;
     }
+    return redirectUrl;
   };
 
 
@@ -548,11 +567,10 @@ class WorkFlowContainer extends React.Component {
     });
 
     let editAction = {};
-
     return editAction;
 
     //tobechanged
-    if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
+    if (status === "CITIZEN-REVIEW" && state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",
         moduleName: moduleName,

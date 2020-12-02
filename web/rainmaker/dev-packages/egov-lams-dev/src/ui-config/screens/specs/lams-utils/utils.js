@@ -5,7 +5,129 @@ import jp from "jsonpath";
 import { httpRequest } from "../../../../ui-utils";
 import commonConfig from "config/common.js";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getLocaleLabels, getQueryArg, getTodaysDateInYMD, getTransformedLocalStorgaeLabels, getObjectKeys, getObjectValues, } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getQueryArg,getFileUrl,getFileUrlFromAPI, getTodaysDateInYMD, getTransformedLocalStorgaeLabels, getObjectKeys, getObjectValues, } from "egov-ui-framework/ui-utils/commons";
+
+export const setDocsForEditFlow = async (state, dispatch) => {
+  let applicationDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "lamsStore.Lease[0].leaseDetails.applicationDocuments",
+    []
+  );
+  /* To change the order of application documents similar order of mdms order*/
+  const mdmsDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.documentObj[0].allowedDocs",
+    []
+  );
+  // let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+  //   let applicationDocument = {}
+  //   applicationDocuments && applicationDocuments.map(appDoc => {
+  //     if (appDoc.documentType == mdmsDoc.documentType) {
+  //       applicationDocument = { ...appDoc }
+  //     }
+  //   })
+  //   return applicationDocument;
+  // }
+  // ).filter(docObj => Object.keys(docObj).length > 0)
+  // applicationDocuments = [...orderedApplicationDocuments];
+  // dispatch(
+  //   prepareFinalObject("Licenses[0].tradeLicenseDetail.applicationDocuments", applicationDocuments)
+  // );
+
+  let uploadedDocuments = {};
+  let fileStoreIds =
+    applicationDocuments &&
+    applicationDocuments.map(item => item.fileStoreId).join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  applicationDocuments &&
+    applicationDocuments.forEach((item, index) => {
+      
+      uploadedDocuments[index] = [
+        {
+          fileName:
+            (fileUrlPayload &&
+              fileUrlPayload[item.fileStoreId] &&
+              decodeURIComponent(
+                getFileUrl(fileUrlPayload[item.fileStoreId])
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`,
+          fileStoreId: item.fileStoreId,
+          fileUrl: fileUrlPayload[item.fileStoreId],
+          documentType: item.documentType,
+          tenantId: item.tenantId,
+          id: item.id
+        }
+      ];
+    });
+  console.log("Check the value", uploadedDocuments);
+  dispatch(
+    prepareFinalObject("lamsStore.uploadedDocsInRedux", uploadedDocuments)
+  );
+};
+
+export const checkIfCitizenEditScreen = () =>{
+  const purpose = getQueryArg(window.location.href, "purpose");
+  if(purpose === "CITIZEN-REVIEW")
+    return true;
+  return false;
+}
+
+export const loadLeaseDetails2 = (action, state, dispatch, queryParams) => {
+  try{
+    let payload = null;
+    payload = httpRequest(
+      "post",
+      "lams-services/v1/_search",
+      "_search",
+      queryParams,
+      {}
+    );
+    return payload;
+  }
+  catch(e)
+  {
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Could not load lease Details",
+        labelKey: "LAMS_API_ERROR"
+      },
+      "error"
+    );
+  }
+  return null;
+}
+
+export const loadLeaseDetails = async (action, state, dispatch, queryParams) => {
+  try{
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "lams-services/v1/_search",
+      "_search",
+      queryParams,
+      {}
+    );
+    return payload;
+  }
+  catch(e)
+  {
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Could not load lease Details",
+        labelKey: "LAMS_API_ERROR"
+      },
+      "error"
+    );
+  }
+  return null;
+}
 
 export const loadSurveyNumbers = async (action, state, dispatch) => {
   let requestBody = {};

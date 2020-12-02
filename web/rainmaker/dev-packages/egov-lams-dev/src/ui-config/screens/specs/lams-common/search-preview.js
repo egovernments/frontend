@@ -18,7 +18,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import {getMdmsData, loadMdmsData} from "../lams-utils/utils";
-import {workflowCode, businessService} from "../lams-utils/utils";
+import {setDocsForEditFlow} from "../lams-utils/utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getQueryArg , setDocuments} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -140,7 +140,10 @@ const searchPreview = {
       if(response && response.leases && response.leases.length > 0)
       {
         dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
-        //alert("Lease Details Loaded Successfully ");
+        
+        //This is used for edit flow, if required. This puts the documents data to redux. Which is used to show
+        //uploaded documents, which can be editted also.
+        setDocsForEditFlow(state,dispatch); 
       }
       
       //toberemoved

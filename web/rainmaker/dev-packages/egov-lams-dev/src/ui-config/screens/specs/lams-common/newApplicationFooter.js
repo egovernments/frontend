@@ -6,10 +6,12 @@ import {
     prepareFinalObject
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
   import { validateFields } from "../utils";
+  import {checkIfCitizenEditScreen} from "../lams-utils/utils";
   import { toggleSpinner , toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { httpRequest } from "egov-ui-framework/ui-utils/api";
   import get from "lodash/get";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+  import jp from "jsonpath";
 
 const checkIfFormIsValid = async (state, dispatch) => {
 
@@ -28,11 +30,25 @@ const checkIfFormIsValid = async (state, dispatch) => {
     try {
       dispatch(toggleSpinner());
 
-      const wfDocuments = get(
+      let uploadedDocsInRedux = get(
         state.screenConfiguration.preparedFinalObject,
-        "lamsStore.Lease[0].wfDocuments"
-      );
-      dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.applicationDocuments", wfDocuments));
+        "lamsStore.uploadedDocsInRedux"
+      ); 
+
+      let finalDocsArray = jp.query(uploadedDocsInRedux, "$[*][0]");
+      //var finalDocsWithIds = finalDocsArray.filter(function(element) {if(element.id) return element;});
+      var finalDocsWithoutIds = finalDocsArray.filter(function(element) {if(!element.id) return element;});
+      dispatch(prepareFinalObject("lamsStore.Lease[0].wfDocuments", finalDocsWithoutIds ));
+      
+      let removedDocsArray = get(
+        state.screenConfiguration.preparedFinalObject,
+        "lamsStore.removedDocs"
+      ); 
+      removedDocsArray = removedDocsArray?removedDocsArray : [];
+      let mergedArray = [...finalDocsArray,...removedDocsArray];
+      console.log("Check this ", finalDocsArray, removedDocsArray, finalDocsWithoutIds, mergedArray);
+      //alert("Check once "+JSON.stringify(mergedArray));
+      dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.applicationDocuments", mergedArray));
 
       const lease = get(
         state.screenConfiguration.preparedFinalObject,
@@ -42,18 +58,34 @@ const checkIfFormIsValid = async (state, dispatch) => {
       let payload = {
         leases: [lease],
       };
-      
+
       dispatch(toggleSpinner());
       //ToBeRemoved
-      payload = await httpRequest(
-        "post",
-        "lams-services/v1/_create",
-        "_create",
-        [],
-        {
-          leases: [lease],
-        }
-      );
+
+      if(checkIfCitizenEditScreen()) //If its citizen-edit screen for citizen-review call update.
+      {
+        payload = await httpRequest(
+          "post",
+          "lams-services/v1/_update",
+          "_update",
+          [],
+          {
+            leases: [lease],
+          }
+        );
+      }
+      else  //else call create.
+      {
+        payload = await httpRequest(
+          "post",
+          "lams-services/v1/_create",
+          "_create",
+          [],
+          {
+            leases: [lease],
+          }
+        );
+      }
       dispatch(toggleSpinner());
       console.log("Response is ", payload);
       //toBeRemoved
@@ -115,6 +147,7 @@ const getCommonApplyFooter = children => {
 export const footer = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
+    visible:false,
     props: {
       variant: "outlined",
       color: "primary",
