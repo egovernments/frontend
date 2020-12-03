@@ -13,7 +13,13 @@ const ConsumerNo = Loadable({
   loading: () => <Loading />
 });
 
+const ToolTipContainer = Loadable({
+  loader:() => import("./ToolTipContainer"),
+  loading:() => <Loading/>
+})
+
 export {
   TestAtoms,
-  ConsumerNo
+  ConsumerNo,
+  ToolTipContainer
 };

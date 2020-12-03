@@ -3,9 +3,12 @@ import {
   getBreak,
   getCommonTitle,
   getCommonParagraph,
-  getCommonContainer
+  getCommonContainer,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCommonCaption, getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  getCommonCaption,
+  getCommonCard,
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 // import { getCommonGrayCard, getLabelOnlyValue } from "../../utils";
 import { footer } from "./footer";
 import "./index.css";
@@ -18,14 +21,14 @@ const styles = {
     fontSize: "20px",
     fontWeight: 500,
     lineHeight: "28px",
-    paddingLeft: "5px"
+    paddingLeft: "5px",
   },
   subHeader: {
     color: "gba(0, 0, 0, 0.87)",
     fontFamily: "Roboto",
     fontSize: "16px",
     fontWeight: 400,
-    lineHeight: "19px"
+    lineHeight: "19px",
   },
   docs: {
     color: "rgba(0, 0, 0, 0.6)",
@@ -33,7 +36,7 @@ const styles = {
     fontSize: "14px",
     fontWeight: 400,
     lineHeight: "17px",
-    paddingBottom: "24px"
+    paddingBottom: "24px",
   },
   description: {
     fontFamily: "Roboto",
@@ -42,23 +45,23 @@ const styles = {
     fontWeight: 400,
     letterSpacing: "0.6px",
     lineHeight: "14px",
-    marginBottom:"1rem"
-  }
+    marginBottom: "1rem",
+  },
 };
 
-const getHeader = (modulePrifx)=>{
+const getHeader = (modulePrifx) => {
   return getCommonHeader(
     {
       labelName: `Required Documents-${modulePrifx}`,
-      labelKey:getTransformedLocale(`${modulePrifx}_REQ_DOCS_HEADER`) 
+      labelKey: getTransformedLocale(`${modulePrifx}_REQ_DOCS_HEADER`),
     },
     {
-      style: styles.header
+      style: styles.header,
     }
   );
-} 
+};
 
- const getCommonGrayCard = children => {
+const getCommonGrayCard = (children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -72,52 +75,66 @@ const getHeader = (modulePrifx)=>{
               backgroundColor: "rgb(242, 242, 242)",
               boxShadow: "none",
               borderRadius: 0,
-              overflow: "visible"
-            }
-          })
+              overflow: "visible",
+            },
+          }),
         },
         gridDefination: {
-          xs: 12
-        }
-      }
+          xs: 12,
+        },
+      },
     },
     gridDefination: {
-      xs: 12
-    }
+      xs: 12,
+    },
   };
 };
 
- const getLabelOnlyValue = (value, props = {}) => {
-  return {
+const getLabelOnlyValue = (value, props = {}) => {
+  const obj = {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     gridDefination: {
       xs: 6,
-      sm: 4
+      sm: 4,
     },
     props: {
       style: {
-        marginBottom: "16px"
+        marginBottom: "16px",
       },
-      ...props
+      ...props,
     },
     children: {
-      value: getCommonCaption(value)
-    }
+      value: getCommonCaption(value.value), 
+    },
   };
+  if(value.toolTip.length > 0){
+    obj.children["tooltip"]= {
+      moduleName: "egov-billamend",
+      uiFramework: "custom-atoms-local",
+      componentPath: "ToolTipContainer",
+      children: {},
+      props:{
+        toolTipData:value.toolTip
+      }
+    }
+  }
+  return obj;
 };
 
-
-const generateDocument = ( item, modulePrifx ) => {
+const generateDocument = (item, modulePrifx) => {
   // Add header to individual grey cards
+  console.log(item,"item h ji for tooltip")
   let subHeader = getCommonTitle(
-      {
-        labelKey: getTransformedLocale(`${modulePrifx}_${item.allowedDocs[0].demandRevisionBasis}_HEADING`)
-      },
-      {
-        style: styles.subHeader
-      }
-    );
+    {
+      labelKey: getTransformedLocale(
+        `${modulePrifx}_${item.allowedDocs[0].demandRevisionBasis}_HEADING`
+      ),
+    },
+    {
+      style: styles.subHeader,
+    }
+  );
 
   // Add documents in individual grey cards
   let docs = {};
@@ -125,10 +142,15 @@ const generateDocument = ( item, modulePrifx ) => {
     docs = item.allowedDocs.reduce((obj, doc) => {
       obj[doc.documentType] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`${modulePrifx}_${doc.documentType}_LABEL`)
+          value: {
+            labelKey: getTransformedLocale(
+              `${modulePrifx}_${doc.documentType}_LABEL`
+            ),
+          },
+          toolTip: doc.hasToolTip?doc.toolTipData:[],
         },
         {
-          style: styles.docs
+          style: styles.docs,
         }
       );
       return obj;
@@ -137,10 +159,12 @@ const generateDocument = ( item, modulePrifx ) => {
     docs = item.options.reduce((obj, doc) => {
       obj[doc.code] = getLabelOnlyValue(
         {
-          labelKey: getTransformedLocale(`${modulePrifx}_${doc.code}_LABEL`)
+          value: {
+            labelKey: getTransformedLocale(`${modulePrifx}_${doc.code}_LABEL`),
+          },
         },
         {
-          style: styles.docs
+          style: styles.docs,
         }
       );
       return obj;
@@ -148,15 +172,14 @@ const generateDocument = ( item, modulePrifx ) => {
   }
 
   // Add description to individual grey cards
-  let subParagraph = 
-     getCommonParagraph(
-        {
-          labelKey: getTransformedLocale(`${modulePrifx}_DOCUMENT_NOTE`)
-        },
-        {
-          style: styles.description
-        }
-     ); 
+  let subParagraph = getCommonParagraph(
+    {
+      labelKey: getTransformedLocale(`${modulePrifx}_DOCUMENT_NOTE`),
+    },
+    {
+      style: styles.description,
+    }
+  );
 
   // let subParagraph1 = getCommonParagraph(
   //   {
@@ -166,7 +189,6 @@ const generateDocument = ( item, modulePrifx ) => {
   //     style: styles.description
   //   }
   // )
-
   return getCommonGrayCard({
     subHeader: subHeader,
     break: getBreak(),
@@ -174,53 +196,52 @@ const generateDocument = ( item, modulePrifx ) => {
     break: getBreak(),
     // / break1: modulePrifx === "TradeLicense" ? {} : getBreak(),
     docs: getCommonContainer({ ...docs }),
-   
   });
 };
 
-export const getRequiredDocuments = ( documents, moduleName, footerCallback ) => {
-  let doc = documents.map(item => {
-    return generateDocument( item, moduleName );
+export const getRequiredDocuments = (documents, moduleName, footerCallback) => {
+  let doc = documents.map((item) => {
+    return generateDocument(item, moduleName);
   });
-  const header= getHeader(moduleName);
-  const footerChildElement= footer( footerCallback, moduleName );
+  const header = getHeader(moduleName);
+  const footerChildElement = footer(footerCallback, moduleName);
   return getCommonContainer(
     {
       header: {
         uiFramework: "custom-atoms",
         componentPath: "Container",
         props: {
-          className: "fixedHeader"
+          className: "fixedHeader",
         },
         children: {
-          header
-        }
+          header,
+        },
       },
       documents: {
         uiFramework: "custom-atoms",
         componentPath: "Container",
         children: {
-          ...doc
+          ...doc,
         },
         props: {
-          id: "documents-div"
-        }
+          id: "documents-div",
+        },
       },
       footer: {
         uiFramework: "custom-atoms",
-        props:{
-          className:"footerSticky",
+        props: {
+          className: "footerSticky",
         },
         componentPath: "Container",
         children: {
-          footerChildElement
-        }
-      }
+          footerChildElement,
+        },
+      },
     },
     {
       style: {
-       // paddingBottom: 75
-      }
+        // paddingBottom: 75
+      },
     }
   );
 };

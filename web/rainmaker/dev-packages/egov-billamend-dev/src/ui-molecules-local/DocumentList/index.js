@@ -6,21 +6,28 @@ import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import {
   getFileUrlFromAPI,
-  getQueryArg
+  getQueryArg,
+  getTransformedLocale,
+  getLocaleLabels,
 } from "egov-ui-framework/ui-utils/commons";
+
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons"
+import { handleFileUpload } from "../../ui-utils/commons";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { AutosuggestContainer } from "../../ui-containers-local";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+
 import get from "lodash/get";
 
-const styles = theme => ({
+const styles = (theme) => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
     padding: "16px",
     marginBottom: "16px",
-    wordBreak : "break-word"
+    wordBreak: "break-word",
   },
   documentIcon: {
     backgroundColor: "#FFFFFF",
@@ -35,7 +42,7 @@ const styles = theme => ({
     fontSize: "20px",
     fontWeight: 400,
     letterSpacing: "0.83px",
-    lineHeight: "24px"
+    lineHeight: "24px",
   },
   documentSuccess: {
     borderRadius: "100%",
@@ -45,15 +52,15 @@ const styles = theme => ({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#39CB74",
-    color: "white"
+    color: "white",
   },
   button: {
     margin: theme.spacing.unit,
-    padding: "8px 38px"
+    padding: "8px 38px",
   },
   input: {
-    opacity: 0
-  }
+    opacity: 0,
+  },
 });
 const documentTitle = {
   color: "rgba(0, 0, 0, 0.87)",
@@ -61,28 +68,30 @@ const documentTitle = {
   fontSize: "16px",
   fontWeight: 400,
   letterSpacing: "0.67px",
-  lineHeight: "19px"
+  lineHeight: "19px",
 };
 
 class DocumentList extends Component {
   state = {
     uploadedDocIndex: 0,
     uploadedIndex: [],
-    uploadedDocuments: []
+    uploadedDocuments: [],
   };
 
   componentDidMount = () => {
     let {
       prepareFinalObject,
       uploadedDocsInRedux: uploadedDocuments,
-      documents
+      documents,
     } = this.props;
     if (uploadedDocuments && Object.keys(uploadedDocuments).length) {
-      let simplified = Object.values(uploadedDocuments).map(item => item[0]);
-      simplified=simplified.filter(document=>document&&document.fileUrl&&document.fileName);
-      documents=documents.filter(document=>document);
+      let simplified = Object.values(uploadedDocuments).map((item) => item[0]);
+      simplified = simplified.filter(
+        (document) => document && document.fileUrl && document.fileName
+      );
+      documents = documents.filter((document) => document);
       let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
-        const index = simplified.findIndex(i => i.documentType === item.code);
+        const index = simplified.findIndex((i) => i.documentType === item.code);
         index > -1 && (acc[ind] = [simplified[index]]);
         return acc;
       }, {});
@@ -98,21 +107,21 @@ class DocumentList extends Component {
       );
 
       getQueryArg(window.location.href, "action") !== "edit" &&
-      Object.values(uploadedDocuments).forEach((item, index) => {
-        prepareFinalObject(
-          `Bill[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
-          { ...item[0] }
-        );
-      });
-      
+        Object.values(uploadedDocuments).forEach((item, index) => {
+          prepareFinalObject(
+            `Bill[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
+            { ...item[0] }
+          );
+        });
+
       this.setState({
         uploadedDocuments: uploadedDocumentsArranged,
-        uploadedIndex
+        uploadedIndex,
       });
     }
   };
 
-  onUploadClick = uploadedDocIndex => {
+  onUploadClick = (uploadedDocIndex) => {
     this.setState({ uploadedDocIndex });
   };
 
@@ -129,43 +138,41 @@ class DocumentList extends Component {
           fileStoreId,
           fileUrl: Object.values(fileUrl)[0],
           documentType: code,
-          tenantId
-        }
-      ]
+          tenantId,
+        },
+      ],
     };
     prepareFinalObject("BillTemp[0].uploadedDocsInRedux", {
-      ...uploadedDocuments
+      ...uploadedDocuments,
     });
     prepareFinalObject(jsonPath, {
       fileName: file.name,
       fileStoreId,
       fileUrl: Object.values(fileUrl)[0],
       documentType: code,
-      tenantId
+      tenantId,
     });
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(true, uploadedDocIndex);
   };
 
-  removeDocument = remDocIndex => {
+  removeDocument = (remDocIndex) => {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
     const jsonPath = documents[remDocIndex].jsonPath;
-   (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" )&&
+    (getQueryArg(window.location.href, "action") === "edit" ||
+      getQueryArg(window.location.href, "action") === "EDITRENEWAL") &&
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject("BillTemp[0].removedDocs", [
         ...get(preparedFinalObject, "BillTemp[0].removedDocs", []),
         {
           ...uploadedDocuments[remDocIndex][0],
-          active: false
-        }
+          active: false,
+        },
       ]);
     uploadedDocuments[remDocIndex] = [];
     prepareFinalObject(jsonPath, uploadedDocuments[remDocIndex]);
-    prepareFinalObject(
-      "BillTemp[0].uploadedDocsInRedux",
-      uploadedDocuments
-    );
+    prepareFinalObject("BillTemp[0].uploadedDocsInRedux", uploadedDocuments);
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(false, remDocIndex);
   };
@@ -176,16 +183,27 @@ class DocumentList extends Component {
       uploadedIndex.push(index);
       this.setState({ uploadedIndex });
     } else {
-      const deletedIndex = uploadedIndex.findIndex(item => item === index);
+      const deletedIndex = uploadedIndex.findIndex((item) => item === index);
       uploadedIndex.splice(deletedIndex, 1);
       this.setState({ uploadedIndex });
     }
   };
   render() {
-    const { classes, documents, documentTypePrefix } = this.props;
-    
+    const { classes, documentTypePrefix } = this.props;
+
     const { uploadedIndex } = this.state;
-    console.log("prpsssss",uploadedIndex);
+    let documents = this.props.documents.map((item) => {
+      return {
+        ...item,
+        dropdown: item.dropdown.map((dropdownItem) => {
+          return {
+            code: dropdownItem.code,
+            label: dropdownItem.code,
+            name: dropdownItem.code,
+          };
+        }),
+      };
+    });
     return (
       <div style={{ paddingTop: 10 }}>
         {documents &&
@@ -197,7 +215,7 @@ class DocumentList extends Component {
                 className={classes.documentContainer}
               >
                 <Grid container={true}>
-                  <Grid item={true} xs={2} sm={1} align="center">
+                  <Grid item={true} xs={2} sm={1} md={1} align="center">
                     {uploadedIndex.indexOf(key) > -1 ? (
                       <div className={classes.documentSuccess}>
                         <Icon>
@@ -210,7 +228,7 @@ class DocumentList extends Component {
                       </div>
                     )}
                   </Grid>
-                  <Grid item={true} xs={6} sm={6} align="left">
+                  <Grid item={true} xs={6} sm={6} md={4} align="left">
                     <LabelContainer
                       labelName={documentTypePrefix + document.code}
                       labelKey={documentTypePrefix + document.code}
@@ -219,14 +237,54 @@ class DocumentList extends Component {
                     {document.required && (
                       <sup style={{ color: "#E54D42" }}>*</sup>
                     )}
-                  
                   </Grid>
-                  <Grid item={true} xs={12} sm={5} align="right">
+                  <Grid item={true} xs={12} sm={6} md={4}>
+                    {document.dropdown && (
+                      <React.Fragment>
+                        <div>
+                          <LabelContainer
+                            labelName={"BILL_SELECT_DOCUMENT"}
+                            labelKey={"BILL_SELECT_DOCUMENT"}
+                            style={documentTitle}
+                          />
+                        </div>
+
+                        <Select
+                          value={getLocaleLabels(
+                            "BILL_SELECT_DOCUMENT",
+                            "BILL_SELECT_DOCUMENT"
+                          )}
+                          id={`Bill_Document_Select_id_${key}`}
+                        >
+                          <MenuItem value={getLocaleLabels(
+                            "BILL_SELECT_DOCUMENT",
+                            "BILL_SELECT_DOCUMENT"
+                          )}>
+                            {getLocaleLabels(
+                              "BILL_SELECT_DOCUMENT",
+                              "BILL_SELECT_DOCUMENT"
+                            )}
+                          </MenuItem>
+
+                          {document.dropdown.map((item) => (
+                            <MenuItem value={item.code}>
+                              {getLocaleLabels(item.code, item.code)}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </React.Fragment>
+                    )}
+                  </Grid>
+                  <Grid item={true} xs={12} sm={12} md={3} align="right">
                     <UploadSingleFile
                       classes={this.props.classes}
                       id={`upload-button-${key}`}
-                      handleFileUpload={e =>
-                        handleFileUpload(e, this.handleDocument, this.props.inputProps)
+                      handleFileUpload={(e) =>
+                        handleFileUpload(
+                          e,
+                          this.handleDocument,
+                          this.props.inputProps
+                        )
                       }
                       uploaded={uploadedIndex.indexOf(key) > -1}
                       removeDocument={() => this.removeDocument(key)}
@@ -246,19 +304,16 @@ class DocumentList extends Component {
 }
 
 DocumentList.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     prepareFinalObject: (jsonPath, value) =>
-      dispatch(prepareFinalObject(jsonPath, value))
+      dispatch(prepareFinalObject(jsonPath, value)),
   };
 };
 
 export default withStyles(styles)(
-  connect(
-    null,
-    mapDispatchToProps
-  )(DocumentList)
+  connect(null, mapDispatchToProps)(DocumentList)
 );
