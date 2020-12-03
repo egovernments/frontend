@@ -279,6 +279,7 @@ export const chequeDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_CHQ_NO_PLACEHOLDER"
     },
     //Pattern validation for Cheque number
+    pattern: getPattern("ChequeNo"),
     jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
     required: true
   }),
@@ -291,6 +292,7 @@ export const chequeDetails = getCommonContainer({
       labelName: "dd/mm/yy",
       labelKey: "NOC_PAYMENT_CHEQUE_DATE_PLACEHOLDER"
     },
+    pattern: getPattern("Date"),
     required: true,
     jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
   }),
