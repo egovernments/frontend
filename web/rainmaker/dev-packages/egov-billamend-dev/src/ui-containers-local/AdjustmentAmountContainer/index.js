@@ -13,6 +13,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 const styles = (theme) => ({
   textField: {
     textAlign: "right",
+    maxWidth:"90%",
   },
   input: {
     padding: "10px 0px 2px 10px !important",
@@ -274,6 +275,7 @@ class AdjustmentAmountContainer extends Component {
               changeMethod={this.handleCheckBoxChange}
             />
           </Grid>
+        
         </Grid>
         <div>
           {data &&

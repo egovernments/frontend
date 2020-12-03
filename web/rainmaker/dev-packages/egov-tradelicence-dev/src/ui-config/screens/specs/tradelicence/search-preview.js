@@ -18,8 +18,9 @@ import {
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import get from "lodash/get";
 import set from "lodash/set";
+import store from "ui-redux/store";
 import { httpRequest } from "../../../../ui-utils";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { checkValidOwners, getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
 
@@ -95,6 +96,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
 
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+  payload && dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
 
   //set business service data
 
@@ -495,6 +497,16 @@ export const tradeReviewDetails = getCommonCard({
   reviewDocumentDetails
 });
 
+export const beforeSubmitHook =  (Licenses=[{}]) => {
+  let state = store.getState();
+  let oldOwners =  JSON.parse(
+    JSON.stringify(get(state, "screenConfiguration.preparedFinalObject.LicensesTemp[0].oldOwners", {}))
+  );
+  Licenses&&Array.isArray(Licenses)&&Licenses.length>0&& set(Licenses[0] ,"tradeLicenseDetail.owners", checkValidOwners(get(Licenses[0], "tradeLicenseDetail.owners",[]),oldOwners));
+  
+return Licenses;
+
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -556,7 +568,8 @@ const screenConfig = {
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            updateUrl: "/tl-services/v1/_update",
+            beforeSubmitHook:beforeSubmitHook
           }
         },
         // actionDialog: {
