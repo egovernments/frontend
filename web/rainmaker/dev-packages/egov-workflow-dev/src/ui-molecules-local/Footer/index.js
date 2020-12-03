@@ -89,10 +89,6 @@ class Footer extends React.Component {
               `screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate`,
               null
             ));
-            handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.tradeSubType`, get(state,
-              `screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType`,
-              null
-            ));
             break;
           case 'FIELDINSPECTION': 
             handleFieldChange(`${dataPath}[0].tradeLicenseDetail.additionalDetail.tradeSubType`, get(state,

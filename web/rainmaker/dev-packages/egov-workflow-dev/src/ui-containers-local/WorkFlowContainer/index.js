@@ -343,12 +343,7 @@ class WorkFlowContainer extends React.Component {
             `Licenses[0].tradeLicenseDetail.additionalDetail.cbrnNumber`,
             null
           );
-          const tradeType = get(
-            preparedFinalObject,
-            `Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType`,
-            null
-          );
-          if (cbrnDate == null || cbrnNumber == null||cbrnDate == ""|| cbrnNumber == "" || tradeType == null ||tradeType == "") {
+          if (cbrnDate == null || cbrnNumber == null||cbrnDate == ""|| cbrnNumber == "") {
             toggleSnackbar(
               true,
               { labelName: "Please fill all mandatory fields !", labelKey: "COMMON_MANDATORY_MISSING_ERROR" },
