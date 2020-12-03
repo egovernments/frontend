@@ -209,12 +209,20 @@ export const searchForm = getCommonCard({
   }),
 
   button: getCommonContainer({
-    buttonContainer: getCommonContainer({
+
+    firstCont: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      gridDefination: {
+        xs: 12,
+        sm: 3
+      }
+    },
       resetButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 3
           // align: "center"
         },
         props: {
@@ -223,11 +231,12 @@ export const searchForm = getCommonCard({
             color: "#FE7A51",
             borderColor: "#FE7A51",
             //   borderRadius: "2px",
-            width: "220px",
+            width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px",
-            margin: "8px",
-            float: "right"
+            margin: "5px",
+            //float: "right"
           }
+          
         },
         children: {
           buttonLabel: getLabel({
@@ -244,17 +253,17 @@ export const searchForm = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 3
           // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            margin: "5px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"
           }
         },
@@ -268,8 +277,16 @@ export const searchForm = getCommonCard({
           action: "condition",
           callBack: searchApiCall
         }
+      },
+      lastCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 3
+        }
       }
-    })
+
   })
 },{
   style:{
