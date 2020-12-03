@@ -82,7 +82,8 @@ export const confirmationDialog = getCommonContainer({
               }
               else
               {
-                dispatch(toggleSnackbar(true,{ labelName:"Comment should be less then 100 characters"}, "error"));
+                dispatch(toggleSnackbar(true,{labelName: "Comment should be less then 100 characters",
+                labelKey: "ERR_CANCEL_CHALLAN_INVALID_INPUT"}, "error"));
               }
             }
           }
