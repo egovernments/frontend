@@ -596,6 +596,8 @@ export const getPattern = type => {
     case "AadharNo":
       //return /^\d{4}\s\d{4}\s\d{4}$/;
       return /^([0-9]){12}$/;
+    case "ChequeNo":
+        return /^[0-9]{6}$/;
   }
 };
 
