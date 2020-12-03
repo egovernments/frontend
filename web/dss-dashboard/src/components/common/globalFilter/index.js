@@ -436,7 +436,7 @@ class GlobalFilter extends Component {
                     case "DDRs":
                         return this.renderAutoComplete(object.label, this.handleChanges, this.state.ddrs, object.values, '')
                     case "Services":
-                        return this.renderSimpleSelect(object.label,JSON.parse(localStorage.getItem('SERVICES')) , this.handleChanges)
+                        return this.renderSimpleSelect(object.label,JSON.parse(sessionStorage.getItem('SERVICES')) , this.handleChanges)
                     case "Date Range":
                         return this.renderDateRange(object.label, object.values);
                 }

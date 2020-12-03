@@ -2,6 +2,7 @@ import API from '../apis/api';
 import C from '../constants';
 import CONFIGS from '../../config/configs';
 import getMDMSData from '../getMDMSData'
+import { get } from 'lodash';
 
 export default class MdmsAPI extends API {
 
@@ -19,9 +20,9 @@ export default class MdmsAPI extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {    
-            localStorage.setItem('MODULE_LEVEL',JSON.stringify(res.MdmsRes['dss-dashboard'].MODULE_LEVEL))
-            localStorage.setItem('CHART_COLOR_CODE',JSON.stringify(res.MdmsRes['dss-dashboard'].CHART_COLOR_CODE))
-            localStorage.setItem('SERVICES',JSON.stringify(res.MdmsRes['dss-dashboard'].SERVICES))  
+            sessionStorage.setItem('MODULE_LEVEL',JSON.stringify(get(res,'MdmsRes.dss-dashboard.dashboard-config[0].MODULE_LEVEL',[])))
+            sessionStorage.setItem('CHART_COLOR_CODE',JSON.stringify(get(res,'MdmsRes.dss-dashboard.dashboard-config[0].CHART_COLOR_CODE',[])))
+            sessionStorage.setItem('SERVICES',JSON.stringify(get(res,'MdmsRes.dss-dashboard.dashboard-config[0].SERVICES',[]))  )
             this.configData=res.MdmsRes.PropertyTax;      
             res = getMDMSData(res.MdmsRes.tenant.tenants);
             this.mdmsData = res;
@@ -46,13 +47,8 @@ export default class MdmsAPI extends API {
                 "moduleName": "dss-dashboard",
                 "masterDetails": [
                     {
-                        "name": "MODULE_LEVEL"
-                    },
-                    {
-                        "name": "SERVICES"
-                    }, {
-                        "name": "CHART_COLOR_CODE"
-                    } 
+                        "name": "dashboard-config"
+                    }
                 ]
             },
                 {

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import CONFIG from '../config/configs';
 export default function getFilterObj(GFilterData, mdmsData, page) {
     let newGFilterData = _.cloneDeep(GFilterData);
-let MODULE_LEVEL=JSON.parse(localStorage.getItem('MODULE_LEVEL'))
+let MODULE_LEVEL=JSON.parse(sessionStorage.getItem('MODULE_LEVEL'))
     /* Filter Customization */
     let tempValue = [],
         filters = {};
