@@ -481,13 +481,13 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 
 export const getReceiptData = async queryObject => {
   try {
-    const response = await httpRequest(
-      "post",
-      "collection-services/receipts/_search",
-      "",
-      queryObject
-    );
-    return response;
+    // const response = await httpRequest(
+    //   "post",
+    //   "collection-services/receipts/_search",
+    //   "",
+    //   queryObject
+    // );
+    // return response;
   } catch (error) {
     console.log(error);
     return {};
@@ -554,12 +554,12 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     ];
 
     // Get Receipt
-    let payload = await httpRequest(
-      "post",
-      "/collection-services/receipts/_search",
-      "",
-      queryObject
-    );
+    // let payload = await httpRequest(
+    //   "post",
+    //   "/collection-services/receipts/_search",
+    //   "",
+    //   queryObject
+    // );
 
     // Get Bill
     const response = await getBill([
