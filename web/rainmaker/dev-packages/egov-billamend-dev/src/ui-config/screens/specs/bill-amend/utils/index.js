@@ -109,7 +109,7 @@ export const getDocList = (state, dispatch) => {
       statement: `COMMON_${item.documentType}_STATEMENT`,
     };
   });
-  console.log(applicationDocArray, "document list obj",documentObjArray,"array of document");
+
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject("BillTemp[0].applicationDocuments", applicationDocument)
