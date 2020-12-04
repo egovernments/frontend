@@ -3,10 +3,17 @@ import {
     getCommonTitle,
     getSelectField,
     getCommonParagraph,
+    getPattern,
+    getTextField,
+    getDateField,
+    getCommonSubHeader,
+    getCommonGrayCard,
+    getCommonContainer 
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
   import get from "lodash/get";
   import {loadSurveyNumbers, getSurveyDetails} from "../lams-utils/utils"
+  import {getDetailsForOwner, getMaxDateForDOB} from "../utils"
   import {documentListContainer} from "./documentListContainer";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {leaseDetailsCard} from "./leaseDetailsCard";
@@ -32,7 +39,7 @@ import PropTypes from "prop-types";
     dispatch(
       handleField(
         "newApplication",
-        "components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
+        "components.div1.children.details.children.cardContent.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
         "visible",
         true
       )
@@ -44,7 +51,7 @@ import PropTypes from "prop-types";
     dispatch(
       handleField(
         "newApplication",
-        "components.newApplicationDetailsCard.children.cardContent.children.leaseDetails",
+        "components.div1.children.details.children.cardContent.children.leaseDetails",
         "visible",
         true
       )
@@ -62,7 +69,7 @@ import PropTypes from "prop-types";
       dispatch(
         handleField(
           "newApplication",
-          "components.newApplicationDetailsCard.children.cardContent.children.cantonment",
+          "components.div1.children.details.children.cardContent.children.cantonment",
           "visible",
           true
         )
@@ -73,7 +80,7 @@ import PropTypes from "prop-types";
       dispatch(
         handleField(
           "newApplication",
-          "components.newApplicationDetailsCard.children.cardContent.children.cantonment",
+          "components.div1.children.details.children.cardContent.children.cantonment",
           "visible",
           false
         )
@@ -298,3 +305,288 @@ import PropTypes from "prop-types";
       }
     }
 );
+
+export const OwnerInfoCard = getCommonCard(
+  { 
+    header: getCommonTitle(
+      {
+        labelName: "Applicant Details",
+        labelKey: "LAMS_APPLICANT_DETAILS"
+      },
+      {
+        style: {
+          marginBottom: 18
+        }
+      }
+    ),
+    ownerDetails: getCommonGrayCard({
+        header: getCommonSubHeader(
+          {
+            labelName: "Owner Information",
+            labelKey: "LAMS_APPLICANT_BASIC_DETAILS"
+          },
+          {
+            style: {
+              marginBottom: 18
+            }
+          }
+        ),
+        ownerDetailsCardContainer: getCommonContainer({
+          getOwnerMobNoField: getTextField({
+            label: {
+              labelName: "Mobile No.",
+              labelKey: "LAMS_APPLICANT_MOB_NO"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Mobile No.",
+              labelKey: "LAMS_APPLICANT_MOB_NO_PLACEHOLDER"
+            },
+            required: true,
+            pattern: getPattern("MobileNo"),
+            jsonPath: "lamsStore.Lease[0].userDetails[0].mobileNumber",
+            iconObj: {
+              iconName: "search",
+              position: "end",
+              color: "#FE7A51",
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch, fieldInfo) => {
+                  getDetailsForOwner(state, dispatch, fieldInfo);
+                }
+              }
+            },
+            title: {
+              value: "Please search owner profile linked to the mobile no.",
+              key: "LAMS_APPLICANT_MOB_NO_MESSAGE"
+            },
+            infoIcon: "info_circle"
+          }),
+          ownerName: getTextField({
+            label: {
+              labelName: "Name",
+              labelKey: "LAMS_APPLICANT_NAME_LABEL"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Name",
+              labelKey: "LAMS_APPLICANT_NAME_PLACEHOLDER"
+            },
+            required: true,
+            pattern: getPattern("Name"),
+            jsonPath: "lamsStore.Lease[0].userDetails[0].name"
+          }),
+          getFatherNameField: getTextField({
+            label: {
+              labelName: "Father/Spouse Name",
+              labelKey: "LAMS_APPLICANT_FATHER_NAME_LABEL"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Father/Spouse Name",
+              labelKey: "LAMS_APPLICANT_FATHER_NAME_LABEL"
+            },
+            required: true,
+            pattern: getPattern("Name"),
+            jsonPath:
+              "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName"
+          }),
+          // getRelationshipRadioButton: {
+          //   uiFramework: "custom-containers",
+          //   componentPath: "RadioGroupContainer",
+          //   gridDefination: {
+          //     xs: 12,
+          //     sm: 12,
+          //     md: 6
+          //   },
+          //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+          //   props: {
+          //     label: {
+          //       name: "Relationship",
+          //       key: "TL_COMMON_RELATIONSHIP_LABEL"
+          //     },
+          //     buttons: [
+          //       {
+          //         labelName: "Father",
+          //         labelKey: "COMMON_RELATION_FATHER",
+          //         value: "FATHER"
+          //       },
+          //       {
+          //         labelName: "Mother",
+          //         labelKey: "COMMON_RELATION_MOTHER",
+          //         value: "MOTHER"
+          //       },
+          //       {
+          //         label: "Spouse",
+          //         labelKey: "COMMON_RELATION_SPOUSE",
+          //         value: "SPOUSE"
+          //       },
+          //       {
+          //         labelName: "Guardian",
+          //         labelKey: "COMMON_RELATION_GUARDIAN",
+          //         value: "GUARDIAN"
+          //       }
+          //     ],
+          //     jsonPath:
+          //       "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+          //     required: true
+          //   },
+          //   required: true,
+          //   type: "array"
+          // },
+          // getRelationshipField : getSelectField({
+          //   label: {
+          //     labelName: "Relationship",
+          //     labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
+          //   },
+          //   placeholder: {
+          //     labelName: "Select Relationship",
+          //     labelKey: "TL_COMMON_RELATIONSHIP_PLACEHOLDER"
+          //   },
+          //   required: true,
+          //   optionValue: "code",
+          //   optionLabel: "label",
+          //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+          //   data: [
+          //     {
+          //       code: "FATHER",
+          //       label: "COMMON_RELATION_FATHER"
+          //     },
+          //     {
+          //       code: "MOTHER",
+          //       label: "COMMON_RELATION_MOTHER"
+          //     },
+          //     {
+          //       code: "SPOUSE",
+          //       label: "COMMON_RELATION_SPOUSE"
+          //     },    
+          //     {
+          //       code: "GUARDIAN",
+          //       label: "COMMON_RELATION_GUARDIAN"
+                
+          //     }
+          //   ]
+          // }),
+          getOwnerGenderField: getSelectField({
+            label: {
+              labelName: "Gender",
+              labelKey: "LAMS_APPLICANT_GENDER_LABEL"
+            },
+            placeholder: {
+              labelName: "Select Gender",
+              labelKey: "LAMS_APPLICANT_GENDER_PLACEHOLDER"
+            },
+            required: true,
+            optionValue: "code",
+            optionLabel: "label",
+            jsonPath: "lamsStore.Lease[0].userDetails[0].gender",
+            data: [
+              {
+                code: "MALE",
+                label: "COMMON_GENDER_MALE"
+              },
+              {
+                code: "FEMALE",
+                label: "COMMON_GENDER_FEMALE"
+              },
+              {
+                code: "OTHERS",
+                label: "COMMON_GENDER_TRANSGENDER"
+              }
+            ]
+          }),
+          ownerDOB: {
+            ...getDateField({
+              label: {
+                labelName: "Date of Birth",
+                labelKey: "LAMS_APPLICANT_DOB"
+              },
+              placeholder: {
+                labelName: "Enter Date of Birth",
+                labelKey: "LAMS_APPLICANT_DOB_PLACEHOLDER"
+              },
+              required: true,
+              pattern: getPattern("Date"),
+              isDOB: true,
+              errorMessage: "LAMS_APPLICANT_DOB_ERROR_MESSAGE",
+              jsonPath: "lamsStore.Lease[0].userDetails[0].dob",
+              props: {
+                inputProps: {
+                  max: getMaxDateForDOB()
+                }
+              }
+            })
+          },
+          getOwnerEmailField: getTextField({
+            label: {
+              labelName: "Email",
+              labelKey: "LAMS_APPLICANT_EMAIL_LABEL"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Email",
+              labelKey: "LAMS_APPLICANT_EMAIL_PLACEHOLDER"
+            },
+            pattern: getPattern("Email"),
+            jsonPath: "lamsStore.Lease[0].userDetails[0].emailId"
+          }),
+          ownerPAN: getTextField({
+            label: {
+              labelName: "PAN No.",
+              labelKey: "LAMS_APPLICANT_PAN_LABEL"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Owner's PAN No.",
+              labelKey: "LAMS_APPLICANT_PAN_PLACEHOLDER"
+            },
+            pattern: getPattern("PAN"),
+            jsonPath: "lamsStore.Lease[0].userDetails[0].pan"
+          }),
+          
+          ownerAddress: getTextField({
+            label: {
+              labelName: "Correspondence Address",
+              labelKey: "LAMS_APPLICANT_ADDR_LABEL"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Correspondence Address",
+              labelKey: "LAMS_APPLICANT_ADDR_PLACEHOLDER"
+            },
+            required: true,
+            pattern: getPattern("Address"),
+            jsonPath: "lamsStore.Lease[0].userDetails[0].permanentAddress"
+          }),
+          // OwnerSpecialCategory: getSelectField({
+          //   label: {
+          //     labelName: "Special Owner Category",
+          //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
+          //   },
+          //   placeholder: {
+          //     labelName: "Select Special Owner Category",
+          //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_PLACEHOLDER"
+          //   },
+          //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
+          //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+          //   localePrefix: {
+          //     moduleName: "common-masters",
+          //     masterName: "OwnerType"
+          //   }
+          // })
+        })
+      })
+       
+    });;

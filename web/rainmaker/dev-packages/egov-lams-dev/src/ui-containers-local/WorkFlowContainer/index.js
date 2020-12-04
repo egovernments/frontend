@@ -2,7 +2,8 @@ import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/ut
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { addWflowFileUrl } from "../../ui-utils/commons"
 import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import get from "lodash/get";
@@ -63,14 +64,10 @@ class WorkFlowContainer extends React.Component {
       //   case "approved" :  payload = sampleAtApprovedState;break;
       // }
 
-      console.log("payload is ", payload);
-
       if (payload && payload.ProcessInstances.length > 0) {
         const processInstances = orderWfProcessInstances(
           payload.ProcessInstances
         );
-
-        console.log(processInstances);
         addWflowFileUrl(processInstances, prepareFinalObject);
       } else {
         toggleSnackbar(
@@ -555,7 +552,7 @@ class WorkFlowContainer extends React.Component {
     );
     const data = find(businessServiceData, { businessService: moduleName });
     const state = find(data.states, { applicationStatus: status });
-    console.log("data.states ",data.states, status);
+    //console.log("data.states ",data.states, status);
     let actions = [];
     state.actions &&
       state.actions.forEach(item => {
@@ -648,8 +645,6 @@ class WorkFlowContainer extends React.Component {
       dataPath,
       moduleName
     } = this.props;
-
-    console.log("In render ",ProcessInstances );
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
@@ -669,7 +664,7 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
       showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     }
-    console.log(" Check the values here.",ProcessInstances, moduleName, showFooter);
+    //console.log(" Check the values here.",ProcessInstances[0].documents[0].title, moduleName, showFooter);
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

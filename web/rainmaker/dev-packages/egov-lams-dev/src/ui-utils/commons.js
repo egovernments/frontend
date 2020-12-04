@@ -19,7 +19,7 @@ import {
   getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
-
+import cloneDeep from "lodash/cloneDeep";
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
@@ -604,4 +604,49 @@ export const handleFileUpload = (event, handleDocument, props) => {
     }
     });
   }
+};
+
+export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
+  const fileStoreIdByAction = await getAllFileStoreIds(ProcessInstances);
+  const fileUrlPayload = await getFileUrlFromAPI(
+    Object.values(fileStoreIdByAction).join(",")
+  );
+  const processInstances = cloneDeep(ProcessInstances);
+    processInstances.map(item => {
+    if (item.documents && item.documents.length > 0) {
+      let nonEmptyDoc = [];
+      item.documents.forEach(i => {
+        if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {        
+          i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
+          i.title = `LAMS_${i.documentType}`;
+          i.name = decodeURIComponent(
+            getFileUrl(fileUrlPayload[i.fileStoreId])
+              .split("?")[0]
+              .split("/")
+              .pop()
+              .slice(13)
+          );
+          i.linkText = "View";
+          nonEmptyDoc.push(i);
+        }        
+      });
+      item.documents = nonEmptyDoc;
+    }
+  });  
+  prepareFinalObject("workflow.ProcessInstances", processInstances);
+};
+
+const getAllFileStoreIds = async ProcessInstances => {
+  return (
+    ProcessInstances &&
+    ProcessInstances.reduce((result, eachInstance) => {
+      if (eachInstance.documents) {
+        let fileStoreIdArr = eachInstance.documents.map(item => {
+          return item.fileStoreId;
+        });
+        result[eachInstance.id] = fileStoreIdArr.join(",");
+      }
+      return result;
+    }, {})
+  );
 };

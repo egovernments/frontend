@@ -72,7 +72,8 @@ export const setDocsForEditFlow = async (state, dispatch) => {
 
 export const checkIfCitizenEditScreen = () =>{
   const purpose = getQueryArg(window.location.href, "purpose");
-  if(purpose === "CITIZEN-REVIEW")
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  if(applicationNumber && purpose === "CITIZEN-REVIEW")
     return true;
   return false;
 }

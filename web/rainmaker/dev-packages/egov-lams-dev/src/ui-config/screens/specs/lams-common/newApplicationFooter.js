@@ -35,7 +35,13 @@ const checkIfFormIsValid = async (state, dispatch) => {
         "lamsStore.uploadedDocsInRedux"
       ); 
 
+      let applicationDocuments = get(
+        state.screenConfiguration.preparedFinalObject,
+        "lamsStore.Lease[0].leaseDetails.applicationDocuments"
+      ); 
+
       let finalDocsArray = jp.query(uploadedDocsInRedux, "$[*][0]");
+      finalDocsArray.forEach((element, index) => {element.active = true});
       //var finalDocsWithIds = finalDocsArray.filter(function(element) {if(element.id) return element;});
       var finalDocsWithoutIds = finalDocsArray.filter(function(element) {if(!element.id) return element;});
       dispatch(prepareFinalObject("lamsStore.Lease[0].wfDocuments", finalDocsWithoutIds ));

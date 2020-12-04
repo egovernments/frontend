@@ -1,6 +1,7 @@
+import commonConfig from "config/common.js";
 import { getCommonCaption, getCommonCard,getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
@@ -104,6 +105,21 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
     return DateObj.getTime();
   } catch (e) {
     return dateString;
+  }
+};
+
+export const convertDateTimeToEpoch = dateTimeString => {
+  //example input format : "26-07-2018 17:43:21"
+  try {
+    // const parts = dateTimeString.match(
+    //   /(\d{2})\-(\d{2})\-(\d{4}) (\d{2}):(\d{2}):(\d{2})/
+    // );
+    const parts = dateTimeString.match(
+      /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/
+    );
+    return Date.UTC(+parts[3], parts[2] - 1, +parts[1], +parts[4], +parts[5]);
+  } catch (e) {
+    return dateTimeString;
   }
 };
 
@@ -472,4 +488,182 @@ export const downloadChallan = async (Challan, mode = 'download') => {
       alert('Some Error Occured while downloading Acknowledgement form!');
     }
   
+}
+
+export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
+  console.log("fieldInfo",fieldInfo)
+  try {
+    const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
+    const ownerNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `lamsStore.Lease[0].userDetails[${cardIndex}].mobileNumber`,
+      ""
+    );
+    if(!ownerNo){
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please enter Mobile Number to search !",
+            labelKey: "ERR_OWNER_NOT_ENTERED"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    const owners = get(
+      state.screenConfiguration.preparedFinalObject,
+      `lamsStore.Lease[0].userDetails`,
+      []
+    );
+    //owners from search call before modification.
+    const oldOwnersArr = get(
+      state.screenConfiguration.preparedFinalObject,
+      "LicensesTemp[0].tradeLicenseDetail.owners",
+      []
+    );
+    //Same no search on Same index
+    if (ownerNo === owners[cardIndex].userName) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Owner already added !",
+            labelKey: "ERR_OWNER_ALREADY_ADDED"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //Same no search in whole array
+    const matchingOwnerIndex = owners.findIndex(
+      item => item.userName === ownerNo
+    );
+    if (matchingOwnerIndex > -1) {
+      if (
+        !isUndefined(owners[matchingOwnerIndex].userActive) &&
+        owners[matchingOwnerIndex].userActive === false
+      ) {
+        //rearrange
+        dispatch(
+          prepareFinalObject(
+            `lamsStore.Lease[0].userDetails[${matchingOwnerIndex}].userActive`,
+            true
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            `lamsStore.Lease[0].userDetails[${cardIndex}].userActive`,
+            false
+          )
+        );
+        //Delete if current card was not part of oldOwners array - no need to save.
+        if (
+          oldOwnersArr.findIndex(
+            item => owners[cardIndex].userName === item.userName
+          ) == -1
+        ) {
+          owners.splice(cardIndex, 1);
+          dispatch(
+            prepareFinalObject(`lamsStore.Lease[0].userDetails`, owners)
+          );
+        }
+      } else {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Owner already added !",
+              labelKey: "ERR_OWNER_ALREADY_ADDED_1"
+            },
+            "error"
+          )
+        );
+      }
+      return;
+    } else {
+      //New number search only
+      let payload = await httpRequest(
+        "post",
+        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        "_search",
+        [],
+        {
+          tenantId: commonConfig.tenantId,
+          userName: `${ownerNo}`
+        }
+      );
+      if (payload && payload.user && payload.user.hasOwnProperty("length")) {
+        if (payload.user.length === 0) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "This mobile number is not registered ! Enter all details and continue.",
+                labelKey: "LAMS_ERR_MOBILE_NUMBER_NOT_REGISTERED"
+              },
+              "info"
+            )
+          );
+        } else {
+          const userInfo =
+            payload.user &&
+            payload.user[0] &&
+            JSON.parse(JSON.stringify(payload.user[0]));
+          if (userInfo && userInfo.createdDate) {
+            userInfo.createdDate = convertDateTimeToEpoch(userInfo.createdDate);
+            userInfo.lastModifiedDate = convertDateTimeToEpoch(
+              userInfo.lastModifiedDate
+            );
+            userInfo.pwdExpiryDate = convertDateTimeToEpoch(
+              userInfo.pwdExpiryDate
+            );
+          }
+          let currOwnersArr = get(
+            state.screenConfiguration.preparedFinalObject,
+            "lamsStore.Lease[0].userDetails",
+            []
+          );
+
+          currOwnersArr[cardIndex] = userInfo;
+          // if (oldOwnersArr.length > 0) {
+          //   currOwnersArr.push({
+          //     ...oldOwnersArr[cardIndex],
+          //     userActive: false,
+          //    // isDeleted:false
+          //   });
+          // }
+          dispatch(
+            prepareFinalObject(
+              `Licenses[0].tradeLicenseDetail.owners`,
+              currOwnersArr
+            )
+          );
+          // dispatch(
+          //   prepareFinalObject(
+          //     `Licenses[0].tradeLicenseDetail.owners[0].mobileNumber`,
+          //     ownerNo
+          //   )
+          // );
+          validateOwners(state, dispatch);
+        }
+      }
+    }
+  } catch (e) {
+    dispatch(toggleSnackbar(true, e.message, "info"));
+  }
+};
+
+export const getMaxDateForDOB = ()=>{
+  var eighteenYearsAgo = new Date();
+  eighteenYearsAgo=eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear()-18);
+  var finDate = new Date(eighteenYearsAgo);
+  var month = finDate.getMonth() + 1;
+  month = month < 10 ? "0" + month : month;
+  var day = finDate.getDate() < 10 ? "0" + finDate.getDate() : finDate.getDate();
+  finDate = finDate.getFullYear() + "-" +month+ "-" + day;
+  return finDate;
 }
