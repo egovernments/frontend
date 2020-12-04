@@ -74,7 +74,15 @@ export const download = async(receiptQueryString, mode = "download" ,configKey =
           , "error"));
         return;
       }
-
+      if(payloadReceiptDetails.Payments[0].payerName!=null){
+        payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].payerName.trim();}
+        else if(payloadReceiptDetails.Payments[0].payerName == null && payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC" && payloadReceiptDetails.Payments[0].paidBy !=null)
+         { payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].paidBy.trim();
+        }
+        if(payloadReceiptDetails.Payments[0].paidBy!=null)
+        {
+          payloadReceiptDetails.Payments[0].paidBy?payloadReceiptDetails.Payments[0].paidBy.trim():payloadReceiptDetails.Payments[0].paidBy;
+        }
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
         let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
         let year=receiptDate.split("/")[2];
