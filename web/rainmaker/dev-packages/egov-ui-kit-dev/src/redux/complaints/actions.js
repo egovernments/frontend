@@ -5,6 +5,7 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import difference from "lodash/difference";
 import uniq from "lodash/uniq";
 import commonConfig from "config/common.js";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 //checking users there in action history
 const checkUsers = (dispatch, state, actionHistory, hasUsers, tenantId) => {
@@ -49,7 +50,7 @@ const checkUsers = (dispatch, state, actionHistory, hasUsers, tenantId) => {
         uniq(difference(userIds, cachedUserIds)).indexOf(auth.userInfo.id) === -1 && auth.userInfo.type === "CITIZEN"
           ? [...uniq(difference(userIds, cachedUserIds)), auth.userInfo.id]
           : [...uniq(difference(userIds, cachedUserIds))];
-      if (id.length) dispatch(commonActions.fetchCitizens({ id }));
+      if (id.length) dispatch(commonActions.fetchCitizens({ tenantId: JSON.parse(getUserInfo()).tenantId, userName: JSON.parse(getUserInfo()).userName, id: id }));
     }
   }
 };
