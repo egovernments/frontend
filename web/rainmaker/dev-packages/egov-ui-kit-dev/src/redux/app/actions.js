@@ -5,7 +5,7 @@ import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/util
 import commonConfig from "config/common";
 import { debug } from "util";
 import { setLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import { getModule, getLocalizationLabels, setStoredModulesList, getStoredModulesList } from "../../utils/localStorageUtils";
+import { getModule } from "../../utils/localStorageUtils";
 
 export const updateActiveRoute = (routePath, menuName) => {
   localStorageSet("menuPath", routePath);
@@ -44,64 +44,33 @@ export const fetchLocalizationLabel = (locale, module, tenantId) => {
   return async (dispatch) => {
     // const commonModules =
     //   "rainmaker-pgr,rainmaker-pt,rainmaker-tl,finance-erp,rainmaker-common,rainmaker-hr,rainmaker-uc,rainmaker-noc,rainmaker-abg,rainmaker-bpareg,rainmaker-ws,rainmaker-dss,rainmaker-bpa";
-    let storedModuleList=[];
-    if(getStoredModulesList()!==null){
-        storedModuleList =JSON.parse(getStoredModulesList());
-    }
     const moduleName = getModule();
-    //const localeModule = moduleName === 'rainmaker-common' ? 'rainmaker-common' : `rainmaker-common,${moduleName}`;
-    let localeModule;
-    if(moduleName==='rainmaker-common'){
-        localeModule='rainmaker-common';
-    }
-    else if(storedModuleList.includes('rainmaker-common')){
-        localeModule=moduleName;
-    }
-    else{
-      localeModule=`rainmaker-common,${moduleName}`;
-    }
+    const localeModule = moduleName === 'rainmaker-common' ? 'rainmaker-common' : `rainmaker-common,${moduleName}`;
     try {
       const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
         { key: "module", value: localeModule },
         { key: "locale", value: locale },
         { key: "tenantId", value: commonConfig.tenantId },
       ]);
-      let tenantModule="";
-      if(module!=null){
-       tenantModule=`rainmaker-${module}`;
-      }
-      
-      let resultArray = [...payload1.messages];
-      
-      if(module && storedModuleList.includes(tenantModule)===false){
-        storedModuleList.push(tenantModule);
-        var newList =JSON.stringify(storedModuleList);
-        setStoredModulesList(newList);
-        const payload2 = module
-          ? await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
-              { key: "module", value: `rainmaker-${module}` },
-              { key: "locale", value: locale },
-              { key: "tenantId", value: tenantId ? tenantId : commonConfig.tenantId },
-            ])
-          : [];
-          if (payload2 && payload2.messages) {
-            resultArray = [...resultArray, ...payload2.messages];
-          }
-      }
+      const payload2 = module
+        ? await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
+            { key: "module", value: `rainmaker-${module}` },
+            { key: "locale", value: locale },
+            { key: "tenantId", value: tenantId ? tenantId : commonConfig.tenantId },
+          ])
+        : [];
       //let resultArray = [...payload1.messages, ...payload2.messages];
-      
-      let prevLocalisationLabels=[];  
-      if(getLocalizationLabels()!=null){
-        prevLocalisationLabels=JSON.parse(getLocalizationLabels());
+
+      let resultArray = [...payload1.messages];
+      if (payload2 && payload2.messages) {
+        resultArray = [...resultArray, ...payload2.messages];
       }
-      resultArray=[...prevLocalisationLabels, ...resultArray];
       dispatch(setLocalizationLabels(locale, resultArray));
     } catch (error) {
       console.log(error);
     }
   };
 };
-
 
 const setActionItems = (payload) => {
   return {
