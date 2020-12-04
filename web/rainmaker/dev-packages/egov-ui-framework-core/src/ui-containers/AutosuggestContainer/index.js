@@ -56,7 +56,7 @@ class AutoSuggestor extends Component {
           label={translatedLabel}
           placeholder={translatedPlaceholder}
           helperText={required && errorText}
-          error={errorText == "Required" && required}
+          error={ (errorText == "Required"||errorText == "आवश्यक प्रविष्टि")  && required}
           isClearable={true}
           required={required}
           disabled={disabled}
@@ -112,6 +112,7 @@ const mapStateToProps = (state, ownprops) => {
     formName
   } = ownprops;
   let errorText = helperText ? helperText : (formName && state.form[formName] && state.form[formName].fields ? getErrorText(state.form[formName].fields, id) : "");
+  console.log("ERROR text ",errorText);
   let suggestions =
     data && data.length > 0
       ? data
