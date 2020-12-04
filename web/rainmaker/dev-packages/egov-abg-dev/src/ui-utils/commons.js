@@ -25,7 +25,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import {
   getQueryArg,
-  getFileUrlFromAPI
+  getFileUrlFromAPI,
+  enableFieldAndHideSpinner
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
@@ -83,6 +84,28 @@ export const getSearchResults = async (dispatch, queryObject) => {
   }
 };
 
+export const getPaymentSearchResults = async (queryObject,dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "collection-services/payments/_search",
+      "",
+      queryObject
+    );
+
+    return response;
+  } catch (error) {
+    // enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
 export const getGroupBillSearch = async (dispatch,searchScreenObject) => {
   try {
     dispatch(toggleSpinner());
