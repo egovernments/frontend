@@ -21,73 +21,138 @@ import { convertEpochToDate } from "../../utils/index";
 const tenantId = getTenantId();
 
 export const receiptSummaryDetails = {
-  transferReason: getLabelWithValue(
+  receiptNumber: getLabelWithValue(
     {
       labelName: "Reason for Transfer",
-      labelKey: "PT_MUTATION_TRANSFER_REASON"
+      labelKey: "CR_RECEIPT_NUMBER"
     },
     {
       jsonPath:
-        "Property.additionalDetails.reasonForTransfer",
+        "PaymentReceipt.paymentDetails[0].receiptNumber",
       callBack: checkValueForNA
     }
   ),
-  marketValue: getLabelWithValue(
-    {
-
-      labelName: "Market Value",
-      labelKey: "PT_MUTATION_MARKET_VALUE"
-    },
-    {
-      jsonPath:
-        "Property.additionalDetails.marketValue",
-      callBack: checkValueForNA
-    }
-  ),
-  documentNo: getLabelWithValue(
-    {
-      labelName: "Document No.",
-      labelKey: "PT_MUTATION_DOCUMENT_NO"
-    },
-    {
-      jsonPath:
-        "Property.additionalDetails.documentNumber",
-      callBack: checkValueForNA
-    }
-  ), documentDate: getLabelWithValue(
+  consumerNo: getLabelWithValue(
     {
       labelName: "Document Issue Date",
-      labelKey: "PT_MUTATION_DOCUMENT_DATE"
+      labelKey: "CR_RECEIPT_CONSUMER_NUMBER"
     },
     {
       jsonPath:
-        "Property.additionalDetails.documentDate",
+        "PaymentReceipt.paymentDetails[0].bill.consumerCode",
+      callBack: checkValueForNA
+    }
+  ), paymentDate: getLabelWithValue(
+    {
+      labelName: "Document Value",
+      labelKey: "CR_RECEIPT_PAYMENT_DATE"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.paymentDetails[0].receiptDate",
       callBack: value => {
         return convertEpochToDate(value);
       }
     }
-  ), documentValue: getLabelWithValue(
+  ),
+  payerName: getLabelWithValue(
     {
-      labelName: "Document Value",
-      labelKey: "PT_MUTATION_DOCUMENT_VALUE"
+      labelName: "Remarks",
+      labelKey: "CR_RECEIPT_PAYER_NAME"
     },
     {
       jsonPath:
-        "Property.additionalDetails.documentValue",
+        "PaymentReceipt.payerName",
       callBack: checkValueForNA
     }
   ),
-  remarks: getLabelWithValue(
+  serviceType: getLabelWithValue(
     {
-      labelName: "Remarks",
-      labelKey: "PT_MUTATION_REMARKS"
+
+      labelName: "Market Value",
+      labelKey: "CR_RECEIPT_SERVICE_TYPE"
     },
     {
       jsonPath:
-        "Property.additionalDetails.remarks",
+        "PaymentReceipt.paymentDetails[0].businessService",
       callBack: checkValueForNA
     }
-  )
+  ),
+  billPeriod: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_BILL_PERIOD"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.paymentDetails[0].bill.billDetails[0].fromPeriod",
+      callBack: value => {
+        return convertEpochToDate(value);
+      }
+    }
+  ), receiptAmount: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_AMOUNT"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.totalAmountPaid",
+      callBack: checkValueForNA
+    }
+  ), pendingAmount: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_PENDING_AMOUNT"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.totalAmountPaid1",
+      callBack: checkValueForNA
+    }
+  ), paymentMode: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_PAYMENT_MODE"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.paymentMode",
+      callBack: checkValueForNA
+    }
+  ), txnId: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_TXN_ID"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.transactionNumber",
+      callBack: checkValueForNA
+    }
+  ), g8ReceiptNo: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_G8_RECEIPT_NO"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.paymentDetails[0].manualReceiptNumber",
+      callBack: checkValueForNA
+    }
+  ), g8ReceiptDate: getLabelWithValue(
+    {
+      labelName: "Document No.",
+      labelKey: "CR_RECEIPT_G8_RECEIPT_DATE"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.paymentDetails[0].manualReceiptDate",
+      callBack: value => {
+        return convertEpochToDate(value);
+      }
+    }
+  ),
 }
 const receiptDetails = getCommonGrayCard({
   receiptDetailsContainer: getCommonContainer(receiptSummaryDetails)
@@ -281,7 +346,7 @@ export const cancelReceiptDetailsCard = getCommonCard(
               sm: 6
             },
             pattern: getPattern("Amount"),
-            
+
             jsonPath: "Demands[0].additionalPenalty"
           })
         })

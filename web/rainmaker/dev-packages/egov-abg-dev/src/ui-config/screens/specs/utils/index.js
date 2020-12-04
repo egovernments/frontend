@@ -149,6 +149,9 @@ export const ifUserRoleExists = role => {
 };
 
 export const convertEpochToDate = dateEpoch => {
+  if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
+    return "NA" ;
+  } 
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
@@ -478,4 +481,7 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
       serviceCategories
     )
   );
+};
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
 };
