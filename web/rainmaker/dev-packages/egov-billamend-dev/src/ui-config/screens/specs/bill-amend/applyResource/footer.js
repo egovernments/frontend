@@ -73,6 +73,7 @@ const callBackForNext = async (state, dispatch) => {
       "BILL.AMOUNT",
       ""
     );
+    console.log("amount inside footer",amount)
     const amountType = get(
       state.screenConfiguration.preparedFinalObject,
       "BILL.AMOUNTTYPE",
@@ -81,7 +82,7 @@ const callBackForNext = async (state, dispatch) => {
     const amountValues = Object.keys(amount).map(
       (key) => amount[key][amountType]
     );
-    if (amountvalues.every(item === 0)) {
+    if (amountValues.every(item=>item === 0)) {
       isFormValid = false;
       let errorMessage = {
         labelName: "All Tax Heads Amount cant't be 0",
@@ -110,9 +111,10 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 1) {
     const documentsUploadRedux = get(
       state.screenConfiguration.preparedFinalObject,
-      "documentsUploadRedux",
+      "BillTemp[0].uploadedDocsInRedux",
       {}
     );
+  
     if (Object.keys(documentsUploadRedux).length === 0) {
       isFormValid = false;
       let errorMessage = {
