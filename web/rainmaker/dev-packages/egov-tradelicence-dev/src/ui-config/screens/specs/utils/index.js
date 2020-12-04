@@ -1951,7 +1951,7 @@ console.log(docLIst);
           },
           jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
           description: `COMMON_${item.code}_DESCRIPTION`,
-         // statement: `COMMON_${item.code}_STATEMENT`
+          statement: `COMMON_${item.code}_STATEMENT`
         }
       )
     //}
