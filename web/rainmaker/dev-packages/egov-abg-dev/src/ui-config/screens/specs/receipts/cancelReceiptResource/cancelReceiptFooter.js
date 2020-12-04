@@ -31,6 +31,39 @@ const getCommonApplyFooter = children => {
 };
 
 export const cancelReceiptFooter = getCommonApplyFooter({
+  previousButton: {
+    componentPath: "Button",
+    props: {
+      variant: "outlined",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      previousButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_left"
+        }
+      },
+      previousButtonLabel: getLabel({
+        labelName: "Previous Step",
+        labelKey: "CR_PREV_STEP_BUTTON"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        // processDemand(state, dispatch);
+        dispatch(setRoute(`/receipts/viewReceipt`));
+      }
+    },
+    visible: true
+  },
   nextButton: {
     componentPath: "Button",
     props: {
@@ -59,7 +92,7 @@ export const cancelReceiptFooter = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         // processDemand(state, dispatch);
-        console.log("RECEIPT CANCELLED");
+        dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&status=success`));
       }
     }
   }

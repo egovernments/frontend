@@ -130,6 +130,7 @@ const getData = async (action, state, dispatch, demandId) => {
     dispatch(
       prepareFinalObject("Demands[0].tenantId", tenantId)
     );
+    dispatch(prepareFinalObject('applyScreenMdmsData.reasonForReceiptCancel',[{code:"ERROR_RECEIPT"},{code:"CHEQUE_BOUNCE"},{code:"OTHER"}]));
   } catch (e) {
     console.log(e);
   }
@@ -173,7 +174,8 @@ const cancelReceipt = {
       state.screenConfiguration,
       "screenConfig.cancelReceipt"
     );
-
+   
+    dispatch(prepareFinalObject('applyScreenMdmsData.reasonForReceiptCancel',[{code:"ERROR_RECEIPT"},{code:"CHEQUE_BOUNCE"},{code:"OTHER"}]));
     dispatch(prepareFinalObject('DynamicMdms.BillingService.selectedValues',[]));
     dispatch(prepareFinalObject('DynamicMdms.BillingService.serviceCategories.selectedValues',[]));
 

@@ -438,6 +438,12 @@ export const getTextToLocalMapping = label => {
             "BILL_GENIE_GROUP_SEARCH_HEADER",
             localisationLabels
           ); 
+        default :
+        return getLocaleLabels(
+          "Search Results for Group Bills",
+          label,
+          localisationLabels
+        ); 
   }
 };
 

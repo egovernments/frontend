@@ -81,9 +81,9 @@ export const searchApiCall = async (state, dispatch) => {
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
         payeeName: get(Payments[i], `payerName`),
-        serviceType: serviceTypeLabel,
+        serviceType:   get(Payments[i], `paymentDetails[0].bill.businessService`),
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
-        amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
+        amount: get(Payments[i], `paymentDetails[0].bill.consumerCode`),
         status: get(Payments[i], `paymentDetails[0].bill.status`),
         businessService: get(Payments[i], `paymentDetails[0].bill.businessService`),
         tenantId: get(Payments[i], `tenantId`),
@@ -92,12 +92,13 @@ export const searchApiCall = async (state, dispatch) => {
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.uiCommonConfig");
     try {
       let data = response.map(item => ({
-        ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
-        ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
-        ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-        ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
-        ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
-        ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ['CR_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['CR_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
+        ['CR_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        ['CR_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
+        ['CR_COMMON_TABLE_CONSUMERCODE']: item.amount || "-",
+        ['CR_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ['CR_COMMON_TABLE_ACTION']: "CANCEL",
         ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-"
       }));

@@ -65,6 +65,16 @@ export const receiptSummaryDetails = {
         "PaymentReceipt.payerName",
       callBack: checkValueForNA
     }
+  ),  payerNumber: getLabelWithValue(
+    {
+      labelName: "Remarks",
+      labelKey: "CR_RECEIPT_PAYER_NUMBER"
+    },
+    {
+      jsonPath:
+        "PaymentReceipt.mobileNumber",
+      callBack: checkValueForNA
+    }
   ),
   serviceType: getLabelWithValue(
     {
@@ -233,8 +243,8 @@ export const cancelReceiptDetailsCard = getCommonCard(
               labelKey: "CR_RECEIPT_CANCELLATION_REASON_LABEL"
             },
             localePrefix: {
-              moduleName: "TENANT",
-              masterName: "TENANTS"
+              moduleName: "CR",
+              masterName: "REASON"
             },
             optionLabel: "name",
             placeholder: {
@@ -247,68 +257,68 @@ export const cancelReceiptDetailsCard = getCommonCard(
             labelsFromLocalisation: true,
             isClearable: true,
             className: "autocomplete-dropdown",
-            sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
+            sourceJsonPath: "applyScreenMdmsData.reasonForReceiptCancel",
           },
           jsonPath: "Demands[0].reason",
           gridDefination: {
             xs: 12,
             sm: 8
           },
-          beforeFieldChange: async (action, state, dispatch) => {
-            const citiesByModule = get(
-              state,
-              "common.citiesByModule.UC.tenants",
-              []
-            );
-            if (!citiesByModule.find(item => item.code === action.value)) {
-              return action;
-            }
-            let requestBody = {
-              MdmsCriteria: {
-                tenantId: action.value,
-                moduleDetails: [
-                  {
-                    moduleName: "BillingService",
-                    masterDetails: [
-                      {
-                        name: "BusinessService",
-                        filter: "[?(@.type=='Adhoc')]"
-                      },
-                      {
-                        name: "TaxHeadMaster"
-                      },
-                      {
-                        name: "TaxPeriod"
-                      }
-                    ]
-                  }
-                ]
-              }
-            };
-            try {
-              let payload = null;
-              payload = await httpRequest(
-                "post",
-                "/egov-mdms-service/v1/_search",
-                "_search",
-                [],
-                requestBody
-              );
-              dispatch(
-                prepareFinalObject(
-                  "applyScreenMdmsData.BillingService",
-                  payload.MdmsRes.BillingService
-                )
-              );
-              setServiceCategory(
-                get(payload, "MdmsRes.BillingService.BusinessService", []),
-                dispatch
-              );
-            } catch (e) {
-              console.log(e);
-            }
-            return action;
-          }
+          // beforeFieldChange: async (action, state, dispatch) => {
+          //   const citiesByModule = get(
+          //     state,
+          //     "common.citiesByModule.UC.tenants",
+          //     []
+          //   );
+          //   if (!citiesByModule.find(item => item.code === action.value)) {
+          //     return action;
+          //   }
+          //   let requestBody = {
+          //     MdmsCriteria: {
+          //       tenantId: action.value,
+          //       moduleDetails: [
+          //         {
+          //           moduleName: "BillingService",
+          //           masterDetails: [
+          //             {
+          //               name: "BusinessService",
+          //               filter: "[?(@.type=='Adhoc')]"
+          //             },
+          //             {
+          //               name: "TaxHeadMaster"
+          //             },
+          //             {
+          //               name: "TaxPeriod"
+          //             }
+          //           ]
+          //         }
+          //       ]
+          //     }
+          //   };
+          //   try {
+          //     let payload = null;
+          //     payload = await httpRequest(
+          //       "post",
+          //       "/egov-mdms-service/v1/_search",
+          //       "_search",
+          //       [],
+          //       requestBody
+          //     );
+          //     dispatch(
+          //       prepareFinalObject(
+          //         "applyScreenMdmsData.BillingService",
+          //         payload.MdmsRes.BillingService
+          //       )
+          //     );
+          //     setServiceCategory(
+          //       get(payload, "MdmsRes.BillingService.BusinessService", []),
+          //       dispatch
+          //     );
+          //   } catch (e) {
+          //     console.log(e);
+          //   }
+          //   return action;
+          // }
         },
         ConsumerName: getTextField({
           label: {

@@ -4,6 +4,7 @@ import {
   getEpochForDate
 } from "../../utils";
 import {download} from "egov-common/ui-utils/commons"
+import { setRoute } from "egov-ui-kit/utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -23,12 +24,21 @@ export const searchResults = {
                   { key: "receiptNumbers", value:  tableMeta.rowData[0]},
                   { key: "tenantId", value: tableMeta.rowData[7] }
                 ]
-                download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
+                // download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
               }}>
               {value}
             </div>
           )
         }
+      },
+     
+      {
+        labelName: "Date",
+        labelKey: "CR_COMMON_TABLE_COL_DATE"
+      },
+      {
+        labelName: "Consumer code",
+        labelKey: "CR_COMMON_TABLE_CONSUMERCODE"
       },
       {
         labelName: "Payee Name",
@@ -39,16 +49,26 @@ export const searchResults = {
         labelKey: "CR_SERVICE_TYPE_LABEL"
       },
       {
-        labelName: "Date",
-        labelKey: "CR_COMMON_TABLE_COL_DATE"
-      },
-      {
-        labelName: "Amount[INR]",
-        labelKey: "CR_COMMON_TABLE_COL_AMOUNT"
-      },
-      {
         labelName: "Status",
         labelKey: "CR_COMMON_TABLE_COL_STATUS"
+      },
+      {
+        labelName: "Action",
+        labelKey: "CR_COMMON_TABLE_ACTION",
+        options: {
+          filter: false,
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <div onClick={value => {
+                const receiptQueryString = [
+                  { key: "receiptNumbers", value:  tableMeta.rowData[0]},
+                  { key: "tenantId", value: tableMeta.rowData[7] }
+                ]
+                setRoute('/receipts/viewReceipt');
+              }}>
+              {value}
+            </div>
+          )
+        }
       },
       {
         labelName: "Receipt Key",
