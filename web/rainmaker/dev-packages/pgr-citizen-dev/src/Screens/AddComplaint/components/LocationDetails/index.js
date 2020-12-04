@@ -46,7 +46,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               }}
               floatingLabelText={mohalla && mohalla.floatingLabelText}
               {...mohalla}
-              pattern = "^[a-zA-Z0-9 .+_-]*$"
+              // pattern = "^[a-zA-Z0-9 .+_-]*$"
             />
             <TextField id="addComplaint-house-no" {...houseNo} pattern = "^[a-zA-Z0-9!@#.,-/: ()&']*$" onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
             <TextField
