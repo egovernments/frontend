@@ -8,7 +8,6 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { checkValueForNA, convertEpochToDate } from "../../utils";
 import { changeStep } from "./footer";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-
 export const tradeAccessoriesDetails = {
   reviewAccessoryType: getLabelWithValue(
     {
@@ -357,11 +356,11 @@ export const tradeLocationDetails = {
     },
     {
       jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
-      // localePrefix: {
+      localePrefix: {
       
-      //   moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : getTenantId().replace('.', '_').toUpperCase(),
-      //   masterName: "REVENUE"
-      // },
+        moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : getTenantId().replace('.', '_').toUpperCase(),
+        masterName: "REVENUE"
+      },
        callBack: checkValueForNA
     }
   ),
