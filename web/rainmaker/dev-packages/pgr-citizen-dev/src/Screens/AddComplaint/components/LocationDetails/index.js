@@ -35,6 +35,7 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               }}
               //onChange={(e, value, selectedValue) => handleFieldChange("city", selectedValue)}
               {...city}
+              pattern = "^[a-zA-Z0-9._]*$"
             />
             <AutoSuggestDropdown
               className="fix-for-layout-break"
@@ -45,11 +46,13 @@ const LocationDetails = ({ formKey, locationDetails, landmark, city, mohalla, ho
               }}
               floatingLabelText={mohalla && mohalla.floatingLabelText}
               {...mohalla}
+              pattern = "^[a-zA-Z0-9 .+_-]*$"
             />
-            <TextField id="addComplaint-house-no" {...houseNo} onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
+            <TextField id="addComplaint-house-no" {...houseNo} pattern = "^[a-zA-Z0-9!@#.,-/: ()&']*$" onChange={(e, value) => handleFieldChange("houseNo", value)} name="house-no" />
             <TextField
               id="addComplaint-landmark-details"
               {...landmark}
+              pattern = "^[a-zA-Z0-9!@#.,/: ()&'-]*$"
               onChange={(e, value) => handleFieldChange("landmark", value)}
               name="landmark-details"
             />

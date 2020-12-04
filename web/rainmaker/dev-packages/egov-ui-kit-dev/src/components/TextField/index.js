@@ -71,8 +71,12 @@ const TextField = ({
   toolTip,
   updateDependentFields,
   toolTipMessage,
+  pattern,
   ...rest
 }) => {
+  if(pattern && value) {
+    RegExp(pattern).test(value) ? errorText = null : errorText = "Invalid input";
+  }
   return (
     <MaterialUITextField
       errorText={errorText}

@@ -77,6 +77,8 @@ class AutoSuggestDropdown extends React.Component {
       toolTip,
       updateDependentFields,
       toolTipMessage,
+      pattern,
+      errorText,
       ...restProps
     } = this.props;
     const { filterAutoComplete, getNameById, onChangeText, getLocalizedLabel } = this;
@@ -95,11 +97,15 @@ class AutoSuggestDropdown extends React.Component {
     } else {
       list = dataSource;
     }
+    if(pattern && value) {
+      RegExp(pattern).test(value) ? errorText = null : errorText = "Invalid input";
+    }
     const items = sortBy(list, ["label"]);
     return (
       <div style={{ display: "flex", position: "relative", width: "100%" }}>
         <AutoComplete
           className={`autosuggest ${className}`}
+          errorText = {errorText}
           floatingLabelFixed={true}
           floatingLabelStyle={{ ...floatingLabelStyle }}
           hintStyle={{ ...hintBaseStyle }}
