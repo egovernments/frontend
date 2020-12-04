@@ -58,6 +58,9 @@ export const getDocList = (state, dispatch) => {
     }
   });
 
+  
+
+
   // const filteredDocTypes =
   //   documentObjArray &&
   //   documentObjArray.length > 0 &&
@@ -108,8 +111,7 @@ export const getDocList = (state, dispatch) => {
       description: `COMMON_${item.documentType}_DESCRIPTION`,
       statement: `COMMON_${item.documentType}_STATEMENT`,
     };
-  });
-
+  })
   let applicationDocument = prepareDocumentTypeObj(applicationDocArray);
   dispatch(
     prepareFinalObject("BillTemp[0].applicationDocuments", applicationDocument)
