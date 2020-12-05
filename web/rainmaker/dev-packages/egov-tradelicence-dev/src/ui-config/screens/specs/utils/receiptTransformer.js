@@ -322,7 +322,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
     let isAppFeeReqd = false;
     if (!isEmpty(businessServiceData)) {
-      const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
+      const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => (item.businessService === "NewTL" ||"EDITRENEWAL"))
       const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
       for (var i = 0; i < states.length; i++) {
         if (states[i].state === "PENDINGAPPLFEE") {
