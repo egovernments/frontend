@@ -129,7 +129,7 @@ export const tradetypeDetails = {
   reviewTradeValue: getLabelWithValue(
     {
       labelName: "Trade Type",
-      labelKey: "TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL"
+      labelKey: "TL_NEW_APP_TRADE_DETAILS_TRADE_TYPE_LABEL"
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType", callBack: checkValueForNA }
   ),
