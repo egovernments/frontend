@@ -3,7 +3,7 @@ import {
     getLabel,
     getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { tradeLicenseApplication } from "./searchResource/leaseRenewalApplicationSearch";
+  import { leaseApplication } from "./searchResource/leaseRenewalApplicationSearch";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   //import { pendingApprovals } from "./searchResource/pendingApprovals";
@@ -70,8 +70,8 @@ import {
   }
   
   const header = getCommonHeader({
-    labelName: "Lease Renewal/Extension",
-    labelKey: "LAMS_COMMON"
+    labelName: "Lease Application Search",
+    labelKey: "LAMS_COMMON_SEARCH"
   });
   const tradeLicenseSearchAndResult = {
     uiFramework: "material-ui",
@@ -108,7 +108,7 @@ import {
             }
           },
           //pendingApprovals,
-          tradeLicenseApplication,
+          leaseApplication,
           breakAfterSearch: getBreak(),
           searchResults
         }

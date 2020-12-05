@@ -29,14 +29,14 @@ export const searchApiCall = async (state, dispatch) => {
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    "components.div.children.leaseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    "components.div.children.leaseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
     state,
     dispatch,
     "search"

@@ -11,7 +11,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
-export const tradeLicenseApplication = getCommonCard({
+export const leaseApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Lease Renewal Application",
     labelKey: "LAMS_SEARCH_RESULTS_HEADING"
@@ -56,7 +56,7 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_SURVEY_NO",
-      jsonPath: "searchScreen.licenseNumbers"
+      jsonPath: "searchScreen.surveyNo"
     }),
     ownerMobNo: getTextField({
       label: {
@@ -189,17 +189,29 @@ export const tradeLicenseApplication = getCommonCard({
             code : "APPLIED"
           },
           {
-            code : "PDDEEXAMINATION"
-          },
-          {
-            code : "DGDEEXAMINATION"
-          },
-          {
-            code : "MODEXAMINATION"
-          },
-          {
             code : "APPROVED"
-          }
+          },
+          {
+            code : "REJECTED"
+          },
+          {
+            code : "CITIZEN-REVIEW"
+          },
+          {
+            code : "CEO-EXAMINATION"
+          },
+          {
+            code : "DEO-EXAMINATION"
+          },
+          {
+            code : "PDDE-EXAMINATION"
+          },
+          {
+            code : "DGDE-EXAMINATION"
+          },
+          {
+            code : "MOD-EXAMINATION"
+          },
         ],
       },
       jsonPath: "searchScreen.status",
