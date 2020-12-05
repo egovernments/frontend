@@ -121,9 +121,9 @@ export const callBackForAppFee = async (state, dispatch) => {
   );
   isFormValid = await applyTradeLicense(state, dispatch,activeStep);
   if (isFormValid) {
-    if (getQueryArg(window.location.href, "action") === "EDITRENEWAL")
-    editRenewalMoveToSuccess(LicenseData, dispatch);
-    else
+    // if (getQueryArg(window.location.href, "action") === "EDITRENEWAL")
+    // editRenewalMoveToSuccess(LicenseData, dispatch);
+    // else
     moveToAppfeeSuccess(LicenseData, dispatch);
   }
 }
