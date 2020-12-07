@@ -1,6 +1,5 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-import generatePdf from "../../utils/receiptPdf";
 import "./index.css";
 
 export const getRedirectionURL = () => {
@@ -10,7 +9,16 @@ export const getRedirectionURL = () => {
   return redirectionURL;
 };
 
-
+const getCommonApplyFooter = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      className: "pt-apply-wizard-footer"
+    },
+    children
+  };
+};
 //Function for go to home button
 export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
@@ -25,10 +33,9 @@ export const gotoHomeFooter = getCommonApplyFooter({
       }
     },
     children: {
-      //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "PT_MUTATION_HOME"
+        labelKey: "CR_HOME"
       })
     },
     // Check this onClickDefinition later again

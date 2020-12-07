@@ -100,7 +100,8 @@ export const searchApiCall = async (state, dispatch) => {
         ['CR_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ['CR_COMMON_TABLE_ACTION']: "CANCEL",
         ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
-        ["TENANT_ID"]: item.tenantId || "-"
+        ["TENANT_ID"]: item.tenantId || "-",
+        ["SERVICE_TYPE"]:item.serviceType
       }));
       enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
       dispatch(
@@ -148,7 +149,8 @@ const checkEmptyFields = (searchScreenObject) => {
   const businessServices = get(searchScreenObject, 'businessServices', null)
   const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
-  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)) { return true; }
+  const consumerNumbers = get(searchScreenObject, 'consumerNumbers', null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber)&& checkEmpty(consumerNumbers) && checkEmpty(receiptNumbers)) { return true; }
   return false;
 }
 const checkEmpty = (value) => {

@@ -59,11 +59,7 @@ export const searchResults = {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
             <div onClick={value => {
-                const receiptQueryString = [
-                  { key: "receiptNumbers", value:  tableMeta.rowData[0]},
-                  { key: "tenantId", value: tableMeta.rowData[7] }
-                ]
-                setRoute('/receipts/viewReceipt');
+                setRoute(`/receipts/viewReceipt?receiptNumbers=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=${tableMeta.rowData[9]}`);
               }}>
               {value}
             </div>
@@ -83,7 +79,15 @@ export const searchResults = {
         options: {
           display: false
         }
-      }
+      },
+      {
+        labelName: "SERVICE TYPE",
+        labelKey: "SERVICE_TYPE",
+        options: {
+          display: false
+        }
+      },
+      
     ],
     title: {
       labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",

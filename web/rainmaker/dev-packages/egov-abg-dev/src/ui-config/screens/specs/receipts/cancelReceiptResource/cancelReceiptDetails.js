@@ -75,7 +75,9 @@ export const receiptSummaryDetails = {
         "PaymentReceipt.mobileNumber",
       callBack: checkValueForNA
     }
-  ),
+  )
+}
+export const receiptPaymentDetails = {
   serviceType: getLabelWithValue(
     {
 
@@ -165,7 +167,8 @@ export const receiptSummaryDetails = {
   ),
 }
 const receiptDetails = getCommonGrayCard({
-  receiptDetailsContainer: getCommonContainer(receiptSummaryDetails)
+  receiptPayeeDetails: getCommonCard({receiptPayeeContainer:getCommonContainer(receiptSummaryDetails)}),
+  receiptPaymentDetails: getCommonCard({receiptPaymentContainer:getCommonContainer(receiptPaymentDetails)})
 });
 
 
@@ -233,7 +236,7 @@ export const cancelReceiptDetailsCard = getCommonCard(
   {
     searchContainer: getCommonContainer(
       {
-        City: {
+        reason: {
           uiFramework: "custom-containers-local",
           moduleName: "egov-uc",
           componentPath: "AutosuggestContainer",
@@ -259,7 +262,7 @@ export const cancelReceiptDetailsCard = getCommonCard(
             className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.reasonForReceiptCancel",
           },
-          jsonPath: "Demands[0].reason",
+          jsonPath: "paymentWorkflows[0].reason",
           gridDefination: {
             xs: 12,
             sm: 8
@@ -320,7 +323,7 @@ export const cancelReceiptDetailsCard = getCommonCard(
           //   return action;
           // }
         },
-        ConsumerName: getTextField({
+        addtionalDetails: getTextField({
           label: {
             labelName: "Consumer Name",
             labelKey: "CR_MORE_DETAILS_LABEL"
@@ -337,11 +340,10 @@ export const cancelReceiptDetailsCard = getCommonCard(
           visible: true,
           pattern: getPattern("Address"),
           errorMessage: "Invalid Details.",
-          jsonPath: "Demands[0].moreDetails"
+          jsonPath: "paymentWorkflows[0].additionalDetails"
         }),
 
-        commentsContainer: getCommonContainer({
-          comments: getTextField({
+        addtionalPenalty:  getTextField({
             label: {
               labelName: "Comments",
               labelKey: "CR_ADDITIONAL_PENALTY"
@@ -353,13 +355,12 @@ export const cancelReceiptDetailsCard = getCommonCard(
             Required: false,
             gridDefination: {
               xs: 12,
-              sm: 6
+              sm: 8
             },
             pattern: getPattern("Amount"),
 
-            jsonPath: "Demands[0].additionalPenalty"
+            jsonPath: "paymentWorkflows[0].additionalPenalty"
           })
-        })
       }
     )
   }

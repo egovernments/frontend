@@ -21,7 +21,7 @@ const header =getCommonContainer({
     moduleName: "egov-abg",
     componentPath: "ApplicationContainer",
     props: {
-      number: getQueryArg(window.location.href, "consumerCode")|| 'PB-PT-2020-03-03-004161',
+      number: getQueryArg(window.location.href, "receiptNumbers"),
       label: {
         labelValue: "Receipt Details Receipt No.",
         labelKey: "CR_RECEIPT_DETAILS_NUMBER"
