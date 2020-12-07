@@ -567,8 +567,6 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       ACTION: "_get",
     },
   };
-  const responseForTrade = await  httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
-  const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
 
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
@@ -631,6 +629,7 @@ if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.s
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
 
         configKey="tradelicense-receipt";
+        const responseForTrade = httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
     
         const details = {
           "address": responseForTrade.Licenses[0].tradeLicenseDetail.address.locality.code
@@ -653,6 +652,7 @@ if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.s
       to=convertDateToEpoch("03/31/"+year);}
       else{from=convertDateToEpoch("04/01/"+year);
       to=convertDateToEpoch("03/31/"+nextyear);}
+      const response = httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
         const details = {
              "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
              }
