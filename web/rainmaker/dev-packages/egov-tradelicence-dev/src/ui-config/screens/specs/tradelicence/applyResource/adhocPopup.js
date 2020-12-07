@@ -97,6 +97,7 @@ let totalAmount = (estimateCardData) => {
   let commonPenalty=0;
   let adhocPenalty=0;
   let adhocRebate = 0;
+  let garbageFee=0;
   estimateCardData.forEach(data => {
    
     if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
@@ -114,10 +115,13 @@ let totalAmount = (estimateCardData) => {
     }
     if(data.name.labelKey === 'TL_ADHOC_REBATE'){
       adhocRebate= data.value ? data.value : 0;
-      }
+    }
+    if(data.name.labelKey === 'TL_GARBAGE_FEE'){
+        garbageFee= data.value ? data.value : 0;
+    }
   });
     
-  return tlTax+adhocPenalty+commonPenalty-Math.abs(commonRebate)-Math.abs(adhocRebate);
+  return tlTax+adhocPenalty+commonPenalty+garbageFee-Math.abs(commonRebate)-Math.abs(adhocRebate);
 }
 const updateAdhoc = (state, dispatch) => {
 let isFormValid = true;
