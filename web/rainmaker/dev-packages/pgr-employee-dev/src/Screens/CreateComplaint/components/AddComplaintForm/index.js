@@ -69,6 +69,7 @@ const AddComplaintForm = ({
                   onChange={(chosenCity, index) => {
                     handleFieldChange("city", chosenCity.value);
                   }}
+                  pattern = "^[a-zA-Z0-9._]*$"
                   {...city}
                 />
               </div>
@@ -84,6 +85,7 @@ const AddComplaintForm = ({
                   {...houseNo}
                   onChange={(e, value) => handleFieldChange("houseNo", value)}
                   name="house-no"
+                  pattern = "^[a-zA-Z0-9!@#.,-/: ()&']*$"
                 />
               </div>
               <div className="col-sm-6 col-xs-12">
@@ -92,6 +94,7 @@ const AddComplaintForm = ({
                   {...landmark}
                   onChange={(e, value) => handleFieldChange("landmark", value)}
                   name="landmark-details"
+                  pattern = "^[a-zA-Z0-9!@#.,/: ()&'-]*$"
                 />
               </div>
             </div>
