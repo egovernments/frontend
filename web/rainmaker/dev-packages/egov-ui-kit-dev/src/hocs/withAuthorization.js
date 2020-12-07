@@ -61,7 +61,7 @@ const withAuthorization = (options = {}) => (Component) => {
         var newList =JSON.stringify(storedModuleList);
         setStoredModulesList(newList);
         const tenantId = process.env.REACT_APP_NAME === "Citizen" ? this.citizenTenantId(): getTenantId();
-        this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+        this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId, true);
         this.setState({localeFetched:true});
       }
     }
@@ -295,7 +295,7 @@ const withAuthorization = (options = {}) => (Component) => {
   const mapDispatchToProps = (dispatch) => {
     return {
       logout: () => dispatch(logout()),
-      fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
+      fetchLocalizationLabel: (locale, moduleName, tenantId, isFromModule)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId, isFromModule))
     };
   };
   return compose(
