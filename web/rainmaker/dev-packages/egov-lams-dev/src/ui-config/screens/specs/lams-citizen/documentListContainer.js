@@ -1,5 +1,3 @@
-import {documentList} from "./documentList";
-
 export const documentListContainer = {
     uiFramework: "custom-containers-local",
     moduleName: "egov-lams",
