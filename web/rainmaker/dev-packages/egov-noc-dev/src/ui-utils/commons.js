@@ -128,6 +128,8 @@ export const download = async(receiptQueryString, mode = "download" ,configKey =
        if(payloadReceiptDetails.Payments[0].paymentMode=="CASH")
       {
         payloadReceiptDetails.Payments[0].instrumentDate=null;
+        payloadReceiptDetails.Payments[0].instrumentNumber=null;
+
       }
       if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
         payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
