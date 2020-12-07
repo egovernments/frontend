@@ -27,6 +27,14 @@ class CityPickerDialog extends Component {
   };
 
   prepareResultsForDisplay = (results = []) => {
+    results.sort(function(a, b){
+      let nameA=a.key.toLowerCase(), nameB=b.key.toLowerCase()
+      if (nameA < nameB) //sort string ascending
+          return -1 
+      if (nameA > nameB)
+          return 1
+      return 0 //default return value (no sorting)
+  });
     return results.map((result, index) => {
       const mappedResult = {};
       mappedResult.key = result.key;
@@ -34,6 +42,8 @@ class CityPickerDialog extends Component {
       mappedResult.id = result.key;
       return mappedResult;
     });
+
+
   };
 
   onCityFieldClicked = () => {
