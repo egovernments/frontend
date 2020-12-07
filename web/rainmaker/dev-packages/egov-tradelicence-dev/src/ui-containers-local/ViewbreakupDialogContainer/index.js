@@ -107,7 +107,8 @@ class ViewBreakupContainer extends React.Component {
                     color: "rgba(0, 0, 0, 0.8700000047683716)",
                     fontSize: "14px",
                     fontWeigt: 400,
-                    lineSpacing: "17px"
+                    lineSpacing: "17px",
+                    paddingLeft: "10px"
                   }
             }
           />

@@ -3,7 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { searchApiCall } from "./function";
 import { ifUserRoleExists } from "../../utils";
-import "../index.css"
+import "./index.css"
 
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 // console.log("tenantId--- ", tenantId);
