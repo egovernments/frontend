@@ -40,7 +40,8 @@ class TastStatusContainer extends React.Component {
   };
 
   render() {
-    const { classes, ProcessInstances, moduleName} = this.props;
+    const { classes, moduleName} = this.props;
+    let {ProcessInstances} = this.props;
     let currentObj =
       ProcessInstances && ProcessInstances[ProcessInstances.length - 1];
       if(currentObj && currentObj.businessService && currentObj.businessService === "BPA"){
@@ -53,6 +54,9 @@ class TastStatusContainer extends React.Component {
             currentObj.assignee.name = assigness.join(',');
           }
       }
+      ProcessInstances = ProcessInstances.filter(
+        record => record.action !== "ADHOC"
+      );
     let taskLabel = "Task Status";
     let taskKey   = "TL_TASK_STATUS";
     if(moduleName === 'NewWS1' || moduleName === 'NewSW1'){
