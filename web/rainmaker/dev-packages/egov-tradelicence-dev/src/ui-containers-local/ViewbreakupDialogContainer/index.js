@@ -221,7 +221,7 @@ class ViewBreakupContainer extends React.Component {
               <Divider className={classes.root} />
               {tradeUnitData &&
                 tradeUnitData.length > 0 &&
-                getGridItem(tradeTotal, classes)}
+                 getGridItem(tradeTotal, classes)}
               {accessoriesUnitData && accessoriesUnitData.length > 0 && (
                 <div style={{ paddingBottom: "12px", marginTop: 20 }}>
                   <LabelContainer
@@ -249,7 +249,7 @@ class ViewBreakupContainer extends React.Component {
               {PenaltyArray&&PenaltyArray.length >0 && (
               this.getRebatePenalty("TL_RENEWAL_PENALTY",PenaltyTotal,classes,style)
               )}
-              {getGridItem(totalBill, classes, style)}
+              { (RebateTotal > 0 || PenaltyTotal >0)  && getGridItem(totalBill, classes, style)} 
             </div>
           ) : (
             <div style={{ padding: "16px", width: "500px" }}>
