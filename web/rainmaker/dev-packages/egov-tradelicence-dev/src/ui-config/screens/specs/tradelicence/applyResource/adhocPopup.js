@@ -91,7 +91,34 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 
   showHideAdhocPopup(state, dispatch);
 };
-
+let totalAmount = (estimateCardData) => {
+  let tlTax=0;
+  let commonRebate=0;
+  let commonPenalty=0;
+  let adhocPenalty=0;
+  let adhocRebate = 0;
+  estimateCardData.forEach(data => {
+   
+    if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
+      tlTax = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
+      commonRebate = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
+      commonPenalty = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
+      adhocPenalty= data.value ? data.value : 0;
+    
+    }
+    if(data.name.labelKey === 'TL_ADHOC_REBATE'){
+      adhocRebate= data.value ? data.value : 0;
+      }
+  });
+    
+  return tlTax+adhocPenalty+commonPenalty-Math.abs(commonRebate)-Math.abs(adhocRebate);
+}
 const updateAdhoc = (state, dispatch) => {
 let isFormValid = true;
  const  isPenaltyValid = validateFields(
@@ -130,11 +157,9 @@ let isFormValid = true;
     "Licenses[0].tradeLicenseDetail.additionalDetail.garbageCharges"
   );
   if (adhocAmount || rebateAmount || garbageCharges) {
-    const totalAmount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
-    );
-    if (rebateAmount && rebateAmount > totalAmount) {
+   
+    const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
+    if (rebateAmount && rebateAmount > totalAmt) {
       dispatch(
         toggleSnackbar(
           true,
@@ -342,7 +367,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageComments"
+        jsonPath: "Licenses[0].tradeLicenseDetail.adhocComments"
       }),
     }),
     },
