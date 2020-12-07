@@ -90,13 +90,13 @@ class Dashboard extends Component {
     let filters = getFilterObj(this.props.GFilterData, this.props.mdmsData, this.state.page);
     let filters1;
 
-    if(this.state.page.includes('ulb')) {
+  /*   if(this.state.page.includes('ulb')) {
       if(!filters['tenantId']) {
         let tenentFilter = []
         tenentFilter.push(`${localStorage.getItem('tenant-id')}`)
         filters['tenantId'] = tenentFilter
       }
-    }
+    } */
     _.each(chartsData, (k, v) => {
       let code = v,requestBody;
       if (code) {
