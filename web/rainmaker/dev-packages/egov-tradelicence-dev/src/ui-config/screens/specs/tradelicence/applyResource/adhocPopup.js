@@ -4,13 +4,14 @@ import {
   getSelectField,
   getCommonContainer,
   getCommonSubHeader,
-  getLabel
+  getLabel,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { showHideAdhocPopup } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
-import { createEstimateData } from "../../utils";
+import { createEstimateData,validateFields } from "../../utils";
 import {
   prepareFinalObject,
   toggleSnackbar
@@ -90,8 +91,63 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 
   showHideAdhocPopup(state, dispatch);
 };
-
+let totalAmount = (estimateCardData) => {
+  let tlTax=0;
+  let commonRebate=0;
+  let commonPenalty=0;
+  let adhocPenalty=0;
+  let adhocRebate = 0;
+  let garbageFee=0;
+  estimateCardData.forEach(data => {
+   
+    if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
+      tlTax = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
+      commonRebate = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
+      commonPenalty = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
+      adhocPenalty= data.value ? data.value : 0;
+    
+    }
+    if(data.name.labelKey === 'TL_ADHOC_REBATE'){
+      adhocRebate= data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_GARBAGE_FEE'){
+        garbageFee= data.value ? data.value : 0;
+    }
+  });
+    
+  return tlTax+adhocPenalty+commonPenalty+garbageFee-Math.abs(commonRebate)-Math.abs(adhocRebate);
+}
 const updateAdhoc = (state, dispatch) => {
+let isFormValid = true;
+ const  isPenaltyValid = validateFields(
+    "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
+  const  isRebateValid = validateFields(
+    "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
+  const  isGcValid = validateFields(
+    "components.adhocDialog.children.popup.children.adhocGCCard.children.GCReasonContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
+
+  if(!isPenaltyValid || !isRebateValid || !isGcValid){
+    isFormValid=false;
+  }
+  if(isFormValid){
   const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.adhocPenalty"
@@ -105,11 +161,9 @@ const updateAdhoc = (state, dispatch) => {
     "Licenses[0].tradeLicenseDetail.additionalDetail.garbageCharges"
   );
   if (adhocAmount || rebateAmount || garbageCharges) {
-    const totalAmount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
-    );
-    if (rebateAmount && rebateAmount > totalAmount) {
+   
+    const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
+    if (rebateAmount && rebateAmount > totalAmt) {
       dispatch(
         toggleSnackbar(
           true,
@@ -135,6 +189,20 @@ const updateAdhoc = (state, dispatch) => {
       )
     );
   }
+}
+
+else{
+  dispatch(
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Please enter valid data",
+        labelKey: "TL_VALID_FIELDS_ERROR_MSG"
+      },
+      "warning"
+    )
+  );
+}
 };
 
 export const adhocPopup = getCommonContainer({
@@ -249,6 +317,8 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenalty"
         }),
       
@@ -301,7 +371,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageComments"
+        jsonPath: "Licenses[0].tradeLicenseDetail.adhocComments"
       }),
     }),
     },
@@ -342,6 +412,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
         }),
         rebateReason: getSelectField({
@@ -433,6 +504,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageCharges"
         }),
         
