@@ -4,13 +4,14 @@ import {
   getSelectField,
   getCommonContainer,
   getCommonSubHeader,
-  getLabel
+  getLabel,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { showHideAdhocPopup } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
-import { createEstimateData } from "../../utils";
+import { createEstimateData,validateFields } from "../../utils";
 import {
   prepareFinalObject,
   toggleSnackbar
@@ -92,6 +93,30 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 };
 
 const updateAdhoc = (state, dispatch) => {
+let isFormValid = true;
+ const  isPenaltyValid = validateFields(
+    "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
+  const  isRebateValid = validateFields(
+    "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
+  const  isGcValid = validateFields(
+    "components.adhocDialog.children.popup.children.adhocGCCard.children.GCReasonContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
+
+  if(!isPenaltyValid || !isRebateValid || !isGcValid){
+    isFormValid=false;
+  }
+  if(isFormValid){
   const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.adhocPenalty"
@@ -135,6 +160,20 @@ const updateAdhoc = (state, dispatch) => {
       )
     );
   }
+}
+
+else{
+  dispatch(
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Please enter valid data",
+        labelKey: "TL_VALID_FIELDS_ERROR_MSG"
+      },
+      "warning"
+    )
+  );
+}
 };
 
 export const adhocPopup = getCommonContainer({
@@ -249,6 +288,8 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenalty"
         }),
       
@@ -342,6 +383,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
         }),
         rebateReason: getSelectField({
@@ -433,6 +475,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageCharges"
         }),
         
