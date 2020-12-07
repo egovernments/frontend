@@ -161,7 +161,7 @@ export const onlineDetails = getCommonContainer({
       labelName: "Enter bank IFSC",
       labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
     },
-    required: true,
+    // required: true,
     jsonPath: "ReceiptTemp[0].instrument.ifscCode",
     iconObj: {
       iconName: "search",
