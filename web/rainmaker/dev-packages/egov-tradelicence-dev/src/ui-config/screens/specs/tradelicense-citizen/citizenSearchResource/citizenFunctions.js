@@ -5,7 +5,7 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
-
+import get from "lodash/get";
 const getMdmsData = async () => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -14,6 +14,10 @@ const getMdmsData = async () => {
         {
           moduleName: "tenant",
           masterDetails: [{ name: "citymodule" }]
+        },
+        {
+          moduleName: "TradeLicense",
+          masterDetails: [{ name: "TradeRenewal" }]
         }
       ]
     }
@@ -46,6 +50,7 @@ export const fetchData = async (action, state, dispatch) => {
       tenants
     )
   );
+  dispatch(prepareFinalObject("renewalPeriod", get(mdmsRes.MdmsRes, "TradeLicense.TradeRenewal[0].renewalPeriod")));
   try {
     /*Mseva 1.0 */
     // let data =

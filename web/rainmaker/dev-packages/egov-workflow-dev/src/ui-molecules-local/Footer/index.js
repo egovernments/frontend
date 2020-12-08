@@ -274,7 +274,7 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `renewalPeriod`
       );
-      if(rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
+      if(rolecheck && status === "APPROVED"  &&
       duration<=renewalPeriod && applicationNumber===renApplNo){
         const editButton = {
           label: "Edit",

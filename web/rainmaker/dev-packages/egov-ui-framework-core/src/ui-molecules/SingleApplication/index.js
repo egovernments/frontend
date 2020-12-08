@@ -166,11 +166,14 @@ class SingleApplication extends React.Component {
   };
 
   render() {
-    const { searchResults, classes, contents, moduleName, setRoute } = this.props;
+    const { searchResults, classes, contents, moduleName, setRoute,renewalPeriod } = this.props;
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
           searchResults.map(item => {
+            const currentDate=Date.now();
+            const duration=item.validTo-currentDate;
+            
             return (
               <Card className={classes.card}>
                 <CardContent>
@@ -235,8 +238,9 @@ class SingleApplication extends React.Component {
                       const url = this.onCardClick(item);
                       // setRoute(url);
                     }}>
+                      
                       <Label
-                        labelKey={(item.status === "APPROVED") && moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
+                        labelKey={(item.status === "APPROVED") && duration<=renewalPeriod && moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL" : "TL_VIEW_DETAILS"}
                         textTransform={"uppercase"}
                         style={{
                           color: "#fe7a51",
@@ -289,7 +293,11 @@ const mapStateToProps = state => {
     ["desc"]);
   searchResults = searchResults ? searchResults : searchResultsRaw;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
-  return { screenConfig, searchResults };
+  const renewalPeriod = get(
+    state.screenConfiguration.preparedFinalObject,
+    `renewalPeriod`
+  ); 
+  return { screenConfig, searchResults,renewalPeriod };
 };
 
 const mapDispatchToProps = dispatch => {
