@@ -18,13 +18,53 @@ const checkIfFormIsValid = async (state, dispatch) => {
   let isFormValid = true;
 
   const isLeaseDetailsValid = validateFields(
-    "components.newApplicationDetailsCard.children.cardContent.children",
+    //"components.div1.children.details.newApplicationDetailsCard.children.cardContent.children",
+    "components.div1.children.details.children.cardContent.children",
     //"components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children",
     state,
-    dispatch
+    dispatch,
+    "newApplication"
   );  
 
-  isFormValid = isLeaseDetailsValid;
+  const isEmployeeDetailsValid = validateFields(
+    "components.div2.children.details.children.cardContent.children.ownerDetails.children.cardContent.children.ownerDetailsCardContainer.children",
+    state,
+    dispatch,
+    "newApplication"
+  );  
+
+  const uploadedDocsInRedux = get(
+    state.screenConfiguration.preparedFinalObject,
+    "lamsStore.uploadedDocsInRedux",
+    []
+  );
+  const requiredDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "lamsStore.requiredDocuments",
+    []
+  );
+
+  // for(var key in uploadedDocsInRedux)
+  // {
+  //   if(uploadedDocsInRedux[key])
+  //   {
+  //     let documentType = uploadedDocsInRedux[key].documentType;
+  //     let doc = jp.query(requiredDocuments[0].applicationDocuments, "$[?(@.code == '"+ documentType +"')]")
+  //     if(doc && doc.required)
+  //   }
+  // }
+  // for (var y = 0; y < uploadedTempDocData.length; y++) {
+  //   if (
+  //     uploadedTempDocData[y].required &&
+  //     !some(uploadedDocData, { documentType: uploadedTempDocData[y].code })
+  //   ) {
+  //     isFormValid = false;
+  //   }
+  // }
+
+  isFormValid = ( isLeaseDetailsValid && isEmployeeDetailsValid ) ? true : false;
+
+  //alert("Is valid form "+isEmployeeDetailsValid);
 
   if (isFormValid) {
     try {

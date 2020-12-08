@@ -11,13 +11,14 @@ import {documentList} from "./documentList";
 import { ifUserRoleExists } from "../utils";
 import get from "lodash/get";
 import jp from "jsonpath";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const newApplication = {
   uiFramework: "material-ui",
   name: "newApplication",
   beforeInitScreen:(action, state, dispatch) => {
 
-    const LeaseRenewalWorkflowCode = "LAMS_NewLR_V2";
     const businessService = "LAMS";
     const workflowAction = "APPLY";
 
@@ -25,14 +26,20 @@ const newApplication = {
     dispatch(prepareFinalObject("lamsStore.uploadedDocsInRedux", {})); //Clear all the data first
     dispatch(prepareFinalObject("lamsStore.Lease[0]", {})); //Clear all the data first
     dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", LeaseRenewalWorkflowCode));
     dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", ""));
    
     loadMdmsData(action, state, dispatch).then((response) => {
       const tenants = get(response, "MdmsRes.tenant.tenants");
       //Requires City Module Updations of MDMS? tobechanged
       let jpFilter = "$[?(@.code != 'pb')]";
       let onlyCBs = jp.query(tenants, jpFilter);
+      if(!(process.env.REACT_APP_NAME === "Citizen"))
+      {
+        let tenantId = getTenantId();
+        let currentCbFilter = "$[?(@.code == 'pb.testing' || @.code == '"+tenantId+"')]";
+        onlyCBs = jp.query(onlyCBs, currentCbFilter );
+      } 
       dispatch(prepareFinalObject("lamsStore.allTenants", onlyCBs));
     });
 
@@ -65,6 +72,14 @@ const newApplication = {
             false
           )
         );
+        dispatch(
+          handleField(
+            "newApplication",
+            "components.div2",
+            "visible",
+            false
+          )
+        );
       });
     }
 
@@ -74,6 +89,14 @@ const newApplication = {
         handleField(
           "newApplication",
           "components.div1",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div2",
           "visible",
           false
         )
@@ -111,7 +134,7 @@ const newApplication = {
       children: {
         details: OwnerInfoCard
       },
-      visible: process.env.REACT_APP_NAME === "Citizen" ? false: true
+      visible: process.env.REACT_APP_NAME === "Citizen" ? false: checkIfCitizenEditScreen()? false: true
     },
     newApplicationDocumentsCard,
     div: {

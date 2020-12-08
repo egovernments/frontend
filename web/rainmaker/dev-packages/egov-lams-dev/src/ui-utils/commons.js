@@ -8,7 +8,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -650,3 +650,74 @@ const getAllFileStoreIds = async ProcessInstances => {
     }, {})
   );
 };
+
+export const getLamsRoles = () =>{
+  let userInfo = JSON.parse(localStorageGet("user-info"));
+  let jpExpression = "$.roles[?(@.code=='LR_APPROVER_CEO' || @.code=='LR_APPROVER_DEO')].code";
+  let lamsRoles = jp.query(userInfo, jpExpression );
+  //console.log("Lams Roles are ",lamsRoles);
+  return lamsRoles;
+}
+
+
+
+export const getWorkflowFilterBasedOnLamsRoles = () => {
+  let lamsRoles = getLamsRoles();
+  let filter = "";
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1 && lamsRoles.indexOf('LR_APPROVER_DEO') > -1 )
+    filter = "@.businessService== 'LAMS_NewLR_CEO_V3' || @.businessService== 'LAMS_NewLR_DEO_V3'";
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1)
+    filter = "@.businessService== 'LAMS_NewLR_CEO_V3'";
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_DEO') > -1)
+    filter = "@.businessService== 'LAMS_NewLR_DEO_V3'";
+  return filter;
+}
+
+//This function should be used only on the employee side.
+export const constructQueryParamsBasedOnLamsRoles = () => {
+
+  let queryParams = [
+    { key: "tenantId", value: getTenantId() }
+  ];
+
+  // tobechanged : Since workflow service filter is having problem dont try to filter. Get all.
+  // let lamsRoles = getLamsRoles();
+  // if(lamsRoles.indexOf('LR_APPROVER_CEO')>-1)
+  //   queryParams.push({ key: "businessServices", value: "LAMS_NewLR_CEO_V3" });
+  // if(lamsRoles.indexOf('LR_APPROVER_DEO')>-1)
+  //   queryParams.push({ key: "businessServices", value: "LAMS_NewLR_DEO_V3" });
+
+  return queryParams;
+}
+
+//This function can be used on both Employee and Citizen side functionality.
+export const constructQueryParamsBasedOnCurrentWorkflowType = (state) => {
+
+  let workflowCode = get(state, "screenConfiguration.preparedFinalObject.lamsStore.Lease[0].workflowCode");
+  let tenantId = get(state, "screenConfiguration.preparedFinalObject.lamsStore.Lease[0].tenantId");
+
+  let queryParams = [
+    { key: "tenantId", value: tenantId }
+  ];
+  queryParams.push({ key: "businessServices", value: workflowCode })
+
+  return queryParams;
+
+  // if(process.env.REACT_APP_NAME === "Citizen")
+  // {
+  //   queryParams.push({ key: "businessServices", value: "LAMS_NewLR_CEO_V3" });
+  //   queryParams.push({ key: "businessServices", value: "LAMS_NewLR_DEO_V3" });
+  //   return queryParams;
+  // }
+  // else
+  // {
+  //   let lamsRoles = getLamsRoles();
+  //   if(lamsRoles.indexOf('LR_APPROVER_CEO')>-1)
+  //     queryParams.push({ key: "businessServices", value: "LAMS_NewLR_CEO_V3" });
+  //   if(lamsRoles.indexOf('LR_APPROVER_DEO')>-1)
+  //     queryParams.push({ key: "businessServices", value: "LAMS_NewLR_DEO_V3" });
+  //   return queryParams;
+  // }
+}

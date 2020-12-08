@@ -187,14 +187,14 @@ class Footer extends React.Component {
           labelName: { buttonLabel },
           labelKey: `WF_${appName.toUpperCase()}_${moduleName.toUpperCase()}_${buttonLabel}`,
           link: () => {
-            (moduleName === "LAMS_NewLR_V2" || moduleName === "EDITRENEWAL" ) && buttonLabel==="APPLY" ? onDialogButtonClick(buttonLabel, isDocRequired) : 
+            (moduleName === "LAMS_NewLR_CEO_V3" || moduleName === "LAMS_NewLR_DEO_V3" || moduleName === "EDITRENEWAL" ) && buttonLabel==="APPLY" ? onDialogButtonClick(buttonLabel, isDocRequired) : 
             this.openActionDialog(item);
           }
         };
       });
 
     console.log("Check the contract data here ",contractData, downloadMenu);
-    if (moduleName === "LAMS_NewLR_V2") {
+    if (moduleName === "LAMS_NewLR_CEO_V3" || moduleName === "LAMS_NewLR_DEO_V3") {
 
 
       status = get(

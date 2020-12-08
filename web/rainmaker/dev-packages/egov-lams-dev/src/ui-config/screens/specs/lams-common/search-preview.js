@@ -13,10 +13,13 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 
+import { localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import jp from "jsonpath";
+
+
 import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
-import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import {getMdmsData, loadMdmsData} from "../lams-utils/utils";
 import {setDocsForEditFlow} from "../lams-utils/utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -33,6 +36,7 @@ import {showHideAdhocPopup, getDialogButton} from "../utils"
 import { getReviewDocuments } from "./searchPreviewResource/review-documents";
 import {userDetailsCard} from "./searchPreviewResource/userDetailsCard";
 import {leaseDetailsCardReview} from "./searchPreviewResource/leaseDetailsCardReview";
+import {constructQueryParamsBasedOnCurrentWorkflowType} from "../../../../ui-utils/commons";
 
 import { workflowMasterData, leaseData , 
   licenseData, 
@@ -89,11 +93,8 @@ let loadLeaseDetails = async (action, state, dispatch) => {
 
 let loadWorkflowMasterData = async (action, state, dispatch) => {
   try{
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    const queryParams = [
-      { key: "businessServices", value: "LAMS_NewLR_V2" },//"LAMS_NewLR_V2"
-      { key: "tenantId", value: tenantId }
-    ];
+    const queryParams = constructQueryParamsBasedOnCurrentWorkflowType(state);
+    //console.log("The query params is ", queryParams);
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -132,6 +133,9 @@ let setDocumentsInfo = async (action, state, dispatch) => {
   }
 }
 
+const asdfa = () =>{
+  
+}
 const searchPreview = {
   uiFramework: "material-ui",
   name: "searchPreview",
@@ -156,14 +160,12 @@ const searchPreview = {
       }
 
       setDocumentsInfo(action, state, dispatch);
+
+      dispatch(prepareFinalObject("LicensesTemp", LicensesTemp))
+
+      //tobechanged  uncomment below code
+      loadWorkflowMasterData(action, state, dispatch);
     });
- 
-    
-    dispatch(prepareFinalObject("LicensesTemp", LicensesTemp))
-
-    //tobechanged  uncomment below code
-    loadWorkflowMasterData(action, state, dispatch);
-
     //localStorageSet("businessServiceData", JSON.stringify(businessServiceData));
 
     return action;
@@ -210,7 +212,9 @@ const searchPreview = {
           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "lamsStore.Lease",
-            moduleName: "LAMS_NewLR_V2",  //tobechanged
+            moduleName:  "", //"LAMS_NewLR_CEO_V3",//get(state, "screenConfiguration.preparedFinalObject.lamsStore.Lease[0].workflowCode"),//"LAMS_NewLR_V2",  //tobechanged
+            //Dont send moduleName here. Pick this up from the state inside WorkflowContainer 
+            //For this to work, the application data should be loaded and data should be ready.(Done in beforeInitScreen)
             updateUrl: "/lams-services/v1/_update"
           }
         },

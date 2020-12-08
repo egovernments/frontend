@@ -155,7 +155,7 @@ class WorkFlowContainer extends React.Component {
     toggleSpinner();
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
-    if (moduleName === "LAMS_NewLR_V2") {
+    if (moduleName === "LAMS_NewLR_CEO_V3" || moduleName === "LAMS_NewLR_DEO_V3") {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
           preparedFinalObject,
@@ -268,7 +268,7 @@ class WorkFlowContainer extends React.Component {
         }
 
         
-        if (moduleName === "LAMS_NewLR_V2") path = "Licenses[0].licenseNumber";
+        if (moduleName === "LAMS_NewLR_CEO_V3" || moduleName === "LAMS_NewLR_DEO_V3") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
@@ -643,8 +643,12 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances,
       prepareFinalObject,
       dataPath,
-      moduleName
+      //moduleName,
+      screenConfiguration
     } = this.props;
+    
+    let moduleName = get(screenConfiguration, "preparedFinalObject.lamsStore.Lease[0].workflowCode");
+
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
@@ -690,7 +694,7 @@ const mapStateToProps = state => {
   const { preparedFinalObject } = screenConfiguration;
   const { workflow } = preparedFinalObject;
   const { ProcessInstances } = workflow || [];
-  return { ProcessInstances, preparedFinalObject };
+  return { ProcessInstances, preparedFinalObject, screenConfiguration};
 };
 
 const mapDispacthToProps = dispatch => {

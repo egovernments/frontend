@@ -117,9 +117,8 @@ const onRowClick = rowData => {
     //   }`;
     //   break;
     default:
-      window.location.href = `/lams-common/search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[5]}`;
+      window.location.href = `../lams-common/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`;
+      //setRoute(`/lams-common/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[5]}`);
       break;
       //setRoute(`/lams-common/search-preview?applicationNumber=${rowData[0]}&tenantId=${rowData[6]}`);
       //break;

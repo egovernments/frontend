@@ -20,6 +20,7 @@ const acknowledgement = {
   uiFramework: "material-ui",
   name: "acknowledgement",
   beforeInitScreen:(action, state, dispatch) => {
+    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     dispatch(toggleSpinner());
     return action;
   },

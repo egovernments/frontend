@@ -15,7 +15,7 @@ import {
   import {loadSurveyNumbers, getSurveyDetails} from "../lams-utils/utils"
   import {getDetailsForOwner, getMaxDateForDOB} from "../utils"
   import {documentListContainer} from "./documentListContainer";
-  import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import {prepareFinalObject,  handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {leaseDetailsCard} from "./leaseDetailsCard";
 
 import PropTypes from "prop-types";
@@ -44,6 +44,9 @@ import PropTypes from "prop-types";
         true
       )
     );
+    const located = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located");
+    const LeaseRenewalWorkflowCode = (located === "insideCivil")? "LAMS_NewLR_CEO_V3": "LAMS_NewLR_DEO_V3";
+    dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", LeaseRenewalWorkflowCode));
   }
 
   const surveyNoChanged = (action, state, dispatch) => {
@@ -99,6 +102,7 @@ import PropTypes from "prop-types";
               labelKey: "LAMS_LEASE_DETAILS"
             },
             {
+              disableValidation:true,
               style: {
                 marginBottom: 18
               }
@@ -155,6 +159,9 @@ import PropTypes from "prop-types";
                 label: "LAMS_CATEGORY_ISOLATED_POCKET"
               },
             ],
+            props:{
+              disabled: true,
+            },
             jsonPath: "lamsStore.Lease[0].category",
             autoSelect: true,
             visible: false,
@@ -230,7 +237,7 @@ import PropTypes from "prop-types";
                props:{
                 className: "autocomplete-dropdown",
                 suggestions: [],
-                disabled:true,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+                disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
                 label: {
                   labelName: "Enter Survey Number",
                   labelKey: "LAMS_ENTER_SURVEY_NO"
@@ -265,7 +272,7 @@ import PropTypes from "prop-types";
             componentPath: "Div",
             visible:false,
             props: {
-             
+              disableValidation: true,
             },
             children: {
               details: leaseDetailsCard

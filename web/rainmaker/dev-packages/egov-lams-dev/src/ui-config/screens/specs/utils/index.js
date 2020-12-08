@@ -54,8 +54,7 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
-  //screen = "apply"
-  screen = "newCollection"
+  screen = "newApplication"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
@@ -72,6 +71,8 @@ export const validateFields = (
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
+        (fields[variable].props.disableValidation === undefined ||
+          !fields[variable].props.disableValidation) &&
         !validate(
           screen,
           {
@@ -85,6 +86,15 @@ export const validateFields = (
           true
         )
       ) {
+        // let s = {
+        //   ...fields[variable],
+        //   value: get(
+        //     state.screenConfiguration.preparedFinalObject,
+        //     fields[variable].jsonPath
+        //   )
+        // };
+        // console.log("Checked for this ",s);
+        // alert("not valid for "+variable);
         isFormValid = false;
       }
     }
