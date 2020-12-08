@@ -6,6 +6,7 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 
 const g8Details = getCommonGrayCard({
   header: getCommonSubHeader({
@@ -36,7 +37,12 @@ const g8Details = getCommonGrayCard({
       },
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "ReceiptTemp[0].Bill[0].billDetails[0].manualReceiptDate"
+      jsonPath: "ReceiptTemp[0].Bill[0].billDetails[0].manualReceiptDate",
+      props: {
+        inputProps: {
+          max: getTodaysDateInYMD(),
+        }
+      }
     })
   })
 });
