@@ -169,7 +169,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     ];
     const payload = await getSearchResults(queryObjectSearch);
     const length = payload && payload.Licenses.length > 0 ? get(payload, `Licenses`, []).length : 0;
+    const validTo = payload && payload.Licenses.length > 0 ? get(payload, `Licenses[0].validTo`, []):null;
+    const renApplNo = payload && payload.Licenses.length > 0 ? get(payload, `Licenses[0].applicationNumber`, []):null;
     dispatch(prepareFinalObject("licenseCount", length));
+    dispatch(prepareFinalObject("validTo", validTo));
+    dispatch(prepareFinalObject("renApplNo", renApplNo));
+
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"

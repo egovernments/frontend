@@ -244,7 +244,14 @@ class Footer extends React.Component {
         `licenseCount`,
         1
       );
-
+      const validTo = get(
+        state.screenConfiguration.preparedFinalObject,
+        `validTo`
+      );
+      const renApplNo = get(
+        state.screenConfiguration.preparedFinalObject,
+        `renApplNo`
+      );
       const rolearray =
         getUserInfo() &&
         JSON.parse(getUserInfo()).roles.filter(item => {
@@ -255,10 +262,12 @@ class Footer extends React.Component {
             return true;
         });
       const rolecheck = rolearray.length > 0 ? true : false;
-      const validTo = get(
-        state.screenConfiguration.preparedFinalObject,
-        `Licenses[0].validTo`
-      );
+      // const validTo = get(
+      //   state.screenConfiguration.preparedFinalObject,
+      //   `Licenses[0].validTo`
+      // );
+      
+      console.log(validTo,"validTo");
       const currentDate=Date.now();
       const duration=validTo-currentDate;
       const renewalPeriod = get(
@@ -266,7 +275,7 @@ class Footer extends React.Component {
         `renewalPeriod`
       );
       if(rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
-      duration<=renewalPeriod ){
+      duration<=renewalPeriod && applicationNumber===renApplNo){
         const editButton = {
           label: "Edit",
           labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
