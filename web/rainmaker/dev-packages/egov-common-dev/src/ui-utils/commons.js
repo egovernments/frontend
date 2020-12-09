@@ -3,7 +3,7 @@ import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/ut
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
+import { downloadPdf, getPaymentSearchAPI, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -489,9 +489,9 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
-    if(fileRes && !fileRes[fileStoreId]){
+    if (fileRes && !fileRes[fileStoreId]) {
       console.error('ERROR IN DOWNLOADING RECEIPT');
-      return ;
+      return;
     }
     if (mode === 'download') {
       downloadPdf(fileRes[fileStoreId]);
@@ -522,8 +522,15 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       ACTION: "_get",
     },
   };
+  let businessService = '';
+  receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+    if (query.key == "businessService") {
+      businessService = query.value;
+    }
+  })
+  receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
   try {
-    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+    httpRequest("post", getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
@@ -610,7 +617,6 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
     }
   } catch (error) {
     console.log(error);
-
   }
 
 }

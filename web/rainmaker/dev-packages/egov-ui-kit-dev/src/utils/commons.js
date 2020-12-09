@@ -12,6 +12,7 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
 import React from "react";
+import { FETCHBILL, PAYMENTSEARCH } from "./endPoints";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
 
@@ -1095,3 +1096,13 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
     console.log(e);
   }
 };
+
+
+
+export const getPaymentSearchAPI = (businessService='')=>{
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`
+}
+
+export const getFetchBillAPI = ()=>{
+  return `${FETCHBILL.GET.URL}`
+}

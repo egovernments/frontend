@@ -60,7 +60,8 @@ class PaymentHistory extends Component {
                                 onClick={() => {
                                     const receiptQueryString= [
                                             { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
-                                            { key: "tenantId", value: payment.paymentDetails[0].tenantId }
+                                            { key: "tenantId", value: payment.paymentDetails[0].tenantId },
+                                            { key: "businessService", value: 'PT' }
                                           ]
                                     downloadReceipt(receiptQueryString)
                                     // lastElement.onClick();

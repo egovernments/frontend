@@ -1,14 +1,12 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import {
-  toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { hideSpinner, showSpinner, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { PAYMENTSEARCH } from "egov-ui-kit/utils/endPoints";
 import { set } from "lodash";
 import get from "lodash/get";
 import { ifUserRoleExists, validateFields } from "../../utils";
-
 
 
 export const getRedirectionURL = () => {
@@ -145,21 +143,24 @@ const cancelReceipt = async (state, dispatch) => {
 
   if (isFormValid && paymentWorkflows && Array.isArray(paymentWorkflows) && paymentWorkflows.length > 0) {
     try {
+      dispatch(showSpinner());
       set(paymentWorkflows[0], 'action', 'CANCEL');
       set(paymentWorkflows[0], 'tenantId', getQueryArg(window.location.href, "tenantId"));
       set(paymentWorkflows[0], 'paymentId', get(state.screenConfiguration.preparedFinalObject, 'PaymentReceipt.id', ''));
       let payload = await httpRequest(
         "post",
-        `collection-services/payments/${getQueryArg(window.location.href, "businessService")}/_workflow`,
+        `${PAYMENTSEARCH.GET.URL}${getQueryArg(window.location.href, "businessService")}/_workflow`,
         "_search",
         [],
         { paymentWorkflows: paymentWorkflows }
       );
       if (payload) {
+        dispatch(hideSpinner());
         //  getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
         dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&status=success`));
       }
     } catch (error) {
+      dispatch(hideSpinner());
       dispatch(
         toggleSnackbar(
           true,
