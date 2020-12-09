@@ -12,6 +12,7 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import set from "lodash/set";
 import React from "react";
+import { FETCHBILL, PAYMENTSEARCH } from "./endPoints";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
 
@@ -1035,6 +1036,7 @@ export const getModuleName = () => {
   const pathName = window.location.pathname;
   if (pathName.indexOf("inbox") > -1) { return "rainmaker-common"; }
   else if (pathName.indexOf("dss") > -1) { return "rainmaker-dss"; }
+  else if (pathName.indexOf("receipts") > -1) { return "rainmaker-receipts"; }
   else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("rainmaker-pt") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("public-search") > -1) { return "rainmaker-pt"; }
   else if (pathName.indexOf("complaint") > -1  || pathName.indexOf("pgr") > -1  ||  pathName.indexOf("resolve-success") > -1 || pathName.indexOf("employee-directory") > -1 || pathName.indexOf("reopen-acknowledgement") > -1|| pathName.indexOf("feedback") > -1|| pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
@@ -1094,3 +1096,13 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
     console.log(e);
   }
 };
+
+
+
+export const getPaymentSearchAPI = (businessService='')=>{
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`
+}
+
+export const getFetchBillAPI = ()=>{
+  return `${FETCHBILL.GET.URL}`
+}

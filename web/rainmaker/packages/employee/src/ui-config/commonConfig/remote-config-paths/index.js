@@ -25,6 +25,7 @@ const remoteConfigPath = (path, screenKey) => {
     case "fire-noc":
       config = require(`egov-firenoc/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "receipts":
     case "abg":
       config = require(`egov-abg/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;

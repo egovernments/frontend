@@ -68,7 +68,7 @@ export const getSearchResults = async queryObject => {
 
     return response;
   } catch (error) {
-    enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
+    enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",store.dispatch);
     console.error(error);
     store.dispatch(
       toggleSnackbar(

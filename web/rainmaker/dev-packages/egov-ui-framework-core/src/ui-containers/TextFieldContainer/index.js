@@ -43,6 +43,9 @@ class TextFieldContainer extends React.Component {
       title,
       errorMessage,
       error,
+      disabled=false,
+      multiline=false,
+      rows="1",
       ...rest
     } = this.props;
     if (!isEmpty(iconObj) && iconObj.onClickDefination) {
@@ -83,6 +86,7 @@ class TextFieldContainer extends React.Component {
       return (
         <TextfieldWithIcon
           label={translatedLabel}
+          disabled={disabled}
           placeholder={translatedPlaceholder}
           iconObj={iconObj}
           value={value ? value : translatedPlaceholder}
@@ -123,6 +127,9 @@ class TextFieldContainer extends React.Component {
             iconObj={iconObj}
             value={value ? value : translatedPlaceholder}
             {...rest}
+            disabled={disabled}
+            multiline={multiline}
+            rows={rows}
             error={error}
             helperText={errorMessage}
           >
@@ -148,6 +155,9 @@ class TextFieldContainer extends React.Component {
                 : value
             }
             {...rest}
+            disabled={disabled}
+            multiline={multiline}
+            rows={rows}
             error={error}
             helperText={errorMessage}
           />
