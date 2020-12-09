@@ -238,8 +238,7 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
     }
-
-    
+        
     try {     
       if (beforeSubmitHook) {
         data = beforeSubmitHook(data);
@@ -417,6 +416,39 @@ class WorkFlowContainer extends React.Component {
         case "PDDE-EXAMINATION":
         case "DGDE-EXAMINATION":
         case "MOD-EXAMINATION":
+          const  comment = get(
+            preparedFinalObject,
+            `lamsStore.Lease[0].comment`,
+            []
+          );
+          
+          if(!comment)
+          {
+            toggleSnackbar(
+              true,
+              { labelName: "Please fill all mandatory fields !", labelKey: "COMMON_MANDATORY_MISSING_ERROR" },
+              "error"
+            );
+            return;
+          }
+
+          if(label === "APPROVE")
+          {
+            const  termExpiryDate = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.termExpiryDate`,[]);
+            const  finalTermExpiryDate = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.finalTermExpiryDate`,[]);            
+            const  lesseAsPerGLR = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.lesseAsPerGLR`,[]);
+            const  termNo = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.termNo`,[]);
+            const  annualRent = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.annualRent`,[]);
+            if(!termExpiryDate || !finalTermExpiryDate || !lesseAsPerGLR || !termNo || !annualRent)
+            {
+              toggleSnackbar(
+                true,
+                { labelName: "Please fill all mandatory fields !", labelKey: "COMMON_MANDATORY_MISSING_ERROR" },
+                "error"
+              );
+              return;
+            }
+          }
           this.wfUpdate(label);
           break;
         case "CITIZEN-REVIEW":
