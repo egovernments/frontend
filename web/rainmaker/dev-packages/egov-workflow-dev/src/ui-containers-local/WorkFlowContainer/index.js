@@ -315,6 +315,19 @@ class WorkFlowContainer extends React.Component {
       }
     } else if(tlAppStatus!=null) {
       let pattern =  /^[a-zA-Z0-9-_]{1,50}$/i ;
+      const comments = get(
+        preparedFinalObject,
+        `Licenses[0].comment`,
+        null
+      );
+      if(!pattern.test(comments)){
+        toggleSnackbar(
+          true,
+          { labelName: "Please enter valid data", labelKey: "TL_VALID_FIELDS_ERROR_MSG"},
+          "error"
+        );
+        return;
+      }
       switch(tlAppStatus){
         case "FIELDINSPECTION":
           const tradeSubType = get(

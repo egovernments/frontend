@@ -267,7 +267,6 @@ class Footer extends React.Component {
       //   `Licenses[0].validTo`
       // );
       
-      console.log(validTo,"validTo");
       const currentDate=Date.now();
       const duration=validTo-currentDate;
       const renewalPeriod = get(
