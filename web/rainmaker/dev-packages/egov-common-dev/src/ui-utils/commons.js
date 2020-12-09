@@ -555,9 +555,21 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
     { key: "tenantId", value:tenantId },
     { key: "applicationNumber", value: consumerCode?consumerCode:applicationNumber}
   ];
+
+  let queryObjectForPT = [
+    { key: "tenantId", value:tenantId },
+    { key: "propertyIds", value: consumerCode?consumerCode:applicationNumber}
+  ];
   const FETCHFIREDETAILS = {
     GET: {
       URL: "/firenoc-services/v1/_search",
+      ACTION: "_get",
+    },
+  };
+
+  const FETCHPROPERTYDETAILS = {
+    GET: {
+      URL: "/property-services/property/_search",
       ACTION: "_get",
     },
   };
@@ -567,8 +579,10 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       ACTION: "_get",
     },
   };
-  const responseForTrade = await  httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
-  const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+  const responseForTrade = await httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
+  const response =  await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+  const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
+
 
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
@@ -586,26 +600,31 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       }
       if(payloadReceiptDetails.Payments[0].paidBy!=null)
       {
-        payloadReceiptDetails.Payments[0].paidBy?payloadReceiptDetails.Payments[0].paidBy.trim():payloadReceiptDetails.Payments[0].paidBy;
+        payloadReceiptDetails.Payments[0].paidBy=payloadReceiptDetails.Payments[0].paidBy.trim();
       }
       let assessmentYear="";
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
-if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
-{
-  const adhocPenaltyReason = get(
-    state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
-  const adhocRebateReason = get(
-      state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
-  
 
-  const reasonss = {
-    "adhocPenaltyReason": adhocPenaltyReason,
-    "adhocRebateReason":adhocRebateReason
-    }
-    payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
+      let lastmodifier=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
+      let reasonss = null;
+      let adhocPenaltyReason=null,adhocRebateReason=null;
+     if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
+        {
+          adhocPenaltyReason = get(
+          state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
+          adhocRebateReason = get(
+          state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
+          
+        }
+        reasonss = {
+          "adhocPenaltyReason": adhocPenaltyReason,
+          "adhocRebateReason":adhocRebateReason,
+          "lastModifier":lastmodifier
+          }
+      payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
 
-  }
+      
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
         
         if(element.amount >0 || element.amountPaid>0)
