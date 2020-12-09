@@ -18,7 +18,7 @@ const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
-const resetFields = (state, dispatch) => {
+export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
@@ -122,7 +122,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.consumerNumbers",
+      jsonPath: "searchScreen.consumerCodes",
       gridDefination: {
         xs: 12,
         sm: 4

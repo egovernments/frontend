@@ -92,7 +92,7 @@ export const searchResults = {
     ],
     title: {
       labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",
-      labelName: "Search Results for Receipt",
+      labelName: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",
     },
     rows: "",
     options: {

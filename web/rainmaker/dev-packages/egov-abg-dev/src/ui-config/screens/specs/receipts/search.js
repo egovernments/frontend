@@ -8,7 +8,7 @@ import { httpRequest } from "../../../../ui-utils";
 import { setServiceCategory } from "../utils";
 import "./index.css";
 import { searchResults } from "./universalCollectionResources/searchResults";
-import { UCSearchCard } from "./universalCollectionResources/ucSearch";
+import { resetFields, UCSearchCard } from "./universalCollectionResources/ucSearch";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -69,6 +69,7 @@ const ucSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
+    resetFields(state,dispatch);
     return action;
   },
   components: {
