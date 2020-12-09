@@ -198,12 +198,6 @@ export const leaseApplication = getCommonCard({
             code : "CITIZEN-REVIEW"
           },
           {
-            code : "CEO-EXAMINATION"
-          },
-          {
-            code : "DEO-EXAMINATION"
-          },
-          {
             code : "PDDE-EXAMINATION"
           },
           {

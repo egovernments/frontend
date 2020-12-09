@@ -33,6 +33,8 @@ const checkIfFormIsValid = async (state, dispatch) => {
     "newApplication"
   );  
 
+  let isCompulsaryDocsUploaded = true;
+
   const uploadedDocsInRedux = get(
     state.screenConfiguration.preparedFinalObject,
     "lamsStore.uploadedDocsInRedux",
@@ -44,27 +46,16 @@ const checkIfFormIsValid = async (state, dispatch) => {
     []
   );
 
-  // for(var key in uploadedDocsInRedux)
-  // {
-  //   if(uploadedDocsInRedux[key])
-  //   {
-  //     let documentType = uploadedDocsInRedux[key].documentType;
-  //     let doc = jp.query(requiredDocuments[0].applicationDocuments, "$[?(@.code == '"+ documentType +"')]")
-  //     if(doc && doc.required)
-  //   }
-  // }
-  // for (var y = 0; y < uploadedTempDocData.length; y++) {
-  //   if (
-  //     uploadedTempDocData[y].required &&
-  //     !some(uploadedDocData, { documentType: uploadedTempDocData[y].code })
-  //   ) {
-  //     isFormValid = false;
-  //   }
-  // }
+  const compulsaryDocuments = jp.query(requiredDocuments[0].applicationDocuments, "$[?(@.required== true)]")
+  compulsaryDocuments.forEach((doc, index)=>{
+    let docCode = doc.code;
+    if((jp.query(uploadedDocsInRedux,"$[*][?(@.documentType== '"+docCode+"')]").length) < 1)
+      isCompulsaryDocsUploaded = false;
+  })
 
-  isFormValid = ( isLeaseDetailsValid && isEmployeeDetailsValid ) ? true : false;
+  isFormValid = ( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded) ? true : false;
 
-  //alert("Is valid form "+isEmployeeDetailsValid);
+  //alert("Is valid form "+isCompulsaryDocsUploaded);
 
   if (isFormValid) {
     try {
@@ -92,7 +83,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
       ); 
       removedDocsArray = removedDocsArray?removedDocsArray : [];
       let mergedArray = [...finalDocsArray,...removedDocsArray];
-      console.log("Check this ", finalDocsArray, removedDocsArray, finalDocsWithoutIds, mergedArray);
+      //console.log("Check this ", finalDocsArray, removedDocsArray, finalDocsWithoutIds, mergedArray);
       //alert("Check once "+JSON.stringify(mergedArray));
       dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.applicationDocuments", mergedArray));
 
@@ -133,7 +124,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
         );
       }
       dispatch(toggleSpinner());
-      console.log("Response is ", payload);
+      //console.log("Response is ", payload);
       //toBeRemoved
       //payload = {"ResponseInfo":{"apiId":"Rainmaker","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"leases":[{"comment":null,"id":"fb737547-e132-49b3-98e5-95f24d8fad01","tenantId":"pb.agra","businessService":"LAMS","applicationType":"RENEWAl","workflowCode":"LAMS_LR","applicationNumber":"TL-APP-AGRA-2020-10-19-004161","applicationDate":1603081340442,"action":"FORWARD","assignee":null,"wfDocuments":null,"status":"FIELDINSPECTION","leaseDetails":{"id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"1234512","termNo":"1234514","area":"2344","termExpiryDate":659989800000,"annualRent":125234,"lesseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad","applicationDocuments":[{"id":"9c52f9fb-0870-495f-9370-0fc265513609","active":true,"tenantId":"pb.agra","documentType":"ELECTBILL","fileStoreId":"4d27f465-636e-4719-8abe-68b364cf70db","documentUid":null,"auditDetails":null},{"id":"cddfa9ce-2ec5-4ff7-95b1-f69381d9de79","active":true,"tenantId":"pb.agra","documentType":"AADHAARCARD","fileStoreId":"b41ccf5c-2687-41d1-9cb1-cfcf9eab36fb","documentUid":null,"auditDetails":null},{"id":"e76d3fd2-b1d1-4e37-b635-93d878935b2f","active":true,"tenantId":"pb.agra","documentType":"OWNERPHOTO","fileStoreId":"a5e5aa69-1115-4fac-8310-e251514d639b","documentUid":null,"auditDetails":null}],"auditDetails":{"createdBy":"9d39d685-edbe-45a7-8dc5-1166a4236b98","lastModifiedBy":"9d39d685-edbe-45a7-8dc5-1166a4236b98","createdTime":1603081340442,"lastModifiedTime":1603081340442}},"auditDetails":{"createdBy":"9d39d685-edbe-45a7-8dc5-1166a4236b98","lastModifiedBy":"9d39d685-edbe-45a7-8dc5-1166a4236b98","createdTime":1603081340442,"lastModifiedTime":1603085076212},"fileStoreId":null}]};
       if (payload.leases && payload.leases.length>0 && payload.leases[0].applicationNumber) {
@@ -163,15 +154,30 @@ const checkIfFormIsValid = async (state, dispatch) => {
     );
     }
   } else {
-    dispatch(toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill the required fields.",
-          labelKey: "LAMS_REQUIRED_FIELDS_ERROR_MSG"
-        },
-        "info"
-      )
-    );
+    if(!isEmployeeDetailsValid || !isLeaseDetailsValid)
+    {
+      dispatch(toggleSnackbar(
+          true,
+          {
+            labelName: "Please fill the required fields.",
+            labelKey: "LAMS_REQUIRED_FIELDS_ERROR_MSG"
+          },
+          "info"
+        )
+      );
+    }
+    else
+    {
+      dispatch(toggleSnackbar(
+          true,
+          {
+            labelName: "Please upload mandatory documents.",
+            labelKey: "LAMS_REQUIRED_DOCS_ERROR_MSG"
+          },
+          "info"
+        )
+      );
+    }
   }
 };
 
