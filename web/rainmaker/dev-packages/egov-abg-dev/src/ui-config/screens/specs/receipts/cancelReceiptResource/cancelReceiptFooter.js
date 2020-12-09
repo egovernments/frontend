@@ -1,18 +1,15 @@
-import commonConfig from "config/common.js";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-
-import get from "lodash/get";
-
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import { set } from "lodash";
+import get from "lodash/get";
+import { ifUserRoleExists, validateFields } from "../../utils";
+
+
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/pay" : "/inbox";
@@ -59,7 +56,7 @@ export const cancelReceiptFooter = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         // processDemand(state, dispatch);
-        dispatch(setRoute(`/receipts/viewReceipt?receiptNumbers=${ getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${ getQueryArg(window.location.href, "tenantId")}&businessService=${getQueryArg(window.location.href, "businessService")}`));
+        dispatch(setRoute(`/receipts/viewReceipt?receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&businessService=${getQueryArg(window.location.href, "businessService")}`));
       }
     },
     visible: true
@@ -128,8 +125,8 @@ export const viewReceiptFooter = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         // processDemand(state, dispatch);
-        dispatch(setRoute(`/receipts/cancelReceipt?receiptNumbers=${ getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${ getQueryArg(window.location.href, "tenantId")}&businessService=${getQueryArg(window.location.href, "businessService")}`));
-        
+        dispatch(setRoute(`/receipts/cancelReceipt?receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&businessService=${getQueryArg(window.location.href, "businessService")}`));
+
       }
     }
   }
@@ -144,23 +141,23 @@ const cancelReceipt = async (state, dispatch) => {
     "cancelReceipt"
   );
 
- let paymentWorkflows= get(state.screenConfiguration.preparedFinalObject,'paymentWorkflows',[]);
+  let paymentWorkflows = get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows', []);
 
-  if (isFormValid&& paymentWorkflows&&Array.isArray(paymentWorkflows)&&paymentWorkflows.length>0) {
+  if (isFormValid && paymentWorkflows && Array.isArray(paymentWorkflows) && paymentWorkflows.length > 0) {
     try {
-      set(paymentWorkflows[0],'action','CANCEL');
-      set(paymentWorkflows[0],'tenantId',getQueryArg(window.location.href, "tenantId"));
-      set(paymentWorkflows[0],'paymentId',get(state.screenConfiguration.preparedFinalObject,'PaymentReceipt.id',''));
+      set(paymentWorkflows[0], 'action', 'CANCEL');
+      set(paymentWorkflows[0], 'tenantId', getQueryArg(window.location.href, "tenantId"));
+      set(paymentWorkflows[0], 'paymentId', get(state.screenConfiguration.preparedFinalObject, 'PaymentReceipt.id', ''));
       let payload = await httpRequest(
         "post",
         `collection-services/payments/${getQueryArg(window.location.href, "businessService")}/_workflow`,
         "_search",
         [],
-       {paymentWorkflows:paymentWorkflows}
+        { paymentWorkflows: paymentWorkflows }
       );
-      if (payload) { 
-          //  getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
-           dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&status=success`));
+      if (payload) {
+        //  getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
+        dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&status=success`));
       }
     } catch (error) {
       dispatch(
@@ -168,12 +165,12 @@ const cancelReceipt = async (state, dispatch) => {
           true,
           {
             labelName: "Please fill the required fields.",
-            labelKey: "CR_FIELDS_ERROR_MSG"
+            labelKey: error.message
           },
           "error"
         )
       );
-     }
+    }
   } else {
     dispatch(
       toggleSnackbar(

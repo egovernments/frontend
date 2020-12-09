@@ -1,10 +1,8 @@
+import { setRoute } from "egov-ui-kit/utils/commons";
 import React from "react";
 import {
-  sortByEpoch,
-  getEpochForDate
+  getEpochForDate, sortByEpoch
 } from "../../utils";
-import {download} from "egov-common/ui-utils/commons"
-import { setRoute } from "egov-ui-kit/utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -20,18 +18,18 @@ export const searchResults = {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
             <div onClick={value => {
-                const receiptQueryString = [
-                  { key: "receiptNumbers", value:  tableMeta.rowData[0]},
-                  { key: "tenantId", value: tableMeta.rowData[7] }
-                ]
-                // download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
-              }}>
+              const receiptQueryString = [
+                { key: "receiptNumbers", value: tableMeta.rowData[0] },
+                { key: "tenantId", value: tableMeta.rowData[7] }
+              ]
+              // download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
+            }}>
               {value}
             </div>
           )
         }
       },
-     
+
       {
         labelName: "Date",
         labelKey: "CR_COMMON_TABLE_COL_DATE"
@@ -59,8 +57,11 @@ export const searchResults = {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
             <div onClick={value => {
+              if(tableMeta.rowData[6]=='CANCEL'){
+
                 setRoute(`/receipts/viewReceipt?receiptNumbers=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=${tableMeta.rowData[9]}`);
-              }}>
+              }
+            }} style={{color:tableMeta.rowData[6]=='CANCEL'?'rgb(254, 122, 81)':"inherit",cursor:tableMeta.rowData[6]=='CANCEL'?'pointer':"initial"}}>
               {value}
             </div>
           )
@@ -87,7 +88,7 @@ export const searchResults = {
           display: false
         }
       },
-      
+
     ],
     title: {
       labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",

@@ -1,9 +1,9 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTransformedLocale, transformById, disableFieldAndShowSpinner, enableFieldAndHideSpinner } from "egov-ui-framework/ui-utils/commons";
+import { disableFieldAndShowSpinner, enableFieldAndHideSpinner, getTransformedLocale, transformById } from "egov-ui-framework/ui-utils/commons";
 import { getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getPaymentSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
-import { convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validateFields } from "../../utils";
+import { getPaymentSearchResults } from "../../../../../ui-utils/commons";
+import { convertEpochToDate, getTextToLocalMapping, validateFields } from "../../utils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -65,12 +65,12 @@ export const searchApiCall = async (state, dispatch) => {
         searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
         searchScreenObject[key].trim() !== ""
       ) {
-              queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-  
+        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+
       }
     }
-    disableFieldAndShowSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
-    const responseFromAPI = await getPaymentSearchResults(queryObject,dispatch);
+    disableFieldAndShowSpinner('search', "components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton", dispatch);
+    const responseFromAPI = await getPaymentSearchResults(queryObject, dispatch);
     dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
     const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
     const response = [];
@@ -81,15 +81,20 @@ export const searchApiCall = async (state, dispatch) => {
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
         payeeName: get(Payments[i], `payerName`),
-        serviceType:   get(Payments[i], `paymentDetails[0].bill.businessService`),
+        serviceType: get(Payments[i], `paymentDetails[0].bill.businessService`),
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.consumerCode`),
-        status: get(Payments[i], `paymentDetails[0].bill.status`),
+        status: get(Payments[i], `paymentStatus`),
         businessService: get(Payments[i], `paymentDetails[0].bill.businessService`),
         tenantId: get(Payments[i], `tenantId`),
+        instrumentStatus: get(Payments[i], `instrumentStatus`),
       };
     }
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.uiCommonConfig");
+    let convertedConfig={};
+    uiConfigs.map(uiConfig=>{
+      convertedConfig[uiConfig.code]={...uiConfig}
+    })
     try {
       let data = response.map(item => ({
         ['CR_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
@@ -98,12 +103,12 @@ export const searchApiCall = async (state, dispatch) => {
         ['CR_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
         ['CR_COMMON_TABLE_CONSUMERCODE']: item.amount || "-",
         ['CR_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ['CR_COMMON_TABLE_ACTION']: "CANCEL",
+        ['CR_COMMON_TABLE_ACTION']:item.status!=="CANCELLED"&&(item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")&&(convertedConfig[item.businessService]?convertedConfig[item.businessService].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)? "CANCEL":"NA",
         ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-",
-        ["SERVICE_TYPE"]:item.serviceType
+        ["SERVICE_TYPE"]: item.serviceType
       }));
-      enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
+      enableFieldAndHideSpinner('search', "components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton", dispatch);
       dispatch(
         handleField(
           "search",
@@ -150,7 +155,7 @@ const checkEmptyFields = (searchScreenObject) => {
   const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
   const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
   const consumerNumbers = get(searchScreenObject, 'consumerNumbers', null)
-  if (checkEmpty(businessServices) && checkEmpty(mobileNumber)&& checkEmpty(consumerNumbers) && checkEmpty(receiptNumbers)) { return true; }
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(consumerNumbers) && checkEmpty(receiptNumbers)) { return true; }
   return false;
 }
 const checkEmpty = (value) => {

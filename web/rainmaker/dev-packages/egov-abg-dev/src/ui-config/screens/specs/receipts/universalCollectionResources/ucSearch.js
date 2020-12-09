@@ -1,20 +1,18 @@
 import {
   getCommonCard,
-  getTextField,
+
   getCommonContainer,
-  getPattern,
-  getLabel,
-  getDateField,
+
+
+
   getCommonHeader,
-  getCommonSubHeader
+  getCommonSubHeader, getLabel, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  handleScreenConfigurationFieldChange as handleField
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchApiCall } from "./function";
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -37,14 +35,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-    dispatch(
-      handleField(
-        "search",
-        "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.serviceType",
-        "props.value",
-        ""
-      )
-    );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.serviceType",
+      "props.value",
+      ""
+    )
+  );
   dispatch(
     handleField(
       "search",
@@ -64,71 +62,72 @@ export const UCSearchCard = getCommonCard({
     labelName: "Provide at least one parameter to search for an application",
     labelKey: "CR_SEARCH_COMMON_SUB_HEADER"
   }),
-  searchContainer: getCommonContainer({serviceType: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-uc",
-    componentPath: "AutosuggestContainer",
-    props: {
-      className: "autocomplete-dropdown",
+  searchContainer: getCommonContainer({
+    serviceType: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-uc",
+      componentPath: "AutosuggestContainer",
+      props: {
+        className: "autocomplete-dropdown",
+        label: {
+          labelName: "Service Category",
+          labelKey: "CR_SERVICE_CATEGORY_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Service Category",
+          labelKey: "CR_SERVICE_CATEGORY_PLACEHOLDER"
+        },
+        localePrefix: {
+          masterName: "BusinessService",
+          moduleName: "BillingService"
+        },
+        required: false,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        sourceJsonPath: "applyScreenMdmsData.businessServices",
+        jsonPath: "searchScreen.businessService",
+      },
+      jsonPath: "searchScreen.businessService",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      // beforeFieldChange: async (action, state, dispatch) => {
+      //   const serviceCategory = get(
+      //     state.screenConfiguration,
+      //     "preparedFinalObject.applyScreenMdmsData.serviceCategories"
+      //   );
+      //   const selectedCategory = serviceCategory.find(
+      //     item => item.code === action.value
+      //   );
+      //   const serviceTypes =
+      //     selectedCategory &&
+      //     ((selectedCategory.child &&
+      //     selectedCategory.child.length > 0) ?
+      //     selectedCategory.child.map(item => item.code) : selectedCategory.code);
+      //   dispatch(
+      //     prepareFinalObject("searchScreen.businessServices", serviceTypes)
+      //   );
+      //   return action;
+      // }
+    },
+    consumerNumber: getTextField({
       label: {
-        labelName: "Service Category",
-        labelKey: "CR_SERVICE_CATEGORY_LABEL"
+        labelName: "Receipt Number.",
+        labelKey: "CR_CONSUMER_NO_LABEL"
       },
       placeholder: {
-        labelName: "Select Service Category",
-        labelKey: "CR_SERVICE_CATEGORY_PLACEHOLDER"
-      },
-      localePrefix: {
-        masterName: "BusinessService",
-        moduleName: "BillingService"
+        labelName: "Enter Receipt No.",
+        labelKey: "CR_ENTER_CONSUMER_NO_PLACEHOLDER"
       },
       required: false,
-      isClearable: true,
-      labelsFromLocalisation: true,
-      sourceJsonPath: "applyScreenMdmsData.businessServices",
-      jsonPath: "searchScreen.businessService",
-    },
-    jsonPath: "searchScreen.businessService",
-    gridDefination: {
-      xs: 12,
-      sm: 4
-    },
-    // beforeFieldChange: async (action, state, dispatch) => {
-    //   const serviceCategory = get(
-    //     state.screenConfiguration,
-    //     "preparedFinalObject.applyScreenMdmsData.serviceCategories"
-    //   );
-    //   const selectedCategory = serviceCategory.find(
-    //     item => item.code === action.value
-    //   );
-    //   const serviceTypes =
-    //     selectedCategory &&
-    //     ((selectedCategory.child &&
-    //     selectedCategory.child.length > 0) ?
-    //     selectedCategory.child.map(item => item.code) : selectedCategory.code);
-    //   dispatch(
-    //     prepareFinalObject("searchScreen.businessServices", serviceTypes)
-    //   );
-    //   return action;
-    // }
-  },
-  consumerNumber: getTextField({
-    label: {
-      labelName: "Receipt Number.",
-      labelKey: "CR_CONSUMER_NO_LABEL"
-    },
-    placeholder: {
-      labelName: "Enter Receipt No.",
-      labelKey: "CR_ENTER_CONSUMER_NO_PLACEHOLDER"
-    },
-    required: false,
-    visible: true,
-    jsonPath: "searchScreen.consumerNumbers",
-    gridDefination: {
-      xs: 12,
-      sm: 4
-    }
-  }),
+      visible: true,
+      jsonPath: "searchScreen.consumerNumbers",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
     receiptNumber: getTextField({
       label: {
         labelName: "Receipt Number.",
@@ -146,7 +145,7 @@ export const UCSearchCard = getCommonCard({
         sm: 4
       }
     }),
-    
+
     mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",
@@ -250,6 +249,6 @@ export const UCSearchCard = getCommonCard({
       }
     }
   })
-},{
-  style: {overflow: "visible"}
+}, {
+  style: { overflow: "visible" }
 });

@@ -27,7 +27,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-       // minWidth: "200px",
+        // minWidth: "200px",
         height: "48px",
         marginRight: "16px"
       }
