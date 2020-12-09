@@ -16,3 +16,7 @@
     overflow: auto;
     max-width: 100%;
     white-space: pre-line; }
+
+
+    p[class^="MuiFormHelperText-root"] {
+      font-size: 14px !important; }
