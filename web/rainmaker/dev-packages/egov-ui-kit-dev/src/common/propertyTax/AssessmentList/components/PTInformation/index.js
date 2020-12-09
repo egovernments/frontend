@@ -72,7 +72,7 @@ class PTInformation extends React.Component {
      logoUrl = window.location.origin + `/pb-egov-assets/${tenantid}/logo.png`;
       corpCity = `TENANT_TENANTS_${get(properties, "tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
       const selectedCityObject =cities && cities && cities.length > 0 && cities.filter(item => item.code === get(properties, "tenantId"));
-      ulbGrade = selectedCityObject ?  get(selectedCityObject[0], "city.ulbType").toUpperCase() : "MUNICIPAL CORPORATION";
+      ulbGrade = selectedCityObject ? get(selectedCityObject[0], "city.ulbType") && get(selectedCityObject[0], "city.ulbType").toUpperCase() : "MUNICIPAL CORPORATION";
       //ulbGrade= "MUNICIPAL CORPORATION";
     }
     let propertyExist = properties.hasOwnProperty('propertyDetails');
