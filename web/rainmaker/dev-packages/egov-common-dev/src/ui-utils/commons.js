@@ -540,7 +540,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   }
 }
 
-//For Application fee receipt
+//For Application fee receipt--dead code
 export const downloadAppFeeReceipt = (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
   let DOWNLOADRECEIPT = {};
   if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
