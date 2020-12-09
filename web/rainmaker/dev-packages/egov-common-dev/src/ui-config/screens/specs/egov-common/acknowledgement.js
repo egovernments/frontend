@@ -2,7 +2,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 import { download } from "../../../../ui-utils/commons";
-import { ifUserRoleExists, generateBill } from "../utils";
+import { generateBill, ifUserRoleExists } from "../utils";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import './index.css';
@@ -11,13 +11,14 @@ import { getHeader } from "./pay";
 
 
 const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig) => {
-   const receiptKey = get(uiCommonPayConfig, "receiptKey","consolidatedreceipt")
+    const receiptKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
     let receiptDownloadObject = {
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
             const receiptQueryString = [
                 { key: "receiptNumbers", value: applicationNumber },
-                { key: "tenantId", value: tenantId }
+                { key: "tenantId", value: tenantId },
+                { key: "businessService", value: getQueryArg(window.location.href, "businessService") }
             ]
             download(receiptQueryString, "download", receiptKey, state);
 
@@ -29,7 +30,8 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
         link: () => {
             const receiptQueryString = [
                 { key: "receiptNumbers", value: applicationNumber },
-                { key: "tenantId", value: tenantId }
+                { key: "tenantId", value: tenantId },
+                { key: "businessService", value: getQueryArg(window.location.href, "businessService") }
             ]
             download(receiptQueryString, "print", receiptKey, state);
         },
@@ -57,7 +59,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
                         label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
                         leftIcon: "cloud_download",
                         rightIcon: "arrow_drop_down",
-                        props: { variant: "outlined", style: { height: "60px", color: "#FE7A51",marginRight:"5px" }, className: "tl-download-button" },
+                        props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
                         menu: downloadMenu
                     }
                 }
@@ -162,7 +164,7 @@ const screenConfig = {
         const tenant = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
         // Calling the Bill so that payer information can be set in the PDF for Citizen application
-        if(process.env.REACT_APP_NAME === "Citizen") {
+        if (process.env.REACT_APP_NAME === "Citizen") {
             generateBill(dispatch, consumerCode, tenant, businessService);
         }
         const data = getAcknowledgementCard(

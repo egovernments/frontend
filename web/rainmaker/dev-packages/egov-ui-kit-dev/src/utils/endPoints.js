@@ -192,3 +192,9 @@ export const FETCHASSESSMENTS = {
     ACTION: "_search",
   },
 };
+export const PAYMENTSEARCH = {
+  GET: {
+    URL: "/collection-services/payments/",
+    ACTION: "_search",
+  },
+};

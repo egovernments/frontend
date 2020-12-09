@@ -76,7 +76,8 @@ const commonApplicantInformation = () => {
               value: "TRANSGENDER"
             }
           ],
-
+          jsonPath:
+          "Property.ownersTemp[0].gender",
           required: true,
           errorMessage: "Required",
         },

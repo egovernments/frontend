@@ -2,7 +2,7 @@ import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/propertyCreateUtils";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { transformById } from "egov-ui-kit/utils/commons";
+import { transformById ,getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT } from "egov-ui-kit/utils/endPoints";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
@@ -636,7 +636,15 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
     if (fetchReceiptQueryObject) {
       dispatch(fetchReceiptPending());
       try {
-        const payloadProperty = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, fetchReceiptQueryObject);
+        let businessService = '';
+        fetchReceiptQueryObject && Array.isArray(fetchReceiptQueryObject) && fetchReceiptQueryObject.map(query => {
+          if (query.key == "businessService") {
+            businessService = query.value;
+          }
+        })
+        fetchReceiptQueryObject = fetchReceiptQueryObject && Array.isArray(fetchReceiptQueryObject) && fetchReceiptQueryObject.filter(query => query.key != "businessService")
+       
+        const payloadProperty = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, fetchReceiptQueryObject);
         dispatch(fetchReceiptComplete(payloadProperty));
       } catch (error) {
         dispatch(fetchReceiptError(error.message));
@@ -681,7 +689,15 @@ export const downloadReceipt = (receiptQueryString) => {
     if (receiptQueryString) {
       // dispatch(downloadReceiptPending());
       try {
-        const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
+        let businessService = '';
+        receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+          if (query.key == "businessService") {
+            businessService = query.value;
+          }
+        })
+        receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+       
+        const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
   
         const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
         const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
