@@ -598,6 +598,8 @@ export const getPattern = type => {
       return /^([0-9]){12}$/;
     case "ChequeNo":
         return /^(?!0{6})[0-9]{6}$/;
+    case "Comments":
+        return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
 
   }
 };

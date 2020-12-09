@@ -138,11 +138,12 @@ let isFormValid = true;
     "search-preview"
   );
   const  isGcValid = validateFields(
-    "components.adhocDialog.children.popup.children.adhocGCCard.children.GCReasonContainer.children",
+    "components.adhocDialog.children.popup.children.adhocGCCard.children",
     state,
     dispatch,
     "search-preview"
   );
+  
 
   if(!isPenaltyValid || !isRebateValid || !isGcValid){
     isFormValid=false;
@@ -371,6 +372,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
+        pattern: getPattern("Comments"),
         jsonPath: "Licenses[0].tradeLicenseDetail.adhocComments"
       }),
     }),
@@ -463,6 +465,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          pattern: getPattern("Comments"),
           jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
         })
       })
@@ -527,6 +530,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
+        pattern: getPattern("Comments"),
         jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageComments"
       })
     },

@@ -314,6 +314,7 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else if(tlAppStatus!=null) {
+      let pattern =  /^[a-zA-Z0-9-_]{1,50}$/i ;
       switch(tlAppStatus){
         case "FIELDINSPECTION":
           const tradeSubType = get(
@@ -321,10 +322,25 @@ class WorkFlowContainer extends React.Component {
             `Licenses[0].tradeLicenseDetail.additionalDetail.tradeSubType`,
             null
           );
+         
           if (tradeSubType == null ||tradeSubType == "")  {
             toggleSnackbar(
               true,
               { labelName: "Please fill all mandatory fields !", labelKey: "COMMON_MANDATORY_MISSING_ERROR" },
+              "error"
+            );
+          }
+          else if(tradeSubType.length>50){
+            toggleSnackbar(
+              true,
+              { labelName: "Trade Type should be of length less than 50", labelKey: "COMMON_TRADE_TYPE_LENGTH_ERROR"},
+              "error"
+            );
+          }
+          else if(!pattern.test(tradeSubType)){
+            toggleSnackbar(
+              true,
+              { labelName: "Please enter valid data", labelKey: "TL_VALID_FIELDS_ERROR_MSG"},
               "error"
             );
           }
@@ -353,7 +369,14 @@ class WorkFlowContainer extends React.Component {
          else if(cbrnNumber.length>50){
             toggleSnackbar(
               true,
-              { labelName: "CBR Number should be of length less than 50", labelKey: "COMMON_MANDATORY_MISSING_ERROR"},
+              { labelName: "CBR Number should be of length less than 50", labelKey: "COMMON_CBRN_LENGTH_ERROR"},
+              "error"
+            );
+          }
+          else if(!pattern.test(cbrnNumber)){
+            toggleSnackbar(
+              true,
+              { labelName: "Please enter valid data", labelKey: "TL_VALID_FIELDS_ERROR_MSG"},
               "error"
             );
           }
