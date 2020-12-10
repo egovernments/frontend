@@ -157,7 +157,7 @@ const cancelReceipt = async (state, dispatch) => {
       if (payload) {
         dispatch(hideSpinner());
         //  getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
-        dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&status=success`));
+        dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&status=success`));
       }
     } catch (error) {
       dispatch(hideSpinner());

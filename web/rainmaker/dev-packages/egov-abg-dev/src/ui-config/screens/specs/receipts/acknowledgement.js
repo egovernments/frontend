@@ -15,7 +15,7 @@ export const header = getCommonContainer({
     moduleName: "egov-abg",
     componentPath: "ApplicationContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber") || 'PB-PT-2020-03-03-004161',
+      number: getQueryArg(window.location.href, "receiptNumbers"),
       label: {
         labelValue: "Application No.",
         labelKey: "CR_RECEIPT_DETAILS_NUMBER"
@@ -79,12 +79,7 @@ const getAcknowledgementCard = (
               labelName:
                 "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
               labelKey: "CR_APPLY_FORWARD_SUCCESS"
-            },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "CR_APPLY_APPLICATION_NO"
-            },
-            number: applicationNumber
+            }
           }),
         }
       },
