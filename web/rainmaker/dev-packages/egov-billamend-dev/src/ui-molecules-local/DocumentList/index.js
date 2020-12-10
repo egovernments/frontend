@@ -1,33 +1,44 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
-import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
+import {
+  LabelContainer,
+  TextFieldContainer
+} from "egov-ui-framework/ui-containers";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getFileUrlFromAPI,
-  getQueryArg,
+  handleFileUpload,
   getTransformedLocale,
-  getLocaleLabels,
+  getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
-
-import { connect } from "react-redux";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { AutosuggestContainer } from "../../ui-containers-local";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-
 import get from "lodash/get";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { UploadSingleFile } from "../../ui-molecules-local";
 
-const styles = (theme) => ({
+const themeStyles = theme => ({
   documentContainer: {
     backgroundColor: "#F2F2F2",
     padding: "16px",
-    marginBottom: "16px",
-    wordBreak: "break-word",
+    marginTop: "10px",
+    marginBottom: "16px"
+  },
+  documentCard: {
+    backgroundColor: "#F2F2F2",
+    padding: "16px",
+    marginTop: "10px",
+    marginBottom: "16px"
+  },
+  documentSubCard: {
+    backgroundColor: "#F2F2F2",
+    padding: "16px",
+    marginTop: "10px",
+    marginBottom: "10px",
+    border: "#d6d6d6",
+    borderStyle: "solid",
+    borderWidth: "1px"
   },
   documentIcon: {
     backgroundColor: "#FFFFFF",
@@ -42,7 +53,7 @@ const styles = (theme) => ({
     fontSize: "20px",
     fontWeight: 400,
     letterSpacing: "0.83px",
-    lineHeight: "24px",
+    lineHeight: "24px"
   },
   documentSuccess: {
     borderRadius: "100%",
@@ -52,249 +63,285 @@ const styles = (theme) => ({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#39CB74",
-    color: "white",
+    color: "white"
   },
   button: {
     margin: theme.spacing.unit,
-    padding: "8px 38px",
+    padding: "8px 38px"
   },
   input: {
-    opacity: 0,
+    display: "none"
   },
+  iconDiv: {
+    display: "flex",
+    alignItems: "center"
+  },
+  descriptionDiv: {
+    display: "flex",
+    alignItems: "center"
+  },
+  formControl: {
+    minWidth: 250,
+    padding: "0px"
+  },
+  fileUploadDiv: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingTop: "5px"
+  }
 });
-const documentTitle = {
-  color: "rgba(0, 0, 0, 0.87)",
-  fontFamily: "Roboto",
-  fontSize: "16px",
-  fontWeight: 400,
-  letterSpacing: "0.67px",
-  lineHeight: "19px",
+
+const styles = {
+  documentTitle: {
+    color: "rgba(0, 0, 0, 0.87)",
+    fontFamily: "Roboto",
+    fontSize: "16px",
+    fontWeight: 500,
+    letterSpacing: "0.67px",
+    lineHeight: "19px",
+    paddingBottom: "5px"
+  },
+  documentName: {
+    color: "rgba(0, 0, 0, 0.87)",
+    fontFamily: "Roboto",
+    fontSize: "16px",
+    fontWeight: 400,
+    letterSpacing: "0.67px",
+    lineHeight: "19px"
+  },
+  dropdownLabel: {
+    color: "rgba(0, 0, 0, 0.54)",
+    fontSize: "12px"
+  }
 };
+
+const requiredIcon = (
+  <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
+);
 
 class DocumentList extends Component {
   state = {
-    uploadedDocIndex: 0,
-    uploadedIndex: [],
-    uploadedDocuments: [],
+    uploadedDocIndex: 0
   };
 
   componentDidMount = () => {
-    let {
-      prepareFinalObject,
-      uploadedDocsInRedux: uploadedDocuments,
-      documents,
+    const {
+      documentsList,
+      documentsUploadRedux = {},
+      prepareFinalObject
     } = this.props;
-    if (uploadedDocuments && Object.keys(uploadedDocuments).length) {
-      let simplified = Object.values(uploadedDocuments).map((item) => item[0]);
-      simplified = simplified.filter(
-        (document) => document && document.fileUrl && document.fileName
-      );
-      documents = documents.filter((document) => document);
-      let uploadedDocumentsArranged = documents.reduce((acc, item, ind) => {
-        const index = simplified.findIndex((i) => i.documentType === item.code);
-        index > -1 && (acc[ind] = [simplified[index]]);
-        return acc;
-      }, {});
-
-      const uploadedIndex = Object.keys(uploadedDocumentsArranged).reduce(
-        (res, curr) => {
-          if (uploadedDocumentsArranged[curr].length > 0) {
-            res.push(parseInt(curr)); //returns string so convert to integer
+    let index = 0;
+    documentsList.forEach(docType => {
+      docType.cards &&
+        docType.cards.forEach(card => {
+          if (card.subCards) {
+            card.subCards.forEach(subCard => {
+              let oldDocType = get(
+                documentsUploadRedux,
+                `[${index}].documentType`
+              );
+              let oldDocCode = get(
+                documentsUploadRedux,
+                `[${index}].documentCode`
+              );
+              let oldDocSubCode = get(
+                documentsUploadRedux,
+                `[${index}].documentSubCode`
+              );
+              if (
+                oldDocType != docType.code ||
+                oldDocCode != card.name ||
+                oldDocSubCode != subCard.name
+              ) {
+                documentsUploadRedux[index] = {
+                  documentType: docType.code,
+                  documentCode: card.name,
+                  documentSubCode: subCard.name
+                };
+              }
+              index++;
+            });
+          } else {
+            let oldDocType = get(
+              documentsUploadRedux,
+              `[${index}].documentType`
+            );
+            let oldDocCode = get(
+              documentsUploadRedux,
+              `[${index}].documentCode`
+            );
+            if (oldDocType != docType.code || oldDocCode != card.name) {
+              documentsUploadRedux[index] = {
+                documentType: docType.code,
+                documentCode: card.name,
+                isDocumentRequired: card.required,
+                isDocumentTypeRequired: card.dropdown
+                  ? card.dropdown.required
+                  : false
+              };
+            }
+            index++;
           }
-          return res;
-        },
-        []
-      );
-
-      getQueryArg(window.location.href, "action") !== "edit" &&
-        Object.values(uploadedDocuments).forEach((item, index) => {
-          prepareFinalObject(
-            `Bill[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
-            { ...item[0] }
-          );
         });
-
-      this.setState({
-        uploadedDocuments: uploadedDocumentsArranged,
-        uploadedIndex,
-      });
-    }
+    });
+    prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
   };
 
-  onUploadClick = (uploadedDocIndex) => {
+  onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
   handleDocument = async (file, fileStoreId) => {
-    let { uploadedDocIndex, uploadedDocuments } = this.state;
-    const { prepareFinalObject, documents, tenantId } = this.props;
-    const { jsonPath, code } = documents[uploadedDocIndex];
+    let { uploadedDocIndex } = this.state;
+    const { prepareFinalObject, documentsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
-    uploadedDocuments = {
-      ...uploadedDocuments,
-      [uploadedDocIndex]: [
-        {
-          fileName: file.name,
-          fileStoreId,
-          fileUrl: Object.values(fileUrl)[0],
-          documentType: code,
-          tenantId,
-        },
-      ],
-    };
-    prepareFinalObject("BillTemp[0].uploadedDocsInRedux", {
-      ...uploadedDocuments,
+
+    prepareFinalObject("documentsUploadRedux", {
+      ...documentsUploadRedux,
+      [uploadedDocIndex]: {
+        ...documentsUploadRedux[uploadedDocIndex],
+        documents: [
+          {
+            fileName: file.name,
+            fileStoreId,
+            fileUrl: getFileUrl(Object.values(fileUrl)[0])
+          }
+        ]
+      }
     });
-    prepareFinalObject(jsonPath, {
-      fileName: file.name,
-      fileStoreId,
-      fileUrl: Object.values(fileUrl)[0],
-      documentType: code,
-      tenantId,
-    });
-    this.setState({ uploadedDocuments });
-    this.getFileUploadStatus(true, uploadedDocIndex);
   };
 
-  removeDocument = (remDocIndex) => {
-    let { uploadedDocuments } = this.state;
-    const { prepareFinalObject, documents, preparedFinalObject } = this.props;
-    const jsonPath = documents[remDocIndex].jsonPath;
-    (getQueryArg(window.location.href, "action") === "edit" ||
-      getQueryArg(window.location.href, "action") === "EDITRENEWAL") &&
-      uploadedDocuments[remDocIndex][0].id &&
-      prepareFinalObject("BillTemp[0].removedDocs", [
-        ...get(preparedFinalObject, "BillTemp[0].removedDocs", []),
-        {
-          ...uploadedDocuments[remDocIndex][0],
-          active: false,
-        },
-      ]);
-    uploadedDocuments[remDocIndex] = [];
-    prepareFinalObject(jsonPath, uploadedDocuments[remDocIndex]);
-    prepareFinalObject("BillTemp[0].uploadedDocsInRedux", uploadedDocuments);
-    this.setState({ uploadedDocuments });
-    this.getFileUploadStatus(false, remDocIndex);
+  removeDocument = remDocIndex => {
+    const { prepareFinalObject } = this.props;
+    prepareFinalObject(
+      `documentsUploadRedux.${remDocIndex}.documents`,
+      undefined
+    );
+    this.forceUpdate();
   };
 
-  getFileUploadStatus = (status, index) => {
-    const { uploadedIndex } = this.state;
-    if (status) {
-      uploadedIndex.push(index);
-      this.setState({ uploadedIndex });
-    } else {
-      const deletedIndex = uploadedIndex.findIndex((item) => item === index);
-      uploadedIndex.splice(deletedIndex, 1);
-      this.setState({ uploadedIndex });
-    }
-  };
-  render() {
-    const { classes, documentTypePrefix } = this.props;
-
-    const { uploadedIndex } = this.state;
-    let documents = this.props.documents.map((item) => {
-      return {
-        ...item,
-        dropdown: item.dropdown.map((dropdownItem) => {
-          return {
-            code: dropdownItem.code,
-            label: dropdownItem.code,
-            name: dropdownItem.code,
-          };
-        }),
-      };
+  handleChange = (key, event) => {
+    const { documentsUploadRedux, prepareFinalObject } = this.props;
+    prepareFinalObject(`documentsUploadRedux`, {
+      ...documentsUploadRedux,
+      [key]: {
+        ...documentsUploadRedux[key],
+        dropdown: { value: event.target.value }
+      }
     });
+  };
+
+  getUploadCard = (card, key) => {
+    const { classes, documentsUploadRedux } = this.props;
+    let jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
     return (
-      <div style={{ paddingTop: 10 }}>
-        {documents &&
-          documents.map((document, key) => {
+      <Grid container={true}>
+        <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
+          {documentsUploadRedux[key] && documentsUploadRedux[key].documents ? (
+            <div className={classes.documentSuccess}>
+              <Icon>
+                <i class="material-icons">done</i>
+              </Icon>
+            </div>
+          ) : (
+            <div className={classes.documentIcon}>
+              <span>{key + 1}</span>
+            </div>
+          )}
+        </Grid>
+        <Grid
+          item={true}
+          xs={10}
+          sm={5}
+          md={4}
+          align="left"
+          className={classes.descriptionDiv}
+        >
+          <LabelContainer
+            labelKey={getTransformedLocale(card.name)}
+            style={styles.documentName}
+          />
+          {card.required && requiredIcon}
+        </Grid>
+        <Grid item={true} xs={12} sm={6} md={4}>
+          {card.dropdown && (
+            <TextFieldContainer
+            select={true}
+            label={{labelKey: getTransformedLocale(card.dropdown.label)}}
+            placeholder={{ labelKey: getTransformedLocale(card.dropdown.label) }}
+            data={card.dropdown.menu}
+            optionValue="code"
+            optionLabel="label"
+            autoSelect={true}
+            required={ card.required ? card.required : true}
+            onChange={event => this.handleChange(key, event)}
+            jsonPath={jsonPath}
+          />
+          )}
+        </Grid>
+        <Grid
+          item={true}
+          xs={12}
+          sm={12}
+          md={3}
+          className={classes.fileUploadDiv}
+        >
+          <UploadSingleFile
+            classes={this.props.classes}
+            handleFileUpload={e =>
+              handleFileUpload(e, this.handleDocument, this.props)
+            }
+            uploaded={
+              documentsUploadRedux[key] && documentsUploadRedux[key].documents
+                ? true
+                : false
+            }
+            removeDocument={() => this.removeDocument(key)}
+            documents={
+              documentsUploadRedux[key] && documentsUploadRedux[key].documents
+            }
+            onButtonClick={() => this.onUploadClick(key)}
+            inputProps={this.props.inputProps}
+            buttonLabel={this.props.buttonLabel}
+          />
+        </Grid>
+      </Grid>
+    );
+  };
+
+  render() {
+    const { classes, documentsList } = this.props;
+    let index = 0;
+    return (
+      <div>
+        {documentsList &&
+          documentsList.map(container => {
             return (
-              <div
-                key={key}
-                id={`document-upload-${key}`}
-                className={classes.documentContainer}
-              >
-                <Grid container={true}>
-                  <Grid item={true} xs={2} sm={1} md={1} align="center">
-                    {uploadedIndex.indexOf(key) > -1 ? (
-                      <div className={classes.documentSuccess}>
-                        <Icon>
-                          <i class="material-icons">done</i>
-                        </Icon>
-                      </div>
-                    ) : (
-                      <div className={classes.documentIcon}>
-                        <span>{key + 1}</span>
-                      </div>
-                    )}
-                  </Grid>
-                  <Grid item={true} xs={6} sm={6} md={4} align="left">
-                    <LabelContainer
-                      labelName={documentTypePrefix + document.code}
-                      labelKey={documentTypePrefix + document.code}
-                      style={documentTitle}
-                    />
-                    {document.required && (
-                      <sup style={{ color: "#E54D42" }}>*</sup>
-                    )}
-                  </Grid>
-                  <Grid item={true} xs={12} sm={6} md={4}>
-                    {document.dropdown && (
-                      <React.Fragment>
-                        <div>
-                          <LabelContainer
-                            labelName={"BILL_SELECT_DOCUMENT"}
-                            labelKey={"BILL_SELECT_DOCUMENT"}
-                            style={documentTitle}
-                          />
-                        </div>
-
-                        <Select
-                          value={getLocaleLabels(
-                            "BILL_SELECT_DOCUMENT",
-                            "BILL_SELECT_DOCUMENT"
-                          )}
-                          id={`Bill_Document_Select_id_${key}`}
-                        >
-                          <MenuItem value={getLocaleLabels(
-                            "BILL_SELECT_DOCUMENT",
-                            "BILL_SELECT_DOCUMENT"
-                          )}>
-                            {getLocaleLabels(
-                              "BILL_SELECT_DOCUMENT",
-                              "BILL_SELECT_DOCUMENT"
-                            )}
-                          </MenuItem>
-
-                          {document.dropdown.map((item) => (
-                            <MenuItem value={item.code}>
-                              {getLocaleLabels(item.code, item.code)}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </React.Fragment>
-                    )}
-                  </Grid>
-                  <Grid item={true} xs={12} sm={12} md={3} align="right">
-                    <UploadSingleFile
-                      classes={this.props.classes}
-                      id={`upload-button-${key}`}
-                      handleFileUpload={(e) =>
-                        handleFileUpload(
-                          e,
-                          this.handleDocument,
-                          this.props.inputProps
-                        )
-                      }
-                      uploaded={uploadedIndex.indexOf(key) > -1}
-                      removeDocument={() => this.removeDocument(key)}
-                      documents={this.state.uploadedDocuments[key]}
-                      onButtonClick={() => this.onUploadClick(key)}
-                      buttonLabel={this.props.buttonLabel}
-                      inputProps={document.formatProps}
-                    />
-                  </Grid>
-                </Grid>
+              <div>
+                {container.cards.map(card => {
+                  return (
+                    <div className={classes.documentContainer}>
+                      {card.hasSubCards && (
+                        <LabelContainer
+                          labelKey={card.name}
+                          style={styles.documentTitle}
+                        />
+                      )}
+                      {card.hasSubCards &&
+                        card.subCards.map(subCard => {
+                          return (
+                            <div className={classes.documentSubCard}>
+                              {this.getUploadCard(subCard, index++)}
+                            </div>
+                          );
+                        })}
+                      {!card.hasSubCards && (
+                        <div>{this.getUploadCard(card, index++)}</div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             );
           })}
@@ -304,16 +351,30 @@ class DocumentList extends Component {
 }
 
 DocumentList.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = state => {
+  const { screenConfiguration } = state;
+  const { moduleName } = screenConfiguration;
+  const documentsUploadRedux = get(
+    screenConfiguration.preparedFinalObject,
+    "documentsUploadRedux",
+    {}
+  );
+  return { documentsUploadRedux, moduleName };
+};
+
+const mapDispatchToProps = dispatch => {
   return {
     prepareFinalObject: (jsonPath, value) =>
-      dispatch(prepareFinalObject(jsonPath, value)),
+      dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 
-export default withStyles(styles)(
-  connect(null, mapDispatchToProps)(DocumentList)
+export default withStyles(themeStyles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(DocumentList)
 );

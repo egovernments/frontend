@@ -115,52 +115,78 @@ const summary = getCommonCard({
             getFeesEstimateCard({
                 sourceJsonPath: "LicensesTemp[0].estimateCardData"
             }),
-        bpaBasicDetailsContainer: getHeader({
+        demandRevisionHeader: getHeader({
             labelName: "Demand Revision Basis Details",
             labelKey: "BILL_DEMAND_REVISION_BASIS_DETAILS"
         }),
         break1: getBreak(),
-        basicDetailsContainer: getCommonContainer({
-            scrutinynumber: getLabelWithValue(
+        demandRevisionContainer: getCommonContainer({
+            demandRevisionBasis: getLabelWithValue(
                 {
-                    labelName: "Demand Revision Basis",
-                    labelKey: "BILL_DEMAND_REVISION_BASIS"
+                    labelName: "Demand Revison Basis",
+                    labelKey: "BILL_DEMAND_REVISON_BASIS_LABEL"
                 },
                 {
-                    jsonPath: "BPA.edcrNumber",
-                    // callBack: checkValueForNA
+                    jsonPath: "Bill.demandRevisionBasis"
                 }
             ),
-            occupancy: getLabelWithValue(
+            courtOrderNo: getLabelWithValue(
                 {
-                    labelName: "Court Order No.",
-                    labelKey: "BILL_COURT_ORDER_NO"
+                    labelName: "Court Order No",
+                    labelKey: "BILL_COURT_ORDER_NO_LABEL"
                 },
                 {
-                    jsonPath:
-                        "scrutinyDetails.planDetail.planInformation.occupancy",
-                    // callBack: checkValueForNA
+                    jsonPath: "Bill.courtOderNo"
                 }
             ),
-            applicationtype: getLabelWithValue(
+            dateEffectiveFrom: getLabelWithValue(
                 {
                     labelName: "Date Effective From",
-                    labelKey: "BILL_DATE_EFFECTIVE_FROM"
+                    labelKey: "BILL_DATE_EFFECTIVE_FROM_LABEL"
                 },
                 {
-                    jsonPath:
-                        "BPA.applicationType",
-                    // callBack: checkValueForNA
+                    jsonPath: "Bill.dateEffectiveFrom"
                 }
             ),
-
+            govtNotificationNumber: getLabelWithValue(
+                {
+                    labelName: "Govt Notification No",
+                    labelKey: "BILL_GOVT_NOTIFICATION_NO_LABEL"
+                },
+                {
+                    jsonPath: "Bill.govtNotificationNumber"
+                }
+            ),
+            documentNo: getLabelWithValue(
+                {
+                    labelName: "Document No",
+                    labelKey: "BILL_DOCUMNET_NO_LABEL"
+                },
+                {
+                    jsonPath: "Bill.documentNo"
+                }
+            ),
+            fromDate: getLabelWithValue(
+                {
+                    labelName: "From Date",
+                    labelKey: "BILL_COMMON_FROM_DATE_LABEL"
+                },
+                {
+                    jsonPath: "Bill.fromDate"
+                }
+            ),
+            toDate: getLabelWithValue(
+                {
+                    labelName: "To Date",
+                    labelKey: "BILL_COMMON_TO_DATE_LABEL"
+                },
+                {
+                    jsonPath: "Bill.toDate"
+                }
+            )
         }),
 
     }),
-
     documents: getReviewDocuments(true, false)
-
-    // demand:getReviewOwner()
-
 })
 export default summary;

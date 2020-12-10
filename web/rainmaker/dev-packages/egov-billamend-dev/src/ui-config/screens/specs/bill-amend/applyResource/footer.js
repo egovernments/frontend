@@ -4,7 +4,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, getDocList, validateFields } from "../utils";
+import { getCommonApplyFooter, prepareDocumentsUploadData, validateFields, onDemandRevisionBasis } from "../utils";
 
 import {
   getQueryArg,
@@ -33,7 +33,7 @@ const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = false;
 
   if (activeStep === 0) {
-    await getDocList(state, dispatch);
+    await prepareDocumentsUploadData(state, dispatch);
 
     let isAddDemandRevisionBasisCard = validateFields(
       "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children",
@@ -109,9 +109,15 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
+    // const documentsUploadRedux = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "BillTemp[0].uploadedDocsInRedux",
+    //   {}
+    // );
+
     const documentsUploadRedux = get(
       state.screenConfiguration.preparedFinalObject,
-      "BillTemp[0].uploadedDocsInRedux",
+      "documentsUploadRedux",
       {}
     );
   
@@ -123,6 +129,7 @@ const callBackForNext = async (state, dispatch) => {
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
+    onDemandRevisionBasis(state, dispatch);
   }
 
   if (activeStep !== 4) {

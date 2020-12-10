@@ -157,11 +157,14 @@ class AdjustmentAmountContainer extends Component {
     this.setState({ name: event.target.value });
   };
   handleAmountChange = (e, field) => {
-    const event = e.target;
-    const data = { ...this.state.data };
-    data[event.name][field] = event.value;
-    this.setState({ data });
-    this.props.prepareFinalObject("BILL.AMOUNT", data);
+    const re = /^(\d+)?([.]?\d{0,2})?$/; ///^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+        const event = e.target;
+        const data = { ...this.state.data };
+        data[event.name][field] = event.value;
+        this.setState({ data });
+        this.props.prepareFinalObject("BILL.AMOUNT", data);
+      }
   };
   handleCheckBoxChange = (field) => {
     if (field === "reducedAmount") {
