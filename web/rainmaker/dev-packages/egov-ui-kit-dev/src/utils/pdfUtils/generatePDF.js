@@ -354,9 +354,9 @@ const getHeaderCard = (applicationData, logo) => {
     let body = [];
     body.push({
         image: logo,
-        width: 60,
-        height: 61.25,
-        margin: [51, 12, 10, 10]
+        width: 50,
+        height: 51.25,
+        margin: [51, 6, 10, 10]
     })
     body.push({
         stack: [
@@ -370,7 +370,7 @@ const getHeaderCard = (applicationData, logo) => {
             }
         ],
         alignment: "left",
-        margin: [10, 13, 0, 0]
+        margin: [10, 8, 0, 0]
     });
     if (applicationData.qrcode) {
         body.push({
@@ -459,7 +459,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     nodeLength = ind;
                 }
             })
-            if (currentNode.startPosition.verticalRatio > 0.80 && currentNode.style == 'pdf-card-title') {
+            if (currentNode.startPosition.verticalRatio > 0.9 && currentNode.style == 'pdf-card-title') {
                 return true;
             }
             if (currentNode.startPosition.verticalRatio > 0.75 && currentNode.style == 'pdf-card-title' && nodeLength > 19) {
@@ -483,7 +483,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 italics: true,
                 "margin": [
                     -18,
-                    8,
+                    6,
                     0,
                     0
                 ],
@@ -498,7 +498,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     0,
                     0,
                     0,
-                    5
+                    2
                 ]
             },
             "pdf-header-sub-text": {
@@ -511,7 +511,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 bold: true,
                 "margin": [
                     -18,
-                    8,
+                    5,
                     0,
                     0
                 ],
@@ -522,9 +522,9 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 bold: true,
                 "margin": [
                     -18,
-                    16,
+                    5,
                     8,
-                    8
+                    2
                 ],
                 "color": "#484848",
                 "fontWeight": 500
