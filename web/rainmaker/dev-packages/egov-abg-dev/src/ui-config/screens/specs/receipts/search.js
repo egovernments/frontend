@@ -55,8 +55,8 @@ const getMDMSData = async (action, state, dispatch) => {
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
     );
-
-    dispatch(prepareFinalObject("applyScreenMdmsData.businessServices", get(payload.MdmsRes, "common-masters.uiCommonPay")))
+    let uiCommonPay=get(payload.MdmsRes, "common-masters.uiCommonPay",[]);
+    dispatch(prepareFinalObject("applyScreenMdmsData.businessServices",uiCommonPay&&uiCommonPay.filter(config=>config.cancelReceipt)))
     dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay")))
   } catch (e) {
     console.log(e);

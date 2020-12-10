@@ -214,6 +214,7 @@ export const cancelReceiptDetailsCard = getCommonCard(
             className: "autocomplete-dropdown",
             sourceJsonPath: "applyScreenMdmsData.reasonForReceiptCancel",
           },
+          required: true,
           jsonPath: "paymentWorkflows[0].reason",
           gridDefination: {
             xs: 12,
