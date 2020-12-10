@@ -34,6 +34,7 @@ export const documentDetails = getCommonCard({
         labelKey: "BILL_DOC_DET_BTN_UPLOAD_FILE"
       },
       inputProps: {
+        accept: "image/*, .pdf, .png, .jpeg",
         formatProps: {
           accept: "image/*, .pdf, .png, .jpeg",
         },

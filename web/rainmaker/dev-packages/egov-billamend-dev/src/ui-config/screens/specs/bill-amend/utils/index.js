@@ -15,6 +15,7 @@ import {
   toggleSpinner,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const getCommonApplyFooter = (children) => {
   return {
@@ -25,6 +26,76 @@ export const getCommonApplyFooter = (children) => {
     },
     children,
   };
+};
+
+export const prepareDocumentsUploadData = (state, dispatch) => {
+  const demandRevisionBasisValue = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Bill.demandRevisionBasis",
+    ""
+  );
+  const documentObj = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.BillAmendment.documentObj"
+  );
+  const documentTypes = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.common-masters.DocumentType"
+  );
+
+  let documentObjArray = [];
+  let flag = false;
+
+  documentObj.forEach((docObj) => {
+    docObj.allowedDocs.forEach((innerObj) => {
+      innerObj.demandRevisionBasis.forEach((value) => {
+        if (value === demandRevisionBasisValue) flag = true;
+      });
+    });
+    if (flag) {
+      documentObjArray.push(docObj);
+      flag = false;
+      return true;
+    }
+  });
+
+  let documents = documentObjArray[0].allowedDocs
+
+  let documentsContract = [];
+  let tempDoc = {};
+  documents.forEach(doc => {
+    let card = {};
+    card["code"] = doc.documentType;
+    card["title"] = doc.documentType;
+    card["cards"] = [];
+    tempDoc[doc.documentType] = card;
+  });
+
+  documents.forEach(doc => {
+      let card = {};
+      card["name"] = doc.documentType;
+      card["code"] = doc.documentType;
+      card["required"] = doc.required ? true : false;
+      if (doc.dropdownData) {
+        let dropdown = {};
+        dropdown.label = "BILL_SELECT_LABEL";
+        dropdown.required = doc.required;
+        dropdown.menu = doc.dropdownData.filter(item => {
+          return item.active;
+        });
+        dropdown.menu = dropdown.menu.map(item => {
+          return { code: item.code, label: getTransformedLocale(item.code) };
+        });
+        card["dropdown"] = dropdown;
+      }
+      tempDoc[doc.documentType].cards.push(card);
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+
+  dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 
 export const getDocList = (state, dispatch) => {
@@ -210,3 +281,168 @@ export const validateFields = (
   }
   return isFormValid;
 };
+
+export const onDemandRevisionBasis = async (state, dispatch) => {
+  let demandRevisionBasis = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Bill.demandRevisionBasis", ""
+  );
+  
+  switch (demandRevisionBasis) {
+      case "COURTCASESETTLEMENT":
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+                  "visible",
+                  true
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+                  "visible",
+                  true
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
+                  "visible",
+                  false
+              )
+          );
+          break;
+      case "ARREARSWRITEOFF":
+      case "ONETIMESETTLEMENT":
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+                  "visible",
+                  true
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
+                  "visible",
+                  true
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
+                  "visible",
+                  true
+              )
+          );
+          break;
+      case "DCBCORRECTION":
+      case "REMISSIONFORPT":
+      case "OTHERS":
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+                  "visible",
+                  false
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
+                  "visible",
+                  true
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
+                  "visible",
+                  true
+              )
+          );
+          dispatch(
+              handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
+                  "visible",
+                  true
+              )
+          );
+          break;
+      default:
+          
+          break;
+  }
+}
