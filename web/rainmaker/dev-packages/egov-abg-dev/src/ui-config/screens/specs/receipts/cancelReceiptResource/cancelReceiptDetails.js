@@ -224,13 +224,15 @@ export const cancelReceiptDetailsCard = getCommonCard(
             const additionalDetailsJson = "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children.addtionalDetails";
             if (action.value == "OTHER") {
               dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.disabled", false))
-              dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.value", ""))
-              dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.error", false))
+              dispatch(handleField('cancelReceipt', additionalDetailsJson, "required", true))
+              dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.required", true))
             } else {
               dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.disabled", true))
-              dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.value", ""))
-              dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.error", false))
+              dispatch(handleField('cancelReceipt', additionalDetailsJson, "required", false))
+              dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.required", false))
             }
+            dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.value", ""))
+            dispatch(handleField('cancelReceipt', additionalDetailsJson, "props.error", false))
             return action;
           }
         },
@@ -247,10 +249,10 @@ export const cancelReceiptDetailsCard = getCommonCard(
             xs: 12,
             sm: 8
           },
-          required: true,
+          required: false,
           disabled: true,
-          multiline: true,
-          rows: "4",
+          // multiline: true,
+          // rows: "4",
           visible: true,
           pattern: getPattern("Address"),
           errorMessage: "Invalid Details.",

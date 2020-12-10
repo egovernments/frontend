@@ -3,6 +3,7 @@ import React from "react";
 import {
   getEpochForDate, sortByEpoch
 } from "../../utils";
+import {download} from "egov-common/ui-utils/commons"
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -20,10 +21,11 @@ export const searchResults = {
             <div onClick={value => {
               const receiptQueryString = [
                 { key: "receiptNumbers", value: tableMeta.rowData[0] },
-                { key: "tenantId", value: tableMeta.rowData[7] }
+                { key: "tenantId", value: tableMeta.rowData[8] },
+                { key: "businessService", value: tableMeta.rowData[9] }
               ]
-              // download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
-            }}>
+              download(receiptQueryString , "download" ,tableMeta.rowData[7]) ;
+            }} style={{color:'#2196F3'}}>
               {value}
             </div>
           )
