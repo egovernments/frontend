@@ -278,7 +278,7 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Electricity Connection No. of Trade Loaction",
           labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
         },
-        // pattern: getPattern("ElectricityConnNo"),
+         pattern: getPattern("ElectricityConnNo"),
         jsonPath:
           "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
       }),

@@ -580,7 +580,7 @@ export const getPattern = type => {
     case "PropertyID":
       return /^[a-zA-z0-9\s\\/\-]$/i;
     case "ElectricityConnNo":
-      return /^[0-9]{15}$/i;
+      return /^.{1,15}$/i;
     case "DocumentNo":
       return /^[0-9]{1,15}$/i; 
     case "eventName":
