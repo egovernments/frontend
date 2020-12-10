@@ -48,7 +48,7 @@ export const searchResults = {
             <a href="javascript:void(0)"
               onClick={() => {
                 console.log('CLICKED');
-                let link2=`/wns/connection-details?connectionNumber=WS/107/2020-21/000037&tenantId=pb.amritsar&service=WATER&connectionType=Metered`;
+                let link2=`/wns/connection-details?connectionNumber=WS/107/2020-21/066733&tenantId=pb.amritsar&service=WATER&connectionType=Metered&due=NA`;
                 let link = `/wns/connection-details?connectionNumber=WS/107/2020-21/000041&tenantId=pb.amritsar&service=WATER&connectionType=Non%20Metered`;
                 link=value=='WS/107/2020-21/000037'?link2:link;
                 routeTo(link);
