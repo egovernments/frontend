@@ -59,10 +59,11 @@ export const leaseRenewalReviewDetails = getCommonCard({
   reviewDocumentDetails
 });
 
+
 let loadLeaseDetails = async (action, state, dispatch) => {
   try{
     //dispatch(toggleSpinner());
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryParams = [{ key: "applicationNumber", value: applicationNumber },
       { key: "tenantId", value: tenantId }
@@ -203,6 +204,18 @@ const searchPreview = {
                 align: "right"
               }
             }
+          }
+        },
+        applicationNumber2: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-lams",
+          componentPath: "ApplicationNo",
+          props: {
+            number: applicationNumber,
+            label:{
+              labelKey:"LAMS_TABLE_COL_APP_NO",
+              labelValue:"Appl No: "
+            } 
           }
         },
         taskStatus: {

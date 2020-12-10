@@ -86,7 +86,7 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     for (var key in searchScreenObject) {
       if (
-        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] && 
         searchScreenObject[key].trim() !== ""
       ) {
         if (key === "fromDate") {

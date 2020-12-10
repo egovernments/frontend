@@ -12,6 +12,9 @@
     width: 100%;
     margin-bottom: 10px;
   }
+  .lams-application-no{
+    width: 100%;
+  }
 }
 
 @media only screen and (min-width: 768px) {
@@ -19,5 +22,8 @@
     margin-left: 8px;
     padding-left: 19px;
     padding-right: 19px;
+  }
+  .lams-application-no{
+    width: 370px;
   }
 }

@@ -53,7 +53,9 @@ const checkIfFormIsValid = async (state, dispatch) => {
       isCompulsaryDocsUploaded = false;
   })
 
-  isFormValid = ( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded) ? true : false;
+  isFormValid = (!process.env.REACT_APP_NAME === "Citizen")? 
+    (( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded) ? true : false):
+    (( isLeaseDetailsValid && isCompulsaryDocsUploaded) ? true : false);
 
   //alert("Is valid form "+isCompulsaryDocsUploaded);
 
