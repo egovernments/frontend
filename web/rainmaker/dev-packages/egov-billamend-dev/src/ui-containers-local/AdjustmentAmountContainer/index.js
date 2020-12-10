@@ -189,7 +189,7 @@ class AdjustmentAmountContainer extends Component {
       <React.Fragment>
         <Grid container={true}>
           <Grid item={true} xs={4} sm={4} md={3} style={lableStyle}>
-            <LabelContainer labelKey={getTransformedLocale(card.taxHeads)} />
+            <LabelContainer labelKey={getTransformedLocale(`BILL_${card.taxHeads}`)} />
           </Grid>
           <Grid item={true} xs={4} sm={4} md={3}>
             <TextField

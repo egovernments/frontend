@@ -9,8 +9,8 @@ import {
     getLabel,
     getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getReviewDocuments } from "../document-review"
+import { getReviewDocuments } from "../document-review";
+import { changeStep } from "../applyResource/footer";
 
 
 export const getFeesEstimateCard = props => {
@@ -21,7 +21,6 @@ export const getFeesEstimateCard = props => {
         componentPath: "EstimateCardContainer",
         props: {
             sourceJsonPath: "LicensesTemp[0].estimateCardData"
-            // ...rest
         }
     };
 };
@@ -44,7 +43,7 @@ const headerrow = getCommonContainer({
     header: getCommonHeader({
         labelName: "Generate Note",
         labelKey: "BILL_GENERATE_NOTE"
-    }), 
+    }),
     applicationNumber: {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-billamend",
@@ -57,55 +56,55 @@ const headerrow = getCommonContainer({
 });
 
 const summary = getCommonCard({
-    title: getCommonTitle({ labelName: "Summary",labelKey:"BILL_SUMMARY" }),
+    title: getCommonTitle({ labelName: "Summary", labelKey: "BILL_SUMMARY" }),
     grayDiv: getCommonGrayCard({
         headerDiv: {
             uiFramework: "custom-atoms",
             componentPath: "Container",
             children: {
-              header: {
-                gridDefination: {
-                  xs: 12,
-                  sm: 10
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Amount Details",
+                        labelKey: "BILL_AMOUNT_DETAILS"
+                    })
                 },
-                ...getCommonSubHeader({
-                  labelName: "Amount Details",
-                  labelKey: "BILL_AMOUNT_DETAILS"
-                })
-              },
-              editSection: {
-                componentPath: "Button",
-                props: {
-                  color: "primary"
-                },
-                gridDefination: {
-                  xs: 12,
-                  sm: 2,
-                  align: "right"
-                },
-                visible: true,
-                children: {
-                  editIcon: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
+                editSection: {
+                    componentPath: "Button",
                     props: {
-                      iconName: "edit"
+                        color: "primary"
+                    },
+                    gridDefination: {
+                        xs: 12,
+                        sm: 2,
+                        align: "right"
+                    },
+                    visible: true,
+                    children: {
+                        editIcon: {
+                            uiFramework: "custom-atoms",
+                            componentPath: "Icon",
+                            props: {
+                                iconName: "edit"
+                            }
+                        },
+                        buttonLabel: getLabel({
+                            labelName: "Edit",
+                            labelKey: "BILL_SUMMARY_EDIT"
+                        })
+                    },
+                    onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch) => {
+                            changeStep(state, dispatch, "", 0);
+                        }
                     }
-                  },
-                  buttonLabel: getLabel({
-                    labelName: "Edit",
-                    labelKey: "BILL_SUMMARY_EDIT"
-                  })
                 },
-                // onClickDefination: {
-                //   action: "condition",
-                //   callBack: (state, dispatch) => {
-                //     changeStep(state, dispatch, "", 2);
-                //   }
-                // }
-              },
-           
-          }
+
+            }
         },
         subtitle: getHeader({
             labelName: "Adjustment Amount Details",

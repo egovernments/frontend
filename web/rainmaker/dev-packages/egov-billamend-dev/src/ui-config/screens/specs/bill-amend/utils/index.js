@@ -369,6 +369,7 @@ export const onDemandRevisionBasis = async (state, dispatch) => {
               handleField(
                   "apply",
                   "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
+                  "visible",
                   false
               )
           );
