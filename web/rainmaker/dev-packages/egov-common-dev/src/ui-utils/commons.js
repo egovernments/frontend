@@ -510,12 +510,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
-  const FETCHRECEIPT = {
-    GET: {
-      URL: "/collection-services/payments/_search",
-      ACTION: "_get",
-    },
-  };
+
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",
@@ -530,7 +525,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   })
   receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
   try {
-    httpRequest("post", getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+    httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
