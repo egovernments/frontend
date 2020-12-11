@@ -53,11 +53,17 @@ const checkIfFormIsValid = async (state, dispatch) => {
       isCompulsaryDocsUploaded = false;
   })
 
-  isFormValid = (!process.env.REACT_APP_NAME === "Citizen")? 
-    (( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded) ? true : false):
-    (( isLeaseDetailsValid && isCompulsaryDocsUploaded) ? true : false);
-
-  //alert("Is valid form "+isCompulsaryDocsUploaded);
+  let isCitizenEditScreen = checkIfCitizenEditScreen();
+  isFormValid =
+  (!process.env.REACT_APP_NAME === "Citizen")? 
+    (isCitizenEditScreen? 
+      (isCompulsaryDocsUploaded? true:false) : 
+      (( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded) ? true : false)
+    ):
+    (isCitizenEditScreen? 
+      (isCompulsaryDocsUploaded? true:false) : 
+      (( isLeaseDetailsValid && isCompulsaryDocsUploaded) ? true : false)
+    );
 
   if (isFormValid) {
     try {
