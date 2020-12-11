@@ -1,7 +1,8 @@
 import commonConfig from "config/common.js";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments, enableField, disableField } from "egov-ui-framework/ui-utils/commons";
+import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -129,7 +130,7 @@ export const getPropertyObj = async (waterConnection) => {
 }
 
 
-export const getSearchResults = async (queryObject,filter=false) => {
+export const getSearchResults = async (queryObject, filter = false) => {
     try {
         const response = await httpRequest(
             "post",
@@ -140,12 +141,12 @@ export const getSearchResults = async (queryObject,filter=false) => {
         if (response.WaterConnection && response.WaterConnection.length == 0) {
             return response;
         }
-        let currentTime=new Date().getTime();
-        if(filter){
-        response.WaterConnection=response.WaterConnection.filter(app=>currentTime>app.dateEffectiveFrom&&(app.applicationStatus=='APPROVED' || app.applicationStatus=='CONNECTION_ACTIVATED'));
-        response.WaterConnection=response.WaterConnection.sort((row1,row2)=>row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+        let currentTime = new Date().getTime();
+        if (filter) {
+            response.WaterConnection = response.WaterConnection.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.WaterConnection = response.WaterConnection.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
-        
+
         let result = findAndReplace(response, null, "NA");
         result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
@@ -157,7 +158,7 @@ export const getSearchResults = async (queryObject,filter=false) => {
     } catch (error) { console.log(error) }
 };
 
-export const getSearchResultsForSewerage = async (queryObject, dispatch,filter=false) => {
+export const getSearchResultsForSewerage = async (queryObject, dispatch, filter = false) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -170,10 +171,10 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch,filter=f
             dispatch(toggleSpinner());
             return response;
         }
-        let currentTime=new Date().getTime();
-        if(filter){
-        response.SewerageConnections=response.SewerageConnections.filter(app=>currentTime>app.dateEffectiveFrom&&(app.applicationStatus=='APPROVED' || app.applicationStatus=='CONNECTION_ACTIVATED'));
-        response.SewerageConnections=response.SewerageConnections.sort((row1,row2)=>row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+        let currentTime = new Date().getTime();
+        if (filter) {
+            response.SewerageConnections = response.SewerageConnections.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.SewerageConnections = response.SewerageConnections.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
         let result = findAndReplace(response, null, "NA");
         result.SewerageConnections = await getPropertyObj(result.SewerageConnections);
@@ -891,8 +892,8 @@ export const applyForWater = async (state, dispatch) => {
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdate, "waterSource", getWaterSource(queryObjectForUpdate.waterSource, queryObjectForUpdate.waterSubSource));
-            disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+            disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            disableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 queryObjectForUpdate.additionalDetails = {};
             }
@@ -902,11 +903,11 @@ export const applyForWater = async (state, dispatch) => {
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
-            enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+            enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         } else {
-            disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+            disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            disableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
@@ -918,8 +919,8 @@ export const applyForWater = async (state, dispatch) => {
             }
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
-            enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            enableField('apply',"components.div.children.footer.children.payButton",dispatch); 
+            enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (isModifyMode()) {
                 response.WaterConnection = await getPropertyObj(response.WaterConnection);
                 response.WaterConnection[0].water = true;
@@ -936,8 +937,8 @@ export const applyForWater = async (state, dispatch) => {
         }
         return true;
     } catch (error) {
-        enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-        enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+        enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+        enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
         console.log(error);
         return false;
@@ -962,8 +963,8 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
             set(queryObjectForUpdate, "connectionType", "Non Metered");
-            disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+            disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            disableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
@@ -973,11 +974,11 @@ export const applyForSewerage = async (state, dispatch) => {
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
-            enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+            enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         } else {
-            disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+            disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            disableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (typeof queryObject.additionalDetails !== 'object') {
                 response.SewerageConnection[0].additionalDetails = {};
             }
@@ -986,8 +987,8 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObject = findAndReplace(queryObject, "NA", null);
             response = await httpRequest("post", "/sw-services/swc/_create", "", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("SewerageConnection", response.SewerageConnections));
-            enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+            enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (isModifyMode()) {
                 response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
                 response.SewerageConnections[0].sewerage = true;
@@ -1001,8 +1002,8 @@ export const applyForSewerage = async (state, dispatch) => {
         }
         return true;
     } catch (error) {
-        enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-        enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+        enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+        enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
         console.log(error);
         return false;
@@ -1050,8 +1051,8 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
                     "WaterConnection[0].additionalDetails.appCreatedDate"
                 )
             );
-            disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+            disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            disableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (typeof queryObjectForUpdateWater.additionalDetails !== 'object') {
                 queryObjectForUpdateWater.additionalDetails = {};
             }
@@ -1074,11 +1075,11 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             let sewerageResponse = await getSearchResultsForSewerage(searchQueryObjectSewerage, dispatch);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
-            enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+            enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         } else {
-            disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            disableField('apply', "components.div.children.footer.children.payButton",dispatch);
+            disableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            disableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
             }
@@ -1089,16 +1090,16 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             dispatch(prepareFinalObject("SewerageConnection", sewerageResponse.SewerageConnections));
-            enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-            enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+            enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+            enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         }
         if (!isModifyMode()) {
             setApplicationNumberBox(state, dispatch);
         }
         return true;
     } catch (error) {
-        enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
-        enableField('apply',"components.div.children.footer.children.payButton",dispatch);
+        enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
+        enableField('apply', "components.div.children.footer.children.payButton", dispatch);
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
         console.log(error);
         return false;
@@ -1320,7 +1321,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
             value: getTenantIdCommon()
         },
         {
-            key: "businessServices",
+            key: "businessService",
             value: "WS"
         },
         {
@@ -1331,7 +1332,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "/collection-services/payments/_search",
+            getPaymentSearchAPI("WS"),
             "_search",
             queryObject
         );
@@ -1359,7 +1360,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
             value: getTenantIdCommon()
         },
         {
-            key: "businessServices",
+            key: "businessService",
             value: "SW"
         },
         {
@@ -1370,7 +1371,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "/collection-services/payments/_search",
+            getPaymentSearchAPI("SW"),
             "_search",
             queryObject
         );

@@ -870,7 +870,8 @@ export const footerReviewTop = (
 
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }    
       ]
       download(receiptQueryString, "download", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_download");
@@ -882,7 +883,8 @@ export const footerReviewTop = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }   
       ]
       download(receiptQueryString, "print", receiptKey, state);
       // generateReceipt(state, dispatch, "receipt_print");
@@ -1036,7 +1038,8 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }   
       ]
       download(receiptQueryString, "download", receiptKey);
     },
@@ -1047,7 +1050,8 @@ export const downloadPrintContainer = (
     link: () => {
       const receiptQueryString = [
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
-        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") },
+        { key: "businessService", value:'TL' }   
       ]
       download(receiptQueryString, "print", receiptKey);
     },

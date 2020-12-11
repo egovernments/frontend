@@ -28,6 +28,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage ,getFileUrl, enableFieldAndHideSpinner} from "egov-ui-framework/ui-utils/commons";
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -59,9 +60,15 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 
 export const getSearchResults = async queryObject => {
   try {
+    let businessService = '';
+    queryObject && Array.isArray(queryObject) && queryObject.map(query => {
+      if (query.key == "businessServices") {
+        businessService = query.value;
+      }
+    })
     const response = await httpRequest(
       "post",
-      "collection-services/payments/_search",
+      getPaymentSearchAPI(businessService),
       "",
       queryObject
     );

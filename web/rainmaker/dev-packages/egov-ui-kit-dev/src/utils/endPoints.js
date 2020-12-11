@@ -176,8 +176,7 @@ export const FETCHBILL = {
 };
 export const FETCHRECEIPT = {
   GET: {
-    URL: "/collection-services/payments/_search",
-    ACTION: "_get",
+    ACTION: "_search",
   },
 };
 export const DOWNLOADRECEIPT = {

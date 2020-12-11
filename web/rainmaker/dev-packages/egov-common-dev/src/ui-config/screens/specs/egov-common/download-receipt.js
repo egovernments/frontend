@@ -25,7 +25,8 @@ const loadMdms = async (action, state, dispatch, consumerCode, tenantId, busines
     await getBusinessServiceMdmsData(dispatch, tenantId);
     const receiptQueryString = [
         { key: "receiptNumbers", value: receiptNumber },
-        { key: "tenantId", value: tenantId }
+        { key: "tenantId", value: tenantId },
+        { key: "businessService", value:businessService }        
     ]
     download(receiptQueryString, "open", receiptKey, state)
 }
