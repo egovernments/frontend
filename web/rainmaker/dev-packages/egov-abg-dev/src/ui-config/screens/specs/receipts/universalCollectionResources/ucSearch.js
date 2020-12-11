@@ -19,38 +19,22 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 export const resetFields = (state, dispatch) => {
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.receiptNumber",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.consumerNumber",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.serviceType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNumber",
-      "props.value",
-      ""
-    )
-  );
+  const compJson="components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children";
+    
+  dispatch(handleField("search",`${compJson}.receiptNumber`,"props.value",""));
+  dispatch(handleField("search",`${compJson}.receiptNumber`,"props.error",false));
+  
+  dispatch(handleField("search",`${compJson}.consumerNumber`,"props.value",""));
+  dispatch(handleField("search",`${compJson}.consumerNumber`,"props.error",false));
+  
+  dispatch(handleField("search",`${compJson}.serviceType`,"props.value",""));
+  dispatch(handleField("search",`${compJson}.serviceType`,"props.error",false));
+  dispatch(handleField("search",`${compJson}.serviceType`,"props.helperText",""));
+  
+  
+  dispatch(handleField("search",`${compJson}.mobileNumber`,"props.value",""));
+  dispatch(handleField("search",`${compJson}.mobileNumber`,"props.error",false));
+  
 };
 
 export const UCSearchCard = getCommonCard({
