@@ -315,7 +315,7 @@ class ActionDialog extends React.Component {
                         shrink: true,
                       }}
                       onChange={(e, value) => {
-                        handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnDate`, Date.parse(e.target.value))
+                        handleFieldChange(`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnDate`, e.target.value)
                       }
                       }
                       jsonPath={`${dataPath}.tradeLicenseDetail.additionalDetail.cbrnDate`}
