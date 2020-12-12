@@ -43,6 +43,56 @@ const fieldConfig = {
       labelKey: "LAMS_FILE_NO_PLACEHOLDER"
     }
   },
+  termExpiryDate: {
+    label: {
+      labelName: "Term Expiry",
+      labelKey: "LAMS_TERM_EXP_DATE"
+    },
+    placeholder: {
+      labelName: "Tery Expiry Date",
+      labelKey: "LAMS_TERM_EXP_DATE_PLACEHOLDER"
+    }
+  },
+  finalTermExpiryDate: {
+    label: {
+      labelName: "Final Term Expiry",
+      labelKey: "LAMS_FINAL_TERM_EXP"
+    },
+    placeholder: {
+      labelName: "Final Tery Expiry Date",
+      labelKey: "LAMS_FINAL_TERM_EXP_PLACEHOLDER"
+    }
+  },
+  annualRent: {
+    label: {
+      labelName: "Annual Rent",
+      labelKey: "LAMS_ANN_RENT"
+    },
+    placeholder: {
+      labelName: "Final Tery Expiry Date",
+      labelKey: "LAMS_ANN_RENT_PLACEHOLDER"
+    }
+  },
+  termNo: {
+    label: {
+      labelName: "Term No",
+      labelKey: "LAMS_TERMNO"
+    },
+    placeholder: {
+      labelName: "Final Tery Expiry Date",
+      labelKey: "LAMS_TERMNO_PLACEHOLDER"
+    }
+  },
+  lesseAsPerGLR: {
+    label: {
+      labelName: "Lessee as per GLR",
+      labelKey: "LAMS_AS_PER_GLR"
+    },
+    placeholder: {
+      labelName: "Lessee as per GLR",
+      labelKey: "LAMS_AS_PER_GLR"
+    }
+  },
   comments: {
     label: {
       labelName: "Comments",
@@ -191,6 +241,12 @@ class ActionDialog extends React.Component {
       state.screenConfiguration.preparedFinalObject,
       `lamsStore.Lease[0].status`
     );
+    const applicationType = get(
+      state.screenConfiguration.preparedFinalObject,
+      `lamsStore.Lease[0].applicationType`
+    );
+
+    //alert("Status is "+status+" " +applicationType);
     switch (status) {
       case "APPLIED":
       case "APPROVED":
@@ -254,10 +310,95 @@ class ActionDialog extends React.Component {
                           }
                           jsonPath={`${dataPath}.fileNo`}
                           placeholder={fieldConfig.fileNo.placeholder}
-                          required={true}
+                          required={false}
                         />
                       </Grid>
-                      <Grid item sm="12">
+                      {buttonLabel === "APPROVE" &&
+                        <Grid item sm="12">
+                          <TextFieldContainer
+                            InputLabelProps={{ shrink: true }}
+                            label={fieldConfig.termNo.label}
+                            onChange={e =>
+                              handleFieldChange(`${dataPath}.leaseDetails.termNo`, e.target.value)
+                            }
+                            jsonPath={`${dataPath}.leaseDetails.termNo`}
+                            placeholder={fieldConfig.termNo.placeholder}
+                            required={true}
+                          />
+                        </Grid>
+                      }
+                      {buttonLabel === "APPROVE" &&
+                        <Grid item sm="12">
+                        <TextFieldContainer
+                          InputLabelProps={{ shrink: true }}
+                          label={fieldConfig.annualRent.label}
+                          onChange={e =>
+                            handleFieldChange(`${dataPath}.leaseDetails.annualRent`, e.target.value)
+                          }
+                          jsonPath={`${dataPath}.leaseDetails.annualRent`}
+                          placeholder={fieldConfig.annualRent.placeholder}
+                          required={true}
+                        />
+                        </Grid>
+                      }
+                      {buttonLabel === "APPROVE" &&
+                        <Grid item sm="12">
+                        <TextFieldContainer
+                          InputLabelProps={{ shrink: true }}
+                          label={fieldConfig.lesseAsPerGLR.label}
+                          onChange={e =>
+                            handleFieldChange(`${dataPath}.leaseDetails.lesseAsPerGLR`, e.target.value)
+                          }
+                          jsonPath={`${dataPath}.leaseDetails.lesseAsPerGLR`}
+                          placeholder={fieldConfig.lesseAsPerGLR.placeholder}
+                          required={true}
+                        />
+                        </Grid>
+                      }
+                      {buttonLabel === "APPROVE" &&
+                        <Grid item sm="12">
+                          <TextFieldContainer
+                            id="datetime-local"
+                            label={fieldConfig.termExpiryDate.label}
+                            //label="Date"
+                            type="date"
+                            required={true}
+                            InputProps={{ inputProps: { max: new Date().toISOString().slice(0,10)} }}
+                            //format={'DD/MM/YYYY'}
+                            // formatDate={(date) => moment(date).format('DD/MM/YYYY')}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            onChange={(e, value) => {
+                              handleFieldChange(`${dataPath}.leaseDetails.termExpiryDate`, Date.parse(e.target.value))
+                            }
+                            }
+                            jsonPath={`${dataPath}.leaseDetails.termExpiryDate`}
+
+                          />
+                        </Grid>}
+                      { buttonLabel === "APPROVE"  && applicationType === "EXTENSION" && 
+                       <Grid item sm="12">
+                        <TextFieldContainer
+                          id="datetime-local"
+                          label={fieldConfig.finalTermExpiryDate.label}
+                          //label="Date"
+                          type="date"
+                          required={true}
+                          InputProps={{ inputProps: { max: new Date().toISOString().slice(0,10)} }}
+                          //format={'DD/MM/YYYY'}
+                          // formatDate={(date) => moment(date).format('DD/MM/YYYY')}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          onChange={(e, value) => {
+                            handleFieldChange(`${dataPath}.leaseDetails.finalTermExpiryDate`, Date.parse(e.target.value))
+                          }
+                          }
+                          jsonPath={`${dataPath}.leaseDetails.finalTermExpiryDate`}
+                        />
+                      </Grid>}
+                      {/* <Grid item sm="12">
                         <TextFieldContainer
                           id="datetime-local"
                           label={fieldConfig.issueDate.label}
@@ -282,7 +423,7 @@ class ActionDialog extends React.Component {
                           jsonPath={`${dataPath}.issueDate`}
 
                         />
-                      </Grid>
+                      </Grid> */}
                       <Grid item sm="12">
                         <TextFieldContainer
                           InputLabelProps={{ shrink: true }}
@@ -291,6 +432,7 @@ class ActionDialog extends React.Component {
                             handleFieldChange(`${dataPath}.comment`, e.target.value)
                           }
                           jsonPath={`${dataPath}.comment`}
+                          required={true}
                           placeholder={fieldConfig.comments.placeholder}
                         />
                       </Grid>
@@ -429,6 +571,7 @@ class ActionDialog extends React.Component {
                             handleFieldChange(`${dataPath}.comment`, e.target.value)
                           }
                           jsonPath={`${dataPath}.comment`}
+                          required={true}
                           placeholder={fieldConfig.comments.placeholder}
                         />
                       </Grid>
@@ -787,7 +930,6 @@ class ActionDialog extends React.Component {
 
                       <Grid item sm="12">
                         <TextFieldContainer
-                        
                           InputLabelProps={{ shrink: true }}
                           label={fieldConfig.cbrnNumber.label}
                           required={true}

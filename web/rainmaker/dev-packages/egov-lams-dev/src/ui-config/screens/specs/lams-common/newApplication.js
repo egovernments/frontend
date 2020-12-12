@@ -37,7 +37,7 @@ const newApplication = {
       if(!(process.env.REACT_APP_NAME === "Citizen"))
       {
         let tenantId = getTenantId();
-        let currentCbFilter = "$[?(@.code == 'pb.testing' || @.code == '"+tenantId+"')]";
+        let currentCbFilter = "$[?(@.code == '"+tenantId+"')]";
         onlyCBs = jp.query(onlyCBs, currentCbFilter );
       } 
       dispatch(prepareFinalObject("lamsStore.allTenants", onlyCBs));
