@@ -695,6 +695,7 @@ export const tradeDetails = getCommonCard({
       props:{
         disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false 
       },
+      pattern: getPattern("OldLicenceNo"),
       // iconObj: {
       //   iconName: "search",
       //   position: "end",

@@ -572,7 +572,7 @@ export const getPattern = type => {
     case "DoorHouseNo":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "BuildingStreet":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
     case "Landline":
@@ -600,6 +600,8 @@ export const getPattern = type => {
         return /^(?!0{6})[0-9]{6}$/;
     case "Comments":
         return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
+    case "OldLicenceNo":
+        return /^[a-zA-Z0-9-/]{0,64}$/;
 
   }
 };
