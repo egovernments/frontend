@@ -314,7 +314,7 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else if(tlAppStatus!=null) {
-      let pattern =  /^[a-zA-Z0-9-_]{1,50}$/i ;
+      let pattern =  /^[a-zA-Z0-9- _]{1,50}$/i ;
       const comments = get(
         preparedFinalObject,
         `Licenses[0].comment`,
