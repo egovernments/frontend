@@ -8,7 +8,9 @@ import {
   getSelectField,
   getCommonContainer,
   getPattern,
-  getLabel
+  getLabel, 
+  getCommonCaption,
+  getCommonValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getIconStyle,
@@ -21,8 +23,11 @@ import {
   getTradeTypeDropdownData,
   updateMdmsDropDowns,
   updateStructureTypes,
-  downloadHelpFile
+  downloadHelpFile,
+  checkValueForNA
 } from "../../utils";
+
+
 import {
   prepareFinalObject as pFO,
   toggleSnackbar
@@ -65,14 +70,6 @@ const tradeSubTypeChange = (reqObj) => {
         code: value
       });
       if (currentObject[0] && currentObject[0].uom !== null) {
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items["+index+"].item"+index+".children.cardContent.children.tradeUnitCardContainer.children.tradeUOM",
-            "props.value",
-            currentObject[0].uom
-          )
-        );
         dispatch(
           pFO(
             `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uom`,
@@ -195,6 +192,27 @@ const showDateBasedOnOldLicense = (state,dispatch,action) =>{
   }
 };
 
+const getUOMLabelWithValue = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    props: {
+      style: {
+        marginTop: "5px",
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label),
+      value: getCommonValue(value)
+    }
+  };
+};
+
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -257,26 +275,23 @@ const tradeUnitCard = {
             }
           },
          
-          tradeUOM: getTextField({
-            label: {
+          tradeUOM : getUOMLabelWithValue(
+            {
               labelName: "UOM (Unit of Measurement)",
               labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
             },
-            placeholder: {
-              labelName: "UOM",
-              labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
+            {
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
+               
+              localePrefix: {
+                moduleName: "COMMON",
+                masterName: "UOM"
+              },
+              callBack: checkValueForNA,
+              className : "tl-trade-uom",
             },
-            // required: true,
-            props: {
-              disabled: true,
-             // jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
-            },
-            jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom",
-            gridDefination: {
-              xs: 12,
-              sm: 4
-            }
-          }),
+            
+          ),
           tradeUOMValue: getTextField({
             label: {
               labelName: "UOM Value",
@@ -291,7 +306,7 @@ const tradeUnitCard = {
               required: false,
               disabled: true,
               setDataInField: true,
-              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue"
+              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue",
             },
             pattern: getPattern("UOMValue"),
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uomValue",
@@ -359,6 +374,7 @@ const tradeUnitCard = {
     sourceJsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits",
     prefixSourceJsonPath:
       "children.cardContent.children.tradeUnitCardContainer.children",
+      afterPrefixJsonPath: "children.value.children.key",
     onMultiItemAdd: (state, muliItemContent) => {
       return setFieldsOnAddItem(state, muliItemContent);
     }

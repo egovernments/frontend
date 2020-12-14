@@ -117,7 +117,11 @@ export const tradetypeDetails = {
       labelName: "UOM (Unit of Measurement)",
       labelKey: "TL_NEW_TRADE_DETAILS_UOM_LABEL"
     },
-    { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom", callBack: checkValueForNA }
+    { jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].uom", callBack: checkValueForNA ,
+    localePrefix: {
+      moduleName: "COMMON",
+      masterName: "UOM"
+    } }
   ),
   reviewTradeUOMValue: getLabelWithValue(
     {
