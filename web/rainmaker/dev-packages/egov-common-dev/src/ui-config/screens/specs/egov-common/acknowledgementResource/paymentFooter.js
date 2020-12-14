@@ -9,7 +9,7 @@ const getHomeButtonPath = (item) => {
     return isPublicSearch() ? "/withoutAuth/pt-mutation/public-search" : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
 }
 const isMiniReceiptBtnVisible =()=>{
-    if((process.env.REACT_APP_NAME === "Citizen" || !JSON.parse(window.localStorage.getItem('isPOSmachine'))  === false)
+    if((process.env.REACT_APP_NAME === "Employee" && JSON.parse(window.localStorage.getItem('isPOSmachine')) )
     && status != "failure"){
         return true;
        

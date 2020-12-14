@@ -349,6 +349,13 @@ export const tradeLocationDetails = {
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.address.street", callBack: checkValueForNA }
   ),
+  reviewGISCoord: getLabelWithValue(
+    {
+      labelName: "GIS Coordinates",
+      labelKey: "TL_NEW_TRADE_DETAILS_GIS_CORD_LABEL"
+    },
+    { jsonPath: "Licenses[0].tradeLicenseDetail.address.latitude", callBack: checkValueForNA }
+  ),
   reviewMohalla: getLabelWithValue(
     {
       labelName: "Mohalla",
