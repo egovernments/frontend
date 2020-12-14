@@ -1259,7 +1259,7 @@ const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 
     if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "PENDINGPAYMENT" && currentStatus != "CITIZENACTIONREQUIRED"){
       isPAID = true;
-      console.log("======current status======",currentStatus);
+     // console.log("======current status======",currentStatus);
     }
   } else {
     isPAID = false;
@@ -2077,7 +2077,7 @@ const getAllBillingSlabs = async tenantId => {
 export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
   
   const payload = await getAllBillingSlabs(tenantId);
-  console.log("=============",payload);
+ // console.log("=============",payload);
   const processedData =
     payload.billingSlab &&
     payload.billingSlab.reduce(
