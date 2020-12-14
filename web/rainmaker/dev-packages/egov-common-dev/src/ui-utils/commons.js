@@ -526,6 +526,22 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   });
 }
 
+
+const getUserDataFromUuid = async bodyObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
 export const download = async (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
   if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
@@ -583,6 +599,13 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
   const response =  await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
   const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
 
+  let uuid=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
+  let data = {};
+  let bodyObject = {
+    uuid: [uuid]
+  };
+  let responseForUser = await getUserDataFromUuid(bodyObject);
+  let lastmodifier=responseForUser?responseForUser.user[0].name:null;
 
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
@@ -606,7 +629,6 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
 
-      let lastmodifier=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
       let reasonss = null;
       let adhocPenaltyReason=null,adhocRebateReason=null;
      if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
