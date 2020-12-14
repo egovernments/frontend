@@ -188,11 +188,12 @@ class ActionDialog extends React.Component {
 
     return (
       <Dialog
-        fullScreen={false}
+        fullScreen={fullscreen}
         open={open}
         onClose={onClose}
         maxWidth={false}
-        //style={{zIndex:2000}}
+       // fullWidth={fullwidth}
+        style={{marginTop: fullscreen ? "20%" : 0}}
       >
         <DialogContent
           children={
