@@ -854,7 +854,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       return;
     } else {
       //New number search only
-      debugger;
+      
       let payload = await httpRequest(
         "post",
         `/user/_search?tenantId=${commonConfig.tenantId}`,
@@ -2063,7 +2063,7 @@ export const getDialogButton = (name, key, screenKey) => {
 };
 
 const getAllBillingSlabs = async tenantId => {
-  debugger;
+  
   let payload = await httpRequest(
     "post",
     `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
@@ -2075,7 +2075,7 @@ const getAllBillingSlabs = async tenantId => {
 };
 
 export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
-  debugger;
+  
   const payload = await getAllBillingSlabs(tenantId);
   console.log("=============",payload);
   const processedData =
@@ -2084,7 +2084,7 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
       (acc, item) => {
         let accessory = { active: true };
         let tradeType = { active: true };
-        debugger;
+        
         if (item.accessoryCategory && item.tradeType === null) {
           accessory.code = item.accessoryCategory;
           accessory.uom = item.uom;
@@ -2134,7 +2134,7 @@ export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
       structureTypes.StructureType
     )
   );
-  debugger;
+  
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.TradeLicense.AccessoriesCategory",
