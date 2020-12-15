@@ -432,6 +432,20 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       );
 
       let action = "INITIATE";
+
+      if(getQueryArg(window.location.href, "action") === "EDITRENEWAL" && activeIndex === 1){
+        set(queryObject[0], "tradeLicenseDetail.adhocExemption", null);
+        set(queryObject[0], "tradeLicenseDetail.adhocPenalty", null);
+
+        set(queryObject[0], "tradeLicenseDetail.adhocExemptionReason", null);
+        set(queryObject[0], "tradeLicenseDetail.adhocPenaltyReason", null);
+        set(queryObject[0], "tradeLicenseDetail.adhocComments", null);
+        set(queryObject[0], "tradeLicenseDetail.rebateComments", null);
+        set(queryObject[0], "tradeLicenseDetail.additionalDetail.cbrnDate", null);
+        set(queryObject[0], "tradeLicenseDetail.additionalDetail.cbrnNumber", null);
+        set(queryObject[0], "tradeLicenseDetail.additionalDetail.garbageCharges", null);
+        set(queryObject[0], "tradeLicenseDetail.additionalDetail.garbageComments", null);
+      }
       //Code for edit flow
 
       if (
