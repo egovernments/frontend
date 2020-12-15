@@ -294,7 +294,12 @@ export const chequeDetails = getCommonContainer({
     },
     pattern: getPattern("Date"),
     required: true,
-    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput",
+    props: {
+      inputProps: {
+        max: getTodaysDateInYMD()
+      }
+    }
   }),
   chequeIFSC: getTextField({
     label: {
