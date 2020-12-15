@@ -6,8 +6,10 @@ import Label from "egov-ui-kit/utils/translationNode";
 import NewAndOldComplaints from "./components/NewAndOldComplaints";
 import Notifications from "./components/Notifications";
 import { fetchComplaints,fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
-import { resetFiles, removeForm } from "egov-ui-kit/redux/form/actions";
-import { mapCompIDToName } from "egov-ui-kit/utils/commons";  
+import { resetFiles, removeForm ,setFieldProperty} from "egov-ui-kit/redux/form/actions";
+import { mapCompIDToName } from "egov-ui-kit/utils/commons";
+import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+
 import { Image } from "components";
 import logo from "egov-ui-kit/assets/images/punjab-logo.png";
 import orderby from "lodash/orderBy";
@@ -26,6 +28,9 @@ class Home extends Component {
     this.props.fetchpgrConstants();
     this.props.fetchUiCommonConfig();
     this.props.fetchComplaintCategories();
+    this.props.resetCityFieldValue();
+    this.props.resetMohallaFieldValue();
+    this.props.resetFormData();
     fetchComplaints([], false);
     if (this.props.form && this.props.form.complaint) {
       resetFiles("reopenComplaint");
@@ -143,6 +148,9 @@ const mapDispatchToProps = dispatch => {
     resetFiles: formKey => dispatch(resetFiles(formKey)),
     removeForm: formKey => dispatch(removeForm(formKey)),
     fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
+    resetCityFieldValue:()=>dispatch(setFieldProperty("complaint","city","value","")), 
+    resetMohallaFieldValue:()=>dispatch(setFieldProperty("complaint","mohalla","value","")), 
+    resetFormData:()=>dispatch(prepareFormData("services",[{}])),
 
   };
 };
