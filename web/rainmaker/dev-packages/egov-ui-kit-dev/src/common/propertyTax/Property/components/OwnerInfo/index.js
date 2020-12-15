@@ -231,7 +231,7 @@ class OwnerInfo extends Component {
           "PT_OWNER_NAME": item.name || "NA",
           "PT_GUARDIANS_NAME": item.fatherOrHusbandName || "NA",
           "PT_GENDER": item.gender || "NA",
-          "PT_OWNERSHIP_INFO_DOB": convertEpochToDate(item.dob) || "NA",
+          // "PT_OWNERSHIP_INFO_DOB": convertEpochToDate(item.dob) || "NA",
           "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
           "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
           "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType || "NA",
