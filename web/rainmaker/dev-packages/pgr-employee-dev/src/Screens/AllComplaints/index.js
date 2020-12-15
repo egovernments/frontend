@@ -4,6 +4,9 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import { Complaints, SortDialog, Screen } from "modules/common";
 import { fetchComplaints } from "egov-ui-kit/redux/complaints/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleFieldChange,setFieldProperty } from "egov-ui-kit/redux/form/actions";
+
+
 import Label from "egov-ui-kit/utils/translationNode";
 import { transformComplaintForComponent } from "egov-ui-kit/utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -19,8 +22,10 @@ import isEqual from "lodash/isEqual";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import CountDetails from "./components/CountDetails";
 import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
-import { fetchpgrConstants } from "egov-ui-kit/redux/common/actions";
+import { fetchpgrConstants, prepareFormData } from "egov-ui-kit/redux/common/actions";
 import "./index.css";
+
+
 
 class AllComplaints extends Component {
   state = {
@@ -47,10 +52,14 @@ class AllComplaints extends Component {
       numEmpComplaint,
       renderCustomTitle,
       prepareFinalObject,
+      form
     } = this.props;
     this.props.fetchpgrConstants();
     this.props.fetchUiCommonConfig();
     this.props.fetchComplaintCategories();
+    this.props.resetCityFieldValue();
+    this.props.resetMohallaFieldValue();
+    this.props.resetFormData();
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
     //const numberOfComplaints = role === "employee" ? numEmpComplaint : role === "csr" ? numCSRComplaint : 0;
@@ -926,8 +935,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     prepareFinalObject: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value)),
+    resetCityFieldValue:()=>dispatch(setFieldProperty("complaint","city","value","")), 
+    resetMohallaFieldValue:()=>dispatch(setFieldProperty("complaint","mohalla","value","")), 
+    resetFormData:()=>dispatch(prepareFormData("services",[{}])), 
     fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
-
     fetchpgrConstants: () => dispatch(fetchpgrConstants()),
     fetchUiCommonConfig: () => dispatch(fetchUiCommonConfig()),
     fetchUiCommonConstants: () => dispatch(fetchUiCommonConstants()),
