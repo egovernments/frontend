@@ -4,7 +4,7 @@ import {
   getCommonContainer,
   getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -47,7 +47,8 @@ const getMDMSPropertyData = async (dispatch) => {
             { name: "UsageCategory" },
             { name: "UsageCategoryMajor" },
             { name: "UsageCategoryMinor" },
-            { name: "UsageCategorySubMinor" }
+            { name: "UsageCategorySubMinor" },
+            { name: "PTWorkflow" }
           ]
         }
       ],
@@ -102,6 +103,20 @@ const getMDMSPropertyData = async (dispatch) => {
     payload.MdmsRes.PropertyTax.subUsageType = array1;
 
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    let ptWorkflowDetails = get(payload, "MdmsRes.PropertyTax.PTWorkflow", []);
+    ptWorkflowDetails.forEach(data => {
+      if(data.enable) {
+        if((data.businessService).includes("WNS")){
+          dispatch(handleField('register-property', "components.div.children.footer.children.payButton","visible", false));
+          dispatch(handleField('register-property', "components.div.children.footer.children.nextButton","visible", true));
+          dispatch(prepareFinalObject("isFromWNS", true));
+        } else {
+          dispatch(handleField('register-property', "components.div.children.footer.children.payButton","visible", true));
+          dispatch(handleField('register-property', "components.div.children.footer.children.nextButton","visible", false));
+          dispatch(prepareFinalObject("isFromWNS", false));
+        }
+      }
+    })
   } catch (e) {
     console.log(e);
   }
