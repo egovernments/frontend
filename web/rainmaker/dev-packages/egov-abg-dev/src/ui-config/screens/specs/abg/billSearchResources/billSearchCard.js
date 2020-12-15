@@ -189,9 +189,10 @@ export const billSearchCard = getCommonCard({
         labelKey: "ABG_CONSUMER_CODE_PLACEHOLDER"
       },
       props:{
-        required: ifUserRoleExists("CITIZEN") ? true : false,   
+        //required: ifUserRoleExists("CITIZEN") ? true : false,   
+        required: false
       },
-      required: ifUserRoleExists("CITIZEN") ? true : false,      
+      //required: ifUserRoleExists("CITIZEN") ? true : false,      
       visible: true,
       jsonPath: "searchScreen.consumerCode",
       gridDefination: {
