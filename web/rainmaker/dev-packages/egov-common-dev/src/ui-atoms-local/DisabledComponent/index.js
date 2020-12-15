@@ -4,8 +4,7 @@ import disableBrowserBackButton from 'disable-browser-back-navigation';
 
 class DisabledComponent extends Component{
     componentDidMount(){
-        disableBrowserBackButton();
-  
+        disableBrowserBackButton(); 
     }
 
   render(){
