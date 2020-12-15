@@ -42,7 +42,6 @@ export default class ListCard extends Component {
   };
 
   prepareRawDataToFormat = (rawData) => {
-    console.log(rawData,"lund")
     let { designationsById, departmentById } = this.props;
     const seperateByDepartment =
       rawData &&
@@ -53,7 +52,6 @@ export default class ListCard extends Component {
         }
         return result;
       }, {});
-    console.log(seperateByDepartment,"seperateByDepartment")  
     return (
       seperateByDepartment &&
       Object.keys(seperateByDepartment).map((depDetails, index) => {
@@ -200,7 +198,6 @@ export default class ListCard extends Component {
     const { prepareRawDataToFormat, generateDataSource, returnResults } = this;
     const { APIData } = this.props;
     const rawDataSource = prepareRawDataToFormat(APIData);
-    console.log(rawDataSource,"raw data soucre")
     this.setState({ dataSource: rawDataSource });
     const allResultData = generateDataSource(prepareRawDataToFormat(APIData));
     const realResults = returnResults(searchTerm, allResultData);
