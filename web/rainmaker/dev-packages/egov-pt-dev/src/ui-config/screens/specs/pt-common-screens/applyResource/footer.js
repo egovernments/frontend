@@ -15,12 +15,49 @@ import "./index.css";
 let screenKey = "register-property"
 
 const callBackForApply = async (state, dispatch) => {
-
-  let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state,
     "screenConfiguration.preparedFinalObject.Property"
   );
+
+  if(window.location.href.includes("pt-common-screens/summary")) {
+    let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
+    set(propertyPayload, "workflow", isFromWorkflowDetails);
+    let payload = null;
+        payload = await httpRequest(
+          "post",
+          "/property-services/property/_update",
+          "_update",
+          [],
+          { Property: propertyPayload }
+        );
+        if (payload) {
+          store.dispatch(handleField("summary", "components.adhocDialog", "props.open", true));
+          setTimeout(() => {
+            const isMode = getQueryArg(window.location.href, "mode");
+            if (isMode === "MODIFY") {
+              store.dispatch(
+                setRoute(`${getQueryRedirectUrl()}&propertyId=${payload.Properties[0].propertyId}`)
+              )
+            } else {
+              store.dispatch(
+                setRoute(`${getQueryRedirectUrl()}&propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
+              )
+            }
+          }, 3000);
+        } else {
+          dispatch(
+            toggleSnackbar(
+              true, {
+              labelKey: "PT_COMMON_FAILED_TO_UPDATE_PROPERTY",
+              labelName: "Failed to update property"
+            },
+              "warning"
+            )
+          )
+        }
+  } else {
+  let consumerCode = getQueryArg(window.location.href, "consumerCode");
 
   let isAssemblyDetailsValid = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children",
@@ -239,7 +276,9 @@ const callBackForApply = async (state, dispatch) => {
         { Property: propertyPayload }
 
       );
-      if (payload) {
+
+      let isFromWNS = get( state, "screenConfiguration.preparedFinalObject.isFromWNS", false);
+      if (payload && !isFromWNS) {
         store.dispatch(handleField(screenKey, "components.adhocDialog", "props.open", true));
         setTimeout(() => {
           const isMode = getQueryArg(window.location.href, "mode");
@@ -253,6 +292,10 @@ const callBackForApply = async (state, dispatch) => {
             )
           }
         }, 3000);
+      } else if (payload && isFromWNS) {
+        store.dispatch(
+          setRoute(`summary?redirectUrl=/wns/apply?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
+        )
       }
       else {
         dispatch(
@@ -289,6 +332,7 @@ const callBackForApply = async (state, dispatch) => {
     )
   }
 }
+}
 
 export const footer = getCommonApplyFooter({
   payButton: {
@@ -313,5 +357,28 @@ export const footer = getCommonApplyFooter({
       callBack: callBackForApply
     },
     visible: true
+  },
+  nextButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      nextButtonLabel: getLabel({
+        labelName: "Next",
+        labelKey: "PT_COMMON_BUTTON_NEXT"
+      }),
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForApply
+    },
+    visible: false
   }
 });
