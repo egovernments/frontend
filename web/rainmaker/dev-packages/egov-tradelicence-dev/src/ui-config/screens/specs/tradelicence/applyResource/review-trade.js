@@ -151,7 +151,7 @@ export const tradetypeDetails = {
     },
     { jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.cbrnDate", 
     callBack: value => {
-      var date = new Date(Math.round(Number(value)));
+      var date = new Date(value);
       var formattedDate =date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
       return value ?  formattedDate : "NA";
     } }
