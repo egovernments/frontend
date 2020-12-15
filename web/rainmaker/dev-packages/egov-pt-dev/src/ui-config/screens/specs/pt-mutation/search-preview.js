@@ -351,6 +351,10 @@ export const setData = async (state, dispatch, applicationNumber, tenantId) => {
     {
       key: "consumerCodes",
       value: applicationNumber
+    },
+    {
+      key: "businessService",
+      value: 'PT.MUTATION'
     }
   ];
   const responsePayments = await getpayments(queryObj)
@@ -390,15 +394,14 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(unMountScreen("propertySearch"));
-    dispatch(unMountScreen("apply"));
+    // dispatch(unMountScreen("propertySearch"));
+    // dispatch(unMountScreen("apply"));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
 
-    searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
     loadUlbLogo(tenantId);
     const queryObject = [
