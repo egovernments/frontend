@@ -61,11 +61,8 @@ class AddComplaints extends Component {
 
 const mapStateToProps = state => {
   const { localizationLabels } = state.app;
-  let form = state.form["complaint"];
-   
-  if(form && form.fields.city.value){
-    form.fields.city.value = ""
-  }
+  const  form = state.form["complaint"];
+
   const categories = state.complaints.categoriesById;
   return { categories, localizationLabels, form };
 };
