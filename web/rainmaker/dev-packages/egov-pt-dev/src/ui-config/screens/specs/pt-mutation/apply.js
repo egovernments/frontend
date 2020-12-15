@@ -522,8 +522,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(unMountScreen("propertySearch"));
-    dispatch(unMountScreen("search-preview"));
+    // dispatch(unMountScreen("propertySearch"));
+    // dispatch(unMountScreen("search-preview"));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
