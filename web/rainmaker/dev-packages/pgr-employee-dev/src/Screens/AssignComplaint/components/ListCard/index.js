@@ -42,6 +42,7 @@ export default class ListCard extends Component {
   };
 
   prepareRawDataToFormat = (rawData) => {
+    console.log(rawData,"lund")
     let { designationsById, departmentById } = this.props;
     const seperateByDepartment =
       rawData &&
@@ -52,6 +53,7 @@ export default class ListCard extends Component {
         }
         return result;
       }, {});
+    console.log(seperateByDepartment,"seperateByDepartment")  
     return (
       seperateByDepartment &&
       Object.keys(seperateByDepartment).map((depDetails, index) => {
@@ -59,7 +61,7 @@ export default class ListCard extends Component {
           id: depDetails,
           primaryText: (
             <Label
-              label={getNameFromId(departmentById, depDetails, "Administration")}
+              label={getNameFromId(departmentById, depDetails,`COMMON_MASTERS_DEPARTMENT_${depDetails}` )}
               dark={true}
               bold={true}
               containerStyle={{ position: "absolute", top: 0, left: 0 }}
@@ -75,7 +77,7 @@ export default class ListCard extends Component {
               leftAvatar: <Image circular={true} source={depItem.photo ? depItem.photo : faceOne} style={this.avatarStyle} />,
               secondaryText: (
                 <Label
-                  label={depItem && depItem.assignments && getNameFromId(designationsById, depItem.assignments[0].designation, "Engineer")}
+                  label={depItem && depItem.assignments && getNameFromId(designationsById, depItem.assignments[0].designation,`COMMON_MASTERS_DESIGNATION_${depItem.assignments[0].designation}` )}
                   style={{ letterSpacing: 0 }}
                 />
               ),
@@ -145,7 +147,6 @@ export default class ListCard extends Component {
           return item;
         });
       }
-
       return listItem;
     });
   };
@@ -199,6 +200,7 @@ export default class ListCard extends Component {
     const { prepareRawDataToFormat, generateDataSource, returnResults } = this;
     const { APIData } = this.props;
     const rawDataSource = prepareRawDataToFormat(APIData);
+    console.log(rawDataSource,"raw data soucre")
     this.setState({ dataSource: rawDataSource });
     const allResultData = generateDataSource(prepareRawDataToFormat(APIData));
     const realResults = returnResults(searchTerm, allResultData);
