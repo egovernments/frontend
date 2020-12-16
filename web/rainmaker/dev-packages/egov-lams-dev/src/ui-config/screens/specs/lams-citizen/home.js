@@ -36,15 +36,15 @@ const cardItems = [
     },
     icon: <FormIcon />,
     route: "myApplications"
+  },
+  {
+    label: {
+      labelKey: "LAMS_HOW_IT_WORKS",
+      labelName: "How It Works"
+    },
+    icon: <HelpIcon />,
+    route: "how-it-works-lams"
   }
-  // ,{
-  //   label: {
-  //     labelKey: "TL_HOW_IT_WORKS",
-  //     labelName: "How It Works"
-  //   },
-  //   icon: <HelpIcon />,
-  //   route: "how-it-works-tl"
-  // }
 
 
 ];
