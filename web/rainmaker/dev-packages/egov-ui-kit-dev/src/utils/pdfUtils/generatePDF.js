@@ -349,8 +349,16 @@ export const getEstimateCardDetails = (fees = [], color) => {
 
     card.push(rowLast);
 
-    estimateCard = getCustomCard(card, [250, 150, 108], tableborder, color)
+    let infocard = [];
 
+    
+    infocard.push({ ...getLabel(getLocaleLabels('TL_COMMON_TR_INFO', 'TL_COMMON_TR_INFO'), 'amount'),style:"pdf-description", "alignment": "left" })
+    infocard.push(getLabel(' ', ''))
+    infocard.push(getLabel(' ', ''))
+    card.push(infocard);
+
+
+    estimateCard = getCustomCard(card, [250, 150, 108], tableborder, color)
     return estimateCard;
 }
 
@@ -627,6 +635,11 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
             "pdf-head-qr-code": {
                 fillColor: "#F2F2F2",
                 margin: [-70, -41, -81, 0]
+            },
+            "pdf-description": {
+                "fontSize": 10,
+                "color": "#c00000",
+                
             },
         },
     };
