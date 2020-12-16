@@ -605,7 +605,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
     uuid: [uuid]
   };
   let responseForUser = await getUserDataFromUuid(bodyObject);
-  let lastmodifier=responseForUser?responseForUser.user[0].name:null;
+  let lastmodifier=responseForUser && responseForUser.user[0]?responseForUser.user[0].name:null;
 
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
