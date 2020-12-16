@@ -244,7 +244,7 @@ export const professionalDetails = getCommonCard(
         jsonPath: "Employee[0].user.roles",
         required: true,
         props: {
-          className:"autocomplete-dropdown hrms-role-dropdown",
+          // className:"autocomplete-dropdown hrms-role-dropdown",
           style: {
             width: "100%",
             cursor: "pointer"
