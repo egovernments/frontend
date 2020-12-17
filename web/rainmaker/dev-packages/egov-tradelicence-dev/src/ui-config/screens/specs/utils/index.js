@@ -2022,6 +2022,9 @@ console.log("final docs:",applicationDocs);
         console.log(applicationDocs[index]);
         acc.push(applicationDocs[index])
       }
+      else{
+        acc.push([]);
+      }
       
       return acc;
     }, []);
@@ -2038,15 +2041,16 @@ console.log("final docs:",applicationDocs);
     //   return acc;
     // }, []);
     console.log(applicationDocsReArranged,"applicationDocsReArranged");
-    const result = applicationDocs &&
+    let result = [];
+    result = applicationDocs &&
     applicationDocs.length && applicationDocs.filter(function(o1){
       return !applicationDocsReArranged.some(function(o2){    
          return o1.documentType == o2.documentType;         
        });
-     },[]);
+     });
      result && result.forEach((item, index) => item.active=false);
      console.log(result,"result");
-     dispatch(prepareFinalObject("LicensesTemp[0].deactivatedDocs", result));
+     dispatch(prepareFinalObject("LicensesTemp[0].deactivatedDocs", (result!=null)?result:[]));
  
   applicationDocsReArranged &&
     dispatch(
