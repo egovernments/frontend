@@ -3,6 +3,7 @@ import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { set } from "lodash";
 import get from "lodash/get";
 import { cancelReceiptDetailsCard } from "./cancelReceiptResource/cancelReceiptDetails";
 import { cancelReceiptFooter } from "./cancelReceiptResource/cancelReceiptFooter";
@@ -55,8 +56,7 @@ const getData = async (action, state, dispatch) => {
     );
 
     if (payload) {
-
-      dispatch(prepareFinalObject('applyScreenMdmsData.reasonForReceiptCancel', get(payload, 'MdmsRes.common-masters.CancelReceiptReason', [{code:"ERROR_RECEIPT"},{code:"CHEQUE_BOUNCE"},{code:"OTHER"}])));
+      dispatch(prepareFinalObject('applyScreenMdmsData.reasonForReceiptCancel', get(payload, 'MdmsRes.common-masters.CancelReceiptReason', [])));
     }
 
   } catch (e) {
@@ -72,6 +72,20 @@ const cancelReceipt = {
   name: "cancelReceipt",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
+    set(action.screenConfig, "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children.reason.props.value", get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].reason', ''))
+    set(action.screenConfig, "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children.addtionalPenalty.props.value", get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].additionalPenalty', ''))
+    const additionalDetailsJson = "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children.addtionalDetails";
+    if (get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].reason', '') == "OTHER") {
+      set(action.screenConfig, `${additionalDetailsJson}.required`, true)
+      set(action.screenConfig, `${additionalDetailsJson}.props.disabled`, false)
+      set(action.screenConfig, `${additionalDetailsJson}.props.required`, true)
+    } else {
+      set(action.screenConfig, `${additionalDetailsJson}.required`, false)
+      set(action.screenConfig, `${additionalDetailsJson}.props.disabled`, true)
+      set(action.screenConfig, `${additionalDetailsJson}.props.required`, false)
+    }
+    set(action.screenConfig, `${additionalDetailsJson}.props.value`, get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].additionalDetails', ''))
+    set(action.screenConfig, `${additionalDetailsJson}.props.error`, false)
     return action;
   },
 

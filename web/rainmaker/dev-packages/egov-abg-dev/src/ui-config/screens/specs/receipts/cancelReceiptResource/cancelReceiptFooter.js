@@ -54,7 +54,7 @@ export const cancelReceiptFooter = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         // processDemand(state, dispatch);
-        dispatch(setRoute(`/receipts/viewReceipt?receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&businessService=${getQueryArg(window.location.href, "businessService")}`));
+        dispatch(setRoute(`/receipts/viewReceipt?receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&edit=true&businessService=${getQueryArg(window.location.href, "businessService")}`));
       }
     },
     visible: true
