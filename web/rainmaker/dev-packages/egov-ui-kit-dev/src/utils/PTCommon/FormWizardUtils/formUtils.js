@@ -365,6 +365,10 @@ const assessProperty = async (action, props) => {
 const createProperty = async (Properties, action, props) => {
   const { documentsUploadRedux, newProperties, propertiesEdited } = props;
   const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux, newProperties);
+  if(getQueryValue(search, "purpose") == 'update'){
+    propertyPayload.owners=get(newProperties[0],'owners',get(propertyPayload,'owners',[]))
+    propertyPayload.institution=get(newProperties[0],'institution',get(propertyPayload,'institution',[]))
+  }
   const propertyMethodAction = action;
 
 

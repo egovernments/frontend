@@ -49,7 +49,7 @@ import { declarationSummary } from "./summaryResource/declarationSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import { documentDetails } from "./applyResourceMutation/mutationDocuments";
-import { transfereeDetails } from './applyResourceMutation/transfereeDetails'
+import { onChangeTypeOfOwnership, transfereeDetails } from './applyResourceMutation/transfereeDetails'
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
   { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
@@ -146,8 +146,8 @@ export const formwizardThirdStep = {
     summary: getCommonCard({
       transferorSummary: { ...transferorSummary },
       transferorInstitutionSummary: { ...transferorInstitutionSummary },
-      transfereeSummary: transfereeSummary,
-      transfereeInstitutionSummary: transfereeInstitutionSummary,
+      transfereeSummary: {...transfereeSummary},
+      transfereeInstitutionSummary: {...transfereeInstitutionSummary},
       mutationSummary: mutationSummary,
       registrationSummary: registrationSummary,
       documentsSummary: documentsSummary,
@@ -201,8 +201,22 @@ const getPropertyData = async (action, state, dispatch) => {
     }
     const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     payload.Properties[0].additionalDetails = { previousPropertyUuid };
+    if (!payload.Properties[0].ownershipCategoryTemp.includes("SINGLEOWNER")) {
+      onChangeTypeOfOwnership({ value: payload.Properties[0].ownershipCategoryTemp }, state, dispatch, false);
+    }
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
+    dispatch(prepareFinalObject("PropertyOld", cloneDeep(payload.Properties[0])));
 
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
+      payload.Properties[0].ownersTemp[0].gender
+    )
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.transferReason.props.value",
+      payload.Properties[0].additionalDetails.reasonForTransfer
+    )
     let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
     if (owners && owners.length > 0) {
       owners.map(owner => {
@@ -296,6 +310,7 @@ const getPropertyData = async (action, state, dispatch) => {
     }
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
+    dispatch(prepareFinalObject("PropertyOld", {}));
   } catch (e) {
     console.log(e);
   }

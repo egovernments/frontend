@@ -255,7 +255,7 @@ const callBackForApply = async (state, dispatch) => {
         value: consumerCode
       }
     ];
-  
+    propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
     propertyPayload.creationReason = 'MUTATION';
     let payload = null;
     payload = await httpRequest(
@@ -313,11 +313,11 @@ const validateMobileNumber = (state) => {
     //     return owner.mobileNumber;
     //   }
     // })
-    newOwners.map(owner => {
-      if (names.includes(owner.name)) {
-        err = "OWNER_NAME_SAME";
-      }
-    })
+    // newOwners.map(owner => {
+    //   if (names.includes(owner.name)) {
+    //     err = "OWNER_NAME_SAME";
+    //   }
+    // })
     // newOwners.map(owner => {
     //   if (mobileNumbers.includes(owner.mobileNumber)) {
     //     err = "OWNER_NUMBER_SAME";

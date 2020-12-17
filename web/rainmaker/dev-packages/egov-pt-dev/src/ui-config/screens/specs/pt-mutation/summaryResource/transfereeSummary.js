@@ -280,11 +280,14 @@ export const transfereeInstitutionSummary = getCommonGrayCard({
         labelKey: "PT_OWNERSHIP_INSTI_TYPE"
       },
       {
-        jsonPath: "Property.institutionTemp.institutionName",
-        callBack: checkValueForNA
-        // callBack: value => {
-        //   return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-        // }
+        jsonPath: "Property.institutionTemp.institutionType",
+        // callBack: checkValueForNA
+        callBack: value => {
+          if(!value){
+            return 'NA';
+          }
+          return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+        }
       }
     ),
     institutionOwnershipType: getLabelWithValue(

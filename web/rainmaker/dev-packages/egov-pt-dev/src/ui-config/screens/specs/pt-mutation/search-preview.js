@@ -409,6 +409,12 @@ const setSearchResponse = async (
 
   }
 
+  if(propertyAudit && propertyAudit.length > 0) {
+    const propertyIndex=property.status ==  'ACTIVE' ? 1:0;
+    const previousActiveProperty = propertyAudit.filter(property => property.status == 'ACTIVE').sort((x, y) => y.auditDetails.lastModifiedTime - x.auditDetails.lastModifiedTime)[propertyIndex];
+    property.ownershipCategoryInit = previousActiveProperty.ownershipCategory;
+    property.ownersInit = previousActiveProperty.owners.filter(owner => owner.status == "ACTIVE");
+  }
   dispatch(prepareFinalObject("Property", property));
   dispatch(prepareFinalObject("documentsUploadRedux", property.documents));
   prepareDocumentsView(state, dispatch);

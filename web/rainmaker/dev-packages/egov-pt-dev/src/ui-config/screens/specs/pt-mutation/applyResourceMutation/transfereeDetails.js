@@ -541,8 +541,64 @@ const institutionInformation = () => {
     })
 };
 
+export const onChangeTypeOfOwnership = (action, state, dispatch,addItemMultiOwner=true) => {
+  let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
+  let applicantType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.Institutions",
+    []
+  );
+  let applicantSubType = applicantType.filter(item => {
+    return item.active && item.parent.startsWith(action.value);
+  });
+  dispatch(handleField("apply", path, "props.data", applicantSubType));
+
+  // let applicantType = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
+  //   []
+  // );
+
+  let singleApplicantContainerJsonPath =
+    "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer";
+  let multipleApplicantContainerJsonPath =
+    "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer"
+  let institutionContainerJsonPath =
+    "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
+  let institutionTypeContainerJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
+  let singleMultipleOwnerPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary";
+  let institutionPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary";
+
+  if (action.value.includes("SINGLEOWNER")) {
+    showComponent(dispatch, singleApplicantContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
+    showComponent(dispatch, multipleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
+    showComponent(dispatch, institutionContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
+    showComponent(dispatch, institutionTypeContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
+    showComponent(dispatch, singleMultipleOwnerPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
+    showComponent(dispatch, institutionPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
+
+  } else if (action.value.includes("INSTITUTIONAL")) {
+    showComponent(dispatch, singleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
+    showComponent(dispatch, multipleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
+    showComponent(dispatch, institutionContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
+    showComponent(dispatch, institutionTypeContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
+    showComponent(dispatch, singleMultipleOwnerPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
+    showComponent(dispatch, institutionPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
 
 
+  }
+  else if (action.value.includes("MULTIPLEOWNERS")) {
+    showComponent(dispatch, singleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
+    showComponent(dispatch, multipleApplicantContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
+    showComponent(dispatch, institutionContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
+    showComponent(dispatch, institutionTypeContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
+    showComponent(dispatch, singleMultipleOwnerPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
+    showComponent(dispatch, institutionPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
+    if(addItemMultiOwner){
+      addItemInMultiselect(state, dispatch);
+    }
+  }
+}
 
 export const transfereeDetails = getCommonCard({
   header: getCommonTitle(
@@ -598,64 +654,9 @@ export const transfereeDetails = getCommonCard({
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
+          onChangeTypeOfOwnership(action, state, dispatch);
         
-          let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
 
-
-          let applicantType = get(
-            state,
-            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.Institutions",
-            []
-          );
-          let applicantSubType = applicantType.filter(item => {
-            return item.active && item.parent.startsWith(action.value);
-          });
-          dispatch(handleField("apply", path, "props.data", applicantSubType));
-
-          // let applicantType = get(
-          //   state,
-          //   "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
-          //   []
-          // );
-
-          let singleApplicantContainerJsonPath =
-            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer";
-          let multipleApplicantContainerJsonPath =
-            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer"
-          let institutionContainerJsonPath =
-            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
-          let institutionTypeContainerJsonPath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer";
-          let singleMultipleOwnerPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeSummary";
-          let institutionPath = "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transfereeInstitutionSummary";
-
-          if (action.value.includes("SINGLEOWNER")) {
-            showComponent(dispatch, singleApplicantContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
-            showComponent(dispatch, multipleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
-            showComponent(dispatch, institutionContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
-            showComponent(dispatch, institutionTypeContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
-            showComponent(dispatch, singleMultipleOwnerPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
-            showComponent(dispatch, institutionPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
-
-          } else if (action.value.includes("INSTITUTIONAL")) {
-            showComponent(dispatch, singleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
-            showComponent(dispatch, multipleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
-            showComponent(dispatch, institutionContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
-            showComponent(dispatch, institutionTypeContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
-            showComponent(dispatch, singleMultipleOwnerPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
-            showComponent(dispatch, institutionPath, true, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
-
-
-          }
-          else if (action.value.includes("MULTIPLEOWNERS")) {
-            showComponent(dispatch, singleApplicantContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${singleApplicantContainerJsonPath}.props.style`));
-            showComponent(dispatch, multipleApplicantContainerJsonPath, true, get(state, `screenConfiguration.screenConfig.apply.${multipleApplicantContainerJsonPath}.props.style`));
-            showComponent(dispatch, institutionContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionContainerJsonPath}.props.style`));
-            showComponent(dispatch, institutionTypeContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
-            showComponent(dispatch, singleMultipleOwnerPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
-            showComponent(dispatch, institutionPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
-
-
-          }
         },
       },
     }),
@@ -709,3 +710,55 @@ export const transfereeDetails = getCommonCard({
     }
   })
 });
+
+export const addItemInMultiselect = (state, dispatch, dynamicInput = {}) => {
+  const {
+    screenKey = "apply",
+    sourceJsonPath = "Property.ownersTemp",
+    prefixSourceJsonPath = "children.cardContent.children.applicantCard.children",
+    componentJsonpath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo",
+  } = dynamicInput;
+  const screenConfig = get(state, "screenConfiguration.screenConfig", {});
+  const scheama = get(screenConfig, `${screenKey}.${componentJsonpath}.props.scheama`, {});
+  const items = get(screenConfig, `${screenKey}.${componentJsonpath}.props.items`, []);
+  const itemsLength = items.length;
+  if (sourceJsonPath) {
+    let multiItemContent = get(scheama, prefixSourceJsonPath, {});
+    for (var variable in multiItemContent) {
+      if (
+        multiItemContent.hasOwnProperty(variable) &&
+        multiItemContent[variable].props &&
+        multiItemContent[variable].props.jsonPath
+      ) {
+        let prefixJP = multiItemContent[variable].props.jsonPathUpdatePrefix
+          ? multiItemContent[variable].props.jsonPathUpdatePrefix
+          : sourceJsonPath;
+        let splitedJsonPath = multiItemContent[variable].props.jsonPath.split(
+          prefixJP
+        );
+        if (splitedJsonPath.length > 1) {
+          let propertyName = splitedJsonPath[1].split("]");
+          if (propertyName.length > 1) {
+            multiItemContent[
+              variable
+            ].jsonPath = `${prefixJP}[${itemsLength}]${propertyName[1]}`;
+            multiItemContent[
+              variable
+            ].props.jsonPath = `${prefixJP}[${itemsLength}]${
+              propertyName[1]
+              }`;
+            multiItemContent[variable].index = itemsLength;
+          }
+        }
+      }
+    }
+    set(scheama, prefixSourceJsonPath, multiItemContent);
+  }
+  items[itemsLength] = cloneDeep(
+    addComponentJsonpath(
+      { [`item${itemsLength}`]: scheama },
+      `${componentJsonpath}.props.items[${itemsLength}]`
+    )
+  );
+  dispatch(handleField(screenKey, componentJsonpath, `props.items`, items));
+}
