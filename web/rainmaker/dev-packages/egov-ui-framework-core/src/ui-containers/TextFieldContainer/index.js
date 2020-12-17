@@ -217,8 +217,13 @@ const mapStateToProps = (state, ownprops) => {
       dropdownData = constructDropdown(get(state, cityDropdown, []));
     }
   }
-
-  return { value: fieldValue, dropdownData, state, localizationLabels };
+  let disabled=ownprops.disabled;
+if(ownprops.checkFieldDisable){
+  let dependantJsonPath=ownprops.jsonPath;
+  dependantJsonPath=dependantJsonPath.replace(ownprops.jsonPathRemoveKey,ownprops.dependantField)
+  disabled= get(preparedFinalObject, dependantJsonPath, false)
+}
+  return { value: fieldValue, dropdownData, state, localizationLabels ,disabled};
 };
 
 export default connect(mapStateToProps)(TextFieldContainer);

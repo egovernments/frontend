@@ -2,6 +2,7 @@ import { getCommonContainer, getCommonHeader, getStepperObject } from "egov-ui-f
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { set } from "lodash";
 import get from "lodash/get";
 import map from "lodash/map";
 import "../../../../index.css";
@@ -29,7 +30,7 @@ export const stepsData = [
   { labelName: "Other Details", labelKey: "HR_OTHER_DET_HEADER" }
 ];
 export const stepper = getStepperObject(
-  { props: { activeStep: 0 } },
+  { props: { activeStep: 0} },
   stepsData
 );
 // export const queryValue = getQueryArg(
@@ -295,7 +296,18 @@ const screenConfig = {
     //       "PERMANENT"
     //     );
     //   });
-
+    const step=getQueryArg(
+      window.location.href,
+      "step"
+    );
+if(step&&Number(step)>0){
+  set(action.screenConfig,"components.div.children.stepper.props.activeStep",Number(step));
+  set(action.screenConfig,"components.div.children.formwizardFifthStep.visible",step=='4'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardFourthStep.visible",step=='3'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardThirdStep.visible",step=='2'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardSecondStep.visible",step=='1'?true:false);
+  set(action.screenConfig,"components.div.children.formwizardFirstStep.visible",step=='0'?true:false);
+}
     return action;
   },
 
