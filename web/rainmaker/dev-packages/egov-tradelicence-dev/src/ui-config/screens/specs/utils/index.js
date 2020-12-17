@@ -1293,6 +1293,19 @@ const getBillingSlabData = async (
                 type: "accessories"
               });
             }
+            if(result.tradeUnitData.length==0){
+              tradeUnits.forEach(function(tradeUnit){
+                result.tradeUnitData.push({
+                  rate:0,
+                  tradeTotal:0,
+                  count:0,
+                  category: tradeUnit.tradeType,
+                  type: "trade"
+                });
+
+              }
+              );
+            }
             return result;
           },
           { tradeUnitData: [], accessoryData: [] }

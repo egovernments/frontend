@@ -179,7 +179,7 @@ class ViewBreakupContainer extends React.Component {
         onClose={handleClose}
         fullWidth={true}
         children={[
-          accessoriesTotal > 0 || tradeTotal > 0 ? (
+          tradeUnitData && tradeUnitData.length > 0 ? (
             <div style={{ padding: "16px" }}>
               <div
                 onClick={handleClose}
