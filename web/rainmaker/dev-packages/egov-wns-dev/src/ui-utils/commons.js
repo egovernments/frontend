@@ -2006,10 +2006,30 @@ export const getDomainLink = () => {
 }
 
 export const isActiveProperty = (propertyObj) => {
-    if (propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW') {
-        return false;
+    let storeData = store.getState();
+    let ptWorkflowDetails = get(storeData, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.PropertyTax.PTWorkflow", []);
+    let status = true;
+    if(ptWorkflowDetails && ptWorkflowDetails.length > 0) {
+        ptWorkflowDetails.forEach(data => {
+            if(data.enable) {
+              if((data.businessService).includes("WNS")){
+                  if (propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW') {
+                      status = false;
+                  }
+              } else {
+                  if (propertyObj.status === 'INACTIVE') {
+                      status = false;
+                  }
+              }
+            }
+          });
+    } else {
+        if (propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW') {
+            status = false;
+        }
     }
-    return true;
+    
+    return status;
 }
 export const isEditAction = () => {
     let isMode = getQueryArg(window.location.href, "action");

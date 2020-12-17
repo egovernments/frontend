@@ -147,7 +147,8 @@ export const getMdmsData = async dispatch => {
             { name: "connectionType" },
             { name: "PropertySearch" }
           ]
-        }
+        },
+        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" }]}
       ]
     }
   };
