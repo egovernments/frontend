@@ -7,6 +7,7 @@ import map from "lodash/map";
 import "../../../../index.css";
 import { httpRequest } from "../../../../ui-utils";
 import { assignmentDetails } from "./createResource/assignment-details";
+
 import {
   employeeDetails,
   professionalDetails
@@ -15,18 +16,20 @@ import { footer } from "./createResource/footer";
 import { jurisdictionDetails } from "./createResource/jurisdiction-details";
 import { otherDetails } from "./createResource/other-details";
 import { serviceDetails } from "./createResource/service-details";
+import { employeeReviewDetails } from "./viewResource/employee-review";
 import { getEmployeeData } from "./viewResource/functions";
+
 
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
   {
-    labelName: "Jurisdiction Details",
-    labelKey: "HR_JURISDICTION_DETAILS_HEADER"
+    labelName: "Jurisdiction & Assignment Details",
+    labelKey: "HR_DETAILS_HEADER"
   },
-  { labelName: "Assignment Details", labelKey: "HR_ASSIGN_DET_HEADER" },
-  { labelName: "Service Details", labelKey: "HR_SER_DET_HEADER" },
-  { labelName: "Other Details", labelKey: "HR_OTHER_DET_HEADER" }
+  // { labelName: "Assignment Details", labelKey: "HR_ASSIGN_DET_HEADER" },
+  { labelName: "Summary", labelKey: "HR_SUMMARY_DETAILS" },
+  // { labelName: "Other Details", labelKey: "HR_OTHER_DET_HEADER" }
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
@@ -63,46 +66,48 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    jurisdictionDetails
-  },
-  visible: false
-};
-
-export const formwizardThirdStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form3"
-  },
-  children: {
+    jurisdictionDetails,
     assignmentDetails
   },
   visible: false
 };
 
-export const formwizardFourthStep = {
+// export const formwizardThirdStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form3"
+//   },
+//   children: {
+//     assignmentDetails
+//   },
+//   visible: false
+// };
+const reviewDetails = employeeReviewDetails(true)
+export const formwizardThirdStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
+ 
   props: {
-    id: "apply_form4"
+    id: "apply_form3"
   },
   children: {
-    serviceDetails
+    reviewDetails
   },
   visible: false
 };
 
-export const formwizardFifthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form5"
-  },
-  children: {
-    otherDetails
-  },
-  visible: false
-};
+// export const formwizardFifthStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form5"
+//   },
+//   children: {
+//     otherDetails
+//   },
+//   visible: false
+// };
 
 const getMdmsData = async (state, dispatch, tenantId) => {
   let mdmsBody = {
@@ -324,8 +329,8 @@ const screenConfig = {
         formwizardFirstStep,
         formwizardSecondStep,
         formwizardThirdStep,
-        formwizardFourthStep,
-        formwizardFifthStep,
+        // formwizardFourthStep,
+        // formwizardFifthStep,
         footer
       }
     }

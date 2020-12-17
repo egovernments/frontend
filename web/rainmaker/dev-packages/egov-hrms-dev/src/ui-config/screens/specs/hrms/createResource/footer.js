@@ -12,6 +12,8 @@ import {
   validateFields
 } from "../../utils";
 import "./index.css";
+import { createUpdateEmployee, setRolesList } from "../viewResource/functions";
+
 
 const moveToReview = dispatch => {
   const reviewUrl =
@@ -70,50 +72,52 @@ export const callBackForNext = async (state, dispatch) => {
     if (!isJurisdictionDetailsValid) {
       isFormValid = false;
     }
+    let assignmentDetailsPath =
+    "components.div.children.formwizardThirdStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
+  let assignmentDetailsItems = get(
+    state.screenConfiguration.screenConfig.create,
+    assignmentDetailsPath,
+    []
+  );
+  let isAssignmentDetailsValid = true;
+  for (var j = 0; j < assignmentDetailsItems.length; j++) {
+    if (
+      (assignmentDetailsItems[j].isDeleted === undefined ||
+        assignmentDetailsItems[j].isDeleted !== false) &&
+      !validateFields(
+        `${assignmentDetailsPath}[${j}].item${j}.children.cardContent.children.asmtDetailsCardContainer.children`,
+        state,
+        dispatch,
+        "create"
+      )
+    )
+      isAssignmentDetailsValid = false;
+  }
+  let assignmentsData = get(
+    state.screenConfiguration.preparedFinalObject.Employee[0],
+    "assignments",
+    []
+  );
+  let atLeastOneCurrentAssignmentSelected = assignmentsData.some(
+    assignment => {
+      return assignment.isCurrentAssignment;
+    }
+  );
+  if (!atLeastOneCurrentAssignmentSelected) {
+    const errorMessage = {
+      labelName: "Please select at least one current assignment",
+      labelKey: "ERR_SELECT_CURRENT_ASSIGNMENT"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+  if (!isAssignmentDetailsValid) {
+    isFormValid = false;
+  }
+setRolesList(state, dispatch);
   }
   if (activeStep === 2) {
-    let assignmentDetailsPath =
-      "components.div.children.formwizardThirdStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
-    let assignmentDetailsItems = get(
-      state.screenConfiguration.screenConfig.create,
-      assignmentDetailsPath,
-      []
-    );
-    let isAssignmentDetailsValid = true;
-    for (var j = 0; j < assignmentDetailsItems.length; j++) {
-      if (
-        (assignmentDetailsItems[j].isDeleted === undefined ||
-          assignmentDetailsItems[j].isDeleted !== false) &&
-        !validateFields(
-          `${assignmentDetailsPath}[${j}].item${j}.children.cardContent.children.asmtDetailsCardContainer.children`,
-          state,
-          dispatch,
-          "create"
-        )
-      )
-        isAssignmentDetailsValid = false;
-    }
-    let assignmentsData = get(
-      state.screenConfiguration.preparedFinalObject.Employee[0],
-      "assignments",
-      []
-    );
-    let atLeastOneCurrentAssignmentSelected = assignmentsData.some(
-      assignment => {
-        return assignment.isCurrentAssignment;
-      }
-    );
-    if (!atLeastOneCurrentAssignmentSelected) {
-      const errorMessage = {
-        labelName: "Please select at least one current assignment",
-        labelKey: "ERR_SELECT_CURRENT_ASSIGNMENT"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      return;
-    }
-    if (!isAssignmentDetailsValid) {
-      isFormValid = false;
-    }
+  
   }
   if (activeStep === 4) {
     moveToReview(dispatch);
@@ -149,8 +153,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 4 ? true : false;
-  const isPayButtonVisible = activeStep === 4 ? true : false;
+  const isNextButtonVisible = activeStep < 2 ? true : false;
+  const isPayButtonVisible = activeStep === 2 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -243,16 +247,16 @@ export const getActionDefinationForStepper = path => {
       property: "visible",
       value: false
     },
-    {
-      path: "components.div.children.formwizardFourthStep",
-      property: "visible",
-      value: false
-    },
-    {
-      path: "components.div.children.formwizardFifthStep",
-      property: "visible",
-      value: false
-    }
+    // {
+    //   path: "components.div.children.formwizardFourthStep",
+    //   property: "visible",
+    //   value: false
+    // },
+    // {
+    //   path: "components.div.children.formwizardFifthStep",
+    //   property: "visible",
+    //   value: false
+    // }
   ];
   for (var i = 0; i < actionDefination.length; i++) {
     actionDefination[i] = {
@@ -273,6 +277,18 @@ export const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "previous");
 };
 
+export const handleCreateUpdateEmployee = (state, dispatch) => {
+  let uuid = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Employee[0].uuid",
+    null
+  );
+  if (uuid) {
+    createUpdateEmployee(state, dispatch, "UPDATE");
+  } else {
+    createUpdateEmployee(state, dispatch, "CREATE");
+  }
+};
 export const footer = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
@@ -359,7 +375,7 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForNext
+      callBack: handleCreateUpdateEmployee
     },
     visible: false
   }

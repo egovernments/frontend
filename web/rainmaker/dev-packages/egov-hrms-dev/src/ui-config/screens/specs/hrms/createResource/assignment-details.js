@@ -208,7 +208,7 @@ const assignmentDetailsCard = {
                 labelName: "Reporting To",
                 labelKey: "HR_REP_TO_LABEL"
               },
-              pattern: getPattern("TradeName") || null,
+              pattern: getPattern("Name") || null,
               jsonPath: "Employee[0].assignments[0].reportingTo"
             })
           },

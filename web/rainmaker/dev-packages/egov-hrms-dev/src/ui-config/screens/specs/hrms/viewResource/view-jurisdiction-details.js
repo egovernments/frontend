@@ -6,6 +6,10 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { changeStep } from "../createResource/footer";
+import { setRolesList } from "./functions";
+
+
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
@@ -18,6 +22,11 @@ const gotoCreatePage = (state, dispatch) => {
 const jurisdictionCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
+  // beforeInitScreen: (action, state, dispatch) => {
+  //   // COMMA SEPARATED ROLES IN REVIEW SCREEN
+  //   setRolesList(state, dispatch);
+  //   return action;
+  // },
   props: {
     className: "review-hr",
     scheama: getCommonGrayCard({
@@ -53,7 +62,14 @@ const jurisdictionCard = {
               masterName: "TENANTS"
             }
           }
-        )
+        ),
+        reviewRole: getLabelWithValue(
+          { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
+          {
+            jsonPath: "hrms.reviewScreen.furnishedRolesList",
+          }
+        ),
+
       })
     }),
 
@@ -113,7 +129,9 @@ export const getJurisdictionDetailsView = (isReview = true) => {
           },
           onClickDefination: {
             action: "condition",
-            callBack: gotoCreatePage
+            callBack: (state, dispatch) => {
+              changeStep(state, dispatch, "", 1);
+          }
           }
         }
       }

@@ -6,7 +6,8 @@ import {
   getSelectField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 const arrayCrawler = (arr, n) => {
   if (n == 1) {
@@ -78,6 +79,7 @@ const jurisdictionDetailsCard = {
                 });
                 crawlBoundaryData = get(crawlBoundaryData, "children[0]", null);
               }
+               
               dispatch(
                 handleField(
                   "create",
@@ -86,7 +88,7 @@ const jurisdictionDetailsCard = {
                     ".boundaryType"
                   ),
                   "props.data",
-                  boundaryList
+                  [boundaryList[0]]
                 )
               );
             }
@@ -200,7 +202,14 @@ const jurisdictionDetailsCard = {
             }
           },
           boundary: {
-            ...getSelectField({
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-hrms",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "Employee[0].jurisdictions[0].boundary",
+            props: {
+              className: "hr-generic-selectfield autocomplete-dropdown",
+              optionValue: "value",
+              optionLabel: "label",
               label: { labelName: "Boundary", labelKey: "HR_BOUNDARY_LABEL" },
               placeholder: {
                 labelName: "Select Boundary",
@@ -211,13 +220,51 @@ const jurisdictionDetailsCard = {
                 masterName: "TENANTS"
               },
               required: true,
+              required: true,
+              isClearable: true,
+              labelsFromLocalisation: true,
               jsonPath: "Employee[0].jurisdictions[0].boundary",
-              gridDefination: {
-                xs: 12,
-                sm: 12,
-                md: 6
+            },
+            required: true,
+            // sourceJsonPath: "createScreenMdmsData.hierarchyList",
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
+          },
+          role: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-hrms",
+            componentPath: "AutosuggestContainer",
+            jsonPath: "Employee[0].user.roles",
+            required: true,
+            props: {
+              className:"autocomplete-dropdown hrms-role-dropdown",
+              label: { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
+              placeholder: {
+                labelName: "Select Role",
+                labelKey: "HR_ROLE_PLACEHOLDER"
               },
-            })
+              jsonPath: "Employee[0].user.roles",
+              sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
+              labelsFromLocalisation: true,
+              suggestions: [],
+              fullwidth: true,
+              required: true,
+              inputLabelProps: {
+                shrink: true
+              },
+              localePrefix: {
+                moduleName: "ACCESSCONTROL_ROLES",
+                masterName: "ROLES"
+              },
+              isMulti: true,
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 6
+            }
           }
         },
         {

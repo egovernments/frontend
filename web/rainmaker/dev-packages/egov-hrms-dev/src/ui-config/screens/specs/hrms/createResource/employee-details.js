@@ -57,20 +57,56 @@ export const employeeDetails = getCommonCard({
         jsonPath: "Employee[0].user.mobileNumber"
       })
     },
-    fatherHusbandName: {
+    guardianName: {
       ...getTextField({
         label: {
-          labelName: "Father/Husband's Name",
-          labelKey: "HR_FATHER_HUSBAND_NAME_LABEL"
+          labelName: "Guardian's Name",
+          labelKey: "HR_GUARDIAN_NAME_LABEL"
         },
         placeholder: {
-          labelName: "Enter Father/Husband's Name",
-          labelKey: "HR_FATHER_HUSBAND_NAME_PLACEHOLDER"
+          labelName: "Enter Guardian's Name",
+          labelKey: "HR_GUARDIAN_NAME_PLACEHOLDER"
         },
         required: true,
         pattern: getPattern("Name") || null,
         jsonPath: "Employee[0].user.fatherOrHusbandName"
       })
+    },
+    relationShipType: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "Employee[0].user.relationship",
+      props: {
+        className: "hr-generic-selectfield autocomplete-dropdown",
+        data: [
+          {
+            code: "FATHER",
+            name: "COMMON_RELATION_FATHER"
+          },
+          {
+            code: "HUSHBAND",
+            name: "COMMON_RELATION_HUSHBAND"
+          },
+        ],
+        optionValue: "value",
+        optionLabel: "label",
+        label: { labelName: "Relationship", labelKey: "HR_RELATIONSHIP_LABEL" },
+        placeholder: {
+          labelName: "Select Relationship",
+          labelKey: "HR_RELATIONSHIP_PLACEHOLDER"
+        },
+        required: true,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        jsonPath: "Employee[0].user.relationship"
+      },
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
     },
     gender: {
       uiFramework: "custom-containers-local",
@@ -87,6 +123,10 @@ export const employeeDetails = getCommonCard({
           {
             code: "FEMALE",
             name: "COMMON_GENDER_FEMALE"
+          },
+          {
+            code:"TRANSGENDER",
+            name:"COMMON_GENDER_TRANSGENDER"
           }
         ],
         optionValue: "value",
@@ -154,7 +194,7 @@ export const employeeDetails = getCommonCard({
           labelName: "Enter Corrospondence Address",
           labelKey: "HR_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
         },
-        required: true,
+        required: false,
         pattern: getPattern("Address"),
         jsonPath: "Employee[0].user.correspondenceAddress"
       })
@@ -188,7 +228,7 @@ export const professionalDetails = getCommonCard(
             labelName: "Enter Employee ID",
             labelKey: "HR_EMPLOYEE_ID_PLACEHOLDER"
           },
-          pattern: /^[a-zA-Z0-9-_]*$/i,
+          pattern: /^[a-zA-Z0-9-!@#\$%\^\&*\)\(+=._]*$/i,
           jsonPath: "Employee[0].code"
         })
       },
@@ -203,7 +243,12 @@ export const professionalDetails = getCommonCard(
             labelKey: "HR_APPOINTMENT_DATE_PLACEHOLDER"
           },
           pattern: getPattern("Date"),
-          jsonPath: "Employee[0].dateOfAppointment"
+          jsonPath: "Employee[0].dateOfAppointment",
+          props: {
+            inputProps: {
+              max: getTodaysDateInYMD()
+            }
+          }
         })
       },
       employmentType: {
@@ -271,39 +316,39 @@ export const professionalDetails = getCommonCard(
           md: 6
         }, 
       },
-      role: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-hrms",
-        componentPath: "AutosuggestContainer",
-        jsonPath: "Employee[0].user.roles",
-        required: true,
-        props: {
-          className:"autocomplete-dropdown hrms-role-dropdown",
-          label: { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
-          placeholder: {
-            labelName: "Select Role",
-            labelKey: "HR_ROLE_PLACEHOLDER"
-          },
-          jsonPath: "Employee[0].user.roles",
-          sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
-          labelsFromLocalisation: true,
-          suggestions: [],
-          fullwidth: true,
-          required: true,
-          inputLabelProps: {
-            shrink: true
-          },
-          localePrefix: {
-            moduleName: "ACCESSCONTROL_ROLES",
-            masterName: "ROLES"
-          },
-          isMulti: true,
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        }
-      }
+      // role: {
+      //   uiFramework: "custom-containers-local",
+      //   moduleName: "egov-hrms",
+      //   componentPath: "AutosuggestContainer",
+      //   jsonPath: "Employee[0].user.roles",
+      //   required: true,
+      //   props: {
+      //     className:"autocomplete-dropdown hrms-role-dropdown",
+      //     label: { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
+      //     placeholder: {
+      //       labelName: "Select Role",
+      //       labelKey: "HR_ROLE_PLACEHOLDER"
+      //     },
+      //     jsonPath: "Employee[0].user.roles",
+      //     sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
+      //     labelsFromLocalisation: true,
+      //     suggestions: [],
+      //     fullwidth: true,
+      //     required: true,
+      //     inputLabelProps: {
+      //       shrink: true
+      //     },
+      //     localePrefix: {
+      //       moduleName: "ACCESSCONTROL_ROLES",
+      //       masterName: "ROLES"
+      //     },
+      //     isMulti: true,
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   }
+      // }
     })
   },
   {
