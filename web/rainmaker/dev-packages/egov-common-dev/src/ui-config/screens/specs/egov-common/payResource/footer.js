@@ -293,7 +293,6 @@ const callBackForPay = async (state, dispatch) => {
   //------------ Validation End -------------//
 
   //------------- Form related ----------------//
-
   const ReceiptDataTemp = get(
     state.screenConfiguration.preparedFinalObject,
     "ReceiptTemp[0]"
@@ -389,6 +388,17 @@ const callBackForPay = async (state, dispatch) => {
   if( finalReceiptData.instrument.instrumentDate){
     ReceiptBodyNew.Payment["instrumentDate"] =
         finalReceiptData.instrument.instrumentDate;
+  }
+  if( finalReceiptData.instrument.ifscCode){
+    ReceiptBodyNew.Payment["ifscCode"] =
+        finalReceiptData.instrument.ifscCode;
+
+        const details = [{
+          "branchName": finalReceiptData.instrument.branchName ,
+         "bankName":finalReceiptData.instrument.bank.name }]
+       
+       ReceiptBodyNew.Payment["additionalDetails"] =details;
+      
   }
 
   let amtPaid =
