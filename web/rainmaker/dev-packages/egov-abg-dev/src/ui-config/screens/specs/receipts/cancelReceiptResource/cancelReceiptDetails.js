@@ -192,7 +192,7 @@ export const cancelReceiptDetailsCard = getCommonCard(
       {
         reason: {
           uiFramework: "custom-containers-local",
-          moduleName: "egov-uc",
+          moduleName: "egov-abg",
           componentPath: "AutosuggestContainer",
           props: {
             label: {

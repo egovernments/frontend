@@ -53,7 +53,12 @@ const assignmentDetailsCard = {
               // required: true,
               pattern: getPattern("Date"),
               jsonPath: "Employee[0].assignments[0].toDate",
+             
               props: {
+                checkFieldDisable: true,
+                dependantField:'isCurrentAssignment',
+                jsonPathRemoveKey:"toDate"
+                
                 // inputProps: {
                 //   min: getTodaysDateInYMD(),
                 //   max: getFinancialYearDates("yyyy-mm-dd").endDate

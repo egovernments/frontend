@@ -79,6 +79,15 @@ const viewReceipt = {
       "tenantId"
     );
     setSearchResponse(state, dispatch, applicationNumber, businessService, tenantId);
+    if (getQueryArg(
+      window.location.href,
+      "edit"
+    )) {
+
+    } else {
+      dispatch(prepareFinalObject('paymentWorkflows', [{}]));
+    }
+
     return action;
   },
 
