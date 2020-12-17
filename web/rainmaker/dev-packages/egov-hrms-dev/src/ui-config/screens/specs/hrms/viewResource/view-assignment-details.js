@@ -6,6 +6,8 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { changeStep } from "../createResource/footer";
+
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
@@ -135,7 +137,9 @@ export const getAssignmentDetailsView = (isReview = true) => {
           },
           onClickDefination: {
             action: "condition",
-            callBack: gotoCreatePage
+            callBack: (state, dispatch) => {
+              changeStep(state, dispatch, "", 1);
+          }
           }
         }
       }

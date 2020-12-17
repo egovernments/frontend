@@ -11,15 +11,13 @@ export const employeeReviewDetails = isReview => {
   const viewEmployeeDetails = getEmployeeDetailsView(isReview);
   const viewJurisdictionDetails = getJurisdictionDetailsView(isReview);
   const viewAssignementDetails = getAssignmentDetailsView(isReview);
-  const viewOtherDetails = getOtherDetailsView(isReview);
-  const viewServiceDetails = getServiceDetailsView(isReview);
+  // const viewOtherDetails = getOtherDetailsView(isReview);
+  // const viewServiceDetails = getServiceDetailsView(isReview);
   const footer = isReview ? hrCommonFooter() : {};
   return getCommonCard({
     viewEmployeeDetails,
     viewJurisdictionDetails,
     viewAssignementDetails,
-    viewServiceDetails,
-    viewOtherDetails,
     footer
   });
 };
