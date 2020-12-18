@@ -1,13 +1,12 @@
-import get from "lodash/get";
-import find from "lodash/find";
 import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../..//ui-utils/commons";
-import { getTextToLocalMapping } from "./searchResults";
-import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import find from "lodash/find";
+import get from "lodash/get";
+import { getSearchResults } from "../../../../..//ui-utils/commons";
+import { validateFields } from "../../utils";
 
 export const getDeptName = (state, codes) => {
   let deptMdmsData = get(
@@ -37,7 +36,7 @@ export const searchApiCall = async (state, dispatch) => {
   let { localisationLabels } = state.app || {};
   showHideTable(false, dispatch);
   const tenantId =
-    get(state.screenConfiguration.preparedFinalObject, "searchScreen.ulb") ||
+    get(state.screenConfiguration.preparedFinalObject, "hrmsSearchScreen.ulb") ||
     getTenantId();
   let queryObject = [
     {
@@ -47,7 +46,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "hrmsSearchScreen",
     {}
   );
   const isSearchFormValid = validateFields(
@@ -126,6 +125,8 @@ export const searchApiCall = async (state, dispatch) => {
             getDesigName(state, currentDesignations) || "-",
           ["HR_COMMON_TABLE_COL_DEPT"]:
             getDeptName(state, currentDepartments) || "-",
+          ["HR_COMMON_TABLE_COL_STATUS"]:
+            get(item, "user.active", true) ? "ACTIVE" : "INACTIVE" || "-",
           ["HR_COMMON_TABLE_COL_TENANT_ID"]: get(item, "tenantId", "-")
         };
       });

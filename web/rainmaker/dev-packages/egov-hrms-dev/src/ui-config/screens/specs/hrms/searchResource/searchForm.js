@@ -5,7 +5,7 @@ import {
   getCommonTitle,
   getLabel,
   getPattern,
-  getSelectField,
+
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -49,6 +49,14 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
+      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.mobileNumber",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
       "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb",
       "props.value",
       tenantId
@@ -70,7 +78,7 @@ export const searchForm = getCommonCard({
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
       componentPath: "AutosuggestContainer",
-      jsonPath: "searchScreen.ulb",
+      jsonPath: "hrmsSearchScreen.ulb",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -78,9 +86,9 @@ export const searchForm = getCommonCard({
       props: {
         optionLabel: "name",
         optionValue: "code",
-        label: { 
-          labelName: "ULB", 
-          labelKey: "HR_ULB_LABEL" 
+        label: {
+          labelName: "ULB",
+          labelKey: "HR_ULB_LABEL"
         },
         placeholder: {
           labelName: "Select ULB",
@@ -95,8 +103,8 @@ export const searchForm = getCommonCard({
           roles: []
         },
         value: tenantId,
-        className:"autocomplete-dropdown",
-        jsonPath: "searchScreen.ulb",
+        className: "autocomplete-dropdown",
+        jsonPath: "hrmsSearchScreen.ulb",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
@@ -104,25 +112,6 @@ export const searchForm = getCommonCard({
       },
       required: true,
     },
-
-    employeeName: getTextField({
-      label: {
-        labelName: "Employee Name",
-        labelKey: "HR_EMP_NAME_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Employee Name",
-        labelKey: "HR_EMP_NAME_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      pattern: getPattern("Name") || null,
-      errorMessage: "HR_EMP_NAME_ERR_MSG",
-      jsonPath: "searchScreen.names"
-    }),
 
     employeeID: getTextField({
       label: {
@@ -140,9 +129,29 @@ export const searchForm = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-_]*$/i,
       errorMessage: "HR_EMP_ID_ERR_MSG",
-      jsonPath: "searchScreen.codes"
+      jsonPath: "hrmsSearchScreen.codes"
     }),
-
+    mobileNumber: getTextField({
+      label: {
+        labelName: "Mobile No.",
+        labelKey: "HR_EMP_MOBILE_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Mobile No.",
+        labelKey: "HR_EMP_MOBILE_PLACEHOLDER"
+      },
+      required: false,
+      props: {
+        className: "applicant-details-error"
+      },
+      pattern: /^[6789][0-9]{9}$/i,
+      errorMessage: "HR_EMP_MOBILE_ERR_MSG",
+      jsonPath: "hrmsSearchScreen.mobileNumber",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+    }),
     department: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
@@ -150,19 +159,19 @@ export const searchForm = getCommonCard({
       props: {
         optionLabel: "name",
         optionValue: "code",
-        label: { 
-          labelName: "Department", 
-          labelKey: "HR_DEPT_LABEL" 
+        label: {
+          labelName: "Department",
+          labelKey: "HR_DEPT_LABEL"
         },
         placeholder: {
           labelName: "Select Department",
           labelKey: "HR_DEPT_PLACEHOLDER"
         },
         required: false,
-        isClearable:true,
+        isClearable: true,
         labelsFromLocalisation: true,
-        className:"autocomplete-dropdown",
-        jsonPath: "searchScreen.departments",
+        className: "autocomplete-dropdown",
+        jsonPath: "hrmsSearchScreen.departments",
         sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
         localePrefix: {
           moduleName: "common-masters",
@@ -170,12 +179,30 @@ export const searchForm = getCommonCard({
         }
       },
       required: false,
-      jsonPath: "searchScreen.departments",
+      jsonPath: "hrmsSearchScreen.departments",
       gridDefination: {
         xs: 12,
         sm: 4
       },
     },
+    employeeName: getTextField({
+      label: {
+        labelName: "Employee Name",
+        labelKey: "HR_EMP_NAME_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Employee Name",
+        labelKey: "HR_EMP_NAME_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: getPattern("Name") || null,
+      errorMessage: "HR_EMP_NAME_ERR_MSG",
+      jsonPath: "hrmsSearchScreen.names"
+    }),
     designation: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
@@ -189,10 +216,10 @@ export const searchForm = getCommonCard({
           labelKey: "HR_DESIGNATION_PLACEHOLDER"
         },
         required: false,
-        isClearable:true,
+        isClearable: true,
         labelsFromLocalisation: true,
-        className:"autocomplete-dropdown",
-        jsonPath: "searchScreen.designations",
+        className: "autocomplete-dropdown",
+        jsonPath: "hrmsSearchScreen.designations",
         sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
         localePrefix: {
           moduleName: "common-masters",
@@ -200,12 +227,13 @@ export const searchForm = getCommonCard({
         }
       },
       required: false,
-      jsonPath: "searchScreen.designations",
+      jsonPath: "hrmsSearchScreen.designations",
       gridDefination: {
         xs: 12,
         sm: 4
       },
     },
+
   }),
 
   button: getCommonContainer({
@@ -271,8 +299,8 @@ export const searchForm = getCommonCard({
       }
     })
   })
-},{
-  style:{
+}, {
+  style: {
     overflow: "visible"
   }
 });

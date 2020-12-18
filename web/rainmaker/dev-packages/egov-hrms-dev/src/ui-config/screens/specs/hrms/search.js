@@ -120,6 +120,7 @@ const employeeSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("hrmsSearchScreen", {}));
     getData(action, state, dispatch);
     setUlbSelect(action, state, dispatch);
     return action;
