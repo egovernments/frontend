@@ -183,7 +183,7 @@ const billSearchAndResult = {
               },
               onClickDefination: {
                 action: "page_change",
-                path:`/abg/how-it-works`
+                path:`/abg/how-it-works-abg`
               },
               children:{
                 
