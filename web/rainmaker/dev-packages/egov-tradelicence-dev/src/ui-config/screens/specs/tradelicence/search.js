@@ -5,7 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { progressStatus } from "./searchResource/progressStatus";
@@ -25,7 +25,14 @@ const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("DynamicMdms", []));
   dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
+const setBusinessServiceData = async(state,dispatch)=>{
 
+  const businessServiceQueryObject = [
+    { key: "tenantId", value: getTenantId() }
+  ];
+
+  await setBusinessServiceDataToLocalStorage(businessServiceQueryObject, dispatch);
+}
 
 const getMdmsData = async (dispatch) => {
   let mdmsBody = {
@@ -81,6 +88,7 @@ const tradeLicenseSearchAndResult = {
     dispatch(unMountScreen("apply"));
     dispatch(unMountScreen("search-preview"));
     getMdmsData(dispatch);
+    setBusinessServiceData(state,dispatch);
     return action;
   },
   components: {
