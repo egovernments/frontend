@@ -25,7 +25,7 @@ import { getEmployeeData } from "./viewResource/functions";
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
   {
-    labelName: "Jurisdiction & Assignment Details",
+    labelName: "Adminstrative Details",
     labelKey: "HR_DETAILS_HEADER"
   },
   // { labelName: "Assignment Details", labelKey: "HR_ASSIGN_DET_HEADER" },
