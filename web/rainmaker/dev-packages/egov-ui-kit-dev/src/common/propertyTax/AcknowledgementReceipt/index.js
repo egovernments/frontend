@@ -575,7 +575,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
              },
              layout: tableborder,
            },
-           { text: getLocaleLabels("Additional Details", "PT_ACK_LOCALIZATION_PROPERTY_ADDRESS"), style: "pt-reciept-citizen-subheader" },
+           { text:"ADDITIONAL DETAILS", style: "pt-reciept-citizen-subheader" },
            {
              style: "pt-reciept-citizen-table",
              table: {
@@ -603,7 +603,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
              },
              layout: tableborder,
            },
-
+           { text:"* This document does not certify payment of Property Tax", style: "pt-reciept-citizen-subheader" },
            {
              text: getLocaleLabels("Commissioner/EO", "PT_ACK_LOCALIZATION_COMMISSIONER_EO"),
              alignment: "right",
