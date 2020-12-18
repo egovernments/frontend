@@ -59,7 +59,7 @@ export const callBackForNext = async (state, dispatch) => {
         userName:get(state.screenConfiguration.preparedFinalObject,"Employee[0].user.mobileNumber")
       }
     );
-    if(payload.user.length>1){
+    if(payload.user.length>0){
       const errorMessage = {
         labelName: "Mobile number already exists . Please try with different mobile number",
         labelKey: "ERR_MOBILE_NUMBER_EXISTS_FIELDS"
