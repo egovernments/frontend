@@ -52,6 +52,11 @@ const ActionDialog = Loadable({
   loading: () => <Loading />
 });
 
+const HowItWorks = Loadable({
+  loader: () => import("./HowItWorks"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   UploadSingleFile,
@@ -62,5 +67,6 @@ export {
   TaskDialog,
   TaskStatusComponents,
   ActionDialog,
-  SingleApplication
+  SingleApplication,
+  HowItWorks
 };
