@@ -658,11 +658,12 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
           //     ownerNo
           //   )
           // );
-          validateOwners(state, dispatch);
+          //validateOwners(state, dispatch);
         }
       }
     }
   } catch (e) {
+    console.log(e);
     dispatch(toggleSnackbar(true, e.message, "info"));
   }
 };

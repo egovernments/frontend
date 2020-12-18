@@ -636,7 +636,7 @@ class TableData extends Component {
         };
       });
 
-      tabData[0] = { label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [filteredData[0].rows.length] };
+      tabData[0] = { label: "COMMON_INBOX_TAB_NEW", dynamicArray: [filteredData[0].rows.length] };
       tabData[1] = { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [filteredData[1].rows.length] };
 
       this.setState({

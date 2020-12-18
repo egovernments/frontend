@@ -431,6 +431,28 @@ class WorkFlowContainer extends React.Component {
             );
             return;
           }
+          if(comment && comment.length > 80)
+          {
+            toggleSnackbar(
+              true,
+              { labelName: "Comments should be less than 80 Charecters", labelKey: "LAMS_COMMENTS_LEN_ERROR" },
+              "error"
+            );
+            return;
+          }
+
+          //let commentPattern = /^[a-zA-Z0-9_.-,]*$/;
+          //let pattern = "([a-zA-Z0-9_.-,])+$";
+          let pattern =  /^[a-zA-Z0-9_.\-, ]*$/;  // /^[a-zA-Z0-9- .,_]{1,80}$/i ;
+          if(!(new RegExp(pattern)).test(comment))
+          {
+            toggleSnackbar(
+              true,
+              { labelName: "Comments to only have : Alphabets, Numbers and , . - _", labelKey: "LAMS_COMMENTS_PATTERN_ERROR" },
+              "error"
+            );
+            return;
+          }
 
           if(label === "APPROVE")
           {

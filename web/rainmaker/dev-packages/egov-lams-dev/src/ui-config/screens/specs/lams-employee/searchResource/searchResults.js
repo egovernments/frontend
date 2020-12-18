@@ -54,8 +54,8 @@ export const searchResults = {
               style={
                 value.includes("APPROVED") ? { color: "green" } : { color: "red" }
               }
-              labelKey={getStatusKey(value).labelKey}
-              labelName={getStatusKey(value).labelName}
+              labelKey={"SEARCH_"+getStatusKey(value).labelKey}
+              labelName={"SEARCH_"+getStatusKey(value).labelName}
             />
           )
         }

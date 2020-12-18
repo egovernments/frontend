@@ -48,8 +48,8 @@ let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 const headerrow = getCommonContainer({
 });
 
-let titleText= "Application Details ";
-let title = getCommonTitle({ labelName: titleText });
+let titleText= "Application Details";
+let title = getCommonTitle({ labelName: titleText ,labelKey :"LAMS_APPLICATION_DETAILS" });
 const reviewDocumentDetails = getReviewDocuments(false, false);
 
 export const leaseRenewalReviewDetails = getCommonCard({

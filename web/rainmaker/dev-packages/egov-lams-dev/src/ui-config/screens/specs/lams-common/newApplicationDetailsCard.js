@@ -120,11 +120,11 @@ import PropTypes from "prop-types";
             required: true,
             data: [
               {
-                code: "RENEWAL",
+                code: "LAMS_APPL_TYPE_RENEWAL",
                 label: "LAMS_APPL_TYPE_RENEWAL"
               },
               {
-                code: "EXTENSION",
+                code: "LAMS_APPL_TYPE_EXTENSION",
                 label: "LAMS_APPL_TYPE_EXTENSION"
               },
             ],
