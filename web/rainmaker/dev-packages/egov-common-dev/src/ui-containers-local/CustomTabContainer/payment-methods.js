@@ -155,7 +155,7 @@ export const payeeDetails = getCommonContainer({
       labelKey: "NOC_PAYMENT_PAYER_NAME_PLACEHOLDER"
     },
    
-    pattern: /^[a-zA-Z][a-zA-Z ]{1,50}$/,
+    pattern: getPattern("Name"),
     jsonPath: "ReceiptTemp[0].Bill[0].paidBy",
     required: true
   }),
