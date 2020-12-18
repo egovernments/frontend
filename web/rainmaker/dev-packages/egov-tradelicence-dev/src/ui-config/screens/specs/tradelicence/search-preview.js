@@ -140,6 +140,11 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
+  let lati = get(payload, `Licenses[0].tradeLicenseDetail.address.latitude`, null);
+  if(lati!=null  ){
+    lati= lati+"  ,"+get(payload, `Licenses[0].tradeLicenseDetail.address.longitude`, null);
+  }
+  dispatch(prepareFinalObject(`gisLocation`,lati));  
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
