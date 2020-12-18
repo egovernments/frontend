@@ -592,11 +592,21 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "forward" && status === "success") {
     return {
+      header: getCommonContainer({
       header: getCommonHeader({
         labelName: `Application for Trade License ${financialYearText}`,
         labelKey: "TL_APPLICATION_TRADE_LICENSE",
         dynamicArray: [financialYearText]
       }),
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number: applicationNumber
+        }
+      }
+    }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -613,11 +623,11 @@ const getAcknowledgementCard = (
                 "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
               labelKey: "TL_APPLICATION_FORWARD_SUCCESS"
             },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-            },
-            number: applicationNumber
+            // tailText: {
+            //   labelName: "Application No.",
+            //   labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            // },
+            // number: applicationNumber
           })
         }
       },
