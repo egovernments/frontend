@@ -86,6 +86,7 @@ class DocumentList extends Component {
          
         const index = simplified.findIndex(i => i.documentType === item.code);
         index > -1 && (acc[ind] = [simplified[index]]);
+        index <= -1 && (acc[ind] = []);
         return acc;
       }, {});
       console.log(uploadedDocumentsArranged,"uploadedDocumentsArranged====");
@@ -98,6 +99,7 @@ class DocumentList extends Component {
         },
         []
       );
+      console.log(uploadedIndex);
       this.setState({
         uploadedDocuments: uploadedDocumentsArranged,
         uploadedIndex
@@ -106,7 +108,7 @@ class DocumentList extends Component {
     getQueryArg(window.location.href, "action") !== "edit" &&
       Object.values(uploadedDocumentsArranged).forEach((item, index) => {
           prepareFinalObject(
-          `Licenses[0].tradeLicenseDetail.applicationDocuments[${uploadedIndex[index]}]`,
+          `Licenses[0].tradeLicenseDetail.applicationDocuments[${index}]`,
           { ...item[0] }
         );
       });
