@@ -232,6 +232,7 @@ export const getData = async (action, state, dispatch) => {
       }
 
       dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+      dispatch(prepareFinalObject("gisLocation", null));
       dispatch(
         handleField(
           "apply",
@@ -345,24 +346,12 @@ const screenConfig = {
       );
 
     });
-    const gisLocLat = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.address.latitude",
-      null
-    );
-    const gisLoclong = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.address.longitude",
-      null
-    );
-    if (gisLocLat !== null && gisLoclong != null ) {
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocGISCoord.children.gisTextField.props.value",
-        `${gisLocLat}, ${gisLoclong}`
-      );
-    }
 
+    let lati = get(state.screenConfiguration.preparedFinalObject, `Licenses[0].tradeLicenseDetail.address.latitude`, null);
+    if(lati!=null  ){
+      lati= lati+"  ,"+get(state.screenConfiguration.preparedFinalObject, `Licenses[0].tradeLicenseDetail.address.longitude`, null);
+    }
+    dispatch(prepareFinalObject(`gisLocation`,lati));  
     return action;
   },
 

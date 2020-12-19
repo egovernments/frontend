@@ -2,6 +2,10 @@ div[class^=MUIDataTable-responsiveScroll] thead {
   background: #F2F2F2;
 }
 
+table[class^=MuiTable-root] {
+  word-break: break-all;
+}
+
 div[class^=MUIDataTableHeadCell-data] {
   color: rgba(0, 0, 0, 0.8700000048);
   font-family: Roboto;

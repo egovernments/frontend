@@ -197,6 +197,11 @@ export const updatePFOforSearchResults = async (
       prepareFinalObject("DynamicMdms.common-masters.structureTypes.selectedValues", selectedValues));
     dispatch(
       prepareFinalObject("DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]", get(state.screenConfiguration.preparedFinalObject,`applyScreenMdmsData.common-masters.StructureType.${structureType}`,[])));
+    let lati = get(prepareFinalObject, `Licenses[0].tradeLicenseDetail.address.latitude`, null);
+    if(lati!=null  ){
+        lati= lati+"  ,"+get(prepareFinalObject, `Licenses[0].tradeLicenseDetail.address.longitude`, null);
+    }
+    dispatch(prepareFinalObject(`gisLocation`,lati));  
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";

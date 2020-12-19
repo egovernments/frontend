@@ -195,6 +195,7 @@ class DynamicMdmsContainer extends Component {
             isClearable: true,
             required: isRequired,
             required: requiredValue,
+            disabled: isDisabled ? isDisabled : false,
             helperText: isRequired ? helperMsg : '',
             inputLabelProps: {
               shrink: true
