@@ -11,9 +11,16 @@ const styles={
 const CountDetails = ({ count, total,status }) => {
   return (
     <div className="box">
-      <div className="count-details">
-        Showing {count} of {total} {status} complaints
-      </div>
+      {count<=total &&
+        <div className="count-details">
+          Showing {count} of {total} {status} complaints
+        </div>
+      }
+      {count>total &&
+        <div className="count-details">
+          Showing {count} complaints
+        </div>
+      }
     </div>
   );
 };
