@@ -41,6 +41,7 @@ import ProfileForm from "egov-ui-kit/common/User/components/ProfileForm";
 import ProfileSection from "egov-ui-kit/common/User/components/ProfileSection";
 import UploadDrawer from "egov-ui-kit/common/User/components/UploadDrawer";
 import DisclaimerInformation from "egov-ui-kit/common/User/components/DisclaimerInformation";
+import LanguageSelectionHeader from "egov-ui-kit/common/User/components/LanguageSelectionHeader";
 //Pt common components
 import AssessPay from "egov-ui-kit/common/propertyTax/AssessPay";
 import AssessmentList from "egov-ui-kit/common/propertyTax/AssessmentList";
@@ -91,5 +92,6 @@ export {
   ModuleLandingPage,
   SingleProperty,
   Notifications,
-  DisclaimerInformation
+  DisclaimerInformation,
+  LanguageSelectionHeader
 };
