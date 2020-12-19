@@ -85,6 +85,7 @@ class MapLocator extends Component {
       "Licenses[0].tradeLicenseDetail.address.longitude",
       add.lng
     );
+    this.props.prepareFinalObject(`gisLocation`,`${add.lat}, ${add.lng}`);  
 
     this.closeMapPopup();
     // this.convertToAddress(add);

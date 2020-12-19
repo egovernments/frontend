@@ -2723,6 +2723,7 @@ export const pageResetAndChange = (state, dispatch, tenant) => {
   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
   dispatch(prepareFinalObject("LicensesTemp", []));
   dispatch(prepareFinalObject("DynamicMdms", []));
+  dispatch(prepareFinalObject("gisLocation", null));
   dispatch(setRoute(`/tradelicence/apply?tenantId=${tenant}`));
 };
 
