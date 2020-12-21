@@ -97,7 +97,9 @@ const AddComplaintForm = ({
                   errorMessage={city.errorMessage}
                   errorStyle={city.errorStyle}
                   pattern={city.pattern}
-
+                  disabled= {true}
+                  defaultValue={city.dropDownData[0]}
+                 
                 />}
               </div>
               <div className="col-sm-6 col-xs-12">

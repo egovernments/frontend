@@ -1,3 +1,4 @@
+@media only screen and (min-width:768px) { 
 .DisclaimerInformation{
     position:absolute; 
     left:0;
@@ -12,8 +13,13 @@
     font-family: arial;
     font-size: 10px;
 }
+}
 
-
+@media only screen and (max-width:768px) { 
+    .DisclaimerInformation{
+      display: none; 
+    } 
+  }
 
 
 .browserLogoStyle{
