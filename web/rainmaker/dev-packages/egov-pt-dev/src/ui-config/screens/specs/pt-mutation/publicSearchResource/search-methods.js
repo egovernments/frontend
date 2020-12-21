@@ -52,7 +52,7 @@ const searchApiCall = async (state, dispatch) => {
 
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ptSearchScreen",
     {}
   );
   
@@ -182,6 +182,11 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     prepareFinalObject("applyScreenMdmsData.tenant.localities", [])
   );
+  dispatch(prepareFinalObject("ptSearchScreen.tenantId", ""));
+  dispatch(prepareFinalObject("ptSearchScreen.locality.code", ""));
+  dispatch(prepareFinalObject("ptSearchScreen.ids", ""));
+  dispatch(prepareFinalObject("ptSearchScreen.mobileNumber", ""));
+  dispatch(prepareFinalObject("ptSearchScreen.ownerName", ""));
   dispatch(prepareFinalObject("searchScreen.tenantId", ""));
   dispatch(prepareFinalObject("searchScreen.locality.code", ""));
   dispatch(prepareFinalObject("searchScreen.ids", ""));
