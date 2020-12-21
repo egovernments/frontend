@@ -122,16 +122,16 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[7]) {
-    case "INITIATED":
-      routeTo(`apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[8]
-      }`);
-      break;
-    default:
+  // switch (rowData[7]) {
+  //   case "INITIATED":
+  //     routeTo(`search-preview?applicationNumber=${
+  //       rowData[0]
+  //     }&tenantId=${rowData[8]}`);
+  //     break;
+  //   default:
       routeTo(`search-preview?applicationNumber=${
         rowData[0]
       }&tenantId=${rowData[8]}`);
-      break;
-  }
+  //     break;
+  // }
 };
