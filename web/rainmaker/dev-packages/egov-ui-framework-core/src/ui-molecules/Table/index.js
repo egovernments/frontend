@@ -179,6 +179,7 @@ class Table extends React.Component {
     const { options, title, rows, customSortDate } = this.props;
     options.textLabels = this.getTableTextLabel();
     return (
+      <div className="div">
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable
           title={this.getTabelTitle(title) + " ("+rows+")"}
@@ -191,6 +192,7 @@ class Table extends React.Component {
           }}
         />
       </MuiThemeProvider>
+      </div>
     );
   }
 }
