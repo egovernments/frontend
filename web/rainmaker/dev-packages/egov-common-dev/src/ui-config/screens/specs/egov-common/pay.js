@@ -4,120 +4,51 @@ import {
     getCommonHeader,
     getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getCurrentFinancialYear, generateBill, getBusinessServiceMdmsData } from "../utils";
+import set from "lodash/set";
+import { generateBill, getBusinessServiceMdmsData, getCurrentFinancialYear } from "../utils";
+import "./pay.css";
+import AmountToBePaid from "./payResource/amount-to-be-paid";
+import capturePayerDetails from "./payResource/capture-payer-details";
 import capturePaymentDetails from "./payResource/capture-payment-details";
+import { paybuttonJsonpath, radioButtonJsonPath } from "./payResource/constants";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
-import AmountToBePaid from "./payResource/amount-to-be-paid";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { ifUserRoleExists } from "../utils";
-import set from "lodash/set";
-import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
-import "./pay.css";
 
-const header = getCommonContainer({
-    header: getCommonHeader({
-        labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-        labelKey: "COMMON_PAY_SCREEN_HEADER"
-    }),
-    consumerCode: {
-        uiFramework: "custom-atoms-local",
-        moduleName: "egov-common",
-        componentPath: "ApplicationNoContainer",
-        props: {
-            number: '',
-            label: {
-                labelValue: "Consumer Code.:",
-                labelKey: "PAYMENT_COMMON_CONSUMER_CODE"
+export const getHeader = (state) => {
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
+    let consumerCode = getQueryArg(window.location.href, "consumerCode");
+    let businessService = getQueryArg(window.location.href, "businessService");
+    let label = get(uiCommonPayConfig, "headerBandLabel");
+    return getCommonContainer({
+        header: getCommonHeader({
+            labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+            labelKey: "COMMON_PAY_SCREEN_HEADER"
+        }),
+        consumerCode: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-common",
+            componentPath: "ApplicationNoContainer",
+            props: {
+                number: consumerCode,
+                label: {
+                    labelKey: label ? label : "PAYMENT_COMMON_CONSUMER_CODE",
+                },
             }
         }
-    }
-});
-
-
-const getPaymentCard = () => {
-
-    const roleExists = ifUserRoleExists("CITIZEN");
-
-    if (roleExists) {
-        return {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-                paymentDetails: getCommonCard({
-                    header: getCommonTitle({
-                        labelName: "Payment Collection Details",
-                        labelKey: "NOC_PAYMENT_HEAD"
-                    }),
-                    estimateDetails,
-                    AmountToBePaid: {
-                        ...AmountToBePaid,
-                        visible: false
-                    }
-                })
-            }
-        }
-    } else {
-        return {
-            uiFramework: "custom-atoms",
-            componentPath: "Div",
-            children: {
-                paymentDetails: getCommonCard({
-                    header: getCommonTitle({
-                        labelName: "Payment Collection Details",
-                        labelKey: "NOC_PAYMENT_HEAD"
-                    }),
-                    estimateDetails,
-                    AmountToBePaid: {
-                        ...AmountToBePaid,
-                        visible: false
-                    },
-                    capturePaymentDetails,
-                    g8Details
-                    // addPenaltyRebateButton: {
-                    //   componentPath: "Button",
-                    //   props: {
-                    //     color: "primary",
-                    //     style: {}
-                    //   },
-                    //   children: {
-                    //     previousButtonLabel: getLabel({
-                    //       labelName: "ADD REBATE/PENALTY",
-                    //       labelKey: "NOC_PAYMENT_ADD_RBT_PEN"
-                    //     })
-                    //   },
-                    //   onClickDefination: {
-                    //     action: "condition",
-                    //     callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
-                    //   }
-                    // },
-                    // viewBreakupButton: getDialogButton(
-                    //   "VIEW BREAKUP",
-                    //   "TL_PAYMENT_VIEW_BREAKUP",
-                    //   "pay"
-                    // ),
-                })
-            }
-        }
-    }
+    });
 }
 
 
-
-    const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
-
+const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBusinessService) => {
     await getBusinessServiceMdmsData(dispatch, tenantId);
 
-
-    await generateBill(dispatch, consumerCode, tenantId);
-
+    await generateBill(dispatch, consumerCode, tenantId, billBusinessService);
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
-
     let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
 
     //Collection Type Added in CS v1.1
@@ -126,22 +57,32 @@ const getPaymentCard = () => {
         state,
         "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
     );
-
     const businessServiceArray = get(state, "screenConfiguration.preparedFinalObject.businessServiceMdmsData.BillingService.BusinessService");
-    
     businessServiceArray && businessServiceArray.map(item => {
         if (item.code == businessService) {
             dispatch(prepareFinalObject("businessServiceInfo", item));
         }
     })
 
+    //commonPay configuration 
+    const commonPayDetails = get(state, "screenConfiguration.preparedFinalObject.businessServiceMdmsData.common-masters.uiCommonPay");
+    const index = commonPayDetails && commonPayDetails.findIndex((item) => {
+        return item.code == businessService;
+    });
+    if (index > -1) {
+        dispatch(prepareFinalObject("commonPayInfo", commonPayDetails[index]));
+    } else {
+        const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
+        dispatch(prepareFinalObject("commonPayInfo", details));
+    }
+
+    let header = getHeader(state);
+    set(action.screenConfig, "components.div.children.headerDiv.children.header", header)
+
+
     const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
     if (isPartialPaymentAllowed) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
-    }
-    const hasOnlinePayment = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.hasOnlinePayment");
-    if (!hasOnlinePayment) {
-    dispatch(handleField("pay", "components.div.children.footer.children.makePayment", "visible", false));
     }
     if (get(payload, "amount") != undefined) {
         //set amount paid as total amount from bill - destination changed in CS v1.1
@@ -153,7 +94,8 @@ const getPaymentCard = () => {
     if (get(totalAmount, "totalAmount") != undefined) {
         const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         dispatch(handleField("pay", componentJsonpath, "props.value", totalAmount.totalAmount));
-        if (totalAmount.totalAmount === 0 || totalAmount.totalAmount <= 100) {
+        const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+        if ((totalAmount.totalAmount === 0 || totalAmount.totalAmount <= 100) && !isAdvancePaymentAllowed) {
             dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
         }
     }
@@ -174,19 +116,10 @@ const getPaymentCard = () => {
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "COMMON_OWNER"));
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName")));
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
-
-
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "Owner"));
-    // const payerComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payer";
-    // dispatch(handleField("pay", payerComponentPath, "props.value","" ));
-    //
-    // const paidByComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.paidBy";
-    // dispatch(handleField("pay", paidByComponentPath, "props.value","" ));
-    //
-    // const numberComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payerMobileNumber";
-    // dispatch(handleField("pay", numberComponentPath, "props.value","" ));
-
-
+    dispatch(handleField("pay", `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerName`,
+        "props.value", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName", '')));
+    dispatch(handleField("pay", `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.cash.children.payeeDetails.children.payerMobileNo`,
+        "props.value", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber", '')));
     //Initially select instrument type as Cash
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
 
@@ -195,6 +128,16 @@ const getPaymentCard = () => {
 
     //set tenantId in instrument
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));
+
+    // Handling Negative amount
+    if (get(totalAmount, "totalAmount") != undefined) {
+        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
+        if (totalAmount.totalAmount < 0) {
+            dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[0].disabled", true));
+            dispatch(handleField("pay", componentJsonpath, "props.value", 0));
+            dispatch(handleField("pay", raidButtonComponentPath, "props.value", "partial_amount"));
+        }
+    }
 };
 
 
@@ -202,12 +145,19 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "pay",
     beforeInitScreen: (action, state, dispatch) => {
+        dispatch(unMountScreen("acknowledgement"));
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
-        fetchBill(state, dispatch, consumerCode, tenantId, businessService);
-        const data = getPaymentCard();
-        set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
+        fetchBill(action, state, dispatch, consumerCode, tenantId, businessService);
+        // fetchBill(action,state, dispatch, consumerCode, tenantId, businessService).then(
+        //     response => {
+        //         let header = getHeader(state);
+        //         set(action, "screenConfig.components.div.children.headerDiv.children.header" ,header) 
+        //     }
+        // );
+        // const data = getPaymentCard(state);    
+        // set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
         return action;
     },
     components: {
@@ -223,42 +173,32 @@ const screenConfig = {
                     uiFramework: "custom-atoms",
                     componentPath: "Container",
                     children: {
-                        header: {
-                            gridDefination: {
-                                xs: 12,
-                                sm: 10
-                            },
-                            ...header
-                        }
+                        // header : {}
                     }
                 },
-                formwizardFirstStep: {},
+                formwizardFirstStep: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    children: {
+                        paymentDetails: getCommonCard({
+                            header: getCommonTitle({
+                                labelName: "Payment Collection Details",
+                                labelKey: "NOC_PAYMENT_HEAD"
+                            }),
+                            estimateDetails,
+                            AmountToBePaid: {
+                                ...AmountToBePaid,
+                                visible: false
+                            },
+                            capturePaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
+                            capturePayerDetails: process.env.REACT_APP_NAME === "Citizen" ? capturePayerDetails : {},
+                            g8Details: process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details
+                        })
+                    }
+                },
                 footer
             }
         },
-        // adhocDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-noc",
-        //   componentPath: "DialogContainer",
-        //   props: {
-        //     open: false,
-        //     maxWidth: "sm",
-        //     screenKey: "pay"
-        //   },
-        //   children: {
-        //     popup: adhocPopup
-        //   }
-        // }
-        // breakUpDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-tradelicence",
-        //   componentPath: "ViewBreakupContainer",
-        //   props: {
-        //     open: false,
-        //     maxWidth: "md",
-        //     screenKey: "pay"
-        //   }
-        // }
     }
 };
 

@@ -10,7 +10,7 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
   let payload = null;
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId().split(".")[0],
+      tenantId: getTenantId(),
       moduleDetails: [
         {
           moduleName: "egf-master",
@@ -33,7 +33,7 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     const financialYears = get(payload.MdmsRes , "egf-master.FinancialYear");
     const currrentFYending = financialYears.filter(item => item.code === currentFinancialYear)[0]
     .endingDate;
-    return financialYears.filter(item => item.startingDate === currrentFYending + 1000)[0];
+    return financialYears.filter(item => item.startingDate === currrentFYending)[0].code;
   }catch(e){
     console.log(e.message)
   }
