@@ -32,9 +32,9 @@ class LanguageSelection extends Component {
     return (
 
       <div>
-      <div>
+      {/* <div>
         <LanguageSelectionHeader/>
-      </div> 
+      </div>  */}
       <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
        
         <div>
@@ -42,7 +42,10 @@ class LanguageSelection extends Component {
         </div>   
          {/* <DisclaimerInformation/>             */}
       </Banner>
-      <div className="Wrapper">
+      <div>
+        <DisclaimerInformation/>
+      </div>  
+      {/* <div className="Wrapper">
          <div className="Left">
           <DisclaimerInformation/>
         </div>
@@ -54,7 +57,7 @@ class LanguageSelection extends Component {
             </div>
         </div>
 
-        </div>
+        </div> */}
       </div>     
     );
   }

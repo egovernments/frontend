@@ -32,15 +32,15 @@ class LanguageSelection extends Component {
     return (
 
       <div>
-        <div>
+        {/* <div>
           <LanguageSelectionHeader/>
-        </div>
+        </div> */}
         <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
           <div>
             <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
           </div>
         </Banner>
-        <div className="Wrapper">
+        {/* <div className="Wrapper">
          <div className="Left">
           <DisclaimerInformation/>
         </div>
@@ -52,7 +52,10 @@ class LanguageSelection extends Component {
             </div>
         </div>
 
-        </div>
+        </div> */}
+      <div>
+        <DisclaimerInformation/>
+      </div> 
 
       </div>     
     );
