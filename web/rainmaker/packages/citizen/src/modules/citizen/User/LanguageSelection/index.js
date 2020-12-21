@@ -3,14 +3,16 @@ import { connect } from "react-redux";
 import { Banner } from "modules/common";
 import { LanguageSelectionForm } from "modules/common";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale,getIsMobileView } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import {DisclaimerInformation} from "modules/common";
 import {LanguageSelectionHeader} from "modules/common";
+import './index.css'
+import  digit from './digit.png'
 
 class LanguageSelection extends Component {
   state = {
-    value: getLocale(),
+    value: getLocale()
   };
 
   onClick = (value) => {
@@ -23,8 +25,9 @@ class LanguageSelection extends Component {
   };
 
   render() {
-    const { value } = this.state;
-    const { onLanguageSelect, onClick } = this;
+
+    const { value,isMobile } = this.state;
+    const { onLanguageSelect, onClick,isMobileView } = this;
     const { bannerUrl, logoUrl, languages } = this.props;
     return (
 
@@ -37,9 +40,20 @@ class LanguageSelection extends Component {
             <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
           </div>
         </Banner>
-        <div>
+        <div className="Wrapper">
+         <div className="Left">
           <DisclaimerInformation/>
         </div>
+        <div className="Right">
+            <div>
+                     <label style={{ fontFamily:'Roboto',color:'whitesmoke' }}> Powered by </label>&nbsp; &nbsp;
+                     <img src={digit} alt="Logo" width="20px" height="20px" />
+                     <label style={{ fontFamily:'Roboto',color:'whitesmoke' }}> DIGIT</label> 
+            </div>
+        </div>
+
+        </div>
+
       </div>     
     );
   }

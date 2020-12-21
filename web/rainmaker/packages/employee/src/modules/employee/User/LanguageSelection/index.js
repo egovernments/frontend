@@ -7,6 +7,8 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import {DisclaimerInformation} from "modules/common";
 import {LanguageSelectionHeader} from "modules/common";
+import './index.css'
+import  digit from './digit.png'
 
 class LanguageSelection extends Component {
   state = {
@@ -40,9 +42,19 @@ class LanguageSelection extends Component {
         </div>   
          {/* <DisclaimerInformation/>             */}
       </Banner>
-       <div>
+      <div className="Wrapper">
+         <div className="Left">
           <DisclaimerInformation/>
-      </div> 
+        </div>
+        <div className="Right">
+            <div>
+                     <label style={{ fontFamily:'Roboto',color:'whitesmoke' }}> Powered by </label>&nbsp; &nbsp;
+                     <img src={digit} alt="Logo" width="20px" height="20px" />
+                     <label style={{ fontFamily:'Roboto',color:'whitesmoke' }}> DIGIT</label> 
+            </div>
+        </div>
+
+        </div>
       </div>     
     );
   }

@@ -1,0 +1,21 @@
+.Wrapper {
+    position:absolute; 
+    left:0;
+    bottom:0;
+    right:5px;   
+    width: auto;
+    height: auto;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .Left {
+    text-align: left;
+    grid-column: 1/4;
+  }
+  
+  .Right {
+    text-align: right;
+    grid-column: 2/2;
+  }
