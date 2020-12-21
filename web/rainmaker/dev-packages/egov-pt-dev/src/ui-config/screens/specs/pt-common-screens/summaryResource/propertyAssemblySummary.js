@@ -73,7 +73,7 @@ export const propertyAssemblySummary = getCommonGrayCard({
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA"
       },
       {
-        jsonPath: "Property.totalConstructedArea"
+        jsonPath: "Property.superBuiltUpArea"
       }
     ),
     usageType: getLabelWithValue(
@@ -99,7 +99,7 @@ export const propertyAssemblySummary = getCommonGrayCard({
           moduleName: "COMMON",
           masterName: "PROPSUBUSGTYPE"
         },
-        jsonPath: "Property.subUsageCategory",
+        jsonPath: "Property.units[0].usageCategory",
       }
     )
   })
