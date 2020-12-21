@@ -2,9 +2,9 @@ div[class^=MUIDataTable-responsiveScroll] thead {
   background: #F2F2F2;
 }
 
-table[class^=MuiTable-root] {
+/* table[class^=MuiTable-root] {
   word-break: break-all;
-}
+} */
 
 div[class^=MUIDataTableHeadCell-data] {
   color: rgba(0, 0, 0, 0.8700000048);
@@ -13,6 +13,9 @@ div[class^=MUIDataTableHeadCell-data] {
   font-weight: 700;
   line-height: 17px;
   text-align: left;
+}
+.div {
+  word-break: break-all
 }
 
 table tbody  tr  td {
