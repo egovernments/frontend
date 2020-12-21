@@ -132,7 +132,7 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "Property.totalConstructedArea"
+      jsonPath: "Property.superBuiltUpArea"
     }),
     usageType: getSelectField({
       label: {
