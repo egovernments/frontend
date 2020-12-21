@@ -13,6 +13,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
+import isEmpty from "lodash/isEmpty";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -241,6 +242,25 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
+        if((moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && label==="APPLY"){
+          const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+          let isAppFeeReqd = false;
+          if (!isEmpty(businessServiceData)) {
+            const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => (item.businessService === "NewTL" || "EDITRENEWAL"))
+            const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
+            for (var i = 0; i < states.length; i++) {
+              if (states[i].state === "PENDINGAPPLFEE") {
+                isAppFeeReqd = true;
+                break;
+              }
+             
+            }
+          } 
+          if(isAppFeeReqd){
+            this.props.setRoute(`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=TL`);
+            return;
+          }
+        }
         if (redirectQueryString) {
           this.props.setRoute(`acknowledgement?${this.getPurposeString(label)}&${redirectQueryString}`);
         } else {
