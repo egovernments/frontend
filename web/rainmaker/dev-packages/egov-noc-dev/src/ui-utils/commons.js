@@ -84,6 +84,19 @@ export const download = async(receiptQueryString, mode = "download" ,configKey =
           payloadReceiptDetails.Payments[0].paidBy?payloadReceiptDetails.Payments[0].paidBy.trim():payloadReceiptDetails.Payments[0].paidBy;
         }
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
+        let owners=""; let contacts="";
+        response.FireNOCs[0].fireNOCDetails.applicantDetails.owners.map(ele=>{
+          if(owners=="")
+          {owners=ele.name; 
+            contacts=ele.mobileNumber;}
+          else{
+            owners=owners+","+ele.name; 
+            contacts=contacts+","+ele.mobileNumber;
+          }
+  
+        });
+        payloadReceiptDetails.Payments[0].payerName=owners;
+        payloadReceiptDetails.Payments[0].mobileNumber=contacts;
         let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
         let year=receiptDate.split("/")[2];
         year++;

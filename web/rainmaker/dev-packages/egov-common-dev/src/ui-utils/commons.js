@@ -656,8 +656,9 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
           assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
        }});
       if(count==0){
-        let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
-        let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
+        let index=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.length;
+        let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[index-1].toPeriod).split("/")[2];
+        let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[index-1].fromPeriod).split("/")[2];
         assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
       }
         
@@ -682,6 +683,20 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       }
     
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
+
+      let owners=""; let contacts="";
+      response.FireNOCs[0].fireNOCDetails.applicantDetails.owners.map(ele=>{
+        if(owners=="")
+        {owners=ele.name; 
+          contacts=ele.mobileNumber;}
+        else{
+          owners=owners+","+ele.name; 
+          contacts=contacts+","+ele.mobileNumber;
+        }
+
+      });
+      payloadReceiptDetails.Payments[0].payerName=owners;
+      payloadReceiptDetails.Payments[0].mobileNumber=contacts;
       let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
       let year=receiptDate.split("/")[2];
       year++;
