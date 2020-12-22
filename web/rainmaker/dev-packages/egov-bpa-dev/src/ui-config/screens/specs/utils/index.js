@@ -4736,6 +4736,12 @@ const prepareFinalCards = (state, dispatch, documentsPreview, requiredDocsFromMd
     sendBackCitizen = false;
   }
 
+  if(get(bpaDetails, "status") === "DOC_VERIFICATION_INPROGRESS" && isVisibleTrue) {
+      isVisibleTrue = true;
+  } else {
+    isVisibleTrue = false;
+  }
+
   documentCards && Object.keys(documentCards).map((doc) => {
     let card = {
       documentCode: doc,
