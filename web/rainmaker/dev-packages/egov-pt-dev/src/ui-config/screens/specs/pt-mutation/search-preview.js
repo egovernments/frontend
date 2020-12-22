@@ -31,11 +31,11 @@ import { citizenFooter } from "./searchResource/citizenFooter";
 import {
   transferorSummary,
   transferorInstitutionSummary
-} from "./summaryResource/transferorSummary";
+} from "./searchPreviewResource/transferorSummary";
 import {
   transfereeSummary,
   transfereeInstitutionSummary
-} from "./summaryResource/transfereeSummary";
+} from "./searchPreviewResource/transfereeSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
@@ -290,11 +290,11 @@ const setSearchResponse = async (
   }
   property.ownershipCategoryTemp = property.ownershipCategory;
   property.ownershipCategoryInit = propertyAudit.ownershipCategory || "N/A";
-  if(propertyAudit.ownershipCategory.startsWith("INSTITUTION")){
-  property.institution = propertyAudit.institution;
-  property.ownershipCategoryInit = propertyAudit.ownershipCategory.split(".")[0] || "N/A";
+  // if(propertyAudit.ownershipCategory.startsWith("INSTITUTION")){
+  // property.institution = propertyAudit.institution;
+  // property.ownershipCategoryInit = propertyAudit.ownershipCategory.split(".")[0] || "N/A";
 
-  }
+  // }
   // Set Institution/Applicant info card visibility
   if (
     get(
@@ -324,9 +324,8 @@ const setSearchResponse = async (
       )
     );
   }
-
-  if (get(property, 'ownersInit[0].altContactNumber', 0)) {
-   
+  if (property.ownershipCategoryInit.startsWith("INSTITUTION")) {
+    property.institutionInit = propertyAudit.Institution;
     dispatch(
       handleField(
         "search-preview",

@@ -182,7 +182,10 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
   } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL")) {
-    propertyPayload.owners[0].altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    // propertyPayload.owners[0].altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.owners.map( owner => {
+        owner.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    })
     propertyPayload.institution = {};
     propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;

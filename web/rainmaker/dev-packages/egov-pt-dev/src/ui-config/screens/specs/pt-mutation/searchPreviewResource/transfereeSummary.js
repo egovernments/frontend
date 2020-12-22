@@ -2,6 +2,7 @@ import { getCommonContainer, getCommonGrayCard, getCommonSubHeader, getLabelWith
 import { checkValueForNA } from "../../utils";
 import { getLabelIfNotNull } from "../../utils/index";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const transfereeSummaryDetails={
   ownerName: getLabelWithValue(
@@ -117,7 +118,7 @@ export const transfereeInstitutionSummaryDetails={
     },
     {
       jsonPath:
-        "Property.institutionTemp.institutionName",
+        "Property.institutionTemp.name",
       callBack: checkValueForNA
     }
   ),
@@ -138,8 +139,14 @@ export const transfereeInstitutionSummaryDetails={
       labelKey: "PT_OWNERSHIP_INSTI_TYPE"
     },
     {
-      jsonPath: "Property.institutionTemp.institutionName",
-      callBack: checkValueForNA
+      jsonPath: "Property.institutionTemp.type",
+      // callBack: checkValueForNA
+      callBack: value => {
+        if (!value) {
+          return 'NA';
+        }
+        return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
+      }
     }
   ),
   institutionOwnershipType: getLabelWithValue(
@@ -158,7 +165,7 @@ export const transfereeInstitutionSummaryDetails={
       labelKey: "PT_OWNERSHIP_INFO_NAME_OF_AUTH"
     },
     {
-      jsonPath: "Property.institutionTemp.name",
+      jsonPath: "Property.institutionTemp.nameOfAuthorizedPerson",
       callBack: checkValueForNA
     }
   ),
@@ -169,7 +176,7 @@ export const transfereeInstitutionSummaryDetails={
     },
     {
       jsonPath:
-        "Property.institutionTemp.landlineNumber",
+        "Property.ownersTemp[0].altContactNumber",
       callBack: checkValueForNA
     }
   ),
@@ -180,7 +187,7 @@ export const transfereeInstitutionSummaryDetails={
     },
     {
       jsonPath:
-        "Property.institutionTemp.mobileNumber",
+        "Property.ownersTemp[0].mobileNumber",
       callBack: checkValueForNA
     }
   ),
@@ -191,7 +198,7 @@ export const transfereeInstitutionSummaryDetails={
     },
     {
       jsonPath:
-        "Property.institutionTemp.correspondenceAddress",
+        "Property.ownersTemp[0].correspondenceAddress",
       callBack: checkValueForNA
     }
   )

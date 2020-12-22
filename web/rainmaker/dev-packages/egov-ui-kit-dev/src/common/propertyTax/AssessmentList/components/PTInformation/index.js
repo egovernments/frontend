@@ -174,6 +174,7 @@ class PTInformation extends React.Component {
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
                 </div>
+                <div>* This document does not certify payment of Property Tax</div>
               </div>
             }
           />
