@@ -209,9 +209,9 @@ const setRolesList = (state, dispatch) => {
     `createScreenMdmsData.ACCESSCONTROL-ROLES.roles`,
     []
   );
-  let furnishedRolesList = rolesList.filter(item => {
-    return item.code;
-  });
+  let furnishedRolesList = rolesList.filter(item =>item.code != 'SUPERUSER')
+                                    .filter(item =>item.code != 'SYSTEM')
+                                    .filter(item =>item.code != 'ANONYMOUS')                                 
   dispatch(
     prepareFinalObject(
       "createScreenMdmsData.furnishedRolesList",

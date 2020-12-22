@@ -9,7 +9,7 @@ import Router from "./Router";
 import commonConfig from "config/common";
 // import logoMseva from "egov-ui-kit/assets/images/logo-white.png";
 import routes from "./Routes";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import { LoadingIndicator, CommonShareContainer } from "components";
 
@@ -63,7 +63,9 @@ class App extends Component {
       },
     };
     // can be combined into one mdms call
-    fetchLocalizationLabel(getLocale() || "en_IN");
+    const tenantId = getTenantId();
+    fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+    //fetchLocalizationLabel(getLocale() || "en_IN");
 
     // current location
     fetchCurrentLocation();
@@ -129,7 +131,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchLocalizationLabel: (locale) => dispatch(fetchLocalizationLabel(locale)),
+    fetchLocalizationLabel: (locale,tenantId,module) => dispatch(fetchLocalizationLabel(locale,tenantId,module)),
+    //fetchLocalizationLabel: (locale) => dispatch(fetchLocalizationLabel(locale)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     fetchMDMSData: (criteria) => dispatch(fetchMDMSData(criteria)),
     fetchCurrentLocation: () => dispatch(fetchCurrentLocation()),
