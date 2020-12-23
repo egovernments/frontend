@@ -1,9 +1,6 @@
 import React from "react";
 import { Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
-import {
-  getQueryArg
-} from "egov-ui-framework/ui-utils/commons";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -123,16 +120,7 @@ const WizardComponent = ({
               selected === 7
                 ? onPayButtonClick
                 : () => {
-                  console.log("===========",(getQueryArg(window.location.href, "purpose") === "assess"));
-                  debugger;
-                  if(getQueryArg(window.location.href, "purpose") === "assess" || getQueryArg(window.location.href, "purpose") === "reassess"){
-                    if(window.confirm("Are you sure you want Assess Property?")){
-                      updateIndex(selected + 1);
-                    }
-                  }
-                  else{
-                    updateIndex(selected + 1);
-                  }
+                  updateIndex(selected + 1);
                 }
             }
             disabled={!nextButtonEnabled}
