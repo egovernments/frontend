@@ -120,14 +120,18 @@ import PropTypes from "prop-types";
             required: true,
             data: [
               {
-                code: "LAMS_APPL_TYPE_RENEWAL",
-                label: "LAMS_APPL_TYPE_RENEWAL"
+                code: "RENEWAL",
+                label: "RENEWAL"
               },
               {
-                code: "LAMS_APPL_TYPE_EXTENSION",
-                label: "LAMS_APPL_TYPE_EXTENSION"
+                code: "EXTENSION",
+                label: "EXTENSION"
               },
             ],
+            localePrefix: {
+              moduleName: "LAMS",
+              masterName: "APPL_TYPE"
+            },
             jsonPath: "lamsStore.Lease[0].applicationType",
             autoSelect: true,
           }),
