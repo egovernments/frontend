@@ -146,7 +146,7 @@ export const searchForm = getCommonCard({
       },
       pattern: /^[6789][0-9]{9}$/i,
       errorMessage: "HR_EMP_MOBILE_ERR_MSG",
-      jsonPath: "hrmsSearchScreen.mobileNumber",
+      jsonPath: "hrmsSearchScreen.phone",
       gridDefination: {
         xs: 12,
         sm: 4

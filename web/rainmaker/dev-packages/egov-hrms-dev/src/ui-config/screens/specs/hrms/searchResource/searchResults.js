@@ -92,7 +92,7 @@ export const searchResults = {
           customBodyRender: value => (
             <LabelContainer
               style={
-                value === "ACTIVE" ? { color: "green" } : { color: "red" }
+                value === "EMPLOYED" ? { color: "green" } : { color: "red" }
               }
               labelKey={getStatusKey(value).labelKey}
               labelName={getStatusKey(value).labelName}
@@ -129,5 +129,5 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  routeTo(`view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`);
+  routeTo(`view?employeeID=${rowData[0]}&tenantId=${rowData[6]}`);
 };
