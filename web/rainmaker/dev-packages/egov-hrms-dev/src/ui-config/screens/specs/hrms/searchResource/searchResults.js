@@ -1,8 +1,8 @@
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
+
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getLocaleLabels, getStatusKey, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+import React from "react";
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -35,6 +35,12 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels(
         "Department",
         "HR_COMMON_TABLE_COL_DEPT",
+        localisationLabels
+      );
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "HR_COMMON_TABLE_COL_STATUS",
         localisationLabels
       );
     case "Search Results for Employee":
@@ -79,6 +85,22 @@ export const searchResults = {
         labelKey: "HR_COMMON_TABLE_COL_DEPT"
       },
       {
+        labelName: "Status",
+        labelKey: "HR_COMMON_TABLE_COL_STATUS",
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <LabelContainer
+              style={
+                value === "EMPLOYED" ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
+          )
+        }
+      },
+      {
         labelName: "Tenant ID",
         labelKey: "HR_COMMON_TABLE_COL_TENANT_ID",
         name: "tenantId",
@@ -107,5 +129,5 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  routeTo(`view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`);
+  routeTo(`view?employeeID=${rowData[0]}&tenantId=${rowData[6]}`);
 };
