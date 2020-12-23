@@ -334,7 +334,7 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else if(tlAppStatus!=null) {
-      let pattern = getPattern("Name");
+      let pattern = getPattern("Comments");
       const comments = get(
         preparedFinalObject,
         `Licenses[0].comment`,
