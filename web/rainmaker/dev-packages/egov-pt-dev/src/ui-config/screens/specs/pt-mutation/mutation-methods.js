@@ -26,7 +26,7 @@ export const resetFields = (state, dispatch) => {
     );
 
     dispatch(prepareFinalObject(
-      "searchScreen.tenantId",
+      "ptSearchScreen.tenantId",
       ''
     ))
   }
@@ -80,19 +80,19 @@ export const resetFields = (state, dispatch) => {
     )
   );
   dispatch(prepareFinalObject(
-    "searchScreen.acknowledgementIds",
+    "ptSearchScreen.acknowledgementIds",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.ids",
+    "ptSearchScreen.ids",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.mobileNumber",
+    "ptSearchScreen.mobileNumber",
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.oldpropertyids",
+    "ptSearchScreen.oldpropertyids",
     ''
   ))
 
@@ -129,7 +129,7 @@ export const searchPropertyDetails = getCommonCard({
           moduleName: "TENANT",
           masterName: "TENANTS"
         },
-        jsonPath: "searchScreen.tenantId",
+        jsonPath: "ptSearchScreen.tenantId",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
@@ -140,7 +140,7 @@ export const searchPropertyDetails = getCommonCard({
         }
       },
       required: true,
-      jsonPath: "searchScreen.tenantId",
+      jsonPath: "ptSearchScreen.tenantId",
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       gridDefination: {
         xs: 12,
@@ -168,7 +168,7 @@ export const searchPropertyDetails = getCommonCard({
       },
       required: false,
       pattern: getPattern("MobileNo"),
-      jsonPath: "searchScreen.mobileNumber",
+      jsonPath: "ptSearchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     }),
     propertyTaxUniqueId: getTextField({
@@ -188,7 +188,7 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.ids"
+      jsonPath: "ptSearchScreen.ids"
     }),
     existingPropertyId: getTextField({
       label: {
@@ -207,7 +207,7 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.oldpropertyids"
+      jsonPath: "ptSearchScreen.oldpropertyids"
     })
   }),
   button: getCommonContainer({
@@ -303,7 +303,7 @@ export const searchApplicationDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_APPLICATION_NO",
-      jsonPath: "searchScreen.acknowledgementIds"
+      jsonPath: "ptSearchScreen.acknowledgementIds"
     }),
     ownerMobNoProp: getTextField({
       label: {
@@ -326,7 +326,7 @@ export const searchApplicationDetails = getCommonCard({
       },
       required: false,
       pattern: getPattern("MobileNo"),
-      jsonPath: "searchScreen.mobileNumber",
+      jsonPath: "ptSearchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     }),
     applicationPropertyTaxUniqueId: getTextField({
@@ -346,7 +346,7 @@ export const searchApplicationDetails = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.ids"
+      jsonPath: "ptSearchScreen.ids"
     }),
   }),
   button: getCommonContainer({

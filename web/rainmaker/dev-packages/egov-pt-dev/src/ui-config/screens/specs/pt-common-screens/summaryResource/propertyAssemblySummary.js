@@ -4,6 +4,7 @@ import {
   getCommonSubHeader,
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { checkValueForNA } from "../../utils";
 
 const getHeader = label => {
   return {
@@ -56,6 +57,7 @@ export const propertyAssemblySummary = getCommonGrayCard({
           masterName: "PROPTYPE"
         },
         jsonPath: "Property.propertyType",
+        callBack: checkValueForNA
       }
     ),
     totalLandArea: getLabelWithValue(
@@ -64,7 +66,8 @@ export const propertyAssemblySummary = getCommonGrayCard({
         labelKey: "PT_COMMON_TOTAL_LAND_AREA"
       },
       {
-        jsonPath: "Property.landArea"
+        jsonPath: "Property.landArea",
+        callBack: checkValueForNA
       }
     ),
     totalConstructedArea: getLabelWithValue(
@@ -73,7 +76,8 @@ export const propertyAssemblySummary = getCommonGrayCard({
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA"
       },
       {
-        jsonPath: "Property.totalConstructedArea"
+        jsonPath: "Property.superBuiltUpArea",
+        callBack: checkValueForNA
       }
     ),
     usageType: getLabelWithValue(
@@ -87,6 +91,7 @@ export const propertyAssemblySummary = getCommonGrayCard({
           masterName: "PROPUSGTYPE"
         },
         jsonPath: "Property.usageCategory",
+        callBack: checkValueForNA
       }
     ),
     subUsageType: getLabelWithValue(
@@ -99,7 +104,8 @@ export const propertyAssemblySummary = getCommonGrayCard({
           moduleName: "COMMON",
           masterName: "PROPSUBUSGTYPE"
         },
-        jsonPath: "Property.subUsageCategory",
+        jsonPath: "Property.units[0].usageCategory",
+        callBack: checkValueForNA
       }
     )
   })

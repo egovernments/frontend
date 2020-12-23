@@ -20,16 +20,13 @@ const rendersubUsageType = (usageType, propType, dispatch, state) => {
     state.screenConfiguration.preparedFinalObject,
     "Property.propertyType"
   );  
+const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType"; 
+
   let subUsage;
   if (propertyType === "BUILTUP.SHAREDPROPERTY") {
-    dispatch(
-      handleField(
-        "register-property",
-        "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType",
-        "required",
-        true
-      )
-     )
+    dispatch(handleField('register-property', additionalDetailsJson, "required", true));
+    dispatch(handleField('register-property', additionalDetailsJson, "props.required", true))
+
     if (usageType === "MIXED") {
       subUsage = subTypeValues;
     } else {
@@ -39,15 +36,9 @@ const rendersubUsageType = (usageType, propType, dispatch, state) => {
     }
   } else {
     subUsage = [];
-     set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", "");
-     dispatch(
-      handleField(
-        "register-property",
-        "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType",
-        "required",
-        false
-      )
-     )
+    set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", "");
+    dispatch(handleField('register-property', additionalDetailsJson, "required", false));
+    dispatch(handleField('register-property', additionalDetailsJson, "props.required", false));
   }
   dispatch(
     prepareFinalObject(
@@ -132,7 +123,7 @@ export const propertyAssemblyDetails = getCommonCard({
       required: true,
       pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "Property.totalConstructedArea"
+      jsonPath: "Property.superBuiltUpArea"
     }),
     usageType: getSelectField({
       label: {

@@ -38,7 +38,7 @@ const getMDMSData = async (action, dispatch) => {
       if (process.env.REACT_APP_NAME != "Citizen") {
         dispatch(
           prepareFinalObject(
-            "searchScreen.tenantId",
+            "ptSearchScreen.tenantId",
             tenant
           )
         );
@@ -82,7 +82,7 @@ const getMDMSData = async (action, dispatch) => {
   //   if (process.env.REACT_APP_NAME != "Citizen") {
   //     dispatch(
   //       prepareFinalObject(
-  //         "searchScreen.tenantId",
+  //         "ptSearchScreen.tenantId",
   //         tenant
   //       )
   //     );

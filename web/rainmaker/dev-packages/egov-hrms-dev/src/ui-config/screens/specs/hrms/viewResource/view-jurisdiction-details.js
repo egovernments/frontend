@@ -63,12 +63,12 @@ const jurisdictionCard = {
             }
           }
         ),
-        reviewRole: getLabelWithValue(
-          { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
-          {
-            jsonPath: "hrms.reviewScreen.furnishedRolesList",
-          }
-        ),
+        // reviewRole: getLabelWithValue(
+        //   { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
+        //   {
+        //     jsonPath: "hrms.reviewScreen.furnishedRolesList",
+        //   }
+        // ),
 
       })
     }),
