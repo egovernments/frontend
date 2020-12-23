@@ -1,4 +1,4 @@
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertDateToEpoch,getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
@@ -334,7 +334,7 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else if(tlAppStatus!=null) {
-      let pattern =  /^[a-zA-Z0-9- _]{1,50}$/i ;
+      let pattern = getPattern("Name");
       const comments = get(
         preparedFinalObject,
         `Licenses[0].comment`,
