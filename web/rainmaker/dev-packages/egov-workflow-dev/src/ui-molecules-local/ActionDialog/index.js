@@ -85,7 +85,7 @@ class ActionDialog extends React.Component {
   };
 
   render() {
-
+        
     let {
       open,
       onClose,
@@ -104,19 +104,34 @@ class ActionDialog extends React.Component {
     } = dialogData;
     const { getButtonLabelName } = this;
     let fullscreen = false;
+    const showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     if (window.innerWidth <= 768) {
-      // fullscreen = true;
+      fullscreen = true;
     }
     if (dataPath === "FireNOCs") {
-      dataPath = `${dataPath}[0].fireNOCDetails`
-    } else if (dataPath === "BPA") {
-      dataPath = `${dataPath}`;
-    } else if (dataPath === "Assessment"||dataPath === "Property") {
+      dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
+    } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       dataPath = `${dataPath}.workflow`;
     } else {
       dataPath = `${dataPath}[0]`;
     }
+    let assigneePath= '';
+    /* The path for Assignee in Property and Assessment has latest workflow contract and it is Array of user object  */
+    if (dataPath.includes("Assessment")||dataPath.includes("Property")){
+      assigneePath=`${dataPath}.assignes[0].uuid`;
+    }else{
+      assigneePath=`${dataPath}.assignee[0]`;
+    }
 
+    let wfDocumentsPath;
+    if(dataPath === "BPA.workflow") {
+      wfDocumentsPath = `${dataPath}.varificationDocuments`
+    } else if (dataPath === "Noc.workflow") {
+      wfDocumentsPath = `${dataPath}.documents`
+    } else {
+      wfDocumentsPath = `${dataPath}.wfDocuments`
+    }
+   
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -135,7 +150,7 @@ class ActionDialog extends React.Component {
                   marginTop={16}
                   className="action-container"
                 >
-                <Grid
+                  <Grid
                     style={{
                       alignItems: "center",
                       display: "flex"
@@ -161,7 +176,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {process.env.REACT_APP_NAME !== "Citizen" ? showEmployeeList && (
+                  {showEmployeeList && showAssignee && (
                     <Grid
                       item
                       sm="12"
@@ -181,14 +196,14 @@ class ActionDialog extends React.Component {
                         //onChange={e => this.onEmployeeClick(e)}
                         onChange={e =>
                           handleFieldChange(
-                            `${dataPath}.assignee`,
-                            [e.target.value]
+                            assigneePath,
+                            e.target.value
                           )
                         }
-                        jsonPath={`${dataPath}.assignee[0]`}
+                        jsonPath={assigneePath}
                       />
                     </Grid>
-                  ) : ""}                  
+                  )}
                   <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
@@ -243,7 +258,7 @@ class ActionDialog extends React.Component {
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
                       buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
-                      jsonPath={`${dataPath}.wfDocuments`}
+                      jsonPath={wfDocumentsPath}
                       maxFileSize={5000}
                     />
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">

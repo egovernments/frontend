@@ -156,7 +156,10 @@ class PropertyTaxDetails extends React.Component {
                   <div className="col-sm-9 col-xs-9" style={{ padding: 0 }}>
                       <Label label="PT_FORM4_TOTAL" />
                     </div>
-                    <div className="col-sm-9 col-xs-9" style={{padding:0}}>
+                    <div 
+                    className="col-sm-9 col-xs-9"
+                    //className="col-sm-3 col-xs-3"
+                    style={{padding:0,marginTop: "-25px"}}>
                       <Label
                         containerStyle={{ textAlign: "right" }}
                         labelStyle={{
