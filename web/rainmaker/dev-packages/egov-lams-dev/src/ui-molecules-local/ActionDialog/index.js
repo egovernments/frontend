@@ -301,7 +301,7 @@ class ActionDialog extends React.Component {
                       >
                         <CloseIcon />
                       </Grid>
-                      <Grid item sm="12">
+                      {/* <Grid item sm="12">
                         <TextFieldContainer
                           InputLabelProps={{ shrink: true }}
                           label={fieldConfig.fileNo.label}
@@ -312,7 +312,7 @@ class ActionDialog extends React.Component {
                           placeholder={fieldConfig.fileNo.placeholder}
                           required={false}
                         />
-                      </Grid>
+                      </Grid> */}
                       {buttonLabel === "APPROVE" &&
                         <Grid item sm="12">
                           <TextFieldContainer

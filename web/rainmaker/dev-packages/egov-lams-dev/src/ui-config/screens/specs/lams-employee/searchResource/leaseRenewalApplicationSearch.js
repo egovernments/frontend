@@ -35,7 +35,7 @@ export const leaseApplication = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: /^[a-zA-Z0-9-]{0,32}$/i,
       errorMessage: "ERR_INVALID_APPLICATION_NO",
       jsonPath: "searchScreen.applicationNumber"
     }),
@@ -54,7 +54,7 @@ export const leaseApplication = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: /^[a-zA-Z0-9-]{0,10}$/i,
       errorMessage: "ERR_INVALID_SURVEY_NO",
       jsonPath: "searchScreen.surveyNo"
     }),

@@ -39,7 +39,7 @@ import PropTypes from "prop-types";
     dispatch(
       handleField(
         "newApplication",
-        "components.div1.children.details.children.cardContent.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
         "visible",
         true
       )
@@ -108,169 +108,185 @@ import PropTypes from "prop-types";
               }
             }
           ),
-          applicationType: getSelectField({
-            label: {
-              labelName: "Application Type",
-              labelKey: "LAMS_APPL_TYPE"
-            },
-            placeholder: {
-              labelName: "Select application type",
-              labelKey: "LAMS_APPL_TYPE_PLACEHOLDER"
-            },
-            required: true,
-            data: [
-              {
-                code: "RENEWAL",
-                label: "RENEWAL"
-              },
-              {
-                code: "EXTENSION",
-                label: "EXTENSION"
-              },
-            ],
-            localePrefix: {
-              moduleName: "LAMS",
-              masterName: "APPL_TYPE"
-            },
-            jsonPath: "lamsStore.Lease[0].applicationType",
-            autoSelect: true,
-          }),
-          category: getSelectField({
-            label: {
-              labelName: "Select Category",
-              labelKey: "LAMS_APPL_CATEGORY"
-            },
-            placeholder: {
-              labelName: "Select Category",
-              labelKey: "LAMS_APPL_CATEGORY_PLACEHOLDER"
-            },
-            required: true,
-            localePrefix: {
-              moduleName: "LAMS",
-              masterName: "CATEGORY"
-            },
-            data: [
-              {
-                code: "cantonment",
-                label: "LAMS_CATEGORY_CANT"
-              },
-              {
-                code: "militaryStation",
-                label: "LAMS_CATEGORY_MILIT_STN"
-              },
-              {
-                code: "isolatedPocket",
-                label: "LAMS_CATEGORY_ISOLATED_POCKET"
-              },
-            ],
-            props:{
-              disabled: true,
-            },
-            jsonPath: "lamsStore.Lease[0].category",
-            autoSelect: true,
-            visible: false,
-            beforeFieldChange: (action, state, dispatch) => {
-             
-            },
-            afterFieldChange: (action, state, dispatch) => {
-              onCategoryChanged(action, state, dispatch);
-            },
-          }),
-          cantonment: getSelectField({
-            label: {
-              labelName: "Select Cantonment",
-              labelKey: "LAMS_APPL_CANT"
-            },
-            placeholder: {
-              labelName: "Select Cantonment",
-              labelKey: "LAMS_APPL_CANT_PLACEHOLDER"
-            },
-            required: true,
-            //data: null,
-            localePrefix: {
-              moduleName: "TENANT",
-              masterName: "TENANTS"
-            },
-            sourceJsonPath:"lamsStore.allTenants",
-            jsonPath: "lamsStore.Lease[0].tenantId",
-            autoSelect: true,
-            visible: true,
-          }),
-          located: {
-            ...getSelectField({
+          optionSelection: getCommonContainer({
+
+            applicationType: getSelectField({
               label: {
-                labelName: "Select Location Type",
-                labelKey: "LAMS_APPL_LOC"
+                labelName: "Application Type",
+                labelKey: "LAMS_APPL_TYPE"
               },
               placeholder: {
-                labelName: "Select Location Type",
-                labelKey: "LAMS_APPL_LOC_PLACEHOLDER"
-              },
-              localePrefix: {
-                moduleName: "LAMS",
-                masterName: "LOCATED"
+                labelName: "Select application type",
+                labelKey: "LAMS_APPL_TYPE_PLACEHOLDER"
               },
               required: true,
               data: [
                 {
-                  code: "insideCivil",
+                  code: "RENEWAL",
+                  label: "RENEWAL"
+                },
+                {
+                  code: "EXTENSION",
+                  label: "EXTENSION"
+                },
+              ],
+              localePrefix: {
+                moduleName: "LAMS",
+                masterName: "APPL_TYPE"
+              },
+              jsonPath: "lamsStore.Lease[0].applicationType",
+              autoSelect: true,
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              }
+            }),
+            category: getSelectField({
+              label: {
+                labelName: "Select Category",
+                labelKey: "LAMS_APPL_CATEGORY"
+              },
+              placeholder: {
+                labelName: "Select Category",
+                labelKey: "LAMS_APPL_CATEGORY_PLACEHOLDER"
+              },
+              required: true,
+              localePrefix: {
+                moduleName: "LAMS",
+                masterName: "CATEGORY"
+              },
+              data: [
+                {
+                  code: "cantonment",
                   label: "LAMS_CATEGORY_CANT"
                 },
                 {
-                  code: "outsideCivil",
+                  code: "militaryStation",
                   label: "LAMS_CATEGORY_MILIT_STN"
-                }
+                },
+                {
+                  code: "isolatedPocket",
+                  label: "LAMS_CATEGORY_ISOLATED_POCKET"
+                },
               ],
-              jsonPath: "lamsStore.Lease[0].located",
+              props:{
+                disabled: true,
+              },
+              jsonPath: "lamsStore.Lease[0].category",
               autoSelect: true,
+              visible: false,
+              beforeFieldChange: (action, state, dispatch) => {
+              
+              },
+              afterFieldChange: (action, state, dispatch) => {
+                onCategoryChanged(action, state, dispatch);
+              },
             }),
-            beforeFieldChange: (action, state, dispatch) => {
-             
-            },
-            afterFieldChange: (action, state, dispatch) => {
-              onLocatedChanged(action, state, dispatch);
-            },
-          },
-          surveyNo: {
-            uiFramework: "custom-containers-local",
-              moduleName: "egov-lams",
-              componentPath: "AutosuggestContainer",
-              jsonPath: "lamsStore.Lease[0].surveyNo",
-              sourceJsonPath: "lamsStore.allSurveyDetails",
-              visible:false,
-               props:{
-                className: "autocomplete-dropdown",
-                suggestions: [],
-                disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            cantonment: getSelectField({
+              label: {
+                labelName: "Select Cantonment",
+                labelKey: "LAMS_APPL_CANT"
+              },
+              placeholder: {
+                labelName: "Select Cantonment",
+                labelKey: "LAMS_APPL_CANT_PLACEHOLDER"
+              },
+              required: true,
+              //data: null,
+              localePrefix: {
+                moduleName: "TENANT",
+                masterName: "TENANTS"
+              },
+              sourceJsonPath:"lamsStore.allTenants",
+              jsonPath: "lamsStore.Lease[0].tenantId",
+              autoSelect: true,
+              visible: true,
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              },
+            }),
+            located: {
+              ...getSelectField({
                 label: {
-                  labelName: "Enter Survey Number",
-                  labelKey: "LAMS_ENTER_SURVEY_NO"
+                  labelName: "Select Location Type",
+                  labelKey: "LAMS_APPL_LOC"
                 },
                 placeholder: {
-                  labelName: "Enter Survey Number",
-                  labelKey: "LAMS_ENTER_SURVEY_NO"
+                  labelName: "Select Location Type",
+                  labelKey: "LAMS_APPL_LOC_PLACEHOLDER"
+                },
+                localePrefix: {
+                  moduleName: "LAMS",
+                  masterName: "LOCATED"
                 },
                 required: true,
-                jsonPath: "lamsStore.Lease[0].surveyNo",
-                sourceJsonPath: "lamsStore.allSurveyDetails",
-                inputLabelProps: {
-                  shrink: true
-                },
-                onClickHandler: (action, state, dispatch) => {
-                  console.log(action,state, dispatch );
-                },
+                data: [
+                  {
+                    code: "insideCivil",
+                    label: "LAMS_CATEGORY_CANT"
+                  },
+                  {
+                    code: "outsideCivil",
+                    label: "LAMS_CATEGORY_MILIT_STN"
+                  }
+                ],
+                jsonPath: "lamsStore.Lease[0].located",
+                autoSelect: true,
+              }),
+              beforeFieldChange: (action, state, dispatch) => {
+              
+              },
+              afterFieldChange: (action, state, dispatch) => {
+                onLocatedChanged(action, state, dispatch);
               },
               gridDefination: {
                 xs: 12,
-                sm: 6
-              },
-              required: true,
-              beforeFieldChange: (action, state, dispatch) => {
-              },
-              afterFieldChange: (action, state, dispatch) => {
-                surveyNoChanged(action, state, dispatch);
-              },
-          },
+                sm: 4
+              }
+            },
+            surveyNo: {
+              uiFramework: "custom-containers-local",
+                moduleName: "egov-lams",
+                componentPath: "AutosuggestContainer",
+                jsonPath: "lamsStore.Lease[0].surveyNo",
+                sourceJsonPath: "lamsStore.allSurveyDetails",
+                visible:false,
+                props:{
+                  className: "autocomplete-dropdown",
+                  suggestions: [],
+                  disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+                  label: {
+                    labelName: "Enter Survey Number",
+                    labelKey: "LAMS_ENTER_SURVEY_NO"
+                  },
+                  placeholder: {
+                    labelName: "Enter Survey Number",
+                    labelKey: "LAMS_ENTER_SURVEY_NO"
+                  },
+                  required: true,
+                  jsonPath: "lamsStore.Lease[0].surveyNo",
+                  sourceJsonPath: "lamsStore.allSurveyDetails",
+                  inputLabelProps: {
+                    shrink: true
+                  },
+                  onClickHandler: (action, state, dispatch) => {
+                    console.log(action,state, dispatch );
+                  },
+                },
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+                required: true,
+                beforeFieldChange: (action, state, dispatch) => {
+                },
+                afterFieldChange: (action, state, dispatch) => {
+                  surveyNoChanged(action, state, dispatch);
+                },
+            },
+            
+        }),
           leaseDetails:{
             uiFramework: "custom-atoms",
             componentPath: "Div",
@@ -281,7 +297,7 @@ import PropTypes from "prop-types";
             children: {
               details: leaseDetailsCard
             },
-          }
+          },
       },
       {
         style: {

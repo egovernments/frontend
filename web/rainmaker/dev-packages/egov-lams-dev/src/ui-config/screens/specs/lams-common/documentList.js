@@ -122,6 +122,17 @@ export const documentList = [
     "jsonPath": "lamsStore.Lease[0].wfDocuments[10]"
   },
   {
+    "code": "JUDICIALORDERS",
+    "maxFileSize": 5000,
+    "required": false,
+    "formatProps": {
+      "accept": "image/*,.pdf,.png,.jpeg"
+    },
+    "description": "LAMS_JUDICIALORDERS_DESCRIPTION",
+    "statement": "LAMS_JUDICIALORDERS_STATEMENT",
+    "jsonPath": "lamsStore.Lease[0].wfDocuments[11]"
+  },
+  {
     "code": "OTHERS",
     "maxFileSize": 5000,
     "required": false,
@@ -130,7 +141,7 @@ export const documentList = [
     },
     "description": "LAMS_OTHERS_DESCRIPTION",
     "statement": "LAMS_OTHERS_STATEMENT",
-    "jsonPath": "lamsStore.Lease[0].wfDocuments[11]"
+    "jsonPath": "lamsStore.Lease[0].wfDocuments[12]"
   }
 
 

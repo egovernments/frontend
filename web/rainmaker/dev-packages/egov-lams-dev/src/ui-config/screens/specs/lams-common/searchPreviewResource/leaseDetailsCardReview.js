@@ -31,6 +31,16 @@ import {
     ),
     leaseDetailsContainer: getCommonContainer(
       {
+        surveyNo: getLabelWithValue(
+          {
+            labelName: "Survey No",
+            labelKey: "LAMS_SURVEYNO"
+          },
+          {
+            jsonPath: "lamsStore.Lease[0].leaseDetails.surveyNo",
+            //callBack: convertEpochToDate
+          }
+        ),
         termNo: getLabelWithValue(
           {
             labelName: "Term Number",
@@ -60,15 +70,15 @@ import {
             jsonPath: "lamsStore.Lease[0].leaseDetails.located",
           }
         ),
-        category:getLabelWithValue(
-          {
-            labelName: "Category",
-            labelKey: "LAMS_CATEGORY"
-          },
-          {
-            jsonPath: "lamsStore.Lease[0].leaseDetails.category",
-          }
-        ),
+        // category:getLabelWithValue(
+        //   {
+        //     labelName: "Category",
+        //     labelKey: "LAMS_CATEGORY"
+        //   },
+        //   {
+        //     jsonPath: "lamsStore.Lease[0].leaseDetails.category",
+        //   },
+        // ),
         div: getDivider(),
         termExpiryDate:getLabelWithValue(
           {

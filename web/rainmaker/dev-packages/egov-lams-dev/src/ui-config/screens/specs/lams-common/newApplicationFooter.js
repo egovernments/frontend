@@ -19,7 +19,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
 
   const isLeaseDetailsValid = validateFields(
     //"components.div1.children.details.newApplicationDetailsCard.children.cardContent.children",
-    "components.div1.children.details.children.cardContent.children",
+    "components.div1.children.details.children.cardContent.children.optionSelection.children",
     //"components.div.children.newCollectionConsumerDetailsCard.children.cardContent.children.ucConsumerContainer.children",
     state,
     dispatch,
