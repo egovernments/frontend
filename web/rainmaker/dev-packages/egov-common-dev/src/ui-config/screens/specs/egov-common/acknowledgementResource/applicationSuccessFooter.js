@@ -1,7 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-import {download} from  "../../../../../ui-utils/commons";
-import get from "lodash/get";
+import {download} from  "../../../../../ui-utils/commons"
 
 
 const getCommonApplyFooter = children => {
@@ -24,8 +23,6 @@ export const applicationSuccessFooter = (
 ) => {
     const roleExists = ifUserRoleExists("CITIZEN");
     const redirectionURL = roleExists ? "/" : "/inbox";
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
-    const receiptKey = get(uiCommonPayConfig, "receiptKey")
     return getCommonApplyFooter({
 
         downloadFormButton: {
@@ -33,12 +30,12 @@ export const applicationSuccessFooter = (
             props: {
                 variant: "outlined",
                 color: "primary",
-                className: "common-footer",
                 style: {
                     minWidth: "180px",
                     height: "48px",
                     marginRight: "16px"
                 },
+                className: "DCButton"
             },
             children: {
                 downloadFormButtonLabel: getLabel({
@@ -53,7 +50,7 @@ export const applicationSuccessFooter = (
                         { key: "receiptNumbers", value: applicationNumber },
                         { key: "tenantId", value: tenant }
                     ]
-                    download(receiptQueryString , "download" , receiptKey);
+                    download(receiptQueryString);
                 }
             }
         },
@@ -63,7 +60,6 @@ export const applicationSuccessFooter = (
                 variant: "contained",
                 color: "primary",
                 // className: "apply-wizard-footer-right-button",
-                className: "common-footer",
                 style: {
                     minWidth: "180px",
                     height: "48px",
@@ -84,7 +80,7 @@ export const applicationSuccessFooter = (
                         { key: "receiptNumbers", value: applicationNumber },
                         { key: "tenantId", value: tenant }
                     ]
-                    download(receiptQueryString,"print",receiptKey);
+                    download(receiptQueryString,"print");
                 }
             }
         }

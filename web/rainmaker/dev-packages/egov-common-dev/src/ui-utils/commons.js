@@ -1,15 +1,20 @@
-import commonConfig from "config/common.js";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+  toggleSnackbar,
+  toggleSpinner
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-// import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
+import { getTransformedLocale, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import printJS from 'print-js';
+import axios from 'axios';
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -487,8 +492,8 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
-  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     if (mode === 'download') {
       var win = window.open(fileRes[fileStoreId], '_blank');
       if(win){
@@ -520,12 +525,169 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   });
 }
 
-
-export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
-  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
-    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
-    configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
+let getModifiedPayment = (payments) =>{
+  if(payments[0].paymentDetails[0].businessService === 'PT'){
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let swatchatha=0;
+  let currentDate=convertDateToEpoch(new Date());
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+    if(billdetail.amount!==0)
+    {
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }
   }
+  })
+  let totalAmount =   get(payments, `[0].paymentDetails[0].bill.totalAmount`,null);
+  set(payments, `[0].paymentDetails[0].bill.totalAmount`, totalAmount.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, -rebate.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
+}
+else if(payments[0].paymentDetails[0].businessService === 'TL'){
+  let tax=0;
+  let adhocPenalty=0;
+  let penalty=0;
+  let adhocRebate=0
+  let rebate=0;
+  payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "TL_TAX":
+            tax = Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_TIME_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_TAX":
+            tax =
+              Math.round((tax + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_REBATE":
+            rebate =
+              Math.round((rebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_PENALTY":
+            penalty =
+              Math.round((penalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_REBATE":
+            adhocRebate =
+              Math.round((adhocRebate + billAccountDetail.amount) * 100) / 100;
+            break;
+          case "TL_RENEWAL_ADHOC_PENALTY":
+            adhocPenalty =
+              Math.round((adhocPenalty + billAccountDetail.amount) * 100) / 100;
+            break;
+          default:
+            break;
+        }
+      })
+    })
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.tax`, tax);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocRebate`, adhocRebate);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.adhocPenalty`, adhocPenalty);
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate);
+}
+  return payments;
+}
+
+const getBankname = async(payment) =>{
+  const ifscCode = payment[0].ifscCode;
+  let payload;
+  if (ifscCode) {
+    payload = await axios.get(`https://ifsc.razorpay.com/${ifscCode}`);
+    console.log("===================>",payload);
+    if (payload.data === "Not Found") {
+      set(payment, `[0].bankName`, "");
+      set(payment, `[0].branchName`, "");
+    } else {
+      const bankName = get(payload.data, "BANK");
+      const bankBranch = get(payload.data, "BRANCH");
+      set(payment, `[0].bankName`, bankName);
+      set(payment, `[0].branchName`, bankBranch);
+    }
+  }
+  return payment;
+}
+export const download = (receiptQueryString, mode = "download") => {
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -539,131 +701,72 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
     },
   };
   try {
-    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-      const queryStr = [
-        { key: "key", value: configKey },
-        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-      ]
-      if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
-        console.log("Could not find any receipts");
-        store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
-          , "error"));
-        return;
+    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then(async(payloadReceiptDetails) => {
+      let queryStr = {};
+      payloadReceiptDetails.Payments = await getBankname(payloadReceiptDetails.Payments);
+      payloadReceiptDetails.Payments = getModifiedPayment(payloadReceiptDetails.Payments);
+      if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT') {
+        queryStr = [
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
       }
-      // Setting the Payer and mobile from Bill to reflect it in PDF
-      state = state ? state : {};
-      let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
-      if ((billDetails && !billDetails.payerName) || !billDetails) {
-        billDetails = {
-          payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
-          mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
-        };
-      }
-      if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
-        payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
-        // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
-        payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
-      }
-
-      const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-      if (oldFileStoreId) {
-        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+      else if (payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL') {
+        queryStr = [
+          { key: "key", value: "tl-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
       }
       else {
-        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-          .then(res => {
-            res.filestoreIds[0]
-            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-              res.filestoreIds.map(fileStoreId => {
-                downloadReceiptFromFilestoreID(fileStoreId, mode)
-              })
-            } else {
-              console.log('Some Error Occured while downloading Receipt!');
-              store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-                , "error"));
-            }
-          });
+        queryStr = [
+          { key: "key", value: "misc-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+        ]
       }
+      if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
+        console.log("Could not find any receipts");
+        return;
+      }
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          res.filestoreIds[0]
+          if(res&&res.filestoreIds&&res.filestoreIds.length>0){
+            res.filestoreIds.map(fileStoreId=>{
+              downloadReceiptFromFilestoreID(fileStoreId,mode)
+            })
+          }else{
+            console.log("Error In Receipt Download");
+          }
+        });
     })
   } catch (exception) {
-    console.log('Some Error Occured while downloading Receipt!');
-    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-      , "error"));
+    alert('Some Error Occured while downloading Receipt!');
   }
 }
 
 
-export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
+export const downloadBill = async (consumerCode ,tenantId) => {
   const searchCriteria = {
-    consumerCode,
+    consumerCode ,
     tenantId
   }
-  const FETCHBILL = {
-    GET: {
-      URL: url,
+  const FETCHBILL={
+    GET:{
+      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
       ACTION: "_get",
     }
   }
   const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-  try {
-    const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [], { searchCriteria });
-    const oldFileStoreId = get(billResponse.Bills[0], "fileStoreId")
-    if (oldFileStoreId) {
-      downloadReceiptFromFilestoreID(oldFileStoreId, 'download')
-    }
-    else {
-      const queryStr = [
-        { key: "key", value: configKey },
-        { key: "tenantId", value: commonConfig.tenantId }
-      ]
-      const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-      downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
-    }
-  } catch (error) {
-    console.log(error);
-
-  }
-
-}
-
-export const downloadMultipleBill = async (bills = [], configKey) => {
-  try {
-    const DOWNLOADRECEIPT = {
       GET: {
-        URL: "/pdf-service/v1/_create",
-        ACTION: "_get",
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
       },
-    };
-    const queryStr = [
-      { key: "key", value: configKey },
-      { key: "tenantId", value: commonConfig.tenantId }
-    ]
-    const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
-  } catch (error) {
-    console.log(error);
-
-  }
-
-}
-
-
-export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, tenantId) => {
-  getFileUrlFromAPI(fileStoreIds.join(','), tenantId).then(async (fileRes) => {
-    fileStoreIds.map(fileStoreId => {
-      if (mode === 'download') {
-        // downloadPdf(fileRes[fileStoreId]);
-      } else if (mode === 'open') {
-        // openPdf(fileRes[fileStoreId], '_self')
-      }
-      else {
-        // printPdf(fileRes[fileStoreId]);
-      }
-    })
-  });
+  };
+  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const queryStr = [
+            { key: "key", value: "consolidatedbill" },
+            { key: "tenantId", value: "pb" }
+        ]
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
 }

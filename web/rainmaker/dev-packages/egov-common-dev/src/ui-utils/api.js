@@ -1,15 +1,16 @@
 import axios from "axios";
 import {
   fetchFromLocalStorage,
-  addQueryArg,
-  isPublicSearch
+  addQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getAccessToken,
-  getTenantId
+  getTenantId,
+  localStorageGet,
 } from "egov-ui-kit/utils/localStorageUtils";
+import { locale } from "core-js";
 
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -27,12 +28,11 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     action: action,
     did: "1",
     key: "",
-    msgId: "20170310130900|en_IN",
+    msgId: "20170310130900|"+ (localStorageGet("locale")? localStorageGet("locale") : "en_IN"),
     requesterId: "",
     authToken
   };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
-  if(isPublicSearch()) delete RequestInfo.authToken;
   return Object.assign(
     {},
     {
