@@ -20,13 +20,13 @@ const instance = axios.create({
 });
 
 const edcrInstance = axios.create({
-  baseURL: "https://egov-dcr-galaxy.egovernments.org",
+  baseURL: window.location.origin,
   headers: {
     "Content-Type": "application/json"
   }
 })
 
-const wrapRequestBody = (requestBody, action, customRequestInfo) => {
+export const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
   let RequestInfo = {
     apiId: "Rainmaker",
@@ -35,7 +35,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     action: action,
     did: "1",
     key: "",
-    msgId: "20170310130900|en_IN",
+    msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
     authToken
   };
@@ -60,6 +60,7 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
   };
 
   let Ids = process.env.REACT_APP_NAME === "Citizen" && action != "search" ? userInfos : null;
+  let usrInfo = (action == "search") ? null: Ids;
   let RequestInfo = {
     "apiId": "1",
     "ver": "1",
@@ -70,7 +71,7 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
     "msgId": "gfcfc",
     "correlationId": "wefiuweiuff897",
     authToken,
-    "userInfo": Ids
+    "userInfo": usrInfo
   };
 
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
@@ -167,7 +168,7 @@ export const edcrHttpRequest = async (
       );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
-    if (responseStatus === 200 || responseStatus === 201) {
+    if (responseStatus === 200 || responseStatus === 201) {      
       return response.data;
     }
   } catch (error) {

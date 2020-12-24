@@ -4,7 +4,8 @@ import {
   getCommonSubHeader,
   getLabel,
   getLabelWithValue,
-  convertEpochToDate
+  convertEpochToDate,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep, checkValueForNA } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
@@ -56,7 +57,7 @@ export const applicantSummary = getCommonGrayCard({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            changeStep(state, dispatch, "", 2);
+            changeStep(state, dispatch, "", 2);            
           }
         }
       }
@@ -67,8 +68,8 @@ export const applicantSummary = getCommonGrayCard({
     componentPath: "MultiItem",
     props: {
       className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        applicantContainer: getCommonContainer({
+      scheama: getCommonContainer({
+        // applicantContainer: getCommonContainer({
           mobileNo: getLabelWithValue(
             {
               labelName: "Mobile No.",
@@ -76,7 +77,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].mobileNumber",
+                "BPA.landInfo.owners[0].mobileNumber",
                 callBack: checkValueForNA
             }
           ),
@@ -86,7 +87,7 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_OWNER_NAME_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].name",
+              jsonPath: "BPA.landInfo.owners[0].name",
               callBack: checkValueForNA
             }
           ),
@@ -96,7 +97,7 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_GENDER_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].gender",
+              jsonPath: "BPA.landInfo.owners[0].gender",
               callBack: checkValueForNA
             }
           ),
@@ -107,7 +108,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].fatherOrHusbandName",
+                "BPA.landInfo.owners[0].fatherOrHusbandName",
                 callBack: checkValueForNA
             }
           ),
@@ -118,7 +119,7 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].relationship",
+                "BPA.landInfo.owners[0].relationship",
                 callBack: checkValueForNA
             }
           ),
@@ -128,7 +129,7 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_APPLICANT_DOB_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].dob",
+              jsonPath: "BPA.landInfo.owners[0].dob",
               callBack: value => {
                 return convertEpochToDate(value) || checkValueForNA;
               }
@@ -140,7 +141,7 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_APPLICANT_EMAIL_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].emailId",
+              jsonPath: "BPA.landInfo.owners[0].emailId",
               callBack: checkValueForNA
             }
           ),
@@ -150,7 +151,7 @@ export const applicantSummary = getCommonGrayCard({
               labelKey: "BPA_APPLICANT_PAN_LABEL"
             },
             {
-              jsonPath: "BPA.owners[0].pan",
+              jsonPath: "BPA.landInfo.owners[0].pan",
               callBack: checkValueForNA
             }
           ),
@@ -161,18 +162,19 @@ export const applicantSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.owners[0].correspondenceAddress",
+                "BPA.landInfo.owners[0].correspondenceAddress",
                 callBack: checkValueForNA
             }
-          )
-        })
+          ),
+          break: getBreak()
+        // })
       }),
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "BPA.owners",
+      sourceJsonPath: "BPA.landInfo.owners",
       prefixSourceJsonPath:
-        "children.cardContent.children.applicantContainer.children",
+        "children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
@@ -238,7 +240,7 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_INSTITUTION_TYPE_LABEL"
       },
       {
-        jsonPath: "BPA.ownerShipType",
+        jsonPath: "BPA.landInfo.ownerShipType",
         callBack: value => {
           return `COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(
             value
@@ -253,7 +255,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.additionalDetail.institutionName",
+          "BPA.landInfo.additionalDetail.institutionName",
           callBack: checkValueForNA
       }
     ),
@@ -264,7 +266,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.additionalDetail.telephoneNumber",
+          "BPA.landInfo.additionalDetail.telephoneNumber",
           callBack: checkValueForNA
       }
     ),
@@ -274,7 +276,7 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_AUTHORIZED_PERSON_LABEL"
       },
       {
-        jsonPath: "BPA.owners[0].name",
+        jsonPath: "BPA.landInfo.owners[0].name",
         callBack: checkValueForNA
       }
     ),
@@ -285,7 +287,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.additionalDetail.institutionDesignation",
+          "BPA.landInfo.additionalDetail.institutionDesignation",
           callBack: checkValueForNA
       }
     ),
@@ -295,7 +297,7 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_AUTHORIZED_PERSON_MOBILE_LABEL"
       },
       {
-        jsonPath: "BPA.owners[0].mobileNumber",
+        jsonPath: "BPA.landInfo.owners[0].mobileNumber",
         callBack: checkValueForNA
       }
     ),
@@ -305,7 +307,7 @@ export const institutionSummary = getCommonGrayCard({
         labelKey: "BPA_AUTHORIZED_PERSON_EMAIL_LABEL"
       },
       {
-        jsonPath: "BPA.owners[0].emailId",
+        jsonPath: "BPA.landInfo.owners[0].emailId",
         callBack: checkValueForNA
       }
     ),
@@ -316,7 +318,7 @@ export const institutionSummary = getCommonGrayCard({
       },
       {
         jsonPath:
-          "BPA.owners[0].correspondenceAddress",
+          "BPA.landInfo.owners[0].correspondenceAddress",
           callBack: checkValueForNA
       }
     )

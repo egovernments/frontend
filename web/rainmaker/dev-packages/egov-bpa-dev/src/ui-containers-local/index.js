@@ -43,6 +43,14 @@ const DownloadFileContainer = Loadable({
   loader: () => import("./DownloadFileContainer"),
   loading: () => <Loading />
 });
+const DocumentSummaryContainer = Loadable({
+  loader: () => import("./DocumentSummaryContainer"),
+  loading: () => <Loading />
+});
+const PreviewContainer = Loadable({
+  loader: () => import("./PreviewContainer"),
+  loading: () => <Loading />
+});
 
 const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
@@ -104,12 +112,22 @@ const FieldInspectionContainer = Loadable({
   loading: () => <Loading />
 });
 
+const BpaConditionsContainer = Loadable({
+  loader: () => import("./BpaConditionsContainer"),
+  loading: () => <Loading />
+});
+
+const DownloadFileContainerForFI = Loadable({
+  loader: () => import("./DownloadFileContainerForFI"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
   LabelContainer,
   CheckboxContainer,
   DownloadFileContainer,
+  DocumentSummaryContainer,
   EstimateCardContainer,
   AutosuggestContainer,
   DocumentListContainer,
@@ -124,5 +142,8 @@ export {
   BpaCheckboxContainer,
   CheckListContainer,
   FeildInspectionCards,
-  FieldInspectionContainer
+  FieldInspectionContainer,
+  BpaConditionsContainer,
+  DownloadFileContainerForFI,
+  PreviewContainer
 };

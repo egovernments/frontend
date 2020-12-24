@@ -32,7 +32,7 @@ const styles = theme => ({
     fontSize: 20
   },
   iconSize: {
-    width : 175
+    width : "auto"
   }
 });
 
@@ -56,11 +56,11 @@ class MenuListComposition extends React.Component {
   render() {
     const { classes, data } = this.props;
     const { open } = this.state;
-
+    
     return (
       <div className={classes.root} data-html2canvas-ignore={true}>
         <div>
-          <Button
+          <Button 
             className={classes.button}
             buttonRef={node => {
               this.anchorEl = node;
@@ -88,14 +88,18 @@ class MenuListComposition extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList>
-                      {data.menu.map((item, key) => {
+                      {data.menu && data.menu.length > 0 && data.menu.map((item, key) => {
                         const { labelName, labelKey } = item.label;
                         return (
                           <MenuItem key={key} onClick={item.link}>
-                            <Icon
+                            {item.leftIcon && <Icon
                               className={classes.leftIcon}
                               iconName={item.leftIcon}
-                            />
+                            />}
+                            {/* <Icon
+                              className={classes.leftIcon}
+                              iconName={item.leftIcon}
+                            /> */}
                             <LabelContainer
                               labelName={labelName}
                               labelKey={labelKey}

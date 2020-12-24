@@ -1,12 +1,13 @@
 import {
   getCommonGrayCard,
   getCommonSubHeader,
+  getBreak,
+  getCommonContainer,
+  getLabelWithValue,
   getLabel,
-  getBreak
+  convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { gotoApplyWithStep } from "../../utils/index";
-import { documentDetails } from "../applyResource/documentDetails";
-import { changeStep } from "../applyResource/footer";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
   return {
@@ -23,82 +24,115 @@ const getHeader = label => {
   };
 };
 
-export const fieldSummary = getCommonGrayCard({
-  header: {
-    uiFramework: "custom-atoms",
-    componentPath: "Container",
-    props: {
-      style: { marginBottom: "10px" }
+const fieldSummaryContent = () => {
+  return getCommonGrayCard({
+    header: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header:   getCommonContainer({
+          statictitle: getLabel("Field Inspection","BPA_FI_REPORT",{labelKey:"BPA_FI_REPORT"}),
+          dynamicTitle: getLabel("Test","abc",{labelName:"UYT"})
+      })
+      }
     },
-    children: {
-      header: {
-        gridDefination: {
-          xs: 8
+    // lableData : getCommonContainer({
+      fieldSummaryDate: getLabelWithValue(
+        {
+          labelName: "BPA_FI_DATE_LABEL_NAME",
+          labelKey: "BPA_FI_DATE_LABEL"
         },
-        ...getCommonSubHeader({
-          labelName: "Document and NOC details",
-          labelKey: "BPA_DOCUMENT_AND_NOC_DETAILS_HEADER"
-        })
+        {
+          jsonPath:
+            "BPA.additionalDetails.fieldinspection_pending[0].date",
+            callBack: value => {
+              return convertEpochToDate(value) || checkValueForNA;
+            }
+        },
+      ),
+      fieldSummaryTime: getLabelWithValue(
+        {
+          labelName: "BPA_FI_TIME_LABEL_NAME",
+          labelKey: "BPA_FI_TIME_LABEL"
+        },
+        {
+          jsonPath:
+          "BPA.additionalDetails.fieldinspection_pending[0].time",
+          callBack: value => {
+            return modifyTimeFormat(value);
+          }
+        }
+      ),
+    // }),
+    checkListDetailsContainer: getHeader({
+      labelName: "Check List",
+      labelKey: "BPA_CHECK_LIST_DETAILS"
+    }),
+    fieldInspectionDetailsCard: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-bpa",
+      componentPath: "FieldInspectionContainer",
+      props: {
+        jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].questions",
+        jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
+        className: "noc-review-documents"
+      }
+    },
+    break: getBreak(),
+    documentsDetailsContainer: getHeader({
+      labelName: "Documents",
+      labelKey: "BPA_FIELD_INSPECTION_DOCUMENTS"
+    }),
+    fiDocumentDetailsCard: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-bpa",
+      componentPath: "DownloadFileContainerForFI",
+      props: {
+        jsonPath: "BPA.additionalDetails.fieldinspection_pending[0].docs",
+        jsonPathUpdatePrefix: "BPA.additionalDetails.fieldinspection_pending",
+        className: "noc-review-documents"
       }
     }
-  },
-  checkListDetailsContainer: getHeader({
-    labelName: "Check List",
-    labelKey: "BPA_CHECK_LIST_DETAILS"
-  }),
-  // break: getBreak(),
-  fieldInspectionDetailsCard: {
+  });
+}
+
+export const fieldSummary = getCommonContainer({
+  summaryContent: {
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
     props: {
-      className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        body: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "FieldInspectionContainer",
-          props: {
-            sourceJsonPath: "fieldInspectionCheckListDetailsPreview",
-            className: "noc-review-documents"
-          }
-        },
-      }),
+      className: "filed-inspection-summary",
+      scheama: fieldSummaryContent(),
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      prefixSourceJsonPath:
-        "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
+      prefixSourceJsonPath: "children.cardContent.children",
+      afterPrefixJsonPath: "children.value.children.key",
+      sourceJsonPath: "BPA.additionalDetails.fieldinspection_pending",
+      headerJsonPath : "children.cardContent.children.header.children.header.children.dynamicTitle.props.labelName",
+      headerName : " "
     },
     type: "array"
-  },
-  documentsDetailsContainer: getHeader({
-    labelName: "Documents",
-    labelKey: "BPA_FIELD_INSPECTION_DOCUMENTS"
-  }),
-  fiDocumentDetailsCard: {
-    uiFramework: "custom-containers",
-    componentPath: "MultiItem",
-    props: {
-      className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        body: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-bpa",
-          componentPath: "DownloadFileContainer",
-          props: {
-            sourceJsonPath: "fieldInspectionDocumentsDetailsPreview",
-            className: "noc-review-documents"
-          }
-        },
-      }),
-      items: [],
-      hasAddItem: false,
-      isReviewPage: true,
-      prefixSourceJsonPath:
-        "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
-      afterPrefixJsonPath: "children.value.children.key"
-    },
-    type: "array"
-  },
+  }
 });
+
+const modifyTimeFormat = (value) => {
+  if(value) {
+    var time = 12 - Number(value.split(':')[0]);
+    if(time < 0 ) {
+      time = time * -1;
+      return time + ":" + value.split(':')[1] + " PM";
+    } else if(time == 0) {
+      return 12 + ":" + value.split(':')[1] + " PM";
+    } else if(time == 12) {
+      return 12 + ":" + value.split(':')[1] + " AM";
+    } else {
+        return value + " AM";
+    }
+  } else {
+    return "NA";
+  }  
+}

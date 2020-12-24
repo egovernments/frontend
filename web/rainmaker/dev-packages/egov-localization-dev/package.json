@@ -3,8 +3,8 @@
   "version": "0.0.2",
   "license": "egov",
   "private": true,
-  "homepage": "https://uttarakhand-uat.egovernments.org/ui-localisation/",
-  "proxy": "https://uttarakhand-uat.egovernments.org/",
+  "homepage": "https://nageswara-uat.egovernments.org/ui-localisation/",
+  "proxy": "https://nageswara-uat.egovernments.org/",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "@material-ui/core": "^4.9.5",
@@ -16,7 +16,7 @@
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "egov-ui-framework": "0.1.41",
-    "egov-workflow": "0.0.1",
+    "egov-workflow":"1.2.0",
     "jquery": "^3.3.1",
     "jsonpath": "^1.0.2",
     "jspdf": "^1.5.3",
@@ -59,7 +59,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build-css": "node-sass-chokidar src/ -o src/",
-    "transpile": "npm run build-css && babel src -d ../../packages/egov-fire-noc --copy-files",
+    "transpile": "npm run build-css && babel src -d ../../packages/egov-localization --copy-files",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

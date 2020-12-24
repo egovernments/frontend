@@ -61,8 +61,20 @@ export const LicenseeCard = getCommonCard({
             state.screenConfiguration.preparedFinalObject,
             "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
           );
-          if (action.value !== previousValue)
+          if (action.value !== previousValue) {
             await setLicenseeSubTypeDropdownData(action.value, state, dispatch);
+            if(counsilForArchNo) {
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
+                  "props.value",
+                  ""
+                )
+              );
+              };
+              dispatch(prepareFinalObject("LicensesTemp.isDeclared",false));
+          }
 
           if (action.value == "ARCHITECT") {
             dispatch(
@@ -89,17 +101,14 @@ export const LicenseeCard = getCommonCard({
                 true
               )
             );
-
-            if(counsilForArchNo) {
             dispatch(
               handleField(
                 "apply",
-                "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
-                "props.value",
-                ""
+                "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+                "visible",
+                true
               )
-            );
-            }
+            )
           } else {
             dispatch(
               handleField(
@@ -124,7 +133,15 @@ export const LicenseeCard = getCommonCard({
                 "visible",
                 false
               )
-            );
+            );   
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+                "visible",
+                false
+              )
+            )      
             if(counsilForArchNo) {
               dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo", ""));
             }
@@ -193,7 +210,7 @@ export const tradeOwnerDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Trade Owner Details",
-      labelKey: "TL_NEW_OWNER_DETAILS_HEADER"
+      labelKey: "BPA_NEW_OWNER_DETAILS_HEADER"
     },
     {
       style: {

@@ -3,8 +3,8 @@ import MUIDataTable from "mui-datatables";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import cloneDeep from "lodash/cloneDeep";
+import { connect } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-// import "./index.css";
 
 class Table extends React.Component {
   state = {
@@ -18,10 +18,11 @@ class Table extends React.Component {
       overrides: {
         MUIDataTableBodyCell: {
           root: {
-            "&:nth-child(2)": {
-              color: "#2196F3"
-              //fontSize: 14
-            }
+            // "&:nth-child(2)": {
+            //   color: "#2196F3"
+            //   //fontSize: 14
+            // }
+            boxShadow: "none"
           }
         },
         MuiTableCell: {
@@ -33,8 +34,14 @@ class Table extends React.Component {
             color: "rgba(0, 0, 0, 0.8700000048)",
             fontWeight: 700
           }
-        }
-      }
+        },
+        MuiToolbar: { 
+          root: { 
+            display: "none" 
+          } 
+        } 
+      },
+      shadows: ["none"]
     });
 
   formatData = (data, columns) => {
@@ -122,4 +129,27 @@ Table.propTypes = {
   // options: PropTypes.object.isRequired
 };
 
-export default Table;
+//export default Table;
+const mapStateToProps = (state, ownprops) => {
+  let data = "";
+  const { localizationLabels } = state.app;
+  const { jsonPath, callBack } = ownprops;
+  const { screenConfiguration } = state;
+  const { preparedFinalObject } = screenConfiguration;
+  if (jsonPath) {
+    data = get(preparedFinalObject, jsonPath);
+    
+  }
+  return { data, localizationLabels };
+}; 
+
+
+/* export function mapStateToProps(state, ownprops) {
+  return {
+     preFinalObj :state.screenConfiguration.preparedFinalObject
+  };
+} */
+export default connect(
+  mapStateToProps,{})(Table);
+
+

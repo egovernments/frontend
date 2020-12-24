@@ -1,22 +1,13 @@
-import Grid from "@material-ui/core/Grid";
-import Icon from "@material-ui/core/Icon";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  LabelContainer,
-  TextFieldContainer
-} from "egov-ui-framework/ui-containers";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  handleFileUpload,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { UploadSingleFile } from "../../ui-molecules-local";
-import Typography from "@material-ui/core/Typography";
+import { getLoggedinUserRole } from "../../ui-config/screens/specs/utils/index.js";
+import UploadCard from "../UploadCard";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -118,20 +109,21 @@ const styles = {
 };
 
 const requiredIcon = (
-  <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
+  <sup style={{ color: "#5b5b5b", fontSize: "12px", paddingLeft: "5px" }}>*</sup>
 );
 
 class NocList extends Component {
   state = {
-    uploadedDocIndex: 0
+    uploadedDocIndex: 0,
+    nocDocumentsUploadRedux: []
   };
 
   componentDidMount = () => {
     const {
       documentsList,
-      nocDocumentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
+    const { nocDocumentsUploadRedux } = this.state;
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -181,12 +173,16 @@ class NocList extends Component {
                   ? card.dropDownValues.required
                   : false
               };
+              if (card && card.dropDownValues && card.dropDownValues.menu && card.dropDownValues.menu.length == 1) {
+                nocDocumentsUploadRedux[index].dropDownValues = {};
+                nocDocumentsUploadRedux[index].dropDownValues.value = card.dropDownValues.menu[0].code
+              }
             }
             index++;
           }
         });
     });
-    prepareFinalObject("nocDocumentsUploadRedux", nocDocumentsUploadRedux);
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocumentsUploadRedux });
   };
 
   prepareDocumentsInEmployee = async (nocDocuments, bpaDetails) => {
@@ -199,101 +195,110 @@ class NocList extends Component {
       });
     }
 
-    prepareFinalObject("nocDocumentsUploadRedux", {});
-    let requiredDocuments = [], finalQstn = [];
+    let finalDocs = [];
     if (documnts && documnts.length > 0) {
       documnts.forEach(documents => {
         if (documents && documents.documents && documents.dropDownValues && documents.dropDownValues.value) {
-          let doc = {}, finalDocs = [];
-          doc.documentType = documents.dropDownValues.value;
-          doc.fileStoreId = documents.documents[0].fileStoreId;
-          doc.fileStore = documents.documents[0].fileStoreId;
-          doc.fileName = documents.documents[0].fileName;
-          doc.fileUrl = documents.documents[0].fileUrl;
-          if (doc.id) {
-            doc.id = documents.documents[0].id;
-          }
-          if(bpaDetails.additionalDetails) {
-            if(bpaDetails.additionalDetails.fieldinspection_pending && bpaDetails.additionalDetails.fieldinspection_pending[0]) {
-              if(bpaDetails.additionalDetails.fieldinspection_pending[0].docs) {
-                finalQstn.push(doc);
-                bpaDetails.additionalDetails.fieldinspection_pending[0].docs = finalQstn
-              } else {
-                bpaDetails.additionalDetails.fieldinspection_pending.push({"docs" : doc, "question" : []})
-              }
+          documents.documents.map(docs => {
+            let doc = {};
+            doc.documentType = documents.dropDownValues.value;
+            doc.fileStoreId = docs.fileStoreId;
+            doc.fileStore = docs.fileStoreId;
+            doc.fileName = docs.fileName;
+            doc.fileUrl = docs.fileUrl;
+            doc.isClickable = true;
+            doc.additionalDetails = docs.additionalDetails;
+            if (doc.id) {
+              doc.id = docs.id;
             }
-          } else {
-            bpaDetails.additionalDetails = [];
-            let documnt = [], fiDocs = [], details;
-            documnt[0] = {};
-            documnt[0].docs = [];
-            documnt[0].questions = [];
-            documnt[0].docs.push(doc);
-            fiDocs.push({
-              "docs" : documnt[0].docs,
-              "questions" : []
-            })
-            details = { "fieldinspection_pending" : fiDocs};
-            finalDocs.push(details);
-            finalDocs = finalDocs[0];
-            bpaDetails.additionalDetails = finalDocs
-          }
+            if (bpaDetails.additionalDetails) {
+
+              finalDocs.push(doc);
+            }
+          })
         }
       });
-
-      if(bpaDetails.additionalDetails && bpaDetails.additionalDetails["fieldinspection_pending"][0] && bpaDetails.additionalDetails["fieldinspection_pending"][0].docs) {
-        prepareFinalObject("BPA",  bpaDetails.additionalDetails["fieldinspection_pending"][0].docs);
-      }
+      this.props.dispatch(prepareFinalObject(this.props.jsonPath, finalDocs));
     }
   }
 
   distinct = (value, index, self) => {
     return self.indexOf(value) === index
- };
+  };
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
   handleDocument = async (file, fileStoreId) => {
-    let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, nocDocumentsUploadRedux, bpaDetails } = this.props;
-    const fileUrl = await getFileUrlFromAPI(fileStoreId);
-
-    let nocDocuments = {
-      ...nocDocumentsUploadRedux,
-      [uploadedDocIndex]: {
-        ...nocDocumentsUploadRedux[uploadedDocIndex],
-        documents: [
-          {
-            fileName: file.name,
-            fileStoreId,
-            fileUrl: Object.values(fileUrl)[0]
-          }
-        ]
+    let { uploadedDocIndex, nocDocumentsUploadRedux } = this.state;
+    const { prepareFinalObject, bpaDetails, wfState } = this.props;
+    const fileUrl = getFileUrlFromAPI(fileStoreId).then(fileUrl);
+    let nocDocuments = {};
+    if (nocDocumentsUploadRedux[uploadedDocIndex] && nocDocumentsUploadRedux[uploadedDocIndex].documents) {
+      nocDocumentsUploadRedux[uploadedDocIndex].documents.push({
+        fileName: file.name,
+        fileStoreId,
+        fileUrl: Object.values(fileUrl)[0],
+        isClickable: true,
+        additionalDetails: {
+          uploadedBy: getLoggedinUserRole(wfState),
+          uploadedTime: new Date().getTime()
+        }
+      });
+      nocDocuments = {
+        ...nocDocumentsUploadRedux
+      };
+    } else {
+      nocDocuments = {
+        ...nocDocumentsUploadRedux,
+        [uploadedDocIndex]: {
+          ...nocDocumentsUploadRedux[uploadedDocIndex],
+          documents: [
+            {
+              fileName: file.name,
+              fileStoreId,
+              fileUrl: Object.values(fileUrl)[0],
+              isClickable: true,
+              additionalDetails: {
+                uploadedBy: getLoggedinUserRole(wfState),
+                uploadedTime: new Date().getTime()
+              }
+            }
+          ]
+        }
       }
     }
-    prepareFinalObject("nocDocumentsUploadRedux", nocDocuments);
+
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocuments });
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
-    if(isEmployee) {
+    if (isEmployee) {
       this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
-      }
+    }
 
   };
 
-  removeDocument = remDocIndex => {
-    const { prepareFinalObject } = this.props;
-    prepareFinalObject(
-      `nocDocumentsUploadRedux.${remDocIndex}.documents`,
-      undefined
-    );
+  removeDocument = (remDocIndex, docIndex) => {
+    const { prepareFinalObject, bpaDetails } = this.props;
+    const { nocDocumentsUploadRedux } = this.state;
+    for (let key in nocDocumentsUploadRedux) {
+      if (key === `${remDocIndex}`) {
+        nocDocumentsUploadRedux[key].documents.splice(docIndex, 1);
+      }
+    }
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocumentsUploadRedux });
     this.forceUpdate();
+    let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
+    if (isEmployee) {
+      this.prepareDocumentsInEmployee(nocDocumentsUploadRedux, bpaDetails);
+    }
   };
 
   handleChange = (key, event) => {
-    const { nocDocumentsUploadRedux, prepareFinalObject, bpaDetails } = this.props;
+    const { prepareFinalObject, bpaDetails } = this.props;
+    const { nocDocumentsUploadRedux } = this.state;
     let nocDocuments = {
       ...nocDocumentsUploadRedux,
       [key]: {
@@ -301,96 +306,45 @@ class NocList extends Component {
         dropDownValues: { value: event.target.value }
       }
     };
-    prepareFinalObject(`nocDocumentsUploadRedux`, nocDocuments);
+    this.setState({ ...this.state, "nocDocumentsUploadRedux": nocDocuments });
 
     let isEmployee = process.env.REACT_APP_NAME === "Citizen" ? false : true
 
-    if(isEmployee) {
+    if (isEmployee) {
       this.prepareDocumentsInEmployee(nocDocuments, bpaDetails);
     }
 
   };
 
   getUploadCard = (card, key) => {
-    const { classes, nocDocumentsUploadRedux } = this.props;
-    let jsonPath = `nocDocumentsUploadRedux[${key}].dropDownValues.value`;
+    const { classes, ...rest } = this.props;
+    const { nocDocumentsUploadRedux } = this.state;
+    let value = (nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].dropDownValues) ? nocDocumentsUploadRedux[key].dropDownValues.value : "";
+    let jsonPath = `${this.props.jsonPath}-${key + 1}`;
+    if (nocDocumentsUploadRedux[key]) {
+      card.documents = nocDocumentsUploadRedux[key].documents;
+      let mergedDropDownValue = { ...card.dropDownValues, ...nocDocumentsUploadRedux[key].dropDownValues }
+      card.dropDownValues = mergedDropDownValue;
+    }
     return (
-      <Grid container={true}>
-        <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
-          {nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents ? (
-            <div className={classes.documentSuccess}>
-              <Icon>
-                <i class="material-icons">done</i>
-              </Icon>
-            </div>
-          ) : (
-              <div className={classes.documentIcon}>
-                <span>{key + 1}</span>
-              </div>
-            )}
-        </Grid>
-        <Grid
-          item={true}
-          xs={10}
-          sm={5}
-          md={4}
-          align="left"
-          className={classes.descriptionDiv}
-        >
-          <LabelContainer
-            labelKey={getTransformedLocale(card.name)}
-            style={styles.documentName}
-          />
-          {card.required && requiredIcon}
-          <Typography variant="caption">
-            <LabelContainer
-              labelKey={getTransformedLocale("TL_UPLOAD_RESTRICTIONS")}
-            />
-          </Typography>
-        </Grid>
-        <Grid item={true} xs={12} sm={6} md={4}>
-          {card.dropDownValues && (
-            <TextFieldContainer
-              select={true}
-              label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
-              placeholder={{ labelKey: card.dropDownValues.label }}
-              data={card.dropDownValues.menu}
-              optionValue="code"
-              optionLabel="label"
-              required={true}
-              onChange={event => this.handleChange(key, event)}
-              jsonPath={jsonPath}
-            />
-          )}
-        </Grid>
-        <Grid
-          item={true}
-          xs={12}
-          sm={12}
-          md={3}
-          className={classes.fileUploadDiv}
-        >
-          <UploadSingleFile
-            classes={this.props.classes}
-            handleFileUpload={e =>
-              handleFileUpload(e, this.handleDocument, this.props)
-            }
-            uploaded={
-              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
-                ? true
-                : false
-            }
-            removeDocument={() => this.removeDocument(key)}
-            documents={
-              nocDocumentsUploadRedux[key] && nocDocumentsUploadRedux[key].documents
-            }
-            onButtonClick={() => this.onUploadClick(key)}
-            inputProps={this.props.inputProps}
-            buttonLabel={this.props.buttonLabel}
-            id={`noc-${key+1}`}
-          />
-        </Grid>
-      </Grid>
+      <React.Fragment>
+        <UploadCard
+          docItem={card}
+          docIndex={key}
+          key={key.toString()}
+          handleDocument={this.handleDocument}
+          removeDocument={this.removeDocument}
+          onUploadClick={this.onUploadClick}
+          handleFileUpload={this.handleFileUpload}
+          handleChange={this.handleChange}
+          uploadedDocIndex={this.state.uploadedDocIndex}
+          toggleEditClick={this.toggleEditClick}
+          ids={jsonPath}
+          jsonPath={`nocDocumentsUploadRedux`}
+          specificStyles="bpa_doc_upload_btn"
+          {...rest}
+        />
+      </React.Fragment>
     );
   };
 
@@ -403,10 +357,6 @@ class NocList extends Component {
           documentsList.map(container => {
             return (
               <div>
-                <LabelContainer
-                  labelKey={getTransformedLocale(container.title)}
-                  style={styles.documentTitle}
-                />
                 {container.cards.map(card => {
                   return (
                     <div className={classes.documentContainer}>
@@ -445,17 +395,16 @@ NocList.propTypes = {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { moduleName } = screenConfiguration;
-  const nocDocumentsUploadRedux = get(
-    screenConfiguration.preparedFinalObject,
-    "nocDocumentsUploadRedux",
-    {}
-  );
   const bpaDetails = get(
     screenConfiguration.preparedFinalObject,
     "BPA",
     {}
-  )
-  return { nocDocumentsUploadRedux, moduleName, bpaDetails };
+  );
+  const wfState = get(
+    screenConfiguration.preparedFinalObject.applicationProcessInstances,
+    "state"
+  );
+  return { moduleName, bpaDetails, wfState };
 };
 
 const mapDispatchToProps = dispatch => {

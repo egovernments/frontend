@@ -1,29 +1,20 @@
 import {
-  getCommonHeader,
-  getLabel,
   getBreak,
-  getCommonContainer
+  getCommonContainer, getCommonHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { BPAApplication } from "./searchResource/bpaApplication";
-import { showHideAdhocPopup, resetFields } from "../utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
-import { searchResults } from "./searchResource/searchResults";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
   getTenantId,
   localStorageGet
 } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
-import set from "lodash/set";
-import get from "lodash/get";
-import {
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { showApplyCityPicker, applyForm } from "../utils";
-import { getBpaMdmsData, getTenantMdmsData } from "../utils";
+import { applyForm, getTenantMdmsData, showApplyCityPicker } from "../utils";
+import { BPAApplication, resetFields } from "./searchResource/bpaApplication";
+import { pendingApprovals } from "./searchResource/pendingApprovals";
+import { searchResults } from "./searchResource/searchResults";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -115,47 +106,47 @@ const BpaSearchAndResult = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
-                buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
-                  labelKey: "NOC_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showApplyCityPicker(state, dispatch)
-                }
-              }
-            }
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW APPLICATION",
+            //       labelKey: "BPA_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       showApplyCityPicker(state, dispatch)
+            //     }
+            //   }
+            // }
           }
         },
         pendingApprovals,
@@ -164,7 +155,7 @@ const BpaSearchAndResult = {
         searchResults
       }
     },
-    cityPickerDialog :{
+    cityPickerDialog: {
       componentPath: "Dialog",
       props: {
         open: false,
@@ -182,7 +173,7 @@ const BpaSearchAndResult = {
             popup: getCommonContainer({
               header: getCommonHeader({
                 labelName: "Select City",
-                labelKey: "TL_SELECT_CITY"
+                labelKey: "BPA_SELECT_CITY"
               }),
               cityPicker: getCommonContainer({
                 cityDropdown: {
@@ -207,14 +198,15 @@ const BpaSearchAndResult = {
                     className: "citizen-city-picker",
                     label: {
                       labelName: "City",
-                      labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+                      labelKey: "BPA_CITY_LABEL"
                     },
-                    placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
+                    placeholder: { labelName: "Select City", labelKey: "BPA_SELECT_CITY" },
                     jsonPath: "BPA.address.city",
                     sourceJsonPath: "citiesByModule.TL.tenants",
                     labelsFromLocalisation: true,
                     fullwidth: true,
                     required: true,
+                    isClearable: true,
                     inputLabelProps: {
                       shrink: true
                     }
@@ -239,7 +231,7 @@ const BpaSearchAndResult = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "SELECT",
-                          labelKey: "TL_CITIZEN_SELECT"
+                          labelKey: "BPA_CITIZEN_SELECT_BUTTON"
                         })
                       },
                       onClickDefination: {
@@ -262,7 +254,7 @@ const BpaSearchAndResult = {
                       children: {
                         previousButtonLabel: getLabel({
                           labelName: "CANCEL",
-                          labelKey: "TL_ADD_HOC_CHARGES_POPUP_BUTTON_CANCEL"
+                          labelKey: "BPA_CITIZEN_CANCEL_BUTTON"
                         })
                       },
                       onClickDefination: {
