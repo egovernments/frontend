@@ -3,7 +3,7 @@ import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/ut
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
+// import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -490,12 +490,32 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
     if (mode === 'download') {
-      downloadPdf(fileRes[fileStoreId]);
-    } else if (mode === 'open') {
-      openPdf(fileRes[fileStoreId], '_self')
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
+      }
     }
     else {
-      printPdf(fileRes[fileStoreId]);
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+
     }
   });
 }
@@ -637,12 +657,12 @@ export const downloadMultipleFileFromFilestoreIds = (fileStoreIds = [], mode, te
   getFileUrlFromAPI(fileStoreIds.join(','), tenantId).then(async (fileRes) => {
     fileStoreIds.map(fileStoreId => {
       if (mode === 'download') {
-        downloadPdf(fileRes[fileStoreId]);
+        // downloadPdf(fileRes[fileStoreId]);
       } else if (mode === 'open') {
-        openPdf(fileRes[fileStoreId], '_self')
+        // openPdf(fileRes[fileStoreId], '_self')
       }
       else {
-        printPdf(fileRes[fileStoreId]);
+        // printPdf(fileRes[fileStoreId]);
       }
     })
   });

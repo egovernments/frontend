@@ -105,13 +105,13 @@ const getAcknowledgementCard = (
                         icon: "done",
                         backgroundColor: "#39CB74",
                         header: {
-                            labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE`
+                            labelKey: roleExists ? "PAYMENT_MESSAGE_CITIZEN" : "PAYMENT_MESSAGE_EMPLOYEE"
                         },
                         body: {
-                            labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_MESSAGE_DETAIL`
+                            labelKey: roleExists ? "PAYMENT_MESSAGE_DETAIL_CITIZEN" : "PAYMENT_MESSAGE_DETAIL_EMPLOYEE"
                         },
                         tailText: {
-                            labelKey: roleExists ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO` : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`
+                            labelKey: "PAYMENT_RECEIPT_NO"
                         },
                         number: receiptNumber
                     })
