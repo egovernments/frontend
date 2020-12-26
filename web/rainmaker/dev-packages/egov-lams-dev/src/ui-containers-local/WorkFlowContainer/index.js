@@ -110,7 +110,7 @@ class WorkFlowContainer extends React.Component {
       case "VERIFY":
         return "purpose=verify&status=success";
       case "REJECT":
-        return "purpose=application&status=rejected";
+        return "purpose=reject&status=rejected";
       case "CANCEL":
         return "purpose=application&status=cancelled";
       case "APPROVE":
@@ -275,7 +275,6 @@ class WorkFlowContainer extends React.Component {
         // window.location.href = `acknowledgement?${this.getPurposeString(
         //   label
         // )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-        let label="updated";
         this.props.setRoute(
           `/lams-common/updateAcknowledgement?${this.getPurposeString(
             label

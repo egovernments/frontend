@@ -771,7 +771,8 @@ export const validateActionFormFields = (preparedFinalObject) => {
 
   const termExpiryDate = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.termExpiryDate`,[]);
   const finalTermExpiryDate = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.finalTermExpiryDate`,[]);
-  
+  const applicationType = get(preparedFinalObject,`lamsStore.Lease[0].applicationType`,[]);
+
   if(!termExpiryDate)
   {
     store.dispatch(toggleSnackbar(

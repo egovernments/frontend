@@ -141,6 +141,7 @@ const searchPreview = {
   uiFramework: "material-ui",
   name: "searchPreview",
   beforeInitScreen: (action, state, dispatch) => {
+    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     loadLeaseDetails(action, state, dispatch).then((response)=>{
       if(response && response.leases && response.leases.length > 0)
       {

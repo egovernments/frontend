@@ -4,6 +4,8 @@ import {
   getCommonParagraph,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 
 const style = {
   bodyBox: {
@@ -46,6 +48,7 @@ const acknowledgementCard = ({
   tailText,
   number
 } = {}) => {
+  number = getQueryArg(window.location.href, "applicationNumber");
   const tail =
     tailText && number && number !== "null"
       ? {

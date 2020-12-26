@@ -55,7 +55,6 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                     className="filter-fields"
                     dropDownData={filter.statusFilter.dropdownData}
                     onChange={(e, index, value) => {
-                                               
                         handleChangeFilter('statusFilter', e.target.value) }}
                     value={filter.statusFilter.selectedValue}
                     underlineStyle={{
@@ -64,7 +63,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                         borderBottom: "1px solid #FE7A51",
                         width: "100%"
                     }}
-                    prefix ={"COMMON_"}
+                    prefix ={""}
                 />
             </div>
             <div className="col-md-3">

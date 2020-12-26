@@ -14,14 +14,62 @@ import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/a
 
 import acknowledgementCard from "./acknowledgementUtils";
 
-let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+const getAcknowledgementCard = (
+  state,
+  dispatch,
+  applicationNumber
+) => {
+  if (applicationNumber) {
+    return {
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Submitted Successfully",
+              labelKey: "LAMS_APPL_SUBMITTED_SUCCESS"
+            },
+            body: {
+              labelName:
+                "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
+              labelKey: "LAMS_APPL_SUBMITTED_SUCCESS_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "LAMS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+    }
+    
+  }
+}
 
 const acknowledgement = {
   uiFramework: "material-ui",
   name: "acknowledgement",
   beforeInitScreen:(action, state, dispatch) => {
-    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     dispatch(toggleSpinner());
+
+    const data = getAcknowledgementCard(
+      state,
+      dispatch,
+      applicationNumber
+    );
+    set(action, "screenConfig.components.div.children", data);
+
     return action;
   },
   components: {
@@ -30,27 +78,7 @@ const acknowledgement = {
       componentPath: "Div",
       props: {
         className: "common-div-css"
-      },
-      children: {
-        card: acknowledgementCard({
-          icon: "done",
-          backgroundColor: "#39CB74",
-          header: {
-            labelName: "Application Submitted Successfully",
-            labelKey: "LAMS_APPL_SUBMITTED_SUCCESS"
-          },
-          body: {
-            labelName:
-              "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
-            labelKey: "LAMS_APPL_SUBMITTED_SUCCESS_MESSAGE_SUB"
-          },
-          tailText: {
-            labelName: "Application No.",
-            labelKey: "LAMS_APP_NO_LABEL"
-          },
-          number: applicationNumber
-        })
-      },
+      }
     },
     //newApplicationFooter
   }

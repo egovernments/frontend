@@ -1,6 +1,9 @@
 import React from "react";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 import "./index.css";
+import color from "@material-ui/core/colors/amber";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -16,13 +19,15 @@ const styles = {
 
 function ApplicationNoContainer(props) {
   
-  const { number, label } = props;
+  const { label } = props;
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   return <div style={styles} className = {"lams-application-no"}>
+    
     <LabelContainer
       labelName={label.labelValue}
       labelKey={label.labelKey}
     />
-    <span> </span> : {number}</div>;
+    <span> </span> :   <div style={{color:"white",paddingLeft:"5px", fontSize:"16px"}}> {applicationNumber} </div> </div>;
 
 }
 export default ApplicationNoContainer;

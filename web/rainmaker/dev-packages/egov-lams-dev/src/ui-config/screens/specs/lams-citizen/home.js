@@ -3,7 +3,8 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import { fetchData } from "./citizenSearchResource/citizenFunctions";
 import { cityPicker } from "./citypicker";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
-import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
+import LeaseIcon from "../../../../ui-atoms-local/Icons/LeaseIcon";
+import NewLeaseIcon from "../../../../ui-atoms-local/Icons/NewLeaseIcon";
 import HelpIcon from "../../../../ui-atoms-local/Icons/HelpIcon";
 import "../utils/index.css";
 import { getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
@@ -26,7 +27,7 @@ const cardItems = [
       labelKey: "LAMS_APPLY_LR",
       labelName: "Apply for Lease Renewal"
     },
-    icon: <TradeLicenseIcon />,
+    icon: <NewLeaseIcon />,
     route: "../lams-common/newApplication"
   },
   {
@@ -34,7 +35,7 @@ const cardItems = [
       labelKey: "LAMS_MY_APPLICATIONS",
       labelName: "My Applications"
     },
-    icon: <FormIcon />,
+    icon: <LeaseIcon />,
     route: "myApplications"
   },
   {

@@ -145,6 +145,7 @@ class TableData extends Component {
         newList.push(element);
       }
     })
+    console.log("Check uniqueList ",newList);
     return newList;
   }
   checkMatch = (row, value) => {
@@ -198,7 +199,7 @@ class TableData extends Component {
   checkRow = (row, filter, searchFilter, taskboardLabel) => {
     if ((filter.localityFilter.selectedValue.includes('ALL') || filter.localityFilter.selectedValue.includes(row[1].text.props.label)) &&
       (filter.moduleFilter.selectedValue.includes('ALL') || filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1])) &&
-      (filter.statusFilter.selectedValue.includes('ALL') || filter.statusFilter.selectedValue.includes(row[2].text.props.label.split('_')[2])) &&
+      (filter.statusFilter.selectedValue.includes('ALL') || filter.statusFilter.selectedValue.includes(row[2].text.props.label/*.split('_')[2]*/)) &&
       (searchFilter.value === '' || this.checkMatch(row, searchFilter.value)
       )
     ) {
@@ -394,9 +395,8 @@ class TableData extends Component {
       localityDropdownList.push(localityDropdown);
       let moduleDropdown = { label: getLocaleLabels("", `CS_COMMON_INBOX_${row2.text.props.label.split('_')[1]}`, localizationLabels), value: row2.text.props.label.split('_')[1] };
       moduleDropdownList.push(moduleDropdown);
-      let statusDropdown = { label: getLocaleLabels("", row2.text.props.label, localizationLabels), value: row2.text.props.label.split('_')[2] };
+      let statusDropdown = { label: getLocaleLabels("", row2.text.props.label, localizationLabels), value: row2.text.props.label/*.split('_')[2] */};
       statusDropdownList.push(statusDropdown);
-
       let dataRows = [
         row0,
         row1,
