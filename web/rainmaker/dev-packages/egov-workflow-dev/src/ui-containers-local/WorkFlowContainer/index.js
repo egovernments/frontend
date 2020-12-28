@@ -340,14 +340,7 @@ class WorkFlowContainer extends React.Component {
         `Licenses[0].comment`,
         null
       );
-      if(comments && !pattern.test(comments)){ 
-        toggleSnackbar(
-          true,
-          { labelName: "Please enter valid data", labelKey: "TL_VALID_FIELDS_ERROR_MSG"},
-          "error"
-        );
-        return;
-      }
+      
       switch(tlAppStatus){
         case "FIELDINSPECTION":
           const tradeSubType = get(
