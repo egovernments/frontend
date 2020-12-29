@@ -63,6 +63,7 @@ export const searchForm = getCommonCard({
         labelKey: "HR_SELECT_ULB_PLACEHOLDER"
       },
       required: true,
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.ulb",
       gridDefination: {
         xs: 12,
@@ -70,8 +71,11 @@ export const searchForm = getCommonCard({
       },
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       props: {
-        optionLabel: "name",
-        optionValue: "code"
+        menuPortalTarget:document.querySelector('body'),
+        setDataInField: true,
+        labelsFromLocalisation: true
+        //optionLabel: "name",
+        //optionValue: "code"
         // hasLocalization: false
       },
       localePrefix: {
@@ -128,7 +132,7 @@ export const searchForm = getCommonCard({
         labelName: "Select Department",
         labelKey: "HR_DEPT_PLACEHOLDER"
       },
-      required: false,
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.departments",
       gridDefination: {
         xs: 12,
@@ -136,8 +140,11 @@ export const searchForm = getCommonCard({
       },
       sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
       props: {
-        optionLabel: "name",
-        optionValue: "code"
+        menuPortalTarget:document.querySelector('body'),
+        setDataInField: true,
+        labelsFromLocalisation: true
+        //optionLabel: "name",
+        //optionValue: "code"
         // hasLocalization: false
       },
       localePrefix: {
@@ -151,7 +158,7 @@ export const searchForm = getCommonCard({
         labelName: "Select Designation",
         labelKey: "HR_DESIGNATION_PLACEHOLDER"
       },
-      required: false,
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.designations",
       gridDefination: {
         xs: 12,
@@ -159,8 +166,11 @@ export const searchForm = getCommonCard({
       },
       sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
       props: {
-        optionValue: "code",
-        optionLabel: "name"
+        menuPortalTarget:document.querySelector('body'),
+        setDataInField: true,
+        labelsFromLocalisation: true
+        //optionValue: "code",
+        //optionLabel: "name"
         // hasLocalization: false
       },
       localePrefix: {
