@@ -293,7 +293,7 @@ export const institutionSummary = getCommonGrayCard({
             labelKey: "PT_COMMON_AUTHORISED_LANDLINE"
           },
           {
-            jsonPath: "Property.institution.landlineNumber",
+            jsonPath: "Property.owners[0].altContactNumber",
             callBack: checkValueForNA
           }
         ),
