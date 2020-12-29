@@ -1,8 +1,26 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
 import generatePdf from "../../utils/receiptPdf";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
+export const getAssmentURL = () => {	
 
+  const propertyId = getQueryArg(	
+    window.location.href,	
+    "propertyId"	
+  );	
+  const tenantId = getQueryArg(	
+    window.location.href,	
+    "tenantId"	
+  );
+  let financialYear = localStorage.getItem('finalData')
+  financialYear = financialYear && JSON.parse(financialYear);
+  financialYear = financialYear && financialYear[0].financialYear;
+  const path  = `/property-tax/assessment-form?assessmentId=0&purpose=assess&propertyId=${propertyId}&tenantId=${tenantId}&FY=${financialYear}`	
+
+  return path;	
+
+};
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
     ? "/property-tax"
@@ -110,3 +128,29 @@ export const applicationSuccessFooter = (
 };
 
 
+export const gotoAssessment = getCommonApplyFooter({
+  gotoHome: {
+    componentPath: "Button",
+    props: {
+      variant: "outlined",
+      color: "primary",
+      style: {
+        // minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      //downloadReceiptButtonLabel: getLabel
+      goToHomeButtonLabel:  getLabel({
+        labelName: "GO TO HOME",
+        labelKey: "PT_ASSESSMENT"
+      })
+    },
+    // Check this onClickDefinition later again
+    onClickDefination: {
+      action: "page_change",
+      path: `${getAssmentURL()}`
+    }
+  }
+});

@@ -286,7 +286,7 @@ const getAssessmentDetails = async () => {
   }
 }
 
-const assessProperty = async (action, props) => {
+export const assessProperty = async (action, props) => {
   const purpose = getPurpose()
   let propertyMethodAction = purpose == PROPERTY_FORM_PURPOSE.REASSESS ? "_update" : '_create';
   const propertyId = getQueryArg(
@@ -297,7 +297,12 @@ const assessProperty = async (action, props) => {
     window.location.href,
     "assessmentId"
   );
-  const financialYear = getQueryArg(window.location.href, "FY");
+  let financialYear = getQueryArg(window.location.href, "FY")
+  if(!financialYear){
+    financialYear = localStorage.getItem('finalData')
+    financialYear = financialYear && JSON.parse(financialYear);
+    financialYear = financialYear && financialYear[0].financialYear;
+  }
   const tenant = getQueryArg(window.location.href, "tenantId");
   let assessment = {
     "tenantId": tenant,

@@ -8,7 +8,7 @@ import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { downloadCertificateForm, prepareDocumentsView } from "../utils/index";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
-import { applicationSuccessFooter, gotoHomeFooter } from "./acknowledgementResource/footers";
+import { applicationSuccessFooter, gotoHomeFooter,gotoAssessment } from "./acknowledgementResource/footers";
 import { mutationSummary } from "./applyResourceMutation/mutationSummary";
 import './index.css';
 import { documentsSummary } from "./summaryResource/documentsSummary";
@@ -359,7 +359,8 @@ const getAcknowledgementCard = (
           // ...getDocumentDetailsCard()
         }
       },
-      gotoHomeFooter
+      // gotoHomeFooter,
+      gotoAssessment,
     };
   }
   else if (purpose === "verified" && status === "failure") {
