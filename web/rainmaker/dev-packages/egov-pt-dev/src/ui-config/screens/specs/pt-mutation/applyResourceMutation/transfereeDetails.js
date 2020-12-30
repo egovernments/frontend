@@ -593,7 +593,7 @@ export const transfereeDetails = getCommonCard({
           required: true,
           isClearable: true,
           labelsFromLocalisation: true,
-          className: "applicant-details-error autocomplete-dropdown",
+          // className: "applicant-details-error autocomplete-dropdown",
           jsonPath: "Property.ownershipCategoryTemp",
           sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
         },
