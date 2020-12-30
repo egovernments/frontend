@@ -3,7 +3,6 @@
   "npmClient": "yarn",
   "packages": [
     "dev-packages/pgr-citizen-dev",
-    "dev-packages/pgr-employee-dev",
     "dev-packages/pt-citizen-dev",
     "dev-packages/pt-employee-dev",
     "dev-packages/egov-workflow-dev",
