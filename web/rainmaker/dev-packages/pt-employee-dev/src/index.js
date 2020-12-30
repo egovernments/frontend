@@ -1,5 +1,6 @@
 // support for older browsers
-import "babel-polyfill";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import "url-search-params-polyfill";
 import "rainmaker-employee/src/webview/web-share-shim.bundle.min";
 import React from "react";
