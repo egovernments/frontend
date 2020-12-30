@@ -83,6 +83,7 @@ const formConfig = {
       dropDownData: [],
       fullWidth: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      menuHeight:"200px",
       updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
         const { value } = sourceField;
         const dependentFields = ["ownerCategoryId", "ownerCategoryIdType"];
