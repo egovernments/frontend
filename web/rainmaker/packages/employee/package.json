@@ -18,15 +18,15 @@
     "datatables.net-buttons-bs": "^1.5.3",
     "disable-browser-back-navigation": "^0.1.0",
     "egov-abg": "1.2.0",
-    "egov-billamend": "0.0.1",
+    
     "egov-bpa": "1.2.0",
     "egov-common": "1.2.0",
     "egov-firenoc": "1.2.0",
     "egov-hrms": "1.2.0",
-    "egov-noc": "1.2.0",
+    
     "egov-pt": "1.2.0",
     "egov-tradelicence": "1.2.0",
-    "egov-uc": "1.2.0",
+    
     "egov-ui-framework": "0.1.41",
     "egov-ui-kit": "^0.0.1",
     "egov-wns": "1.2.0",
