@@ -295,7 +295,8 @@ class TableData extends Component {
     const businessIds = data.map((item) => {
       return item.businessId;
     });
-    const businessServiceData = this.getBussinessServiceData();
+    let businessServiceData = [];
+    businessServiceData = this.getBussinessServiceData();
     const modules =
       businessServiceData &&
       businessServiceData.map((item, index) => {
