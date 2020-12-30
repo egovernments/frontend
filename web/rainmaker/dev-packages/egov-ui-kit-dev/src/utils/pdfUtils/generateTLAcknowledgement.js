@@ -15,7 +15,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     tradetypeDetails.reviewTradeCategory.localiseValue = true;
     tradetypeDetails.reviewTradeType.localiseValue = true;
     tradetypeDetails.reviewTradeSubtype.localiseValue = true;
-   
+    tradetypeDetails.reviewTradeUOM.localiseValue = true;
     tradeAccessoriesDetails.reviewAccessoryType.localiseValue = true;
 
     tradeReviewDetails.reviewApplicationType.localiseValue = true;
