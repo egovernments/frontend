@@ -680,10 +680,38 @@ export const getFileUrlFromAPI = async fileStoreId => {
 
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
-    if (receiptQueryString) {
-      // dispatch(downloadReceiptPending());
+   
+    if (receiptQueryString) { 
+      
+      // dispatch(downloadReceiptPending()); const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
+      const FETCHPROPERTYDETAILS = {
+        GET: {
+          URL: "/property-services/property/_search",
+          ACTION: "_get",
+        },
+      };
+      const USER = {
+        SEARCH: {
+          URL: "/user/_search",
+          ACTION: "search",
+        },
+      };
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
+        let queryObjectForPT = [
+          { key: "tenantId", value:receiptQueryString[1].value},
+          { key: "propertyIds", value: payloadReceiptDetails.Payments[0].paymentDetails[0].bill.consumerCode}
+        ];
+        const responseForPT =  await httpRequest(FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
+     
+  let uuid=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
+  let data = {};
+  let bodyObject = {
+    uuid: [uuid]
+  };
+  let responseForUser= await httpRequest(USER.SEARCH.URL, USER.SEARCH.ACTION,null, bodyObject);
+
+  let lastmodifier=responseForUser && responseForUser.user[0]?responseForUser.user[0].name:null;
         const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId");
         const businessModule=get(payloadReceiptDetails.Payments[0].paymentDetails[0],"businessService");
         console.log("businee serice"+ businessModule);
@@ -691,6 +719,15 @@ export const downloadReceipt = (receiptQueryString) => {
         let assessmentYear="";
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
+        let reasonss = null;
+        let adhocPenaltyReason=null,adhocRebateReason=null;
+        reasonss = {
+            "adhocPenaltyReason": adhocPenaltyReason,
+            "adhocRebateReason":adhocRebateReason,
+            "lastModifier":lastmodifier
+            }
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
+  
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
         
         if(element.amount >0 || element.amountPaid>0)
