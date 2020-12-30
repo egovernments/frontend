@@ -807,7 +807,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
       },
       required: true,
-      pattern: getPattern("TradeName"),
+      pattern: getPattern("eventName"),
       jsonPath: "Licenses[0].tradeName"
     }),
     tradeFromDate: {

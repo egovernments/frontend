@@ -584,7 +584,7 @@ export const getPattern = type => {
     case "DocumentNo":
       return /^[0-9]{1,15}$/i; 
     case "eventName":
-      return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
+      return /^[^\$\"<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”]{1,65}$/i;
     case "eventDescription":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
     case "cancelChallan":
