@@ -178,17 +178,17 @@ export const getSurveyDetails = (action, state, dispatch) => {
   
   const allSurveyDetails = get(state.screenConfiguration.preparedFinalObject.lamsStore,"allSurveyDetails");
   const selectedSurveyNo = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"surveyNo"); 
-  const selectedSurveyDetails = jp.query(allSurveyDetails, "$[?(@.surveyNo == "+selectedSurveyNo+")]" );
+  const selectedSurveyDetails = jp.query(allSurveyDetails, "$[?(@.surveyNo == '"+selectedSurveyNo+"')]" );
   if(selectedSurveyDetails && selectedSurveyDetails.length>0 )
   {
     dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails", selectedSurveyDetails[0]));
     
-    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termExpiryDate", 1605697485)); //selectedSurveyDetails[0].termExpiryDate)); //tobechanged
-    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.annualRent", 9999));//selectedSurveyDetails[0].annualRent));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termNo", 34)); //selectedSurveyDetails[0].termNo));
-    dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.termExpiryDate", 1605697485)); //selectedSurveyDetails[0].termExpiryDate)); //tobechanged
-    dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.annualRent", 9999));//selectedSurveyDetails[0].annualRent));
-    dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.termNo", 34)); //selectedSurveyDetails[0].termNo));
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termExpiryDate", 1605697485)); //selectedSurveyDetails[0].termExpiryDate)); //tobechanged
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.annualRent", 9999));//selectedSurveyDetails[0].annualRent));
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.termNo", 34)); //selectedSurveyDetails[0].termNo));
+    //dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.termExpiryDate", 1605697485)); //selectedSurveyDetails[0].termExpiryDate)); //tobechanged
+    //dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.annualRent", 9999));//selectedSurveyDetails[0].annualRent));
+    //dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails.termNo", 34)); //selectedSurveyDetails[0].termNo));
   }
 }
 

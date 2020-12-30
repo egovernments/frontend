@@ -80,7 +80,7 @@ class RejectComplaint extends Component {
   onSubmit = e => {
     const { valueSelected, commentValue } = this.state;
     const { toggleSnackbarAndSetText } = this.props;
-    if (!valueSelected || (valueSelected === "Other" && !commentValue)) {
+    if (!valueSelected || (valueSelected === "ES_REJECT_OPTION_FOUR" && !commentValue)) {
       e.preventDefault();
       toggleSnackbarAndSetText(
         true,

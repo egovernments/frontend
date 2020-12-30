@@ -15,6 +15,7 @@ import { Footer } from "../../ui-molecules-local";
 //import { Footer } from "egov-workflow/ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
 //import TaskStatusContainer from "egov-workflow/ui-containers-local/TaskStatusContainer";
+import  {validateActionFormFields, validateActionFormForComments} from "../../ui-utils/commons";
 
 
 const tenant = getQueryArg(window.location.href, "tenantId");
@@ -109,7 +110,7 @@ class WorkFlowContainer extends React.Component {
       case "VERIFY":
         return "purpose=verify&status=success";
       case "REJECT":
-        return "purpose=application&status=rejected";
+        return "purpose=reject&status=rejected";
       case "CANCEL":
         return "purpose=application&status=cancelled";
       case "APPROVE":
@@ -274,7 +275,6 @@ class WorkFlowContainer extends React.Component {
         // window.location.href = `acknowledgement?${this.getPurposeString(
         //   label
         // )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}&moduleName=${moduleName}`;
-        let label="updated";
         this.props.setRoute(
           `/lams-common/updateAcknowledgement?${this.getPurposeString(
             label
@@ -416,46 +416,12 @@ class WorkFlowContainer extends React.Component {
         case "PDDE-EXAMINATION":
         case "DGDE-EXAMINATION":
         case "MOD-EXAMINATION":
-          const  comment = get(
-            preparedFinalObject,
-            `lamsStore.Lease[0].comment`,
-            []
-          );
-          
-          if(!comment)
-          {
-            toggleSnackbar(
-              true,
-              { labelName: "Please fill all mandatory fields !", labelKey: "COMMON_MANDATORY_MISSING_ERROR" },
-              "error"
-            );
-            return;
-          }
-          if(comment && comment.length > 80)
-          {
-            toggleSnackbar(
-              true,
-              { labelName: "Comments should be less than 80 Charecters", labelKey: "LAMS_COMMENTS_LEN_ERROR" },
-              "error"
-            );
-            return;
-          }
-
-          //let commentPattern = /^[a-zA-Z0-9_.-,]*$/;
-          //let pattern = "([a-zA-Z0-9_.-,])+$";
-          let pattern =  /^[a-zA-Z0-9_.\-, ]*$/;  // /^[a-zA-Z0-9- .,_]{1,80}$/i ;
-          if(!(new RegExp(pattern)).test(comment))
-          {
-            toggleSnackbar(
-              true,
-              { labelName: "Comments to only have : Alphabets, Numbers and , . - _", labelKey: "LAMS_COMMENTS_PATTERN_ERROR" },
-              "error"
-            );
-            return;
-          }
 
           if(label === "APPROVE")
           {
+            if(!validateActionFormFields(preparedFinalObject))
+              return;
+
             const  termExpiryDate = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.termExpiryDate`,[]);
             const  finalTermExpiryDate = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.finalTermExpiryDate`,[]);            
             const  lesseAsPerGLR = get(preparedFinalObject,`lamsStore.Lease[0].leaseDetails.lesseAsPerGLR`,[]);
@@ -470,6 +436,11 @@ class WorkFlowContainer extends React.Component {
               );
               return;
             }
+          }
+          else
+          {
+            if(!validateActionFormForComments(preparedFinalObject))
+              return;
           }
           this.wfUpdate(label);
           break;

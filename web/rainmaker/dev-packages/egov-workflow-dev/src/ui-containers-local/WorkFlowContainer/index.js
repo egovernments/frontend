@@ -1,4 +1,4 @@
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertDateToEpoch,getPattern } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
@@ -334,20 +334,13 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else if(tlAppStatus!=null) {
-      let pattern =  /^[a-zA-Z0-9- _]{1,50}$/i ;
+      let pattern = getPattern("Comments");
       const comments = get(
         preparedFinalObject,
         `Licenses[0].comment`,
         null
       );
-      if(comments && !pattern.test(comments)){ 
-        toggleSnackbar(
-          true,
-          { labelName: "Please enter valid data", labelKey: "TL_VALID_FIELDS_ERROR_MSG"},
-          "error"
-        );
-        return;
-      }
+      
       switch(tlAppStatus){
         case "FIELDINSPECTION":
           const tradeSubType = get(

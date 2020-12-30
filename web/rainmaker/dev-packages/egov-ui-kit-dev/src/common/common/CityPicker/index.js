@@ -70,12 +70,15 @@ class CityPickerDialog extends Component {
     const {cities} = this.props;
     if(searchTerm){
       const filteredCities = cities && cities.filter(item => {
-        return item.key.includes(searchTerm.toLowerCase())
+        return item.description.toLowerCase().includes(searchTerm.toLowerCase())
       });
       if (results.length === 0) {
         results.push({ key: "", text: "No City Found" });
       }
     this.setState({ results : filteredCities, searchTerm });
+    }
+    else{
+      this.setState({searchTerm });
     }
   };
 

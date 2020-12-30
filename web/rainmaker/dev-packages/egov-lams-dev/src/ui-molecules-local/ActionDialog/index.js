@@ -301,7 +301,7 @@ class ActionDialog extends React.Component {
                       >
                         <CloseIcon />
                       </Grid>
-                      <Grid item sm="12">
+                      {/* <Grid item sm="12">
                         <TextFieldContainer
                           InputLabelProps={{ shrink: true }}
                           label={fieldConfig.fileNo.label}
@@ -312,7 +312,7 @@ class ActionDialog extends React.Component {
                           placeholder={fieldConfig.fileNo.placeholder}
                           required={false}
                         />
-                      </Grid>
+                      </Grid> */}
                       {buttonLabel === "APPROVE" &&
                         <Grid item sm="12">
                           <TextFieldContainer
@@ -365,7 +365,7 @@ class ActionDialog extends React.Component {
                             required={true}
                             InputProps={{ inputProps: { max: new Date().toISOString().slice(0,10)} }}
                             //format={'DD/MM/YYYY'}
-                            // formatDate={(date) => moment(date).format('DD/MM/YYYY')}
+                            //formatDate={(date) => moment(date).format('DD/MM/YYYY')}
                             InputLabelProps={{
                               shrink: true,
                             }}
@@ -377,17 +377,18 @@ class ActionDialog extends React.Component {
 
                           />
                         </Grid>}
-                      { buttonLabel === "APPROVE"  && applicationType === "EXTENSION" && 
+                      { buttonLabel === "APPROVE"  && 
                        <Grid item sm="12">
                         <TextFieldContainer
                           id="datetime-local"
                           label={fieldConfig.finalTermExpiryDate.label}
                           //label="Date"
+                          disabled={(applicationType === "RENEWAL")}
                           type="date"
                           required={true}
                           InputProps={{ inputProps: { max: new Date().toISOString().slice(0,10)} }}
                           //format={'DD/MM/YYYY'}
-                          // formatDate={(date) => moment(date).format('DD/MM/YYYY')}
+                          //formatDate={(date) => moment(date).format('DD/MM/YYYY')}
                           InputLabelProps={{
                             shrink: true,
                           }}
