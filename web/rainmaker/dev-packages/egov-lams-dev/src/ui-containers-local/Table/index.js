@@ -10,12 +10,13 @@ import ImportExportIcon from "@material-ui/icons/ImportExport";
 import { Card } from "components";
 import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import { addWflowFileUrl } from "../../ui-utils/commons";
 import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
-import { TaskDialog } from "egov-workflow/ui-molecules-local";
+import { TaskDialog } from "../../ui-molecules-local";
 import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
@@ -101,7 +102,7 @@ class InboxData extends React.Component {
     window.scrollTo(0, 0);
     const status = row[2].text && row[2].text.props.defaultLabel;
     const taskId = index === 0 && item.text;
-    const tenantId = row[6].text;
+    const tenantId = row[5].hiddenText;
     // const processInstances = await this.getProcessIntanceData(row[0].text);
     // if (processInstances && processInstances.length > 0) {
     //   await addWflowFileUrl(processInstances, prepareFinalObject);
@@ -223,7 +224,7 @@ class InboxData extends React.Component {
                           } else if (item.historyButton) {
                             return (
                               <TableCell className={classNames}>
-                                <div onClick={() => onHistoryClick(row[0],row[6])} style={{ cursor: "pointer" }}>
+                                <div onClick={() => onHistoryClick(row[0],row[5].hiddenText)} style={{ cursor: "pointer" }}>
                                   <i class="material-icons">history</i>
                                 </div>
                               </TableCell>
@@ -298,7 +299,7 @@ class InboxData extends React.Component {
                             <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1]) }}>{row[4].text}</span>
                           </div>
 
-                          <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0],row[6])}>
+                          <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0],row[5].hiddenText)}>
                             <i class="material-icons">history</i>
                           </div>
                         </div>

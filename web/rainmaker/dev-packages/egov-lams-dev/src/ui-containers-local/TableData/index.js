@@ -152,7 +152,7 @@ class TableData extends Component {
     if (value.length <= 2) {
       return true;
     }
-    if (row[5].hiddenField.length !== 6) {
+    if (row[6].hiddenField.length !== 6) {
       if (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
         row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
         String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
@@ -166,12 +166,12 @@ class TableData extends Component {
 
     }
     if (
-      row[5].hiddenField[0].includes(value.toLowerCase()) ||
-      row[5].hiddenField[1].includes(value.toLowerCase()) ||
-      row[5].hiddenField[2].includes(value.toLowerCase()) ||
-      row[5].hiddenField[3].includes(value.toLowerCase()) ||
-      row[5].hiddenField[4].includes(value.toLowerCase()) ||
-      row[5].hiddenField[5].includes(value.toLowerCase())
+      row[6].hiddenField[0].includes(value.toLowerCase()) ||
+      row[6].hiddenField[1].includes(value.toLowerCase()) ||
+      row[6].hiddenField[2].includes(value.toLowerCase()) ||
+      row[6].hiddenField[3].includes(value.toLowerCase()) ||
+      row[6].hiddenField[4].includes(value.toLowerCase()) ||
+      row[6].hiddenField[5].includes(value.toLowerCase())
 
     ) {
       return true;
@@ -390,7 +390,7 @@ class TableData extends Component {
       let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
-      let row6 = { text: item.tenantId,  hidden: true, value: item.tenantId}//<Label label={item.tenantId}/>
+      let row6 = { text: <Label label={item.tenantId.split(".")[1].toUpperCase()}></Label>, hiddenText: item.tenantId}//<Label label={item.tenantId}/>
 
       let localityDropdown = { label: getLocaleLabels("", row1.text.props.label, localizationLabels), value: row1.text.props.label };
       localityDropdownList.push(localityDropdown);
@@ -404,6 +404,7 @@ class TableData extends Component {
         row2,
         row3,
         row4,
+        row6,
         {
           ...row5, hiddenField: [row0.text.toLowerCase(),
           String(row4.text),
@@ -411,8 +412,8 @@ class TableData extends Component {
           getLocaleLabels("", row1.text.props.label, localizationLabels).toLowerCase(),
           getLocaleLabels("", row2.text.props.label, localizationLabels).toLowerCase(),
           row3.text.props.label.toLowerCase()]
-        },
-        row6
+        }
+        
       ];
       return dataRows;
     });
@@ -554,6 +555,8 @@ class TableData extends Component {
     try {
       this.showLoading();
       //this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
+
+
       
       const queryParams = [{ key: "tenantId", value: tenantId }];//constructQueryParamsBasedOnLamsRoles();
       //console.log("The query params is ", queryParams);
@@ -568,6 +571,14 @@ class TableData extends Component {
 
       let filter = getWorkflowFilterBasedOnLamsRoles();
       responseData.ProcessInstances = jp.query(responseData, "$.ProcessInstances[?("+filter+")]"); //Filter only LAMS Workflow instances
+
+
+
+
+      Based on the process instances keep the businiess service data ready
+
+
+
 
 
       // const assignedData = orderBy(
@@ -597,6 +608,7 @@ class TableData extends Component {
         "WF_INBOX_HEADER_STATUS",
         "WF_INBOX_HEADER_CURRENT_OWNER",
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
+        "WF_INBOX_HEADER_TENANTID",
       ];
       inboxData[0].headers = headersList;
       inboxData[0].rows = assignedDataRows;
