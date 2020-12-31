@@ -7,7 +7,7 @@ import { employeeReviewDetails } from "./viewResource/employee-review";
 import { hrViewFooter } from "./viewResource/footer";
 import { getEmployeeData } from "./viewResource/functions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { deactivateEmployee } from "./viewResource/deactivate-employee";
+import { deactivateEmployee ,ActivateEmployee } from "./viewResource/deactivate-employee";
 import { showHideAdhocPopup } from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
@@ -98,17 +98,36 @@ const screenConfig = {
     //   },
     //   type: "array"
     // },
-    adhocDialog: {
+    deactivateAdhocDialog: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
       componentPath: "DialogContainer",
       props: {
         open: false,
         maxWidth: "sm",
-        screenKey: "view"
+        screenKey: "view",
+        activate:{
+          popup:{...ActivateEmployee}},
+        deactivate:{
+          popup:{...deactivateEmployee}}
       },
       children: {
         popup: deactivateEmployee
+      }
+    },
+    activateAdhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hrms",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "view",
+        activate:{...ActivateEmployee},
+        deactivate:{...deactivateEmployee}
+      },
+      children: {
+        popup: ActivateEmployee
       }
     }
   }
