@@ -69,13 +69,19 @@ const style = {
 };
 
 export const showHideAdhocPopup = (state, dispatch) => {
+  let json = get(
+    state.screenConfiguration.preparedFinalObject,
+    'employeeStatus',
+    'deactivate',
+  );
   let toggle = get(
     state.screenConfiguration.screenConfig["view"],
-    "components.adhocDialog.props.open",
+    `components.${json}AdhocDialog.props.open`,
     false
   );
+
   dispatch(
-    handleField("view", "components.adhocDialog", "props.open", !toggle)
+    handleField("view", `components.${json}AdhocDialog`, "props.open", !toggle)
   );
 };
 

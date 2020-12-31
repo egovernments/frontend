@@ -6,17 +6,22 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 
 class DialogContainer extends React.Component {
   handleClose = () => {
-    const { screenKey } = this.props;
+    const { screenKey ,json} = this.props;
     this.props.handleField(
       screenKey,
-      `components.adhocDialog`,
+      `${screenKey}.components.${json}AdhocDialog`,
       "props.open",
       false
     );
   };
 
   render() {
-    const { open, maxWidth, children } = this.props;
+    const { open, maxWidth, children ,json} = this.props;
+const child=this.props[json];
+console.log(child);
+
+
+children.props.components.popup={...child}
     return (
       <Dialog open={open} maxWidth={maxWidth} onClose={this.handleClose}>
         <DialogContent children={children} />
@@ -29,15 +34,22 @@ const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const { screenKey } = ownProps;
   const { screenConfig } = screenConfiguration;
+  let json = get(
+    state.screenConfiguration.preparedFinalObject,
+    'employeeStatus',
+    'deactivate',
+  );
   const open = get(
     screenConfig,
-    `${screenKey}.components.adhocDialog.props.open`
+    `${screenKey}.components.${json}AdhocDialog.props.open`
   );
+
 
   return {
     open,
     screenKey,
-    screenConfig
+    screenConfig,
+    json
   };
 };
 

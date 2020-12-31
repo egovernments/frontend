@@ -1,12 +1,12 @@
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
-  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField, prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
-  convertToFilestoreid,
   createEmployee,
   getSearchResults,
   updateEmployee
@@ -17,8 +17,7 @@ import {
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { ActivateEmployee, deactivateEmployee } from "./deactivate-employee";
 
 // SET ALL SIMPLE DATES IN YMD FORMAT
 const setDateInYmdFormat = (obj, values) => {
@@ -126,6 +125,33 @@ const setDeactivationDocuments = (state, dispatch) => {
   // SAVE THE DOCUMENTS BACK TO EMPLOYEE
   dispatch(prepareFinalObject("Employee[0].documents", documents));
 };
+const setActivationDocuments = (state, dispatch) => {
+  // GET THE DEACTIVATION DOCUMENTS FROM UPLOAD FILE COMPONENT
+  let activationDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    `ActivationDocuments`,
+    []
+  );
+  // FORMAT THE NEW DOCUMENTS ARRAY ACCORDING TO THE REQUIRED STRUCTURE
+  let addedDocuments = activationDocuments.map(document => {
+    return {
+      documentName: get(document, "fileName", ""),
+      documentId: get(document, "fileStoreId", ""),
+      referenceType: "ACTIVATION"
+    };
+  });
+  // GET THE PREVIOUS DOCUMENTS FROM EMPLOYEE OBJECT
+  let documents = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Employee[0].documents`,
+    []
+  );
+  // ADD THE NEW DOCUMENTS TO PREVIOUS DOCUMENTS
+  documents = [...documents, ...addedDocuments];
+  // SAVE THE DOCUMENTS BACK TO EMPLOYEE
+  dispatch(prepareFinalObject("Employee[0].documents", documents));
+};
+
 
 // Remove objects from Arrays not having the specified key (eg. "id")
 // and add the key-value isActive:false in those objects having the key
@@ -204,7 +230,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
   // DEACTIVATE EMPLOYEE VALIDATIONS
   if (action === "DEACTIVATE") {
     const isDeactivateEmployeeDetailsValid = validateFields(
-      "components.adhocDialog.children.popup.children.body.children",
+      `components.deactivateAdhocDialog.children.popup.children.body.children`,
       state,
       dispatch,
       "view"
@@ -222,6 +248,27 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
       );
       return;
     }
+  }else if(action === "ACTIVATE"){
+    const isDeactivateEmployeeDetailsValid = validateFields(
+      "components.activateAdhocDialog.children.popup.children.body.children",
+      state,
+      dispatch,
+      "view"
+    );
+    if (!isDeactivateEmployeeDetailsValid) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Please fill mandatory Fields!",
+            labelKey: "ERR_FILL_MANDATORY_FIELDS"
+          },
+          "warning"
+        )
+      );
+      return;
+    }
+    
   }
 
   // SET TENANT IDS IF THEY DO NOT ALREADY EXIST
@@ -366,12 +413,12 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     }
   } else if (action === "UPDATE") {
     try {
-      
+
       // const fileStoreid=await convertToFilestoreid(get(employeeObject[0],'user.photo'));
 
       // set(employeeObject[0],'user.photo',fileStoreid);
-      if(get(employeeObject[0],'user.photo',null)){
-        set(employeeObject[0],'user.photo',get(employeeObject[0],'user.identificationMark',null));
+      if (get(employeeObject[0], 'user.photo', null)) {
+        set(employeeObject[0], 'user.photo', get(employeeObject[0], 'user.identificationMark', null));
       }
 
       let response = await updateEmployee(
@@ -380,7 +427,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
         dispatch
       );
       let employeeId = response && get(response, "Employees[0].code");
-     
+
       const acknowledgementUrl =
         process.env.REACT_APP_SELF_RUNNING === "true"
           ? `/egov-ui-framework/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`
@@ -391,6 +438,9 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     }
   } else if (action === "DEACTIVATE") {
     try {
+      if (get(employeeObject[0], 'user.photo', null)) {
+        set(employeeObject[0], 'user.photo', get(employeeObject[0], 'user.identificationMark', null));
+      }
       set(employeeObject[0], "isActive", false);
       set(
         employeeObject[0],
@@ -412,6 +462,37 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
         process.env.REACT_APP_SELF_RUNNING === "true"
           ? `/egov-ui-framework/hrms/acknowledgement?purpose=deactivate&status=success&applicationNumber=${employeeId}`
           : `/hrms/acknowledgement?purpose=deactivate&status=success&applicationNumber=${employeeId}`;
+      dispatch(setRoute(acknowledgementUrl));
+    } catch (error) {
+      furnishEmployeeData(state, dispatch);
+    }
+  } else if (action === "ACTIVATE") {
+    try {
+      if (get(employeeObject[0], 'user.photo', null)) {
+        set(employeeObject[0], 'user.photo', get(employeeObject[0], 'user.identificationMark', null));
+      }
+      set(employeeObject[0], "reActivateEmployee", true);
+      set(employeeObject[0], "isActive", true);
+      set(
+        employeeObject[0],
+        `reactivationDetails[0].effectiveFrom`,
+        convertDateToEpoch(
+          get(employeeObject[0], `reactivationDetails[0].effectiveFrom`),
+          "dayStart"
+        )
+      );
+      setActivationDocuments(state, dispatch);
+      let response = await updateEmployee(
+        queryObject,
+        employeeObject,
+        dispatch
+      );
+      let employeeId = response && get(response, "Employees[0].code");
+      showHideAdhocPopup(state, dispatch);
+      const acknowledgementUrl =
+        process.env.REACT_APP_SELF_RUNNING === "true"
+          ? `/egov-ui-framework/hrms/acknowledgement?purpose=activate&status=success&applicationNumber=${employeeId}`
+          : `/hrms/acknowledgement?purpose=activate&status=success&applicationNumber=${employeeId}`;
       dispatch(setRoute(acknowledgementUrl));
     } catch (error) {
       furnishEmployeeData(state, dispatch);
@@ -448,5 +529,43 @@ export const getEmployeeData = async (
       }
     )
   );
+  if (get(response, "Employees[0].employeeStatus", '') == "EMPLOYED") {
+    dispatch(
+      handleField(
+        "view",
+        "components.div.children.footer.children.activateEmployee",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "view",
+        "components.div.children.footer.children.deactivateEmployee",
+        "visible",
+        true
+      )
+    );
+ 
+    dispatch(prepareFinalObject("employeeStatus",'deactivate'))
+  } else {
+    dispatch(
+      handleField(
+        "view",
+        "components.div.children.footer.children.activateEmployee",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "view",
+        "components.div.children.footer.children.deactivateEmployee",
+        "visible",
+        false
+      )
+    );
+    dispatch(prepareFinalObject("employeeStatus",'activate'))
+  }
   furnishEmployeeData(state, dispatch);
 };
