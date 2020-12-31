@@ -63,8 +63,8 @@ class InboxData extends React.Component {
     }
   }
 
-  getProcessIntanceData = async (pid) => {
-    const tenantId = getTenantId();
+  getProcessIntanceData = async (pid, tenantId) => {
+    //const tenantId = getTenantId();
     const queryObject = [
       { key: "businessIds", value: pid },
       { key: "history", value: true },
@@ -75,9 +75,9 @@ class InboxData extends React.Component {
     return processInstances;
   };
 
-  onHistoryClick = async (moduleNumber) => {
+  onHistoryClick = async (moduleNumber, tenantId) => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
-    const processInstances = await this.getProcessIntanceData(moduleNumber.text);
+    const processInstances = await this.getProcessIntanceData(moduleNumber.text, tenantId);
     if (processInstances && processInstances.length > 0) {
       await addWflowFileUrl(processInstances, prepareFinalObject);
       this.setState({
@@ -101,7 +101,7 @@ class InboxData extends React.Component {
     window.scrollTo(0, 0);
     const status = row[2].text && row[2].text.props.defaultLabel;
     const taskId = index === 0 && item.text;
-    const tenantId = getTenantId();
+    const tenantId = row[6].text;
     // const processInstances = await this.getProcessIntanceData(row[0].text);
     // if (processInstances && processInstances.length > 0) {
     //   await addWflowFileUrl(processInstances, prepareFinalObject);
@@ -223,7 +223,7 @@ class InboxData extends React.Component {
                           } else if (item.historyButton) {
                             return (
                               <TableCell className={classNames}>
-                                <div onClick={() => onHistoryClick(row[0])} style={{ cursor: "pointer" }}>
+                                <div onClick={() => onHistoryClick(row[0],row[6])} style={{ cursor: "pointer" }}>
                                   <i class="material-icons">history</i>
                                 </div>
                               </TableCell>
@@ -298,7 +298,7 @@ class InboxData extends React.Component {
                             <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1]) }}>{row[4].text}</span>
                           </div>
 
-                          <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>
+                          <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0],row[6])}>
                             <i class="material-icons">history</i>
                           </div>
                         </div>

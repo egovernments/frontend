@@ -139,12 +139,10 @@ export const loadSurveyNumbers = async (action, state, dispatch) => {
   const located = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located");
   const tenantId = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"tenantId");
 
-  console.log("Check values now ", applicationType, category, located, tenantId);
-
   const queryParams = [
-    //{ key: "applicationType", value: applicationType },  //tobechanged
+    { key: "applicationType", value: applicationType },  //tobechanged
     //{ key: "category", value: category },
-    //{ key: "located", value: located },
+    { key: "located", value: (located === "insideCivil")? 1 : 2 },
     { key: "tenantId", value: tenantId }  
     ];
   

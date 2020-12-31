@@ -390,6 +390,7 @@ class TableData extends Component {
       let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
+      let row6 = { text: item.tenantId,  hidden: true, value: item.tenantId}//<Label label={item.tenantId}/>
 
       let localityDropdown = { label: getLocaleLabels("", row1.text.props.label, localizationLabels), value: row1.text.props.label };
       localityDropdownList.push(localityDropdown);
@@ -410,7 +411,8 @@ class TableData extends Component {
           getLocaleLabels("", row1.text.props.label, localizationLabels).toLowerCase(),
           getLocaleLabels("", row2.text.props.label, localizationLabels).toLowerCase(),
           row3.text.props.label.toLowerCase()]
-        }
+        },
+        row6
       ];
       return dataRows;
     });
@@ -524,17 +526,18 @@ class TableData extends Component {
         let currentState = get(item,'state.state');
         if(currentState != "APPLIED")  //List in this tab only if the status is "APPLIED"
           return false;
-
-        let filter = getWorkflowFilterBasedOnLamsRoles();
-
-        let eligibleRolesToTakeAction = jp.query(businessServiceData, "$[?("+filter+")].states[?(@.state=='"+
-          currentState+"' )].actions[*].roles[*]" );
-        //console.log("Check first ",eligibleRolesToTakeAction);
-        let eligibleRolesToTakeActionUnique = eligibleRolesToTakeAction.filter((v, i, a) => a.indexOf(v) === i); 
-        //console.log("Check Eligible roles to take action ", eligibleRolesToTakeActionUnique);
-        let isAssignedToMe = this.checkIfAssignedToMe(lamsRoles, eligibleRolesToTakeActionUnique);
-        //alert("IsAssigned to me is "+isAssignedToMe);
-        return isAssignedToMe;
+        else
+          return true;
+        // let filter = getWorkflowFilterBasedOnLamsRoles();
+        // let eligibleRolesToTakeAction = jp.query(businessServiceData, "$[?("+filter+")].states[?(@.state=='"+
+        //   currentState+"' )].actions[*].roles[*]" );
+        // console.log("Check first ",eligibleRolesToTakeAction);
+        // let eligibleRolesToTakeActionUnique = eligibleRolesToTakeAction.filter((v, i, a) => a.indexOf(v) === i); 
+        // console.log("Check Eligible roles to take action ", eligibleRolesToTakeActionUnique);
+        // console.log("Lams roles are ",lamsRoles);
+        // let isAssignedToMe = this.checkIfAssignedToMe(lamsRoles, eligibleRolesToTakeActionUnique);
+        // //alert("IsAssigned to me is "+isAssignedToMe);
+        // return isAssignedToMe;
       }),
       ["businesssServiceSla"]
     );
@@ -552,10 +555,11 @@ class TableData extends Component {
       this.showLoading();
       //this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       
-      const queryParams = constructQueryParamsBasedOnLamsRoles();
+      const queryParams = [{ key: "tenantId", value: tenantId }];//constructQueryParamsBasedOnLamsRoles();
       //console.log("The query params is ", queryParams);
+
       this.setBusinessServiceDataToLocalStorage(queryParams);
-      const requestBody = [{ key: "tenantId", value: tenantId }];
+      const requestBody = constructQueryParamsBasedOnLamsRoles();//[{ key: "tenantId", value: tenantId }];
       showBusy();
       let responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
 
@@ -564,6 +568,8 @@ class TableData extends Component {
 
       let filter = getWorkflowFilterBasedOnLamsRoles();
       responseData.ProcessInstances = jp.query(responseData, "$.ProcessInstances[?("+filter+")]"); //Filter only LAMS Workflow instances
+
+
       // const assignedData = orderBy(
       //   filter(responseData.ProcessInstances, (item) => {
       //     let assignes = get(item, 'assignes');

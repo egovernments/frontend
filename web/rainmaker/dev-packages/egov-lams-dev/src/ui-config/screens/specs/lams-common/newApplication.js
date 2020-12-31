@@ -40,6 +40,7 @@ const newApplication = {
         let currentCbFilter = "$[?(@.code == '"+tenantId+"')]";
         onlyCBs = jp.query(onlyCBs, currentCbFilter );
       } 
+      onlyCBs.sort((a, b) => (a.code > b.code) ? 1 : -1)
       dispatch(prepareFinalObject("lamsStore.allTenants", onlyCBs));
     });
 

@@ -16,7 +16,8 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import {
   acceptedFiles, getFileUrl,
-  getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage
+  getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage,
+  deoProcessMappings
 } from "egov-ui-framework/ui-utils/commons";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
@@ -653,9 +654,16 @@ const getAllFileStoreIds = async ProcessInstances => {
 
 export const getLamsRoles = () =>{
   let userInfo = JSON.parse(localStorageGet("user-info"));
-  let jpExpression = "$.roles[?(@.code=='LR_APPROVER_CEO' || @.code=='LR_APPROVER_DEO')].code";
-  let lamsRoles = jp.query(userInfo, jpExpression );
-  //console.log("Lams Roles are ",lamsRoles);
+  //let jpExpression = "$.roles[?(@.code=='LR_APPROVER_CEO' || @.code=='LR_APPROVER_DEO')].code";
+  let lamsRoles = [];
+  userInfo["roles"].forEach(role => {
+    if(role.code == 'LR_APPROVER_CEO' || role.code == 'LR_APPROVER_DEO' || role.code == 'LR_CEMP' 
+      || role.code.indexOf("DEO_") > -1)
+    {
+      lamsRoles.push(role.code);
+    }
+  });
+  console.log("Lams Roles are ",lamsRoles);
   return lamsRoles;
 }
 
@@ -665,29 +673,63 @@ export const getWorkflowFilterBasedOnLamsRoles = () => {
   let lamsRoles = getLamsRoles();
   let filter = "";
   if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1 && lamsRoles.indexOf('LR_APPROVER_DEO') > -1 )
-    filter = "@.businessService== 'LAMS_NewLR_CEO_V3' || @.businessService== 'LAMS_NewLR_DEO_V3'";
+  { 
+    //alert("Looks like DEO and CEO are same. Please correct this.");
+    filter = "(@.businessService== 'LAMS_NewLR_CEO_V3' || @.businessService== 'LAMS_NewLR_DEO_V3')";
+  }
   else
   if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1)
-    filter = "@.businessService== 'LAMS_NewLR_CEO_V3'";
+    filter = "(@.businessService== 'LAMS_NewLR_CEO_V3')";
   else
   if(lamsRoles.indexOf('LR_APPROVER_DEO') > -1)
-    filter = "@.businessService== 'LAMS_NewLR_DEO_V3'";
+  {
+    filter = "(@.businessService== 'LAMS_NewLR_DEO_V3')";
+
+    // let deoMappings = deoProcessMappings();
+
+    // let role = lamsRoles.find(x => x.index("DEO_") >= 0)
+    // let deoBoard = role.split("DEO_")[1];
+    // let cbsOfBoard = deoMappings[deoBoard];
+
+    // console.log("The cbs of the board are ". cbsOfBoard);
+    // let cbFilter = "(";
+    // cbsOfBoard.forEach(function(cb, i) { 
+    //   if(i==0)
+    //     cbFilter = cbFilter + "@.tenantId=='pb."+cb.toLowerCase()+"'";
+    //   else
+    //     cbFilter = cbFilter + "|| @.tenantId=='pb."+cb.toLowerCase()+"'";
+    // }); 
+    // cbFilter = cbFilter + ")";
+      
+    // filter = filter + " && "+cbFilter;
+    // console.log("The final filter is ",filter);
+
+  }
   return filter;
 }
+
 
 //This function should be used only on the employee side.
 export const constructQueryParamsBasedOnLamsRoles = () => {
 
-  let queryParams = [
-    { key: "tenantId", value: getTenantId() }
-  ];
-
-  // tobechanged : Since workflow service filter is having problem dont try to filter. Get all.
-  // let lamsRoles = getLamsRoles();
-  // if(lamsRoles.indexOf('LR_APPROVER_CEO')>-1)
-  //   queryParams.push({ key: "businessServices", value: "LAMS_NewLR_CEO_V3" });
-  // if(lamsRoles.indexOf('LR_APPROVER_DEO')>-1)
-  //   queryParams.push({ key: "businessServices", value: "LAMS_NewLR_DEO_V3" });
+  let lamsRoles = getLamsRoles();
+  let queryParams = [];
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1 && lamsRoles.indexOf('LR_APPROVER_DEO') > -1 )
+  { 
+    alert("Looks like DEO and CEO are same. Please correct this.");
+  }
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1)
+  {
+    queryParams.push({ key: "tenantId", value: getTenantId()})
+    queryParams.push({ key: "role", value: "LR_APPROVER_CEO"})
+  }
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_DEO') > -1)
+  {
+    let deoRoleName = lamsRoles.find(x => x.indexOf("DEO_") >= 0)
+    queryParams.push({ key: "role", value: deoRoleName})
+  }
 
   return queryParams;
 }
@@ -759,11 +801,11 @@ export const validateActionFormFields = (preparedFinalObject) => {
     `lamsStore.Lease[0].leaseDetails.lesseAsPerGLR`,
     []
   );
-  if(!lesseAsPerGLR || lesseAsPerGLR.length > 63)
+  if(!lesseAsPerGLR || lesseAsPerGLR.length > 2000)
   {
     store.dispatch(toggleSnackbar(
       true,
-      { labelName: "Lesse As per GLR should have less than 63 charecters", labelKey: "INVALID_LESSEASPERGLR_ERROR" },
+      { labelName: "Lesse As per GLR should have less than 2000 charecters", labelKey: "INVALID_LESSEASPERGLR_ERROR" },
       "error"
     ));
     return false;
@@ -850,4 +892,48 @@ export const validateActionFormForComments = (preparedFinalObject) => {
   }
 
   return true;
+}
+
+export const  getESignRequest = async() => {
+
+  let requestBody = {};
+  let payload = null;
+  payload = await httpRequest(
+    "post",
+    "/egov-lams-service/v1/getESignRequest",
+    "getESignRequest",
+    [],
+    requestBody
+  );
+  return payload;
+
+}
+
+export const eVerify = () => {
+  getESignRequest().then((response) => {
+    
+    //toberemoved
+    let sc = "cn:Y,x500UniqueIdentifier:Y,pseudonym:Y,l:N,street:N,state:Y,postalAddress:Y,postalCode:Y";
+    let ts = "2011-11-02T02:50:12.208Z"; //"YYYY-MM-DDTHH:mm:ss.sss"
+    let txnId = 123456789;
+    let ekycIdType = "A";
+    let aspId = 'aspId';
+    let authMode = 1 ; //OTP
+    let responseSigType = "pkcs7";
+    let redirectionUrl = 'https://13.71.65.215.nip.io/employee/lams-common/newApplication';
+    let documentId = 'asdfasdf';
+    let hashAlgorithm = "SHA256";
+    let docInfo = "Information abt the document";
+    let ekycId = 'optional';
+    response = '<Esign ver="2.5" sc="'+sc+'" ts="'+ ts +'" txn="'+ txnId+'" ekycId="'+ekycId+'" ekycIdType="'+ekycIdType +
+      '" aspId="'+aspId +'" AuthMode="'+authMode+'" responseSigType="'+responseSigType+'" responseUrl="'+redirectionUrl +'">' +
+    '<Docs>'+
+    '<InputHash id="'+documentId+'" hashAlgorithm="'+hashAlgorithm+'" docInfo="'+docInfo+'"> Document Hash in Hex</InputHash>'
+    + '</Docs>' +
+    + '<Signature>Digital signature of ASP</Signature>'
+    + '</Esign>';
+
+    let parser = new DOMParser();
+    parser.parseFromString(response,"text/xml")
+  });
 }

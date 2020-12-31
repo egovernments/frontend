@@ -104,8 +104,8 @@ let loadWorkflowMasterData = async (action, state, dispatch) => {
       queryParams,
       {}
     );
-    let businessServiceData = payload;
-    localStorageSet("businessServiceData", JSON.stringify(businessServiceData.BusinessServices));
+    
+    return payload;
   }
   catch(e)
   {
@@ -166,9 +166,16 @@ const searchPreview = {
       dispatch(prepareFinalObject("LicensesTemp", LicensesTemp))
 
       //tobechanged  uncomment below code
-      loadWorkflowMasterData(action, state, dispatch);
+      loadWorkflowMasterData(action, state, dispatch).then((response)=>{
+        let businessServiceData = response;
+        localStorageSet("businessServiceData", JSON.stringify(businessServiceData.BusinessServices));
+        //alert("Recieved full BusinessService Data");
+        let fullContainer = getFullContainer(action, state, dispatch);
+        set(action, "screenConfig.components.div.children", fullContainer);
+        //alert("Setting done");
+      });
     });
-    //localStorageSet("businessServiceData", JSON.stringify(businessServiceData));
+    //localStorageSet("businessSeraiceData", JSON.stringify(businessServiceData));
 
     return action;
   },
@@ -180,84 +187,6 @@ const searchPreview = {
       props: {
         className: "common-div-css search-preview"
       },
-      children: {
-        headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-          children: {
-            header1: {
-              gridDefination: {
-                xs: 12,
-                sm: 8
-              },
-              ...headerrow
-            },
-            helpSection: {
-              uiFramework: "custom-atoms",
-              componentPath: "Container",
-              props: {
-                color: "primary",
-                style: { justifyContent: "flex-end" }
-              },
-              gridDefination: {
-                xs: 12,
-                sm: 4,
-                align: "right"
-              }
-            }
-          }
-        },
-        applicationNumber2: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-lams",
-          componentPath: "ApplicationNo",
-          props: {
-            number: applicationNumber,
-            label:{
-              labelKey:"LAMS_TABLE_COL_APP_NO",
-              labelValue:"Appl No: "
-            } 
-          }
-        },
-        taskStatus: {
-          uiFramework: "custom-containers-local",
-          componentPath: "WorkFlowContainer",
-          moduleName: "egov-lams",//"egov-workflow",//"egov-lams",
-          // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-          props: {
-            dataPath: "lamsStore.Lease",
-            moduleName:  "", //"LAMS_NewLR_CEO_V3",//get(state, "screenConfiguration.preparedFinalObject.lamsStore.Lease[0].workflowCode"),//"LAMS_NewLR_V2",  //tobechanged
-            //Dont send moduleName here. Pick this up from the state inside WorkflowContainer 
-            //For this to work, the application data should be loaded and data should be ready.(Done in beforeInitScreen)
-            updateUrl: "/lams-services/v1/_update"
-          }
-        },
-        // actionDialog: {
-        //   uiFramework: "custom-containers-local",
-        //   componentPath: "ResubmitActionContainer",
-        //   moduleName: "egov-tradelicence",
-        //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-        //   props: {
-        //     open: true,
-        //     dataPath: "Licenses",
-        //     moduleName: "LAMS_NewLR_V2",
-        //     updateUrl: "/tl-services/v1/_update",
-        //     data: {
-        //       buttonLabel: "RESUBMIT",
-        //       moduleName: "LAMS_NewLR_V2",
-        //       isLast: false,
-        //       dialogHeader: {
-        //         labelName: "RESUBMIT Application",
-        //         labelKey: "WF_RESUBMIT_APPLICATION"
-        //       },
-        //       showEmployeeList: false,
-        //       roles: "CITIZEN",
-        //       isDocRequired: false
-        //     }
-        //   }
-        // },
-        leaseRenewalReviewDetails,
-      }
     },
     breakUpDialog: {
       uiFramework: "custom-containers-local",
@@ -284,4 +213,88 @@ const searchPreview = {
     }
   }
 };
+
+const getFullContainer = (
+  action, state, dispatch
+) => {
+  return {
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      children: {
+        header1: {
+          gridDefination: {
+            xs: 12,
+            sm: 8
+          },
+          ...headerrow
+        },
+        helpSection: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          props: {
+            color: "primary",
+            style: { justifyContent: "flex-end" }
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+            align: "right"
+          }
+        }
+      }
+    },
+    applicationNumber2: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-lams",
+      componentPath: "ApplicationNo",
+      props: {
+        number: applicationNumber,
+        label:{
+          labelKey:"LAMS_TABLE_COL_APP_NO",
+          labelValue:"Appl No: "
+        } 
+      }
+    },
+    taskStatus: {
+      uiFramework: "custom-containers-local",
+      componentPath: "WorkFlowContainer",
+      moduleName: "egov-lams",//"egov-workflow",//"egov-lams",
+      // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+      props: {
+        dataPath: "lamsStore.Lease",
+        moduleName:  "", //"LAMS_NewLR_CEO_V3",//get(state, "screenConfiguration.preparedFinalObject.lamsStore.Lease[0].workflowCode"),//"LAMS_NewLR_V2",  //tobechanged
+        //Dont send moduleName here. Pick this up from the state inside WorkflowContainer 
+        //For this to work, the application data should be loaded and data should be ready.(Done in beforeInitScreen)
+        updateUrl: "/lams-services/v1/_update"
+      }
+    },
+    // actionDialog: {
+    //   uiFramework: "custom-containers-local",
+    //   componentPath: "ResubmitActionContainer",
+    //   moduleName: "egov-tradelicence",
+    //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+    //   props: {
+    //     open: true,
+    //     dataPath: "Licenses",
+    //     moduleName: "LAMS_NewLR_V2",
+    //     updateUrl: "/tl-services/v1/_update",
+    //     data: {
+    //       buttonLabel: "RESUBMIT",
+    //       moduleName: "LAMS_NewLR_V2",
+    //       isLast: false,
+    //       dialogHeader: {
+    //         labelName: "RESUBMIT Application",
+    //         labelKey: "WF_RESUBMIT_APPLICATION"
+    //       },
+    //       showEmployeeList: false,
+    //       roles: "CITIZEN",
+    //       isDocRequired: false
+    //     }
+    //   }
+    // },
+    leaseRenewalReviewDetails,
+  };
+}
+
 export default searchPreview;
