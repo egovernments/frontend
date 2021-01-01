@@ -572,14 +572,24 @@ class TableData extends Component {
       let filter = getWorkflowFilterBasedOnLamsRoles();
       responseData.ProcessInstances = jp.query(responseData, "$.ProcessInstances[?("+filter+")]"); //Filter only LAMS Workflow instances
 
+      let allTenantIds = jp.query(responseData.ProcessInstances, "$.[tenantId]");
+      let uniqueTenantIds = allTenantIds.filter(function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+      });
+      
+      // let tempBusinessServiceData = []; // JSON.parse(localStorageGet("businessServiceData"));
+      // uniqueTenantIds.forEach(function(tenantId,idx){
+      //   let wfBusinessDataUrl = "egov-workflow-v2/egov-wf/businessservice/_search";
+      //   let queryObject = constructQueryParamsBasedOnLamsRoles(tenantId);
+      //   let payload = await httpRequest(wfBusinessDataUrl, "_search", queryObject);
+      //   payload.then((response)=>{
+      //     if(response && response.BusinessServices)
+      //       tempBusinessServiceData.concat(response.BusinessServices);
+      //     localStorageSet("businessServiceData", JSON.stringify(tempBusinessServiceData));
+      //   })
+      // });
 
-
-
-      Based on the process instances keep the businiess service data ready
-
-
-
-
+      
 
       // const assignedData = orderBy(
       //   filter(responseData.ProcessInstances, (item) => {
