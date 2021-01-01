@@ -111,7 +111,15 @@ import { PrivacyPolicy } from "modules/common";
 //   loader: () => import("../../ui-views/HowItWorks"),
 //   loading: Loading,
 // });
-import TLHowItWorks from "../../ui-views/HowItWorks";
+import TLHowItWorks from "../../ui-views/PFBRules1977";
+//NOC 
+import NOCNBCPart4 from "../../ui-views/NBCPart4";
+import NOCAPPFORM from "../../ui-views/NOCAppForm";
+import NOCPFSQuestionnaire from "../../ui-views/PFSQuestionnaire";
+import NOCPFBRules1977 from "../../ui-views/PFBRules1977";
+import NOCPAForm from "../../ui-views/PAForm";
+import NOCPFPAct2004 from "../../ui-views/PFPAct2004";
+import NOCPFPAct2005 from "../../ui-views/PFPAct2005";
 
 //Whatsapp Screen
 // const WhatsAppCity = Loadable({
@@ -222,6 +230,78 @@ const routes = [
       hideFooter: true,
       hideBackButton: true,
       title: "TL_HOW_IT_WORKS",
+    },
+  },
+
+  //NOC
+  {
+    path: "fire-noc/Nbc-Part4",
+    component: NOCNBCPart4,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_NBC_PART4",
+    },
+  },
+  {
+    path: "fire-noc/NOC-App-Form",
+    component: NOCAPPFORM,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_APP_FORM",
+    },
+  },
+  {
+    path: "fire-noc/PFS-Questionnaire",
+    component: NOCPFSQuestionnaire,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_PFS_QUESTIONNAIRE",
+    },
+  },
+  {
+    path: "fire-noc/PFB-Rules1977",
+    component: NOCPFBRules1977,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_PFB_RULES1977",
+    },
+  },
+  {
+    path: "fire-noc/PA-Form",
+    component: NOCPAForm,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_PA_FORM",
+    },
+  },
+  {
+    path: "fire-noc/PFP-Act2004",
+    component: NOCPFPAct2004,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_PFP_ACT2004",
+    },
+  },
+  {
+    path: "fire-noc/PFP-Act2005",
+    component: NOCPFPAct2005,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_PFP_ACT2005",
     },
   },
   {
