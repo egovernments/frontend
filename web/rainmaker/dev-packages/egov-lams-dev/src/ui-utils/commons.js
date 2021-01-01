@@ -708,10 +708,10 @@ export const getWorkflowFilterBasedOnLamsRoles = () => {
   return filter;
 }
 
+export const getWorkflowCodeFromRoles = (tenantId) => {
 
-//This function should be used only on the employee side.
-export const constructQueryParamsBasedOnLamsRoles = () => {
-
+  if(!tenantId)
+    tenantId=getTenantId();
   let lamsRoles = getLamsRoles();
   let queryParams = [];
   if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1 && lamsRoles.indexOf('LR_APPROVER_DEO') > -1 )
@@ -721,7 +721,58 @@ export const constructQueryParamsBasedOnLamsRoles = () => {
   else
   if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1)
   {
-    queryParams.push({ key: "tenantId", value: getTenantId()})
+    return "LAMS_NewLR_CEO_V3";
+  }
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_DEO') > -1)
+  {
+    return "LAMS_NewLR_DEO_V3";
+  }
+
+  return queryParams;
+}
+
+export const constructQueryParamsBasedOnLamsRoles2 = (tenantId) => {
+
+  if(!tenantId)
+    tenantId=getTenantId();
+  let lamsRoles = getLamsRoles();
+  let queryParams = [];
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1 && lamsRoles.indexOf('LR_APPROVER_DEO') > -1 )
+  { 
+    alert("Looks like DEO and CEO are same. Please correct this.");
+  }
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1)
+  {
+    queryParams.push({ key: "tenantId", value: tenantId})
+    queryParams.push({ key: "businessServices", value: "LAMS_NewLR_CEO_V3"})
+  }
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_DEO') > -1)
+  {
+    queryParams.push({ key: "tenantId", value: tenantId})
+    queryParams.push({ key: "businessServices", value: "LAMS_NewLR_DEO_V3"})
+  }
+
+  return queryParams;
+}
+
+//This function should be used only on the employee side.
+export const constructQueryParamsBasedOnLamsRoles = (tenantId) => {
+
+  if(!tenantId)
+    tenantId=getTenantId();
+  let lamsRoles = getLamsRoles();
+  let queryParams = [];
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1 && lamsRoles.indexOf('LR_APPROVER_DEO') > -1 )
+  { 
+    alert("Looks like DEO and CEO are same. Please correct this.");
+  }
+  else
+  if(lamsRoles.indexOf('LR_APPROVER_CEO') > -1)
+  {
+    queryParams.push({ key: "tenantId", value: tenantId})
     queryParams.push({ key: "role", value: "LR_APPROVER_CEO"})
   }
   else

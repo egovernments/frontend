@@ -15,7 +15,7 @@ import { Footer } from "../../ui-molecules-local";
 //import { Footer } from "egov-workflow/ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
 //import TaskStatusContainer from "egov-workflow/ui-containers-local/TaskStatusContainer";
-import  {validateActionFormFields, validateActionFormForComments} from "../../ui-utils/commons";
+import  {validateActionFormFields, validateActionFormForComments, getWorkflowCodeFromRoles} from "../../ui-utils/commons";
 
 
 const tenant = getQueryArg(window.location.href, "tenantId");
@@ -26,6 +26,11 @@ class WorkFlowContainer extends React.Component {
     action: ""
   };
 
+  componentDidUpdate = async () => {
+  }
+
+  componentWillReceiveProps(nextProps) {
+  }
 
   componentDidMount = async () => {
     const { prepareFinalObject, toggleSnackbar } = this.props;
@@ -552,56 +557,85 @@ class WorkFlowContainer extends React.Component {
   };
 
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
-    // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
 
-    const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
-    return isLastState;
+    try{
+      //alert(nextStateUUID+" and "+ moduleName);
+      const businessServiceData = JSON.parse(
+        localStorageGet("businessServiceData")
+      );
+      const tenantId = getQueryArg(
+        window.location.href,
+        "tenantId"
+      );
+
+      const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName, tenantId:tenantId }) : [];
+
+      // const nextState = data && data.length > 0 find(data.states, { uuid: nextStateUUID });
+
+      const isLastState = data ? find(data.states, { uuid: nextStateUUID }).isTerminateState : false;
+      return isLastState;
+    }
+      catch(e){
+        location.reload();
+      }
   };
 
   checkIfDocumentRequired = (nextStateUUID, moduleName) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: moduleName });
-    const nextState = find(data.states, { uuid: nextStateUUID });
-    return nextState.docUploadRequired;
+    try
+    {
+      const businessServiceData = JSON.parse(
+        localStorageGet("businessServiceData")
+      );
+      const tenantId = getQueryArg(
+        window.location.href,
+        "tenantId"
+      );
+      const data = find(businessServiceData, { businessService: moduleName, tenantId:tenantId });
+      const nextState = find(data.states, { uuid: nextStateUUID });
+      return nextState.docUploadRequired;
+    }
+    catch(e)
+    {
+      location.reload();
+    }
   };
 
   getActionIfEditable = (status, businessId, moduleName) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: moduleName });
-    const state = find(data.states, { applicationStatus: status });
-    //console.log("data.states ",data.states, status);
-    let actions = [];
-    state.actions &&
-      state.actions.forEach(item => {
-        actions = [...actions, ...item.roles];
+    try{
+      const businessServiceData = JSON.parse(
+        localStorageGet("businessServiceData")
+      );
+      const data = find(businessServiceData, { businessService: moduleName });
+      const state = find(data.states, { applicationStatus: status });
+      //console.log("data.states ",data.states, status);
+      let actions = [];
+      state.actions &&
+        state.actions.forEach(item => {
+          actions = [...actions, ...item.roles];
+        });
+      const userRoles = JSON.parse(getUserInfo()).roles;
+      const roleIndex = userRoles.findIndex(item => {
+        if (actions.indexOf(item.code) > -1) return true;
       });
-    const userRoles = JSON.parse(getUserInfo()).roles;
-    const roleIndex = userRoles.findIndex(item => {
-      if (actions.indexOf(item.code) > -1) return true;
-    });
 
-    let editAction = {};
-    return editAction;
+      let editAction = {};
+      return editAction;
 
-    //tobechanged
-    if (status === "CITIZEN-REVIEW" && state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
-      editAction = {
-        buttonLabel: "EDIT",
-        moduleName: moduleName,
-        tenantId: state.tenantId,
-        isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
-      };
+      //tobechanged
+      if (status === "CITIZEN-REVIEW" && state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
+        editAction = {
+          buttonLabel: "EDIT",
+          moduleName: moduleName,
+          tenantId: state.tenantId,
+          isLast: true,
+          buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
+        };
+      }
+      return editAction;
     }
-    return editAction;
+    catch(e){
+      location.reload();
+    }
   };
 
   prepareWorkflowContract = (data, moduleName) => {
@@ -673,7 +707,10 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     
     let moduleName = get(screenConfiguration, "preparedFinalObject.lamsStore.Lease[0].workflowCode");
-
+    if(!moduleName)
+    {
+      moduleName = getWorkflowCodeFromRoles();
+    }
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
@@ -710,8 +747,12 @@ class WorkFlowContainer extends React.Component {
             moduleName={moduleName}
           />}
       </div>
-    );
-  }
+    ); 
+  }  
+}
+
+const doRender = ()=>{
+
 }
 
 const mapStateToProps = state => {

@@ -8,6 +8,7 @@ import { getLocaleLabels, transformById } from "egov-ui-framework/ui-utils/commo
 import TextFieldIcon from "egov-ui-kit/components/TextFieldIcon";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { httpRequest as httpRequest2} from "../../ui-utils";
 import { getLocale, getLocalization, getTenantId, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import cloneDeep from "lodash/cloneDeep";
@@ -24,7 +25,8 @@ import InboxData from "../Table";
 import "./index.css";
 import jp from "jsonpath";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {getWorkflowFilterBasedOnLamsRoles, constructQueryParamsBasedOnLamsRoles} from "../../ui-utils/commons";
+import {getWorkflowFilterBasedOnLamsRoles, constructQueryParamsBasedOnLamsRoles,
+  constructQueryParamsBasedOnLamsRoles2} from "../../ui-utils/commons";
 
 
 const getWFstatus = (status) => {
@@ -556,8 +558,6 @@ class TableData extends Component {
       this.showLoading();
       //this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
 
-
-      
       const queryParams = [{ key: "tenantId", value: tenantId }];//constructQueryParamsBasedOnLamsRoles();
       //console.log("The query params is ", queryParams);
 
@@ -572,38 +572,34 @@ class TableData extends Component {
       let filter = getWorkflowFilterBasedOnLamsRoles();
       responseData.ProcessInstances = jp.query(responseData, "$.ProcessInstances[?("+filter+")]"); //Filter only LAMS Workflow instances
 
-      let allTenantIds = jp.query(responseData.ProcessInstances, "$.[tenantId]");
+      let allTenantIds =[];
+      responseData.ProcessInstances.forEach(function(p,i){
+        allTenantIds.push(p.tenantId);
+      });
+
       let uniqueTenantIds = allTenantIds.filter(function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
       });
       
-      // let tempBusinessServiceData = []; // JSON.parse(localStorageGet("businessServiceData"));
-      // uniqueTenantIds.forEach(function(tenantId,idx){
-      //   let wfBusinessDataUrl = "egov-workflow-v2/egov-wf/businessservice/_search";
-      //   let queryObject = constructQueryParamsBasedOnLamsRoles(tenantId);
-      //   let payload = await httpRequest(wfBusinessDataUrl, "_search", queryObject);
-      //   payload.then((response)=>{
-      //     if(response && response.BusinessServices)
-      //       tempBusinessServiceData.concat(response.BusinessServices);
-      //     localStorageSet("businessServiceData", JSON.stringify(tempBusinessServiceData));
-      //   })
-      // });
-
-      
-
-      // const assignedData = orderBy(
-      //   filter(responseData.ProcessInstances, (item) => {
-      //     let assignes = get(item, 'assignes');
-      //     return get(assignes ? assignes[0] : {}, "uuid") === uuid
-
-
-      //   }),
-      //   ["businesssServiceSla"]
-      // );
+      let tempBusinessServiceData = []; // JSON.parse(localStorageGet("businessServiceData"));
+      uniqueTenantIds.forEach(function(tenantId,idx){
+        let getWfBusinessServiceData = async () => {
+          let wfBusinessDataUrl = "/egov-workflow-v2/egov-wf/businessservice/_search";
+          let queryObject = constructQueryParamsBasedOnLamsRoles2(tenantId);
+          let payload = null;
+          payload = await httpRequest2("post",wfBusinessDataUrl, "_search", queryObject,[]);
+          let response = payload;
+          if(response && response.BusinessServices)
+          { 
+            tempBusinessServiceData = tempBusinessServiceData.concat(response.BusinessServices);
+            localStorageSet("businessServiceData", JSON.stringify(tempBusinessServiceData));
+          }
+        };
+        getWfBusinessServiceData();
+      });
 
       const assignedData = this.getAssignedData(responseData);
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
-
 
       // const assignedDataRows = []
       // const allDataRows = []
