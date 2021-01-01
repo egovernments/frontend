@@ -422,7 +422,7 @@ class WorkFlowContainer extends React.Component {
         case "DGDE-EXAMINATION":
         case "MOD-EXAMINATION":
 
-          if(label === "APPROVE")
+          if(label === "APPROVE" && false)
           {
             if(!validateActionFormFields(preparedFinalObject))
               return;

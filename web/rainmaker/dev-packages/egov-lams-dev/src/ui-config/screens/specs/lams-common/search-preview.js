@@ -36,6 +36,7 @@ import {showHideAdhocPopup, getDialogButton} from "../utils"
 import { getReviewDocuments } from "./searchPreviewResource/review-documents";
 import {userDetailsCard} from "./searchPreviewResource/userDetailsCard";
 import {leaseDetailsCardReview} from "./searchPreviewResource/leaseDetailsCardReview";
+import {getLeaseDetailsCard} from "./leaseDetailsCard";
 import {constructQueryParamsBasedOnCurrentWorkflowType} from "../../../../ui-utils/commons";
 
 import { workflowMasterData, leaseData , 
@@ -52,13 +53,19 @@ let titleText= "Application Details";
 let title = getCommonTitle({ labelName: titleText ,labelKey :"LAMS_APPLICATION_DETAILS" });
 const reviewDocumentDetails = getReviewDocuments(false, false);
 
-export const leaseRenewalReviewDetails = getCommonCard({
-  title,
-  userDetailsCard,
-  leaseDetailsCardReview,
-  reviewDocumentDetails
-});
+export const leaseRenewalReviewDetails = () => {
+   
+  let leaseDetailsCard = getLeaseDetailsCard("lamsStore.Lease[0].leaseDetails");
 
+  let card = getCommonCard({
+    title,
+    userDetailsCard,
+    leaseDetailsCard,
+    reviewDocumentDetails
+  });
+
+  return card;
+}
 
 let loadLeaseDetails = async (action, state, dispatch) => {
   try{
@@ -256,7 +263,7 @@ const searchPreview = {
         //     }
         //   }
         // },
-        leaseRenewalReviewDetails,
+        leaseDetails: leaseRenewalReviewDetails(),
       }
     },
     breakUpDialog: {

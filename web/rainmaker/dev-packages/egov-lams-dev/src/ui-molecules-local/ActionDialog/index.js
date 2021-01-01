@@ -313,7 +313,7 @@ class ActionDialog extends React.Component {
                           required={false}
                         />
                       </Grid> */}
-                      {buttonLabel === "APPROVE" &&
+                      {buttonLabel === "APPROVE" && false && 
                         <Grid item sm="12">
                           <TextFieldContainer
                             InputLabelProps={{ shrink: true }}
@@ -327,7 +327,7 @@ class ActionDialog extends React.Component {
                           />
                         </Grid>
                       }
-                      {buttonLabel === "APPROVE" &&
+                      {buttonLabel === "APPROVE" && false &&
                         <Grid item sm="12">
                         <TextFieldContainer
                           InputLabelProps={{ shrink: true }}
@@ -341,7 +341,7 @@ class ActionDialog extends React.Component {
                         />
                         </Grid>
                       }
-                      {buttonLabel === "APPROVE" &&
+                      {buttonLabel === "APPROVE" && false && 
                         <Grid item sm="12">
                         <TextFieldContainer
                           InputLabelProps={{ shrink: true }}
@@ -355,7 +355,7 @@ class ActionDialog extends React.Component {
                         />
                         </Grid>
                       }
-                      {buttonLabel === "APPROVE" &&
+                      {buttonLabel === "APPROVE" && false &&
                         <Grid item sm="12">
                           <TextFieldContainer
                             id="datetime-local"
@@ -377,7 +377,7 @@ class ActionDialog extends React.Component {
 
                           />
                         </Grid>}
-                      { buttonLabel === "APPROVE"  && 
+                      { buttonLabel === "APPROVE"  && false && 
                        <Grid item sm="12">
                         <TextFieldContainer
                           id="datetime-local"

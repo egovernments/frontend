@@ -16,7 +16,7 @@ import {
   import {getDetailsForOwner, getMaxDateForDOB} from "../utils"
   import {documentListContainer} from "./documentListContainer";
   import {prepareFinalObject,  handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import {leaseDetailsCard} from "./leaseDetailsCard";
+  import {getLeaseDetailsCard} from "./leaseDetailsCard";
 
 import PropTypes from "prop-types";
 
@@ -295,7 +295,7 @@ import PropTypes from "prop-types";
               disableValidation: true,
             },
             children: {
-              details: leaseDetailsCard
+              details: getLeaseDetailsCard("lamsStore.selectedSurveyDetails")
             },
           },
       },
