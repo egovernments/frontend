@@ -242,7 +242,8 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
-        if((moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && label==="APPLY"){
+        const status = get(preparedFinalObject, "Licenses[0].status", "");
+        if((moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && label==="APPLY" && status !=='CITIZENACTIONREQUIRED'){
           const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
           let isAppFeeReqd = false;
           if (!isEmpty(businessServiceData)) {
