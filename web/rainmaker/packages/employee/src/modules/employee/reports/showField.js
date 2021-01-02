@@ -43,7 +43,8 @@ export default class ShowField extends Component {
     if (typeof obj.defaultValue == "object") {
       for (var variable in obj.defaultValue) {
         let val = obj.defaultValue[variable];
-        if(val.indexOf(".") != -1){
+        let name = obj.name;
+        if(name=="businessservice" && val.indexOf(".") != -1){
           val = val.split(".")[1];
         }
         dropDownData.push({
