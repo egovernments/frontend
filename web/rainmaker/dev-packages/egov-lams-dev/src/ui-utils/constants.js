@@ -21,6 +21,7 @@ export const deoProcessMappings = () => {
     "pb.ajmer":["pb.nasirabad"]
   };
 
+  //This attribute is being used. Dont remove this.
   const deoMappings2 = {
       "AGRA": [
         "AGRA",
@@ -135,6 +136,9 @@ export const deoProcessMappings = () => {
         "BAKLOH",
         "DALHOUSIE",
         "KHASYOL"
+      ],
+      "TESTING": [
+        "TESTING"
       ]
     }
   

@@ -47,6 +47,7 @@ import PropTypes from "prop-types";
     const located = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located");
     const LeaseRenewalWorkflowCode = (located === "insideCivil")? "LAMS_NewLR_CEO_V3": "LAMS_NewLR_DEO_V3";
     dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", LeaseRenewalWorkflowCode));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
   }
 
   const surveyNoChanged = (action, state, dispatch) => {
@@ -89,6 +90,20 @@ import PropTypes from "prop-types";
         )
       );
     }
+    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+
+  }
+
+  const onCbChange = (action, state, dispatch) => {
+
+    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+
+  }
+
+  const onApplicationTypeChange = (action, state, dispatch) => {
+
+    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+
   }
 
   const locationChanged = () =>{
@@ -135,6 +150,12 @@ import PropTypes from "prop-types";
                 masterName: "APPL_TYPE"
               },
               jsonPath: "lamsStore.Lease[0].applicationType",
+              beforeFieldChange: (action, state, dispatch) => {
+              
+              },
+              afterFieldChange: (action, state, dispatch) => {
+                onApplicationTypeChange(action, state, dispatch);
+              },
               autoSelect: true,
               gridDefination: {
                 xs: 12,
@@ -201,6 +222,12 @@ import PropTypes from "prop-types";
               jsonPath: "lamsStore.Lease[0].tenantId",
               autoSelect: true,
               visible: true,
+              beforeFieldChange: (action, state, dispatch) => {
+              
+              },
+              afterFieldChange: (action, state, dispatch) => {
+                onCbChange(action, state, dispatch);
+              },
               gridDefination: {
                 xs: 12,
                 sm: 4

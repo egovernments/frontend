@@ -87,13 +87,13 @@ export const getLeaseDetailsCard = (inJsonPath) => {
     //divider1: getDivider(),
     leaseDetailsContainer2: getCommonContainer(
       {
-        detailsAndMutDate: getLabelWithValue(
+        landLord: getLabelWithValue(
           {
-            labelName: "Details and Mutation Date",
-            labelKey: "LAMS_DETAILSMUTDATE"
+            labelName: "Land lord",
+            labelKey: "LAMS_LANDLORD"
           },
           {
-            jsonPath: inJsonPath + ".detailsAndMutDate",
+            jsonPath: inJsonPath + ".landLord",
             callBack: checkValueForNA
           }
         ),
@@ -131,16 +131,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
     //divider2: getDivider(),
     leaseDetailsContainer3: getCommonContainer(
       {
-        landLord: getLabelWithValue(
-          {
-            labelName: "Land lord",
-            labelKey: "LAMS_LANDLORD"
-          },
-          {
-            jsonPath: inJsonPath + ".landLord",
-            callBack: checkValueForNA
-          }
-        ),
+
         rentTowardCentGovt: getLabelWithValue(
           {
             labelName: "Rent towards Central Govt",
@@ -168,6 +159,15 @@ export const getLeaseDetailsCard = (inJsonPath) => {
         }
       }
     ),
+    divider2: getDivider(),
+    caption2: getCommonCaption({
+      labelName: "Details and Mutation Date",
+      labelKey: "LAMS_DETAILSMUTDATE"
+    }),
+    value2: getCommonValue({
+      jsonPath: inJsonPath + ".detailsAndMutDate",
+      callBack: addSpace
+    }),
     divider3: getDivider(),
     caption3: getCommonCaption({
       labelName: "Description",

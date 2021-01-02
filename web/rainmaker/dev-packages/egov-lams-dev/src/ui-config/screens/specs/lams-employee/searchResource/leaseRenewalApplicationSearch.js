@@ -214,8 +214,42 @@ export const leaseApplication = getCommonCard({
         sm: 4
       }
     },
+    cb: getCommonContainer({
+      cb: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "AutosuggestContainer",
+        visible:false,
+        props: {
+          sourceJsonPath: "lamsStore.searchScreen.tenantIds",
+          label: {
+            labelName: "Cant Board Name",
+            labelKey: "LAMS_SEARCH_RESULTS_CB_LABEL"
+          },
+          placeholder: {
+            labelName: "Cant Board",
+            labelKey: "LAMS_SEARCH_RESULTS_CB_PLACEHOLDER"
+          },
+          required: false,
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          },
+          className: "autocomplete-dropdown",
+          labelsFromLocalisation: true,
+          isClearable:true,
+        },
+        jsonPath: "searchScreen.tenantId",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      },
+  
+    }),
 
   }),
+  
   
 
   button: getCommonContainer({

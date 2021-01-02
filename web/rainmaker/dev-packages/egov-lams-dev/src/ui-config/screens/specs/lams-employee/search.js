@@ -14,6 +14,7 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import find from "lodash/find";
   import get from "lodash/get";
+  import {getCbsForDeoBasedOnLamsRoles, getLamsRoles} from "../../../../ui-utils/commons"
   
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
@@ -81,6 +82,10 @@ import {
       
       //dispatch(prepareFinalObject("searchScreen.applicationType", [{code: "EXTENSION"},{code: "RENEWAL"}]));
       dispatch(prepareFinalObject("lamsStore.searchScreen.applicationType", [{code: "EXTENSION"},{code: "RENEWAL"}]));
+
+      let cbsOfDeos = getCbsForDeoBasedOnLamsRoles(); //getCbsForDeoBasedOnLamsRoles();
+      dispatch(prepareFinalObject("lamsStore.searchScreen.tenantIds", cbsOfDeos));
+
       getMdmsData(dispatch);
       return action;
     },

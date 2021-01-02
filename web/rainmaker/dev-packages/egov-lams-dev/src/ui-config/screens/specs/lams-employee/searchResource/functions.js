@@ -11,18 +11,32 @@ import {
 import { toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { checkIfTheUserIsDeo, getCbsForDeoBasedOnLamsRoles} from "../../../../../ui-utils/commons";
 
 //Added toggleSpinner for Search by Minju
 export const searchApiCall = async (state, dispatch) => {
   dispatch(toggleSpinner());
   showHideTable(false, dispatch);
+
   let queryObject = [
-    {
-      key: "tenantId",
-      value: getTenantId()
-    },
     { key: "offset", value: "0" }
   ];
+
+  if(checkIfTheUserIsDeo())
+  {
+    let cbs = getCbsForDeoBasedOnLamsRoles();
+    let queryString = "";
+    cbs.forEach(cb => {
+      queryString = queryString+cb.code+","
+    })
+    queryString = queryString?queryString.slice(0, -1):queryString; 
+    queryObject.push({key: "tenantIds",value: queryString});
+  } 
+  else
+  {
+    queryObject.push({key: "tenantId",value: getTenantId()});
+  }
+
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "searchScreen",
@@ -104,6 +118,8 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
+
+
 
     let response = await getSearchResults(queryObject); //tobechanged
     if(!response || !response.leases)

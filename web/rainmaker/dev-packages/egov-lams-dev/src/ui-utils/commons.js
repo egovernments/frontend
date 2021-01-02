@@ -17,10 +17,10 @@ import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import {
   acceptedFiles, getFileUrl,
   getFileUrlFromAPI, getMultiUnits, getQueryArg, setBusinessServiceDataToLocalStorage,
-  deoProcessMappings
 } from "egov-ui-framework/ui-utils/commons";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
+import {deoProcessMappings} from "./constants";
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
@@ -651,6 +651,41 @@ const getAllFileStoreIds = async ProcessInstances => {
     }, {})
   );
 };
+
+export const checkIfTheUserIsDeo = () =>{
+  let lamsRoles = getLamsRoles();
+  let isDeo = false;
+  lamsRoles.forEach(role => {
+    if(role.indexOf("DEO_") > -1)
+    {
+      isDeo = true;
+    }
+  });
+  return isDeo;
+}
+
+export const getCbsForDeoBasedOnLamsRoles = () =>{
+  let lamsRoles = getLamsRoles();
+  let deoName = null;
+  lamsRoles.forEach(role => {
+    if(role.indexOf("DEO_") > -1)
+    {
+      deoName = role.split("_")[1];
+    }
+  });
+  let childCbsForDeo = [];
+  if(deoName!=null)
+    childCbsForDeo = deoProcessMappings()[deoName];
+  let finalList = [];
+  if(childCbsForDeo && childCbsForDeo.length>0)
+  {
+    childCbsForDeo.forEach(cb => {
+      finalList.push({"code": "pb."+cb.toLowerCase()});
+    })
+    return finalList;
+  }
+  return [];
+}
 
 export const getLamsRoles = () =>{
   let userInfo = JSON.parse(localStorageGet("user-info"));

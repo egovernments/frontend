@@ -12,6 +12,7 @@ import {
   import get from "lodash/get";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import jp from "jsonpath";
+  import {eVerify} from "../../../../ui-utils/commons"
 
 const checkIfFormIsValid = async (state, dispatch) => {
 
@@ -53,16 +54,22 @@ const checkIfFormIsValid = async (state, dispatch) => {
       isCompulsaryDocsUploaded = false;
   })
 
+  const selectorsChangesValid = get(
+    state.screenConfiguration.preparedFinalObject,
+    "lamsStore.Lease[0].surveyNo",
+    []
+  )?true:false;
+
   let isCitizenEditScreen = checkIfCitizenEditScreen();
   isFormValid =
   (!process.env.REACT_APP_NAME === "Citizen")? 
     (isCitizenEditScreen? 
       (isCompulsaryDocsUploaded? true:false) : 
-      (( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded) ? true : false)
+      (( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded && selectorsChangesValid) ? true : false)
     ):
     (isCitizenEditScreen? 
       (isCompulsaryDocsUploaded? true:false) : 
-      (( isLeaseDetailsValid && isCompulsaryDocsUploaded) ? true : false)
+      (( isLeaseDetailsValid && isCompulsaryDocsUploaded && selectorsChangesValid) ? true : false)
     );
 
   if (isFormValid) {
@@ -175,6 +182,19 @@ const checkIfFormIsValid = async (state, dispatch) => {
       );
     }
     else
+    if(!selectorsChangesValid)
+    {
+      dispatch(toggleSnackbar(
+        true,
+        {
+          labelName: "Selector Changed Error",
+          labelKey: "LAMS_REQUIRED_SELECTOR_ERROR_MSG"
+        },
+        "info"
+      )
+    );
+    }
+    else
     {
       dispatch(toggleSnackbar(
           true,
@@ -202,6 +222,10 @@ const getCommonApplyFooter = children => {
     },
     children
   };
+};
+
+const callBackeVerify = async (state, dispatch) => {
+  eVerify(state, dispatch);
 };
 
 export const footer = getCommonApplyFooter({
@@ -236,5 +260,37 @@ export const footer = getCommonApplyFooter({
       callBack: callBackSubmit
     },
     visible: true
-  }
+  },
+  // eVerify: {
+  //   componentPath: "Button",
+  //   visible:false,
+  //   props: {
+  //     variant: "outlined",
+  //     color: "primary",
+  //     style: {
+  //       minWidth: "180px",
+  //       height: "48px",
+  //       marginRight: "16px",
+  //       borderRadius: "inherit"
+  //     }
+  //   },
+  //   children: {
+  //     previousButtonIcon: {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Icon",
+  //       props: {
+  //         iconName: "keyboard_arrow_right"
+  //       }
+  //     },
+  //     previousButtonLabel: getLabel({
+  //       labelName: "E Verify",
+  //       labelKey: "LAMS_COMMON_EVERIFY"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: callBackeVerify
+  //   },
+  //   visible: true
+  // }
 });

@@ -53,7 +53,7 @@ class MenuListComposition extends React.Component {
     const { classes, data } = this.props;
     const { open } = this.state;
     return (
-      <div className={classes.root} data-html2canvas-ignore={true}>
+      <div className={classes.root} data-html2canvas-ignore={true} test={"role1"} >
         <div>
           <Button
             buttonRef={node => {
@@ -75,6 +75,8 @@ class MenuListComposition extends React.Component {
                 {...TransitionProps}
                 id="menu-list-grow"
                 style={{
+                  backgroundColor: "red",
+                  width:"200px",
                   transformOrigin:
                     placement === "bottom" ? "center top" : "center bottom"
                 }}
