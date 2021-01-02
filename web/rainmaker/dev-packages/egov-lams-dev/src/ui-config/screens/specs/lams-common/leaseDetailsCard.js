@@ -14,8 +14,17 @@ import {
   getCommonValue,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertEpochToDate, checkValueForNA } from "egov-ui-framework/ui-config/screens/specs/utils";
 
+
+const addSpace = data => {
+  return ""+checkValueForNA(data);;
+};
+
+const addMoneySuffix = data => {
+  data = checkValueForNA(data);
+  return data==="NA"? data: data+" /-";
+};
 
 export const getLeaseDetailsCard = (inJsonPath) => {
   return getCommonGrayCard({
@@ -41,7 +50,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".surveyNo",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         ),
         mutationId: getLabelWithValue(
@@ -51,7 +60,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".mutationId",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         ),
         volume: getLabelWithValue(
@@ -61,7 +70,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".volume",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         ),
         pageOfRegister: getLabelWithValue(
@@ -71,7 +80,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".pageOfRegister",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         )
       }),
@@ -85,7 +94,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".detailsAndMutDate",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         ),
         area: getLabelWithValue(
@@ -95,7 +104,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".area",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         ),
         class: getLabelWithValue(
@@ -104,8 +113,8 @@ export const getLeaseDetailsCard = (inJsonPath) => {
             labelKey: "LAMS_CLASS"
           },
           {
-            jsonPath: inJsonPath + ".class",
-            //callBack: convertEpochToDate
+            jsonPath: inJsonPath + ".classSurvey",
+            callBack: checkValueForNA
           }
         ),
         managedBy: getLabelWithValue(
@@ -115,7 +124,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".managedBy",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         ),
       }),
@@ -129,7 +138,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".landLord",
-            //callBack: convertEpochToDate
+            callBack: checkValueForNA
           }
         ),
         rentTowardCentGovt: getLabelWithValue(
@@ -139,7 +148,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".rentTowardsCentGovt",
-            //callBack: convertEpochToDate
+            callBack: addMoneySuffix
           }
         ),
         rentTowardCB: getLabelWithValue(
@@ -149,7 +158,7 @@ export const getLeaseDetailsCard = (inJsonPath) => {
           },
           {
             jsonPath: inJsonPath + ".rentTowardsCB",
-            //callBack: convertEpochToDate
+            callBack: addMoneySuffix
           }
         ),
       },
@@ -160,137 +169,189 @@ export const getLeaseDetailsCard = (inJsonPath) => {
       }
     ),
     divider3: getDivider(),
-    leaseDetailsContainer4: getCommonContainer(
-      {
-        caption: getCommonCaption({
-          labelName: "Description",
-          labelKey: "LAMS_DESCRIPTION"
-        }),
-        value: getCommonValue({
-          jsonPath: inJsonPath + ".description",
-          //callBack: convertEpochToDate
-        }),
-        // description: getLabelWithValue(
-        //   {
-        //     labelName: "Description",
-        //     labelKey: "LAMS_DESCRIPTION"
-        //   },
-        //   {
-        //     jsonPath: inJsonPath + ".description",
-        //     //callBack: convertEpochToDate
-        //   }
-        // )
-      }),
+    caption3: getCommonCaption({
+      labelName: "Description",
+      labelKey: "LAMS_DESCRIPTION"
+    }),
+    value3: getCommonValue({
+      jsonPath: inJsonPath + ".description",
+      callBack: addSpace
+    }),
+    // leaseDetailsContainer4: getCommonContainer(
+    //   {
+    //     caption: getCommonCaption({
+    //       labelName: "Description",
+    //       labelKey: "LAMS_DESCRIPTION"
+    //     }),
+    //     value: getCommonValue({
+    //       jsonPath: inJsonPath + ".description",
+    //       callBack: addSpace
+    //     }),
+    //     // description: getLabelWithValue(
+    //     //   {
+    //     //     labelName: "Description",
+    //     //     labelKey: "LAMS_DESCRIPTION"
+    //     //   },
+    //     //   {
+    //     //     jsonPath: inJsonPath + ".description",
+    //     //     //callBack: convertEpochToDate
+    //     //   }
+    //     // )
+    //   }),
     divider4: getDivider(),
-    leaseDetailsContainer5: getCommonContainer(
-      {
-        caption: getCommonCaption({
-          labelName: "Occupancy Rights Holder",
-          labelKey: "LAMS_OCCUPANCYRIGHTSHOLDER"
-        }),
-        value: getCommonValue({
-          jsonPath: inJsonPath + ".holderOfOccupancyRights",
-          //callBack: convertEpochToDate
-        }),
-        // holderOfOccupancyRights: getLabelWithValue(
-        //   {
-        //     labelName: "Occupancy Rights Holder",
-        //     labelKey: "LAMS_OCCUPANCYRIGHTSHOLDER"
-        //   },
-        //   {
-        //     jsonPath: inJsonPath + ".holderOfOccupancyRights",
-        //     //callBack: convertEpochToDate
-        //   }
-        // )
-      }),
+    caption4: getCommonCaption({
+      labelName: "Occupancy Rights Holder",
+      labelKey: "LAMS_OCCUPANCYRIGHTSHOLDER"
+    }),
+    value4: getCommonValue({
+      jsonPath: inJsonPath + ".holderOfOccupancyRights",
+      callBack: addSpace
+    }),
+    // leaseDetailsContainer5: getCommonContainer(
+    //   {
+    //     caption: getCommonCaption({
+    //       labelName: "Occupancy Rights Holder",
+    //       labelKey: "LAMS_OCCUPANCYRIGHTSHOLDER"
+    //     }),
+    //     value: getCommonValue({
+    //       jsonPath: inJsonPath + ".holderOfOccupancyRights",
+    //       callBack: addSpace
+    //     }),
+    //     // holderOfOccupancyRights: getLabelWithValue(
+    //     //   {
+    //     //     labelName: "Occupancy Rights Holder",
+    //     //     labelKey: "LAMS_OCCUPANCYRIGHTSHOLDER"
+    //     //   },
+    //     //   {
+    //     //     jsonPath: inJsonPath + ".holderOfOccupancyRights",
+    //     //     //callBack: convertEpochToDate
+    //     //   }
+    //     // )
+    //   }),
     divider5: getDivider(),
-    leaseDetailsContainer6: getCommonContainer(
-      {
-        caption: getCommonCaption({
-          labelName: "Nature of Holder Rights",
-          labelKey: "LAMS_NATUREOFHOLDERRIGHTS"
-        }),
-        value: getCommonValue({
-          jsonPath: inJsonPath + ".natureOfHolderRights",
-          //callBack: convertEpochToDate
-        }),
-        // natureOfHolderRights: getLabelWithValue(
-        //   {
-        //     labelName: "Nature of Holder Rights",
-        //     labelKey: "LAMS_NATUREOFHOLDERRIGHTS"
-        //   },
-        //   {
-        //     jsonPath: inJsonPath + ".natureOfHolderRights",
-        //     //callBack: convertEpochToDate
-        //   }
-        // ),
-      }),
+    caption5: getCommonCaption({
+      labelName: "Nature of Holder Rights",
+      labelKey: "LAMS_NATUREOFHOLDERRIGHTS"
+    }),
+    value5: getCommonValue({
+      jsonPath: inJsonPath + ".natureOfHolderRights",
+      callBack: addSpace
+    }),
+    // leaseDetailsContainer6: getCommonContainer(
+    //   {
+    //     caption: getCommonCaption({
+    //       labelName: "Nature of Holder Rights",
+    //       labelKey: "LAMS_NATUREOFHOLDERRIGHTS"
+    //     }),
+    //     value: getCommonValue({
+    //       jsonPath: inJsonPath + ".natureOfHolderRights",
+    //       callBack: addSpace
+    //     }),
+    //     // natureOfHolderRights: getLabelWithValue(
+    //     //   {
+    //     //     labelName: "Nature of Holder Rights",
+    //     //     labelKey: "LAMS_NATUREOFHOLDERRIGHTS"
+    //     //   },
+    //     //   {
+    //     //     jsonPath: inJsonPath + ".natureOfHolderRights",
+    //     //     //callBack: convertEpochToDate
+    //     //   }
+    //     // ),
+    //   }),
     divider6: getDivider(),
-    leaseDetailsContainer7: getCommonContainer(
-      {
-        caption: getCommonCaption({
-          labelName: "Remarks",
-          labelKey: "LAMS_REMARKS"
-        }),
-        value: getCommonValue({
-          jsonPath: inJsonPath + ".remarks",
-          //callBack: convertEpochToDate
-        }),
-        // remarks: getLabelWithValue(
-        //   {
-        //     labelName: "Remarks",
-        //     labelKey: "LAMS_REMARKS"
-        //   },
-        //   {
-        //     jsonPath: inJsonPath + ".remarks",
-        //     //callBack: convertEpochToDate
-        //   }
-        // )
-      }),
+    caption6: getCommonCaption({
+      labelName: "Remarks",
+      labelKey: "LAMS_REMARKS"
+    }),
+    value6: getCommonValue({
+      jsonPath: inJsonPath + ".remarks",
+      callBack: addSpace
+    }),
+    // leaseDetailsContainer7: getCommonContainer(
+    //   {
+    //     caption: getCommonCaption({
+    //       labelName: "Remarks",
+    //       labelKey: "LAMS_REMARKS"
+    //     }),
+    //     value: getCommonValue({
+    //       jsonPath: inJsonPath + ".remarks",
+    //       callBack: addSpace
+    //     }),
+    //     // remarks: getLabelWithValue(
+    //     //   {
+    //     //     labelName: "Remarks",
+    //     //     labelKey: "LAMS_REMARKS"
+    //     //   },
+    //     //   {
+    //     //     jsonPath: inJsonPath + ".remarks",
+    //     //     //callBack: convertEpochToDate
+    //     //   }
+    //     // )
+    //   }),
     divider7: getDivider(),
-    leaseDetailsContainer8: getCommonContainer(
-      {
-        props:{
-          style:{
-            display:"block",
-          }
+    caption7: getCommonCaption({
+      labelName: "Lease as per GLR",
+      labelKey: "LAMS_AS_PER_GLR",
+      props:{
+        style:{
+          display:"block",
         },
-        caption: getCommonCaption({
-          labelName: "Lease as per GLR",
-          labelKey: "LAMS_AS_PER_GLR",
-          props:{
-            style:{
-              display:"block",
-            }
-          },
-        }),
-        break: getBreak(),
-        value: getCommonValue({
-          jsonPath: inJsonPath + ".lesseAsPerGLR",
-          props:{
-            style:{
-              display:"block",
-            }
-          },
-          //callBack: convertEpochToDate
-        }),
-        // lesseDetails: getLabelWithValue(
-        //   {
-        //     labelName: "Lessee Details",
-        //     labelKey: "LAMS_LESSEEDETAILS"
-        //   },
-        //   {
-        //     jsonPath: inJsonPath + ".lesseeDetails",
-        //     //callBack: convertEpochToDate
-        //   }
-        // ),
       },
-      {
-        style: {
-          overflow: "visible"
+    }),
+    //break: getBreak(),
+    value7: getCommonValue({
+      jsonPath: inJsonPath + ".lesseAsPerGLR",
+      props:{
+        style:{
+          display:"block",
         }
-      }
-    ),
+      },
+      callBack: addSpace
+    }),
+    // leaseDetailsContainer8: getCommonContainer(
+    //   {
+    //     props:{
+    //       style:{
+    //         display:"block",
+    //       }
+    //     },
+    //     caption: getCommonCaption({
+    //       labelName: "Lease as per GLR",
+    //       labelKey: "LAMS_AS_PER_GLR",
+    //       props:{
+    //         style:{
+    //           display:"block",
+    //         },
+    //       },
+    //     }),
+        
+    //     break: getBreak(),
+    //     value: getCommonValue({
+    //       jsonPath: inJsonPath + ".lesseAsPerGLR",
+    //       props:{
+    //         style:{
+    //           display:"block",
+    //         }
+    //       },
+    //       callBack: addSpace
+    //     }),
+    //     // lesseDetails: getLabelWithValue(
+    //     //   {
+    //     //     labelName: "Lessee Details",
+    //     //     labelKey: "LAMS_LESSEEDETAILS"
+    //     //   },
+    //     //   {
+    //     //     jsonPath: inJsonPath + ".lesseeDetails",
+    //     //     //callBack: convertEpochToDate
+    //     //   }
+    //     // ),
+    //   },
+    //   {
+    //     style: {
+    //       overflow: "visible"
+    //     }
+    //   }
+    // ),
     // leaseDetailsContainer: getCommonContainer(
     //   {
     //     termNo: getLabelWithValue(
@@ -340,36 +401,36 @@ export const getLeaseDetailsCard = (inJsonPath) => {
     //     }
     //   }
     // ),
-    divider8: getDivider(),
+    divider9: getDivider(),
 
 
-    leaseDetailsContainer9: getCommonContainer(
-      {
-        caption: getCommonCaption({
-          labelName: "Lease as per GLR",
-          labelKey: "LAMS_AS_PER_GLR"
-        }),
-        break: getBreak(),
-        value: getCommonValue({
-          jsonPath: inJsonPath + ".lesseAsPerGLR",
-          //callBack: convertEpochToDate
-        }),
-        // lesseAsPerGLR: getLabelWithValue(
-        //   {
-        //     labelName: "Lease as per GLR",
-        //     labelKey: "LAMS_AS_PER_GLR"
-        //   },
-        //   {
-        //     jsonPath: inJsonPath + ".lesseAsPerGLR",
-        //     //callBack: convertEpochToDate
-        //   }
-        // )
-      },
-      {
-        style: {
-          overflow: "visible"
-        }
-      }
-    ),
+    // leaseDetailsContainer9: getCommonContainer(
+    //   {
+    //     caption: getCommonCaption({
+    //       labelName: "Lease as per GLR",
+    //       labelKey: "LAMS_AS_PER_GLR"
+    //     }),
+    //     break: getBreak(),
+    //     value: getCommonValue({
+    //       jsonPath: inJsonPath + ".lesseAsPerGLR",
+    //       callBack: addSpace
+    //     }),
+    //     // lesseAsPerGLR: getLabelWithValue(
+    //     //   {
+    //     //     labelName: "Lease as per GLR",
+    //     //     labelKey: "LAMS_AS_PER_GLR"
+    //     //   },
+    //     //   {
+    //     //     jsonPath: inJsonPath + ".lesseAsPerGLR",
+    //     //     //callBack: convertEpochToDate
+    //     //   }
+    //     // )
+    //   },
+    //   {
+    //     style: {
+    //       overflow: "visible"
+    //     }
+    //   }
+    // ),
   });
 }
