@@ -5,6 +5,8 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { checkValueForNA } from "../../utils";
+import store from "ui-redux/store";
+import get from "lodash/get";
 
 const getHeader = label => {
   return {
@@ -105,7 +107,19 @@ export const propertyAssemblySummary = getCommonGrayCard({
           masterName: "PROPSUBUSGTYPE"
         },
         jsonPath: "Property.units[0].usageCategory",
-        callBack: checkValueForNA
+        // callBack: checkValueForNA
+        callBack: value => {
+          let state = store.getState();
+          let finalValue;
+            let propertyType = get( state.screenConfiguration.preparedFinalObject, "Property.propertyType" );
+            let usageType = get( state.screenConfiguration.preparedFinalObject, "Property.usageCategory" );
+            if (propertyType === "BUILTUP.SHAREDPROPERTY" || propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
+              if (usageType === "NONRESIDENTIAL.COMMERCIAL" || usageType === "NONRESIDENTIAL.INDUSTRIAL" || usageType === "NONRESIDENTIAL.INSTITUTIONAL") {
+                finalValue = value;
+              }
+            }
+          return finalValue ? finalValue : "NA";
+        }
       }
     )
   })

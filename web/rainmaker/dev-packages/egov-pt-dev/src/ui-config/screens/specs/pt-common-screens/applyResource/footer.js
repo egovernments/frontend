@@ -260,7 +260,7 @@ const callBackForApply = async (state, dispatch) => {
     try {
       if (propertyPayload.propertyType === 'BUILTUP.SHAREDPROPERTY') {
         let unit = {};
-        unit.usageCategory = propertyPayload.subUsageCategory;
+        unit.usageCategory = propertyPayload.subUsageCategory ? propertyPayload.subUsageCategory : propertyPayload.usageCategory;
         unit.occupancyType = "SELFOCCUPIED";
         unit.constructionDetail = {};
         propertyPayload.units = [];
