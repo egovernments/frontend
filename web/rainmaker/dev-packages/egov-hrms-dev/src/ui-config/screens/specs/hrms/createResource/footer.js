@@ -1,20 +1,20 @@
-import get from "lodash/get";
 import {
   dispatchMultipleFieldChangeAction,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar ,showSpinner ,hideSpinner} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import {
-  getButtonVisibility,
   getCommonApplyFooter,
-  ifUserRoleExists,
+
   validateFields
 } from "../../utils";
-import "./index.css";
 import { createUpdateEmployee, setRolesList } from "../viewResource/functions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import commonConfig from "config/common.js";
+import "./index.css";
 
 
 
@@ -49,25 +49,57 @@ export const callBackForNext = async (state, dispatch) => {
     if (!(isEmployeeDetailsValid && isProfessionalDetailsValid)) {
       isFormValid = false;
     }
-    // let payload = await httpRequest(
-    //   "post",
-    //   `/user/_search?tenantId=${commonConfig.tenantId}`,
-    //   "_search",
-    //   [],
-    //   {
-    //     tenantId:commonConfig.tenantId,
-    //     userName:get(state.screenConfiguration.preparedFinalObject,"Employee[0].user.mobileNumber")
-    //   }
-    // );
-    // if(payload.user.length>0){
-    //   const errorMessage = {
-    //     labelName: "Mobile number already exists . Please try with different mobile number",
-    //     labelKey: "ERR_MOBILE_NUMBER_EXISTS_FIELDS"
-    //   };
-    //   dispatch(toggleSnackbar(true, errorMessage, "error"));
-    //   isFormValid = false;
+    let tenantId = getTenantId();
+    const errorMessage = {
+      labelName: "Mobile number already exists . Please try with different mobile number",
+      labelKey: "ERR_MOBILE_NUMBER_EXISTS_FIELDS"
+    };
+    let existingPhoneNumbers = get(state.screenConfiguration.preparedFinalObject, "existingPhoneNumbers", []);
+    if(get(state.screenConfiguration.preparedFinalObject, "empPhoneNumber")!=get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")){
 
-    // }
+    
+    if (existingPhoneNumbers.includes(get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber"))) {
+      dispatch(toggleSnackbar(true, errorMessage, "error"));
+      return;
+    } else {
+      dispatch(showSpinner());
+try {
+  
+
+      let queryObject = [
+        {
+          key: "phone",
+          value: get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")
+        },
+        {
+          key: "tenantId",
+          value: tenantId
+        }
+      ];
+      const response = await httpRequest(
+        "post",
+        "/egov-hrms/employees/_search",
+        "",
+        queryObject
+      );
+      dispatch(hideSpinner());
+
+      if (response && response.Employees && response.Employees.length == 0) {
+
+
+      } else {
+        dispatch(prepareFinalObject("existingPhoneNumbers", [...existingPhoneNumbers, get(state.screenConfiguration.preparedFinalObject, "Employee[0].user.mobileNumber")]));
+
+        dispatch(toggleSnackbar(true, errorMessage, "error"));
+        return
+      }
+    } catch (error) {
+      dispatch(hideSpinner());
+      dispatch(toggleSnackbar(true,{...errorMessage,labelKey:'HRMS_SEARCH_ERROR'}, "error"));
+      return
+    }
+    }
+  }
   }
   if (activeStep === 1) {
     let jurisdictionDetailsPath =
@@ -95,51 +127,51 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     }
     let assignmentDetailsPath =
-    "components.div.children.formwizardThirdStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
-  let assignmentDetailsItems = get(
-    state.screenConfiguration.screenConfig.create,
-    assignmentDetailsPath,
-    []
-  );
-  let isAssignmentDetailsValid = true;
-  for (var j = 0; j < assignmentDetailsItems.length; j++) {
-    if (
-      (assignmentDetailsItems[j].isDeleted === undefined ||
-        assignmentDetailsItems[j].isDeleted !== false) &&
-      !validateFields(
-        `${assignmentDetailsPath}[${j}].item${j}.children.cardContent.children.asmtDetailsCardContainer.children`,
-        state,
-        dispatch,
-        "create"
+      "components.div.children.formwizardThirdStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
+    let assignmentDetailsItems = get(
+      state.screenConfiguration.screenConfig.create,
+      assignmentDetailsPath,
+      []
+    );
+    let isAssignmentDetailsValid = true;
+    for (var j = 0; j < assignmentDetailsItems.length; j++) {
+      if (
+        (assignmentDetailsItems[j].isDeleted === undefined ||
+          assignmentDetailsItems[j].isDeleted !== false) &&
+        !validateFields(
+          `${assignmentDetailsPath}[${j}].item${j}.children.cardContent.children.asmtDetailsCardContainer.children`,
+          state,
+          dispatch,
+          "create"
+        )
       )
-    )
-      isAssignmentDetailsValid = false;
-  }
-  let assignmentsData = get(
-    state.screenConfiguration.preparedFinalObject.Employee[0],
-    "assignments",
-    []
-  );
-  let atLeastOneCurrentAssignmentSelected = assignmentsData.some(
-    assignment => {
-      return assignment.isCurrentAssignment;
+        isAssignmentDetailsValid = false;
     }
-  );
-  if (!atLeastOneCurrentAssignmentSelected) {
-    const errorMessage = {
-      labelName: "Please select at least one current assignment",
-      labelKey: "ERR_SELECT_CURRENT_ASSIGNMENT"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    return;
-  }
-  if (!isAssignmentDetailsValid) {
-    isFormValid = false;
-  }
-setRolesList(state, dispatch);
+    let assignmentsData = get(
+      state.screenConfiguration.preparedFinalObject.Employee[0],
+      "assignments",
+      []
+    );
+    let atLeastOneCurrentAssignmentSelected = assignmentsData.some(
+      assignment => {
+        return assignment.isCurrentAssignment;
+      }
+    );
+    if (!atLeastOneCurrentAssignmentSelected) {
+      const errorMessage = {
+        labelName: "Please select at least one current assignment",
+        labelKey: "ERR_SELECT_CURRENT_ASSIGNMENT"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return;
+    }
+    if (!isAssignmentDetailsValid) {
+      isFormValid = false;
+    }
+    setRolesList(state, dispatch);
   }
   if (activeStep === 2) {
-  
+
   }
   if (activeStep === 4) {
     moveToReview(dispatch);
