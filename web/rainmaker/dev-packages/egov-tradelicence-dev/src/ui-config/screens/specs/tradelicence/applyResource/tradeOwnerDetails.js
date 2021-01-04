@@ -398,6 +398,9 @@ export const tradeOwnerDetails = getCommonCard({
           labelName: "Type of ownership",
           labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL"
         },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+        },
         placeholder: {
           labelName: "Select Type of Ownership",
           labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_PLACEHOLDER"
@@ -502,6 +505,9 @@ export const tradeOwnerDetails = getCommonCard({
         placeholder: {
           labelName: "Select Type of sub ownership",
           labelKey: "TL_TYPE_OF_SUB_OWNERSHIP_PLACEHOLDER"
+        },
+        props:{
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         },
         jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
         required: true,
