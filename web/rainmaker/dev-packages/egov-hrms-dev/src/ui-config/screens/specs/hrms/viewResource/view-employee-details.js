@@ -4,9 +4,10 @@ import {
   getCommonGrayCard,
   getCommonSubHeader,
   getLabel,
-  getLabelWithValue,
+  getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { checkValueForNA } from "../../utils";
 import { changeStep } from "../createResource/footer";
 
 const gotoCreatePage = (state, dispatch) => {
@@ -95,25 +96,25 @@ export const getEmployeeDetailsView = (isReview = true) => {
           labelName: "Name",
           labelKey: "HR_COMMON_TABLE_COL_NAME",
         },
-        { jsonPath: "Employee[0].user.name" }
+        { jsonPath: "Employee[0].user.name", callBack: checkValueForNA }
       ),
       reviewMobile: getLabelWithValue(
         { labelName: "Mobile No", labelKey: "HR_MOB_NO_LABEL" },
-        { jsonPath: "Employee[0].user.mobileNumber" }
+        { jsonPath: "Employee[0].user.mobileNumber", callBack: checkValueForNA }
       ),
       reviewGuardian: getLabelWithValue(
         {
           labelName: "Guardian's Name",
           labelKey: "HR_GUARDIAN_NAME_LABEL",
         },
-        { jsonPath: "Employee[0].user.fatherOrHusbandName" }
+        { jsonPath: "Employee[0].user.fatherOrHusbandName", callBack: checkValueForNA }
       ),
       reviewFather: getLabelWithValue(
         {
           labelName: "Relationship",
           labelKey: "HR_RELATIONSHIP_LABEL",
         },
-        { jsonPath: "Employee[0].user.relationship" }
+        { jsonPath: "Employee[0].user.relationship", callBack: checkValueForNA }
       ),
       reviewGender: getLabelWithValue(
         { labelName: "Gender", labelKey: "HR_GENDER_LABEL" },
@@ -122,19 +123,19 @@ export const getEmployeeDetailsView = (isReview = true) => {
           localePrefix: {
             moduleName: "COMMON",
             masterName: "GENDER",
-          },
+          }, callBack: checkValueForNA
         }
       ),
       reviewDob: getLabelWithValue(
         { labelName: "Date Of Birth", labelKey: "HR_DOB_LABEL" },
         {
-          jsonPath: "Employee[0].user.dob",
+          jsonPath: "Employee[0].user.dob", callBack: checkValueForNA
         }
       ),
       reviewEmail: getLabelWithValue(
         { labelName: "Email", labelKey: "HR_EMAIL_LABEL" },
         {
-          jsonPath: "Employee[0].user.emailId",
+          jsonPath: "Employee[0].user.emailId", callBack: checkValueForNA
         }
       ),
       reviewAddress: getLabelWithValue(
@@ -143,7 +144,7 @@ export const getEmployeeDetailsView = (isReview = true) => {
           labelKey: "HR_CORRESPONDENCE_ADDRESS_LABEL",
         },
         {
-          jsonPath: "Employee[0].user.correspondenceAddress",
+          jsonPath: "Employee[0].user.correspondenceAddress", callBack: checkValueForNA
         }
       ),
     }),
@@ -158,18 +159,18 @@ export const getEmployeeDetailsView = (isReview = true) => {
           labelName: "Employee ID",
           labelKey: "HR_EMP_ID_LABEL",
         },
-        { jsonPath: "Employee[0].code" }
+        { jsonPath: "Employee[0].code", callBack: checkValueForNA }
       ),
       reviewDOA: getLabelWithValue(
         { labelName: "Date of Appointment", labelKey: "HR_APPT_DATE_LABEL" },
         {
-          jsonPath: "Employee[0].dateOfAppointment",
+          jsonPath: "Employee[0].dateOfAppointment", callBack: checkValueForNA
         }
       ),
       reviewEmpType: getLabelWithValue(
         { labelName: "Employee Type", labelKey: "HR_EMP_TYPE_LABEL" },
         {
-          jsonPath: "Employee[0].employeeType",
+          jsonPath: "Employee[0].employeeType", callBack: checkValueForNA,
           localePrefix: {
             moduleName: "egov-hrms",
             masterName: "EmployeeType",
@@ -182,14 +183,14 @@ export const getEmployeeDetailsView = (isReview = true) => {
           jsonPath: "Employee[0].employeeStatus",
           localePrefix: {
             moduleName: "egov-hrms",
-            masterName: "EmployeeStatus",
+            masterName: "EmployeeStatus", callBack: checkValueForNA
           },
         }
       ),
       reviewRole: getLabelWithValue(
         { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
         {
-          jsonPath: "hrms.reviewScreen.furnishedRolesList",
+          jsonPath: "hrms.reviewScreen.furnishedRolesList", callBack: checkValueForNA
         }
       ),
     }),

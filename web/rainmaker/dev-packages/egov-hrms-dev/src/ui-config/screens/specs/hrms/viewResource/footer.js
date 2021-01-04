@@ -97,8 +97,8 @@ export const hrViewFooter = () => {
         action: "condition",
         callBack: showHideAdhocPopup
       },
-      
-        visible:false
+
+      visible: false
     },
     editDetails: {
       componentPath: "Button",

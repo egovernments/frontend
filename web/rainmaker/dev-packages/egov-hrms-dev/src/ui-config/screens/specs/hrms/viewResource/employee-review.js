@@ -1,11 +1,9 @@
 import { getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import { hrCommonFooter } from "./footer";
+import { getAssignmentDetailsView } from "./view-assignment-details";
 import { getEmployeeDetailsView } from "./view-employee-details";
 import { getJurisdictionDetailsView } from "./view-jurisdiction-details";
-import { getAssignmentDetailsView } from "./view-assignment-details";
-import { getOtherDetailsView } from "./view-other-details";
-import { getServiceDetailsView } from "./view-service-details";
-import { hrCommonFooter } from "./footer";
+
 
 export const employeeReviewDetails = isReview => {
   const viewEmployeeDetails = getEmployeeDetailsView(isReview);

@@ -9,11 +9,17 @@ import {
   getSelectField,
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { get } from "lodash";
 import { showHideAdhocPopup } from "../../utils";
 import { createUpdateEmployee } from "./functions";
 
 const deactivateEmployeeCallback = (state, dispatch) => {
-  createUpdateEmployee(state, dispatch, "DEACTIVATE");
+  let employeeStatus = get(
+    state.screenConfiguration.preparedFinalObject,
+    'employeeStatus',
+    'DEACTIVATE',
+  );
+  createUpdateEmployee(state, dispatch, employeeStatus);
 };
 const activateEmployeeCallback = (state, dispatch) => {
   createUpdateEmployee(state, dispatch, "ACTIVATE");

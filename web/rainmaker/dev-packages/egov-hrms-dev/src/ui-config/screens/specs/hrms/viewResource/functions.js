@@ -17,7 +17,6 @@ import {
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
-import { ActivateEmployee, deactivateEmployee } from "./deactivate-employee";
 
 // SET ALL SIMPLE DATES IN YMD FORMAT
 const setDateInYmdFormat = (obj, values) => {
@@ -230,7 +229,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
   // DEACTIVATE EMPLOYEE VALIDATIONS
   if (action === "DEACTIVATE") {
     const isDeactivateEmployeeDetailsValid = validateFields(
-      `components.deactivateAdhocDialog.children.popup.children.body.children`,
+      `components.adhocDialog.children.popup.children.body.children`,
       state,
       dispatch,
       "view"
@@ -248,9 +247,9 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
       );
       return;
     }
-  }else if(action === "ACTIVATE"){
+  } else if (action === "ACTIVATE") {
     const isDeactivateEmployeeDetailsValid = validateFields(
-      "components.activateAdhocDialog.children.popup.children.body.children",
+      "components.adhocDialog.children.popup.children.body.children",
       state,
       dispatch,
       "view"
@@ -268,7 +267,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
       );
       return;
     }
-    
+
   }
 
   // SET TENANT IDS IF THEY DO NOT ALREADY EXIST
@@ -529,7 +528,7 @@ export const getEmployeeData = async (
       }
     )
   );
-  if (get(response, "Employees[0].employeeStatus", '') == "EMPLOYED") {
+  if (get(response, "Employees[0].isActive", false)) {
     dispatch(
       handleField(
         "view",
@@ -546,8 +545,8 @@ export const getEmployeeData = async (
         true
       )
     );
- 
-    dispatch(prepareFinalObject("employeeStatus",'deactivate'))
+    dispatch(prepareFinalObject("employeeStatus", 'DEACTIVATE'))
+    showActivateDetails(dispatch, false)
   } else {
     dispatch(
       handleField(
@@ -565,7 +564,137 @@ export const getEmployeeData = async (
         false
       )
     );
-    dispatch(prepareFinalObject("employeeStatus",'activate'))
+    dispatch(prepareFinalObject("employeeStatus", 'ACTIVATE'))
+    showActivateDetails(dispatch, true)
   }
   furnishEmployeeData(state, dispatch);
 };
+
+
+
+const showActivateDetails = (dispatch, activate = true) => {
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
+      "jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].reasonForReactivation" : "Employee[0].deactivationDetails[0].reasonForDeactivation"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
+      "props.jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].reasonForReactivation" : "Employee[0].deactivationDetails[0].reasonForDeactivation"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
+      "props.placeholder.labelKey",
+      activate ? "HR_ACTIVATION_REASON_SELECT" : "HR_DEACTIVATION_REASON_SELECT"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.body.children.deactivationReason",
+      "props.label.labelKey",
+      activate ? "HR_ACTIVATION_REASON" : "HR_DEACTIVATION_REASON"
+    )
+  );
+
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.body.children.effectiveDate",
+      "jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].effectiveFrom" : "Employee[0].deactivationDetails[0].effectiveFrom"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.body.children.effectiveDate",
+      "props.jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].effectiveFrom" : "Employee[0].deactivationDetails[0].effectiveFrom"
+    )
+  );
+
+
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.orderNo",
+      "jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].orderNo" : "Employee[0].deactivationDetails[0].orderNo"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.orderNo",
+      "props.jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].orderNo" : "Employee[0].deactivationDetails[0].orderNo"
+    )
+  );
+
+
+
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.remarks",
+      "jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].remarks" : "Employee[0].deactivationDetails[0].remarks"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.remarks",
+      "props.jsonPath",
+      activate ? "Employee[0].reactivationDetails[0].remarks" : "Employee[0].deactivationDetails[0].remarks"
+    )
+  );
+
+
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.upload",
+      "jsonPath",
+      activate ? "ActivationDocuments" : "deactivationDocuments"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.nonMandatoryBody.children.upload",
+      "props.jsonPath",
+      activate ? "ActivationDocuments" : "deactivationDocuments"
+    )
+  );
+
+
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.buttonDiv.children.deactivateButton.children.previousButtonLabel",
+      "props.labelKey",
+      activate ? "HR_ACTIVATE_EMPLOYEE_LABEL" : "HR_DEACTIVATE_EMPLOYEE_LABEL"
+    )
+  );
+  dispatch(
+    handleField(
+      "view",
+      "components.adhocDialog.children.popup.children.header.children.div1.children.div.children.key",
+      "props.labelKey",
+      activate ? "HR_ACTIVATE_EMPLOYEE_HEAD" : "HR_DEACTIVATE_EMPLOYEE_HEAD"
+    )
+  );
+
+
+}
