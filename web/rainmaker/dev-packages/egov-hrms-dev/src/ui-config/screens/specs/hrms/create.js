@@ -254,6 +254,7 @@ const screenConfig = {
   name: "create",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("empPhoneNumber", ""));
     const pickedTenant = getQueryArg(window.location.href, "tenantId");
     pickedTenant &&
       dispatch(prepareFinalObject("Employee[0].tenantId", pickedTenant));
@@ -313,6 +314,7 @@ if(step&&Number(step)>0){
   set(action.screenConfig,"components.div.children.formwizardSecondStep.visible",step=='1'?true:false);
   set(action.screenConfig,"components.div.children.formwizardFirstStep.visible",step=='0'?true:false);
 }
+dispatch(prepareFinalObject("existingPhoneNumbers", []));
     return action;
   },
 

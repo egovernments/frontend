@@ -517,6 +517,7 @@ export const getEmployeeData = async (
   ];
   let response = await getSearchResults(queryObject, dispatch);
   dispatch(prepareFinalObject("Employee", get(response, "Employees")));
+  dispatch(prepareFinalObject("empPhoneNumber", get(response, "Employees[0].user.mobileNumber",'')));
   dispatch(
     handleField(
       "create",
