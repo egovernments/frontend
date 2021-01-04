@@ -14,6 +14,9 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getDetailsForOwner } from "../../utils";
 import get from "lodash/get";
 import "./index.css";
+import { addComponentJsonpath } from "egov-ui-framework/ui-utils/commons";
+import cloneDeep from "lodash/cloneDeep";
+import set from "lodash/set";
 
 const showComponent = (dispatch, componentJsonPath, display, oldStyle = {}) => {
   let displayProps = display ? { ...oldStyle ,display:'block'} : { ...oldStyle, display: "none" };
@@ -560,7 +563,10 @@ export const transfereeDetails = getCommonCard({
   applicantTypeContainer: getCommonContainer({
     applicantTypeSelection: getCommonContainer({
       applicantType: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
+        props: {
           label: {
             labelName: "Ownership Type",
             labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL"
@@ -569,8 +575,6 @@ export const transfereeDetails = getCommonCard({
             labelName: "Select Ownership Type",
             labelKey: "PT_MUTATION_APPLICANT_TYPE_LABEL_PLACEHOLDER"
           },
-          jsonPath:
-            "Property.ownershipCategoryTemp",
           localePrefix: {
             moduleName: "common-masters",
             masterName: "OwnerShipCategory"
@@ -587,16 +591,20 @@ export const transfereeDetails = getCommonCard({
           //   }
           // ],
           required: true,
+          isClearable: true,
+          labelsFromLocalisation: true,
+          // className: "applicant-details-error autocomplete-dropdown",
+          jsonPath: "Property.ownershipCategoryTemp",
           sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
+        },
+          required: true,
+          jsonPath: "Property.ownershipCategoryTemp",
+          sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",        
           gridDefination: {
             xs: 12,
             sm: 12,
             md: 6
           },
-          props: {
-            className: "applicant-details-error"
-          }
-        }),
         beforeFieldChange: (action, state, dispatch) => {
         
           let path = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionType.children.cardContent.children.institutionTypeDetailsContainer.children.privateInstitutionTypeDetails";
@@ -653,7 +661,7 @@ export const transfereeDetails = getCommonCard({
             showComponent(dispatch, institutionTypeContainerJsonPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionTypeContainerJsonPath}.props.style`));
             showComponent(dispatch, singleMultipleOwnerPath, true, get(state, `screenConfiguration.screenConfig.apply.${singleMultipleOwnerPath}.props.style`));
             showComponent(dispatch, institutionPath, false, get(state, `screenConfiguration.screenConfig.apply.${institutionPath}.props.style`));
-
+            addItemInMultiselect(state, dispatch);
 
           }
         },
@@ -709,3 +717,58 @@ export const transfereeDetails = getCommonCard({
     }
   })
 });
+
+export const addItemInMultiselect = (state, dispatch, dynamicInput = {}) => {
+  const {
+    screenKey = "apply",
+    sourceJsonPath = "Property.ownersTemp",
+    prefixSourceJsonPath = "children.cardContent.children.applicantCard.children",
+    componentJsonpath = "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo",
+  } = dynamicInput;
+  const screenConfig = get(state, "screenConfiguration.screenConfig", {});
+  const scheama = get(screenConfig, `${screenKey}.${componentJsonpath}.props.scheama`, {});
+  const items = get(screenConfig, `${screenKey}.${componentJsonpath}.props.items`, []);
+  const itemsLength = items.length;
+
+  if (sourceJsonPath) {
+    let multiItemContent = get(scheama, prefixSourceJsonPath, {});
+    for (var variable in multiItemContent) {
+      if (
+        multiItemContent.hasOwnProperty(variable) &&
+        multiItemContent[variable].props &&
+        multiItemContent[variable].props.jsonPath
+      ) {
+        let prefixJP = multiItemContent[variable].props.jsonPathUpdatePrefix
+          ? multiItemContent[variable].props.jsonPathUpdatePrefix
+          : sourceJsonPath;
+        let splitedJsonPath = multiItemContent[variable].props.jsonPath.split(
+          prefixJP
+        );
+        if (splitedJsonPath.length > 1) {
+          let propertyName = splitedJsonPath[1].split("]");
+          if (propertyName.length > 1) {
+            multiItemContent[
+              variable
+            ].jsonPath = `${prefixJP}[${itemsLength}]${propertyName[1]}`;
+            multiItemContent[
+              variable
+            ].props.jsonPath = `${prefixJP}[${itemsLength}]${
+              propertyName[1]
+              }`;
+            multiItemContent[variable].index = itemsLength;
+          }
+        }
+      }
+    }
+
+    set(scheama, prefixSourceJsonPath, multiItemContent);
+  }
+  items[itemsLength] = cloneDeep(
+    addComponentJsonpath(
+      { [`item${itemsLength}`]: scheama },
+      `${componentJsonpath}.props.items[${itemsLength}]`
+    )
+  );
+  dispatch(handleField(screenKey, componentJsonpath, `props.items`, items));
+
+}
