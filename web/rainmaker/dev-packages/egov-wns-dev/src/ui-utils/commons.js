@@ -82,7 +82,7 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     }
 };
 
-export const getPropertyObj = async (waterConnection) => {
+export const getPropertyObj = async (waterConnection, locality, tenantId) => {
     let uuidsArray = [];
     let uuids = "";
     let propertyArr = [];
@@ -100,6 +100,14 @@ export const getPropertyObj = async (waterConnection) => {
                 } else {
                     queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "uuids", value: uuids }];
                 }
+
+                if(locality) {
+                    queryObject1.push({key: "locality", value: locality})
+                }
+                if(tenantId) {
+                    queryObject1.push({key: "tenantId", value: tenantId})
+                }
+                
                 let payload = await getPropertyResultsWODispatch(queryObject1);
                 if (payload.Properties.length > 0) {
                     for (var j = 0; j < payload.Properties.length; j++) {
@@ -2126,3 +2134,72 @@ export const isWorkflowExists = async (queryObj) => {
         console.log(error);
     }
 }
+
+export const getMdmsDataForBill = async (tenantId)=>{
+    try {
+        // Get the MDMS data for billingPeriod
+        let mdmsBody = {
+            MdmsCriteria: {
+                tenantId: tenantId,
+                moduleDetails: [
+                    { moduleName: "ws-services-masters", masterDetails: [{ name: "billingPeriod" }] },
+                    { moduleName: "sw-services-calculation", masterDetails: [{ name: "billingPeriod" }] }
+                ]
+            }
+        }
+        //Read metered & non-metered demand expiry date and assign value.
+        return await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+
+    } catch (err) { console.log(err) }
+}
+
+export const getOpenSearchResultsForWater = async (queryObject, requestBody, dispatch) => {
+    try {
+        const response = await httpRequest(
+            "post",
+            "/ws-services/wc/_search",
+            "_search",
+            requestBody
+        );
+        if (response.WaterConnection && response.WaterConnection.length == 0) {
+            return response;
+        }
+        let currentTime = new Date().getTime(), locality, tenantId;
+        let result = findAndReplace(response, null, "NA");
+        result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
+        let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
+        let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
+        result.WaterConnection[0].waterSource = waterSource;
+        result.WaterConnection[0].waterSubSource = waterSubSource;
+        requestBody.forEach(value => {if(value.key == "locality") {locality = value.value;}else if(value.key == "tenantId"){tenantId = value.value}});
+        result.WaterConnection = await getPropertyObj(result.WaterConnection, locality, tenantId);
+        return result;
+    } catch (error) { console.log(error) }
+
+
+};
+
+export const getOpenSearchResultsForSewerage = async (queryObject, requestBody, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            "_search",
+            requestBody
+        );
+        if (response.SewerageConnections && response.SewerageConnections.length == 0) {
+            dispatch(toggleSpinner());
+            return response;
+        }
+        let currentTime = new Date().getTime();
+        let result = findAndReplace(response, null, "NA"), locality, tenantId;
+        requestBody.forEach(value => {if(value.key == "locality") {locality = value.value;}else if(value.key == "tenantId"){tenantId = value.value}})
+        result.SewerageConnections = await getPropertyObj(result.SewerageConnections, locality, tenantId);
+        dispatch(toggleSpinner());
+        return result;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error)
+    }
+};
