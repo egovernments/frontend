@@ -1,27 +1,22 @@
-import React from "react";
-import { connect } from "react-redux";
-import get from "lodash/get";
 import { Dialog, DialogContent } from "@material-ui/core";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import React from "react";
+import { connect } from "react-redux";
 
 class DialogContainer extends React.Component {
   handleClose = () => {
-    const { screenKey ,json} = this.props;
+    const { screenKey } = this.props;
     this.props.handleField(
       screenKey,
-      `${screenKey}.components.${json}AdhocDialog`,
+      `${screenKey}.components.adhocDialog`,
       "props.open",
       false
     );
   };
 
   render() {
-    const { open, maxWidth, children ,json} = this.props;
-const child=this.props[json];
-console.log(child);
-
-
-children.props.components.popup={...child}
+    const { open, maxWidth, children } = this.props;
     return (
       <Dialog open={open} maxWidth={maxWidth} onClose={this.handleClose}>
         <DialogContent children={children} />
@@ -34,22 +29,16 @@ const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
   const { screenKey } = ownProps;
   const { screenConfig } = screenConfiguration;
-  let json = get(
-    state.screenConfiguration.preparedFinalObject,
-    'employeeStatus',
-    'deactivate',
-  );
   const open = get(
     screenConfig,
-    `${screenKey}.components.${json}AdhocDialog.props.open`
+    `${screenKey}.components.adhocDialog.props.open`
   );
 
 
   return {
     open,
     screenKey,
-    screenConfig,
-    json
+    screenConfig
   };
 };
 

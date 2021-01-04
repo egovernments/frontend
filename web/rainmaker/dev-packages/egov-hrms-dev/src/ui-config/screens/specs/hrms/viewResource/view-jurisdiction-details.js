@@ -6,8 +6,8 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { checkValueForNA } from "../../utils";
 import { changeStep } from "../createResource/footer";
-import { setRolesList } from "./functions";
 
 
 
@@ -36,22 +36,26 @@ const jurisdictionCard = {
             labelName: "Hierarchy",
             labelKey: "HR_HIERARCHY_LABEL"
           },
-          { jsonPath: "Employee[0].jurisdictions[0].hierarchy",
-          localePrefix :{
-            moduleName : "EGOV_LOCATION",
-            masterName : "TENANTBOUNDARY"
-          }, }
+          {
+            jsonPath: "Employee[0].jurisdictions[0].hierarchy",
+            localePrefix: {
+              moduleName: "EGOV_LOCATION",
+              masterName: "TENANTBOUNDARY"
+            }, callBack: checkValueForNA
+          }
         ),
         reviewBoundaryType: getLabelWithValue(
           {
             labelName: "Boundary Type",
             labelKey: "HR_BOUNDARY_TYPE_LABEL"
           },
-          { jsonPath: "Employee[0].jurisdictions[0].boundaryType",
-          localePrefix :{
-            moduleName : "EGOV_LOCATION",
-            masterName : "BOUNDARYTYPE"
-          }, }
+          {
+            jsonPath: "Employee[0].jurisdictions[0].boundaryType",
+            localePrefix: {
+              moduleName: "EGOV_LOCATION",
+              masterName: "BOUNDARYTYPE"
+            }, callBack: checkValueForNA
+          }
         ),
         reviewBoundary: getLabelWithValue(
           { labelName: "Boundary", labelKey: "HR_BOUNDARY_LABEL" },
@@ -60,7 +64,7 @@ const jurisdictionCard = {
             localePrefix: {
               moduleName: "TENANT",
               masterName: "TENANTS"
-            }
+            }, callBack: checkValueForNA
           }
         ),
         // reviewRole: getLabelWithValue(
@@ -131,7 +135,7 @@ export const getJurisdictionDetailsView = (isReview = true) => {
             action: "condition",
             callBack: (state, dispatch) => {
               changeStep(state, dispatch, "", 1);
-          }
+            }
           }
         }
       }

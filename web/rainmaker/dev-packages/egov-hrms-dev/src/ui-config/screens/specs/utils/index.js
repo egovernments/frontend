@@ -1,22 +1,11 @@
-import {
-  getLabel,
-  getTextField,
-  getCommonSubHeader
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
+import commonConfig from "config/common.js";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import filter from "lodash/filter";
-import { httpRequest } from "../../../../ui-utils/api";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import isUndefined from "lodash/isUndefined";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import commonConfig from "config/common.js";
+import "./index.css";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -40,6 +29,10 @@ export const transformById = (payload, id) => {
       return result;
     }, {})
   );
+};
+
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
 };
 
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
@@ -69,19 +62,15 @@ const style = {
 };
 
 export const showHideAdhocPopup = (state, dispatch) => {
-  let json = get(
-    state.screenConfiguration.preparedFinalObject,
-    'employeeStatus',
-    'deactivate',
-  );
+
   let toggle = get(
     state.screenConfiguration.screenConfig["view"],
-    `components.${json}AdhocDialog.props.open`,
+    `components.adhocDialog.props.open`,
     false
   );
 
   dispatch(
-    handleField("view", `components.${json}AdhocDialog`, "props.open", !toggle)
+    handleField("view", `components.adhocDialog`, "props.open", !toggle)
   );
 };
 
@@ -171,14 +160,14 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item,
-            required: true,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-            statement: getStatementForDocType(item)
-          });
-          return documentsArr;
-        }, [])
+        documentsArr.push({
+          name: item,
+          required: true,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+      }, [])
       : [];
   return documentsArr;
 };
@@ -267,7 +256,7 @@ export const updateDropDowns = async (
           "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
           get(
             state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
-              "common-masters"
+            "common-masters"
             ],
             `StructureType.${structType.split(".")[0]}`,
             []

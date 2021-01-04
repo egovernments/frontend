@@ -126,7 +126,7 @@ export const searchApiCall = async (state, dispatch) => {
           ["HR_COMMON_TABLE_COL_DEPT"]:
             getDeptName(state, currentDepartments) || "-",
           ["HR_COMMON_TABLE_COL_STATUS"]:
-            get(item, "employeeStatus", 'NA')|| "-",
+            get(item, "isActive", false) ? "EMPLOYED" : "RESIGNED" || "-",
           ["HR_COMMON_TABLE_COL_TENANT_ID"]: get(item, "tenantId", "-")
         };
       });
