@@ -108,7 +108,6 @@ export const searchForm = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
-        isClearable: true,
       },
       required: true,
     },
@@ -161,25 +160,25 @@ export const searchForm = getCommonCard({
         optionValue: "code",
         label: {
           labelName: "Department",
-          labelKey: "HR_DEPT_LABEL"
+          labelKey: "HR_ROLE_LABEL"
         },
         placeholder: {
           labelName: "Select Department",
-          labelKey: "HR_DEPT_PLACEHOLDER"
+          labelKey: "HR_ROLE_PLACEHOLDER"
         },
         required: false,
         isClearable: true,
         labelsFromLocalisation: true,
         className: "autocomplete-dropdown",
-        jsonPath: "hrmsSearchScreen.departments",
-        sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+        jsonPath: "hrmsSearchScreen.roles",
+        sourceJsonPath: "searchScreenMdmsData.ACCESSCONTROL-ROLES.roles",
         localePrefix: {
-          moduleName: "common-masters",
-          masterName: "Department"
+          moduleName: "ACCESSCONTROL_ROLES",
+          masterName: "ROLES"
         }
       },
       required: false,
-      jsonPath: "hrmsSearchScreen.departments",
+      jsonPath: "hrmsSearchScreen.roles",
       gridDefination: {
         xs: 12,
         sm: 4
