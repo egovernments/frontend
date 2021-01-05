@@ -36,30 +36,20 @@ import PropTypes from "prop-types";
 
   const onLocatedChanged = (action, state, dispatch) =>{
     loadSurveyNumbers(action, state, dispatch);
-    dispatch(
-      handleField(
-        "newApplication",
-        "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
-        "visible",
-        true
-      )
-    );
+
     const located = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located");
     const LeaseRenewalWorkflowCode = (located === "insideCivil")? "LAMS_NewLR_CEO_V3": "LAMS_NewLR_DEO_V3";
     dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", LeaseRenewalWorkflowCode));
     dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+
+    setVisibilitySurveyNo(action, state, dispatch, true);
+    setVisibilityLeaseDetails(action, state, dispatch, false);
   }
 
   const surveyNoChanged = (action, state, dispatch) => {
     getSurveyDetails(action, state, dispatch);
-    dispatch(
-      handleField(
-        "newApplication",
-        "components.div1.children.details.children.cardContent.children.leaseDetails",
-        "visible",
-        true
-      )
-    );
+    
+    setVisibilityLeaseDetails(action, state, dispatch,true);
   }
 
   const onCategoryChanged = (action, state, dispatch) => {
@@ -91,19 +81,93 @@ import PropTypes from "prop-types";
       );
     }
     dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
-
+    dispatch(prepareFinalObject("lamsStore.allSurveyDetails", []));
   }
 
   const onCbChange = (action, state, dispatch) => {
 
     dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+    dispatch(prepareFinalObject("lamsStore.allSurveyDetails", []));
 
+    dispatch(
+      handleField(
+      "newApplication",
+      "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
+      "props.value",
+      "")
+    );
+
+    dispatch(
+      handleField(
+      "newApplication",
+      "components.div1.children.details.children.cardContent.children.optionSelection.children.located", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
+      "props.value",
+      "")
+    );
+
+    setVisibilitySurveyNo(action, state, dispatch, false);
+    setVisibilityLeaseDetails(action, state, dispatch, false);
+    setVisibilityLocated(action, state, dispatch, true);
   }
 
   const onApplicationTypeChange = (action, state, dispatch) => {
 
     dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+    dispatch(prepareFinalObject("lamsStore.allSurveyDetails", []));
+    dispatch(
+      handleField(
+      "newApplication",
+      "components.div1.children.details.children.cardContent.children.optionSelection.children.located",
+      "props.value",
+      "")
+    );
+    setVisibilityLeaseDetails(action, state, dispatch, false);
+    setVisibilitySurveyNo(action, state, dispatch, false);
 
+  }
+
+  const setVisibilityCant = (action, state, dispatch,visible) =>{
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.cantonment",
+        "visible",
+        visible
+      )
+    );
+  }
+
+  const setVisibilityLocated = (action, state, dispatch, visible) => {
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.located",
+        "visible",
+        visible
+      )
+    );
+  }
+
+  const setVisibilitySurveyNo = (action, state, dispatch, visible) => {
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo",
+        "visible",
+        visible
+      )
+    );
+  }
+
+  const setVisibilityLeaseDetails = (action, state, dispatch, visible) =>{
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.leaseDetails",
+        "visible",
+        visible
+      )
+    );
   }
 
   const locationChanged = () =>{
@@ -203,36 +267,79 @@ import PropTypes from "prop-types";
                 onCategoryChanged(action, state, dispatch);
               },
             }),
-            cantonment: getSelectField({
-              label: {
-                labelName: "Select Cantonment",
-                labelKey: "LAMS_APPL_CANT"
-              },
-              placeholder: {
-                labelName: "Select Cantonment",
-                labelKey: "LAMS_APPL_CANT_PLACEHOLDER"
-              },
-              required: true,
-              //data: null,
-              localePrefix: {
-                moduleName: "TENANT",
-                masterName: "TENANTS"
-              },
-              sourceJsonPath:"lamsStore.allTenants",
-              jsonPath: "lamsStore.Lease[0].tenantId",
-              autoSelect: true,
-              visible: true,
-              beforeFieldChange: (action, state, dispatch) => {
+            cantonment: {
+              uiFramework: "custom-containers-local",
+                moduleName: "egov-lams",
+                componentPath: "AutosuggestContainer",
+                jsonPath: "lamsStore.Lease[0].tenantId",
+                sourceJsonPath: "lamsStore.allTenants",
+                visible:true,
+                props:{
+                  isClearable:true,
+                  className: "autocomplete-dropdown",
+                  suggestions: [],
+                  disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+                  label: {
+                    labelName: "Select Cantonment",
+                    labelKey: "LAMS_APPL_CANT"
+                  },
+                  placeholder: {
+                    labelName: "Select Cantonment",
+                    labelKey: "LAMS_APPL_CANT_PLACEHOLDER"
+                  },
+                  required: true,
+                  jsonPath: "lamsStore.Lease[0].tenantId",
+                  sourceJsonPath: "lamsStore.allTenants",
+                  inputLabelProps: {
+                    shrink: true
+                  },
+                  onClickHandler: (action, state, dispatch) => {
+                    console.log(action,state, dispatch );
+                  },
+                },
+                gridDefination: {
+                  xs: 12,
+                  sm: 4
+                },
+                required: true,
+                beforeFieldChange: (action, state, dispatch) => {
+
+                },
+                afterFieldChange: (action, state, dispatch) => {
+                  onCbChange(action, state, dispatch);
+                },
+            },
+            // cantonment: getSelectField({
+            //   label: {
+            //     labelName: "Select Cantonment",
+            //     labelKey: "LAMS_APPL_CANT"
+            //   },
+            //   placeholder: {
+            //     labelName: "Select Cantonment",
+            //     labelKey: "LAMS_APPL_CANT_PLACEHOLDER"
+            //   },
+            //   required: true,
+            //   //data: null,
+            //   localePrefix: {
+            //     moduleName: "TENANT",
+            //     masterName: "TENANTS"
+            //   },
+
+            //   sourceJsonPath:"lamsStore.allTenants",
+            //   jsonPath: "lamsStore.Lease[0].tenantId",
+            //   autoSelect: true,
+            //   visible: true,
+            //   beforeFieldChange: (action, state, dispatch) => {
               
-              },
-              afterFieldChange: (action, state, dispatch) => {
-                onCbChange(action, state, dispatch);
-              },
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              },
-            }),
+            //   },
+            //   afterFieldChange: (action, state, dispatch) => {
+            //     onCbChange(action, state, dispatch);
+            //   },
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 4
+            //   },
+            // }),
             located: {
               ...getSelectField({
                 label: {
@@ -261,6 +368,7 @@ import PropTypes from "prop-types";
                 jsonPath: "lamsStore.Lease[0].located",
                 autoSelect: true,
               }),
+              visible:false,
               beforeFieldChange: (action, state, dispatch) => {
               
               },
