@@ -92,7 +92,7 @@ export const searchResults = {
           customBodyRender: value => (
             <LabelContainer
               style={
-                value === "EMPLOYED" ? { color: "green" } : { color: "red" }
+                value === "ACTIVE" ? { color: "green" } : { color: "red" }
               }
               labelKey={getStatusKey(value).labelKey}
               labelName={getStatusKey(value).labelName}
