@@ -113,6 +113,7 @@ import { PrivacyPolicy } from "modules/common";
 // });
 import TLHowItWorks from "../../ui-views/PFBRules1977";
 //NOC 
+import NOCHowItWorks from "../../ui-views/HowItWorks";
 import NOCNBCPart4 from "../../ui-views/NBCPart4";
 import NOCAPPFORM from "../../ui-views/NOCAppForm";
 import NOCPFSQuestionnaire from "../../ui-views/PFSQuestionnaire";
@@ -234,6 +235,16 @@ const routes = [
   },
 
   //NOC
+  {
+    path: "fire-noc/how-it-works",
+    component: NOCHowItWorks,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideBackButton: true,
+      title: "NOC_HOW_IT_WORKS",
+    },
+  },
   {
     path: "fire-noc/Nbc-Part4",
     component: NOCNBCPart4,
