@@ -1,10 +1,10 @@
 import React from "react";
 
-const HowItWorks = (props) => {
+const NOCAppForm = (props) => {
   return (
     <div style={{ height: "100vh" }}>
       <iframe
-        src="https://firenoc.lgpunjab.gov.in/downloads/howitworks.pdf#view=FitH&embedded=true"
+        src="https://firenoc.lgpunjab.gov.in/downloads/NOCAppForm.pdf#view=FitH&embedded=true"
         style={{ width: "100%", height: "90%" }}
         frameborder="0"
       />
@@ -16,4 +16,4 @@ const HowItWorks = (props) => {
   );
 };
 
-export default HowItWorks;
+export default NOCAppForm;
