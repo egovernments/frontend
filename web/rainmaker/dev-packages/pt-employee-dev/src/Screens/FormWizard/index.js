@@ -488,7 +488,7 @@ class FormWizard extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC />
+            <OwnershipTypeHOC disabled={propertiesEdited}/>
             {getOwnerDetails(ownerType)}
           </div>
         );

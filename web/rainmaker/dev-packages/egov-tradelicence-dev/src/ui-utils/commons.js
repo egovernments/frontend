@@ -149,6 +149,7 @@ const generateNextFinancialYear = state => {
 
 };
 
+
 export const updatePFOforSearchResults = async (
   action,
   state,
@@ -456,26 +457,15 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       const isRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
       let updateResponse = [];
       if (!isEditFlow) {
-        
-         if(queryObject[0].applicationType === "RENEWAL" && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")
-         {
-         }
-         else{
-          try {
-            dispatch(toggleSpinner());
-          updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
-            Licenses: queryObject
-           })
-           dispatch(toggleSpinner());
-          }
-          catch(e)
-          {
-            dispatch(toggleSpinner());
-            console.log(e);
-          }
-
-         }
-
+        let oldOwners = JSON.parse(
+          JSON.stringify(
+            get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
+          )
+        );
+        set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
+        updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
+          Licenses: queryObject
+        })
       }
       //Renewal flow
     
@@ -726,3 +716,22 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     console.log(e.message)
   }
 }
+export const checkValidOwners=(currentOwners=[],oldOwners=[])=>{
+
+  for (var i = 0, len = currentOwners.length; i < len; i++) { 
+    for (var j = 0, len2 = oldOwners.length; j < len2; j++) { 
+        if (currentOwners[i].name === oldOwners[j].name) {
+          oldOwners.splice(j, 1);
+            len2=oldOwners.length;
+        }
+    }   
+}
+oldOwners=oldOwners&&Array.isArray(oldOwners)&&oldOwners.map(owner=>{
+  return {...owner, userActive :false}
+})
+currentOwners=currentOwners&&Array.isArray(currentOwners)&&currentOwners.map(owner=>{
+  return {...owner, userActive :true}
+})
+
+return [...currentOwners, ...oldOwners];
+ }
