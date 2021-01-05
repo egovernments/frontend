@@ -13,7 +13,14 @@ const styles = theme => ({
 
 class HowItWorks extends React.Component {
   
-  handleClick1 = () => {
+  handleClick = () => {
+
+    let url = window.location.href;
+    let fUrl = url.replace ("fire-noc/home" ,"fire-noc/how-it-works");
+    window.location.href = fUrl;     
+  
+  };
+handleClick1 = () => {
 
     let url = window.location.href;
     let fUrl = url.replace ("fire-noc/home" ,"fire-noc/nbc-part4");
@@ -70,6 +77,16 @@ class HowItWorks extends React.Component {
   render() {
     const { classes } = this.props;
     return [(
+      <div className={classes.root}>
+        <List component="nav">
+          <ListItem button>
+            <ListItemText onClick={this.handleClick}
+            primary="How It Works?" />
+          </ListItem>
+        </List>
+      </div>
+    ),
+     (
       <div className={classes.root}>
         <List component="nav">
           <ListItem button>
