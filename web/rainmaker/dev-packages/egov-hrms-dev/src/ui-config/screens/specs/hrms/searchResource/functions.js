@@ -111,22 +111,20 @@ export const searchApiCall = async (state, dispatch) => {
           .map(assignment => {
             return assignment.department;
           });
-
+let role=get(item, "user.roles", []).map(role => {
+  return ` ${role.name}`;
+}).join();
         return {
           ["HR_COMMON_TABLE_COL_EMP_ID"]: get(item, "code", "-") || "-",
           ["HR_COMMON_TABLE_COL_NAME"]: get(item, "user.name", "-") || "-",
           ["HR_COMMON_TABLE_COL_ROLE"]:
-            get(item, "user.roles", [])
-              .map(role => {
-                return ` ${role.name}`;
-              })
-              .join() || "-",
+            get(item, "user.roles", false)?role&&role.length<50?role:`${role.slice(0,50)}...`: "-",
           ["HR_COMMON_TABLE_COL_DESG"]:
             getDesigName(state, currentDesignations) || "-",
           ["HR_COMMON_TABLE_COL_DEPT"]:
             getDeptName(state, currentDepartments) || "-",
           ["HR_COMMON_TABLE_COL_STATUS"]:
-            get(item, "isActive", false) ? "EMPLOYED" : "RESIGNED" || "-",
+            get(item, "isActive", false) ? "ACTIVE" : "INACTIVE" || "-",
           ["HR_COMMON_TABLE_COL_TENANT_ID"]: get(item, "tenantId", "-")
         };
       });
