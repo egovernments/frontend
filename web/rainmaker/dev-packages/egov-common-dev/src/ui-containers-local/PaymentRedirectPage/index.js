@@ -72,7 +72,7 @@ class PaymentRedirect extends Component {
 
         let searchResponse = await httpRequest(
           "post",
-          getPaymentSearchAPI(get(pgUpdateResponse, "Transaction[0].module", localStorage.getItem('pay-businessService'))) + srcQuery,
+          getPaymentSearchAPI(get(pgUpdateResponse, "Transaction[0].module", localStorage.getItem('pay-businessService'))|| localStorage.getItem('pay-businessService')) + srcQuery,
           "_search",
           [],
           {}
