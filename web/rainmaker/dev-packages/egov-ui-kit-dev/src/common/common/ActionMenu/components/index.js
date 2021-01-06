@@ -344,6 +344,7 @@ class ActionMenuComp extends Component {
                         document.title = item.name;
                         if (item.navigationURL && item.navigationURL.includes('digit-ui')) {
                           window.location.href = item.navigationURL
+                          return;
                         }
                         else {
                           updateActiveRoute(item.path, item.name);

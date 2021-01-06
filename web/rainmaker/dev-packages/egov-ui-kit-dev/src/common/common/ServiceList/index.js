@@ -85,6 +85,7 @@ class ServiceList extends React.Component {
                   onClick={(e) => {
                     if (service.navigationURL && service.navigationURL.includes('digit-ui')) {
                       window.location.href = service.navigationURL;
+                      return;
                     } else {
                       history.push(service.navigationURL);
                     }
@@ -112,6 +113,7 @@ class ServiceList extends React.Component {
                   onClick={(e) => {
                     if (service.navigationURL && service.navigationURL.includes('digit-ui')) {
                       window.location.href = service.navigationURL;
+                      return;
                     } else {
                       history.push(service.navigationURL);
                     }
