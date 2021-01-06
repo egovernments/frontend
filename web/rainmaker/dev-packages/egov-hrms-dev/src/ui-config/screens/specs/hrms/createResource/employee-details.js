@@ -242,6 +242,8 @@ export const professionalDetails = getCommonCard(
             labelName: "Enter Date of Appointment",
             labelKey: "HR_APPOINTMENT_DATE_PLACEHOLDER"
           },
+          isDOB: true,
+          maxDate: getTodaysDateInYMD(),
           pattern: getPattern("Date"),
           jsonPath: "Employee[0].dateOfAppointment",
           props: {

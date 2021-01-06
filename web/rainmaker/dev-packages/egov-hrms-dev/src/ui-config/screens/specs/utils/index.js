@@ -228,7 +228,7 @@ export const epochToYmdDate = et => {
 export const getTodaysDateInYMD = () => {
   let date = new Date();
   let month = date.getMonth() + 1;
-  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  let day = date.getDate() < 9 ? `0${date.getDate()+1}` : date.getDate()+1;
   date = `${date.getFullYear()}-${month}-${day}`;
   return date;
 };

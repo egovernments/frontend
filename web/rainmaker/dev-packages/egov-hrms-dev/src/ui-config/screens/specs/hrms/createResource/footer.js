@@ -127,7 +127,7 @@ try {
       isFormValid = false;
     }
     let assignmentDetailsPath =
-      "components.div.children.formwizardThirdStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
+      "components.div.children.formwizardSecondStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
     let assignmentDetailsItems = get(
       state.screenConfiguration.screenConfig.create,
       assignmentDetailsPath,
@@ -163,6 +163,25 @@ try {
         labelKey: "ERR_SELECT_CURRENT_ASSIGNMENT"
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return;
+    }
+    let assignmentInvalid=false;
+    assignmentsData.map(assignment=>{
+      if(assignment.isCurrentAssignment){
+
+      }else if(!assignment.isCurrentAssignment&&!assignment.toDate){
+        assignmentInvalid=true;
+      }else if(new Date(assignment.toDate)-new Date(assignment.fromDate)<0){
+        assignmentInvalid=true;
+      }
+    })
+    if(assignmentInvalid){
+      isFormValid = false;
+      const errorMessage1 = {
+        labelName: "Please select at least one current assignment",
+        labelKey: "ERR_INAVLID_ASSIGNMENT"
+      };
+      dispatch(toggleSnackbar(true, errorMessage1, "warning"));
       return;
     }
     if (!isAssignmentDetailsValid) {
