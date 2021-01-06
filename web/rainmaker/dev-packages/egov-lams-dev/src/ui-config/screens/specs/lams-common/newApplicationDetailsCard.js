@@ -48,6 +48,10 @@ import PropTypes from "prop-types";
 
   const surveyNoChanged = (action, state, dispatch) => {
     getSurveyDetails(action, state, dispatch);
+
+    const selectedSurveyDetails = get(state.screenConfiguration.preparedFinalObject.lamsStore,"selectedSurveyDetails"); 
+    if(selectedSurveyDetails && selectedSurveyDetails.surveyId)
+      dispatch(prepareFinalObject("lamsStore.Lease[0].surveyId", selectedSurveyDetails.surveyId));
     
     setVisibilityLeaseDetails(action, state, dispatch,true);
   }

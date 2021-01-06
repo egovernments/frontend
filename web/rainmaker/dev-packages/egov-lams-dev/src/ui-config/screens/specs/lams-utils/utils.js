@@ -161,7 +161,7 @@ export const loadSurveyNumbers = async (action, state, dispatch) => {
     //toBeRemoved
     payload = {"leases":[{"lesseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 1","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"123","termNo":"456","area":"12344","termExpiryDate":659989800000,"annualRent":15234},{"lesseAsPerGLR":"Mst.Ram Dulari d/o Sital Persad 2","id":"d466202f-6426-43da-ac4a-06723665e123","surveyNo":"456","termNo":"456","area":"23414","termExpiryDate":659989800000,"annualRent":1234}]};
   }
-  console.log("Survey numbers recieved...",payload);
+  //console.log("Survey numbers recieved...",payload);
   if(payload.leases)
   {
     for (let lease of payload.leases) {
