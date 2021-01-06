@@ -152,6 +152,7 @@ const screenConfig = {
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
         fetchBill(action, state, dispatch, consumerCode, tenantId, businessService);
+        localStorage.setItem('pay-businessService',businessService);
         // fetchBill(action,state, dispatch, consumerCode, tenantId, businessService).then(
         //     response => {
         //         let header = getHeader(state);
