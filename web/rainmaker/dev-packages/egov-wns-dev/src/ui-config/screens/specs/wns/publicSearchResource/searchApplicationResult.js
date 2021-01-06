@@ -47,7 +47,7 @@ export const searchApplicationResult = {
 				options: {
 					filter: false,
 					customBodyRender: (value, tableMeta) => (
-						(value.totalAmount >= 0 && value.totalAmount < 0 && value.status === "Active") ? <div className="linkStyle" onClick={() => getPayDetails(tableMeta)}>
+						((value.totalAmount >= 0 || value.totalAmount < 0 ) && value.status === "Active") ? <div className="linkStyle" onClick={() => getPayDetails(tableMeta)}>
 							<a>{`PAY`}</a>
 						</div> : "NA"
 					)
