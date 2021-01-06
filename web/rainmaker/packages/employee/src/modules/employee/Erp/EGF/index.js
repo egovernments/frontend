@@ -22,8 +22,12 @@ class EGFFinance extends Component {
     winheight = window.innerHeight - 100,
     erp_url,
     tenantId = getTenantId();
+	
+    if (hostname.search("-") != -1)
+    	subdomainurl = hostname.substring(hostname.indexOf("-") + 1);
+    else 
+	subdomainurl = "prod." + hostname.substring(hostname.indexOf(".") + 1);
 
-    subdomainurl = hostname.substring(hostname.indexOf("-") + 1);
     erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-fin-" + subdomainurl + menuUrl;
 
     console.log("ERP URL : " + erp_url);
