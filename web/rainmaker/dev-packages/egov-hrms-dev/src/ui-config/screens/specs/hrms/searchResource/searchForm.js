@@ -177,6 +177,24 @@ export const searchForm = getCommonCard({
         moduleName: "common-masters",
         masterName: "Designation"
       }
+    }),
+     mobileNumber: getTextField({
+      label: {
+        labelName: "Mobile Number",
+        labelKey: "HR_MOBILE_NUMBER_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Mobile Number",
+        labelKey: "HR_MOBILE_NUMBER_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      required: false,
+      pattern: getPattern("phone") || null,
+      errorMessage: "HR_MOBILE_NUMBER_ERR_MSG",
+      jsonPath: "searchScreen.phone"
     })
   }),
 
