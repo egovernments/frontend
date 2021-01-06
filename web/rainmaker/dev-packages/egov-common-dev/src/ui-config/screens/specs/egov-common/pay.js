@@ -153,6 +153,16 @@ const screenConfig = {
         let businessService = getQueryArg(window.location.href, "businessService");
         fetchBill(action, state, dispatch, consumerCode, tenantId, businessService);
         localStorage.setItem('pay-businessService',businessService);
+        let channel = getQueryArg(window.location.href, "channel");
+        let redirectNumber = getQueryArg(window.location.href, "redirectNumber");
+        if(channel){
+            localStorage.setItem('pay-channel',channel);
+            redirectNumber=!redirectNumber.includes('+91')&&redirectNumber.length==10?`+91${redirectNumber}`:redirectNumber
+            localStorage.setItem('pay-redirectNumber',redirectNumber);
+        }else{
+            localStorage.setItem('pay-channel',"");
+            localStorage.setItem('pay-redirectNumber','');
+        }
         // fetchBill(action,state, dispatch, consumerCode, tenantId, businessService).then(
         //     response => {
         //         let header = getHeader(state);
