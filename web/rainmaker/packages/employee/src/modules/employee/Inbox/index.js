@@ -66,7 +66,8 @@ class Inbox extends Component {
             this.props.setRequiredDocumentFlag();
           }
           if (obj.navigationURL && obj.navigationURL.includes('digit-ui')) {
-            window.location.href = obj.navigationURL
+            window.location.href = obj.navigationURL;
+            return;
           } else {
             setRoute(obj.navigationURL)
           }
