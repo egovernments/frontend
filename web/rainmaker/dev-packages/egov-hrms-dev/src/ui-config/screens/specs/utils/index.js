@@ -659,3 +659,21 @@ export const getAdminRole = state => {
     });
   return { hasAdminRole: hasAdminRole, configAdminRoles: configAdminRoles };
 };
+
+
+export const getEpochForDate = date => {
+  const dateSplit = date.split("/");
+  return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
+};
+
+export const sortByEpoch = (data, order) => {
+  if (order) {
+    return data.sort((a, b) => {
+      return a[a.length - 1] - b[b.length - 1];
+    });
+  } else {
+    return data.sort((a, b) => {
+      return b[b.length - 1] - a[a.length - 1];
+    });
+  }
+};

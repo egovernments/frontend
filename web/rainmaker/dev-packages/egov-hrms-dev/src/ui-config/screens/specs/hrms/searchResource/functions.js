@@ -91,7 +91,7 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getSearchResults(queryObject, dispatch);
+    let response = await getSearchResults(queryObject.filter(query=>query.key!='ulb'), dispatch);
     try {
       let data = response.Employees.map(item => {
         // GET ALL CURRENT DESIGNATIONS OF EMPLOYEE

@@ -3,6 +3,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getLocaleLabels, getStatusKey, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import React from "react";
+import { getEpochForDate,  sortByEpoch } from "../../utils";
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -123,6 +124,21 @@ export const searchResults = {
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
         onRowClick(row);
+      }
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
     }
   }

@@ -529,6 +529,15 @@ export const getEmployeeData = async (
       }
     )
   );
+  dispatch(
+    handleField(
+      "create",
+      "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children.employeeId",
+      "props.disabled",
+      true
+    )
+  );
+  
   if (get(response, "Employees[0].isActive", false)) {
     dispatch(
       handleField(
