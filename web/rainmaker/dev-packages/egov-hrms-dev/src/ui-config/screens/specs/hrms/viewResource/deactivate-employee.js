@@ -129,7 +129,8 @@ export const deactivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },
+          value:''
         },
         // data: [
         //   {
@@ -160,7 +161,8 @@ export const deactivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },
+          value:'',
         },
         jsonPath: "Employee[0].deactivationDetails[0].effectiveFrom",
         gridDefination: {
@@ -186,7 +188,7 @@ export const deactivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },value:'',
         },
         jsonPath: "Employee[0].deactivationDetails[0].orderNo",
         gridDefination: {
@@ -200,7 +202,8 @@ export const deactivateEmployee = getCommonContainer({
         props: {
           style: {
             marginLeft: 8
-          }
+          },
+          value:'',
         },
         required: false,
         children: {
@@ -260,7 +263,8 @@ export const deactivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },
+          value:'',
         },
         jsonPath: "Employee[0].deactivationDetails[0].remarks",
         gridDefination: {
@@ -403,7 +407,7 @@ export const ActivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },value:''
         },
         jsonPath: "Employee[0].reactivationDetails[0].reasonForReactivation",
         gridDefination: {
@@ -426,7 +430,7 @@ export const ActivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },value:''
         },
         jsonPath: "Employee[0].reactivationDetails[0].effectiveFrom",
         gridDefination: {
@@ -452,7 +456,7 @@ export const ActivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },value:''
         },
         jsonPath: "Employee[0].reactivationDetails[0].orderNo",
         gridDefination: {
@@ -526,7 +530,7 @@ export const ActivateEmployee = getCommonContainer({
         props: {
           style: {
             width: "100%"
-          }
+          },value:''
         },
         jsonPath: "Employee[0].reactivationDetails[0].remarks",
         gridDefination: {
