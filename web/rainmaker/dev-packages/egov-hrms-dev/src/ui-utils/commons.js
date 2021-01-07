@@ -33,16 +33,8 @@ export const getSearchResults = async (queryObject, dispatch) => {
       "",
       queryObject
     );
-    const response1 = await httpRequest(
-      "post",
-      "/egov-hrms/employees/_search",
-      "",
-      [...queryObject, {
-        key: "isActive",
-        value: false
-      }]
-    );
-    response.Employees = [...response.Employees, ...response1.Employees]
+
+    response.Employees = [...response.Employees]
     return response;
   } catch (error) {
     dispatch(
