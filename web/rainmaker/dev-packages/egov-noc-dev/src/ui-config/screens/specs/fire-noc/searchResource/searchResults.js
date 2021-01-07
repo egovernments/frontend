@@ -102,6 +102,11 @@ export const textToLocalMapping = {
     "WF_FIRENOC_FIELDINSPECTION",
     getTransformedLocalStorgaeLabels()
   ),
+  CITIZENACTIONREQUIRED: getLocaleLabels(
+    "Pending at Citizen",
+    "WF_FIRENOC_CITIZENACTIONREQUIRED",
+    getTransformedLocalStorgaeLabels()
+  ),
   "Search Results for Fire-NOC Applications": getLocaleLabels(
     "Search Results for Fire-NOC Applications",
     "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
