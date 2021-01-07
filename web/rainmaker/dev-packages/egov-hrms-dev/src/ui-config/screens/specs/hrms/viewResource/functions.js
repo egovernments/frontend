@@ -82,6 +82,7 @@ const returnEmptyArrayIfNull = value => {
 };
 
 export const setRolesList = (state, dispatch) => {
+
   let rolesList = get(
     state.screenConfiguration.preparedFinalObject,
     `Employee[0].user.roles`,
@@ -538,6 +539,17 @@ export const getEmployeeData = async (
     )
   );
   
+  const judis=get(response,'Employees[0].jurisdictions',[]);
+  const roles=get(response,'Employees[0].user.roles',[])
+  judis.map(judis=>{
+    if(judis.boundary){
+      judis.roles=roles.filter(role=>role.tenantId==judis.boundary).map(role=>{
+        return {...role,value:role.code,label:role.name}
+      });
+    }
+  })
+  dispatch(prepareFinalObject("Employee", get(response, "Employees")));
+
   if (get(response, "Employees[0].isActive", false)) {
     dispatch(
       handleField(
