@@ -624,7 +624,7 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         dispatch(toggleSnackbarAndSetText(
           true,
           { labelName: error.message, labelKey: error.message },
-          error.message&& error.message.includes&& error.message.includes("No payable demand found") ? "warning" : "error"
+          error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error"
         ))
         dispatch(fetchBillError(error.message));
       }
