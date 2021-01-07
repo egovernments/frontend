@@ -20,12 +20,12 @@ export const searchApplications = {
 	...getCommonCard({
 		subHeader: getCommonTitle({
 			labelName: "Search Property",
-			labelKey: "SEARCH_PROPERTY"
+			labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
 		}),
 		subParagraph: getCommonParagraph({
 			labelName:
 				"Provide at least one of the non-mandatory parameter to search for a property",
-			labelKey: "PT_HOME_SEARCH_PROPERTY_SUB_HEADING"
+			labelKey: "WS_PUBLIC_HOME_SEARCH_CONN_RESULTS_DESC"
 		}),
 
 		searchPropertyContainer: getCommonContainer({
@@ -36,11 +36,11 @@ export const searchApplications = {
 				props: {
 					label: {
 						labelName: "ULB/City",
-						labelKey: "PT_SEARCH_ULB_CITY"
+						labelKey: "WS_SEARCH_ULB_CITY"
 					},
 					placeholder: {
 						labelName: "Select ULB/City",
-						labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
+						labelKey: "WS_SEARCH_ULB_CITY_PLACEHOLDER"
 					},
 					localePrefix: {
 						moduleName: "TENANT",
@@ -63,6 +63,11 @@ export const searchApplications = {
 				beforeFieldChange: async (action, state, dispatch) => {
 					if (action.value) {
 						try {
+							let storageList = localStorage.getItem("storedModulesList");
+							storageList = JSON.parse(storageList);
+							const index = storageList.indexOf(`rainmaker-${action.value}`);
+							let finalList = storageList.splice(index, 1); finalList = JSON.stringify(storageList);
+							if (index > -1) {localStorage.setItem("storedModulesList", finalList)};
 							dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
 							let payload = await httpRequest(
 								"post",
@@ -86,11 +91,11 @@ export const searchApplications = {
 				props: {
 					label: {
 						labelName: "Locality",
-						labelKey: "PT_SEARCH_LOCALITY"
+						labelKey: "WS_SEARCH_LOCALITY"
 					},
 					placeholder: {
 						labelName: "Select Locality",
-						labelKey: "PT_SEARCH_LOCALITY_PLACEHOLDER"
+						labelKey: "WS_SEARCH_LOCALITY_PLACEHOLDER"
 					},
 					localePrefix: {
 						moduleName: "TENANT",
@@ -113,11 +118,11 @@ export const searchApplications = {
 			propertyID: getTextField({
 				label: {
 					labelName: "Property ID",
-					labelKey: "PT_MUTATION_PID"
+					labelKey: "WS_PROPERTY_ID_LABEL"
 				},
 				placeholder: {
 					labelName: "Enter Property ID",
-					labelKey: "PT_PROPERTY_ID_PLACEHOLDER"
+					labelKey: "WS_PROPERTY_ID_PLACEHOLDER"
 				},
 				gridDefination: {
 					xs: 12,
@@ -131,11 +136,11 @@ export const searchApplications = {
 			ownerMobNo: getTextField({
 				label: {
 					labelName: "Owner Mobile No.",
-					labelKey: "PT_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+					labelKey: "WS_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
 				},
 				placeholder: {
 					labelName: "Enter your mobile No.",
-					labelKey: "PT_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+					labelKey: "WS_OWN_DETAIL_MOBILE_NO_PLACEHOLDER"
 				},
 				gridDefination: {
 					xs: 12,
@@ -152,10 +157,10 @@ export const searchApplications = {
 			}),
 			consumerNo: getTextField({
 				label: {
-					labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_LABEL"
+					labelKey: "WS_MYCONNECTIONS_CONSUMER_NO"
 				},
 				placeholder: {
-					labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_PLACEHOLDER"
+					labelKey: "WS_SEARCH_CONNNECTION_CONSUMER_PLACEHOLDER"
 				},
 				gridDefination: {
 					xs: 12,
@@ -192,7 +197,7 @@ export const searchApplications = {
 					children: {
 						buttonLabel: getLabel({
 							labelName: "Reset",
-							labelKey: "PT_HOME_RESET_BUTTON"
+							labelKey: "WS_SEARCH_CONNECTION_RESET_BUTTON"
 						})
 					},
 					onClickDefination: {
@@ -223,7 +228,7 @@ export const searchApplications = {
 					children: {
 						buttonLabel: getLabel({
 							labelName: "Search",
-							labelKey: "PT_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+							labelKey: "WS_SEARCH_CONNECTION_SEARCH_BUTTON"
 						})
 					},
 					onClickDefination: {
