@@ -59,7 +59,6 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 };
 
 export const getSearchResults = async queryObject => {
-  debugger;
   try {
     let businessService = '';
     queryObject && Array.isArray(queryObject) && queryObject.map(query => {
@@ -71,7 +70,6 @@ export const getSearchResults = async queryObject => {
       }
     })
     if (typeof businessService == 'string') {
-      debugger
       const response = await httpRequest(
         "post",
         getPaymentSearchAPI(businessService),
@@ -80,8 +78,16 @@ export const getSearchResults = async queryObject => {
       );
 
       return response;
-    } else if (typeof businessService == 'object') {
-      debugger
+    } else if (process.env.REACT_APP_NAME === "Citizen"){
+      const response = await httpRequest(
+        "post",
+        getPaymentSearchAPI('-1'),
+        "",
+        queryObject
+      );
+
+      return response;
+    }else if (typeof businessService == 'object') {
       const response = { "Payments": [] };
       businessService.map(async (businessSer) => {
         try {

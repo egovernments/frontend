@@ -1100,6 +1100,9 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
 
 
 export const getPaymentSearchAPI = (businessService='')=>{
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }
   return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`
 }
 
