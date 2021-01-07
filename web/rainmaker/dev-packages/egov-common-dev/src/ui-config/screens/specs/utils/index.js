@@ -507,13 +507,15 @@ export const getBill = async (queryObject, dispatch) => {
     );
     return response;
   } catch (error) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelKey: error.message },
-        error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error"
-      )
-    );
+    if(!window.location.pathname.includes('acknowledgement')){
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+          error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error"
+        )
+      );
+    }
   }
 };
 
