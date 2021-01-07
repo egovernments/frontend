@@ -52,10 +52,10 @@ const getAddress = item => {
 export const getPayload = (searchScreenObject) => {
     let querryObject = [];
     if (searchScreenObject) {
-        if (searchScreenObject.connectionNo) {
+        if (searchScreenObject.connectionNumber) {
             querryObject.push({
-                key: "connectionNo",
-                value: searchScreenObject.connectionNo,
+                key: "connectionNumber",
+                value: searchScreenObject.connectionNumber,
             });
         }
         if (searchScreenObject.mobileNumber) {
@@ -65,7 +65,7 @@ export const getPayload = (searchScreenObject) => {
             });
         }
         if (searchScreenObject.ids) {
-            querryObject.push({ key: "propertyIds", value: searchScreenObject.ids });
+            querryObject.push({ key: "propertyId", value: searchScreenObject.ids });
         }
         if (searchScreenObject.locality) {
             querryObject.push({
@@ -99,7 +99,28 @@ const searchApiCall = async (state, dispatch) => {
         {}
     );
 
-    if (searchScreenObject.tenantId && searchScreenObject.locality && !(searchScreenObject.ids || searchScreenObject.mobileNumber || searchScreenObject.ownerName)) {
+    const isSearchBoxFirstRowValid = validateFields(
+        "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children",
+        state,
+        dispatch,
+        "public-search"
+      );
+    
+      if (!isSearchBoxFirstRowValid) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Please fill valid fields to search",
+              labelKey: "ERR_PT_FILL_VALID_FIELDS"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+
+    if (searchScreenObject.tenantId && searchScreenObject.locality && !(searchScreenObject.ids || searchScreenObject.mobileNumber || searchScreenObject.ownerName || searchScreenObject.connectionNumber)) {
         store.dispatch(
             toggleSnackbar(
                 true,
@@ -113,7 +134,7 @@ const searchApiCall = async (state, dispatch) => {
         );
         return;
     } else {
-        // removeValidation(state, dispatch);
+        removeValidation(state, dispatch);
         let requestBody = getPayload(searchScreenObject);
         let payloadbillingPeriod;
         let tenantId = searchScreenObject.tenantId;
@@ -163,10 +184,11 @@ const showResults = (connections, tenantId, dispatch) => {
     showHideTable(true, dispatch);
 }
 
-export const resetFields = (state) => {
+export const resetFields = (state, dispatch) => {
     let ulbCityValue = get(state, "screenConfiguration.preparedFinalObject.searchScreen.tenantId", "");
+    let localityValue = get(state, "screenConfiguration.preparedFinalObject.searchScreen.locality.code", "");
     if (ulbCityValue) {
-        store.dispatch(
+        dispatch(
             handleField(
                 "public-search",
                 "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.ulbCity",
@@ -176,7 +198,18 @@ export const resetFields = (state) => {
         );
     }
 
-    store.dispatch(
+    if(localityValue) {
+        dispatch(
+            handleField(
+                "public-search",
+                "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.locality",
+                "props.value",
+                ""
+            )
+        );
+    }
+
+    dispatch(
         handleField(
             "public-search",
             "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.ownerMobNo",
@@ -184,7 +217,7 @@ export const resetFields = (state) => {
             ""
         )
     );
-    store.dispatch(
+    dispatch(
         handleField(
             "public-search",
             "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.propertyID",
@@ -192,7 +225,7 @@ export const resetFields = (state) => {
             ""
         )
     );
-    store.dispatch(
+    dispatch(
         handleField(
             "public-search",
             "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.consumerNo",
@@ -200,4 +233,5 @@ export const resetFields = (state) => {
             ""
         )
     );
+    removeValidation(state, dispatch);
 }

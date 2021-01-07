@@ -11,10 +11,10 @@ import { serviceConst } from "../../../../../ui-utils/commons";
 export const ComponentJsonPath = {
   ulbCity:
     "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.ulbCity",
+  locality:
+    "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.locality",
   consumerNo:
     "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.consumerNo",
-  ownerName:
-    "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.ownerName",
   ownerMobNo:
     "components.div.children.searchApplications.children.cardContent.children.searchPropertyContainer.children.ownerMobNo",
   propertyID:
@@ -221,11 +221,14 @@ export const getPropertyWithBillAmount = (propertyResponse, billResponse, type, 
               propertyResponse.WaterConnection[key].totalAmount = bill.totalAmount;
               if (type === "WATER") {
                 propertyResponse.WaterConnection[key].businessService = "WS";
+              if(bill && bill.billDetails && bill.billDetails.length > 0 && bill.billDetails[0].toPeriod)  {
                 propertyResponse.WaterConnection[key].updatedDueDate = (item.connectionType === 'Metered' ?
-                  (bill.billDetails[0].toPeriod + waterMeteredDemandExipryDate) :
-                  (bill.billDetails[0].toPeriod + waterNonMeteredDemandExipryDate));
+                (bill.billDetails[0].toPeriod + waterMeteredDemandExipryDate) :
+                (bill.billDetails[0].toPeriod + waterNonMeteredDemandExipryDate));
+              }
               } else {
                 propertyResponse.WaterConnection[key].businessService = "SW";
+              if(bill && bill.billDetails && bill.billDetails.length > 0 && bill.billDetails[0].toPeriod) 
                 propertyResponse.WaterConnection[key].updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
               }
             }
@@ -233,6 +236,7 @@ export const getPropertyWithBillAmount = (propertyResponse, billResponse, type, 
         });
       } else {
         propertyResponse.SewerageConnections.map((item, key) => {
+          let sewerageNonMeteredDemandExpiryDate = 0;
           if (item.service === serviceConst.SEWERAGE && payloadbillingPeriod.MdmsRes['sw-services-calculation'] && payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== undefined && payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod !== null) {
             payloadbillingPeriod.MdmsRes['sw-services-calculation'].billingPeriod.forEach(obj => {
               if (obj.connectionType === 'Non Metered') {
@@ -243,8 +247,9 @@ export const getPropertyWithBillAmount = (propertyResponse, billResponse, type, 
           billResponse.Bill.map(bill => {
             if (bill.consumerCode === item.connectionNo) {
               propertyResponse.SewerageConnections[key].totalAmount = bill.totalAmount;
-              propertyResponse.WaterConnection[key].businessService = "SW";
-              propertyResponse.WaterConnection[key].updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
+              propertyResponse.SewerageConnections[key].businessService = "SW";
+              if(bill && bill.billDetails && bill.billDetails.length > 0 && bill.billDetails[0].toPeriod) 
+              propertyResponse.SewerageConnections[key].updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
             }
           });
         });
