@@ -27,7 +27,7 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { setBusinessServiceDataToLocalStorage ,getFileUrl, enableFieldAndHideSpinner} from "egov-ui-framework/ui-utils/commons";
+import { setBusinessServiceDataToLocalStorage, getFileUrl, enableFieldAndHideSpinner } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
 export const updateTradeDetails = async requestBody => {
@@ -59,23 +59,52 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 };
 
 export const getSearchResults = async queryObject => {
+  debugger;
   try {
     let businessService = '';
     queryObject && Array.isArray(queryObject) && queryObject.map(query => {
       if (query.key == "businessServices") {
         businessService = query.value;
+        if (typeof businessService == 'object') {
+          query.value = businessService.join();
+        }
       }
     })
-    const response = await httpRequest(
-      "post",
-      getPaymentSearchAPI(businessService),
-      "",
-      queryObject
-    );
+    if (typeof businessService == 'string') {
+      debugger
+      const response = await httpRequest(
+        "post",
+        getPaymentSearchAPI(businessService),
+        "",
+        queryObject
+      );
 
-    return response;
+      return response;
+    } else if (typeof businessService == 'object') {
+      debugger
+      const response = { "Payments": [] };
+      businessService.map(async (businessSer) => {
+        try {
+          let respo = await httpRequest(
+            "post",
+            getPaymentSearchAPI(businessSer),
+            "",
+            queryObject
+          )
+          response.Payments.push(...respo.Payments);
+
+        } catch (e) {
+          console.log(e);
+        }
+      })
+      if (response.Payments.length == 0) {
+        throw { message: 'PAYMENT_SEARCH_FAILED' };
+      }
+      return response;
+    }
+
   } catch (error) {
-    enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",store.dispatch);
+    enableFieldAndHideSpinner('search', "components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton", store.dispatch);
     console.error(error);
     store.dispatch(
       toggleSnackbar(
@@ -107,7 +136,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
             (fileUrlPayload &&
               fileUrlPayload[item.fileStoreId] &&
               decodeURIComponent(
-                getFileUrl( fileUrlPayload[item.fileStoreId])
+                getFileUrl(fileUrlPayload[item.fileStoreId])
                   .split("?")[0]
                   .split("/")
                   .pop()
@@ -146,9 +175,9 @@ export const getBoundaryData = async (
     const tenantId =
       process.env.REACT_APP_NAME === "Employee"
         ? get(
-            state.screenConfiguration.preparedFinalObject,
-            "Licenses[0].tradeLicenseDetail.address.city"
-          )
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0].tradeLicenseDetail.address.city"
+        )
         : getQueryArg(window.location.href, "tenantId");
 
     const mohallaData =
@@ -161,8 +190,8 @@ export const getBoundaryData = async (
           name: `${tenantId
             .toUpperCase()
             .replace(/[.]/g, "_")}_REVENUE_${item.code
-            .toUpperCase()
-            .replace(/[._:-\s\/]/g, "_")}`
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}`
         });
         return result;
       }, []);

@@ -108,12 +108,13 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
-        required: false,
+        required: true,
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
       },
+      required: true,
       jsonPath: "searchScreenMdmsData.businessServiceSelected",
       gridDefination: {
         xs: 12,
