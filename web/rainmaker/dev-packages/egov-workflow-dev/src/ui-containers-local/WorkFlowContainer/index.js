@@ -499,7 +499,6 @@ class WorkFlowContainer extends React.Component {
     }
     return editAction;
   };
-
   prepareWorkflowContract = (data, moduleName) => {
     const {
       getRedirectUrl,
