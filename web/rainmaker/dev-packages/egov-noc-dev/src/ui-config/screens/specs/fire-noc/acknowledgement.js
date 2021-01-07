@@ -415,35 +415,6 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "sendbacktocitizen" && status === "success") {
-    return {
-      header: getHeader(applicationNumber),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName: "Application is sent back to Citizen Successfully",
-              labelKey: "TL_SENDBACK_TOCITIZEN_CHECKLIST_MESSAGE_HEAD"
-            },
-            // body: {
-            //   labelName:
-            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-            //   labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
-            // },
-            tailText: {
-              labelName: "Application No.",
-              labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
-            },
-            number: applicationNumber
-          })
-        }
-      },
-      gotoHomeFooter
-    };
   }else if (purpose === "refer" && status === "success") {
     return {
       header,
