@@ -407,6 +407,8 @@ export const handleFileUpload = (event, handleDocument, props) => {
         alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
         uploadDocument = false;
       }
+      //VAPT observation --Showing error in case of invalid file
+      try{
       if (uploadDocument) {
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(
@@ -425,6 +427,10 @@ export const handleFileUpload = (event, handleDocument, props) => {
           );
           handleDocument(file, fileStoreId);
         }
+      }
+      }catch(err){
+        console.log("Error catched",err);
+        alert(`Error in uploading file.Please upload valid file`);
       }
     });
   }
