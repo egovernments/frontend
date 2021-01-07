@@ -64,10 +64,12 @@ export const searchApplications = {
 					if (action.value) {
 						try {
 							let storageList = localStorage.getItem("storedModulesList");
+							if(storageList) {
 							storageList = JSON.parse(storageList);
 							const index = storageList.indexOf(`rainmaker-${action.value}`);
 							let finalList = storageList.splice(index, 1); finalList = JSON.stringify(storageList);
 							if (index > -1) {localStorage.setItem("storedModulesList", finalList)};
+							}
 							dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
 							let payload = await httpRequest(
 								"post",
