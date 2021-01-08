@@ -31,7 +31,7 @@ class UserSettings extends Component {
     },
     label: {
       color: "#5F5C57",
-      fontSize: "12px",
+      fontSize: "14px",
       paddingRight: "0px",
     },
     arrowIconStyle: {

@@ -518,14 +518,12 @@ export const changeStep = (
     const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === "PENDINGAPPLFEE") {
-        console.log("PENDINGAPPLFEE::::");
         isAppFeeReqd = true;
         break;
       }
      
     }
   } 
-  console.log("isAppFeeReqd::::",isAppFeeReqd);
   const isPayButtonVisible = (activeStep===3 && !isAppFeeReqd) ? true : false;
   const isAppPayButtonVisible = (activeStep===3 && isAppFeeReqd)  ? true : false;
 
@@ -1091,7 +1089,19 @@ export const footerReviewTop = (
     },
     leftIcon: "assignment"
   };
-
+  const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+  let isAppFeeReqd = false;
+  if (!isEmpty(businessServiceData)) {
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => (item.businessService === "NewTL" ||"EDITRENEWAL"))
+    const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].state === "PENDINGAPPLFEE") {
+        isAppFeeReqd = true;
+        break;
+      }
+     
+    }
+  }
   switch (status) {
     case "APPROVED":
       downloadMenu = [
@@ -1104,36 +1114,75 @@ export const footerReviewTop = (
         receiptPrintObject,
         applicationPrintObject
       ];
-      const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
-      let isAppFeeReqd = false;
-      if (!isEmpty(businessServiceData)) {
-        const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => (item.businessService === "NewTL" ||"EDITRENEWAL"))
-        const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
-        for (var i = 0; i < states.length; i++) {
-          if (states[i].state === "PENDINGAPPLFEE") {
-            console.log("PENDINGAPPLFEE::::");
-            isAppFeeReqd = true;
-            break;
-          }
-         
-        }
-      } 
+      
     if(isAppFeeReqd){
       downloadMenu.push(appFeeReceiptDownloadObject);
       printMenu.push(appFeeReceiptPrintObject);
     }
       break;
     case "APPLIED":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "CITIZENACTIONREQUIRED":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "FIELDINSPECTION":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "PENDINGAPPROVAL":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
       break;
     case "pending_approval":
       downloadMenu = [receiptDownloadObject, applicationDownloadObject];
       printMenu = [receiptPrintObject, applicationPrintObject];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
@@ -1300,19 +1349,7 @@ export const downloadPrintContainer = (
     },
     leftIcon: "assignment"
   };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        tlCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        tlCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+  const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
       let isAppFeeReqd = false;
       if (!isEmpty(businessServiceData)) {
         const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => (item.businessService === "NewTL" ||"EDITRENEWAL"))
@@ -1325,19 +1362,80 @@ export const downloadPrintContainer = (
           }
          
         }
-      } 
+      }
+  switch (status) {
+    case "APPROVED":
+      downloadMenu = [
+        tlCertificateDownloadObject,
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        tlCertificatePrintObject,
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+       
     if(isAppFeeReqd){
       downloadMenu.push(appFeeReceiptDownloadObject);
       printMenu.push(appFeeReceiptPrintObject);
     }
       break;
     case "APPLIED":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "CITIZENACTIONREQUIRED":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "FIELDINSPECTION":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "PENDINGAPPROVAL":
+      downloadMenu = [
+        applicationDownloadObject
+      ];
+      printMenu = [
+        applicationPrintObject
+      ];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
+      break;
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
+      if(isAppFeeReqd){
+        downloadMenu.push(appFeeReceiptDownloadObject);
+        printMenu.push(appFeeReceiptPrintObject);
+      }
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];

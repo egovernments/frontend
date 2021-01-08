@@ -76,7 +76,7 @@ export const confirmationDialog = getCommonContainer({
             action: "condition",
             callBack: (state, dispatch) => {
               let cancelComment = get(state.screenConfiguration.preparedFinalObject , "Challan.additionalDetail.cancellComment");
-              if(cancelComment.length<=100)
+              if(cancelComment && cancelComment.length<=100)
               {
                 cancelChallan(state, dispatch, "CANCELLED");
               }

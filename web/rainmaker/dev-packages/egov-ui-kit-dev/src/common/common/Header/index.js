@@ -165,7 +165,7 @@ class Header extends Component {
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
-      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://raw.githubusercontent.com/belegovgithub/egov-mdms-data/BEL-CB-Impl/data/pb/images/dgde-logo.png";
+      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://raw.githubusercontent.com/belegovgithub/webaccess/master/images/dgde-logo.png";
     return (
       <div style={headerStyle}>
         <AppBar
