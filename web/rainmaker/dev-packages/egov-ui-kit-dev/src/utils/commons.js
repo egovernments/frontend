@@ -946,22 +946,22 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
 export const isDocumentValid = (docUploaded, requiredDocCount) => {
   const totalDocsKeys = Object.keys(docUploaded) || [];
   let isValid = true;
-    for (let key = 0; key < totalDocsKeys.length; key++) {
-      if(docUploaded[key].isDocumentRequired) {
-        if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
-          isValid = true;
-        } else {
-          isValid = false;
-          break;
-        }
-      }else{
-        if (docUploaded[key].documents && (!docUploaded[key].dropdown || !docUploaded[key].dropdown.value)) {
-          isValid = false;
-          break;
-        }
+  for (let key = 0; key < totalDocsKeys.length; key++) {
+    if (docUploaded[key].isDocumentRequired) {
+      if (docUploaded[key].documents && docUploaded[key].dropdown && docUploaded[key].dropdown.value) {
+        isValid = true;
+      } else {
+        isValid = false;
+        break;
+      }
+    } else {
+      if (docUploaded[key].documents && (!docUploaded[key].dropdown || !docUploaded[key].dropdown.value)) {
+        isValid = false;
+        break;
       }
     }
-    return isValid;
+  }
+  return isValid;
 }
 
 export const getMohallaData = (payload, tenantId) => {
@@ -1039,7 +1039,7 @@ export const getModuleName = () => {
   else if (pathName.indexOf("receipts") > -1) { return "rainmaker-receipts"; }
   else if (pathName.indexOf("property-tax") > -1 || pathName.indexOf("rainmaker-pt") > -1 || pathName.indexOf("pt-mutation") > -1) { return "rainmaker-pt,rainmaker-pgr"; }
   else if (pathName.indexOf("pt-common-screens") > -1 || pathName.indexOf("pt-mutation/public-search") > -1) { return "rainmaker-pt"; }
-  else if (pathName.indexOf("complaint") > -1  || pathName.indexOf("pgr") > -1  ||  pathName.indexOf("resolve-success") > -1 || pathName.indexOf("employee-directory") > -1 || pathName.indexOf("reopen-acknowledgement") > -1|| pathName.indexOf("feedback") > -1|| pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
+  else if (pathName.indexOf("complaint") > -1 || pathName.indexOf("pgr") > -1 || pathName.indexOf("resolve-success") > -1 || pathName.indexOf("employee-directory") > -1 || pathName.indexOf("reopen-acknowledgement") > -1 || pathName.indexOf("feedback") > -1 || pathName.indexOf("request-reassign") > -1 || pathName.indexOf("reassign-success") > -1) { return "rainmaker-pgr"; }
   else if (pathName.indexOf("wns") > -1 || pathName.indexOf("wns/public-search")) { return "rainmaker-ws"; }
   else if (pathName.indexOf("tradelicense") > -1 || pathName.indexOf("rainmaker-tl") > -1 || pathName.indexOf("tradelicence") > -1 || pathName.indexOf("tradelicense-citizen") > -1) { return "rainmaker-tl"; }
   else if (pathName.indexOf("hrms") > -1) { return "rainmaker-hr"; }
@@ -1099,10 +1099,13 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
 
 
 
-export const getPaymentSearchAPI = (businessService='')=>{
-  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`
+export const getPaymentSearchAPI = (businessService = '') => {
+  if (process.env.REACT_APP_NAME === "Citizen") {
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+  }
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
 }
 
-export const getFetchBillAPI = ()=>{
+export const getFetchBillAPI = () => {
   return `${FETCHBILL.GET.URL}`
 }
