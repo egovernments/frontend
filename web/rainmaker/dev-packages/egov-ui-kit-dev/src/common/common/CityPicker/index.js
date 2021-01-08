@@ -13,8 +13,12 @@ class CityPickerDialog extends Component {
 
   componentDidMount = async () => {
     document.getElementById("person-city").addEventListener("focus", function() {
-      this.blur();
-    });
+      blur();
+      this.setState({
+        open: true,
+        searchTerm: "",
+      });
+    }.bind(this));
   };
 
   componentWillUnmount() {
