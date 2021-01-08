@@ -1,5 +1,5 @@
 import commonConfig from "config/common.js";
-import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -26,6 +26,19 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
+
+export const downloadSelfDeclerationForm = async (state, dispatch) => {  
+  try{
+    const helpurl = get(state.screenConfiguration.preparedFinalObject,
+      "selfDecFormURL",
+      ""
+    );  
+    window.open(helpurl,"_blank");
+  }catch(er){
+    console.log("errror in opening pdf ",er);
+  }
+  
+}
 export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"
@@ -50,24 +63,92 @@ export const header = getCommonContainer({
     visible: false
   }
 });
-
-export const tradeDocumentDetails = getCommonCard({
+const headerrow = getCommonContainer({
   header: getCommonTitle(
     {
       labelName: "Required Documents",
       labelKey: "TL_NEW-UPLOAD-DOCS_HEADER"
     },
-    {
-      style: {
-        marginBottom: 18
-      }
+  )
+});
+export const tradeDocumentDetails = getCommonCard({
+  
+  div: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    children: {
+      
+      headerDiv: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+        children: {
+          header1: {
+            gridDefination: {
+              xs: 8,
+              sm: 8
+            },
+            ...headerrow
+          }
+          ,
+          helpSection: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+              color: "primary",
+              style: { justifyContent: "flex-end" }, 
+            },
+            gridDefination: {
+              xs: 4,
+              sm: 4,
+              align: "right"
+            },
+            children : {
+              helpPdfButton:{
+                componentPath:"Button", 
+               
+         
+                props:{
+                  //variant: "outlined",
+                  color:"primary",                 
+                  style: { textAlign: "right", display: "flex" },
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: (state, dispatch) => {
+                  downloadSelfDeclerationForm(state, dispatch);
+                  }
+                },
+                children:{
+                  
+                  nextButtonIcon:{
+                    uiFramework:"custom-atoms",
+                    componentPath:"Icon",
+                    props:{
+                      iconName:"cloud_download"
+                    }
+                  },
+                  nextButtonLabel:getLabel({
+                    labelName:"Self Declearation Form",
+                    labelKey:"TL_SELFDECLERATION_FORM"
+                  }),
+                },
+                            
+               }
+            }
+          }
+        }
+      },
+       
+      
+      
+       paragraph: getCommonParagraph({
+        labelName:
+          "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
+        labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
+      }),
+
     }
-  ),
-  paragraph: getCommonParagraph({
-    labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
-  }),
+  },
   documentList
 });
 
@@ -147,8 +228,14 @@ export const getMdmsData = async (action, state, dispatch) => {
         "MdmsRes.common-masters.Help",
         []
         ).filter(item =>item.code ==="TL" && item.tenant === presentTenantId);
+        let selfDecFormURL = get(
+          payload,
+          "MdmsRes.common-masters.Help",
+          []
+          ).filter(item =>item.code ==="TL_SELFDECLERATION_FORM" );
     console.info("help url is set for TL==",helpUrl[0].URL);
     dispatch(prepareFinalObject("helpFileUrl", helpUrl[0].URL));  
+    dispatch(prepareFinalObject("selfDecFormURL", selfDecFormURL[0].URL));  
   } catch (e) {
     console.log(e);
   }
