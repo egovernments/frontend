@@ -216,7 +216,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           value: "WS.ONE_TIME_FEE",
         },
       ];
-      const bill = await getBill(queryObjForBill);
+      const bill = await getBill(queryObjForBill,dispatch);
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
@@ -307,7 +307,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           value: "WS.ONE_TIME_FEE",
         },
       ];
-      const bill = await getBill(queryObjForBill);
+      const bill = await getBill(queryObjForBill,dispatch);
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));

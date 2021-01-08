@@ -124,7 +124,6 @@ const getLabelOnlyValue = (value, props = {}) => {
 
 const generateDocument = (item, modulePrifx) => {
   // Add header to individual grey cards
-  console.log(item,"item h ji for tooltip")
   let subHeader = getCommonTitle(
     {
       labelKey: getTransformedLocale(

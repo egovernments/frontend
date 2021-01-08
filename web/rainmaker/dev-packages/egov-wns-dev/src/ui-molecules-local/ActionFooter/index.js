@@ -30,7 +30,6 @@ class Footer extends React.Component {
       businessService,
       bill,
     } = this.props;
-    console.log(bill, "bill ji");
     const editButton = {
       label: "Edit",
       labelKey: "WS_MODIFY_CONNECTION_BUTTON",
