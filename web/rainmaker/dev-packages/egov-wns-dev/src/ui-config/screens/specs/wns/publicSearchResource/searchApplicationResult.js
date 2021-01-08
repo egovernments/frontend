@@ -29,10 +29,10 @@ export const searchApplicationResult = {
 				labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
 				options: {
 					filter: false,
-					customBodyRender: (value, index) => (
-						<div className="linkStyle" onClick={() => getConnectionDetails(index)}>
-							<a>{value}</a>
-						</div>
+					customBodyRender: value => (
+						<span style={{ color: '#000000' }}>
+							{value}
+						</span>
 					)
 				}
 			},
