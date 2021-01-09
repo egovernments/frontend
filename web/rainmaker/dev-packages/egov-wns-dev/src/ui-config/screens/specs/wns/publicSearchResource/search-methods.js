@@ -37,17 +37,17 @@ const removeValidation = (state, dispatch) => {
 
 const getAddress = item => {
     if (item && item.address) {
-        let doorNo = item.address.doorNo != null ? item.address.doorNo + "," : "";
-        let buildingName =
-            item.address.buildingName != null ? item.address.buildingName + "," : "";
-        let street = item.address.street != null ? item.address.street + "," : "";
-        let mohalla = item.address.locality.name
+   let mohalla = item.address.locality.name&&item.address.locality.name != null && item.address.locality.name != 'NA' 
             ? item.address.locality.name + ","
             : "";
-        let city = item.address.city != null ? item.address.city : "";
-        return doorNo + buildingName + street + mohalla + city;
+        let city = item.address.city&&item.address.city != null && item.address.city != 'NA'  ? item.address.city : "";
+        if(mohalla==""&&city==""){
+            city='NA';
+        }
+        return  mohalla + city;
     }
 };
+
 
 export const getPayload = (searchScreenObject) => {
     let querryObject = [];
@@ -173,7 +173,7 @@ const showResults = (connections, tenantId, dispatch) => {
         ["WS_COMMON_TABLE_COL_OWN_NAME_LABEL"]: get(item, "property.owners[0].name", "NA"),
         ["WS_COMMON_TABLE_COL_STATUS_LABEL"]: item.status,
         ["WS_COMMON_TABLE_COL_DUE_LABEL"]: (item.totalAmount || item.totalAmount === 0) ? item.totalAmount : "NA",
-        ["WS_COMMON_TABLE_COL_ADDRESS"]: get(item, "property.owners[0].permanentAddress", "NA"),
+        ["WS_COMMON_TABLE_COL_ADDRESS"]: getAddress(get(item, "property", {})),
         ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.updatedDueDate !== undefined) ? convertEpochToDate(item.updatedDueDate) : 0,
         ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: tenantId,
         ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,

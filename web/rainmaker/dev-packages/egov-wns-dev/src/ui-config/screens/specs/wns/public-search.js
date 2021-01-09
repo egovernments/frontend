@@ -8,6 +8,7 @@ import { getTenantId, setModule, getLocale } from "egov-ui-kit/utils/localStorag
 import commonConfig from "config/common.js";
 import { searchApplications } from "./publicSearchResource/search-resources";
 import { searchApplicationResult } from "./publicSearchResource/searchApplicationResult";
+import "./index.css";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;

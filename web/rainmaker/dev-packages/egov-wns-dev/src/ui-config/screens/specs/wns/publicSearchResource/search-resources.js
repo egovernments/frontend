@@ -48,7 +48,7 @@ export const searchApplications = {
 					},
 					jsonPath: "searchScreen.tenantId",
 					sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-					className: "autocomplete-dropdown",
+					className: "autocomplete-dropdown pds-search",
 					labelsFromLocalisation: true,
 					required: true,
 					disabled: false,
@@ -110,7 +110,7 @@ export const searchApplications = {
 					labelsFromLocalisation: true,
 					jsonPath: "searchScreen.locality.code",
 					sourceJsonPath: "applyScreenMdmsData.tenant.localities",
-					className: "locality-dropdown autocomplete-dropdown"
+					className: "locality-dropdown autocomplete-dropdown pds-search"
 				},
 				required: true,
 				jsonPath: "searchScreen.locality.code",

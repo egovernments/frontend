@@ -29,6 +29,39 @@ export const resetFields = (state, dispatch) => {
       "ptSearchScreen.tenantId",
       ''
     ))
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+        "props.isDisabled",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+        "isDisabled",
+        false
+      )
+    );
+  }else{
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+        "props.isDisabled",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "propertySearch",
+        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+        "isDisabled",
+        true
+      )
+    );
   }
 
   dispatch(

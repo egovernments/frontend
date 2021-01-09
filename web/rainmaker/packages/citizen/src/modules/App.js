@@ -1,21 +1,19 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
-import { connect } from "react-redux";
-import { Toast } from "components";
-import { addBodyClass } from "egov-ui-kit/utils/commons";
-import { fetchCurrentLocation, fetchLocalizationLabel, toggleSnackbarAndSetText, setRoute, setPreviousRoute } from "egov-ui-kit/redux/app/actions";
-import { fetchMDMSData } from "egov-ui-kit/redux/common/actions";
-import { logout } from "egov-ui-kit/redux/auth/actions";
-import Router from "./Router";
+import { LoadingIndicator, Toast } from "components";
 import commonConfig from "config/common";
 import redirectionLink from "egov-ui-kit/config/smsRedirectionLinks";
-import routes from "./Routes";
-import { LoadingIndicator } from "components";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchCurrentLocation, fetchLocalizationLabel, setPreviousRoute, setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { logout } from "egov-ui-kit/redux/auth/actions";
+import { fetchMDMSData } from "egov-ui-kit/redux/common/actions";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
-import { getQueryArg } from "egov-ui-kit/utils/commons";
+import { addBodyClass, getQueryArg } from "egov-ui-kit/utils/commons";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
-import get from "lodash/get"
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import Router from "./Router";
+import routes from "./Routes";
 
 class App extends Component {
   constructor(props) {
@@ -77,22 +75,29 @@ class App extends Component {
   };
 
   handleSMSLinks = () => {
-    const { authenticated, setPreviousRoute, setRoute, userInfo,logout } = this.props;
+    const { authenticated, setPreviousRoute, setRoute, userInfo, logout } = this.props;
     const { href } = window.location;
-    const mobileNumber = getQueryArg(href,"mobileNo");
+    const mobileNumber = getQueryArg(href, "mobileNo");
     const citizenMobileNo = get(userInfo, "mobileNumber");
 
-    if(authenticated){
-      if(mobileNumber === citizenMobileNo){
-        setRoute(redirectionLink(href));
-      }else{
+    if (authenticated) {
+      if (mobileNumber === citizenMobileNo) {
+        let redirectionURL = redirectionLink(href);
+        if (redirectionURL && redirectionURL.includes && redirectionURL.includes('digit-ui')) {
+          window.location.href = redirectionURL.startsWith('/digit') ? redirectionURL : `/${redirectionURL}`;
+          return;
+        } else {
+          setRoute(redirectionURL);
+        }
+      } else {
         logout()
         setRoute("/user/otp?smsLink=true");
-       // setPreviousRoute(redirectionLink(href));
-      } 
-    }else{
+        // setPreviousRoute(redirectionLink(href));
+      }
+    } else {
       setRoute("/user/otp?smsLink=true");
-      setPreviousRoute(redirectionLink(href));
+      let redirectionURL = redirectionLink(href);
+      setPreviousRoute(redirectionURL);
     }
     // if (!authenticated) {
     //   setRoute("/user/otp?smsLink=true");
@@ -132,7 +137,7 @@ class App extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { app, auth, common } = state;
-  const { authenticated,userInfo,token } = auth || false;
+  const { authenticated, userInfo, token } = auth || false;
   const { route, toast } = app;
   const { spinner } = common;
   const { stateInfoById } = common || [];
