@@ -66,14 +66,17 @@ class CityPickerDialog extends Component {
     if (key) {
       const { fieldKey, onChange } = this.props;
       onChange(fieldKey, key);
+      document.getElementById("person-city").select();
       this.onClose();
     }
   };
   onKeyPressed = (e,item) => {
     const { key } = item;
     if (e.key == 'Enter') {
+      e.preventDefault();
       const { fieldKey, onChange } = this.props;
       onChange(fieldKey, key);
+      document.getElementById("person-city").select();
       this.onClose();
     }
 }
@@ -117,7 +120,6 @@ class CityPickerDialog extends Component {
               top: 10,
             //  margin: "auto",
             }
-
             }
           />
         </div>
