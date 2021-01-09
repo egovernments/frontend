@@ -1,14 +1,14 @@
+import commonConfig from "config/common.js";
 import { getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getBusinessServiceMdmsData, getModuleName } from "egov-ui-kit/utils/commons";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTenantId, setModule, getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import commonConfig from "config/common.js";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getBusinessServiceMdmsData, getModuleName } from "egov-ui-kit/utils/commons";
+import { getLocale, getTenantId, setModule } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 import { searchApplications } from "./publicSearchResource/search-resources";
 import { searchApplicationResult } from "./publicSearchResource/searchApplicationResult";
-import "./index.css";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
