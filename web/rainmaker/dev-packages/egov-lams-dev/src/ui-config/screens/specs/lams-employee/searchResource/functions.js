@@ -31,10 +31,12 @@ export const searchApiCall = async (state, dispatch) => {
     })
     queryString = queryString?queryString.slice(0, -1):queryString; 
     queryObject.push({key: "tenantIds",value: queryString});
+    queryObject.push({key: "located",value: 2})
   } 
   else
   {
     queryObject.push({key: "tenantId",value: getTenantId()});
+    queryObject.push({key: "located",value: 1});
   }
 
   let searchScreenObject = get(

@@ -51,8 +51,10 @@ import PropTypes from "prop-types";
 
     const selectedSurveyDetails = get(state.screenConfiguration.preparedFinalObject.lamsStore,"selectedSurveyDetails"); 
     if(selectedSurveyDetails && selectedSurveyDetails.surveyId)
+    {
       dispatch(prepareFinalObject("lamsStore.Lease[0].surveyId", selectedSurveyDetails.surveyId));
-    
+      dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails", selectedSurveyDetails));
+    }
     setVisibilityLeaseDetails(action, state, dispatch,true);
   }
 
