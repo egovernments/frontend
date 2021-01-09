@@ -16,6 +16,10 @@ const ApplicationNoContainer = Loadable({
   loader: () => import("./ApplicationNo"),
   loading: () => <Loading />
 });
+const OthersContainer = Loadable({
+  loader: () => import("./OthersContainer"),
+  loading: () => <Loading />
+});
 const DisabledComponent = Loadable({
   loader: () => import("./DisabledComponent"),
   loading: () => <Loading />
@@ -25,5 +29,6 @@ export {
   TestAtoms,
   AutoSuggest,
   ApplicationNoContainer,
-  DisabledComponent
+  DisabledComponent,
+  OthersContainer
 };

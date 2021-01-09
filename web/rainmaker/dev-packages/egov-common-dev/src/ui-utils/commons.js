@@ -487,7 +487,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showConfirmation=false) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
     if (fileRes && !fileRes[fileStoreId]) {
       console.error('ERROR IN DOWNLOADING RECEIPT');
@@ -495,8 +495,16 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
     }
     if (mode === 'download') {
       downloadPdf(fileRes[fileStoreId]);
+      if(showConfirmation){
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
+      }
     } else if (mode === 'open') {
       openPdf(fileRes[fileStoreId], '_self')
+      if(showConfirmation){
+        store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+      , "success"));
+      }
     }
     else {
       printPdf(fileRes[fileStoreId]);
@@ -505,7 +513,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
 }
 
 
-export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state,showConfirmation=false) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
@@ -553,7 +561,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
 
       const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
       if (oldFileStoreId) {
-        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+        downloadReceiptFromFilestoreID(oldFileStoreId, mode,undefined,showConfirmation)
       }
       else {
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
@@ -561,7 +569,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
             res.filestoreIds[0]
             if (res && res.filestoreIds && res.filestoreIds.length > 0) {
               res.filestoreIds.map(fileStoreId => {
-                downloadReceiptFromFilestoreID(fileStoreId, mode)
+                downloadReceiptFromFilestoreID(fileStoreId, mode,undefined,showConfirmation)
               })
             } else {
               console.log('Some Error Occured while downloading Receipt!');
