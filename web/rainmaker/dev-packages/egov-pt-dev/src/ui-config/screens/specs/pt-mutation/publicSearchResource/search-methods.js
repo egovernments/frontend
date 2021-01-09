@@ -52,7 +52,7 @@ const searchApiCall = async (state, dispatch) => {
 
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "ptSearchScreen",
+    "searchScreen",
     {}
   );
   
