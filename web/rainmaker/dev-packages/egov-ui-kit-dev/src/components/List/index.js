@@ -10,7 +10,7 @@ const baseListItemStyle = { color: "#484848", fontWeight: 500 };
 //   marginLeft: 0,
 // };
 
-const List = ({ listItemContainer, onItemClick, listItemStyle = {}, innerDivStyle, hoverColor, listContainerStyle = {}, items = [], ...rest }) => {
+const List = ({ listItemContainer, onItemClick,onKeyPressed, listItemStyle = {}, innerDivStyle, hoverColor, listContainerStyle = {}, items = [], ...rest }) => {
   const renderListItems = (items) => {
     return items.map((item, index) => {
       const { nestedItems } = item;
@@ -26,6 +26,7 @@ const List = ({ listItemContainer, onItemClick, listItemStyle = {}, innerDivStyl
       return (
         <ListItem
           onClick={() => onItemClick && onItemClick(item, index)}
+          onKeyDown = {(event) => onKeyPressed && onKeyPressed(event,item)}
           innerDivStyle={innerDivStyle}
           containerElement={listItemContainer}
           hoverColor={hoverColor}

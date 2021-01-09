@@ -69,6 +69,14 @@ class CityPickerDialog extends Component {
       this.onClose();
     }
   };
+  onKeyPressed = (e,item) => {
+    const { key } = item;
+    if (e.key == 'Enter') {
+      const { fieldKey, onChange } = this.props;
+      onChange(fieldKey, key);
+      this.onClose();
+    }
+}
 
   autoSuggestCallback = (results = [] ,searchTerm) => {
     const {cities} = this.props;
@@ -87,7 +95,7 @@ class CityPickerDialog extends Component {
   };
 
   render() {
-    const { autoSuggestCallback, prepareResultsForDisplay, onClose, onCityFieldClicked, onItemClick } = this;
+    const { autoSuggestCallback, prepareResultsForDisplay, onClose, onCityFieldClicked, onItemClick, onKeyPressed } = this;
     const { results, searchTerm, open } = this.state;
     const { field, localizationLabels,cities } = this.props;
     const displayInitialList = searchTerm.length === 0 ? true : false;
@@ -141,6 +149,7 @@ class CityPickerDialog extends Component {
             callback={autoSuggestCallback}
           />
           <List
+            onKeyPressed={onKeyPressed}          
             onItemClick={onItemClick}
             innerDivStyle={{ paddingLeft: "50px",color:"#484848"  }}
             listItemStyle={{ borderBottom: "1px solid #eee",color:"#484848"}}
