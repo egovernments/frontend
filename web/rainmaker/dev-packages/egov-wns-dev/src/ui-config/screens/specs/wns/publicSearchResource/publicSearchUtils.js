@@ -129,11 +129,11 @@ export const generateBill = async (
       });
       if (businessService) {
         queryObj.push({
-          key: "service",
+          key: "businessService",
           value: businessService,
         });
       }
-      const payload = await getSearchBillResult(queryObj);
+      const payload = await getBill(queryObj);
       return payload;
     }
   } catch (e) {
@@ -169,7 +169,7 @@ export const getSearchBillResult = async (queryObject) => {
   }
 };
 
-export const getBill = async (queryObject, dispatch) => {
+export const getBill = async (queryObject) => {
   try {
     const response = await httpRequest(
       "post",
@@ -179,13 +179,13 @@ export const getBill = async (queryObject, dispatch) => {
     );
     return response;
   } catch (error) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelKey: error.message },
-        "error"
-      )
-    );
+    // store.dispatch(
+    //   toggleSnackbar(
+    //     true,
+    //     { labelName: error.message, labelKey: error.message },
+    //     "error"
+    //   )
+    // );
     console.log(error, "fetxh");
   }
 };
