@@ -107,11 +107,12 @@ export const getPropertyObj = async (waterConnection, locality, tenantId) => {
                 if(tenantId) {
                     queryObject1.push({key: "tenantId", value: tenantId})
                 }
-                
-                let payload = await getPropertyResultsWODispatch(queryObject1);
-                if (payload.Properties.length > 0) {
-                    for (var j = 0; j < payload.Properties.length; j++) {
-                        propertyArr[payload.Properties[j].id] = payload.Properties[j]
+                if (!window.location.href.includes("propertyId")) {
+                    let payload = await getPropertyResultsWODispatch(queryObject1);
+                    if (payload.Properties.length > 0) {
+                        for (var j = 0; j < payload.Properties.length; j++) {
+                            propertyArr[payload.Properties[j].id] = payload.Properties[j]
+                        }
                     }
                 }
                 uuids = "";
