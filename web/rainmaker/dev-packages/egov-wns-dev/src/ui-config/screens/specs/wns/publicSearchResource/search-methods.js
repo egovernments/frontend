@@ -174,7 +174,7 @@ const showResults = (connections, tenantId, dispatch) => {
         ["WS_COMMON_TABLE_COL_STATUS_LABEL"]: item.status,
         ["WS_COMMON_TABLE_COL_DUE_LABEL"]: (item.totalAmount || item.totalAmount === 0) ? item.totalAmount : "NA",
         ["WS_COMMON_TABLE_COL_ADDRESS"]: getAddress(get(item, "property", {})),
-        ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.updatedDueDate !== undefined) ? convertEpochToDate(item.updatedDueDate) : 0,
+        ["WS_COMMON_TABLE_COL_DUE_DATE_LABEL"]: (item.updatedDueDate !== undefined) ? convertEpochToDate(item.updatedDueDate) : "NA",
         ["WS_COMMON_TABLE_COL_TENANTID_LABEL"]: tenantId,
         ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
         ["WS_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, connectionNo: item.connectionNo, businessService: item.businessService, tenantId: item.tenantId }
