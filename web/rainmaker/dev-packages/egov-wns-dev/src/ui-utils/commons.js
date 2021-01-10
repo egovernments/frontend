@@ -82,7 +82,7 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     }
 };
 
-export const getPropertyObj = async (waterConnection, locality, tenantId) => {
+export const getPropertyObj = async (waterConnection, locality, tenantId, isFromSearch) => {
     let uuidsArray = [];
     let uuids = "";
     let propertyArr = [];
@@ -107,7 +107,7 @@ export const getPropertyObj = async (waterConnection, locality, tenantId) => {
                 if(tenantId) {
                     queryObject1.push({key: "tenantId", value: tenantId})
                 }
-                if (!window.location.href.includes("propertyId")) {
+                if (!window.location.href.includes("propertyId") || isFromSearch) {
                     let payload = await getPropertyResultsWODispatch(queryObject1);
                     if (payload.Properties.length > 0) {
                         for (var j = 0; j < payload.Properties.length; j++) {
@@ -931,7 +931,7 @@ export const applyForWater = async (state, dispatch) => {
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (isModifyMode()) {
-                response.WaterConnection = await getPropertyObj(response.WaterConnection);
+                response.WaterConnection = await getPropertyObj(response.WaterConnection, "", "", true);
                 response.WaterConnection[0].water = true;
                 let waterSource = response.WaterConnection[0].waterSource.split(".");
                 response.WaterConnection[0].waterSource = waterSource[0];
@@ -999,7 +999,7 @@ export const applyForSewerage = async (state, dispatch) => {
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
             if (isModifyMode()) {
-                response.SewerageConnections = await getPropertyObj(response.SewerageConnections);
+                response.SewerageConnections = await getPropertyObj(response.SewerageConnections,"", "", true);
                 response.SewerageConnections[0].sewerage = true;
                 response.SewerageConnections[0].service = "Sewerage";
                 dispatch(prepareFinalObject("applyScreen", response.SewerageConnections[0]));
