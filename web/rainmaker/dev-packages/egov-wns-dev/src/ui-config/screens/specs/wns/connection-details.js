@@ -122,7 +122,6 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       dispatch,
       true
     );
-    console.log("wns-payload", payloadData);
     if (
       payloadData !== null &&
       payloadData !== undefined &&
