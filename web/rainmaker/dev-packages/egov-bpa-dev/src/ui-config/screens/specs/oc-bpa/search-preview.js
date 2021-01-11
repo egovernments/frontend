@@ -49,7 +49,7 @@ import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
-
+import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -245,10 +245,28 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
     }
   }
 
-  let paymentPayload = await httpRequest(
-    "post",
-    `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
-  );
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCodes",
+      value: applicationNumber
+    }
+  ];
+  let paymentPayload = {}; 
+  paymentPayload.Payments = [];
+  let businessServicesList = ["BPA.NC_OC_APP_FEE", "BPA.NC_OC_SAN_FEE" ];
+    for(let fee = 0; fee < businessServicesList.length; fee++ ) {
+      let lowAppPaymentPayload = await httpRequest(
+        "post",
+        getPaymentSearchAPI(businessServicesList[fee]),
+        "",
+        queryObject
+      );
+      if(lowAppPaymentPayload && lowAppPaymentPayload.Payments && lowAppPaymentPayload.Payments.length > 0) paymentPayload.Payments.push(lowAppPaymentPayload.Payments[0]);
+    }
 
   if (paymentPayload && paymentPayload.Payments.length == 1) {
     if (get(paymentPayload, "Payments[0].paymentDetails[0].businessService") === "BPA.NC_OC_APP_FEE") {
