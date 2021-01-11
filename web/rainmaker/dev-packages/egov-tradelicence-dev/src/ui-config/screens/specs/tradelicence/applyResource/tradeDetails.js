@@ -179,17 +179,7 @@ const showDateBasedOnOldLicense = (state,dispatch,action) =>{
         ""
       )
     );
-  }
-  else{
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
-        "props.inputProps.min",
-        getFinancialYearDates("yyyy-mm-dd").startDate
-      )
-    );
-  }
+  } 
 };
 
 const getUOMLabelWithValue = (label, value, props = {}) => {
@@ -697,14 +687,23 @@ export const tradeDetails = getCommonCard({
                 "code": action.value
               });
               if(currentObject && currentObject.length >0){
-                //5 Days reduced to be sure on selected fiscal year
-                let miliSec =currentObject[0].endingDate-432000000 ;
+                //5 Days +- to be sure on selected fiscal year
+                let startDateMilSec =currentObject[0].startingDate+432000000 ;
+                let endDateMilSec =currentObject[0].endingDate-432000000 ;
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
+                    "props.inputProps.min",
+                    getFinancialYearDates("yyyy-mm-dd",startDateMilSec).startDate
+                  )
+                );
                 dispatch(
                   handleField(
                     "apply",
                     "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
                     "props.inputProps.max",
-                    getFinancialYearDates("yyyy-mm-dd",miliSec).endDate
+                    getFinancialYearDates("yyyy-mm-dd",endDateMilSec).endDate
                   )
                 );
               }
