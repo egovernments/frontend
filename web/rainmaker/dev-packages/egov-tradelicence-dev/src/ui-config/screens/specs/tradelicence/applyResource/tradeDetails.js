@@ -689,6 +689,30 @@ export const tradeDetails = getCommonCard({
             shrink: true
           }
         },
+        beforeFieldChange: async (action, state, dispatch) => {
+          try{
+            if (action.value) {
+              let fiscalYr = get(state.screenConfiguration.preparedFinalObject,"applyScreenMdmsData.egf-master.FinancialYear",null);
+              let currentObject = filter(fiscalYr, {
+                "code": action.value
+              });
+              if(currentObject && currentObject.length >0){
+                //5 Days reduced to be sure on selected fiscal year
+                let miliSec =currentObject[0].endingDate-432000000 ;
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeCommencementDate",
+                    "props.inputProps.max",
+                    getFinancialYearDates("yyyy-mm-dd",miliSec).endDate
+                  )
+                );
+              }
+            }
+          }catch(err){
+            console.log("error in adding validation in commencement date",err)
+          }
+        },
         gridDefination: {
           xs: 12,
           sm: 6
