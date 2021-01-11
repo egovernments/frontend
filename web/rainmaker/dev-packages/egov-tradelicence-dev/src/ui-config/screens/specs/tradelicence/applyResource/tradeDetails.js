@@ -897,7 +897,7 @@ export const tradeDetails = getCommonCard({
         
         inputProps: {
           min: getFinancialYearDates("yyyy-mm-dd").startDate,
-          max:getFinancialYearDates("yyyy-mm-dd").endDate
+          //max:getFinancialYearDates("yyyy-mm-dd").endDate
           
         }
       },
