@@ -103,13 +103,46 @@ const prepareDocumentsView = async (state, dispatch) => {
     ...otherDocuments
   ];
 
-  allDocuments.forEach(doc => {
+  allDocuments.forEach((doc, index) => {
     documentsPreview.push({
-      title: getTransformedLocale(doc.documentType),
+      title: getTransformedLocale(doc.documentType || doc.title),
       fileStoreId: doc.fileStoreId,
       linkText: "View"
     });
+    if(doc && doc.dropdown && doc.dropdown.value) {
+      documentsPreview[index].dropdown = {
+        value : doc.dropdown.value
+      }
+    }
   });
+  if(documentsPreview && documentsPreview.length <= 0) {
+    let reduxDocuments = get(
+      state,
+      "screenConfiguration.preparedFinalObject.documentsUploadRedux",
+      {}
+    );
+    jp.query(reduxDocuments, "$.*").forEach((doc, index) => {
+      if (doc.documents && doc.documents.length > 0) {
+        documentsPreview.push({
+          title: getTransformedLocale(doc.documentCode),
+          name: doc.documents[0].fileName,
+          fileStoreId: doc.documents[0].fileStoreId,
+          linkText: "View",
+        });
+        if(doc && doc.dropdown && doc.dropdown.value) {
+          documentsPreview[index].dropdown = {
+            value : doc.dropdown.value
+          }
+        }
+      }
+      
+    });
+    set(
+      firenoc,
+      "fireNOCDetails.applicantDetails.additionalDetail.ownerAuditionalDetail.documents",
+      documentsPreview
+    );
+  }
   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
   let fileUrls =
     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
@@ -300,6 +333,7 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
+  const fireDetails = get(state.screenConfiguration.preparedFinalObject, 'FireNOCs', []);
   const response = await getSearchResults([
     {
       key: "tenantId",
@@ -307,9 +341,17 @@ const setSearchResponse = async (
     },
     { key: "applicationNumber", value: applicationNumber }
   ]);
-  // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  const equals = (a, b) =>
+  a.length === b.length &&
+  a.every((v, i) => v === b[i]);
+  if(fireDetails && fireDetails.length > 0 && !(equals(fireDetails, response.FireNOCs))) {
+    // const response = sampleSingleSearch();
+    dispatch(prepareFinalObject("FireNOCs", fireDetails, []));
+  }
+  else {
+    dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 
+  }
   // let firNOCType = get(
   //   state.screenConfiguration.preparedFinalObject,
   //   "FireNOCs[0].fireNOCDetails.fireNOCType",[]);

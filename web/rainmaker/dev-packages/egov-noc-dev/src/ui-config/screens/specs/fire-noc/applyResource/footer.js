@@ -319,11 +319,6 @@ const callBackForNext = async (state, dispatch) => {
           `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
         )
       );
-      const updateMessage = {
-        labelName: "Rates will be updated on submission",
-        labelKey: "TL_COMMON_EDIT_UPDATE_MESSAGE"
-      };
-      dispatch(toggleSnackbar(true, updateMessage, "info"));
     }
     else {
       moveToReview(state, dispatch);
