@@ -1606,7 +1606,7 @@ export const getFinancialYearDates = (format, et) => {
   var date = !et ? new Date() : new Date(et);
   var curMonth = date.getMonth();
   var financialDates = { startDate: "NA", endDate: "NA" };
-  if (curMonth > 3) {
+  if (curMonth >= 3) {
     switch (format) {
       case "dd/mm/yyyy":
         financialDates.startDate = `01/04/${date.getFullYear().toString()}`;
