@@ -23,6 +23,9 @@
 	<uses-permission android:name="android.permission.CAMERA"/>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.BLUETOOTH"/>
+	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <!--<uses-permission android:name="android.permission.RECEIVE_SMS" />-->
 
     <!-- remove location.gps feature if not using permission ACCESS_FINE_LOCATION -->
@@ -36,7 +39,8 @@
 		tools:node="merge"
         android:supportsRtl="true"
         android:theme="@style/SplashTheme"
-        tools:ignore="AllowBackup">
+        tools:ignore="AllowBackup"
+		android:requestLegacyExternalStorage="true">
 		<provider
 			android:name="android.support.v4.content.FileProvider"
 			android:authorities="${applicationId}.provider"

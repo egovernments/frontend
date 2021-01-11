@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string  name="SEC_API">94416339-08f9-45b4-a5d2-b150f49842f5</string >
+	<string name="SEC_MERCHANT_NAME">BHARAT_ELECTRONICS_LIMITE</string>
+	<string  name="TEST_API">94416339-08f9-45b4-a5d2-b150f49842f5</string >
+	<string name="TEST_MERCHANT_NAME">BHARAT_ELECTRONICS_LIMITE</string>
+	<string  name="MOS_UNAME">9632643463</string >
+	<string name="MOS_PSWD">1321</string>
+</resources>

@@ -80,7 +80,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-//import com.eze.api.EzeAPI;
+import com.eze.api.EzeAPI;
 import com.mosambee.lib.ResultData;
 
 import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_CASH_TXN;
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity{
 			//  Log.d("SampleAppLogs", "requestCode = " + requestCode + "resultCode = " + resultCode);
 			try {
 				if (intent != null && intent.hasExtra("response")) {
-					//Toast.makeText(this, intent.getStringExtra("response"), Toast.LENGTH_LONG).show();
+
 					Log.d("SampleAppLogs", intent.getStringExtra("response"));
 				}
 
@@ -188,17 +188,18 @@ public class MainActivity extends AppCompatActivity{
 							// JSONObject mainObject = new JSONObject(intent.getStringExtra("response"));
 							response = response.getJSONObject("result");
 							response = response.getJSONObject("txn");
+							Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show();
 							String strTxnId = response.getString("txnId");
 							String stramount = response.getString("amount");
+							String cardNo = response.getString("cardLastFourDigit");
 							String strsettlementStatus = response.getString("settlementStatus");
 							// Log.v("SETTLEMENTSTATUS", settlementStatus);
-							JSONObject cardRes =  new JSONObject();
-							cardRes = response.getJSONObject("card ");
-							String cardNO = cardRes.getString("maskedCardNo");
 
 							JSONObject resultjson = new JSONObject();
 							resultjson.put("tranactionid",strTxnId);
-							resultjson.put("cardNumber",cardNO.substring(cardNO.length() - 4));
+							resultjson.put("cardNumber",cardNo);
+							resjson = resultjson.toString();
+
 							loadView("javascript:window.posOnSuccess('"+resjson+"')",false);
 							closeEzeTap();
 
@@ -325,16 +326,47 @@ public class MainActivity extends AppCompatActivity{
 			if(name.equals("paymentData")) {
 				JSONObject jsonObject = new JSONObject(json);
 				String cbType = jsonObject.getString("tenant");
-			//	doInitializeEzeTap(cbType);
-				intializeMOS("test");
+				switch(cbType) {
+					case "Secunderabad": {
+						doInitializeEzeTap(cbType);
+						break;
+					}
+					default: {
+//						runOnUiThread(new Runnable() {
+//
+//							@Override
+//							public void run() {
+//								intializeMOS("test");
+//							}
+//						});
+
+					}
+				}
+
+
 				//doCheckIncompleteTxn();
 
 				String modeOfPayment = jsonObject.getString("instrumentType");
 				if (modeOfPayment.equalsIgnoreCase("Cash")) {
 					onCash(json);
 				} else if (modeOfPayment.equalsIgnoreCase("Card")) {
+					switch(cbType) {
+						case "Secunderabad": {
+							onCard(json);
+							break;
+						}
+						default: {
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									onMosambeePayment(json);
+								}
+							});
+
+						}
+					}
 					//onCard(json);
-					onMosambeePayment(json);
+					//onMosambeePayment(json);
 				} else {
 					//closeEzeTap();
 					//closeMosambee();
@@ -398,8 +430,7 @@ public class MainActivity extends AppCompatActivity{
 			String invoiceDate = today.toString();
 			String orderId = jsonObject.getString("billNumber");
 			String amount =jsonObject.getString("paymentAmount");
-
-			mosambeeClass.startProcess(container,customerNo,customerEmail,transType,invoiceDate,orderId,amount,this);
+			mosambeeClass.startProcess(container,customerNo,customerEmail,transType,invoiceDate,orderId,amount);
 
 		}
 		catch (JSONException e) {
@@ -640,6 +671,8 @@ public class MainActivity extends AppCompatActivity{
 		context = getApplicationContext();
 		mosambeeClass.setContext(context);
 		mosambeeClass.setActivity(MainActivity.this);
+		intializeMOS("test");
+
 
     }
 
@@ -1126,7 +1159,7 @@ public class MainActivity extends AppCompatActivity{
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		//EzeAPI.initialize(this, REQUEST_CODE_INITIALIZE, jsonRequest);
+		EzeAPI.initialize(this, REQUEST_CODE_INITIALIZE, jsonRequest);
 	}
 
 	void onCash(String json) {
@@ -1199,7 +1232,7 @@ public class MainActivity extends AppCompatActivity{
 		 }
 		 ******************************************/
 
-		//EzeAPI.cashTransaction(this, REQUEST_CODE_CASH_TXN, jsonRequest);
+		EzeAPI.cashTransaction(this, REQUEST_CODE_CASH_TXN, jsonRequest);
 	}
 
 
@@ -1275,14 +1308,14 @@ public class MainActivity extends AppCompatActivity{
 		 }
 		 ******************************************/
 
-	//	EzeAPI.cardTransaction(this, REQUEST_CODE_SALE_TXN, jsonRequest);
+		EzeAPI.cardTransaction(this, REQUEST_CODE_SALE_TXN, jsonRequest);
 	}
 
 	private void doCheckIncompleteTxn() {
-		//EzeAPI.checkForIncompleteTransaction(this, REQUEST_CODE_GET_INCOMPLETE_TXN);
+		EzeAPI.checkForIncompleteTransaction(this, REQUEST_CODE_GET_INCOMPLETE_TXN);
 	}
 	private void closeEzeTap() {
-		//EzeAPI.close(this, REQUEST_CODE_CLOSE);
+		EzeAPI.close(this, REQUEST_CODE_CLOSE);
 	}
 	private void closeMosambee() {
 		mosambeeClass.stopProcess();
@@ -1331,7 +1364,7 @@ public class MainActivity extends AppCompatActivity{
 					+ result.getAmount()
 					+ "\nTransactin data: "
 					+ result.getTransactionData();
-			Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 			JSONObject txnObject = new JSONObject(result.getTransactionData());
 			String cardNO = txnObject.getString("cardNumber");
 

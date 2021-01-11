@@ -22,11 +22,12 @@ public class MosambeeImplementation implements TransactionResult {
 	void init(String user, String pswd) {
 		moscCallback = new MosCallback(context);
 		moscCallback.initialise(user, pswd, this);
+		moscCallback.setSleepTime(180);
 		//moscCallback.getLocation();
 	}
 
 
-	void startProcess(FrameLayout container,String customerMobile, String customerEmail, String transType, String invoiceDate, String orderId, String amount, Activity activity) {
+	void startProcess(FrameLayout container,String customerMobile, String customerEmail, String transType, String invoiceDate, String orderId, String amount) {
 
 //		moscCallback = new MosCallback(context);
 //		moscCallback.initialise(user, pswd, this);
