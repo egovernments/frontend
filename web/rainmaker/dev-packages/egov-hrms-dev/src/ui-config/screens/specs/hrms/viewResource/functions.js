@@ -347,6 +347,11 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
   });
   set(employeeObject[0], "user.roles", processedRoles);
 
+  let email = get(employeeObject[0], "user.emailId");
+  email= email.trim(); 
+  set(employeeObject[0], "user.emailId", email);
+  
+
   if (action === "CREATE") {
     try {
       let response = await createEmployee(
