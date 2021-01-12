@@ -64,7 +64,7 @@ class App extends Component {
     };
     // can be combined into one mdms call
     const tenantId = getTenantId();
-    fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+    fetchLocalizationLabel(getLocale() || "en_IN", tenantId, tenantId);
     //fetchLocalizationLabel(getLocale() || "en_IN");
 
     // current location
