@@ -17,6 +17,7 @@ import {
   furnishNocResponse,
   getSearchResults
 } from "../../../../../ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const loadProvisionalNocData = async (state, dispatch) => {
   let fireNOCNumber = get(
@@ -308,7 +309,7 @@ export const nocDetails = getCommonCard({
               )
             );
           }
-          if(get(state.screenConfiguration.preparedFinalObject, "FireNOCs[0].fireNOCDetails.action", "") === "SENDBACKTOCITIZEN") {
+          if(get(state.screenConfiguration.preparedFinalObject, "FireNOCs[0].fireNOCDetails.action", "") === "SENDBACKTOCITIZEN" || getQueryArg(window.location.href,"edited")) {
             dispatch(
               handleField(
                 "apply",
