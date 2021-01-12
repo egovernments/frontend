@@ -395,11 +395,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].applicationType"
     );
+    const finYear = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].financialYear"
+    );
 
     const headerrow = getCommonContainer({
       header: getCommonHeader({
-        labelName: "Trade License Application (2018-2019)",
-        labelKey: applicationType === "RENEWAL" ? "TL_TRADE_RENEW_APPLICATION" : "TL_TRADE_APPLICATION"
+        labelName: `Trade License Application (${finYear})`,
+        labelKey: applicationType === "RENEWAL" ? "TL_TRADE_RENEW_APPLICATION" : "TL_TRADE_APPLICATION",
+        dynamicArray: [finYear]
       }),
       applicationLicence: getCommonContainer({
         applicationNumber: {
