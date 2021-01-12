@@ -1133,6 +1133,8 @@ const getToolTipInfo = (taxHead, LicenseData) => {
       return get(LicenseData, "tradeLicenseDetail.adhocExemptionReason");
     case "TL_GARBAGE_FEE":
       return get(LicenseData, "tradeLicenseDetail.additionalDetail.garbageComments");
+    case "TL_MISC_CHARGES":
+      return get(LicenseData, "tradeLicenseDetail.additionalDetail.miscComments");
     default:
       return "";
   }

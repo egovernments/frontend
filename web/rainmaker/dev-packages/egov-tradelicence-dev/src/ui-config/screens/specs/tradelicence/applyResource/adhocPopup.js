@@ -98,6 +98,7 @@ let totalAmount = (estimateCardData) => {
   let adhocPenalty=0;
   let adhocRebate = 0;
   let garbageFee=0;
+  let miscCharges=0;
   estimateCardData.forEach(data => {
    
     if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
@@ -119,9 +120,12 @@ let totalAmount = (estimateCardData) => {
     if(data.name.labelKey === 'TL_GARBAGE_FEE'){
         garbageFee= data.value ? data.value : 0;
     }
+    if(data.name.labelKey === 'TL_MISC_CHARGES'){
+      miscCharges= data.value ? data.value : 0;
+  }
   });
     
-  return tlTax+adhocPenalty+commonPenalty+garbageFee-Math.abs(commonRebate)-Math.abs(adhocRebate);
+  return tlTax+adhocPenalty+commonPenalty+garbageFee+miscCharges-Math.abs(commonRebate)-Math.abs(adhocRebate);
 }
 const updateAdhoc = (state, dispatch) => {
 let isFormValid = true;
@@ -161,7 +165,28 @@ let isFormValid = true;
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.additionalDetail.garbageCharges"
   );
-  if (adhocAmount || rebateAmount || garbageCharges) {
+  const miscCharges =  get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.additionalDetail.miscCharges"
+  );
+  const miscComments =  get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.additionalDetail.miscComments"
+  );
+  if(miscCharges && (!miscComments || miscComments.length===0)){
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please enter the misc remarks",
+          labelKey: "ERR_MISC_COMMENTS"
+        },
+        "warning"
+      )
+    );
+    return;
+  }
+  if (adhocAmount || rebateAmount || garbageCharges || miscCharges) {
    
     const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
     if (rebateAmount && rebateAmount > totalAmt) {
@@ -532,6 +557,71 @@ export const adhocPopup = getCommonContainer({
         },
         pattern: getPattern("Comments"),
         jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.garbageComments"
+      })
+    },
+    {
+      style: {
+        marginTop: "12px"
+      }
+    }
+  ),
+
+  miscCard: getCommonContainer(
+    {
+      subheader: getCommonSubHeader(
+        {
+          labelName: "Miscellaneous Charges",
+          labelKey: "TL_ADD_HOC_CHARGES_POPUP_MISC_FIRST"
+        },
+        {
+          style: {
+            fontSize: "16px"
+          }
+        }
+      ),
+
+      
+      MiscReasonContainer: getCommonContainer({
+        MiscAmount: getTextField({
+          label: {
+            labelName: "Miscellaneous Charges",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_MISC_AMT_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Miscellaneous Charges Amount",
+            labelKey: "TL_ADD_HOC_CHARGES_POPUP_MISC_AMT_PLACEHOLDER"
+          },
+          props: {
+            type:"number",
+            style: {
+              width: "90%"
+            }
+          },
+          pattern: getPattern("Amount"),
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.miscCharges"
+        }),
+        
+      }),
+      commentsField: getTextField({
+        label: {
+          labelName: "Enter Remarks",
+          labelKey: "TL_ADD_HOC_CHARGES_POPUP_REMARKS_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Remarks",
+          labelKey: "TL_ADD_HOC_CHARGES_POPUP_REMARKS_LABEL"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        props: {
+          style: {
+            width: "90%"
+          }
+        },
+        pattern: getPattern("Comments"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.miscComments"
       })
     },
     {

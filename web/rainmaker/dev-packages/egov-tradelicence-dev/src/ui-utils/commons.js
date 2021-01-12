@@ -450,6 +450,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         set(queryObject[0], "tradeLicenseDetail.additionalDetail.cbrnNumber", null);
         set(queryObject[0], "tradeLicenseDetail.additionalDetail.garbageCharges", null);
         set(queryObject[0], "tradeLicenseDetail.additionalDetail.garbageComments", null);
+        set(queryObject[0], "tradeLicenseDetail.additionalDetail.miscCharges", null);
+        set(queryObject[0], "tradeLicenseDetail.additionalDetail.miscComments", null);
       }
       //Code for edit flow
 
