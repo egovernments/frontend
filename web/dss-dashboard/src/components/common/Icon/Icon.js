@@ -4,6 +4,7 @@ import DashBoardIcon from '../../../images/dashboards.svg'
 import ComplaintsIcon from '../../../images/complaints.svg'
 import TradeIcon from '../../../images/trade-license.svg'
 import WaterSewerage from '../../../images/water_sewerage.svg'
+import mCollect from '../../../images/mCollect.svg'
 import Style from './Styles'
 import { withStyles } from '@material-ui/core/styles';
 
@@ -25,6 +26,14 @@ class Icon extends React.Component {
             case 'property tax':
             case 'dss_property_tax':
                 return <SVG src={PropertyTaxIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+
+
+            case 'mCollect':
+            case 'dss_mCollect':
+                return <SVG src={mCollect} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>   
+        
+
+
             case 'trade license':
             case 'dss_trade_licence':
                 return <SVG src={TradeIcon} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
