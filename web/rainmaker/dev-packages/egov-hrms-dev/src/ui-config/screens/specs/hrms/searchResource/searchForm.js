@@ -67,8 +67,8 @@ export const searchForm = getCommonCard({
   }),
   searchFormContainer: getCommonContainer({
     ulb: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-hrms",
+      uiFramework: "custom-containers",
+      //moduleName: "egov-hrms",
       componentPath: "AutosuggestContainer",
       jsonPath: "searchScreen.ulb",
       gridDefination: {
@@ -76,6 +76,7 @@ export const searchForm = getCommonCard({
         sm: 4
       },
       props: {
+        disabled:true,
         optionLabel: "name",
         optionValue: "code",
         label: { 
@@ -100,7 +101,7 @@ export const searchForm = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
-        isClearable: true,
+       // isClearable: true,
       },
       required: true,
     },

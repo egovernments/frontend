@@ -101,6 +101,19 @@ const setUlbSelect = (action, state, dispatch) => {
       false
     );
   }
+  
+  const tenantId = getTenantId();
+    set(
+      action.screenConfig,
+      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb.props.value",
+      tenantId
+    );
+    dispatch(
+      prepareFinalObject(
+        "searchScreen.ulb",
+        tenantId
+      )
+    );
 };
 
 const getData = async (action, state, dispatch) => {
