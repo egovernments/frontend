@@ -8,7 +8,8 @@ import {
     getDateField,
     getCommonSubHeader,
     getCommonGrayCard,
-    getCommonContainer 
+    getCommonContainer,
+    getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
   import get from "lodash/get";
@@ -17,9 +18,13 @@ import {
   import {documentListContainer} from "./documentListContainer";
   import {prepareFinalObject,  handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {getLeaseDetailsCard} from "./leaseDetailsCard";
+  import {downloadLeaseApplication, downloadLeaseApplication2} from "../../../../ui-utils/commons";
+  import {dSignConfirmationDialog} from "./dSignConfirmationDialog";
+  import PropTypes from "prop-types";
+  import {localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
-import PropTypes from "prop-types";
 
+  const monthsPattern = /^(0)*[1-9][0-9]{0,3}$/i;
   const getClasses = () =>{
     return PropTypes.object.isRequired;
   }
@@ -34,6 +39,33 @@ import PropTypes from "prop-types";
   const tradeSubTypeChange = () =>{
   }
 
+  export const setPostDSignSuccessScreen = (action,state, dispatch) => {
+    setVisibilityCant(action, state, dispatch, true, false);
+    setVisibilitySurveyNo(action, state, dispatch, true, false);
+    setVisibilityLeaseDetails(action, state, dispatch, true, false);
+    setVisibilityDownloadButton(action, state, dispatch, true, false);
+    setVisibilityEsignButton(action, state, dispatch, true, false);
+    setVisibilityMonths(action, state, dispatch, true, false);
+    setVisibilityApplicationType(action, state, dispatch, true, false);
+  }
+
+  const onMonthsChanged = (action,state, dispatch) => {
+    const months = get(
+      state.screenConfiguration.preparedFinalObject,
+      "lamsStore.Lease[0].months"
+    );
+    if(monthsPattern.test(months))
+    {
+      setVisibilityDownloadButton(action, state, dispatch, true);
+      setVisibilityEsignButton(action, state, dispatch, true)
+    }
+    else
+    {
+      setVisibilityDownloadButton(action, state, dispatch, false);
+      setVisibilityEsignButton(action, state, dispatch, false);
+    }
+  }
+
   const onLocatedChanged = (action, state, dispatch) =>{
     loadSurveyNumbers(action, state, dispatch);
 
@@ -44,6 +76,10 @@ import PropTypes from "prop-types";
 
     setVisibilitySurveyNo(action, state, dispatch, true);
     setVisibilityLeaseDetails(action, state, dispatch, false);
+    setVisibilityDownloadButton(action, state, dispatch, false);
+    setVisibilityEsignButton(action, state, dispatch, false);
+    setVisibilityMonths(action, state, dispatch, false);
+
   }
 
   const surveyNoChanged = (action, state, dispatch) => {
@@ -56,6 +92,9 @@ import PropTypes from "prop-types";
       dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails", selectedSurveyDetails));
     }
     setVisibilityLeaseDetails(action, state, dispatch,true);
+    setVisibilityDownloadButton(action, state, dispatch, false);
+    setVisibilityEsignButton(action, state, dispatch, false);
+    setVisibilityMonths(action, state, dispatch, true);
   }
 
   const onCategoryChanged = (action, state, dispatch) => {
@@ -114,6 +153,10 @@ import PropTypes from "prop-types";
     setVisibilitySurveyNo(action, state, dispatch, false);
     setVisibilityLeaseDetails(action, state, dispatch, false);
     setVisibilityLocated(action, state, dispatch, true);
+    setVisibilityDownloadButton(action, state, dispatch, false);
+    setVisibilityEsignButton(action, state, dispatch, false)
+    setVisibilityMonths(action, state, dispatch, false);
+
   }
 
   const onApplicationTypeChange = (action, state, dispatch) => {
@@ -129,10 +172,41 @@ import PropTypes from "prop-types";
     );
     setVisibilityLeaseDetails(action, state, dispatch, false);
     setVisibilitySurveyNo(action, state, dispatch, false);
+    setVisibilityDownloadButton(action, state, dispatch, false);
+    setVisibilityEsignButton(action, state, dispatch, false);
+    setVisibilityMonths(action, state, dispatch, false);
+
 
   }
 
-  const setVisibilityCant = (action, state, dispatch,visible) =>{
+  const onSignTypeChange = (action, state, dispatch) => {
+
+    
+  }
+
+  const setVisibilityApplicationType = (action, state, dispatch,visible, disabled) =>{
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.applicationType",
+        "visible",
+        visible
+      )
+    );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div1.children.details.children.cardContent.children.optionSelection.children.applicationType",
+          "disabled",
+          disabled
+        )
+      );
+    }
+  }
+
+  const setVisibilityCant = (action, state, dispatch,visible, disabled) =>{
     dispatch(
       handleField(
         "newApplication",
@@ -141,9 +215,20 @@ import PropTypes from "prop-types";
         visible
       )
     );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div1.children.details.children.cardContent.children.optionSelection.children.cantonment",
+          "disabled",
+          disabled
+        )
+      );
+    }
   }
 
-  const setVisibilityLocated = (action, state, dispatch, visible) => {
+  const setVisibilityLocated = (action, state, dispatch, visible, disabled) => {
     dispatch(
       handleField(
         "newApplication",
@@ -152,9 +237,20 @@ import PropTypes from "prop-types";
         visible
       )
     );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div1.children.details.children.cardContent.children.optionSelection.children.located",
+          "disabled",
+          disabled
+        )
+      );
+    }
   }
 
-  const setVisibilitySurveyNo = (action, state, dispatch, visible) => {
+  const setVisibilitySurveyNo = (action, state, dispatch, visible, disabled) => {
     dispatch(
       handleField(
         "newApplication",
@@ -163,9 +259,53 @@ import PropTypes from "prop-types";
         visible
       )
     );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo",
+          "disabled",
+          disabled
+        )
+      );
+    }
   }
 
-  const setVisibilityLeaseDetails = (action, state, dispatch, visible) =>{
+  const setVisibilityMonths = (action, state, dispatch, visible, disabled) => {
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
+        "visible",
+        visible
+      )
+    );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
+          "disabled",
+          disabled
+        )
+      );
+    }
+    if(get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months"))
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
+          "props.value",
+          ""
+        )
+      );
+    }
+  }
+
+  const setVisibilityLeaseDetails = (action, state, dispatch, visible, disabled) =>{
     dispatch(
       handleField(
         "newApplication",
@@ -174,10 +314,88 @@ import PropTypes from "prop-types";
         visible
       )
     );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+        "components.div1.children.details.children.cardContent.children.leaseDetails",
+          "disabled",
+          disabled
+        )
+      );
+    }
+  }
+  const setVisibilityDownloadButton = (action, state, dispatch, visible, disabled) =>{
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.downloadApplication",
+        "visible",
+        visible
+      )
+    );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.downloadApplication",
+          "disabled",
+          disabled
+        )
+      );
+    }
+  }
+
+  const setVisibilityEsignButton = (action, state, dispatch, visible, disabled) =>{
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.eSignApplication",
+        "visible",
+        visible
+      )
+    );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.eSignApplication",
+          "disabled",
+          disabled
+        )
+      );
+    }
   }
 
   const locationChanged = () =>{
   }
+
+  const onDownloadApplClicked = (state, dispatch) => {
+    // const LeaseApplication = [
+    //   { key: "challanNo", value: "CH-CB-AGRA-2021-003755" },
+    //   { key: "tenantId", value: "pb.agra" }
+    // ]
+    // downloadLeaseApplication(LeaseApplication,"download");   
+    downloadLeaseApplication2(state,dispatch, false);
+  }
+
+  const onEsignClicked = (state,dispatch) => {
+    showHideConfirmationPopup(state, dispatch);
+  }
+
+  export const showHideConfirmationPopup = (state, dispatch) => {
+    let toggle = get(
+      state.screenConfiguration.screenConfig["newApplication"],
+     "components.div1.children.details.children.cardContent.children.optionSelection.children.dSignConfirmationDialogDiv.props.open",
+     false
+   );
+   dispatch(
+     handleField("newApplication", "components.div1.children.details.children.cardContent.children.optionSelection.children.dSignConfirmationDialogDiv", "props.open", !toggle)
+   );
+ };
 
   export const newApplicationDetailsCard = getCommonCard(
       {
@@ -426,7 +644,161 @@ import PropTypes from "prop-types";
                   surveyNoChanged(action, state, dispatch);
                 },
             },
-            
+            // signType: getSelectField({
+            //   visible:false,
+            //   label: {
+            //     labelName: "Sign Type",
+            //     labelKey: "LAMS_SIGN_TYPE"
+            //   },
+            //   placeholder: {
+            //     labelName: "Select type of Signature",
+            //     labelKey: "LAMS_SIGN_TYPE_PLACEHOLDER"
+            //   },
+            //   required: true,
+            //   data: [
+            //     {
+            //       code: "DSIGN",
+            //       label: "DSIGN"
+            //     },
+            //     {
+            //       code: "DOWNLOAD_SIGN_UPLOAD",
+            //       label: "DOWNLOAD_SIGN_UPLOAD"
+            //     },
+            //   ],
+            //   localePrefix: {
+            //     moduleName: "LAMS",
+            //     masterName: "SIGN_TYPE"
+            //   },
+            //   jsonPath: "lamsStore.Lease[0].signType",
+            //   beforeFieldChange: (action, state, dispatch) => {
+              
+            //   },
+            //   afterFieldChange: (action, state, dispatch) => {
+            //     onSignTypeChange(action, state, dispatch);
+            //   },
+            //   autoSelect: true,
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 4
+            //   }
+            // }),
+            months: getTextField({
+              label: {
+                labelName: "For a period of (Months)",
+                labelKey: "LAMS_FOR_A_PERIOD"
+              },
+              props:{
+                className:"applicant-details-error",
+                //hasDependant: true,
+                //onChange:null,
+                //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+              },
+              placeholder: {
+                labelName: "Enter period in months",
+                labelKey: "LAMS_FOR_A_PERIOD_PLACEHOLDER"
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4
+              },
+              required: true,
+              pattern: monthsPattern,
+              jsonPath: "lamsStore.Lease[0].months",
+              visible: false,
+              afterFieldChange: (action, state, dispatch) => {
+                onMonthsChanged(action, state, dispatch);
+              },
+            }),
+            downloadApplication: {
+              uiFrameWork: "custom-atoms",
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "16px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                previousButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    //iconName: "keyboard_arrow_right"
+                  }
+                },
+                previousButtonLabel: getLabel({
+                  labelName: "DOWNLOAD_APPLICATION",
+                  labelKey: "DOWNLOAD_APPLICATION"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack:  (state, dispatch) => {
+                  onDownloadApplClicked(state, dispatch)
+                }
+              },
+              visible: false
+            },
+            eSignApplication: {
+              uiFrameWork: "custom-atoms",
+              componentPath: "Button",
+              
+              props: {
+                variant: "outlined",
+                color: "primary",
+                style: {
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "16px",
+                  borderRadius: "inherit"
+                }
+              },
+              children: {
+                previousButtonIcon: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    //iconName: "keyboard_arrow_right"
+                  }
+                },
+                previousButtonLabel: getLabel({
+                  labelName: "DSIGN_APPLICATION",
+                  labelKey: "DSIGN_APPLICATION"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                  callBack: (state, dispatch) => {
+                    onEsignClicked(state, dispatch);
+                  }
+              },
+              visible: false
+            },
+            dSignConfirmationDialogDiv: {
+              componentPath: "Dialog",
+              props: {
+                open: false,
+                maxWidth: "sm"
+              },
+              children: {
+                dialogContent: {
+                  componentPath: "DialogContent",
+                  props: {
+                    classes: {
+                      root: "city-picker-dialog-style"
+                    }
+                    // style: { minHeight: "180px", minWidth: "365px" }
+                  },
+                  children: {
+                    popup: dSignConfirmationDialog
+                  }
+                }
+              }
+            },
         }),
           leaseDetails:{
             uiFramework: "custom-atoms",

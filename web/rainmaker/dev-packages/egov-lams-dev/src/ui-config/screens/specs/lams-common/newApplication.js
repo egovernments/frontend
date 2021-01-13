@@ -4,7 +4,7 @@ import {
 
 import {loadMdmsData, loadLeaseDetails, loadLeaseDetails2, setDocsForEditFlow} from "../lams-utils/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {newApplicationDetailsCard, newApplicationDocumentsCard, OwnerInfoCard} from "./newApplicationDetailsCard";
+import {newApplicationDetailsCard, newApplicationDocumentsCard, OwnerInfoCard, set} from "./newApplicationDetailsCard";
 import {checkIfCitizenEditScreen} from "../lams-utils/utils";
 import {footer} from "./newApplicationFooter";
 import {documentList} from "./documentList";
@@ -13,79 +13,54 @@ import get from "lodash/get";
 import jp from "jsonpath";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
+const initFreshScreen = (action, state, dispatch) =>{
 
-const newApplication = {
-  uiFramework: "material-ui",
-  name: "newApplication",
-  beforeInitScreen:(action, state, dispatch) => {
-
-    const businessService = "LAMS";
-    const workflowAction = "APPLY";
-
-    dispatch(prepareFinalObject("lamsStore.removedDocs", {})); //Clear all the data first
-    dispatch(prepareFinalObject("lamsStore.uploadedDocsInRedux", {})); //Clear all the data first
-    dispatch(prepareFinalObject("lamsStore.Lease[0]", {})); //Clear all the data first
-    dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", ""));
-   
-    loadMdmsData(action, state, dispatch).then((response) => {
-      const tenants = get(response, "MdmsRes.tenant.tenants");
-      //Requires City Module Updations of MDMS? tobechanged
-      let jpFilter = "$[?(@.code != 'pb')]";
-      let onlyCBs = jp.query(tenants, jpFilter);
-      if(!(process.env.REACT_APP_NAME === "Citizen"))
-      {
-        let tenantId = getTenantId();
-        let currentCbFilter = "$[?(@.code == '"+tenantId+"')]";
-        onlyCBs = jp.query(onlyCBs, currentCbFilter );
-      } 
-      onlyCBs.sort((a, b) => (a.code > b.code) ? 1 : -1)
-      dispatch(prepareFinalObject("lamsStore.allTenants", onlyCBs));
-    });
-
-    //tobechanged
-    let tenantId2 = process.env.REACT_APP_NAME === "Citizen"? getQueryArg(window.location.href, "tenantId") : state.auth.userInfo.tenantId;
-    if(!ifUserRoleExists("CITIZEN")) //Only for employee directly set the tenantId
-      dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", state.auth.userInfo.tenantId));
-
-    dispatch(prepareFinalObject("lamsStore.requiredDocuments", [{applicationDocuments:documentList}]));
-
-    //Check if its citizen Review and he wants to edit
-    if(checkIfCitizenEditScreen())
+  const businessService = "LAMS";
+  const workflowAction = "APPLY";
+  
+  dispatch(prepareFinalObject("lamsStore.removedDocs", {})); //Clear all the data first
+  dispatch(prepareFinalObject("lamsStore.uploadedDocsInRedux", {})); //Clear all the data first
+  dispatch(prepareFinalObject("lamsStore.Lease[0]", {})); //Clear all the data first
+  dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
+  dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
+  dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", ""));
+ 
+  loadMdmsData(action, state, dispatch).then((response) => {
+    const tenants = get(response, "MdmsRes.tenant.tenants");
+    //Requires City Module Updations of MDMS? tobechanged
+    let jpFilter = "$[?(@.code != 'pb')]";
+    let onlyCBs = jp.query(tenants, jpFilter);
+    if(!(process.env.REACT_APP_NAME === "Citizen"))
     {
-      const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-      const tenantId = getQueryArg(window.location.href, "tenantId");
-      const purpose = getQueryArg(window.location.href, "purpose");
+      let tenantId = getTenantId();
+      let currentCbFilter = "$[?(@.code == '"+tenantId+"')]";
+      onlyCBs = jp.query(onlyCBs, currentCbFilter );
+    } 
+    onlyCBs.sort((a, b) => (a.code > b.code) ? 1 : -1)
+    dispatch(prepareFinalObject("lamsStore.allTenants", onlyCBs));
+  });
 
-      const queryParams = [{ key: "applicationNumber", value: applicationNumber },
-        { key: "tenantId", value: tenantId }
-      ];
-      loadLeaseDetails2(action, state, dispatch, queryParams).then((response)=>{
-        dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
-        setDocsForEditFlow(state,dispatch);
-        dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
-        dispatch(
-          handleField(
-            "newApplication",
-            "components.div1",
-            "visible",
-            false
-          )
-        );
-        dispatch(
-          handleField(
-            "newApplication",
-            "components.div2",
-            "visible",
-            false
-          )
-        );
-      });
-    }
+  //tobechanged
+  let tenantId2 = process.env.REACT_APP_NAME === "Citizen"? getQueryArg(window.location.href, "tenantId") : state.auth.userInfo.tenantId;
+  if(!ifUserRoleExists("CITIZEN")) //Only for employee directly set the tenantId
+    dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", state.auth.userInfo.tenantId));
 
-    if(checkIfCitizenEditScreen())
-    {
+  dispatch(prepareFinalObject("lamsStore.requiredDocuments", [{applicationDocuments:documentList}]));
+
+  //Check if its citizen Review and he wants to edit
+  if(checkIfCitizenEditScreen())
+  {
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const purpose = getQueryArg(window.location.href, "purpose");
+
+    const queryParams = [{ key: "applicationNumber", value: applicationNumber },
+      { key: "tenantId", value: tenantId }
+    ];
+    loadLeaseDetails2(action, state, dispatch, queryParams).then((response)=>{
+      dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
+      setDocsForEditFlow(state,dispatch);
+      dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
       dispatch(
         handleField(
           "newApplication",
@@ -102,18 +77,64 @@ const newApplication = {
           false
         )
       );
+    });
+  }
+
+  if(checkIfCitizenEditScreen())
+  {
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div2",
+        "visible",
+        false
+      )
+    );
+  }
+  else
+  {
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1",
+        "visible",
+        true
+      )
+    );
+  }
+}
+
+const initPostDSignSuccessScreen = (action, state, dispatch) => {
+
+  setPostDSignSuccessScreen(action,state, dispatch);
+
+}
+
+const newApplication = {
+  uiFramework: "material-ui",
+  name: "newApplication",
+  beforeInitScreen:(action, state, dispatch) => {
+
+    let aspTxnID = localStorageGet("dSign.initiated");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
+    let initiated = localStorageGet("lamsStore.dSign.initiated");
+    let dSignSuccess = getQueryArg(window.location.href, "success");
+    if(aspTxnID && initiated && dSignSuccess)
+    {
+      initPostDSignSuccessScreen(action,state,dispatch);
     }
     else
     {
-      dispatch(
-        handleField(
-          "newApplication",
-          "components.div1",
-          "visible",
-          true
-        )
-      );
+      initFreshScreen(action,state, dispatch);
     }
+    
     return action;
   },
   components: {
