@@ -3,7 +3,7 @@ import './index.css'
 import chrome from './chrome.png'
 import edge from './edge.png'
 import firefox from './firefox.png'
-import ie from './ie.png'
+
 
 const DisclaimerInformation = () =>{
    
@@ -16,37 +16,21 @@ const DisclaimerInformation = () =>{
             <table className="tableStyle">
                 <tbody>
                     <tr>
-                        <td className="tdStyle">
+                        <td className="tdStyleDisclimer">
                         <img src={chrome} alt="Logo"/><br></br>
                                 <label style={{color:'whitesmoke'}}> >V-81 </label>
                         </td>
-                        <td className="tdStyle">
+                        <td className="tdStyleDisclimer">
                         <img src={edge} alt="Logo" /><br></br>
                         <label style={{color:'whitesmoke'}}>>V-84 </label>
                         </td>
-                        <td className="tdStyle">
+                        <td className="tdStyleDisclimer">
                         <img src={firefox} alt="Logo" /><br></br>
                         <label style={{color:'whitesmoke'}}>>V-79 </label>
                         </td>
-                        {/* <td className="tdStyle">
-                        <img src={ie} alt="Logo"/> <br></br>
-                        <label>>V- </label>
-                        </td> */}
+                        
                     </tr>
-                    {/* <tr>
-                        <td className="tdStyle">
-                        <label> >V-23 </label>
-                        </td>
-                        <td className="tdStyle">
-                         <label>>V-10 </label>
-                        </td>
-                        <td className="tdStyle">
-                        <label>>V-21 </label>
-                        </td>
-                        <td className="tdStyle">
-                        <label>>V-9 </label>
-                        </td>
-                    </tr> */}
+                   
                 </tbody>
             </table>        
         </div>                    
