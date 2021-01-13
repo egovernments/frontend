@@ -2,6 +2,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generateReceipt from "../../utils/receiptPdf";
 import { ifUserRoleExists } from "../../utils";
 import { generatePdfFromDiv } from "../applyResource/footer";
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 
 const getCommonApplyFooter = children => {
   return {
@@ -139,7 +140,8 @@ export const paymentSuccessFooter = (
                   props: { variant: "outlined", style: { marginLeft: 10 } },
                   menu: printMenu
                 }
-              }
+              },
+              visible : !JSON.parse(localStorageGet('isMobileApp'))
             }
           },
           gridDefination: {

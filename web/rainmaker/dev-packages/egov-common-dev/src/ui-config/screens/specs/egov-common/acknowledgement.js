@@ -7,6 +7,7 @@ import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils"
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import './index.css';
 import { getHeader } from "./pay";
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 
 
 
@@ -79,7 +80,8 @@ const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig
                         props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
                         menu: printMenu
                     }
-                }
+                },
+                visible : !JSON.parse(localStorageGet('isMobileApp'))
             }
 
         },
