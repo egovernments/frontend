@@ -1,6 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
+	<android.support.v4.widget.SwipeRefreshLayout
+		android:id="@+id/swipeToRefresh"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
 	<WebView
 		android:id="@+id/webview"
@@ -8,10 +12,12 @@
 		android:layout_alignParentLeft="true"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"></WebView>
-	<FrameLayout
-		android:id="@+id/frameContainer"
-		android:layout_width="match_parent"
-		android:layout_height="250dp"
-		android:orientation="vertical"></FrameLayout>
+
+	</android.support.v4.widget.SwipeRefreshLayout>
+<!--	<FrameLayout-->
+<!--		android:id="@+id/frameContainer"-->
+<!--		android:layout_width="match_parent"-->
+<!--		android:layout_height="250dp"-->
+<!--		android:orientation="vertical"></FrameLayout>-->
 
 </RelativeLayout>

@@ -17,9 +17,6 @@ allprojects {
 	repositories {
 		jcenter()
 		google()
-		flatDir {
-			dirs 'libs'
-		}
 	}
 }
 
@@ -27,7 +24,7 @@ android {
 	compileSdkVersion 29
 	buildTypes {
 		release {
-			minifyEnabled false
+			minifyEnabled true
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 			applicationVariants.all { variant ->
 				variant.outputs.all {
@@ -114,7 +111,8 @@ android {
 //			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/citizen/user/register"'
 
 			//UAT
-			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/citizen/user/register"'
+			//DEV2
+			buildConfigField 'String', 'url', '"https://13.71.65.215.nip.io/citizen/user/register"'
 		}
 		EmployeeUAT {
 			minSdkVersion 21
@@ -145,6 +143,4 @@ android {
 dependencies {
 	implementation 'com.android.support:appcompat-v7:26.1.0'
 	implementation 'com.google.android.gms:play-services-base:15.0.1'
-	implementation (name: 'ezetapandroidsdk_2_20', ext: 'aar')
-	implementation files('libs/mosambeelib_v1.0.0.091.jar')
 }

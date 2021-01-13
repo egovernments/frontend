@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,8 +44,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +63,6 @@ import android.app.DownloadManager;
 import android.os.AsyncTask;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.FileOutputStream;
@@ -76,37 +74,21 @@ import java.io.OutputStream;
 
 import org.egovernment.mseva.BuildConfig;
 import org.egovernment.mseva.R;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.eze.api.EzeAPI;
-import com.mosambee.lib.ResultData;
-
-import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_CASH_TXN;
-import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_CLOSE;
-import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_SALE_TXN;
-import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_UPI;
-import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_INITIALIZE;
-import static org.egovernment.mseva.utils.Constant.REQUEST_CODE_GET_INCOMPLETE_TXN;
-import static org.egovernment.mseva.utils.Constant.MERCHANT_NAME;
-import static org.egovernment.mseva.utils.Constant.API_KEY;
-import static org.egovernment.mseva.utils.Constant.USER_NAME;
 
 
-
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
 
 	final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
 	private static String URL   =BuildConfig.url;
 	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
 	public static String HOST	= getHost(URL);
-//	static final int SEND_PYAMENT_INFORMATION = 2;
+	public static String PAYMENTURL	= getHost("https://pilot.surepay.ndml.in");
+	public static String PAYMENTURL_2	= getHost("https://api.razorpay.com/");
 
 	//Careful with these variable names if altering
     private WebView webView;
-	private FrameLayout container;
+	private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private String asw_cam_message;
     private ValueCallback<Uri> asw_file_message;
@@ -132,331 +114,42 @@ public class MainActivity extends AppCompatActivity{
 
 
 	private static final String TAG = MainActivity.class.getSimpleName();
-	private String strTxnId = null;
 
-	private static Context context;
-	final MosambeeImplementation mosambeeClass = new MosambeeImplementation();
-	String resjson = null;
-
-
-	@Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (Build.VERSION.SDK_INT >= 21) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-			getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-			Uri[] results = null;
-			if (resultCode == Activity.RESULT_OK && requestCode == asw_file_req) {
-
-				if (null == asw_file_path) {
-					return;
-				}
-				if (intent == null || intent.getFlags() == 0) {
-					if (asw_cam_message != null) {
-						results = new Uri[]{Uri.parse(asw_cam_message)};
-					}
-				} else {
-					String dataString = intent.getDataString();
-					if (dataString != null) {
-						results = new Uri[]{Uri.parse(dataString)};
-					}
-				}
-				asw_file_path.onReceiveValue(results);
-				asw_file_path = null;
-			} else {
-				if (requestCode == asw_file_req) {
-					if (null == asw_file_message) return;
-					Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-					asw_file_message.onReceiveValue(result);
-					asw_file_message = null;
-				}
-			}
-			//  Log.d("SampleAppLogs", "requestCode = " + requestCode + "resultCode = " + resultCode);
-			try {
-				if (intent != null && intent.hasExtra("response")) {
-
-					Log.d("SampleAppLogs", intent.getStringExtra("response"));
-				}
-
-				if (intent != null) {
-					if (requestCode == REQUEST_CODE_SALE_TXN) {
-						//  Intent sendAckIntent;
-						if (resultCode == RESULT_OK) {
-
-							Log.v("JSONRST", intent.getStringExtra("response"));
-							JSONObject response = new JSONObject(intent.getStringExtra("response"));
-							// JSONObject mainObject = new JSONObject(intent.getStringExtra("response"));
-							response = response.getJSONObject("result");
-							response = response.getJSONObject("txn");
-							Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show();
-							String strTxnId = response.getString("txnId");
-							String stramount = response.getString("amount");
-							String cardNo = response.getString("cardLastFourDigit");
-							String strsettlementStatus = response.getString("settlementStatus");
-							// Log.v("SETTLEMENTSTATUS", settlementStatus);
-
-							JSONObject resultjson = new JSONObject();
-							resultjson.put("tranactionid",strTxnId);
-							resultjson.put("cardNumber",cardNo);
-							resjson = resultjson.toString();
-
-							loadView("javascript:window.posOnSuccess('"+resjson+"')",false);
-							closeEzeTap();
-
-
-						} else if (resultCode == RESULT_CANCELED) {
-							// JSONObject response = new JSONObject(intent.getStringExtra("response"));
-							// response = response.getJSONObject("error");
-							// String errorCode = response.getString("code");
-							// String errorMessage = response.getString("message");
-							Toast.makeText(this, "Paymemnt Failure", Toast.LENGTH_LONG).show();
-							loadView("javascript:window.posOnFailure()",false);
-							closeEzeTap();
-						}
-					}
-
-//					if (requestCode == REQUEST_CODE_CASH_TXN) {
-//						Intent sendAckIntent;
-//						if (resultCode == RESULT_OK) {
-//							Log.v("JSONRST", intent.getStringExtra("response"));
-//							JSONObject response = new JSONObject(intent.getStringExtra("response"));
-//							JSONObject mainObject = new JSONObject(intent.getStringExtra("response"));
-//							response = response.getJSONObject("result");
-//							response = response.getJSONObject("txn");
-//							String strTxnId = response.getString("txnId");
-//							String stramount = response.getString("amount");
-//							String strsettlementStatus = response.getString("settlementStatus");
-////                    Log.v("SETTLEMENTSTATUS", settlementStatus);
-//
-//							loadView("javascript:window.posOnSuccess()",false);
-//							closeEzeTap();
-//						} else {
-//							System.out.println("------------------------api cashbackCallback-------4");
-//							JSONObject response = new JSONObject(intent.getStringExtra("response"));
-//							response = response.getJSONObject("error");
-//							// String errorCode = response.getString("code");
-//							// String errorMessage = response.getString("message");
-//							loadView("javascript:window.posOnFailure()",false);
-//							closeEzeTap();
-//						}
-//					}
-					if (requestCode == REQUEST_CODE_GET_INCOMPLETE_TXN) {
-						JSONObject response = new JSONObject(intent.getStringExtra("response"));
-						if (resultCode == RESULT_OK) {
-							response = response.getJSONObject("result");
-						} else {
-							response = response.getJSONObject("error");
-							String message = response.getString("message");
-							Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-							if(!response.getString("code").equalsIgnoreCase("NONCE_NOT_FOUND")){
-								Toast.makeText(this, "Paymemnt Failure", Toast.LENGTH_LONG).show();
-								loadView("javascript:window.posOnFailure()",false);
-							}
-
-						}
-
-
-					}
-				}
-
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-
-//				if (requestCode == SEND_PYAMENT_INFORMATION) {
-//					// Make sure the request was successful
-//					if (resultCode == RESULT_OK) {
-////						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-////
-////						Toast.makeText(getBaseContext(), "Sucess!" , Toast.LENGTH_SHORT ).show();
-//						// The user picked a contact.
-//						//call javascript bridge to update the status
-//
-//						// Do something with the contact here (bigger example below)
-//						loadView("javascript:window.posOnSuccess()",false);
-//					}
-//					else
-//					{
-////						Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
-////
-////						Toast.makeText(getBaseContext(), "Failure!" , Toast.LENGTH_SHORT ).show();
-//
-//						//call javascript bridge to update the status
-//						loadView("javascript:window.posOnFailure()",false);
-//					}
-//				}
-
-		}
-
-
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            Uri[] results = null;
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == asw_file_req) {
+                    if (null == asw_file_path) {
+                        return;
+                    }
+                    if (intent == null || intent.getFlags() == 0) {
+                        if (asw_cam_message != null) {
+                            results = new Uri[]{Uri.parse(asw_cam_message)};
+                        }
+                    } else {
+                        String dataString = intent.getDataString();
+                        if (dataString != null) {
+                            results = new Uri[]{ Uri.parse(dataString) };
+                        }
+                    }
+                }
+            }
+            asw_file_path.onReceiveValue(results);
+            asw_file_path = null;
+        } else {
+            if (requestCode == asw_file_req) {
+                if (null == asw_file_message) return;
+                Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+                asw_file_message.onReceiveValue(result);
+                asw_file_message = null;
+            }
+        }
     }
-
-
-	public class WebAppInterface {
-		Context mContext;
-		HashMap<String, JSONObject> mObjectsFromJS = new HashMap<String, JSONObject>();
-
-		/**
-		 * Instantiate the interface and set the context
-		 */
-		WebAppInterface(Context c) {
-			mContext = c;
-		}
-
-		/**
-		 * Show a toast from the web page
-		 */
-		@JavascriptInterface
-		public void sendPaymentData(String name, String json) throws JSONException {
-//			mObjectsFromJS.put(name, new JSONObject(json));
-//			JSONObject paymentData = mObjectsFromJS.get("paymentData");
-		//	Toast.makeText(mContext, json, Toast.LENGTH_SHORT).show();
-			//call call back function with paymentDataMap
-//			Intent sendPaymentIntent = new Intent(Intent.ACTION_SEND);
-//			sendPaymentIntent.setClassName("ritika.com.myapplication", "ritika.com.myapplication.MainActivity");
-//			sendPaymentIntent.setType("text/plain");
-//
-//			sendPaymentIntent.putExtra(name, json);
-//
-//			startActivityForResult(sendPaymentIntent, SEND_PYAMENT_INFORMATION);
-
-
-			if(name.equals("paymentData")) {
-				JSONObject jsonObject = new JSONObject(json);
-				String cbType = jsonObject.getString("tenant");
-				switch(cbType) {
-					case "Secunderabad": {
-						doInitializeEzeTap(cbType);
-						break;
-					}
-					default: {
-//						runOnUiThread(new Runnable() {
-//
-//							@Override
-//							public void run() {
-//								intializeMOS("test");
-//							}
-//						});
-
-					}
-				}
-
-
-				//doCheckIncompleteTxn();
-
-				String modeOfPayment = jsonObject.getString("instrumentType");
-				if (modeOfPayment.equalsIgnoreCase("Cash")) {
-					onCash(json);
-				} else if (modeOfPayment.equalsIgnoreCase("Card")) {
-					switch(cbType) {
-						case "Secunderabad": {
-							onCard(json);
-							break;
-						}
-						default: {
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									onMosambeePayment(json);
-								}
-							});
-
-						}
-					}
-					//onCard(json);
-					//onMosambeePayment(json);
-				} else {
-					//closeEzeTap();
-					//closeMosambee();
-
-					return;
-				}
-			}
-		}
-
-
-		@JavascriptInterface
-		public void sendPrintData(String name, String json) throws JSONException {
-			if(name.equals("printData")){
-				try{
-					JSONObject jsonObject = new JSONObject(json);
-					String NEXTLINE = "&&";
-					String receiptString = "     " + jsonObject.getString("ulbType");
-					receiptString = receiptString + NEXTLINE + "        Collection Receipt" + NEXTLINE;
-					receiptString = receiptString + "******************************************" + NEXTLINE;
-
-					receiptString = receiptString + " Receipt No    : " + jsonObject.getString("receiptNumber") + NEXTLINE;
-					if(jsonObject.has("receiptDate")){
-						receiptString = receiptString + " Receipt Date  : " + jsonObject.getString("receiptDate") + NEXTLINE;
-					}
-					receiptString = receiptString + " Consumer Name : " + jsonObject.getString("consumerName") + NEXTLINE;
-
-
-					receiptString = receiptString + " Category      : " + jsonObject.getString("businessService") + NEXTLINE;
-					receiptString = receiptString + " From Period   : " + jsonObject.getString("fromPeriod") + NEXTLINE;
-					receiptString = receiptString + " To Period     : " + jsonObject.getString("toPeriod") + NEXTLINE;
-					receiptString = receiptString + " Paid Amount   : ₹ " + jsonObject.getString("receiptAmount") + NEXTLINE;
-					if(jsonObject.has("paymentMode")) {
-						receiptString = receiptString + " Payment Mode  : " + jsonObject.getString("paymentMode") + NEXTLINE;
-					}
-					receiptString = receiptString + " Collector Name: " + jsonObject.getString("collectorName")+ NEXTLINE;
-					receiptString = receiptString + "******************************************" + NEXTLINE;
-
-					Toast.makeText(mContext, receiptString, Toast.LENGTH_SHORT).show();
-
-
-				}catch (JSONException e) {
-
-					e.printStackTrace();
-				}
-
-			}
-
-		}
-
-	}
-
-	private void onMosambeePayment(String json) {
-
-		JSONObject jsonRequest = new JSONObject();
-		try {
-			Date today = new Date();
-			JSONObject jsonObject = new JSONObject(json);
-			String customerNo = jsonObject.getString("customerMobile");
-			String customerEmail = "";
-			String transType = "SALE";
-			String invoiceDate = today.toString();
-			String orderId = jsonObject.getString("billNumber");
-			String amount =jsonObject.getString("paymentAmount");
-			mosambeeClass.startProcess(container,customerNo,customerEmail,transType,invoiceDate,orderId,amount);
-
-		}
-		catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-
-	}
-
-	private void intializeMOS(String cbType) {
-    	String username = null;
-    	String password = null;
-		switch(cbType) {
-			case "Secunderabad":
-			{
-				break;
-			}
-			default:
-			{
-				username = getString(R.string.MOS_UNAME);
-				password = getString(R.string.MOS_PSWD);
-			}
-		}
-		mosambeeClass.init(username,password);
-
-	}
 
 	@SuppressLint({"SetJavaScriptEnabled", "WrongViewCast"})
     @Override
@@ -483,9 +176,8 @@ public class MainActivity extends AppCompatActivity{
 
 		webView = (WebView) findViewById(R.id.webview);
 //		webView.addJavascriptInterface(proxy, "mSewaApp");
-		webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
-		container = (FrameLayout) findViewById(R.id.frameContainer);
+		mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeToRefresh);
 
 		String versionName = "";
 		int versionCode = 0;
@@ -500,7 +192,7 @@ public class MainActivity extends AppCompatActivity{
 
 		WebSettings webSettings = webView.getSettings();
 
-		webSettings.setUserAgentString(webSettings.getUserAgentString() + " mSewa V." + versionName + "." + versionCode);
+		webSettings.setUserAgentString(webSettings.getUserAgentString() + " eChhawani V." + versionName + "." + versionCode);
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setGeolocationEnabled(true);
 		webSettings.setAllowFileAccess(true);
@@ -508,6 +200,7 @@ public class MainActivity extends AppCompatActivity{
 		webSettings.setAllowUniversalAccessFromFileURLs(true);
 		webSettings.setUseWideViewPort(true);
 		webSettings.setDomStorageEnabled(true);
+		webSettings.setSupportMultipleWindows(false);
 		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
 		//improve performance
@@ -540,7 +233,7 @@ public class MainActivity extends AppCompatActivity{
 			@Override
 			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 							== PackageManager.PERMISSION_GRANTED) {
 							Log.v(TAG,"Permission is granted");
 							downloadDialog(url,userAgent,contentDisposition,mimeType);
@@ -634,7 +327,7 @@ public class MainActivity extends AppCompatActivity{
 
             }
             //Handling input[type="file"] requests for android API 21+
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams){
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,WebChromeClient.FileChooserParams fileChooserParams){
 
 				if (asw_file_path != null) {
 					asw_file_path.onReceiveValue(null);
@@ -668,20 +361,51 @@ public class MainActivity extends AppCompatActivity{
             */
             loadView(path,false);
         }
-		context = getApplicationContext();
-		mosambeeClass.setContext(context);
-		mosambeeClass.setActivity(MainActivity.this);
-		intializeMOS("test");
+
+		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				webView.loadUrl( "javascript:window.location.reload( true )" );
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
+		});
 
 
     }
 
 
-	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimetype)
+	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimeType)
 	{
-		startActivity(Intent.makeMainSelectorActivity(
-			Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
-			.setData(Uri.parse(url.toString())));
+		if(url.startsWith("blob") == true) {
+
+			startActivity(Intent.makeMainSelectorActivity(
+					Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
+					.setData(Uri.parse(url.toString())));
+		}
+		else{
+			try {
+				DownloadManager.Request request = new DownloadManager.Request(
+						Uri.parse(url));
+				request.setMimeType(mimeType);
+
+				request.addRequestHeader("User-Agent", userAgent);
+				request.setDescription("Downloading File...");
+				request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
+				request.allowScanningByMediaScanner();
+				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				request.setDestinationInExternalPublicDir(
+						Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
+								url, contentDisposition, mimeType));
+				DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+				dm.enqueue(request);
+				Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
+			}catch(Exception e ){
+				Log.d("DownloadManager","Failed");
+				Toast.makeText(getApplicationContext(), "Downloading Failed", Toast.LENGTH_SHORT).show();
+			}
+		}
+
+
 	}
 
 
@@ -706,7 +430,7 @@ public class MainActivity extends AppCompatActivity{
         }
 
         public void onPageFinished(WebView view, String url) {
-			loadView("javascript:window.localStorage.setItem('isPOSmachine',true)",false);
+			loadView("javascript:window.localStorage.setItem('Citizen.isMobileApp',true)",false);
         }
         //For android below API 23
 		@SuppressWarnings("deprecation")
@@ -777,20 +501,13 @@ public class MainActivity extends AppCompatActivity{
 
 			//Use to do download support
 		}
-		else if(url.startsWith("egov://print/"))
-		{
-			Intent sendPrintIntent = new Intent(Intent.ACTION_SEND);
-			sendPrintIntent.setClassName("com.example.bluetoothprinting", "com.example.bluetoothprinting.MainActivity");
-			sendPrintIntent.setType("text/plain");
-
-			sendPrintIntent.putExtra("printdata", url);
-			startActivity(sendPrintIntent);
-		}
 //		else if (url.contains("98jf4")) {
 //			loadView(url, true);
 //			//Opening external URLs in android default web browser
 //		}
-		else if (!getHost(url).equals(HOST)) {
+		else if (!getHost(url).equals(HOST)
+		&& !getHost(url).equals(PAYMENTURL)
+		&& !getHost(url).equals(PAYMENTURL_2)) {
 			try {
 				Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
 
@@ -1060,16 +777,6 @@ public class MainActivity extends AppCompatActivity{
 		if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE) || !addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
 			permissionsNeeded.add("Read/Write Files");
 
-		if (!addPermission(permissionsList, Manifest.permission.READ_PHONE_STATE))
-			permissionsNeeded.add("Read Phone State");
-
-		if (!addPermission(permissionsList, Manifest.permission.BLUETOOTH) )
-			permissionsNeeded.add("Bluetooth");
-
-		if(!addPermission(permissionsList, Manifest.permission.BLUETOOTH_ADMIN))
-			permissionsNeeded.add("Bluetooth Admin");
-
-
 
 		if (permissionsList.size() > 0) {
 			if (permissionsNeeded.size() > 0) {
@@ -1106,293 +813,6 @@ public class MainActivity extends AppCompatActivity{
 		}
 		return true;
 	}
-
-	private void doInitializeEzeTap(String cbType) {
-		/**********************************************
-		 {
-		 "demoAppKey": "your demo app key",
-		 "prodAppKey": "your prod app key",
-		 "merchantName": "your merchant name",
-		 "userName": "your user name",
-		 "currencyCode": "INR",
-		 "appMode": "DEMO/PROD",
-		 "captureSignature": "true/false",
-		 "prepareDevice": "true/false"
-		 }
-		 **********************************************/
-		JSONObject jsonRequest = new JSONObject();
-		try {
-//            jsonRequest.put("demoAppKey", "1a1e3805-394e-4928-a95e-1d1f61085677");
-//            jsonRequest.put("prodAppKey", "1a1e3805-394e-4928-a95e-1d1f61085677");
-//            jsonRequest.put("merchantName", "your organization name");
-//            jsonRequest.put("userName", "PUNJAB_MUNICIPAL");
-//            jsonRequest.put("currencyCode", "INR");
-//            jsonRequest.put("appMode", "Demo");
-//            jsonRequest.put("captureSignature", "true");
-//            jsonRequest.put("prepareDevice", "false");
-			String apikey = "";
-			String merchantName = "";
-
-			switch(cbType) {
-				case "Secunderabad":
-				{
-					apikey = getString(R.string.SEC_API);
-					merchantName = getString(R.string.SEC_MERCHANT_NAME);
-
-					break;
-				}
-				default:
-				{
-					apikey = getString(R.string.TEST_API);
-					merchantName = getString(R.string.TEST_MERCHANT_NAME);
-				}
-			}
-
-			jsonRequest.put("demoAppKey", apikey);
-			jsonRequest.put("prodAppKey", API_KEY);
-			jsonRequest.put("merchantName", merchantName);
-			jsonRequest.put("userName", USER_NAME);
-			jsonRequest.put("currencyCode", "INR");
-			jsonRequest.put("appMode", "Demo");
-			jsonRequest.put("captureSignature", "true");
-			jsonRequest.put("prepareDevice", "false");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		EzeAPI.initialize(this, REQUEST_CODE_INITIALIZE, jsonRequest);
-	}
-
-	void onCash(String json) {
-
-		try {
-			//  REQUEST
-
-			JSONObject jsonObject = new JSONObject(json);
-
-
-			JSONObject jsonRequest = new JSONObject();
-			JSONObject jsonOptionalParams = new JSONObject();
-			JSONObject jsonReferences = new JSONObject();
-			JSONObject jsonCustomer = new JSONObject();
-
-			//Building Customer Object
-			jsonCustomer.put("name", jsonObject.getString("customerName"));
-			jsonCustomer.put("mobileNo",jsonObject.getString("customerMobile"));
-			// jsonCustomer.put("email", et_email_adrs.getText().toString().trim());
-
-			//int refNo = SharedPrefrences.getRefNo(PaymentoptionActivity.this);
-			jsonReferences.put("reference1", "" + UUID.randomUUID());
-			//SharedPrefrences.setReferenceNo(PaymentoptionActivity.this, (refNo + 1));
-
-			//Passing Additional References
-			JSONArray array = new JSONArray();
-			array.put("addRef_xx1");
-			array.put("addRef_xx2");
-			jsonReferences.put("additionalReferences", array);
-
-			//Building Optional params Object
-			//Cannot have amount cashback in cash transaction.
-			jsonOptionalParams.put("amountCashback", "0.00");
-			jsonOptionalParams.put("amountTip", "0.00");
-			jsonOptionalParams.put("references", jsonReferences);
-			jsonOptionalParams.put("customer", jsonCustomer);
-
-
-			//Building final request object
-			jsonRequest.put("amount",jsonObject.getString("paymentAmount"));
-			jsonRequest.put("options", jsonOptionalParams);
-
-			doCashTxn(jsonRequest);
-
-			//EzeAPI.cashTransaction(this, REQUESTCODE_, jsonRequest);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	private void doCashTxn(JSONObject jsonRequest) {
-		/******************************************
-		 {
-		 "amount": "123",
-		 "options": {
-		 "references": {
-		 "reference1": "1234",
-		 "additionalReferences": [
-		 "addRef_xx1",
-		 "addRef_xx2"
-		 ]
-		 },
-		 "customer": {
-		 "name": "xyz",
-		 "mobileNo": "1234567890",
-		 "email": "abc@xyz.com"
-		 }
-		 }
-		 }
-		 ******************************************/
-
-		EzeAPI.cashTransaction(this, REQUEST_CODE_CASH_TXN, jsonRequest);
-	}
-
-
-	void onCard(String json) {
-
-
-		JSONObject jsonRequest = new JSONObject();
-		try {
-			JSONObject jsonObject = new JSONObject(json);
-			jsonRequest = new JSONObject();
-			JSONObject jsonOptionalParams = new JSONObject();
-			JSONObject jsonReferences = new JSONObject();
-			JSONObject josnAdtionakRefrence = new JSONObject();
-
-			// Building References Object
-			jsonReferences.put("reference1", "ref" +  UUID.randomUUID());
-
-
-			// Passing Additional References
-			JSONArray array = new JSONArray();
-			array.put("addRef_xx1");
-			array.put("addRef_xx2");
-			jsonReferences.put("additionalReferences", array);
-
-			jsonOptionalParams.put("amountCashback", "0");// Cannot
-			// have
-			// amount cashback in SALE transaction.
-			jsonOptionalParams.put("amountTip", 0.00);
-			jsonOptionalParams.put("references", jsonReferences);
-
-
-			JSONObject jsonCustomer = new JSONObject();
-
-			// Building Customer Object
-			jsonCustomer.put("name", jsonObject.getString("customerName"));
-			jsonCustomer.put("mobileNo",jsonObject.getString("customerMobile"));
-			//  jsonCustomer.put("email", et_email_adrs.getText().toString().trim());
-
-			jsonRequest.put("amount",jsonObject.getString("paymentAmount"));
-			jsonRequest.put("options", jsonOptionalParams);
-
-			jsonRequest.put("references", jsonReferences);
-			jsonRequest.put("additionalReferences", josnAdtionakRefrence);
-			jsonRequest.put("mode", "SALE");//Card payment Mode
-			doSaleTxn(jsonRequest);
-
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	private void doSaleTxn(JSONObject jsonRequest) {
-		/******************************************
-		 {
-		 "amount": "123",
-		 "options": {
-		 "amountCashback": 0,
-		 "amountTip": 0,
-		 "references": {
-		 "reference1": "1234",
-		 "additionalReferences": [
-		 "addRef_xx1",
-		 "addRef_xx2"
-		 ]
-		 },
-		 "customer": {
-		 "name": "xyz",
-		 "mobileNo": "1234567890",
-		 "email": "abc@xyz.com"
-		 }
-		 },
-		 "mode": "SALE"
-		 }
-		 ******************************************/
-
-		EzeAPI.cardTransaction(this, REQUEST_CODE_SALE_TXN, jsonRequest);
-	}
-
-	private void doCheckIncompleteTxn() {
-		EzeAPI.checkForIncompleteTransaction(this, REQUEST_CODE_GET_INCOMPLETE_TXN);
-	}
-	private void closeEzeTap() {
-		EzeAPI.close(this, REQUEST_CODE_CLOSE);
-	}
-	private void closeMosambee() {
-		mosambeeClass.stopProcess();
-	}
-
-	public void setData(final ResultData result) throws JSONException {
-		if (result == null|| (result != null && result.getResult() == false) ) {
-			Toast.makeText(context, "Paymemnt Failure", Toast.LENGTH_LONG).show();
-			if(result.getResult() == false )
-			{
-				String msg = "Result: " + result.getResult()
-						+ "\nReason code: "
-						+ result.getReasonCode() + "\nReason: "
-						+ result.getReason() + "\nTranaction Id: "
-						+ result.getTransactionId()
-						+ "\nTransactin amount: "
-						+ result.getAmount()
-						+ "\nTransactin data: "
-						+ result.getTransactionData();
-				Toast.makeText(context, result.getReason(), Toast.LENGTH_LONG).show();
-			}
-			//loadView("javascript:window.posOnFailure()",false);
-			webView.post(new Runnable() {
-				@Override
-				public void run() {
-					webView.loadUrl("javascript:window.posOnFailure()");
-				}
-			});
-		} else {
-//			Log.d("Result","Result: " + result.getResult()
-//					+ "\nReason code: "
-//					+ result.getReasonCode() + "\nReason: "
-//					+ result.getReason() + "\nTranaction Id: "
-//					+ result.getTransactionId()
-//					+ "\nTransactin amount: "
-//					+ result.getAmount()
-//					+ "\nTransactin data: "
-//					+ result.getTransactionData());
-
-			String msg = "Result: " + result.getResult()
-					+ "\nReason code: "
-					+ result.getReasonCode() + "\nReason: "
-					+ result.getReason() + "\nTranaction Id: "
-					+ result.getTransactionId()
-					+ "\nTransactin amount: "
-					+ result.getAmount()
-					+ "\nTransactin data: "
-					+ result.getTransactionData();
-			//Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-			JSONObject txnObject = new JSONObject(result.getTransactionData());
-			String cardNO = txnObject.getString("cardNumber");
-
-			JSONObject resultjson = new JSONObject();
-			resultjson.put("tranactionid",result.getTransactionId());
-			resultjson.put("cardNumber",cardNO.substring(cardNO.length() - 4));
-//			resultjson.put("tranactionid","123456");
-//			resultjson.put("cardNumber","1234");
-			resjson = resultjson.toString();
-		//	Toast.makeText(context, resjson, Toast.LENGTH_LONG).show();
-
-
-			webView.post(new Runnable() {
-				@Override
-				public void run() {
-					webView.loadUrl("javascript:window.posOnSuccess('"+resjson+"')");
-				}
-			});
-		}
-
-		//closeMosambee();
-	}
-
-	public void setCommand(final String command) {
-		Toast.makeText(context, command, Toast.LENGTH_LONG).show();
-	}
-
-
 
 
 }
