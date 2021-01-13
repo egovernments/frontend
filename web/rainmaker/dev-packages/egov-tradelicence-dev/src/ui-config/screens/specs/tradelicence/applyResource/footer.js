@@ -1486,7 +1486,7 @@ export const downloadPrintContainer = (
             }
             
           },
-          visible : !JSON.parse(window.localStorage.getItem('isMobileApp')),
+          visible : !JSON.parse(localStorageGet('isMobileApp'))
         }
 
       },
