@@ -4,7 +4,7 @@ import {
 
 import {loadMdmsData, loadLeaseDetails, loadLeaseDetails2, setDocsForEditFlow} from "../lams-utils/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {newApplicationDetailsCard, newApplicationDocumentsCard, OwnerInfoCard, set} from "./newApplicationDetailsCard";
+import {newApplicationDetailsCard, newApplicationDocumentsCard, OwnerInfoCard, setPostDSignSuccessScreen} from "./newApplicationDetailsCard";
 import {checkIfCitizenEditScreen} from "../lams-utils/utils";
 import {footer} from "./newApplicationFooter";
 import {documentList} from "./documentList";
@@ -12,6 +12,9 @@ import { ifUserRoleExists } from "../utils";
 import get from "lodash/get";
 import jp from "jsonpath";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import {afterDSignDone} from "../../../../ui-utils/commons";
+
 
 const initFreshScreen = (action, state, dispatch) =>{
 
@@ -115,7 +118,7 @@ const initFreshScreen = (action, state, dispatch) =>{
 const initPostDSignSuccessScreen = (action, state, dispatch) => {
 
   setPostDSignSuccessScreen(action,state, dispatch);
-
+  afterDSignDone(action,state,dispatch);;
 }
 
 const newApplication = {
@@ -123,8 +126,8 @@ const newApplication = {
   name: "newApplication",
   beforeInitScreen:(action, state, dispatch) => {
 
-    let aspTxnID = localStorageGet("dSign.initiated");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
-    let initiated = localStorageGet("lamsStore.dSign.initiated");
+    let aspTxnID = localStorageGet("dSign.aspTxnID");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
+    let initiated = localStorageGet("dSign.initiated");
     let dSignSuccess = getQueryArg(window.location.href, "success");
     if(aspTxnID && initiated && dSignSuccess)
     {
