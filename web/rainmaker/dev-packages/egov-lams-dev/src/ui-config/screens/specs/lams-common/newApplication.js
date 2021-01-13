@@ -113,12 +113,25 @@ const initFreshScreen = (action, state, dispatch) =>{
       )
     );
   }
+
+  //D Sign Success Page check.
+  let aspTxnID = localStorageGet("dSign.aspTxnID");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
+  let initiated = localStorageGet("dSign.initiated");
+  let dSignSuccess = getQueryArg(window.location.href, "success");
+  if(aspTxnID && initiated && dSignSuccess)
+  {
+    setTimeout(() => {     
+      setPostDSignSuccessScreen(action,state, dispatch);
+    }, 2000); //Give 2 gap so that the screen
+    
+    afterDSignDone(action,dispatch);;  
+  }
 }
 
 const initPostDSignSuccessScreen = (action, state, dispatch) => {
 
   setPostDSignSuccessScreen(action,state, dispatch);
-  afterDSignDone(action,state,dispatch);;
+  afterDSignDone(action,dispatch);;  
 }
 
 const newApplication = {
@@ -126,18 +139,19 @@ const newApplication = {
   name: "newApplication",
   beforeInitScreen:(action, state, dispatch) => {
 
-    let aspTxnID = localStorageGet("dSign.aspTxnID");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
-    let initiated = localStorageGet("dSign.initiated");
-    let dSignSuccess = getQueryArg(window.location.href, "success");
-    if(aspTxnID && initiated && dSignSuccess)
-    {
-      initPostDSignSuccessScreen(action,state,dispatch);
-    }
-    else
-    {
-      initFreshScreen(action,state, dispatch);
-    }
+    // let aspTxnID = localStorageGet("dSign.aspTxnID");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
+    // let initiated = localStorageGet("dSign.initiated");
+    // let dSignSuccess = getQueryArg(window.location.href, "success");
+    // if(aspTxnID && initiated && dSignSuccess)
+    // {
+    //   initPostDSignSuccessScreen(action,state,dispatch);
+    // }
+    // else
+    // {
+    //   initFreshScreen(action,state, dispatch);
+    // }
     
+    initFreshScreen(action,state, dispatch);
     return action;
   },
   components: {

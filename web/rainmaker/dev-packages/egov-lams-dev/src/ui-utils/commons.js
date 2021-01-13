@@ -1216,8 +1216,11 @@ export const callDSignService = async(state, dispatch, req) => {
     //Set the values in lamsStore just before redirection
     dispatch(prepareFinalObject("lamsStore.dSign.aspTxnID", req.aspTxnID));
     dispatch(prepareFinalObject("lamsStore.dSign.initiated",true));
+
+    let leaseDetails = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0]");
     localStorageSet("dSign.aspTxnID", req.aspTxnID);
     localStorageSet("dSign.initiated", true);
+    localStorageSet("leaseDetails", JSON.stringify(leaseDetails));;
 
     $(document.body).append(newForm);
     newForm.submit();
@@ -1274,10 +1277,11 @@ export const callDSignServiceOldImpl = async(state, dispatch, req) => {
 
 export const afterDSignDone = async(state, dispatch, response) => {
   
-  dispatch(prepareFinalObject("lamsStore.dSign.success",true));
-  //let initiated = get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.initiated");
-  let aspTxnID = get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
+  dispatch(prepareFinalObject("lamsStore.Lease[0]",JSON.parse(localStorageGet("leaseDetails"))));
 
+  //dispatch(prepareFinalObject("lamsStore.dSign.success",true));
+  //let initiated = get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.initiated");
+  let aspTxnID = localStorageGet("dSign.aspTxnID");
   let reqWrapper = {"aspTxnID":aspTxnID};
 
   let payload = null;

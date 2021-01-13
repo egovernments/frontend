@@ -40,13 +40,13 @@ import {
   }
 
   export const setPostDSignSuccessScreen = (action,state, dispatch) => {
-    setVisibilityCant(action, state, dispatch, true, false);
-    setVisibilitySurveyNo(action, state, dispatch, true, false);
-    setVisibilityLeaseDetails(action, state, dispatch, true, false);
-    setVisibilityDownloadButton(action, state, dispatch, true, false);
-    setVisibilityEsignButton(action, state, dispatch, true, false);
-    setVisibilityMonths(action, state, dispatch, true, false);
-    setVisibilityApplicationType(action, state, dispatch, true, false);
+    setVisibilityCant(action, state, dispatch, true, true);
+    setVisibilitySurveyNo(action, state, dispatch, true, true);
+    setVisibilityLeaseDetails(action, state, dispatch, true, true);
+    setVisibilityDownloadButton(action, state, dispatch, true, true);
+    setVisibilityEsignButton(action, state, dispatch, true, true);
+    setVisibilityMonths(action, state, dispatch, true, true);
+    setVisibilityApplicationType(action, state, dispatch, true, true);
   }
 
   const onMonthsChanged = (action,state, dispatch) => {
@@ -199,7 +199,7 @@ import {
         handleField(
           "newApplication",
           "components.div1.children.details.children.cardContent.children.optionSelection.children.applicationType",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -215,13 +215,13 @@ import {
         visible
       )
     );
-    if(disabled === true || disabled === false)
+    if(disabled == true || disabled == false)
     {
       dispatch(
         handleField(
           "newApplication",
           "components.div1.children.details.children.cardContent.children.optionSelection.children.cantonment",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -243,7 +243,7 @@ import {
         handleField(
           "newApplication",
           "components.div1.children.details.children.cardContent.children.optionSelection.children.located",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -265,7 +265,7 @@ import {
         handleField(
           "newApplication",
           "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -287,7 +287,7 @@ import {
         handleField(
           "newApplication",
           "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -320,7 +320,7 @@ import {
         handleField(
           "newApplication",
         "components.div1.children.details.children.cardContent.children.leaseDetails",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -341,7 +341,7 @@ import {
         handleField(
           "newApplication",
         "components.div1.children.details.children.cardContent.children.optionSelection.children.downloadApplication",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -363,7 +363,7 @@ import {
         handleField(
           "newApplication",
         "components.div1.children.details.children.cardContent.children.optionSelection.children.eSignApplication",
-          "disabled",
+          "props.disabled",
           disabled
         )
       );
@@ -414,6 +414,7 @@ import {
           optionSelection: getCommonContainer({
 
             applicationType: getSelectField({
+              
               label: {
                 labelName: "Application Type",
                 labelKey: "LAMS_APPL_TYPE"
@@ -448,6 +449,9 @@ import {
               gridDefination: {
                 xs: 12,
                 sm: 4
+              },
+              props:{
+                disabled: false
               }
             }),
             category: getSelectField({
@@ -498,7 +502,9 @@ import {
                 jsonPath: "lamsStore.Lease[0].tenantId",
                 sourceJsonPath: "lamsStore.allTenants",
                 visible:true,
+                autoSelect:true,
                 props:{
+                  autoSelect:true,
                   isClearable:true,
                   className: "autocomplete-dropdown",
                   suggestions: [],
