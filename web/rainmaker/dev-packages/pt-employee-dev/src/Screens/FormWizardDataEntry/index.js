@@ -63,7 +63,8 @@ import {
   normalizePropertyDetails,
   getImportantDates,
   renderPlotAndFloorDetails,
-  removeAdhocIfDifferentFY
+  removeAdhocIfDifferentFY,
+  routeToAcknowledgement
 } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import sortBy from "lodash/sortBy";
 import {
@@ -2391,6 +2392,7 @@ class FormWizardDataEntry extends Component {
           this.setState({
             selected: index
           });
+          routeToAcknowledgement("update","success",createPropertyResponse.Properties[0].propertyId,getTenantId(),createPropertyResponse.Properties[0].acknowldgementNumber)
           break;
         case "_create":
           this.setState({
@@ -2401,6 +2403,7 @@ class FormWizardDataEntry extends Component {
           //   "PropertyTax Created Successfully",
           //   "success"
           // );
+         routeToAcknowledgement("create","success",createPropertyResponse.Properties[0].propertyId,getTenantId(),createPropertyResponse.Properties[0].acknowldgementNumber)
           break;
         default:
       }

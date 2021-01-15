@@ -9,6 +9,8 @@ import { get, set, isEmpty } from "lodash";
 import { trimObj } from "../../../utils/commons";
 import { MDMS } from "../../../utils/endPoints";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+import store from "ui-redux/store";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -835,3 +837,17 @@ export const removeAdhocIfDifferentFY = (property, fY) => {
   set(property, "Properties[0].propertyDetails[0].adhocPenaltyReason", null);
   return property;
 };
+export const routeToAcknowledgement = (purpose, status, propertyId, tenantId, secondNumber, FY) => {
+
+  let routeLink = `/property-tax/pt-acknowledgment?purpose=${purpose}&status=${status}`;
+  routeLink = propertyId ? `${routeLink}&propertyId=${propertyId}` : `${routeLink}`;
+  routeLink = tenantId ? `${routeLink}&tenantId=${tenantId}` : `${routeLink}`;
+  routeLink = secondNumber ? `${routeLink}&secondNumber=${secondNumber}` : `${routeLink}`;
+  routeLink = FY ? `${routeLink}&FY=${FY}` : `${routeLink}`;
+
+  store.dispatch(
+    setRoute(
+      routeLink
+    )
+  );
+}
