@@ -654,15 +654,15 @@ export const tradeDetails = getCommonCard({
   ),
   tradeDetailsConatiner: getCommonContainer({
     financialYear: {
-      uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
+      uiFramework: "custom-containers",
+        //moduleName: "egov-tradelicence",
         componentPath: "AutosuggestContainer",
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
          props:{
           className: "autocomplete-dropdown",
           suggestions: [],
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL" || "edit" ? true:false,
           label: {
             labelName: "Financial Year",
             labelKey: "TL_FINANCIAL_YEAR_LABEL"
