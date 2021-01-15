@@ -1237,8 +1237,11 @@ export const footerReviewTop = (
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
-          }
+          },
+            visible : !JSON.parse(localStorageGet('isMobileApp'))
+           //visible: isMobile ? false : true,
         }
+
 
       },
       // gridDefination: {
@@ -1494,7 +1497,7 @@ export const downloadPrintContainer = (
             
           },
          //visible : !JSON.parse(localStorageGet('isMobileApp'))
-         visible: isMobile ? false : true,
+         //visible: isMobile ? false : true,
         }
         
       },
