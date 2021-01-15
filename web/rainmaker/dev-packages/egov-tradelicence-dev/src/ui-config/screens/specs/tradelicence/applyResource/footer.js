@@ -16,6 +16,11 @@ import "./index.css";
 import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import store from "ui-redux/store";
+import {
+  isBrowser,
+  isMobile
+} from "react-device-detect";
+
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
   const tenantId = get(LicenseData, "tenantId");
@@ -1223,6 +1228,7 @@ export const footerReviewTop = (
           uiFramework: "custom-atoms-local",
           moduleName: "egov-tradelicence",
           componentPath: "MenuButton",
+          visible: isMobile ? false : true,
           props: {
             data: {
               label: { labelName: "PRINT", labelKey: "TL_PRINT" },
@@ -1231,8 +1237,11 @@ export const footerReviewTop = (
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
-          }
+          },
+            visible : !JSON.parse(localStorageGet('isMobileApp'))
+           //visible: isMobile ? false : true,
         }
+
 
       },
       // gridDefination: {
@@ -1447,10 +1456,11 @@ export const downloadPrintContainer = (
       break;
     default:
       break;
-  }
+ 
+    }
   /** END */
-
-  return {
+   return {
+    
     rightdiv: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
@@ -1486,9 +1496,10 @@ export const downloadPrintContainer = (
             }
             
           },
-          visible : !JSON.parse(localStorageGet('isMobileApp'))
+         //visible : !JSON.parse(localStorageGet('isMobileApp'))
+         //visible: isMobile ? false : true,
         }
-
+        
       },
       // gridDefination: {
       //   xs: 12,
