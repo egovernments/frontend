@@ -342,6 +342,9 @@ export const adhocPopup = getCommonContainer({
             },
             {
               code: "Others"
+            },
+            {
+              code: "NA"
             }
           ],
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
@@ -430,6 +433,9 @@ export const adhocPopup = getCommonContainer({
             },
             {
               code: "Others"
+            },
+            {
+              code: "NA"
             }
           ],
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
