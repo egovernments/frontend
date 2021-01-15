@@ -550,6 +550,9 @@ export const getPattern = type => {
       return /^[0-9]{0,8}$/i;
     case "NonZeroAmount":
       return /^[1-9][0-9]{0,7}$/i;  
+    case "DecimalNumber":
+      return /^\d{0,8}(\.\d{1,2})?$/i;
+      //return /(([0-9]+)((\.\d{1,2})?))$/i;
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":

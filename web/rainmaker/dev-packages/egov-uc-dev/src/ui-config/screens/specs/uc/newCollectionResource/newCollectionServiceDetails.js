@@ -494,9 +494,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
               .split(".")
               .join("_")}`,
             required: item.isRequired || false,
-            pattern: item.isRequired
-              ? getPattern("NonZeroAmount")
-              : getPattern("Amount"),
+            pattern: getPattern("DecimalNumber"),
            
 
             //errorMessage: "Invalid Amount",
@@ -504,6 +502,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
             // required: true,
             props: {
               // required: true
+              disabled:item.code.endsWith('_ROUNDOFF')? true: false,
               type:"number"
             },
             jsonPath: `Challan[0].amount[${index}].amount`,
