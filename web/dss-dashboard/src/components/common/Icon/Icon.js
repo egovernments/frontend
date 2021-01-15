@@ -29,7 +29,7 @@ class Icon extends React.Component {
 
 
             case 'mcollect':
-            case 'dss_mcollect':
+            case 'dss_m_collect':
                 return <SVG src={mCollect} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>   
         
 
