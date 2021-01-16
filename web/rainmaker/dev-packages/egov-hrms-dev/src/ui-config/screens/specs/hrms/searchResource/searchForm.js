@@ -38,14 +38,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.employeeName",
-      "props.value",
-      ""
-    )
-  );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.employeeName",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
   dispatch(
     handleField(
       "search",
