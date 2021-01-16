@@ -13,6 +13,7 @@ import {
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import jp from "jsonpath";
   import {eVerify} from "../../../../ui-utils/commons"
+  import "./index.css";
 
 const checkIfFormIsValid = async (state, dispatch) => {
 
@@ -233,14 +234,15 @@ export const footer = getCommonApplyFooter({
     componentPath: "Button",
     visible:false,
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
-      style: {
-        minWidth: "180px",
-        height: "48px",
-        marginRight: "16px",
-        borderRadius: "inherit"
-      }
+      className: "submit-btn", 
+      // style: {
+      //   minWidth: "180px",
+      //   height: "48px",
+      //   marginRight: "16px",
+      //   borderRadius: "inherit"
+      // }
     },
     children: {
       previousButtonIcon: {

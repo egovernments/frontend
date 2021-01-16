@@ -66,9 +66,6 @@
                 <data android:scheme="https"
                     android:host="https://13.71.65.215.nip.io/"
                     android:pathPrefix="/" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
-				<data android:scheme="https"
-					android:host="https://pilot.surepay.ndml.in"
-					android:pathPrefix="/" />
             </intent-filter>
         </activity>
 		<meta-data

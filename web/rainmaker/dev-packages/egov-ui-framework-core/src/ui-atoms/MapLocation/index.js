@@ -120,6 +120,8 @@ const MapLocation = compose(
           background: "#969696",
           borderRadius: "50%",
           padding: "12px",
+          width: "48px",
+          height: "48px",
           color: "rgb(255, 255, 255)"
         }}
         action="maps"
