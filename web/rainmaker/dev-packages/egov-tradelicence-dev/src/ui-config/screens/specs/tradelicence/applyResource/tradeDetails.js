@@ -662,7 +662,7 @@ export const tradeDetails = getCommonCard({
          props:{
           className: "autocomplete-dropdown",
           suggestions: [],
-          disabled:(getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit") ? true:false,
+         // disabled:(getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit") ? true:false,
           label: {
             labelName: "Financial Year",
             labelKey: "TL_FINANCIAL_YEAR_LABEL"
