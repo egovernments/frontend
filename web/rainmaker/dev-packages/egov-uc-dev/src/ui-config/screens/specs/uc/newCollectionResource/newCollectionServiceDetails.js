@@ -498,11 +498,11 @@ const setTaxHeadFields = (action, state, dispatch) => {
            
 
             //errorMessage: "Invalid Amount",
-            visible: true,
+            visible: item.code.endsWith('_ROUNDOFF')? false: true,
             // required: true,
             props: {
               // required: true
-              disabled:item.code.endsWith('_ROUNDOFF')? true: false,
+              //visible:item.code.endsWith('_ROUNDOFF')? false: true,
               type:"number"
             },
             jsonPath: `Challan[0].amount[${index}].amount`,
