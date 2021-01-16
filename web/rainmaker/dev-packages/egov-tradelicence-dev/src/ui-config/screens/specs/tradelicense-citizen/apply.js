@@ -7,6 +7,7 @@ import {
   getBoundaryData
 } from "../../../../ui-utils/commons";
 import get from "lodash/get";
+import set from "lodash/set";
 import { footer } from "../tradelicence/applyResource/footer";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -92,6 +93,12 @@ const screenConfig = {
           "Licenses[0].oldLicenseNumber",
           null
         );
+      let disableFinYear = (getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit") ? true:false;
+      set(
+        action.screenConfig,
+        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear.props.disabled",
+        disableFinYear
+      );
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
