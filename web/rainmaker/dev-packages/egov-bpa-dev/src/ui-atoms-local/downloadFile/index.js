@@ -39,7 +39,8 @@ const styles = {
 
 class downloadFile extends React.Component {
   render() {
-    const { label = {}, linkDetail= {}, value, classes, localizationLabels  } = this.props;
+    const { label = {}, linkDetail= {}, classes, localizationLabels  } = this.props;
+    let { value } = this.props;
     let translatedLabel = getLocaleLabels(
       label.labelName,
       label.labelKey,
