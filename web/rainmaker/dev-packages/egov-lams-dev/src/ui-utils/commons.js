@@ -1227,9 +1227,12 @@ export const callDSignService = async(state, dispatch, req) => {
     dispatch(prepareFinalObject("lamsStore.dSign.initiated",true));
 
     let leaseDetails = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0]");
+    let allCbSurveyDetails = get(state.screenConfiguration.preparedFinalObject , "lamsStore.allSurveyDetails");
+
     localStorageSet("dSign.aspTxnID", req.aspTxnID);
     localStorageSet("dSign.initiated", true);
-    localStorageSet("leaseDetails", JSON.stringify(leaseDetails));;
+    localStorageSet("dSign.leaseDetails", JSON.stringify(leaseDetails));;
+    localStorageSet("dSign.cbSurveyDetails", JSON.stringify(allCbSurveyDetails));;
 
     $(document.body).append(newForm);
     newForm.submit();
@@ -1286,40 +1289,33 @@ export const callDSignServiceOldImpl = async(state, dispatch, req) => {
 
 export const afterDSignDone = async(state, dispatch, response) => {
   
-  console.log("Check now ",JSON.parse(localStorageGet("leaseDetails")));
-  dispatch(prepareFinalObject("lamsStore.Lease[0]",JSON.parse(localStorageGet("leaseDetails"))));
-  dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails",JSON.parse(localStorageGet("leaseDetails")).leaseDetails));
+  //console.log("Check now ",JSON.parse(localStorageGet("leaseDetails")));
+  dispatch(prepareFinalObject("lamsStore.Lease[0]",JSON.parse(localStorageGet("dSign.leaseDetails"))));
+  dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails",JSON.parse(localStorageGet("dSign.leaseDetails")).leaseDetails));
+  dispatch(prepareFinalObject("lamsStore.allSurveyDetails",JSON.parse(localStorageGet("dSign.cbSurveyDetails"))));
 
   //dispatch(prepareFinalObject("lamsStore.dSign.success",true));
   //let initiated = get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.initiated");
 
-  dispatch(prepareFinalObject("lamsStore.Lease[0].months2","12"));
-
-  let aspTxnID = localStorageGet("dSign.aspTxnID");
-  let reqWrapper = {"aspTxnID":aspTxnID};
+  let espTxnID = getQueryArg(window.location.href, "espTxnID"); //localStorageGet("dSign.aspTxnID");
 
   let payload = null;
   try{
-    try{
-      payload = await httpRequest(
-        "post",
-        "/egov-lams/dSign/getSignedPdfId",
-        "",
-        [],
-        reqWrapper
-      );
-    }
-    catch(e)
-    {
-
-    }
-
-    //dsignChange: Remove below code. Remove upper try catch
-    payload = {"filestoreIds":["0207fdc3-4017-4e24-ad15-152aab2e9737"],"ResponseInfo":{"Accept":"application/json","RequestInfo":{"apiId":"Mihy","ver":".01","action":"_get","did":"1","key":"","msgId":"20170310130900|en_IN","requesterId":"","userInfo":{"id":2034,"uuid":"cfd640e6-b19e-4429-a710-86fa41e51cf9","userName":"9480734475","name":"Sham","type":"CITIZEN","mobileNumber":"9480734475","emailId":"Poojapadma45@gmail.com","tenantId":"pb","roles":[{"id":null,"name":"Citizen","code":"CITIZEN","tenantId":"pb"}]},"correlationId":"6ac5b9bc-8b2a-4900-928a-ebcf4067687c"}},"key":"mcollect-challan"};
+ 
+    payload = await httpRequest(
+      "post",
+      "/lams-services/dSign/getApplicationfile?txnid="+espTxnID,
+      "",
+      [],
+      ""
+    );
     
-    if (payload && payload.filestoreIds && payload.filestoreIds.length > 0 ) {
+    //dsignChange: Remove below code. Remove upper try catch
+    //payload = {"filestoreIds":["0207fdc3-4017-4e24-ad15-152aab2e9737"],"ResponseInfo":{"Accept":"application/json","RequestInfo":{"apiId":"Mihy","ver":".01","action":"_get","did":"1","key":"","msgId":"20170310130900|en_IN","requesterId":"","userInfo":{"id":2034,"uuid":"cfd640e6-b19e-4429-a710-86fa41e51cf9","userName":"9480734475","name":"Sham","type":"CITIZEN","mobileNumber":"9480734475","emailId":"Poojapadma45@gmail.com","tenantId":"pb","roles":[{"id":null,"name":"Citizen","code":"CITIZEN","tenantId":"pb"}]},"correlationId":"6ac5b9bc-8b2a-4900-928a-ebcf4067687c"}},"key":"mcollect-challan"};
+    
+    if (payload && payload.files && payload.files.length > 0 ) {
       let mode = 'download';
-      downloadReceiptFromFilestoreID(filestoreIds[0], mode);
+      downloadReceiptFromFilestoreID(payload.files[0].fileStoreId, mode);
 
       //Write auto upload code here.
     }
@@ -1346,6 +1342,20 @@ export const afterDSignDone = async(state, dispatch, response) => {
     );
   }
 
+}
+
+export const isPostDSignMode = () => {
+  let aspTxnID = localStorageGet("dSign.aspTxnID");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
+  let initiated = localStorageGet("dSign.initiated");
+  let dSignSuccess = getQueryArg(window.location.href, "success");
+  if(initiated && aspTxnID && dSignSuccess)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 export const  getESignRequest = async() => {

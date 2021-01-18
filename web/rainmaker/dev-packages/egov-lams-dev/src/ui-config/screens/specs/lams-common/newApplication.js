@@ -4,7 +4,8 @@ import {
 
 import {loadMdmsData, loadLeaseDetails, loadLeaseDetails2, setDocsForEditFlow} from "../lams-utils/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {newApplicationDetailsCard, newApplicationDocumentsCard, OwnerInfoCard, setPostDSignSuccessScreen} from "./newApplicationDetailsCard";
+import {newApplicationDetailsCard, newApplicationDocumentsCard, OwnerInfoCard, 
+  setPostDSignSuccessScreen,setNewApplicationScreen} from "./newApplicationDetailsCard";
 import {checkIfCitizenEditScreen} from "../lams-utils/utils";
 import {footer} from "./newApplicationFooter";
 import {documentList} from "./documentList";
@@ -12,8 +13,10 @@ import { ifUserRoleExists } from "../utils";
 import get from "lodash/get";
 import jp from "jsonpath";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-import {afterDSignDone} from "../../../../ui-utils/commons";
+import { localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
+import {afterDSignDone, isPostDSignMode} from "../../../../ui-utils/commons";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 
 const initFreshScreen = (action, state, dispatch) =>{
@@ -105,28 +108,30 @@ const initFreshScreen = (action, state, dispatch) =>{
   }
 
   //D Sign Success Page check.
-  let aspTxnID = localStorageGet("dSign.aspTxnID");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
-  let initiated = localStorageGet("dSign.initiated");
-  let dSignSuccess = getQueryArg(window.location.href, "success");
-  if(aspTxnID && initiated && dSignSuccess)
+  if(isPostDSignMode())
   {
+    dispatch(toggleSpinner());
     setTimeout(() => {     
       setPostDSignSuccessScreen(action,state, dispatch);
-    }, 2000); //Give 2 gap so that the screen
-    
+      dispatch(toggleSpinner());
+    }, 2000); //Give 2 sec gap so that the screen is loaded correctly
     afterDSignDone(action,dispatch);;  
   }
   else //For Fresh application
   {
-    const businessService = "LAMS";
-    const workflowAction = "APPLY";
-    
-    dispatch(prepareFinalObject("lamsStore.removedDocs", {})); //Clear all the data first
-    dispatch(prepareFinalObject("lamsStore.uploadedDocsInRedux", {})); //Clear all the data first
-    dispatch(prepareFinalObject("lamsStore.Lease[0]", {})); //Clear all the data first
-    dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", ""));
+    dispatch(toggleSpinner());
+    setTimeout(() => {     
+      setNewApplicationScreen(action,state, dispatch);
+      const businessService = "LAMS";
+      const workflowAction = "APPLY";
+      dispatch(prepareFinalObject("lamsStore.removedDocs", {})); //Clear all the data first
+      dispatch(prepareFinalObject("lamsStore.uploadedDocsInRedux", {})); //Clear all the data first
+      dispatch(prepareFinalObject("lamsStore.Lease[0]", {})); //Clear all the data first
+      dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
+      dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
+      dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", ""));
+      dispatch(toggleSpinner());
+    }, 2000); //Give 2 sec gap so that the screen correctly
   }
 }
 

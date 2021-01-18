@@ -18,7 +18,7 @@ import {
   import {documentListContainer} from "./documentListContainer";
   import {prepareFinalObject,  handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {getLeaseDetailsCard} from "./leaseDetailsCard";
-  import {downloadLeaseApplication, downloadLeaseApplication2} from "../../../../ui-utils/commons";
+  import {downloadLeaseApplication, downloadLeaseApplication2,isPostDSignMode} from "../../../../ui-utils/commons";
   import {dSignConfirmationDialog} from "./dSignConfirmationDialog";
   import PropTypes from "prop-types";
   import {localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
@@ -41,12 +41,24 @@ import {
 
   export const setPostDSignSuccessScreen = (action,state, dispatch) => {
     setVisibilityCant(action, state, dispatch, true, true);
+    setVisibilityLocated(action,state, dispatch, true, true );
     setVisibilitySurveyNo(action, state, dispatch, true, true);
     setVisibilityLeaseDetails(action, state, dispatch, true, true);
     setVisibilityDownloadButton(action, state, dispatch, true, true);
     setVisibilityEsignButton(action, state, dispatch, true, true);
     setVisibilityMonths(action, state, dispatch, true, true);
     setVisibilityApplicationType(action, state, dispatch, true, true);
+  }
+
+  export const setNewApplicationScreen = (action,state, dispatch) => {
+    setVisibilityApplicationType(action, state, dispatch, true, false);
+    setVisibilityCant(action, state, dispatch, true, false);
+    setVisibilityLocated(action,state, dispatch, false, false );
+    setVisibilitySurveyNo(action, state, dispatch, false, false);
+    setVisibilityLeaseDetails(action, state, dispatch, false, false);
+    setVisibilityDownloadButton(action, state, dispatch, false, false);
+    setVisibilityEsignButton(action, state, dispatch, false, false);
+    setVisibilityMonths(action, state, dispatch, false, false);
   }
 
   const onMonthsChanged = (action,state, dispatch) => {
@@ -67,34 +79,39 @@ import {
   }
 
   const onLocatedChanged = (action, state, dispatch) =>{
-    loadSurveyNumbers(action, state, dispatch);
+    if(!isPostDSignMode())
+    {
+      loadSurveyNumbers(action, state, dispatch);
 
-    const located = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located");
-    const LeaseRenewalWorkflowCode = (located === "insideCivil")? "LAMS_NewLR_CEO_V3": "LAMS_NewLR_DEO_V3";
-    dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", LeaseRenewalWorkflowCode));
-    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+      const located = get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located");
+      const LeaseRenewalWorkflowCode = (located === "insideCivil")? "LAMS_NewLR_CEO_V3": "LAMS_NewLR_DEO_V3";
+      dispatch(prepareFinalObject("lamsStore.Lease[0].workflowCode", LeaseRenewalWorkflowCode));
+      //dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
 
-    setVisibilitySurveyNo(action, state, dispatch, true);
-    setVisibilityLeaseDetails(action, state, dispatch, false);
-    setVisibilityDownloadButton(action, state, dispatch, false);
-    setVisibilityEsignButton(action, state, dispatch, false);
-    setVisibilityMonths(action, state, dispatch, false);
-
+      setVisibilitySurveyNo(action, state, dispatch, true);
+      setVisibilityLeaseDetails(action, state, dispatch, false);
+      setVisibilityDownloadButton(action, state, dispatch, false);
+      setVisibilityEsignButton(action, state, dispatch, false);
+      setVisibilityMonths(action, state, dispatch, false);
+    }
   }
 
   const surveyNoChanged = (action, state, dispatch) => {
-    getSurveyDetails(action, state, dispatch);
-
-    const selectedSurveyDetails = get(state.screenConfiguration.preparedFinalObject.lamsStore,"selectedSurveyDetails"); 
-    if(selectedSurveyDetails && selectedSurveyDetails.surveyId)
+    if(!isPostDSignMode())
     {
-      dispatch(prepareFinalObject("lamsStore.Lease[0].surveyId", selectedSurveyDetails.surveyId));
-      dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails", selectedSurveyDetails));
+      getSurveyDetails(action, state, dispatch);
+
+      const selectedSurveyDetails = get(state.screenConfiguration.preparedFinalObject.lamsStore,"selectedSurveyDetails"); 
+      if(selectedSurveyDetails && selectedSurveyDetails.surveyId)
+      {
+        dispatch(prepareFinalObject("lamsStore.Lease[0].surveyId", selectedSurveyDetails.surveyId));
+        dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails", selectedSurveyDetails));
+      }
+      setVisibilityLeaseDetails(action, state, dispatch,true);
+      setVisibilityDownloadButton(action, state, dispatch, false);
+      setVisibilityEsignButton(action, state, dispatch, false);
+      setVisibilityMonths(action, state, dispatch, true);
     }
-    setVisibilityLeaseDetails(action, state, dispatch,true);
-    setVisibilityDownloadButton(action, state, dispatch, false);
-    setVisibilityEsignButton(action, state, dispatch, false);
-    setVisibilityMonths(action, state, dispatch, true);
   }
 
   const onCategoryChanged = (action, state, dispatch) => {
@@ -125,56 +142,66 @@ import {
         )
       );
     }
-    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
     dispatch(prepareFinalObject("lamsStore.allSurveyDetails", []));
   }
 
   const onCbChange = (action, state, dispatch) => {
 
-    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
     dispatch(prepareFinalObject("lamsStore.allSurveyDetails", []));
 
-    dispatch(
-      handleField(
-      "newApplication",
-      "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
-      "props.value",
-      "")
-    );
+    if(!isPostDSignMode())
+    {
+      dispatch(
+        handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
+        "props.value",
+        "")
+      );
 
-    dispatch(
-      handleField(
-      "newApplication",
-      "components.div1.children.details.children.cardContent.children.optionSelection.children.located", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
-      "props.value",
-      "")
-    );
+      dispatch(
+        handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.located", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
+        "props.value",
+        "")
+      );
 
-    setVisibilitySurveyNo(action, state, dispatch, false);
-    setVisibilityLeaseDetails(action, state, dispatch, false);
-    setVisibilityLocated(action, state, dispatch, true);
-    setVisibilityDownloadButton(action, state, dispatch, false);
-    setVisibilityEsignButton(action, state, dispatch, false)
-    setVisibilityMonths(action, state, dispatch, false);
+      setVisibilitySurveyNo(action, state, dispatch, false);
+      setVisibilityLeaseDetails(action, state, dispatch, false);
+      setVisibilityLocated(action, state, dispatch, true);
+      setVisibilityDownloadButton(action, state, dispatch, false);
+      setVisibilityEsignButton(action, state, dispatch, false)
+      setVisibilityMonths(action, state, dispatch, false);
+
+    }
 
   }
 
   const onApplicationTypeChange = (action, state, dispatch) => {
 
-    dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
-    dispatch(prepareFinalObject("lamsStore.allSurveyDetails", []));
-    dispatch(
-      handleField(
-      "newApplication",
-      "components.div1.children.details.children.cardContent.children.optionSelection.children.located",
-      "props.value",
-      "")
-    );
-    setVisibilityLeaseDetails(action, state, dispatch, false);
-    setVisibilitySurveyNo(action, state, dispatch, false);
-    setVisibilityDownloadButton(action, state, dispatch, false);
-    setVisibilityEsignButton(action, state, dispatch, false);
-    setVisibilityMonths(action, state, dispatch, false);
+    //dispatch(prepareFinalObject("lamsStore.Lease[0].surveyNo", ""));
+
+    if(!isPostDSignMode())
+    {
+      dispatch(prepareFinalObject("lamsStore.allSurveyDetails", []));
+      dispatch(
+        handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.located",
+        "props.value",
+        "")
+      );
+
+      setVisibilityLeaseDetails(action, state, dispatch, false);
+      setVisibilitySurveyNo(action, state, dispatch, false);
+      setVisibilityDownloadButton(action, state, dispatch, false);
+      setVisibilityEsignButton(action, state, dispatch, false);
+      setVisibilityMonths(action, state, dispatch, false);
+    }
+    
 
 
   }
@@ -300,7 +327,7 @@ import {
         )
       );
     }
-    if(get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months"))
+    if(get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months") && !isPostDSignMode())
     {
       dispatch(
         handleField(
@@ -627,6 +654,8 @@ import {
                 visible:true,
                 autoSelect:true,
                 props:{
+                  autoSelect:true,
+                  isClearable:true,
                   className: "autocomplete-dropdown",
                   suggestions: [],
                   disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
@@ -729,6 +758,7 @@ import {
               uiFrameWork: "custom-atoms",
               componentPath: "Button",
               props: {
+                disableValidation:true,
                 variant: "outlined",
                 color: "primary",
                 style: {
@@ -764,6 +794,7 @@ import {
               componentPath: "Button",
               
               props: {
+                disableValidation:true,
                 variant: "outlined",
                 color: "primary",
                 style: {
@@ -798,7 +829,8 @@ import {
               componentPath: "Dialog",
               props: {
                 open: false,
-                maxWidth: "sm"
+                maxWidth: "sm",
+                disableValidation: true
               },
               children: {
                 dialogContent: {
