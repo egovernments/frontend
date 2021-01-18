@@ -50,10 +50,11 @@ class downloadFile extends React.Component {
       linkDetail.labelKey,
       localizationLabels
     );
-    if(value && !value.includes("https")) {
-      value.replace(/http/g, "https")
+    let downloadLink;
+    if(value && !value.includes("https") && window.location.href.includes("https")) {
+      downloadLink = value.replace(/http/g, "https")
     }
-
+    value = downloadLink ? downloadLink : value;
     return (
       <div>
         <div className={classes.root}>{translatedLabel}</div>
