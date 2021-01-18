@@ -145,12 +145,16 @@ const assignmentDetailsCard = {
                 labelKey: "HR_DEPT_PLACEHOLDER"
               },
               required: true,
+              componentPath: "AutosuggestContainer",
               jsonPath: "Employee[0].assignments[0].department",
               sourceJsonPath: "createScreenMdmsData.common-masters.Department",
               props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
+                menuPortalTarget:document.querySelector('body'),
+                setDataInField: true,
+                labelsFromLocalisation: true
+//                 className: "hr-generic-selectfield",
+//                 optionValue: "code",
+//                 optionLabel: "name"
                 // hasLocalization: false
               },
               localePrefix: {
@@ -167,12 +171,16 @@ const assignmentDetailsCard = {
                 labelKey: "HR_DESIGNATION_PLACEHOLDER"
               },
               required: true,
+              componentPath: "AutosuggestContainer",
               jsonPath: "Employee[0].assignments[0].designation",
               sourceJsonPath: "createScreenMdmsData.common-masters.Designation",
               props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
+                menuPortalTarget:document.querySelector('body'),
+                setDataInField: true,
+                labelsFromLocalisation: true
+//                 className: "hr-generic-selectfield",
+//                 optionValue: "code",
+//                 optionLabel: "name"
                 // hasLocalization: false
               },
               localePrefix: {
