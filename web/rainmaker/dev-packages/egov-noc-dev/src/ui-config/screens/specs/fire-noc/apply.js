@@ -228,7 +228,7 @@ export const prepareEditFlow = async (
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
     []
   );
-  if (applicationNumber && buildings.length == 0) {
+  if (applicationNumber ) {
     let response = await getSearchResults([
       {
         key: "tenantId",
@@ -272,7 +272,7 @@ export const prepareEditFlow = async (
         nocType
       )
     );
-
+    
     // setCardsIfMultipleBuildings(state, dispatch);
 
     // Set sample docs upload

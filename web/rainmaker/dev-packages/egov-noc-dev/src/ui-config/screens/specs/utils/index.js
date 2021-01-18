@@ -783,12 +783,20 @@ export const getTextToLocalMapping = label => {
         "WF_FIRENOC_FIELDINSPECTION",
         localisationLabels
       );
-      // case "CITIZENACTIONREQUIRED":
-      // return getLocaleLabels(
-      //   "Pending at Citizen",
-      //   "WF_FIRENOC_CITIZENACTIONREQUIRED",
-      //   localisationLabels
-      // );
+
+      case "CITIZENACTIONREQUIRED":
+      return getLocaleLabels(
+        "Pending at Citizen",
+        "WF_FIRENOC_CITIZENACTIONREQUIRED",
+        localisationLabels
+      );
+      case "CITIZENACTIONREQUIRED-DV":
+      return getLocaleLabels(
+        "Pending at Citizen",
+        "WF_FIRENOC_CITIZENACTIONREQUIRED-DV",
+        localisationLabels
+      );
+
     case "Search Results for Fire-NOC Applications":
       return getLocaleLabels(
         "Search Results for Fire-NOC Applications",
