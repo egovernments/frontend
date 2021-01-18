@@ -187,6 +187,7 @@ try {
     if (!isAssignmentDetailsValid) {
       isFormValid = false;
     }
+
     let jurisdictions = get(
       state.screenConfiguration.preparedFinalObject,
       `Employee[0].jurisdictions`,
@@ -195,7 +196,7 @@ try {
   
     let rolesList=[];
     jurisdictions.map(judis=>{
-      judis.roles.map(role=>{
+      judis&&judis.roles&&Array.isArray(judis.roles)&&judis.roles.map(role=>{
         rolesList.push({...role,tenantId:judis.boundary,code:role.value,name:role.label})
       })
     })
