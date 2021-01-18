@@ -1065,7 +1065,7 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
     try{
       payload = await httpRequest(
         "post",
-        "/egov-lams/dSign/createApplicationPdf",  // "/egov-pdf/download/LRMS/lrms-renewalCertificate?tenantId="+requestBody.tenantId,
+        "/lams-services/dSign/createApplicationPdf",  // "/egov-pdf/download/LRMS/lrms-renewalCertificate?tenantId="+requestBody.tenantId,
         "",
         [],
         reqWrapper
@@ -1077,25 +1077,30 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
     }
 
     //dsignChange: Remove below code. Remove upper try catch
-    payload = {"filestoreIds":["0207fdc3-4017-4e24-ad15-152aab2e9737"],"ResponseInfo":{"Accept":"application/json","RequestInfo":{"apiId":"Mihy","ver":".01","action":"_get","did":"1","key":"","msgId":"20170310130900|en_IN","requesterId":"","userInfo":{"id":2034,"uuid":"cfd640e6-b19e-4429-a710-86fa41e51cf9","userName":"9480734475","name":"Sham","type":"CITIZEN","mobileNumber":"9480734475","emailId":"Poojapadma45@gmail.com","tenantId":"pb","roles":[{"id":null,"name":"Citizen","code":"CITIZEN","tenantId":"pb"}]},"correlationId":"6ac5b9bc-8b2a-4900-928a-ebcf4067687c"}},"key":"mcollect-challan"};
+    //payload = {"filestoreIds":["0207fdc3-4017-4e24-ad15-152aab2e9737"],"ResponseInfo":{"Accept":"application/json","RequestInfo":{"apiId":"Mihy","ver":".01","action":"_get","did":"1","key":"","msgId":"20170310130900|en_IN","requesterId":"","userInfo":{"id":2034,"uuid":"cfd640e6-b19e-4429-a710-86fa41e51cf9","userName":"9480734475","name":"Sham","type":"CITIZEN","mobileNumber":"9480734475","emailId":"Poojapadma45@gmail.com","tenantId":"pb","roles":[{"id":null,"name":"Citizen","code":"CITIZEN","tenantId":"pb"}]},"correlationId":"6ac5b9bc-8b2a-4900-928a-ebcf4067687c"}},"key":"mcollect-challan"};
     
-    if (payload && payload.filestoreIds && payload.filestoreIds.length > 0 ) {
-      payload.filestoreIds.map(fileStoreId => {
-        if(forEsign)
-          prepareForDSign(state, dispatch, {fileStoreId : fileStoreId});
-        else
-          downloadReceiptFromFilestoreID(fileStoreId, mode)
-      })
+    if(forEsign)
+    {
+      if(payload && payload.dSignInfo)
+        prepareForDSign(state, dispatch, payload);
     }
     else
     {
-      store.dispatch(
-        toggleSnackbar(
-          true,
-          { labelName: "Error in generating PDF", labelKey: "LAMS_ERROR_PDF_DSIGN" },
-          "error"
-        )
-      );
+      if (payload && payload.filestoreIds && payload.filestoreIds.length > 0 ) {
+        payload.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+        })
+      }
+      else
+      {
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Error in generating PDF", labelKey: "LAMS_ERROR_PDF_DSIGN" },
+            "error"
+          )
+        );
+      }
     }
   }
   catch(error)
@@ -1111,26 +1116,29 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
   }
 }
 
-export const prepareForDSign = async (state, dispatch, requestBody) => {
+export const prepareForDSign = async (state, dispatch, response) => {
 
   try{
-    let payload = null;
-    try{
-      payload = await httpRequest(
-        "post",
-        "/egov-lams/dSign/prepareData",
-        "",
-        [],
-        requestBody
-      );
-    }
-    catch(e)
-    {
+    // let payload = null;
+    // try{
+    //   payload = await httpRequest(
+    //     "post",
+    //     "/egov-lams/dSign/prepareData",
+    //     "",
+    //     [],
+    //     requestBody
+    //   );
+    // }
+    // catch(e)
+    // {
 
-    }
+    // }
+    
+    let eSignRequest = response.dSignInfo.esignRequest;
+    let aspTxnID = response.dSignInfo.aspTxnID;
     
     //dsignChange : Remove the below code. Remove upper try catch
-    let eSignRequest = '<?xml version="1.0" encoding="UTF-8"?><Esign AuthMode="1" aspId="DGDE-900" ekycId="" ekycIdType="A" responseSigType="pkcs7" responseUrl="https://localhost:8443/SpringBootESign/finalResponse" sc="Y" ts="2021-01-13T11:15:09" txn="1610516708555A191366689" ver="2.1"><Docs><InputHash docInfo="My Document" hashAlgorithm="SHA256" id="1">3d17778027d3ea9a623aba80f207e0e0a4978deedfbd87f6ea64c115a972e221</InputHash></Docs><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>VlsJGL7pdF65JSnJoAY9gW9+jXqpt8lYJ/UnjzAvV4Q=</DigestValue></Reference></SignedInfo><SignatureValue>qA+VSnZ+m27eEgiWERmRskRwBHxAJAo/zkhCmpLd6GUmxNxm3Kfk8zWnAnBNDpBzld1BrAXdEXkW&#13;'
+    let eSignRequest2 = '<?xml version="1.0" encoding="UTF-8"?><Esign AuthMode="1" aspId="DGDE-900" ekycId="" ekycIdType="A" responseSigType="pkcs7" responseUrl="https://localhost:8443/SpringBootESign/finalResponse" sc="Y" ts="2021-01-13T11:15:09" txn="1610516708555A191366689" ver="2.1"><Docs><InputHash docInfo="My Document" hashAlgorithm="SHA256" id="1">3d17778027d3ea9a623aba80f207e0e0a4978deedfbd87f6ea64c115a972e221</InputHash></Docs><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>VlsJGL7pdF65JSnJoAY9gW9+jXqpt8lYJ/UnjzAvV4Q=</DigestValue></Reference></SignedInfo><SignatureValue>qA+VSnZ+m27eEgiWERmRskRwBHxAJAo/zkhCmpLd6GUmxNxm3Kfk8zWnAnBNDpBzld1BrAXdEXkW&#13;'
     +'6abNzG276c32yaxEdM6jvNMWa0Mt5fNNWn21VfQe4gBTIT16Lpm5icGN7Ve4UoFpTYYxOclvW1rV&#13;'
     +'u9EejXQo1OwYCJCbsguWXpgBnLknSbdyhnQXNgrJUsMjnfiwJRSclrbvmf2XGyT4BVmZTrqjLctE&#13;'
     +'3ISF/jU89pKNYwnzGxBu5pfPSKKukpJyfNfLfE3OzekiCSJFfHc9K+3P7zE7X7cVwLPc3F1/Hb0M&#13;'
@@ -1140,9 +1148,9 @@ export const prepareForDSign = async (state, dispatch, requestBody) => {
     +'HRMk6u3lxPLFyAdi+zajjLVpSfmTlDQdmW5gnm45Vsg3H330xtbYyxXwfvrKQzJIUNOSCnVHtYFf&#13;'
     +'nCb9zOcWzMrAqOUkikV35HOJTR2bFmxPoMY7l/ARCwjKfCPMhBGJ153dfMwg2hW9BgTB0iwlZJg=</SignatureValue></Signature></Esign>';
 
-    payload = {
+    let payload = {
      'eSignRequest': eSignRequest, //'<?xml version="1.0" encoding="UTF-8"?><Esign AuthMode="1" aspId="DGDE-900" ekycId="" ekycIdType="A" responseSigType="pkcs7" responseUrl="https://localhost:8443/SpringBootESign/finalResponse" sc="Y" ts="2021-01-13T11:15:09" txn="1610516708555A191366689" ver="2.1"><Docs><InputHash docInfo="My Document" hashAlgorithm="SHA256" id="1">3d17778027d3ea9a623aba80f207e0e0a4978deedfbd87f6ea64c115a972e221</InputHash></Docs><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>VlsJGL7pdF65JSnJoAY9gW9+jXqpt8lYJ/UnjzAvV4Q=</DigestValue></Reference></SignedInfo><SignatureValue>qA+VSnZ+m27eEgiWERmRskRwBHxAJAo/zkhCmpLd6GUmxNxm3Kfk8zWnAnBNDpBzld1BrAXdEXkW&#13;6abNzG276c32yaxEdM6jvNMWa0Mt5fNNWn21VfQe4gBTIT16Lpm5icGN7Ve4UoFpTYYxOclvW1rV&#13;u9EejXQo1OwYCJCbsguWXpgBnLknSbdyhnQXNgrJUsMjnfiwJRSclrbvmf2XGyT4BVmZTrqjLctE&#13;3ISF/jU89pKNYwnzGxBu5pfPSKKukpJyfNfLfE3OzekiCSJFfHc9K+3P7zE7X7cVwLPc3F1/Hb0M&#13;RfGyRbDoeD3Z13CkAjPA/bw0HuyHF2QtgZU1vwx0KGxmH7vI3iFbJxw1MUsCjxmm9pORmJDmdOU9&#13;SMM7Q29ekM991fWDBgfodiUsZck1YsEFeDKWgxhe+5uVTx0zpkuAMIn4Xjpn80IsBda8LCF7F0uD&#13;Pd/dqsU6qi89ZEfdTZAIK6D3oYGBuiiouJNQihIKDlyNmxscw2HtsxYUxJjc6LBuECyOmu5Nc4ur&#13;HRMk6u3lxPLFyAdi+zajjLVpSfmTlDQdmW5gnm45Vsg3H330xtbYyxXwfvrKQzJIUNOSCnVHtYFf&#13;nCb9zOcWzMrAqOUkikV35HOJTR2bFmxPoMY7l/ARCwjKfCPMhBGJ153dfMwg2hW9BgTB0iwlZJg=</SignatureValue></Signature></Esign>nCb9zOcWzMrAqOUkikV35HOJTR2bFmxPoMY7l/ARCwjKfCPMhBGJ153dfMwg2hW9BgTB0iwlZJg=</SignatureValue></Signature></Esign>',
-     'aspTxnID': '1610516708555A191366689',
+     'aspTxnID': aspTxnID, //'1610516708555A191366689',
      'Content-Type': 'application/xml',
      };
 
@@ -1162,6 +1170,7 @@ export const prepareForDSign = async (state, dispatch, requestBody) => {
   }
   catch(error)
   {
+    console.error(error);
     store.dispatch(
       toggleSnackbar(
         true,
@@ -1277,10 +1286,15 @@ export const callDSignServiceOldImpl = async(state, dispatch, req) => {
 
 export const afterDSignDone = async(state, dispatch, response) => {
   
+  console.log("Check now ",JSON.parse(localStorageGet("leaseDetails")));
   dispatch(prepareFinalObject("lamsStore.Lease[0]",JSON.parse(localStorageGet("leaseDetails"))));
+  dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails",JSON.parse(localStorageGet("leaseDetails")).leaseDetails));
 
   //dispatch(prepareFinalObject("lamsStore.dSign.success",true));
   //let initiated = get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.initiated");
+
+  dispatch(prepareFinalObject("lamsStore.Lease[0].months2","12"));
+
   let aspTxnID = localStorageGet("dSign.aspTxnID");
   let reqWrapper = {"aspTxnID":aspTxnID};
 

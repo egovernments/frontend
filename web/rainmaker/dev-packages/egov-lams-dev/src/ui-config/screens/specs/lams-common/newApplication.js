@@ -17,16 +17,6 @@ import {afterDSignDone} from "../../../../ui-utils/commons";
 
 
 const initFreshScreen = (action, state, dispatch) =>{
-
-  const businessService = "LAMS";
-  const workflowAction = "APPLY";
-  
-  dispatch(prepareFinalObject("lamsStore.removedDocs", {})); //Clear all the data first
-  dispatch(prepareFinalObject("lamsStore.uploadedDocsInRedux", {})); //Clear all the data first
-  dispatch(prepareFinalObject("lamsStore.Lease[0]", {})); //Clear all the data first
-  dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
-  dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
-  dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", ""));
  
   loadMdmsData(action, state, dispatch).then((response) => {
     const tenants = get(response, "MdmsRes.tenant.tenants");
@@ -125,6 +115,18 @@ const initFreshScreen = (action, state, dispatch) =>{
     }, 2000); //Give 2 gap so that the screen
     
     afterDSignDone(action,dispatch);;  
+  }
+  else //For Fresh application
+  {
+    const businessService = "LAMS";
+    const workflowAction = "APPLY";
+    
+    dispatch(prepareFinalObject("lamsStore.removedDocs", {})); //Clear all the data first
+    dispatch(prepareFinalObject("lamsStore.uploadedDocsInRedux", {})); //Clear all the data first
+    dispatch(prepareFinalObject("lamsStore.Lease[0]", {})); //Clear all the data first
+    dispatch(prepareFinalObject("lamsStore.Lease[0].businessService", businessService));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
+    dispatch(prepareFinalObject("lamsStore.Lease[0].tenantId", ""));
   }
 }
 

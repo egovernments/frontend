@@ -225,6 +225,14 @@ import {
           disabled
         )
       );
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div1.children.details.children.cardContent.children.optionSelection.children.cantonment",
+          "disabled",
+          disabled
+        )
+      );
     }
   }
 
@@ -496,8 +504,8 @@ import {
               },
             }),
             cantonment: {
-              uiFramework: "custom-containers-local",
-                moduleName: "egov-lams",
+              uiFramework: "custom-containers",
+                //moduleName: "egov-lams",
                 componentPath: "AutosuggestContainer",
                 jsonPath: "lamsStore.Lease[0].tenantId",
                 sourceJsonPath: "lamsStore.allTenants",
@@ -611,12 +619,13 @@ import {
               }
             },
             surveyNo: {
-              uiFramework: "custom-containers-local",
-                moduleName: "egov-lams",
+              uiFramework: "custom-containers",
+                //moduleName: "egov-lams",
                 componentPath: "AutosuggestContainer",
                 jsonPath: "lamsStore.Lease[0].surveyNo",
                 sourceJsonPath: "lamsStore.allSurveyDetails",
-                visible:false,
+                visible:true,
+                autoSelect:true,
                 props:{
                   className: "autocomplete-dropdown",
                   suggestions: [],
@@ -710,6 +719,7 @@ import {
               required: true,
               pattern: monthsPattern,
               jsonPath: "lamsStore.Lease[0].months",
+              sourceJsonPath: "lamsStore.Lease[0].months",
               visible: false,
               afterFieldChange: (action, state, dispatch) => {
                 onMonthsChanged(action, state, dispatch);
