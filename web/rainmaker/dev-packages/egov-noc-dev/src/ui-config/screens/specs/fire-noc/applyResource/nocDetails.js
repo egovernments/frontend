@@ -146,7 +146,7 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
       );
     }
   }
-
+  
   let isLegacy = false;
   if (!get(response, "FireNOCs", []).length) {
 
@@ -204,7 +204,9 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
   );
 
   // Set fire noc id to null
+if (getQueryArg(window.location.href, "action") != "edit") {
   dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
+}
 };
 export const nocDetails = getCommonCard({
   header: getCommonTitle(
