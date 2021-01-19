@@ -730,7 +730,11 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-    const financialYear = getQueryArg(window.location.href, "FY");
+    const financialYear = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].financialYear"
+    );
+    //const financialYear = getQueryArg(window.location.href, "FY");
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
