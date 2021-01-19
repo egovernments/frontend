@@ -83,7 +83,8 @@ export const searchResults = {
         labelKey: "HR_COMMON_TABLE_COL_TENANT_ID",
         name: "tenantId",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       }
     ],
@@ -102,6 +103,9 @@ export const searchResults = {
       onRowClick: (row, index) => {
         onRowClick(row);
       }
+    },
+    customSortColumn: {
+     
     }
   }
 };
