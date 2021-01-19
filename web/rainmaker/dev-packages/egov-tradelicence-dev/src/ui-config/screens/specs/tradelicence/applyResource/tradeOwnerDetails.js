@@ -442,7 +442,17 @@ export const tradeOwnerDetails = getCommonCard({
               )
             )
           );
-          
+          const applicationType = get(state.screenConfiguration.preparedFinalObject, 'Licenses[0].applicationType', "");
+          if(applicationType === "RENEWAL") {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.ownership",
+                "props.disabled",
+                true
+              )
+            );
+          }
           if (action.value === "INDIVIDUAL") {
             if (
               get(
@@ -565,6 +575,17 @@ export const tradeOwnerDetails = getCommonCard({
             )
           );
         }
+        const applicationType = get(state.screenConfiguration.preparedFinalObject, 'Licenses[0].applicationType', "");
+          if(applicationType === "RENEWAL") {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children.subOwnership",
+                "props.disabled",
+                true
+              )
+            );
+          }
       }
     },
     

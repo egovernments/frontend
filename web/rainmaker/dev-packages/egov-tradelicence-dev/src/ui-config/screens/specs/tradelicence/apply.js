@@ -398,7 +398,19 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       ); 
+      const applicationType = get(state.screenConfiguration.preparedFinalObject, 'Licenses[0].applicationType', "");
+      if(applicationType === "RENEWAL") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeLocationDetails",
+            "props.style",
+            {"pointer-events":"none"}
+          )
+         );
+      }
     });
+    
 
     return action;
   },
