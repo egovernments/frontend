@@ -21,9 +21,21 @@
 
 .tl-trade-type div {
   color: rgba(0, 0, 0, 0.87); }
- #material-ui-tradeLocationDetails{
-    height: 600px !important;
+.mohalla-details {
+  box-sizing: border-box;
+  background-color: #ffffff;
+  
+  display: block;
+  position: absolute !important;
+  display: block;
+
+  z-index: 1;
   }
+
+#material-ui-tradeLocationDetails {
+  padding-bottom: 200px !important;
+  overflow-x: scroll; }
+
 .applicant-details-error p {
   font-size: 14px; }
 
