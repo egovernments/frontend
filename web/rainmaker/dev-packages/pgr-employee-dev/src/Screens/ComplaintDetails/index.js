@@ -480,6 +480,7 @@ const mapStateToProps = (state, ownProps) => {
       )[0];
     let details = {
       status: selectedComplaint.status || "",
+      phone:selectedComplaint.phone || "NA",
       complaint: mapCompIDToName(
         complaints.categoriesById,
         selectedComplaint.serviceCode
