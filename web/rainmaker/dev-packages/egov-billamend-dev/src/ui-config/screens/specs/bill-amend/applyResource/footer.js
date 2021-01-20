@@ -68,44 +68,44 @@ const callBackForNext = async (state, dispatch) => {
         }
       }
     }
-    const amount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "BILL.AMOUNT",
-      ""
-    );
-    console.log("amount inside footer",amount)
-    const amountType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "BILL.AMOUNTTYPE",
-      ""
-    );
-    const amountValues = Object.keys(amount).map(
-      (key) => amount[key][amountType]
-    );
-    if (amountValues.every(item=>item === 0)) {
-      isFormValid = false;
-      let errorMessage = {
-        labelName: "All Tax Heads Amount cant't be 0",
-        labelKey: "ERR_NON_ZERO_AMOUNT_TOAST",
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    } else {
-      const amountPattern = /^\d+(\.\d{1,2})?$/;
-      let error = false;
-      amountValues.forEach((item) => {
-        if (!amountPattern.test(item)) {
-         error - true
-        }
-      });
-      if(error){
-        isFormValid = false;
-        let errorMessage = {
-          labelName: "lpease enter a valid amount",
-          labelKey: "ERR_VALID_AMOUNT_TOAST",
-        };
-        dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      }
-    }
+    // const amount = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "BILL.AMOUNT",
+    //   ""
+    // );
+    // console.log("amount inside footer",amount)
+    // const amountType = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "BILL.AMOUNTTYPE",
+    //   ""
+    // );
+    // const amountValues = Object.keys(amount).map(
+    //   (key) => amount[key][amountType]
+    // );
+    // if (amountValues.every(item=>item === 0)) {
+    //   isFormValid = false;
+    //   let errorMessage = {
+    //     labelName: "All Tax Heads Amount cant't be 0",
+    //     labelKey: "ERR_NON_ZERO_AMOUNT_TOAST",
+    //   };
+    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    // } else {
+    //   const amountPattern = /^\d+(\.\d{1,2})?$/;
+    //   let error = false;
+    //   amountValues.forEach((item) => {
+    //     if (!amountPattern.test(item)) {
+    //      error - true
+    //     }
+    //   });
+    //   if(error){
+    //     isFormValid = false;
+    //     let errorMessage = {
+    //       labelName: "lpease enter a valid amount",
+    //       labelKey: "ERR_VALID_AMOUNT_TOAST",
+    //     };
+    //     dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    //   }
+    // }
   }
 
   if (activeStep === 1) {
