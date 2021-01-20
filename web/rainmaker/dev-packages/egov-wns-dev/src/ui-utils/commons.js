@@ -130,6 +130,8 @@ export const getPropertyObj = async (waterConnection) => {
 
 
 export const getSearchResults = async queryObject => {
+    debugger;
+    console.log("==========queryObject===",queryObject);
     try {
         const response = await httpRequest(
             "post",
@@ -137,6 +139,7 @@ export const getSearchResults = async queryObject => {
             "_search",
             queryObject
         );
+        
         if (response.WaterConnection && response.WaterConnection.length == 0) {
             return response;
         }
@@ -153,6 +156,8 @@ export const getSearchResults = async queryObject => {
 
 export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
+    console.log("===========",queryObject);
+    
     try {
         const response = await httpRequest(
             "post",
@@ -177,6 +182,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
 export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     dispatch(toggleSpinner());
     try {
+        debugger;
         const response = await httpRequest(
             "post",
             "/egov-mdms-service/v1/_search",
@@ -555,6 +561,8 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
 const parserFunction = (state) => {
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
+    let waterDetails =get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0]", {});
+    debugger;
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
         meterInstallationDate: convertDateToEpoch(queryObject.meterInstallationDate),
@@ -567,6 +575,8 @@ const parserFunction = (state) => {
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
         propertyId: (queryObject.property) ? queryObject.property.id : null,
+        
+
         additionalDetails: {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
@@ -577,9 +587,32 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== null
             ) ? queryObject.additionalDetails.detailsProvidedBy : "",
+            billingType : waterDetails && waterDetails.additionalDetails  ? waterDetails.additionalDetails.billingType : null,
+            billingAmount :waterDetails && waterDetails.additionalDetails? waterDetails.additionalDetails.billingAmount : null,
+            connectionCategory :waterDetails && waterDetails.additionalDetails? waterDetails.additionalDetails.connectionCategory : null,
+            ledgerId :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.ledgerId : null,
+            averageMake :waterDetails && waterDetails.additionalDetails? waterDetails.additionalDetails.averageMake : null,
+            meterMake :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.meterMake : null,
+            compositionFee :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.compositionFee : null,
+            userCharges :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.userCharges : null,
+            othersFee :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.othersFee : null,
+            
+            detailsProvidedBy : null,
+            adhocPenalty: null,
+            adhocPenaltyComment: null,
+            adhocPenaltyReason: null,
+            adhocRebate: null,
+            adhocRebateComment: null,
+            adhocRebateReason: null,
+            estimationFileStoreId: null,
+            sanctionFileStoreId:null,
+            estimationLetterDate :null,
         }
     }
-    queryObject = { ...queryObject, ...parsedObject }
+    // if(!queryObject.hasOwnProperty("additionalDetails")){
+    //     queryObject.additionalDetails=waterDetails.additionalDetails;
+    // }
+    queryObject = { ...queryObject, ...parsedObject}
     return queryObject;
 }
 
@@ -884,11 +917,20 @@ export const applyForWater = async (state, dispatch) => {
                 queryObjectForUpdate.additionalDetails = {};
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
+            console.log("==========findAndReplace",queryObjectForUpdate);
+            debugger;
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
+            console.log("==========2",queryObjectForUpdate);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
+            
+            console.log("==========3",queryObjectForUpdate);
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
+            
             let searchResponse = await getSearchResults(searchQueryObject);
+            
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
+            
+            
         } else {
             if (typeof queryObject.additionalDetails !== 'object') {
                 queryObject.additionalDetails = {};
@@ -948,6 +990,7 @@ export const applyForSewerage = async (state, dispatch) => {
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
+            
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
         } else {
@@ -1171,6 +1214,7 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
         }
     };
     try {
+        debugger;
         let payload = null;
         payload = await httpRequest(
             "post",
@@ -1221,6 +1265,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
             }
         };
         try {
+            debugger;
             let payload = await httpRequest(
                 "post",
                 "/egov-mdms-service/v1/_search",
@@ -1689,6 +1734,7 @@ export const downloadBill = (receiptQueryString, mode) => {
                 }
 
                 payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
+                debugger;
                 httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {
                     console.log(payloadbillingPeriod);
                     let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;

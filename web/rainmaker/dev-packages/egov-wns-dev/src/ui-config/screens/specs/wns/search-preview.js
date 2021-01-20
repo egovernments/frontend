@@ -113,6 +113,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
   let Response = await getWorkFlowData(queryObj);
   let processInstanceAppStatus = Response.ProcessInstances[0].state.applicationStatus;
+ 
   //Search details for given application Number
   if (applicationNumber) {
 
@@ -123,10 +124,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         { display: "none" }
       );
     }
-
-    if (!getQueryArg(window.location.href, "edited")) {
+    if (getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
-    } else {
+    } 
+    else if (!getQueryArg(window.location.href, "edited")) {
+      (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
+    }else {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
@@ -615,8 +618,11 @@ const screenConfig = {
 const searchResults = async (action, state, dispatch, applicationNumber, processInstanceAppStatus) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
+  
   if (service === serviceConst.WATER) {
     payload = [];
+    debugger;
+console.log("======state",state);
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
     const convPayload = findAndReplace(payload, "NA", null)
@@ -625,13 +631,17 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       tenantId: tenantId,
       waterConnection: convPayload.WaterConnection[0]
     }]
+    debugger;
     if (payload !== undefined && payload !== null) {
+      debugger;
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
+        debugger;
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
       }
       if (!payload.WaterConnection[0].connectionHolders || payload.WaterConnection[0].connectionHolders === 'NA') {
+        debugger;
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
       } else {
@@ -756,6 +766,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
 };
 
 const parserFunction = (obj) => {
+  debugger;
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),

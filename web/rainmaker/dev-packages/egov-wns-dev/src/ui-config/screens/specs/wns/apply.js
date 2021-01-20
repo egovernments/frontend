@@ -145,7 +145,9 @@ export const getMdmsData = async dispatch => {
             { name: "ModifyConnectionDocuments" },
             { name: "waterSource" },
             { name: "connectionType" },
-            { name: "PropertySearch" }
+            { name: "PropertySearch" },
+            { name: "connectionCategory" },
+            { name: "billingType" }
           ]
         }
       ]

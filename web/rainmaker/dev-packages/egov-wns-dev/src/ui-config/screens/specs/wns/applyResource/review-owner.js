@@ -201,6 +201,54 @@ export const roadDetails={
       jsonPath: "WaterConnectionOld[0].roadCuttingArea",
       callBack: handleNA
     }
+  ),
+  reviewCompositionFee : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Area (in sq ft)",
+      labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.compositionFee",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.compositionFee",
+      callBack: handleNA
+    }
+  ),
+  reviewUserCharges : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Area (in sq ft)",
+      labelKey: "WS_ADDN_USER_CHARGES_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.userCharges",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.userCharges",
+      callBack: handleNA
+    }
+  ),
+  reviewOthersFee : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Area (in sq ft)",
+      labelKey: "WS_ADDN_OTHER_FEE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.othersFee",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.othersFee",
+      callBack: handleNA
+    }
   )
 
 }
@@ -265,8 +313,31 @@ export const activateDetailsMeter={
       },
       { jsonPath: "WaterConnectionOld[0].additionalDetails.initialMeterReading",
       callBack: handleNA }
-  )
-
+  ),
+  reviewMeterMakeReading : getLabelWithValueForModifiedLabel(
+    {
+      labelName: " Meter Make Reading",
+      labelKey: "WS_ADDN_DETAILS_REVIEW_METER_READING"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.meterMake",
+      callBack: handleNA }, {
+        labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.meterMake",
+      callBack: handleNA }
+  ),
+  reviewAverageMakeReading : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Average Meter Reading",
+      labelKey: "WS_ADDN_DETAILS_AVERAGE_METER_READING"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.averageMake",
+      callBack: handleNA }, {
+        labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.averageMake",
+      callBack: handleNA }
+  ),
 }
 export const activateDetailsNonMeter={
   reviewConnectionExecutionDate : getLabelWithValueForModifiedLabel(
@@ -320,6 +391,70 @@ export const connectionWater={
     },
     {
       jsonPath: "WaterConnectionOld[0].noOfTaps",
+      callBack: handleNA
+    }
+  ),
+  reviewBillingType : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Billing Type",
+      labelKey: "WS_SERV_DETAIL_BILLING_TYPE"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.billingType",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.billingType",
+      callBack: handleNA
+    }
+  ),
+  reviewBillingAmount : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Taps",
+      labelKey: "WS_BILLING_AMOUNT"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.billingAmount",
+      callBack: handleNA
+    }
+  ),
+  reviewConnectionCategory : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Taps",
+      labelKey: "WS_SERV_CONNECTION_CATEGORY"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.connectionCategory",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.connectionCategory",
+      callBack: handleNA
+    }
+  ),
+  reviewLedgerId : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Taps",
+      labelKey: "WS_BILLING_LEDGER_ID"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.ledgerId",
       callBack: handleNA
     }
   ),
@@ -420,7 +555,71 @@ export const connectionSewerage={
       jsonPath: "WaterConnectionOld[0].noOfToilets",
       callBack: handleNA
     }
-  )
+  ),
+  reviewBillingType : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Billing Type",
+      labelKey: "WS_SERV_DETAIL_BILLING_TYPE"
+    },
+    {
+      jsonPath: "SewerageConnection[0].additionalDetails.billingType",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "SewerageConnectionOld[0].additionalDetails.billingType",
+      callBack: handleNA
+    }
+  ),
+  reviewBillingAmount : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Taps",
+      labelKey: "WS_BILLING_AMOUNT"
+    },
+    {
+      jsonPath: "SewerageConnection[0].additionalDetails.billingAmount",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "SewerageConnectionOld[0].additionalDetails.billingAmount",
+      callBack: handleNA
+    }
+  ),
+  reviewConnectionCategory : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Taps",
+      labelKey: "WS_SERV_CONNECTION_CATEGORY"
+    },
+    {
+      jsonPath: "SewerageConnection[0].additionalDetails.connectionCategory",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "SewerageConnectionOld[0].additionalDetails.connectionCategory",
+      callBack: handleNA
+    }
+  ),
+  reviewLedgerId : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "No. of Taps",
+      labelKey: "WS_BILLING_LEDGER_ID"
+    },
+    {
+      jsonPath: "SewerageConnection[0].additionalDetails.ledgerId",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "SewerageConnectionOld[0].additionalDetails.ledgerId",
+      callBack: handleNA
+    }
+  ),
 }
 
 export const additionDetailsWater=connectionWater;
