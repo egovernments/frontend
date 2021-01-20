@@ -220,6 +220,9 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
     }
+    if (moduleName === "FIRENOC") {
+      set(data[0],"fireNOCDetails.tenantId", get(data[0], 'tenantId', ""));
+    }
     this.props.showSpinner();
     try {
       const payload = await httpRequest("post", updateUrl, "", [], {
