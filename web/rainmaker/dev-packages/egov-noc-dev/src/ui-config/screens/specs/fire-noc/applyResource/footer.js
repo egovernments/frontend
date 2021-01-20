@@ -36,6 +36,19 @@ const setReviewPageRoute = (state, dispatch) => {
   const reviewUrl = `${appendUrl}/fire-noc/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 };
+const setPreviewPageRoute = (state, dispatch) => {
+  //EDIT FLOW
+  const businessId = getQueryArg(
+    window.location.href,
+    "applicationNumber"
+  );
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  dispatch(
+    setRoute(
+      `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
+    )
+  );
+}
 const moveToReview = (state, dispatch) => {
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
@@ -83,7 +96,10 @@ const moveToReview = (state, dispatch) => {
     }
   }
 
-  if (validateDocumentField) {
+  if (validateDocumentField && getQueryArg(window.location.href, "action") === "edit") {
+    setPreviewPageRoute(state, dispatch);
+  }
+  else if (validateDocumentField) {
     setReviewPageRoute(state, dispatch);
   }
 };
@@ -308,22 +324,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    if (getQueryArg(window.location.href, "action") === "edit") {
-      //EDIT FLOW
-      const businessId = getQueryArg(
-        window.location.href,
-        "applicationNumber"
-      );
-      const tenantId = getQueryArg(window.location.href, "tenantId");
-      dispatch(
-        setRoute(
-          `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
-        )
-      );
-    }
-    else {
       moveToReview(state, dispatch);
-    }
   }
 
   if (activeStep !== 3) {

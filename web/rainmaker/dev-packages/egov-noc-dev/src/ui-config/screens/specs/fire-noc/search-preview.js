@@ -505,6 +505,18 @@ const city22 = get(
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
+  const isAlreadyEdited = getQueryArg(window.location.href, "edited");
+  if(isAlreadyEdited) {
+    const propertyItems = get(state.screenConfiguration.screenConfig, 'search-preview.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children', {});
+    dispatch(
+      handleField(
+        "search-preview",
+        `components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.items[0].item0.children.cardContent.children.propertyContainer`,
+        "children",
+        propertyItems
+      )
+    );
+  }
   setDownloadMenu(state, dispatch);
 };
 

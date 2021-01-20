@@ -57,7 +57,7 @@ class LabelContainer extends React.Component {
             localizationLabels
           )
         : fieldValue;
-    let labelValue = fieldValue ? fieldLabel : translatedLabel;
+    let labelValue = (fieldValue == 0 || fieldValue != 0) ? fieldLabel : translatedLabel;
     labelValue =
       checkValueForNA && typeof checkValueForNA === "function"
         ? checkValueForNA(labelValue)
