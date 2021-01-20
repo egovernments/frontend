@@ -77,6 +77,7 @@ export const SearchChallanResults = {
       hover: true,
       rowsPerPageOptions: [10, 15, 20]
     },
+    customSortColumn: {}
     
   }
 };
