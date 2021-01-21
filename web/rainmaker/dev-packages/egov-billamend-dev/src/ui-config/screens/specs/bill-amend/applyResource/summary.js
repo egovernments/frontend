@@ -126,7 +126,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_DEMAND_REVISON_BASIS_LABEL"
                 },
                 {
-                    jsonPath: "Bill.demandRevisionBasis"
+                    jsonPath: "Amendment.amendmentReason"
                 }
             ),
             courtOrderNo: getLabelWithValue(
@@ -135,7 +135,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COURT_ORDER_NO_LABEL"
                 },
                 {
-                    jsonPath: "Bill.courtOderNo"
+                    jsonPath: "Amendment.courtOderNo"
                 }
             ),
             dateEffectiveFrom: getLabelWithValue(
@@ -144,7 +144,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_DATE_EFFECTIVE_FROM_LABEL"
                 },
                 {
-                    jsonPath: "Bill.dateEffectiveFrom"
+                    jsonPath: "Amendment.dateEffectiveFrom"
                 }
             ),
             govtNotificationNumber: getLabelWithValue(
@@ -153,7 +153,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_GOVT_NOTIFICATION_NO_LABEL"
                 },
                 {
-                    jsonPath: "Bill.govtNotificationNumber"
+                    jsonPath: "Amendment.govtNotificationNumber"
                 }
             ),
             documentNo: getLabelWithValue(
@@ -162,7 +162,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_DOCUMNET_NO_LABEL"
                 },
                 {
-                    jsonPath: "Bill.documentNo"
+                    jsonPath: "Amendment.documentNo"
                 }
             ),
             fromDate: getLabelWithValue(
@@ -171,7 +171,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COMMON_FROM_DATE_LABEL"
                 },
                 {
-                    jsonPath: "Bill.fromDate"
+                    jsonPath: "Amendment.fromDate"
                 }
             ),
             toDate: getLabelWithValue(
@@ -180,7 +180,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COMMON_TO_DATE_LABEL"
                 },
                 {
-                    jsonPath: "Bill.toDate"
+                    jsonPath: "Amendment.toDate"
                 }
             )
         }),

@@ -4,26 +4,23 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, prepareDocumentsUploadData, validateFields, onDemandRevisionBasis } from "../utils";
-
 import {
-  getQueryArg,
-  getFileUrlFromAPI,
-  getTransformedLocale,
-} from "egov-ui-framework/ui-utils/commons";
+  getCommonApplyFooter,
+  prepareDocumentsUploadData,
+  validateFields,
+  onDemandRevisionBasis,
+  submitApplication
+} from "../utils";
 import {
   toggleSnackbar,
-  prepareFinalObject,
-  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import jp from "jsonpath";
 import "./index.css";
-import store from "../../../../../ui-redux/store";
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
-  let activeStep = get( state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
+  let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -34,93 +31,91 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     );
 
-    const demandRevisionBasisValue = get( state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
+    const demandRevisionBasisValue = get(state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
 
-      if (!isAddDemandRevisionBasisCard) {
-        isFormValid = false;
-        hasFieldToaster = true;
-      } else {
-        if ( demandRevisionBasisValue !== "COURTCASESETTLEMENT" ) {
-          const fromDate = get( state.screenConfiguration.preparedFinalObject, "Amendment.fromDate");
-          const toDate = get( state.screenConfiguration.preparedFinalObject, "Amendment.toDate");
-          if (new Date(fromDate) > new Date(toDate)) {
-            isFormValid = false;
-            let errorMessage = {
-              labelName: "From Date should be less than To Date",
-              labelKey: "ERR_FROM_TO_DATE_TOAST",
-            };
-            dispatch(toggleSnackbar(true, errorMessage, "warning"));
-          } else {
-            await prepareDocumentsUploadData(state, dispatch);
-          }
+    if (!isAddDemandRevisionBasisCard) {
+      isFormValid = false;
+      hasFieldToaster = true;
+    } else {
+      if (demandRevisionBasisValue !== "COURTCASESETTLEMENT") {
+        const fromDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.fromDate");
+        const toDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.toDate");
+        if (new Date(fromDate) > new Date(toDate)) {
+          isFormValid = false;
+          let errorMessage = {
+            labelName: "From Date should be less than To Date",
+            labelKey: "ERR_FROM_TO_DATE_TOAST",
+          };
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
         } else {
           await prepareDocumentsUploadData(state, dispatch);
+          dispatch(prepareFinalObject("AmendmentTemp.amendmentReason", demandRevisionBasisValue));
         }
+      } else {
+        await prepareDocumentsUploadData(state, dispatch);
+        dispatch(prepareFinalObject("AmendmentTemp.amendmentReason", demandRevisionBasisValue));
       }
-
-    // await prepareDocumentsUploadData(state, dispatch);
-    // const amount = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "BILL.AMOUNT",
-    //   ""
-    // );
-    // console.log("amount inside footer",amount)
-    // const amountType = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "BILL.AMOUNTTYPE",
-    //   ""
-    // );
-    // const amountValues = Object.keys(amount).map(
-    //   (key) => amount[key][amountType]
-    // );
-    // if (amountValues.every(item=>item === 0)) {
-    //   isFormValid = false;
-    //   let errorMessage = {
-    //     labelName: "All Tax Heads Amount cant't be 0",
-    //     labelKey: "ERR_NON_ZERO_AMOUNT_TOAST",
-    //   };
-    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    // } else {
-    //   const amountPattern = /^\d+(\.\d{1,2})?$/;
-    //   let error = false;
-    //   amountValues.forEach((item) => {
-    //     if (!amountPattern.test(item)) {
-    //      error - true
-    //     }
-    //   });
-    //   if(error){
-    //     isFormValid = false;
-    //     let errorMessage = {
-    //       labelName: "lpease enter a valid amount",
-    //       labelKey: "ERR_VALID_AMOUNT_TOAST",
-    //     };
-    //     dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    //   }
-    // }
+    }
   }
 
   if (activeStep === 1) {
-    // const documentsUploadRedux = get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "BillTemp[0].uploadedDocsInRedux",
-    //   {}
-    // );
 
-    const documentsUploadRedux = get(
-      state.screenConfiguration.preparedFinalObject,
-      "documentsUploadRedux",
-      {}
+    const documentsFormat = Object.values(
+      get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
     );
-  
-    if (Object.keys(documentsUploadRedux).length === 0) {
-      isFormValid = false;
-      let errorMessage = {
-        labelName: "Please fill all mandatory fields and upload the documents!",
-        labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST",
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+    let validateDocumentField = false;
+
+    if (documentsFormat && documentsFormat.length) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+        let documents = get(documentsFormat[i], "documents");
+        if (isDocumentRequired) {
+          if (documents && documents.length > 0) {
+            if (isDocumentTypeRequired) {
+              if (get(documentsFormat[i], "dropdown.value")) {
+                validateDocumentField = true;
+              } else {
+                dispatch(toggleSnackbar(
+                  true,
+                  {
+                    labelName: "Please select type of Document!",
+                    labelKey: "BILL_FOOTER_SELECT_DOC_TYPE"
+                  },
+                  "warning"
+                ));
+                validateDocumentField = false;
+                break;
+              }
+            } else {
+              validateDocumentField = true;
+            }
+          } else {
+            dispatch(toggleSnackbar(
+              true,
+              {
+                labelName: "Please uplaod mandatory documents!",
+                labelKey: "BILL_FOOTER_UPLOAD_MANDATORY_DOC"
+              },
+              "warning"
+            ));
+            validateDocumentField = false;
+            break;
+          }
+        } else {
+          validateDocumentField = true;
+        }
+      }
+      if (!validateDocumentField) {
+        isFormValid = false;
+        hasFieldToaster = true;
+      } else {
+        onDemandRevisionBasis(state, dispatch);
+      }
+    } else {
+      onDemandRevisionBasis(state, dispatch);
     }
-    onDemandRevisionBasis(state, dispatch);
   }
 
   if (activeStep !== 4) {
@@ -264,11 +259,6 @@ export const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "previous");
 };
 
-export const submitApplication = (state, dispatch) => {
-  dispatch(
-    setRoute("/bill-amend/acknowledgement?purpose=apply&status=success")
-  );
-};
 export const footer = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",

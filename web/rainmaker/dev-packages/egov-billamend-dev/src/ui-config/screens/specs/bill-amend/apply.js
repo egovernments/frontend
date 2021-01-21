@@ -27,6 +27,7 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
+import { getFetchBill } from "../utils";
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
@@ -89,26 +90,6 @@ export const formwizardThirdStep = {
   },
   visible: false
 };
-export const getFetchBill = async(state, dispatch, action, queryObject) => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/billing-service/bill/v2/_fetchbill",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelKey: error.message },
-        "error"
-      )
-    );
-    console.log(error, "fetxh");
-  }
-}
 
 export const setSearchResponse = async (state, dispatch, action) => {
 
@@ -126,7 +107,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
       value: "WS.ONE_TIME_FEE"
     }
   ]);
-  console.log(fetBill, "qweyoiuyroqwrpoiy");
+  
   if(fetBill && fetBill.Bill && fetBill && fetBill.Bill.length > 0) {
     let billDetails = get(fetBill, "Bill[0].billDetails[0].billAccountDetails",[]);
     billDetails.map(bill => {
