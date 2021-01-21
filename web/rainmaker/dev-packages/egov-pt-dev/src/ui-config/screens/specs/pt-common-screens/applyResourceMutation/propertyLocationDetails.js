@@ -117,7 +117,7 @@ export const propertyLocationDetails = getCommonCard({
       }
 
     },
-    propertyType: getSelectField({
+    propertyLocation: getSelectField({
             label: {
               labelName: "Property Location",
               labelKey: "PT_COMMON_PROPERTY_LOCATION"
@@ -127,7 +127,7 @@ export const propertyLocationDetails = getCommonCard({
               labelKey: "PT_COMMON_PROPERTY_LOCATION_PLACEHOLDER"
             },
             required: true,
-            jsonPath: "Property.propertyLocation",
+            jsonPath: "Property.additionaldetails",
             sourceJsonPath: "searchScreenMdmsData.PropertyTax.PropertyLocation",
             gridDefination: {
               xs: 12,
