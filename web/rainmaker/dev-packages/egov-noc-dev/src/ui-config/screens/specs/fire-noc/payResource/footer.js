@@ -172,6 +172,7 @@ const updatePayAction = async (
       { key: "applicationNumber", value: applicationNo }
     ]);
     set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
+    set(response,"FireNOCs[0]fireNOCDetails.tenantId", get(response, 'FireNOCs[0].tenantId', ""));
     response = await httpRequest(
       "post",
       "/firenoc-services/v1/_update",
