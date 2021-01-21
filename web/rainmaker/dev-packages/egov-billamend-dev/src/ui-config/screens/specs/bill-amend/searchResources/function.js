@@ -13,10 +13,7 @@ export const searchApiCall = async (state, dispatch) => {
     "searchScreen.tenantId"
   );
   let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId
-    }
+   
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -30,13 +27,8 @@ export const searchApiCall = async (state, dispatch) => {
     dispatch,
     "search"
   );
-  const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.searchCard.children.cardContent.children.searchContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
-  if (!isSearchBoxFirstRowValid || !isSearchBoxSecondRowValid) {
+
+  if (!isSearchBoxFirstRowValid ) {
     dispatch(
       toggleSnackbar(
         true,
@@ -79,8 +71,6 @@ export const searchApiCall = async (state, dispatch) => {
       "searchScreenMdmsData.BillingService.BusinessService"
     ).filter(item => item.code === searchScreenObject.businesService);
 
-    searchScreenObject.url = serviceObject && serviceObject[0] && serviceObject[0].billGineiURL;
-    const isAdvancePayment = serviceObject && serviceObject[0] && serviceObject[0].isAdvanceAllowed;
     // if (!searchScreenObject.url) {
     //   dispatch(
     //     toggleSnackbar(
@@ -105,7 +95,8 @@ export const searchApiCall = async (state, dispatch) => {
         status: get(item, "status"),
         consumerName: get(item, "additionalDetails.payerName"),
         consumerAddress: get(item, "additionalDetails.payerAddress"),
-        tenantId: get(item, "tenantId")
+        tenantId: get(item, "tenantId"),
+        connectionType:get(item, "additionalDetails.connectionType",'Metered')
       };
     });
     dispatch(
@@ -125,6 +116,9 @@ export const searchApiCall = async (state, dispatch) => {
         ['BILL_COMMON_TABLE_COL_STATUS']: item.status  || "-",
 
         ["TENANT_ID"]: item.tenantId ||'',
+        ['BUSINESS_SERVICE']: item.businessService || "-",
+        ['SERVICE_CONST']:item.businessService=='WS'?'WATER':(item.businessService=='SW'?'SEWERAGE':'NA'),
+        ['CONNECTION_TYPE']:item.connectionType||"NA"
 
       }));
 
