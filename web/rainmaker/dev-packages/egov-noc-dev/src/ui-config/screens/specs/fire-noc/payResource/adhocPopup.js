@@ -22,7 +22,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     get(state.screenConfiguration.preparedFinalObject, "FireNOCs")
   );
   set(NOCRequestBody[0], "fireNOCDetails.action", "ADHOC");
-
+  set(NOCRequestBody[0], "fireNOCDetails.tenantId",get(NOCRequestBody[0], "tenantId", ""));
   try {
     const NOCpayload = await httpRequest(
       "post",

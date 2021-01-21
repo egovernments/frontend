@@ -584,7 +584,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         "payload[1]",
         data
       );
-
+      set(payload[0], "fireNOCDetails.tenantId",get(payload[0], "tenantId", ""));
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
