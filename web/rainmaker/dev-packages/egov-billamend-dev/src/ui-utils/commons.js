@@ -120,3 +120,43 @@ qo[query.key]=query.value
     );
   }
 };
+
+
+export const searchBill = async (queryObject, dispatch) => {
+  try {
+    let newQuery={};
+    queryObject.map(query=>{
+      newQuery[query.key]=query.value
+    })  
+    let newQueryObj=[
+      {
+        "key": 'tenantId',
+        "value":newQuery['tenantId']
+      },{
+        "key": 'service',
+        "value":newQuery['businessService']
+      },{
+        "key": 'consumerCode',
+        "value":newQuery['consumerCode']
+      }
+    ];
+    
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_search",
+      "_search",
+      newQueryObj
+    );
+    console.log('resa',response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
