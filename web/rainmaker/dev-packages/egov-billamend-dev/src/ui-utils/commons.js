@@ -1,6 +1,10 @@
 import commonConfig from "config/common.js";
-import { acceptedFiles } from "egov-ui-framework/ui-utils/commons";
+import {
+  toggleSnackbar
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
+import { acceptedFiles } from "egov-ui-framework/ui-utils/commons";
+import { httpRequest } from "./api";
 
 export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {
@@ -77,4 +81,42 @@ export const getImageUrlByFile = file => {
       resolve(fileurl);
     };
   });
+};
+
+
+
+export const getBillAmendSearchResult = async (queryObject, dispatch) => {
+  try {
+    let qo={
+      "amendmentId": '3edf1f2d-761e-4e8b-a990-505b648cf5eb'
+    }
+    queryObject.map(query=>
+qo[query.key]=query.value
+    )
+    let newQuery=[];
+  Object.keys(qo).map(key=>{
+    newQuery.push({
+      key: key,
+      value:qo[key]
+    })
+  })
+
+    const response = await httpRequest(
+      "post",
+      "/billing-service/amendment/_search",
+      "_search",
+      newQuery
+    );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
 };

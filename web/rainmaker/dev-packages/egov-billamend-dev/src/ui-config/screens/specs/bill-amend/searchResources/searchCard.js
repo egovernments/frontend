@@ -63,7 +63,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId ,businesService:""}));
+  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId ,businessService:""}));
 };
 
 export const searchCard = getCommonCard({
@@ -78,7 +78,7 @@ export const searchCard = getCommonCard({
   searchContainer: getCommonContainer({
     ulb: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-abg",
+      moduleName: "egov-billamend",
       componentPath: "AutosuggestContainer",
       props: {
         label: {
@@ -111,7 +111,7 @@ export const searchCard = getCommonCard({
     },
     serviceCategory: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-abg",
+      moduleName: "egov-billamend",
       componentPath: "AutosuggestContainer",
       props: {
         label: {
@@ -126,7 +126,7 @@ export const searchCard = getCommonCard({
         labelsFromLocalisation: true,
         className: "autocomplete-dropdown",
         // isClearable: true,
-        jsonPath: "searchScreen.businesService",
+        jsonPath: "searchScreen.businessService",
         localePrefix: {
           moduleName: "BillingService",
           masterName: "BusinessService"
@@ -134,7 +134,7 @@ export const searchCard = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService",
       },
       required: true,
-      jsonPath: "searchScreen.businesService",
+      jsonPath: "searchScreen.businessService",
       gridDefination: {
         xs: 12,
         sm: 4
