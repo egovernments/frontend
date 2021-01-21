@@ -134,8 +134,8 @@ export const propertyLocationDetails = getCommonCard({
               md: 6
             },
             localePrefix: {
-              moduleName: "COMMON",
-              masterName: "PROPLOCATION"
+              moduleName: "PT_COMMON",
+              masterName: "PROPERTY_LOCATION"
             }
     }),
     localityOrMohalla: {
