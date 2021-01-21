@@ -21,10 +21,10 @@ class AddLinkForProperty extends React.Component {
             propertyId = fieldValue;
         }
         return (
-            {/* <div style={styles}>
+            <div style={styles}>
                 <ErrorIcon style={{ color: "red", fontSize: "30px", marginRight: "5px", marginTop: "2px" }} /> <span>  </span><LabelContainer
                     labelName={`Edit Property details application no. ${propertyId} is under Workflow`} />
-            </div> */}
+            </div>
         );
     }
 }
