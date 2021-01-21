@@ -57,7 +57,13 @@ class Header extends Component {
   };
 
   _handleBackNavigation = () => {
-    this.props.history.goBack();
+    const urlpath = window.location.pathname;
+    if(urlpath.indexOf("citizen/egov-common/acknowledgement?status") != -1){
+      this.props.history.push("/");
+    }
+    else
+      this.props.history.goBack();
+   
   };
 
   _logout = () => {
