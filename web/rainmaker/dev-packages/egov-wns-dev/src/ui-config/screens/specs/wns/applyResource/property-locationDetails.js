@@ -15,14 +15,6 @@ import {
         jsonPath: "applyScreen.property.address.city",
       }
     ),
-    location: getLabelWithValue(
-      {
-        labelKey: "WS_PROP_DETAIL_LOCATION"
-      },
-      {
-        jsonPath: "applyScreen.property.PropertyLocation",
-      }
-    ),
     plotOrHouseOrSurveyNo: getLabelWithValue(
       {
         labelKey: "WS_PROP_DETAIL_DHNO",
