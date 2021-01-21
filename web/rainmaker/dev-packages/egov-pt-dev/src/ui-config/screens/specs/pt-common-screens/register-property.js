@@ -47,7 +47,8 @@ const getMDMSPropertyData = async (dispatch) => {
             { name: "UsageCategory" },
             { name: "UsageCategoryMajor" },
             { name: "UsageCategoryMinor" },
-            { name: "UsageCategorySubMinor" }
+            { name: "UsageCategorySubMinor" },
+            {name: "PropertyLocation"}
           ]
         }
       ],

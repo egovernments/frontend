@@ -117,6 +117,28 @@ export const propertyLocationDetails = getCommonCard({
       }
 
     },
+    propertyType: getSelectField({
+            label: {
+              labelName: "Property Location",
+              labelKey: "PT_COMMON_PROPERTY_LOCATION"
+            },
+            placeholder: {
+              labelName: "Select Property Type",
+              labelKey: "PT_COMMON_PROPERTY_LOCATION_PLACEHOLDER"
+            },
+            required: true,
+            jsonPath: "Property.propertyLocation",
+            sourceJsonPath: "searchScreenMdmsData.PropertyTax.PropertyLocation",
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
+            localePrefix: {
+              moduleName: "COMMON",
+              masterName: "PROPLOCATION"
+            }
+    }),
     localityOrMohalla: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-pt",
