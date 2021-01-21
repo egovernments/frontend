@@ -8,7 +8,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -21,6 +21,12 @@ import {
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
 import {deoProcessMappings} from "./constants";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import axios from "axios";
+import qs from "qs";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import $ from 'jquery';
+
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
@@ -978,6 +984,378 @@ export const validateActionFormForComments = (preparedFinalObject) => {
   }
 
   return true;
+}
+
+//This function is not used as of now.
+export const downloadLeaseApplication = async (queryStr, mode = 'download') => {
+
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/egov-pdf/download/UC/mcollect-challan",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+          })
+        } else {
+          console.log("Error In Application form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Application form!');
+  }
+
+}
+
+//This function is used to create pdf in the back end (Simple download) Not for E Sign
+export const downloadLeaseApplication1 = async (queryStr, mode = 'download') => {
+
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/egov-pdf/download/UC/mcollect-challan",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+          })
+        } else {
+          console.log("Error In Application form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Application form!');
+  }
+
+}
+
+export const prepareRequestBodyForLeaseAppPdf = (state, dispatch , forEsign) =>{
+
+  let requestBody = {};
+  requestBody.tenantId = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].tenantId");
+  requestBody.area = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].leaseDetails.area");
+  requestBody.surveyNo = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].leaseDetails.surveyNo");
+  requestBody.months = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months");
+  requestBody.name = JSON.parse(getUserInfo()).name;
+  requestBody.mobileNo = JSON.parse(getUserInfo()).mobileNumber;
+  requestBody.aadhaarNumber = JSON.parse(getUserInfo()).aadhaarNumber;
+  requestBody.fatherOrHusbandName = JSON.parse(getUserInfo()).fatherOrHusbandName;
+  requestBody.forEsign = forEsign;
+
+  let reqWrapper = {"leaseApplication":[requestBody]}
+  return reqWrapper;
+}
+//This function is used to create pdf in the backend for eSign
+export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
+
+  let reqWrapper = prepareRequestBodyForLeaseAppPdf(state, dispatch, forEsign);
+  let payload = null;
+  try{
+    try{
+      payload = await httpRequest(
+        "post",
+        "/lams-services/dSign/createApplicationPdf",  // "/egov-pdf/download/LRMS/lrms-renewalCertificate?tenantId="+requestBody.tenantId,
+        "",
+        [],
+        reqWrapper
+      );
+    }
+    catch(e)
+    {
+
+    }
+
+    //dsignChange: Remove below code. Remove upper try catch
+    //payload = {"filestoreIds":["0207fdc3-4017-4e24-ad15-152aab2e9737"],"ResponseInfo":{"Accept":"application/json","RequestInfo":{"apiId":"Mihy","ver":".01","action":"_get","did":"1","key":"","msgId":"20170310130900|en_IN","requesterId":"","userInfo":{"id":2034,"uuid":"cfd640e6-b19e-4429-a710-86fa41e51cf9","userName":"9480734475","name":"Sham","type":"CITIZEN","mobileNumber":"9480734475","emailId":"Poojapadma45@gmail.com","tenantId":"pb","roles":[{"id":null,"name":"Citizen","code":"CITIZEN","tenantId":"pb"}]},"correlationId":"6ac5b9bc-8b2a-4900-928a-ebcf4067687c"}},"key":"mcollect-challan"};
+    
+    if(forEsign)
+    {
+      if(payload && payload.dSignInfo)
+        prepareForDSign(state, dispatch, payload);
+    }
+    else
+    {
+      if (payload && payload.filestoreIds && payload.filestoreIds.length > 0 ) {
+        payload.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+        })
+      }
+      else
+      {
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Error in generating PDF", labelKey: "LAMS_ERROR_PDF_DSIGN" },
+            "error"
+          )
+        );
+      }
+    }
+  }
+  catch(error)
+  {
+    console.error(error);
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Error in generating PDF", labelKey: "LAMS_ERROR_PDF_DSIGN" },
+        "error"
+      )
+    );
+  }
+}
+
+export const prepareForDSign = async (state, dispatch, response) => {
+
+  try{
+    // let payload = null;
+    // try{
+    //   payload = await httpRequest(
+    //     "post",
+    //     "/egov-lams/dSign/prepareData",
+    //     "",
+    //     [],
+    //     requestBody
+    //   );
+    // }
+    // catch(e)
+    // {
+
+    // }
+    
+    let eSignRequest = response.dSignInfo.esignRequest;
+    let aspTxnID = response.dSignInfo.aspTxnID;
+    
+    //dsignChange : Remove the below code. Remove upper try catch
+    let eSignRequest2 = '<?xml version="1.0" encoding="UTF-8"?><Esign AuthMode="1" aspId="DGDE-900" ekycId="" ekycIdType="A" responseSigType="pkcs7" responseUrl="https://localhost:8443/SpringBootESign/finalResponse" sc="Y" ts="2021-01-13T11:15:09" txn="1610516708555A191366689" ver="2.1"><Docs><InputHash docInfo="My Document" hashAlgorithm="SHA256" id="1">3d17778027d3ea9a623aba80f207e0e0a4978deedfbd87f6ea64c115a972e221</InputHash></Docs><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>VlsJGL7pdF65JSnJoAY9gW9+jXqpt8lYJ/UnjzAvV4Q=</DigestValue></Reference></SignedInfo><SignatureValue>qA+VSnZ+m27eEgiWERmRskRwBHxAJAo/zkhCmpLd6GUmxNxm3Kfk8zWnAnBNDpBzld1BrAXdEXkW&#13;'
+    +'6abNzG276c32yaxEdM6jvNMWa0Mt5fNNWn21VfQe4gBTIT16Lpm5icGN7Ve4UoFpTYYxOclvW1rV&#13;'
+    +'u9EejXQo1OwYCJCbsguWXpgBnLknSbdyhnQXNgrJUsMjnfiwJRSclrbvmf2XGyT4BVmZTrqjLctE&#13;'
+    +'3ISF/jU89pKNYwnzGxBu5pfPSKKukpJyfNfLfE3OzekiCSJFfHc9K+3P7zE7X7cVwLPc3F1/Hb0M&#13;'
+    +'RfGyRbDoeD3Z13CkAjPA/bw0HuyHF2QtgZU1vwx0KGxmH7vI3iFbJxw1MUsCjxmm9pORmJDmdOU9&#13;'
+    +'SMM7Q29ekM991fWDBgfodiUsZck1YsEFeDKWgxhe+5uVTx0zpkuAMIn4Xjpn80IsBda8LCF7F0uD&#13;'
+    +'Pd/dqsU6qi89ZEfdTZAIK6D3oYGBuiiouJNQihIKDlyNmxscw2HtsxYUxJjc6LBuECyOmu5Nc4ur&#13;'
+    +'HRMk6u3lxPLFyAdi+zajjLVpSfmTlDQdmW5gnm45Vsg3H330xtbYyxXwfvrKQzJIUNOSCnVHtYFf&#13;'
+    +'nCb9zOcWzMrAqOUkikV35HOJTR2bFmxPoMY7l/ARCwjKfCPMhBGJ153dfMwg2hW9BgTB0iwlZJg=</SignatureValue></Signature></Esign>';
+
+    let payload = {
+     'eSignRequest': eSignRequest, //'<?xml version="1.0" encoding="UTF-8"?><Esign AuthMode="1" aspId="DGDE-900" ekycId="" ekycIdType="A" responseSigType="pkcs7" responseUrl="https://localhost:8443/SpringBootESign/finalResponse" sc="Y" ts="2021-01-13T11:15:09" txn="1610516708555A191366689" ver="2.1"><Docs><InputHash docInfo="My Document" hashAlgorithm="SHA256" id="1">3d17778027d3ea9a623aba80f207e0e0a4978deedfbd87f6ea64c115a972e221</InputHash></Docs><Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><DigestValue>VlsJGL7pdF65JSnJoAY9gW9+jXqpt8lYJ/UnjzAvV4Q=</DigestValue></Reference></SignedInfo><SignatureValue>qA+VSnZ+m27eEgiWERmRskRwBHxAJAo/zkhCmpLd6GUmxNxm3Kfk8zWnAnBNDpBzld1BrAXdEXkW&#13;6abNzG276c32yaxEdM6jvNMWa0Mt5fNNWn21VfQe4gBTIT16Lpm5icGN7Ve4UoFpTYYxOclvW1rV&#13;u9EejXQo1OwYCJCbsguWXpgBnLknSbdyhnQXNgrJUsMjnfiwJRSclrbvmf2XGyT4BVmZTrqjLctE&#13;3ISF/jU89pKNYwnzGxBu5pfPSKKukpJyfNfLfE3OzekiCSJFfHc9K+3P7zE7X7cVwLPc3F1/Hb0M&#13;RfGyRbDoeD3Z13CkAjPA/bw0HuyHF2QtgZU1vwx0KGxmH7vI3iFbJxw1MUsCjxmm9pORmJDmdOU9&#13;SMM7Q29ekM991fWDBgfodiUsZck1YsEFeDKWgxhe+5uVTx0zpkuAMIn4Xjpn80IsBda8LCF7F0uD&#13;Pd/dqsU6qi89ZEfdTZAIK6D3oYGBuiiouJNQihIKDlyNmxscw2HtsxYUxJjc6LBuECyOmu5Nc4ur&#13;HRMk6u3lxPLFyAdi+zajjLVpSfmTlDQdmW5gnm45Vsg3H330xtbYyxXwfvrKQzJIUNOSCnVHtYFf&#13;nCb9zOcWzMrAqOUkikV35HOJTR2bFmxPoMY7l/ARCwjKfCPMhBGJ153dfMwg2hW9BgTB0iwlZJg=</SignatureValue></Signature></Esign>nCb9zOcWzMrAqOUkikV35HOJTR2bFmxPoMY7l/ARCwjKfCPMhBGJ153dfMwg2hW9BgTB0iwlZJg=</SignatureValue></Signature></Esign>',
+     'aspTxnID': aspTxnID, //'1610516708555A191366689',
+     'Content-Type': 'application/xml',
+     };
+
+    if (payload && payload.aspTxnID && payload.eSignRequest) {
+      callDSignService(state,dispatch, payload);
+    }
+    else
+    {
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Error in initiating Digital Signature", labelKey: "LAMS_ERROR_INIT_DSIGN" },
+          "error"
+        )
+      );
+    }
+  }
+  catch(error)
+  {
+    console.error(error);
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Error in initiating Digital Signature", labelKey: "LAMS_ERROR_INIT_DSIGN" },
+        "error"
+      )
+    );
+  }
+}
+
+export const callDSignService = async(state, dispatch, req) => {
+
+  if(process.env.DSIGN_REDIRECT_URL)
+    console.error("DSIGN_REDIRECT_URL Environment Variable not set!");
+  
+  let dSignUrl = process.env.DSIGN_REDIRECT_URL? process.env.DSIGN_REDIRECT_URL : "https://es-staging.cdac.in/esign2.1level1/2.1/form/signdoc";
+
+  console.log(JSON.stringify(req))
+  try 
+  {
+    var newForm = $('<form>', {
+      action: dSignUrl,
+      method: 'post',
+      target: '_top',
+    });
+
+    // for (var key in req) {
+    //   console.log(key,req[key])
+    //   newForm.append(
+    //     $('<input>', {
+    //       name: key,
+    //       value: req[key],
+    //       type: 'text',
+    //     }))
+    // }
+
+    newForm.append(
+      $('<input>', {
+        name: 'eSignRequest',
+        value: req['eSignRequest'],
+        type: 'text',
+      })).append($('<input>', {
+        name: 'aspTxnID',
+        value: req['aspTxnID'],
+        type: 'text',
+      })).append($('<input>', {
+        name: 'Content-Type',
+        value: req['Content-Type'],
+        type: 'text',
+      }));
+      
+    //Set the values in lamsStore just before redirection
+    dispatch(prepareFinalObject("lamsStore.dSign.aspTxnID", req.aspTxnID));
+    dispatch(prepareFinalObject("lamsStore.dSign.initiated",true));
+
+    let leaseDetails = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0]");
+    let allCbSurveyDetails = get(state.screenConfiguration.preparedFinalObject , "lamsStore.allSurveyDetails");
+
+    localStorageSet("dSign.aspTxnID", req.aspTxnID);
+    localStorageSet("dSign.initiated", true);
+    localStorageSet("dSign.leaseDetails", JSON.stringify(leaseDetails));;
+    localStorageSet("dSign.cbSurveyDetails", JSON.stringify(allCbSurveyDetails));;
+
+    $(document.body).append(newForm);
+    newForm.submit();
+  }
+  catch(error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Digital Signature cannot be performed now", labelKey: "LAMS_ERROR_DSIGN_CDAC_POST" },
+        "error"
+      )
+    );
+    console.log(error);
+  }
+}
+
+export const callDSignServiceOldImpl = async(state, dispatch, req) => {
+
+  if(process.env.DSIGN_REDIRECT_URL)
+    console.error("DSIGN_REDIRECT_URL Environment Variable not set!");
+  
+  let dSignUrl = process.env.DSIGN_REDIRECT_URL? process.env.DSIGN_REDIRECT_URL : "https://es-staging.cdac.in/esign2.1level1/2.1/form/signdoc";
+  var data = qs.stringify(req);
+
+  const form = new FormData();
+  form.append('eSignRequest', req['eSignRequest']);
+
+  var config = {
+    method: 'post',
+    url: dSignUrl,
+    headers: { 
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data : form
+  };
+
+  axios(config)
+  .then(function (response) {
+    afterDSignDone(state,dispatch,response)
+    console.log(JSON.stringify(response.data));
+  })
+  .catch(function (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Digital Signature cannot be performed now", labelKey: "LAMS_ERROR_DSIGN_CDAC_POST" },
+        "error"
+      )
+    );
+    console.log(error);
+  });
+
+}
+
+export const afterDSignDone = async(state, dispatch, response) => {
+  
+  //console.log("Check now ",JSON.parse(localStorageGet("leaseDetails")));
+  dispatch(prepareFinalObject("lamsStore.Lease[0]",JSON.parse(localStorageGet("dSign.leaseDetails"))));
+  dispatch(prepareFinalObject("lamsStore.selectedSurveyDetails",JSON.parse(localStorageGet("dSign.leaseDetails")).leaseDetails));
+  dispatch(prepareFinalObject("lamsStore.allSurveyDetails",JSON.parse(localStorageGet("dSign.cbSurveyDetails"))));
+
+  //dispatch(prepareFinalObject("lamsStore.dSign.success",true));
+  //let initiated = get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.initiated");
+
+  let espTxnID = getQueryArg(window.location.href, "espTxnID"); //localStorageGet("dSign.aspTxnID");
+
+  let payload = null;
+  try{
+ 
+    payload = await httpRequest(
+      "post",
+      "/lams-services/dSign/getApplicationfile?txnid="+espTxnID,
+      "",
+      [],
+      ""
+    );
+    
+    //dsignChange: Remove below code. Remove upper try catch
+    //payload = {"filestoreIds":["0207fdc3-4017-4e24-ad15-152aab2e9737"],"ResponseInfo":{"Accept":"application/json","RequestInfo":{"apiId":"Mihy","ver":".01","action":"_get","did":"1","key":"","msgId":"20170310130900|en_IN","requesterId":"","userInfo":{"id":2034,"uuid":"cfd640e6-b19e-4429-a710-86fa41e51cf9","userName":"9480734475","name":"Sham","type":"CITIZEN","mobileNumber":"9480734475","emailId":"Poojapadma45@gmail.com","tenantId":"pb","roles":[{"id":null,"name":"Citizen","code":"CITIZEN","tenantId":"pb"}]},"correlationId":"6ac5b9bc-8b2a-4900-928a-ebcf4067687c"}},"key":"mcollect-challan"};
+    
+    if (payload && payload.files && payload.files.length > 0 ) {
+      let mode = 'download';
+      downloadReceiptFromFilestoreID(payload.files[0].fileStoreId, mode);
+
+      //Write auto upload code here.
+    }
+    else
+    {
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Error in getting the Signed PDF", labelKey: "LAMS_ERROR_GET_SIGNED_DOC" },
+          "error"
+        )
+      );
+    }
+  }
+  catch(error)
+  {
+    console.error(error);
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Error in getting the Signed PDF", labelKey: "LAMS_ERROR_GET_SIGNED_DOC" },
+        "error"
+      )
+    );
+  }
+
+}
+
+export const isPostDSignMode = () => {
+  let aspTxnID = localStorageGet("dSign.aspTxnID");  //get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.aspTxnID");
+  let initiated = localStorageGet("dSign.initiated");
+  let dSignSuccess = getQueryArg(window.location.href, "success");
+  if(initiated && aspTxnID && dSignSuccess)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 export const  getESignRequest = async() => {
