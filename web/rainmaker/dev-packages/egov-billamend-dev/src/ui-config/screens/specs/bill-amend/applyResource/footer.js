@@ -23,89 +23,80 @@ import store from "../../../../../ui-redux/store";
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
-  let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.div.children.stepper.props.activeStep",
-    0
-  );
-
+  let activeStep = get( state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
 
   if (activeStep === 0) {
-    await prepareDocumentsUploadData(state, dispatch);
-
-    let isAddDemandRevisionBasisCard = validateFields(
+    const isAddDemandRevisionBasisCard = validateFields(
       "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children",
       state,
       dispatch
     );
 
-    if (!isAddDemandRevisionBasisCard) {
-      isFormValid = false;
-    } else {
-      const demandRevisionBasisValue = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Bill.demandRevisionBasis",
-        ""
-      );
-      if (demandRevisionBasisValue !== "COURTCASESETTLEMENT") {
-        const fromDate = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Bill.fromDate"
-        );
-        const toDate = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Bill.toDate"
-        );
-        if (new Date(fromDate) > new Date(toDate)) {
-          isFormValid = false;
-          let errorMessage = {
-            labelName: "From Date should be less than To Date",
-            labelKey: "ERR_FROM_TO_DATE_TOAST",
-          };
-          dispatch(toggleSnackbar(true, errorMessage, "warning"));
-        }
-      }
-    }
-    const amount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "BILL.AMOUNT",
-      ""
-    );
-    console.log("amount inside footer",amount)
-    const amountType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "BILL.AMOUNTTYPE",
-      ""
-    );
-    const amountValues = Object.keys(amount).map(
-      (key) => amount[key][amountType]
-    );
-    if (amountValues.every(item=>item === 0)) {
-      isFormValid = false;
-      let errorMessage = {
-        labelName: "All Tax Heads Amount cant't be 0",
-        labelKey: "ERR_NON_ZERO_AMOUNT_TOAST",
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    } else {
-      const amountPattern = /^\d+(\.\d{1,2})?$/;
-      let error = false;
-      amountValues.forEach((item) => {
-        if (!amountPattern.test(item)) {
-         error - true
-        }
-      });
-      if(error){
+    const demandRevisionBasisValue = get( state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
+
+      if (!isAddDemandRevisionBasisCard) {
         isFormValid = false;
-        let errorMessage = {
-          labelName: "lpease enter a valid amount",
-          labelKey: "ERR_VALID_AMOUNT_TOAST",
-        };
-        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        hasFieldToaster = true;
+      } else {
+        if ( demandRevisionBasisValue !== "COURTCASESETTLEMENT" ) {
+          const fromDate = get( state.screenConfiguration.preparedFinalObject, "Amendment.fromDate");
+          const toDate = get( state.screenConfiguration.preparedFinalObject, "Amendment.toDate");
+          if (new Date(fromDate) > new Date(toDate)) {
+            isFormValid = false;
+            let errorMessage = {
+              labelName: "From Date should be less than To Date",
+              labelKey: "ERR_FROM_TO_DATE_TOAST",
+            };
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          } else {
+            await prepareDocumentsUploadData(state, dispatch);
+          }
+        } else {
+          await prepareDocumentsUploadData(state, dispatch);
+        }
       }
-    }
+
+    // await prepareDocumentsUploadData(state, dispatch);
+    // const amount = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "BILL.AMOUNT",
+    //   ""
+    // );
+    // console.log("amount inside footer",amount)
+    // const amountType = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "BILL.AMOUNTTYPE",
+    //   ""
+    // );
+    // const amountValues = Object.keys(amount).map(
+    //   (key) => amount[key][amountType]
+    // );
+    // if (amountValues.every(item=>item === 0)) {
+    //   isFormValid = false;
+    //   let errorMessage = {
+    //     labelName: "All Tax Heads Amount cant't be 0",
+    //     labelKey: "ERR_NON_ZERO_AMOUNT_TOAST",
+    //   };
+    //   dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    // } else {
+    //   const amountPattern = /^\d+(\.\d{1,2})?$/;
+    //   let error = false;
+    //   amountValues.forEach((item) => {
+    //     if (!amountPattern.test(item)) {
+    //      error - true
+    //     }
+    //   });
+    //   if(error){
+    //     isFormValid = false;
+    //     let errorMessage = {
+    //       labelName: "lpease enter a valid amount",
+    //       labelKey: "ERR_VALID_AMOUNT_TOAST",
+    //     };
+    //     dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    //   }
+    // }
   }
 
   if (activeStep === 1) {
@@ -143,25 +134,8 @@ const callBackForNext = async (state, dispatch) => {
       switch (activeStep) {
         case 0:
           errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Basic Details, then proceed!",
-            labelKey:
-              "Please fill all mandatory fields for Basic Details, then proceed!",
-          };
-          break;
-        case 1:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Scrutiny Details, then proceed!",
-            labelKey:
-              "Please fill all mandatory fields for Scrutiny Details, then proceed!",
-          };
-          break;
-        case 2:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Applicant Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST",
+            labelName: "Please, provide required details",
+            labelKey: "BILL_ERR_PROVIDE_REQ_DETAILS_TOAST",
           };
           break;
       }

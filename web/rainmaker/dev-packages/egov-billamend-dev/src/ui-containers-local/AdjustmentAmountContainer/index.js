@@ -131,8 +131,8 @@ class AdjustmentAmountContainer extends Component {
     this.state = {
       reducedAmount: true,
       additionalAmount: true,
-      color: "red",
-      year: 1964,
+      reducedAmountValue: 0,
+      additionalAmountValue: 0,
       data: {
         WATER_TAX: { reducedAmount: 0, additionalAmount: 0 },
 
@@ -145,25 +145,15 @@ class AdjustmentAmountContainer extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.prepareFinalObject("BILL.AMOUNT", this.state.data);
-  }
-
-  handlereducedAmountChange = (event) => {
-    this.setState({ reducedAmount: event.target.value });
-  };
-
-  handleadditionalAmountChange = (event) => {
-    this.setState({ name: event.target.value });
-  };
-  handleAmountChange = (e, field) => {
+  handleAmountChange = (e, field, key) => {
+    const { data, ...rest } = this.props;
     const re = /^(\d+)?([.]?\d{0,2})?$/; ///^[0-9\b]+$/;
       if (e.target.value === '' || re.test(e.target.value)) {
         const event = e.target;
-        const data = { ...this.state.data };
-        data[event.name][field] = event.value;
-        this.setState({ data });
-        this.props.prepareFinalObject("BILL.AMOUNT", data);
+        let details = { ...data };
+        if(field == "reducedAmount") details[key]["reducedAmountValue"] = event.value;
+        if(field == "additionalAmount") details[key]["additionalAmountValue"] = event.value;
+        this.props.prepareFinalObject("fetchBillDetailsssss", details);
       }
   };
   handleCheckBoxChange = (field) => {
@@ -189,19 +179,16 @@ class AdjustmentAmountContainer extends Component {
       <React.Fragment>
         <Grid container={true}>
           <Grid item={true} xs={4} sm={4} md={3} style={lableStyle}>
-            <LabelContainer labelKey={getTransformedLocale(`BILL_${card.taxHeads}`)} />
+            <LabelContainer labelKey={getTransformedLocale(`BILL_${card.taxHeadCode}`)} />
           </Grid>
           <Grid item={true} xs={4} sm={4} md={3}>
             <TextField
               variant="outlined"
-              name={getTransformedLocale(card.taxHeads)}
-              value={`${
-                this.state.data[getTransformedLocale(card.taxHeads)]
-                  .reducedAmount
-              }`}
+              name={getTransformedLocale(card.taxHeadCode)}
+              value={card.reducedAmountValue ? card.reducedAmountValue : 0}
               className={classes.textField}
               onChange={(event) =>
-                this.handleAmountChange(event, "reducedAmount")
+                this.handleAmountChange(event, "reducedAmount", key)
               }
               InputProps={{
                 className: classes.input,
@@ -215,14 +202,11 @@ class AdjustmentAmountContainer extends Component {
           <Grid item={true} xs={4} sm={4} md={3}>
             <TextField
               variant="outlined"
-              value={`${
-                this.state.data[getTransformedLocale(card.taxHeads)]
-                  .additionalAmount
-              }`}
+              value={card.additionalAmountValue ? card.additionalAmountValue : 0}
               className={classes.textField}
-              name={getTransformedLocale(card.taxHeads)}
+              name={getTransformedLocale(card.taxHeadCode)}
               onChange={(event) =>
-                this.handleAmountChange(event, "additionalAmount")
+                this.handleAmountChange(event, "additionalAmount", key)
               }
               InputProps={{
                 className: classes.input,
@@ -239,21 +223,7 @@ class AdjustmentAmountContainer extends Component {
   };
 
   render() {
-    const { ...rest } = this.props;
-    let data = [
-      {
-        taxHeads: "Water Tax",
-      },
-      {
-        taxHeads: "Water cess",
-      },
-      {
-        taxHeads: "Interest",
-      },
-      {
-        taxHeads: "Penalty",
-      },
-    ];
+    const { data, ...rest } = this.props;
     return (
       <div>
         <Grid container={true}>
@@ -300,12 +270,13 @@ const mapStateToProps = (state) => {
     "BILL.AMOUNT",
     []
   );
-  const amountType = get(
-    screenConfiguration.prepareFinalObject,
-    "BILL.AMOUNTTYPE",
-    ""
-  );
-  return { amount, amountType, moduleName };
+  // const amountType = get(
+  //   screenConfiguration.prepareFinalObject,
+  //   "BILL.AMOUNTTYPE",
+  //   ""
+  // );
+  let data = get( screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
+  return { amount, moduleName, data };
 };
 
 const mapDispatchToProps = (dispatch) => {

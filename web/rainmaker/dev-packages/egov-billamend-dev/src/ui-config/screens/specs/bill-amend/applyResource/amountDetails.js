@@ -17,7 +17,7 @@ let demandArray = [];
 export const onDemandRevisionBasis = async (action, state, dispatch) => {
     let demandRevisionBasis = get(
         state.screenConfiguration.preparedFinalObject,
-        "Bill.demandRevisionBasis", ""
+        "Amendment.amendmentReason", ""
     );
     let demandArray = [];
     switch (demandRevisionBasis) {
@@ -331,7 +331,7 @@ export const AddDemandRevisionBasis = getCommonCard({
                 labelName: "Select Demand Revison Basis",
                 labelKey: "BILL_DEMAND_REVISON_BASIS_PLACEHOLDER"
             },
-            jsonPath: "Bill.demandRevisionBasis",
+            jsonPath: "Amendment.amendmentReason",
             sourceJsonPath: "applyScreenMdmsData.BillAmendment.DemandRevisionBasis",
             required: true,
             gridDefination: {
@@ -354,7 +354,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.courtOderNo",
+            jsonPath: "Amendment.courtOderNo",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -372,7 +372,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.dateEffectiveFrom",
+            jsonPath: "Amendment.dateEffectiveFrom",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -392,7 +392,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.govtNotificationNumber",
+            jsonPath: "Amendment.govtNotificationNumber",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -410,7 +410,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.documentNo",
+            jsonPath: "Amendment.documentNo",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -428,7 +428,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.fromDate",
+            jsonPath: "Amendment.fromDate",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -448,7 +448,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Bill.toDate",
+            jsonPath: "Amendment.toDate",
             gridDefination: {
                 xs: 12,
                 sm: 12,

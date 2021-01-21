@@ -20,7 +20,6 @@ import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import set from "lodash/set";
 import get from "lodash/get";
 import jp from "jsonpath";
-// import { changeStep } from "./applyResource/footer";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { documentDetails } from "./applyResource/documentDetails";
 import { footer } from "./applyResource/footer";
@@ -90,9 +89,57 @@ export const formwizardThirdStep = {
   },
   visible: false
 };
+export const getFetchBill = async(state, dispatch, action, queryObject) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
+}
+
+export const setSearchResponse = async (state, dispatch, action) => {
+
+  let fetBill = await getFetchBill(state, dispatch, action, [
+    {
+      key: "tenantId",
+      value: "pb.amritsar"
+    },
+    {
+      key: "consumerCode",
+      value: "WS_AP/107/2020-21/000942"
+    },
+    {
+      key: "businessService",
+      value: "WS.ONE_TIME_FEE"
+    }
+  ]);
+  console.log(fetBill, "qweyoiuyroqwrpoiy");
+  if(fetBill && fetBill.Bill && fetBill && fetBill.Bill.length > 0) {
+    let billDetails = get(fetBill, "Bill[0].billDetails[0].billAccountDetails",[]);
+    billDetails.map(bill => {
+      bill.reducedAmountValue = 0;
+      bill.additionalAmountValue = 0;
+    });
+    dispatch(prepareFinalObject("fetchBillDetails", billDetails));
+  }
+}
 
 export const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
+  await setSearchResponse(state, dispatch, action);
 }
 
 export const getMdmsData = async (action, state, dispatch) => {
@@ -125,9 +172,6 @@ export const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    // if(!payload.MdmsRes.BillAmendment){
-    //   payload.MdmsRes.BillAmendment=docdata.BillAmendment;
-    // }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
