@@ -275,7 +275,7 @@ const mapStateToProps = (state) => {
   //   "BILL.AMOUNTTYPE",
   //   ""
   // );
-  let data = get( screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
+  let data = get( screenConfiguration.preparedFinalObject, "Amendment.demandDetails", []); //fetchbilldetails
   return { amount, moduleName, data };
 };
 

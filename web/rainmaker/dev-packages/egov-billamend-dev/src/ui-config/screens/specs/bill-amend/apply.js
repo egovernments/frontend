@@ -41,17 +41,18 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for Bill`,
+    labelName: `Generate Note`,
     labelKey: "BILL_APPLY_FOR_BILL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: "NA"
-    },
-    visible: false
+        moduleName: "egov-billamend",
+        componentPath: "ConsumerNo",
+        props: {
+            number: "NA",
+            label: { labelValue: "Consumer No.", labelKey: "BILL_CONSUMER_NO" }
+        },
+    // visible: false
   }
 });
 
@@ -115,6 +116,17 @@ export const setSearchResponse = async (state, dispatch, action) => {
       bill.additionalAmountValue = 0;
     });
     dispatch(prepareFinalObject("fetchBillDetails", billDetails));
+    dispatch(prepareFinalObject("Amendment.demandDetails", billDetails));
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        "WS_AP/107/2020-21/000942"
+      )
+    );
+
   }
 }
 
