@@ -226,6 +226,11 @@ class WorkFlowContainer extends React.Component {
         data[0].fireNOCDetails.status = "CITIZENACTIONREQUIRED";
         data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
       }
+      data.map((items, index) => {
+       if( items.fireNOCDetails.applicationNumber != applicationNumber ) {
+         data.splice(index, 1)
+       }
+      })
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -301,6 +306,7 @@ class WorkFlowContainer extends React.Component {
       data = get(preparedFinalObject, dataPath, [])
       data = data[0];
     }
+    console.log(data, 'dataaaa');
     //setting the action to send in RequestInfo
     let appendToPath = ""
     if (dataPath === "FireNOCs") {
