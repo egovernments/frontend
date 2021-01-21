@@ -18,8 +18,14 @@ const ToolTipContainer = Loadable({
   loading:() => <Loading/>
 })
 
+const AutoSuggest = Loadable({
+  loader: () => import("./AutoSuggest"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   ConsumerNo,
-  ToolTipContainer
+  ToolTipContainer,
+  AutoSuggest
 };
