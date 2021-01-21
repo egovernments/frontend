@@ -45,7 +45,7 @@ class LabelContainer extends React.Component {
     if (typeof fieldValue === "boolean") {
       fieldValue = fieldValue ? getLocaleLabels("SCORE_YES","SCORE_YES") : getLocaleLabels("SCORE_NO","SCORE_NO");
     }
-
+    
     let fieldLabel =
       typeof fieldValue === "string"
         ? getLocaleLabels(
@@ -57,7 +57,7 @@ class LabelContainer extends React.Component {
             localizationLabels
           )
         : fieldValue;
-    let labelValue = (fieldValue == 0 || fieldValue != 0) ? fieldLabel : translatedLabel;
+    let labelValue = (fieldValue === 0 || fieldValue != 0) ? fieldLabel : translatedLabel;
     labelValue =
       checkValueForNA && typeof checkValueForNA === "function"
         ? checkValueForNA(labelValue)
