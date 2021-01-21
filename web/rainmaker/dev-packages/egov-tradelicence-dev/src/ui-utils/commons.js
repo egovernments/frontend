@@ -375,7 +375,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // set(queryObject[0], "financialYear", currentFinancialYr);
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
     }
-
+    const channel = getQueryArg(window.location.href, "channel");
+    if(channel !=null){
+    set(queryObject[0], "tradeLicenseDetail.channel", channel);}
+    
     set(queryObject[0], "tenantId", tenantId);
     if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL" || get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "RENEWAL") {
       set(queryObject[0], "workflowCode", "EDITRENEWAL");
@@ -455,6 +458,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       const isRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
+     
+
       let updateResponse = [];
       if (!isEditFlow) {
         let oldOwners = JSON.parse(

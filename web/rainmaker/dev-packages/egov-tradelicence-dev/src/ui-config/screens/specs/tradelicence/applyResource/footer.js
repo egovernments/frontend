@@ -37,11 +37,18 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
+
+  if ( get(LicenseData.tradeLicenseDetail, "channel") == null){
   dispatch(
     setRoute(
       `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
     )
-  );
+  );}
+
+  else{
+alert("Yet to add redirection url for EODB");
+
+  }
 };
 const editRenewalMoveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -602,7 +609,15 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     `Licenses`
   );
-
+  const channel = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Licenses[0].tradeLicenseDetails.channel`
+  );
+    if(channel !=null){
+    set(queryObject[0], "tradeLicenseDetail.channel", channel);}
+    else{
+      set(queryObject[0], "tradeLicenseDetail.channel", "COUNTER");  
+}
   const tenantId= get(licences[0] , "tenantId");
 
   const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
@@ -626,10 +641,12 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
           response,
           `Licenses[0].licenseNumber`
         );
+       
         dispatch(
           setRoute(
             `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
           ));
+
       }
       catch(e)
       {
