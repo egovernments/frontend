@@ -29,18 +29,22 @@ export const searchResults = {
         }
       },
       {
-        labelName: "Consumer Code",
+        labelName: "Application No",
         labelKey: "BILL_COMMON_APPLICATION_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
-            <a href="javascript:void(0)"
-              onClick={() => {
-                let link = `/bill-amend/search-preview?tenantId=${tableMeta.rowData[6]}&applicationNumber=${tableMeta.rowData[1]}`;
-                routeTo(link);
-              }}
-            >{value}
-            </a>
+            value == 'NA' ?
+              <span style={{ "color": "rgba(0, 0, 0, 0.87)", "cursor": "text" }} >
+                {value}
+              </span> :
+              <a href="javascript:void(0)"
+                onClick={() => {
+                  let link = `/bill-amend/search-preview?tenantId=${tableMeta.rowData[6]}&applicationNumber=${tableMeta.rowData[1]}`;
+                  routeTo(link);
+                }}
+              >{value}
+              </a>
           )
         }
       },

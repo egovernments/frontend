@@ -1,34 +1,32 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getBillAmendSearchResult } from "../../../../../ui-utils/commons";
+import { getBillAmendSearchResult, searchBill } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { convertEpochToDate } from "../../utils/index";
 
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
-  let tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreen.tenantId"
-  );
+
   let queryObject = [
-   
+
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "searchScreenBillAmend",
     {}
   );
 
-  const isSearchBoxFirstRowValid = validateFields(
+  let isSearchBoxFirstRowValid = validateFields(
     "components.div.children.searchCard.children.cardContent.children.searchContainer.children",
     state,
     dispatch,
     "search"
   );
+  if (isSearchBoxFirstRowValid) {
+    isSearchBoxFirstRowValid = get(searchScreenObject, 'mobileNumber', '') == "" && get(searchScreenObject, 'billNo', '') == "" && get(searchScreenObject, 'consumerCode', '') == "" ? false : true;
+  }
 
-  if (!isSearchBoxFirstRowValid ) {
+  if (!isSearchBoxFirstRowValid) {
     dispatch(
       toggleSnackbar(
         true,
@@ -62,8 +60,8 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
       if (searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key] =="") {
-          delete searchScreenObject[key];
+        searchScreenObject[key] == "") {
+        delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
@@ -85,44 +83,53 @@ export const searchApiCall = async (state, dispatch) => {
     //   return;
     // }
     // searchScreenObject.tenantId =getTenantId();
-    const responseFromAPI = await getBillAmendSearchResult(queryObject,dispatch)
-    const bills = (responseFromAPI && responseFromAPI.Amendments) || [];
+    const responseFromAPI = await getBillAmendSearchResult(queryObject, dispatch)
+    const Amendments = (responseFromAPI && responseFromAPI.Amendments) || [];
+    const respObj = {};
+
+    Amendments.map(bill => {
+      respObj[bill.consumerCode] = bill;
+    })
+    const resp = await searchBill(queryObject, dispatch)
+
+    const bills = (resp && resp.Bill) || [];
     const billTableData = bills.map(item => {
+
       return {
         businessService: get(item, "businessService"),
-        amendmentId: get(item, "amendmentId"),
+        amendmentId: get(respObj[get(item, "consumerCode")], "amendmentId", 'NA'),
         consumerCode: get(item, "consumerCode"),
-        status: get(item, "status"),
-        consumerName: get(item, "additionalDetails.payerName"),
-        consumerAddress: get(item, "additionalDetails.payerAddress"),
+        status: get(respObj[get(item, "consumerCode")], "status", "NA"),
+        consumerName: get(item, "payerName"),
+        consumerAddress: get(item, "payerAddress"),
         tenantId: get(item, "tenantId"),
-        connectionType:get(item, "additionalDetails.connectionType",'Metered')
+        connectionType: get(respObj[get(item, "consumerCode")], "additionalDetails.connectionType", 'Metered')
       };
     });
     dispatch(
       prepareFinalObject("searchScreenMdmsData.searchResponse", bills)
     );
-    
+
     try {
       let data = billTableData.map(item => ({
-    
+
         ['BILL_COMMON_SERVICE_TYPE']: item.businessService || "-",
         ["BILL_COMMON_APPLICATION_NO"]: item.amendmentId || "NA",
-        ["PAYMENT_COMMON_CONSUMER_CODE"]:item.consumerCode  || "-",
-        
-        ['BILL_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName  || "-",
-        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']:item.consumerAddress  || "-",
-  
-        ['BILL_COMMON_TABLE_COL_STATUS']: item.status  || "-",
+        ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
 
-        ["TENANT_ID"]: item.tenantId ||'',
+        ['BILL_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
+        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']: item.consumerAddress || "-",
+
+        ['BILL_COMMON_TABLE_COL_STATUS']: item.status || "-",
+
+        ["TENANT_ID"]: item.tenantId || '',
         ['BUSINESS_SERVICE']: item.businessService || "-",
-        ['SERVICE_CONST']:item.businessService=='WS'?'WATER':(item.businessService=='SW'?'SEWERAGE':'NA'),
-        ['CONNECTION_TYPE']:item.connectionType||"NA"
+        ['SERVICE_CONST']: item.businessService == 'WS' ? 'WATER' : (item.businessService == 'SW' ? 'SEWERAGE' : 'NA'),
+        ['CONNECTION_TYPE']: item.connectionType || "NA"
 
       }));
 
-     
+
       dispatch(
         handleField(
           "search",
@@ -166,13 +173,3 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
-
-const getActionItem = (status) => {
-  switch (status) {
-    case "ACTIVE": return "PAY";
-    case "CANCELLED":
-    case "EXPIRED": return "GENERATE NEW BILL"
-    case "PAID": return "DOWNLOAD RECEIPT"
-    case "PARTIALLY_PAID": return "PARTIALLY PAID"
-  }
-}
