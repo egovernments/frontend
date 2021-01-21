@@ -29,11 +29,7 @@ export const getCommonApplyFooter = (children) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  const demandRevisionBasisValue = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Bill.demandRevisionBasis",
-    ""
-  );
+  const demandRevisionBasisValue = get( state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
   const documentObj = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.BillAmendment.documentObj"
@@ -101,7 +97,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 export const getDocList = (state, dispatch) => {
   const demandRevisionBasisValue = get(
     state.screenConfiguration.preparedFinalObject,
-    "Bill.demandRevisionBasis",
+    "Amendment.amendmentReason",
     ""
   );
   const documentObj = get(
@@ -285,7 +281,7 @@ export const validateFields = (
 export const onDemandRevisionBasis = async (state, dispatch) => {
   let demandRevisionBasis = get(
       state.screenConfiguration.preparedFinalObject,
-      "Bill.demandRevisionBasis", ""
+      "Amendment.amendmentReason", ""
   );
   
   switch (demandRevisionBasis) {

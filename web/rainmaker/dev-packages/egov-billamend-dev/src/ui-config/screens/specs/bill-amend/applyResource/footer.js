@@ -23,51 +23,42 @@ import store from "../../../../../ui-redux/store";
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
-  let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.div.children.stepper.props.activeStep",
-    0
-  );
-
+  let activeStep = get( state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
 
   if (activeStep === 0) {
-    await prepareDocumentsUploadData(state, dispatch);
-
-    let isAddDemandRevisionBasisCard = validateFields(
+    const isAddDemandRevisionBasisCard = validateFields(
       "components.div.children.formwizardFirstStep.children.AddDemandRevisionBasis.children.cardContent.children.demandRevisionContainer.children",
       state,
       dispatch
     );
 
-    if (!isAddDemandRevisionBasisCard) {
-      isFormValid = false;
-    } else {
-      const demandRevisionBasisValue = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Bill.demandRevisionBasis",
-        ""
-      );
-      if (demandRevisionBasisValue !== "COURTCASESETTLEMENT") {
-        const fromDate = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Bill.fromDate"
-        );
-        const toDate = get(
-          state.screenConfiguration.preparedFinalObject,
-          "Bill.toDate"
-        );
-        if (new Date(fromDate) > new Date(toDate)) {
-          isFormValid = false;
-          let errorMessage = {
-            labelName: "From Date should be less than To Date",
-            labelKey: "ERR_FROM_TO_DATE_TOAST",
-          };
-          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    const demandRevisionBasisValue = get( state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
+
+      if (!isAddDemandRevisionBasisCard) {
+        isFormValid = false;
+        hasFieldToaster = true;
+      } else {
+        if ( demandRevisionBasisValue !== "COURTCASESETTLEMENT" ) {
+          const fromDate = get( state.screenConfiguration.preparedFinalObject, "Amendment.fromDate");
+          const toDate = get( state.screenConfiguration.preparedFinalObject, "Amendment.toDate");
+          if (new Date(fromDate) > new Date(toDate)) {
+            isFormValid = false;
+            let errorMessage = {
+              labelName: "From Date should be less than To Date",
+              labelKey: "ERR_FROM_TO_DATE_TOAST",
+            };
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          } else {
+            await prepareDocumentsUploadData(state, dispatch);
+          }
+        } else {
+          await prepareDocumentsUploadData(state, dispatch);
         }
       }
-    }
+
+    // await prepareDocumentsUploadData(state, dispatch);
     // const amount = get(
     //   state.screenConfiguration.preparedFinalObject,
     //   "BILL.AMOUNT",
@@ -143,25 +134,8 @@ const callBackForNext = async (state, dispatch) => {
       switch (activeStep) {
         case 0:
           errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Basic Details, then proceed!",
-            labelKey:
-              "Please fill all mandatory fields for Basic Details, then proceed!",
-          };
-          break;
-        case 1:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Scrutiny Details, then proceed!",
-            labelKey:
-              "Please fill all mandatory fields for Scrutiny Details, then proceed!",
-          };
-          break;
-        case 2:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Applicant Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST",
+            labelName: "Please, provide required details",
+            labelKey: "BILL_ERR_PROVIDE_REQ_DETAILS_TOAST",
           };
           break;
       }
