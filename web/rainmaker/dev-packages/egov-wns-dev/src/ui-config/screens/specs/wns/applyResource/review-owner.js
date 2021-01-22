@@ -575,7 +575,7 @@ export const connectionSewerage={
   reviewBillingAmount : getLabelWithValueForModifiedLabel(
     {
       labelName: "No. of Taps",
-      labelKey: "WS_SERV_DETAIL_BILLING_TYPE"
+      labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT"
     },
     {
       jsonPath: "SewerageConnection[0].additionalDetails.billingAmount",
