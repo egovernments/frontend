@@ -128,8 +128,7 @@ class DocumentList extends Component {
     const {
       documentsList,
       documentsUploadRedux = {},
-      prepareFinalObject,
-      documentsPreview
+      prepareFinalObject
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -180,48 +179,11 @@ class DocumentList extends Component {
                   ? card.dropdown.required
                   : false
               };
-              if (card.dropdown && card.dropdown.value) {
-                documentsUploadRedux[index]['dropdown'] = {}
-                documentsUploadRedux[index]['dropdown']['value'] = card.dropdown.value;
-              }
-            }
-            if (card.dropdown && card.dropdown.value) {
-              documentsUploadRedux[index]=documentsUploadRedux[index]?documentsUploadRedux[index]:{};
-              documentsUploadRedux[index]['dropdown'] = documentsUploadRedux[index]['dropdown']?documentsUploadRedux[index]['dropdown']:{};
-              documentsUploadRedux[index]['dropdown']['value'] = card.dropdown.value;
-              documentsUploadRedux[index]['documentType'] = docType.code;
-              documentsUploadRedux[index]['documentCode'] = card.name;
-              documentsUploadRedux[index]['isDocumentRequired'] = card.required;
-              documentsUploadRedux[index]['isDocumentTypeRequired'] = card.dropdown
-              ? card.dropdown.required
-              : false
             }
             index++;
           }
         });
     });
-    if(documentsPreview && documentsPreview.length > 0) {
-      Object.keys(documentsUploadRedux).forEach(key => {
-        documentsPreview.map(upDocs => {
-          let docCode = upDocs && upDocs.title && upDocs.title.split('_').join('.');
-          if(documentsUploadRedux[key].documentCode === docCode) {
-            documentsUploadRedux[key].documents = [
-              {
-                fileName: upDocs.name,
-                fileStoreId: upDocs.fileStoreId,
-                fileUrl: upDocs.link
-              }
-            ]
-            if(upDocs && upDocs.dropdown && upDocs.dropdown.value) {
-              documentsUploadRedux[key].dropdown = {
-                value: upDocs.dropdown.value
-              }
-            }
-          }
-        })
-      })
-    }
-    this.forceUpdate();
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
   };
 
@@ -402,12 +364,7 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
-  const documentsPreview = get(
-    screenConfiguration.preparedFinalObject,
-    "documentsPreview",
-    []
-  );
-  return { documentsUploadRedux, documentsPreview, moduleName };
+  return { documentsUploadRedux, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {
