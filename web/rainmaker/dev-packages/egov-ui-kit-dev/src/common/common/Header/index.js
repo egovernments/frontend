@@ -58,7 +58,7 @@ class Header extends Component {
 
   _handleBackNavigation = () => {  
     if(location && location.pathname && 
-      location.pathname.indexOf("/citizen/egov-common/paymentRedirectPage) != -1")){
+      location.pathname.indexOf("/citizen/egov-common/acknowledgement") != -1){
       this.props.history.push("/");
     }
     else
