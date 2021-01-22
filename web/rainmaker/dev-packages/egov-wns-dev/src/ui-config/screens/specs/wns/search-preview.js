@@ -272,7 +272,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch,
       processInstanceAppStatus,
       applicationNumber,
-      tenantId
+      tenantId,service
     );
     set(
       action,

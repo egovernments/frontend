@@ -1835,175 +1835,34 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
 
 };
 // to download application 
-export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
-    let estFileStrID = wnsConnection[0].additionalDetails.estimationFileStoreId
-    let sanFileStrID = wnsConnection[0].additionalDetails.sanctionFileStoreId
-
-    if (type === 'estimateNotice' && estFileStrID !== undefined && estFileStrID !== null) {
-        downloadReceiptFromFilestoreID(estFileStrID, mode)
-        return false;
-    } else if (type === 'sanctionLetter' && sanFileStrID !== undefined && sanFileStrID !== null) {
-        downloadReceiptFromFilestoreID(sanFileStrID, mode)
-        return false;
-    }
-
-    let tenantName = wnsConnection[0].property.tenantId;
-    tenantName = tenantName.split('.')[1];
-
-    wnsConnection[0].tenantName = tenantName.toUpperCase();
-    const appNo = wnsConnection[0].applicationNo;
-
-    let queryStr = [{ key: "tenantId", value: getTenantIdCommon().split('.')[0] }];
-    let apiUrl, appService, estKey, queryObjectForEst
-    if (wnsConnection[0].service === serviceConst.WATER) {
-
-        // for Estimate api 
-        if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
-            if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_YES') {
-                wnsConnection[0].property.rainWaterHarvesting = true
-            } else if (wnsConnection[0].property.rainWaterHarvesting === 'SCORE_NO') {
-                wnsConnection[0].property.rainWaterHarvesting = false
-            }
-        }
-        apiUrl = "ws-calculator/waterCalculator/_estimate";
-        appService = "ws-applicationwater";
-        queryObjectForEst = [{
-            applicationNo: appNo,
-            tenantId: getTenantIdCommon(),
-            waterConnection: wnsConnection[0]
-        }]
-
-    } else {
-        apiUrl = "sw-calculator/sewerageCalculator/_estimate";
-        appService = "ws-applicationsewerage";
-        queryObjectForEst = [{
-            applicationNo: appNo,
-            tenantId: getTenantIdCommon(),
-            sewerageConnection: wnsConnection[0]
-        }]
-    }
-
-    const DOWNLOADCONNECTIONDETAILS = {
+export const downloadApp = async (inpuString, type, mode, dispatch) => {
+    const DOWNLOAD= {
         GET: {
-            URL: "/pdf-service/v1/_create",
-            ACTION: "_get",
+          URL: `/egov-pdf/download/WS/${type}`,
+          ACTION: "_get",
         },
-    };
-
-
-    switch (type) {
-        case 'application':
-            queryStr.push({ key: "key", value: appService })
-            break
-        case 'estimateNotice':
-            appService = "ws-estimationnotice";
-            queryStr.push({ key: "key", value: appService });
-            break;
-        case 'sanctionLetter':
-            appService = "ws-sanctionletter";
-            queryStr.push({ key: "key", value: appService });
-            break;
-    }
-
-    try {
-        const estResponse = await httpRequest(
-            "post",
-            apiUrl,
-            "_estimate",
-            [],
-
-            {
-                isconnectionCalculation: false,
-                CalculationCriteria: queryObjectForEst
-            }
-        );
-
-        wnsConnection[0].totalAmount = estResponse.Calculation[0].totalAmount;
-        wnsConnection[0].applicationFee = estResponse.Calculation[0].fee;
-        wnsConnection[0].serviceFee = estResponse.Calculation[0].charge;
-        wnsConnection[0].tax = estResponse.Calculation[0].taxAmount;
-
-        let obj = {};
-        if (type === 'estimateNotice' || type === 'sanctionLetter') {
-            estResponse.Calculation[0].taxHeadEstimates.map((val) => {
-                val.taxHeadCode = val.taxHeadCode.substring(3)
-            });
-            wnsConnection[0].pdfTaxhead = estResponse.Calculation[0].taxHeadEstimates;
-
-            obj = {
-                WnsConnection: wnsConnection
-            }
-        }
-
-        if (type === 'sanctionLetter') {
-            const slaDetails = await httpRequest(
-                "post",
-                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
-                "_search"
-            );
-
-            var states = [], findSLA = false;
-            for (var i = 0; i < slaDetails.BusinessServices.length; i++) {
-                states = slaDetails.BusinessServices[i].states;
-                if (findSLA) break;
-                if (states.length > 0) {
-                    for (var j = 0; j < states.length; j++) {
-                        if (states[j]['state'] && states[j]['state'] !== undefined && states[j]['state'] !== null && states[j]['state'] !== "" && states[j]['state'] === 'PENDING_FOR_CONNECTION_ACTIVATION') {
-                            //console.log(states[j]['sla']);
-                            wnsConnection[0].sla = states[j]['sla'] / 86400000;
-                            findSLA = true;
-                            break;
-                        }
-                    }
-                }
-                //console.log(i);
-            }
-            let connectionExecutionDate = new Date(wnsConnection[0].connectionExecutionDate);
-            wnsConnection[0].slaDate = connectionExecutionDate.setDate(connectionExecutionDate.getDate() + wnsConnection[0].sla);
-        }
-
-
-        if (type === 'application') {
-            if (wnsConnection[0].property && wnsConnection[0].property.units && wnsConnection[0].property.units.length > 0 && wnsConnection[0].property.units[0].usageCategory) {
-                wnsConnection[0].property.propertySubUsageType = wnsConnection[0].property.units[0].usageCategory;
-            }
-            if (wnsConnection[0].service === serviceConst.WATER) {
-                if (wnsConnection[0].property.rainWaterHarvesting !== undefined && wnsConnection[0].property.rainWaterHarvesting !== null) {
-                    if (wnsConnection[0].property.rainWaterHarvesting === true) {
-                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_YES'
-                    } else {
-                        wnsConnection[0].property.rainWaterHarvesting = 'SCORE_NO'
-                    }
-                }
-                obj = {
-                    WaterConnection: wnsConnection
-                }
-            } else {
-                obj = {
-                    SewerageConnection: wnsConnection
-                }
-            }
-        }
-        await httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, obj, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      };
+        try {
+          httpRequest("post", DOWNLOAD.GET.URL, DOWNLOAD.GET.ACTION, inpuString, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
-                res.filestoreIds[0]
-                if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-                    res.filestoreIds.map(fileStoreId => {
-                        if (type === "sanctionLetter") {
-                            store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.sanctionFileStoreId", fileStoreId));
-                        } else if (type === "estimateNotice") {
-                            store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.estimationFileStoreId", fileStoreId));
-                        }
-                        downloadReceiptFromFilestoreID(fileStoreId, mode)
-                    })
-                } else {
-                    console.log("Error In Download");
-                }
-
+              res.filestoreIds[0]
+              if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+                res.filestoreIds.map(fileStoreId => {
+                    if (type === "ws-sanctionletter") {
+                        store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.sanctionFileStoreId", fileStoreId));
+                    } else if (type === "ws-estimationnotice") {
+                        store.dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.estimationFileStoreId", fileStoreId));
+                    }
+                  downloadReceiptFromFilestoreID(fileStoreId, mode)
+                })
+              } else {
+                console.log("Error In Acknowledgement form Download");
+              }
             });
-    } catch (exception) {
-        alert('Some Error Occured while downloading!');
-    }
+        } catch (exception) {
+          alert('Some Error Occured while downloading Acknowledgement form!');
+        }
+      
 }
 
 export const getDomainLink = () => {

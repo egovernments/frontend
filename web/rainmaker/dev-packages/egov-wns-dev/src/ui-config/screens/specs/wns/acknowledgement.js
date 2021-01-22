@@ -571,24 +571,44 @@ export const downloadPrintContainer = (
   dispatch,
   appStatus,
   applicationNumber,
-  tenantId
+  tenantId,service
 ) => {
   /** MenuButton data based on status */
+  tenantId = getQueryArg(window.location.href, "tenantId");
+ applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+ service = getQueryArg(window.location.href, "service");
   let downloadMenu = [];
   let printMenu = [];
   let wsEstimateDownloadObject = {
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice',"download",dispatch);
+      const inputString = [
+        {
+          key: 'applicationNumber',
+          value: applicationNumber
+        },
+        { key: 'tenantId',value: tenantId },
+        { key: 'service', value:service },
+      ];
+
+      downloadApp(inputString, 'ws-estimationnotice',"download",dispatch);
     },
     leftIcon: "book"
   };
   let wsEstimatePrintObject = {
     label: { labelKey: "WS_ESTIMATION_NOTICE" },
     link: () => {
+      const inputString = [
+        {
+          key: 'applicationNumber',
+          value: applicationNumber
+        },
+        { key: 'tenantId',value: tenantId },
+        { key: 'service', value:service },
+      ];
       const { WaterConnection } = state.screenConfiguration.preparedFinalObject;
-      downloadApp(WaterConnection, 'estimateNotice', 'print',dispatch);
+      downloadApp(inputString, 'ws-estimationnotice', 'print',dispatch);
     },
     leftIcon: "book"
   };
@@ -599,7 +619,15 @@ export const downloadPrintContainer = (
       const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "To Citizen" : "Department Use";
       WaterConnection[0].appUserType = appUserType;
       WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter',"download",dispatch);
+      const inputString = [
+        {
+          key: 'applicationNumber',
+          value: applicationNumber
+        },
+        { key: 'tenantId',value: tenantId },
+        { key: 'service', value:service },
+      ];
+      downloadApp(inputString, 'ws-sanctionletter',"download",dispatch);
     },
     leftIcon: "receipt"
   };
@@ -610,7 +638,15 @@ export const downloadPrintContainer = (
       const appUserType = process.env.REACT_APP_NAME === "Citizen" ? "Department Use" : "To Citizen";
       WaterConnection[0].appUserType = appUserType;
       WaterConnection[0].commissionerName = "S.Ravindra Babu";
-      downloadApp(WaterConnection, 'sanctionLetter', 'print',dispatch);
+      const inputString = [
+        {
+          key: 'applicationNumber',
+          value: applicationNumber
+        },
+        { key: 'tenantId',value: tenantId },
+        { key: 'service', value:service },
+      ];
+      downloadApp(inputString, 'ws-sanctionletter', 'print',dispatch);
     },
     leftIcon: "receipt"
   };
