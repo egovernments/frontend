@@ -1088,7 +1088,7 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
     {
       if (payload && payload.filestoreIds && payload.filestoreIds.length > 0 ) {
         payload.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId, mode)
+            downloadReceiptFromFilestoreID(fileStoreId, 'download')
         })
       }
       else
