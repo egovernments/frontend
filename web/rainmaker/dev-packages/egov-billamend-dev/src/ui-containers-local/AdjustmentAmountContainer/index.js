@@ -151,15 +151,24 @@ class AdjustmentAmountContainer extends Component {
       if (e.target.value === '' || re.test(e.target.value)) {
         const event = e.target;
         let details = { ...data };
-        if(field == "reducedAmount") details[key]["reducedAmountValue"] = event.value;
-        if(field == "additionalAmount") details[key]["additionalAmountValue"] = event.value;
+        if(field == "reducedAmount") details[key]["reducedAmountValue"] = parseInt(event.value);
+        if(field == "additionalAmount") details[key]["additionalAmountValue"] = parseInt(event.value);
         this.props.prepareFinalObject("fetchBillDetailsssss", details);
       }
   };
   handleCheckBoxChange = (field) => {
+    const { data, ...rest } = this.props;
+    let details = { ...data };
     if (field === "reducedAmount") {
       const reducedAmount = this.state.reducedAmount;
       if (reducedAmount) {
+        if (typeof details == "object") {
+          details = Object.values(details);
+        }
+        details.forEach( data => {
+          if (data.additionalAmountValue) data.additionalAmountValue = 0;
+        });
+        this.props.prepareFinalObject("fetchBillDetailsssss", details);
         this.setState({ additionalAmount: true });
         this.props.prepareFinalObject("BILL.AMOUNTTYPE", "reducedAmount");
       }
@@ -167,6 +176,13 @@ class AdjustmentAmountContainer extends Component {
     } else if (field === "additionalAmount") {
       const additionalAmount = this.state.additionalAmount;
       if (additionalAmount) {
+        if (typeof details == "object") {
+          details = Object.values(details);
+        }
+        details.forEach( data => {
+          if (data.reducedAmountValue){ data.reducedAmountValue = 0 }
+        });
+        this.props.prepareFinalObject("fetchBillDetailsssss", details);
         this.setState({ reducedAmount: true });
         this.props.prepareFinalObject("BILL.AMOUNTTYPE", "additionalAmount");
       }

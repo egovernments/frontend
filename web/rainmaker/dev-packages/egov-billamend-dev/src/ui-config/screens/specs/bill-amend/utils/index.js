@@ -1,10 +1,13 @@
 import get from "lodash/get";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject,
+  toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import jp from "jsonpath";
+import { httpRequest } from "../../../../../ui-utils/api"; 
 
 export const getCommonApplyFooter = (children) => {
   return {
@@ -302,8 +305,45 @@ export const onDemandRevisionBasis = async (state, dispatch) => {
   }
 }
 
-export const submitApplication = (state, dispatch) => {
-  dispatch(
-    setRoute("/bill-amend/acknowledgement?purpose=apply&status=success")
-  );
+export const submitApplication = async (state, dispatch) => {
+
+  let billAmdDetails = get (state.screenConfiguration.preparedFinalObject, "Amendment", {});
+  let reduxDocuments = get( state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+  let documentsPreview = [];
+  jp.query(reduxDocuments, "$.*").forEach(doc => {
+    if (doc.documents && doc.documents.length > 0 && doc.dropdown) {
+      doc.documents.forEach(docDetail => {
+        let obj = {};
+        obj.documentType = doc.dropdown.value;
+        obj.fileName = docDetail.fileName;
+        obj.fileStoreId = docDetail.fileStoreId;
+        obj.fileStore = docDetail.fileStoreId;
+        obj.fileUrl = docDetail.fileUrl && docDetail.fileUrl.split(",")[0];
+        documentsPreview.push(obj);
+      });
+    }
+  });
+
+  billAmdDetails.documents = documentsPreview && documentsPreview.length > 0 ? documentsPreview : null;
+
+
+  try {
+
+    let response = await httpRequest(
+      "post",
+      "bpa-services/v1/bpa/_create",
+      "",
+      [],
+      { Amendment : billAmdDetails }
+    );
+    dispatch(prepareFinalObject("Amendment", response.Amendment[0]));
+
+    dispatch(
+      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendment[0].consumerCode}`)
+    );
+    
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "failure", message: error };
+  }
 };

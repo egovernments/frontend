@@ -2,7 +2,6 @@ import {
   dispatchMultipleFieldChangeAction,
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import {
   getCommonApplyFooter,
@@ -15,8 +14,45 @@ import {
   toggleSnackbar,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { 
+  getQueryArg, 
+  getFileUrlFromAPI, 
+  getTransformedLocale 
+} from "egov-ui-framework/ui-utils/commons";
+import jp from "jsonpath";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import "./index.css";
+
+
+const preparingDocumentsReview = async (state, dispatch) => {
+  let documentsPreview = [];
+  let reduxDocuments = get(
+    state,
+    "screenConfiguration.preparedFinalObject.documentsUploadRedux",
+    {}
+  );
+  jp.query(reduxDocuments, "$.*").forEach(doc => {
+    if (doc.documents && doc.documents.length > 0 && doc.dropdown) {
+      doc.documents.forEach(docDetail =>{
+        let obj = {};
+        obj.title = getTransformedLocale(doc.documentCode);
+        obj.name = docDetail.fileName;
+        obj.fileStoreId = docDetail.fileStoreId;
+        obj.linkText = "View";
+        obj.link = docDetail.fileUrl && docDetail.fileUrl.split(",")[0];
+        documentsPreview.push(obj);
+      });
+    }
+  });
+  dispatch(prepareFinalObject("bill-amend-review-document-data", documentsPreview));
+};
+
+export const getSummaryRequiredDetails = async (state, dispatch) => {
+  await onDemandRevisionBasis(state, dispatch);
+  await preparingDocumentsReview(state, dispatch);
+
+}
 
 const callBackForNext = async (state, dispatch) => {
   window.scrollTo(0, 0);
@@ -111,10 +147,10 @@ const callBackForNext = async (state, dispatch) => {
         isFormValid = false;
         hasFieldToaster = true;
       } else {
-        onDemandRevisionBasis(state, dispatch);
+        getSummaryRequiredDetails(state, dispatch);
       }
     } else {
-      onDemandRevisionBasis(state, dispatch);
+      getSummaryRequiredDetails(state, dispatch);
     }
   }
 
