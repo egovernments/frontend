@@ -5,6 +5,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import toolbarStyles from './UiTableHeaderStyle'
+import {convertLabelValue} from '../../../utils/commons'
 
 class UiTableHead extends Component {
   createSortHandler = property => event => {
