@@ -56,9 +56,9 @@ class Header extends Component {
     });
   };
 
-  _handleBackNavigation = () => {
-    const urlpath = window.location.pathname;
-    if(urlpath.indexOf("citizen/egov-common/acknowledgement?status") != -1){
+  _handleBackNavigation = () => {  
+    if(location && location.pathname && 
+      location.pathname.indexOf("/citizen/egov-common/paymentRedirectPage) != -1")){
       this.props.history.push("/");
     }
     else
