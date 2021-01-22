@@ -1086,9 +1086,10 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
     }
     else
     {
-      if (payload && payload.filestoreIds && payload.filestoreIds.length > 0 ) {
-        payload.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId, mode)
+      console.log('payload',payload);
+      if (payload && payload.fileStoreInfo && payload.fileStoreInfo.filestoreIds && payload.fileStoreInfo.filestoreIds.length > 0 ) {
+        payload.fileStoreInfo.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, 'download')
         })
       }
       else
