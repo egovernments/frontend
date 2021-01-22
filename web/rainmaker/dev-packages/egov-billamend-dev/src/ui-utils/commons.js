@@ -87,19 +87,19 @@ export const getImageUrlByFile = file => {
 
 export const getBillAmendSearchResult = async (queryObject, dispatch) => {
   try {
-    let qo={
+    let qo = {
       "amendmentId": '3edf1f2d-761e-4e8b-a990-505b648cf5eb'
     }
-    queryObject.map(query=>
-qo[query.key]=query.value
+    queryObject.map(query =>
+      qo[query.key] = query.value
     )
-    let newQuery=[];
-  Object.keys(qo).map(key=>{
-    newQuery.push({
-      key: key,
-      value:qo[key]
+    let newQuery = [];
+    Object.keys(qo).map(key => {
+      newQuery.push({
+        key: key,
+        value: qo[key]
+      })
     })
-  })
 
     const response = await httpRequest(
       "post",
@@ -124,30 +124,30 @@ qo[query.key]=query.value
 
 export const searchBill = async (queryObject, dispatch) => {
   try {
-    let newQuery={};
-    queryObject.map(query=>{
-      newQuery[query.key]=query.value
-    })  
-    let newQueryObj=[
+    let newQuery = {};
+    queryObject.map(query => {
+      newQuery[query.key] = query.value
+    })
+    let newQueryObj = [
       {
         "key": 'tenantId',
-        "value":newQuery['tenantId']
-      },{
-        "key": 'service',
-        "value":newQuery['businessService']
-      },{
+        "value": newQuery['tenantId']
+      }, {
+        "key": 'businessService',
+        "value": newQuery['businessService']
+      }, {
         "key": 'consumerCode',
-        "value":newQuery['consumerCode']
+        "value": newQuery['consumerCode']
       }
     ];
-    
+
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_search",
+      "/billing-service/bill/v2/_fetchbill",
       "_search",
       newQueryObj
     );
-    console.log('resa',response);
+
     return response;
   } catch (error) {
     console.error(error);
