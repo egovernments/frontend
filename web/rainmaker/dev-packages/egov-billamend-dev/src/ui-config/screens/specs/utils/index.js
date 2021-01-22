@@ -490,3 +490,24 @@ export const getTextToLocalMapping = label => {
           ); 
   }
 };
+
+export const getFetchBill = async(state, dispatch, action, queryObject) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, "fetxh");
+  }
+}

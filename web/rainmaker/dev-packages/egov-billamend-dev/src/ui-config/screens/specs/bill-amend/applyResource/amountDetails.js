@@ -10,7 +10,10 @@ import {
     getTextField,
     getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { 
+    handleScreenConfigurationFieldChange as handleField, 
+    prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 
 let demandArray = [];
@@ -19,6 +22,15 @@ export const onDemandRevisionBasis = async (action, state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "Amendment.amendmentReason", ""
     );
+    let previousDemandRevBasisValue = get(
+        state.screenConfiguration.preparedFinalObject,
+        "AmendmentTemp.amendmentReason", ""
+    );
+    if (previousDemandRevBasisValue !== demandRevisionBasis) {
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        dispatch(prepareFinalObject("documentsContract", []));
+    }
+    
     let demandArray = [];
     switch (demandRevisionBasis) {
         case "COURTCASESETTLEMENT":

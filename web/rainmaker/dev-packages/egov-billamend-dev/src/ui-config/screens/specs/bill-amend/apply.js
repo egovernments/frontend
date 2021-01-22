@@ -27,6 +27,7 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
+import { getFetchBill } from "../utils";
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
@@ -40,17 +41,18 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Apply for Bill`,
+    labelName: `Generate Note`,
     labelKey: "BILL_APPLY_FOR_BILL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-bpa",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: "NA"
-    },
-    visible: false
+        moduleName: "egov-billamend",
+        componentPath: "ConsumerNo",
+        props: {
+            number: "NA",
+            label: { labelValue: "Consumer No.", labelKey: "BILL_CONSUMER_NO" }
+        },
+    // visible: false
   }
 });
 
@@ -89,26 +91,6 @@ export const formwizardThirdStep = {
   },
   visible: false
 };
-export const getFetchBill = async(state, dispatch, action, queryObject) => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/billing-service/bill/v2/_fetchbill",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelKey: error.message },
-        "error"
-      )
-    );
-    console.log(error, "fetxh");
-  }
-}
 
 export const setSearchResponse = async (state, dispatch, action) => {
 
@@ -126,7 +108,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
       value: "WS.ONE_TIME_FEE"
     }
   ]);
-  console.log(fetBill, "qweyoiuyroqwrpoiy");
+  
   if(fetBill && fetBill.Bill && fetBill && fetBill.Bill.length > 0) {
     let billDetails = get(fetBill, "Bill[0].billDetails[0].billAccountDetails",[]);
     billDetails.map(bill => {
@@ -134,6 +116,21 @@ export const setSearchResponse = async (state, dispatch, action) => {
       bill.additionalAmountValue = 0;
     });
     dispatch(prepareFinalObject("fetchBillDetails", billDetails));
+    dispatch(prepareFinalObject("Amendment.demandDetails", billDetails));
+    dispatch(prepareFinalObject("Amendment.consumerCode", "WS_AP/107/2020-21/000942"));
+    dispatch(prepareFinalObject("Amendment.tenantId", "pb.amritsar"));
+    dispatch(prepareFinalObject("Amendment.businessService", "WS.ONE_TIME_FEE"));
+    dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        "WS_AP/107/2020-21/000942"
+      )
+    );
+
   }
 }
 
@@ -183,15 +180,6 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     dispatch(prepareFinalObject("BILL", {}));
-    dispatch(prepareFinalObject("bill-amend-review-document-data",
-    [
-    { "title": "Court Order", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "CourtOrder.jpeg" },
-    { "title": "Past Bills", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "PastBills.jpeg" },
-    { "title": "Identity Proof", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "IdentityProof.jpeg" },
-    { "title": "Address Proof", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "AddressProof.jpeg" },
-    { "title": "Self Declaration", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "SelfDeclaration.jpeg" },
-    ]
-))
     getData(action, state, dispatch).then(responseAction => {
 
     });
