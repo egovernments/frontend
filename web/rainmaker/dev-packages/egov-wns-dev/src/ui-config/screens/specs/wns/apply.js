@@ -35,7 +35,7 @@ import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 let isMode = isModifyMode();
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
@@ -130,10 +130,11 @@ export const documentDetails = getCommonCard({
   }
 });
 
-export const getMdmsData = async dispatch => {
+export const getMdmsData = async (state,dispatch)=> {
+  console.log("=============getTenantId",getTenantId());
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: getTenantId(),
       moduleDetails: [
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
@@ -163,29 +164,29 @@ export const getMdmsData = async dispatch => {
       let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
       payload.MdmsRes['ws-services-masters'].waterSource.forEach(obj => {
         waterSource.push({
-          code: obj.code.split(".")[0],
+          code: obj.code,
           name: obj.name,
           isActive: obj.active
         });
-        if (obj.code.split(".")[0] === "GROUND") {
-          GROUND.push({
-            code: obj.code.split(".")[1],
-            name: obj.name,
-            isActive: obj.active
-          });
-        } else if (obj.code.split(".")[0] === "SURFACE") {
-          SURFACE.push({
-            code: obj.code.split(".")[1],
-            name: obj.name,
-            isActive: obj.active
-          });
-        } else if (obj.code.split(".")[0] === "BULKSUPPLY") {
-          BULKSUPPLY.push({
-            code: obj.code.split(".")[1],
-            name: obj.name,
-            isActive: obj.active
-          })
-        }
+        // if (obj.code === "GROUND") {
+        //   GROUND.push({
+        //     code: obj.code.split(".")[1],
+        //     name: obj.name,
+        //     isActive: obj.active
+        //   });
+        // } else if (obj.code === "SURFACE") {
+        //   SURFACE.push({
+        //     code: obj.code.split(".")[1],
+        //     name: obj.name,
+        //     isActive: obj.active
+        //   });
+        // } else if (obj.code === "BULKSUPPLY") {
+        //   BULKSUPPLY.push({
+        //     code: obj.code.split(".")[1],
+        //     name: obj.name,
+        //     isActive: obj.active
+        //   })
+        // }
       })
       let filtered = waterSource.reduce((filtered, item) => {
         if (!filtered.some(filteredItem => JSON.stringify(filteredItem.code) == JSON.stringify(item.code)))
@@ -248,7 +249,7 @@ export const getData = async (action, state, dispatch) => {
   const propertyID = getQueryArg(window.location.href, "propertyId");
   const actionType = getQueryArg(window.location.href, "action");
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
-  await getMdmsData(dispatch);
+  await getMdmsData(state, dispatch);
   if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [

@@ -51,7 +51,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    debugger;
+    
   let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
   if (isModifyMode() && isModifyModeAction()) {
     reviewUrl += "&mode=MODIFY"
@@ -117,7 +117,7 @@ const moveToReview = (state, dispatch) => {
 
 
 const getMdmsData = async (state, dispatch) => {
-  debugger;
+  
   let tenantId = "pb";
   // let tenantId = get(
   //   state.screenConfiguration.preparedFinalObject,
@@ -141,7 +141,7 @@ const getMdmsData = async (state, dispatch) => {
     }
   };
   try {
-    debugger;
+    
     let payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
     dispatch(prepareFinalObject("applyScreenMdmsData.applyScreen.Documents", payload.MdmsRes['ws-services-masters'].Documents));
     prepareDocumentsUploadData(state, dispatch);
@@ -314,7 +314,7 @@ const callBackForNext = async (state, dispatch) => {
                 )
               );
             }
-            debugger;
+            
             let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
             let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
             let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
@@ -422,6 +422,7 @@ const callBackForNext = async (state, dispatch) => {
   }
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+    
     if (isModifyMode()) {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
@@ -450,6 +451,7 @@ const callBackForNext = async (state, dispatch) => {
 
   }
   if (activeStep === 3) {
+    
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) {
@@ -570,7 +572,7 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
       prepareDocumentsUploadData(state, dispatch);
     }
     if (activeStep === 3) {
-      debugger;
+      
       getMdmsData(state, dispatch);
       isFormValid = await applyForWaterOrSewerage(state, dispatch);
       let combinedArray = get(state.screenConfiguration.preparedFinalObject, "WaterConnection");

@@ -317,7 +317,7 @@ export const activateDetailsMeter={
   reviewMeterMakeReading : getLabelWithValueForModifiedLabel(
     {
       labelName: " Meter Make Reading",
-      labelKey: "WS_ADDN_DETAILS_REVIEW_METER_READING"
+      labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE"
     },
     { jsonPath: "WaterConnection[0].additionalDetails.meterMake",
       callBack: handleNA }, {
@@ -329,7 +329,7 @@ export const activateDetailsMeter={
   reviewAverageMakeReading : getLabelWithValueForModifiedLabel(
     {
       labelName: "Average Meter Reading",
-      labelKey: "WS_ADDN_DETAILS_AVERAGE_METER_READING"
+      labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
     },
     { jsonPath: "WaterConnection[0].additionalDetails.averageMake",
       callBack: handleNA }, {
@@ -413,7 +413,7 @@ export const connectionWater={
   reviewBillingAmount : getLabelWithValueForModifiedLabel(
     {
       labelName: "No. of Taps",
-      labelKey: "WS_BILLING_AMOUNT"
+      labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT"
     },
     {
       jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
@@ -445,7 +445,7 @@ export const connectionWater={
   reviewLedgerId : getLabelWithValueForModifiedLabel(
     {
       labelName: "No. of Taps",
-      labelKey: "WS_BILLING_LEDGER_ID"
+      labelKey: "WS_SERV_DETAIL_LEDGER_ID"
     },
     {
       jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
@@ -575,7 +575,7 @@ export const connectionSewerage={
   reviewBillingAmount : getLabelWithValueForModifiedLabel(
     {
       labelName: "No. of Taps",
-      labelKey: "WS_BILLING_AMOUNT"
+      labelKey: "WS_SERV_DETAIL_BILLING_TYPE"
     },
     {
       jsonPath: "SewerageConnection[0].additionalDetails.billingAmount",
@@ -607,7 +607,7 @@ export const connectionSewerage={
   reviewLedgerId : getLabelWithValueForModifiedLabel(
     {
       labelName: "No. of Taps",
-      labelKey: "WS_BILLING_LEDGER_ID"
+      labelKey: "WS_SERV_DETAIL_LEDGER_ID"
     },
     {
       jsonPath: "SewerageConnection[0].additionalDetails.ledgerId",

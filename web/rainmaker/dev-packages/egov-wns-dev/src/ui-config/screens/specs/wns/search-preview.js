@@ -124,10 +124,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         { display: "none" }
       );
     }
-    if (getQueryArg(window.location.href, "edited")) {
-      (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
-    } 
-    else if (!getQueryArg(window.location.href, "edited")) {
+    
+    // if (getQueryArg(window.location.href, "edited")) {
+    //   (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
+    // } 
+    if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
     }else {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
@@ -621,7 +622,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
   
   if (service === serviceConst.WATER) {
     payload = [];
-    debugger;
+    
 console.log("======state",state);
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
@@ -631,17 +632,17 @@ console.log("======state",state);
       tenantId: tenantId,
       waterConnection: convPayload.WaterConnection[0]
     }]
-    debugger;
+    
     if (payload !== undefined && payload !== null) {
-      debugger;
+      
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
-        debugger;
+        
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
       }
       if (!payload.WaterConnection[0].connectionHolders || payload.WaterConnection[0].connectionHolders === 'NA') {
-        debugger;
+        
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
       } else {
@@ -766,7 +767,9 @@ console.log("======state",state);
 };
 
 const parserFunction = (obj) => {
-  debugger;
+  console.log("========obj", obj);
+  let waterDetails =get(obj, "additionalDetails", {});
+  
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
@@ -784,6 +787,25 @@ const parserFunction = (obj) => {
         obj.additionalDetails.detailsProvidedBy !== undefined &&
         obj.additionalDetails.detailsProvidedBy !== null
       ) ? obj.additionalDetails.detailsProvidedBy : "",
+      billingType : waterDetails && waterDetails ? waterDetails.billingType : null,
+      billingAmount : waterDetails && waterDetails ? waterDetails.billingAmount : null,
+      connectionCategory : waterDetails && waterDetails ? waterDetails.connectionCategory : null,
+      ledgerId : waterDetails && waterDetails ? waterDetails.ledgerId : null,
+      averageMake : waterDetails && waterDetails ? waterDetails.averageMake : null,
+      meterMake : waterDetails && waterDetails ? waterDetails.meterMake : null,
+      compositionFee : waterDetails && waterDetails ? waterDetails.compositionFee : null,
+      userCharges : waterDetails && waterDetails ? waterDetails.userCharges : null,
+      othersFee : waterDetails && waterDetails ? waterDetails.ledgerId : null,
+      detailsProvidedBy : null,
+      adhocPenalty: null,
+      adhocPenaltyComment: null,
+      adhocPenaltyReason: null,
+      adhocRebate: null,
+      adhocRebateComment: null,
+      adhocRebateReason: null,
+      estimationFileStoreId: null,
+      sanctionFileStoreId:null,
+      estimationLetterDate :null,
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),

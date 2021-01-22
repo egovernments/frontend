@@ -78,7 +78,7 @@ export const reviewNumberOfTaps = getLabelWithValueForModifiedLabel(
 export const reviewBillingAmount = getLabelWithValueForModifiedLabel(
   {
     labelName: "No. of Taps",
-    labelKey: "WS_BILLING_AMOUNT"
+    labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT"
   },
   {
     jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
@@ -95,7 +95,7 @@ export const reviewBillingAmount = getLabelWithValueForModifiedLabel(
 export const reviewLedgerId = getLabelWithValueForModifiedLabel(
   {
     labelName: "No. of Taps",
-    labelKey: "WS_BILLING_LEDGER_ID"
+    labelKey: "WS_SERV_DETAIL_LEDGER_ID"
   },
   {
     jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
@@ -457,7 +457,7 @@ export const reviewInitialMeterReading = getLabelWithValueForModifiedLabel(
 export const reviewMeterMakeReading = getLabelWithValueForModifiedLabel(
   {
     labelName: "Initial Meter Reading",
-    labelKey: "WS_ADDN_DETAILS_REVIEW_METER_READING"
+    labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE"
   },
   { jsonPath: "WaterConnection[0].additionalDetails.meterMake",
     callBack: handleNA },
@@ -472,7 +472,7 @@ export const reviewMeterMakeReading = getLabelWithValueForModifiedLabel(
 export const reviewAverageMakeReading = getLabelWithValueForModifiedLabel(
   {
     labelName: "Initial Meter Reading",
-    labelKey: "WS_ADDN_DETAILS_AVERAGE_METER_READING"
+    labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
   },
   { jsonPath: "WaterConnection[0].additionalDetails.averageMake",
     callBack: handleNA },

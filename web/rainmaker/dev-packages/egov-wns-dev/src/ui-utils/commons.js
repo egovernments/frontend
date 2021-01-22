@@ -130,7 +130,7 @@ export const getPropertyObj = async (waterConnection) => {
 
 
 export const getSearchResults = async queryObject => {
-    debugger;
+    
     console.log("==========queryObject===",queryObject);
     try {
         const response = await httpRequest(
@@ -182,7 +182,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
 export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     dispatch(toggleSpinner());
     try {
-        debugger;
+        
         const response = await httpRequest(
             "post",
             "/egov-mdms-service/v1/_search",
@@ -562,7 +562,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 const parserFunction = (state) => {
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
     let waterDetails =get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0]", {});
-    debugger;
+    
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
         meterInstallationDate: convertDateToEpoch(queryObject.meterInstallationDate),
@@ -918,7 +918,7 @@ export const applyForWater = async (state, dispatch) => {
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
             console.log("==========findAndReplace",queryObjectForUpdate);
-            debugger;
+            
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             console.log("==========2",queryObjectForUpdate);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
@@ -1214,7 +1214,7 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
         }
     };
     try {
-        debugger;
+        
         let payload = null;
         payload = await httpRequest(
             "post",
@@ -1265,7 +1265,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
             }
         };
         try {
-            debugger;
+            
             let payload = await httpRequest(
                 "post",
                 "/egov-mdms-service/v1/_search",
@@ -1734,7 +1734,7 @@ export const downloadBill = (receiptQueryString, mode) => {
                 }
 
                 payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
-                debugger;
+                
                 httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {
                     console.log(payloadbillingPeriod);
                     let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;
