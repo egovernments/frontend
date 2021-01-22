@@ -687,9 +687,7 @@ export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
       receiptPDF.print();
     } else {
       // we are running under webview
-      receiptPDF.getBase64(data => {
-        mSewaApp.downloadBase64File(data, filename);
-      });
+      receiptPDF.open();
     }
   }
 
