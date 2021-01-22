@@ -126,7 +126,7 @@ export const propertyLocationDetails = getCommonCard({
               labelKey: "PT_COMMON_PROPERTY_LOCATION_PLACEHOLDER"
             },
             required: true,
-            jsonPath: "Property.additionaldetails",
+            jsonPath: "Property.address.location",
             sourceJsonPath: "searchScreenMdmsData.PropertyTax.PropertyLocation",
             gridDefination: {
               xs: 12,
