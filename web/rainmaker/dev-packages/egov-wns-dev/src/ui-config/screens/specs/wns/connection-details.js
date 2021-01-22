@@ -1,20 +1,24 @@
+import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
+import { getBill } from "egov-common/ui-config/screens/specs/utils";
 import {
   convertEpochToDate,
   getCommonCard,
   getCommonContainer,
-  getCommonHeader,
+  getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
+import { httpRequest } from "../../../../ui-utils/api";
 import {
   getDescriptionFromMDMS,
   getSearchResults,
   getSearchResultsForSewerage,
-  serviceConst,
+  serviceConst
 } from "../../../../ui-utils/commons";
 import { ifUserRoleExists } from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
@@ -22,14 +26,10 @@ import { connectionDetailsFooter } from "./connectionDetailsResource/connectionD
 import {
   connHolderDetailsSameAsOwnerSummary,
   connHolderDetailsSummary,
-  getOwnerDetails,
+  getOwnerDetails
 } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
-import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils/api";
-import { getBill } from "egov-common/ui-config/screens/specs/utils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -45,7 +45,6 @@ const getApplicationNumber = (dispatch, connectionsObj) => {
   } else {
     appNos = connectionsObj[0].applicationNo;
   }
-  console.log(appNos, "application numbers");
   dispatch(prepareFinalObject("applicationNos", appNos));
 };
 const showHideConnectionHolder = (dispatch, connectionHolders) => {
@@ -163,7 +162,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           mdmsPropertyType !== undefined &&
           mdmsPropertyType !== null &&
           mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !==
-            undefined &&
+          undefined &&
           mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !== null
         ) {
           sewerageConnection.property.propertyTypeData =
@@ -208,14 +207,14 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
         {
           key: "consumerCode",
-          value: sewerageConnection.applicationNo,
+          value: connectionNumber,
         },
         {
           key: "businessService",
-          value: "WS.ONE_TIME_FEE",
+          value: "SW",
         },
       ];
-      const bill = await getBill(queryObjForBill,dispatch);
+      const bill = await getBill(queryObjForBill, dispatch);
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
@@ -274,7 +273,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         );
         waterConnection.property.propertyTypeData =
           mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name !==
-          undefined
+            undefined
             ? mdmsPropertyType.MdmsRes.PropertyTax.PropertyType[0].name
             : "NA"; //propertyType from Mdms
       }
@@ -299,14 +298,14 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
         {
           key: "consumerCode",
-          value: waterConnection.applicationNo,
+          value: connectionNumber,
         },
         {
           key: "businessService",
-          value: "WS.ONE_TIME_FEE",
+          value: "WS",
         },
       ];
-      const bill = await getBill(queryObjForBill,dispatch);
+      const bill = await getBill(queryObjForBill, dispatch);
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
@@ -344,8 +343,8 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
-const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
- 
+const getConnectionDetailsFooterAction = (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
+
 
 export const connectionDetails = getCommonCard({
   serviceDetails,
