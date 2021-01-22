@@ -33,7 +33,7 @@ class PaymentRedirect extends Component {
           { key: "applicationNumber", value: consumerCode }
         ]);
         set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
-        set(response,"FireNOCs[0]fireNOCDetails.tenantId", get(response, 'FireNOCs[0].tenantId', ""));
+        set(response, "FireNOCs[0].fireNOCDetails.tenantId",get(response, "FireNOCs[0].tenantId", ""));
         response = await httpRequest(
           "post",
           "/firenoc-services/v1/_update",
