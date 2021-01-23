@@ -11,6 +11,26 @@ import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
+const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
+
+    console.log("usage type",usageType);
+    //let noOfFloors;
+    let propertyType = get(
+            state.screenConfiguration.preparedFinalObject,
+            "Property.propertyType"
+          ); 
+    console.log("propertyType",propertyType);
+    const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFloors"; 
+    if (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "VACANT") {
+        set(state.screenConfiguration.preparedFinalObject,"Property.noOfFloors", "");
+        dispatch(handleField('register-property', additionalDetailsJson, "visible", false));
+       // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
+    }else{
+        dispatch(handleField('register-property', additionalDetailsJson, "visible", true));
+    }
+}
+
+
 const rendersubUsageType = (usageType, propType, dispatch, state) => {
   let subTypeValues = get(
     state.screenConfiguration.preparedFinalObject,
@@ -112,6 +132,7 @@ export const propertyAssemblyDetails = getCommonCard({
         );
         // if (usageType) {
           rendersubUsageType(usageType, action.value, dispatch, state)
+          renderNoOfFloorData(usageType, action.value, dispatch, state)
         // }
       }
     }),
@@ -201,6 +222,22 @@ export const propertyAssemblyDetails = getCommonCard({
         moduleName: "COMMON",
         masterName: "PROPSUBUSGTYPE"
       },
-    })
+    }),
+    noOfFloors: getTextField({
+          label: {
+            labelName: "No of Floors",
+            labelKey: "PT_COMMON_NO_OF_FLOORS"
+          },
+          props: {
+          },
+          placeholder: {
+            labelName: "Enter Number of Floors",
+            labelKey: "PT_COMMON_NO_OF_FLOORS_PLACEHOLDER"
+          },
+          required: true,
+          pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "Property.noOfFloors"
+        })
   })
 });
