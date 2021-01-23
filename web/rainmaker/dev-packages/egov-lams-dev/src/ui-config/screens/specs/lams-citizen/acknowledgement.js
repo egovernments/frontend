@@ -13,6 +13,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import acknowledgementCard from "./acknowledgementUtils";
+import { gotoHomeFooter } from "./gotoHomeFooter";
 
 const getAcknowledgementCard = (
   state,
@@ -51,6 +52,7 @@ const getAcknowledgementCard = (
           })
         }
       },
+      gotoHomeFooter
     }
     
   }
