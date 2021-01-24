@@ -21,6 +21,7 @@ import {
   getUniqueItemsFromArray
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints"
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -629,7 +630,7 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {
-    endPoint: "filestore/v1/files"
+    endPoint: FILE_UPLOAD.POST.URL
   };
   let uploadDocument = true;
   const { maxFileSize, formatProps, moduleName } = props;

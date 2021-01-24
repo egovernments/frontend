@@ -22,6 +22,7 @@ import axios from "axios";
 import {
   getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
+import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints"
 
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
@@ -233,7 +234,7 @@ export const acceptedFiles = acceptedExt => {
 
 export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {
-    endPoint: "filestore/v1/files"
+    endPoint: FILE_UPLOAD.POST.URL
   };
   let uploadDocument = true;
   const { inputProps, maxFileSize } = props;
@@ -327,7 +328,7 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 export const convertToFilestoreid = async (link) => {
   const FILESTORE = {
-    endPoint: "filestore/v1/files"
+    endPoint: FILE_UPLOAD.POST.URL
   };
   
   var response = await axios.get(getFileUrl(link), {

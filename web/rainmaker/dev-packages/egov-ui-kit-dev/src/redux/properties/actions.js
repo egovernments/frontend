@@ -10,6 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import orderby from "lodash/orderBy";
 import * as actionTypes from "./actionTypes";
+import { FETCH_FILE } from "egov-ui-kit/utils/endPoints"
 
 const reset_property_reset = () => {
   return {
@@ -672,7 +673,7 @@ export const getFileUrlFromAPI = async fileStoreId => {
   ];
   try {
     const fileUrl = await httpRequest(
-      "/filestore/v1/files/url",
+      FETCH_FILE.GET.URL,
       "",
       queryObject,
       {},

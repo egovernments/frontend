@@ -28,6 +28,7 @@ import set from "lodash/set";
 import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-utils/api";
 import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
+import {FETCH_FILE} from "egov-ui-kit/utils/endPoints"
 
 export const getCommonApplyFooter = children => {
   return {
@@ -5090,7 +5091,7 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   let fileStoreId = res.filestoreIds[0];
   let pdfDownload = await httpRequest(
     "get",
-    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
+    `${FETCH_FILE.GET.URL}?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
   );
   if (mode && mode === "Download") {
     window.open(pdfDownload[fileStoreId]);
@@ -5139,7 +5140,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   let fileStoreId = res.filestoreIds[0];
   let pdfDownload = await httpRequest(
     "get",
-    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
+    `${FETCH_FILE.GET.URL}?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
   );
   if (mode && mode === "Download") {
     window.open(pdfDownload[fileStoreId]);
@@ -5218,7 +5219,7 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
   let fileStoreId = res.filestoreIds[0];
   let pdfDownload = await httpRequest(
     "get",
-    `filestore/v1/files/url?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
+    `${FETCH_FILE.GET.URL}?tenantId=${bpaDetails.tenantId}&fileStoreIds=${fileStoreId}`, []
   );
   if (mode && mode === "Download") {
     window.open(pdfDownload[fileStoreId]);

@@ -25,6 +25,12 @@ export const FILE_UPLOAD = {
   },
 };
 
+export const FETCH_FILE = {
+  GET: {
+    URL: "filestore/v1/files/url",
+  }
+}
+
 export const CATEGORY = {
   GET: {
     URL: "egov-mdms-service/v1/_search",
