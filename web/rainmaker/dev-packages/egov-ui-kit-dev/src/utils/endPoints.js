@@ -127,7 +127,7 @@ export const ACTIONMENU = {
 
 export const PROPERTY = {
   GET: {
-    URL: "/property-services/property/_search",
+    URL: "/property/property/_search",
     ACTION: "_get",
   },
 };
@@ -214,7 +214,7 @@ export const DOWNLOADRECEIPT = {
 };
 export const FETCHASSESSMENTS = {
   GET: {
-    URL: "/property-services/assessment/_search",
+    URL: "/property/assessment/_search",
     ACTION: "_search",
   },
 };
@@ -239,5 +239,34 @@ export const WORKFLOW_COUNT = {
   GET: {
     URL: "workflow/egov-wf/process/_count",
     ACTION: "_search",
+  }
+}
+export const PROPERTY_SEARCH = {
+  POST: {
+    URL: "property/property/_search",
+    ACTION: "_search",
+  } 
+}
+export const PROPERTY_ASSESSMENT_SEARCH = {
+  POST: {
+    URL: "property/assessment/_update",
+    ACTION: "_search",
+  }
+}
+export const PROPERTY_CREATE = {
+  POST: {
+    URL: "/property/property/_create",
+    ACTION: "_update",
+  }
+}
+export const PROPERTY_UPDATE = {
+  POST: {
+    URL: "/property/property/_update",
+    ACTION: "_update",
+  }
+}
+export const PROPERTY_ASSESSMENT_UPDATE = {
+  POST: {
+    URL: "/property/assessment/_update",
   }
 }

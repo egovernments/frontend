@@ -11,6 +11,7 @@ import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/spe
 import { httpRequest } from "./api";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -316,7 +317,7 @@ export const getPropertyResults = async (queryObject, dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "/property-services/property/_search",
+            PROPERTY.GET.URL,
             "_search",
             queryObject
         );
@@ -333,7 +334,7 @@ export const getPropertyResultsWODispatch = async (queryObject) => {
     try {
         const response = await httpRequest(
             "post",
-            "/property-services/property/_search",
+            PROPERTY.GET.URL,
             "_search",
             queryObject
         );

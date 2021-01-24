@@ -9,6 +9,7 @@ import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { get } from "lodash";
 import store from "ui-redux/store";
 import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
+import { PROPERTY_ASSESSMENT_SEARCH } from "egov-ui-kit/utils/endPoints";
 
 export const assessProperty = async (action, props) => {
     const purpose = getPurpose()
@@ -50,7 +51,7 @@ export const assessProperty = async (action, props) => {
     }
     try {
         let assessPropertyResponse = await httpRequest(
-            `property-services/assessment/${propertyMethodAction}`,
+            `property/assessment/${propertyMethodAction}`,
             `${propertyMethodAction}`,
             [],
             {
@@ -74,7 +75,7 @@ const getAssessmentDetails = async () => {
             "assessmentId"
         );
         let searchPropertyResponse = await httpRequest(
-            `property-services/assessment/_search?assessmentNumbers=${assessmentId}&tenantId=${tenantId}`,
+            `${PROPERTY_ASSESSMENT_SEARCH.POST.URL}?assessmentNumbers=${assessmentId}&tenantId=${tenantId}`,
             "_search",
             [],
             {
@@ -132,7 +133,7 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         
         propertyPayload.additionalDetails?{...propertyPayload.additionalDetails,...propertyAdditionalDetails}:{...propertyAdditionalDetails};
         const propertyResponse = await httpRequest(
-            `property-services/property/${propertyMethodAction}`,
+            `property/property/${propertyMethodAction}`,
             `${propertyMethodAction}`,
             [],
             {

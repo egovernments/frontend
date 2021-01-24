@@ -22,6 +22,7 @@ import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
+import {FETCHASSESSMENTS, PROPERTY, PROPERTY_ASSESSMENT_UPDATE, PROPERTY_UPDATE, PROPERTY_SEARCH, PROPERTY_ASSESSMENT_SEARCH } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 
@@ -210,8 +211,8 @@ class ApplicationPreview extends Component {
       ];
       try {
         const payload = await httpRequest(
-          "property-services/assessment/_search",
-          "_search",
+          PROPERTY_ASSESSMENT_SEARCH.POST.URL,
+          PROPERTY_ASSESSMENT_SEARCH.POST.ACTION,
           queryObject
         );
         if (payload && payload.Assessments.length > 0) {
@@ -227,8 +228,8 @@ class ApplicationPreview extends Component {
       ];
       try {
         const payload = await httpRequest(
-          "property-services/property/_search",
-          "_search",
+          PROPERTY_SEARCH.POST.URL,
+          PROPERTY_SEARCH.POST.ACTION,
           queryObject
         );
         if (payload && payload.Properties.length > 0) {
@@ -246,7 +247,7 @@ class ApplicationPreview extends Component {
       applicationObject.dataPath = "Assessment";
       applicationObject.responsePath = "Assessments";
       applicationObject.moduleName = "ASMT";
-      applicationObject.updateUrl = "/property-services/assessment/_update";
+      applicationObject.updateUrl = PROPERTY_ASSESSMENT_UPDATE.POST.URL;
       applicationObject.queryParams = [
         {
           key: "assessmentNumbers", value: getQueryArg(
@@ -266,7 +267,7 @@ class ApplicationPreview extends Component {
       applicationObject.responsePath = "Properties";
       applicationObject.dataPath = "Property";
       applicationObject.moduleName = "PT.CREATE";
-      applicationObject.updateUrl = "/property-services/property/_update";
+      applicationObject.updateUrl = PROPERTY_UPDATE.POST.URL;
       applicationObject.queryParams = [
         {
           key: "acknowledgementIds", value: getQueryArg(

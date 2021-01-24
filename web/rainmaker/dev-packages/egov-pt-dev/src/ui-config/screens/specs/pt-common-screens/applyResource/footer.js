@@ -8,6 +8,7 @@ import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils";
 import { getCommonApplyFooter } from "../../utils";
 import { getQueryRedirectUrl } from "../searchResource/searchResults";
+import { PROPERTY_CREATE } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 
@@ -270,8 +271,8 @@ const callBackForApply = async (state, dispatch) => {
       let payload = null;
       payload = await httpRequest(
         "post",
-        "/property-services/property/_create",
-        "_update",
+        PROPERTY_CREATE.POST.URL,
+        PROPERTY_CREATE.POST.ACTION,
         [],
         { Property: propertyPayload }
 
