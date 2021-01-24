@@ -5,10 +5,11 @@ import {
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import { acceptedFiles } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "./api";
+import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints"
 
 export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {
-    endPoint: "filestore/v1/files"
+    endPoint: FILE_UPLOAD.POST.URL
   };
   let uploadDocument = true;
   const { maxFileSize, formatProps, moduleName } = props;

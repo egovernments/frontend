@@ -15,6 +15,7 @@ import { UploadSingleFile } from "../../ui-molecules-local";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
+import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints"
 
 const styles = theme => ({
   documentContainer: {
@@ -64,7 +65,7 @@ const documentTitle = {
   lineHeight: "19px"
 };
 // const S3_BUCKET = {
-//   endPoint: "filestore/v1/files"
+//   endPoint: FILE_UPLOAD.POST.URL
 // };
 
 class DocumentList extends Component {

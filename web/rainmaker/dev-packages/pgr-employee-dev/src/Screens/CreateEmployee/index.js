@@ -17,6 +17,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import Api from "./components/api"
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css"
+import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints"
 
 const headerStyle ={
   backgroundColor : "#607d8b" ,
@@ -201,7 +202,7 @@ const makeAjaxUpload = function(file, cb) {
     formData.append('module', 'HR');
     formData.append('file', file);
 
-    Api.commonApiPost('/filestore/v1/files', {}, formData).then(
+    Api.commonApiPost(FILE_UPLOAD.POST.URL, {}, formData).then(
       function(res) {
         cb(null, res);
       },

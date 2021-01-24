@@ -10,6 +10,7 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
+import { FETCH_FILE } from "egov-ui-kit/utils/endPoints"
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -211,7 +212,7 @@ export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
   try {
     const fileUrl = await httpRequest(
       "get",
-      "/filestore/v1/files/url",
+      FETCH_FILE.GET.URL,
       "",
       queryObject
     );
