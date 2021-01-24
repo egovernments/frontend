@@ -19,6 +19,7 @@ import PendingAmountDialog from "../PendingAmountDue";
 import PropertyInfoCard from "../PropertyInfoCard";
 import TransferOwnerShipDialog from "../TransferOwnerShipDialog";
 import ViewHistoryDialog from "../ViewHistory";
+import { PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
@@ -293,8 +294,8 @@ class OwnerInfo extends Component {
     let ownershipInfo = {};
     try {
       const payload = await httpRequest(
-        "property-services/property/_search",
-        "_search",
+        PROPERTY_SEARCH.POST.URL,
+        PROPERTY_SEARCH.POST.ACTION,
         queryObject
       );
       if (payload && payload.Properties.length > 0) {

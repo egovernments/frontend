@@ -9,6 +9,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter, validateFields } from "../../utils";
 import { onChangeTypeOfOwnership } from "../applyResourceMutation/transfereeDetails";
+import { PROPERTY_UPDATE } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 
@@ -258,8 +259,8 @@ const callBackForApply = async (state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/property-services/property/_update",
-      "_update",
+      PROPERTY_UPDATE.POST.URL,
+      PROPERTY_UPDATE.POST.ACTION,
       queryObject,
       { Property: propertyPayload }
 

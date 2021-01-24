@@ -22,6 +22,7 @@ import { registrationSummary } from "./summaryResource/registrationSummary";
 import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResource/transfereeSummary";
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
+import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
@@ -150,7 +151,7 @@ const getPropertyData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/property-services/property/_search",
+      PROPERTY.GET.URL,
       "_search",
       queryObject,
 
@@ -202,7 +203,7 @@ const getApplicationData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/property-services/property/_search",
+      PROPERTY.GET.URL,
       "_search",
       queryObject,
     );

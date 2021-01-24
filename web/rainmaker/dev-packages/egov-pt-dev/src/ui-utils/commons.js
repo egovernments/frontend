@@ -10,6 +10,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -51,7 +52,7 @@ export const getSearchResults = async (queryObject, requestBody) => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/property-services/property/_search",
+      PROPERTY.GET.URL,
       "",
       queryObject,
       requestBody

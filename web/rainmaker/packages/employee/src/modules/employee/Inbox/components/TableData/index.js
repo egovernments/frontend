@@ -22,7 +22,8 @@ import { Taskboard } from "../actionItems";
 import Filter from "../Filter";
 import InboxData from "../Table";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
-import { WORKFLOW_SEARCH, WORKFLOW_COUNT } from "egov-ui-kit/utils/endPoints";
+import { WORKFLOW_SEARCH, WORKFLOW_COUNT, PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
+
 
 import "./index.css";
 
@@ -344,7 +345,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
                 { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
                 requestBodies.push(undefined)
                 queries.push(query)
-                endpoints.push("property-services/property/_search")
+                endpoints.push(PROPERTY_SEARCH.POST.URL)
               }
             }
           } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
@@ -394,7 +395,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
                 if (acknowledgementId && acknowledgementId.length > 0) {
                   const query = [{ key: "tenantId", value: getTenantId() },
                   { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
-                  const propertyResponse = await httpRequest("property-services/property/_search", "_search", query);
+                  const propertyResponse = await httpRequest(PROPERTY_SEARCH.POST.URL, PROPERTY_SEARCH.POST.ACTION, query);
   
                   const localities = propertyResponse.Properties && propertyResponse.Properties.map(property => {
                     return {

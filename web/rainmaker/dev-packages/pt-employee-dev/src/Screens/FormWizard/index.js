@@ -36,6 +36,7 @@ import ReviewForm from "./components/ReviewForm";
 import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
+import { PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 class FormWizard extends Component {
   state = {
@@ -98,8 +99,8 @@ class FormWizard extends Component {
       let currentDraft;
 
       let searchPropertyResponse = await httpRequest(
-        "property-services/property/_search",
-        "_search",
+        PROPERTY_SEARCH.POST.URL,
+        PROPERTY_SEARCH.POST.ACTION,
         [
           {
             key: "tenantId",

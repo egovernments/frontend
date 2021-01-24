@@ -17,6 +17,7 @@ import { transferorInstitutionSummary, transferorSummary } from "./searchPreview
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
+import { PROPERTY_UPDATE } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 const titlebar = getCommonContainer({
@@ -506,7 +507,7 @@ const screenConfig = {
           props: {
             dataPath: "Property",
             moduleName: "PT.MUTATION",
-            updateUrl: "/property-services/property/_update"
+            updateUrl: PROPERTY_UPDATE.POST.URL,
           }
         },
         body: getCommonCard({

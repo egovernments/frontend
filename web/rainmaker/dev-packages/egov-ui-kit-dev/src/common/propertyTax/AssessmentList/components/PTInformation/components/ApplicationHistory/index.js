@@ -10,6 +10,7 @@ import { getFullRow } from "../AssessmentHistory";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { navigateToApplication,getApplicationType } from "egov-ui-kit/utils/commons";
+import { PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
 
 const labelStyle = {
     letterSpacing: 1.2,
@@ -60,8 +61,8 @@ class ApplicationHistory extends Component {
         ];
         try {
           const payload = await httpRequest(
-            "property-services/property/_search",
-            "_search",
+            PROPERTY_SEARCH.POST.URL,
+            PROPERTY_SEARCH.POST.ACTION,
             queryObject
           );
           prepareFinalObject("propertiesAudit", payload.Properties);
