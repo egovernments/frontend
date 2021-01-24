@@ -270,3 +270,19 @@ export const PROPERTY_ASSESSMENT_UPDATE = {
     URL: "/property/assessment/_update",
   }
 }
+export const WATER_CREATE = {
+  POST: {
+    URL: "/water/wc/_create",
+  }
+}
+export const WATER_SEARCH = {
+  POST: {
+    URL: "/water/wc/_search",
+    ACTION: "_search",
+  }
+}
+export const WATER_UPDATE  = {
+  POST: {
+    URL: "/water/wc/_update",
+  }
+}
