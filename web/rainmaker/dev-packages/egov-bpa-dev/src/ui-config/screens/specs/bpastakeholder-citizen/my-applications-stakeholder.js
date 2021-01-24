@@ -9,6 +9,7 @@ import {
 
   getTextToLocalMapping, sortByEpoch
 } from "../utils";
+import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
 const header = getCommonHeader(
   {
     labelName: "My Applications",
@@ -29,8 +30,8 @@ export const getWfBusinessData = async (action, state, dispatch, businessService
   ];
   const payload = await httpRequest(
     "post",
-    "egov-workflow-v2/egov-wf/businessservice/_search",
-    "_search",
+    WORKFLOW_BUSINESS_SEARCH.POST.URL,
+    WORKFLOW_BUSINESS_SEARCH.POST.ACTION,
     BSqueryObject
   );
   if (

@@ -8,6 +8,8 @@ import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
+import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -229,7 +231,7 @@ export const getWorkFlowData = async (queryObject) => {
     try {
         const response = await httpRequest(
             "post",
-            "egov-workflow-v2/egov-wf/process/_search",
+            WORKFLOW_SEARCH.POST.URL,
             "_search",
             queryObject
         );
@@ -1928,7 +1930,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
         if (type === 'sanctionLetter') {
             const slaDetails = await httpRequest(
                 "post",
-                `egov-workflow-v2/egov-wf/businessservice/_search?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
+                `${WORKFLOW_BUSINESS_SEARCH.POST.URL}?tenantId=${wnsConnection[0].property.tenantId}&businessService=WS`,
                 "_search"
             );
 
@@ -2087,7 +2089,7 @@ export const isWorkflowExists = async (queryObj) => {
     try {
         const payload = await httpRequest(
             "post",
-            "/egov-workflow-v2/egov-wf/process/_search",
+            WORKFLOW_SEARCH.POST.URL,
             "_search",
             queryObj
         );

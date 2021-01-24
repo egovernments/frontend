@@ -6,6 +6,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { getTextToLocalMapping } from "../../utils";
+import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 
 
 export const getNOCSearchResults = async queryObject => {
@@ -55,7 +56,7 @@ export const getWorkflowDataForNocs = async nocs => {
       try {
         let payload = await httpRequest(
           "post",
-          "egov-workflow-v2/egov-wf/process/_search",
+          WORKFLOW_SEARCH.POST.URL,
           "",
           queryObject
         );

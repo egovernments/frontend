@@ -9,7 +9,7 @@ import {
 
   getTextToLocalMapping
 } from "../../utils/index";
-
+import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 
 const convertMillisecondsToDays = (milliseconds) => {
   return Math.round(milliseconds / (1000 * 60 * 60 * 24));
@@ -171,7 +171,7 @@ export const getWorkFlowData = async Licenses => {
   try {
     const payload = await httpRequest(
       "post",
-      "egov-workflow-v2/egov-wf/process/_search",
+      WORKFLOW_SEARCH.POST.URL,
       "",
       queryObject
     );
@@ -218,7 +218,7 @@ export const getWorkFlowDataForBPA = async Licenses => {
       try {
         let payload = await httpRequest(
           "post",
-          "egov-workflow-v2/egov-wf/process/_search",
+          WORKFLOW_SEARCH.POST.URL,
           "",
           queryObject
         );

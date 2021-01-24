@@ -21,6 +21,7 @@ import DocumentsInfo from "../Property/components/DocumentsInfo";
 import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
+import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 
@@ -135,7 +136,7 @@ class ApplicationPreview extends Component {
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbarAndSetText } = this.props;
     try {
-      const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest(WORKFLOW_BUSINESS_SEARCH.POST.URL, WORKFLOW_BUSINESS_SEARCH.POST.ACTION, queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {

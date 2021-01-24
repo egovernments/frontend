@@ -13,6 +13,7 @@ import { getRequiredDocData, showHideAdhocPopup } from "egov-ui-framework/ui-uti
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
+import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -67,8 +68,8 @@ const getBusinessService=async(businessService, dispatch)=>{
   ];
   const payload = await httpRequest(
     "post",
-    "egov-workflow-v2/egov-wf/businessservice/_search",
-    "_search",
+    WORKFLOW_BUSINESS_SEARCH.POST.URL,
+    WORKFLOW_BUSINESS_SEARCH.POST.ACTION,
     queryObject
   );
   if (payload.BusinessServices[0].businessService === "NewWS1" || payload.BusinessServices[0].businessService === "NewSW1") {

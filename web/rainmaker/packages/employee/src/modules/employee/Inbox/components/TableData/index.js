@@ -21,6 +21,9 @@ import { connect } from "react-redux";
 import { Taskboard } from "../actionItems";
 import Filter from "../Filter";
 import InboxData from "../Table";
+import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
+import { WORKFLOW_SEARCH, WORKFLOW_COUNT } from "egov-ui-kit/utils/endPoints";
+
 import "./index.css";
 
 const getWFstatus = (status) => {
@@ -534,7 +537,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
     const { toggleSnackbarAndSetText } = this.props;
     try {
-      const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest(WORKFLOW_BUSINESS_SEARCH.POST.URL, WORKFLOW_BUSINESS_SEARCH.POST.ACTION, queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
@@ -566,10 +569,10 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
     try {
       this.showLoading();
       const requestBody1 = [{ key: "tenantId", value: tenantId }];
-      let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
+      let maxCount = await httpRequest(WORKFLOW_COUNT.GET.URL, WORKFLOW_COUNT.GET.ACTION, requestBody1);
       maxCount = maxCount ;
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? Math.round(maxCount / 3) : maxCount }];
-      const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      const responseData = await httpRequest(WORKFLOW_SEARCH.POST.URL, "_search", requestBody);
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
       if (maxCount > 500) {
         this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: Math.round(maxCount / 3) }, { key: "limit", value: Math.round(maxCount / 3) * 2 + 2 }], responseData)
@@ -621,7 +624,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
     let { taskboardData, tabData } = this.state;
     const inboxData = [{ headers: [], rows: [] }];
     try {
-      const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      const responseData = await httpRequest(WORKFLOW_SEARCH.POST.URL, "_search", requestBody);
       set(responseData, "ProcessInstances", [...responseData.ProcessInstances, ...response.ProcessInstances]);
 
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);

@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { httpRequest } from "ui-utils/api";
-
+import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
 export const setProcessInstances = payload => {
   return {
     type: actionTypes.GET_WORK_FLOW,
@@ -13,7 +13,7 @@ export const getWorkFlowData = queryObject => {
     try {
       const payload = await httpRequest(
         "post",
-        "egov-workflow-v2/egov-wf/process/_search",
+        WORKFLOW_SEARCH.POST.URL,
         "",
         queryObject
       );

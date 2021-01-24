@@ -29,6 +29,7 @@ import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-ut
 import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
 import {FETCH_FILE} from "egov-ui-kit/utils/endPoints";
+import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -3956,7 +3957,7 @@ export const requiredDocumentsData = async (state, dispatch, action) => {
     ];
     const wfPayload = await httpRequest(
       "post",
-      "egov-workflow-v2/egov-wf/process/_search",
+      WORKFLOW_SEARCH.POST.URL,
       "",
       queryObject
     );
