@@ -10,7 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import orderby from "lodash/orderBy";
 import * as actionTypes from "./actionTypes";
-import { FETCH_FILE } from "egov-ui-kit/utils/endPoints"
+import { FETCH_FILE } from "egov-ui-kit/utils/endPoints";
 
 const reset_property_reset = () => {
   return {

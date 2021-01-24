@@ -15,7 +15,7 @@ import { UploadSingleFile } from "../../ui-molecules-local";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
-import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints"
+import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 
 const styles = theme => ({
   documentContainer: {

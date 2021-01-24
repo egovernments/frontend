@@ -10,7 +10,8 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
-import { FETCH_FILE } from "egov-ui-kit/utils/endPoints"
+import { FETCH_FILE } from "egov-ui-kit/utils/endPoints";
+import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -386,7 +387,7 @@ export const acceptedFiles = acceptedExt => {
 
 export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {
-    endPoint: "filestore/v1/files"
+    endPoint: FILE_UPLOAD.POST.URL
   };
   let uploadDocument = true;
   const { inputProps, maxFileSize, moduleName } = props;

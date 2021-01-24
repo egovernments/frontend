@@ -2,10 +2,10 @@ import commonConfig from "config/common.js";
 import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import { acceptedFiles } from "egov-ui-framework/ui-utils/commons";
+import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import { httpRequest } from "./api";
-import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints"
+import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 
 export const handleFileUpload = (event, handleDocument, props) => {
   const S3_BUCKET = {

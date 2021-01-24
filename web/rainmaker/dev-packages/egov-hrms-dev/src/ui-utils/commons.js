@@ -9,8 +9,7 @@ import {
   getTranslatedLabel
 } from "../ui-config/screens/specs/utils";
 import { httpRequest, uploadFile } from "../ui-utils/api";
-import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints"
-
+import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {

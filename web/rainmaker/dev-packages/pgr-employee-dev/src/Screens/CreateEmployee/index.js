@@ -17,7 +17,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import Api from "./components/api"
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css"
-import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints"
+import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 
 const headerStyle ={
   backgroundColor : "#607d8b" ,
