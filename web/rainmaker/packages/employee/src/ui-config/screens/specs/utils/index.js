@@ -11,6 +11,7 @@ import store from "../../../../redux/store";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import cloneDeep from "lodash/cloneDeep";
+import {EVENTS_CREATE, EVENTS_UPDATE_MAIN, NOTIFICATIONS} from "egov-ui-kit/utils/endPoints";
 
 export const getTodaysDateInYMD = () => {
   let date = new Date();
@@ -125,7 +126,7 @@ export const callBackForNext = async (state, dispatch, eventType, isDelete) => {
     if (!uuid) {
       let successMessage = eventType === "BROADCAST" ? "MESSAGE_ADD_SUCCESS_MESSAGE_MAIN" : "EVENT_ADD_SUCCESS_MESSAGE_MAIN";
       try {
-        await httpRequest("post", "/egov-user-event/v1/events/_create", "_create", [], requestBody);
+        await httpRequest("post", EVENTS_CREATE.POST.URL , EVENTS_CREATE.POST.ACTION, [], requestBody);
         store.dispatch(toggleSpinner());
         // dispatch(setRoute(`${baseUrl}/acknowledgement?purpose=${purpose}&status=${status}`));
         dispatch(setRoute(`${baseUrl}/search`));
@@ -137,7 +138,7 @@ export const callBackForNext = async (state, dispatch, eventType, isDelete) => {
     } else if (uuid) {
       let successMessage = isDelete ? "MESSAGE_DELETE_SUCCESS_LABEL" : "MESSAGE_UPDATE_SUCCESS_LABEL";
       try {
-        await httpRequest("post", "/egov-user-event/v1/events/_update", "_update", [], requestBody);
+        await httpRequest("post", EVENTS_UPDATE_MAIN.POST.URL, EVENTS_UPDATE_MAIN.POST.ACTION, [], requestBody);
         store.dispatch(toggleSpinner());
         dispatch(setRoute(`${baseUrl}/search`));
         dispatch(toggleSnackbar(true, { labelKey: successMessage }, "success"));
@@ -167,7 +168,7 @@ export const getEventsByType = async (queryObj) => {
   };
 
   try {
-    const payload = await httpRequest("post", "/egov-user-event/v1/events/_search", "_search", queryObj, requestBody);
+    const payload = await httpRequest("post", NOTIFICATIONS.GET.URL, NOTIFICATIONS.GET.ACTION, queryObj, requestBody);
     if (payload) {
       return payload.events;
     }

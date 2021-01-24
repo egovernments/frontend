@@ -15,6 +15,7 @@ import React from "react";
 import { FETCHBILL, PAYMENTSEARCH } from "./endPoints";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
+import { EVENTS_UPDATE} from "egov-ui-kit/utils/endPoints";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -876,7 +877,7 @@ export const onNotificationClick = async (history) => {
       },
     };
 
-    await httpRequest("/egov-user-event/v1/events/lat/_update", "_update", queryObject, requestBody);
+    await httpRequest(EVENTS_UPDATE.POST.URL, EVENTS_UPDATE.POST.ACTION, queryObject, requestBody);
     history.push("/notifications");
   } catch (e) {
     toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" }, "error");

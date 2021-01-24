@@ -162,17 +162,38 @@ export const BOUNDARY = {
 
 export const EVENTSCOUNT = {
   GET: {
-    URL: "/egov-user-event/v1/events/notifications/_count",
+    URL: "/user-event/v1/events/notifications/_count",
     ACTION: "_search",
   },
 };
 
 export const NOTIFICATIONS = {
   GET: {
-    URL: "/egov-user-event/v1/events/_search",
+    URL: "/user-event/v1/events/_search",
     ACTION: "_search",
   },
 };
+
+export const EVENTS_UPDATE = {
+  POST: {
+    URL: "/user-event/v1/events/lat/_update",
+    ACTION: "_update",
+  }
+}
+
+export const EVENTS_UPDATE_MAIN = {
+  POST: {
+    URL: "/user-event/v1/events/_update",
+    ACTION: "_update",
+  }
+}
+
+export const EVENTS_CREATE = {
+  POST: {
+    URL: "/user-event/v1/events/_create",
+    ACTION: "_create",
+  }
+}
 
 export const FETCHBILL = {
   GET: {
