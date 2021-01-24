@@ -28,7 +28,7 @@ import set from "lodash/set";
 import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../ui-utils/api";
 import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/commons";
 import "./index.css";
-import {FETCH_FILE} from "egov-ui-kit/utils/endPoints"
+import {FETCH_FILE} from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {

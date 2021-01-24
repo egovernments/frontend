@@ -22,7 +22,7 @@ import axios from "axios";
 import {
   getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
-import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints"
+import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
