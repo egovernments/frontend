@@ -28,6 +28,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
 import get from "lodash/get";
 import jp from "jsonpath";
+import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 import {
   basicDetails,
   buildingPlanScrutinyDetails,
@@ -350,7 +351,7 @@ const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJ
   let processInstances =[];
     const payload = await httpRequest(
       "post",
-      "egov-workflow-v2/egov-wf/process/_search",
+      WORKFLOW_SEARCH.POST.URL,
       "",
       queryObject
     );

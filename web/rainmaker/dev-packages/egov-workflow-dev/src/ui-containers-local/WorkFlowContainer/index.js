@@ -13,6 +13,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Footer } from "../../ui-molecules-local";
 import TaskStatusContainer from "../TaskStatusContainer";
+import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
 
 const tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -37,7 +38,7 @@ class WorkFlowContainer extends React.Component {
     try {
       const payload = await httpRequest(
         "post",
-        "egov-workflow-v2/egov-wf/process/_search",
+        WORKFLOW_SEARCH.POST.URL,
         "",
         queryObject
       );

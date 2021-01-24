@@ -224,3 +224,20 @@ export const PAYMENTSEARCH = {
     ACTION: "_search",
   },
 };
+export const WORKFLOW_SEARCH = {
+  POST: {
+    URL: "workflow/egov-wf/process/_search",
+  }
+}
+export const WORKFLOW_BUSINESS_SEARCH = {
+  POST: {
+    URL: "workflow/egov-wf/businessservice/_search",
+    ACTION: "_search",
+  }
+}
+export const WORKFLOW_COUNT = {
+  GET: {
+    URL: "workflow/egov-wf/process/_count",
+    ACTION: "_search",
+  }
+}

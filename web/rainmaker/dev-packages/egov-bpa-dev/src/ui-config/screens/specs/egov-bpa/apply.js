@@ -46,6 +46,7 @@ import { bpaSummaryDetails } from "../egov-bpa/summaryDetails";
 import { changeStep } from "./applyResource/footer";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { nocDetailsApply } from "./noc";
+import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
@@ -529,7 +530,7 @@ const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJ
   let processInstances =[];
     const payload = await httpRequest(
       "post",
-      "egov-workflow-v2/egov-wf/process/_search",
+      WORKFLOW_SEARCH.POST.URL,
       "",
       queryObject
     );

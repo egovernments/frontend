@@ -16,6 +16,7 @@ import { FETCHBILL, PAYMENTSEARCH } from "./endPoints";
 import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
 import { EVENTS_UPDATE} from "egov-ui-kit/utils/endPoints";
+import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -931,7 +932,7 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
       }
     } else {
       const payload = await httpRequest(
-        "egov-workflow-v2/egov-wf/process/_search",
+        WORKFLOW_SEARCH.POST.URL,
         "_search",
         queryObject
       );
