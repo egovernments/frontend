@@ -500,7 +500,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showC
           setTimeout(() => {
             const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
             window.location.href = weblink
-          }, 100)
+          }, 1500)
         }
         store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
       , "success"));
@@ -512,7 +512,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showC
           setTimeout(() => {
             const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
             window.location.href = weblink
-          }, 100)
+          }, 1500)
         }
         store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
       , "success"));
