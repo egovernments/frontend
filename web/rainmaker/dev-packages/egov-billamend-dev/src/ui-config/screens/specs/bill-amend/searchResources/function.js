@@ -1,43 +1,32 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-// import { getGroupsearch } from "../../../../../ui-utils/commons";
+import { getBillAmendSearchResult, searchBill } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { convertEpochToDate } from "../../utils/index";
 
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
-  let tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreen.tenantId"
-  );
+
   let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "limit", value: "10" }
+
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "searchScreenBillAmend",
     {}
   );
 
-  const isSearchBoxFirstRowValid = validateFields(
+  let isSearchBoxFirstRowValid = validateFields(
     "components.div.children.searchCard.children.cardContent.children.searchContainer.children",
     state,
     dispatch,
     "search"
   );
-  const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.searchCard.children.cardContent.children.searchContainer.children",
-    state,
-    dispatch,
-    "search"
-  );
-  if (!isSearchBoxFirstRowValid || !isSearchBoxSecondRowValid) {
+  if (isSearchBoxFirstRowValid) {
+    isSearchBoxFirstRowValid = get(searchScreenObject, 'mobileNumber', '') == "" && get(searchScreenObject, 'billNo', '') == "" && get(searchScreenObject, 'consumerCode', '') == "" ? false : true;
+  }
+
+  if (!isSearchBoxFirstRowValid) {
     dispatch(
       toggleSnackbar(
         true,
@@ -71,8 +60,8 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
       if (searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key] =="") {
-          delete searchScreenObject[key];
+        searchScreenObject[key] == "") {
+        delete searchScreenObject[key];
       }
     }
     let serviceObject = get(
@@ -80,105 +69,67 @@ export const searchApiCall = async (state, dispatch) => {
       "searchScreenMdmsData.BillingService.BusinessService"
     ).filter(item => item.code === searchScreenObject.businesService);
 
-    searchScreenObject.url = serviceObject && serviceObject[0] && serviceObject[0].billGineiURL;
-    const isAdvancePayment = serviceObject && serviceObject[0] && serviceObject[0].isAdvanceAllowed;
-    if (!searchScreenObject.url) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Selected Service Category is Not Available for Search",
-            labelKey: "BILL_SEARCH_BILLGINEIURL_NOTFOUND"
-          },
-          "error"
-        )
-      );
-      return;
-    }
-    searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
-    // const responseFromAPI = await getGroupsearch(dispatch, searchScreenObject)
-    const responseFromAPI={};
-    const bills = (responseFromAPI && responseFromAPI.Bills) || [];
+    // if (!searchScreenObject.url) {
+    //   dispatch(
+    //     toggleSnackbar(
+    //       true,
+    //       {
+    //         labelName: "Selected Service Category is Not Available for Search",
+    //         labelKey: "BILL_SEARCH_BILLGINEIURL_NOTFOUND"
+    //       },
+    //       "error"
+    //     )
+    //   );
+    //   return;
+    // }
+    // searchScreenObject.tenantId =getTenantId();
+    const responseFromAPI = await getBillAmendSearchResult(queryObject, dispatch)
+    const Amendments = (responseFromAPI && responseFromAPI.Amendments) || [];
+    const respObj = {};
+
+    Amendments.map(bill => {
+      respObj[bill.consumerCode] = bill;
+    })
+    const resp = await searchBill(queryObject, dispatch)
+
+    const bills = (resp && resp.Bill) || [];
     const billTableData = bills.map(item => {
+
       return {
-        billNumber: get(item, "billNumber"),
-        billId: get(item, "id"),
+        businessService: get(item, "businessService"),
+        amendmentId: get(respObj[get(item, "consumerCode")], "amendmentId", 'NA'),
         consumerCode: get(item, "consumerCode"),
+        status: get(respObj[get(item, "consumerCode")], "status", "NA"),
         consumerName: get(item, "payerName"),
-        billDate: get(item, "billDate"),
-        billAmount: get(item, "totalAmount"),
-        status: get(item, "status"),
-        action: getActionItem(get(item, "status")),
-        tenantId: get(item, "tenantId")
+        consumerAddress: get(item, "payerAddress"),
+        tenantId: get(item, "tenantId"),
+        connectionType: get(respObj[get(item, "consumerCode")], "additionalDetails.connectionType", 'Metered')
       };
     });
     dispatch(
       prepareFinalObject("searchScreenMdmsData.searchResponse", bills)
     );
-    const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
-    const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
-    
+
     try {
       let data = billTableData.map(item => ({
-        ['BILL_COMMON_SERVICE_TYPE']: item.billNumber || "-",
-        ["BILL_COMMON_APPLICATION_NO"]: item.consumerCode || "-",
+
+        ['BILL_COMMON_SERVICE_TYPE']: item.businessService || "-",
+        ["BILL_COMMON_APPLICATION_NO"]: item.amendmentId || "NA",
         ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
-        
+
         ['BILL_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
-        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']: item.consumerName || "-",
-        ['BILL_COMMON_TABLE_COL_BILL_DATE']:
-          convertEpochToDate(item.billDate) || "-",
-        ['BILL_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount===0) ? item.billAmount : "-",
+        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']: item.consumerAddress || "-",
+
         ['BILL_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ['BILL_COMMON_TABLE_COL_ACTION']: item.action || "-",
-        ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
-        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey"),
-        ["BILL_KEY"]: get(configObject[0], "billKey"),
-        ["TENANT_ID"]: item.tenantId,
-        ["BILL_ID"]: item.billId,
-        ["BILL_SEARCH_URL"]: searchScreenObject.url,
-        ["ADVANCE_PAYMENT"]: isAdvancePayment
+
+        ["TENANT_ID"]: item.tenantId || '',
+        ['BUSINESS_SERVICE']: item.businessService || "-",
+        ['SERVICE_CONST']: item.businessService == 'WS' ? 'WATER' : (item.businessService == 'SW' ? 'SEWERAGE' : 'NA'),
+        ['CONNECTION_TYPE']: item.connectionType || "NA"
+
       }));
 
-      data=[{
-        ['BILL_COMMON_SERVICE_TYPE']: 'WATER' || "-",
-        ["BILL_COMMON_APPLICATION_NO"]: 'NA',
-        ["PAYMENT_COMMON_CONSUMER_CODE"]: 'WS/107/2020-21/000041' || "-",
-        
-        ['BILL_COMMON_TABLE_COL_CONSUMER_NAME']: 'Anand' || "-",
-        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']: 'Patiala Road - Area1, amritsar' || "-",
-        ['BILL_COMMON_TABLE_COL_BILL_DATE']:
-          "-",
-        ['BILL_COMMON_TABLE_COL_BILL_AMOUNT']:  "-",
-        ['BILL_COMMON_TABLE_COL_STATUS']: "APPROVED" || "-",
-        ['BILL_COMMON_TABLE_COL_ACTION']: "-",
-        ["BUSINESS_SERVICE"]: '',
-        ["RECEIPT_KEY"]:'',
-        ["BILL_KEY"]:'',
-        ["TENANT_ID"]: '',
-        ["BILL_ID"]:'',
-        ["BILL_SEARCH_URL"]: '',
-        ["ADVANCE_PAYMENT"]: false
-      },{
-        ['BILL_COMMON_SERVICE_TYPE']: 'WATER' || "-",
-        ["BILL_COMMON_APPLICATION_NO"]: 'WS/107/2020-21/000037',
-        ["PAYMENT_COMMON_CONSUMER_CODE"]: 'WS/107/2020-21/000037' || "-",
-        
-        ['BILL_COMMON_TABLE_COL_CONSUMER_NAME']: 'Karthikeyan' || "-",
-        ['BILL_COMMON_TABLE_CONSUMER_ADDRESS']: 'Ajit Nagar - Area1, amritsar' || "-",
-        ['BILL_COMMON_TABLE_COL_BILL_DATE']:
-          "-",
-        ['BILL_COMMON_TABLE_COL_BILL_AMOUNT']:  "-",
-        ['BILL_COMMON_TABLE_COL_STATUS']: "APPROVED" || "-",
-        ['BILL_COMMON_TABLE_COL_ACTION']: "-",
-        ["BUSINESS_SERVICE"]: '',
-        ["RECEIPT_KEY"]:'',
-        ["BILL_KEY"]:'',
-        ["TENANT_ID"]: '',
-        ["BILL_ID"]:'',
-        ["BILL_SEARCH_URL"]: '',
-        ["ADVANCE_PAYMENT"]: false
-      }]
+
       dispatch(
         handleField(
           "search",
@@ -222,13 +173,3 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
-
-const getActionItem = (status) => {
-  switch (status) {
-    case "ACTIVE": return "PAY";
-    case "CANCELLED":
-    case "EXPIRED": return "GENERATE NEW BILL"
-    case "PAID": return "DOWNLOAD RECEIPT"
-    case "PARTIALLY_PAID": return "PARTIALLY PAID"
-  }
-}
