@@ -82,6 +82,16 @@ const screenConfig = {
         set(action, "screenConfig.components.div.children", { data,paymentDetails: getCommonCard({
            head:getReceiptData(receiptNumber)
         }) });
+        let channel = getQueryArg(window.location.href, "channel");
+        let redirectNumber = getQueryArg(window.location.href, "redirectNumber");
+        if(channel){
+            localStorage.setItem('receipt-channel',channel);
+            redirectNumber=!redirectNumber.includes('+91')&&redirectNumber.length==10?`+91${redirectNumber}`:redirectNumber
+            localStorage.setItem('receipt-redirectNumber',redirectNumber);
+        }else{
+            localStorage.setItem('receipt-channel',"");
+            localStorage.setItem('receipt-redirectNumber','');
+        }
         return action;
     }
 };
