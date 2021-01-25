@@ -4,7 +4,10 @@ import { getUserInfo,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {set,get} from "lodash";
 
 import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { 
+  handleScreenConfigurationFieldChange as handleField,prepareFinalObject, 
+  toggleSnackbar 
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
   getCommonCaption
@@ -277,13 +280,15 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
   }
 };
 const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
-  const tenant = getTenantId();
+  const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
+  const tenantId = getQueryArg( window.location.href, "tenantId");
+  const businessService = connectionNumber.includes("WS") ? "WS" : "SW";
+
   switch (moduleName) {
    
     case "BillAmendment":
       return (state, dispatch) => {
-        // dispatch(prepareFinalObject("documentsUploadRedux", {}));
-        const applyUrl = `/bill-amend/apply`;
+        const applyUrl = `/bill-amend/apply?connectionNumber=${connectionNumber}&tenantId=${tenantId}&businessService=${businessService}`;
         dispatch(setRoute(applyUrl));
       };
     }

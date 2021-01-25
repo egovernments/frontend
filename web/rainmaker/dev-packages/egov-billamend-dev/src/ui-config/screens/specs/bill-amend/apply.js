@@ -93,19 +93,22 @@ export const formwizardThirdStep = {
 };
 
 export const setSearchResponse = async (state, dispatch, action) => {
+  const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
+  const businessService = getQueryArg( window.location.href, "businessService");
+  const tenantId = getTenantId() || getQueryArg( window.location.href, "businessService");
 
   let fetBill = await getFetchBill(state, dispatch, action, [
     {
       key: "tenantId",
-      value: "pb.amritsar"
+      value: tenantId
     },
     {
       key: "consumerCode",
-      value: "WS_AP/107/2020-21/000942"
+      value: connectionNumber
     },
     {
       key: "businessService",
-      value: "WS.ONE_TIME_FEE"
+      value: businessService
     }
   ]);
   
@@ -116,18 +119,17 @@ export const setSearchResponse = async (state, dispatch, action) => {
       bill.additionalAmountValue = 0;
     });
     dispatch(prepareFinalObject("fetchBillDetails", billDetails));
-    // dispatch(prepareFinalObject("Amendment.demandDetails", billDetails));
-    dispatch(prepareFinalObject("Amendment.consumerCode", "WS_AP/107/2020-21/000942"));
-    dispatch(prepareFinalObject("Amendment.tenantId", "pb.amritsar"));
-    dispatch(prepareFinalObject("Amendment.businessService", "WS.ONE_TIME_FEE"));
-    dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
+    dispatch(prepareFinalObject("Amendment.consumerCode", connectionNumber));
+    dispatch(prepareFinalObject("Amendment.tenantId", tenantId));
+    dispatch(prepareFinalObject("Amendment.businessService", businessService));
+    // dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
 
     dispatch(
       handleField(
         "apply",
         "components.div.children.headerDiv.children.header.children.applicationNumber",
         "props.number",
-        "WS_AP/107/2020-21/000942"
+        connectionNumber
       )
     );
 
