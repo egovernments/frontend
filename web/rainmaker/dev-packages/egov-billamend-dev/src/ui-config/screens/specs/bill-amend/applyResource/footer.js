@@ -55,7 +55,7 @@ export const summaryAdjustmentAmountDetails = async(state, dispatch) => {
   fetchBillDetails.map(bill => {
     billDetails.push({
       taxHeadMasterCode: bill.taxHeadCode,
-      taxAmount: amountType == "reducedAmount" ? - bill.reducedAmountValue : bill.additionalAmountValue
+      taxAmount: amountType == "reducedAmount" ? bill.reducedAmountValue : bill.additionalAmountValue
     });
   });
   console.log(billDetails, "billDetailsbillDetailsbillDetailsbillDetails");

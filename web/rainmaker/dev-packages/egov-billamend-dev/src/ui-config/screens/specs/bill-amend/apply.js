@@ -1,7 +1,9 @@
 import {
   getCommonContainer,
   getCommonHeader,
-  getStepperObject
+  getStepperObject,
+  getCommonSubHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getQueryArg,
@@ -27,7 +29,9 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
-import { getFetchBill } from "../utils";
+import { getFetchBill, procedToNextStep, cancelPopUp } from "../utils";
+import "./index.scss";
+
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
@@ -255,7 +259,101 @@ const screenConfig = {
         formwizardThirdStep,
         footer
       }
-    }
+    },
+    billAmdAlertDialog :{
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "sm"
+      },
+      children: {
+        dialogTitle:{
+          componentPath: "DialogTitle",
+          children: {
+            popup: getCommonContainer({
+              billamdHeader: getCommonHeader({
+                labelName: "Confirm change",
+                labelKey: "BILL_CONFIRM_CHANGE_HEADER"
+              }),
+            }) 
+          }
+        },
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+          },
+          children: {
+            popup: getCommonContainer({
+              billamdSubheader: getCommonSubHeader ({
+                labelName: "Changing the Demand Revision basis will erase the previosly selected values.",
+                labelKey: "BILL_CONFIRM_CHANGE_SUB_HEADER"
+              }),
+              billamdSubheader1: getCommonSubHeader ({
+                labelName: "Are you sure want to proceed?",
+                labelKey: "BILL_CONFIRM_CHANGE_SUB_HEADER_1"
+              }),
+              billAmdDialogPicker: getCommonContainer({
+                div: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Div",
+                  children: {
+                    selectButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "outlined",
+                        color: "primary",
+                        style: {
+                          width: "110px",
+                          height: "30px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "CANCEL",
+                          labelKey: "BILL_CANCEL_BUTTON"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: cancelPopUp
+                      }
+                    },
+                    cancelButton: {
+                      componentPath: "Button",
+                      props: {
+                        variant: "contained",
+                        color: "primary",
+                        style: {
+                          width: "100px",
+                          height: "30px",
+                          marginRight: "4px",
+                          marginTop: "16px"
+                        }
+                      },
+                      children: {
+                        previousButtonLabel: getLabel({
+                          labelName: "OK",
+                          labelKey: "BILL_OK_BUTTON"
+                        })
+                      },
+                      onClickDefination: {
+                        action: "condition",
+                        callBack: procedToNextStep
+                      }
+                    }
+                  }
+                }
+              })
+            })
+          }
+        }
+      }
+    },
   }
 };
 
