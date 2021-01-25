@@ -8,6 +8,8 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { httpRequest } from "../../../../../ui-utils/api"; 
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const getCommonApplyFooter = (children) => {
   return {
@@ -308,8 +310,10 @@ export const onDemandRevisionBasis = async (state, dispatch) => {
 export const submitApplication = async (state, dispatch) => {
 
   let billAmdDetails = get (state.screenConfiguration.preparedFinalObject, "Amendment", {});
+  let fetchBillDetails = get (state.screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
+  let amountType = get (state.screenConfiguration.preparedFinalObject, "BILL.AMOUNTTYPE", "");
   let reduxDocuments = get( state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
-  let documentsPreview = [];
+  let documentsPreview = [], demandDetails = [];;
   jp.query(reduxDocuments, "$.*").forEach(doc => {
     if (doc.documents && doc.documents.length > 0 && doc.dropdown) {
       doc.documents.forEach(docDetail => {
@@ -324,22 +328,47 @@ export const submitApplication = async (state, dispatch) => {
     }
   });
 
-  billAmdDetails.documents = documentsPreview && documentsPreview.length > 0 ? documentsPreview : null;
+  fetchBillDetails.map( data => {
+    let obj = {};
+    obj.taxHeadMasterCode = data.taxHeadCode;
+    obj.tenantId = data.tenantId;
+    obj.collectionAmount = data.collectionAmount;
+    if(amountType == "reducedAmount") {
+      obj.taxAmount = data.reducedAmountValue ? -data.reducedAmountValue : 0;
+    } else {
+      obj.taxAmount = data.additionalAmountValue ? data.additionalAmountValue : 0;
+    }
+    demandDetails.push(obj);
+  });
 
+  billAmdDetails.documents = documentsPreview && documentsPreview.length > 0 ? documentsPreview : null;
+  billAmdDetails.demandDetails = demandDetails;
+
+  if (get(billAmdDetails, "fromDate")) {
+    billAmdDetails.fromDate = convertDateToEpoch(get(billAmdDetails, "fromDate"));
+  }
+
+  if (get(billAmdDetails, "toDate")) {
+    billAmdDetails.toDate = convertDateToEpoch(get(billAmdDetails, "toDate"));
+  }
+
+  if (get(billAmdDetails, "dateEffectiveFrom")) {
+    billAmdDetails.dateEffectiveFrom = convertDateToEpoch(get(billAmdDetails, "dateEffectiveFrom"));
+  }
 
   try {
 
     let response = await httpRequest(
       "post",
-      "bpa-services/v1/bpa/_create",
+      "billing-service/amendment/_create",
       "",
       [],
       { Amendment : billAmdDetails }
     );
-    dispatch(prepareFinalObject("Amendment", response.Amendment[0]));
+    dispatch(prepareFinalObject("Amendment", response.Amendments[0]));
 
     dispatch(
-      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendment[0].consumerCode}`)
+      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendments[0].consumerCode}`)
     );
     
   } catch (error) {

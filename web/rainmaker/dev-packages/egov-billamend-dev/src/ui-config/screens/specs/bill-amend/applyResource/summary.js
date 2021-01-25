@@ -20,7 +20,7 @@ export const getFeesEstimateCard = props => {
         moduleName: "egov-billamend",
         componentPath: "EstimateCardContainer",
         props: {
-            sourceJsonPath: "LicensesTemp[0].estimateCardData"
+            sourceJsonPath: "AmendmentTemp[0].estimateCardData"
         }
     };
 };
