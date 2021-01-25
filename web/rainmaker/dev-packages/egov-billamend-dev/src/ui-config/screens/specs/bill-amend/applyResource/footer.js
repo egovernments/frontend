@@ -48,9 +48,24 @@ const preparingDocumentsReview = async (state, dispatch) => {
   dispatch(prepareFinalObject("bill-amend-review-document-data", documentsPreview));
 };
 
+export const summaryAdjustmentAmountDetails = async(state, dispatch) => {
+  const fetchBillDetails = get (state.screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
+  const amountType = get (state.screenConfiguration.preparedFinalObject, "BILL.AMOUNTTYPE", "");
+  let billDetails = [];
+  fetchBillDetails.map(bill => {
+    billDetails.push({
+      taxHeadMasterCode: bill.taxHeadCode,
+      taxAmount: amountType == "reducedAmount" ? - bill.reducedAmountValue : bill.additionalAmountValue
+    });
+  });
+  console.log(billDetails, "billDetailsbillDetailsbillDetailsbillDetails");
+  dispatch(prepareFinalObject("AmendmentTemp[0].estimateCardData", billDetails, []));
+}
+
 export const getSummaryRequiredDetails = async (state, dispatch) => {
   await onDemandRevisionBasis(state, dispatch);
   await preparingDocumentsReview(state, dispatch);
+  await summaryAdjustmentAmountDetails(state, dispatch);
 
 }
 

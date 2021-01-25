@@ -116,7 +116,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
       bill.additionalAmountValue = 0;
     });
     dispatch(prepareFinalObject("fetchBillDetails", billDetails));
-    dispatch(prepareFinalObject("Amendment.demandDetails", billDetails));
+    // dispatch(prepareFinalObject("Amendment.demandDetails", billDetails));
     dispatch(prepareFinalObject("Amendment.consumerCode", "WS_AP/107/2020-21/000942"));
     dispatch(prepareFinalObject("Amendment.tenantId", "pb.amritsar"));
     dispatch(prepareFinalObject("Amendment.businessService", "WS.ONE_TIME_FEE"));

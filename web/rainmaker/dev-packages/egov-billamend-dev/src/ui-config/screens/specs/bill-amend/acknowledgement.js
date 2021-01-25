@@ -178,7 +178,7 @@ const getAcknowledgementCard = (
             })
           }
         },
-        headerdownloadprint: downloadprintMenu(state, dispatch),
+        // headerdownloadprint: downloadprintMenu(state, dispatch),
       },{style:{justifyContent:"space-between"}}),
 
 
