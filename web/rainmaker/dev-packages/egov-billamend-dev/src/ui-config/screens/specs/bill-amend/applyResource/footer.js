@@ -118,7 +118,7 @@ const callBackForNext = async (state, dispatch) => {
         return;
       }
 
-      if (demandRevisionBasisValue !== "COURTCASESETTLEMENT") {
+      if (demandRevisionBasisValue !== "COURT_CASE_SETTLEMENT") {
         const fromDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.fromDate");
         const toDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.toDate");
         if (new Date(fromDate) > new Date(toDate)) {
