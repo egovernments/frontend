@@ -14,7 +14,7 @@ import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { WATER_SEARCH, WATER_CREATE, WATER_UPDATE } from "egov-ui-kit/utils/endPoints";
 import { SEWERAGE_UPDATE, SEWERAGE_CREATE, SEWERAGE_SEARCH } from "egov-ui-kit/utils/endPoints";
-import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
+import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE, SEWERAGE_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -1824,8 +1824,8 @@ export const swEstimateCalculation = async (queryObject, dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "sw-calculator/sewerageCalculator/_estimate",
-            "_estimate",
+            SEWERAGE_CAL_ESTIMATE.POST.URL,
+            SEWERAGE_CAL_ESTIMATE.POST.ACTION,
             [],
             {
                 isconnectionCalculation: false,
@@ -1880,7 +1880,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
         }]
 
     } else {
-        apiUrl = "sw-calculator/sewerageCalculator/_estimate";
+        apiUrl = SEWERAGE_CAL_ESTIMATE.POST.URL;
         appService = "ws-applicationsewerage";
         queryObjectForEst = [{
             applicationNo: appNo,
