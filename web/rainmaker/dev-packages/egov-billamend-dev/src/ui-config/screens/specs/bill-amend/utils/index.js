@@ -148,7 +148,7 @@ export const onDemandRevisionBasis = async (state, dispatch) => {
   );
   
   switch (demandRevisionBasis) {
-      case "COURTCASESETTLEMENT":
+      case "COURT_CASE_SETTLEMENT":
           dispatch(
               handleField(
                   "apply",
@@ -198,8 +198,8 @@ export const onDemandRevisionBasis = async (state, dispatch) => {
               )
           );
           break;
-      case "ARREARSWRITEOFF":
-      case "ONETIMESETTLEMENT":
+      case "ARREAR_WRITE_OFF":
+      case "ONE_TIME_SETTLEMENT":
           dispatch(
               handleField(
                   "apply",
@@ -249,8 +249,8 @@ export const onDemandRevisionBasis = async (state, dispatch) => {
               )
           );
           break;
-      case "DCBCORRECTION":
-      case "REMISSIONFORPT":
+      case "DCB_CORRECTION":
+      case "REMISSION_FOR_PROPERTY_TAX":
       case "OTHERS":
           dispatch(
               handleField(
