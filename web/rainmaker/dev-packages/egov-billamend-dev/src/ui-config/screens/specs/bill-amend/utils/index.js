@@ -344,17 +344,17 @@ export const submitApplication = async (state, dispatch) => {
   billAmdDetails.documents = documentsPreview && documentsPreview.length > 0 ? documentsPreview : null;
   billAmdDetails.demandDetails = demandDetails;
 
-  if (get(billAmdDetails, "fromDate")) {
-    billAmdDetails.fromDate = convertDateToEpoch(get(billAmdDetails, "fromDate"));
+  if (get(billAmdDetails, "effectiveFrom")) {
+    billAmdDetails.effectiveFrom = convertDateToEpoch(get(billAmdDetails, "effectiveFrom"));
   }
 
-  if (get(billAmdDetails, "toDate")) {
-    billAmdDetails.toDate = convertDateToEpoch(get(billAmdDetails, "toDate"));
+  if (get(billAmdDetails, "effectiveTill")) {
+    billAmdDetails.effectiveTill = convertDateToEpoch(get(billAmdDetails, "effectiveTill"));
   }
 
-  if (get(billAmdDetails, "dateEffectiveFrom")) {
-    billAmdDetails.dateEffectiveFrom = convertDateToEpoch(get(billAmdDetails, "dateEffectiveFrom"));
-  }
+  // if (get(billAmdDetails, "dateEffectiveFrom")) {
+  //   billAmdDetails.dateEffectiveFrom = convertDateToEpoch(get(billAmdDetails, "dateEffectiveFrom"));
+  // }
 
   try {
 
@@ -368,7 +368,7 @@ export const submitApplication = async (state, dispatch) => {
     dispatch(prepareFinalObject("Amendment", response.Amendments[0]));
 
     dispatch(
-      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendments[0].consumerCode}`)
+      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendments[0].consumerCode}&id=${response.Amendments[0].amendmentId}`)
     );
     
   } catch (error) {

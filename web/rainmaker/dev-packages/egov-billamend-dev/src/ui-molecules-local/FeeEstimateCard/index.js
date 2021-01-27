@@ -94,7 +94,7 @@ function FeesEstimateCard(props) {
                             style={{fontWeight:"bold"}}/>
                             </Grid>
                         </Grid>
-                        {estimate.fees.map((fee, key) => {
+                        {estimate.fees && estimate.fees.length > 0 && estimate.fees.map((fee, key) => {
                             let tooltip = fee.info ? (
                                 <Tooltip val="" icon={"info_circle"} /> //{fee.info.labelName}
                             ) : (

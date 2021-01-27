@@ -135,7 +135,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COURT_ORDER_NO_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.courtOderNo"
+                    jsonPath: "Amendment.reasonDocumentNumber"
                 }
             ),
             dateEffectiveFrom: getLabelWithValue(
@@ -144,7 +144,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_DATE_EFFECTIVE_FROM_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.dateEffectiveFrom"
+                    jsonPath: "Amendment.effectiveFrom"
                 }
             ),
             govtNotificationNumber: getLabelWithValue(
@@ -153,7 +153,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_GOVT_NOTIFICATION_NO_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.govtNotificationNumber"
+                    jsonPath: "Amendment.reasonDocumentNumber"
                 }
             ),
             documentNo: getLabelWithValue(
@@ -162,7 +162,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_DOCUMNET_NO_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.documentNo"
+                    jsonPath: "Amendment.reasonDocumentNumber"
                 }
             ),
             fromDate: getLabelWithValue(
@@ -171,7 +171,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COMMON_FROM_DATE_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.fromDate"
+                    jsonPath: "Amendment.effectiveFrom"
                 }
             ),
             toDate: getLabelWithValue(
@@ -180,7 +180,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COMMON_TO_DATE_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.toDate"
+                    jsonPath: "Amendment.effectiveTill"
                 }
             )
         }),

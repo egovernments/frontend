@@ -105,7 +105,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Amendment.courtOderNo",
+            jsonPath: "Amendment.reasonDocumentNumber",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -123,7 +123,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Amendment.dateEffectiveFrom",
+            jsonPath: "Amendment.effectiveFrom",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -143,7 +143,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Amendment.govtNotificationNumber",
+            jsonPath: "Amendment.reasonDocumentNumber",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -161,7 +161,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Amendment.documentNo",
+            jsonPath: "Amendment.reasonDocumentNumber",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -179,7 +179,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Amendment.fromDate",
+            jsonPath: "Amendment.effectiveFrom",
             gridDefination: {
                 xs: 12,
                 sm: 12,
@@ -199,7 +199,7 @@ export const AddDemandRevisionBasis = getCommonCard({
             },
             visible: false,
             required: true,
-            jsonPath: "Amendment.toDate",
+            jsonPath: "Amendment.effectiveTill",
             gridDefination: {
                 xs: 12,
                 sm: 12,
