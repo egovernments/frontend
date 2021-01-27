@@ -15,6 +15,7 @@ import set from "lodash/set";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
 import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getLicenseDetails, validateFields } from "../utils";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 const userTenant = getTenantId();
 const userUUid = get(JSON.parse(getUserInfo()), "uuid");
 export const fetchData = async (
@@ -401,7 +402,7 @@ export const getMdmsData = async () => {
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody
@@ -457,7 +458,7 @@ export const getMdmsDataForOc = async () => {
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

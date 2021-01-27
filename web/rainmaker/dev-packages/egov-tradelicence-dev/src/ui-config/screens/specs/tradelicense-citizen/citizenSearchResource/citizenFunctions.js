@@ -5,6 +5,7 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const getMdmsData = async () => {
   let mdmsBody = {
@@ -21,7 +22,7 @@ const getMdmsData = async () => {
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

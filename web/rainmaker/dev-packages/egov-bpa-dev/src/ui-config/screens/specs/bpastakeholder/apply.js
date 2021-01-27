@@ -37,6 +37,7 @@ import { httpRequest } from "../../../../ui-utils";
 import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const stepsData = [
   {
@@ -183,7 +184,7 @@ export const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

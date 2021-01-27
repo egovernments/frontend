@@ -14,6 +14,7 @@ import { tradeDetails } from "./applyResource/tradeDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 
 export const stepsData = [
@@ -111,7 +112,7 @@ export const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

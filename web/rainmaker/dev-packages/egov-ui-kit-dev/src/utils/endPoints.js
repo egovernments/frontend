@@ -33,7 +33,7 @@ export const FETCH_FILE = {
 
 export const CATEGORY = {
   GET: {
-    URL: "egov-mdms-service/v1/_search",
+    URL: "mdms/v1/_search",
     ACTION: "_search",
   },
 };
@@ -86,7 +86,7 @@ export const CITIZEN = {
 
 export const MDMS = {
   GET: {
-    URL: "/egov-mdms-service/v1/_search",
+    URL: "mdms/v1/_search",
     ACTION: "_search",
   },
 };
@@ -107,20 +107,20 @@ export const SPEC = {
 
 export const CITY = {
   GET: {
-    URL: "/egov-mdms-service/v1/_search",
+    URL: "mdms/v1/_search",
     ACTION: "_search",
   },
 };
 
 export const FLOOR = {
   GET: {
-    URL: "/egov-mdms-service/v1/_search",
+    URL: "mdms/v1/_search",
     ACTION: "_search",
   },
 };
 export const ACTIONMENU = {
   GET: {
-    URL: "/access/v1/actions/mdms/_get",
+    URL: "/access/v1/actions/egov-mdms-service/_get",
     ACTION: "_get",
   },
 };
@@ -225,6 +225,10 @@ export const PAYMENTSEARCH = {
     ACTION: "_search",
   },
 };
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 export const WORKFLOW_SEARCH = {
   POST: {
     URL: "workflow/egov-wf/process/_search",
@@ -246,7 +250,7 @@ export const PROPERTY_SEARCH = {
   POST: {
     URL: "property/property/_search",
     ACTION: "_search",
-  } 
+  }
 }
 export const PROPERTY_ASSESSMENT_SEARCH = {
   POST: {
@@ -310,6 +314,10 @@ export const WATER_CAL_ADHOC = {
     URL: "water-calculator/waterCalculator/_applyAdhocTax",
   }
 }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 export const IDGEN = {
   GET: {
     URL: "/egov-idgen/id/",
@@ -317,6 +325,7 @@ export const IDGEN = {
   },
 };
 
+<<<<<<< Updated upstream
 export const SEWERAGE_SEARCH = {
   POST : {
     URL: "/sewerage/swc/_search",
@@ -344,3 +353,11 @@ export const SEWERAGE_CAL_ADHOC = {
     URL : "sewerage-calculator/sewerageCalculator/_applyAdhocTax",
   }
 }
+=======
+export const MDMS_GET = {
+  GET: {
+    URL: "mdms/v1/_get",
+    ACTION: "_get",
+  },
+};
+>>>>>>> Stashed changes

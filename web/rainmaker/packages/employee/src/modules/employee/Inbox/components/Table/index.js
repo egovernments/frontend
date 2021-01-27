@@ -30,6 +30,8 @@ import React from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getWFConfig } from "./workflowRedirectionConfig";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+
 const actionsStyles = theme => ({
   root: {
     flexShrink: 0,
@@ -160,7 +162,7 @@ class InboxData extends React.Component {
     };
     try {
       const payload = await httpRequest(
-        "/egov-mdms-service/v1/_search",
+        MDMS.URL,
         "_search",
         [],
         mdmsBody

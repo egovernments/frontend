@@ -19,6 +19,7 @@ import { propertySummary } from "./summaryResource/propertySummary";
 import { registrationSummary } from './summaryResource/registrationSummary';
 import { PROPERTY_UPDATE } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -374,7 +375,7 @@ const getPropertyConfigurationMDMSData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

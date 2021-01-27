@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { loginUser, userLoginSuccess } from "./actions";
 import { Redirect } from "react-router-dom";
 import { persistInLocalStorage } from "../utils";
+import { MDMS_GET } from "../../../rainmaker/dev-packages/egov-ui-kit-dev/src/utils/endPoints";
 
 class UserLogin extends Component {
   constructor() {
@@ -39,7 +40,7 @@ class UserLogin extends Component {
   fetchoption() {
     fetch(
       window.location.origin +
-        "/egov-mdms-service/v1/_get?moduleName=tenant&masterName=tenants&tenantId=pb",
+        `${MDMS_GET.URL}?moduleName=tenant&masterName=tenants&tenantId=pb`,
       {
         method: "POST",
         headers: {

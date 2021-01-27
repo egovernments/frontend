@@ -31,6 +31,7 @@ import {
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
 import { USER } from "egov-ui-kit/src/utils/endPoints.js";
+import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
 
 export const getCommonApplyFooter = (position,children) => {
   return {
@@ -388,7 +389,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_get",
+      MDMS_GET.URL,
       "",
       queryObject
     );
@@ -1496,7 +1497,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

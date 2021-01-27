@@ -31,6 +31,7 @@ import {
 } from "../../../../ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
@@ -119,7 +120,7 @@ export const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

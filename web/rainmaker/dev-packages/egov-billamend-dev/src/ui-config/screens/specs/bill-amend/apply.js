@@ -28,6 +28,8 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
@@ -120,7 +122,7 @@ export const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

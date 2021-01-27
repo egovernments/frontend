@@ -30,6 +30,7 @@ import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -401,7 +402,7 @@ const getMDMSData = async (action, state, dispatch) => {
     ]);
     const payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

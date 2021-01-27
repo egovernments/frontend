@@ -31,6 +31,7 @@ import {
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
 import "./index.css";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const stepsData = [
   { labelName: "NOC Details", labelKey: "NOC_COMMON_NOC_DETAILS" },
@@ -169,7 +170,7 @@ const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

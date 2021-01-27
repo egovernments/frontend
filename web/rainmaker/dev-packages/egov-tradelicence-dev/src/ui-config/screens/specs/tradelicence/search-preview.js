@@ -35,6 +35,7 @@ import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer"
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -230,7 +231,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       let payload = null;
       payload = await httpRequest(
         "post",
-        "/egov-mdms-service/v1/_search",
+        MDMS.URL,
         "_search",
         [],
         mdmsBody

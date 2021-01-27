@@ -20,6 +20,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 import { USER } from "egov-ui-kit/src/utils/endPoints.js";
+import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
 
 export const getCommonApplyFooter = children => {
   return {
@@ -474,7 +475,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_get",
+      MDMS_GET.URL,
       "",
       queryObject
     );
@@ -640,7 +641,7 @@ export const getBusinessServiceMdmsData = async (dispatch,  tenantId) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody
@@ -765,7 +766,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

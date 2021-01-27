@@ -10,6 +10,7 @@ import get from "lodash/get";
 import queryString from 'query-string';
 import "./index.css";
 import commonConfig from "config/common";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const styles = (theme) => ({
   root: {
@@ -71,7 +72,7 @@ class WhatsAppCity extends React.Component {
     };
     try {
       const payload = await httpRequest(
-        "/egov-mdms-service/v1/_search",
+        MDMS.URL,
         "_search",
         [],
         mdmsBody

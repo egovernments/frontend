@@ -18,6 +18,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import { requiredDocumentsData, checkValueForNA, getNocSearchResults } from "../utils";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const titlebar = {
   uiFramework: "custom-atoms",
@@ -255,7 +256,7 @@ const getRequiredMdmsDetails = async (state, dispatch, action) => {
   };
   let payload = await httpRequest(
     "post",
-    "/egov-mdms-service/v1/_search",
+    MDMS.URL,
     "_search",
     [],
     mdmsBody

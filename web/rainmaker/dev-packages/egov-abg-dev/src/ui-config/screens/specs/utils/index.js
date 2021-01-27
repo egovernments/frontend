@@ -11,6 +11,7 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import {  prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const getCommonApplyFooter = children => {
   return {
@@ -40,7 +41,7 @@ export const getMdmsData = async  requestBody=> {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       requestBody

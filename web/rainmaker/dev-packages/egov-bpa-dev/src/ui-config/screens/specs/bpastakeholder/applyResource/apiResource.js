@@ -1,11 +1,11 @@
 import { httpRequest } from "../../../../../ui-utils/api";
-
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 // Mdms API call
 export const getMdmsResults = async mdmsBody => {
   try {
     const response = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

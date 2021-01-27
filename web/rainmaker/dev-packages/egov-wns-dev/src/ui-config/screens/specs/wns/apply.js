@@ -35,6 +35,8 @@ import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+
 
 let isMode = isModifyMode();
 export const stepperData = () => {
@@ -153,7 +155,7 @@ export const getMdmsData = async dispatch => {
   };
   try {
     let payload = null;
-    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    payload = await httpRequest("post", MDMS.URL, "_search", [], mdmsBody);
     if (payload.MdmsRes['ws-services-calculation'].PipeSize !== undefined && payload.MdmsRes['ws-services-calculation'].PipeSize.length > 0) {
       let pipeSize = [];
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
