@@ -1,4 +1,6 @@
-import get from "lodash/get";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
@@ -7,9 +9,8 @@ import {
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
-import { httpRequest } from "../../../../../ui-utils/api"; 
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import get from "lodash/get";
+import { httpRequest } from "../../../../../ui-utils/api";
 
 export const getCommonApplyFooter = (children) => {
   return {
@@ -23,7 +24,7 @@ export const getCommonApplyFooter = (children) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  const demandRevisionBasisValue = get( state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
+  const demandRevisionBasisValue = get(state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
   const documentObj = get(
     state.screenConfiguration.preparedFinalObject,
     "applyScreenMdmsData.BillAmendment.documentObj"
@@ -62,23 +63,23 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   });
 
   documents.forEach(doc => {
-      let card = {};
-      card["name"] = doc.documentType;
-      card["code"] = doc.documentType;
-      card["required"] = doc.required ? true : false;
-      if (doc.dropdownData) {
-        let dropdown = {};
-        dropdown.label = "BILL_SELECT_LABEL";
-        dropdown.required = doc.required;
-        dropdown.menu = doc.dropdownData.filter(item => {
-          return item.active;
-        });
-        dropdown.menu = dropdown.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
-        });
-        card["dropdown"] = dropdown;
-      }
-      tempDoc[doc.documentType].cards.push(card);
+    let card = {};
+    card["name"] = doc.documentType;
+    card["code"] = doc.documentType;
+    card["required"] = doc.required ? true : false;
+    if (doc.dropdownData) {
+      let dropdown = {};
+      dropdown.label = "BILL_SELECT_LABEL";
+      dropdown.required = doc.required;
+      dropdown.menu = doc.dropdownData.filter(item => {
+        return item.active;
+      });
+      dropdown.menu = dropdown.menu.map(item => {
+        return { code: item.code, label: getTransformedLocale(item.code) };
+      });
+      card["dropdown"] = dropdown;
+    }
+    tempDoc[doc.documentType].cards.push(card);
   });
 
   Object.keys(tempDoc).forEach(key => {
@@ -143,176 +144,176 @@ export const validateFields = (
 
 export const onDemandRevisionBasis = async (state, dispatch) => {
   let demandRevisionBasis = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Amendment.amendmentReason", ""
+    state.screenConfiguration.preparedFinalObject,
+    "Amendment.amendmentReason", ""
   );
-  
+
   switch (demandRevisionBasis) {
-      case "COURT_CASE_SETTLEMENT":
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                  "visible",
-                  true
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                  "visible",
-                  true
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
-                  "visible",
-                  false
-              )
-          );
-          break;
-      case "ARREAR_WRITE_OFF":
-      case "ONE_TIME_SETTLEMENT":
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                  "visible",
-                  true
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
-                  "visible",
-                  true
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
-                  "visible",
-                  true
-              )
-          );
-          break;
-      case "DCB_CORRECTION":
-      case "REMISSION_FOR_PROPERTY_TAX":
-      case "OTHERS":
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
-                  "visible",
-                  false
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
-                  "visible",
-                  true
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
-                  "visible",
-                  true
-              )
-          );
-          dispatch(
-              handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
-                  "visible",
-                  true
-              )
-          );
-          break;
-      default:
-          
-          break;
+    case "COURT_CASE_SETTLEMENT":
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
+          "visible",
+          false
+        )
+      );
+      break;
+    case "ARREAR_WRITE_OFF":
+    case "ONE_TIME_SETTLEMENT":
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
+          "visible",
+          true
+        )
+      );
+      break;
+    case "DCB_CORRECTION":
+    case "REMISSION_FOR_PROPERTY_TAX":
+    case "OTHERS":
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate",
+          "visible",
+          true
+        )
+      );
+      break;
+    default:
+
+      break;
   }
 }
 
 export const submitApplication = async (state, dispatch) => {
 
-  let billAmdDetails = get (state.screenConfiguration.preparedFinalObject, "Amendment", {});
-  let fetchBillDetails = get (state.screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
-  let amountType = get (state.screenConfiguration.preparedFinalObject, "BILL.AMOUNTTYPE", "");
-  let reduxDocuments = get( state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+  let billAmdDetails = get(state.screenConfiguration.preparedFinalObject, "Amendment", {});
+  let fetchBillDetails = get(state.screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
+  let amountType = get(state.screenConfiguration.preparedFinalObject, "BILL.AMOUNTTYPE", "");
+  let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
   let documentsPreview = [], demandDetails = [];;
   jp.query(reduxDocuments, "$.*").forEach(doc => {
     if (doc.documents && doc.documents.length > 0 && doc.dropdown) {
@@ -328,12 +329,12 @@ export const submitApplication = async (state, dispatch) => {
     }
   });
 
-  fetchBillDetails.map( data => {
+  fetchBillDetails.map(data => {
     let obj = {};
     obj.taxHeadMasterCode = data.taxHeadCode;
     obj.tenantId = data.tenantId;
     obj.collectionAmount = data.collectionAmount;
-    if(amountType == "reducedAmount") {
+    if (amountType == "reducedAmount") {
       obj.taxAmount = data.reducedAmountValue ? -data.reducedAmountValue : 0;
     } else {
       obj.taxAmount = data.additionalAmountValue ? data.additionalAmountValue : 0;
@@ -363,16 +364,50 @@ export const submitApplication = async (state, dispatch) => {
       "billing-service/amendment/_create",
       "",
       [],
-      { Amendment : billAmdDetails }
+      { Amendment: billAmdDetails }
     );
     dispatch(prepareFinalObject("Amendment", response.Amendments[0]));
 
     dispatch(
-      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendments[0].consumerCode}&id=${response.Amendments[0].amendmentId}`)
+      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendments[0].amendmentId}&consumerCode=${response.Amendments[0].consumerCode}&tenantId=${response.Amendments[0].tenantId}`)
     );
-    
+
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
     return { status: "failure", message: error };
   }
 };
+
+
+
+
+export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'download') => {
+  const queryStr = [
+    { key: "key", value: 'bill-amendment-summary' },
+    { key: "tenantId", value: tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+
+
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Amendments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+
+}
