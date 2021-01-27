@@ -287,3 +287,26 @@ export const WATER_UPDATE  = {
     URL: "/water/wc/_update",
   }
 }
+export const WATER_CAL_ESTIMATE = {
+  POST: {
+    URL: "water-calculator/waterCalculator/_estimate",
+    ACTION: "_estimate",
+  }
+}
+export const WATER_CAL_SEARCH = {
+  POST: {
+    URL : "/water-calculator/meterConnection/_search",
+    ACTION : "_search",
+  }
+}
+export const WATER_CAL_CREATE = {
+  POST: {
+    URL : "/water-calculator/meterConnection/_search",
+    ACTION : "_search",
+  }
+}
+export const WATER_CAL_ADHOC = {
+  POST: {
+    URL: "water-calculator/waterCalculator/_applyAdhocTax",
+  }
+}

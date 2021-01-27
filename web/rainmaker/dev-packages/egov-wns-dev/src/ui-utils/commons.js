@@ -12,6 +12,7 @@ import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { WATER_SEARCH, WATER_CREATE, WATER_UPDATE } from "egov-ui-kit/utils/endPoints";
+import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -343,8 +344,8 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "/ws-calculator/meterConnection/_search",
-            "_search",
+            WATER_CAL_SEARCH.POST.URL,
+            WATER_CAL_SEARCH.POST.ACTION,
             queryObject
         );
         dispatch(toggleSpinner());
@@ -1399,7 +1400,7 @@ export const createMeterReading = async (dispatch, body) => {
     try {
         const response = await httpRequest(
             "post",
-            "/ws-calculator/meterConnection/_create",
+            WATER_CAL_CREATE.POST.URL,
             "", [], { meterReadings: body }
         );
         if (response && response !== undefined && response !== null) {
@@ -1788,8 +1789,8 @@ export const waterEstimateCalculation = async (queryObject, dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "ws-calculator/waterCalculator/_estimate",
-            "_estimate",
+            WATER_CAL_ESTIMATE.POST.URL,
+            WATER_CAL_ESTIMATE.POST.ACTION,
             [],
 
             {
@@ -1859,7 +1860,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
                 wnsConnection[0].property.rainWaterHarvesting = false
             }
         }
-        apiUrl = "ws-calculator/waterCalculator/_estimate";
+        apiUrl = WATER_CAL_ESTIMATE.POST.URL;
         appService = "ws-applicationwater";
         queryObjectForEst = [{
             applicationNo: appNo,
