@@ -163,6 +163,24 @@ export const reviewNumberOfToilets = getLabelWithValueForModifiedLabel(
   }
 );
 
+export const reviewDrainageSize = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Drainage Size (in inches)",
+    labelKey: "WS_SERV_DETAIL_DRAINAGE_SIZE"
+  },
+  {
+    jsonPath: "applyScreen.drainageSize",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.drainageSize",
+    callBack: handleNA
+  }
+);
+
 export const reviewPlumberProvidedBy = getLabelWithValueForModifiedLabel(
   {
     labelName: "Plumber Provided By",
@@ -410,7 +428,8 @@ const connectionDetails = getCommonContainer({
   reviewPipeSize,
   // reviewBillingType,
   reviewWaterClosets,
-  reviewNumberOfToilets
+  reviewNumberOfToilets,
+  reviewDrainageSize
 });
 
 const connectionChargeDetails = getCommonContainer({

@@ -121,6 +121,16 @@ export const propertyAssemblySummary = getCommonGrayCard({
           return finalValue ? finalValue : "NA";
         }
       }
+    ),
+    noOfFloors: getLabelWithValue(
+      {
+        labelName: "No of Floors",
+        labelKey: "PT_COMMON_NO_OF_FLOORS"
+      },
+      {
+        jsonPath: "Property.noOfFloors",
+        callBack: checkValueForNA
+      }
     )
   })
 });

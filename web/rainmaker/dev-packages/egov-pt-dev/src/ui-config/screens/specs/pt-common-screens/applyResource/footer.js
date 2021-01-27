@@ -19,7 +19,7 @@ const callBackForApply = async (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.Property"
   );
-
+  //console.log("propertyPayload here--",propertyPayload);
   if(window.location.href.includes("pt-common-screens/summary")) {
     let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
     set(propertyPayload, "workflow", isFromWorkflowDetails);
@@ -57,6 +57,7 @@ const callBackForApply = async (state, dispatch) => {
           )
         }
   } else {
+  //console.log("in else")
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
 
   let isAssemblyDetailsValid = validateFields(
@@ -86,6 +87,13 @@ const callBackForApply = async (state, dispatch) => {
   );
   let isAssemblyDetailstotalLandArea = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalLandArea",
+    state,
+    dispatch,
+    screenKey
+  );
+
+  let isAssemblyDetailsnoOfFloors = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFloors",
     state,
     dispatch,
     screenKey
@@ -170,6 +178,7 @@ const callBackForApply = async (state, dispatch) => {
     isAssemblyDetailsValid &&
     isAssemblyDetailsPropType &&
     isAssemblyDetailsConstructedArea &&
+    isAssemblyDetailsnoOfFloors &&
     isAssemblyDetailstotalLandArea &&
     isAssemblyDetailsusageType &&
     isPropertyLocationDetailsValid &&
@@ -249,7 +258,10 @@ const callBackForApply = async (state, dispatch) => {
     } else {
       set(propertyPayload, "source", "MUNICIPAL_RECORDS");
     }
+   // console.log("nooffloors---",propertyPayload.noOfFloor);
+    if(propertyPayload.noOfFloor==undefined)
     set(propertyPayload, "noOfFloors", 1);
+   // console.log("nooffloors after---",propertyPayload.noOfFloors);
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
@@ -268,6 +280,7 @@ const callBackForApply = async (state, dispatch) => {
       }
       propertyPayload.creationReason = 'CREATE';
       let payload = null;
+      //console.log("propertyPayload at create--",propertyPayload);
       payload = await httpRequest(
         "post",
         "/property-services/property/_create",

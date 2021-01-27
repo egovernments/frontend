@@ -680,6 +680,17 @@ export const taskNoOfToilets = getLabelWithValueForModifiedLabel(
   { jsonPath: "applyScreenOld.proposedToilets", callBack: handleNA },
 );
 
+export const taskDrainageSizeProposed = getLabelWithValueForModifiedLabel(
+  {
+    labelKey: "WS_TASK_DETAILS_CONN_DETAIL_DRAINAGE_SIZE_PROPOSED"
+  },
+  { jsonPath: "applyScreen.proposedDrainageSize", callBack: handleNA },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  { jsonPath: "applyScreen.proposedDrainageSize", callBack: handleNA },
+)
+
 const getConnectionDetails = () => {
   return getCommonContainer({
     connectionDetailsHeader,
@@ -693,7 +704,8 @@ export const renderService = () => {
     taskNumberOfTapsPropsed,
     taskPipeSizeProposed,
     taskNoOfClosets,
-    taskNoOfToilets
+    taskNoOfToilets,
+    taskDrainageSizeProposed
   });
 }
 
