@@ -127,7 +127,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("Amendment.tenantId", tenantId));
     dispatch(prepareFinalObject("Amendment.businessService", businessService));
     dispatch(prepareFinalObject("BILL.AMOUNTTYPE", "reducedAmount"));
-    // dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
+    dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
 
     dispatch(
       handleField(
