@@ -4,6 +4,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get"
 import store from "redux/store";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     
@@ -24,7 +25,7 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

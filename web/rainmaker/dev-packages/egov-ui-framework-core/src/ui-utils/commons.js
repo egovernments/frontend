@@ -10,14 +10,10 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
-<<<<<<< Updated upstream
 import { FETCH_FILE } from "egov-ui-kit/utils/endPoints";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
-=======
 import { USER } from "egov-ui-kit/src/utils/endPoints.js";
-
->>>>>>> Stashed changes
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -714,7 +710,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody
@@ -829,7 +825,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

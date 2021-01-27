@@ -13,6 +13,7 @@ import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -169,7 +170,7 @@ const getMdmsData = async () => {
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

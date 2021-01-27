@@ -12,6 +12,7 @@ import {
 import { httpRequest } from "../../../../ui-utils/api";
 import get from "lodash/get";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const header = getCommonHeader({
   labelName: "NOC_APPLICATION_HEADER",
@@ -22,7 +23,7 @@ export const getNOCMdmsData = async (action, state, dispatch, mdmsBody) => {
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

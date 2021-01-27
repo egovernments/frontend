@@ -32,6 +32,8 @@ import { docdata } from "./applyResource/docData";
 import { getFetchBill, procedToNextStep, cancelPopUp } from "../utils";
 import "./index.scss";
 
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "BILL_STEPPER_DOCUMENTS_HEADER" },
@@ -115,7 +117,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
       value: businessService
     }
   ]);
-  
+
   if(fetBill && fetBill.Bill && fetBill && fetBill.Bill.length > 0) {
     let billDetails = get(fetBill, "Bill[0].billDetails[0].billAccountDetails",[]);
     billDetails.map(bill => {
@@ -180,7 +182,7 @@ export const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody
@@ -315,7 +317,7 @@ const screenConfig = {
                 labelName: "Confirm change",
                 labelKey: "BILL_CONFIRM_CHANGE_HEADER"
               }),
-            }) 
+            })
           }
         },
         dialogContent: {

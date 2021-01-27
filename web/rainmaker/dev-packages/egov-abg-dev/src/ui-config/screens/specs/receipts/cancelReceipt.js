@@ -7,6 +7,7 @@ import { set } from "lodash";
 import get from "lodash/get";
 import { cancelReceiptDetailsCard } from "./cancelReceiptResource/cancelReceiptDetails";
 import { cancelReceiptFooter } from "./cancelReceiptResource/cancelReceiptFooter";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -49,7 +50,7 @@ const getData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       requestBody

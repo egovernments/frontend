@@ -13,6 +13,7 @@ import { createEmployee, getAdminRole, showCityPicker } from "../utils";
 import { cityPicker } from "./createResource/cityPicker";
 import { searchForm } from "./searchResource/searchForm";
 import { searchResults } from "./searchResource/searchResults";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -76,7 +77,7 @@ const getMDMSData = async (action, state, dispatch) => {
   try {
     const payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

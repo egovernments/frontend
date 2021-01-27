@@ -7,6 +7,7 @@ import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 class PaymentRedirect extends Component {
   getBusinessServiceMdmsData = async (tenantId) => {
@@ -30,7 +31,7 @@ class PaymentRedirect extends Component {
       let payload = null;
       payload = await httpRequest(
         "post",
-        "/egov-mdms-service/v1/_search",
+        MDMS.URL,
         "_search",
         [],
         mdmsBody

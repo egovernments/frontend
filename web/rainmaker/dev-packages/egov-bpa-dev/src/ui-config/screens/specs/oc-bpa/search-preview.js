@@ -50,6 +50,7 @@ import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "../egov-bpa/noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
 export const ifUserRoleExists = role => {
@@ -260,7 +261,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
       value: applicationNumber
     }
   ];
-  let paymentPayload = {}; 
+  let paymentPayload = {};
   paymentPayload.Payments = [];
   let businessServicesList = ["BPA.NC_OC_APP_FEE", "BPA.NC_OC_SAN_FEE" ];
     for(let fee = 0; fee < businessServicesList.length; fee++ ) {
@@ -374,7 +375,7 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
   };
   let payload = await httpRequest(
     "post",
-    "/egov-mdms-service/v1/_search",
+    MDMS.URL,
     "_search",
     [],
     mdmsBody

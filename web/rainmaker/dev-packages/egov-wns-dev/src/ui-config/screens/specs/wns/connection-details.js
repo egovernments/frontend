@@ -30,6 +30,8 @@ import {
 } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -399,7 +401,7 @@ const getMDMSData = async (action, state, dispatch) => {
     ]);
     const payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

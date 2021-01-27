@@ -14,6 +14,7 @@ import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { setServiceCategory } from "../../utils";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const tenantId = getTenantId();
 
@@ -126,7 +127,7 @@ export const newCollectionDetailsCard = getCommonCard(
               let payload = null;
               payload = await httpRequest(
                 "post",
-                "/egov-mdms-service/v1/_search",
+                MDMS.URL,
                 "_search",
                 [],
                 requestBody

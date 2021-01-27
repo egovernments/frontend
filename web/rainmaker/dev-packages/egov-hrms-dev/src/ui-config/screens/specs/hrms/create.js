@@ -19,6 +19,7 @@ import { otherDetails } from "./createResource/other-details";
 import { serviceDetails } from "./createResource/service-details";
 import { employeeReviewDetails } from "./viewResource/employee-review";
 import { getEmployeeData } from "./viewResource/functions";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 
 
@@ -181,7 +182,7 @@ const getMdmsData = async (state, dispatch, tenantId) => {
   try {
     const response = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

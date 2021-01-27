@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import commonConfig from "config/common";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const styles = (theme) => ({
   root: {
@@ -76,7 +77,7 @@ class WhatsAppCity extends React.Component {
     };
     try {
       const payload = await httpRequest(
-        "/egov-mdms-service/v1/_search",
+        MDMS.URL,
         "_search",
         [],
         mdmsBody
@@ -100,7 +101,7 @@ class WhatsAppCity extends React.Component {
 
 
     const citydata = await this.getMDMSData(stateId);
-  
+
     const citylistCodeModule = get(citydata, "MdmsRes.tenant.citymodule", []);
     const citylistCode=citylistCodeModule.filter(item=>item.module==="PGR.WHATSAPP")[0].tenants
     const citylist = citylistCode.map((item) => {

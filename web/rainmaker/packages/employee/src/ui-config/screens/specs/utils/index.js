@@ -12,6 +12,7 @@ import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 import commonConfig from "config/common.js";
 import cloneDeep from "lodash/cloneDeep";
 import {EVENTS_CREATE, EVENTS_UPDATE_MAIN, NOTIFICATIONS} from "egov-ui-kit/utils/endPoints";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const getTodaysDateInYMD = () => {
   let date = new Date();
@@ -263,7 +264,7 @@ export const getMdmsData = async (action, state, dispatch) => {
   };
   try {
     let payload = null;
-    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    payload = await httpRequest("post", MDMS.URL, "_search", [], mdmsBody);
     const localities = get(state.screenConfiguration, "preparedFinalObject.applyScreenMdmsData.tenant.localities", []);
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {

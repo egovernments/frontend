@@ -15,6 +15,7 @@ import queryString from 'query-string';
 import React from "react";
 import { connect } from "react-redux";
 // import "./index.css";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 
 const styles = (theme) => ({
@@ -97,7 +98,7 @@ class WhatsAppLocality extends React.Component {
     };
     try {
       const payload = await httpRequest(
-        "/egov-mdms-service/v1/_search",
+        MDMS.URL,
         "_search",
         [],
         mdmsBody

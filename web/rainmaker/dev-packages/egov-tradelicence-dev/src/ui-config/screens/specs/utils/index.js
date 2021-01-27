@@ -15,6 +15,7 @@ import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { USER } from "egov-ui-kit/src/utils/endPoints.js";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const getCommonApplyFooter = children => {
   return {
@@ -652,7 +653,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_search",
+      MDMS.URL,
       "",
       [],
       queryObject

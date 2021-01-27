@@ -13,6 +13,7 @@ import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -45,7 +46,7 @@ const getMDMSData = async (action, state, dispatch) => {
   try {
     const payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

@@ -5,6 +5,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { USER } from "egov-ui-kit/src/utils/endPoints.js"
+
 import {
   getFileUrl,
   getFileUrlFromAPI, getLocaleLabels, getQueryArg,
@@ -32,6 +33,7 @@ import "./index.css";
 import {FETCH_FILE} from "egov-ui-kit/utils/endPoints";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
+import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
 
 export const getCommonApplyFooter = children => {
   return {
@@ -657,7 +659,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_get",
+      MDMS_GET.URL,
       "",
       queryObject
     );
@@ -3123,7 +3125,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
 //   try {
 //     const response = await httpRequest(
 //       "post",
-//       "egov-mdms-service/v1/_get",
+//       MDMS_GET.URL,
 //       "",
 //       queryObject
 //     );
@@ -3353,7 +3355,7 @@ export const resetFields = (state, dispatch) => {
 //     let payload = null;
 //     // payload = await httpRequest(
 //     //   "post",
-//     //   "/egov-mdms-service/v1/_search",
+//     //   MDMS.URL,
 //     //   "_search",
 //     //   [],
 //     //   mdmsBody
@@ -3755,7 +3757,7 @@ export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody
@@ -3898,7 +3900,7 @@ const tenantData = async (action, state, dispatch) => {
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody
@@ -3931,7 +3933,7 @@ export const getMdmsDataForBpa = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+     MDMS.URL,
       "",
       queryObject
     );

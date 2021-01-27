@@ -50,6 +50,7 @@ import { nocDetailsSearch } from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -336,8 +337,8 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
       value: applicationNumber
     }
   ];
-  
-  let paymentPayload = {}; 
+
+  let paymentPayload = {};
   paymentPayload.Payments = [];
   if(riskType === "LOW") {
     let lowAppPaymentPayload = await httpRequest(
@@ -484,7 +485,7 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
   };
   let payload = await httpRequest(
     "post",
-    "/egov-mdms-service/v1/_search",
+    MDMS.URL,
     "_search",
     [],
     mdmsBody

@@ -14,6 +14,7 @@ import { footer } from "./applyResource/footer";
 import { propertyAssemblyDetails } from "./applyResourceMutation/propertyAssemblyDetails";
 import { propertyLocationDetails } from "./applyResourceMutation/propertyLocationDetails";
 import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails';
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 
 export const header = getCommonContainer({
@@ -57,7 +58,7 @@ const getMDMSPropertyData = async (dispatch) => {
   }
   try {
     let payload = null;
-    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    payload = await httpRequest("post", MDMS.URL, "_search", [], mdmsBody);
     let PropertyType = []; let UsageType = [];
     payload.MdmsRes.PropertyTax.PropertyType.filter(item => {
       if (item.name != "Built Up") {
@@ -156,7 +157,7 @@ const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

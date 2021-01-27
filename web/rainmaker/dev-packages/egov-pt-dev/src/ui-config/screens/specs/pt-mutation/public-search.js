@@ -11,6 +11,8 @@ import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
 import { searchPropertyDetails } from "./publicSearchResource/search-resources";
 import { searchPropertyTable } from "./publicSearchResource/search-table";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -37,7 +39,7 @@ const getMDMSData = async dispatch => {
   try {
     const payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

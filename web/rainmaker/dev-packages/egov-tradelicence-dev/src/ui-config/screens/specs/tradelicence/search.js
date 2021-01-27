@@ -12,6 +12,7 @@ import { pendingApprovals } from "./searchResource/pendingApprovals";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
 import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -35,7 +36,7 @@ const getMdmsData = async (dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody

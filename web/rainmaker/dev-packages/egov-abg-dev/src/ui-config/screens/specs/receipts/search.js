@@ -9,6 +9,7 @@ import { setServiceCategory } from "../utils";
 import "./index.css";
 import { searchResults } from "./universalCollectionResources/searchResults";
 import { resetFields, UCSearchCard } from "./universalCollectionResources/ucSearch";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints"
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -46,7 +47,7 @@ const getMDMSData = async (action, state, dispatch) => {
   try {
     const payload = await httpRequest(
       "post",
-      "/egov-mdms-service/v1/_search",
+      MDMS.URL,
       "_search",
       [],
       mdmsBody
