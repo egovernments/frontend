@@ -1,10 +1,10 @@
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getStatusKey } from "egov-ui-framework/ui-utils/commons";
 import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
 import React from "react";
 import {
   getEpochForDate, sortByEpoch
 } from "../../utils";
-
 
 const getConnectionDetails = data => {
   if (data.rowData[0] == "WS" || data.rowData[0] == "SW") {
@@ -82,9 +82,13 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: value => (
-            <span>
-              {getLocaleLabels(value.toUpperCase(), value.toUpperCase())}
-            </span>
+            <LabelContainer
+              style={
+                value === "ACTIVE" ? { color: "green" } : { color: "red" }
+              }
+              labelKey={getStatusKey(value).labelKey}
+              labelName={getStatusKey(value).labelName}
+            />
           )
         }
       },
