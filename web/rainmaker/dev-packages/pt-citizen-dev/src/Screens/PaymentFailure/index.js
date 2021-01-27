@@ -12,6 +12,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import AcknowledgementCard from 'egov-ui-kit/common/propertyTax/AcknowledgementCard';
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import ActionFooter from "egov-ui-kit/common/common/ActionFooter";
+import { PROPERTYTAX_CAL_GETBILL } from "egov-ui-kit/utils/endPoints";
 
 const buttons = {
   button2: "Retry"
@@ -91,7 +92,7 @@ class PaymentFailure extends Component {
     ];
     try {
       // const payload = await httpRequest(
-      //   "pt-calculator-v2/propertytax/_getbill",
+      //   PROPERTYTAX_CAL.GETBILL.POST.URL,
       //   "_create",
       //   queryObj,
       //   {}

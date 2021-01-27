@@ -8,7 +8,7 @@ import { MDMS } from "../../../utils/endPoints";
 import Label from "../../../utils/translationNode";
 import { httpRequest } from "../../api";
 import { convertUnitsToSqFt, findCorrectDateObj, findCorrectDateObjPenaltyIntrest, getFinancialYearFromQuery, getQueryValue } from "../../PTCommon";
-
+import { PROPERTYTAX_CAL_SEARCH } from "egov-ui-kit/utils/endPoints";
 
 export const updateDraftinLocalStorage = async (draftInfo, assessmentNumber, self) => {
   // localStorageSet("draftId", draftInfo.id);
@@ -397,9 +397,9 @@ export const getCalculationScreenData = async (billingSlabs, tenantId, self) => 
     },
     { mappedIds: [], idsArray: [] }
   );
-  ("pt-calculator-v2/billingslab/_search");
+  (PROPERTYTAX_CAL_SEARCH.GET.URL);
   try {
-    var billingSlabResponse = await httpRequest("pt-calculator-v2/billingslab/_search", "_search", [
+    var billingSlabResponse = await httpRequest(PROPERTYTAX_CAL_SEARCH.GET.URL, PROPERTYTAX_CAL_SEARCH.GET.ACTION, [
       { key: "id", value: mapIdWithIndex.idsArray.join(",") },
       { key: "tenantId", value: tenantId },
     ]);

@@ -224,10 +224,6 @@ export const PAYMENTSEARCH = {
     ACTION: "_search",
   },
 };
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 export const WORKFLOW_SEARCH = {
   POST: {
     URL: "workflow/egov-wf/process/_search",
@@ -313,10 +309,6 @@ export const WATER_CAL_ADHOC = {
     URL: "water-calculator/waterCalculator/_applyAdhocTax",
   }
 }
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 export const IDGEN = {
   GET: {
     URL: "/egov-idgen/id/",
@@ -324,7 +316,6 @@ export const IDGEN = {
   },
 };
 
-<<<<<<< Updated upstream
 export const SEWERAGE_SEARCH = {
   POST : {
     URL: "/sewerage/swc/_search",
@@ -352,11 +343,27 @@ export const SEWERAGE_CAL_ADHOC = {
     URL : "sewerage-calculator/sewerageCalculator/_applyAdhocTax",
   }
 }
-=======
 export const MDMS_GET = {
   GET: {
     URL: "mdms/v1/_get",
     ACTION: "_get",
   },
 };
->>>>>>> Stashed changes
+export const PROPERTYTAX_CAL_SEARCH = {
+  GET : {
+    URL : "propertytax-calculator/billingslab/_search",
+    ACTION : "_search",
+  }
+}
+export const PROPERTYTAX_CAL_GETBILL = {
+  POST : {
+    URL : "propertytax-calculator/propertytax/_getbill",
+    ACTION : "_create",
+  }
+}
+export const PROPERTYTAX_CAL_ESTIMATE = {
+  POST : {
+    URL : "propertytax-calculator/propertytax/v2/_estimate",
+    ACTION : "_estimate",
+  }
+}

@@ -38,6 +38,7 @@ import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
 import { PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
+import { PROPERTYTAX_CAL_GETBILL, PROPERTYTAX_CAL_ESTIMATE } from "egov-ui-kit/utils/endPoints";
 class FormWizard extends Component {
   state = {
     dialogueOpen: false,
@@ -1043,8 +1044,8 @@ class FormWizard extends Component {
 
     try {
       const billResponse = await httpRequest(
-        "pt-calculator-v2/propertytax/_getbill",
-        "_create",
+        PROPERTYTAX_CAL_GETBILL.POST.URL,
+        PROPERTYTAX_CAL_GETBILL.POST.ACTION,
         queryObj,
         {}
       );
@@ -1304,8 +1305,8 @@ class FormWizard extends Component {
         const financeYear = { financialYear: financialYearFromQuery };
         const assessmentPayload = createAssessmentPayload(prepareFormData.Properties[0], financeYear);
         let estimateResponse = await httpRequest(
-          "pt-calculator-v2/propertytax/v2/_estimate",
-          "_estimate",
+          PROPERTYTAX_CAL_ESTIMATE.POST.URL,
+          PROPERTYTAX_CAL_ESTIMATE.POST.ACTION,
           [],
           {
             Assessment: assessmentPayload
