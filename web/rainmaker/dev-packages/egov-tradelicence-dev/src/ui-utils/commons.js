@@ -22,7 +22,7 @@ import {
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const updateTradeDetails = async requestBody => {
   try {

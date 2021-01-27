@@ -28,7 +28,7 @@ import  summary from "./applyResource/summary"
 import { AddDemandRevisionBasis,AddAdjustmentAmount } from "./applyResource/amountDetails";
 import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },

@@ -13,7 +13,7 @@ import find from "lodash/find";
 import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../ui-utils";
 import "./index.css"
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = hasButton && hasButton === "false" ? false : true;

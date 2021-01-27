@@ -31,7 +31,7 @@ import {
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
 import "./index.css";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const stepsData = [
   { labelName: "NOC Details", labelKey: "NOC_COMMON_NOC_DETAILS" },

@@ -18,7 +18,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import { requiredDocumentsData, checkValueForNA, getNocSearchResults } from "../utils";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const titlebar = {
   uiFramework: "custom-atoms",

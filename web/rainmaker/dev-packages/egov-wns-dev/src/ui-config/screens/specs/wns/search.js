@@ -14,7 +14,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [

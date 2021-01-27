@@ -10,7 +10,7 @@ import get from "lodash/get";
 import queryString from 'query-string';
 import "./index.css";
 import commonConfig from "config/common";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const styles = (theme) => ({
   root: {

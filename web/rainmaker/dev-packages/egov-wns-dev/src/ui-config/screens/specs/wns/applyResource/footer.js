@@ -25,7 +25,7 @@ import {
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import commonConfig from "config/common.js";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();

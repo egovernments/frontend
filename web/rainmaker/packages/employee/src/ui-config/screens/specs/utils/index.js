@@ -12,7 +12,7 @@ import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 import commonConfig from "config/common.js";
 import cloneDeep from "lodash/cloneDeep";
 import {EVENTS_CREATE, EVENTS_UPDATE_MAIN, NOTIFICATIONS} from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const getTodaysDateInYMD = () => {
   let date = new Date();

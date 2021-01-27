@@ -16,8 +16,7 @@ import { jurisdictionDetails } from "./createResource/jurisdiction-details";
 import { otherDetails } from "./createResource/other-details";
 import { serviceDetails } from "./createResource/service-details";
 import { getEmployeeData } from "./viewResource/functions";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
-
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },

@@ -8,7 +8,7 @@ import set from "lodash/set";
 import { setServiceCategory } from "../utils";
 import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const header = getCommonHeader({
   labelName: "New Collection",

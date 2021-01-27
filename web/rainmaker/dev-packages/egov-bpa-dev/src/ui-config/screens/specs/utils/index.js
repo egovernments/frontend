@@ -32,7 +32,7 @@ import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/
 import "./index.css";
 import {FETCH_FILE} from "egov-ui-kit/utils/endPoints";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {

@@ -14,7 +14,7 @@ import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {

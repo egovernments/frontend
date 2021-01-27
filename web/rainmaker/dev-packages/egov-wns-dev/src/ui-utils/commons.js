@@ -15,11 +15,9 @@ import { WATER_SEARCH, WATER_CREATE, WATER_UPDATE } from "egov-ui-kit/utils/endP
 <<<<<<< Updated upstream
 import { SEWERAGE_UPDATE, SEWERAGE_CREATE, SEWERAGE_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE, SEWERAGE_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
-=======
 import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
->>>>>>> Stashed changes
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
