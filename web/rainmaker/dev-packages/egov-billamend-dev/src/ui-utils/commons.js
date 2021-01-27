@@ -88,7 +88,7 @@ export const getImageUrlByFile = file => {
 export const getBillAmendSearchResult = async (queryObject, dispatch) => {
   try {
     let qo = {
-      "amendmentId": '3edf1f2d-761e-4e8b-a990-505b648cf5eb'
+      // "amendmentId": '3edf1f2d-761e-4e8b-a990-505b648cf5eb'
     }
     queryObject.map(query =>
       qo[query.key] = query.value
@@ -135,11 +135,19 @@ export const searchBill = async (queryObject, dispatch) => {
       }, {
         "key": 'businessService',
         "value": newQuery['businessService']
-      }, {
-        "key": 'consumerCode',
-        "value": newQuery['consumerCode']
       }
     ];
+    if (newQuery['mobileNumber'] != '' && !newQuery['consumerCode']) {
+      newQueryObj.push({
+        "key": 'mobileNumber',
+        "value": newQuery['mobileNumber']
+      })
+    } else {
+      newQueryObj.push({
+        "key": 'consumerCode',
+        "value": newQuery['consumerCode']
+      })
+    }
 
     const response = await httpRequest(
       "post",

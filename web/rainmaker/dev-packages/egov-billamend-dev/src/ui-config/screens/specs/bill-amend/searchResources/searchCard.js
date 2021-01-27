@@ -63,7 +63,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId, businessService: "", mobileNumber: "", billNo: "", consumerCode: "" }));
+  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId, businessService: "", mobileNumber: "", amendmentId: "", consumerCode: "" }));
 };
 
 export const searchCard = getCommonCard({
@@ -186,7 +186,7 @@ export const searchCard = getCommonCard({
         position: "start"
       },
       required: false,
-      disabled: true,
+      // disabled: true,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
       jsonPath: "searchScreenBillAmend.mobileNumber"
@@ -202,7 +202,7 @@ export const searchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreenBillAmend.billNo",
+      jsonPath: "searchScreenBillAmend.amendmentId",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -219,6 +219,7 @@ export const searchCard = getCommonCard({
       },
       required: false,
       visible: true,
+      pattern: /^[a-zA-Z0-9-/]*$/i,
       jsonPath: "searchScreenBillAmend.consumerCode",
       gridDefination: {
         xs: 12,

@@ -23,7 +23,7 @@ export const searchApiCall = async (state, dispatch) => {
     "search"
   );
   if (isSearchBoxFirstRowValid) {
-    isSearchBoxFirstRowValid = get(searchScreenObject, 'mobileNumber', '') == "" && get(searchScreenObject, 'billNo', '') == "" && get(searchScreenObject, 'consumerCode', '') == "" ? false : true;
+    isSearchBoxFirstRowValid = get(searchScreenObject, 'mobileNumber', '') == "" && get(searchScreenObject, 'amendmentId', '') == "" && get(searchScreenObject, 'consumerCode', '') == "" ? false : true;
   }
 
   if (!isSearchBoxFirstRowValid) {
@@ -90,6 +90,15 @@ export const searchApiCall = async (state, dispatch) => {
     Amendments.map(bill => {
       respObj[bill.consumerCode] = bill;
     })
+
+    if (get(searchScreenObject, 'amendmentId', '') != "" && get(searchScreenObject, 'consumerCode', '') == "" && get(responseFromAPI, 'Amendments[0].consumerCode', '') != '') {
+      queryObject.push({
+        "key": 'consumerCode',
+        "value": get(responseFromAPI, 'Amendments[0].consumerCode', '')
+      })
+    } else if (get(searchScreenObject, 'consumerCode', '') != "" && get(searchScreenObject, 'amendmentId', '') == "") {
+
+    }
     const resp = await searchBill(queryObject, dispatch)
 
     const bills = (resp && resp.Bill) || [];
@@ -106,6 +115,16 @@ export const searchApiCall = async (state, dispatch) => {
         connectionType: get(respObj[get(item, "consumerCode")], "additionalDetails.connectionType", 'Metered')
       };
     });
+
+
+    if (Amendments && Amendments.length > 1 && billTableData && Array.isArray(billTableData) && billTableData.length > 0) {
+
+      Amendments.map(Amendment => {
+        if (Amendment.amendmentId != billTableData[0].amendmentId) {
+          billTableData.push({ ...billTableData[0], amendmentId: Amendment.amendmentId, status: Amendment.status, connectionType: get(Amendment, 'additionalDetails.connectionType', '') })
+        }
+      })
+    }
     dispatch(
       prepareFinalObject("searchScreenMdmsData.searchResponse", bills)
     );
