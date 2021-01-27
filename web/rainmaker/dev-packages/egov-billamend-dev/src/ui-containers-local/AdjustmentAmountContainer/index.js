@@ -129,7 +129,7 @@ class AdjustmentAmountContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reducedAmount: true,
+      reducedAmount: false,
       additionalAmount: true,
       reducedAmountValue: 0,
       additionalAmountValue: 0,
@@ -151,8 +151,8 @@ class AdjustmentAmountContainer extends Component {
       if (e.target.value === '' || re.test(e.target.value)) {
         const event = e.target;
         let details = { ...data };
-        if(field == "reducedAmount") details[key]["reducedAmountValue"] = parseInt(event.value);
-        if(field == "additionalAmount") details[key]["additionalAmountValue"] = parseInt(event.value);
+        if(field == "reducedAmount") details[key]["reducedAmountValue"] = event.value;
+        if(field == "additionalAmount") details[key]["additionalAmountValue"] = event.value;
         this.props.prepareFinalObject("fetchBillDetailsssss", details);
       }
   };
@@ -190,7 +190,8 @@ class AdjustmentAmountContainer extends Component {
     }
   };
   getHeaderTaxCard = (card, key) => {
-    const { classes, ...rest } = this.props;
+    const { classes, amountType, ...rest } = this.props;
+    let disableValue = (amountType == "reducedAmount") ? true : false;
     return (
       <React.Fragment>
         <Grid container={true}>
@@ -208,7 +209,7 @@ class AdjustmentAmountContainer extends Component {
               }
               InputProps={{
                 className: classes.input,
-                disabled: this.state.reducedAmount,
+                disabled: !disableValue
               }}
               inputProps={{
                 style: { textAlign: "right", paddingRight: "0.5rem" },
@@ -226,7 +227,7 @@ class AdjustmentAmountContainer extends Component {
               }
               InputProps={{
                 className: classes.input,
-                disabled: this.state.additionalAmount,
+                disabled: disableValue
               }}
               inputProps={{
                 style: { textAlign: "right", paddingRight: "0.5rem" },
@@ -239,7 +240,8 @@ class AdjustmentAmountContainer extends Component {
   };
 
   render() {
-    const { data, ...rest } = this.props;
+    const { data, amountType, ...rest } = this.props;
+    let checkedValue = (amountType == "reducedAmount") ? true : false;
     return (
       <div>
         <Grid container={true}>
@@ -251,7 +253,7 @@ class AdjustmentAmountContainer extends Component {
               labelName="Reduced Amount (Rs)"
               labelKey="BILL_REDUCED_AMOUNT_RS"
               name="reducedAmount"
-              checked={this.state.reducedAmount}
+              checked={!checkedValue}
               changeMethod={this.handleCheckBoxChange}
             />
           </Grid>
@@ -260,7 +262,7 @@ class AdjustmentAmountContainer extends Component {
               labelName="Additional Amount (Rs)"
               labelKey="BILL_ADDITIONAL_AMOUNT_RS"
               name="additionalAmount"
-              checked={this.state.additionalAmount}
+              checked={checkedValue}
               changeMethod={this.handleCheckBoxChange}
             />
           </Grid>
@@ -286,14 +288,14 @@ const mapStateToProps = (state) => {
     "BILL.AMOUNT",
     []
   );
-  // const amountType = get(
-  //   screenConfiguration.prepareFinalObject,
-  //   "BILL.AMOUNTTYPE",
-  //   ""
-  // );
-  // let data = get( screenConfiguration.preparedFinalObject, "Amendment.demandDetails", []); //fetchbilldetails
+  const amountType = get(
+    screenConfiguration.preparedFinalObject,
+    "BILL.AMOUNTTYPE",
+    ""
+  );
+
   let data = get( screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
-  return { amount, moduleName, data };
+  return { amount, moduleName, data, amountType };
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -787,6 +787,7 @@ export const procedToNextStep = async (state, dispatch) => {
   const demandRevBasisValue = get( state.screenConfiguration.preparedFinalObject, "Amendment.amendmentReason", "");
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("documentsContract", []));
+  dispatch(prepareFinalObject("AmendmentTemp.amendmentReason", demandRevBasisValue));
   dispatch(
     handleField(
       "apply",

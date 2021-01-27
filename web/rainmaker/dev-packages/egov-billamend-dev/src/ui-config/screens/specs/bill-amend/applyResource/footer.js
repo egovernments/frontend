@@ -55,7 +55,8 @@ export const summaryAdjustmentAmountDetails = async(state, dispatch) => {
   fetchBillDetails.map(bill => {
     billDetails.push({
       taxHeadMasterCode: bill.taxHeadCode,
-      taxAmount: amountType == "reducedAmount" ? bill.reducedAmountValue : bill.additionalAmountValue
+      taxAmount: amountType == "reducedAmount" ? parseFloat(bill.reducedAmountValue) : parseFloat(bill.additionalAmountValue),
+      amountType: amountType
     });
   });
   console.log(billDetails, "billDetailsbillDetailsbillDetailsbillDetails");
@@ -88,6 +89,35 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     } else {
+      let amountType = get(state.screenConfiguration.preparedFinalObject, "BILL.AMOUNTTYPE", "");
+      let fetchBillDetails = get(state.screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
+      let amountValue = false;
+      if (amountType && amountType == "reducedAmount") {
+        for (let i = 0; i < fetchBillDetails.length; i++) {
+          if(fetchBillDetails[i].reducedAmountValue > 0) {
+            amountValue = true;
+            break;
+          }
+        }
+      } else {
+        for (let i = 0; i < fetchBillDetails.length; i++) {
+          if(fetchBillDetails[i].additionalAmountValue > 0) {
+            amountValue = true;
+            break;
+          }
+        }
+      }
+
+      if(!amountValue) {
+        isFormValid = false;
+        let errorMessage = {
+          labelName: "All Tax Heads Amount cant't be 0",
+          labelKey: "ERR_NON_ZERO_AMOUNT_TOAST",
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return;
+      }
+
       if (demandRevisionBasisValue !== "COURTCASESETTLEMENT") {
         const fromDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.fromDate");
         const toDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.toDate");
