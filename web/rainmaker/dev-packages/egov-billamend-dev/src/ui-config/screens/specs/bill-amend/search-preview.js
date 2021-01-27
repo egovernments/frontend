@@ -77,7 +77,7 @@ export const adjustmentAmountDetails = async (state, dispatch, amendment) => {
     amendment.demandDetails.map(bill => {
         billDetails.push({
             taxHeadMasterCode: bill.taxHeadMasterCode,
-            taxAmount: parseFloat(bill.taxAmount),
+            taxAmount: Math.abs(parseFloat(bill.taxAmount)),
             amountType: amountType
         });
     });
