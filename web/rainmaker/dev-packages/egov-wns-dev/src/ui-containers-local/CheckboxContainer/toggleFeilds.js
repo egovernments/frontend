@@ -155,6 +155,12 @@ export const toggleSewerage = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
+    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.drainageSize",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfToilets`,
     "visible",
     value
@@ -162,6 +168,12 @@ export const toggleSewerage = (onFieldChange, value) => {
   onFieldChange(
     "apply",
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfWaterClosets`,
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.drainageSize`,
     "visible",
     value
   );
@@ -179,6 +191,12 @@ export const toggleSewerage = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskPipeSizeProposed",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewWaterClosets",
     "visible",
     value
@@ -186,6 +204,12 @@ export const toggleSewerage = (onFieldChange, value) => {
   onFieldChange(
     "apply",
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewNumberOfToilets",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewDrainageSize",
     "visible",
     value
   );
@@ -290,6 +314,11 @@ export const toggleSewerageFeilds = (action, value) => {
     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfWaterClosets.visible`,
     value
   );
+  set(
+    action.screenConfig,
+    `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.drainageSize.visible`,
+    value
+  );
   if (!value) {
     set(
       action.screenConfig,
@@ -299,6 +328,11 @@ export const toggleSewerageFeilds = (action, value) => {
     set(
       action.screenConfig,
       `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.noOfWaterClosets.visible`,
+      value
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.drainageSize.visible`,
       value
     );
   }
@@ -324,12 +358,27 @@ export const toggleSewerageFeilds = (action, value) => {
   );
   set(
     action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.drainageSize.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskDrainageSize.visible",
+    value
+  );
+  set(
+    action.screenConfig,
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewWaterClosets.visible",
     value
   );
   set(
     action.screenConfig,
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewNumberOfToilets.visible",
+    value
+  )
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewDrainageSize.visible",
     value
   )
 }

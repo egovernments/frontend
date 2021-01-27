@@ -170,6 +170,14 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.noOfToilets",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
+      }),
+      drainageSize: getSelectField({
+        label: { labelKey: "WS_SERV_DETAIL_DRAINAGE_SIZE" },
+        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.drainageSize",
+        placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
+        required: true,
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "applyScreen.drainageSize"
       })
     }),
   }),

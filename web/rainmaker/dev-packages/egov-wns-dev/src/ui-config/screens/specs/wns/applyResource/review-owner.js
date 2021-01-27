@@ -421,6 +421,22 @@ export const connectionSewerage={
       jsonPath: "WaterConnectionOld[0].noOfToilets",
       callBack: handleNA
     }
+  ),
+  reviewDrainageSize : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Drainage Size (in inches)",
+      labelKey: "WS_SERV_DETAIL_DRAINAGE_SIZE"
+    },
+    {
+      jsonPath: "WaterConnection[0].drainageSize",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].drainageSize",
+      callBack: handleNA
+    }
   )
 }
 

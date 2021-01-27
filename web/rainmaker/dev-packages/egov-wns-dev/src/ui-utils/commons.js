@@ -390,6 +390,9 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedPipeSize") &&
         applyScreenObject["proposedPipeSize"] !== undefined &&
         applyScreenObject["proposedPipeSize"] !== "" &&
+        applyScreenObject.hasOwnProperty("proposedDrainageSize") &&
+        applyScreenObject["proposedDrainageSize"] !== undefined &&
+        applyScreenObject["proposedDrainageSize"] !== "" &&
         applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
         applyScreenObject["proposedWaterClosets"] !== undefined &&
         applyScreenObject["proposedWaterClosets"] !== "" &&
@@ -482,7 +485,10 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedToilets") &&
         applyScreenObject["proposedToilets"] !== undefined &&
         applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
+        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)&&
+        applyScreenObject.hasOwnProperty("proposedDrainageSize") &&
+        applyScreenObject["proposedDrainageSize"] !== undefined &&
+        applyScreenObject["proposedDrainageSize"] !== ""
     ) { return true; } else { return false }
 }
 
