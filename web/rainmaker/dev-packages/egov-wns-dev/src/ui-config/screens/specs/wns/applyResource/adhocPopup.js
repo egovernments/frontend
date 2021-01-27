@@ -18,6 +18,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { WATER_CAL_ESTIMATE } from "egov-ui-kit/utils/endPoints";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 
@@ -47,7 +48,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 
   let serviceUrl;
   if (WSRequestBody[0].service === serviceConst.WATER) {
-    serviceUrl = "ws-calculator/waterCalculator/_estimate";
+    serviceUrl = WATER_CAL_ESTIMATE.POST.URL;
     querObj[0].waterConnection = WSRequestBody[0];
   } else {
     serviceUrl = "sw-calculator/sewerageCalculator/_estimate"
