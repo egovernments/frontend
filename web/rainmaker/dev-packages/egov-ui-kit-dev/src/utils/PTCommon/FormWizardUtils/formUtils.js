@@ -328,11 +328,22 @@ const assessProperty = async (action, props) => {
   }
 
 
-
   if (purpose == PROPERTY_FORM_PURPOSE.REASSESS) {
     let assessments = await getAssessmentDetails();
     if (assessments.Assessments.length > 0) {
       let assessmentResponse = assessments.Assessments[0];
+      if( assessment && assessment.additionalDetails && assessment.additionalDetails.adhocExemption ) {
+        assessmentResponse.additionalDetails.adhocExemption = assessment.additionalDetails.adhocExemption;
+        if( !assessmentResponse.additionalDetails.adhocExemptionReason ) {
+          assessmentResponse.additionalDetails.adhocExemptionReason = assessment.additionalDetails.adhocExemptionReason;
+        }
+      }
+      else if( assessment && assessment.additionalDetails && assessment.additionalDetails.adhocPenalty) {
+        assessmentResponse.additionalDetails.adhocPenalty = assessment.additionalDetails.adhocPenalty;
+        if( !assessmentResponse.additionalDetails.adhocPenaltyReason ) {
+          assessmentResponse.additionalDetails.adhocPenaltyReason = assessment.additionalDetails.adhocPenaltyReason;
+        }
+      }
       assessment = assessmentResponse;
       assessment.assessmentDate = new Date().getTime() - 60000;
     }
