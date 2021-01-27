@@ -343,13 +343,7 @@ const validateMobileNumber = (state) => {
     //     err = "OWNER_NUMBER_SAME";
     //   }
     // })
-    let ownerDeleted;
-    newOwners.map(items => {
-      if(items.hasOwnProperty('isDeleted')) {
-        ownerDeleted = items.isDeleted;
-      }
-    })
-    if (!err && ownershipCategoryTemp.includes('MULTIPLEOWNERS') && (newOwners.length == 1 || !ownerDeleted)) {
+    if (!err && ownershipCategoryTemp.includes('MULTIPLEOWNERS') && newOwners.length == 1) {
       err = "Please add more than one owner in case of multipleownership";
     }
   }
