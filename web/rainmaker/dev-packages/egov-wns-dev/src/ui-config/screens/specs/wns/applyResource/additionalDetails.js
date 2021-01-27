@@ -285,10 +285,10 @@ export const additionDetails = getCommonCard({
               key: 'waterSourceType',
               callBack: waterSourceTypeChange
             },
-            {
-              key: 'waterSubSource',
-              callBack: waterSubSourceChange
-            }
+            // {
+            //   key: 'waterSubSource',
+            //   callBack: waterSubSourceChange
+            // }
           ],
           moduleName: "ws-services-masters",
           masterName: "waterSource",
