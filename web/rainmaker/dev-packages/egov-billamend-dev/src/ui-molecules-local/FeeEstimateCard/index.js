@@ -10,6 +10,8 @@ import { Tooltip } from "egov-ui-framework/ui-molecules";
 import ErrorIcon from "@material-ui/icons/Error";
 import { getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 
 
 const styles = {
@@ -63,17 +65,18 @@ function totalAmount(arr) {
     }
 }
 
-function getAmountType (fees) {
-    for(let i = 0; i < fees.length; i++) {
-        if (fees[i].taxAmount < 0) return "reducedAmount";
-        if (fees[i].taxAmount > 0) return "additionalAmount";
-    }
-}
+// function getAmountType (fees) {
+//     for(let i = 0; i < fees.length; i++) {
+//         // if (fees[i].taxAmount < 0) return "reducedAmount";
+//         // if (fees[i].taxAmount > 0) return "additionalAmount";
+//         return fees[i].amountType
+//     }
+// }
 
 function FeesEstimateCard(props) {
     const { classes, estimate } = props;
     const total = totalAmount(estimate.fees);
-    const amountType = getAmountType(estimate.fees);
+    // const amountType = getAmountType(estimate.fees);
     return (
 
         <Grid container>
@@ -87,7 +90,7 @@ function FeesEstimateCard(props) {
                             <Grid xs={6} align="right">
                             <LabelContainer 
                             labelName="Reduced Amount(Rs)" 
-                            labelKey= {amountType === "reducedAmount" ? "BILL_REDUCED_AMOUNT" : "BILL_ADDITIONAL_AMOUNT"}
+                            labelKey= {get(estimate, "fees[0].amountType", "") === "reducedAmount" ? "BILL_REDUCED_AMOUNT" : "BILL_ADDITIONAL_AMOUNT"}
                             style={{fontWeight:"bold"}}/>
                             </Grid>
                         </Grid>
@@ -99,7 +102,10 @@ function FeesEstimateCard(props) {
                                 );
                             let textLeft = fee.taxHeadMasterCode ? (
                                 <Grid container xs={8}>
-                                    <Typography>{fee.taxHeadMasterCode}</Typography>
+                                    <LabelContainer 
+                                        labelKey = {getTransformedLocale(`BILL_${fee.taxHeadMasterCode}`)}
+                                    />
+                                    {/* <Typography>{`BILL_${fee.taxHeadMasterCode}`}</Typography> */}
                                     {tooltip}
                                 </Grid>
                             ) : (

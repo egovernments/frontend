@@ -126,6 +126,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
     dispatch(prepareFinalObject("Amendment.consumerCode", connectionNumber));
     dispatch(prepareFinalObject("Amendment.tenantId", tenantId));
     dispatch(prepareFinalObject("Amendment.businessService", businessService));
+    dispatch(prepareFinalObject("BILL.AMOUNTTYPE", "reducedAmount"));
     // dispatch(prepareFinalObject("Amendment.status", "ACTIVE"));
 
     dispatch(
@@ -186,6 +187,7 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     dispatch(prepareFinalObject("BILL", {}));
+    dispatch(prepareFinalObject("Amendment", {}));
     getData(action, state, dispatch).then(responseAction => {
 
     });
