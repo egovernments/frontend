@@ -168,3 +168,25 @@ export const searchBill = async (queryObject, dispatch) => {
     );
   }
 };
+
+export const getBillAmdSearchResult = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/amendment/_search",
+      "_search",
+      queryObject
+    );
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};

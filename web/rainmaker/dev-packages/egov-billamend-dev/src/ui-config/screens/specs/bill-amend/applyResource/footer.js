@@ -59,7 +59,6 @@ export const summaryAdjustmentAmountDetails = async(state, dispatch) => {
       amountType: amountType
     });
   });
-  console.log(billDetails, "billDetailsbillDetailsbillDetailsbillDetails");
   dispatch(prepareFinalObject("AmendmentTemp[0].estimateCardData", billDetails, []));
 }
 
@@ -119,8 +118,8 @@ const callBackForNext = async (state, dispatch) => {
       }
 
       if (demandRevisionBasisValue !== "COURT_CASE_SETTLEMENT") {
-        const fromDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.fromDate");
-        const toDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.toDate");
+        const fromDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.effectiveFrom");
+        const toDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.effectiveTill");
         if (new Date(fromDate) > new Date(toDate)) {
           isFormValid = false;
           let errorMessage = {

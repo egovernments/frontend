@@ -5,10 +5,22 @@ import {
     getCommonTitle,
     getBreak,
     getLabelWithValue,
-    getCommonHeader
+    getCommonHeader,
+    convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getReviewDocuments } from "./document-review"
+import { getReviewDocuments } from "./document-review";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {
+    getQueryArg,
+    getFileUrlFromAPI,
+    getTransformedLocale,
+    getFileUrl
+} from "egov-ui-framework/ui-utils/commons";
+import { getBillAmdSearchResult } from "../../../../ui-utils/commons";
+import get from "lodash/get";
+import set from "lodash/set";
+import jp from "jsonpath";
 
 
 export const getFeesEstimateCard = props => {
@@ -19,7 +31,6 @@ export const getFeesEstimateCard = props => {
         componentPath: "EstimateCardContainer",
         props: {
             sourceJsonPath: "AmendmentTemp[0].estimateCardData"
-            // ...rest
         }
     };
 };
@@ -42,7 +53,7 @@ const headerrow = getCommonContainer({
     header: getCommonHeader({
         labelName: "Generate Note",
         labelKey: "BILL_GENERATE_NOTE"
-    }), 
+    }),
     applicationNumber: {
         uiFramework: "custom-atoms-local",
         moduleName: "egov-billamend",
@@ -54,19 +65,207 @@ const headerrow = getCommonContainer({
     },
 });
 
+export const adjustmentAmountDetails = async (state, dispatch, amendment) => {
+    let amountType = amendment && amendment.demandDetails &&
+        amendment.demandDetails.length > 0 && amendment.demandDetails.filter(details => details.taxAmount < 0);
+    if (amountType && amountType.length > 0) {
+        amountType = "reducedAmount"
+    } else {
+        amountType = "additionalAmount"
+    }
+    let billDetails = [];
+    amendment.demandDetails.map(bill => {
+        billDetails.push({
+            taxHeadMasterCode: bill.taxHeadMasterCode,
+            taxAmount: parseFloat(bill.taxAmount),
+            amountType: amountType
+        });
+    });
+    dispatch(prepareFinalObject("AmendmentTemp[0].estimateCardData", billDetails, []));
+}
+
+const documentMaping = async (documentsPreview) => {
+    let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+    let fileUrls =
+        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    let documentsPreviews = documentsPreview.map((doc, index) => {
+        doc["link"] =
+            (fileUrls &&
+                fileUrls[doc.fileStoreId] &&
+                getFileUrl(fileUrls[doc.fileStoreId])) ||
+            "";
+        doc["name"] =
+            (fileUrls[doc.fileStoreId] &&
+                decodeURIComponent(
+                    getFileUrl(fileUrls[doc.fileStoreId])
+                        .split("?")[0]
+                        .split("/")
+                        .pop()
+                        .slice(13)
+                )) ||
+            `Document - ${index + 1}`;
+        return doc;
+    });
+    return documentsPreviews;
+}
+
+export const documentDetailsPreview = async (state, dispatch, amendment) => {
+    let documentsPreview = [];
+    amendment.documents.forEach(doc => {
+        documentsPreview.push({
+            title: getTransformedLocale(doc.documentType),
+            fileStoreId: doc.fileStore,
+            linkText: "View"
+        });
+    });
+    let appDocuments = await documentMaping(documentsPreview);
+    dispatch(prepareFinalObject("bill-amend-review-document-data", appDocuments));
+}
+
+export const onDemandRevisionBasisHidendShowFields = async (state, dispatch, action, amendment) => {
+    let demandRevisionBasis = get(amendment, "amendmentReason", "");
+    switch (demandRevisionBasis) {
+        case "COURT_CASE_SETTLEMENT":
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo.visible",
+                true
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom.visible",
+                true
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate.visible",
+                false
+            );
+            break;
+        case "ARREAR_WRITE_OFF":
+        case "ONE_TIME_SETTLEMENT":
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber.visible",
+                true
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate.visible",
+                true
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate.visible",
+                true
+            );
+            break;
+        case "DCB_CORRECTION":
+        case "REMISSION_FOR_PROPERTY_TAX":
+        case "OTHERS":
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.courtOrderNo.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.dateEffectiveFrom.visible",
+                false
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.govtNotificationNumber.visible",
+                false
+            );
+
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.documentNo.visible",
+                true
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.fromDate.visible",
+                true
+            );
+            set(
+                action,
+                "screenConfig.components.div.children.bodyDiv.children.cardContent.children.grayDiv.children.cardContent.children.demandRevisionContainer.children.toDate.visible",
+                true
+            );
+
+
+            break;
+        default:
+
+            break;
+    }
+}
+
+export const setSearchResponse = async (state, dispatch, action) => {
+    const tenantId = getTenantId() || getQueryArg(window.location.href, "tenantId");
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    let billAMDSearch = await getBillAmdSearchResult([
+        {
+            key: "tenantId",
+            value: tenantId
+        },
+        {
+            key: "amendmentId",
+            value: applicationNumber
+        }
+    ], dispatch);
+    let amendments = get(billAMDSearch, "Amendments", []);
+    if (amendments && amendments.length > 0) {
+        dispatch(prepareFinalObject("Amendment", amendments[0]));
+        adjustmentAmountDetails(state, dispatch, amendments[0]);
+        documentDetailsPreview(state, dispatch, amendments[0]);
+        onDemandRevisionBasisHidendShowFields(state, dispatch, action, amendments[0]);
+    }
+}
+
+
+
+export const getData = async (action, state, dispatch) => {
+    await setSearchResponse(state, dispatch, action);
+}
+
 const screenConfig = {
     uiFramework: "material-ui",
     name: "search-preview",
     beforeInitScreen: (action, state, dispatch) => {
-        dispatch(prepareFinalObject("bill-amend-review-document-data",
-        [
-            { "title": "Court Order", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "CourtOrder.jpeg" },
-            { "title": "Past Bills", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "PastBills.jpeg" },
-            { "title": "Identity Proof", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "IdentityProof.jpeg" },
-            { "title": "Address Proof", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "AddressProof.jpeg" },
-            { "title": "Self Declaration", "link": "https://minio-egov-micro-qa.egovernments.org/egov-rainmaker-1/pb/undefined/October/16/1602857173091JPEG.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20201027%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20201027T080407Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cc9a4105a881665ff4624337648ef5820f133d6cad3d15b3db183412aceb996a", "linkText": "View", "name": "SelfDeclaration.jpeg" }
-        ]
-        ))
+        getData(action, state, dispatch).then(responseAction => { });
         return action;
     },
     components: {
@@ -105,7 +304,7 @@ const screenConfig = {
                     }
                 },
                 bodyDiv: getCommonCard({
-                    title: getCommonTitle({ labelName: "Summary",labelKey:"BILL_SUMMARY" }),
+                    title: getCommonTitle({ labelName: "Summary", labelKey: "BILL_SUMMARY" }),
                     grayDiv: getCommonGrayCard({
                         title: getCommonTitle({
                             labelName: "Amount Details",
@@ -119,53 +318,88 @@ const screenConfig = {
                             getFeesEstimateCard({
                                 sourceJsonPath: "LicensesTemp[0].estimateCardData"
                             }),
-                        bpaBasicDetailsContainer: getHeader({
+                        demandRevisionHeader: getHeader({
                             labelName: "Demand Revision Basis Details",
                             labelKey: "BILL_DEMAND_REVISION_BASIS_DETAILS"
                         }),
                         break1: getBreak(),
-                        basicDetailsContainer: getCommonContainer({
-                            scrutinynumber: getLabelWithValue(
+                        demandRevisionContainer: getCommonContainer({
+                            demandRevisionBasis: getLabelWithValue(
                                 {
-                                    labelName: "Demand Revision Basis",
-                                    labelKey: "BILL_DEMAND_REVISION_BASIS"
+                                    labelName: "Demand Revison Basis",
+                                    labelKey: "BILL_DEMAND_REVISON_BASIS_LABEL"
                                 },
                                 {
-                                    jsonPath: "BPA.edcrNumber",
-                                    // callBack: checkValueForNA
+                                    jsonPath: "Amendment.amendmentReason"
                                 }
                             ),
-                            occupancy: getLabelWithValue(
+                            courtOrderNo: getLabelWithValue(
                                 {
-                                    labelName: "Court Order No.",
-                                    labelKey: "BILL_COURT_ORDER_NO"
+                                    labelName: "Court Order No",
+                                    labelKey: "BILL_COURT_ORDER_NO_LABEL"
                                 },
                                 {
-                                    jsonPath:
-                                        "scrutinyDetails.planDetail.planInformation.occupancy",
-                                    // callBack: checkValueForNA
+                                    jsonPath: "Amendment.reasonDocumentNumber"
                                 }
                             ),
-                            applicationtype: getLabelWithValue(
+                            dateEffectiveFrom: getLabelWithValue(
                                 {
                                     labelName: "Date Effective From",
-                                    labelKey: "BILL_DATE_EFFECTIVE_FROM"
+                                    labelKey: "BILL_DATE_EFFECTIVE_FROM_LABEL"
                                 },
                                 {
-                                    jsonPath:
-                                        "BPA.applicationType",
-                                    // callBack: checkValueForNA
+                                    jsonPath: "Amendment.effectiveFrom",
+                                    callBack: value => {
+                                        return convertEpochToDate(value);
+                                    }
                                 }
                             ),
-
+                            govtNotificationNumber: getLabelWithValue(
+                                {
+                                    labelName: "Govt Notification No",
+                                    labelKey: "BILL_GOVT_NOTIFICATION_NO_LABEL"
+                                },
+                                {
+                                    jsonPath: "Amendment.reasonDocumentNumber"
+                                }
+                            ),
+                            documentNo: getLabelWithValue(
+                                {
+                                    labelName: "Document No",
+                                    labelKey: "BILL_DOCUMNET_NO_LABEL"
+                                },
+                                {
+                                    jsonPath: "Amendment.reasonDocumentNumber"
+                                }
+                            ),
+                            fromDate: getLabelWithValue(
+                                {
+                                    labelName: "From Date",
+                                    labelKey: "BILL_COMMON_FROM_DATE_LABEL"
+                                },
+                                {
+                                    jsonPath: "Amendment.effectiveFrom",
+                                    callBack: value => {
+                                        return convertEpochToDate(value);
+                                    }
+                                }
+                            ),
+                            toDate: getLabelWithValue(
+                                {
+                                    labelName: "To Date",
+                                    labelKey: "BILL_COMMON_TO_DATE_LABEL"
+                                },
+                                {
+                                    jsonPath: "Amendment.effectiveTill",
+                                    callBack: value => {
+                                        return convertEpochToDate(value);
+                                    }
+                                }
+                            )
                         }),
 
                     }),
-
                     documents: getReviewDocuments(false, false)
-
-                    // demand:getReviewOwner()
-
                 }),
 
 
