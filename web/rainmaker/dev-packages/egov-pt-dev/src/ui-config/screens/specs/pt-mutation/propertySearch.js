@@ -8,6 +8,7 @@ import get from "lodash/get";
 import { resetFields } from "./mutation-methods";
 import propertySearchTabs from "./property-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -48,7 +49,7 @@ const getMDMSData = async (action, dispatch) => {
     })
     // const payload = await httpRequest(
     //   "post",
-    //   "/egov-mdms-service/v1/_search",
+    //   MDMS.URL,
     //   "_search",
     //   [],
     //   mdmsBody

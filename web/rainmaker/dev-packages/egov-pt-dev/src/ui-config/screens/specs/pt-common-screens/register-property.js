@@ -14,7 +14,7 @@ import { footer } from "./applyResource/footer";
 import { propertyAssemblyDetails } from "./applyResourceMutation/propertyAssemblyDetails";
 import { propertyLocationDetails } from "./applyResourceMutation/propertyLocationDetails";
 import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails';
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 
 export const header = getCommonContainer({

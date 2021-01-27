@@ -11,7 +11,7 @@ import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
 import { searchPropertyDetails } from "./publicSearchResource/search-resources";
 import { searchPropertyTable } from "./publicSearchResource/search-table";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 
 const hasButton = getQueryArg(window.location.href, "hasButton");

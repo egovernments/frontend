@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import commonConfig from "config/common";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const styles = (theme) => ({
   root: {

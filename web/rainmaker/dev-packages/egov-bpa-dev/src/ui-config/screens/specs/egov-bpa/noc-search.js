@@ -13,7 +13,7 @@ import {
 import { httpRequest } from "../../../../ui-utils/api";
 import get from "lodash/get";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const header = getCommonHeader({
   labelName: "NOC_APPLICATION_HEADER",

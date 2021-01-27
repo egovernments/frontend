@@ -7,7 +7,7 @@ import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 class PaymentRedirect extends Component {
   getBusinessServiceMdmsData = async (tenantId) => {

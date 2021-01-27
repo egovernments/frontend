@@ -20,7 +20,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import { getNocSearchResults } from "../../../../ui-utils/commons";
 import { checkValueForNA, ifUserRoleExists } from "../utils/index";
 import { requiredDocumentsData } from "../utils/noc-functions";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")

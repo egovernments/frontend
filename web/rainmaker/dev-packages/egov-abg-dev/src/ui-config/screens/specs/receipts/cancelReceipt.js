@@ -7,7 +7,7 @@ import { set } from "lodash";
 import get from "lodash/get";
 import { cancelReceiptDetailsCard } from "./cancelReceiptResource/cancelReceiptDetails";
 import { cancelReceiptFooter } from "./cancelReceiptResource/cancelReceiptFooter";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const header = getCommonContainer({
   header: getCommonHeader({

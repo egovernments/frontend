@@ -9,7 +9,7 @@ import { setServiceCategory } from "../utils";
 import "./index.css";
 import { searchResults } from "./universalCollectionResources/searchResults";
 import { resetFields, UCSearchCard } from "./universalCollectionResources/ucSearch";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({

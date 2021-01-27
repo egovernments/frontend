@@ -11,7 +11,7 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import { onChangeTypeOfOwnership } from "../applyResourceMutation/transfereeDetails";
 import { PROPERTY_UPDATE } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 
 const setReviewPageRoute = (state, dispatch) => {

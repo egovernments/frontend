@@ -5,7 +5,7 @@ import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { httpRequest } from "../../../../../ui-utils";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);

@@ -11,7 +11,7 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import {  prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {

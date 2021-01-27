@@ -9,7 +9,7 @@ import {
 } from "./groupBillResource/groupBillSearch";
 import { searchResults } from "./groupBillResource/searchResults";
 import "./index.css";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const tenantId = getTenantId();
 

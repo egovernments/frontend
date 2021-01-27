@@ -14,7 +14,7 @@ import "./index.css";
 import { resetFields, searchPropertyDetails } from "./mutation-methods";
 import { getQueryRedirectUrl, searchPropertyTable } from "./searchResource/searchResults";
 import get from "lodash/get";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;

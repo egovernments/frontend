@@ -10,7 +10,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import { getBpaSearchResults, getSearchResults } from "../../../../../ui-utils/commons";
 import { getWorkFlowData, getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 import { getTextToLocalMapping } from "../../utils/index";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const getMdmsData = async () => {
   let mdmsBody = {

@@ -14,7 +14,7 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import commonConfig from "config/common.js";
 import {getRequiredDocuments} from "../../../../ui-containers-local/RequiredDocuments/reqDocs";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",

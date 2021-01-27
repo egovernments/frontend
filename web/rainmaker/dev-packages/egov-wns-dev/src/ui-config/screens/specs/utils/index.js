@@ -31,7 +31,7 @@ import {
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
 
 export const getCommonApplyFooter = (position,children) => {
   return {

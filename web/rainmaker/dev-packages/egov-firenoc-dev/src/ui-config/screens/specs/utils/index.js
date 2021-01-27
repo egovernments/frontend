@@ -13,7 +13,7 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {

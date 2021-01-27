@@ -31,8 +31,7 @@ import commonConfig from "config/common.js";
 import { docdata } from "./applyResource/docData";
 import { getFetchBill, procedToNextStep, cancelPopUp } from "../utils";
 import "./index.scss";
-
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Amount Details", labelKey: "BILL_STEPPER_AMOUNT_DETAILS_HEADER" },

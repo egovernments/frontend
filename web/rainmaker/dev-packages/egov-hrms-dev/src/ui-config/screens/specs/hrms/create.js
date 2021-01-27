@@ -19,8 +19,7 @@ import { otherDetails } from "./createResource/other-details";
 import { serviceDetails } from "./createResource/service-details";
 import { employeeReviewDetails } from "./viewResource/employee-review";
 import { getEmployeeData } from "./viewResource/functions";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints"
-
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 
 
 export const stepsData = [
