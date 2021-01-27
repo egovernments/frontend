@@ -127,7 +127,7 @@ export const getConnectionDetails = () => {
           },
           { jsonPath: "WaterConnectionOld[0].proposedToilets" }
     ),
-    taskDrainageSize : getLabelWithValueForModifiedLabel(
+    taskDrainageSizeProposed : getLabelWithValueForModifiedLabel(
        {
            labelName:"Drainage Size",
            labelKey: "WS_TASK_DETAILS_CONN_DETAIL_DRAINAGE_SIZE_PROPOSED"

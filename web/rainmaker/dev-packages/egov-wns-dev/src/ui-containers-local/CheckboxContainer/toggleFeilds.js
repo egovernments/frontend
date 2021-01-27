@@ -191,7 +191,7 @@ export const toggleSewerage = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskPipeSizeProposed",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskDrainageSizeProposed",
     "visible",
     value
   );
@@ -363,7 +363,7 @@ export const toggleSewerageFeilds = (action, value) => {
   );
   set(
     action.screenConfig,
-    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskDrainageSize.visible",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewFour.children.view.children.taskDrainageSizeProposed.visible",
     value
   );
   set(
