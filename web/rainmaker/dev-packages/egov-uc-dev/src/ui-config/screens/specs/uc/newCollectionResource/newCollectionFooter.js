@@ -12,7 +12,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
-import { USER } from "egov-ui-kit/src/utils/endPoints.js";
+import { USER } from "egov-ui-kit/src/utils/endPoints";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
