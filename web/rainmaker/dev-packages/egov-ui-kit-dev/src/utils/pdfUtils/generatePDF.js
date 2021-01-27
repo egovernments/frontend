@@ -692,6 +692,10 @@ const mobileCheck = ()=> {
   };
 
 export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
+    receiptPDF.getBase64((data) => {     
+        console.log("Base 64:",data);
+    });
+    
     if (typeof mSewaApp === "undefined" && !mobileCheck())
     {
       // we are running in browser

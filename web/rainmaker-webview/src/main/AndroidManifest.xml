@@ -23,6 +23,7 @@
 	<uses-permission android:name="android.permission.CAMERA"/>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
     <!--<uses-permission android:name="android.permission.RECEIVE_SMS" />-->
 
     <!-- remove location.gps feature if not using permission ACCESS_FINE_LOCATION -->
@@ -37,7 +38,7 @@
         android:theme="@style/SplashTheme"
         tools:ignore="AllowBackup">
 		<provider
-			android:name="android.support.v4.content.FileProvider"
+			android:name="androidx.core.content.FileProvider"
 			android:authorities="${applicationId}.provider"
 			android:exported="false"
 			android:grantUriPermissions="true">
@@ -64,7 +65,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https"
-                    android:host="https://13.71.65.215.nip.io/"
+                    android:host="https://13.71.65.215.nip.io"
                     android:pathPrefix="/" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
             </intent-filter>
         </activity>

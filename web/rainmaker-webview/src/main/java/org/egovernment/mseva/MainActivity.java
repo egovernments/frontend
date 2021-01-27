@@ -9,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,21 +20,22 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
-import android.webkit.JavascriptInterface;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -48,7 +48,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
@@ -60,23 +59,24 @@ import java.util.Map;
 import android.app.AlertDialog;
 import android.webkit.DownloadListener;
 import android.app.DownloadManager;
-import android.os.AsyncTask;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.io.FileOutputStream;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+//import android.os.AsyncTask;
+//import java.net.HttpURLConnection;
+//import java.net.URL;
+//import java.util.regex.Matcher;
+//import java.util.regex.Pattern;
+//import java.io.FileOutputStream;
+//import java.io.BufferedInputStream;
+//import java.io.InputStream;
+//import java.io.OutputStream;
 
 
 import org.egovernment.mseva.BuildConfig;
 import org.egovernment.mseva.R;
 
+import static android.webkit.CookieManager.*;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements  ViewTreeObserver.OnScrollChangedListener{
 
 
 	final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
 	//Careful with these variable names if altering
     private WebView webView;
-	private SwipeRefreshLayout mSwipeRefreshLayout;
+	//private SwipeRefreshLayout mSwipeRefreshLayout;
+	private ViewTreeObserver.OnScrollChangedListener mOnScrollChangedListener;
 
     private String asw_cam_message;
     private ValueCallback<Uri> asw_file_message;
@@ -175,9 +176,11 @@ public class MainActivity extends AppCompatActivity {
         //Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
-//		webView.addJavascriptInterface(proxy, "mSewaApp");
+		webView.addJavascriptInterface(proxy, "mSewaApp");
 
-		mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeToRefresh);
+
+	//	mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeToRefresh);
+
 
 		String versionName = "";
 		int versionCode = 0;
@@ -200,12 +203,14 @@ public class MainActivity extends AppCompatActivity {
 		webSettings.setAllowUniversalAccessFromFileURLs(true);
 		webSettings.setUseWideViewPort(true);
 		webSettings.setDomStorageEnabled(true);
-		webSettings.setSupportMultipleWindows(false);
 		webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
 		//improve performance
 		webSettings.setLoadWithOverviewMode(true);
 		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+		webSettings.setAppCachePath(this.getCacheDir().getAbsolutePath());
+		webSettings.setDatabaseEnabled(true);
+	//	webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 		webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 		webView.setScrollbarFadingEnabled(true);
 
@@ -214,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-			CookieManager cookieManager = CookieManager.getInstance();
+			CookieManager cookieManager = getInstance();
 			cookieManager.setAcceptThirdPartyCookies(webView, true);
         } else if (Build.VERSION.SDK_INT >= 19) {
             webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -236,7 +241,12 @@ public class MainActivity extends AppCompatActivity {
 						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 							== PackageManager.PERMISSION_GRANTED) {
 							Log.v(TAG,"Permission is granted");
-							downloadDialog(url,userAgent,contentDisposition,mimeType);
+							long downloadRef = downloadDialog(url,userAgent,contentDisposition,mimeType);
+							if (downloadRef != 0) {
+								Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
+							}else {
+								Toast.makeText(getApplicationContext(), "File is not available for download", Toast.LENGTH_LONG).show();
+							}
 						} else {
 
 							Log.v(TAG,"Permission is revoked");
@@ -248,10 +258,16 @@ public class MainActivity extends AppCompatActivity {
 					else {
 						//Code for devices below API 23 or Marshmallow
 						Log.v(TAG,"Permission is granted");
-						downloadDialog(url,userAgent,contentDisposition,mimeType);
+						long downloadRef = downloadDialog(url,userAgent,contentDisposition,mimeType);
+						if (downloadRef != 0) {
+							Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
+						}else {
+							Toast.makeText(getApplicationContext(), "File is not available for download", Toast.LENGTH_LONG).show();
+						}
 					}
 				}
 		});
+
 
 		/*webView.setDownloadListener(new DownloadListener() {
 			public void onDownloadStart(String url, String userAgent,
@@ -362,27 +378,34 @@ public class MainActivity extends AppCompatActivity {
             loadView(path,false);
         }
 
-		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				webView.loadUrl( "javascript:window.location.reload( true )" );
-				mSwipeRefreshLayout.setRefreshing(false);
-			}
-		});
-
+//		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//			@Override
+//			public void onRefresh() {
+////				webView.loadUrl( "javascript:window.location.reload( true )" );
+//				mSwipeRefreshLayout.setRefreshing(false);
+//				webView.reload();
+//				if (null != mSwipeRefreshLayout) {
+//					mSwipeRefreshLayout.setRefreshing(false);
+//				}
+//			}
+//		});
+//
 
     }
 
 
-	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimeType)
+	public long downloadDialog(final String url,final String userAgent,String contentDisposition,String mimeType)
 	{
+		long downloadReference = 0;
 		if(url.startsWith("blob") == true) {
 
 			startActivity(Intent.makeMainSelectorActivity(
 					Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
 					.setData(Uri.parse(url.toString())));
+			downloadReference=1;
 		}
 		else{
+
 			try {
 				DownloadManager.Request request = new DownloadManager.Request(
 						Uri.parse(url));
@@ -397,13 +420,14 @@ public class MainActivity extends AppCompatActivity {
 						Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
 								url, contentDisposition, mimeType));
 				DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-				dm.enqueue(request);
-				Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
+				downloadReference = dm.enqueue(request);
+				//Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
 			}catch(Exception e ){
 				Log.d("DownloadManager","Failed");
 				Toast.makeText(getApplicationContext(), "Downloading Failed", Toast.LENGTH_SHORT).show();
 			}
 		}
+		return downloadReference;
 
 
 	}
@@ -421,9 +445,20 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.setTaskDescription(taskDesc);
         }
 
-    }
 
-    //Setting activity layout visibility
+	}
+
+	@Override
+	public void onScrollChanged() {
+//		if (webView.getScrollY() == 0) {
+//			mSwipeRefreshLayout.setEnabled(true);
+//		} else {
+//			mSwipeRefreshLayout.setEnabled(false);
+//		}
+
+	}
+
+	//Setting activity layout visibility
 	private class CustomWebView extends WebViewClient {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
@@ -431,6 +466,7 @@ public class MainActivity extends AppCompatActivity {
 
         public void onPageFinished(WebView view, String url) {
 			loadView("javascript:window.localStorage.setItem('Citizen.isMobileApp',true)",false);
+
         }
         //For android below API 23
 		@SuppressWarnings("deprecation")
@@ -464,8 +500,6 @@ public class MainActivity extends AppCompatActivity {
 			return url_actions(view, request.getUrl().toString());
 //			return true;
         }
-
-
 
 
     }
@@ -665,6 +699,10 @@ public class MainActivity extends AppCompatActivity {
 										}
 									});
 						}
+						else if(currentWebViewUrl.contains("citizen/egov-common/acknowledgement?status")){
+							webView.loadUrl(URL);
+
+						}
 						else{
 							webView.goBack();
 						}
@@ -682,9 +720,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    @Override
+
+	@Override
     protected void onStop() {
-        super.onStop();
+		super.onStop();
 //		if (proxy.smsReceiverRunning()) {
 //			proxy.stopSMSReceiver();
 //		}

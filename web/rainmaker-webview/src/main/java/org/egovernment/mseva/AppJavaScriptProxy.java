@@ -6,17 +6,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -25,11 +24,8 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 
@@ -122,8 +118,8 @@ public class AppJavaScriptProxy  {
 //		String currentDateTime = DateFormat.getDateTimeInstance().format(new Date());
 
 		final File dwldsPath = new File(Environment.getExternalStoragePublicDirectory(
-			Environment.DIRECTORY_DOWNLOADS) + "/" + filename);
-		byte[] pdfAsBytes = Base64.decode(base64Data.replaceFirst("^data:[^;]+;base64,", ""), 0);
+			Environment.DIRECTORY_DOWNLOADS) + "/" + filename+".pdf");
+		byte[] pdfAsBytes = Base64.decode(base64Data.replaceFirst("^data:[^;]+;base64,", ""),0);
 		FileOutputStream os;
 		os = new FileOutputStream(dwldsPath, false);
 		os.write(pdfAsBytes);
