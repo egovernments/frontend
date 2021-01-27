@@ -225,6 +225,7 @@ export const PAYMENTSEARCH = {
     ACTION: "_search",
   },
 };
+<<<<<<< Updated upstream
 export const WORKFLOW_SEARCH = {
   POST: {
     URL: "workflow/egov-wf/process/_search",
@@ -310,3 +311,12 @@ export const WATER_CAL_ADHOC = {
     URL: "water-calculator/waterCalculator/_applyAdhocTax",
   }
 }
+=======
+
+export const IDGEN = {
+  GET: {
+    URL: "/egov-idgen/id/",
+    ACTION: "_generate",
+  },
+};
+>>>>>>> Stashed changes

@@ -384,7 +384,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
                   "referenceNumber": businessIds
                 }
               }
-              const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
+              const moduleWiseLocality = await httpRequest(`searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
               localitymap = [...localitymap, ...moduleWiseLocality.Localities];
           
             

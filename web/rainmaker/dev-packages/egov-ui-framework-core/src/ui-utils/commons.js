@@ -10,9 +10,14 @@ import isEmpty from "lodash/isEmpty";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
 import { httpRequest, uploadFile } from "./api.js";
+<<<<<<< Updated upstream
 import { FETCH_FILE } from "egov-ui-kit/utils/endPoints";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
+=======
+import { USER } from "egov-ui-kit/src/utils/endPoints.js";
+
+>>>>>>> Stashed changes
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -604,8 +609,8 @@ if (window) {
 export const getUserDataFromUuid = async bodyObject => {
   try {
     const response = await httpRequest(
-      "post",
-      "/user/_search",
+     "post",
+      USER.SEARCH.URL,
       "",
       [],
       bodyObject

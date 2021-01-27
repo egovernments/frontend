@@ -12,6 +12,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
+import { USER } from "egov-ui-kit/src/utils/endPoints.js";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -92,7 +93,7 @@ const processDemand = async (state, dispatch) => {
       );
       let payload = await httpRequest(
         "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        `${USER.SEARCH.URL}?tenantId=${commonConfig.tenantId}`,
         "_search",
         [],
         {

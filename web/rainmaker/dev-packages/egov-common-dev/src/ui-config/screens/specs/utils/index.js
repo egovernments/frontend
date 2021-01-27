@@ -19,6 +19,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
+import { USER } from "egov-ui-kit/src/utils/endPoints.js";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -387,7 +388,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        "/user/_search?tenantId=pb",
+        `${USER.SEARCH.URL}?tenantId=pb`,
         "_search",
         [],
         {
@@ -489,7 +490,7 @@ export const getUserDataFromUuid = async bodyObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/user/_search",
+      USER.SEARCH.URL,
       "",
       [],
       bodyObject
