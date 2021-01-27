@@ -15,7 +15,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import isUndefined from "lodash/isUndefined";
-import { USER } from "egov-ui-kit/src/utils/endPoints.js";
+import { USER } from "egov-ui-kit/src/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints"
 
 
