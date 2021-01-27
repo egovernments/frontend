@@ -14,6 +14,7 @@ import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
+import { USER } from "egov-ui-kit/src/utils/endPoints.js";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -839,7 +840,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        `${USER.SEARCH.URL}?tenantId=${commonConfig.tenantId}`,
         "_search",
         [],
         {

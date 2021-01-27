@@ -7,14 +7,16 @@ import {
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import {
   getLocaleLabels, getQueryArg,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import isUndefined from "lodash/isUndefined";
 import { httpRequest } from "../../../../ui-utils/api";
+import isUndefined from "lodash/isUndefined";
+import { USER } from "egov-ui-kit/src/utils/endPoints.js";
+
 
 export const getCommonApplyFooter = children => {
   return {
@@ -383,7 +385,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        "/user/_search?tenantId=pb",
+        `${USER.SEARCH.URL}?tenantId=pb`,
         "_search",
         [],
         {
@@ -485,7 +487,7 @@ export const getUserDataFromUuid = async bodyObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/user/_search",
+      USER.SEARCH.URL,
       "",
       [],
       bodyObject

@@ -4,6 +4,7 @@ import { getCommonCaption, getCommonCard, getCommonSubHeader, getLabel, getPatte
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { USER } from "egov-ui-kit/src/utils/endPoints.js"
 import {
   getFileUrl,
   getFileUrlFromAPI, getLocaleLabels, getQueryArg,
@@ -843,7 +844,7 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        `${USER.SEARCH.URL}?tenantId=${commonConfig.tenantId}`,
         "_search",
         [],
         {
@@ -909,7 +910,7 @@ export const getUserDataFromUuid = async bodyObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/user/_search",
+      USER.SEARCH.URL,
       "",
       [],
       bodyObject
@@ -2782,7 +2783,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        "/user/_search?tenantId=" + tenantId,
+        `${USER.SEARCH.URL}?tenantId=` + tenantId,
         "_search",
         [],
         {
