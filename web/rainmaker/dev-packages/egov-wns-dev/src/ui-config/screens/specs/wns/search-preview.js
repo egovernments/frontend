@@ -31,12 +31,12 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
-import { WATER_UPDATE } from "egov-ui-kit/utils/endPoints";
+import { WATER_UPDATE, SEWERAGE_UPDATE } from "egov-ui-kit/utils/endPoints";
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let service = getQueryArg(window.location.href, "service");
 let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
-let serviceUrl = serviceModuleName === "NewWS1" ? WATER_UPDATE.POST.URL : "/sw-services/swc/_update";
+let serviceUrl = serviceModuleName === "NewWS1" ? WATER_UPDATE.POST.URL : SEWERAGE_UPDATE.POST.URL;
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
@@ -45,7 +45,7 @@ const resetData = () => {
   applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   service = getQueryArg(window.location.href, "service");
   serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
-  serviceUrl = serviceModuleName === "NewWS1" ? WATER_UPDATE.POST.URL : "/sw-services/swc/_update";
+  serviceUrl = serviceModuleName === "NewWS1" ? WATER_UPDATE.POST.URL : SEWERAGE_UPDATE.POST.URL;
   redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   editredirect = `apply?${redirectQueryString}&action=edit`;
   if (isModifyMode()) {

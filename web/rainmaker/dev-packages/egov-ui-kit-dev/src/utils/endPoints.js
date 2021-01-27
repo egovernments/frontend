@@ -311,6 +311,7 @@ export const WATER_CAL_ADHOC = {
     URL: "water-calculator/waterCalculator/_applyAdhocTax",
   }
 }
+<<<<<<< Updated upstream
 =======
 
 export const IDGEN = {
@@ -319,4 +320,22 @@ export const IDGEN = {
     ACTION: "_generate",
   },
 };
+>>>>>>> Stashed changes
+=======
+export const SEWERAGE_SEARCH = {
+  POST : {
+    URL: "/sewerage/swc/_search",
+    ACTION: "_search",
+  }
+} 
+export const SEWERAGE_CREATE = {
+  POST : {
+    URL : "/sewerage/swc/_create",
+  }
+}
+export const SEWERAGE_UPDATE = {
+  POST : {
+    URL : "/sewerage/swc/_update",
+  }
+}
 >>>>>>> Stashed changes
