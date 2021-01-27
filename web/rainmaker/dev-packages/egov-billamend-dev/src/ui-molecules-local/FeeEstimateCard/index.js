@@ -52,6 +52,10 @@ const styles = {
     leftIcon: {
         color: "grey",
         marginRight: 4
+    },
+    taxHeadMasterCodes: {
+        fontSize: "12px",
+        marginTop: "5px"
     }
 };
 
@@ -104,6 +108,7 @@ function FeesEstimateCard(props) {
                                 <Grid container xs={8}>
                                     <LabelContainer 
                                         labelKey = {getTransformedLocale(`BILL_${fee.taxHeadMasterCode}`)}
+                                        className={classes.taxHeadMasterCodes}
                                     />
                                     {/* <Typography>{`BILL_${fee.taxHeadMasterCode}`}</Typography> */}
                                     {tooltip}
@@ -113,7 +118,7 @@ function FeesEstimateCard(props) {
                                 );
                             let textRight = fee ? (
                                 <Grid xs={4} align="right">
-                                    <Typography variant="body2">
+                                    <Typography variant="body2" className={classes.taxHeadMasterCodes}>
                                         {fee.taxAmount}
                                     </Typography>
                                 </Grid>
