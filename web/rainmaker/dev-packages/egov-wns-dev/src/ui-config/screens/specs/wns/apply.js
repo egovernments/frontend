@@ -2,9 +2,8 @@ import commonConfig from "config/common.js";
 import {
   getBreak, getCommonCard,
   getCommonContainer, getCommonHeader,
-
-
-
+  getTextField,
+  getPattern,
   getCommonParagraph, getCommonTitle, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -34,6 +33,8 @@ import { reviewConnectionDetails, snackbarWarningMessage } from "./applyResource
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { reviewOwner } from "./applyResource/reviewOwner";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+
 import './index.css'
 
 let isMode = isModifyMode();
@@ -145,7 +146,8 @@ export const getMdmsData = async dispatch => {
             { name: "ModifyConnectionDocuments" },
             { name: "waterSource" },
             { name: "connectionType" },
-            { name: "PropertySearch" }
+            { name: "PropertySearch" },
+            { name: "TaxHeadMaster" }
           ]
         },
         { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" }]}
@@ -218,6 +220,7 @@ export const getMdmsData = async dispatch => {
 
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
+    
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
 };
@@ -551,6 +554,44 @@ const pageReset = (dispatch) => {
   connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
 }
 
+const getIndividualTaxheads = (item,index,dispatch) =>{
+  console.info("came to create each item==",item.code);
+  //return{
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children",
+        `taxheadField_${item.code.split(".").join("_")}`,
+        getTextField({
+          label: {
+            labelName: "Tax Amount",
+            labelKey: `${getTransformedLocale(item.code)}`,
+          },
+          placeholder: {
+            labelName: "Enter Tax Amount",
+            labelKey: "UC_AMOUNT_TO_BE_COLLECTED_PLACEHOLDER",
+          },
+         
+          componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children.taxheadField_${item.code.split(".").join("_")}`,
+          pattern: getPattern("DecimalNumber"),
+          visible:true,
+          jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
+          props: {
+            type:"number",
+            jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
+          },
+          jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
+          
+   
+        
+      })
+     
+      )
+    )
+   
+}
+
+ 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
@@ -569,6 +610,35 @@ const screenConfig = {
           ownershipCategory
         )
       );
+
+      let taxHeadDetails = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
+        []
+      );
+
+      dispatch(
+        prepareFinalObject(
+          "wsTaxHeadDetails",
+          taxHeadDetails
+        )
+      );
+
+      dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, []));
+
+      for(var i=0;i<taxHeadDetails.length;i++){        
+        dispatch(
+          prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, taxHeadDetails[i].code)
+        );
+        
+        dispatch(
+          prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
+        );
+        getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
+     
+      }
+  
+
     });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
@@ -645,10 +715,21 @@ let mode = getQueryArg(window.location.href, "mode");
     } else {
       modifyLink = "/wns/apply"
     }
+
+
+
+
+
+   // set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children", taxHeads);
+    //set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children.taxheads", taxHeads);
     set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberSewerage.props.mode",isModifyMode() && !isModifyModeAction());
     set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.mode",isModifyMode() && !isModifyModeAction());
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.url", modifyLink)
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.isMode", isMode)
+   
+   
+  
+   
     return action;
   },
 

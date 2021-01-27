@@ -23,6 +23,7 @@ import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
 import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
 import { isModifyMode } from "../../../../../ui-utils/commons";
+
 let isMode = isModifyMode();
 
 const getPlumberRadioButton = {
@@ -41,6 +42,8 @@ const getPlumberRadioButton = {
   },
   type: "array"
 };
+
+
 export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
   if(dispatch == "set"){
     set(state, `screenConfiguration.preparedFinalObject.DynamicMdms.ws-services-masters.waterSource.selectedValues[${keyIndex}]`, value);
@@ -84,6 +87,9 @@ const waterSubSourceChange = (reqObj) => {
     console.log(e);
   }
 }
+
+
+
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
     labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
@@ -225,8 +231,23 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.plumberInfo[0].mobileNumber"
       }),
+     // visible:false,
     })
   }),
+  
+
+  
+  wsConnectionTaxHeadsContainer: getCommonGrayCard({
+    subHeader: getCommonTitle({
+      labelKey: "WF_ESTIMATION"
+    }),
+   
+    wsConnectionTaxHeads:getCommonContainer({
+
+     })
+  }),
+
+
   roadCuttingChargeContainer: getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
@@ -372,7 +393,8 @@ export const additionDetails = getCommonCard({
       }),
       
     })
-  })
+  }),
+ 
 });
 
 const showHideFeilds = (dispatch, value) => {
