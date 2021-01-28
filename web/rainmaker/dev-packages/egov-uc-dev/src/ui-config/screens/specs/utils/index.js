@@ -8,6 +8,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { EMPLOYEE_ASSIGN } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -308,7 +309,7 @@ export const getEmployeeName = async queryObject => {
     let employeeName = "";
     const payload = await httpRequest(
       "post",
-      "/egov-hrms/employees/_search",
+      EMPLOYEE_ASSIGN.GET.URL,
       "",
       queryObject
     );
