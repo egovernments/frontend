@@ -1,26 +1,173 @@
 import {
-    getCommonCard,
+    convertEpochToDate, getBreak, getCommonCard,
     getCommonContainer,
     getCommonGrayCard,
-    getCommonTitle,
-    getBreak,
-    getLabelWithValue,
-    getCommonHeader,
-    convertEpochToDate
+
+
+
+    getCommonHeader, getCommonTitle,
+
+    getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getReviewDocuments } from "./document-review";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-    getQueryArg,
-    getFileUrlFromAPI,
-    getTransformedLocale,
-    getFileUrl
+    getFileUrl, getFileUrlFromAPI, getQueryArg,
+
+    getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
-import { getBillAmdSearchResult } from "../../../../ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import jp from "jsonpath";
+import commonConfig from "../../../../config/common";
+import { getBillAmdSearchResult } from "../../../../ui-utils/commons";
+import { getReviewDocuments } from "./document-review";
+import { generateBillAmendPdf } from "./utils";
+
+
+
+
+export const downloadPrintContainer = (
+    action,
+    state,
+    dispatch,
+  ) => {
+    /** MenuButton data based on status */
+    let downloadMenu = [];
+    let printMenu = [];
+    let ptMutationCertificateDownloadObject = {
+      label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
+      link: () => {
+        console.log("clicked");
+      },
+      leftIcon: "book"
+    };
+    let ptMutationCertificatePrintObject = {
+      label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
+      link: () => {
+        console.log("clicked");
+      },
+      leftIcon: "book"
+    };
+  
+
+        downloadMenu = [ptMutationCertificateDownloadObject];
+        printMenu = [ptMutationCertificatePrintObject];
+   
+    /** END */
+  
+    return {
+      rightdiv: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          style: { textAlign: "right", display: "flex" }
+        },
+        children: {
+          downloadMenu: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-billamend",
+            componentPath: "MenuButton",
+            props: {
+              data: {
+                label: { labelName: "DOWNLOAD", labelKey: "BILL_AMEND_DOWNLOAD" },
+                leftIcon: "cloud_download",
+                rightIcon: "arrow_drop_down",
+                props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "pt-download-button" },
+                menu: downloadMenu
+              }
+            }
+          },
+          printMenu: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-billamend",
+            componentPath: "MenuButton",
+            props: {
+              data: {
+                label: { labelName: "PRINT", labelKey: "BILL_AMEND_PRINT" },
+                leftIcon: "print",
+                rightIcon: "arrow_drop_down",
+                props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-print-button" },
+                menu: printMenu
+              }
+            }
+          }
+  
+        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6
+        // }
+      }
+    }
+  };
+  
+
+
+const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
+    /** MenuButton data based on status */
+    let status = get(
+        state,
+        "screenConfiguration.preparedFinalObject.Amendment.status"
+    );
+    let downloadMenu = [];
+    let printMenu = [];
+    let certificateDownloadObject = {
+        label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_ACK" },
+        link: () => {
+            generateBillAmendPdf(get(
+                state,
+                "screenConfiguration.preparedFinalObject.Amendment", {}
+            ), commonConfig.tenantId, 'download');
+        },
+        leftIcon: "book"
+    };
+    let certificatePrintObject = {
+        label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_ACK" },
+        link: () => {
+            generateBillAmendPdf(get(
+                state,
+                "screenConfiguration.preparedFinalObject.Amendment", {}
+            ), commonConfig.tenantId, 'print');
+        },
+        leftIcon: "book"
+    };
+
+
+    switch (status) {
+        case "ACTIVE":
+            downloadMenu = [
+                certificateDownloadObject
+            ];
+            printMenu = [
+                certificatePrintObject
+            ];
+            break;
+        case "INWORKFLOW":
+            downloadMenu = [];
+            printMenu = [];
+            break;
+        default:
+            break;
+    }
+    dispatch(
+        handleField(
+            "search-preview",
+            "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.downloadMenu",
+            "props.data.menu",
+            downloadMenu
+        )
+    );
+    dispatch(
+        handleField(
+            "search-preview",
+            "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.printMenu",
+            "props.data.menu",
+            printMenu
+        )
+    );
+    /** END */
+};
 
 
 export const getFeesEstimateCard = props => {
@@ -252,6 +399,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
         adjustmentAmountDetails(state, dispatch, amendments[0]);
         documentDetailsPreview(state, dispatch, amendments[0]);
         onDemandRevisionBasisHidendShowFields(state, dispatch, action, amendments[0]);
+        setDownloadMenu(state, dispatch);
     }
 }
 
@@ -265,6 +413,17 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "search-preview",
     beforeInitScreen: (action, state, dispatch) => {
+        const printCont = downloadPrintContainer(
+            action,
+            state,
+            dispatch,
+          );
+      
+          set(
+            action,
+            "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+            printCont
+          );
         getData(action, state, dispatch).then(responseAction => { });
         return action;
     },
