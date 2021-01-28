@@ -1,5 +1,10 @@
 export const getWFConfig = (module, businessService) => {
   switch (module.toUpperCase()) {
+    case "LAMS":
+      return {
+        INITIATED: "/lams-common/search-preview",
+        DEFAULT: "lams-common/search-preview",
+      };
     case "TL-SERVICES":
       return {
         INITIATED: "/tradelicence/apply",
