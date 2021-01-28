@@ -23,12 +23,13 @@ import {
 import { httpRequest } from "./api";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
       "post",
-      "/tl-services/v1/_update",
+      TL.UPDATE.URL,
       "",
       [],
       requestBody
@@ -56,7 +57,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      TL.SEARCH.URL,
       "",
       queryObject
     );
@@ -462,7 +463,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           )
         );
         set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
-        updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
+        updateResponse = await httpRequest("post", TL.UPDATE.URL, "", [], {
           Licenses: queryObject
         })
       }
@@ -531,7 +532,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
       const response = await httpRequest(
         "post",
-        "/tl-services/v1/_create",
+        TL.CREATE.URL,
         "",
         [],
         { Licenses: queryObject }

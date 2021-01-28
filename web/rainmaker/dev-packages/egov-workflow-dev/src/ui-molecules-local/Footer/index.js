@@ -17,6 +17,7 @@ import {
 import { getDownloadItems } from "./downloadItems";
 import { EMPLOYEE_ASSIGN } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 class Footer extends React.Component {
   state = {
@@ -150,7 +151,7 @@ class Footer extends React.Component {
     try {
       const response = await httpRequest(
         "post",
-        "/tl-services/v1/_update",
+        TL.UPDATE.URL,
         "",
         [],
         {

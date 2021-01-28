@@ -384,3 +384,28 @@ export const PDFGEN = {
     URL: "pdfgen/v1/_create",
   },
 };
+
+export const TL = {
+  CREATE: {
+    URL: "/tradelicense/v1/_create",
+  },
+  UPDATE: {
+    URL: "/tradelicense/v1/_update",
+  },
+  SEARCH: {
+    URL: "/tradelicense/v1/_search",
+  },
+};
+
+export const TL_BPAREG = {
+  CREATE: {
+    URL: "/tradelicense/v1/BPAREG/_create",
+  },
+  UPDATE: {
+    URL: "/tradelicense/v1/BPAREG/_update",
+  },
+  SEARCH: {
+    URL: "/tradelicense/v1/BPAREG/_search",
+  },
+};
+

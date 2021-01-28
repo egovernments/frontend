@@ -41,6 +41,7 @@ import {
 } from "./applyResource/review-location";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import "./index.css";
+import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let headerSideText = { word1: "", word2: "" };
@@ -579,7 +580,7 @@ const screenConfig = {
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "Licenses",
-            updateUrl: "/tl-services/v1/BPAREG/_update"
+            updateUrl: TL_BPAREG.UPDATE.URL
           }
         },
         tradeReviewDetails

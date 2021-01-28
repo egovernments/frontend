@@ -5,6 +5,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
+import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
 
 import {
   getFileUrl,
@@ -5406,7 +5407,7 @@ export const getLicenseDetails = async (state, dispatch) => {
   try {
     const License = await httpRequest(
       "post",
-      "/tl-services/v1/BPAREG/_search",
+      TL_BPAREG.SEARCH.URL,
       "", [],
       queryObject
     );

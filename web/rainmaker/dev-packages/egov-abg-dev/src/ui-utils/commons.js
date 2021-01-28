@@ -18,12 +18,13 @@ import {
 } from "../ui-config/screens/specs/utils";
 import store from "../ui-redux/store";
 import { httpRequest } from "./api";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
       "post",
-      "/tl-services/v1/_update",
+      TL.UPDATE.URL,
       "",
       [],
       requestBody
@@ -445,7 +446,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       !isEditFlow &&
-        (await httpRequest("post", "/tl-services/v1/_update", "", [], {
+        (await httpRequest("post", TL.UPDATE.URL, "", [], {
           Licenses: queryObject
         }));
       let searchQueryObject = [
@@ -492,7 +493,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
       const response = await httpRequest(
         "post",
-        "/tl-services/v1/_create",
+        TL.CREATE.URL,
         "",
         [],
         { Licenses: queryObject }

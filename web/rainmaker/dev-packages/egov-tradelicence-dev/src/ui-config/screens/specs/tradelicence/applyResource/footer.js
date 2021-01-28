@@ -13,6 +13,7 @@ import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
 import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields} from "../../utils";
 import "./index.css";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
@@ -634,7 +635,7 @@ export const renewTradelicence = async (financialYear, state, dispatch) => {
   set(licences[0], "applicationType", "RENEWAL");
   set(licences[0], "financialYear", nextFinancialYear);
 
-  const response = await httpRequest("post", "/tl-services/v1/_update", "", [], {
+  const response = await httpRequest("post", TL.UPDATE.URL, "", [], {
     Licenses: licences
   })
   const renewedapplicationNo = get(

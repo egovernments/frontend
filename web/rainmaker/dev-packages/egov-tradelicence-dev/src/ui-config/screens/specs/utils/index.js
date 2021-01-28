@@ -16,6 +16,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -480,7 +481,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      TL.SEARCH.URL,
       "",
       queryObject
     );
