@@ -40,25 +40,25 @@ import {
             //callBack: convertEpochToDate
           }
         ),
-        aadhaarNo: getLabelWithValue(
-          {
-            labelName: "Aadhaar Number ",
-            labelKey: "LAMS_AADHAAR_NO"
-          },
-          {
-            jsonPath: "lamsStore.Lease[0].userDetails[0].aadhaarNumber",
-            //callBack: convertEpochToDate
-          }
-        ),
-        panNo:getLabelWithValue(
-          {
-            labelName: "PAN No",
-            labelKey: "LAMS_PAN_NO"
-          },
-          {
-            jsonPath: "lamsStore.Lease[0].userDetails[0].pan",
-          }
-        ),
+        // aadhaarNo: getLabelWithValue(
+        //   {
+        //     labelName: "Aadhaar Number ",
+        //     labelKey: "LAMS_AADHAAR_NO"
+        //   },
+        //   {
+        //     jsonPath: "lamsStore.Lease[0].userDetails[0].aadhaarNumber",
+        //     //callBack: convertEpochToDate
+        //   }
+        // ),
+        // panNo:getLabelWithValue(
+        //   {
+        //     labelName: "PAN No",
+        //     labelKey: "LAMS_PAN_NO"
+        //   },
+        //   {
+        //     jsonPath: "lamsStore.Lease[0].userDetails[0].pan",
+        //   }
+        // ),
         mobileNo:getLabelWithValue(
           {
             labelName: "Mobile No",

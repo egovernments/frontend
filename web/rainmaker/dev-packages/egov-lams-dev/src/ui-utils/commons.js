@@ -1047,6 +1047,8 @@ export const prepareRequestBodyForLeaseAppPdf = (state, dispatch , forEsign) =>{
   requestBody.surveyId = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].leaseDetails.surveyId");
   requestBody.months = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months");
   requestBody.fatherOrHusbandName = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName");
+  requestBody.located = (get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located") === "insideCivil") ? 1: 2;
+  ;
   requestBody.forEsign = forEsign;
 
   let reqWrapper = {"leaseApplication":[requestBody]}

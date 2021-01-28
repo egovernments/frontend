@@ -49,7 +49,7 @@ import {
     setVisibilityLeaseDetails(action, state, dispatch, true, true);
     setVisibilityDownloadButton(action, state, dispatch, (process.env.REACT_APP_NAME === "Citizen"), true);
     setVisibilityEsignButton(action, state, dispatch,  (process.env.REACT_APP_NAME === "Citizen"), true);
-    setVisibilityMonths(action, state, dispatch, true, true);
+    //setVisibilityMonths(action, state, dispatch, true, true);
     setVisibilityApplicationType(action, state, dispatch, true, true);
   }
 
@@ -61,7 +61,7 @@ import {
     setVisibilityLeaseDetails(action, state, dispatch, false, false);
     setVisibilityDownloadButton(action, state, dispatch, false, false);
     setVisibilityEsignButton(action, state, dispatch, false, false);
-    setVisibilityMonths(action, state, dispatch, false, false);
+    //setVisibilityMonths(action, state, dispatch, false, false);
   }
 
   // const onMonthsChanged = (action,state, dispatch) => {
@@ -119,7 +119,7 @@ import {
       setVisibilityLeaseDetails(action, state, dispatch, false);
       setVisibilityDownloadButton(action, state, dispatch, false);
       setVisibilityEsignButton(action, state, dispatch, false);
-      setVisibilityMonths(action, state, dispatch, false);
+      //setVisibilityMonths(action, state, dispatch, false);
     }
   }
 
@@ -137,7 +137,7 @@ import {
       setVisibilityLeaseDetails(action, state, dispatch,true);
       setVisibilityDownloadButton(action, state, dispatch, true);
       setVisibilityEsignButton(action, state, dispatch, (process.env.REACT_APP_NAME === "Citizen"));
-      setVisibilityMonths(action, state, dispatch, true);
+      //setVisibilityMonths(action, state, dispatch, true);
     }
   }
 
@@ -201,7 +201,7 @@ import {
       setVisibilityLocated(action, state, dispatch, true);
       setVisibilityDownloadButton(action, state, dispatch, false);
       setVisibilityEsignButton(action, state, dispatch, false)
-      setVisibilityMonths(action, state, dispatch, false);
+      //setVisibilityMonths(action, state, dispatch, false);
 
     }
 
@@ -226,7 +226,7 @@ import {
       setVisibilitySurveyNo(action, state, dispatch, false);
       setVisibilityDownloadButton(action, state, dispatch, false);
       setVisibilityEsignButton(action, state, dispatch, false);
-      setVisibilityMonths(action, state, dispatch, false);
+      //setVisibilityMonths(action, state, dispatch, false);
     }
     
 
@@ -334,38 +334,38 @@ import {
     }
   }
 
-  const setVisibilityMonths = (action, state, dispatch, visible, disabled) => {
-    dispatch(
-      handleField(
-        "newApplication",
-        "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
-        "visible",
-        visible
-      )
-    );
-    if(disabled === true || disabled === false)
-    {
-      dispatch(
-        handleField(
-          "newApplication",
-          "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
-          "props.disabled",
-          disabled
-        )
-      );
-    }
-    if(get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months") && !isPostDSignMode())
-    {
-      dispatch(
-        handleField(
-          "newApplication",
-          "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
-          "props.value",
-          ""
-        )
-      );
-    }
-  }
+  // const setVisibilityMonths = (action, state, dispatch, visible, disabled) => {
+  //   dispatch(
+  //     handleField(
+  //       "newApplication",
+  //       "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
+  //       "visible",
+  //       visible
+  //     )
+  //   );
+  //   if(disabled === true || disabled === false)
+  //   {
+  //     dispatch(
+  //       handleField(
+  //         "newApplication",
+  //         "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
+  //         "props.disabled",
+  //         disabled
+  //       )
+  //     );
+  //   }
+  //   if(get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months") && !isPostDSignMode())
+  //   {
+  //     dispatch(
+  //       handleField(
+  //         "newApplication",
+  //         "components.div1.children.details.children.cardContent.children.optionSelection.children.months",
+  //         "props.value",
+  //         ""
+  //       )
+  //     );
+  //   }
+  //}
 
   const setVisibilityLeaseDetails = (action, state, dispatch, visible, disabled) =>{
     dispatch(
