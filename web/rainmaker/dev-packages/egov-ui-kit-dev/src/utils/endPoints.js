@@ -451,3 +451,13 @@ export const FINANCE_MASTER = {
     URL: "/finance-masters/functions/_search",
   },
 };
+
+export const SEARCHER = {
+  BILL_GENIE: {
+    URL: "searcher/bill-genie/billswithaddranduser/_get",
+  },
+  LOCALITY: {
+    URL: "searcher/locality/",
+    ACTION: "_get"
+  },
+};
