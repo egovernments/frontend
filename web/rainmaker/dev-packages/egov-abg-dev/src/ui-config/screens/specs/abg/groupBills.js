@@ -9,7 +9,7 @@ import {
 } from "./groupBillResource/groupBillSearch";
 import { searchResults } from "./groupBillResource/searchResults";
 import "./index.css";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 const tenantId = getTenantId();
 
@@ -67,7 +67,7 @@ const getMDMSData = async (action, state, dispatch) => {
   try {
     const payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

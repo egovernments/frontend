@@ -8,7 +8,7 @@ import set from "lodash/set";
 import { setServiceCategory } from "../utils";
 import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { IDGEN } from "egov-ui-kit/src/utils/endPoints";
 
 const header = getCommonHeader({
@@ -43,7 +43,7 @@ const loadServiceType = async (tenantId, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       requestBody
@@ -85,7 +85,7 @@ const getData = async (action, state, dispatch, demandId) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       requestBody

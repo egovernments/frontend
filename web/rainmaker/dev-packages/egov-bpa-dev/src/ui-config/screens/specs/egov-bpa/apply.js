@@ -47,7 +47,7 @@ import { changeStep } from "./applyResource/footer";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { nocDetailsApply } from "./noc";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
@@ -219,7 +219,7 @@ const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

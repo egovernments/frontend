@@ -20,7 +20,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import { getNocSearchResults } from "../../../../ui-utils/commons";
 import { checkValueForNA, ifUserRoleExists } from "../utils/index";
 import { requiredDocumentsData } from "../utils/noc-functions";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const getRedirectionURL = () => {
   const redirectionURL = ifUserRoleExists("CITIZEN")
@@ -264,7 +264,7 @@ const getRequiredMdmsDetails = async (state, dispatch, action) => {
   };
   let payload = await httpRequest(
     "post",
-    MDMS.URL,
+    MDMS.GET.URL,
     "_search",
     [],
     mdmsBody

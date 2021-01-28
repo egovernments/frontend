@@ -5,7 +5,7 @@ import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { httpRequest } from "../../../../../ui-utils";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
@@ -71,7 +71,7 @@ export const searchApiCall = async (state, dispatch) => {
           }
         }
         //Read metered & non-metered demand expiry date and assign value.
-        payloadbillingPeriod = await httpRequest("post", MDMS.URL, "_search", [], mdmsBody);
+        payloadbillingPeriod = await httpRequest("post", MDMS.GET.URL, "_search", [], mdmsBody);
         
       } catch (err) { console.log(err) }
       let getSearchResult = getSearchResults(queryObject)

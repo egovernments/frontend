@@ -30,7 +30,7 @@ import React from "react";
 import { connect } from "react-redux";
 import "./index.css";
 import { getWFConfig } from "./workflowRedirectionConfig";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 const actionsStyles = theme => ({
   root: {
@@ -162,7 +162,7 @@ class InboxData extends React.Component {
     };
     try {
       const payload = await httpRequest(
-        MDMS.URL,
+        MDMS.GET.URL,
         "_search",
         [],
         mdmsBody

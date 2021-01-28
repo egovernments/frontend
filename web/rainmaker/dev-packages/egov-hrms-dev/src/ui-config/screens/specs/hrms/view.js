@@ -10,8 +10,7 @@ import { deactivateEmployee } from "./viewResource/deactivate-employee";
 import { employeeReviewDetails } from "./viewResource/employee-review";
 import { hrViewFooter } from "./viewResource/footer";
 import { getEmployeeData } from "./viewResource/functions";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
-
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -43,7 +42,7 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
   try {
     const payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

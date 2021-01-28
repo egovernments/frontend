@@ -14,7 +14,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 
 const getMDMSData = (action, dispatch) => {
   const moduleDetails = [
@@ -49,7 +49,7 @@ const getMDMSAppType =async (dispatch) => {
     try {
       let applicationType = [];
       let payload = null;
-       payload = await httpRequest("post", MDMS.URL, "_search", [], mdmsBody);       
+       payload = await httpRequest("post", MDMS.GET.URL, "_search", [], mdmsBody);       
         if(payload && payload.MdmsRes['ws-services-masters'] && payload.MdmsRes['ws-services-masters'].ApplicationType !== undefined){
           payload.MdmsRes['ws-services-masters'].ApplicationType.forEach(obj => applicationType.push({ code: obj.code.replace(/_/g,' '), name: obj.name, businessService:obj.businessService}));          
           applicationType.forEach(type=>getBusinessService(type.businessService,dispatch))
@@ -109,7 +109,7 @@ export const getMdmsTenantsData = async (dispatch) => {
       let payload = null;
       payload = await httpRequest(
           "post",
-          MDMS.URL,
+          MDMS.GET.URL,
           "_search",
           [],
           mdmsBody

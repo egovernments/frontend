@@ -18,7 +18,7 @@ import store from "ui-redux/store";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -490,7 +490,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      MDMS_GET.URL,
+      MDMS_GET.POST.URL,
       "",
       queryObject
     );
@@ -711,7 +711,7 @@ export const getRequiredDocData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

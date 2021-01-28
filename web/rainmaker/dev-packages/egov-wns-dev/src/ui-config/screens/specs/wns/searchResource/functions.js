@@ -5,7 +5,7 @@ import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerag
 import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
@@ -63,7 +63,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
           }
         }
         //Read metered & non-metered demand expiry date and assign value.
-        payloadbillingPeriod = await httpRequest("post", MDMS.URL, "_search", [], mdmsBody);        
+        payloadbillingPeriod = await httpRequest("post", MDMS.GET.URL, "_search", [], mdmsBody);        
         console.log(payloadbillingPeriod);
       } catch (err) { console.log(err) }
       let getSearchResult = getSearchResults(queryObject)

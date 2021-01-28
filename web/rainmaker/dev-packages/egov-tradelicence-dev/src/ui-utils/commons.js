@@ -22,7 +22,7 @@ import {
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
 
 export const updateTradeDetails = async requestBody => {
@@ -691,7 +691,7 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
   try {
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody
