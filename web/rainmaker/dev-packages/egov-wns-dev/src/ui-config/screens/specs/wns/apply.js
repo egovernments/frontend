@@ -3,6 +3,7 @@ import {
   getBreak, getCommonCard,
   getCommonContainer, getCommonHeader,
   getTextField,
+  getSelectField,
   getPattern,
   getCommonParagraph, getCommonTitle, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -596,6 +597,176 @@ const getIndividualTaxheads = (item,index,dispatch) =>{
    
 }
 
+
+const setRoadCuttingEstimate = (item,index,dispatch) =>{
+console.info("came for road cutting",item);
+  dispatch(
+    handleField(
+      "apply",
+     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children",
+     `roadCutting_${index}`,
+     getCommonContainer({
+      roadTypeDiv:{
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children:{
+            subHeader: getCommonTitle({
+                labelKey: `${getTransformedLocale(item.code)}`
+              },
+              {style: {
+                 fontSize: "15px",
+                // overflow-wrap: "break-word"
+                overflowWrap: 'break-word'
+                }}
+            )},
+        gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+    },
+  
+      
+      // roadType:getSelectField({
+      //     label: {
+      //     labelName: "Road Type",
+      //     labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+      //   },
+      
+      // localePrefix: {
+      //     moduleName: "WS",
+      //     masterName: "ROADTYPE"
+      // },
+      // required: false,
+      // sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
+      // componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.roadType`,
+      // jsonPath:`applyScreen.roadTypeEst[${index}].roadType`,
+      // value:"TRADE",
+      //   defaultValue:"TTT",
+      // props:{
+      //   //value:`${item}`,
+      //   value:"TRADE",
+      //   defaultValue:"TTT",
+
+      // },
+      //  gridDefination: {
+      //     xs: 12,
+      //     sm: 2
+      //   },
+      // }),
+      RoadCuttingLength:getTextField({
+        label: {
+          labelName: "Road Cutting Length",
+          labelKey: "WF_ESTIMATION_LENGTH"
+        },
+        placeholder: {
+          labelName: "Road Cutting Length",
+          labelKey: "WF_ESTIMATION_LENGTH"
+        },
+  
+        required: true,
+        visible: true,
+        pattern: getPattern("DecimalNumber"),
+        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingLength`,
+        jsonPath: `applyScreen.roadTypeEst[${index}].length`,
+        gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+      }),
+      RoadCuttingBreadth:getTextField({
+        label: {
+          labelName: "Road Cutting Breadth",
+          labelKey: "WF_ESTIMATION_BREADTH"
+        },
+        placeholder: {
+          labelName: "Road Cutting Breadth",
+          labelKey: "WF_ESTIMATION_BREADTH"
+        },
+
+        required: true,
+        visible: true,
+        pattern: getPattern("DecimalNumber"),
+        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingBreadth`,
+        jsonPath: `applyScreen.roadTypeEst[${index}].breadth`,
+        gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+      }),
+      RoadCuttingDepth:getTextField({
+        label: {
+          labelName: "Road Cutting Depth",
+          labelKey: "WF_ESTIMATION_DEPTH"
+        },
+        placeholder: {
+          labelName: "Road Cutting Depth",
+          labelKey: "WF_ESTIMATION_DEPTH"
+        },
+
+        required: true,
+        visible: true,
+        pattern: getPattern("DecimalNumber"),
+       componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingDepth`,
+       jsonPath: `applyScreen.roadTypeEst[${index}].depth`,
+        gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+      }),
+      RoadCuttingRate:getTextField({
+        label: {
+          labelName: "Road Cutting Rate",
+          labelKey: "WF_ESTIMATION_RATE"
+        },
+        placeholder: {
+          labelName: "Road Cutting Rate",
+          labelKey: "WF_ESTIMATION_RATE"
+        },
+
+        required: true,
+        visible: true,
+        pattern: getPattern("DecimalNumber"),
+        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingRate`,
+        jsonPath: `applyScreen.roadTypeEst[${index}].rate`,
+        gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+      }),
+      RoadCuttingTotalAmt:getTextField({
+        label: {
+          labelName: "Road Cutting Total",
+          labelKey: "WF_ESTIMATION_TOTAL_AMT"
+        },
+        placeholder: {
+          labelName: "Road Cutting Total",
+          labelKey: "WF_ESTIMATION_TOTAL_AMT"
+        },
+        props:{
+          required: true,
+          visible: true,
+          disabled: true,
+        },
+      
+        pattern: getPattern("DecimalNumber"),
+        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingTotalAmt`,
+        //jsonPath: `applyScreen.roadTypeEst[${index}].rate`,
+        gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+      })
+      
+
+
+     }),
+    
+  
+     )
+    )
+  
+
+}
  
 const screenConfig = {
   uiFramework: "material-ui",
@@ -615,33 +786,45 @@ const screenConfig = {
           ownershipCategory
         )
       );
-
       let taxHeadDetails = get(
         state,
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
         []
       );
-
-      dispatch(
-        prepareFinalObject(
-          "wsTaxHeadDetails",
-          taxHeadDetails
-        )
-      );
-
+      console.info("taxheads==",taxHeadDetails);
+     // dispatch(
+      //   prepareFinalObject(
+      //     "wsTaxHeadDetails",
+      //     taxHeadDetails
+      //   )
+      // );
+      //Taxheads
       dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, []));
-
       for(var i=0;i<taxHeadDetails.length;i++){        
         dispatch(
           prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, taxHeadDetails[i].code)
         );
-        
         dispatch(
           prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
         );
         getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
      
       }
+      //Road cutting charges
+      dispatch(prepareFinalObject(`applyScreen.roadTypeEst`, []));
+      let roadTypes = get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData.sw-services-calculation.RoadType",
+        []
+      );
+      console.info("Road types====>",roadTypes);
+      for(var i=0;i<roadTypes.length;i++){ 
+        dispatch(
+          prepareFinalObject(`applyScreen.roadTypeEst[${i}].roadType`, roadTypes[i].code)
+        );
+        setRoadCuttingEstimate(roadTypes[i],i,dispatch);
+      }
+        
   
 
     });

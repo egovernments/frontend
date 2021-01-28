@@ -250,65 +250,72 @@ export const additionDetails = getCommonCard({
       labelKey: "WF_ESTIMATION"
     }),
    
-    wsConnectionTaxHeads:getCommonContainer({
-
-     })
-  }),
-
-
-  roadCuttingChargeContainer: getCommonGrayCard({
-    subHeader: getCommonTitle({
-      labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
-    }),
-    roadDetails: getCommonContainer({
-      roadType: getSelectField({
-        label: {
-          labelName: "Road Type",
-          labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
-        },
-      //   props: {
-      //     label: {
-      //       labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
-      //     },
-      //     placeholder: {
-      //       labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
-      //     }
-      // },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "WS",
-          masterName: "ROADTYPE"
-        },
-        required: false,
-        sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        errorMessage: "ERR_INVALID_BILLING_PERIOD",
-        jsonPath: "applyScreen.roadType"
+    wsConnectionTaxHeads:getCommonContainer({}),
+    roadCuttingChargeContainer:getCommonContainer({
+      subHeader: getCommonTitle({
+        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
       }),
-      enterArea: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_AREA_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: getPattern("Amount"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.roadCuttingArea"
-      })
-    }),
+       roadDetails: getCommonContainer({
+          
+       }),
+    })
+
   }),
+
+
+  // roadCuttingChargeContainer: getCommonGrayCard({
+  //   subHeader: getCommonTitle({
+  //     labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+  //   }),
+  //   roadDetails: getCommonContainer({
+  //     roadType: getSelectField({
+  //       label: {
+  //         labelName: "Road Type",
+  //         labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+  //       },
+  //     //   props: {
+  //     //     label: {
+  //     //       labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+  //     //     },
+  //     //     placeholder: {
+  //     //       labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
+  //     //     }
+  //     // },
+  //       placeholder: {
+  //         labelKey: "WS_ADDN_DETAILS_ROAD_TYPE_PLACEHOLDER"
+  //       },
+  //       localePrefix: {
+  //         moduleName: "WS",
+  //         masterName: "ROADTYPE"
+  //       },
+  //       required: false,
+  //       sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.RoadType",
+  //       gridDefination: {
+  //         xs: 12,
+  //         sm: 6
+  //       },
+  //       required: false,
+  //       errorMessage: "ERR_INVALID_BILLING_PERIOD",
+  //       jsonPath: "applyScreen.roadType"
+  //     }),
+  //     enterArea: getTextField({
+  //       label: {
+  //         labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+  //       },
+  //       placeholder: {
+  //         labelKey: "WS_ADDN_DETAILS_AREA_PLACEHOLDER"
+  //       },
+  //       gridDefination: {
+  //         xs: 12,
+  //         sm: 6
+  //       },
+  //       required: false,
+  //       pattern: getPattern("Amount"),
+  //       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+  //       jsonPath: "applyScreen.roadCuttingArea"
+  //     })
+  //   }),
+  // }),
   activationDetailsContainer: getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_ACTIVATION_DETAILS"
