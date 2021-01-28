@@ -120,7 +120,7 @@ const callBackForNext = async (state, dispatch) => {
       if (demandRevisionBasisValue !== "COURT_CASE_SETTLEMENT") {
         const fromDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.effectiveFrom");
         const toDate = get(state.screenConfiguration.preparedFinalObject, "Amendment.effectiveTill");
-        if (new Date(fromDate) > new Date(toDate)) {
+        if (new Date(fromDate) >= new Date(toDate)) {
           isFormValid = false;
           let errorMessage = {
             labelName: "From Date should be less than To Date",
