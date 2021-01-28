@@ -55,6 +55,19 @@ export const propertyLocationSummary = getCommonGrayCard({
         jsonPath: "Property.address.city"
       }
     ),
+    propertyLocation: getLabelWithValue(
+      {
+        labelName: "Property Location",
+        labelKey: "PT_COMMON_PROPERTY_LOCATION"
+      },
+      {
+        localePrefix: {
+          moduleName: "PT_COMMON",
+          masterName: "PROPERTY_LOCATION"
+        },
+        jsonPath: "Property.address.location",
+      }
+    ),
     localityOrMohalla: getLabelWithValue(
       {
         labelName: "Locality/Mohalla",
