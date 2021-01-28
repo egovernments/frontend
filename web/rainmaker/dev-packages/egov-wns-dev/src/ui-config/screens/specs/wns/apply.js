@@ -139,7 +139,7 @@ export const getMdmsData = async (state,dispatch)=> {
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
         { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" }] },
-        { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
+        { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" },{name: "MeterStatus"}] },
         {
           moduleName: "ws-services-masters", masterDetails: [
             { name: "Documents" },
@@ -159,8 +159,12 @@ export const getMdmsData = async (state,dispatch)=> {
     payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
     if (payload.MdmsRes['ws-services-calculation'].PipeSize !== undefined && payload.MdmsRes['ws-services-calculation'].PipeSize.length > 0) {
       let pipeSize = [];
+      let meterStatus=[];
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
       payload.MdmsRes['ws-services-calculation'].pipeSize = pipeSize;
+      payload.MdmsRes['ws-services-calculation'].MeterStatus.forEach(obj => meterStatus.push({ code: obj.name, name: obj.code, active: obj.active }));
+      payload.MdmsRes['ws-services-calculation'].meterStatus = meterStatus;
+
       let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
       payload.MdmsRes['ws-services-masters'].waterSource.forEach(obj => {
         waterSource.push({

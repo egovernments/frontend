@@ -576,10 +576,25 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "WaterConnection[0].additionalDetails.averageMake"
-      })
+        jsonPath: "WaterConnection[0].additionalDetails.avarageMeterReading"
+      }),
+      meterStatus: {
+        ...getSelectField({
+          label: { labelKey: "WS_SERV_METER_STATUS_TYPE" },
+          placeholder: { labelKey: "WS_SERV_DETAIL_METER_STATUS_PLACEHOLDER" },
+          required: false,
+          sourceJsonPath: "applyScreenMdmsData.ws-services-calculation.meterStatus",
+          gridDefination: { xs: 12, sm: 6 },
+          errorMessage: "ERR_INVALID_BILLING_PERIOD",
+          jsonPath: "WaterConnection[0].additionalDetails.meterStatus",
+          props: {
+            disabled: false
+          }
+        }),
+      },
     })
   }),
+  
   modificationsEffectiveFrom: getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_MODIFICATIONS_EFFECTIVE_FROM"

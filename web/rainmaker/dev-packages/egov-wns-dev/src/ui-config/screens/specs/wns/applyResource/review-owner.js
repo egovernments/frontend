@@ -331,11 +331,23 @@ export const activateDetailsMeter={
       labelName: "Average Meter Reading",
       labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
     },
-    { jsonPath: "WaterConnection[0].additionalDetails.averageMake",
+    { jsonPath: "WaterConnection[0].additionalDetails.avarageMeterReading",
       callBack: handleNA }, {
         labelKey: "WS_OLD_LABEL_NAME"
       },
-      { jsonPath: "WaterConnectionOld[0].additionalDetails.averageMake",
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.avarageMeterReading",
+      callBack: handleNA }
+  ),
+  reviewMeterStatus : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Meter Status",
+      labelKey: "WS_SERV_METER_STATUS_TYPE"
+    },
+    { jsonPath: "WaterConnection[0].additionalDetails.meterStatus",
+      callBack: handleNA }, {
+        labelKey: "WS_OLD_LABEL_NAME"
+      },
+      { jsonPath: "WaterConnectionOld[0].additionalDetails.meterStatus",
       callBack: handleNA }
   ),
 }
