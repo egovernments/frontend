@@ -32,6 +32,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = (position,children) => {
   return {
@@ -195,7 +196,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      TL.SEARCH.URL,
       "",
       queryObject
     );

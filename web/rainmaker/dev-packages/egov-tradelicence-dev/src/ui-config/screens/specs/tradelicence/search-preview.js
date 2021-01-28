@@ -36,6 +36,7 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -569,7 +570,7 @@ const screenConfig = {
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update",
+            updateUrl: TL.UPDATE.URL,
             beforeSubmitHook:beforeSubmitHook
           }
         },
@@ -582,7 +583,7 @@ const screenConfig = {
         //     open: true,
         //     dataPath: "Licenses",
         //     moduleName: "NewTL",
-        //     updateUrl: "/tl-services/v1/_update",
+        //     updateUrl: TL.UPDATE.URL,
         //     data: {
         //       buttonLabel: "RESUBMIT",
         //       moduleName: "NewTL",

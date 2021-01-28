@@ -32,6 +32,7 @@ import jp from "jsonpath";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { edcrDetailsToBpaDetails } from "../ui-config/screens/specs/utils"
 import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
+import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
 
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
@@ -123,7 +124,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/BPAREG/_search",
+      TL_BPAREG.SEARCH.URL,
       "",
       queryObject
     );
@@ -176,7 +177,7 @@ export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
       "post",
-      "/tl-services/v1/BPAREG/_update",
+      TL_BPAREG.UPDATE.URL,
       "",
       [],
       requestBody
@@ -1092,7 +1093,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       if (!isEditFlow) {
         searchResponse = await httpRequest(
           "post",
-          "/tl-services/v1/BPAREG/_update",
+          TL_BPAREG.UPDATE.URL,
           "",
           [],
           {
@@ -1137,7 +1138,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
       const response = await httpRequest(
         "post",
-        "/tl-services/v1/BPAREG/_create",
+        TL_BPAREG.CREATE.URL,
         "",
         [],
         { Licenses: queryObject }

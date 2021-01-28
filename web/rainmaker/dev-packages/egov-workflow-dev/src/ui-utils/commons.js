@@ -5,6 +5,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import get from "lodash/get"
 import store from "redux/store";
 import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { TL } from "egov-ui-kit/utils/endPoints";
 
 export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
     
@@ -52,7 +53,7 @@ export const getSearchResults = async (tenantId ,licenseNumber) => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      TL.SEARCH.URL,
       "",
       queryObject
     );
