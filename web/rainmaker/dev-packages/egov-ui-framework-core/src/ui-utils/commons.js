@@ -13,7 +13,7 @@ import { httpRequest, uploadFile } from "./api.js";
 import { FETCH_FILE } from "egov-ui-kit/utils/endPoints";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
-import { USER } from "egov-ui-kit/src/utils/endPoints";
+import { USER } from "egov-ui-kit/utils/endPoints";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {

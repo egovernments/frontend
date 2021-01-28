@@ -19,7 +19,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
-import { USER } from "egov-ui-kit/src/utils/endPoints";
+import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
