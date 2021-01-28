@@ -4,7 +4,7 @@ import { getCommonCaption, getCommonCard, getCommonSubHeader, getLabel, getPatte
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, initScreen, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { USER } from "egov-ui-kit/src/utils/endPoints";
+import { USER } from "egov-ui-kit/utils/endPoints";
 import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
 
 import {

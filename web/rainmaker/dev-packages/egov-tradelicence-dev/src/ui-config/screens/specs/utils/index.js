@@ -13,7 +13,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import "./index.css";
 import { showHideAdhocPopup as showReqDocPopup} from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { USER } from "egov-ui-kit/src/utils/endPoints";
+import { USER } from "egov-ui-kit/utils/endPoints";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
