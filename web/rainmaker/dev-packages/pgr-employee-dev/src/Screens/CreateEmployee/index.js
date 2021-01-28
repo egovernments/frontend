@@ -18,6 +18,7 @@ import Api from "./components/api"
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css"
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
+import { FINANCE_MASTER } from "egov-ui-kit/utils/endPoints";
 
 const headerStyle ={
   backgroundColor : "#607d8b" ,
@@ -576,7 +577,7 @@ class Employee extends Component {
       self.setState({
         bankBranches: [],
       });
-    Api.commonApiPost('egf-masters/bankbranches/_search', { bank: id }).then(
+    Api.commonApiPost(FINANCE_MASTER.BANKBRANCHES.URL, { bank: id }).then(
       function(res) {
         self.setState({
           bankBranches: res['bankBranches'],
@@ -2326,7 +2327,7 @@ class Employee extends Component {
     self.fetchURLData('/hr-masters/groups/_search', {}, [], function(res) {
       checkCountAndSetState('groups', res['Group']);
     });
-    self.fetchURLData('/egf-masters/banks/_search', {}, [], function(res) {
+    self.fetchURLData(FINANCE_MASTER.BANKS_SEARCH.URL, {}, [], function(res) {
       checkCountAndSetState('banks', res['banks']);
     });
     self.fetchURLData('/egov-common-masters/categories/_search', {}, [], function(res) {
@@ -2353,13 +2354,13 @@ class Employee extends Component {
     self.fetchURLData('/hr-masters/grades/_search', {}, [], function(res) {
       checkCountAndSetState('grades', res['Grade']);
     });
-    self.fetchURLData('/egf-masters/funds/_search', {}, [], function(res) {
+    self.fetchURLData(FINANCE_MASTER.FUNDS_SEARCH.URL, {}, [], function(res) {
       checkCountAndSetState('funds', res['funds']);
     });
-    self.fetchURLData('/egf-masters/functionaries/_search', {}, [], function(res) {
+    self.fetchURLData(FINANCE_MASTER.FUNCTIONARIES_SEARCH.URL, {}, [], function(res) {
       checkCountAndSetState('functionaries', res['functionaries']);
     });
-    self.fetchURLData('/egf-masters/functions/_search', {}, [], function(res) {
+    self.fetchURLData(FINANCE_MASTER.FUNCTIONS_SEARCH.URL, {}, [], function(res) {
       checkCountAndSetState('functions', res['functions']);
     });
     self.fetchURLData('/egov-location/boundarytypes/getByHierarchyType', { hierarchyTypeName: 'ADMINISTRATION' }, [], function(res) {

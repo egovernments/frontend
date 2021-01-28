@@ -433,3 +433,21 @@ export const FIRENOC = {
     URL: "/firenoc/v1/_search",
   },
 };
+
+export const FINANCE_MASTER = {
+  BANKBRANCHES: {
+    URL: "finance-masters/bankbranches/_search",
+  },
+  BANKS_SEARCH: {
+    URL: "/finance-masters/banks/_search",
+  },
+  FUNDS_SEARCH: {
+    URL: "/finance-masters/funds/_search",
+  },
+  FUNCTIONARIES_SEARCH: {
+    URL: "/finance-masters/functionaries/_search",
+  },
+  FUNCTIONS_SEARCH: {
+    URL: "/finance-masters/functions/_search",
+  },
+};
