@@ -77,7 +77,7 @@ export const generateTLAcknowledgement = (preparedFinalObject, fileName = "ackno
     const tradeLocationSummary = generateKeyValue(preparedFinalObject, tradeLocationDetails);
 
     let pdfData = {
-        header: "TL_TRADE_APPLICATION", tenantId: License.tradeLicenseDetail.address.tenantId,
+        header: "TL_TRADE_APPLICATION", tenantId: License.tradeLicenseDetail.address.tenantId,finYear:License.financialYear,
         applicationNoHeader: 'PDF_STATIC_LABEL_CONSOLIDATED_TLCERTIFICATE_LICENSE_NO', applicationNoValue: License.licenseNumber,
         additionalHeader: "PDF_STATIC_LABEL_CONSOLIDATED_TLAPP_APPLICATION_NO", additionalHeaderValue: License.applicationNumber,
         cards: [

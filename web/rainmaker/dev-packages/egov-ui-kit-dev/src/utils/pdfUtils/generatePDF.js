@@ -408,7 +408,7 @@ const getHeaderCard = (applicationData, logo) => {
                 style: "pdf-header-text"
             },
             {
-                text: getLocaleLabels(applicationData.header, applicationData.header) || "",
+                text: getLocaleLabels(applicationData.header, applicationData.header).replace('{0}',  applicationData.finYear)  || "",
                 style: "pdf-header-sub-text",
             }
         ],
