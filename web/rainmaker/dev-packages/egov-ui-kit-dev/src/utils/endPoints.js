@@ -323,7 +323,7 @@ export const WATER_CAL_ADHOC = {
   },
 };
 export const IDGEN = {
-  GET: {
+  POST: {
     URL: "/idgen/id/_generate",
   },
 };
