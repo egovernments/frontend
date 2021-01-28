@@ -299,29 +299,35 @@ const totalAmount = (arr) => {
         .map(item => (item.value ? item.value : 0))
         .reduce((prev, next) => prev + next, 0);
 }
-export const getEstimateCardDetails = (fees = [], color) => {
+export const getEstimateCardDetails = (fees = [], color,firstRowEnable=true,lastRowEnable=true) => {
     let estimateCard = {};
 
-    let total = totalAmount(fees);
+    let total =0;
+    if(firstRowEnable||lastRowEnable){
+        total= totalAmount(fees);
+    }
+
 
     let card = [];
     let row1 = []
+    
+    let row2 = []
 
+if(firstRowEnable){
     row1.push(getLabel(' ', 'amount'))
     row1.push(getLabel(' ', 'amount'))
     row1.push({ ...getLabel(getLocaleLabels('TL_COMMON_TOTAL_AMT', 'TL_COMMON_TOTAL_AMT'), 'amount'), "alignment": "right" })
     card.push(row1);
-    let row2 = []
-
     row2.push(getLabel(' ', 'amount'))
     row2.push(getLabel(' ', 'amount'))
     row2.push({ ...getLabel(total, 'amount'), style: "pdf-application-no-value", "alignment": "right" })
     card.push(row2);
+}
+    
+
+    
     let rowLast = []
 
-    rowLast.push(getLabel(getLocaleLabels('TL_COMMON_TOTAL_AMT', 'TL_COMMON_TOTAL_AMT'), 'totalAmount'))
-    rowLast.push(getLabel(total, 'totalAmount'))
-    rowLast.push(getLabel(' ', 'header'))
 
     fees.map(fee => {
         let row = []
@@ -330,8 +336,13 @@ export const getEstimateCardDetails = (fees = [], color) => {
         row.push(getLabel(' ', 'value'))
         card.push(row);
     })
+    if(lastRowEnable){
+        rowLast.push(getLabel(getLocaleLabels('TL_COMMON_TOTAL_AMT', 'TL_COMMON_TOTAL_AMT'), 'totalAmount'))
+        rowLast.push(getLabel(total, 'totalAmount'))
+        rowLast.push(getLabel(' ', 'header'))
+        card.push(rowLast);
+        }
 
-    card.push(rowLast);
 
     estimateCard = getCustomCard(card, [250, 150, 108], tableborder, color)
 

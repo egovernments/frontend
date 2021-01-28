@@ -19,10 +19,12 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
+import { generateBillAmendAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateBillAmendAcknowledgement";
 import commonConfig from "../../../../config/common";
 import { getBillAmdSearchResult } from "../../../../ui-utils/commons";
 import { getReviewDocuments } from "./document-review";
 import { generateBillAmendPdf } from "./utils";
+
 
 
 
@@ -104,7 +106,7 @@ export const downloadPrintContainer = (
   
 
 
-const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
+const setDownloadMenu = (state, dispatch,  applicationNumber) => {
     /** MenuButton data based on status */
     let status = get(
         state,
@@ -113,7 +115,7 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
     let downloadMenu = [];
     let printMenu = [];
     let certificateDownloadObject = {
-        label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_ACK" },
+        label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_COUPON" },
         link: () => {
             generateBillAmendPdf(get(
                 state,
@@ -123,7 +125,7 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
         leftIcon: "book"
     };
     let certificatePrintObject = {
-        label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_ACK" },
+        label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_COUPON" },
         link: () => {
             generateBillAmendPdf(get(
                 state,
@@ -132,20 +134,38 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
         },
         leftIcon: "book"
     };
-
+    let applicationDownloadObject = {
+        label: { labelName: "Application", labelKey: "BILL_AMEND_ACK" },
+        link: () => {
+            generateBillAmendAcknowledgement(get(
+            state,
+            "screenConfiguration.preparedFinalObject", {}), `billamend-acknowledgement-${applicationNumber}.pdf`);
+        },
+        leftIcon: "assignment"
+      };
+      let applicationPrintObject = {
+        label: { labelName: "Application", labelKey: "BILL_AMEND_ACK" },
+        link: () => {
+            generateBillAmendAcknowledgement(get(
+            state,
+            "screenConfiguration.preparedFinalObject", {}), 'print');
+          },
+        leftIcon: "assignment"
+      };
+    
 
     switch (status) {
         case "ACTIVE":
-            downloadMenu = [
+            downloadMenu = [applicationDownloadObject,
                 certificateDownloadObject
             ];
-            printMenu = [
+            printMenu = [applicationPrintObject,
                 certificatePrintObject
             ];
             break;
         case "INWORKFLOW":
-            downloadMenu = [];
-            printMenu = [];
+            downloadMenu = [applicationDownloadObject];
+            printMenu = [applicationPrintObject];
             break;
         default:
             break;
@@ -399,11 +419,84 @@ export const setSearchResponse = async (state, dispatch, action) => {
         adjustmentAmountDetails(state, dispatch, amendments[0]);
         documentDetailsPreview(state, dispatch, amendments[0]);
         onDemandRevisionBasisHidendShowFields(state, dispatch, action, amendments[0]);
-        setDownloadMenu(state, dispatch);
+        setDownloadMenu(state, dispatch,applicationNumber);
     }
 }
 
-
+export const billAmendDemandRevisionContainer ={
+    demandRevisionBasis: getLabelWithValue(
+        {
+            labelName: "Demand Revison Basis",
+            labelKey: "BILL_DEMAND_REVISON_BASIS_LABEL"
+        },
+        {
+            jsonPath: "Amendment.amendmentReason"
+        }
+    ),
+    courtOrderNo: getLabelWithValue(
+        {
+            labelName: "Court Order No",
+            labelKey: "BILL_COURT_ORDER_NO_LABEL"
+        },
+        {
+            jsonPath: "Amendment.reasonDocumentNumber"
+        }
+    ),
+    dateEffectiveFrom: getLabelWithValue(
+        {
+            labelName: "Date Effective From",
+            labelKey: "BILL_DATE_EFFECTIVE_FROM_LABEL"
+        },
+        {
+            jsonPath: "Amendment.effectiveFrom",
+            callBack: value => {
+                return convertEpochToDate(value);
+            }
+        }
+    ),
+    govtNotificationNumber: getLabelWithValue(
+        {
+            labelName: "Govt Notification No",
+            labelKey: "BILL_GOVT_NOTIFICATION_NO_LABEL"
+        },
+        {
+            jsonPath: "Amendment.reasonDocumentNumber"
+        }
+    ),
+    documentNo: getLabelWithValue(
+        {
+            labelName: "Document No",
+            labelKey: "BILL_DOCUMNET_NO_LABEL"
+        },
+        {
+            jsonPath: "Amendment.reasonDocumentNumber"
+        }
+    ),
+    fromDate: getLabelWithValue(
+        {
+            labelName: "From Date",
+            labelKey: "BILL_COMMON_FROM_DATE_LABEL"
+        },
+        {
+            jsonPath: "Amendment.effectiveFrom",
+            callBack: value => {
+                return convertEpochToDate(value);
+            }
+        }
+    ),
+    toDate: getLabelWithValue(
+        {
+            labelName: "To Date",
+            labelKey: "BILL_COMMON_TO_DATE_LABEL"
+        },
+        {
+            jsonPath: "Amendment.effectiveTill",
+            callBack: value => {
+                return convertEpochToDate(value);
+            }
+        }
+    )
+}
 
 export const getData = async (action, state, dispatch) => {
     await setSearchResponse(state, dispatch, action);
@@ -482,80 +575,7 @@ const screenConfig = {
                             labelKey: "BILL_DEMAND_REVISION_BASIS_DETAILS"
                         }),
                         break1: getBreak(),
-                        demandRevisionContainer: getCommonContainer({
-                            demandRevisionBasis: getLabelWithValue(
-                                {
-                                    labelName: "Demand Revison Basis",
-                                    labelKey: "BILL_DEMAND_REVISON_BASIS_LABEL"
-                                },
-                                {
-                                    jsonPath: "Amendment.amendmentReason"
-                                }
-                            ),
-                            courtOrderNo: getLabelWithValue(
-                                {
-                                    labelName: "Court Order No",
-                                    labelKey: "BILL_COURT_ORDER_NO_LABEL"
-                                },
-                                {
-                                    jsonPath: "Amendment.reasonDocumentNumber"
-                                }
-                            ),
-                            dateEffectiveFrom: getLabelWithValue(
-                                {
-                                    labelName: "Date Effective From",
-                                    labelKey: "BILL_DATE_EFFECTIVE_FROM_LABEL"
-                                },
-                                {
-                                    jsonPath: "Amendment.effectiveFrom",
-                                    callBack: value => {
-                                        return convertEpochToDate(value);
-                                    }
-                                }
-                            ),
-                            govtNotificationNumber: getLabelWithValue(
-                                {
-                                    labelName: "Govt Notification No",
-                                    labelKey: "BILL_GOVT_NOTIFICATION_NO_LABEL"
-                                },
-                                {
-                                    jsonPath: "Amendment.reasonDocumentNumber"
-                                }
-                            ),
-                            documentNo: getLabelWithValue(
-                                {
-                                    labelName: "Document No",
-                                    labelKey: "BILL_DOCUMNET_NO_LABEL"
-                                },
-                                {
-                                    jsonPath: "Amendment.reasonDocumentNumber"
-                                }
-                            ),
-                            fromDate: getLabelWithValue(
-                                {
-                                    labelName: "From Date",
-                                    labelKey: "BILL_COMMON_FROM_DATE_LABEL"
-                                },
-                                {
-                                    jsonPath: "Amendment.effectiveFrom",
-                                    callBack: value => {
-                                        return convertEpochToDate(value);
-                                    }
-                                }
-                            ),
-                            toDate: getLabelWithValue(
-                                {
-                                    labelName: "To Date",
-                                    labelKey: "BILL_COMMON_TO_DATE_LABEL"
-                                },
-                                {
-                                    jsonPath: "Amendment.effectiveTill",
-                                    callBack: value => {
-                                        return convertEpochToDate(value);
-                                    }
-                                }
-                            )
-                        }),
+                        demandRevisionContainer: getCommonContainer(billAmendDemandRevisionContainer),
 
                     }),
                     documents: getReviewDocuments(false, false)
