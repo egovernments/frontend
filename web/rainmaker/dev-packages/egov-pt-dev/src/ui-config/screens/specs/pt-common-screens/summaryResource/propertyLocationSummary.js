@@ -66,6 +66,7 @@ export const propertyLocationSummary = getCommonGrayCard({
           masterName: "PROPERTY_LOCATION"
         },
         jsonPath: "Property.address.location",
+        callBack: checkValueForNA
       }
     ),
     localityOrMohalla: getLabelWithValue(

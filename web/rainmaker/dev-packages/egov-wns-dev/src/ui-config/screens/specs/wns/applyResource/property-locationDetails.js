@@ -22,6 +22,10 @@ import {
       },
       {
         jsonPath: "applyScreen.property.address.location",
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "PROP_LOCATION"
+        }
       }
     ),
     plotOrHouseOrSurveyNo: getLabelWithValue(

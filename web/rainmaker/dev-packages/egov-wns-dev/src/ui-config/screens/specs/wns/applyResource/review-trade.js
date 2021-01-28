@@ -114,6 +114,27 @@ export const locationDetails={
     },
     { jsonPath: "WaterConnectionOld[0].property.address.city", callBack: handleNA },
   ),
+  reviewLocation: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Property Location",
+      labelKey: "WS_PROP_DETAIL_LOCATION"
+    },
+    { jsonPath: "WaterConnection[0].property.address.location", callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROP_LOCATION"
+      }
+    },
+    {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    { jsonPath: "WaterConnectionOld[0].property.address.location", callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROP_LOCATION"
+      }
+    },
+  ),
   reviewDoorOrHouseNumber: getLabelWithValueForModifiedLabel(
     {
       labelName: "Door/House No.",

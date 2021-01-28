@@ -126,6 +126,27 @@ const propertyLocationDetails = {
           },
           { jsonPath: "applyScreenOld.property.address.city", callBack: handleNA },
         ),
+        reviewLocation: getLabelWithValueForModifiedLabel(
+          {
+            labelName: "Property Location",
+            labelKey: "WS_PROP_DETAIL_LOCATION"
+          },
+          { jsonPath: "applyScreen.property.address.location", callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROP_LOCATION"
+            }
+          },
+          {
+            labelKey: "WS_OLD_LABEL_NAME"
+          },
+          { jsonPath: "applyScreenOld.property.address.location", callBack: handleNA,
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "PROP_LOCATION"
+            }
+          },
+        ),
         reviewDoorOrHouseNumber: getLabelWithValueForModifiedLabel(
           {
             labelName: "Door/House No.",
