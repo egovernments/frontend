@@ -94,7 +94,7 @@ function FeesEstimateCard(props) {
                             <Grid xs={6} align="right">
                             <LabelContainer 
                             labelName="Reduced Amount(Rs)" 
-                            labelKey= {get(estimate, "fees[0].amountType", "") === "reducedAmount" ? "BILL_REDUCED_AMOUNT" : "BILL_ADDITIONAL_AMOUNT"}
+                            labelKey= {get(estimate, "fees[0].amountType", "") === "reducedAmount" ? "BILL_REDUCED_AMOUNT_RS" : "BILL_ADDITIONAL_AMOUNT_RS"}
                             style={{fontWeight:"bold"}}/>
                             </Grid>
                         </Grid>
