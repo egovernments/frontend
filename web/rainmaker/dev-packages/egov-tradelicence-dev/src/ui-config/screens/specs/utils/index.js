@@ -998,7 +998,7 @@ export const downloadAcknowledgementForm = (Licenses, mode = "download") => {
   ]
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/pdfgen/v1/_create",
       ACTION: "_get",
     },
   };
@@ -1029,7 +1029,7 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
   ]
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/pdfgen/v1/_create",
       ACTION: "_get",
     },
   };

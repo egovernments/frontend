@@ -34,6 +34,7 @@ import {FETCH_FILE} from "egov-ui-kit/utils/endPoints";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { PDFGEN } from "egov-ui-kit/src/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -5093,7 +5094,7 @@ export const revocationPdfDownload = async (action, state, dispatch, mode = "Dow
   );
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key=bpa-revocation&tenantId=${bpaDetails.tenantId}`,
+    `${PDFGEN.URL}?key=bpa-revocation&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Bpa: [bpaDetails] }
@@ -5142,7 +5143,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
   }
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
+    `${PDFGEN.URL}?key=${permitPfKey}&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Bpa: [Bpa] }
@@ -5239,7 +5240,7 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
 
   let res = await httpRequest(
     "post",
-    `pdf-service/v1/_create?key=consolidatedreceipt&tenantId=${bpaDetails.tenantId}`,
+    `${PDFGEN}?key=consolidatedreceipt&tenantId=${bpaDetails.tenantId}`,
     "",
     [],
     { Payments: payments }

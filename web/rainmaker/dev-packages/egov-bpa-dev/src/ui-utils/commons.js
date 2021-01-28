@@ -58,7 +58,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   };
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/pdfgen/v1/_create",
       ACTION: "_get",
     },
   };

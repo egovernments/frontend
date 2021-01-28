@@ -533,7 +533,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
 
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/pdfgen/v1/_create",
       ACTION: "_get",
     },
   };
@@ -612,7 +612,7 @@ export const downloadBill = async (consumerCode, tenantId, configKey = "consolid
   }
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/pdfgen/v1/_create",
       ACTION: "_get",
     },
   };
@@ -640,7 +640,7 @@ export const downloadMultipleBill = async (bills = [], configKey) => {
   try {
     const DOWNLOADRECEIPT = {
       GET: {
-        URL: "/pdf-service/v1/_create",
+        URL: "/pdfgen/v1/_create",
         ACTION: "_get",
       },
     };

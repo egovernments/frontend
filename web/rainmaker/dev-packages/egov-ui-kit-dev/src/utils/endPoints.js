@@ -220,7 +220,7 @@ export const FETCHRECEIPT = {
 };
 export const DOWNLOADRECEIPT = {
   GET: {
-    URL: "/pdf-service/v1/_create",
+    URL: "/pdfgen/v1/_create",
     ACTION: "_get",
   },
 };
@@ -376,5 +376,11 @@ export const PROPERTYTAX_CAL_ESTIMATE = {
   POST : {
     URL : "propertytax-calculator/propertytax/v2/_estimate",
     ACTION : "_estimate",
+  },
+};
+
+export const PDFGEN = {
+  GET: {
+    URL: "pdfgen/v1/_create",
   },
 };
