@@ -324,8 +324,7 @@ export const WATER_CAL_ADHOC = {
 }
 export const IDGEN = {
   GET: {
-    URL: "/egov-idgen/id/",
-    ACTION: "_generate",
+    URL: "/idgen/id/_generate",
   },
 };
 

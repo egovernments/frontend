@@ -9,6 +9,7 @@ import { setServiceCategory } from "../utils";
 import { newCollectionDetailsCard } from "./newCollectionResource/newCollectionDetails";
 import { newCollectionFooter } from "./newCollectionResource/newCollectionFooter";
 import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { IDGEN } from "egov-ui-kit/src/utils/endPoints";
 
 const header = getCommonHeader({
   labelName: "New Collection",
@@ -120,7 +121,7 @@ const getData = async (action, state, dispatch, demandId) => {
   if (!demandId) {
     try {
       let payload = null;
-      payload = await httpRequest("post", "/egov-idgen/id/_generate", "", [], {
+      payload = await httpRequest("post", IDGEN.URL , "", [], {
         idRequests: [
           {
             idName: "",
