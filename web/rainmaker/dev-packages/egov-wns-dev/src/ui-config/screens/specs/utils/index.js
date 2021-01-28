@@ -33,6 +33,7 @@ import {
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
+import { TL_CALC } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = (position,children) => {
   return {
@@ -211,7 +212,7 @@ export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-calculator/v1/_getbill",
+      TL_CALC.GETBILL.URL,
       "",
       queryObject
     );
@@ -1290,7 +1291,7 @@ export const getDialogButton = (name, key, screenKey) => {
 const getAllBillingSlabs = async tenantId => {
   let payload = await httpRequest(
     "post",
-    `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
+    `${TL_CALC.BILLINGSLAB.URL}?tenantId=${tenantId}`,
     "_search",
     [],
     {}
