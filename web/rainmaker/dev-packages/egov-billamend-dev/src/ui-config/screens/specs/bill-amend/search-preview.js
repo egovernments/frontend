@@ -15,7 +15,8 @@ import {
     getQueryArg,
     getFileUrlFromAPI,
     getTransformedLocale,
-    getFileUrl
+    getFileUrl,
+    setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { getBillAmdSearchResult } from "../../../../ui-utils/commons";
 import get from "lodash/get";
@@ -249,6 +250,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
     let amendments = get(billAMDSearch, "Amendments", []);
     if (amendments && amendments.length > 0) {
         dispatch(prepareFinalObject("Amendment", amendments[0]));
+        dispatch(prepareFinalObject("AmendmentUpdate", amendments[0]));
         adjustmentAmountDetails(state, dispatch, amendments[0]);
         documentDetailsPreview(state, dispatch, amendments[0]);
         onDemandRevisionBasisHidendShowFields(state, dispatch, action, amendments[0]);
@@ -265,6 +267,13 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "search-preview",
     beforeInitScreen: (action, state, dispatch) => {
+        const businessService = "BS.AMENDMENT";
+        const tenantId = getQueryArg(window.location.href, "tenantId");
+        const queryObject = [
+          { key: "tenantId", value: tenantId },
+          { key: "businessServices", value: businessService }
+        ];
+        setBusinessServiceDataToLocalStorage(queryObject, dispatch);
         getData(action, state, dispatch).then(responseAction => { });
         return action;
     },
@@ -303,6 +312,17 @@ const screenConfig = {
 
                     }
                 },
+                taskStatus: {
+                    uiFramework: "custom-containers-local",
+                    componentPath: "WorkFlowContainer",
+                    moduleName: "egov-workflow",
+                    visible: true,
+                    props: {
+                      dataPath: "AmendmentUpdate",
+                      moduleName: "Amendment",
+                      updateUrl: "billing-service/amendment/_update"
+                    }
+                  },
                 bodyDiv: getCommonCard({
                     title: getCommonTitle({ labelName: "Summary", labelKey: "BILL_SUMMARY" }),
                     grayDiv: getCommonGrayCard({

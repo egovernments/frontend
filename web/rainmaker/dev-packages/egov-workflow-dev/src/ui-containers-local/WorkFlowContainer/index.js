@@ -191,6 +191,17 @@ class WorkFlowContainer extends React.Component {
         data.workflow.documents = data.workflow.wfDocuments;
       }
     }
+    if(moduleName === "Amendment") {
+      data.workflow = {};
+      data.workflow.documents = get(data[0], "wfDocuments", []);
+      data.workflow.comment = get(data[0], "comment", "");
+      data.workflow.assignee = get(data[0], "assignee", []);
+      data.workflow.action = get(data[0], "action", "");
+      data.workflow.businessId = get(data, "amendmentId", "");
+      data.workflow.tenantId = get(data, "tenantId", "");
+      data.workflow.businessService = "BS.AMENDMENT";
+      data.workflow.moduleName = "BS";
+    }
 
     const applicationNumber = getQueryArg(
       window.location.href,
