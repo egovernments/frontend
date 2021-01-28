@@ -26,6 +26,7 @@ import { WORKFLOW_SEARCH, WORKFLOW_COUNT, PROPERTY_SEARCH } from "egov-ui-kit/ut
 
 
 import "./index.css";
+import { SEARCHER } from "egov-ui-kit/utils/endPoints";
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -357,7 +358,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
               }
             })
             queries.push([])
-            endpoints.push(`egov-searcher/locality/${uniqueModule}/_get`)
+            endpoints.push(`${SEARCHER.LOCALITY.URL}${uniqueModule}/${SEARCHER.LOCALITY.ACTION}`)
           }
 
         })

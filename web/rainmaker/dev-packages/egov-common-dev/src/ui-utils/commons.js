@@ -11,6 +11,7 @@ import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { FIRENOC } from "egov-ui-kit/utils/endPoints";
+import { SEARCHER } from "egov-ui-kit/utils/endPoints";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -585,7 +586,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
 }
 
 
-export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
+export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = SEARCHER.BILL_GENIE.URL) => {
   const searchCriteria = {
     consumerCode,
     tenantId

@@ -75,7 +75,7 @@ export const applyMohallaData = (mohallaData, tenantId, dispatch) => {
 export const getSearchResults = async (requestPayload) => {
   const PUBLIC_SEARCH = {
     GET: {
-      URL: "egov-searcher/property-services/propertyopensearch/_get",
+      URL: "searcher/property-services/propertyopensearch/_get",
       ACTION: "_get",
     },
   };
