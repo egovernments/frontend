@@ -558,7 +558,7 @@ const connectionDetails = getCommonContainer({
   reviewConnectionCategory,
   reviewLedgerId,
   reviewWaterSource,
-  reviewWaterSubSource,
+  // reviewWaterSubSource,
   reviewPipeSize,
   reviewWaterClosets,
   reviewNumberOfToilets

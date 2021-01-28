@@ -597,7 +597,7 @@ const parserFunction = (state) => {
             userCharges :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.userCharges : null,
             othersFee :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.othersFee : null,
             
-            detailsProvidedBy : null,
+            // detailsProvidedBy : null,
             adhocPenalty: null,
             adhocPenaltyComment: null,
             adhocPenaltyReason: null,
