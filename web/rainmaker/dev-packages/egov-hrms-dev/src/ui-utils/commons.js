@@ -23,6 +23,7 @@ import {
   getFileUrl
 } from "egov-ui-framework/ui-utils/commons";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
+import { EMPLOYEE_ASSIGN, EMPLOYEE_CREATE, EMPLOYEE_UPDATE } from "egov-ui-kit/utils/endPoints";
 
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
@@ -43,7 +44,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/egov-hrms/employees/_search",
+      EMPLOYEE_ASSIGN.GET.URL,
       "",
       queryObject
     );
@@ -64,7 +65,7 @@ export const createEmployee = async (queryObject, payload, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/egov-hrms/employees/_create",
+      EMPLOYEE_CREATE.POST.URL,
       "",
       queryObject,
       { Employees: payload }
@@ -87,7 +88,7 @@ export const updateEmployee = async (queryObject, payload, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/egov-hrms/employees/_update",
+      EMPLOYEE_UPDATE.POST.URL,
       "",
       queryObject,
       { Employees: payload }

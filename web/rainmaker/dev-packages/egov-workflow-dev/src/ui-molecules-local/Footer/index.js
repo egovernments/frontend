@@ -15,6 +15,7 @@ import {
   getNextFinancialYearForRenewal
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
+import { EMPLOYEE_ASSIGN } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 class Footer extends React.Component {
@@ -105,7 +106,7 @@ class Footer extends React.Component {
       ];
       const payload = await httpRequest(
         "post",
-        "/egov-hrms/employees/_search",
+        EMPLOYEE_ASSIGN.GET.URL,
         "",
         queryObj
       );

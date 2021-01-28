@@ -65,17 +65,29 @@ export const OTP = {
 
 export const EMPLOYEE = {
   GET: {
-    URL: "/egov-hrms/employees/_search",
+    URL: "/hrms/employees/_search",
     ACTION: "_search",
   },
 };
 
 export const EMPLOYEE_ASSIGN = {
   GET: {
-    URL: "/egov-hrms/employees/_search",
+    URL: "/hrms/employees/_search",
     ACTION: "_search",
   },
 };
+
+export const EMPLOYEE_CREATE = {
+  POST: {
+    URL: "/hrms/employees/_create",
+  }
+}
+
+export const EMPLOYEE_UPDATE = {
+  POST: {
+    URL: "/hrms/employees/_update",
+  }
+}
 
 export const CITIZEN = {
   GET: {
