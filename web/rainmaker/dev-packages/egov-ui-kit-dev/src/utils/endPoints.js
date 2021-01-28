@@ -28,8 +28,8 @@ export const FILE_UPLOAD = {
 export const FETCH_FILE = {
   GET: {
     URL: "filestore/v1/files/url",
-  }
-}
+  },
+};
 
 export const CATEGORY = {
   GET: {
@@ -80,14 +80,14 @@ export const EMPLOYEE_ASSIGN = {
 export const EMPLOYEE_CREATE = {
   POST: {
     URL: "/hrms/employees/_create",
-  }
-}
+  },
+};
 
 export const EMPLOYEE_UPDATE = {
   POST: {
     URL: "/hrms/employees/_update",
-  }
-}
+  },
+};
 
 export const CITIZEN = {
   GET: {
@@ -190,22 +190,22 @@ export const EVENTS_UPDATE = {
   POST: {
     URL: "/user-event/v1/events/lat/_update",
     ACTION: "_update",
-  }
-}
+  },
+};
 
 export const EVENTS_UPDATE_MAIN = {
   POST: {
     URL: "/user-event/v1/events/_update",
     ACTION: "_update",
-  }
-}
+  },
+};
 
 export const EVENTS_CREATE = {
   POST: {
     URL: "/user-event/v1/events/_create",
     ACTION: "_create",
-  }
-}
+  },
+};
 
 export const FETCHBILL = {
   GET: {
@@ -239,88 +239,88 @@ export const PAYMENTSEARCH = {
 export const WORKFLOW_SEARCH = {
   POST: {
     URL: "workflow/egov-wf/process/_search",
-  }
-}
+  },
+};
 export const WORKFLOW_BUSINESS_SEARCH = {
   POST: {
     URL: "workflow/egov-wf/businessservice/_search",
     ACTION: "_search",
-  }
-}
+  },
+};
 export const WORKFLOW_COUNT = {
   GET: {
     URL: "workflow/egov-wf/process/_count",
     ACTION: "_search",
-  }
-}
+  },
+};
 export const PROPERTY_SEARCH = {
   POST: {
     URL: "property/property/_search",
     ACTION: "_search",
-  }
-}
+  },
+};
 export const PROPERTY_ASSESSMENT_SEARCH = {
   POST: {
     URL: "property/assessment/_update",
     ACTION: "_search",
-  }
-}
+  },
+};
 export const PROPERTY_CREATE = {
   POST: {
     URL: "/property/property/_create",
     ACTION: "_update",
-  }
-}
+  },
+};
 export const PROPERTY_UPDATE = {
   POST: {
     URL: "/property/property/_update",
     ACTION: "_update",
-  }
-}
+  },
+};
 export const PROPERTY_ASSESSMENT_UPDATE = {
   POST: {
     URL: "/property/assessment/_update",
-  }
-}
+  },
+};
 export const WATER_CREATE = {
   POST: {
     URL: "/water/wc/_create",
-  }
-}
+  },
+};
 export const WATER_SEARCH = {
   POST: {
     URL: "/water/wc/_search",
     ACTION: "_search",
-  }
-}
+  },
+};
 export const WATER_UPDATE  = {
   POST: {
     URL: "/water/wc/_update",
-  }
-}
+  },
+};
 export const WATER_CAL_ESTIMATE = {
   POST: {
     URL: "water-calculator/waterCalculator/_estimate",
     ACTION: "_estimate",
-  }
-}
+  },
+};
 export const WATER_CAL_SEARCH = {
   POST: {
     URL : "/water-calculator/meterConnection/_search",
     ACTION : "_search",
-  }
-}
+  },
+};
 export const WATER_CAL_CREATE = {
   POST: {
     URL : "/water-calculator/meterConnection/_search",
     ACTION : "_search",
-  }
-}
+  },
+};
 export const WATER_CAL_ADHOC = {
   POST: {
     URL: "water-calculator/waterCalculator/_applyAdhocTax",
-  }
-}
+  },
+};
 export const IDGEN = {
   GET: {
     URL: "/idgen/id/_generate",
@@ -331,29 +331,29 @@ export const SEWERAGE_SEARCH = {
   POST : {
     URL: "/sewerage/swc/_search",
     ACTION: "_search",
-  }
-} 
+  },
+};
 export const SEWERAGE_CREATE = {
   POST : {
     URL : "/sewerage/swc/_create",
-  }
-}
+  },
+};
 export const SEWERAGE_UPDATE = {
   POST : {
     URL : "/sewerage/swc/_update",
-  }
-}
+  },
+};
 export const SEWERAGE_CAL_ESTIMATE = {
   POST : {
     URL : "sewerage-calculator/sewerageCalculator/_estimate",
     ACTION : "_estimate",
-  }
-}
+  },
+};
 export const SEWERAGE_CAL_ADHOC = {
   GET : {
     URL : "sewerage-calculator/sewerageCalculator/_applyAdhocTax",
-  }
-}
+  },
+};
 export const MDMS_GET = {
   GET: {
     URL: "mdms/v1/_get",
@@ -364,17 +364,17 @@ export const PROPERTYTAX_CAL_SEARCH = {
   GET : {
     URL : "propertytax-calculator/billingslab/_search",
     ACTION : "_search",
-  }
-}
+  },
+};
 export const PROPERTYTAX_CAL_GETBILL = {
   POST : {
     URL : "propertytax-calculator/propertytax/_getbill",
     ACTION : "_create",
-  }
-}
+  },
+};
 export const PROPERTYTAX_CAL_ESTIMATE = {
   POST : {
     URL : "propertytax-calculator/propertytax/v2/_estimate",
     ACTION : "_estimate",
-  }
-}
+  },
+};
