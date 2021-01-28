@@ -7,7 +7,7 @@ import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
-import { MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { EMPLOYEE_ASSIGN } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
@@ -129,7 +129,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      MDMS_GET.URL,
+      MDMS_GET.POST.URL,
       "",
       queryObject
     );

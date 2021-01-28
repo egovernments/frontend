@@ -23,7 +23,7 @@ import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResour
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { transferorInstitutionSummary as ti1, transferorSummary as ts1 } from "./summaryResource/transferorSummary1";
 import { PROPERTY } from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
@@ -328,7 +328,7 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody
@@ -385,7 +385,7 @@ const getMdmsData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody
@@ -431,7 +431,7 @@ const getMdmsTransferReasonData = async (action, state, dispatch) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

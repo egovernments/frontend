@@ -13,7 +13,7 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import commonConfig from "config/common.js";
 import {getRequiredDocuments} from "../../../../ui-containers-local/RequiredDocuments/reqDocs";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -42,7 +42,7 @@ export const getMdmsData = async  requestBody=> {
   try {
     const response = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       requestBody
@@ -249,7 +249,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

@@ -40,7 +40,7 @@ class UserLogin extends Component {
   fetchoption() {
     fetch(
       window.location.origin +
-        `${MDMS_GET.URL}?moduleName=tenant&masterName=tenants&tenantId=pb`,
+        `${MDMS_GET.POST.URL}?moduleName=tenant&masterName=tenants&tenantId=pb`,
       {
         method: "POST",
         headers: {

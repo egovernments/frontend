@@ -16,7 +16,7 @@ import { jurisdictionDetails } from "./createResource/jurisdiction-details";
 import { otherDetails } from "./createResource/other-details";
 import { serviceDetails } from "./createResource/service-details";
 import { getEmployeeData } from "./viewResource/functions";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Employee Details", labelKey: "HR_NEW_EMPLOYEE_FORM_HEADER" },
@@ -175,7 +175,7 @@ const getMdmsData = async (state, dispatch, tenantId) => {
   try {
     const response = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

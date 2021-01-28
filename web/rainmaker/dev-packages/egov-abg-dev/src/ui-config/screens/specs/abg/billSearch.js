@@ -6,7 +6,7 @@ import { httpRequest } from "../../../../ui-utils";
 import { billSearchCard } from "./billSearchResources/billSearchCard";
 import { searchResults } from "./billSearchResources/searchResults";
 import "./index.css";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 const header = getCommonHeader({
   labelName: "Universal Bill",
@@ -52,7 +52,7 @@ const getMDMSData = async (action, state, dispatch) => {
   try {
     const payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

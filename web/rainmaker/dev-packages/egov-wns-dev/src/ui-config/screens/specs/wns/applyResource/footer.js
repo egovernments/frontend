@@ -25,7 +25,7 @@ import {
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import commonConfig from "config/common.js";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
@@ -112,7 +112,7 @@ const getMdmsData = async (state, dispatch) => {
     }
   };
   try {
-    let payload = await httpRequest("post", MDMS.URL, "_search", [], mdmsBody);
+    let payload = await httpRequest("post", MDMS.GET.URL, "_search", [], mdmsBody);
     dispatch(prepareFinalObject("applyScreenMdmsData.applyScreen.Documents", payload.MdmsRes['ws-services-masters'].Documents));
     prepareDocumentsUploadData(state, dispatch);
   } catch (e) {

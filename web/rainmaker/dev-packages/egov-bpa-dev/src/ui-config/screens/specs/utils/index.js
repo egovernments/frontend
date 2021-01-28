@@ -33,7 +33,7 @@ import { getBpaSearchResults, prepareNOCUploadData } from "../../../../ui-utils/
 import "./index.css";
 import {FETCH_FILE} from "egov-ui-kit/utils/endPoints";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { PDFGEN } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
@@ -660,7 +660,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      MDMS_GET.URL,
+      MDMS_GET.POST.URL,
       "",
       queryObject
     );
@@ -3126,7 +3126,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
 //   try {
 //     const response = await httpRequest(
 //       "post",
-//       MDMS_GET.URL,
+//       MDMS_GET.POST.URL,
 //       "",
 //       queryObject
 //     );
@@ -3356,7 +3356,7 @@ export const resetFields = (state, dispatch) => {
 //     let payload = null;
 //     // payload = await httpRequest(
 //     //   "post",
-//     //   MDMS.URL,
+//     //   MDMS.GET.URL,
 //     //   "_search",
 //     //   [],
 //     //   mdmsBody
@@ -3758,7 +3758,7 @@ export const getBpaMdmsData = async (action, state, dispatch, mdmsBody) => {
   try {
     let payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody
@@ -3901,7 +3901,7 @@ const tenantData = async (action, state, dispatch) => {
   try {
     let payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody
@@ -3934,7 +3934,7 @@ export const getMdmsDataForBpa = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-     MDMS.URL,
+     MDMS.GET.URL,
       "",
       queryObject
     );

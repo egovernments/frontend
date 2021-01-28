@@ -355,12 +355,13 @@ export const SEWERAGE_CAL_ADHOC = {
     URL : "sewerage-calculator/sewerageCalculator/_applyAdhocTax",
   },
 };
+
 export const MDMS_GET = {
-  GET: {
+  POST: {
     URL: "mdms/v1/_get",
-    ACTION: "_get",
   },
 };
+
 export const PROPERTYTAX_CAL_SEARCH = {
   GET : {
     URL : "propertytax-calculator/billingslab/_search",

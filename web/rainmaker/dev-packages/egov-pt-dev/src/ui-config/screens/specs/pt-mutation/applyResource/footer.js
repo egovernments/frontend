@@ -11,7 +11,7 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import { onChangeTypeOfOwnership } from "../applyResourceMutation/transfereeDetails";
 import { PROPERTY_UPDATE } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 
 const setReviewPageRoute = (state, dispatch) => {
@@ -100,7 +100,7 @@ const getMdmsData = async (state, dispatch) => {
   try {
     let payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

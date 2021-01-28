@@ -49,7 +49,7 @@ import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocDetailsSearch } from "./noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -448,7 +448,7 @@ const getRequiredMdmsDetails = async (state, dispatch) => {
   };
   let payload = await httpRequest(
     "post",
-    MDMS.URL,
+    MDMS.GET.URL,
     "_search",
     [],
     mdmsBody

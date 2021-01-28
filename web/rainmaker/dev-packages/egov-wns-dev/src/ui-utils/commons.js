@@ -15,7 +15,7 @@ import { WATER_SEARCH, WATER_CREATE, WATER_UPDATE } from "egov-ui-kit/utils/endP
 import { SEWERAGE_UPDATE, SEWERAGE_CREATE, SEWERAGE_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE, SEWERAGE_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
 import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
 
 export const serviceConst = {
@@ -200,7 +200,7 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            MDMS.URL,
+            MDMS.GET.URL,
             "_search", [],
             requestBody
         );
@@ -1225,7 +1225,7 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
         let payload = null;
         payload = await httpRequest(
             "post",
-            MDMS.URL,
+            MDMS.GET.URL,
             "_search",
             [],
             mdmsBody
@@ -1274,7 +1274,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
         try {
             let payload = await httpRequest(
                 "post",
-                MDMS.URL,
+                MDMS.GET.URL,
                 "_search",
                 [],
                 mdmsBody
@@ -1740,7 +1740,7 @@ export const downloadBill = (receiptQueryString, mode) => {
                 }
 
                 payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
-                httpRequest("post", MDMS.URL, "_search", [], requestBody).then((payloadbillingPeriod) => {
+                httpRequest("post", MDMS.GET.URL, "_search", [], requestBody).then((payloadbillingPeriod) => {
                     console.log(payloadbillingPeriod);
                     let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;
                     const service = (payloadReceiptDetails.Bill && payloadReceiptDetails.Bill.length > 0 && payloadReceiptDetails.Bill[0].businessService) ? payloadReceiptDetails.Bill[0].businessService : 'WS';

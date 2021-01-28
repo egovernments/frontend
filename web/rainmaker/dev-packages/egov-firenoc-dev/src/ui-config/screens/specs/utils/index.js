@@ -11,7 +11,7 @@ import isUndefined from "lodash/isUndefined";
 import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 import { USER } from "egov-ui-kit/src/utils/endPoints";
-import { MDMS, MDMS_GET } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -563,7 +563,7 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      MDMS_GET.URL,
+      MDMS_GET.POST.URL,
       "",
       queryObject
     );
@@ -578,7 +578,7 @@ export const searchMdmsData = async mdmsBody => {
   try {
     const response = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody
@@ -844,7 +844,7 @@ export const resetFields = (state, dispatch) => {
 //     let payload = null;
 //     payload = await httpRequest(
 //       "post",
-//       MDMS.URL,
+//       MDMS.GET.URL,
 //       "_search",
 //       [],
 //       mdmsBody

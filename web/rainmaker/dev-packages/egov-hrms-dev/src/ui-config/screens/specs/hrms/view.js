@@ -12,7 +12,7 @@ import { showHideAdhocPopup } from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -44,7 +44,7 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
   try {
     const payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

@@ -710,7 +710,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody
@@ -825,7 +825,7 @@ export const getMdmsJson = async (state, dispatch, reqObj) => {
     let payload = null;
     payload = await httpRequest(
       "post",
-      MDMS.URL,
+      MDMS.GET.URL,
       "_search",
       [],
       mdmsBody

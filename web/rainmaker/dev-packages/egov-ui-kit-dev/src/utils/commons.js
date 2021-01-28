@@ -17,7 +17,7 @@ import { routeTo } from "./PTCommon/FormWizardUtils/formActionUtils";
 import { getPropertyInfoScreenUrl } from "./PTCommon/FormWizardUtils/formUtils";
 import { EVENTS_UPDATE} from "egov-ui-kit/utils/endPoints";
 import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
-import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { MDMS } from "egov-ui-kit/utils/endPoints";
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -1065,7 +1065,7 @@ export const getModuleName = () => {
 
 export const businessServiceInfo = async (mdmsBody, businessService) => {
   const payload = await httpRequest(
-    MDMS.URL,
+    MDMS.GET.URL,
     "_search",
     [],
     mdmsBody
