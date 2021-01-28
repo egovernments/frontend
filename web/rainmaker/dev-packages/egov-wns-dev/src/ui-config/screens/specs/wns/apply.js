@@ -150,7 +150,7 @@ export const getMdmsData = async dispatch => {
             { name: "TaxHeadMaster" }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" }]}
+        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{ name: "PropertyOwnershipCategory" }]}
       ]
     }
   };
