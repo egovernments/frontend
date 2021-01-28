@@ -380,7 +380,7 @@ export const PROPERTYTAX_CAL_ESTIMATE = {
 };
 
 export const PDFGEN = {
-  GET: {
+  POST: {
     URL: "pdfgen/v1/_create",
   },
 };
