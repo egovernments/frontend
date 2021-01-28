@@ -12,7 +12,6 @@ import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { WORKFLOW_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { WATER_SEARCH, WATER_CREATE, WATER_UPDATE } from "egov-ui-kit/utils/endPoints";
-<<<<<<< Updated upstream
 import { SEWERAGE_UPDATE, SEWERAGE_CREATE, SEWERAGE_SEARCH } from "egov-ui-kit/utils/endPoints";
 import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE, SEWERAGE_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
 import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
@@ -1514,7 +1513,7 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
     };
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
-            URL: "/pdf-service/v1/_create",
+            URL: "/pdfgen/v1/_create",
             ACTION: "_get",
         },
     };
@@ -1669,7 +1668,7 @@ export const downloadBill = (receiptQueryString, mode) => {
     };
     const DOWNLOADBILL = {
         GET: {
-            URL: "/pdf-service/v1/_create",
+            URL: "/pdfgen/v1/_create",
             ACTION: "_get",
         },
     };
@@ -1885,7 +1884,7 @@ export const downloadApp = async (wnsConnection, type, mode, dispatch) => {
 
     const DOWNLOADCONNECTIONDETAILS = {
         GET: {
-            URL: "/pdf-service/v1/_create",
+            URL: "/pdfgen/v1/_create",
             ACTION: "_get",
         },
     };

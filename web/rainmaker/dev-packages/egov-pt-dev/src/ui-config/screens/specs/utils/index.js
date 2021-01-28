@@ -918,7 +918,7 @@ export const downloadCertificateForm = async (oldProperties, pdfcode, tenantId, 
   ]
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/pdfgen/v1/_create",
       ACTION: "_get",
     },
   };
@@ -962,7 +962,7 @@ export const downloadReceitForm = async (Payments, pdfcode, tenantId, applicatio
   ]
   const DOWNLOADRECEIPT = {
     GET: {
-      URL: "/pdf-service/v1/_create",
+      URL: "/pdfgen/v1/_create",
       ACTION: "_get",
     },
   };
