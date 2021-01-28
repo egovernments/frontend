@@ -9,6 +9,7 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { FIRENOC } from "egov-ui-kit/utils/endPoints";
 
 export const callPGService = async (state, dispatch) => {
  
@@ -173,7 +174,7 @@ const updatePayAction = async (
     set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
     response = await httpRequest(
       "post",
-      "/firenoc-services/v1/_update",
+      FIRENOC.UPDATE.URL,
       "",
       [],
       {

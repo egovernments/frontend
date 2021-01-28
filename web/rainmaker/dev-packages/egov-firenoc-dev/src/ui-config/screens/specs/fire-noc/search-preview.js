@@ -19,6 +19,7 @@ import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { uniqBy } from "lodash";
+import { FIRENOC } from "egov-ui-kit/utils/endPoints";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -446,7 +447,7 @@ const screenConfig = {
           props: {
             dataPath: "FireNOCs",
             moduleName: "FIRENOC",
-            updateUrl: "/firenoc-services/v1/_update"
+            updateUrl: FIRENOC.UPDATE.URL
           }
         },
         body: getCommonCard({
