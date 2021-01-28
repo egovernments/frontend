@@ -148,6 +148,14 @@ const getMultiCard = (items = [], color = 'grey') => {
     }
     return tableCard;
 }
+const getHeader = (header) => {
+    let cardWithHeader = header ? [{
+        "text": header == '-1' ? " " : getLocaleLabels(header, header),
+        "style": header == '-1' ? "pdf-card-no-title" : "pdf-card-title"
+    }] : [];
+  
+    return cardWithHeader;
+}
 const getCard = (keyValues = [], color = 'grey') => {
     let card = []
     let keys = [];
@@ -628,13 +636,18 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                     data.content.push(...getCardWithHeader(card.header, card.items, card.color));
                 }
                 break;
+            case "header":
+                if (!card.hide && card.header) {
+                    data.content.push(...getHeader(card.header));
+                }
+                break;
             case "multiItem":
                 if (!card.hide && card.items && card.items.length) {
                     data.content.push(...getMultiItemCard(card.header, card.items, card.color));
                 }
                 break;
             case "estimate":
-                if (!card.hide && card.items && card.items.length) {
+                if (!card.hide && card.items && card.items) {
                     data.content.push({ ...card.items });
                 }
                 break;
