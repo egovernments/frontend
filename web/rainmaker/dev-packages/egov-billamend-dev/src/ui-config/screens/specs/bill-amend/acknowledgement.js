@@ -1,6 +1,7 @@
 import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
+import { generateBillAmendAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateBillAmendAcknowledgement";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -43,34 +44,37 @@ const searchResults = async (dispatch, applicationNo, tenantId) => {
   ];
   let payload = await getBillAmendSearchResult(queryObject);
 
-  // await setDocuments(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.applicationDocuments",
-  //   "LicensesTemp[0].reviewDocData",
-  //   dispatch, 'TL'
-  // );
-  //set Trade Types
+  await setDocuments(
+    payload,
+    "Amendments[0].documents",
+    "bill-amend-review-document-data",
+    dispatch, 'BILLAMEND'
+  );
+  // set Trade Types
 
   payload && dispatch(
     prepareFinalObject(
-      "Amendments", get(
+      "Amendment", get(
         payload,
-        "Amendments",
+        "Amendments[0]",
         []
       )))
 
 };
 
-const downloadprintMenu = (state, dispatch) => {
+const downloadprintMenu = (state, dispatch, status) => {
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "BILL_APPLICATION" },
     link: () => {
-      const { Amendments } = state.screenConfiguration.preparedFinalObject;
+
+      const { Amendment } = state.screenConfiguration.preparedFinalObject;
       // const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
       // set(Licenses[0], "additionalDetails.documents", documents)
       // downloadAcknowledgementForm(Licenses);
 
-      generateBillAmendPdf(Amendments, commonConfig.tenantId, 'download');
+      generateBillAmendAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), `billamend-acknowledgement-${Amendment.amendmentId}.pdf`)
     },
     leftIcon: "assignment"
   };
@@ -78,19 +82,53 @@ const downloadprintMenu = (state, dispatch) => {
     label: { labelName: "Application", labelKey: "BILL_APPLICATION" },
     link: () => {
 
-      const { Amendments } = state.screenConfiguration.preparedFinalObject;
-      // const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
-      // set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses);
 
-      generateBillAmendPdf(Amendments, commonConfig.tenantId, 'print');
+
+      const { Amendments } = state.screenConfiguration.preparedFinalObject;
+      generateBillAmendAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print')
     },
     leftIcon: "assignment"
   };
+
+  let certificateDownloadObject = {
+    label: { labelName: "Application", labelKey: "BILL_COUPON" },
+    link: () => {
+
+      const { Amendment } = state.screenConfiguration.preparedFinalObject;
+      generateBillAmendPdf([Amendment], commonConfig.tenantId, 'download');
+    },
+    leftIcon: "assignment"
+  };
+  let certificatePrintObject = {
+    label: { labelName: "Application", labelKey: "BILL_COUPON" },
+    link: () => {
+
+      const { Amendment } = state.screenConfiguration.preparedFinalObject;
+      generateBillAmendPdf([Amendment], commonConfig.tenantId, 'print');
+    },
+    leftIcon: "assignment"
+  };
+
+
   let downloadMenu = [];
   let printMenu = [];
-  downloadMenu = [applicationDownloadObject];
-  printMenu = [applicationPrintObject];
+  switch (status) {
+    case 'apply':
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+    case 'approve':
+      downloadMenu = [certificateDownloadObject];
+      printMenu = [certificatePrintObject];
+      break;
+    default:
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
+      break;
+  }
+
 
 
   return {
@@ -157,7 +195,7 @@ const getAcknowledgementCard = (
             })
           }
         },
-        headerdownloadprint: downloadprintMenu(state, dispatch),
+        headerdownloadprint: downloadprintMenu(state, dispatch, 'apply'),
       }, { style: { justifyContent: "space-between" } }),
 
 
@@ -203,23 +241,23 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "approve" && status === "success") {
-    // loadReceiptGenerationData(applicationNumber, tenant);
+    searchResults(dispatch, applicationNumber, tenant);
     return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: `BILL AMENDMENT Application `,
-          labelKey: "BILL_AMENDMENT_APPLICATION",
-          dynamicArray: []
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
+      headerDiv: getCommonContainer({
+        header: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            headerTitle: getCommonHeader({
+              labelName: `Acknowledgement for Bill Amendment`,
+              labelKey: "BILL_COMMON_APPLICATION_NEW_AMENDMENT",
+              dynamicArray: [],
+              style: { alignSelf: "center" }
+            })
           }
-        }
-      }),
+        },
+        headerdownloadprint: downloadprintMenu(state, dispatch, 'approve'),
+      }, { style: { justifyContent: "space-between" } }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
