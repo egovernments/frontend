@@ -6,6 +6,7 @@ import { handleScreenConfigurationFieldChange as handleField, initScreen, prepar
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
+import { TL_CALC } from "egov-ui-kit/utils/endPoints";
 
 import {
   getFileUrl,
@@ -35,6 +36,7 @@ import {FETCH_FILE} from "egov-ui-kit/utils/endPoints";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { PDFGEN } from "egov-ui-kit/utils/endPoints";
+import { TL_CALC } from "../../../../../../egov-ui-kit-dev/src/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -508,7 +510,7 @@ export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-calculator/v1/BPAREG/_getbill",
+      TL_CALC.BPAREG.URL,
       "",
       queryObject
     );
@@ -1057,7 +1059,7 @@ const getBillingSlabData = async (
     try {
       const response = await httpRequest(
         "post",
-        "/tl-calculator/billingslab/_search",
+        TL_CALC.BILLINGSLAB.URL,
         "",
         queryObject
       );
@@ -1973,7 +1975,7 @@ export const getDialogButton = (name, key, screenKey) => {
 const getAllBillingSlabs = async tenantId => {
   let payload = await httpRequest(
     "post",
-    `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
+    `${TL_CALC.BILLINGSLAB.URL}?tenantId=${tenantId}`,
     "_search",
     [],
     {}

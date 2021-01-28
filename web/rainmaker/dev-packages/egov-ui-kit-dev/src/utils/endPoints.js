@@ -411,3 +411,14 @@ export const TL_BPAREG = {
   },
 };
 
+export const TL_CALC = {
+  GETBILL: {
+    URL: "/tradelicense-calculator/v1/_getbill",
+  },
+  BILLINGSLAB: {
+    URL: "/tradelicense-calculator/billingslab/_search",
+  },
+  BPAREG: {
+    URL: "/tradelicense-calculator/v1/BPAREG/_getbill",
+  },
+};
