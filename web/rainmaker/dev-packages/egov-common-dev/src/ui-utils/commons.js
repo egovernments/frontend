@@ -10,6 +10,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { FIRENOC } from "egov-ui-kit/utils/endPoints";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -51,7 +52,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/firenoc-services/v1/_search",
+      FIRENOC.SEARCH.URL,
       "",
       queryObject
     );
@@ -253,7 +254,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
-        "/firenoc-services/v1/_create",
+        FIRENOC.CREATE.URL,
         "",
         [],
         { FireNOCs: payload }
@@ -264,7 +265,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "/firenoc-services/v1/_update",
+        FIRENOC.UPDATE.URL,
         "",
         [],
         { FireNOCs: payload }

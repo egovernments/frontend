@@ -6,6 +6,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { getSearchResults } from "../../ui-utils/commons";
+import { FIRENOC } from "egov-ui-kit/utils/endPoints";
 
 class PaymentRedirect extends Component {
   componentDidMount = async () => {
@@ -35,7 +36,7 @@ class PaymentRedirect extends Component {
         set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
         response = await httpRequest(
           "post",
-          "/firenoc-services/v1/_update",
+          FIRENOC.UPDATE.URL,
           "",
           [],
           {

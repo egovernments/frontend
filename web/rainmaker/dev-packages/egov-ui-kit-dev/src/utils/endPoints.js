@@ -421,3 +421,15 @@ export const TL_CALC = {
     URL: "/tradelicense-calculator/v1/BPAREG/_getbill",
   },
 };
+
+export const FIRENOC = {
+  CREATE: {
+    URL: "/firenoc/v1/_create",
+  },
+  UPDATE: {
+    URL: "/firenoc/v1/_update",
+  },
+  SEARCH: {
+    URL: "/firenoc/v1/_search",
+  },
+};

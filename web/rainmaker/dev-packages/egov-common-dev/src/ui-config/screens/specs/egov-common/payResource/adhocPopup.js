@@ -16,6 +16,7 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
+import { FIRENOC } from "egov-ui-kit/utils/endPoints";
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   const NOCRequestBody = cloneDeep(
@@ -26,7 +27,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   try {
     const NOCpayload = await httpRequest(
       "post",
-      "/firenoc-services/v1/_update",
+      FIRENOC.UPDATE.URL,
       "",
       [],
       { FireNOCs: NOCRequestBody }
