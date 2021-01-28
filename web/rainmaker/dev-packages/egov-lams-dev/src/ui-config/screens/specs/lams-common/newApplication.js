@@ -162,16 +162,6 @@ const newApplication = {
     return action;
   },
   components: {
-    div1:{
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-      },
-      children: {
-        details: newApplicationDetailsCard
-      },
-      visible: checkIfCitizenEditScreen()?false:true
-    },
     div2:{
       uiFramework: "custom-atoms",
       componentPath: "Div",
@@ -181,6 +171,16 @@ const newApplication = {
         details: OwnerInfoCard
       },
       visible: process.env.REACT_APP_NAME === "Citizen" ? false: checkIfCitizenEditScreen()? false: true
+    },
+    div1:{
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+      },
+      children: {
+        details: newApplicationDetailsCard
+      },
+      visible: checkIfCitizenEditScreen()?false:true
     },
     newApplicationDocumentsCard,
     div: {

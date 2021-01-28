@@ -178,3 +178,5 @@ export const cbToDeoMappingTransformer = (deoMappings2) => {
         map[deoMappings2[key][i]] = key
   return map;
 }
+
+export const monthsPattern = /^(0)*[1-9][0-9]{0,3}$/i;

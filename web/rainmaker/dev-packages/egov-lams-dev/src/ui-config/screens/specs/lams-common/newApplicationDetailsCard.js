@@ -19,12 +19,15 @@ import {
   import {prepareFinalObject,  handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {getLeaseDetailsCard} from "./leaseDetailsCard";
   import {downloadLeaseApplication, downloadLeaseApplication2,isPostDSignMode} from "../../../../ui-utils/commons";
+  import {monthsPattern} from "../../../../ui-utils/constants";
   import {dSignConfirmationDialog} from "./dSignConfirmationDialog";
+  import {downloadDialog} from "./downloadDialog";
   import PropTypes from "prop-types";
   import {localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+  import { validateFields } from "../utils";
+  import {toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
-  const monthsPattern = /^(0)*[1-9][0-9]{0,3}$/i;
   const getClasses = () =>{
     return PropTypes.object.isRequired;
   }
@@ -44,8 +47,8 @@ import {
     setVisibilityLocated(action,state, dispatch, true, true );
     setVisibilitySurveyNo(action, state, dispatch, true, true);
     setVisibilityLeaseDetails(action, state, dispatch, true, true);
-    setVisibilityDownloadButton(action, state, dispatch, true, true);
-    setVisibilityEsignButton(action, state, dispatch, true, true);
+    setVisibilityDownloadButton(action, state, dispatch, (process.env.REACT_APP_NAME === "Citizen"), true);
+    setVisibilityEsignButton(action, state, dispatch,  (process.env.REACT_APP_NAME === "Citizen"), true);
     setVisibilityMonths(action, state, dispatch, true, true);
     setVisibilityApplicationType(action, state, dispatch, true, true);
   }
@@ -61,22 +64,46 @@ import {
     setVisibilityMonths(action, state, dispatch, false, false);
   }
 
-  const onMonthsChanged = (action,state, dispatch) => {
-    const months = get(
-      state.screenConfiguration.preparedFinalObject,
-      "lamsStore.Lease[0].months"
-    );
-    if(monthsPattern.test(months))
-    {
-      setVisibilityDownloadButton(action, state, dispatch, true);
-      setVisibilityEsignButton(action, state, dispatch, true)
-    }
-    else
-    {
-      setVisibilityDownloadButton(action, state, dispatch, false);
-      setVisibilityEsignButton(action, state, dispatch, false);
-    }
-  }
+  // const onMonthsChanged = (action,state, dispatch) => {
+  //   setVisibilityDownloadButton(action, state, dispatch, false);
+  //   setVisibilityEsignButton(action, state, dispatch, false);
+  //   const months = get(
+  //     state.screenConfiguration.preparedFinalObject,
+  //     "lamsStore.Lease[0].months"
+  //   );
+  //   if(process.env.REACT_APP_NAME === "Citizen") //This is for Citizen Screen
+  //   {
+  //     if(monthsPattern.test(months))
+  //     {
+  //       setVisibilityFatherOrHusbandName(action, state, dispatch, true, false);
+  //     }
+  //     else
+  //     {
+  //       setVisibilityFatherOrHusbandName(action, state, dispatch, false, true);
+  //     }
+  //   }
+  //   else  //For employee take this value from Applicant Details.
+  //   {
+  //     setVisibilityFatherOrHusbandName(action, state, dispatch, false, true);
+  //   }
+  // }
+
+  // const onFathersNameChanged = (action,state, dispatch) => {
+  //   const fatherOrHusbandName = get(
+  //     state.screenConfiguration.preparedFinalObject,
+  //     "lamsStore.Lease[0].fatherOrHusbandName"
+  //   );
+  //   if(getPattern("Name").test(fatherOrHusbandName))
+  //   {
+  //     setVisibilityDownloadButton(action, state, dispatch, true);
+  //     setVisibilityEsignButton(action, state, dispatch, true)
+  //   }
+  //   else
+  //   {
+  //     setVisibilityDownloadButton(action, state, dispatch, false);
+  //     setVisibilityEsignButton(action, state, dispatch, false);
+  //   }
+  // }
 
   const onLocatedChanged = (action, state, dispatch) =>{
     if(!isPostDSignMode())
@@ -108,8 +135,8 @@ import {
         dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails", selectedSurveyDetails));
       }
       setVisibilityLeaseDetails(action, state, dispatch,true);
-      setVisibilityDownloadButton(action, state, dispatch, false);
-      setVisibilityEsignButton(action, state, dispatch, false);
+      setVisibilityDownloadButton(action, state, dispatch, true);
+      setVisibilityEsignButton(action, state, dispatch, (process.env.REACT_APP_NAME === "Citizen"));
       setVisibilityMonths(action, state, dispatch, true);
     }
   }
@@ -383,6 +410,28 @@ import {
     }
   }
 
+  const setVisibilityFatherOrHusbandName = (action, state, dispatch, visible, disabled) =>{
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.fatherOrHusbandName",
+        "visible",
+        visible
+      )
+    );
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.fatherOrHusbandName",
+          "props.disabled",
+          disabled
+        )
+      );
+    }
+  }
+
   const setVisibilityEsignButton = (action, state, dispatch, visible, disabled) =>{
     dispatch(
       handleField(
@@ -408,17 +457,61 @@ import {
   const locationChanged = () =>{
   }
 
+  const validateOwnerDetails = (state,dispatch) =>{
+    //Validate only on Employee side.
+    if(process.env.REACT_APP_NAME === "Employee")
+    {
+      const isEmployeeDetailsValid = validateFields(
+        "components.div2.children.details.children.cardContent.children.ownerDetails.children.cardContent.children.ownerDetailsCardContainer.children",
+        state,
+        dispatch,
+        "newApplication"
+      );
+      if(!isEmployeeDetailsValid)
+        dispatch(toggleSnackbar(
+          true,
+          {labelName: "Please fill the Applicant Details",
+          labelKey: "ERR_LAMS_APPL_DETAILS"}, 
+          "error")
+        );
+      return isEmployeeDetailsValid;
+    }
+    else
+      return true;
+  }
+
   const onDownloadApplClicked = (state, dispatch) => {
-    // const LeaseApplication = [
-    //   { key: "challanNo", value: "CH-CB-AGRA-2021-003755" },
-    //   { key: "tenantId", value: "pb.agra" }
-    // ]
-    // downloadLeaseApplication(LeaseApplication,"download");   
-    downloadLeaseApplication2(state,dispatch, false);
+
+    dispatch(prepareFinalObject("lamsStore.eSignClicked", false));
+
+    dispatch(
+      handleField(
+        "newApplication", 
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.downloadApplDialogDiv.children.dialogContent.children.popup.children.optionSelection.children.div.children.yesButton.children.previousButtonLabel", 
+        "props.labelKey", 
+        "LAMS_DOWNLOAD")
+    );
+
+    if(validateOwnerDetails(state, dispatch))
+      showHideDownloadApplPopup(state, dispatch);
+
   }
 
   const onEsignClicked = (state,dispatch) => {
-    showHideConfirmationPopup(state, dispatch);
+
+    dispatch(prepareFinalObject("lamsStore.eSignClicked", true));
+
+    dispatch(
+      handleField(
+        "newApplication", 
+        "components.div1.children.details.children.cardContent.children.optionSelection.children.downloadApplDialogDiv.children.dialogContent.children.popup.children.optionSelection.children.div.children.yesButton.children.previousButtonLabel", 
+        "props.labelKey", 
+        "LAMS_PROCEED_DSIGN")
+    );
+
+    if(validateOwnerDetails(state, dispatch))
+      showHideDownloadApplPopup(state, dispatch);
+      //showHideConfirmationPopup(state, dispatch);
   }
 
   export const showHideConfirmationPopup = (state, dispatch) => {
@@ -431,6 +524,17 @@ import {
      handleField("newApplication", "components.div1.children.details.children.cardContent.children.optionSelection.children.dSignConfirmationDialogDiv", "props.open", !toggle)
    );
  };
+
+ export const showHideDownloadApplPopup = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["newApplication"],
+   "components.div1.children.details.children.cardContent.children.optionSelection.children.downloadApplDialogDiv.props.open",
+   false
+ );
+ dispatch(
+   handleField("newApplication", "components.div1.children.details.children.cardContent.children.optionSelection.children.downloadApplDialogDiv", "props.open", !toggle)
+ );
+};
 
   export const newApplicationDetailsCard = getCommonCard(
       {
@@ -726,34 +830,62 @@ import {
             //     sm: 4
             //   }
             // }),
-            months: getTextField({
-              label: {
-                labelName: "For a period of (Months)",
-                labelKey: "LAMS_FOR_A_PERIOD"
-              },
-              props:{
-                className:"applicant-details-error",
-                //hasDependant: true,
-                //onChange:null,
-                //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-              },
-              placeholder: {
-                labelName: "Enter period in months",
-                labelKey: "LAMS_FOR_A_PERIOD_PLACEHOLDER"
-              },
-              gridDefination: {
-                xs: 12,
-                sm: 4
-              },
-              required: true,
-              pattern: monthsPattern,
-              jsonPath: "lamsStore.Lease[0].months",
-              sourceJsonPath: "lamsStore.Lease[0].months",
-              visible: false,
-              afterFieldChange: (action, state, dispatch) => {
-                onMonthsChanged(action, state, dispatch);
-              },
-            }),
+            // months: getTextField({
+            //   label: {
+            //     labelName: "For a period of (Months)",
+            //     labelKey: "LAMS_FOR_A_PERIOD"
+            //   },
+            //   props:{
+            //     className:"applicant-details-error",
+            //     //hasDependant: true,
+            //     //onChange:null,
+            //     //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            //   },
+            //   placeholder: {
+            //     labelName: "Enter period in months",
+            //     labelKey: "LAMS_FOR_A_PERIOD_PLACEHOLDER"
+            //   },
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 4
+            //   },
+            //   required: true,
+            //   pattern: monthsPattern,
+            //   jsonPath: "lamsStore.Lease[0].months",
+            //   sourceJsonPath: "lamsStore.Lease[0].months",
+            //   visible: false,
+            //   afterFieldChange: (action, state, dispatch) => {
+            //     onMonthsChanged(action, state, dispatch);
+            //   },
+            // }),
+            // fatherOrHusbandName: getTextField({
+            //   label: {
+            //     labelName: "Father/Spouse Name",
+            //     labelKey: "LAMS_APPLICANT_FATHER_NAME_LABEL"
+            //   },
+            //   props:{
+            //     className:"applicant-details-error",
+            //     //hasDependant: true,
+            //     //onChange:null,
+            //     //disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            //   },
+            //   placeholder: {
+            //     labelName: "Enter Father/Spouse Name",
+            //     labelKey: "LAMS_APPLICANT_FATHER_NAME_LABEL"
+            //   },
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 4
+            //   },
+            //   required: true,
+            //   pattern: getPattern("Name"),
+            //   jsonPath: "lamsStore.Lease[0].fatherOrHusbandName",
+            //   sourceJsonPath: "lamsStore.Lease[0].fatherOrHusbandName",
+            //   visible: false,
+            //   afterFieldChange: (action, state, dispatch) => {
+            //     onFathersNameChanged(action, state, dispatch);
+            //   },
+            // }),
             downloadApplication: {
               uiFrameWork: "custom-atoms",
               componentPath: "Button",
@@ -843,6 +975,28 @@ import {
                   },
                   children: {
                     popup: dSignConfirmationDialog
+                  }
+                }
+              }
+            },
+            downloadApplDialogDiv: {
+              componentPath: "Dialog",
+              props: {
+                open: false,
+                maxWidth: "sm",
+                disableValidation: true
+              },
+              children: {
+                dialogContent: {
+                  componentPath: "DialogContent",
+                  props: {
+                    classes: {
+                      root: "city-picker-dialog-style"
+                    }
+                    // style: { minHeight: "180px", minWidth: "365px" }
+                  },
+                  children: {
+                    popup: downloadDialog
                   }
                 }
               }
@@ -1126,21 +1280,21 @@ export const OwnerInfoCard = getCommonCard(
             pattern: getPattern("Email"),
             jsonPath: "lamsStore.Lease[0].userDetails[0].emailId"
           }),
-          ownerPAN: getTextField({
-            label: {
-              labelName: "PAN No.",
-              labelKey: "LAMS_APPLICANT_PAN_LABEL"
-            },
-            props:{
-              className:"applicant-details-error"
-            },
-            placeholder: {
-              labelName: "Enter Owner's PAN No.",
-              labelKey: "LAMS_APPLICANT_PAN_PLACEHOLDER"
-            },
-            pattern: getPattern("PAN"),
-            jsonPath: "lamsStore.Lease[0].userDetails[0].pan"
-          }),
+          // ownerPAN: getTextField({
+          //   label: {
+          //     labelName: "PAN No.",
+          //     labelKey: "LAMS_APPLICANT_PAN_LABEL"
+          //   },
+          //   props:{
+          //     className:"applicant-details-error"
+          //   },
+          //   placeholder: {
+          //     labelName: "Enter Owner's PAN No.",
+          //     labelKey: "LAMS_APPLICANT_PAN_PLACEHOLDER"
+          //   },
+          //   pattern: getPattern("PAN"),
+          //   jsonPath: "lamsStore.Lease[0].userDetails[0].pan"
+          // }),
           
           ownerAddress: getTextField({
             label: {

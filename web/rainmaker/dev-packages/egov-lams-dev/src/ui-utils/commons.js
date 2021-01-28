@@ -1044,13 +1044,9 @@ export const prepareRequestBodyForLeaseAppPdf = (state, dispatch , forEsign) =>{
 
   let requestBody = {};
   requestBody.tenantId = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].tenantId");
-  requestBody.area = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].leaseDetails.area");
-  requestBody.surveyNo = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].leaseDetails.surveyNo");
+  requestBody.surveyId = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].leaseDetails.surveyId");
   requestBody.months = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months");
-  requestBody.name = JSON.parse(getUserInfo()).name;
-  requestBody.mobileNo = JSON.parse(getUserInfo()).mobileNumber;
-  requestBody.aadhaarNumber = JSON.parse(getUserInfo()).aadhaarNumber;
-  requestBody.fatherOrHusbandName = JSON.parse(getUserInfo()).fatherOrHusbandName;
+  requestBody.fatherOrHusbandName = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName");
   requestBody.forEsign = forEsign;
 
   let reqWrapper = {"leaseApplication":[requestBody]}
@@ -1062,7 +1058,7 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
   let reqWrapper = prepareRequestBodyForLeaseAppPdf(state, dispatch, forEsign);
   let payload = null;
   try{
-    try{
+
       payload = await httpRequest(
         "post",
         "/lams-services/dSign/createApplicationPdf",  // "/egov-pdf/download/LRMS/lrms-renewalCertificate?tenantId="+requestBody.tenantId,
@@ -1070,11 +1066,7 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
         [],
         reqWrapper
       );
-    }
-    catch(e)
-    {
-
-    }
+    
 
     //dsignChange: Remove below code. Remove upper try catch
     //payload = {"filestoreIds":["0207fdc3-4017-4e24-ad15-152aab2e9737"],"ResponseInfo":{"Accept":"application/json","RequestInfo":{"apiId":"Mihy","ver":".01","action":"_get","did":"1","key":"","msgId":"20170310130900|en_IN","requesterId":"","userInfo":{"id":2034,"uuid":"cfd640e6-b19e-4429-a710-86fa41e51cf9","userName":"9480734475","name":"Sham","type":"CITIZEN","mobileNumber":"9480734475","emailId":"Poojapadma45@gmail.com","tenantId":"pb","roles":[{"id":null,"name":"Citizen","code":"CITIZEN","tenantId":"pb"}]},"correlationId":"6ac5b9bc-8b2a-4900-928a-ebcf4067687c"}},"key":"mcollect-challan"};
@@ -1086,7 +1078,6 @@ export const downloadLeaseApplication2 = async (state, dispatch, forEsign) => {
     }
     else
     {
-      console.log('payload',payload);
       if (payload && payload.fileStoreInfo && payload.fileStoreInfo.filestoreIds && payload.fileStoreInfo.filestoreIds.length > 0 ) {
         payload.fileStoreInfo.filestoreIds.map(fileStoreId => {
             downloadReceiptFromFilestoreID(fileStoreId, 'download')
@@ -1401,4 +1392,9 @@ export const eVerify = () => {
     let parser = new DOMParser();
     parser.parseFromString(response,"text/xml")
   });
+}
+
+export const getCustomLabel = () =>{
+
+
 }
