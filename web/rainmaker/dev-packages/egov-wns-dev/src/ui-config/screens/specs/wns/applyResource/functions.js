@@ -131,4 +131,12 @@ const showHideFields = (dispatch, value) => {
       value
     )
   );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.existingConnection",
+      "visible",
+      value
+    )
+  );
 }

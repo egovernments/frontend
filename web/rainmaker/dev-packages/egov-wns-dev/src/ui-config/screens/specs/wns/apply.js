@@ -507,7 +507,7 @@ export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details, ownerDetails, connectionHolderDetails, OwnerInfoCard }
+  children: { IDDetails, Details,existingConnection, ownerDetails, connectionHolderDetails, OwnerInfoCard }
 };
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",

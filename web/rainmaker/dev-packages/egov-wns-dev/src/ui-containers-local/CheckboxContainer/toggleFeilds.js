@@ -298,6 +298,11 @@ export const togglePropertyFeilds = (action, value) => {
     "components.div.children.formwizardFirstStep.children.connectionHolderDetails.visible",
     value
   );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.existingConnection.visible",
+    value
+  );
 
 }
 
