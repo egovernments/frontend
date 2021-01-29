@@ -233,8 +233,9 @@ export const footer = getCommonApplyFooter({
     componentPath: "Button",
     visible:false,
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
+      className:"leaseApplicationSubmitButton",
       style: {
         minWidth: "180px",
         height: "48px",
@@ -243,13 +244,13 @@ export const footer = getCommonApplyFooter({
       }
     },
     children: {
-      previousButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      },
+      // previousButtonIcon: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Icon",
+      //   props: {
+      //     iconName: "keyboard_arrow_right"
+      //   }
+      // },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
         labelKey: "LAMS_COMMON_SUBMIT"
