@@ -34,6 +34,7 @@ import { edcrDetailsToBpaDetails } from "../ui-config/screens/specs/utils"
 import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
 
+import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/commons";
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
@@ -53,7 +54,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   }
   const FETCHRECEIPT = {
     GET: {
-      URL: "/collection-services/payments/_search",
+      URL: `/${COLLECTION_PAYMENTS.SEARCH.URL}`,
       ACTION: "_get",
     },
   };

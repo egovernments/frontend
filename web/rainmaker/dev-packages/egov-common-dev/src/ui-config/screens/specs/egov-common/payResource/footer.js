@@ -9,6 +9,7 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import { paybuttonJsonpath } from "./constants";
+import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/commons";
 import "./index.css";
 
 const checkAmount = (totalAmount, customAmount, businessService) => {
@@ -534,8 +535,8 @@ const callBackForPay = async (state, dispatch) => {
     try {
       let response = await httpRequest(
         "post",
-        "collection-services/payments/_create",
-        "_create",
+        COLLECTION_RECEIPTS.POST.URL,
+        COLLECTION_RECEIPTS.POST.ACTION,
         [],
         ReceiptBodyNew,
         [],

@@ -14,6 +14,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_PAYMENTS, FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {

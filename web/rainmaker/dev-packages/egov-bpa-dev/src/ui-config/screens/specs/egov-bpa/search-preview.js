@@ -51,6 +51,7 @@ import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());

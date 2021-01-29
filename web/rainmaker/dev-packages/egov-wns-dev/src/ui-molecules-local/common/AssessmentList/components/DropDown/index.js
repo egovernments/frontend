@@ -4,6 +4,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import createReceipt from "../../../PaymentStatus/Components/createReceipt";
 import generateReceipt from "../../../PaymentStatus/Components/receiptsPDF";
+import { RECEIPT } from "egov-ui-kit/utils/endPoints";
 import React from "react";
 
 const styles = {
@@ -55,7 +56,7 @@ const downloadReceipt = async item => {
   ];
   try {
     const payload = await httpRequest(
-      "/collection-services/receipts/_search",
+      RECEIPT.GET.URL,
       "_search",
       queryObj,
       {},

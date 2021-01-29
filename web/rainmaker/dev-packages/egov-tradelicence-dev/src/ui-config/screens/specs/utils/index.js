@@ -18,6 +18,7 @@ import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
 import { TL_CALC } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_PAYMENTS,FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {

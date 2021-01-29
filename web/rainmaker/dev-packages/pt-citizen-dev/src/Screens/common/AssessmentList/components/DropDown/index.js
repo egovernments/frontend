@@ -6,6 +6,7 @@ import SelectField from "material-ui/SelectField";
 import React from "react";
 import createReceipt from "../../../PaymentStatus/Components/createReceipt";
 import generateReceipt from "../../../PaymentStatus/Components/receiptsPDF";
+import { RECEIPT } from "egov-ui-kit/utils/endPoints";
 
 const styles = {
   customWidth: {
@@ -48,7 +49,7 @@ const downloadReceipt = async item => {
   ];
   try {
     const payload = await httpRequest(
-      "/collection-services/receipts/_search",
+      RECEIPT.GET.URL,
       "_search",
       queryObj,
       {},

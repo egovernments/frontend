@@ -37,6 +37,7 @@ import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
 import { PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/endPoints";
 import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 import { PROPERTYTAX_CAL_GETBILL, PROPERTYTAX_CAL_ESTIMATE } from "egov-ui-kit/utils/endPoints";
 class FormWizard extends Component {
@@ -1236,8 +1237,8 @@ class FormWizard extends Component {
 
     try {
       const getReceipt = await httpRequest(
-        "collection-services/receipts/_create",//todo Consumer code uniqueness
-        "_create",
+        COLLECTION_RECEIPTS.POST.URL,//todo Consumer code uniqueness
+        COLLECTION_RECEIPTS.POST.ACTION,
         [],
         formData,
         []

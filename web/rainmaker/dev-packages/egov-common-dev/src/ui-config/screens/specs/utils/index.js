@@ -17,6 +17,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import isUndefined from "lodash/isUndefined";
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
+import { RECEIPT } from "egov-ui-kit/utils/endPoints";
 
 
 export const getCommonApplyFooter = children => {
@@ -538,7 +539,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      RECEIPT.GET.URL,
       "",
       queryObject
     );

@@ -18,6 +18,8 @@ import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE, SEWERAGE_CAL_ES
 import { WATER_CAL_CREATE, WATER_CAL_SEARCH, WATER_CAL_ESTIMATE} from "egov-ui-kit/utils/endPoints";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
+import { MDMS } from "egov-ui-kit/src/utils/endPoints";
+import { FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
 
 export const serviceConst = {
     "WATER": "WATER",
@@ -2047,7 +2049,7 @@ export const isActiveProperty = (propertyObj) => {
             status = false;
         }
     }
-    
+
     return status;
 }
 export const isEditAction = () => {
