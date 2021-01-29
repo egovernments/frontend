@@ -3,13 +3,18 @@ import { Icon } from "components";
 import { Screen } from "modules/common";
 import { withStyles } from "@material-ui/core/styles";
 import Label from "egov-ui-kit/utils/translationNode";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { List } from "egov-ui-kit/components";
+import { setLocale, localStorageSet, getLocale, setModule } from "egov-ui-kit/utils/localStorageUtils";
 import Input from '@material-ui/core/Input';
 import get from "lodash/get";
 import queryString from 'query-string';
 import "./index.css";
+import { connect } from "react-redux";
 import commonConfig from "config/common";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const styles = (theme) => ({
   root: {
@@ -95,7 +100,7 @@ class WhatsAppCity extends React.Component {
 
 
     const citydata = await this.getMDMSData(stateId);
-    console.log("aa",citydata)
+  
     const citylistCodeModule = get(citydata, "MdmsRes.tenant.citymodule", []);
     const citylistCode=citylistCodeModule.filter(item=>item.module==="PGR.WHATSAPP")[0].tenants
     const citylist = citylistCode.map((item) => {
@@ -108,6 +113,10 @@ class WhatsAppCity extends React.Component {
     this.setState({
       citylist: citylist,
     })
+    let locale=getQueryArg(window.location.href, "locale")||'en_IN';
+    setLocale(locale);
+    setModule('rainmaker-common');
+    this.props.fetchLocalizationLabel(getLocale(),commonConfig.tenantId , commonConfig.tenantId);
   };
 
 
@@ -170,7 +179,7 @@ class WhatsAppCity extends React.Component {
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
               const number = this.state.phone || commonConfig.whatsappNumber;
-              const name=item.primaryText.props.label;
+              const name=getLocaleLabels(item.primaryText.props.label,item.primaryText.props.label);
               const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink
             }}
@@ -186,6 +195,13 @@ class WhatsAppCity extends React.Component {
 }
 
 
-export default withStyles(styles)(
+const mapDispatchToProps = (dispatch) => ({
+  fetchLocalizationLabel: (locale, moduleName, tenantId) => dispatch(fetchLocalizationLabel(locale, moduleName, tenantId)),
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(withStyles(styles)(
   (WhatsAppCity)
-);
+));
