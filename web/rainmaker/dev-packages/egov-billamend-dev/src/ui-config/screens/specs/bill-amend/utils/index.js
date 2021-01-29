@@ -335,7 +335,7 @@ export const submitApplication = async (state, dispatch) => {
     obj.tenantId = data.tenantId;
     obj.collectionAmount = data.collectionAmount;
     if (amountType == "reducedAmount") {
-      obj.taxAmount = data.reducedAmountValue ? -data.reducedAmountValue : 0;
+      obj.taxAmount = data.reducedAmountValue ? -data.reducedAmountValue : -0;
     } else {
       obj.taxAmount = data.additionalAmountValue ? data.additionalAmountValue : 0;
     }

@@ -11,31 +11,8 @@ import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils"
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
-// import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
-// import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import "./index.css";
 import { generateBillAmendPdf } from "./utils";
-
-
-
-// const getTradeTypeSubtypeDetails = payload => {
-//   const tradeUnitsFromApi = get(
-//     payload,
-//     "Licenses[0].tradeLicenseDetail.tradeUnits",
-//     []
-//   );
-//   const tradeUnitDetails = [];
-//   tradeUnitsFromApi.forEach(tradeUnit => {
-//     const { tradeType } = tradeUnit;
-//     const tradeDetails = tradeType.split(".");
-//     tradeUnitDetails.push({
-//       trade: get(tradeDetails, "[0]", ""),
-//       tradeType: get(tradeDetails, "[1]", ""),
-//       tradeSubType: get(tradeDetails, "[2]", "")
-//     });
-//   });
-//   return tradeUnitDetails;
-// };
 
 const searchResults = async (dispatch, applicationNo, tenantId) => {
   let queryObject = [
@@ -50,8 +27,6 @@ const searchResults = async (dispatch, applicationNo, tenantId) => {
     "bill-amend-review-document-data",
     dispatch, 'BILLAMEND'
   );
-  // set Trade Types
-
   payload && dispatch(
     prepareFinalObject(
       "Amendment", get(
@@ -68,10 +43,6 @@ const downloadprintMenu = (state, dispatch, status) => {
     link: () => {
 
       const { Amendment } = state.screenConfiguration.preparedFinalObject;
-      // const documents = LicensesTemp && LicensesTemp[0].reviewDocData;
-      // set(Licenses[0], "additionalDetails.documents", documents)
-      // downloadAcknowledgementForm(Licenses);
-
       generateBillAmendAcknowledgement(get(
         state,
         "screenConfiguration.preparedFinalObject", {}), `billamend-acknowledgement-${Amendment.amendmentId}.pdf`)
@@ -81,9 +52,6 @@ const downloadprintMenu = (state, dispatch, status) => {
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "BILL_APPLICATION" },
     link: () => {
-
-
-
       const { Amendments } = state.screenConfiguration.preparedFinalObject;
       generateBillAmendAcknowledgement(get(
         state,
@@ -197,17 +165,9 @@ const getAcknowledgementCard = (
         },
         headerdownloadprint: downloadprintMenu(state, dispatch, 'apply'),
       }, { style: { justifyContent: "space-between" } }),
-
-
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
-        props: {
-          // style: {
-          //   position: "absolute",
-          //   width: "95%"
-          // }
-        },
         children: {
           card: acknowledgementCard({
             icon: "done",
@@ -267,55 +227,62 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application is Approved Successfully",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+              labelKey: "BILL_APPROVED_MESSAGE_HEAD"
             },
             body: {
-              labelName:
-                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
+              labelName: "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "BILL_APPROVED_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelName: "Application No.",
+              labelKey: "BILL_APPLICATION_NUMBER"
             },
-            number: secondNumber
+            number: applicationNumber
           })
         }
       },
       approvalSuccessFooter
     };
-  } else if (purpose === "forward" && status === "success") {
+  } else if (purpose === "application" && status === "rejected") {
     return {
-      header: getCommonHeader({
-        labelName: `Application for Trade License `,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: []
+      headerDiv: getCommonContainer({
+        header: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          children: {
+            headerTitle: getCommonHeader({
+              labelName: `Acknowledgement for Bill Amendment`,
+              labelKey: "BILL_COMMON_APPLICATION_NEW_AMENDMENT",
+              dynamicArray: [],
+              style: { alignSelf: "center" }
+            })
+          }
+        },
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         children: {
           card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
+            icon: "close",
+            backgroundColor: "#E54D42",
             header: {
-              labelName: "Application Forwarded Successfully",
-              labelKey: "TL_FORWARD_SUCCESS_MESSAGE_MAIN"
+              labelName: "Application is Rejected Successfully",
+              labelKey: "BILL_REJECTED_MESSAGE_HEAD"
             },
             body: {
-              labelName:
-                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_FORWARD_SUCCESS"
+              labelName: "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "BILL_REJECTED_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Application No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+              labelKey: "BILL_APPLICATION_NUMBER"
             },
             number: applicationNumber
           })
         }
       },
-      gotoHomeFooter
+      approvalSuccessFooter
     };
   }
 };
