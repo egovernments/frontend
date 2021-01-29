@@ -228,7 +228,7 @@ const headerrow = getCommonContainer({
         moduleName: "egov-billamend",
         componentPath: "ConsumerNo",
         props: {
-            number: "WS-2018-PB-246464",
+            number: "NA",
             label: { labelValue: "Consumer No.", labelKey: "BILL_CONSUMER_NO" }
         }
     },
@@ -425,6 +425,11 @@ export const setSearchResponse = async (state, dispatch, action) => {
         documentDetailsPreview(state, dispatch, amendments[0]);
         onDemandRevisionBasisHidendShowFields(state, dispatch, action, amendments[0]);
         setDownloadMenu(state, dispatch,applicationNumber);
+        set(
+            action,
+            "screenConfig.components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
+            get(amendments[0], "consumerCode")
+        );
     }
 }
 
