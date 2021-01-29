@@ -12,7 +12,11 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { FIRENOC } from "egov-ui-kit/utils/endPoints";
+<<<<<<< Updated upstream
 import { BILLING_V2 } from "egov-ui-kit/utils/endPoints";
+=======
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
+>>>>>>> Stashed changes
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -554,7 +558,7 @@ export const getBoundaryData = async (
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
       "_search",
       queryObject,
       {}

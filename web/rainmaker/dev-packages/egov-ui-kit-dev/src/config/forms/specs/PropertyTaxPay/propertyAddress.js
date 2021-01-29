@@ -7,6 +7,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import filter from "lodash/filter";
 import get from "lodash/get";
 import sortBy from "lodash/sortBy";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 const formConfig = {
   name: "propertyAddress",
@@ -145,7 +146,7 @@ const formConfig = {
 
       if (process.env.REACT_APP_NAME === "Citizen" && tenant && mohallaDropDownData.length == 0) {
         const dataFetchConfig = {
-          url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+          url: `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
           action: "",
           queryParams: [{
             key: "tenantId",

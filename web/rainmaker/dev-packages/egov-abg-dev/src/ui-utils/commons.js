@@ -18,8 +18,12 @@ import {
 } from "../ui-config/screens/specs/utils";
 import store from "../ui-redux/store";
 import { httpRequest } from "./api";
+<<<<<<< Updated upstream
 import { TL } from "egov-ui-kit/utils/endPoints";
 import { BILLING_V2 } from "egov-ui-kit/utils/endPoints";
+=======
+import { BOUNDARY, TL } from "egov-ui-kit/utils/endPoints";
+>>>>>>> Stashed changes
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -180,7 +184,7 @@ export const getBoundaryData = async (
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
       "_search",
       queryObject,
       {}

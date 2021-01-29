@@ -30,7 +30,11 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage, getFileUrl, enableFieldAndHideSpinner } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { TL } from "egov-ui-kit/utils/endPoints";
+<<<<<<< Updated upstream
 import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
+=======
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
+>>>>>>> Stashed changes
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -175,7 +179,7 @@ export const getBoundaryData = async (
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
       "_search",
       queryObject,
       {}

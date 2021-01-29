@@ -11,6 +11,7 @@ import {
 import { httpRequest, uploadFile } from "../ui-utils/api";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 import { EMPLOYEE_ASSIGN, EMPLOYEE_CREATE, EMPLOYEE_UPDATE } from "egov-ui-kit/utils/endPoints";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {

@@ -10,6 +10,7 @@ import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
 import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 let floorDropDownData = [];
 
@@ -579,7 +580,7 @@ export const mohalla = {
     },
     errorMessage: "PT_PROPERTY_DETAILS_MOHALLA_ERRORMSG",
     dataFetchConfig: {
-      url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      url: `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
       action: "",
       queryParams: [],
       requestBody: {},

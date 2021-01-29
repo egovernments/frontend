@@ -116,7 +116,7 @@ const jurisdictionDetailsCard = {
               jsonPath: "Employee[0].jurisdictions[0].boundaryType"
             }),
             beforeFieldChange: (action, state, dispatch) => {
-              // GET COMPLETE EGOV-LOCATION DATA FROM PFO
+              // GET COMPLETE LOCATION DATA FROM PFO
               let tenantBoundary = get(
                 state.screenConfiguration.preparedFinalObject,
                 `createScreenMdmsData.egov-location.TenantBoundary`,

@@ -14,6 +14,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import { propertySearch, resetFields } from "./search-methods";
 import { getMohallaData } from "egov-ui-kit/utils/commons";
 import { applyMohallaData } from "./publicSearchUtils";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 export const searchPropertyDetails = {
   ...getCommonCard({
@@ -65,7 +66,7 @@ export const searchPropertyDetails = {
               dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
               let payload = await httpRequest(
                 "post",
-                "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+                `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
                 "_search",
                 [{ key: "tenantId", value: action.value }],
                 {}

@@ -13,6 +13,7 @@ import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 export const tradeLocationDetails = getCommonCard(
   {
@@ -61,7 +62,7 @@ export const tradeLocationDetails = getCommonCard(
           try {
             let payload = await httpRequest(
               "post",
-              "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+              `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
               "_search",
               [{ key: "tenantId", value: action.value }],
               {}
