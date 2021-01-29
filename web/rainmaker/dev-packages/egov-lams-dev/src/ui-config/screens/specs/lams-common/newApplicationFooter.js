@@ -236,7 +236,7 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className:"leaseApplicationSubmitButton",
+      className:"submit-btn leaseApplicationSubmitButton",
       style: {
         minWidth: "180px",
         height: "48px",
