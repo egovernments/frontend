@@ -209,7 +209,7 @@ export const EVENTS_CREATE = {
 
 export const FETCHBILL = {
   GET: {
-    URL: "/billing-service/bill/v2/_fetchbill",
+    URL: "/billing/bill/v2/_fetchbill",
     ACTION: "_get",
   },
 };
@@ -387,8 +387,8 @@ export const COLLECTION_RECEIPTS = {
 export const COLLECTION_PAYMENTS = {
   SEARCH : {
     URL : "collection/payments/_search",
-  }
-}
+  },
+};
 
 
 export const PDFGEN = {
@@ -470,5 +470,38 @@ export const SEARCHER = {
   LOCALITY: {
     URL: "searcher/locality/",
     ACTION: "_get"
+  },
+};
+
+export const BILLING = {
+  SEARCH : {
+    URL : "/billing/bill/_search",
+  },
+  GENERATE : {
+    URL : "/billing/bill/_generate",
+  },
+};
+
+export const BILLING_V2 = {
+  SEARCH : {
+    URL : "billing/bill/v2/_search",
+  },
+};
+
+export const BILLING_DEMAND = {
+  CREATE : {
+    URL : "/billing/demand/_create",
+  },
+  UPDATE : {
+    URL : "/billing/demand/_update",
+  },
+  SEARCH : {
+    URL : "/billing/demand/_search",
+  },
+};
+
+export const FETCHBILL_2 = {
+  GET = {
+    URL : "/billing/bill/v2/_fetchbill",
   },
 };

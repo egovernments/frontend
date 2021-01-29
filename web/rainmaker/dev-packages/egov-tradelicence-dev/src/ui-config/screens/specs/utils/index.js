@@ -18,6 +18,7 @@ import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
 import { TL_CALC } from "egov-ui-kit/utils/endPoints";
+import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -497,7 +498,7 @@ export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+      FETCHBILL.GET.URL,
       "",
       queryObject
     );

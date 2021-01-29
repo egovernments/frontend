@@ -18,6 +18,7 @@ import isUndefined from "lodash/isUndefined";
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { RECEIPT } from "egov-ui-kit/utils/endPoints";
+import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
 
 
 export const getCommonApplyFooter = children => {
@@ -505,7 +506,7 @@ export const getBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+      FETCHBILL.GET.URL,
       "",
       queryObject
     );

@@ -16,6 +16,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { BILLING } from "egov-ui-kit/utils/endPoints";
 import get from "lodash/get";
 
 const getAllData = async (state, dispatch, billId, tenantId) => {
@@ -26,7 +27,7 @@ const searchBill = async (state, dispatch, billId, tenantId) => {
   try {
     const payload = await httpRequest(
       "post",
-      `/billing-service/bill/_search?billId=${billId}&tenantId=${tenantId}`,
+      `${BILLING.SEARCH.URL}?billId=${billId}&tenantId=${tenantId}`,
       "",
       [],
       {}
@@ -119,7 +120,7 @@ const generateBill = async (
   try {
     const payload = await httpRequest(
       "post",
-      `/billing-service/bill/_search?consumerCode=${consumerCode}&service=${businessService}&tenantId=${tenantId}`,
+      `${BILLING.SEARCH.URL}?consumerCode=${consumerCode}&service=${businessService}&tenantId=${tenantId}`,
       "",
       [],
       {}
