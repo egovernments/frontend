@@ -596,8 +596,6 @@ const parserFunction = (state) => {
             compositionFee :waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.compositionFee) : null,
             userCharges :waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.userCharges) : null,
             othersFee :waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.othersFee) : null,
-            meterStatus :waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.meterStatus : null,
-            // detailsProvidedBy : null,
             adhocPenalty: null,
             adhocPenaltyComment: null,
             adhocPenaltyReason: null,

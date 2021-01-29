@@ -159,12 +159,8 @@ export const getMdmsData = async (state,dispatch)=> {
     payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
     if (payload.MdmsRes['ws-services-calculation'].PipeSize !== undefined && payload.MdmsRes['ws-services-calculation'].PipeSize.length > 0) {
       let pipeSize = [];
-      let meterStatus=[];
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
       payload.MdmsRes['ws-services-calculation'].pipeSize = pipeSize;
-      payload.MdmsRes['ws-services-calculation'].MeterStatus.forEach(obj => meterStatus.push({ code: obj.name, name: obj.code, active: obj.active }));
-      payload.MdmsRes['ws-services-calculation'].meterStatus = meterStatus;
-
       let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
       payload.MdmsRes['ws-services-masters'].waterSource.forEach(obj => {
         waterSource.push({

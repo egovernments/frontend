@@ -484,21 +484,7 @@ export const reviewAverageMakeReading = getLabelWithValueForModifiedLabel(
     callBack: handleNA
   }
 );
-export const reviewMeterStatus = getLabelWithValueForModifiedLabel(
-  {
-    labelName: "Initial Meter Reading",
-    labelKey: "WS_SERV_METER_STATUS_TYPE"
-  },
-  { jsonPath: "WaterConnection[0].additionalDetails.meterStatus",
-    callBack: handleNA },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "WaterConnectionOld[0].additionalDetails.meterStatus",
-    callBack: handleNA
-  }
-);
+
 export const reviewOwner = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {

@@ -98,10 +98,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   // "div", {}));
   dispatch(unMountScreen("apply"));
   dispatch(unMountScreen("search"));
-  dispatch(prepareFinalObject("WaterConnection",[]));
-  dispatch(prepareFinalObject("SewerageConnection",[]));
-  dispatch(prepareFinalObject("WaterConnectionOld",[]));
-  dispatch(prepareFinalObject("SewerageConnectionOld",[]));
+  dispatch(prepareFinalObject("WaterConnection", []));
+  dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("WaterConnectionOld", []));
+  dispatch(prepareFinalObject("SewerageConnectionOld", []));
   const queryObj = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
@@ -113,7 +113,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
   let Response = await getWorkFlowData(queryObj);
   let processInstanceAppStatus = Response.ProcessInstances[0].state.applicationStatus;
- 
+
   //Search details for given application Number
   if (applicationNumber) {
 
@@ -124,13 +124,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         { display: "none" }
       );
     }
-    
+
     // if (getQueryArg(window.location.href, "edited")) {
     //   (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
     // } 
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
-    }else {
+    } else {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
       let parsedObject = parserFunction(findAndReplace(applyScreenObject, "NA", null));
@@ -619,11 +619,9 @@ const screenConfig = {
 const searchResults = async (action, state, dispatch, applicationNumber, processInstanceAppStatus) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
-  
+
   if (service === serviceConst.WATER) {
     payload = [];
-    
-console.log("======state",state);
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
     const convPayload = findAndReplace(payload, "NA", null)
@@ -632,20 +630,17 @@ console.log("======state",state);
       tenantId: tenantId,
       waterConnection: convPayload.WaterConnection[0]
     }]
-    
+
     if (payload !== undefined && payload !== null) {
-      if(payload.WaterConnection[0] && payload.WaterConnection[0].additionalDetails){
-        payload.WaterConnection[0].additionalDetails.meterStatus = payload.WaterConnection[0].additionalDetails.meterStatus.toLowerCase().replace(/[_]/g, "-")
-    }
-    debugger;
+      
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
-        
+
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
       }
       if (!payload.WaterConnection[0].connectionHolders || payload.WaterConnection[0].connectionHolders === 'NA') {
-        
+
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
       } else {
@@ -686,13 +681,13 @@ console.log("======state",state);
       let connectionNo = payload.WaterConnection[0].connectionNo;
       let queryObjForSearchApplications = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNo }, { key: "isConnectionSearch", value: true }]
       let oldApplicationPayload = await getSearchResults(queryObjForSearchApplications);
-      oldApplicationPayload.WaterConnection = oldApplicationPayload.WaterConnection.sort((row1,row2)=>row2.auditDetails.createdTime - row1.auditDetails.createdTime);
-      if(oldApplicationPayload.WaterConnection.length>1){
+      oldApplicationPayload.WaterConnection = oldApplicationPayload.WaterConnection.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+      if (oldApplicationPayload.WaterConnection.length > 1) {
         oldApplicationPayload.WaterConnection.shift();
       }
-      const waterSource=oldApplicationPayload.WaterConnection[0].waterSource||'';
-      oldApplicationPayload.WaterConnection[0].waterSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[0];
-      oldApplicationPayload.WaterConnection[0].waterSubSource=waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
+      const waterSource = oldApplicationPayload.WaterConnection[0].waterSource || '';
+      oldApplicationPayload.WaterConnection[0].waterSource = waterSource.includes("null") ? "NA" : waterSource.split(".")[0];
+      oldApplicationPayload.WaterConnection[0].waterSubSource = waterSource.includes("null") ? "NA" : waterSource.split(".")[1];
       if (oldApplicationPayload.WaterConnection.length > 0) {
         dispatch(prepareFinalObject("WaterConnectionOld", oldApplicationPayload.WaterConnection))
       }
@@ -717,13 +712,13 @@ console.log("======state",state);
       if (isModifyMode()) {
         let connectionNo = payload.SewerageConnections[0].connectionNo;
         let queryObjForSearchApplications = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: connectionNo }, { key: "isConnectionSearch", value: true }]
-        let oldApplicationPayload = await getSearchResultsForSewerage(queryObjForSearchApplications,dispatch);
+        let oldApplicationPayload = await getSearchResultsForSewerage(queryObjForSearchApplications, dispatch);
         oldApplicationPayload.SewerageConnections = oldApplicationPayload.SewerageConnections.filter(row => {
           return row.applicationType !== "MODIFY_SEWERAGE_CONNECTION"
         })
-             if (oldApplicationPayload.SewerageConnections.length > 0) {
+        if (oldApplicationPayload.SewerageConnections.length > 0) {
           dispatch(prepareFinalObject("SewerageConnectionOld[0]", oldApplicationPayload.SewerageConnections[0]))
-          dispatch(prepareFinalObject("WaterConnectionOld[0]",oldApplicationPayload.SewerageConnections[0]));
+          dispatch(prepareFinalObject("WaterConnectionOld[0]", oldApplicationPayload.SewerageConnections[0]));
         }
       }
     }
@@ -771,8 +766,8 @@ console.log("======state",state);
 
 const parserFunction = (obj) => {
   console.log("========obj", obj);
-  let waterDetails =get(obj, "additionalDetails", {});
-  
+  let waterDetails = get(obj, "additionalDetails", {});
+
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
@@ -790,16 +785,16 @@ const parserFunction = (obj) => {
         obj.additionalDetails.detailsProvidedBy !== undefined &&
         obj.additionalDetails.detailsProvidedBy !== null
       ) ? obj.additionalDetails.detailsProvidedBy : "",
-      billingType : waterDetails && waterDetails ? waterDetails.billingType : null,
-      billingAmount : waterDetails && waterDetails ? parseFloat(waterDetails.billingAmount) : null,
-      connectionCategory : waterDetails && waterDetails ? waterDetails.connectionCategory : null,
-      ledgerId : waterDetails && waterDetails ?parseFloat( waterDetails.ledgerId) : null,
-      avarageMeterReading : waterDetails && waterDetails ? parseFloat(waterDetails.avarageMeterReading) : null,
-      meterMake : waterDetails && waterDetails ? parseFloat(waterDetails.meterMake) : null,
-      compositionFee : waterDetails && waterDetails ? parseFloat(waterDetails.compositionFee ): null,
-      userCharges : waterDetails && waterDetails ? parseFloat(waterDetails.userCharges) : null,
-      othersFee : waterDetails && waterDetails ? parseFloat(waterDetails.othersFee) : null,
-      meterStatus : waterDetails && waterDetails ? waterDetails.meterStatus : null,
+      billingType: waterDetails && waterDetails ? waterDetails.billingType : null,
+      billingAmount: waterDetails && waterDetails ? parseFloat(waterDetails.billingAmount) : null,
+      connectionCategory: waterDetails && waterDetails ? waterDetails.connectionCategory : null,
+      ledgerId: waterDetails && waterDetails ? parseFloat(waterDetails.ledgerId) : null,
+      avarageMeterReading: waterDetails && waterDetails ? parseFloat(waterDetails.avarageMeterReading) : null,
+      meterMake: waterDetails && waterDetails ? parseFloat(waterDetails.meterMake) : null,
+      compositionFee: waterDetails && waterDetails ? parseFloat(waterDetails.compositionFee) : null,
+      userCharges: waterDetails && waterDetails ? parseFloat(waterDetails.userCharges) : null,
+      othersFee: waterDetails && waterDetails ? parseFloat(waterDetails.othersFee) : null,
+      meterStatus: waterDetails && waterDetails ? waterDetails.meterStatus : null,
       // detailsProvidedBy : null,
       adhocPenalty: null,
       adhocPenaltyComment: null,
@@ -808,8 +803,8 @@ const parserFunction = (obj) => {
       adhocRebateComment: null,
       adhocRebateReason: null,
       estimationFileStoreId: null,
-      sanctionFileStoreId:null,
-      estimationLetterDate :null,
+      sanctionFileStoreId: null,
+      estimationLetterDate: null,
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),
