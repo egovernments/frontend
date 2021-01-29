@@ -595,7 +595,19 @@ export const connectionHolderDetails={
       labelKey: "WS_OLD_LABEL_NAME"
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].ownerType", callBack: handleNA },
-   )
+   ),
+   propertyOwnership : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_PROPOWNER_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].connectionHolders[0].propertyOwnership",
+      callBack: handleNA
+    },  {
+     labelKey: "WS_OLD_LABEL_NAME"
+   },
+   { jsonPath: "WaterConnectionOld[0].connectionHolders[0].propertyOwnership", callBack: handleNA },
+  )
  };
 const taskConnHolderDetailsSummary = () => {
   return ({
