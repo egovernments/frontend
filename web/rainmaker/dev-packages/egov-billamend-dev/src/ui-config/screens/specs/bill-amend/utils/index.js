@@ -330,16 +330,18 @@ export const submitApplication = async (state, dispatch) => {
   });
 
   fetchBillDetails.map(data => {
-    let obj = {};
-    obj.taxHeadMasterCode = data.taxHeadCode;
-    obj.tenantId = data.tenantId;
-    obj.collectionAmount = data.collectionAmount;
-    if (amountType == "reducedAmount") {
-      obj.taxAmount = data.reducedAmountValue ? -data.reducedAmountValue : 0;
-    } else {
-      obj.taxAmount = data.additionalAmountValue ? data.additionalAmountValue : 0;
+    if (data.reducedAmountValue || data.reducedAmountValue) {
+      let obj = {};
+      obj.taxHeadMasterCode = data.taxHeadCode;
+      obj.tenantId = data.tenantId;
+      obj.collectionAmount = data.collectionAmount;
+      if (amountType == "reducedAmount") {
+        obj.taxAmount = data.reducedAmountValue ? -data.reducedAmountValue : 0;
+      } else {
+        obj.taxAmount = data.additionalAmountValue ? data.additionalAmountValue : 0;
+      }
+      demandDetails.push(obj);
     }
-    demandDetails.push(obj);
   });
 
   billAmdDetails.documents = documentsPreview && documentsPreview.length > 0 ? documentsPreview : null;
