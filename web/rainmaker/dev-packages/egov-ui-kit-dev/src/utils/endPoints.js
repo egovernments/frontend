@@ -313,8 +313,8 @@ export const WATER_CAL_SEARCH = {
 };
 export const WATER_CAL_CREATE = {
   POST: {
-    URL : "/water-calculator/meterConnection/_search",
-    ACTION : "_search",
+    URL : "/water-calculator/meterConnection/_create",
+    ACTION : "_create",
   },
 };
 export const WATER_CAL_ADHOC = {
