@@ -176,5 +176,12 @@ input[type="date"]:valid::before {
 @media only screen and (min-width: 768px) {
   .common-div-css {
     margin: 30px 16px 88px 16px;
+    background-color: red;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .leaseApplicationSubmitButton {
+    width: 100%;
   }
 }
