@@ -586,6 +586,5 @@ const activationDetails = getCommonContainer({
   reviewInitialMeterReading,
   reviewMeterMakeReading,
   reviewAverageMakeReading,
-  reviewMeterStatus
   
 });
