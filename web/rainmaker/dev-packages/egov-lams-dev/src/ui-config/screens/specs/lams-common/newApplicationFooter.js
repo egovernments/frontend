@@ -62,7 +62,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
 
   let isCitizenEditScreen = checkIfCitizenEditScreen();
   isFormValid =
-  (!process.env.REACT_APP_NAME === "Citizen")? 
+  !(process.env.REACT_APP_NAME === "Citizen")? 
     (isCitizenEditScreen? 
       (isCompulsaryDocsUploaded? true:false) : 
       (( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded && selectorsChangesValid) ? true : false)
