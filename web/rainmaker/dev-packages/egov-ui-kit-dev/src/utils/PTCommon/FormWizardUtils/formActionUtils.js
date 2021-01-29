@@ -9,7 +9,7 @@ import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { get } from "lodash";
 import store from "ui-redux/store";
 import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
-import { PROPERTY_ASSESSMENT_SEARCH } from "egov-ui-kit/utils/endPoints";
+import { FETCHASSESSMENTS } from "egov-ui-kit/utils/endPoints";
 
 export const assessProperty = async (action, props) => {
     const purpose = getPurpose()
@@ -75,7 +75,7 @@ const getAssessmentDetails = async () => {
             "assessmentId"
         );
         let searchPropertyResponse = await httpRequest(
-            `${PROPERTY_ASSESSMENT_SEARCH.POST.URL}?assessmentNumbers=${assessmentId}&tenantId=${tenantId}`,
+            `${FETCHASSESSMENTS.GET.URL}?assessmentNumbers=${assessmentId}&tenantId=${tenantId}`,
             "_search",
             [],
             {

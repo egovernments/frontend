@@ -254,18 +254,6 @@ export const WORKFLOW_COUNT = {
     ACTION: "_search",
   },
 };
-export const PROPERTY_SEARCH = {
-  POST: {
-    URL: "property/property/_search",
-    ACTION: "_search",
-  },
-};
-export const PROPERTY_ASSESSMENT_SEARCH = {
-  POST: {
-    URL: "property/assessment/_update",
-    ACTION: "_search",
-  },
-};
 export const PROPERTY_CREATE = {
   POST: {
     URL: "/property/property/_create",
