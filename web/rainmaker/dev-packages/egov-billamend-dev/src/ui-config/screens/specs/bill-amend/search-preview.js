@@ -244,11 +244,13 @@ export const adjustmentAmountDetails = async (state, dispatch, amendment) => {
     }
     let billDetails = [];
     amendment.demandDetails.map(bill => {
-        billDetails.push({
-            taxHeadMasterCode: bill.taxHeadMasterCode,
-            taxAmount: Math.abs(parseFloat(bill.taxAmount)),
-            amountType: amountType
-        });
+        if(bill && bill.taxAmount) {
+            billDetails.push({
+                taxHeadMasterCode: bill.taxHeadMasterCode,
+                taxAmount: Math.abs(parseFloat(bill.taxAmount)),
+                amountType: amountType
+            });
+        }
     });
     dispatch(prepareFinalObject("AmendmentTemp[0].estimateCardData", billDetails, []));
 }
@@ -283,7 +285,7 @@ export const documentDetailsPreview = async (state, dispatch, amendment) => {
     amendment.documents.forEach(doc => {
         documentsPreview.push({
             title: getTransformedLocale(doc.documentType),
-            fileStoreId: doc.fileStore,
+            fileStoreId: doc.fileStoreId,
             linkText: "View"
         });
     });

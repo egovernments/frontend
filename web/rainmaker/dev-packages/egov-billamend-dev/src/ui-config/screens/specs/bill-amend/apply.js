@@ -188,6 +188,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     dispatch(prepareFinalObject("BILL", {}));
     dispatch(prepareFinalObject("Amendment", {}));
+    dispatch(prepareFinalObject("AmendmentTemp", {}));
     getData(action, state, dispatch).then(responseAction => {
 
     });

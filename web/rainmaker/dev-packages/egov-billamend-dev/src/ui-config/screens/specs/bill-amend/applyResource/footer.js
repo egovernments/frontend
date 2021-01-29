@@ -53,11 +53,13 @@ export const summaryAdjustmentAmountDetails = async(state, dispatch) => {
   const amountType = get (state.screenConfiguration.preparedFinalObject, "BILL.AMOUNTTYPE", "");
   let billDetails = [];
   fetchBillDetails.map(bill => {
-    billDetails.push({
-      taxHeadMasterCode: bill.taxHeadCode,
-      taxAmount: amountType == "reducedAmount" ? parseFloat(bill.reducedAmountValue) : parseFloat(bill.additionalAmountValue),
-      amountType: amountType
-    });
+    if (bill.reducedAmountValue || bill.additionalAmountValue) {
+      billDetails.push({
+        taxHeadMasterCode: bill.taxHeadCode,
+        taxAmount: amountType == "reducedAmount" ? parseFloat(bill.reducedAmountValue) : parseFloat(bill.additionalAmountValue),
+        amountType: amountType
+      });
+    }
   });
   dispatch(prepareFinalObject("AmendmentTemp[0].estimateCardData", billDetails, []));
 }
