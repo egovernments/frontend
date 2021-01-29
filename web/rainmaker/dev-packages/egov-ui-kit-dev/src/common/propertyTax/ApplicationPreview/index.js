@@ -22,7 +22,7 @@ import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import { WORKFLOW_BUSINESS_SEARCH } from "egov-ui-kit/utils/endPoints";
-import {FETCHASSESSMENTS, PROPERTY, PROPERTY_ASSESSMENT_UPDATE, PROPERTY_UPDATE, PROPERTY_SEARCH, PROPERTY_ASSESSMENT_SEARCH } from "egov-ui-kit/utils/endPoints";
+import {FETCHASSESSMENTS, PROPERTY, PROPERTY_ASSESSMENT_UPDATE, PROPERTY_UPDATE } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 
@@ -211,8 +211,8 @@ class ApplicationPreview extends Component {
       ];
       try {
         const payload = await httpRequest(
-          PROPERTY_ASSESSMENT_SEARCH.POST.URL,
-          PROPERTY_ASSESSMENT_SEARCH.POST.ACTION,
+          FETCHASSESSMENTS.GET.URL,
+          FETCHASSESSMENTS.GET.ACTION,
           queryObject
         );
         if (payload && payload.Assessments.length > 0) {
@@ -228,8 +228,8 @@ class ApplicationPreview extends Component {
       ];
       try {
         const payload = await httpRequest(
-          PROPERTY_SEARCH.POST.URL,
-          PROPERTY_SEARCH.POST.ACTION,
+          PROPERTY.GET.URL,
+          "_search",
           queryObject
         );
         if (payload && payload.Properties.length > 0) {

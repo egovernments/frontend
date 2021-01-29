@@ -6,7 +6,7 @@ import uniqBy from "lodash/uniqBy";
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 
 export const createPropertyPayload = (properties, documentsUploadRedux) => {
   let oldUnits=properties&&properties[0]&&properties[0].units||[];
@@ -229,8 +229,8 @@ export const setOldPropertyData = async (search, prepareFinalObject) => {
   const propertyId = getQueryValue(search, "propertyId");
   const tenantId = getQueryValue(search, "tenantId");
   let searchPropertyResponse = await httpRequest(
-    PROPERTY_SEARCH.POST.URL,
-    PROPERTY_SEARCH.POST.ACTION,
+    PROPERTY.GET.URL,
+    "_search",
     [
       {
         key: "tenantId",

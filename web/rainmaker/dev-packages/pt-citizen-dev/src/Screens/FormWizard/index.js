@@ -35,7 +35,7 @@ import PlotDetails from "./components/Forms/PlotDetails";
 import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
-import { PROPERTY_SEARCH } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 import { PROPERTYTAX_CAL_GETBILL, PROPERTYTAX_CAL_ESTIMATE } from "egov-ui-kit/utils/endPoints";
 
@@ -95,8 +95,8 @@ class FormWizard extends Component {
     try {
       let currentDraft;
       let searchPropertyResponse = await httpRequest(
-        PROPERTY_SEARCH.POST.URL,
-        PROPERTY_SEARCH.POST.ACTION,
+        PROPERTY.GET.URL,
+        "_search",
         [
           {
             key: "tenantId",
