@@ -12,3 +12,9 @@
     margin-top: 0px !important;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .application-card {
+    margin-top: 0px;
+  }
+}

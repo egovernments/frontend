@@ -21,12 +21,12 @@ import {
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
 import {deoProcessMappings} from "./constants";
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import { downloadReceiptFromFilestoreID} from "egov-common/ui-utils/commons";
 import axios from "axios";
 import qs from "qs";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import $ from 'jquery';
-
+import { commentsPattern} from "./constants";
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
@@ -970,9 +970,7 @@ export const validateActionFormForComments = (preparedFinalObject) => {
     return false;
   }
 
-  //let commentPattern = /^[a-zA-Z0-9_.-,]*$/;
-  //let pattern = "([a-zA-Z0-9_.-,])+$";
-  let pattern =  /^[a-zA-Z0-9_.\-, ]*$/;  // /^[a-zA-Z0-9- .,_]{1,80}$/i ;
+  let pattern = commentsPattern;
   if(!(new RegExp(pattern)).test(comment))
   {
     store.dispatch(toggleSnackbar(

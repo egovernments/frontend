@@ -897,18 +897,18 @@ import {
                 style: {
                   minWidth: "180px",
                   height: "48px",
-                  marginRight: "16px",
+                  margin: "7px",
                   borderRadius: "inherit"
                 }
               },
               children: {
-                previousButtonIcon: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    //iconName: "keyboard_arrow_right"
-                  }
-                },
+                // previousButtonIcon: {
+                //   uiFramework: "custom-atoms",
+                //   componentPath: "Icon",
+                //   props: {
+                //     iconName: "keyboard_arrow_right"
+                //   }
+                // },
                 previousButtonLabel: getLabel({
                   labelName: "DOWNLOAD_APPLICATION",
                   labelKey: "DOWNLOAD_APPLICATION"
@@ -920,7 +920,7 @@ import {
                   onDownloadApplClicked(state, dispatch)
                 }
               },
-              visible: false
+              visible: false,
             },
             eSignApplication: {
               uiFrameWork: "custom-atoms",
@@ -933,18 +933,18 @@ import {
                 style: {
                   minWidth: "180px",
                   height: "48px",
-                  marginRight: "16px",
+                  margin: "7px",
                   borderRadius: "inherit"
                 }
               },
               children: {
-                previousButtonIcon: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    //iconName: "keyboard_arrow_right"
-                  }
-                },
+                // previousButtonIcon: {
+                //   uiFramework: "custom-atoms",
+                //   componentPath: "Icon",
+                //   props: {
+                //     iconName: "keyboard_arrow_right"
+                //   }
+                // },
                 previousButtonLabel: getLabel({
                   labelName: "DSIGN_APPLICATION",
                   labelKey: "DSIGN_APPLICATION"
@@ -956,7 +956,7 @@ import {
                     onEsignClicked(state, dispatch);
                   }
               },
-              visible: false
+              visible: false,
             },
             dSignConfirmationDialogDiv: {
               componentPath: "Dialog",
