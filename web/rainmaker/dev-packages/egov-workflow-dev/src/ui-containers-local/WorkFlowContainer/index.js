@@ -232,7 +232,7 @@ class WorkFlowContainer extends React.Component {
         data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
       }
       data && data.length > 0 && data.map((items, index) => {
-       if( items.fireNOCDetails.applicationNumber != applicationNumber ) {
+       if( items.fireNOCDetails && items.fireNOCDetails.applicationNumber != applicationNumber ) {
          data.splice(index, 1)
        }
       })
