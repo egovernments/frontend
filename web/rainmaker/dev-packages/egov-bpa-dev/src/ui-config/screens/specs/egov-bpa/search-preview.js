@@ -51,6 +51,7 @@ import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -912,7 +913,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/v1/bpa/_update",
+            updateUrl: BPA.UPDATE.URL,
             beforeSubmitHook: beforeSubmitHook
           }
         },

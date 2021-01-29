@@ -48,6 +48,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { nocDetailsApply } from "./noc";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "BPA_STEPPER_BASIC_DETAILS_HEADER" },
@@ -667,7 +668,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/v1/bpa/_update"
+            updateUrl:  BPA.UPDATE.URL
           }
           },
         formwizardFirstStep,

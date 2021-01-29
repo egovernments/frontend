@@ -461,7 +461,6 @@ export const SEARCHER = {
   },
 };
 
-<<<<<<< Updated upstream
 export const BILLING = {
   SEARCH : {
     URL : "/billing/bill/_search",
@@ -492,7 +491,8 @@ export const BILLING_DEMAND = {
 export const FETCHBILL_2 = {
   GET = {
     URL : "/billing/bill/v2/_fetchbill",
-=======
+  }
+};
 
 export const LOCATION = {
   BOUNDARY_TYPE: {
@@ -505,6 +505,27 @@ export const LOCATION = {
   BOUNDARYS: {
     URL: "egov-location/boundarys",
     ACTION: "_get"
->>>>>>> Stashed changes
   },
 };
+
+export const BPA = {
+  CREATE : {
+    URL : "building-plan/v1/bpa/_create",
+  },
+  UPDATE : {
+    URL : "/building-plan/v1/bpa/_update",
+  },
+  SEARCH : {
+    URL : "/building-plan/v1/bpa/_search",
+  },
+  UPDATE_WITHOUT_BPA : {
+    URL : "/building-plan/v1/_update",
+  },
+  SEARCH_BPAREG : {
+    URL : "/building-plan/v1/BPAREG/_search",
+  },
+  PERMITORDER : {
+    URL : "/building-plan/v1/bpa/_permitorderedcr",
+  },
+};
+

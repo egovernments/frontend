@@ -38,8 +38,9 @@ import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { PDFGEN } from "egov-ui-kit/utils/endPoints";
-import { TL_CALC } from "../../../../../../egov-ui-kit-dev/src/utils/endPoints";
+import { TL_CALC } from "egov-ui-kit/utils/endPoints";
 import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -498,7 +499,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/bpa-services/v1/BPAREG/_search",
+      BPA.SEARCH_BPAREG.URL,
       "",
       queryObject
     );
@@ -3028,7 +3029,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/v1/bpa/_search",
+      BPA.SEARCH.URL,
       "",
       queryObject
     );
@@ -5169,7 +5170,7 @@ export const permitOrderNoDownload = async (action, state, dispatch, mode = "Dow
 
   let data = wrapRequestBody({ BPA: detailsOfBpa });
   axios({
-    url: '/bpa-services/v1/bpa/_permitorderedcr',
+    url: BPA.PERMITORDER.URL,
     method: 'POST',
     responseType: 'blob', data
     // important
@@ -5753,7 +5754,7 @@ export const getOcEdcrDetails = async (state, dispatch, action) => {
     ];
     const bpaSearch = await httpRequest(
       "post",
-      "bpa-services/v1/bpa/_search",
+      BPA.SEARCH.URL,
       "",
       queryObject
     );
