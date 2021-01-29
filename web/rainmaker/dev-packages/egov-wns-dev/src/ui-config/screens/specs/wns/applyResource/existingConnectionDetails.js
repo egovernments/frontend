@@ -7,19 +7,37 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
   export const existingConnectionDetails = getCommonContainer({
-    count: getLabelWithValue(
+    noOfWaterConn: getLabelWithValue(
       {
-        labelKey: "WS_NO_OF_CONNECTION",
-        labelName:"No of connection"
+        labelKey: "WS_NO_OF_WATER_CONNECTION",
+        labelName:"No. of Water Connection"
       },
       {
         jsonPath: "applyScreen.property.address.city",
       }
     ),    
-    connectionNo: getLabelWithValue(
+    noOfSewerageConn: getLabelWithValue(
       {
-        labelKey: "WS_CONNECTION_NUMBER",
-        labelName:"Connection No."
+        labelKey: "WS_NO_OF_SEWERAGE_CONNECTION",
+        labelName:"No. of Sewerage Connection"
+      },
+      {
+        jsonPath: "applyScreen.property.address.city",
+      }
+    ),    
+    waterConnectionNo: getLabelWithValue(
+      {
+        labelKey: "WS_WATER_CONNECTION_NUMBER",
+        labelName:"Water Connection No."
+      },
+      {
+        jsonPath: "applyScreen.property.address.doorNo",
+      }
+    ),
+    waterConnectionNo: getLabelWithValue(
+      {
+        labelKey: "WS_SEWERAGE_CONNECTION_NUMBER",
+        labelName:"Sewerage Connection No."
       },
       {
         jsonPath: "applyScreen.property.address.doorNo",
