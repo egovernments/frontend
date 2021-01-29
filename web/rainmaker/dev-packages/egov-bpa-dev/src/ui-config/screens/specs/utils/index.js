@@ -37,6 +37,7 @@ import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { PDFGEN } from "egov-ui-kit/utils/endPoints";
 import { TL_CALC } from "../../../../../../egov-ui-kit-dev/src/utils/endPoints";
+import { FETCHRECEIPT, COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -524,7 +525,7 @@ export const getReceipt = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      FETCHRECEIPT.GET.URL,
       "",
       queryObject
     );
@@ -579,7 +580,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/payments/_search",
+      COLLECTION_PAYMENTS.SEARCH.URL,
       "",
       queryObject
     );
@@ -3157,7 +3158,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      FETCHRECEIPT.GET.URL,
       "",
       queryObject
     );
@@ -5185,7 +5186,7 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
 
   let paymentPayload = await httpRequest(
     "post",
-    `collection-services/payments/_search?tenantId=${bpaDetails.tenantId}&consumerCodes=${bpaDetails.applicationNo}`
+    `${COLLECTION_PAYMENTS.SEARCH.URL}?tenantId=${bpaDetails.tenantId}&consumerCodes=${bpaDetails.applicationNo}`
   );
 
   let payments = [];

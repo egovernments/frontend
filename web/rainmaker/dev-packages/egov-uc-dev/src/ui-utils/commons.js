@@ -29,6 +29,7 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage ,getFileUrl, enableFieldAndHideSpinner} from "egov-ui-framework/ui-utils/commons";
 import { TL } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -62,7 +63,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/payments/_search",
+      COLLECTION_PAYMENTS.SEARCH.URL,
       "",
       queryObject
     );

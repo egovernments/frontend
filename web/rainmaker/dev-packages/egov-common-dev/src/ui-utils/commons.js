@@ -12,6 +12,7 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { FIRENOC } from "egov-ui-kit/utils/endPoints";
 import { SEARCHER } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -514,7 +515,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   }
   const FETCHRECEIPT = {
     GET: {
-      URL: "/collection-services/payments/_search",
+      URL: `/${COLLECTION_PAYMENTS.SEARCH.URL}`,
       ACTION: "_get",
     },
   };

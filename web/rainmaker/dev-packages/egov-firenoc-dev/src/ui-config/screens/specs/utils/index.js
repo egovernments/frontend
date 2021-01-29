@@ -12,6 +12,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import commonConfig from "config/common.js";
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_PAYMENTS, FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -548,7 +549,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/payments/_search",
+      COLLECTION_PAYMENTS.SEARCH.URL,
       "",
       queryObject
     );
@@ -623,7 +624,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      FETCHRECEIPT.GET.URL,
       "",
       queryObject
     );

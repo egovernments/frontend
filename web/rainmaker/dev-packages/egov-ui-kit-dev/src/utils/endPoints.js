@@ -160,7 +160,7 @@ export const PGService = {
 
 export const RECEIPT = {
   GET: {
-    URL: "/collection-services/receipts/_search",
+    URL: "/collection/receipts/_search",
     ACTION: "_get",
   },
 };
@@ -215,7 +215,7 @@ export const FETCHBILL = {
 };
 export const FETCHRECEIPT = {
   GET: {
-    URL: "/collection-services/payments/_search",
+    URL: "/collection/payments/_search",
     ACTION: "_get",
   },
 };
@@ -233,7 +233,7 @@ export const FETCHASSESSMENTS = {
 };
 export const PAYMENTSEARCH = {
   GET: {
-    URL: "/collection-services/payments/",
+    URL: "/collection/payments/",
     ACTION: "_search",
   },
 };
@@ -355,7 +355,6 @@ export const SEWERAGE_CAL_ADHOC = {
     URL : "sewerage-calculator/sewerageCalculator/_applyAdhocTax",
   },
 };
-
 export const MDMS_GET = {
   POST: {
     URL: "mdms/v1/_get",
@@ -380,6 +379,18 @@ export const PROPERTYTAX_CAL_ESTIMATE = {
     ACTION : "_estimate",
   },
 };
+export const COLLECTION_RECEIPTS = {
+  POST : {
+    URL : "collection/receipts/_create",
+    ACTION : "_create",
+  },
+};
+export const COLLECTION_PAYMENTS = {
+  SEARCH : {
+    URL : "collection/payments/_search",
+  }
+}
+
 
 export const PDFGEN = {
   POST: {

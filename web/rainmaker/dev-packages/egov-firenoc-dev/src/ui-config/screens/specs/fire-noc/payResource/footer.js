@@ -10,6 +10,7 @@ import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { FIRENOC } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/endPoints";
 
 export const callPGService = async (state, dispatch) => {
  
@@ -315,8 +316,8 @@ const callBackForPay = async (state, dispatch) => {
     try {
       let response = await httpRequest(
         "post",
-        "collection-services/receipts/_create",
-        "_create",
+       COLLECTION_RECEIPTS.POST.URL,
+       COLLECTION_RECEIPTS.POST.ACTION,
         [],
         ReceiptBody,
         [],

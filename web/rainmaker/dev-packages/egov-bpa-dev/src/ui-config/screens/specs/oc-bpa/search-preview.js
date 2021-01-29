@@ -50,7 +50,7 @@ import { nocDetailsSearch } from "../egov-bpa/noc";
 import store from "ui-redux/store";
 import commonConfig from "config/common.js";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
-
+import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
 
 export const ifUserRoleExists = role => {
   let userInfo = JSON.parse(getUserInfo());
@@ -248,7 +248,7 @@ const setDownloadMenu = async (action, state, dispatch, applicationNumber, tenan
 
   let paymentPayload = await httpRequest(
     "post",
-    `collection-services/payments/_search?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
+    `${COLLECTION_PAYMENTS.SEARCH.URL}?tenantId=${tenantId}&consumerCodes=${applicationNumber}`
   );
 
   if (paymentPayload && paymentPayload.Payments.length == 1) {

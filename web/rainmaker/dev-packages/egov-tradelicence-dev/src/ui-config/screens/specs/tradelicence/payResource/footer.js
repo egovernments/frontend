@@ -14,6 +14,7 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getBill } from "../../utils";
+import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/endPoints";
 
 export const callPGService = async (state, dispatch) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -219,8 +220,8 @@ const callBackForPay = async (state, dispatch) => {
       dispatch(toggleSpinner());
       let response = await httpRequest(
         "post",
-        "collection-services/receipts/_create",
-        "_create",
+        COLLECTION_RECEIPTS.POST.URL,
+        COLLECTION_RECEIPTS.POST.ACTION,
         [],
         ReceiptBody,
         [],

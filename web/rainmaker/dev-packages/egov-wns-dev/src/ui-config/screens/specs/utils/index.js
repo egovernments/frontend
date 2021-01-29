@@ -34,6 +34,7 @@ import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
 import { TL_CALC } from "egov-ui-kit/utils/endPoints";
+import { RECEIPT } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = (position,children) => {
   return {
@@ -226,7 +227,7 @@ export const getReceipt = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      RECEIPT.GET.URL,
       "",
       queryObject
     );
@@ -314,7 +315,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      RECEIPT.GET.URL,
       "",
       queryObject
     );

@@ -10,6 +10,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createReceiptDetails } from "../../../PaymentStatus/Components/createReceipt";
 import generateReceipt from "../../../PaymentStatus/Components/receipt";
+import { RECEIPT } from "egov-ui-kit/utils/endPoints";
 
 const styles = {
   customWidth: {
@@ -100,7 +101,7 @@ class DropDown extends Component {
     const queryObj = [{ key: "tenantId", value: item.tenantId }, { key: "consumerCode", value: item.consumerCode }];//todo Consumer code uniqueness
 
     try {
-      const payload = await httpRequest("/collection-services/receipts/_search", "_search", queryObj, {}, [], { ts: 0 });
+      const payload = await httpRequest(RECEIPT.GET.URL, "_search", queryObj, {}, [], { ts: 0 });
       // const lastAmount = payload && payload.Receipt && get(payload.Receipt[0], "Bill[0].billDetails[0].totalAmount");
       // const totalAmountBeforeLast =
       //   payload &&

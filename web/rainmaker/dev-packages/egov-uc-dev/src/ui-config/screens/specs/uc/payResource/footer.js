@@ -10,6 +10,7 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/endPoints";
 import get from "lodash/get";
 import set from "lodash/set";
 
@@ -247,8 +248,8 @@ const callBackForPay = async (state, dispatch) => {
       dispatch(toggleSpinner());
       let response = await httpRequest(
         "post",
-        "collection-services/receipts/_create",
-        "_create",
+        COLLECTION_RECEIPTS.POST.URL,
+        COLLECTION_RECEIPTS.POST.ACTION,
         [],
         ReceiptBody,
         [],
