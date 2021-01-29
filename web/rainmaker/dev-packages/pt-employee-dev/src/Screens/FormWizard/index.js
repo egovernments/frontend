@@ -742,9 +742,9 @@ class FormWizard extends Component {
                         if (isbussiFormValid) {
                           let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
                           let intPlot = parseInt(getPlotSizeValue);
-                           if(intPlot < 2)
+                           if(intPlot < 0)
                            {
-                             alert("Please Enter the plot size greater than 2 sq yards")
+                             alert("Please Enter the plot size greater than 0 sq yards")
                              displayFormErrorsAction("plotDetails");
                              break;
      
@@ -766,9 +766,9 @@ class FormWizard extends Component {
                       }
                       let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
                      let intPlot = parseInt(getPlotSizeValue);
-                      if(intPlot < 2)
+                      if(intPlot < 0)
                       {
-                        alert("Please Enter the plot size greater than 2 sq yards")
+                        alert("Please Enter the plot size greater than 0 sq yards")
                         displayFormErrorsAction("plotDetails");
                         break;
 
@@ -793,9 +793,9 @@ class FormWizard extends Component {
 
                       let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
                       let intPlot = parseInt(getPlotSizeValue);
-                       if(intPlot < 2)
+                       if(intPlot < 0)
                        {
-                         alert("Please Enter the plot size greater than 2 sq yards")
+                         alert("Please Enter the plot size greater than 0 sq yards")
                          displayFormErrorsAction("plotDetails");
                          break;
   
@@ -818,9 +818,9 @@ class FormWizard extends Component {
                      else{
                       let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
                       let intPlot = parseInt(getPlotSizeValue);
-                       if(intPlot < 2)
+                       if(intPlot < 0)
                        {
-                         alert("Please Enter the plot size greater than 2 sq yards")
+                         alert("Please Enter the plot size greater than 0 sq yards")
                          displayFormErrorsAction("plotDetails");
                          break;
   
