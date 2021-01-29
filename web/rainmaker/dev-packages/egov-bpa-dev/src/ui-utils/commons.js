@@ -35,6 +35,7 @@ import { downloadPdf, printPdf } from "egov-ui-kit/utils/commons";
 import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
 
 import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/commons";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
@@ -158,7 +159,7 @@ export const getBpaSearchResults = async queryObject => {
     }
     const response = await httpRequest(
       "post",
-      "/bpa-services/v1/bpa/_search?offset=0&limit=-1",
+      `${BPA.SEARCH.URL}?offset=0&limit=-1`,
       "",
       queryObject
     );
@@ -219,7 +220,7 @@ export const getAppSearchResults = async (queryObject, dispatch) => {
     }
     const response = await httpRequest(
       "post",
-      "/bpa-services/v1/bpa/_search",
+      BPA.SEARCH.URL,
       "",
       queryObject
     );
@@ -452,7 +453,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/v1/bpa/_create",
+        BPA.CREATE.URL,
         "",
         [],
         { BPA: payload }
@@ -464,7 +465,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/v1/bpa/_update",
+        BPA.UPDATE.URL,
         "",
         [],
         { BPA: payload }
@@ -1526,7 +1527,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
     if (method === "CREATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/v1/bpa/_create",
+        BPA.CREATE.URL,
         "",
         [],
         { BPA: payload }
@@ -1537,7 +1538,7 @@ export const createUpdateOCBpaApplication = async (state, dispatch, status) => {
     } else if (method === "UPDATE") {
       response = await httpRequest(
         "post",
-        "bpa-services/v1/bpa/_update",
+        BPA.UPDATE.URL,
         "",
         [],
         { BPA: payload }

@@ -10,6 +10,7 @@ import { getAppSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/endPoints";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 export const callPGService = async (state, dispatch) => {
  
@@ -162,7 +163,7 @@ const updatePayAction = async (
     set(response, "BPA.action", "PAY");
     response = await httpRequest(
       "post",
-      "/bpa-services/v1/_update",
+      BPA.UPDATE_WITHOUT_BPA.URL,
       "",
       [],
       {

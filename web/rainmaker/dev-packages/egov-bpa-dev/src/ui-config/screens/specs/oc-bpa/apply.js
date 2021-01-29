@@ -51,6 +51,7 @@ import { edcrHttpRequest, httpRequest } from "../../../../ui-utils/api";
 import { comparisondialog } from "./comparisondialog";
 import { nocDetailsApply } from "../egov-bpa/noc";
 import { prepareNocFinalCards } from "../utils";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 export const stepsData = [
   { labelName: "Scrutiny Details", labelKey: "BPA_STEPPER_SCRUTINY_DETAILS_HEADER" },
@@ -462,7 +463,7 @@ const screenConfig = {
           props: {
             dataPath: "BPA",
             moduleName: "BPA",
-            updateUrl: "/bpa-services/v1/bpa/_update"
+            updateUrl: BPA.UPDATE.URL
           }
           },
         formwizardFirstStep,

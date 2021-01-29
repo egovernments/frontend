@@ -16,6 +16,7 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   const BpaRequestBody = cloneDeep(
@@ -26,7 +27,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   try {
     const BpaPayload = await httpRequest(
       "post",
-      "/bpa-services/v1/_update",
+      BPA.UPDATE_WITHOUT_BPA.URL,
       "",
       [],
       { BPA: BpaRequestBody }

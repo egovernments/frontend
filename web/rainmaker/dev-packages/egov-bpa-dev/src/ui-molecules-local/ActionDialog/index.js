@@ -19,6 +19,7 @@ import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import get from "lodash/get";
 import set from "lodash/set";
 import "./index.css";
+import { BPA } from "egov-ui-kit/utils/endPoints";
 
 const styles = theme => ({
   root: {
@@ -104,7 +105,7 @@ class ActionDialog extends React.Component {
       if((comment && applicationAction === "SEND_TO_ARCHITECT") || (applicationAction === "APPROVE") || (applicationAction === "FORWARD")) {
         let response = await httpRequest(
           "post",
-          "bpa-services/v1/bpa/_update",
+          BPA.UPDATE.URL,
           "",
           [],
           { BPA: bpaDetails }
