@@ -634,7 +634,10 @@ console.log("======state",state);
     }]
     
     if (payload !== undefined && payload !== null) {
-      
+      if(payload.WaterConnection[0] && payload.WaterConnection[0].additionalDetails){
+        payload.WaterConnection[0].additionalDetails.meterStatus = payload.WaterConnection[0].additionalDetails.meterStatus.toLowerCase().replace(/[_]/g, "-")
+    }
+    debugger;
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
         

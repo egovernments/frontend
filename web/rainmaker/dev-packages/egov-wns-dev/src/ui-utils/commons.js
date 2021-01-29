@@ -916,14 +916,13 @@ export const applyForWater = async (state, dispatch) => {
             if (typeof queryObjectForUpdate.additionalDetails !== 'object') {
                 queryObjectForUpdate.additionalDetails = {};
             }
+            debugger;
+            if(queryObjectForUpdate && queryObjectForUpdate.additionalDetails){
+                queryObjectForUpdate.additionalDetails.meterStatus = queryObjectForUpdate.additionalDetails.meterStatus.toUpperCase().replace(/[-]/g, "_")
+            }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
-            console.log("==========findAndReplace",queryObjectForUpdate);
-            
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
-            console.log("==========2",queryObjectForUpdate);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
-            
-            console.log("==========3",queryObjectForUpdate);
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             
             let searchResponse = await getSearchResults(searchQueryObject);
