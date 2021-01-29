@@ -19,6 +19,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css"
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 import { FINANCE_MASTER } from "egov-ui-kit/utils/endPoints";
+import { LOCATION } from "egov-ui-kit/utils/endPoints";
 
 const headerStyle ={
   backgroundColor : "#607d8b" ,
@@ -593,7 +594,7 @@ class Employee extends Component {
 
   loadBoundaries = id => {
     let self = this;
-    Api.commonApiPost('egov-location/boundarys/getByBoundaryType', {
+    Api.commonApiPost(LOCATION.BOUNDARY_TYPE.URL, {
       boundaryTypeId: id,
     }).then(
       function(res) {
@@ -2363,7 +2364,7 @@ class Employee extends Component {
     self.fetchURLData(FINANCE_MASTER.FUNCTIONS_SEARCH.URL, {}, [], function(res) {
       checkCountAndSetState('functions', res['functions']);
     });
-    self.fetchURLData('/egov-location/boundarytypes/getByHierarchyType', { hierarchyTypeName: 'ADMINISTRATION' }, [], function(res) {
+    self.fetchURLData(LOCATION.HEIRARCHY_TYPE.URL, { hierarchyTypeName: 'ADMINISTRATION' }, [], function(res) {
       checkCountAndSetState('boundarytypes', res['BoundaryType']);
     });
     self.fetchURLData('hr-masters/designations/_search', {}, [], function(res) {
@@ -2382,7 +2383,7 @@ class Employee extends Component {
       checkCountAndSetState('communities', res['Community']);
     });
 
-    Api.commonApiGet('egov-location/boundarys', {
+    Api.commonApiGet(LOCATION.BOUNDARYS.URL, {
       'Boundary.tenantId': getTenantId(),
     }).then(
       function(res) {

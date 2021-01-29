@@ -105,7 +105,7 @@ export const MDMS = {
 
 export const TENANT = {
   POST: {
-    URL: "egov-location/location/v11/tenant/_search",
+    URL: "location/location/v11/tenant/_search",
     ACTION: "_search",
   },
 };
@@ -167,7 +167,7 @@ export const RECEIPT = {
 
 export const BOUNDARY = {
   GET: {
-    URL: "/egov-location/location/v11/boundarys/_search",
+    URL: "/location/location/v11/boundarys/_search",
     ACTION: "_get",
   },
 };
@@ -462,6 +462,7 @@ export const SEARCHER = {
   },
 };
 
+<<<<<<< Updated upstream
 export const BILLING = {
   SEARCH : {
     URL : "/billing/bill/_search",
@@ -492,5 +493,19 @@ export const BILLING_DEMAND = {
 export const FETCHBILL_2 = {
   GET = {
     URL : "/billing/bill/v2/_fetchbill",
+=======
+
+export const LOCATION = {
+  BOUNDARY_TYPE: {
+    URL: "location/boundarys/getByBoundaryType",
+  },
+  HEIRARCHY: {
+    URL: "location/boundarytypes/getByHierarchyType",
+    ACTION: "_get"
+  },
+  BOUNDARYS: {
+    URL: "egov-location/boundarys",
+    ACTION: "_get"
+>>>>>>> Stashed changes
   },
 };

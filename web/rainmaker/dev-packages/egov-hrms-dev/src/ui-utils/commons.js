@@ -24,6 +24,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { FILE_UPLOAD} from "egov-ui-kit/utils/endPoints";
 import { EMPLOYEE_ASSIGN, EMPLOYEE_CREATE, EMPLOYEE_UPDATE } from "egov-ui-kit/utils/endPoints";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
@@ -153,7 +154,7 @@ export const getBoundaryData = async (
   try {
     let payload = await httpRequest(
       "post",
-      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
       "_search",
       queryObject,
       {}

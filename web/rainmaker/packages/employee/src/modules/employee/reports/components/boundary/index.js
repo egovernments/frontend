@@ -6,6 +6,7 @@ import React, { Component } from "react";
 import { Col } from "react-bootstrap";
 import AutoComplete from "material-ui/AutoComplete";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 class UiBoundary extends Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class UiBoundary extends Component {
           value: "REVENUE",
         },
       ];
-      boundaryData = await httpRequest("/egov-location/location/v11/boundarys/_search?", "", queryObj, {});
+      boundaryData = await httpRequest(`${BOUNDARY.GET.URL}?`, "", queryObj, {});
       sessionStorage.setItem("boundaryData", JSON.stringify(boundaryData));
     }
     return boundaryData;

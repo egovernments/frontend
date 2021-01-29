@@ -3,6 +3,7 @@ import get from "lodash/get";
 import { getUserInfo, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 const tenantId = JSON.parse(getUserInfo()).permanentCity;
 
@@ -84,7 +85,7 @@ const formConfig = {
       boundary: true,
       dropDownData: [],
       dataFetchConfig: {
-        url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality",
+        url: `${BOUNDARY.GET.URL}?hierarchyTypeCode=ADMIN&boundaryType=Locality`,
         action: "",
         queryParams: [],
         requestBody: {},

@@ -4,6 +4,7 @@ import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 const tenantId = getTenantId();
 
@@ -95,7 +96,7 @@ const formConfig = {
       boundary: true,
       dropDownData: [],
       dataFetchConfig: {
-        url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=ADMIN&boundaryType=Locality",
+        url: `${BOUNDARY.GET.URL}?hierarchyTypeCode=ADMIN&boundaryType=Locality`,
         action: "",
         queryParams: [],
         requestBody: {},

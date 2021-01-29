@@ -17,6 +17,7 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import "./index.css";
+import { BOUNDARY } from "egov-ui-kit/utils/endPoints";
 
 const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
@@ -217,7 +218,7 @@ export const propertyLocationDetails = getCommonCard(
             dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
             let payload = await httpRequest(
               "post",
-              "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+              `${BOUNDARY.GET.URL}?hierarchyTypeCode=REVENUE&boundaryType=Locality`,
               "_search",
               [{ key: "tenantId", value: action.value }],
               {}
