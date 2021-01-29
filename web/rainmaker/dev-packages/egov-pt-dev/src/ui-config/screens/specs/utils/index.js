@@ -26,6 +26,7 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { RECEIPT, FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -889,7 +890,7 @@ export const fetchBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+      FETCHBILL.GET.URL,
       "",
       queryObject
     );
@@ -902,7 +903,7 @@ export const getpayments = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/collection-services/payments/_search",
+      FETCHRECEIPT.GET.URL,
       "",
       queryObject
     );

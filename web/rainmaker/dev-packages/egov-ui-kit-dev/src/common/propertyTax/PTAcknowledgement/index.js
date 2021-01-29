@@ -17,6 +17,7 @@ import store from "ui-redux/store";
 import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import PTInformation from "../AssessmentList/components/PTInformation";
+import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
 import "./index.css";
 
 class PTAcknowledgement extends React.Component {
@@ -90,7 +91,7 @@ class PTAcknowledgement extends React.Component {
       { key: "businessService", value: "PT" },
     ];
     try {
-      const payload = await httpRequest("billing-service/bill/v2/_fetchbill", "_search", queryObject);
+      const payload = await httpRequest(FETCHBILL.GET.URL, "_search", queryObject);
       if (payload && payload.Bill.length > 0) {
         showPay = true;
       }

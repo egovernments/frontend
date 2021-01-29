@@ -13,6 +13,7 @@ import commonConfig from "config/common.js";
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { COLLECTION_PAYMENTS, FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -711,7 +712,7 @@ export const createBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+      FETCHBILL.GET.URL,
       "",
       queryObject
     );

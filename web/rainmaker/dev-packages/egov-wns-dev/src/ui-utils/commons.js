@@ -19,6 +19,7 @@ import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { TL } from "egov-ui-kit/utils/endPoints";
 import { MDMS } from "egov-ui-kit/src/utils/endPoints";
 import { FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { FETCHBILL, BILLING_DEMAND, FETCHBILL_2 } from "egov-ui-kit/utils/endPoints";
 
 export const serviceConst = {
     "WATER": "WATER",
@@ -224,7 +225,7 @@ export const fetchBill = async (queryObject, dispatch) => {
     try {
         const response = await httpRequest(
             "post",
-            "/billing-service/bill/v2/_fetchbill",
+            FETCHBILL.GET.URL,
             "_fetchBill",
             queryObject
         );
@@ -277,7 +278,7 @@ export const getWSMyResults = async (queryObject, consumer, dispatch) => {
                     try {
                         const data = await httpRequest(
                             "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=${bService}`,
+                            `${FETCHBILL.GET.URL}?consumerCode=${consumerCode}&tenantId=${response.WaterConnection[i].property.tenantId}&businessService=${bService}`,
                             "_fetchbill",
                             // queryObject
                         );
@@ -1603,7 +1604,7 @@ export const getSWMyResults = async (queryObject, consumer, dispatch) => {
                     try {
                         const data = await httpRequest(
                             "post",
-                            `billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=${bService}`,
+                            `${FETCHBILL.GET.URL}?consumerCode=${consumerCode}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=${bService}`,
                             "_fetchbill",
                             // queryObject
                         );
@@ -1665,7 +1666,7 @@ export const billingPeriodMDMS = (toPeriod, payloadbillingPeriod, service) => {
 export const downloadBill = (receiptQueryString, mode) => {
     const FETCHBILL = {
         GET: {
-            URL: "/billing-service/bill/v2/_fetchbill",
+            URL: FETCHBILL_2.GET.URL,
             ACTION: "_get",
         },
     };
@@ -1706,7 +1707,7 @@ export const downloadBill = (receiptQueryString, mode) => {
 
             httpRequest(
                 "post",
-                "/billing-service/demand/_search",
+                BILLING_DEMAND.SEARCH.URL,
                 "_demand",
                 queryString
             ).then((getDemandBills) => {

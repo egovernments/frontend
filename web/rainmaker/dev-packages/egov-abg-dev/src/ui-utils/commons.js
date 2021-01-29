@@ -19,6 +19,7 @@ import {
 import store from "../ui-redux/store";
 import { httpRequest } from "./api";
 import { TL } from "egov-ui-kit/utils/endPoints";
+import { BILLING_V2 } from "egov-ui-kit/utils/endPoints";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -53,7 +54,7 @@ export const getSearchResults = async (dispatch, queryObject) => {
     dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "billing-service/bill/v2/_search",
+      BILLING_V2.SEARCH.URL,
       "",
       queryObject,
       {}

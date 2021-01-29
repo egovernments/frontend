@@ -13,6 +13,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import { USER } from "egov-ui-kit/utils/endPoints";
+import { BILLING_DEMAND, BILLING } from "egov-ui-kit/utils/endPoints";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -185,8 +186,8 @@ const createDemand = async (state, dispatch) => {
       "Demands[0].id",
       null
     )
-      ? "/billing-service/demand/_update"
-      : "/billing-service/demand/_create";
+      ? BILLING_DEMAND.UPDATE.URL
+      : BILLING_DEMAND.CREATE.URL;
     try {
       const payload = await httpRequest("post", url, "", [], {
         Demands: demands
@@ -249,7 +250,7 @@ const generateBill = async (
   try {
     const payload = await httpRequest(
       "post",
-      `/billing-service/bill/_generate?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
+      `${BILLING.GENERATE.URL}?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
       "",
       [],
       {}

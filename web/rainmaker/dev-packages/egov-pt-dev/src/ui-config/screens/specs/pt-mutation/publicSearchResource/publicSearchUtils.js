@@ -6,6 +6,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getSearchBillResult } from "../../../../../ui-utils/commons";
+import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
 
 export const ComponentJsonPath = {
   ulbCity:
@@ -194,7 +195,7 @@ export const getBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+      FETCHBILL.GET.URL,
       "",
       queryObject
     );

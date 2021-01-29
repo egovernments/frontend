@@ -7,6 +7,7 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import { USER } from "egov-ui-kit/utils/endPoints";
 import { TL_BPAREG } from "egov-ui-kit/utils/endPoints";
 import { TL_CALC } from "egov-ui-kit/utils/endPoints";
+import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
 
 import {
   getFileUrl,
@@ -3725,7 +3726,7 @@ export const createBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_fetchbill",
+      FETCHBILL.GET.URL,
       "",
       queryObject
     );

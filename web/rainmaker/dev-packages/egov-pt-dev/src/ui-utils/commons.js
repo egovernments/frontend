@@ -12,6 +12,7 @@ import store from "ui-redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { FIRENOC } from "egov-ui-kit/utils/endPoints";
+import { BILLING_V2 } from "egov-ui-kit/utils/endPoints";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -623,7 +624,7 @@ export const getSearchBillResult = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/billing-service/bill/v2/_search",
+      BILLING_V2.SEARCH.URL,
       "",
       queryObject
     );
