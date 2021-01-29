@@ -383,7 +383,8 @@ export const submitApplication = async (state, dispatch) => {
 
 export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'download') => {
   const queryStr = [
-    { key: "key", value: 'bill-amendment-summary' },
+    // { key: "key", value: 'bill-amendment-summary' },
+    { key: "key", value: 'bill-amendment-credit-note' },   
     { key: "tenantId", value: tenantId }
   ]
   const DOWNLOADRECEIPT = {
