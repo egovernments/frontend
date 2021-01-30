@@ -110,7 +110,7 @@ export const reviewWaterSubSource = getLabelWithValueForModifiedLabel(
   }
 );
 
-export const reviewWaterSourceInfo = getLabelWithValueForModifiedLabel(
+export const reviewSourceInfo = getLabelWithValueForModifiedLabel(
   {
     labelName: "Water Source Info",
     labelKey: "WS_SERV_DETAIL_WATER_SOURCE_INFO"
@@ -483,7 +483,7 @@ const connectionDetails = getCommonContainer({
   reviewPipeSize,
   reviewAuthorizedConnection,
   reviewMotorInfo,
-  reviewWaterSourceInfo,
+  reviewSourceInfo,
   // reviewBillingType,
   reviewWaterClosets,
   reviewNumberOfToilets,

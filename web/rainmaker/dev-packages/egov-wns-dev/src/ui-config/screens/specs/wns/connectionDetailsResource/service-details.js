@@ -50,8 +50,10 @@ export const renderService = () => {
         rainwaterHarvestingFacility: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC" }, { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting" }),
         waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
         waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
+        authorizedConnection: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN" }, { jsonPath: "WaterConnection[0].authorizedConnection" }),
+        motorInfo: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_MOTOR_INFO" }, { jsonPath: "WaterConnection[0].motorInfo" }),
         numberOfTaps: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" }, { jsonPath: "WaterConnection[0].noOfTaps" }),
-        sourceInfo: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" }, { jsonPath: "WaterConnection[0].sourceInfo" })
+        sourceInfo: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE_INFO" }, { jsonPath: "WaterConnection[0].sourceInfo" })
       })
     }
   } else if (service === serviceConst.SEWERAGE) {

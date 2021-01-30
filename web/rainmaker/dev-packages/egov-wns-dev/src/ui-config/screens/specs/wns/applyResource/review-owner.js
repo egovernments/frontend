@@ -400,7 +400,7 @@ export const connectionWater={
       callBack: handleNA
     }
   ),
-  reviewWaterSourceInfo : getLabelWithValueForModifiedLabel(
+  reviewSourceInfo : getLabelWithValueForModifiedLabel(
     {
       labelName: "Water Source Info",
       labelKey: "WS_SERV_DETAIL_WATER_SOURCE_INFO"
