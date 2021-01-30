@@ -20,13 +20,13 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
-import {deoProcessMappings} from "./constants";
 import { downloadReceiptFromFilestoreID} from "egov-common/ui-utils/commons";
 import axios from "axios";
 import qs from "qs";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import $ from 'jquery';
 import { commentsPattern} from "./constants";
+import {DSIGN_REDIRECT_URL} from "../ui-config/lams-app-config";
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
@@ -670,7 +670,13 @@ export const checkIfTheUserIsDeo = () =>{
   return isDeo;
 }
 
-export const getCbsForDeoBasedOnLamsRoles = () =>{
+export const deoProcessMappings = (state, dispatch) => {
+  let deoMappings = get(state, "screenConfiguration.preparedFinalObject.lamsStore.deoMappings");
+  console.log("deoMappings is ",deoMappings);
+  return deoMappings;
+}
+
+export const getCbsForDeoBasedOnLamsRoles = (state, dispatch) =>{
   let lamsRoles = getLamsRoles();
   let deoName = null;
   lamsRoles.forEach(role => {
@@ -681,12 +687,12 @@ export const getCbsForDeoBasedOnLamsRoles = () =>{
   });
   let childCbsForDeo = [];
   if(deoName!=null)
-    childCbsForDeo = deoProcessMappings()[deoName];
+    childCbsForDeo = deoProcessMappings(state, dispatch)["DEO_"+deoName];
   let finalList = [];
   if(childCbsForDeo && childCbsForDeo.length>0)
   {
     childCbsForDeo.forEach(cb => {
-      finalList.push({"code": "pb."+cb.toLowerCase()});
+      finalList.push({"code": cb.toLowerCase()});
     })
     return finalList;
   }
@@ -1045,9 +1051,9 @@ export const prepareRequestBodyForLeaseAppPdf = (state, dispatch , forEsign) =>{
   requestBody.surveyId = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].leaseDetails.surveyId");
   requestBody.months = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months");
   requestBody.fatherOrHusbandName = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName");
-  requestBody.citizenName = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].name");
+  requestBody.name = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].name");
   requestBody.located = (get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located") === "insideCivil") ? 1: 2;
-  ;
+
   requestBody.forEsign = forEsign;
 
   let reqWrapper = {"leaseApplication":[requestBody]}
@@ -1175,13 +1181,14 @@ export const prepareForDSign = async (state, dispatch, response) => {
 }
 
 export const callDSignService = async(state, dispatch, req) => {
-
-  if(process.env.DSIGN_REDIRECT_URL)
-    console.error("DSIGN_REDIRECT_URL Environment Variable not set!");
   
-  let dSignUrl = process.env.DSIGN_REDIRECT_URL? process.env.DSIGN_REDIRECT_URL : "https://es-staging.cdac.in/esign2.1level1/2.1/form/signdoc";
+  let dSignUrl = DSIGN_REDIRECT_URL;
 
-  console.log(JSON.stringify(req))
+  if(!dSignUrl)
+  {
+    alert("DSIGN_REDIRECT_URL environment not set");
+    dSignUrl = "https://es-staging.cdac.in/esign2.1level1/2.1/form/signdoc";
+  }
   try 
   {
     var newForm = $('<form>', {
@@ -1244,9 +1251,11 @@ export const callDSignService = async(state, dispatch, req) => {
 
 export const callDSignServiceOldImpl = async(state, dispatch, req) => {
 
-  if(process.env.DSIGN_REDIRECT_URL)
+  if(!process.env.DSIGN_REDIRECT_URL)
+  {
+    alert("DSIGN_REDIRECT_URL Environment Variable not set!")
     console.error("DSIGN_REDIRECT_URL Environment Variable not set!");
-  
+  }
   let dSignUrl = process.env.DSIGN_REDIRECT_URL? process.env.DSIGN_REDIRECT_URL : "https://es-staging.cdac.in/esign2.1level1/2.1/form/signdoc";
   var data = qs.stringify(req);
 
@@ -1309,6 +1318,18 @@ export const afterDSignDone = async(state, dispatch, response) => {
     if (payload && payload.files && payload.files.length > 0 ) {
       let mode = 'download';
       downloadReceiptFromFilestoreID(payload.files[0].fileStoreId, mode);
+
+      let dSignSuccess = getQueryArg(window.location.href, "success");
+      if(dSignSuccess == "false")
+      {
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Could not digitally sign the application. Please try again later or print, sign and upload the application.", labelKey: "LAMS_ERROR_DSIGN_AADHAR" },
+            "error"
+          )
+        );
+      }
 
       //Write auto upload code here.
     }

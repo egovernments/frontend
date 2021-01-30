@@ -24,7 +24,7 @@ export const searchApiCall = async (state, dispatch) => {
 
   if(checkIfTheUserIsDeo())
   {
-    let cbs = getCbsForDeoBasedOnLamsRoles();
+    let cbs = getCbsForDeoBasedOnLamsRoles(state,dispatch);
     let queryString = "";
     cbs.forEach(cb => {
       queryString = queryString+cb.code+","

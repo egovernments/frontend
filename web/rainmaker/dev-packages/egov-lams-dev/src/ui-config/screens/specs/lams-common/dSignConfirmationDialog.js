@@ -29,6 +29,10 @@ export const dSignConfirmationDialog = getCommonContainer({
     }),
     
     termsContainer: getCommonGrayCard({
+      // info1: getCommonCaption({
+      //   labelName: "*Note",
+      //   labelKey: "LAMS_DSIGN_NOTE"
+      // }),
       info1: getCommonCaption({
         labelName: "E Sign Terms",
         labelKey: "LAMS_DSIGN_TERMS"
@@ -39,11 +43,27 @@ export const dSignConfirmationDialog = getCommonContainer({
           "You can digitally sign if you have your aadhar number linked with your mobile number. ",
         labelKey: "LAMS_DSIGN_TERMS_DESC1"
       }),
-      divider2: getDivider(),
       value2: getCommonParagraph({
+        labelName:
+          "When you proceed, you will be asked to enter Aadhar Virtual ID. This is different from your Aadhar number."+
+          " If you have not created virtual ID yet, click on 'Get Virtual ID' or visit https://resident.uidai.gov.in/vid-generation and follow the steps acordingly",
+        labelKey: "LAMS_DSIGN_TERMS_DESC4"
+      }),
+      // info2: getCommonCaption({
+      //   labelName: "E Sign Terms",
+      //   labelKey: "LAMS_DSIGN_TERMS"
+      // }),
+      //divider2: getDivider(),
+      value3: getCommonParagraph({
         labelName:
           "You can digitally sign if you have your aadhar number linked with your mobile number. ",
         labelKey: "LAMS_DSIGN_TERMS_DESC2"
+      }),
+      //divider3: getDivider(),
+      value4: getCommonParagraph({
+        labelName:
+          "I hereby give my consent for usage of the mentioned details for the purpose of digitally signing and storing the application.",
+        labelKey: "LAMS_DSIGN_TERMS_DESC3"
       }),
 
     }),
