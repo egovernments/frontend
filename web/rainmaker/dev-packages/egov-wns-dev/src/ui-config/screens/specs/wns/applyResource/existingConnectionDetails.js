@@ -5,7 +5,8 @@ import {
     getLabelWithValue,
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  
+  import {handleNA } from '../../utils';
+
   export const existingConnectionDetails = getCommonContainer({
     noOfWaterConn: getLabelWithValue(
       {
@@ -13,34 +14,38 @@ import {
         labelName:"No. of Water Connection"
       },
       {
-        jsonPath: "applyScreen.property.address.city",
+        sourceJsonPath: "applyScreen.existingWaterConnCount",
+        callBack: handleNA
       }
-    ),    
-    noOfSewerageConn: getLabelWithValue(
-      {
-        labelKey: "WS_NO_OF_SEWERAGE_CONNECTION",
-        labelName:"No. of Sewerage Connection"
-      },
-      {
-        jsonPath: "applyScreen.property.address.city",
-      }
-    ),    
+    ), 
     waterConnectionNo: getLabelWithValue(
       {
         labelKey: "WS_WATER_CONNECTION_NUMBER",
         labelName:"Water Connection No."
       },
       {
-        jsonPath: "applyScreen.property.address.doorNo",
+        sourceJsonPath: "applyScreen.existingWaterConn",
+        callBack: handleNA
       }
     ),
-    waterConnectionNo: getLabelWithValue(
+    noOfSewerageConn: getLabelWithValue(
+      {
+        labelKey: "WS_NO_OF_SEWERAGE_CONNECTION",
+        labelName:"No. of Sewerage Connection"
+      },
+      {
+        sourceJsonPath: "applyScreen.existingSewerageConnCount",
+        callBack: handleNA
+      }
+    ),   
+    sewerageConnectionNo: getLabelWithValue(
       {
         labelKey: "WS_SEWERAGE_CONNECTION_NUMBER",
         labelName:"Sewerage Connection No."
       },
       {
-        jsonPath: "applyScreen.property.address.doorNo",
+        sourceJsonPath: "applyScreen.existingSewerageConn",
+        callBack: handleNA
       }
     ),
     

@@ -92,12 +92,29 @@ export const propertySearchApiCall = async (state, dispatch) => {
         queryObject = [{ key: "searchType", value: "CONNECTION" }];
         queryObject.push({ key: "tenantId", value: tenantId });
         queryObject.push({ key: "propertyId", value: searchScreenObject["propertyIds"].trim() });
-        try { let payloadWater = await getSearchResults(queryObject) 
-          dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection)); 
+        try { 
+          let payloadWater = await getSearchResults(queryObject);
+          let wsConns = get(payloadWater,"WaterConnection",[]); 
+          let count = wsConns.length; 
+          let connStr =[];
+          wsConns.forEach(obj => connStr.push(obj.connectionNo));
+          dispatch(prepareFinalObject("applyScreen.existingWaterConnCount", count));
+          dispatch(prepareFinalObject("applyScreen.existingWaterConn", connStr.join(", ")));          
         } catch (error) { console.error(error); };
 
-        try { let payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) 
-          dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
+        try { 
+          let payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) ;
+          let swConns = get(payloadSewerage,"SewerageConnections",[]); 
+          let count = swConns.length; 
+          let connStr =[];
+          swConns.forEach(obj => connStr.push(obj.connectionNo));
+          // for (let i = 0; i < swConns.length; i++) {
+          //   let conn = swConns[i];                    
+          //   connStr = connStr.concat(conn.connectionNo);
+          //   console.log("Swerge connection No. ", connStr);   
+          // }
+          dispatch(prepareFinalObject("applyScreen.existingSewerageConnCount", count));
+          dispatch(prepareFinalObject("applyScreen.existingSewerageConn", connStr.join(", ")));
         } catch (error) { console.error(error); }///////////
       } else {
         showHideFields(dispatch, false);
