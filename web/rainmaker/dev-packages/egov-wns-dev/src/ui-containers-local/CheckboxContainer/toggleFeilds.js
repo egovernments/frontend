@@ -90,6 +90,18 @@ export const toggleWater = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewAuthorizedConnection",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewMotorInfo",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewNumberOfTaps",
     "visible",
     value
@@ -506,6 +518,16 @@ export const toggleWaterFeilds = (action, value) => {
   set(
     action.screenConfig,
     "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewWaterSource.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewAuthorizedConnection.visible",
+    value
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewMotorInfo.visible",
     value
   );
   set(

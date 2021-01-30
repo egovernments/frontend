@@ -127,6 +127,42 @@ export const reviewPipeSize = getLabelWithValueForModifiedLabel(
   }
 );
 
+export const reviewMotorInfo = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Motor Info",
+    labelKey: "WS_SERV_DETAIL_MOTOR_INFO"
+  },
+  {
+    jsonPath: "applyScreen.motorInfo",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.motorInfo",
+    callBack: handleNA
+  }
+);
+
+export const reviewAuthorizedConnection = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Authorized Connection",
+   labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN"
+  },
+  {
+    jsonPath: "applyScreen.authorizedConnection",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.authorizedConnection",
+    callBack: handleNA
+  }
+); 
+ 
 export const reviewWaterClosets = getLabelWithValueForModifiedLabel(
   {
     labelName: "No. of Water Closets",
@@ -426,6 +462,8 @@ const connectionDetails = getCommonContainer({
   reviewWaterSource,
   reviewWaterSubSource,
   reviewPipeSize,
+  reviewAuthorizedConnection,
+  reviewMotorInfo,
   // reviewBillingType,
   reviewWaterClosets,
   reviewNumberOfToilets,

@@ -167,13 +167,13 @@ import {
     propertyOwnership: getSelectField({
       label: {
         labelName: "Property Ownership Type",
-        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_PROPOWNER_LABEL"
       },
       placeholder: {
         labelName: "Select Property Ownership Type",
-        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_PLACEHOLDER"
+        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_PROPOWNER_LABEL_PLACEHOLDER"
       },
-      jsonPath: "connectionHolders[0].propertyOwnership",
+      jsonPath: "applyScreen.propertyOwnership",
       required: false, 
       sourceJsonPath: "applyScreenMdmsData.PropertyTax.PropertyOwnershipCategory",
       gridDefination: {

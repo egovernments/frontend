@@ -160,6 +160,22 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
+      authorizedConnection: getSelectField({
+        label: { labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN" },
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.authorizedConnection",
+        placeholder: { labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN_PLACEHOLDER" },
+        required: true,
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "applyScreen.authorizedConnection"
+      }),
+      motorInfo: getSelectField({
+        label: { labelKey: "WS_SERV_DETAIL_MOTOR_INFO" },
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.motorInfo",
+        placeholder: { labelKey: "WS_SERV_DETAIL_MOTOR_INFO_PLACEHOLDER" },
+        required: true,
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "applyScreen.motorInfo"
+      }),
 
       noOfWaterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
