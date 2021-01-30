@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getPropertyResults, isActiveProperty, showHideFieldsFirstStep } from "../../../../../ui-utils/commons";
+import { getPropertyResults, isActiveProperty, showHideFieldsFirstStep, getSearchResults, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
@@ -87,6 +87,18 @@ export const propertySearchApiCall = async (state, dispatch) => {
           dispatch(prepareFinalObject("applyScreen.property", propertyData))
           showHideFields(dispatch, true);
         }
+        //Added by vidya to get water and severage connection for a property   
+        queryObject = [];
+        queryObject = [{ key: "searchType", value: "CONNECTION" }];
+        queryObject.push({ key: "tenantId", value: tenantId });
+        queryObject.push({ key: "propertyId", value: searchScreenObject["propertyIds"].trim() });
+        try { let payloadWater = await getSearchResults(queryObject) 
+          dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection)); 
+        } catch (error) { console.error(error); };
+
+        try { let payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) 
+          dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
+        } catch (error) { console.error(error); }///////////
       } else {
         showHideFields(dispatch, false);
         dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_PROP_NOT_FOUND", labelName: "No Property records found" }, "warning"));
@@ -127,6 +139,14 @@ const showHideFields = (dispatch, value) => {
     handleField(
       "apply",
       "components.div.children.formwizardFirstStep.children.connectionHolderDetails",
+      "visible",
+      value
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.existingConnection",
       "visible",
       value
     )

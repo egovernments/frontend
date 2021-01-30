@@ -1962,6 +1962,14 @@ export const showHideFieldsFirstStep = (dispatch, propertyId, value) => {
             value
         )
     );
+    dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.existingConnection",
+          "visible",
+          value
+        )
+      );
 }
 
 export const getWaterSource = (waterSource, waterSubSource) => {
