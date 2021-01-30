@@ -759,68 +759,59 @@ const screenConfig = {
 
        //Setting Tax heads and Road Types
           if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+
+            //Create tax head object ---start
             let taxHeadDetails = get(
               state,
               "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
               []
             );
+            //Filter for tax heads 
+            let applicationType =applicationNumber.includes("SW") ?"SW" : "WS";
+            taxHeadDetails = taxHeadDetails.filter( (taxHead) => taxHead.service.includes(applicationType));
             console.info("Tax details===",taxHeadDetails);
+            //Read existing tax heads
+            let existingTaxHeads=get(state, "screenConfiguration.preparedFinalObject.applyScreen.wsTaxHeads",[]);
+            let taxHeads={};
+            existingTaxHeads.forEach(obj =>taxHeads[obj.taxHeadCode]=obj );
+
+            for(var i=0;i<taxHeadDetails.length ;i++){      
+              taxHeadDetails[i]={...taxHeadDetails[i] , amount : null,taxHeadCode : taxHeadDetails[i].code, id : null } ;
+              if(taxHeads[taxHeadDetails[i].code]){
+                taxHeadDetails[i].amount=taxHeads[taxHeadDetails[i].code].amount;
+                taxHeadDetails[i].id=taxHeads[taxHeadDetails[i].code].id;
+              }  
+            }
+            dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, taxHeadDetails) );
+
+            //Filter for road types
             let roadTypes = get(
               state,
               "screenConfiguration.preparedFinalObject.applyScreenMdmsData.sw-services-calculation.RoadType",
               []
             ); 
-            console.info("Road types=",roadTypes);
-            for(var i=0;i<roadTypes.length;i++){ 
-            dispatch(
-              prepareFinalObject(`applyScreen.roadTypeEst[${i}].roadType`, roadTypes[i].code)
-            );
-            dispatch(
-              prepareFinalObject(`applyScreen.roadTypeEst[${i}].length`, roadTypes[i].length)
-             );
-            dispatch(
-              prepareFinalObject(`applyScreen.roadTypeEst[${i}].breadth`, roadTypes[i].breadth)
-            );
-            dispatch(
-              prepareFinalObject(`applyScreen.roadTypeEst[${i}].depth`, roadTypes[i].depth)
-            );
-            dispatch(
-              prepareFinalObject(`applyScreen.roadTypeEst[${i}].rate`, roadTypes[i].rate)
-            );
-            setRoadCuttingEstimate(roadTypes[i],i,dispatch);
-             }
-                
-             if (applicationNumber.includes("SW")) {
-                //Set tax head specific to Swerage
-                let swTaxHead = taxHeadDetails.filter( (eachTaxhHead) => eachTaxhHead.service.includes("SW"));
-                console.info("set sewerage tax heads=",swTaxHead);
-                for(var i=0;i<swTaxHead.length;i++){        
-                  dispatch(
-                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, swTaxHead[i].code)
-                  );
-                  dispatch(
-                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
-                  );
-                  getIndividualTaxheads(swTaxHead[i],i,dispatch);
-                }
-             }
-             else{
-                //Set tax head specific to Water
-                
-               let wsTaxHead = taxHeadDetails.filter( (eachTaxhHead) => eachTaxhHead.service.includes("WS"));
-               console.info("==Set tax head specific to Water==",wsTaxHead);
-               for(var i=0;i<wsTaxHead.length;i++){        
-                  dispatch(
-                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, wsTaxHead[i].code)
-                  );
-                  dispatch(
-                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
-                  );
-                  getIndividualTaxheads(wsTaxHead[i],i,dispatch);
-                }
-               
-             }
+            let existingRoadDetail=get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadTypeEst",[]);
+            let roadDetails={};
+            existingRoadDetail.forEach(obj =>obj['code']=obj.roadType );
+            existingRoadDetail.forEach(obj =>roadDetails[obj.roadType]=obj );
 
+            for(var i=0;i<roadTypes.length ;i++){     
+              roadTypes[i]={...roadTypes[i], roadType :roadTypes[i].code , length : null, depth : null ,breadth : null,rate : null };
+              if(roadDetails[roadTypes[i].code]){ 
+                roadTypes[i] =roadDetails[roadTypes[i].code]; 
+              }  
+            }
+            dispatch(
+              prepareFinalObject(`applyScreen.roadTypeEst`, roadTypes )
+            );
+
+            //create component
+            for(var i=0;i<taxHeadDetails.length ;i++){        
+              getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
+            }
+            for(var i=0;i<roadTypes.length;i++){ 
+              setRoadCuttingEstimate(roadTypes[i],i,dispatch);
+            }
           }
    
 
