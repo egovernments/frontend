@@ -1,6 +1,5 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../utils";
-import "./index.css";
 
 const getCommonApplyFooter = children => {
   return {

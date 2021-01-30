@@ -103,6 +103,12 @@ const checkIfFormIsValid = async (state, dispatch) => {
       //alert("Check once "+JSON.stringify(mergedArray));
       dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.applicationDocuments", mergedArray));
 
+      let months = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months");
+      let fatherOrHusbandName = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName");;
+
+      dispatch(prepareFinalObject("lamsStore.Lease[0].months", months));
+      dispatch(prepareFinalObject("lamsStore.Lease[0].fatherOrHusbandName", fatherOrHusbandName));
+
       const lease = get(
         state.screenConfiguration.preparedFinalObject,
         "lamsStore.Lease[0]"
