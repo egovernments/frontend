@@ -107,65 +107,6 @@ const summaryScreenEMP = getCommonCard({
  // reviewRoadCuttingUserEntry
 })
 
-// export const reviewRoadCuttingUserEntryDetails = (isEditable = true) => {
-//   console.info("reviewRoadCutting==");
-//   return getCommonGrayCard({
-//     headerDiv: {
-//       uiFramework: "custom-atoms",
-//       componentPath: "Container",
-//       props: {
-//         style: { marginBottom: "10px" }
-//       },
-//       // children: {
-//       //   header: {
-//       //     gridDefination: {
-//       //       xs: 12,
-//       //       sm: 10
-//       //     },
-//       //     ...getCommonSubHeader({
-//       //       labelName: "Connection Details",
-//       //       labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
-//       //     })
-//       //   },
-//       //   editSection: {
-//       //     componentPath: "Button",
-//       //     props: { color: "primary" },
-//       //     visible: isEditable,
-//       //     gridDefination: {
-//       //       xs: 12,
-//       //       sm: 2,
-//       //       align: "right"
-//       //     },
-//       //     children: {
-//       //       editIcon: {
-//       //         uiFramework: "custom-atoms",
-//       //         componentPath: "Icon",
-//       //         props: { iconName: "edit" }
-//       //       },
-//       //       buttonLabel: getLabel({
-//       //         labelName: "Edit",
-//       //         labelKey: "WS_SUMMARY_EDIT"
-//       //       })
-//       //     },
-//       //     // onClickDefination: {
-//       //     //   action: "condition",
-//       //     //   callBack: (state, dispatch) => {
-//       //     //     changeStep(state, dispatch, "", 0);
-//       //     //   }
-//       //     // }
-//       //   }
-//       // }
-//     },
-//     //viewOne: getRoadCuttingDetails,
-//     });
-// };
-// export const getRoadCuttingDetails = () =>{
-
-// }
-
-
-
-
 
 let summaryScreen = process.env.REACT_APP_NAME === "Citizen" ? summaryScreenCitizen : summaryScreenEMP;
 export const documentDetails = getCommonCard({
@@ -632,7 +573,7 @@ const pageReset = (dispatch) => {
 }
 
 const getIndividualTaxheads = (item,index,dispatch) =>{
-  console.info("came to create each item==",item.code);
+ 
   //return{
     dispatch(
       handleField(
@@ -777,32 +718,7 @@ console.info("came for road cutting",item);
             sm: 2
           },
       }),
-      // RoadCuttingTotalAmt:getTextField({
-      //   label: {
-      //     labelName: "Road Cutting Total",
-      //     labelKey: "WF_ESTIMATION_TOTAL_AMT"
-      //   },
-      //   placeholder: {
-      //     labelName: "Road Cutting Total",
-      //     labelKey: "WF_ESTIMATION_TOTAL_AMT"
-      //   },
-      //   props:{
-      //     required: true,
-      //     visible: true,
-      //     disabled: true,
-      //   },
       
-      //   pattern: getPattern("DecimalNumber"),
-      //   componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingTotalAmt`,
-      //   //jsonPath: `applyScreen.roadTypeEst[${index}].rate`,
-      //   gridDefination: {
-      //       xs: 12,
-      //       sm: 2
-      //     },
-      // })
-      
-
-
      }),
     
   
@@ -821,6 +737,13 @@ const screenConfig = {
     dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, []));
     //Road cutting charges
     dispatch(prepareFinalObject(`applyScreen.roadTypeEst`, []));
+
+    dispatch(prepareFinalObject("applyScreen.water", true));
+    dispatch(prepareFinalObject("applyScreen.sewerage", false));
+
+    const propertyId = getQueryArg(window.location.href, "propertyId");
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
     getData(action, state, dispatch).then(() => {
       let ownershipCategory = get(
         state,
@@ -831,86 +754,24 @@ const screenConfig = {
         prepareFinalObject(
           "OwnershipCategory",
           ownershipCategory
-        )
-      );
-      // let taxHeadDetails = get(
-      //   state,
-      //   "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
-      //   []
-      // );
-      // for(var i=0;i<taxHeadDetails.length;i++){        
-      //   dispatch(
-      //     prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, taxHeadDetails[i].code)
-      //   );
-      //   dispatch(
-      //     prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
-      //   );
-      //   getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
-     
-      // }
-     
-      // let roadTypes = get(
-      //   state,
-      //   "screenConfiguration.preparedFinalObject.applyScreenMdmsData.sw-services-calculation.RoadType",
-      //   []
-      // );
-      // console.info("Road types====>",roadTypes);
-     
+         )
+       );
 
-    
-      // for(var i=0;i<roadTypes.length;i++){ 
-      //   dispatch(
-      //     prepareFinalObject(`applyScreen.roadTypeEst[${i}].roadType`, roadTypes[i].code)
-      //   );
-      //   setRoadCuttingEstimate(roadTypes[i],i,dispatch);
-      // }
-        
-  
-
-      //   });
-        dispatch(prepareFinalObject("applyScreen.water", true));
-        dispatch(prepareFinalObject("applyScreen.sewerage", false));
-        const propertyId = getQueryArg(window.location.href, "propertyId");
-
-        const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-
-        if (propertyId) {
-          togglePropertyFeilds(action, true);
-          if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, true);
-          } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, false);
-            toggleSewerageFeilds(action, true);
-          } else {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, false);
-          }
-        } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
-
-          let taxHeadDetails = get(
-            state,
-            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
-            []
-          );
-          console.info("Setting taxheads==",taxHeadDetails)
-          for(var i=0;i<taxHeadDetails.length;i++){        
-              dispatch(
-                prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, taxHeadDetails[i].code)
-              );
-              dispatch(
-                prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
-              );
-              getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
-          
-            }
-          let roadTypes = get(
+       //Setting Tax heads and Road Types
+          if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+            let taxHeadDetails = get(
+              state,
+              "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
+              []
+            );
+            console.info("Tax details===",taxHeadDetails);
+            let roadTypes = get(
               state,
               "screenConfiguration.preparedFinalObject.applyScreenMdmsData.sw-services-calculation.RoadType",
               []
-            );         
-          console.info("Setting Road types====>",roadTypes);
-          for(var i=0;i<roadTypes.length;i++){ 
+            ); 
+            console.info("Road types=",roadTypes);
+            for(var i=0;i<roadTypes.length;i++){ 
             dispatch(
               prepareFinalObject(`applyScreen.roadTypeEst[${i}].roadType`, roadTypes[i].code)
             );
@@ -927,7 +788,65 @@ const screenConfig = {
               prepareFinalObject(`applyScreen.roadTypeEst[${i}].rate`, roadTypes[i].rate)
             );
             setRoadCuttingEstimate(roadTypes[i],i,dispatch);
+             }
+                
+             if (applicationNumber.includes("SW")) {
+                //Set tax head specific to Swerage
+                let swTaxHead = taxHeadDetails.filter( (eachTaxhHead) => eachTaxhHead.service.includes("SW"));
+                console.info("set sewerage tax heads=",swTaxHead);
+                for(var i=0;i<swTaxHead.length;i++){        
+                  dispatch(
+                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, swTaxHead[i].code)
+                  );
+                  dispatch(
+                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
+                  );
+                  getIndividualTaxheads(swTaxHead[i],i,dispatch);
+                }
+             }
+             else{
+                //Set tax head specific to Water
+                
+               let wsTaxHead = taxHeadDetails.filter( (eachTaxhHead) => eachTaxhHead.service.includes("WS"));
+               console.info("==Set tax head specific to Water==",wsTaxHead);
+               for(var i=0;i<wsTaxHead.length;i++){        
+                  dispatch(
+                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, wsTaxHead[i].code)
+                  );
+                  dispatch(
+                    prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
+                  );
+                  getIndividualTaxheads(wsTaxHead[i],i,dispatch);
+                }
+               
+             }
+
           }
+   
+
+       });
+
+
+      // dispatch(prepareFinalObject("applyScreen.water", true));
+      // dispatch(prepareFinalObject("applyScreen.sewerage", false));
+
+
+        // const propertyId = getQueryArg(window.location.href, "propertyId");
+        // const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+        if (propertyId) {
+          togglePropertyFeilds(action, true);
+          if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+            toggleWaterFeilds(action, true);
+            toggleSewerageFeilds(action, true);
+          } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+            toggleWaterFeilds(action, false);
+            toggleSewerageFeilds(action, true);
+          } else {
+            toggleWaterFeilds(action, true);
+            toggleSewerageFeilds(action, false);
+          }
+        } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {   
 
           togglePropertyFeilds(action, true);
           if (applicationNumber.includes("SW")) {
@@ -935,12 +854,14 @@ const screenConfig = {
             dispatch(prepareFinalObject("applyScreen.sewerage", true));
             toggleWaterFeilds(action, false);
             toggleSewerageFeilds(action, true);
-          } else {
+            } 
+          else {
             dispatch(prepareFinalObject("applyScreen.water", true));
             dispatch(prepareFinalObject("applyScreen.sewerage", false));
+            console.info("Going to toggle field");
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
-          }
+            }
         } else {
           togglePropertyFeilds(action, false)
           if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -955,7 +876,7 @@ const screenConfig = {
           }
         }
 
-    });
+   // });
 
 
 
