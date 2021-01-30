@@ -9,6 +9,8 @@ import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import cloneDeep from "lodash/cloneDeep";
+
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -898,7 +900,8 @@ export const applyForWater = async (state, dispatch) => {
                 state.screenConfiguration.preparedFinalObject,
                 "WaterConnection[0].additionalDetails.appCreatedDate"
             )
-            let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
+            let queryObjectForUpdate =  get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
+
             let waterSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", null);
             let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", null);
             queryObjectForUpdate.waterSource = queryObjectForUpdate.waterSource ? queryObjectForUpdate.waterSource : waterSource;
@@ -913,7 +916,29 @@ export const applyForWater = async (state, dispatch) => {
                 queryObjectForUpdate.additionalDetails = {};
             }
             queryObjectForUpdate.additionalDetails.locality = queryObjectForUpdate.property.address.locality.code;
+           
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
+           //Remove null value from each tax heads
+            queryObjectForUpdate.wsTaxHeads.forEach(item => {
+                if (!item.amount) {
+                  item.amount = 0;
+                }
+              });
+              queryObjectForUpdate.roadTypeEst.forEach(item => {
+                if (!item.length) {
+                    item.length = 0;
+                  }
+                  if (!item.breadth) {
+                    item.breadth = 0;
+                  }
+                  if (!item.depth) {
+                    item.depth = 0;
+                  }
+                  if (!item.rate) {
+                    item.rate = 0;
+                  }
+
+              });
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);

@@ -1655,5 +1655,6 @@ export const triggerModificationsDisplay = (action, isModeEnable) => {
     setVisible('modificationsEffectiveFrom', isModeEnable, action);
     setVisible('plumberDetailsContainer', !isModeEnable, action);
     //setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+    setVisible('wsConnectionTaxHeadsContainer',!isModeEnable, action);
 }
 

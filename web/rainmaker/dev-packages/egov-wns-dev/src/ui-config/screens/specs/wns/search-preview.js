@@ -620,6 +620,14 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
     const convPayload = findAndReplace(payload, "NA", null)
+
+    payload.WaterConnection[0].wsTaxHeads.forEach(item => {
+      console.info("amout in taxhead for estimate==",item.amount)
+     if (!item.amount || item.amount == null) {
+       item.amount = 0;
+     }
+   });
+
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
       tenantId: tenantId,
@@ -764,6 +772,30 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
 };
 
 const parserFunction = (obj) => {
+  console.info("OBJ==",obj);
+
+       //Remove null value from each tax heads
+       obj.wsTaxHeads.forEach(item => {
+         console.info("amout in taxhead for estimate==",item.amount)
+        if (!item.amount || item.amount == null) {
+          item.amount = 0;
+        }
+      });
+
+      obj.roadTypeEst.forEach(item => {
+        if (!item.length) {
+            item.length = 0;
+          }
+          if (!item.breadth) {
+            item.breadth = 0;
+          }
+          if (!item.depth) {
+            item.depth = 0;
+          }
+          if (!item.rate) {
+            item.rate = 0;
+          }
+      });
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
