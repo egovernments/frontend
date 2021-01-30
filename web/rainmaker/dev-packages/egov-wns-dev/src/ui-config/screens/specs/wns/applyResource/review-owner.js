@@ -171,42 +171,86 @@ export const plumberDetails={
 }
 const connectionChargeDetails = getCommonContainer(plumberDetails);
 export const roadDetails={
-  reviewRoadType : getLabelWithValueForModifiedLabel(
+  getCommonContainerreviewRoadType : getLabelWithValue(
     {
       labelName: "Road Type",
       labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
     },
     {
-      jsonPath: "WaterConnection[0].roadType",
+      jsonPath: "WaterConnection[0].tempRoadType[0].roadType",
       callBack: handleRoadType
-    }, {
-      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    
+
+  ),
+ 
+  reviewlength : getLabelWithValue(
+    {
+      labelName: "Length (in meter)",
+      labelKey: "WS_ADDN_DETAILS_LENGTH_LABEL"
     },
     {
-      jsonPath: "WaterConnectionOld[0].roadType",
-      callBack: handleRoadType
+      jsonPath: "WaterConnection[0].tempRoadType[0].length",
+      callBack: handleNA
     }
   ),
-  reviewArea : getLabelWithValueForModifiedLabel(
+ 
+  reviewBreadth : getLabelWithValue(
     {
-      labelName: "Area (in sq ft)",
-      labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+      labelName: "Breadth (in meter)",
+      labelKey: "WS_ADDN_DETAILS_BREADTH_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].roadCuttingArea",
-      callBack: handleNA
-    }, {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].roadCuttingArea",
+      jsonPath: "WaterConnection[0].tempRoadType[0].breadth",
       callBack: handleNA
     }
-  )
+  ),
+  reviewDepth : getLabelWithValue(
+    {
+      labelName: "Depth (in meter)",
+      labelKey: "WS_ADDN_DETAILS_DEPTH_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].tempRoadType[0].depth",
+      callBack: handleNA
+    }
+  ),
+  
+  reviewRate : getLabelWithValue(
+    {
+      labelName: "Rate (in meter)",
+      labelKey: "WS_ADDN_DETAILS_RATE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].tempRoadType[0].rate",
+      callBack: handleNA
+    }
+  ),
+ 
 
 }
 
-const roadCuttingCharges = getCommonContainer(roadDetails);
+const roadCuttingCharges = getCommonGrayCard({
+
+roadCharges: {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    scheama: getCommonGrayCard({
+      viewEight: getCommonContainer(roadDetails)
+
+    }),
+    items: [],
+    hasAddItem: false,
+    visible:false,
+    sourceJsonPath: "WaterConnection[0].tempRoadType",
+    prefixSourceJsonPath: "children.cardContent.children.viewEight.children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  visible:false,
+  type: "array"
+},})
+
 
 
 

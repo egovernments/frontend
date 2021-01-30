@@ -335,7 +335,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     }
   }
 
-
+  let roadTypes = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].roadTypeEst");
+     let newRoad =  roadTypes && roadTypes.filter(roadType=>(roadType.length!=0 && roadType.breadth!=0 && roadType.depth!=0 && roadType.rate!=0));
+     if(newRoad.length!=0){
+      set(
+        action,
+        "screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.children.cardContent.children.roadCharges.visible",
+        true
+      );
+      dispatch(prepareFinalObject("WaterConnection[0].tempRoadType",newRoad));
+     }
+  
 };
 
 let titleText = "";
