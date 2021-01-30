@@ -14,7 +14,7 @@ import {
         labelName:"No. of Water Connection"
       },
       {
-        sourceJsonPath: "applyScreen.existingWaterConnCount",
+        jsonPath: "applyScreen.existingWaterConnCount",
         callBack: handleNA
       }
     ), 
@@ -24,7 +24,7 @@ import {
         labelName:"Water Connection No."
       },
       {
-        sourceJsonPath: "applyScreen.existingWaterConn",
+        jsonPath: "applyScreen.existingWaterConn",
         callBack: handleNA
       }
     ),
@@ -34,7 +34,7 @@ import {
         labelName:"No. of Sewerage Connection"
       },
       {
-        sourceJsonPath: "applyScreen.existingSewerageConnCount",
+        jsonPath: "applyScreen.existingSewerageConnCount",
         callBack: handleNA
       }
     ),   
@@ -44,7 +44,7 @@ import {
         labelName:"Sewerage Connection No."
       },
       {
-        sourceJsonPath: "applyScreen.existingSewerageConn",
+        jsonPath: "applyScreen.existingSewerageConn",
         callBack: handleNA
       }
     ),
