@@ -28,6 +28,7 @@ import { OwnerInfoCard } from "./applyResource/connectionDetails";
 import { getHolderDetails, holderHeader, sameAsOwner } from "./applyResource/connectionHolder";
 import { footer } from "./applyResource/footer";
 import { getOwnerDetails, ownerDetailsHeader, ownershipType } from "./applyResource/ownerDetails";
+import { getExistingConnectionDetails } from "./applyResource/existingConnectionDetails";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
 import { getPropertyIDDetails, propertyHeader, propertyID } from "./applyResource/propertyDetails";
 import { reviewConnectionDetails, snackbarWarningMessage,reviewRoadCuttingUserEntry } from "./applyResource/reviewConnectionDetails";
@@ -213,10 +214,12 @@ export const getMdmsData = async dispatch => {
             { name: "waterSource" },
             { name: "connectionType" },
             { name: "PropertySearch" },
-            { name: "TaxHeadMaster" }
+            { name: "TaxHeadMaster" },
+            { name: "motorInfo" },
+            { name: "authorizedConnection" }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" }]}
+        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{ name: "PropertyOwnershipCategory" }]}
       ]
     }
   };
@@ -555,7 +558,7 @@ const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
   dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
 }
 
-
+let existingConnectionDetails = getExistingConnectionDetails();
 let propertyDetail = getPropertyDetails();
 let propertyIDDetails = getPropertyIDDetails();
 let ownerDetail = getOwnerDetails();
@@ -563,6 +566,7 @@ let holderDetails = getHolderDetails();
 
 export let ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
 export let IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+export let existingConnection = getCommonCard({ existingConnectionDetails });
 export let Details = getCommonCard({ propertyDetail });
 export let connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
 
@@ -570,7 +574,7 @@ export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details, ownerDetails, connectionHolderDetails, OwnerInfoCard }
+  children: { IDDetails, Details,existingConnection, ownerDetails, connectionHolderDetails, OwnerInfoCard }
 };
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
@@ -615,10 +619,12 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("connectionHolders", []));
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", []));
+  existingConnectionDetails = getExistingConnectionDetails();
   propertyDetail = getPropertyDetails();
   propertyIDDetails = getPropertyIDDetails();
   ownerDetail = getOwnerDetails();
   holderDetails = getHolderDetails();
+  existingConnection = getCommonCard({ existingConnectionDetails });
   ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
   IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
   Details = getCommonCard({ propertyDetail });

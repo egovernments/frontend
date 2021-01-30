@@ -371,7 +371,39 @@ export const connectionWater={
       jsonPath: "WaterConnectionOld[0].pipeSize",
       callBack: handleNA
     }
-  )
+  ),
+  reviewMotorInfo : getLabelWithValueForModifiedLabel(
+   {
+     labelName: "Motor Info",
+     labelKey: "WS_SERV_DETAIL_MOTOR_INFO"
+   },
+   {
+     jsonPath: "WaterConnection[0].motorInfo",
+     callBack: handleNA
+   }, {
+     labelKey: "WS_OLD_LABEL_NAME"
+   },
+   {
+     jsonPath: "WaterConnectionOld[0].motorInfo",
+     callBack: handleNA
+   }
+ ),
+ reviewAuthorizedConnection : getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Authorized Connection",
+    labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN"
+  },
+  {
+    jsonPath: "WaterConnection[0].authorizedConnection",
+    callBack: handleNA
+  }, {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].authorizedConnection",
+    callBack: handleNA
+  }
+)
 
 
 }
