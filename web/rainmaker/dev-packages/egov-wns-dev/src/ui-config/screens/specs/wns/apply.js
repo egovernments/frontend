@@ -573,7 +573,7 @@ const pageReset = (dispatch) => {
 }
 
 const getIndividualTaxheads = (item,index,dispatch) =>{
- 
+  console.info("came to create each item==",cloneDeep(item));
   //return{
     dispatch(
       handleField(
