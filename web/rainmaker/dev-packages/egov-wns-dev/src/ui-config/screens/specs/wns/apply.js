@@ -632,7 +632,7 @@ const pageReset = (dispatch) => {
 }
 
 const getIndividualTaxheads = (item,index,dispatch) =>{
-  console.info("came to create each item==",item.code);
+  console.info("came to create each item==",cloneDeep(item));
   //return{
     dispatch(
       handleField(
@@ -893,17 +893,18 @@ const screenConfig = {
             "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
             []
           );
-          console.info("Setting taxheads==",taxHeadDetails)
-          for(var i=0;i<taxHeadDetails.length;i++){        
-              dispatch(
-                prepareFinalObject(`applyScreen.wsTaxHeads[${i}].taxHeadCode`, taxHeadDetails[i].code)
-              );
-              dispatch(
-                prepareFinalObject(`applyScreen.wsTaxHeads[${i}].amount`, null)
-              );
-              getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
+          let existingTaxHeads=get(state, "screenConfiguration.preparedFinalObject.applyScreen.wsTaxHeads",[]);
+          let taxHeads={};
+          existingTaxHeads.forEach(obj =>taxHeads[obj.taxHeadCode]=obj.amount );
+          taxHeadDetails.forEach( obj  =>  obj.amount=(taxHeads[obj.code] ? taxHeads[obj.code] : null));  
+          taxHeadDetails.forEach( obj  =>  obj.taxHeadCode=obj.code); 
+          dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, taxHeadDetails) );
+
+          console.info("Setting taxheads==",taxHeadDetails,taxHeads);
           
-            }
+          for(var i=0;i<taxHeadDetails.length ;i++){        
+              getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
+          }
           let roadTypes = get(
               state,
               "screenConfiguration.preparedFinalObject.applyScreenMdmsData.sw-services-calculation.RoadType",
