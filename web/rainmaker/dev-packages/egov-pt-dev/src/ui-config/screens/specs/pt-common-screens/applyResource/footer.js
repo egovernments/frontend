@@ -99,6 +99,13 @@ const callBackForApply = async (state, dispatch) => {
     screenKey
   );
 
+  let isAssemblyDetailsnoOfFlats = validateFields(
+    "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFlats",
+    state,
+    dispatch,
+    screenKey
+  );
+
   let isPropertyLocationDetailsValid = validateFields(
     "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children",
     state,
@@ -179,6 +186,7 @@ const callBackForApply = async (state, dispatch) => {
     isAssemblyDetailsPropType &&
     isAssemblyDetailsConstructedArea &&
     isAssemblyDetailsnoOfFloors &&
+    isAssemblyDetailsnoOfFlats &&
     isAssemblyDetailstotalLandArea &&
     isAssemblyDetailsusageType &&
     isPropertyLocationDetailsValid &&
@@ -258,10 +266,13 @@ const callBackForApply = async (state, dispatch) => {
     } else {
       set(propertyPayload, "source", "MUNICIPAL_RECORDS");
     }
-   // console.log("nooffloors---",propertyPayload.noOfFloor);
-    if(propertyPayload.noOfFloor==undefined)
+    console.log("nooffloors---",propertyPayload.noOfFloors);
+    if(propertyPayload.noOfFloors==undefined)
     set(propertyPayload, "noOfFloors", 1);
-   // console.log("nooffloors after---",propertyPayload.noOfFloors);
+    //console.log("nooffloors after---",propertyPayload.noOfFloors);
+    if(propertyPayload.noOfFlats==undefined)
+    set(propertyPayload, "noOfFlats", NA);
+    //console.log("noOfFlats after---",propertyPayload.noOfFlats);
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;
     propertyPayload.address.city = propertyPayload.address.city.split(".")[1];

@@ -176,7 +176,22 @@ export const additionDetails = getCommonCard({
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.motorInfo"
       }),
-
+      sourceInfo: getTextField({
+        label: {
+          labelKey: "WS_SERV_DETAIL_SOURCE_INFO"
+        },
+        placeholder: {
+          labelKey: "WS_SERV_DETAIL_SOURCE_INFO_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Name"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.sourceInfo"
+      }),
       noOfWaterClosets: getTextField({
         label: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS" },
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },

@@ -109,6 +109,25 @@ export const reviewWaterSubSource = getLabelWithValueForModifiedLabel(
     callBack: handleNA
   }
 );
+
+export const reviewWaterSourceInfo = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Water Source Info",
+    labelKey: "WS_SERV_DETAIL_WATER_SOURCE_INFO"
+  },
+  {
+    jsonPath: "applyScreen.sourceInfo",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.sourceInfo",
+    callBack: handleNA
+  }
+);
+
 export const reviewPipeSize = getLabelWithValueForModifiedLabel(
   {
     labelName: "Pipe Size (in inches)",
@@ -464,6 +483,7 @@ const connectionDetails = getCommonContainer({
   reviewPipeSize,
   reviewAuthorizedConnection,
   reviewMotorInfo,
+  reviewWaterSourceInfo,
   // reviewBillingType,
   reviewWaterClosets,
   reviewNumberOfToilets,

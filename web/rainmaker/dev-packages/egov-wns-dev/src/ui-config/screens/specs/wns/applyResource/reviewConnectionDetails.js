@@ -340,6 +340,17 @@ const getPropertyDetails = {
             },
             { jsonPath: "applyScreenOld.property.noOfFloors", callBack: handleNA },
           ),
+          reviewNumberOfFlats: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "Number Of Flats",
+              labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
+            },
+            { jsonPath: "applyScreen.property.noOfFlats", callBack: handleNA },
+            {
+              labelKey: "WS_OLD_LABEL_NAME"
+            },
+            { jsonPath: "applyScreenOld.property.noOfFlats", callBack: handleNA },
+          ),
           rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
             {
               labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",

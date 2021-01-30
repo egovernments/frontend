@@ -336,6 +336,20 @@ export const propertyDetails={
       callBack: handleNA      
     }
   ),
+  reviewNumberOfFlats: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Number Of Flats",
+      labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
+    },
+    { jsonPath: "WaterConnection[0].property.noOfFlats",
+    callBack: handleNA },{
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].property.noOfFlats",
+      callBack: handleNA      
+    }
+  ),
   rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
     {
       labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",

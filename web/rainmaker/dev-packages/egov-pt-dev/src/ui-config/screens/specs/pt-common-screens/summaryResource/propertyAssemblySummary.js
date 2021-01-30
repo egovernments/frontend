@@ -131,6 +131,16 @@ export const propertyAssemblySummary = getCommonGrayCard({
         jsonPath: "Property.noOfFloors",
         callBack: checkValueForNA
       }
+    ),
+    noOfFlats: getLabelWithValue(
+      {
+        labelName: "No of Flats",
+        labelKey: "PT_COMMON_NO_OF_FLATS"
+      },
+      {
+        jsonPath: "Property.noOfFlats",
+        callBack: checkValueForNA
+      }
     )
   })
 });

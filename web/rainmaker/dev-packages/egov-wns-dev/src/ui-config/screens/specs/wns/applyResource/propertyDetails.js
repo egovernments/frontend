@@ -177,6 +177,16 @@ const propertyDetails = getCommonContainer({
       callBack: handleNA
     }
   ),
+  numberOfFlats: getLabelWithValue(
+    {
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL",
+      labelName: "Number Of Flats"
+    },
+    {
+      jsonPath: "applyScreen.property.noOfFlats",
+      callBack: handleNA
+    }
+  ),
   rainwaterHarvestingFacility: getLabelWithValue(
     {
       labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",

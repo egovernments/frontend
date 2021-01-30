@@ -30,6 +30,25 @@ const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
     }
 }
 
+const renderNoOfFlatsData = (usageType, propType, dispatch, state) => {
+
+    console.log("usage type",usageType);
+    //let noOfFloors;
+    let propertyType = get(
+            state.screenConfiguration.preparedFinalObject,
+            "Property.propertyType"
+          ); 
+    console.log("propertyType",propertyType);
+    const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFlats"; 
+    if (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "VACANT") {
+        set(state.screenConfiguration.preparedFinalObject,"Property.noOfFlats", "");
+        dispatch(handleField('register-property', additionalDetailsJson, "visible", false));
+       // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
+    }else{
+        dispatch(handleField('register-property', additionalDetailsJson, "visible", true));
+    }
+}
+
 
 const rendersubUsageType = (usageType, propType, dispatch, state) => {
   let subTypeValues = get(
@@ -133,6 +152,7 @@ export const propertyAssemblyDetails = getCommonCard({
         // if (usageType) {
           rendersubUsageType(usageType, action.value, dispatch, state)
           renderNoOfFloorData(usageType, action.value, dispatch, state)
+          renderNoOfFlatsData(usageType, action.value, dispatch, state)
         // }
       }
     }),
@@ -238,6 +258,22 @@ export const propertyAssemblyDetails = getCommonCard({
           pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           jsonPath: "Property.noOfFloors"
-        })
+        }),
+    noOfFlats:getTextField({
+              label: {
+                labelName: "No of Flats",
+                labelKey: "PT_COMMON_NO_OF_FLATS"
+              },
+              props: {
+              },
+              placeholder: {
+                labelName: "Enter Number of Flats",
+                labelKey: "PT_COMMON_NO_OF_FLATS_PLACEHOLDER"
+              },
+              required: true,
+              pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+              errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+              jsonPath: "Property.noOfFlats"
+            })
   })
 });
