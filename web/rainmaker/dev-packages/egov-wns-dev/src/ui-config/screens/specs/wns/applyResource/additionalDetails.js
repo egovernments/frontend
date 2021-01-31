@@ -114,15 +114,154 @@ export const additionDetails = getCommonCard({
           else {
             showHideFeilds(dispatch, true);
           }
+          if (connType === "Metered") {
+            console.log("=========", connType);
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingType",
+                "props.value",
+                "STANDARD"
+              ),
+            )
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingType",
+                  "props.disabled",
+                  true
+                )
+              )
+          }
+          else{
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingType",
+                "props.disabled",
+                false
+              )
+            ),
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
+                "visible",
+                true
+              )
+            );
+          }
+          if(connType === "Bulk-supply"){
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingType",
+                "visible",
+                false
+              )
+            ),
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
+                "visible",
+                false
+              )
+            );
+          }
+          else{
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingType",
+                "visible",
+                true
+              )
+            ),
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
+                "visible",
+                true
+              )
+            );
+          }
         }
       },
+      billingType: {
+        ...getSelectField({
+          label: { labelKey: "WS_SERV_DETAIL_BILLING_TYPE" },
+          placeholder: { labelKey: "WS_SERV_DETAIL_BILING_TYPE_PLACEHOLDER" },
+          required: false,
+          sourceJsonPath: "applyScreenMdmsData.ws-services-masters.billingType",
+          gridDefination: { xs: 12, sm: 6 },
+          errorMessage: "ERR_INVALID_BILLING_PERIOD",
+          jsonPath: "WaterConnection[0].additionalDetails.billingType",
+          props: {
+            disabled: false
+          }
+        }),
+        afterFieldChange: async (action, state, dispatch) => {
+          let billingType = await get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.billingType");
+          let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
 
+          console.log('billingType');
+          console.log(billingType);
+          if (billingType != "CUSTOM") {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
+                "visible",
+                false
+              )
+            );
+          }
+          else {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
+                "visible",
+                true
+              )
+            );
+          }
+
+        }
+      },
       numberOfTaps: getTextField({
         label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
         placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.noOfTaps",
         pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      }),
+      billingAmount: getTextField({
+        label: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT" },
+        placeholder: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT_PLACEHOLDER" },
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
+        pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      }),
+      connectionCategory: getSelectField({
+        label: { labelKey: "WS_SERV_CONNECTION_CATEGORY" },
+        placeholder: { labelKey: "WS_SERV_CONNECTION_CATEGORY_PLACEHOLDER" },
+        gridDefination: { xs: 12, sm: 6 },
+        sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionCategory",
+        jsonPath: "WaterConnection[0].additionalDetails.connectionCategory",
+        // pattern: /^[0-9]*$/i,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
+      }),
+      ledgerId: getTextField({
+        label: { labelKey: "WS_SERV_DETAIL_LEDGER_ID" },
+        placeholder: { labelKey: "WS_SERV_DETAIL_LEDGER_ID_PLACEHOLDER" },
+        gridDefination: { xs: 12, sm: 6 },
+        jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
+        // pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
       dynamicMdmsWaterSource : {
@@ -277,6 +416,54 @@ export const additionDetails = getCommonCard({
         pattern: getPattern("Amount"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.roadCuttingArea"
+      }),
+      compositionFee: getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_COMPOSITION_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "WaterConnection[0].additionalDetails.compositionFee"
+      }),
+      userCharges: getTextField({
+        label: {
+          labelKey: "WS_ADDN_USER_CHARGES_LABEL"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_USER_CHARGES_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "WaterConnection[0].additionalDetails.userCharges"
+      }),
+      othersFee : getTextField({
+        label: {
+          labelKey: "WS_ADDN_OTHER_FEE_LABEL"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_OTHER_FEE_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "WaterConnection[0].additionalDetails.othersFee"
       })
     }),
   }),
@@ -346,6 +533,38 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading"
+      }),
+      meterMake: getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "WaterConnection[0].additionalDetails.meterMake"
+      }),
+      averageMake: getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "WaterConnection[0].additionalDetails.avarageMeterReading"
       })
     })
   }),

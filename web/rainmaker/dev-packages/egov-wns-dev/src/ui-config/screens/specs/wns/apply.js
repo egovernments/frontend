@@ -35,7 +35,7 @@ import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { reviewOwner } from "./applyResource/reviewOwner";
 import './index.css'
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 let isMode = isModifyMode();
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
@@ -133,7 +133,7 @@ export const documentDetails = getCommonCard({
 export const getMdmsData = async dispatch => {
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: commonConfig.tenantId,
+      tenantId: getTenantId(),
       moduleDetails: [
         { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
         { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
@@ -143,9 +143,13 @@ export const getMdmsData = async dispatch => {
           moduleName: "ws-services-masters", masterDetails: [
             { name: "Documents" },
             { name: "ModifyConnectionDocuments" },
+            { name: "connectionType" },
             { name: "waterSource" },
             { name: "connectionType" },
-            { name: "PropertySearch" }
+            { name: "PropertySearch" },
+            { name: "connectionCategory" },
+            { name: "billingType" },
+
           ]
         },
         { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" }]}

@@ -75,6 +75,156 @@ export const reviewNumberOfTaps = getLabelWithValueForModifiedLabel(
     callBack: handleNA
   }
 );
+export const reviewBillingAmount = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "No. of Taps",
+    labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.billingAmount",
+    callBack: handleNA
+  }
+);
+export const reviewBillingType = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Billing Type",
+    labelKey: "WS_SERV_DETAIL_BILLING_TYPE"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.billingType",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.billingType",
+    callBack: handleNA
+  }
+);
+export const reviewLedgerId = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "No. of Taps",
+    labelKey: "WS_SERV_DETAIL_LEDGER_ID"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.ledgerId",
+    callBack: handleNA
+  }
+);
+export const reviewConnectionCategory = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Connection Category",
+    labelKey: "WS_SERV_CONNECTION_CATEGORY"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.connectionCategory",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.connectionCategory",
+    callBack: handleNA
+  }
+);
+export const reviewCompositionFee = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Area (in sq ft)",
+    labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.compositionFee",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.compositionFee",
+    callBack: handleNA
+  }
+);
+export const reviewUserCharges = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Area (in sq ft)",
+    labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.userCharges",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.userCharges",
+    callBack: handleNA
+  }
+);
+export const reviewOthersFee = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Area (in sq ft)",
+    labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.othersFee",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.othersFee",
+    callBack: handleNA
+  }
+);
+export const reviewMeterMakeReading = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Initial Meter Reading",
+    labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE"
+  },
+  { jsonPath: "WaterConnection[0].additionalDetails.meterMake",
+    callBack: handleNA },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.meterMake",
+    callBack: handleNA
+  }
+);
+export const reviewAverageMakeReading = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Initial Meter Reading",
+    labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
+  },
+  { jsonPath: "WaterConnection[0].additionalDetails.avarageMeterReading",
+    callBack: handleNA },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].additionalDetails.avarageMeterReading",
+    callBack: handleNA
+  }
+);
+
 export const reviewWaterSource = getLabelWithValueForModifiedLabel(
   {
     labelName: "Water Source",
@@ -405,6 +555,10 @@ export const reviewOwner = (isEditable = true) => {
 const connectionDetails = getCommonContainer({
   reviewConnectionType,
   reviewNumberOfTaps,
+  reviewBillingType,
+  reviewBillingAmount,
+  reviewConnectionCategory,
+  reviewLedgerId,
   reviewWaterSource,
   reviewWaterSubSource,
   reviewPipeSize,
@@ -422,12 +576,17 @@ const connectionChargeDetails = getCommonContainer({
 
 const roadCuttingCharges = getCommonContainer({
   reviewRoadType,
-  reviewArea
+  reviewArea,
+  reviewCompositionFee,
+  reviewUserCharges,
+  reviewOthersFee
 });
 
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,
   reviewMeterId,
   reviewMeterInstallationDate,
-  reviewInitialMeterReading
+  reviewInitialMeterReading,
+  reviewMeterMakeReading,
+  reviewAverageMakeReading,
 });

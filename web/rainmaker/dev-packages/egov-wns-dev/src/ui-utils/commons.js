@@ -576,6 +576,9 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 
 const parserFunction = (state) => {
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
+    let waterDetails =get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0]", {});
+    debugger;
+    console.log(".........",waterDetails );
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
         meterInstallationDate: convertDateToEpoch(queryObject.meterInstallationDate),
@@ -598,10 +601,31 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== null
             ) ? queryObject.additionalDetails.detailsProvidedBy : "",
+            billingType: waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.billingType : null,
+      billingAmount: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.billingAmount) : null,
+      connectionCategory: waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.connectionCategory : null,
+      ledgerId: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.ledgerId) : null,
+      avarageMeterReading: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.avarageMeterReading) : null,
+      meterMake: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.meterMake) : null,
+      compositionFee: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.compositionFee) : null,
+      userCharges: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.userCharges) : null,
+      othersFee: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.othersFee) : null,
+      //meterStatus: waterDetails && waterDetails ? waterDetails.meterStatus : null,
+      // detailsProvidedBy : null,
+      adhocPenalty: null,
+      adhocPenaltyComment: null,
+      adhocPenaltyReason: null,
+      adhocRebate: null,
+      adhocRebateComment: null,
+      adhocRebateReason: null,
+      estimationFileStoreId: null,
+      sanctionFileStoreId: null,
+      estimationLetterDate: null,
         }
     }
     queryObject = { ...queryObject, ...parsedObject }
     return queryObject;
+    debugger;
 }
 
 export const prepareDocumentsUploadRedux = async (state, dispatch) => {
@@ -881,6 +905,7 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 
 export const applyForWater = async (state, dispatch) => {
     let queryObject = parserFunction(state);
+    debugger;
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     try {

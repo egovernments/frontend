@@ -764,6 +764,9 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
 };
 
 const parserFunction = (obj) => {
+  let waterDetails = get(obj, "additionalDetails", {});
+  console.log(".........",waterDetails );
+  debugger;
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
@@ -781,6 +784,26 @@ const parserFunction = (obj) => {
         obj.additionalDetails.detailsProvidedBy !== undefined &&
         obj.additionalDetails.detailsProvidedBy !== null
       ) ? obj.additionalDetails.detailsProvidedBy : "",
+      billingType: waterDetails && waterDetails ? waterDetails.billingType : null,
+      billingAmount: waterDetails && waterDetails ? parseFloat(waterDetails.billingAmount) : null,
+      connectionCategory: waterDetails && waterDetails ? waterDetails.connectionCategory : null,
+      ledgerId: waterDetails && waterDetails ? parseFloat(waterDetails.ledgerId) : null,
+      avarageMeterReading: waterDetails && waterDetails ? parseFloat(waterDetails.avarageMeterReading) : null,
+      meterMake: waterDetails && waterDetails ? parseFloat(waterDetails.meterMake) : null,
+      compositionFee: waterDetails && waterDetails ? parseFloat(waterDetails.compositionFee) : null,
+      userCharges: waterDetails && waterDetails ? parseFloat(waterDetails.userCharges) : null,
+      othersFee: waterDetails && waterDetails ? parseFloat(waterDetails.othersFee) : null,
+      //meterStatus: waterDetails && waterDetails ? waterDetails.meterStatus : null,
+      // detailsProvidedBy : null,
+      adhocPenalty: null,
+      adhocPenaltyComment: null,
+      adhocPenaltyReason: null,
+      adhocRebate: null,
+      adhocRebateComment: null,
+      adhocRebateReason: null,
+      estimationFileStoreId: null,
+      sanctionFileStoreId: null,
+      estimationLetterDate: null,
     },
     dateEffectiveFrom: convertDateToEpoch(obj.dateEffectiveFrom),
     noOfTaps: parseInt(obj.noOfTaps),
@@ -789,6 +812,7 @@ const parserFunction = (obj) => {
   }
   obj = { ...obj, ...parsedObject }
   return obj;
+  debugger;
 }
 
 const processBills = async (data, viewBillTooltip, dispatch) => {

@@ -60,8 +60,10 @@ class MultiItem extends React.Component {
       this.initMultiItem(nextProps);
     }else if(!isEqual(get(nextProps,`preparedFinalObject.${nextProps.sourceJsonPath}`,[]), get(this.props,`preparedFinalObject.${this.props.sourceJsonPath}`,[]))) {
       this.initMultiItem(nextProps);
+      debugger;
     }else if(get(nextProps,`preparedFinalObject.${nextProps.sourceJsonPath}`,[]).length!==get(this.props,`items`,[]).length) {
       this.initMultiItem(nextProps);
+      debugger;
     }
   }
 
