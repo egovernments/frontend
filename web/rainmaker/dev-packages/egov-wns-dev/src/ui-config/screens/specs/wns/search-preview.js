@@ -341,7 +341,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
      if(newRoad.length!=0){
       set(
         action,
-        "screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.children.cardContent.children.roadCharges.visible",
+        "screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.visible",
         true
       );
       dispatch(prepareFinalObject("WaterConnection[0].tempRoadType",newRoad));

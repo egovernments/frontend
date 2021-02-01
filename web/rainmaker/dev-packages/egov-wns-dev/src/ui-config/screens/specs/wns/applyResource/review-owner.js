@@ -242,12 +242,13 @@ roadCharges: {
     }),
     items: [],
     hasAddItem: false,
-    visible:false,
+    //visible:false,
+    isReviewPage: true,
     sourceJsonPath: "WaterConnection[0].tempRoadType",
     prefixSourceJsonPath: "children.cardContent.children.viewEight.children",
     afterPrefixJsonPath: "children.value.children.key"
   },
-  visible:false,
+  //visible:false,
   type: "array"
 },})
 
