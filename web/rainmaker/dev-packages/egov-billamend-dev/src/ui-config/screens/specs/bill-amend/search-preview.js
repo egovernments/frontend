@@ -158,6 +158,7 @@ const setDownloadMenu = (state, dispatch,  applicationNumber) => {
 
     switch (status) {
         case "ACTIVE":
+        case "CONSUMED":
             downloadMenu = [applicationDownloadObject,
                 certificateDownloadObject
             ];
@@ -170,7 +171,8 @@ const setDownloadMenu = (state, dispatch,  applicationNumber) => {
             printMenu = [applicationPrintObject];
             break;
         default:
-            break;
+            downloadMenu = [applicationDownloadObject];
+            printMenu = [applicationPrintObject];
     }
     dispatch(
         handleField(
