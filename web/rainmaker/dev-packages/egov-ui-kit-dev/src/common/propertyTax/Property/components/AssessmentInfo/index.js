@@ -154,11 +154,56 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
   )
   return floors;
 }
+const getVasikaItems = (additionalDetails) => {
+debugger;
+console.log("===========additionalDetails",additionalDetails);
+  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)? convertLocalDate( additionalDetails.vasikaDate):null;
+ var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? convertLocalDate( additionalDetails.allotmentDate):null;
 
+  return (
+    additionalDetails && [
+          {
+            key: "PT_COMMON_VASIKA_NO",
+            value:  additionalDetails.vasikaNo || "NA", //noOfFloors
+          },
+          {
+            key: "PT_COMMON_VASIKA_DATE",
+            value: vasika_date ? `${vasika_date}` : "NA",
+          },
+          {
+            key: "PT_COMMON_ALLOTMENT_NO",
+            value:  additionalDetails.allotmentNo || "NA",
+          },
+          {
+            key: "PT_COMMON_ALLOTMENT_DATE",
+            value: allotment_date ? `${allotment_date}` : "NA",
+          },
+          {
+            key: "PT_COMMON_BUSSINESS_NAME",
+            value:  additionalDetails.businessName || "NA",
+          },
+          {
+            key: "PT_COMMON_REMARKS",
+            value:  additionalDetails.remrks || "NA",
+          },
+          {
+            key: "PT_COMMON_INFLAMMABLE_MATERIAL_PROPERTY",
+            value:  additionalDetails.inflammable === true ? "Yes" : "No",
+          },
+          {
+            key: "PT_COMMON_HEIGHT_OF_PROPERTY",
+            value: additionalDetails.heightAbove36Feet=== true ? "Yes" : "No",
+          },
+          
+
+        ]
+      );
+}
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty }) => {
   let hideSubsectionLabel = false;
   let assessmentItems = [];
   let subUnitItems = [];
+  let subVasikaItems = [];
   let oldPropertydetails = '';
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
   if (OldProperty && Object.keys(OldProperty).length > 0) {
@@ -168,6 +213,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0], oldPropertydetails);
+      subVasikaItems = getVasikaItems(additionalDetails);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById, properties, oldPropertydetails, OldProperty);
       if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
         hideSubsectionLabel = true;
@@ -176,7 +222,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty
   }
 
   return (
-    <PropertyInfoCard editIcon={editIcon} items={assessmentItems} header={header} subSection={subUnitItems} hideSubsectionLabel={hideSubsectionLabel} ></PropertyInfoCard>
+    <PropertyInfoCard editIcon={editIcon} items={assessmentItems} header={header} items2={subVasikaItems} subSection={subUnitItems} hideSubsectionLabel={hideSubsectionLabel} ></PropertyInfoCard>
   );
 };
 
