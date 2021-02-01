@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { getSearchResults } from "../../ui-utils/commons";
 import { FIRENOC } from "egov-ui-kit/utils/endPoints";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 class PaymentRedirect extends Component {
   componentDidMount = async () => {
@@ -14,7 +15,7 @@ class PaymentRedirect extends Component {
     try {
       let pgUpdateResponse = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_update" + search,
+        PGService.UPDATE.URL + search,
         "_update",
         [],
         {}

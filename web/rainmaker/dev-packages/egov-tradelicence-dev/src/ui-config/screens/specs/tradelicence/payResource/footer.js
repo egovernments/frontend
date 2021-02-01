@@ -15,6 +15,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getBill } from "../../utils";
 import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/endPoints";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 export const callPGService = async (state, dispatch) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -72,7 +73,7 @@ export const callPGService = async (state, dispatch) => {
       };
       const goToPaymentGateway = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_create",
+        PGService.CREATE.URL,
         "_create",
         [],
         requestBody

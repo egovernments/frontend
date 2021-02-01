@@ -11,6 +11,7 @@ import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { FIRENOC } from "egov-ui-kit/utils/endPoints";
 import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/endPoints";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 export const callPGService = async (state, dispatch) => {
  
@@ -77,7 +78,7 @@ export const callPGService = async (state, dispatch) => {
       };
       const goToPaymentGateway = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_create",
+        PGService.CREATE.URL,
         "_create",
         [],
         requestBody

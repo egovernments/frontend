@@ -153,8 +153,16 @@ export const DRAFT = {
 
 export const PGService = {
   GET: {
-    URL: "/pg-service/transaction/v1/_search",
+    URL: "/payment-gateway/transaction/v1/_search",
     ACTION: "_get",
+  },
+  UPDATE: {
+    URL: "/payment-gateway/transaction/v1/_update",
+    ACTION: "_update",
+  },
+  CREATE: {
+    URL: "/payment-gateway/transaction/v1/_create",
+    ACTION: "_create",
   },
 };
 
@@ -528,4 +536,3 @@ export const BPA = {
     URL : "/building-plan/v1/bpa/_permitorderedcr",
   },
 };
-

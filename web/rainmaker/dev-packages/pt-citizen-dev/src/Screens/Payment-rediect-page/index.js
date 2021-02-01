@@ -4,6 +4,7 @@ import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import get from "lodash/get";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 class PaymentRedirect extends React.Component {
   componentWillMount() {
@@ -14,7 +15,7 @@ class PaymentRedirect extends React.Component {
     let { search } = this.props.location;
     try {
       let pgUpdateResponse = await httpRequest(
-        "pg-service/transaction/v1/_update" + search,
+        PGService.UPDATE.URL + search,
         "_update",
         [],
         {}

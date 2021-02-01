@@ -11,6 +11,7 @@ import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../util
 import { paybuttonJsonpath } from "./constants";
 import { COLLECTION_RECEIPTS } from "egov-ui-kit/utils/commons";
 import "./index.css";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 const checkAmount = (totalAmount, customAmount, businessService) => {
   if (totalAmount !== 0 && customAmount === 0) {
@@ -126,7 +127,7 @@ export const callPGService = async (state, dispatch) => {
     };
     const goToPaymentGateway = await httpRequest(
       "post",
-      "pg-service/transaction/v1/_create",
+      PGService.CREATE.URL,
       "_create",
       [],
       requestBody

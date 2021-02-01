@@ -3,6 +3,7 @@ import get from "lodash/get";
 import { httpRequest } from "../../ui-utils/api";
 import { withRouter } from "react-router";
 import { getAppSearchResults } from "../../ui-utils/commons";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 class BpaPaymentRedirect extends Component {
   componentDidMount = async () => {
@@ -10,7 +11,7 @@ class BpaPaymentRedirect extends Component {
     try {
       let pgUpdateResponse = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_update" + search,
+        PGService.UPDATE.URL + search,
         "_update",
         [],
         {}
