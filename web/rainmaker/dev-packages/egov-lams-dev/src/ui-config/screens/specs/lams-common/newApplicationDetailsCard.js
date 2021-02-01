@@ -1139,7 +1139,7 @@ export const OwnerInfoCard = getCommonCard(
             infoIcon: "info_circle",
             gridDefination: {
               xs: 12,
-              sm: 4
+              sm: 6
             }
           }),
           ownerName: getTextField({
@@ -1159,7 +1159,7 @@ export const OwnerInfoCard = getCommonCard(
             jsonPath: "lamsStore.Lease[0].userDetails[0].name",
             gridDefination: {
               xs: 12,
-              sm: 4
+              sm: 6
             }
           }),
           getFatherNameField: getTextField({
@@ -1180,7 +1180,26 @@ export const OwnerInfoCard = getCommonCard(
               "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName",
             gridDefination: {
               xs: 12,
-              sm: 4
+              sm: 6
+            }
+          }),
+          getOwnerEmailField: getTextField({
+            label: {
+              labelName: "Email",
+              labelKey: "LAMS_APPLICANT_EMAIL_LABEL"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Email",
+              labelKey: "LAMS_APPLICANT_EMAIL_PLACEHOLDER"
+            },
+            pattern: getPattern("Email"),
+            jsonPath: "lamsStore.Lease[0].userDetails[0].emailId",
+            gridDefination: {
+              xs: 12,
+              sm: 6
             }
           }),
           info1: getCommonCaption({
@@ -1317,21 +1336,7 @@ export const OwnerInfoCard = getCommonCard(
           //     }
           //   })
           // },
-          // getOwnerEmailField: getTextField({
-          //   label: {
-          //     labelName: "Email",
-          //     labelKey: "LAMS_APPLICANT_EMAIL_LABEL"
-          //   },
-          //   props:{
-          //     className:"applicant-details-error"
-          //   },
-          //   placeholder: {
-          //     labelName: "Enter Email",
-          //     labelKey: "LAMS_APPLICANT_EMAIL_PLACEHOLDER"
-          //   },
-          //   pattern: getPattern("Email"),
-          //   jsonPath: "lamsStore.Lease[0].userDetails[0].emailId"
-          // }),
+          // 
           // ownerPAN: getTextField({
           //   label: {
           //     labelName: "PAN No.",
