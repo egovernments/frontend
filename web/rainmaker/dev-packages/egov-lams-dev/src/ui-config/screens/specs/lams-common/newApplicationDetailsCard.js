@@ -1183,6 +1183,21 @@ export const OwnerInfoCard = getCommonCard(
               sm: 4
             }
           }),
+          getOwnerEmailField: getTextField({
+            label: {
+              labelName: "Email",
+              labelKey: "LAMS_APPLICANT_EMAIL_LABEL"
+            },
+            props:{
+              className:"applicant-details-error"
+            },
+            placeholder: {
+              labelName: "Enter Email",
+              labelKey: "LAMS_APPLICANT_EMAIL_PLACEHOLDER"
+            },
+            pattern: getPattern("Email"),
+            jsonPath: "lamsStore.Lease[0].userDetails[0].emailId"
+          }),
           info1: getCommonCaption({
               labelName: "Note: This is only used to get the citizen information. Citizen Details cannot not be updated from here.",
               labelKey: "LAMS_APPL_DETAILS_NOTE"
@@ -1317,21 +1332,7 @@ export const OwnerInfoCard = getCommonCard(
           //     }
           //   })
           // },
-          // getOwnerEmailField: getTextField({
-          //   label: {
-          //     labelName: "Email",
-          //     labelKey: "LAMS_APPLICANT_EMAIL_LABEL"
-          //   },
-          //   props:{
-          //     className:"applicant-details-error"
-          //   },
-          //   placeholder: {
-          //     labelName: "Enter Email",
-          //     labelKey: "LAMS_APPLICANT_EMAIL_PLACEHOLDER"
-          //   },
-          //   pattern: getPattern("Email"),
-          //   jsonPath: "lamsStore.Lease[0].userDetails[0].emailId"
-          // }),
+          // 
           // ownerPAN: getTextField({
           //   label: {
           //     labelName: "PAN No.",

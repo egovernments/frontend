@@ -1053,7 +1053,7 @@ export const prepareRequestBodyForLeaseAppPdf = (state, dispatch , forEsign) =>{
   requestBody.fatherOrHusbandName = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName");
   requestBody.name = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].name");
   requestBody.located = (get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"located") === "insideCivil") ? 1: 2;
-
+  requestBody.mobileNo = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].mobileNumber");
   requestBody.forEsign = forEsign;
 
   let reqWrapper = {"leaseApplication":[requestBody]}
