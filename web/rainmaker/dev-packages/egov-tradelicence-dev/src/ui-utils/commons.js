@@ -375,7 +375,10 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // set(queryObject[0], "financialYear", currentFinancialYr);
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
     }
-
+    const channel = getQueryArg(window.location.href, "channel");
+    if(channel !=null){
+    set(queryObject[0], "tradeLicenseDetail.channel", channel);}
+    
     set(queryObject[0], "tenantId", tenantId);
     if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL" || get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "RENEWAL") {
       set(queryObject[0], "workflowCode", "EDITRENEWAL");
@@ -436,13 +439,15 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
         ];
         const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
+        let renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
+        renewalDocuments = renewalDocuments ? renewalDocuments : [];
         for (let i = 1; i <= documents.length; i++) {
-          if (i > renewalDocuments.length) {
+          if (renewalDocuments && i > renewalDocuments.length) {
             renewalDocuments.push(documents[i-1])
           }
           else{
              if(!documents[i-1].hasOwnProperty("id")){
+              renewalDocuments[i-1] = {};
              renewalDocuments[i-1].active=false;
              renewalDocuments.push(documents[i-1])
              }
@@ -455,6 +460,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       const isRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
+     
+
       let updateResponse = [];
       if (!isEditFlow) {
         let oldOwners = JSON.parse(

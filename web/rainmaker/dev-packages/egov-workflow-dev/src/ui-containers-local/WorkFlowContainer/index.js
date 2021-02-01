@@ -220,22 +220,25 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
     }
+    if (moduleName === "FIRENOC") {
+
+      set(data[0], "fireNOCDetails.tenantId",get(data[0], "tenantId", ""));
+
+    }
     this.props.showSpinner();
     try {
       if(get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.action") === "SENDBACKTOCITIZEN") {
         data[0].fireNOCDetails.status = "CITIZENACTIONREQUIRED";
         data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
       }
-      data.map((items, index) => {
-       if( items.fireNOCDetails.applicationNumber != applicationNumber ) {
+      data && data.length > 0 && data.map((items, index) => {
+       if( items.fireNOCDetails && items.fireNOCDetails.applicationNumber != applicationNumber ) {
          data.splice(index, 1)
        }
       })
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
-
-
       this.setState({
         open: false
       });
@@ -362,7 +365,7 @@ class WorkFlowContainer extends React.Component {
       const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
       const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
 
-      if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
+      if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
           this.wfUpdate(label);
        }
        else{

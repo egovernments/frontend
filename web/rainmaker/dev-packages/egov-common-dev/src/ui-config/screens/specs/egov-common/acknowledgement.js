@@ -6,11 +6,17 @@ import get from "lodash/get";
 import { ifUserRoleExists } from "../utils";
 import {download} from  "../../../../ui-utils/commons";
 import {getHeader} from "./pay";
+import { httpRequest } from "../../../../ui-utils/api";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import './index.css';
 
 
 const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
-    const receiptKey = get(uiCommonPayConfig, "receiptKey")
+    const receiptKey = get(uiCommonPayConfig, "receiptKey");
+    const businessService=get(state.screenConfiguration.preparedFinalObject,"Licenses[0].businessService");
+    const applicationType=get(state.screenConfiguration.preparedFinalObject,"Licenses[0].applicationType")?get(state.screenConfiguration.preparedFinalObject,"Licenses[0].applicationType"):"NA";
+    const workflowCode=get(state.screenConfiguration.preparedFinalObject,"Licenses[0].workflowCode")?get(state.screenConfiguration.preparedFinalObject,"Licenses[0].workflowCode"):"NA";
+
       let receiptDownloadObject = {
         label: { labelName: "DOWNLOAD RECEIPT", labelKey: "COMMON_DOWNLOAD_RECEIPT" },
         link: () => {
@@ -34,10 +40,33 @@ const downloadprintMenu=(state,applicationNumber,tenantId,uiCommonPayConfig)=>{
         },
         leftIcon: "receipt"
       };
+      let tlCertificateDownloadObject = {
+        label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+        link: () => {
+          const { Licenses } = state.screenConfiguration.preparedFinalObject;
+          downloadCertificateForm(Licenses,applicationNumber,tenantId,);
+        },
+        leftIcon: "book"
+      };
+      let tlCertificatePrintObject = {
+        label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+        link: () => {
+          const { Licenses } = state.screenConfiguration.preparedFinalObject;
+          downloadCertificateForm(Licenses,applicationNumber,tenantId,'print');
+        },
+        leftIcon: "book"
+      };
     let downloadMenu = [];
     let printMenu = [];
+    if(businessService == "TL" && applicationType == "RENEWAL" && workflowCode == "DIRECTRENEWAL")
+    {
+        downloadMenu = [receiptDownloadObject,tlCertificateDownloadObject];
+        printMenu = [receiptPrintObject,tlCertificatePrintObject];
+    }
+    else{
         downloadMenu = [receiptDownloadObject];
         printMenu = [receiptPrintObject];
+    }  
     
   
       return {
@@ -143,6 +172,66 @@ const getAcknowledgementCard = (
         };
     }
 };
+const downloadCertificateForm = async(LicensesOld,applicationNumber,tenantId,mode='download') => {
+    const applicationType= LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"applicationType") : "NEW";
+    const workflowCode=LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"workflowCode"):"EDITRENEWAL";
+   
+     const queryStr = [
+       { key: "key", value:workflowCode==="DIRECTRENEWAL"?"tlrenewalcertificate": "tlcertificate" },
+       { key: "tenantId", value: "pb" }
+     ]
+     const DOWNLOADRECEIPT = {
+       GET: {
+         URL: "/pdf-service/v1/_create",
+         ACTION: "_get",
+       },
+     };
+     let queryObject = [
+       { key: "tenantId", value: tenantId},
+       {
+         key: "applicationNumber",
+         value: LicensesOld[0].applicationNumber
+       }
+     ];
+     const LicensesPayload = await getSearchResults(queryObject);
+     const Licenses=get(LicensesPayload,"Licenses");
+     const oldFileStoreId=get(Licenses[0],"fileStoreId")
+     if(oldFileStoreId){
+       downloadReceiptFromFilestoreID(oldFileStoreId,mode)
+     }
+     else{
+     try { 
+       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+         .then(res => {
+           res.filestoreIds[0]
+           if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+             res.filestoreIds.map(fileStoreId => {
+               downloadReceiptFromFilestoreID(fileStoreId,mode)
+             })
+           } else {
+             console.log("Error In Acknowledgement form Download");
+           }
+         });
+     } catch (exception) {
+       alert('Some Error Occured while downloading Acknowledgement form!');
+     }
+   }
+   };
+
+   const getSearchResults = async queryObject => {
+    try {
+      const response = await httpRequest(
+        "post",
+        "/tl-services/v1/_search",
+        "",
+        queryObject
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      return {};
+    }
+  };
 const screenConfig = {
     uiFramework: "material-ui",
     name: "acknowledgement",

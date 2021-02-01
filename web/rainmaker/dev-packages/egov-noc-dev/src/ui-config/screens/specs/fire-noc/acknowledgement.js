@@ -440,6 +440,7 @@ const getAcknowledgementCard = (
       gotoHomeFooter
     };
   } else if (purpose === "refer" && status === "success") {
+
     return {
       header,
       applicationSuccessCard: {

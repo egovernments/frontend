@@ -594,7 +594,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         "payload[1]",
         data
       );
-
+      set(payload[0], "fireNOCDetails.tenantId",get(payload[0], "tenantId", ""));
     let response;
     if (method === "CREATE") {
       response = await httpRequest(
@@ -608,6 +608,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
+
       let isEdited = getQueryArg(window.location.href, "action") === "edit";
       if(!isEdited) {
 
