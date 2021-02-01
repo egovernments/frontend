@@ -189,6 +189,8 @@ const screenConfig = {
     dispatch(prepareFinalObject("BILL", {}));
     dispatch(prepareFinalObject("Amendment", {}));
     dispatch(prepareFinalObject("AmendmentTemp", {}));
+    dispatch(prepareFinalObject("documentsUploadRedux", {}));
+    dispatch(prepareFinalObject("documentsContract", []));
     getData(action, state, dispatch).then(responseAction => {
 
     });
