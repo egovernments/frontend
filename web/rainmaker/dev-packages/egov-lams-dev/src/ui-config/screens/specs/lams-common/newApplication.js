@@ -182,7 +182,16 @@ const newApplication = {
       },
       visible: checkIfCitizenEditScreen()?false:true
     },
-    newApplicationDocumentsCard,
+    div3:{
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+      },
+      children: {
+        details: newApplicationDocumentsCard
+      },
+      visible: false
+    },
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
