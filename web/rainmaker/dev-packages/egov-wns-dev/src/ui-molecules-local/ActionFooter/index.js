@@ -127,14 +127,14 @@ class Footer extends React.Component {
     };
     //if(applicationType === "MODIFY"){
     downloadMenu && downloadMenu.push(editButton);
-    if (
+   /* if (
       businessService.includes("ws-services-calculation") ||
       businessService.includes("sw-services-calculation")
     ) {
       if (bill.Bill && bill.Bill.length > 0) {
         downloadMenu && downloadMenu.push(BillAmendment);
       }
-    }
+    }*/
 
     //}
     const buttonItems = {
