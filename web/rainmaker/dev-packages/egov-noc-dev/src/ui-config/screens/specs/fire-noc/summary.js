@@ -36,7 +36,7 @@ const prepareDocumentsView = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.documentsUploadRedux",
     {}
   );
-  jp.query(reduxDocuments, "$.*").forEach(doc => {
+  jp.query(reduxDocuments, "$.*").forEach((doc, index) => {
     if (doc.documents && doc.documents.length > 0) {
       documentsPreview.push({
         title: getTransformedLocale(doc.documentCode),
@@ -44,6 +44,11 @@ const prepareDocumentsView = async (state, dispatch) => {
         fileStoreId: doc.documents[0].fileStoreId,
         linkText: "View"
       });
+      if(doc && doc.dropdown && doc.dropdown.value) {
+        documentsPreview[index].dropdown = {
+          value : doc.dropdown.value
+        }
+      }
     }
   });
   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");

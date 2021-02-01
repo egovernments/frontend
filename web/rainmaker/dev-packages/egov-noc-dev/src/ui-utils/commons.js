@@ -451,7 +451,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       let finalUoms = [];
       allUoms.forEach(uom => {
         let value = get(building.uomsMap, uom);
-        value &&
+        (value == 0 || value > 0) &&
           finalUoms.push({
             code: uom,
             value: parseInt(value),
@@ -512,11 +512,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         uploadedDocs
       );
     });
-
+    
     // Set owners & other documents
     let ownerDocuments = [];
     let otherDocuments = [];
-    jp.query(reduxDocuments, "$.*").forEach(doc => {
+    jp.query(reduxDocuments, "$.*").forEach((doc, index) => {
       if (doc.documents && doc.documents.length > 0) {
         if (doc.documentType === "OWNER") {
           ownerDocuments = [
@@ -529,6 +529,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
               fileStoreId: doc.documents[0].fileStoreId
             }
           ];
+          if(doc && doc.dropdown && doc.dropdown.value) {
+            ownerDocuments[index].dropdown = {
+              value : doc.dropdown.value
+            }
+          }
         } else if (!doc.documentSubCode) {
           // SKIP BUILDING PLAN DOCS
           otherDocuments = [
@@ -539,6 +544,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
               fileStoreId: doc.documents[0].fileStoreId
             }
           ];
+          if(doc && doc.dropdown && doc.dropdown.value) {
+            ownerDocuments[index].dropdown = {
+              value : doc.dropdown.value
+            }
+          }
         }
       }
     });
@@ -598,6 +608,10 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
+
+      let isEdited = getQueryArg(window.location.href, "action") === "edit";
+      if(!isEdited) {
+
         response = await httpRequest(
           "post",
           "/firenoc-services/v1/_update",
@@ -607,6 +621,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         );
         response = furnishNocResponse(response);
         dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+      }
     }
 
     return { status: "success", message: response };
@@ -779,7 +794,9 @@ export const furnishNocResponse = response => {
     let uoms = get(building, "uoms", []);
     let uomMap = {};
     uoms.forEach(uom => {
-      uomMap[uom.code] = `${uom.value}`;
+      if(uom.active == true){
+        uomMap[uom.code] = `${uom.value}`;
+      }
     });
     set(
       response,
