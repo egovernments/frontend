@@ -85,7 +85,8 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     const documentsUploadRedux = get(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const estimate = get(preparedFinalObject, 'taxHeadEstimates', []);
+    let estimate = get(preparedFinalObject, 'taxHeadEstimates', []);
+    estimate = estimate && estimate.filter(est=>est.estimateAmount!=0);
     let formattedFees =estimate && estimate.map((taxHead) => {
       return {
         info: {

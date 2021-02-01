@@ -335,21 +335,16 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.address.locality.code")));
     }
   }
-  set(
-    action,
-    "screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.visible",
-    false
-  );
+ 
 
   let roadTypes = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].roadTypeEst",[]);
      let newRoad =  roadTypes && roadTypes.filter(roadType=>(roadType.length!=0 && roadType.breadth!=0 && roadType.depth!=0 && roadType.rate!=0));
      if(newRoad.length!=0){
-      set(
-        action,
-        "screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.visible",
-        true
-      );
+     
       dispatch(prepareFinalObject("WaterConnection[0].tempRoadType",newRoad));
+     }
+     else{
+     
      }
   
 };
@@ -819,7 +814,7 @@ const parserFunction = (obj) => {
     proposedWaterClosets: parseInt(obj.proposedWaterClosets),
     proposedToilets: parseInt(obj.proposedToilets),
     roadCuttingArea: parseInt(obj.roadCuttingArea),
-    additionalDetails: {
+    additionalDetails: {...obj.additionalDetails,
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.initialMeterReading !== undefined

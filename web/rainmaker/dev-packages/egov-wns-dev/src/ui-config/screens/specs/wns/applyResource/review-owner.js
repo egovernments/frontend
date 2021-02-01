@@ -33,7 +33,7 @@ const connectionChargeDetailsHeader = getHeader({
 });
 
 const roadCuttingChargesHeader = getHeader({
-  labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+  labelKey: "WS_ROAD_CUTTING__DETAILS"
 });
 
 const activationDetailsHeader = getHeader({
@@ -101,7 +101,7 @@ export const getReviewOwner = (isEditable = true) => {
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
     viewNine: roadCuttingChargesHeader,
-    viewTen: roadCuttingCharges,
+    viewTen: getRoadCharges(),
     viewEleven: activationDetailsHeader,
     viewTwelve: activationDetails
   })
@@ -230,12 +230,13 @@ export const roadDetails={
 
 }
 
-const roadCuttingCharges = getCommonGrayCard({
 
-roadCharges: {
+  const getRoadCharges = ()=>{
+    return({
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
+    className: "common-div-css search-preview",
     scheama: getCommonGrayCard({
       viewEight: getCommonContainer(roadDetails)
 
@@ -243,14 +244,16 @@ roadCharges: {
     items: [],
     hasAddItem: false,
     //visible:false,
-    isReviewPage: true,
+    //isReviewPage: true,
     sourceJsonPath: "WaterConnection[0].tempRoadType",
     prefixSourceJsonPath: "children.cardContent.children.viewEight.children",
     afterPrefixJsonPath: "children.value.children.key"
   },
   //visible:false,
   type: "array"
-},})
+})
+}
+  
 
 
 
