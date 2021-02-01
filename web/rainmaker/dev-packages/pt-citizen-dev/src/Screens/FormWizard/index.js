@@ -38,6 +38,7 @@ import { getDocumentTypes } from "./utils/mdmsCalls";
 import { PROPERTY } from "egov-ui-kit/utils/endPoints";
 import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
 import { PROPERTYTAX_CAL_GETBILL, PROPERTYTAX_CAL_ESTIMATE } from "egov-ui-kit/utils/endPoints";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 class FormWizard extends Component {
   state = {
@@ -1122,7 +1123,7 @@ class FormWizard extends Component {
           }
         };
         const goToPaymentGateway = await httpRequest(
-          "pg-service/transaction/v1/_create",
+          PGService.CREATE.URL,
           "_create",
           [],
           requestBody

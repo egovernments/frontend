@@ -8,6 +8,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
+import { PGService } from "egov-ui-kit/utils/endPoints";
 
 class PaymentRedirect extends Component {
   getBusinessServiceMdmsData = async (tenantId) => {
@@ -56,7 +57,7 @@ class PaymentRedirect extends Component {
     try {
       let pgUpdateResponse = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_update" + txnQuery,
+        PGService.UPDATE.URL + txnQuery,
         "_update",
         [],
         {}
