@@ -120,6 +120,7 @@ import {
       setVisibilityLeaseDetails(action, state, dispatch, false);
       setVisibilityDownloadButton(action, state, dispatch, false);
       setVisibilityEsignButton(action, state, dispatch, false);
+      setVisibilityDocuments(action, state, dispatch, false);;
       //setVisibilityMonths(action, state, dispatch, false);
     }
   }
@@ -138,6 +139,7 @@ import {
       setVisibilityLeaseDetails(action, state, dispatch,true);
       setVisibilityDownloadButton(action, state, dispatch, true);
       setVisibilityEsignButton(action, state, dispatch, (process.env.REACT_APP_NAME === "Citizen"));
+      setVisibilityDocuments(action, state, dispatch, true);;
       //setVisibilityMonths(action, state, dispatch, true);
     }
   }
@@ -181,13 +183,13 @@ import {
 
     if(!isPostDSignMode())
     {
-      dispatch(
-        handleField(
-        "newApplication",
-        "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
-        "props.value",
-        "")
-      );
+      // dispatch(
+      //   handleField(
+      //   "newApplication",
+      //   "components.div1.children.details.children.cardContent.children.optionSelection.children.surveyNo", //"components.newApplicationDetailsCard.children.cardContent.children.surveyNo",
+      //   "props.value",
+      //   "")
+      // );
 
       dispatch(
         handleField(
@@ -201,7 +203,8 @@ import {
       setVisibilityLeaseDetails(action, state, dispatch, false);
       setVisibilityLocated(action, state, dispatch, true);
       setVisibilityDownloadButton(action, state, dispatch, false);
-      setVisibilityEsignButton(action, state, dispatch, false)
+      setVisibilityEsignButton(action, state, dispatch, false);
+      setVisibilityDocuments(action, state, dispatch, false);;
       //setVisibilityMonths(action, state, dispatch, false);
 
     }
@@ -227,6 +230,7 @@ import {
       setVisibilitySurveyNo(action, state, dispatch, false);
       setVisibilityDownloadButton(action, state, dispatch, false);
       setVisibilityEsignButton(action, state, dispatch, false);
+      setVisibilityDocuments(action, state, dispatch, false);
       //setVisibilityMonths(action, state, dispatch, false);
     }
     
@@ -448,6 +452,33 @@ import {
         handleField(
           "newApplication",
         "components.div1.children.details.children.cardContent.children.optionSelection.children.eSignApplication",
+          "props.disabled",
+          disabled
+        )
+      );
+    }
+  }
+
+  const setVisibilityDocuments = (action, state, dispatch, visible, disabled) =>{
+
+    if(get(state, "screenConfiguration.preparedFinalObject.lamsStore.Lease[0].surveyNo"))
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+          "components.div3",
+          "visible",
+          visible
+        )
+      );
+    }
+    
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+        "screenConfig.newApplication.components.div3",
           "props.disabled",
           disabled
         )
