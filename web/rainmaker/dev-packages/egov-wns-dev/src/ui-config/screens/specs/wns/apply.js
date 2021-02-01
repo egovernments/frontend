@@ -592,8 +592,10 @@ const getIndividualTaxheads = (item,index,dispatch) =>{
          
           componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children.taxheadField_${item.code.split(".").join("_")}`,
           pattern: getPattern("DecimalNumber"),
-          visible:true,
+         // visible:true,
+         visible: item.code.endsWith('_ROAD_CUTTING_CHARGE')? false: true,
           jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
+
           props: {
             type:"number",
             jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
@@ -757,8 +759,37 @@ const screenConfig = {
          )
        );
 
+       //Make taxHead visible to false initially
+       dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer",
+          "visible",
+          false
+        )
+      );
+
        //Setting Tax heads and Road Types
           if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+
+            //show tax head estimates to only field inspector and doc verifier
+            let workFlowStatus = get(
+              state,
+              "screenConfiguration.preparedFinalObject.applyScreen.applicationStatus",
+              []
+            );
+            if(workFlowStatus === "PENDING_FOR_DOCUMENT_VERIFICATION" || workFlowStatus === "PENDING_FOR_FIELD_INSPECTION"){
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer",
+                  "visible",
+                  true
+                )
+              );
+            }
+         
+               
 
             //Create tax head object ---start
             let taxHeadDetails = get(
@@ -837,6 +868,8 @@ const screenConfig = {
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
           }
+          console.info("IF -1");
+          
         } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {   
 
           togglePropertyFeilds(action, true);
@@ -853,6 +886,8 @@ const screenConfig = {
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
             }
+
+            console.info("IF -2");
         } else {
           togglePropertyFeilds(action, false)
           if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -865,6 +900,8 @@ const screenConfig = {
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
           }
+
+          console.info("IF -3");
         }
 
    // });

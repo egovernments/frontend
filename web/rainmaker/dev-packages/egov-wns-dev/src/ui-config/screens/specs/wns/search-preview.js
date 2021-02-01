@@ -140,7 +140,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       } else {
         set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible", false);
       }
-      if (processInstanceAppStatus === "PENDING_FOR_FIELD_INSPECTION") {
+      //Call estimate for both field inspector and doc verifier
+      if (processInstanceAppStatus === "PENDING_FOR_FIELD_INSPECTION" || processInstanceAppStatus === "PENDING_FOR_DOCUMENT_VERIFICATION") {
         let queryObjectForEst = [{
           applicationNo: applicationNumber,
           tenantId: tenantId,
