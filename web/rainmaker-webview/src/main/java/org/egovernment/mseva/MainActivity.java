@@ -9,17 +9,21 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -69,9 +73,9 @@ import android.app.DownloadManager;
 //import java.io.InputStream;
 //import java.io.OutputStream;
 
-
 import org.egovernment.mseva.BuildConfig;
 import org.egovernment.mseva.R;
+
 
 import static android.webkit.CookieManager.*;
 
@@ -116,7 +120,16 @@ public class MainActivity extends AppCompatActivity implements  ViewTreeObserver
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
-    @Override
+//	private static int RETRIES_MAX_NUMBER = 3; //nr of retries
+//	private static int alreadyRetried;
+//	private static boolean isEntered = false;
+	private DownloadManager downloadManager = null;
+	private long lastDownload=-1L;
+
+
+
+
+	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -241,8 +254,10 @@ public class MainActivity extends AppCompatActivity implements  ViewTreeObserver
 						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 							== PackageManager.PERMISSION_GRANTED) {
 							Log.v(TAG,"Permission is granted");
-							long downloadRef = downloadDialog(url,userAgent,contentDisposition,mimeType);
-							if (downloadRef != 0) {
+							lastDownload = downloadDialog(url,userAgent,contentDisposition,mimeType);
+
+
+							if (lastDownload != 0) {
 								Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
 							}else {
 								Toast.makeText(getApplicationContext(), "File is not available for download", Toast.LENGTH_LONG).show();
@@ -258,8 +273,8 @@ public class MainActivity extends AppCompatActivity implements  ViewTreeObserver
 					else {
 						//Code for devices below API 23 or Marshmallow
 						Log.v(TAG,"Permission is granted");
-						long downloadRef = downloadDialog(url,userAgent,contentDisposition,mimeType);
-						if (downloadRef != 0) {
+						lastDownload = downloadDialog(url,userAgent,contentDisposition,mimeType);
+						if (lastDownload != 0) {
 							Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
 						}else {
 							Toast.makeText(getApplicationContext(), "File is not available for download", Toast.LENGTH_LONG).show();
@@ -391,50 +406,304 @@ public class MainActivity extends AppCompatActivity implements  ViewTreeObserver
 //		});
 //
 
-    }
+		downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+//        registerReceiver(receiver,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+//
+//		PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
+//				.setReadTimeout(30_000)
+//				.setConnectTimeout(30_000)
+//				.build();
+//		PRDownloader.initialize(getApplicationContext(),config);
+
+	}
+
+
+//	private BroadcastReceiver receiver = new BroadcastReceiver() {
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//
+//			String action = intent.getAction();
+//
+//			if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+//
+//
+//				DownloadManager.Query ImageDownloadQuery = new DownloadManager.Query();
+//				//set the query filter to our previously Enqueued download
+//				ImageDownloadQuery.setFilterById(lastDownload);
+//
+//				//Query the download manager about downloads that have been requested.
+//				Cursor cursor = downloadManager.query(ImageDownloadQuery);
+//
+//				if (cursor.moveToFirst()) {
+//
+//					Toast.makeText(MainActivity.this, DownloadStatus(cursor), Toast.LENGTH_SHORT).show();
+//				}
+//
+//
+//			}
+//
+//		}
+//	};
 
 
 	public long downloadDialog(final String url,final String userAgent,String contentDisposition,String mimeType)
 	{
 		long downloadReference = 0;
-		if(url.startsWith("blob") == true) {
-
+//		if(url.startsWith("blob") == true) {
+//		url_actions(webView,url);
+//
+//
 			startActivity(Intent.makeMainSelectorActivity(
 					Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
-					.setData(Uri.parse(url.toString())));
+					.setData(Uri.parse(url)));
 			downloadReference=1;
-		}
-		else{
+//		}
+//		else{
 
-			try {
-				DownloadManager.Request request = new DownloadManager.Request(
-						Uri.parse(url));
-				request.setMimeType(mimeType);
+//			try {
+//				DownloadManager.Request request = new DownloadManager.Request(
+//						Uri.parse(url));
+//				request.setMimeType(mimeType);
+//				String cookies = CookieManager.getInstance().getCookie(url);
+//				request.addRequestHeader("cookie", cookies);
+//				request.addRequestHeader("User-Agent", userAgent);
+//				request.setDescription("Downloading File...");
+//				request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
+//				request.allowScanningByMediaScanner();
+//				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+//				request.setDestinationInExternalPublicDir(
+//						Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
+//								url, contentDisposition, mimeType));
+//				//downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+//				lastDownload = downloadManager.enqueue(request);
+//
+//				//manageDownloadProcess(url, Environment.DIRECTORY_DOWNLOADS,  URLUtil.guessFileName(
+//				//		url, contentDisposition, mimeType), lastDownload,userAgent,contentDisposition,mimeType);
+//				Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
 
-				request.addRequestHeader("User-Agent", userAgent);
-				request.setDescription("Downloading File...");
-				request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType));
-				request.allowScanningByMediaScanner();
-				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-				request.setDestinationInExternalPublicDir(
-						Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
-								url, contentDisposition, mimeType));
-				DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-				downloadReference = dm.enqueue(request);
-				//Toast.makeText(getApplicationContext(), "Downloading File", Toast.LENGTH_LONG).show();
-			}catch(Exception e ){
-				Log.d("DownloadManager","Failed");
-				Toast.makeText(getApplicationContext(), "Downloading Failed", Toast.LENGTH_SHORT).show();
-			}
-		}
-		return downloadReference;
+//				String filename =  URLUtil.guessFileName(url, contentDisposition, mimeType);
+//				Toast.makeText(getApplicationContext(), filename, Toast.LENGTH_SHORT).show();
+//
+//				int downloadId = PRDownloader.download(url,  Environment.DIRECTORY_DOWNLOADS, filename)
+//						.build()
+//						.setOnStartOrResumeListener(new OnStartOrResumeListener() {
+//							@Override
+//							public void onStartOrResume() {
+//
+//							}
+//						})
+//
+//						.start(new OnDownloadListener() {
+//							@Override
+//							public void onDownloadComplete() {
+//								Toast.makeText(getApplicationContext(), "Downloaded Completed", Toast.LENGTH_LONG).show();
+//
+//							}
+//
+//							@Override
+//							public void onError(Error error) {
+//								Toast.makeText(getApplicationContext(), "Download Failed", Toast.LENGTH_SHORT).show();
+//
+//							}
+//
+//						});
+//					Toast.makeText(getApplicationContext(), "DID:"+downloadId, Toast.LENGTH_LONG).show();
+
+//
+//						}catch(Exception e ){
+//				Log.d("DownloadManager","Failed");
+//				Toast.makeText(getApplicationContext(), "Downloading Failed", Toast.LENGTH_SHORT).show();
+//			}
+	//	}
+		return lastDownload;
 
 
 	}
 
 
+//	private void manageDownloadProcess(final  String urlLink, final  String pathUri, final String fileName, final  long downloadReference,final String userAgent,final String contentDisposition,final String mimeType) {
+//		DownloadManager.Query query = new DownloadManager.Query();
+//		query.setFilterByStatus(DownloadManager.STATUS_PENDING | DownloadManager.STATUS_SUCCESSFUL | DownloadManager.STATUS_PAUSED | DownloadManager.STATUS_RUNNING | DownloadManager.STATUS_FAILED);
+//
+//		final Cursor cursor = downloadManager.query(query.setFilterById(downloadReference));
+//		final Handler handler = new Handler();
+//		handler.postDelayed(new Runnable() {
+//			@Override
+//			public void run() {
+//				if (cursor.moveToFirst()) {
+//					Toast.makeText(getApplicationContext(),DownloadStatus(cursor),Toast.LENGTH_SHORT).show();
+//
+//					Log.d(getClass().getName(), "COLUMN_ID: "+
+//							cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID)));
+//					Toast.makeText(getApplicationContext(),"COLUMN_ID: "+
+//							cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_ID)), Toast.LENGTH_LONG).show();
+//					Log.d(getClass().getName(), "COLUMN_BYTES_DOWNLOADED_SO_FAR: "+
+//							cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)));
+//					Toast.makeText(getApplicationContext(),"COLUMN_BYTES_DOWNLOADED_SO_FAR: "+
+//							cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR)), Toast.LENGTH_LONG).show();
+//					Log.d(getClass().getName(), "COLUMN_LAST_MODIFIED_TIMESTAMP: "+
+//							cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_LAST_MODIFIED_TIMESTAMP)));
+//					Toast.makeText(getApplicationContext(),"COLUMN_LAST_MODIFIED_TIMESTAMP: "+
+//							cursor.getLong(cursor.getColumnIndex(DownloadManager.COLUMN_LAST_MODIFIED_TIMESTAMP)), Toast.LENGTH_LONG).show();
+//					Log.d(getClass().getName(), "COLUMN_LOCAL_URI: "+
+//							cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)));
+//					Toast.makeText(getApplicationContext(),"COLUMN_LOCAL_URI: "+
+//							cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)), Toast.LENGTH_LONG).show();
+//					Log.d(getClass().getName(), "COLUMN_STATUS: "+
+//							cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)));
+//					Toast.makeText(getApplicationContext(),"COLUMN_STATUS: "+
+//							cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)), Toast.LENGTH_LONG).show();
+//					Log.d(getClass().getName(), "COLUMN_REASON: "+
+//							cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_REASON)));
+//					Toast.makeText(getApplicationContext(),"COLUMN_REASON: "+
+//							cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_REASON)), Toast.LENGTH_LONG).show();
+//
+//					Toast.makeText(getApplicationContext(), statusMessage(cursor), Toast.LENGTH_LONG).show();
+//					switch (status) {
+//
+//						/*I introdused 'isEntered' param to eliminate first response from this method
+//						 * I don't know why but I get STATUS_PENDING always on first run, so this is an ugly workaround*/
+//						case DownloadManager.STATUS_PENDING: {
+//							Log.d("status", "STATUS_PENDING - timeout");
+//							Toast.makeText(getApplicationContext(), "STATUS_PENDING - timeout", Toast.LENGTH_SHORT).show();
+//							if (isEntered) {
+//								if (alreadyRetried < RETRIES_MAX_NUMBER) {
+//									alreadyRetried++;
+//									downloadManager.remove(downloadReference);
+//								//	downloadFile(urlLink, pathUri, fileName);
+//									long downloadRef = downloadDialog(urlLink,userAgent,contentDisposition, mimeType);
+//									manageDownloadProcess(urlLink, pathUri, fileName, downloadRef,userAgent,contentDisposition, mimeType);
+//
+//								}
+//							} else {
+//								isEntered = true;
+//								manageDownloadProcess(urlLink, pathUri, fileName, downloadReference,userAgent,contentDisposition, mimeType);
+//							}
+//							break;
+//						}
+//
+//						case DownloadManager.STATUS_PAUSED: {
+//							Log.d("status", "STATUS_PAUSED - error");
+//							Toast.makeText(getApplicationContext(), "STATUS_PAUSED - error", Toast.LENGTH_SHORT).show();
+//
+//							if (alreadyRetried < RETRIES_MAX_NUMBER) {
+//								alreadyRetried++;
+//								downloadManager.remove(downloadReference);
+//								long downloadRef = downloadDialog(urlLink,userAgent,contentDisposition, mimeType);
+//							}
+//							break;
+//						}
+//
+//						case DownloadManager.STATUS_RUNNING: {
+//							Log.d("status", "STATUS_RUNNING - good");
+//							Toast.makeText(getApplicationContext(), "STATUS_RUNNING - good", Toast.LENGTH_SHORT).show();
+//							manageDownloadProcess(urlLink, pathUri, fileName, downloadReference,userAgent,contentDisposition, mimeType);
+//							break;
+//						}
+//
+//						case DownloadManager.STATUS_SUCCESSFUL: {
+//							alreadyRetried =0;
+//							Log.d("status", "STATUS_SUCCESSFUL - done");
+//							Toast.makeText(getApplicationContext(), "STATUS_SUCCESSFUL - done", Toast.LENGTH_SHORT).show();
+//							break;
+//						}
+//
+//						case DownloadManager.STATUS_FAILED: {
+//							Log.d("status", "STATUS_FAILED - error");
+//							Toast.makeText(getApplicationContext(), "STATUS_FAILED - error", Toast.LENGTH_SHORT).show();
+//							if (alreadyRetried < RETRIES_MAX_NUMBER) {
+//								alreadyRetried++;
+//								downloadManager.remove(downloadReference);
+//								long downloadRef = downloadDialog(urlLink,userAgent,contentDisposition, mimeType);
+//							}
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		}, 5000);//do this after 5 sec
+//	}
 
-    @Override
+//	private String DownloadStatus(Cursor cursor){
+//
+//		//column for download  status
+//		int columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+//		int status = cursor.getInt(columnIndex);
+//		//column for reason code if the download failed or paused
+//		int columnReason = cursor.getColumnIndex(DownloadManager.COLUMN_REASON);
+//		int reason = cursor.getInt(columnReason);
+//
+//
+//
+//		String statusText = "";
+//		String reasonText = "";
+//
+//		switch(status){
+//			case DownloadManager.STATUS_FAILED:
+//				statusText = "STATUS_FAILED";
+//				switch(reason){
+//					case DownloadManager.ERROR_CANNOT_RESUME:
+//						reasonText = "ERROR_CANNOT_RESUME";
+//						break;
+//					case DownloadManager.ERROR_DEVICE_NOT_FOUND:
+//						reasonText = "ERROR_DEVICE_NOT_FOUND";
+//						break;
+//					case DownloadManager.ERROR_FILE_ALREADY_EXISTS:
+//						reasonText = "ERROR_FILE_ALREADY_EXISTS";
+//						break;
+//					case DownloadManager.ERROR_FILE_ERROR:
+//						reasonText = "ERROR_FILE_ERROR";
+//						break;
+//					case DownloadManager.ERROR_HTTP_DATA_ERROR:
+//						reasonText = "ERROR_HTTP_DATA_ERROR";
+//						break;
+//					case DownloadManager.ERROR_INSUFFICIENT_SPACE:
+//						reasonText = "ERROR_INSUFFICIENT_SPACE";
+//						break;
+//					case DownloadManager.ERROR_TOO_MANY_REDIRECTS:
+//						reasonText = "ERROR_TOO_MANY_REDIRECTS";
+//						break;
+//					case DownloadManager.ERROR_UNHANDLED_HTTP_CODE:
+//						reasonText = "ERROR_UNHANDLED_HTTP_CODE";
+//						break;
+//					case DownloadManager.ERROR_UNKNOWN:
+//						reasonText = "ERROR_UNKNOWN";
+//						break;
+//				}
+//				break;
+//			case DownloadManager.STATUS_PAUSED:
+//				statusText = "STATUS_PAUSED";
+//				switch(reason){
+//					case DownloadManager.PAUSED_QUEUED_FOR_WIFI:
+//						reasonText = "PAUSED_QUEUED_FOR_WIFI";
+//						break;
+//					case DownloadManager.PAUSED_UNKNOWN:
+//						reasonText = "PAUSED_UNKNOWN";
+//						break;
+//					case DownloadManager.PAUSED_WAITING_FOR_NETWORK:
+//						reasonText = "PAUSED_WAITING_FOR_NETWORK";
+//						break;
+//					case DownloadManager.PAUSED_WAITING_TO_RETRY:
+//						reasonText = "PAUSED_WAITING_TO_RETRY";
+//						break;
+//				}
+//				break;
+//			case DownloadManager.STATUS_PENDING:
+//				statusText = "STATUS_PENDING";
+//				break;
+//			case DownloadManager.STATUS_SUCCESSFUL:
+//				statusText = "Image Saved Successfully";
+//				//reasonText = "Filename:\n" + filename;
+//				Toast.makeText(MainActivity.this, "Download Status:" + "\n" + statusText + "\n" + reasonText, Toast.LENGTH_SHORT).show();
+//				break;
+//		}
+//
+//		return statusText + reasonText;
+//
+//
+//	}
+
+	@Override
     public void onResume() {
         super.onResume();
         //Coloring the "recent apps" tab header; doing it onResume, as an insurance

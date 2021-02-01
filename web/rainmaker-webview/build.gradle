@@ -69,7 +69,7 @@ android {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.citizen'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani"
@@ -83,7 +83,7 @@ android {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.employee'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani Employee"
@@ -97,7 +97,7 @@ android {
 			minSdkVersion 19
 			applicationId 'org.egovernment.mseva.citizen'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani"
@@ -108,17 +108,17 @@ android {
 //			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/citizen/user/register"'
 
 			// DEV
-//			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/citizen/user/register"'
+			//buildConfigField 'String', 'url', '"https://demo.echhawani.gov.in/citizen/user/register"'
 
 			//UAT
 			//DEV2
-			buildConfigField 'String', 'url', '"https://13.71.65.215.nip.io/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://demo.echhawani.gov.in/citizen/user/register"'
 		}
 		EmployeeUAT {
 			minSdkVersion 21
 			applicationId 'org.egovernment.mseva.employee'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani Employee"
@@ -141,6 +141,6 @@ android {
 }
 
 dependencies {
-	implementation 'com.android.support:appcompat-v7:26.1.0'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
 	implementation 'com.google.android.gms:play-services-base:15.0.1'
 }

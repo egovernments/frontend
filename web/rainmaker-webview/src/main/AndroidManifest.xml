@@ -65,7 +65,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https"
-                    android:host="https://13.71.65.215.nip.io"
+                    android:host="https://demo.echhawani.gov.in"
                     android:pathPrefix="/" /> <!-- if you want only a specific directory from your website to be opened in the app through external links -->
             </intent-filter>
         </activity>
