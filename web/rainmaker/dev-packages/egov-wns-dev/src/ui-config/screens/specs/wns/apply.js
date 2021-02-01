@@ -843,9 +843,8 @@ const screenConfig = {
             for(var i=0;i<roadTypes.length;i++){ 
               setRoadCuttingEstimate(roadTypes[i],i,dispatch);
             }
+            dispatch(prepareFinalObject("editWSFlow", true));
           }
-   
-
        });
 
 
@@ -867,9 +866,7 @@ const screenConfig = {
           } else {
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
-          }
-          console.info("IF -1");
-          
+          }          
         } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {   
 
           togglePropertyFeilds(action, true);
@@ -882,12 +879,9 @@ const screenConfig = {
           else {
             dispatch(prepareFinalObject("applyScreen.water", true));
             dispatch(prepareFinalObject("applyScreen.sewerage", false));
-            console.info("Going to toggle field");
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
             }
-
-            console.info("IF -2");
         } else {
           togglePropertyFeilds(action, false)
           if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -900,9 +894,8 @@ const screenConfig = {
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
           }
-
-          console.info("IF -3");
         }
+         
 
    // });
 
