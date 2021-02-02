@@ -150,9 +150,18 @@ class AdjustmentAmountContainer extends Component {
     const re = /^(\d+)?([.]?\d{0,2})?$/; ///^[0-9\b]+$/;
       if (e.target.value === '' || re.test(e.target.value)) {
         const event = e.target;
-        let details = { ...data };
-        if(field == "reducedAmount") details[key]["reducedAmountValue"] = event.value;
-        if(field == "additionalAmount") details[key]["additionalAmountValue"] = event.value;
+        let details = { ...data }, value = event.value,
+          endSplitValue = e.target.value.split('.')[1],
+          initialSplitValue = e.target.value.split('.')[0];
+        if (endSplitValue && endSplitValue.length > 0) {
+          value = `${initialSplitValue * 1}.${endSplitValue}`;
+        } else if (initialSplitValue && initialSplitValue.length > 0 && endSplitValue != "") {
+          value = initialSplitValue * 1;
+        } else if (endSplitValue == "") {
+          value = `${initialSplitValue * 1}.`;
+        }
+        if (field == "reducedAmount") details[key]["reducedAmountValue"] = value;
+        if (field == "additionalAmount") details[key]["additionalAmountValue"] = value;
         this.props.prepareFinalObject("fetchBillDetailsssss", details);
       }
   };
