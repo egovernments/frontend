@@ -98,14 +98,14 @@ const propertyLocationDetails = getCommonContainer({
       jsonPath: "WaterConnection[0].property.address.buildingName"
     }
   ),
-  streetName: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_STREET_NAME"
-    },
-    {
-      jsonPath: "WaterConnection[0].property.address.street"
-    }
-  ),
+  // streetName: getLabelWithValue(
+  //   {
+  //     labelKey: "WS_PROP_DETAIL_STREET_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].property.address.street"
+  //   }
+  // ),
   locality: getLabelWithValue(
     {
       labelKey: "WS_PROP_DETAIL_LOCALITY_LABEL"
@@ -114,20 +114,20 @@ const propertyLocationDetails = getCommonContainer({
       jsonPath: "WaterConnection[0].property.address.locality.name",
     }
   ),
-  pincode: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_PINCODE"
-    },
-    { jsonPath: "WaterConnection[0].property.address.pincode" }
-  ),
-  locationOnMap: getLabelWithValue(
-    {
-      labelKey: "WS_PROP_DETAIL_MAP_LOC"
-    },
-    {
-      jsonPath: "WaterConnection[0].property.address.locality.locationOnMap"
-    }
-  ),
+  // pincode: getLabelWithValue(
+  //   {
+  //     labelKey: "WS_PROP_DETAIL_PINCODE"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.address.pincode" }
+  // ),
+  // locationOnMap: getLabelWithValue(
+  //   {
+  //     labelKey: "WS_PROP_DETAIL_MAP_LOC"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].property.address.locality.locationOnMap"
+  //   }
+  // ),
 })
 
 export const getPropertyDetails = (isEditable = true) => {
