@@ -103,16 +103,16 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById, properti
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
           oldValue: oldPropertydetails && oldPropertydetails.noOfFloors ? `${noOfFloors}` : "NA"
         },
-      {
-        key: getTranslatedLabel("PT_COMMONS_IS_RAINWATER_HARVESTING", localizationLabelsData),
-        value: getRainWaterHarvestingInfo(properties),
-        oldValue: OldProperty && getRainWaterHarvestingInfo(OldProperty),
-      },
-      process.env.REACT_APP_NAME !== "Citizen" ? {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ENTRY_TYPE", localizationLabelsData),
-        value: getaddressPropertyEntryTypeInfo(properties),
-        oldValue: OldProperty && getaddressPropertyEntryTypeInfo(OldProperty),
-      } : "",
+      // {
+      //   key: getTranslatedLabel("PT_COMMONS_IS_RAINWATER_HARVESTING", localizationLabelsData),
+      //   value: getRainWaterHarvestingInfo(properties),
+      //   oldValue: OldProperty && getRainWaterHarvestingInfo(OldProperty),
+      // },
+      // process.env.REACT_APP_NAME !== "Citizen" ? {
+      //   key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ENTRY_TYPE", localizationLabelsData),
+      //   value: getaddressPropertyEntryTypeInfo(properties),
+      //   oldValue: OldProperty && getaddressPropertyEntryTypeInfo(OldProperty),
+      // } : "",
     ]
   );
 };
