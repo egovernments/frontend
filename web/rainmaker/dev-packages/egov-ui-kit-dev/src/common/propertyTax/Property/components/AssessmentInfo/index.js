@@ -3,6 +3,7 @@ import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import { convertLocalDate } from "egov-ui-kit/utils/commons";
 import React from "react";
 import PropertyInfoCard from "../PropertyInfoCard";
 
@@ -156,8 +157,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
 }
 const getVasikaItems = (additionalDetails) => {
 debugger;
-console.log("===========additionalDetails",additionalDetails);
-  var vasika_date =(additionalDetails && additionalDetails.vasikaDate)? convertLocalDate( additionalDetails.vasikaDate):null;
+var vasika_date =(additionalDetails && additionalDetails.vasikaDate)? convertLocalDate( additionalDetails.vasikaDate):null;
  var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? convertLocalDate( additionalDetails.allotmentDate):null;
 
   return (
@@ -211,6 +211,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty
   }
   if (properties) {
     const { propertyDetails } = properties;
+    const { additionalDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0], oldPropertydetails);
       subVasikaItems = getVasikaItems(additionalDetails);

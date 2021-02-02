@@ -1,6 +1,7 @@
-import { AutoSuggestDropdown, DropDown, Label, MobileNumberField, SingleCheckbox, TextField, TextFieldIcon } from "components";
+import { AutoSuggestDropdown, DropDown, Label, MobileNumberField, SingleCheckbox,DatePicker, TextField, TextFieldIcon } from "components";
 import { AutosuggestContainer } from "egov-ui-framework/ui-containers";
 import React from "react";
+import { convertLocalDate } from "./commons";
 import { RadioButton } from "../components";
 
 
@@ -70,6 +71,18 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, disabled, onTextFieldI
             onChange={(e, value, selectedValue) => handleFieldChange(fieldKey, selectedValue)}
           />
         );
+        case "date":
+          return (
+            <DatePicker
+            formatDate={(date) => convertLocalDate(date)}
+            onChange={(e, value) => handleFieldChange(fieldKey,value)}
+            autoOk={true}
+            {...rest}
+            {...fieldProps}
+
+
+            />
+          )
       case "textFieldIcon":
         return (
           <TextFieldIcon
