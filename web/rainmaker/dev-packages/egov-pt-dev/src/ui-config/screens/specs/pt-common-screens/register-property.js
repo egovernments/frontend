@@ -7,6 +7,7 @@ import {
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import uniqBy from "lodash/uniqBy"
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import { getBoundaryData } from "../../../../ui-utils/commons";
@@ -191,7 +192,26 @@ const getMdmsData = async (action, state, dispatch) => {
     if (localities && localities.length > 0) {
       payload.MdmsRes.tenant.localities = localities;
     }
+
+    let tenantsWS =
+    payload &&
+    payload.MdmsRes &&
+    payload.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "WS") return true;
+    });
+    let tenantsSW =
+    payload &&
+    payload.MdmsRes &&
+    payload.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "SW") return true;
+    });
+
+    let tenantsList = [...tenantsWS.tenants,...tenantsSW.tenants];
+    tenantsList = uniqBy(tenantsList, "code");
+    console.log("tenantsList==",tenantsList);
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    dispatch(prepareFinalObject("applyScreenMdmsData.common-masters.citiesByModule.wns", tenantsList));
+
     payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
     dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
   } catch (e) {
