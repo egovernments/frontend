@@ -109,6 +109,25 @@ export const reviewWaterSubSource = getLabelWithValueForModifiedLabel(
     callBack: handleNA
   }
 );
+
+export const reviewSourceInfo = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Water Source Info",
+    labelKey: "WS_SERV_DETAIL_WATER_SOURCE_INFO"
+  },
+  {
+    jsonPath: "applyScreen.sourceInfo",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.sourceInfo",
+    callBack: handleNA
+  }
+);
+
 export const reviewPipeSize = getLabelWithValueForModifiedLabel(
   {
     labelName: "Pipe Size (in inches)",
@@ -127,6 +146,42 @@ export const reviewPipeSize = getLabelWithValueForModifiedLabel(
   }
 );
 
+export const reviewMotorInfo = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Motor Info",
+    labelKey: "WS_SERV_DETAIL_MOTOR_INFO"
+  },
+  {
+    jsonPath: "applyScreen.motorInfo",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.motorInfo",
+    callBack: handleNA
+  }
+);
+
+export const reviewAuthorizedConnection = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Authorized Connection",
+   labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN"
+  },
+  {
+    jsonPath: "applyScreen.authorizedConnection",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.authorizedConnection",
+    callBack: handleNA
+  }
+); 
+ 
 export const reviewWaterClosets = getLabelWithValueForModifiedLabel(
   {
     labelName: "No. of Water Closets",
@@ -159,6 +214,24 @@ export const reviewNumberOfToilets = getLabelWithValueForModifiedLabel(
   },
   {
     jsonPath: "applyScreenOld.noOfToilets",
+    callBack: handleNA
+  }
+);
+
+export const reviewDrainageSize = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Drainage Size (in inches)",
+    labelKey: "WS_SERV_DETAIL_DRAINAGE_SIZE"
+  },
+  {
+    jsonPath: "applyScreen.drainageSize",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.drainageSize",
     callBack: handleNA
   }
 );
@@ -408,9 +481,13 @@ const connectionDetails = getCommonContainer({
   reviewWaterSource,
   reviewWaterSubSource,
   reviewPipeSize,
+  reviewAuthorizedConnection,
+  reviewMotorInfo,
+  reviewSourceInfo,
   // reviewBillingType,
   reviewWaterClosets,
-  reviewNumberOfToilets
+  reviewNumberOfToilets,
+  reviewDrainageSize
 });
 
 const connectionChargeDetails = getCommonContainer({

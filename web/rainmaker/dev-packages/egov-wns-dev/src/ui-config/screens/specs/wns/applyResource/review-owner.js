@@ -33,7 +33,7 @@ const connectionChargeDetailsHeader = getHeader({
 });
 
 const roadCuttingChargesHeader = getHeader({
-  labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+  labelKey: "WS_ROAD_CUTTING__DETAILS"
 });
 
 const activationDetailsHeader = getHeader({
@@ -95,12 +95,13 @@ export const getReviewOwner = (isEditable = true) => {
     // viewOne: propertyDetails,
     // viewTwo: propertyLocationDetails
     viewFive: connectionDetailsHeader,
-    viewSix: renderService(),
+    viewSixWS: renderServiceForWater(),
+    viewSixVS: renderServiceForSW(),
     // viewSix: connectionDetails,
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
     viewNine: roadCuttingChargesHeader,
-    viewTen: roadCuttingCharges,
+    viewTen: getRoadCharges(),
     viewEleven: activationDetailsHeader,
     viewTwelve: activationDetails
   })
@@ -170,42 +171,90 @@ export const plumberDetails={
 }
 const connectionChargeDetails = getCommonContainer(plumberDetails);
 export const roadDetails={
-  reviewRoadType : getLabelWithValueForModifiedLabel(
+  getCommonContainerreviewRoadType : getLabelWithValue(
     {
       labelName: "Road Type",
       labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
     },
     {
-      jsonPath: "WaterConnection[0].roadType",
+      jsonPath: "WaterConnection[0].tempRoadType[0].roadType",
       callBack: handleRoadType
-    }, {
-      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    
+
+  ),
+ 
+  reviewlength : getLabelWithValue(
+    {
+      labelName: "Length (in meter)",
+      labelKey: "WS_ADDN_DETAILS_LENGTH_LABEL"
     },
     {
-      jsonPath: "WaterConnectionOld[0].roadType",
-      callBack: handleRoadType
+      jsonPath: "WaterConnection[0].tempRoadType[0].length",
+      callBack: handleNA
     }
   ),
-  reviewArea : getLabelWithValueForModifiedLabel(
+ 
+  reviewBreadth : getLabelWithValue(
     {
-      labelName: "Area (in sq ft)",
-      labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+      labelName: "Breadth (in meter)",
+      labelKey: "WS_ADDN_DETAILS_BREADTH_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].roadCuttingArea",
-      callBack: handleNA
-    }, {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].roadCuttingArea",
+      jsonPath: "WaterConnection[0].tempRoadType[0].breadth",
       callBack: handleNA
     }
-  )
+  ),
+  reviewDepth : getLabelWithValue(
+    {
+      labelName: "Depth (in meter)",
+      labelKey: "WS_ADDN_DETAILS_DEPTH_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].tempRoadType[0].depth",
+      callBack: handleNA
+    }
+  ),
+  
+  reviewRate : getLabelWithValue(
+    {
+      labelName: "Rate (in meter)",
+      labelKey: "WS_ADDN_DETAILS_RATE_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].tempRoadType[0].rate",
+      callBack: handleNA
+    }
+  ),
+ 
 
 }
 
-const roadCuttingCharges = getCommonContainer(roadDetails);
+
+  const getRoadCharges = ()=>{
+    return({
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "common-div-css search-preview",
+    scheama: getCommonGrayCard({
+      viewEight: getCommonContainer(roadDetails)
+
+    }),
+    items: [],
+    hasAddItem: false,
+    //visible:false,
+    //isReviewPage: true,
+    sourceJsonPath: "WaterConnection[0].tempRoadType",
+    prefixSourceJsonPath: "children.cardContent.children.viewEight.children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  //visible:false,
+  type: "array"
+})
+}
+  
+
 
 
 
@@ -355,6 +404,22 @@ export const connectionWater={
       callBack: handleNA
     }
   ),
+  reviewSourceInfo : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Water Source Info",
+      labelKey: "WS_SERV_DETAIL_WATER_SOURCE_INFO"
+    },
+    {
+      jsonPath: "WaterConnection[0].sourceInfo",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].sourceInfo",
+      callBack: handleNA
+    }
+  ),
    reviewPipeSize : getLabelWithValueForModifiedLabel(
     {
       labelName: "Pipe Size (in inches)",
@@ -370,7 +435,39 @@ export const connectionWater={
       jsonPath: "WaterConnectionOld[0].pipeSize",
       callBack: handleNA
     }
-  )
+  ),
+  reviewMotorInfo : getLabelWithValueForModifiedLabel(
+   {
+     labelName: "Motor Info",
+     labelKey: "WS_SERV_DETAIL_MOTOR_INFO"
+   },
+   {
+     jsonPath: "WaterConnection[0].motorInfo",
+     callBack: handleNA
+   }, {
+     labelKey: "WS_OLD_LABEL_NAME"
+   },
+   {
+     jsonPath: "WaterConnectionOld[0].motorInfo",
+     callBack: handleNA
+   }
+ ),
+ reviewAuthorizedConnection : getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Authorized Connection",
+    labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN"
+  },
+  {
+    jsonPath: "WaterConnection[0].authorizedConnection",
+    callBack: handleNA
+  }, {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].authorizedConnection",
+    callBack: handleNA
+  }
+)
 
 
 }
@@ -420,6 +517,22 @@ export const connectionSewerage={
       jsonPath: "WaterConnectionOld[0].noOfToilets",
       callBack: handleNA
     }
+  ),
+  reviewDrainageSize : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Drainage Size (in inches)",
+      labelKey: "WS_SERV_DETAIL_DRAINAGE_SIZE"
+    },
+    {
+      jsonPath: "WaterConnection[0].drainageSize",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].drainageSize",
+      callBack: handleNA
+    }
   )
 }
 
@@ -434,4 +547,12 @@ export const renderService = () => {
   } else if (isService === serviceConst.SEWERAGE) {
     return getCommonContainer(connectionSewerage)
   }
+}
+
+export const renderServiceForWater = () => {
+  return getCommonContainer(connectionWater);
+}
+
+export const renderServiceForSW = () => {
+  return getCommonContainer(connectionSewerage)
 }

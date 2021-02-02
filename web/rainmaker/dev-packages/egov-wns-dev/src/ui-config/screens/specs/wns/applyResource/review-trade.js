@@ -114,6 +114,27 @@ export const locationDetails={
     },
     { jsonPath: "WaterConnectionOld[0].property.address.city", callBack: handleNA },
   ),
+  reviewLocation: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Property Location",
+      labelKey: "WS_PROP_DETAIL_LOCATION"
+    },
+    { jsonPath: "WaterConnection[0].property.address.location", callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROP_LOCATION"
+      }
+    },
+    {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    { jsonPath: "WaterConnectionOld[0].property.address.location", callBack: handleNA,
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "PROP_LOCATION"
+      }
+    },
+  ),
   reviewDoorOrHouseNumber: getLabelWithValueForModifiedLabel(
     {
       labelName: "Door/House No.",
@@ -136,17 +157,18 @@ export const locationDetails={
     },
     { jsonPath: "WaterConnectionOld[0].property.address.buildingName", callBack: handleNA },
   ),
-  reviewStreetName: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Street Name",
-      labelKey: "WS_PROP_DETAIL_STREET_NAME"
-    },
-    { jsonPath: "WaterConnection[0].property.address.street",
-    callBack: handleNA },  {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    { jsonPath: "WaterConnectionOld[0].property.address.street", callBack: handleNA },
-  ),
+  //commented by vidya
+  // reviewStreetName: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Street Name",
+  //     labelKey: "WS_PROP_DETAIL_STREET_NAME"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.address.street",
+  //   callBack: handleNA },  {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   { jsonPath: "WaterConnectionOld[0].property.address.street", callBack: handleNA },
+  // ),
   reviewLocalityOrMohalla: getLabelWithValueForModifiedLabel(
     {
       labelName: "Locality/Mohalla",
@@ -158,17 +180,18 @@ export const locationDetails={
     },
     { jsonPath: "WaterConnectionOld[0].property.locality.name", callBack: handleNA },
   ),
-  reviewPincode: getLabelWithValueForModifiedLabel(
-    {
-      labelName: "Pincode",
-      labelKey: "WS_PROP_DETAIL_PINCODE"
-    },
-    { jsonPath: "WaterConnection[0].property.address.pincode",
-    callBack: handleNA },  {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    { jsonPath: "WaterConnectionOld[0].property.address.pincode", callBack: handleNA },
-  ),
+  //commented by vidya
+  // reviewPincode: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Pincode",
+  //     labelKey: "WS_PROP_DETAIL_PINCODE"
+  //   },
+  //   { jsonPath: "WaterConnection[0].property.address.pincode",
+  //   callBack: handleNA },  {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   { jsonPath: "WaterConnectionOld[0].property.address.pincode", callBack: handleNA },
+  // ),
 }
 
 const propertyLocationDetails = {
@@ -313,6 +336,20 @@ export const propertyDetails={
       callBack: handleNA      
     }
   ),
+  reviewNumberOfFlats: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Number Of Flats",
+      labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
+    },
+    { jsonPath: "WaterConnection[0].property.noOfFlats",
+    callBack: handleNA },{
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].property.noOfFlats",
+      callBack: handleNA      
+    }
+  ),
   rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
     {
       labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
@@ -349,112 +386,129 @@ const getPropertyDetails = {
   type: "array"
 };
 
-export const propertyOwnerDetail={
-  mobileNumber: getLabelWithValueForModifiedLabel(
-   {
-     labelName: "Mobile Number",
-       labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
-   },
-   { jsonPath: "WaterConnection[0].property.owners[0].mobileNumber",
-   callBack: handleNA },  {
+export const propertyOwnerDetail = {
+  mobileNumber: getLabelWithValue(
+    {
+      labelName: "Mobile Number",
+      labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].mobileNumber",
+      callBack: handleNA
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].mobileNumber", callBack: handleNA },
-),
- name: getLabelWithValueForModifiedLabel(
-   {
-     labelName: "Name",
-     labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
-   },
-   {
-     jsonPath: "WaterConnection[0].property.owners[0].name",
-     callBack: handleNA
-   },  {
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].mobileNumber", callBack: handleNA },
+  ),
+  name: getLabelWithValue(
+    {
+      labelName: "Name",
+      labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].name",
+      callBack: handleNA
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].name", callBack: handleNA },
- ),
- email: getLabelWithValueForModifiedLabel(
-   {
-     labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
-   },
-   {
-     jsonPath: "WaterConnection[0].property.owners[0].emailId",
-     callBack: handleNA
-   },  {
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].name", callBack: handleNA },
+  ),
+  email: getLabelWithValue(
+    {
+      labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].emailId",
+      callBack: handleNA
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].emailId", callBack: handleNA },
- ),
- gender: getLabelWithValueForModifiedLabel(
-   {
-     labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
-   },
-   {
-     jsonPath: "WaterConnection[0].property.owners[0].gender",
-     callBack: handleNA,
-     localePrefix: {
-       moduleName: "COMMON",
-       masterName: "GENDER"
-     }
-   },  {
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].emailId", callBack: handleNA },
+  ),
+  gender: getLabelWithValue(
+    {
+      labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].gender",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "COMMON",
+        masterName: "GENDER"
+      }
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].gender", callBack: handleNA },
- ),
- dateOfBirth: getLabelWithValueForModifiedLabel(
-   {
-     labelName: "Date Of Birth",
-     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
-   },
-   {
-     jsonPath: "WaterConnection[0].property.owners[0].dob",
-     callBack: convertEpochToDateAndHandleNA
-   },  {
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].gender", callBack: handleNA },
+  ),
+  //commented by vidya
+  //  dateOfBirth: getLabelWithValue(
+  //    {
+  //      labelName: "Date Of Birth",
+  //      labelKey: "WS_OWN_DETAIL_DOB_LABEL"
+  //    },
+  //    {
+  //      jsonPath: "WaterConnection[0].property.owners[0].dob",
+  //      callBack: convertEpochToDateAndHandleNA
+  //    },  {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   { jsonPath: "WaterConnectionOld[0].property.owners[0].dob", callBack: handleNA },
+  //  ),
+  fatherName: getLabelWithValue(
+    {
+      labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName",
+      callBack: handleNA
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].dob", callBack: handleNA },
- ),
- fatherName: getLabelWithValueForModifiedLabel(
-   {
-     labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
-   },
-   { jsonPath: "WaterConnection[0].property.owners[0].fatherOrHusbandName",
-   callBack: handleNA },  {
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].fatherOrHusbandName", callBack: handleNA },
+  ),
+  relationship: getLabelWithValue(
+    {
+      labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].relationship",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "COMMON",
+        masterName: "RELATION"
+      }
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].fatherOrHusbandName", callBack: handleNA },
- ),
- relationship: getLabelWithValueForModifiedLabel(
-   {
-     labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
-   },
-   { jsonPath: "WaterConnection[0].property.owners[0].relationship",
-   callBack: handleNA },  {
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].relationship", callBack: handleNA },
+  ),
+  correspondenceAddress: getLabelWithValue(
+    {
+      labelKey: "WS_OWN_DETAIL_CROSADD"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress",
+      callBack: handleNA
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].relationship", callBack: handleNA },
- ),
- correspondenceAddress: getLabelWithValueForModifiedLabel(
-   {
-     labelKey: "WS_OWN_DETAIL_CROSADD"
-   },
-   { jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress",
-   callBack: handleNA },  {
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].correspondenceAddress", callBack: handleNA },
+  ), specialApplicantCategory: getLabelWithValue(
+    {
+      labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].property.owners[0].ownerType",
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "COMMON_MASTERS",
+        masterName: "OWNERTYPE"
+      }
+    }, {
     labelKey: "WS_OLD_LABEL_NAME"
   },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].correspondenceAddress", callBack: handleNA },
- ), specialApplicantCategory: getLabelWithValueForModifiedLabel(
-   {
-     labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
-   },
-   {
-     jsonPath: "WaterConnection[0].property.owners[0].ownerType",
-     callBack: handleNA
-   },  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  { jsonPath: "WaterConnectionOld[0].property.owners[0].ownerType", callBack: handleNA },)
+    { jsonPath: "WaterConnectionOld[0].property.owners[0].ownerType", callBack: handleNA })
 }
 
 const ownerDetails = {
@@ -483,7 +537,7 @@ const holderHeader = getHeader({
 })
 
 export const connectionHolderDetails={
-  mobileNumber : getLabelWithValueForModifiedLabel(
+  mobileNumber : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_MOBILE_NO_LABEL"
      },
@@ -492,7 +546,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].mobileNumber", callBack: handleNA },
    ),
-    name : getLabelWithValueForModifiedLabel(
+    name : getLabelWithValue(
      {
        labelName: "Name",
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_OWN_NAME_LABEL"
@@ -502,7 +556,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].name", callBack: handleNA },
    ),
-    gender : getLabelWithValueForModifiedLabel(
+    gender : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"
      },
@@ -514,7 +568,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].gender", callBack: handleNA },
    ),
-    fatherName : getLabelWithValueForModifiedLabel(
+    fatherName : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"
      },
@@ -523,7 +577,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].fatherOrHusbandName", callBack: handleNA },
    ),
-    relationship : getLabelWithValueForModifiedLabel(
+    relationship : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
      },
@@ -532,7 +586,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].relationship", callBack: handleNA },
    ),
-    correspondenceAddress :getLabelWithValueForModifiedLabel(
+    correspondenceAddress :getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_CROSADD"
      },
@@ -544,7 +598,7 @@ export const connectionHolderDetails={
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].correspondenceAddress", callBack: handleNA },
    ),
-    specialApplicantCategory : getLabelWithValueForModifiedLabel(
+    specialApplicantCategory : getLabelWithValue(
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
      },
@@ -555,7 +609,19 @@ export const connectionHolderDetails={
       labelKey: "WS_OLD_LABEL_NAME"
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].ownerType", callBack: handleNA },
-   )
+   ),
+   propertyOwnership : getLabelWithValue(
+    {
+      labelKey: "WS_CONN_HOLDER_OWN_DETAIL_PROPOWNER_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].propertyOwnership",
+      callBack: handleNA
+    },  {
+     labelKey: "WS_OLD_LABEL_NAME"
+   },
+   { jsonPath: "WaterConnectionOld[0].propertyOwnership", callBack: handleNA },
+  )
  };
 const taskConnHolderDetailsSummary = () => {
   return ({

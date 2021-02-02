@@ -140,7 +140,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       } else {
         set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible", false);
       }
-      if (processInstanceAppStatus === "PENDING_FOR_FIELD_INSPECTION") {
+      //Call estimate for both field inspector and doc verifier
+      if (processInstanceAppStatus === "PENDING_FOR_FIELD_INSPECTION" || processInstanceAppStatus === "PENDING_FOR_DOCUMENT_VERIFICATION") {
         let queryObjectForEst = [{
           applicationNo: applicationNumber,
           tenantId: tenantId,
@@ -272,8 +273,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch,
       processInstanceAppStatus,
       applicationNumber,
-      tenantId,
-      service
+      tenantId,service
     );
     set(
       action,
@@ -335,8 +335,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.locality", get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.address.locality.code")));
     }
   }
+ 
 
-
+  let roadTypes = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].roadTypeEst",[]);
+     let newRoad =  roadTypes && roadTypes.filter(roadType=>(roadType.length!=0 && roadType.breadth!=0 && roadType.depth!=0 && roadType.rate!=0));
+     if(newRoad.length!=0){
+     
+      dispatch(prepareFinalObject("WaterConnection[0].tempRoadType",newRoad));
+     }
+     else{
+     
+     }
+  
 };
 
 let titleText = "";
@@ -621,11 +631,23 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
     const convPayload = findAndReplace(payload, "NA", null)
+
+    payload.WaterConnection[0].wsTaxHeads.forEach(item => {
+      console.info("amout in taxhead for estimate==",item.amount)
+     if (!item.amount || item.amount == null) {
+       item.amount = 0;
+     }
+   });
+
     let queryObjectForEst = [{
       applicationNo: applicationNumber,
       tenantId: tenantId,
       waterConnection: convPayload.WaterConnection[0]
     }]
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", false);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", true);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
@@ -691,6 +713,10 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = [];
     payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
     payload.SewerageConnections[0].service = service;
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForSW.visible", true);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.items[0].item0.children.cardContent.children.serviceCardContainerForWater.visible", false);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
+    set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false); 
     if (payload !== undefined && payload !== null) {
       dispatch(prepareFinalObject("SewerageConnection[0]", payload.SewerageConnections[0]));
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
@@ -757,6 +783,30 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
 };
 
 const parserFunction = (obj) => {
+  console.info("OBJ==",obj);
+
+       //Remove null value from each tax heads
+       obj.wsTaxHeads.forEach(item => {
+         console.info("amout in taxhead for estimate==",item.amount)
+        if (!item.amount || item.amount == null) {
+          item.amount = 0;
+        }
+      });
+
+      obj.roadTypeEst.forEach(item => {
+        if (!item.length) {
+            item.length = 0;
+          }
+          if (!item.breadth) {
+            item.breadth = 0;
+          }
+          if (!item.depth) {
+            item.depth = 0;
+          }
+          if (!item.rate) {
+            item.rate = 0;
+          }
+      });
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
@@ -764,7 +814,7 @@ const parserFunction = (obj) => {
     proposedWaterClosets: parseInt(obj.proposedWaterClosets),
     proposedToilets: parseInt(obj.proposedToilets),
     roadCuttingArea: parseInt(obj.roadCuttingArea),
-    additionalDetails: {
+    additionalDetails: {...obj.additionalDetails,
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
         obj.additionalDetails.initialMeterReading !== undefined

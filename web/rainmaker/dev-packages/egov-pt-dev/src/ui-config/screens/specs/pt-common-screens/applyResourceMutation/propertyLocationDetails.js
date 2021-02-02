@@ -3,8 +3,7 @@ import {
   getCommonContainer,
   getCommonTitle,
   getTextField,
-  getSelectField,
-  getPattern
+  getSelectField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   prepareFinalObject
@@ -117,6 +116,28 @@ export const propertyLocationDetails = getCommonCard({
       }
 
     },
+    propertyLocation: getSelectField({
+            label: {
+              labelName: "Property Location",
+              labelKey: "PT_COMMON_PROPERTY_LOCATION"
+            },
+            placeholder: {
+              labelName: "Select Property Type",
+              labelKey: "PT_COMMON_PROPERTY_LOCATION_PLACEHOLDER"
+            },
+            required: true,
+            jsonPath: "Property.address.location",
+            sourceJsonPath: "searchScreenMdmsData.PropertyTax.PropertyLocation",
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              md: 6
+            },
+            localePrefix: {
+              moduleName: "PT_COMMON",
+              masterName: "PROPERTY_LOCATION"
+            }
+    }),
     localityOrMohalla: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-pt",
@@ -165,8 +186,7 @@ export const propertyLocationDetails = getCommonCard({
         sm: 6
       },
       required: true,
-     // pattern: /^[a-zA-Z0-9-]*$/i,
-      pattern: getPattern("DoorHouseNo"),
+      pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "PT_COMMON_ERR_INVALID_DOOR_NO",
       jsonPath: "Property.address.doorNo"
     }),
@@ -182,8 +202,7 @@ export const propertyLocationDetails = getCommonCard({
         sm: 6
       },
       required: true,
-     // pattern: /^[a-zA-Z0-9-]*$/i,
-      pattern: getPattern("BuildingStreet"),
+      pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "PT_COMMON_ERR_INVALID_BUILDING_COLONY",
       jsonPath: "Property.address.buildingName"
     })

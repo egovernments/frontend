@@ -1392,7 +1392,15 @@ export const resetFieldsForConnection = (state, dispatch) => {
       ""
     )
   );
-
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
+      "props.value",
+      ""
+    )
+  );
+  
   dispatch(
     handleField(
       "search",
@@ -1646,6 +1654,7 @@ const setVisible = (key, status, action) => {
 export const triggerModificationsDisplay = (action, isModeEnable) => {  
     setVisible('modificationsEffectiveFrom', isModeEnable, action);
     setVisible('plumberDetailsContainer', !isModeEnable, action);
-    setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+    //setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+    setVisible('wsConnectionTaxHeadsContainer',!isModeEnable, action);
 }
 

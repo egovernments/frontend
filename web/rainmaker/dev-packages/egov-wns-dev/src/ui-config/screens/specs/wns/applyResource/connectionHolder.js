@@ -164,6 +164,23 @@ import {
         sm: 6
       }
     }),
+    propertyOwnership: getSelectField({
+      label: {
+        labelName: "Property Ownership Type",
+        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_PROPOWNER_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Property Ownership Type",
+        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_PROPOWNER_LABEL_PLACEHOLDER"
+      },
+      jsonPath: "applyScreen.propertyOwnership",
+      required: false, 
+      sourceJsonPath: "applyScreenMdmsData.PropertyTax.PropertyOwnershipCategory",
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      }
+    }) 
   });
 
   export const sameAsOwner=getCommonContainer({

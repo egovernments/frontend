@@ -574,7 +574,7 @@ export const downloadPrintContainer = (
   tenantId,service
 ) => {
   /** MenuButton data based on status */
-tenantId = getQueryArg(window.location.href, "tenantId");
+  tenantId = getQueryArg(window.location.href, "tenantId");
  applicationNumber = getQueryArg(window.location.href, "applicationNumber");
  service = getQueryArg(window.location.href, "service");
   let downloadMenu = [];

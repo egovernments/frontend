@@ -15,6 +15,19 @@ import {
         jsonPath: "applyScreen.property.address.city",
       }
     ),
+    location: getLabelWithValue(
+      {
+        labelKey: "WS_PROP_DETAIL_LOCATION",
+        labelName:"Property Location"
+      },
+      {
+        jsonPath: "applyScreen.property.address.location",
+        localePrefix: {
+          moduleName: "WS",
+          masterName: "PROP_LOCATION"
+        }
+      }
+    ),
     plotOrHouseOrSurveyNo: getLabelWithValue(
       {
         labelKey: "WS_PROP_DETAIL_DHNO",
@@ -32,14 +45,14 @@ import {
         jsonPath: "applyScreen.property.address.buildingName"
       }
     ),
-    streetName: getLabelWithValue(
-      {
-        labelKey: "WS_PROP_DETAIL_STREET_NAME"
-      },
-      {
-        jsonPath: "applyScreen.property.address.street"
-      }
-    ),
+    // streetName: getLabelWithValue(
+    //   {
+    //     labelKey: "WS_PROP_DETAIL_STREET_NAME"
+    //   },
+    //   {
+    //     jsonPath: "applyScreen.property.address.street"
+    //   }
+    // ),
     locality: getLabelWithValue(
       {
         labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL",
@@ -49,12 +62,12 @@ import {
         jsonPath: "applyScreen.property.address.locality.name",
       }
     ),
-    pincode: getLabelWithValue(
-      {
-        labelKey: "WS_PROP_DETAIL_PINCODE"
-      },
-      { jsonPath: "applyScreen.property.address.pincode" }
-    ),
+    // pincode: getLabelWithValue(
+    //   {
+    //     labelKey: "WS_PROP_DETAIL_PINCODE"
+    //   },
+    //   { jsonPath: "applyScreen.property.address.pincode" }
+    // ),
    })
   
   export const getPropertyDetails = (isEditable = true) => {
