@@ -324,7 +324,22 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      //EDIT FLOW
+      const businessId = getQueryArg(
+        window.location.href,
+        "applicationNumber"
+      );
+      const tenantId = getQueryArg(window.location.href, "tenantId");
+      dispatch(
+        setRoute(
+          `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
+        )
+      );
+    }
+    else {
       moveToReview(state, dispatch);
+    }
   }
 
   if (activeStep !== 3) {
