@@ -560,6 +560,7 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("connectionHolders", []));
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", []));
+  dispatch(prepareFinalObject("editWSFlow", false));
   existingConnectionDetails = getExistingConnectionDetails();
   propertyDetail = getPropertyDetails();
   propertyIDDetails = getPropertyIDDetails();
