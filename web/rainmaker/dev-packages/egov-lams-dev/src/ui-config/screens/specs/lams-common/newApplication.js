@@ -49,6 +49,7 @@ const initFreshScreen = (action, state, dispatch) =>{
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const purpose = getQueryArg(window.location.href, "purpose");
+    const workflowAction = "APPLY";
 
     const queryParams = [{ key: "applicationNumber", value: applicationNumber },
       { key: "tenantId", value: tenantId }
@@ -57,56 +58,15 @@ const initFreshScreen = (action, state, dispatch) =>{
       dispatch(prepareFinalObject("lamsStore.Lease", response.leases));
       setDocsForEditFlow(state,dispatch);
       dispatch(prepareFinalObject("lamsStore.Lease[0].action", workflowAction));
-      dispatch(
-        handleField(
-          "newApplication",
-          "components.div1",
-          "visible",
-          false
-        )
-      );
-      dispatch(
-        handleField(
-          "newApplication",
-          "components.div2",
-          "visible",
-          false
-        )
-      );
+      
+      dispatch(handleField("newApplication","components.div1","visible",false));
+      dispatch(handleField("newApplication","components.div2","visible",false));
     });
-  }
 
-  if(checkIfCitizenEditScreen())
-  {
-    dispatch(
-      handleField(
-        "newApplication",
-        "components.div1",
-        "visible",
-        false
-      )
-    );
-    dispatch(
-      handleField(
-        "newApplication",
-        "components.div2",
-        "visible",
-        false
-      )
-    );
+    dispatch(handleField("newApplication","components.div1","visible",false));
+    dispatch(handleField("newApplication","components.div2","visible",false));
   }
   else
-  {
-    dispatch(
-      handleField(
-        "newApplication",
-        "components.div1",
-        "visible",
-        true
-      )
-    );
-  }
-
   //D Sign Success Page check.
   if(isPostDSignMode())
   {
@@ -115,7 +75,8 @@ const initFreshScreen = (action, state, dispatch) =>{
       setPostDSignSuccessScreen(action,state, dispatch);
       dispatch(toggleSpinner());
     }, 2000); //Give 2 sec gap so that the screen is loaded correctly
-    afterDSignDone(action,dispatch);;  
+    afterDSignDone(action,dispatch);;
+    dispatch(handleField("newApplication","components.div1","visible",true));
   }
   else //For Fresh application
   {
@@ -190,7 +151,7 @@ const newApplication = {
       children: {
         details: newApplicationDocumentsCard
       },
-      visible: false
+      visible: checkIfCitizenEditScreen()?true:false
     },
     div: {
       uiFramework: "custom-atoms",

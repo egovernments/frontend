@@ -51,6 +51,7 @@ import {
     setVisibilityDownloadButton(action, state, dispatch, (process.env.REACT_APP_NAME === "Citizen"), true);
     setVisibilityEsignButton(action, state, dispatch,  (process.env.REACT_APP_NAME === "Citizen"), true);
     //setVisibilityMonths(action, state, dispatch, true, true);
+    setVisibilityDocuments(action, state, dispatch, true);
     setVisibilityApplicationType(action, state, dispatch, true, true);
   }
 
