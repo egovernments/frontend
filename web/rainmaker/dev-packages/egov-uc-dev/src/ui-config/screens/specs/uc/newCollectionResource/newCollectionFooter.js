@@ -85,6 +85,7 @@ const processDemand = async (state, dispatch) => {
     "newCollection"
   );
   if (isFormValid) {
+    debugger;
     try {
       const mobileNumber = get(
         state.screenConfiguration.preparedFinalObject,
