@@ -41,7 +41,7 @@ export const propertyLocationDetails = getCommonCard({
           moduleName: "TENANT",
           masterName: "TENANTS"
         },
-        sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+        sourceJsonPath: "applyScreenMdmsData.common-masters.citiesByModule.wns",
         jsonPath: "Property.address.city",//db sake
         required: true,
         gridDefination: {

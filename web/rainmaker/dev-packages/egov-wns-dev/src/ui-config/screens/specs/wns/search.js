@@ -3,8 +3,9 @@ import { showSearches } from "./searchResource/searchTabs";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchResults } from "./searchResource/searchResults";
 import { searchApplicationResults } from "./searchResource/searchApplicationResults";
-import { localStorageGet, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet, getTenantIdCommon,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
+import get from "lodash/get";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { resetFieldsForConnection, resetFieldsForApplication } from '../utils';
 import { handleScreenConfigurationFieldChange as handleField ,unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -83,6 +84,14 @@ const getBusinessService=async(businessService, dispatch)=>{
       }
     }
 }
+const ifUserRoleExists = () => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf("WS_CEMP") > -1 || roleCodes.indexOf("SW_CEMP") > -1) {
+    return true;
+  } else return false;
+}; 
 
 export const getMdmsTenantsData = async (dispatch) => {
   let mdmsBody = {
@@ -179,7 +188,7 @@ const employeeSearchResults = {
                 sm: 6,
                 align: "right"
               },
-              visible: true,
+              visible: ifUserRoleExists(),
               props: {
                 variant: "contained",
                 color: "primary",

@@ -56,12 +56,11 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
        // roadDetail = generateKeyValue(preparedFinalObject, roadDetails);
       
     }
-    if (WaterConnection.tempRoadType && WaterConnection.tempRoadType.length > 1) {
+    if (WaterConnection.tempRoadType && WaterConnection.tempRoadType.length > 0) {
         roadDetailInfo = getMultiItems(preparedFinalObject, roadDetails, 'WaterConnection[0].tempRoadType')
         roadDetail = getMultipleItemCard(roadDetailInfo, 'WS_ROADTYPE');
     }
    
-console.log("roadDetail==",roadDetail);
     let connHolderDetail = {};
     if (WaterConnection.connectionHolders === null) {
         let sameAsOwnerArray = generateKeyValue(preparedFinalObject, connectionHolderSameAsOwnerDetails);
@@ -86,8 +85,8 @@ console.log("roadDetail==",roadDetail);
     const documentsUploadRedux = get(preparedFinalObject, 'DocumentsData', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const estimate = get(preparedFinalObject, 'taxHeadEstimates', []);
-
+    let estimate = get(preparedFinalObject, 'taxHeadEstimates', []);
+    estimate = estimate && estimate.filter(est=>est.estimateAmount!=0);
     let formattedFees =estimate && estimate.map((taxHead) => {
       return {
         info: {
@@ -102,13 +101,12 @@ console.log("roadDetail==",roadDetail);
       };
     });
     const estimateDetails = formattedFees && getEstimateCardDetails(formattedFees);
-
     let pdfData = {
         header: WaterConnection.applicationNo.includes("WS") ? "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER" : "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER", tenantId: tenantId,
         applicationNoHeader: WaterConnection.applicationType !== null ? WaterConnection.applicationType.split("_").join(" ") : "",
         additionalHeader: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_APPLICATION_NO', additionalHeaderValue: WaterConnection.applicationNo,
         cards: [
-            { items: estimateDetails, type: 'estimate',hide: estimateDetails.length === 0, },
+            { items: estimateDetails, type: 'estimate',hide: estimate.length === 0 },
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PROPERTY_DETAILS_HEADER", items: propertyDetail },
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOCATION_DETAILS_HEADER", items: locationDetail },
             { header: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_OWNER_DETAILS_HEADER", items: ownerDetail, type: ownerDetailInfo.length > 1 ? 'multiItem' : 'singleItem' },

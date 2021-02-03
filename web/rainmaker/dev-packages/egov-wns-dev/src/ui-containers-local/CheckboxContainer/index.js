@@ -11,7 +11,6 @@ import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { toggleWater, toggleSewerage } from './toggleFeilds';
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   root: {
@@ -74,8 +73,9 @@ class CheckboxLabels extends React.Component {
   }
 
   render() {
-    const { classes, required, preparedFinalObject } = this.props;
+    const { classes, required, preparedFinalObject,editWSFlow  } = this.props;
     let checkedWater, checkedSewerage;
+    let disabled = editWSFlow ? editWSFlow : false;
     if (this.state.interChange) {
       checkedWater = this.state.checkedWater;
       checkedSewerage = this.state.checkedSewerage;
@@ -99,6 +99,7 @@ class CheckboxLabels extends React.Component {
                   onChange={this.handleWater("checkedWater")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
+                  disabled ={disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_WATER" />}
             />
@@ -110,6 +111,7 @@ class CheckboxLabels extends React.Component {
                   onChange={this.handleSewerage("checkedSewerage")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
+                  disabled ={disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_SEWERAGE" />}
             />
@@ -123,8 +125,9 @@ class CheckboxLabels extends React.Component {
 const mapStateToProps = (state, ownprops) => {
   const { screenConfiguration } = state;
   const { jsonPathWater, jsonPathSewerage } = ownprops;
-  const { preparedFinalObject } = screenConfiguration;
-  return { preparedFinalObject, jsonPathWater, jsonPathSewerage };
+  const { preparedFinalObject } = screenConfiguration; 
+  const { editWSFlow } = preparedFinalObject; 
+  return { preparedFinalObject, jsonPathWater, jsonPathSewerage, editWSFlow  };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -214,16 +214,16 @@ export const getOwnerDetails = (isEditable = true) => {
                 callBack: handleNA
               }
             ),
-            dateOfBirth: getLabelWithValue(
-              {
-                labelName: "Date Of Birth",
-                labelKey: "WS_OWN_DETAIL_DOB_LABEL"
-              },
-              {
-                jsonPath: "applyScreen.property.owners[0].dob",
-                callBack: convertEpochToDateAndHandleNA
-              }
-            ),
+            // dateOfBirth: getLabelWithValue(
+            //   {
+            //     labelName: "Date Of Birth",
+            //     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
+            //   },
+            //   {
+            //     jsonPath: "applyScreen.property.owners[0].dob",
+            //     callBack: convertEpochToDateAndHandleNA
+            //   }
+            // ),
             email: getLabelWithValue(
               {
                 labelName: "Email",

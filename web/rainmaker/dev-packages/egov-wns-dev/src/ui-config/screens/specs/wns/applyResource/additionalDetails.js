@@ -164,7 +164,7 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN" },
         sourceJsonPath: "applyScreenMdmsData.ws-services-masters.authorizedConnection",
         placeholder: { labelKey: "WS_SERV_DETAIL_AUTHORIZED_CONN_PLACEHOLDER" },
-        required: true,
+        required: false,
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.authorizedConnection"
       }),
@@ -172,7 +172,7 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_MOTOR_INFO" },
         sourceJsonPath: "applyScreenMdmsData.ws-services-masters.motorInfo",
         placeholder: { labelKey: "WS_SERV_DETAIL_MOTOR_INFO_PLACEHOLDER" },
-        required: true,
+        required: false,
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.motorInfo"
       }),

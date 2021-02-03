@@ -157,7 +157,8 @@ export const getMdmsData = async dispatch => {
             { name: "PropertySearch" },
             { name: "TaxHeadMaster" },
             { name: "motorInfo" },
-            { name: "authorizedConnection" }
+            { name: "authorizedConnection" },
+            { name: "workflowBasedCardPermission" }
           ]
         },
         { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{ name: "PropertyOwnershipCategory" }]}
@@ -235,6 +236,7 @@ export const getMdmsData = async dispatch => {
 
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
+
     
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
@@ -488,6 +490,25 @@ const  getApplicationNoLabel= () => {
   return  "WS_ACKNO_APP_NO_LABEL" ;
 }
 
+const checkCardPermission =(state,cardName) =>{
+  let workFlowStatus = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreen.applicationStatus",
+    null
+  );
+  let cardList = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.workflowBasedCardPermission",
+    []
+  );
+  cardList = cardList.filter( (card) => card.code.includes(cardName));
+  if(cardList.length >0 && cardList[0].status.includes(workFlowStatus) ){
+    return true;
+  }
+  return false;
+
+}
+
 const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
   let payload = await getPropertyResults(queryObject, dispatch);
   let propertyObj = payload.Properties[0];
@@ -560,6 +581,7 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("connectionHolders", []));
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", []));
+  dispatch(prepareFinalObject("editWSFlow", false));
   existingConnectionDetails = getExistingConnectionDetails();
   propertyDetail = getPropertyDetails();
   propertyIDDetails = getPropertyIDDetails();
@@ -771,14 +793,8 @@ const screenConfig = {
 
        //Setting Tax heads and Road Types
           if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
-
             //show tax head estimates to only field inspector and doc verifier
-            let workFlowStatus = get(
-              state,
-              "screenConfiguration.preparedFinalObject.applyScreen.applicationStatus",
-              []
-            );
-            if(workFlowStatus === "PENDING_FOR_DOCUMENT_VERIFICATION" || workFlowStatus === "PENDING_FOR_FIELD_INSPECTION"){
+            if(checkCardPermission(state , "wsConnectionTaxHeadsContainer")){
               dispatch(
                 handleField(
                   "apply",
@@ -788,8 +804,6 @@ const screenConfig = {
                 )
               );
             }
-         
-               
 
             //Create tax head object ---start
             let taxHeadDetails = get(
@@ -843,9 +857,8 @@ const screenConfig = {
             for(var i=0;i<roadTypes.length;i++){ 
               setRoadCuttingEstimate(roadTypes[i],i,dispatch);
             }
+            dispatch(prepareFinalObject("editWSFlow", true));
           }
-   
-
        });
 
 
@@ -867,9 +880,7 @@ const screenConfig = {
           } else {
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
-          }
-          console.info("IF -1");
-          
+          }          
         } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {   
 
           togglePropertyFeilds(action, true);
@@ -882,12 +893,9 @@ const screenConfig = {
           else {
             dispatch(prepareFinalObject("applyScreen.water", true));
             dispatch(prepareFinalObject("applyScreen.sewerage", false));
-            console.info("Going to toggle field");
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
             }
-
-            console.info("IF -2");
         } else {
           togglePropertyFeilds(action, false)
           if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -900,9 +908,8 @@ const screenConfig = {
             toggleWaterFeilds(action, true);
             toggleSewerageFeilds(action, false);
           }
-
-          console.info("IF -3");
         }
+         
 
    // });
 
