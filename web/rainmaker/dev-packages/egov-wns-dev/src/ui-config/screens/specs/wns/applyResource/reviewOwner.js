@@ -81,7 +81,7 @@ export const reviewBillingAmount = getLabelWithValueForModifiedLabel(
     labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
+    jsonPath: "applyScreen.additionalDetails.billingAmount",
     callBack: handleNA
   },
   {
@@ -98,7 +98,7 @@ export const reviewBillingType = getLabelWithValueForModifiedLabel(
     labelKey: "WS_SERV_DETAIL_BILLING_TYPE"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.billingType",
+    jsonPath: "applyScreen.additionalDetails.billingType",
     callBack: handleNA
   },
   {
@@ -115,7 +115,7 @@ export const reviewLedgerId = getLabelWithValueForModifiedLabel(
     labelKey: "WS_SERV_DETAIL_LEDGER_ID"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
+    jsonPath: "applyScreen.additionalDetails.ledgerId",
     callBack: handleNA
   },
   {
@@ -132,7 +132,7 @@ export const reviewConnectionCategory = getLabelWithValueForModifiedLabel(
     labelKey: "WS_SERV_CONNECTION_CATEGORY"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.connectionCategory",
+    jsonPath: "applyScreen.additionalDetails.connectionCategory",
     callBack: handleNA
   },
   {
@@ -149,7 +149,7 @@ export const reviewCompositionFee = getLabelWithValueForModifiedLabel(
     labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.compositionFee",
+    jsonPath: "applyScreen.additionalDetails.compositionFee",
     callBack: handleNA
   },
   {
@@ -163,10 +163,10 @@ export const reviewCompositionFee = getLabelWithValueForModifiedLabel(
 export const reviewUserCharges = getLabelWithValueForModifiedLabel(
   {
     labelName: "Area (in sq ft)",
-    labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+    labelKey: "WS_ADDN_USER_CHARGES_LABEL"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.userCharges",
+    jsonPath: "applyScreen.additionalDetails.userCharges",
     callBack: handleNA
   },
   {
@@ -180,10 +180,10 @@ export const reviewUserCharges = getLabelWithValueForModifiedLabel(
 export const reviewOthersFee = getLabelWithValueForModifiedLabel(
   {
     labelName: "Area (in sq ft)",
-    labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+    labelKey: "WS_ADDN_OTHER_FEE_LABEL"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.othersFee",
+    jsonPath: "applyScreen.additionalDetails.othersFee",
     callBack: handleNA
   },
   {
@@ -199,7 +199,7 @@ export const reviewMeterMakeReading = getLabelWithValueForModifiedLabel(
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE"
   },
-  { jsonPath: "WaterConnection[0].additionalDetails.meterMake",
+  { jsonPath: "applyScreen.additionalDetails.meterMake",
     callBack: handleNA },
   {
     labelKey: "WS_OLD_LABEL_NAME"
@@ -214,7 +214,7 @@ export const reviewAverageMakeReading = getLabelWithValueForModifiedLabel(
     labelName: "Initial Meter Reading",
     labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
   },
-  { jsonPath: "WaterConnection[0].additionalDetails.avarageMeterReading",
+  { jsonPath: "applyScreen.additionalDetails.avarageMeterReading",
     callBack: handleNA },
   {
     labelKey: "WS_OLD_LABEL_NAME"

@@ -197,13 +197,13 @@ export const additionDetails = getCommonCard({
           sourceJsonPath: "applyScreenMdmsData.ws-services-masters.billingType",
           gridDefination: { xs: 12, sm: 6 },
           errorMessage: "ERR_INVALID_BILLING_PERIOD",
-          jsonPath: "WaterConnection[0].additionalDetails.billingType",
+          jsonPath: "applyScreen.additionalDetails.billingType",
           props: {
             disabled: false
           }
         }),
         afterFieldChange: async (action, state, dispatch) => {
-          let billingType = await get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.billingType");
+          let billingType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.billingType");
           let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
 
           console.log('billingType');
@@ -243,7 +243,7 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT" },
         placeholder: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
+        jsonPath: "applyScreen.additionalDetails.billingAmount",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
@@ -252,7 +252,7 @@ export const additionDetails = getCommonCard({
         placeholder: { labelKey: "WS_SERV_CONNECTION_CATEGORY_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
         sourceJsonPath: "applyScreenMdmsData.ws-services-masters.connectionCategory",
-        jsonPath: "WaterConnection[0].additionalDetails.connectionCategory",
+        jsonPath: "applyScreen.additionalDetails.connectionCategory",
         // pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
@@ -260,7 +260,7 @@ export const additionDetails = getCommonCard({
         label: { labelKey: "WS_SERV_DETAIL_LEDGER_ID" },
         placeholder: { labelKey: "WS_SERV_DETAIL_LEDGER_ID_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
+        jsonPath: "applyScreen.additionalDetails.ledgerId",
         // pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
@@ -431,7 +431,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Amount"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "WaterConnection[0].additionalDetails.compositionFee"
+        jsonPath: "applyScreen.additionalDetails.compositionFee"
       }),
       userCharges: getTextField({
         label: {
@@ -447,7 +447,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Amount"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "WaterConnection[0].additionalDetails.userCharges"
+        jsonPath: "applyScreen.additionalDetails.userCharges"
       }),
       othersFee : getTextField({
         label: {
@@ -463,7 +463,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: getPattern("Amount"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "WaterConnection[0].additionalDetails.othersFee"
+        jsonPath: "applyScreen.additionalDetails.othersFee"
       })
     }),
   }),
@@ -548,7 +548,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "WaterConnection[0].additionalDetails.meterMake"
+        jsonPath: "applyScreen.additionalDetails.meterMake"
       }),
       averageMake: getTextField({
         label: {
@@ -564,7 +564,7 @@ export const additionDetails = getCommonCard({
         required: false,
         pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "WaterConnection[0].additionalDetails.avarageMeterReading"
+        jsonPath: "applyScreen.additionalDetails.avarageMeterReading"
       })
     })
   }),
