@@ -177,7 +177,7 @@ export const getMdmsData = async dispatch => {
       let pipeSize = [];
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
       payload.MdmsRes['ws-services-calculation'].pipeSize = pipeSize;
-      let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
+      let waterSource = [], GROUND = [], SURFACE = [], PIPE = [];
       payload.MdmsRes['ws-services-masters'].waterSource.forEach(obj => {
         waterSource.push({
           code: obj.code.split(".")[0],
@@ -196,8 +196,8 @@ export const getMdmsData = async dispatch => {
             name: obj.name,
             isActive: obj.active
           });
-        } else if (obj.code.split(".")[0] === "BULKSUPPLY") {
-          BULKSUPPLY.push({
+        } else if (obj.code.split(".")[0] === "PIPE") {
+          PIPE.push({
             code: obj.code.split(".")[1],
             name: obj.name,
             isActive: obj.active
@@ -212,7 +212,7 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-masters'].waterSource = filtered;
       payload.MdmsRes['ws-services-masters'].GROUND = GROUND;
       payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
-      payload.MdmsRes['ws-services-masters'].BULKSUPPLY = BULKSUPPLY;
+      payload.MdmsRes['ws-services-masters'].PIPE = PIPE;
     }
 
     //related to ownershipcategory

@@ -68,12 +68,37 @@ export const updateWaterSource = async ( state, dispatch ) => {
 const waterSourceTypeChange = (reqObj) => {
   try {
       let { dispatch, value, state } = reqObj;
+      console.log("value---",value);
       dispatch(prepareFinalObject("WaterConnection[0].waterSource", value));
       dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", ''));
+      let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
+      if(value!="OTHERS")
+      {
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo`,
+            "visible",
+            false
+          )
+        );
+      }
+      else
+      {
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo`,
+            "visible",
+            true
+          )
+        );
+      }
       let formObj = {
         waterSourceType: value, waterSubSource: ''
       }
       triggerUpdateByKey(state, `selectedValues[0]`, formObj , dispatch);
+    
   } catch (e) {
     console.log(e);
   }
