@@ -168,7 +168,8 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_LAND_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+  //    pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+      pattern: /^[1-9]\d{1,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.landArea"
     }),
