@@ -790,6 +790,7 @@ export const getTextToLocalMapping = label => {
         "WF_FIRENOC_CITIZENACTIONREQUIRED",
         localisationLabels
       );
+
       case "CITIZENACTIONREQUIRED-DV":
       return getLocaleLabels(
         "Pending at Citizen",

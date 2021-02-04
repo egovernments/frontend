@@ -340,7 +340,7 @@ const setSearchResponse = async (
       value: tenantId
     },
     { key: "applicationNumber", value: applicationNumber }
-  ]);
+  ])
   const equals = (a, b) =>
   a.length === b.length &&
   a.every((v, i) => v === b[i]);
