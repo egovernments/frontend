@@ -169,7 +169,7 @@ export const propertyAssemblyDetails = getCommonCard({
       },
       required: true,
   //    pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
-      pattern: /^[1-9]\d{1,9}(\.\d{1,3})?%?$/,
+      pattern: /^[1-9]\d*(\.\d+)?$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.landArea"
     }),
@@ -256,9 +256,11 @@ export const propertyAssemblyDetails = getCommonCard({
             labelKey: "PT_COMMON_NO_OF_FLOORS_PLACEHOLDER"
           },
           required: true,
-          pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+          pattern: /^[1-9]\d*$/,
+         // pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          jsonPath: "Property.noOfFloors"
+          jsonPath: "Property.noOfFloors",
+         visible:false,
         }),
     noOfFlats:getTextField({
               label: {
@@ -272,9 +274,11 @@ export const propertyAssemblyDetails = getCommonCard({
                 labelKey: "PT_COMMON_NO_OF_FLATS_PLACEHOLDER"
               },
               required: true,
-              pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+            //  pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+              pattern: /^[1-9]\d*$/,
               errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-              jsonPath: "Property.noOfFlats"
+              jsonPath: "Property.noOfFlats",
+              visible:false,
             })
   })
 });
