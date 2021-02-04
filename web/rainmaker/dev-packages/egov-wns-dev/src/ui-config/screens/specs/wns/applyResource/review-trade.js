@@ -339,7 +339,7 @@ export const propertyDetails={
   reviewNumberOfFlats: getLabelWithValueForModifiedLabel(
     {
       labelName: "Number Of Flats",
-      labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL"
+      labelKey: "WS_PROPERTY_NO_OF_FLATS_LABEL"
     },
     { jsonPath: "WaterConnection[0].property.noOfFlats",
     callBack: handleNA },{
@@ -350,20 +350,25 @@ export const propertyDetails={
       callBack: handleNA      
     }
   ),
-  rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
-    {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rain Water Harvesting Facility"
-    },
-    { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.additionalDetails.isRainwaterHarvesting",
-      callBack: handleNA      
-    }
-  )
+  // rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+  //     labelName: "Rain Water Harvesting Facility"
+  //   },
+  //   {
+  //      jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting",
+  //      callBack: handleNA,
+            
+  //     },
+  //   {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].property.additionalDetails.isRainwaterHarvesting",
+  //     callBack: handleNA      
+  //   },
+    
+  // )
 }
 
 const getPropertyDetails = {
