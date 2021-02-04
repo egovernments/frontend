@@ -14,13 +14,27 @@ import "./index.css";
 
 let screenKey = "register-property"
 
+export const displayEditPage = async (state, dispatch) => {
+  let propertyPayload = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Property"
+  );
+  
+  if(window.location.href.includes("pt-common-screens/summary")) {
+    let mode = getQueryArg(window.location.href, "ptmode")
+    store.dispatch(
+      setRoute(`register-property?purpose=update&propertyId=${propertyPayload.propertyId}&tenantId=${propertyPayload.tenantId}&ptmode=${mode}&redirectUrl=${getQueryArg(window.location.href, "redirectUrl")}`)
+    );
+  }
+}
+
 const callBackForApply = async (state, dispatch) => {
   let propertyPayload = get(
     state,
     "screenConfiguration.preparedFinalObject.Property"
   );
   //console.log("propertyPayload here--",propertyPayload);
-  if(window.location.href.includes("pt-common-screens/summary")) {
+  if(window.location.href.includes("pt-common-screens/summary") && getQueryArg(window.location.href, "purpose")!='update') {
     let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
     set(propertyPayload, "workflow", isFromWorkflowDetails);
     let payload = null;
@@ -214,7 +228,7 @@ const callBackForApply = async (state, dispatch) => {
       }
     }
     // Property.landArea Property.totalConstructedArea
-    if (propertyPayload.superBuiltUpArea > propertyPayload.landArea) {
+    if (Number(propertyPayload.superBuiltUpArea) > Number(propertyPayload.landArea)) {
       dispatch(
         toggleSnackbar(
           true, {
@@ -261,7 +275,7 @@ const callBackForApply = async (state, dispatch) => {
       ]
     }
     set(propertyPayload, "channel", "SYSTEM");
-    if(window.location.href.includes("register-property?redirectUrl=/wns/apply")) { 
+    if(window.location.href.includes("redirectUrl=/wns/apply")) { 
       set(propertyPayload, "source", "WATER_CHARGES");
     } else {
       set(propertyPayload, "source", "MUNICIPAL_RECORDS");
@@ -275,8 +289,8 @@ const callBackForApply = async (state, dispatch) => {
     set(propertyPayload, "noOfFlats", 0);
     //console.log("noOfFlats after---",propertyPayload.noOfFlats);
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
-    propertyPayload.tenantId = propertyPayload.address.city;
-    propertyPayload.address.city = propertyPayload.address.city.split(".")[1];
+    propertyPayload.tenantId = propertyPayload.tenantId || propertyPayload.address.city;
+    propertyPayload.address.city = propertyPayload.tenantId.split(".")[1];
     let additionalDetails = {
       isRainwaterHarvesting: false
     }
@@ -293,14 +307,37 @@ const callBackForApply = async (state, dispatch) => {
       propertyPayload.creationReason = 'CREATE';
       let payload = null;
       //console.log("propertyPayload at create--",propertyPayload);
-      payload = await httpRequest(
-        "post",
-        "/property-services/property/_create",
-        "_update",
-        [],
-        { Property: propertyPayload }
+     
+      if(getQueryArg(window.location.href, "purpose")=='update'){
 
-      );
+        let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
+        //propertyPayload.creationReason = 'UPDATE';
+        let mode = getQueryArg(window.location.href, "ptmode")
+        if(mode=="modify"){
+          propertyPayload.creationReason = 'UPDATE';
+        }
+        set(propertyPayload, "workflow", isFromWorkflowDetails);
+            payload = await httpRequest(
+              "post",
+              "/property-services/property/_update",
+              "_update",
+              [],
+              { Property: propertyPayload }
+            );
+
+      }
+      else{
+       
+        payload = await httpRequest(
+          "post",
+          "/property-services/property/_create",
+          "_update",
+          [],
+          { Property: propertyPayload }
+  
+        );
+      }
+     
 
       let isFromWNS = get( state, "screenConfiguration.preparedFinalObject.isFromWNS", false);
       if (payload && !isFromWNS) {
@@ -312,15 +349,26 @@ const callBackForApply = async (state, dispatch) => {
               setRoute(`${getQueryRedirectUrl()}&propertyId=${payload.Properties[0].propertyId}`)
             )
           } else {
+           
             store.dispatch(
               setRoute(`${getQueryRedirectUrl()}&propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
             )
           }
         }, 3000);
       } else if (payload && isFromWNS) {
+        let mode = getQueryArg(window.location.href, "ptmode");
+        let action =  getQueryArg(window.location.href, "action");
+        let redirectUrl = `${getQueryRedirectUrl()}&propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}&ptmode=${mode}`
+        if(action==="edit"){
+          store.dispatch(
+            setRoute(`summary?redirectUrl=${redirectUrl}`)
+          )
+        }
+        else{
         store.dispatch(
-          setRoute(`summary?redirectUrl=/wns/apply?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}`)
+          setRoute(`summary?redirectUrl=/wns/apply?propertyId=${payload.Properties[0].propertyId}&tenantId=${propertyPayload.tenantId}&ptmode=${mode}`)
         )
+        }
       }
       else {
         dispatch(

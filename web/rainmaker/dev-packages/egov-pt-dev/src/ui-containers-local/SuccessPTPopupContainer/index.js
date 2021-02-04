@@ -2,6 +2,7 @@ import { Dialog, DialogContent } from "@material-ui/core";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
@@ -29,7 +30,7 @@ class SuccessPTPopupContainer extends React.Component {
   
 
   render() {
-    const { open, maxWidth, children } = this.props;
+    const { open, maxWidth, children,ptmode } = this.props;
     return (
       <Dialog open={open} maxWidth={maxWidth} onClose={this.handleClose} DisableBackdropClick={true}>
         <DialogContent children={[
@@ -37,7 +38,7 @@ class SuccessPTPopupContainer extends React.Component {
 				<h1 style= {{ margin: "0px 0px 25px 0px" }}> 
 					<LabelContainer
             					labelName={"Property Created Successfully"}
-            					labelKey={"PT_COMMON_PROPERTY_CREATED_SUCCESSFULLY"}
+            					labelKey={ptmode==="modify"?"PT_COMMON_PROPERTY_MODIFIED_SUCCESSFULLY":"PT_COMMON_PROPERTY_CREATED_SUCCESSFULLY"}
             				/> 
             			</h1>
 				<div style= {{ height: "100px" }} >
@@ -48,7 +49,7 @@ class SuccessPTPopupContainer extends React.Component {
 			    			<h3 style={{ margin : "10px 0px"}}>
 			    				<LabelContainer
 			    					labelName={"Property Registered Successfully!"}
-			    					labelKey={"PT_COMMON_PROPERTY_REGISTERED_SUCCESSFULLY"}
+			    					labelKey={ptmode==="modify"? "PT_COMMON_PROPERTY_UPDATED_SUCCESSFULLY": "PT_COMMON_PROPERTY_REGISTERED_SUCCESSFULLY"}
 			    				/> 
 			    			</h3>
 			    			<p style= {{ color: "black"}}>
@@ -74,11 +75,12 @@ const mapStateToProps = (state, ownProps) => {
     screenConfig,
     `${screenKey}.components.adhocDialog.props.open`
   );
-
+const ptmode =  getQueryArg(window.location.href, "ptmode");
   return {
     open,
     screenKey,
-    screenConfig
+    screenConfig,
+    ptmode
   };
 };
 
