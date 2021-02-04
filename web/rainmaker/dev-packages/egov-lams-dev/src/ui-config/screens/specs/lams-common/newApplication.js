@@ -5,7 +5,7 @@ import {
 import {loadMdmsData, loadLeaseDetails, loadLeaseDetails2, setDocsForEditFlow} from "../lams-utils/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {newApplicationDetailsCard, newApplicationDocumentsCard, OwnerInfoCard, 
-  setPostDSignSuccessScreen,setNewApplicationScreen} from "./newApplicationDetailsCard";
+  setPostDSignSuccessScreen,setNewApplicationScreen,setCitizenEditScreen} from "./newApplicationDetailsCard";
 import {checkIfCitizenEditScreen} from "../lams-utils/utils";
 import {footer} from "./newApplicationFooter";
 import {documentList} from "./documentList";
@@ -65,6 +65,7 @@ const initFreshScreen = (action, state, dispatch) =>{
 
     dispatch(handleField("newApplication","components.div1","visible",false));
     dispatch(handleField("newApplication","components.div2","visible",false));
+    setCitizenEditScreen(action,state, dispatch);
   }
   else
   //D Sign Success Page check.

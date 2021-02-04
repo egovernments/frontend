@@ -63,9 +63,17 @@ import {
     setVisibilityLeaseDetails(action, state, dispatch, false, false);
     setVisibilityDownloadButton(action, state, dispatch, false, false);
     setVisibilityEsignButton(action, state, dispatch, false, false);
+    setVisibilityDocuments(action, state, dispatch, false);
+    setVisibilitySelectors(action, state, dispatch, true);
+    if(process.env.REACT_APP_NAME === "Employee")
+      setVisibilityOwnerInfo(action, state, dispatch, true, false);
     //setVisibilityMonths(action, state, dispatch, false, false);
   }
 
+  export const setCitizenEditScreen = (action,state, dispatch) => {
+    setVisibilityDocuments(action, state, dispatch, true);
+    setVisibilitySelectors(action, state, dispatch, false);
+  }
   // const onMonthsChanged = (action,state, dispatch) => {
   //   setVisibilityDownloadButton(action, state, dispatch, false);
   //   setVisibilityEsignButton(action, state, dispatch, false);
@@ -202,7 +210,10 @@ import {
 
       setVisibilitySurveyNo(action, state, dispatch, false);
       setVisibilityLeaseDetails(action, state, dispatch, false);
-      setVisibilityLocated(action, state, dispatch, true);
+      if(get(state.screenConfiguration.preparedFinalObject.lamsStore.Lease[0],"tenantId"))
+        setVisibilityLocated(action, state, dispatch, true);
+      else
+        setVisibilityLocated(action, state, dispatch, false);
       setVisibilityDownloadButton(action, state, dispatch, false);
       setVisibilityEsignButton(action, state, dispatch, false);
       setVisibilityDocuments(action, state, dispatch, false);;
@@ -460,20 +471,87 @@ import {
     }
   }
 
-  const setVisibilityDocuments = (action, state, dispatch, visible, disabled) =>{
-
-    if(get(state, "screenConfiguration.preparedFinalObject.lamsStore.Lease[0].surveyNo"))
+  const setVisibilityOwnerInfo = (action, state, dispatch, visible, disabled) =>{
+    //Hiding first, then showing. 
+    dispatch(handleField(
+        "newApplication",
+        "components.div2",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div2",
+        "visible",
+        visible
+      )
+    );
+    if(disabled === true || disabled === false)
     {
       dispatch(
         handleField(
           "newApplication",
-          "components.div3",
-          "visible",
-          visible
+        "components.div2",
+          "props.disabled",
+          disabled
         )
       );
     }
-    
+  }
+
+  const setVisibilitySelectors = (action, state, dispatch, visible, disabled) =>{
+
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div1",
+        "visible",
+        visible
+      )
+    );
+
+    if(disabled === true || disabled === false)
+    {
+      dispatch(
+        handleField(
+          "newApplication",
+        "screenConfig.newApplication.components.div1",
+          "props.disabled",
+          disabled
+        )
+      );
+    }
+  }
+
+  const setVisibilityDocuments = (action, state, dispatch, visible, disabled) =>{
+
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div3",
+        "visible",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "newApplication",
+        "components.div3",
+        "visible",
+        visible
+      )
+    );
+
     if(disabled === true || disabled === false)
     {
       dispatch(
@@ -677,7 +755,7 @@ import {
                 autoSelect:true,
                 props:{
                   autoSelect:true,
-                  isClearable:true,
+                  //isClearable:true,
                   className: "autocomplete-dropdown",
                   suggestions: [],
                   disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
@@ -689,6 +767,11 @@ import {
                     labelName: "Select Cantonment",
                     labelKey: "LAMS_APPL_CANT_PLACEHOLDER"
                   },
+                  localePrefix: {
+                    moduleName: "TENANT",
+                    masterName: "TENANTS"
+                  },
+                  labelsFromLocalisation: true,
                   required: true,
                   jsonPath: "lamsStore.Lease[0].tenantId",
                   sourceJsonPath: "lamsStore.allTenants",
