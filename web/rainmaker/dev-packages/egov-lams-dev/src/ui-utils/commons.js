@@ -670,6 +670,30 @@ export const checkIfTheUserIsDeo = () =>{
   return isDeo;
 }
 
+export const checkIfTheUserIsCeo = () =>{
+  let lamsRoles = getLamsRoles();
+  let isCeo = false;
+  lamsRoles.forEach(role => {
+    if(role.indexOf("LR_APPROVER_CEO") > -1)
+    {
+      isCeo = true;
+    }
+  });
+  return isCeo;
+}
+
+export const checkIfTheUserIsLrCe = () =>{
+  let lamsRoles = getLamsRoles();
+  let isLrCe = false;
+  lamsRoles.forEach(role => {
+    if(role.indexOf("LR_CEMP") > -1)
+    {
+      isLrCe = true;
+    }
+  });
+  return isLrCe;
+}
+
 export const deoProcessMappings = (state, dispatch) => {
   let deoMappings = get(state, "screenConfiguration.preparedFinalObject.lamsStore.deoMappings");
   console.log("deoMappings is ",deoMappings);
