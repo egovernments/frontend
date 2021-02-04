@@ -238,7 +238,7 @@ export const roadDetails={
   props: {
     className: "common-div-css search-preview",
     scheama: getCommonGrayCard({
-      viewEight: getCommonContainer(roadDetails)
+      roadDetailContainer: getCommonContainer(roadDetails)
 
     }),
     items: [],
@@ -246,7 +246,7 @@ export const roadDetails={
     //visible:false,
     //isReviewPage: true,
     sourceJsonPath: "WaterConnection[0].tempRoadType",
-    prefixSourceJsonPath: "children.cardContent.children.viewEight.children",
+    prefixSourceJsonPath: "children.cardContent.children.roadDetailContainer.children",
     afterPrefixJsonPath: "children.value.children.key"
   },
   //visible:false,
