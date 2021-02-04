@@ -466,7 +466,12 @@ export const SEARCHER = {
   },
   LOCALITY: {
     URL: "searcher/locality/",
-    ACTION: "_get"
+    ACTION: "_get",
+  },
+  PROPERTY:
+  {
+    URL: "searcher/property-services/propertyopensearch/_get",
+    ACTION: "_get",
   },
 };
 

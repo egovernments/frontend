@@ -7,6 +7,7 @@ import {
 import get from "lodash/get";
 import { getSearchBillResult } from "../../../../../ui-utils/commons";
 import { FETCHBILL } from "egov-ui-kit/utils/endPoints";
+import { SEARCHER } from "egov-ui-kit/utils/endPoints";
 
 export const ComponentJsonPath = {
   ulbCity:
@@ -76,7 +77,7 @@ export const applyMohallaData = (mohallaData, tenantId, dispatch) => {
 export const getSearchResults = async (requestPayload) => {
   const PUBLIC_SEARCH = {
     GET: {
-      URL: "searcher/property-services/propertyopensearch/_get",
+      URL: SEARCHER.PROPERTY.URL,
       ACTION: "_get",
     },
   };
