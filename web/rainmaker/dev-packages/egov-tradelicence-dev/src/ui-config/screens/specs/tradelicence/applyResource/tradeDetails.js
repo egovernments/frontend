@@ -794,7 +794,8 @@ export const tradeDetails = getCommonCard({
         masterName: "StructureType",
         rootBlockSub : 'structureTypes',
         callBackEdit: updateStructureTypes
-      }
+      },
+      disabled:getQueryArg(window.location.href, "action") === "RESUBMIT" || getQueryArg(window.location.href, "action") === "edit" ? true:false,
     },
     tradeCommencementDate: getDateField({
       label: {

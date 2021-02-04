@@ -5,9 +5,10 @@ import {
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale, enableField, disableField } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -50,6 +51,7 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 };
 
 export const getSearchResults = async (queryObject, dispatch) => {
+
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
@@ -59,6 +61,34 @@ export const getSearchResults = async (queryObject, dispatch) => {
       queryObject
     );
     store.dispatch(toggleSpinner());
+
+    if (response === '') {
+      store.dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "This Provisional NoC number is not registered!",
+            //labelKey: "ERR_PROVISIONAL_NUMBER_NOT_REGISTERED"
+          },
+          "info"
+        )
+      );
+      return null;
+    }
+
+    response.FireNOCs.forEach(firenoc => {
+
+      let buildings = firenoc.fireNOCDetails.buildings;
+
+      for (let i = 0; i < buildings.length; i++) {
+
+        buildings[i].landArea = parseInt(buildings[i].landArea);
+        buildings[i].parkingArea = parseInt(buildings[i].parkingArea);
+        buildings[i].totalCoveredArea = parseInt(buildings[i].totalCoveredArea);
+
+      }
+    });
+
     return response;
   } catch (error) {
     store.dispatch(
@@ -79,16 +109,105 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
   );
   let method = nocId ? "UPDATE" : "CREATE";
   try {
+    debugger;
     let payload = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs",
       []
     );
-    let tenantId = get(
+    let newbuildings = get(
       state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-      getTenantId()
+      "FireNOCs[0].fireNOCDetails.buildings",
+      []
     );
+    newbuildings.map(index => {
+
+      set(
+        index,
+        `landArea`,
+        parseInt(index.landArea)
+      );
+
+      set(
+        index,
+        `totalCoveredArea`,
+        parseInt(index.totalCoveredArea)
+      );
+      set(
+        index,
+        `parkingArea`,
+        parseInt(index.parkingArea)
+      );
+
+
+      if (!index.parkingArea) {
+        set(
+          index,
+          `parkingArea`,
+          0
+        );
+
+      }
+      else {
+        set(
+          index,
+          `parkingArea`,
+          parseInt(index.parkingArea)
+        );
+      }
+    })
+
+    let noctypedata = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType"
+    );
+
+    if (noctypedata === "NEW" || noctypedata === "PROVISIONAL") {
+
+      let isLegacy = false;
+      set(
+        payload[0],
+        "isLegacy",
+        isLegacy
+      );
+    }
+
+
+    let provisionalnocnumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].provisionFireNOCNumber",
+      []
+    )
+
+
+    if (provisionalnocnumber.length === 0) {
+
+      provisionalnocnumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "FireNOCs[0].provisionFireNOCNumber",
+        []
+      )
+
+      var keyToDelete = "provisionFireNOCNumber";
+
+      const codefull = get(
+        state.screenConfiguration,
+        "preparedFinalObject"
+      );
+
+      delete codefull.FireNOCs[0][keyToDelete];
+
+    }
+
+    let userInfodata = JSON.parse(getUserInfo());
+    const tenantId1 = get(userInfodata, "permanentCity");
+    let tenantId2 = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].tenantId",
+      getTenantId()
+     );
+   let tenantId = process.env.REACT_APP_NAME === "Citizen" ?  tenantId1: tenantId2;
+    debugger;
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
 
@@ -135,7 +254,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
           ...[
             "NO_OF_FLOORS",
             "NO_OF_BASEMENTS",
-            "PLOT_SIZE",
+            // "PLOT_SIZE",
             "BUILTUP_AREA",
             "HEIGHT_OF_BUILDING"
           ]
@@ -264,9 +383,13 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
-
+    payload[0].fireNOCDetails.buildings[0].landArea = parseInt(payload[0].fireNOCDetails.buildings[0].landArea);
+    payload[0].fireNOCDetails.buildings[0].parkingArea = parseInt(payload[0].fireNOCDetails.buildings[0].parkingArea);
+    payload[0].fireNOCDetails.buildings[0].totalCoveredArea = parseInt(payload[0].fireNOCDetails.buildings[0].totalCoveredArea);
     let response;
+    console.log("===============",payload);
     if (method === "CREATE") {
+      debugger;
       response = await httpRequest(
         "post",
         "/firenoc-services/v1/_create",
@@ -313,11 +436,16 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
+  debugger;
   let documents = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",
     []
   );
+  console.log("======>>>>",documents);
+  let NOCType = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType", []);
+  documents = documents.filter(doc=>{return doc.applicationType  === NOCType });
+  documents = documents.length ? documents[0].allowedDocs : [] ;
   documents = documents.filter(item => {
     return item.active;
   });

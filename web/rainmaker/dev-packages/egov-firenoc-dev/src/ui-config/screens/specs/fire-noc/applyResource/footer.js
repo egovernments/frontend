@@ -82,19 +82,21 @@ const moveToReview = (state, dispatch) => {
 };
 
 const getMdmsData = async (state, dispatch) => {
-  let tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-  );
+  let tenantId = "pb";
+  // let tenantId = get(
+  //   state.screenConfiguration.preparedFinalObject,
+  //   "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+  // );
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "firenoc", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
   try {
+    debugger;
     let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
@@ -102,14 +104,15 @@ const getMdmsData = async (state, dispatch) => {
       [],
       mdmsBody
     );
-
+    debugger;
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        payload.MdmsRes.firenoc.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
+    debugger;
   } catch (e) {
     console.log(e);
   }
@@ -270,6 +273,7 @@ const callBackForNext = async (state, dispatch) => {
         prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 2) {
+        debugger;
         getMdmsData(state, dispatch);
         let response = await createUpdateNocApplication(
           state,

@@ -236,6 +236,7 @@ class DocumentList extends Component {
   getUploadCard = (card, key) => {
     const { classes, documentsUploadRedux } = this.props;
     let jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
+    debugger;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
@@ -314,6 +315,7 @@ class DocumentList extends Component {
 
   render() {
     const { classes, documentsList } = this.props;
+    debugger;
     let index = 0;
     return (
       <div>

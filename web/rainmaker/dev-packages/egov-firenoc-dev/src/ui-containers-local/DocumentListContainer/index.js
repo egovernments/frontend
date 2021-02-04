@@ -27,6 +27,7 @@ const mapStateToProps = state => {
     "screenConfiguration.preparedFinalObject.documentsContract",
     []
   );
+  console.log(">>>>>>>>>>>>>>>>>>",documentsList);
   if(documentsList.length > 0) {
     documentsList.map(docList => {
       docList.cards.map(document => {
