@@ -128,7 +128,7 @@ const getAcknowledgementCard = (
               labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Water Application No.",
+              labelName: "Water Application No",
               labelKey: "WS_ACKNO_APP_NO_LABEL"
             },
             number: applicationNumberWater,
@@ -180,7 +180,7 @@ const getAcknowledgementCard = (
               labelKey: "WS_APPLICATION_SUCCESS_ACKO_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Application Number.",
+              labelName: "Application Number",
               labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
             },
             number: applicationNumber

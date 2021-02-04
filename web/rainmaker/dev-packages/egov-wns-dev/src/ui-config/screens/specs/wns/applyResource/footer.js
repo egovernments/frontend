@@ -29,6 +29,8 @@ import commonConfig from "config/common.js";
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
+
+  console.info("setReview=====>",setReviewPageRoute);
   let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
@@ -48,7 +50,7 @@ const moveToReview = (state, dispatch) => {
   );
 
   let validateDocumentField = false;
-
+    console.info("move to Review====");
   for (let i = 0; i < documentsFormat.length; i++) {
     let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
     let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
@@ -390,24 +392,44 @@ const callBackForNext = async (state, dispatch) => {
   }
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
-    if (isModifyMode()) {
-      if (moveToReview(state, dispatch)) {
-        await pushTheDocsUploadedToRedux(state, dispatch);
-        isFormValid = true; hasFieldToaster = false;
-        // if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
-        //   setReviewPageRoute(state, dispatch);
-        // }
-      }
+
+    console.info("Validate third step");
+    console.info("Checking 3rd page");
+    let roadCuttingValidation =  checkThirdFormValid(state,dispatch,isFormValid);
+    console.info("check result==",roadCuttingValidation);
+    isFormValid = roadCuttingValidation;
+    hasFieldToaster = !isFormValid;
+    if(isFormValid){
+      if (isModifyMode()) {
+        console.info("inside the modify ");             
+          if (moveToReview(state, dispatch)) {
+            await pushTheDocsUploadedToRedux(state, dispatch);
+            // isFormValid = true; 
+            // hasFieldToaster = false;
+                // if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
+                //   setReviewPageRoute(state, dispatch);
+                // }
+          }
+          // else {
+          //   isFormValid = true;
+          //   hasFieldToaster = false;
+          // }
+        
+      
+      } 
       else {
-        isFormValid = true;
-        hasFieldToaster = false;
-      }
-    } else {
-      if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
-        setReviewPageRoute(state, dispatch);
-      }
-      isFormValid = true;
+            console.info("in else part");
+          if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
+            setReviewPageRoute(state, dispatch);
+          }
+        //isFormValid = true;
+       }
+  
     }
+
+  
+
+
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
     dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "props.propertyId", get(applyScreenObj, "property.propertyId", '')));
@@ -416,8 +438,8 @@ const callBackForNext = async (state, dispatch) => {
     }
 
 
-  }
-  if (activeStep === 3) {
+   }
+   if (activeStep === 3) {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     if (waterId && sewerId) {
@@ -428,7 +450,7 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = await acknoledgementForSewerage(state, activeStep, isFormValid, dispatch);
     }
     // responseStatus === "success" && changeStep(activeStep, state, dispatch);
-  }
+   }
   if (activeStep !== 3) {
     if (isFormValid) {
       changeStep(state, dispatch);
@@ -446,10 +468,11 @@ const callBackForNext = async (state, dispatch) => {
           };
           break;
         case 2:
+          console.info("PG= 484");
           errorMessage = {
             labelName:
               "Please fill all mandatory fields for Applicant Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+            labelKey: "ERR_ROADCUTTING_TOAST"
           };
           break;
       }
@@ -458,7 +481,37 @@ const callBackForNext = async (state, dispatch) => {
   }
 };
 
-const moveToSuccess = (combinedArray, dispatch) => {
+const checkThirdFormValid = (state,dispatch,isFormValid) =>{
+  console.info("Came");
+   let roadTypeEstimate = get(state.screenConfiguration.preparedFinalObject, "applyScreen.roadTypeEst");
+   const roadEstimateValidation = [];
+   roadTypeEstimate.forEach(element => {
+    var arr =[parseFloat(element.length,10),parseFloat(element.breadth,10),parseFloat(element.depth,10),parseFloat(element.rate,10)];
+    const NanResult = arr.filter(each => isNaN(each));
+    console.info("NanResult=",NanResult.length,"NaN Result for element==",element);
+    if(NanResult.length < 4 && NanResult.length >0){
+        roadEstimateValidation.push(element);
+       }
+    });
+
+      if(roadEstimateValidation.length>=1) {
+        // let errorMessage = {
+        //   labelName: "Please fill all fields for road cutting charges",
+        //   labelKey: "ERR_ROADCUTTING_TOAST"
+        // };
+        // console.info("show error");
+        // dispatch(toggleSnackbar(true, errorMessage, "error"));
+      return false;
+      }
+      else {
+      return true;
+      }
+ 
+  }
+
+
+
+ const moveToSuccess = (combinedArray, dispatch) => {
   const tenantId = get(combinedArray[0].property, "tenantId");
   const purpose = "apply";
   const status = "success";
@@ -520,6 +573,7 @@ const acknoledgementForBothWaterAndSewerage = async (state, activeStep, isFormVa
         };
         break;
       case 2:
+        console.info("PG= 589");
         errorMessage = {
           labelName:
             "Please fill all mandatory fields for Applicant Details, then proceed!",
@@ -557,10 +611,12 @@ const acknoledgementForWater = async (state, activeStep, isFormValid, dispatch) 
         };
         break;
       case 2:
+        console.info("PG= 627");
         errorMessage = {
           labelName:
             "Please fill all mandatory fields for Applicant Details, then proceed!",
-          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+         // labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+         labelKey:"ERR_ROADCUTTING_TOAST"
         };
         break;
     }
@@ -594,6 +650,7 @@ const acknoledgementForSewerage = async (state, activeStep, isFormValid, dispatc
         };
         break;
       case 2:
+        console.info("PG= 664");
         errorMessage = {
           labelName:
             "Please fill all mandatory fields for Applicant Details, then proceed!",

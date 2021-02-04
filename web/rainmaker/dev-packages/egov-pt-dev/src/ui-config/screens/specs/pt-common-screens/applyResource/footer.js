@@ -266,12 +266,13 @@ const callBackForApply = async (state, dispatch) => {
     } else {
       set(propertyPayload, "source", "MUNICIPAL_RECORDS");
     }
-    console.log("nooffloors---",propertyPayload.noOfFloors);
-    if(propertyPayload.noOfFloors==undefined)
+   // console.log("nooffloors---",propertyPayload.noOfFloors);
+
+    if(propertyPayload.noOfFloors==undefined || propertyPayload.noOfFloors=='')
     set(propertyPayload, "noOfFloors", 1);
     //console.log("nooffloors after---",propertyPayload.noOfFloors);
-    if(propertyPayload.noOfFlats==undefined)
-    set(propertyPayload, "noOfFlats", NA);
+    if(propertyPayload.noOfFlats==undefined || propertyPayload.noOfFlats=='')
+    set(propertyPayload, "noOfFlats", 0);
     //console.log("noOfFlats after---",propertyPayload.noOfFlats);
     propertyPayload.landArea = parseInt(propertyPayload.landArea);
     propertyPayload.tenantId = propertyPayload.address.city;

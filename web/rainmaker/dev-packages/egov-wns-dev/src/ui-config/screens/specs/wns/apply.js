@@ -157,7 +157,8 @@ export const getMdmsData = async dispatch => {
             { name: "PropertySearch" },
             { name: "TaxHeadMaster" },
             { name: "motorInfo" },
-            { name: "authorizedConnection" }
+            { name: "authorizedConnection" },
+            { name: "workflowBasedCardPermission" }
           ]
         },
         { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{ name: "PropertyOwnershipCategory" }]}
@@ -176,7 +177,7 @@ export const getMdmsData = async dispatch => {
       let pipeSize = [];
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
       payload.MdmsRes['ws-services-calculation'].pipeSize = pipeSize;
-      let waterSource = [], GROUND = [], SURFACE = [], BULKSUPPLY = [];
+      let waterSource = [], GROUND = [], SURFACE = [], PIPE = [];
       payload.MdmsRes['ws-services-masters'].waterSource.forEach(obj => {
         waterSource.push({
           code: obj.code.split(".")[0],
@@ -195,8 +196,8 @@ export const getMdmsData = async dispatch => {
             name: obj.name,
             isActive: obj.active
           });
-        } else if (obj.code.split(".")[0] === "BULKSUPPLY") {
-          BULKSUPPLY.push({
+        } else if (obj.code.split(".")[0] === "PIPE") {
+          PIPE.push({
             code: obj.code.split(".")[1],
             name: obj.name,
             isActive: obj.active
@@ -211,7 +212,7 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-masters'].waterSource = filtered;
       payload.MdmsRes['ws-services-masters'].GROUND = GROUND;
       payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
-      payload.MdmsRes['ws-services-masters'].BULKSUPPLY = BULKSUPPLY;
+      payload.MdmsRes['ws-services-masters'].PIPE = PIPE;
     }
 
     //related to ownershipcategory
@@ -235,6 +236,7 @@ export const getMdmsData = async dispatch => {
 
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
+
     
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) { console.log(e); }
@@ -486,6 +488,25 @@ const  getApplicationNoLabel= () => {
     return "WS_ACKNO_CONNECTION_NO_LABEL";
   }
   return  "WS_ACKNO_APP_NO_LABEL" ;
+}
+
+const checkCardPermission =(state,cardName) =>{
+  let workFlowStatus = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreen.applicationStatus",
+    null
+  );
+  let cardList = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.workflowBasedCardPermission",
+    []
+  );
+  cardList = cardList.filter( (card) => card.code.includes(cardName));
+  if(cardList.length >0 && cardList[0].status.includes(workFlowStatus) ){
+    return true;
+  }
+  return false;
+
 }
 
 const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
@@ -772,14 +793,8 @@ const screenConfig = {
 
        //Setting Tax heads and Road Types
           if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
-
             //show tax head estimates to only field inspector and doc verifier
-            let workFlowStatus = get(
-              state,
-              "screenConfiguration.preparedFinalObject.applyScreen.applicationStatus",
-              []
-            );
-            if(workFlowStatus === "PENDING_FOR_DOCUMENT_VERIFICATION" || workFlowStatus === "PENDING_FOR_FIELD_INSPECTION"){
+            if(checkCardPermission(state , "wsConnectionTaxHeadsContainer")){
               dispatch(
                 handleField(
                   "apply",
@@ -789,8 +804,6 @@ const screenConfig = {
                 )
               );
             }
-         
-               
 
             //Create tax head object ---start
             let taxHeadDetails = get(
