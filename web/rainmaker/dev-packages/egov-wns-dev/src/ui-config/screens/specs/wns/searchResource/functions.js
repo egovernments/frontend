@@ -27,7 +27,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
   if (
     Object.values(searchScreenObject).length <= 1
   ) {
-    dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_PT_COMMON_FILL_MANDATORY_FIELDS" }, "warning"));
+    dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
   } else if (
     (searchScreenObject["fromDate"] === undefined || searchScreenObject["fromDate"].length === 0) &&
     searchScreenObject["toDate"] !== undefined && searchScreenObject["toDate"].length !== 0) {

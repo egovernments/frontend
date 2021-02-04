@@ -214,7 +214,7 @@ const callBackForApply = async (state, dispatch) => {
       }
     }
     // Property.landArea Property.totalConstructedArea
-    if (propertyPayload.superBuiltUpArea > propertyPayload.landArea) {
+    if (Number(propertyPayload.superBuiltUpArea) > Number(propertyPayload.landArea)) {
       dispatch(
         toggleSnackbar(
           true, {
