@@ -1141,7 +1141,7 @@ export const tradeDetails = getCommonCard({
     }),
     tradeOperationalArea: getTextField({
       label: {
-        labelName: "Operatonal Area (Sq Ft)",
+        labelName: "Operatonal Area",
         labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
       },
       props:{
@@ -1152,7 +1152,7 @@ export const tradeDetails = getCommonCard({
         labelName: "Enter Operatonal Area in Sq Ft",
         labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
       },
-      pattern: getPattern("OperationalArea"),
+      //pattern: getPattern("OperationalArea"),
       jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
     }),
     tradeNoOfEmployee: getTextField({
