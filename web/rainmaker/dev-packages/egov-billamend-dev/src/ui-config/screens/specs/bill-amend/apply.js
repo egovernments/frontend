@@ -143,10 +143,14 @@ export const setSearchResponse = async (state, dispatch, action) => {
 
 export const getData = async (action, state, dispatch) => {
   await getMdmsData(action, state, dispatch);
-  await setSearchResponse(state, dispatch, action);
+  // await setSearchResponse(state, dispatch, action);
 }
 
 export const getMdmsData = async (action, state, dispatch) => {
+  const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
+  const businessService = getQueryArg( window.location.href, "businessService");
+  const tenantId = getTenantId() || getQueryArg( window.location.href, "tenantId");
+
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -163,6 +167,11 @@ export const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "DocumentType" }
           ]
+        },
+        {
+          moduleName: "BillingService",
+          masterDetails: [
+            { name: "TaxHeadMaster" } ]
         }
       ]
     }
@@ -176,7 +185,33 @@ export const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    let taxHeadMasterMdmsDetails = get(payload, "MdmsRes.BillingService.TaxHeadMaster", []), taxHeadMasterDetails;
+    if (taxHeadMasterMdmsDetails && taxHeadMasterMdmsDetails.length > 0) {
+      taxHeadMasterDetails = taxHeadMasterMdmsDetails.filter(service => (service.service == businessService));
+      if(taxHeadMasterDetails && taxHeadMasterDetails.length > 0) {
+        taxHeadMasterDetails.map(bill => {
+          bill.reducedAmountValue = 0;
+          bill.additionalAmountValue = 0;
+          bill.taxHeadCode = bill.code;
+        });
+      }
+      dispatch(prepareFinalObject("fetchBillDetails", taxHeadMasterDetails, []));
+    } else {
+      dispatch(prepareFinalObject("fetchBillDetails", []));
+    }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    dispatch(prepareFinalObject("Amendment.consumerCode", connectionNumber));
+    dispatch(prepareFinalObject("Amendment.tenantId", tenantId));
+    dispatch(prepareFinalObject("Amendment.businessService", businessService));
+    dispatch(prepareFinalObject("BILL.AMOUNTTYPE", "reducedAmount"));
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        connectionNumber
+      )
+    );
   } catch (e) {
     console.log(e);
   }
