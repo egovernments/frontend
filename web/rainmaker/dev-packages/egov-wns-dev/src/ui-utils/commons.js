@@ -577,7 +577,6 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 const parserFunction = (state) => {
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
     let waterDetails =get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0]", {});
-    debugger;
     console.log(".........",waterDetails );
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
@@ -601,15 +600,15 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== null
             ) ? queryObject.additionalDetails.detailsProvidedBy : "",
-            billingType: waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.billingType : null,
-      billingAmount: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.billingAmount) : null,
-      connectionCategory: waterDetails && waterDetails.additionalDetails ? waterDetails.additionalDetails.connectionCategory : null,
-      ledgerId: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.ledgerId) : null,
-      avarageMeterReading: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.avarageMeterReading) : null,
-      meterMake: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.meterMake) : null,
-      compositionFee: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.compositionFee) : null,
-      userCharges: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.userCharges) : null,
-      othersFee: waterDetails && waterDetails.additionalDetails ? parseFloat(waterDetails.additionalDetails.othersFee) : null,
+            billingType: queryObject && queryObject.additionalDetails ? queryObject.additionalDetails.billingType : null,
+      billingAmount: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.billingAmount) : null,
+      connectionCategory: queryObject && queryObject.additionalDetails ? queryObject.additionalDetails.connectionCategory : null,
+      ledgerId: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.ledgerId) : null,
+      avarageMeterReading: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.avarageMeterReading) : null,
+      meterMake: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.meterMake) : null,
+      compositionFee: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.compositionFee): null,
+      userCharges: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.userCharges) : null,
+      othersFee: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.othersFee) : null,
       //meterStatus: waterDetails && waterDetails ? waterDetails.meterStatus : null,
       // detailsProvidedBy : null,
       adhocPenalty: null,
@@ -625,7 +624,6 @@ const parserFunction = (state) => {
     }
     queryObject = { ...queryObject, ...parsedObject }
     return queryObject;
-    debugger;
 }
 
 export const prepareDocumentsUploadRedux = async (state, dispatch) => {
@@ -905,7 +903,6 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
 
 export const applyForWater = async (state, dispatch) => {
     let queryObject = parserFunction(state);
-    debugger;
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let method = waterId ? "UPDATE" : "CREATE";
     try {
