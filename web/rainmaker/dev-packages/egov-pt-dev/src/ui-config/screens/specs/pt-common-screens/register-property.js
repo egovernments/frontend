@@ -15,6 +15,7 @@ import { footer } from "./applyResource/footer";
 import { propertyAssemblyDetails } from "./applyResourceMutation/propertyAssemblyDetails";
 import { propertyLocationDetails } from "./applyResourceMutation/propertyLocationDetails";
 import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 
 export const header = getCommonContainer({
@@ -219,8 +220,72 @@ const getMdmsData = async (action, state, dispatch) => {
   }
 };
 
+const setPropertyDetails = async (action, state, dispatch) => {
+  const propertyId = getQueryArg(window.location.href, "propertyId");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  if(propertyId){
+    const response = await httpRequest(
+      "post",
+      "/property-services/property/_search",
+      "",
+      [{
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "propertyIds",
+        value: propertyId
+      }]
+    );
+    dispatch(prepareFinalObject("Property", get(response, "Properties[0]")));
+    loadWorkflowDataForUpdate(dispatch);
+  }
 
+}
 
+const loadWorkflowDataForUpdate = async (dispatch) => {
+  
+    const mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "PropertyTax",
+            masterDetails: [
+              { name: "PTWorkflow" }
+            ]
+          }
+        ],
+  
+      }
+    }
+    try {
+      let payload = null;
+      payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+  
+     // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+      let ptWorkflowDetails = get(payload, "MdmsRes.PropertyTax.PTWorkflow", []);
+
+    ptWorkflowDetails.forEach(data => {
+      if(data.enable) {
+        let workFlow = {
+          tenantId : getQueryArg(window.location.href, "tenantId"),
+          businessService : data.businessService,
+          businessId : getQueryArg(window.location.href, "propertyId"),
+          action : "OPEN",
+          moduleName : "PT",
+          state : null,
+          comment : null,
+          documents : null,
+          assignes : null
+        };
+        dispatch(prepareFinalObject("isWorkflowDetails", workFlow, null));
+      }
+    })
+  } catch (e) {
+    console.log(e);
+  }
+};
 const getFirstListFromDotSeparated = list => {
   list = list.map(item => {
     if (item.active) {
@@ -301,8 +366,10 @@ const screenConfig = {
           ownershipCategory
         )
       );
+      setPropertyDetails(action, state, dispatch);
     });
-
+    
+   
     return action;
   },
   components: {

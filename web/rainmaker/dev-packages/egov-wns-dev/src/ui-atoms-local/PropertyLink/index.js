@@ -1,6 +1,7 @@
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { routeTo } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formActionUtils";
+import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
@@ -21,8 +22,10 @@ class AddLinkForProperty extends React.Component {
   render() {
     const { url, isMode, selectedPropertyId } = this.props;
     let link = `/pt-common-screens/propertySearch?redirectUrl=${url}`;
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    let modifyLink = `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${selectedPropertyId}&tenantId=${tenantId}&redirectTo=${url.substring(1)}`
+    const tenantId = getQueryArg(window.location.href, "tenantId") || getTenantIdCommon();
+    let modifyLink = `/pt-common-screens/register-property?purpose=update&ptmode=modify&propertyId=${selectedPropertyId}&tenantId=${tenantId}&redirectUrl=${url}`
+
+    //let modifyLink = `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${selectedPropertyId}&tenantId=${tenantId}&redirectTo=${url.substring(1)}`
     if (link) {
       let applicationNo = getQueryArg(window.location.href, "applicationNumber");
       const connectionNo = getQueryArg(window.location.href, "connectionNumber");
@@ -58,6 +61,13 @@ class AddLinkForProperty extends React.Component {
               style={clickHereStyles}
               labelKey="WS_APPLY_CLICK_HERE" />
           </a>
+          <br />
+          { (process.env.REACT_APP_NAME != "Citizen")?
+          <a href="javascript:void(0)" onClick={() => routeTo(modifyLink)} >
+            <LabelContainer
+              style={clickHereStyles}
+              labelKey="WS_MODIFY_PROPERTY" />
+          </a> : ""}
         </div>
       );
     }
@@ -67,7 +77,7 @@ const mapStateToProps = (state, ownprops) => {
   let selectedPropertyId = "";
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
-  selectedPropertyId = get(preparedFinalObject, "applyScreen.property.propertyId");
+  selectedPropertyId = get(preparedFinalObject, "applyScreen.property.propertyId") || get(preparedFinalObject, "searchScreen.propertyIds");
 
   return { selectedPropertyId };
 };
