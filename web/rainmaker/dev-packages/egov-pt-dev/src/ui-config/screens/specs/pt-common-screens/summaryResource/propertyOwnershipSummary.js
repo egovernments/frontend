@@ -57,6 +57,10 @@ export const reviewOwnerGender = getLabelWithValue(
   },
   {
     jsonPath: "Property.owners[0].gender",
+    localePrefix: {
+      moduleName: "COMMON",
+      masterName: "GENDER"
+    },
     callBack: checkValueForNA
   }
 );

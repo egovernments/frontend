@@ -211,6 +211,10 @@ export const getOwnerDetails = (isEditable = true) => {
               },
               {
                 jsonPath: "applyScreen.property.owners[0].gender",
+                localePrefix: {
+                  moduleName: "COMMON",
+                  masterName: "GENDER"
+                },
                 callBack: handleNA
               }
             ),
@@ -224,16 +228,16 @@ export const getOwnerDetails = (isEditable = true) => {
             //     callBack: convertEpochToDateAndHandleNA
             //   }
             // ),
-            email: getLabelWithValue(
-              {
-                labelName: "Email",
-                labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
-              },
-              {
-                jsonPath: "applyScreen.property.owners[0].emailId",
-                callBack: handleNA
-              }
-            ),
+            // email: getLabelWithValue(
+            //   {
+            //     labelName: "Email",
+            //     labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
+            //   },
+            //   {
+            //     jsonPath: "applyScreen.property.owners[0].emailId",
+            //     callBack: handleNA
+            //   }
+            // ),
             fatherName: getLabelWithValue(
               {
                 labelName: "Father/Husband Name",
@@ -250,6 +254,10 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
               },
               { jsonPath: "applyScreen.property.owners[0].relationship",
+              localePrefix: {
+                moduleName: "COMMON",
+                masterName: "RELATION"
+              },
               callBack: handleNA }
             ),
             //   ownerCategory,
@@ -268,6 +276,10 @@ export const getOwnerDetails = (isEditable = true) => {
                 labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
               },
               { jsonPath: "applyScreen.property.owners[0].ownerType",
+              localePrefix: {
+                moduleName: "COMMON_MASTERS",
+                masterName: "OWNERTYPE"
+              },
               callBack: handleNA }
             )
           }),
