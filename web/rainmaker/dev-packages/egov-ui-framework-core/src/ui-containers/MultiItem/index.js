@@ -33,7 +33,7 @@ class MultiItem extends React.Component {
   };
 
   initMultiItem = props => {
-    const { items, sourceJsonPath, preparedFinalObject } = props;
+    let { items, sourceJsonPath, preparedFinalObject } = props;
     const editItems = get(preparedFinalObject, sourceJsonPath, []);
     if (editItems) {
       if (!items.length && !editItems.length) {
@@ -50,6 +50,12 @@ class MultiItem extends React.Component {
               // this.addItem(true);
             }
           }
+        }else   if (items.filter(a=>a.isDeleted!==false).length > editItems.length && editItems.length!=0) {
+            let removeLength= items.length - editItems.length;
+            for (let i=0;i<removeLength;i++){
+              this.removeItem(removeLength-i);
+            }
+
         }
       }
     }
