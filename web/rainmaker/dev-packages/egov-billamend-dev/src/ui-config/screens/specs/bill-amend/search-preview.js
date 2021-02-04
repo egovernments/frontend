@@ -119,20 +119,20 @@ const setDownloadMenu = (state, dispatch,  applicationNumber) => {
     let certificateDownloadObject = {
         label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_COUPON" },
         link: () => {
-            generateBillAmendPdf(get(
+            generateBillAmendPdf([get(
                 state,
                 "screenConfiguration.preparedFinalObject.Amendment", {}
-            ), commonConfig.tenantId, 'download');
+            )], commonConfig.tenantId, 'download');
         },
         leftIcon: "book"
     };
     let certificatePrintObject = {
         label: { labelName: "PT Certificate", labelKey: "BILL_AMEND_COUPON" },
         link: () => {
-            generateBillAmendPdf(get(
+            generateBillAmendPdf([get(
                 state,
                 "screenConfiguration.preparedFinalObject.Amendment", {}
-            ), commonConfig.tenantId, 'print');
+            )], commonConfig.tenantId, 'print');
         },
         leftIcon: "book"
     };
