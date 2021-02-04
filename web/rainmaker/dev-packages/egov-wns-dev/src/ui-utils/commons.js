@@ -70,7 +70,6 @@ export const updateTradeDetails = async requestBody => {
 };
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
-    alert(1);
     console.log(label, labelKey)
     if (labelKey) {
         let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
@@ -130,6 +129,23 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
             if (waterConnection[i].propertyId && waterConnection[i].propertyId !== null && waterConnection[i].propertyId !== "NA") {
                 if (propertyArr[waterConnection[i].propertyId]) {
                     tempPropertyObj = (propertyArr[waterConnection[i].propertyId]) ? propertyArr[waterConnection[i].propertyId] : null
+                    if(tempPropertyObj.status=='INACTIVE'){
+                        let queryObject1 = [];
+                        if (process.env.REACT_APP_NAME === "Citizen") {
+                            queryObject1 = [{ key: "propertyIds", value: tempPropertyObj.propertyId }];
+                        } else {
+                            queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "propertyIds", value: tempPropertyObj.propertyId }];
+                        }
+        
+                        if(locality) {
+                            queryObject1.push({key: "locality", value: locality})
+                        }
+                        if(tenantId) {
+                            queryObject1.push({key: "tenantId", value: tenantId})
+                        }
+                        let payload = await getPropertyResultsWODispatch(queryObject1);
+                        tempPropertyObj = payload.Properties[0];
+                    }
                     waterConnection[i].property = tempPropertyObj;
                     waterConnection[i].tenantId = (tempPropertyObj && tempPropertyObj.tenantId) ? tempPropertyObj.tenantId : null;
                     tempPropertyObj = null;

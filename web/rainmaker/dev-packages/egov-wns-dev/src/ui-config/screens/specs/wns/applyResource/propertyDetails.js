@@ -21,7 +21,7 @@ let modeaction = getQueryArg(window.location.href, "modeaction");
 let mode = getQueryArg(window.location.href, "mode");
 
 let modifyLink;
-if(isMode==="MODIFY"){
+if(isMode==="MODIFY" || action ==="edit"){
   modifyLink=`/wns/apply?`;
   modifyLink = applicationNumber ? modifyLink + `applicationNumber=${applicationNumber}` : modifyLink;
   modifyLink = connectionNumber ? modifyLink + `&connectionNumber=${connectionNumber}` : modifyLink;
@@ -40,8 +40,7 @@ isMode = (isMode) ? isMode.toUpperCase() : "";
  connectionNumber = getQueryArg(window.location.href, "connectionNumber");
  tenantId = getQueryArg(window.location.href, "tenantId");
  action = getQueryArg(window.location.href, "action");
-
-if(isMode==="MODIFY"){
+if(isMode==="MODIFY" || action ==="edit"){
   modifyLink=`/wns/apply?`;
   modifyLink = applicationNumber ? modifyLink + `applicationNumber=${applicationNumber}` : modifyLink;
   modifyLink = connectionNumber ? modifyLink + `&connectionNumber=${connectionNumber}` : modifyLink;

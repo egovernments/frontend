@@ -934,7 +934,7 @@ let modeaction1 = getQueryArg(window.location.href, "modeaction");
 
 let mode = getQueryArg(window.location.href, "mode");
     let modifyLink;
-    if (isMode === "MODIFY") {
+    if (isMode === "MODIFY" || action1 ==="edit") {
       modifyLink = `/wns/apply?`;
       modifyLink = applicationNumber ? modifyLink + `applicationNumber=${applicationNumber}` : modifyLink;
       modifyLink = connectionNumber ? modifyLink + `&connectionNumber=${connectionNumber}` : modifyLink;
