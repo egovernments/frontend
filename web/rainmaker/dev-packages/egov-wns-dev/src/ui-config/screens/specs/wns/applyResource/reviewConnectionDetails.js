@@ -576,30 +576,30 @@ const propertyOwnerDetails = () => {
               }
             }
           ),
-          dateOfBirth: getLabelWithValue(
-            {
-              labelKey: "WS_OWN_DETAIL_DOB_LABEL"
-            },
-            {
-              jsonPath: "applyScreen.property.owners[0].dob",
-              callBack: convertEpochToDateAndHandleNA
-            }
-          ),
-          email: getLabelWithValue(
-            {
-              labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
-            },
-            {
-              jsonPath: "applyScreen.property.owners[0].emailId",
-              callBack: handleNA
-            }
-          ),
+          // dateOfBirth: getLabelWithValue(
+          //   {
+          //     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
+          //   },
+          //   {
+          //     jsonPath: "applyScreen.property.owners[0].dob",
+          //     callBack: convertEpochToDateAndHandleNA
+          //   }
+          // ),
+          // email: getLabelWithValue(
+          //   {
+          //     labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
+          //   },
+          //   {
+          //     jsonPath: "applyScreen.property.owners[0].emailId",
+          //     callBack: handleNA
+          //   }
+          // ),
           fatherName: getLabelWithValue(
             {
               labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
             },
             { 
-              jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName", 
+              jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",               
               callBack: handleNA 
             }
           ),
@@ -609,6 +609,10 @@ const propertyOwnerDetails = () => {
             },
             { 
               jsonPath: "applyScreen.property.owners[0].relationship", 
+              localePrefix: {
+                moduleName: "COMMON",
+                masterName: "RELATION"
+              },
               callBack: handleNA 
             }
           ),
@@ -627,6 +631,10 @@ const propertyOwnerDetails = () => {
             },
             {
               jsonPath: "applyScreen.property.owners[0].ownerType",
+              localePrefix: {
+                moduleName: "COMMON_MASTERS",
+                masterName: "OWNERTYPE"
+              },
               callBack: handleNA
             }
           )

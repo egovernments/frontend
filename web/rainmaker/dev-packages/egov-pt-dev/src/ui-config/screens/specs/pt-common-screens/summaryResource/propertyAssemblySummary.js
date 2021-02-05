@@ -2,12 +2,13 @@ import {
   getBreak, getCommonContainer,
   getCommonGrayCard,
   getCommonSubHeader,
-  getLabelWithValue
+  getLabelWithValue,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { checkValueForNA } from "../../utils";
 import store from "ui-redux/store";
 import get from "lodash/get";
-
+import { displayEditPage } from "../applyResource/footer";
 const getHeader = label => {
   return {
     uiFramework: "custom-molecules-local",
@@ -40,6 +41,39 @@ export const propertyAssemblySummary = getCommonGrayCard({
           labelKey: "PT_COMMON_PROPERTY_ASSEMBLY_DETAILS"
         })
       },
+      editSection: {
+        componentPath: "Button",
+        props: {
+          color: "primary",
+          style: {
+            marginTop: "-10px",
+            marginRight: "-18px"
+          }
+        },
+        gridDefination: {
+          xs: 4,
+          align: "right"
+        },
+        children: {
+          editIcon: {
+            uiFramework: "custom-atoms",
+            componentPath: "Icon",
+            props: {
+              iconName: "edit"
+            }
+          },
+          buttonLabel: getLabel({
+            labelName: "Edit",
+            labelKey: "PT_EDIT"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            displayEditPage(state, dispatch);
+          }
+        }
+      }
     }
   },
   propertyAssemblyHeader: getHeader({
