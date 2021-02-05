@@ -536,7 +536,9 @@ class WorkFlowContainer extends React.Component {
     const roleIndex = userRoles.findIndex(item => {
       if (actions.indexOf(item.code) > -1) return true;
     });
-
+    if((moduleName === "NewWS1" || moduleName === "ModifyWSConnection" || moduleName === "ModifySWConnection" || moduleName === "NewSW1") && applicationState==='PENDING_APPROVAL_FOR_CONNECTION'){
+      state.isStateUpdatable = false;
+    }
     let editAction = {};
     // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {

@@ -31,7 +31,7 @@ const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
 
   console.info("setReview=====>",setReviewPageRoute);
-  let tenantId = getTenantIdCommon();
+  let tenantId = getQueryArg(window.location.href, "tenantId");
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";

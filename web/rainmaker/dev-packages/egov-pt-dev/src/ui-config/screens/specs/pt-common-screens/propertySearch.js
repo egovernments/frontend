@@ -52,7 +52,7 @@ const getMDMSData = async (dispatch) => {
       [],
       mdmsBody
     );
-    dispatch(prepareFinalObject("searchScreenMdmsData.PropertyTax.PTWorkflow", payload.MdmsRes.PropertyTax.PTWorkflow));
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
     dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
     if (process.env.REACT_APP_NAME != "Citizen") {
