@@ -947,7 +947,7 @@ export const validateFields = (
               `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${item.key}`,
               ''
             );
-            if(isValid == '' || isValid == 'none') {
+            if(item.isRequired && (isValid == '' || isValid == 'none') ){
               isFormValid = false;
               dispatch(
                 handleField(
