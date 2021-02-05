@@ -34,7 +34,7 @@ export const reviewownershipType = getLabelWithValue(
       masterName: "OwnerShipCategory"
     },
     callBack: value => {
-      return value ? value.split(".")[0] : "";
+      return value ? value : "";
     }
   }
 );
