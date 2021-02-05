@@ -69,27 +69,8 @@ export const searchApiCall = async (state, dispatch) => {
       "searchScreenMdmsData.BillingService.BusinessService"
     ).filter(item => item.code === searchScreenObject.businesService);
 
-    // if (!searchScreenObject.url) {
-    //   dispatch(
-    //     toggleSnackbar(
-    //       true,
-    //       {
-    //         labelName: "Selected Service Category is Not Available for Search",
-    //         labelKey: "BILL_SEARCH_BILLGINEIURL_NOTFOUND"
-    //       },
-    //       "error"
-    //     )
-    //   );
-    //   return;
-    // }
-    // searchScreenObject.tenantId =getTenantId();
     const responseFromAPI = await getBillAmendSearchResult(queryObject, dispatch)
     const Amendments = (responseFromAPI && responseFromAPI.Amendments) || [];
-    const respObj = {};
-
-    Amendments.map(bill => {
-      respObj[bill.consumerCode] = bill;
-    })
 
     if (get(searchScreenObject, 'amendmentId', '') != "" && get(searchScreenObject, 'consumerCode', '') == "" && get(responseFromAPI, 'Amendments[0].consumerCode', '') != '') {
       queryObject.push({
@@ -102,26 +83,50 @@ export const searchApiCall = async (state, dispatch) => {
     const resp = await searchBill(queryObject, dispatch)
 
     const bills = (resp && resp.Bill) || [];
-    const billTableData = bills.map(item => {
+    const respObj = {};
+    bills.map(bill => {
+      respObj[bill.consumerCode] = bill;
+    })
+    let usedBills = {};
+    const billTableData = Amendments.map(item => {
+      let billDetails = {}
+      if (respObj[get(item, "consumerCode", '')]) {
+        billDetails = respObj[get(item, "consumerCode", '')]
+        usedBills[get(item, "consumerCode", '')] = { ...billDetails }
+        delete respObj[get(item, "consumerCode", '')];
+      } else if (usedBills[get(item, "consumerCode", '')]) {
+        billDetails = usedBills[get(item, "consumerCode", '')]
+      } else {
+        billDetails = {};
+      }
 
       return {
         businessService: get(item, "businessService"),
-        amendmentId: get(respObj[get(item, "consumerCode")], "amendmentId", 'NA'),
+        amendmentId: get(item, "amendmentId", 'NA'),
         consumerCode: get(item, "consumerCode"),
-        status: get(respObj[get(item, "consumerCode")], "status", "NA"),
-        consumerName: get(item, "payerName"),
-        consumerAddress: get(item, "payerAddress"),
+        status: get(item, "status", "NA"),
+        consumerName: get(billDetails, "payerName", 'NA'),
+        consumerAddress: get(billDetails, "payerAddress", 'NA'),
         tenantId: get(item, "tenantId"),
-        connectionType: get(respObj[get(item, "consumerCode")], "additionalDetails.connectionType", 'Metered')
+        connectionType: get(item, "additionalDetails.connectionType", 'Metered')
       };
     });
 
 
-    if (Amendments && Amendments.length > 1 && billTableData && Array.isArray(billTableData) && billTableData.length > 0) {
+    if (respObj && Object.keys(respObj).length > 0) {
 
-      Amendments.map(Amendment => {
-        if (Amendment.amendmentId != billTableData[0].amendmentId) {
-          billTableData.push({ ...billTableData[0], amendmentId: Amendment.amendmentId, status: Amendment.status, connectionType: get(Amendment, 'additionalDetails.connectionType', '') })
+      Object.values(respObj).map(billDetail => {
+        if (billDetail) {
+          billTableData.push({
+            businessService: get(billDetail, "businessService"),
+            amendmentId: 'NA',
+            consumerCode: get(billDetail, "consumerCode"),
+            status: "NA",
+            consumerName: get(billDetail, "payerName", 'NA'),
+            consumerAddress: get(billDetail, "payerAddress", 'NA'),
+            tenantId: get(billDetail, "tenantId"),
+            connectionType: 'Metered'
+          })
         }
       })
     }
