@@ -105,7 +105,7 @@ const getMDMSPropertyData = async (dispatch) => {
     let payload = null;
     payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
 
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    //dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     let ptWorkflowDetails = get(payload, "MdmsRes.PropertyTax.PTWorkflow", []);
     ptWorkflowDetails.forEach(data => {
       if(data.enable) {
@@ -135,8 +135,48 @@ const screenConfig = {
     const propertyId = getQueryArg(window.location.href, "propertyId");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     getMDMSPropertyData(dispatch);
-    dispatch(prepareFinalObject("Property", {}));
+   // dispatch(prepareFinalObject("Property", {}));
     dispatch(prepareFinalObject("isFromWNS", false));
+    
+    let ownershipCategory = get(state.screenConfiguration,
+    "preparedFinalObject.Property.ownershipCategory",
+    []
+  );
+    if (ownershipCategory.includes("INDIVIDUAL")) {
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.formwizardFirstStep.children.institutionSummary",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.formwizardFirstStep.children.applicantSummary",
+          "visible",
+          true
+        )
+      );
+    } else {
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.formwizardFirstStep.children.institutionSummary",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.formwizardFirstStep.children.applicantSummary",
+          "visible",
+          false
+        )
+      );
+    }
     setSearchResponse(state, dispatch, propertyId, tenantId, action);
     return action;
   },
