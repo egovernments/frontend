@@ -50,6 +50,7 @@ export const propertyAssemblySummary = getCommonGrayCard({
             marginRight: "-18px"
           }
         },
+        visible:false,
         gridDefination: {
           xs: 4,
           align: "right"
