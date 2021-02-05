@@ -395,7 +395,7 @@ export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'downloa
       ACTION: "_get",
     },
   };
-
+  Amendments&& Amendments[0] && Amendments[0].demandDetails.map(detail=>detail.taxAmount =detail.taxAmount == 0 ? "0" : Math.abs(detail.taxAmount))
 
   try {
     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Amendments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
