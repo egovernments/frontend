@@ -13,6 +13,8 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
+import get from "lodash/get";
+import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import {
   getDescriptionFromMDMS,
@@ -215,7 +217,11 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getBill(queryObjForBill, dispatch);
+      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let amendments=get(billAMDSearch, "Amendments", []);
+      amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
+      dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
@@ -306,7 +312,11 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getBill(queryObjForBill, dispatch);
+      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let amendments=get(billAMDSearch, "Amendments", []);
+      amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
+      dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
       getApplicationNumber(dispatch, payloadData.WaterConnection);
@@ -404,10 +414,7 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(
-      (service) => service.billGineiURL
-    );
-    // console.log(payload.MdmsRes,"nishant")
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.isBillAmendmentEnabled)
     dispatch(prepareFinalObject("connectDetailsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);

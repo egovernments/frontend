@@ -26,6 +26,7 @@ class Footer extends React.Component {
       applicationNos,
       businessService,
       bill,
+      isAmendmentInWorkflow
     } = this.props;
     const editButton = {
       label: "Edit",
@@ -128,7 +129,7 @@ class Footer extends React.Component {
       businessService.includes("ws-services-calculation") ||
       businessService.includes("sw-services-calculation")
     ) {
-      if (bill.Bill && bill.Bill.length > 0) {
+      if (bill.Bill && bill.Bill.length > 0 &&isAmendmentInWorkflow) {
         downloadMenu && downloadMenu.push(BillAmendment);
       }
     }
@@ -180,6 +181,12 @@ const mapStateToProps = (state) => {
     "BILL_FOR_WNS",
     ""
   );
+  let isAmendmentInWorkflow = get(
+    state.screenConfiguration.preparedFinalObject,
+    "isAmendmentInWorkflow",
+    true
+  );
+  
   let connectDetailsData = get(
     state.screenConfiguration.preparedFinalObject,
     "connectDetailsData"
@@ -201,7 +208,7 @@ const mapStateToProps = (state) => {
       return item.businessService;
     }
   );
-  return { state, applicationNo, applicationNos, businessService, bill };
+  return { state, applicationNo, applicationNos, businessService, bill , isAmendmentInWorkflow};
 };
 
 const mapDispatchToProps = (dispatch) => {
