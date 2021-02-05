@@ -22,7 +22,7 @@ import { footer } from "./summaryResource/footer";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { generateBill } from "../utils/index";
-
+import {getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "Fire NOC - Application Summary",
@@ -68,13 +68,14 @@ const screenConfig = {
         state.screenConfiguration.preparedFinalObject,
         "FireNOCs[0].fireNOCDetails.applicationNumber"
       );
-    let tenantId =
-      getQueryArg(window.location.href, "tenantId") ||
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "FireNOCs[0].tenantId"
-      );
-
+    // let tenantId =
+    //   getQueryArg(window.location.href, "tenantId") ||
+    //   get(
+    //     state.screenConfiguration.preparedFinalObject,
+    //     "FireNOCs[0].tenantId"
+    //   );
+      let userInfodata = JSON.parse(getUserInfo());
+    const tenantId = get(userInfodata, "correspondenceAddress");
     let uomsObject = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
@@ -122,6 +123,64 @@ const screenConfig = {
       state,
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
     );
+    let firNOCType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.fireNOCType",[]);
+
+
+      if( firNOCType === "RENEWAL")
+      {           
+        set(
+          action,
+          "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber.visible",
+          false
+        );      
+  
+      }       
+      else {      
+        set(
+          action,
+          "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber.visible",
+          false
+        );  
+  
+        } 
+
+    let value = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType",[]);
+    let currentcity = get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",[]);
+    var mtenantid = value === 'Urban'? currentcity : tenantId
+    if( value === 'Urban')
+    {           
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.subDistrict.visible",
+        false
+      );   
+      
+      
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName.visible",
+        false
+      );  
+
+    }       
+    else {      
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.city.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.mohalla.visible",
+        false
+      );
+      }
     generateBill(dispatch, applicationNumber, tenantId, status);
     prepareDocumentsView(state, dispatch);
     return action;

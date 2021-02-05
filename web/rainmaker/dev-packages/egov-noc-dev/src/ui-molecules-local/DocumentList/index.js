@@ -9,15 +9,13 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import {
   getFileUrlFromAPI,
   handleFileUpload,
-  getTransformedLocale,
-  getFileUrl
+  getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { AutosuggestContainer } from "../../ui-containers-local";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -130,7 +128,8 @@ class DocumentList extends Component {
     const {
       documentsList,
       documentsUploadRedux = {},
-      prepareFinalObject
+      prepareFinalObject,
+      documentsPreview
     } = this.props;
     let index = 0;
     documentsList.forEach(docType => {
@@ -181,11 +180,48 @@ class DocumentList extends Component {
                   ? card.dropdown.required
                   : false
               };
+              if (card.dropdown && card.dropdown.value) {
+                documentsUploadRedux[index]['dropdown'] = {}
+                documentsUploadRedux[index]['dropdown']['value'] = card.dropdown.value;
+              }
+            }
+            if (card.dropdown && card.dropdown.value) {
+              documentsUploadRedux[index]=documentsUploadRedux[index]?documentsUploadRedux[index]:{};
+              documentsUploadRedux[index]['dropdown'] = documentsUploadRedux[index]['dropdown']?documentsUploadRedux[index]['dropdown']:{};
+              documentsUploadRedux[index]['dropdown']['value'] = card.dropdown.value;
+              documentsUploadRedux[index]['documentType'] = docType.code;
+              documentsUploadRedux[index]['documentCode'] = card.name;
+              documentsUploadRedux[index]['isDocumentRequired'] = card.required;
+              documentsUploadRedux[index]['isDocumentTypeRequired'] = card.dropdown
+              ? card.dropdown.required
+              : false
             }
             index++;
           }
         });
     });
+    if(documentsPreview && documentsPreview.length > 0) {
+      Object.keys(documentsUploadRedux).forEach(key => {
+        documentsPreview.map(upDocs => {
+          let docCode = upDocs && upDocs.title && upDocs.title.split('_').join('.');
+          if(documentsUploadRedux[key].documentCode === docCode) {
+            documentsUploadRedux[key].documents = [
+              {
+                fileName: upDocs.name,
+                fileStoreId: upDocs.fileStoreId,
+                fileUrl: upDocs.link
+              }
+            ]
+            if(upDocs && upDocs.dropdown && upDocs.dropdown.value) {
+              documentsUploadRedux[key].dropdown = {
+                value: upDocs.dropdown.value
+              }
+            }
+          }
+        })
+      })
+    }
+    this.forceUpdate();
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
   };
 
@@ -206,7 +242,7 @@ class DocumentList extends Component {
           {
             fileName: file.name,
             fileStoreId,
-            fileUrl: getFileUrl(Object.values(fileUrl)[0])
+            fileUrl: Object.values(fileUrl)[0]
           }
         ]
       }
@@ -267,7 +303,7 @@ class DocumentList extends Component {
         </Grid>
         <Grid item={true} xs={12} sm={6} md={4}>
           {card.dropdown && (
-            <AutosuggestContainer
+            <TextFieldContainer
               select={true}
               label={{ labelKey: getTransformedLocale(card.dropdown.label) }}
               placeholder={{ labelKey: card.dropdown.label }}
@@ -277,8 +313,6 @@ class DocumentList extends Component {
               required={true}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
-              className= "autocomplete-dropdown"
-              labelsFromLocalisation= {true}
             />
           )}
         </Grid>
@@ -368,7 +402,12 @@ const mapStateToProps = state => {
     "documentsUploadRedux",
     {}
   );
-  return { documentsUploadRedux, moduleName };
+  const documentsPreview = get(
+    screenConfiguration.preparedFinalObject,
+    "documentsPreview",
+    []
+  );
+  return { documentsUploadRedux, documentsPreview, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {

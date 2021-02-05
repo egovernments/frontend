@@ -109,7 +109,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
   );
   let method = nocId ? "UPDATE" : "CREATE";
   try {
-    debugger;
+
     let payload = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs",
@@ -207,7 +207,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       getTenantId()
      );
    let tenantId = process.env.REACT_APP_NAME === "Citizen" ?  tenantId1: tenantId2;
-    debugger;
+
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);
 
@@ -217,17 +217,17 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "screenConfiguration.preparedFinalObject.documentsUploadRedux",
       {}
     );
-
-    let isDocumentValid = true;
-    Object.keys(reduxDocuments).map((key) => {
-        if(reduxDocuments[key].documentType==="OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)){
-            isDocumentValid = false;
-        }
-    });
-    if(!isDocumentValid){
-        dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
-        return;
-    }
+debugger;
+    // let isDocumentValid = true;
+    // Object.keys(reduxDocuments).map((key) => {
+    //     if(reduxDocuments[key].documentType==="OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)){
+    //         isDocumentValid = false;
+    //     }
+    // });
+    // if(!isDocumentValid){
+    //     dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
+    //     return;
+    // }
 
     handleDeletedCards(payload[0], "fireNOCDetails.buildings", "id");
     handleDeletedCards(
@@ -389,7 +389,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     let response;
     console.log("===============",payload);
     if (method === "CREATE") {
-      debugger;
+  
       response = await httpRequest(
         "post",
         "/firenoc-services/v1/_create",
@@ -436,7 +436,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
 };
 
 export const prepareDocumentsUploadData = (state, dispatch) => {
-  debugger;
   let documents = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.FireNoc.Documents",

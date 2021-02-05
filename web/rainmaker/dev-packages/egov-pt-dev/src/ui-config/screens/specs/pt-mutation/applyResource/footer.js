@@ -255,7 +255,13 @@ const callBackForApply = async (state, dispatch) => {
     ];
     propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
     propertyPayload.creationReason = 'MUTATION';
+    console.log("==========",propertyPayload.owners[0]);
+    console.log("==========",propertyPayload.owners[0].documentType);
+    if(propertyPayload.owners[0].documentType===null){
+      propertyPayload.owners[0].documentType="NA"
+    }
     let payload = null;
+    debugger;
     payload = await httpRequest(
       "post",
       "/property-services/property/_update",
