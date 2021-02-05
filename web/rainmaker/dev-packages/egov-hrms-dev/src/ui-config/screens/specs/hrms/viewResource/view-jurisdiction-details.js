@@ -70,7 +70,7 @@ const jurisdictionCard = {
         reviewRole: getLabelWithValue(
           { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
           {
-            jsonPath: "hrms.reviewScreen.furnishedRolesList",
+            jsonPath: "Employee[0].jurisdictions[0].furnishedRolesList",
           }
         ),
 

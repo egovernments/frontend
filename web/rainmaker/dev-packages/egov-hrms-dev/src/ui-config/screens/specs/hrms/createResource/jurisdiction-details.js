@@ -188,6 +188,12 @@ const jurisdictionDetailsCard = {
                   }
                 ];
               }
+
+              let multiTenant =  get(
+                state.screenConfiguration.preparedFinalObject,
+                `createScreenMdmsData.tenant.tenants`,
+                []
+              );
               dispatch(
                 handleField(
                   "create",
@@ -196,7 +202,8 @@ const jurisdictionDetailsCard = {
                     ".boundary"
                   ),
                   "props.data",
-                  processedBoundaryData
+                  multiTenant
+                  // processedBoundaryData
                 )
               );
             }
