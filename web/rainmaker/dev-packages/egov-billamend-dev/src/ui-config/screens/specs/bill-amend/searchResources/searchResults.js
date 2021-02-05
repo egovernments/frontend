@@ -84,7 +84,7 @@ export const searchResults = {
           customBodyRender: value => (
             <LabelContainer
               style={
-                value === "ACTIVE" ? { color: "green" } : { color: "red" }
+                value === "ACTIVE" ||value === "CONSUMED" ? { color: "green" } : { color: "red" }
               }
               labelKey={getStatusKey(value).labelKey}
               labelName={getStatusKey(value).labelName}
