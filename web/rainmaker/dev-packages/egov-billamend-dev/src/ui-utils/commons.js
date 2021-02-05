@@ -91,7 +91,7 @@ export const getBillAmendSearchResult = async (queryObject, dispatch) => {
       // "amendmentId": '3edf1f2d-761e-4e8b-a990-505b648cf5eb'
     }
     queryObject.map(query =>
-      qo[query.key] = query.value
+      qo[query.key=='mobileNumber'?'number':query.key] = query.value
     )
     let newQuery = [];
     Object.keys(qo).map(key => {
