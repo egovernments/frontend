@@ -38,7 +38,7 @@ import {WORKFLOW_SEARCH} from "egov-ui-kit/utils/endPoints";
 import { MDMS, MDMS_GET } from "egov-ui-kit/utils/endPoints";
 import { PDFGEN } from "egov-ui-kit/utils/endPoints";
 import { TL_CALC } from "../../../../../../egov-ui-kit-dev/src/utils/endPoints";
-import { FETCHRECEIPT, COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
+import { COLLECTION_PAYMENTS } from "egov-ui-kit/utils/endPoints";
 
 export const getCommonApplyFooter = children => {
   return {
