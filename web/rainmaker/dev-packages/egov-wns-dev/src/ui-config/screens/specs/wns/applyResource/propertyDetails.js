@@ -9,7 +9,8 @@ import {
 import { propertySearchApiCall } from './functions';
 import { handlePropertySubUsageType, handleNA, resetFieldsForApplication } from '../../utils';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import store from "ui-redux/store";
+import get from "lodash/get";
 let isMode = getQueryArg(window.location.href, "mode");
 isMode = (isMode) ? isMode.toUpperCase() : "";
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -173,7 +174,20 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath: "applyScreen.property.noOfFloors",
-      callBack: handleNA
+      //callBack: handleNA
+      callBack: value => {
+        let state = store.getState();
+        let finalValue;
+       // console.log("state---"+JSON.stringify(state.screenConfiguration.preparedFinalObject))
+          let propertyType = get( state.screenConfiguration.preparedFinalObject.applyScreen, "property.propertyType" );
+          console.log("usage type is---"+propertyType)
+          if ( propertyType !== "VACANT") {
+              finalValue = value;
+          }
+          else
+              finalValue = "NA";
+        return finalValue;
+      }
     }
   ),
   numberOfFlats: getLabelWithValue(

@@ -50,6 +50,7 @@ export const propertyAssemblySummary = getCommonGrayCard({
             marginRight: "-18px"
           }
         },
+        visible:false,
         gridDefination: {
           xs: 4,
           align: "right"
@@ -163,7 +164,20 @@ export const propertyAssemblySummary = getCommonGrayCard({
       },
       {
         jsonPath: "Property.noOfFloors",
-        callBack: checkValueForNA
+        //callBack: checkValueForNA
+        callBack: value => {
+          let state = store.getState();
+          let finalValue;
+          //console.log("state---"+state.screenConfiguration.preparedFinalObject)
+            let propertyType = get( state.screenConfiguration.preparedFinalObject, "Property.propertyType" );
+            //console.log("usage type is---"+propertyType)
+            if ( propertyType !== "VACANT") {
+                finalValue = value;
+            }
+            else
+                finalValue = "NA";
+          return finalValue;
+        }
       }
     ),
     noOfFlats: getLabelWithValue(
@@ -173,7 +187,17 @@ export const propertyAssemblySummary = getCommonGrayCard({
       },
       {
         jsonPath: "Property.noOfFlats",
-        callBack: checkValueForNA
+        //callBack: checkValueForNA
+        callBack: value => {
+          let state = store.getState();
+          let finalValue;
+            let propertyType = get( state.screenConfiguration.preparedFinalObject, "Property.propertyType" );
+            //let usageType = get( state.screenConfiguration.preparedFinalObject, "Property.usageCategory" );
+            if ( propertyType !== "VACANT") {
+                finalValue = value;
+            }
+          return finalValue ? finalValue : "NA";
+        }
       }
     )
   })

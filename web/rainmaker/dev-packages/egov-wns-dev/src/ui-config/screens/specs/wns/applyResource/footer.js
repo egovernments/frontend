@@ -4,7 +4,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from 'lodash/set';
@@ -12,7 +12,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import {
   applyForSewerage,
   applyForWater, applyForWaterOrSewerage,
-
+  validateFields,
   findAndReplace,
   isActiveProperty,
   isModifyMode,
@@ -393,10 +393,23 @@ const callBackForNext = async (state, dispatch) => {
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
 
-    console.info("Validate third step");
-    console.info("Checking 3rd page");
+    console.info("Validate third step"); 
+    let plumberValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children", state, dispatch);
+    let activateDetailValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children", state, dispatch);
+    let addConnDetailValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children", state, dispatch);
+    console.log("plumberValid",plumberValid ,"activateDetailValid",activateDetailValid,"addConnDetailValid",addConnDetailValid);
+
+    let errorMessage = {
+      labelName: "Please provide valid inputs!",
+      labelKey: "WS_FILL_VALID_INPUTS"
+    };
+    if(!plumberValid|| !activateDetailValid||!addConnDetailValid){
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return;
+    }
     let roadCuttingValidation =  checkThirdFormValid(state,dispatch,isFormValid);
     console.info("check result==",roadCuttingValidation);
+    
     isFormValid = roadCuttingValidation;
     hasFieldToaster = !isFormValid;
     if(isFormValid){

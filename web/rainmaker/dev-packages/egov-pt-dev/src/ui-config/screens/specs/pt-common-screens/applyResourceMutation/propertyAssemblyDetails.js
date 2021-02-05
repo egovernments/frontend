@@ -23,10 +23,32 @@ const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
     const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFloors"; 
     if (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "VACANT") {
         set(state.screenConfiguration.preparedFinalObject,"Property.noOfFloors", "");
-        dispatch(handleField('register-property', additionalDetailsJson, "visible", false));
+        dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", true));
        // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
     }else{
-        dispatch(handleField('register-property', additionalDetailsJson, "visible", true));
+        dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", false));
+    }
+}
+
+const renderAreaData = (usageType, propType, dispatch, state) => {
+
+    console.log("usage type",usageType);
+    //let noOfFloors;
+    let propertyType = get(
+            state.screenConfiguration.preparedFinalObject,
+            "Property.propertyType"
+          ); 
+    console.log("propertyType",propertyType);
+    
+    const additionalDetailsJson_totalConstructedArea = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.totalConstructedArea"; 
+    if (propertyType === "VACANT") {
+        set(state.screenConfiguration.preparedFinalObject,"Property.noOfFloors", "");
+        dispatch(handleField('register-property', additionalDetailsJson_totalConstructedArea, "props.disabled", true));
+       
+       // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
+    }else{
+        dispatch(handleField('register-property', additionalDetailsJson_totalConstructedArea, "props.disabled", false));
+       
     }
 }
 
@@ -42,10 +64,10 @@ const renderNoOfFlatsData = (usageType, propType, dispatch, state) => {
     const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFlats"; 
     if (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "VACANT") {
         set(state.screenConfiguration.preparedFinalObject,"Property.noOfFlats", "");
-        dispatch(handleField('register-property', additionalDetailsJson, "visible", false));
+        dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", true));
        // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
     }else{
-        dispatch(handleField('register-property', additionalDetailsJson, "visible", true));
+        dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", false));
     }
 }
 
@@ -153,6 +175,7 @@ export const propertyAssemblyDetails = getCommonCard({
           rendersubUsageType(usageType, action.value, dispatch, state)
           renderNoOfFloorData(usageType, action.value, dispatch, state)
           renderNoOfFlatsData(usageType, action.value, dispatch, state)
+          renderAreaData(usageType, action.value, dispatch, state)
         // }
       }
     }),
@@ -168,8 +191,7 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_LAND_AREA_PLACEHOLDER"
       },
       required: true,
-  //    pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
-      pattern: /^[1-9]\d*(\.\d+)?$/i,
+      pattern: /^[1-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.landArea"
     }),
@@ -185,7 +207,7 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+      pattern: /^[1-9]\d{0,9}(\.\d{1,3})?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.superBuiltUpArea"
     }),
@@ -256,11 +278,9 @@ export const propertyAssemblyDetails = getCommonCard({
             labelKey: "PT_COMMON_NO_OF_FLOORS_PLACEHOLDER"
           },
           required: true,
-          pattern: /^[1-9]\d*$/,
-         // pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+          pattern: /^[1-9]\d{0,9}(\.\d{1,3})?%?$/,
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          jsonPath: "Property.noOfFloors",
-         visible:false,
+          jsonPath: "Property.noOfFloors"
         }),
     noOfFlats:getTextField({
               label: {
@@ -274,11 +294,9 @@ export const propertyAssemblyDetails = getCommonCard({
                 labelKey: "PT_COMMON_NO_OF_FLATS_PLACEHOLDER"
               },
               required: true,
-            //  pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
-              pattern: /^[1-9]\d*$/,
+              pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
               errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-              jsonPath: "Property.noOfFlats",
-              visible:false,
+              jsonPath: "Property.noOfFlats"
             })
   })
 });

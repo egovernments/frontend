@@ -338,14 +338,25 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
  
 
   let roadTypes = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].roadTypeEst",[]);
-     let newRoad =  roadTypes && roadTypes.filter(roadType=>(roadType.length!=0 && roadType.breadth!=0 && roadType.depth!=0 && roadType.rate!=0));
-     if(newRoad.length!=0){
-     
-      dispatch(prepareFinalObject("WaterConnection[0].tempRoadType",newRoad));
-     }
-     else{
-     
-     }
+  let newRoad =  roadTypes && roadTypes.filter(roadType=>(roadType.length!=0 && roadType.breadth!=0 && roadType.depth!=0 && roadType.rate!=0));
+  let flag =false;
+  if(newRoad.length ==0 ){
+    flag =true;
+    newRoad.includes({  roadType :null , length : null, depth : null ,breadth : null,rate : null });
+  }
+  dispatch(prepareFinalObject("WaterConnection[0].tempRoadType",newRoad));
+  if(flag){
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen",
+        "visible",
+        false
+      )
+    );
+  }
+  
+   
   
 };
 

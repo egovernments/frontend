@@ -10,7 +10,7 @@ import store from "redux/store";
 import { convertDateToEpoch, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 import cloneDeep from "lodash/cloneDeep";
-
+import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -902,6 +902,89 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
         return response;
     }
 }
+
+
+export const validateFields = (
+    objectJsonPath,
+    state,
+    dispatch,
+    screen = "apply"
+  ) => {
+    const fields = get(
+      state.screenConfiguration.screenConfig[screen],
+      objectJsonPath,
+      {}
+    );
+    let isFormValid = true;
+    for (var variable in fields) {
+      if (fields.hasOwnProperty(variable)) {
+        if (
+          fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" &&
+          fields[variable].props && fields[variable].jsonPath &&
+          (fields[variable].props.disabled === undefined ||
+            !fields[variable].props.disabled) &&
+          !validate(
+            screen,
+            {
+              ...fields[variable],
+              value: get(
+                state.screenConfiguration.preparedFinalObject,
+                fields[variable].jsonPath
+              )
+            },
+            dispatch,
+            true
+          )
+        ) {
+          isFormValid = false;
+        } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props){
+          
+          let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+          let {index=0}=fields[variable];
+          dropdownFields.forEach((item, i) => {
+            let isValid = get(
+              state.screenConfiguration.preparedFinalObject ,
+              `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${item.key}`,
+              ''
+            );
+            if(isValid == '' || isValid == 'none') {
+              isFormValid = false;
+              dispatch(
+                handleField(
+                  "apply",
+                  `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
+                  "isRequired",
+                  true
+                )
+              );
+            }
+          });
+          
+        }
+      }
+    }
+    return isFormValid;
+  };
+  export const validateDynamicMDMSFields = ( objectJsonPath, state, dispatch, screen = "apply" ) => {
+    const fields = get(
+      state.screenConfiguration.screenConfig[screen],
+      objectJsonPath,
+      {}
+    );
+    let isFormValid = true;
+    let {masterName, moduleName, rootBlockSub, dropdownFields} = fields.props;
+    dropdownFields.forEach(item => {
+      let isValid = get(
+        state.screenConfiguration.preparedFinalObject ,
+        `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${item.index}].${item.key}`,
+        ''
+      );
+      if(isValid == '' || isValid == 'none') {
+        isFormValid = false;
+      }
+    });
+    return isFormValid;
+  }; 
 
 export const applyForWater = async (state, dispatch) => {
     let queryObject = parserFunction(state);

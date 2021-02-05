@@ -13,6 +13,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 //   import { searchApiCall } from "./functions";
 import commonConfig from "config/common.js";
+import { disableField,enableField } from "egov-ui-framework/ui-utils/commons";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
@@ -72,27 +73,33 @@ const waterSourceTypeChange = (reqObj) => {
       dispatch(prepareFinalObject("WaterConnection[0].waterSource", value));
       dispatch(prepareFinalObject("WaterConnection[0].waterSubSource", ''));
       let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep'; 
+      console.log("mstep---",mStep);
       if(value!="OTHERS")
       {
-        dispatch(
-          handleField(
-            "apply",
-            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo`,
-            "visible",
-            false
-          )
-        );
+        // dispatch(
+        //   handleField(
+        //     "apply",
+        //     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo`,
+        //     "disabled",
+        //     true
+        //   )
+        // );
+        disableField('apply', 'components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo', dispatch);
+        //enableField('apply', 'components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSubSource', dispatch);
       }
       else
       {
-        dispatch(
-          handleField(
-            "apply",
-            `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo`,
-            "visible",
-            true
-          )
-        );
+        console.log("its in others---")
+        // dispatch(
+        //   handleField(
+        //     "apply",
+        //     `components.div.children.${mStep}.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo`,
+        //     "disabled",
+        //     false
+        //   )
+        // );
+        enableField('apply', 'components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo', dispatch);
+        //disableField('apply', 'components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterSubSource', dispatch);
       }
       let formObj = {
         waterSourceType: value, waterSubSource: ''
@@ -156,26 +163,6 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
-      dynamicMdmsWaterSource : {
-        uiFramework: "custom-containers",
-        componentPath: "DynamicMdmsContainer",
-        props: {
-          dropdownFields: [
-            {
-              key : 'waterSourceType',
-              callBack: waterSourceTypeChange 
-            },
-            {
-              key : 'waterSubSource',
-              callBack: waterSubSourceChange 
-            }
-          ],
-          moduleName: "ws-services-masters",
-          masterName: "waterSource",
-          rootBlockSub : 'waterSource',
-          callBackEdit: updateWaterSource
-        }
-      },
       pipeSize: getSelectField({
         label: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE" },
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
@@ -201,6 +188,26 @@ export const additionDetails = getCommonCard({
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.motorInfo"
       }),
+      dynamicMdmsWaterSource : {
+        uiFramework: "custom-containers",
+        componentPath: "DynamicMdmsContainer",
+        props: {
+          dropdownFields: [
+            {
+              key : 'waterSourceType',
+              callBack: waterSourceTypeChange 
+            },
+            {
+              key : 'waterSubSource',
+              callBack: waterSubSourceChange 
+            }
+          ],
+          moduleName: "ws-services-masters",
+          masterName: "waterSource",
+          rootBlockSub : 'waterSource',
+          callBackEdit: updateWaterSource
+        }
+      },
       sourceInfo: getTextField({
         label: {
           labelKey: "WS_SERV_DETAIL_SOURCE_INFO"
