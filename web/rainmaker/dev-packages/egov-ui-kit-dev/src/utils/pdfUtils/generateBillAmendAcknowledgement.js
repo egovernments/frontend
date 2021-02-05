@@ -52,7 +52,7 @@ export const generateBillAmendAcknowledgement = (preparedFinalObject, fileName =
                 labelName: demand.taxHeadMasterCode,
                 labelKey: demand.taxHeadMasterCode
             },
-            value: demand.taxAmount == 0 ? `0` : demand.taxAmount
+            value: demand.taxAmount == 0 ? '0' : Math.abs(demand.taxAmount)
         })
     })
 
