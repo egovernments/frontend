@@ -330,7 +330,7 @@ export const submitApplication = async (state, dispatch) => {
   });
 
   fetchBillDetails.map(data => {
-    if (data.reducedAmountValue || data.reducedAmountValue) {
+    if (data.reducedAmountValue || data.additionalAmountValue) {
       let obj = {};
       obj.taxHeadMasterCode = data.taxHeadCode;
       obj.tenantId = data.tenantId;
