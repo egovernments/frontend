@@ -14,13 +14,15 @@ const header = getCommonHeader({
     }
 });
 
-const cardItems = [{
-    label: {
-        labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
-    },
-    icon: < PayWnsBillIcon />,
-    route: "search"
-},
+const cardItems = [
+    //hide pay bill by vidya
+//     {
+//     label: {
+//         labelKey: "WS_COMMON_PAY_WS_BILL_HEADER",
+//     },
+//     icon: < PayWnsBillIcon />,
+//     route: "search"
+// },
 {
     label: {
         labelKey: "WS_MYCONNECTIONS_HEADER",
