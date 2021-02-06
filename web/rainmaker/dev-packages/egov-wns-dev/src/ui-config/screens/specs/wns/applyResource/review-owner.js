@@ -33,7 +33,8 @@ const connectionChargeDetailsHeader = getHeader({
 });
 
 const roadCuttingChargesHeader = getHeader({
-  labelKey: "WS_ROAD_CUTTING__DETAILS"
+ // labelKey: "WS_ROAD_CUTTING__DETAILS"
+   labelKey:"WS_ROAD_CUTTING_CHARGE_DETAILS"
 });
 
 const activationDetailsHeader = getHeader({
@@ -102,12 +103,31 @@ export const getReviewOwner = (isEditable = true) => {
     viewEight: connectionChargeDetails,
     viewNine: roadCuttingChargesHeader,
     viewTen: getRoadCharges(),
+    viewThirteen: getRoadCuttingChargesNA(),
     viewEleven: activationDetailsHeader,
-    viewTwelve: activationDetails
+    viewTwelve: activationDetails,
+   
   })
 };
 
+export const getRoadCuttingChargesNA = () => {
+  return getCommonContainer(reviewRoadType);
+}
 
+
+
+export const reviewRoadType = {
+  a:getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Road Type",
+    labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+  },
+  {
+    jsonPath: "WaterConnection[0].additionalDetails.detailsProvidedBy",
+    callBack: handleNA
+  }
+ )
+}
 
 export const plumberDetails={
   reviewPlumberProvidedBy : getLabelWithValueForModifiedLabel(
@@ -232,7 +252,7 @@ export const roadDetails={
 
 
   const getRoadCharges = ()=>{
-    return({
+  return({
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
@@ -248,15 +268,11 @@ export const roadDetails={
     sourceJsonPath: "WaterConnection[0].tempRoadType",
     prefixSourceJsonPath: "children.cardContent.children.roadDetailContainer.children",
     afterPrefixJsonPath: "children.value.children.key"
-  },
+   },
   //visible:false,
   type: "array"
-})
+  })
 }
-  
-
-
-
 
 export const activateDetailsMeter={
   reviewConnectionExecutionDate : getLabelWithValueForModifiedLabel(

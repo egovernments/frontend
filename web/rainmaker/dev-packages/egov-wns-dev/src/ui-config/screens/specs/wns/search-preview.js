@@ -1,16 +1,7 @@
 import {
   getCommonCard,
-
-
   getCommonContainer, getCommonGrayCard, getCommonHeader,
-
-
-
-
   getCommonSubHeader, getCommonTitle,
-
-
-
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -342,11 +333,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   let flag =false;
   if(newRoad.length ==0 ){
     flag =true;
-    newRoad.includes({  roadType :null , length : null, depth : null ,breadth : null,rate : null });
+    newRoad.includes({  roadType :null , length : null, depth : null ,breadth : null,rate : null });    
   }
+
   dispatch(prepareFinalObject("WaterConnection[0].tempRoadType",newRoad));
-  if(flag){
-    dispatch(
+  //If Road cutting is not entered
+  
+   if(flag){
+    console.info("if flat is kept true??",flag);
+      dispatch(
       handleField(
         "search-preview",
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen",
@@ -354,13 +349,26 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         false
       )
     );
-  }
-  
+   }
+   else{
+    console.info("if flat is kept false??",flag);
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirteen",
+        "visible",
+         false
+      )
+    );
+   }
    
   
 };
 
 let titleText = "";
+
+
+
 
 const setStatusBasedValue = status => {
   switch (status) {
