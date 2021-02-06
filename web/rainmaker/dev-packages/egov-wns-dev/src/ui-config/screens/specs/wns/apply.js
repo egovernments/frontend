@@ -671,8 +671,11 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Length",
           labelKey: "WF_ESTIMATION_LENGTH"
         },
+        props:{
+          type:"number",
+        },
   
-        required: true,
+       // required: true,
         visible: true,
         pattern: getPattern("DecimalNumber"),
         componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingLength`,
@@ -691,8 +694,10 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Breadth",
           labelKey: "WF_ESTIMATION_BREADTH"
         },
-
-        required: true,
+        props:{
+          type:"number",
+        },
+       // required: true,
         visible: true,
         pattern: getPattern("DecimalNumber"),
         componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingBreadth`,
@@ -711,8 +716,10 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Depth",
           labelKey: "WF_ESTIMATION_DEPTH"
         },
-
-        required: true,
+        props:{
+          type:"number",
+        },
+       // required: true,
         visible: true,
         pattern: getPattern("DecimalNumber"),
        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingDepth`,
@@ -731,8 +738,10 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Rate",
           labelKey: "WF_ESTIMATION_RATE"
         },
-
-        required: true,
+  props:{
+          type:"number",
+        },
+       // required: true,
         visible: true,
         pattern: getPattern("DecimalNumber"),
         componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingRate`,

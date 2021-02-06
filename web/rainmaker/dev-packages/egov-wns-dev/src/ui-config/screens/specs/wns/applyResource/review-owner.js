@@ -42,6 +42,7 @@ const activationDetailsHeader = getHeader({
 });
 
 export const getReviewOwner = (isEditable = true) => {
+  console.info("DC- getReviewOwner");
   return getCommonGrayCard({
     headerDiv: {
       uiFramework: "custom-atoms",
@@ -117,13 +118,13 @@ export const getRoadCuttingChargesNA = () => {
 
 
 export const reviewRoadType = {
-  a:getLabelWithValueForModifiedLabel(
+  roadCuttingInfoNA:getLabelWithValueForModifiedLabel(
   {
     labelName: "Road Type",
     labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
   },
   {
-    jsonPath: "WaterConnection[0].additionalDetails.detailsProvidedBy",
+    jsonPath: "WaterConnection[0].roadType",
     callBack: handleNA
   }
  )
