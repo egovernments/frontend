@@ -9,6 +9,7 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import { searchApiCall } from "./functions";
 import { resetFieldsForApplication } from '../../utils';
 import {
@@ -86,6 +87,7 @@ export const searchApplications = getCommonCard({
       gridDefination: { xs: 12, sm: 4 },
       required: false,
       beforeFieldChange: async (action, state, dispatch) => {
+        dispatch(handleField('search', "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus", "props.disabled", false));
         if (action.value === "NEW WATER CONNECTION" || action.value ==="NEW SEWERAGE CONNECTION") {
           dispatch(
             prepareFinalObject(
@@ -96,6 +98,7 @@ export const searchApplications = getCommonCard({
               )
             )
           )
+          
         } else if (action.value === "MODIFY WATER CONNECTION" || action.value ==="MODIFY SEWERAGE CONNECTION") {
           dispatch(
             prepareFinalObject(
@@ -122,6 +125,9 @@ export const searchApplications = getCommonCard({
         xs: 12,
         sm: 4
       },
+      props :{
+        disabled : true,
+      },
       required: false,
       errorMessage: "ERR_INVALID_BILLING_PERIOD",
       jsonPath: "searchScreen.applicationStatus"
@@ -140,7 +146,12 @@ export const searchApplications = getCommonCard({
       },
       required: false,
       pattern: getPattern("Date"),
-      errorMessage: "ERR_INVALID_DATE"
+      errorMessage: "ERR_INVALID_DATE",
+      props: {
+        inputProps: {
+          max: getTodaysDateInYMD()
+        }
+      }
     }),
 
     toDate: getDateField({
@@ -153,6 +164,11 @@ export const searchApplications = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4
+      },
+      props: {
+        inputProps: {
+          max: getTodaysDateInYMD()
+        }
       },
       pattern: getPattern("Date"),
       errorMessage: "ERR_INVALID_DATE",

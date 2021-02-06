@@ -1381,6 +1381,13 @@ export const resetFieldsForApplication = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      'search', 
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus", 
+      "props.disabled", true
+    )
+  );
 };
 
 export const resetFieldsForConnection = (state, dispatch) => {
