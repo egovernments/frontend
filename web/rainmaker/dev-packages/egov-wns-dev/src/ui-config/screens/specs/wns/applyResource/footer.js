@@ -525,7 +525,7 @@ const checkThirdFormValid = (state,dispatch,isFormValid) =>{
 
 
  const moveToSuccess = (combinedArray, dispatch) => {
-  const tenantId = get(combinedArray[0].property, "tenantId");
+  const tenantId = get(combinedArray[0].property, "tenantId") || getQueryArg(window.location.href, "tenantId");
   const purpose = "apply";
   const status = "success";
   const applicationNoWater = get(combinedArray[0], "applicationNo");
