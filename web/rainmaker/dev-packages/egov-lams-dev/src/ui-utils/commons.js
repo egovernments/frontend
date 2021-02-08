@@ -1323,8 +1323,9 @@ export const afterDSignDone = async(state, dispatch, response) => {
   //dispatch(prepareFinalObject("lamsStore.dSign.success",true));
   //let initiated = get(state.screenConfiguration.preparedFinalObject , "lamsStore.dSign.initiated");
 
-  let espTxnID = getQueryArg(window.location.href, "espTxnID"); //localStorageGet("dSign.aspTxnID");
-
+  let espTxnID = localStorageGet("dSign.aspTxnID"); //getQueryArg(window.location.href, "espTxnID");
+  localStorageSet("dSign.aspTxnID","");
+  
   let payload = null;
   try{
  
