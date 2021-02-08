@@ -528,6 +528,54 @@ export const connectionSewerage={
       callBack: handleNA
     }
   ),
+  reviewBillingAmount : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Billing Amount",
+      labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.billingAmount",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.billingAmount",
+      callBack: handleNA
+    }
+  ),
+  reviewConnectionCategory : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Connection Category",
+      labelKey: "WS_SERV_CONNECTION_CATEGORY"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.connectionCategory",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.connectionCategory",
+      callBack: handleNA
+    }
+  ),
+  reviewLedgerId : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Ledger Id",
+      labelKey: "WS_SERV_DETAIL_LEDGER_ID"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.ledgerId",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].additionalDetails.ledgerId",
+      callBack: handleNA
+    }
+  ),
    reviewWaterClosets : getLabelWithValueForModifiedLabel(
     {
       labelName: "No. of Water Closets",
