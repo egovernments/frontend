@@ -34,6 +34,7 @@ export const formwizardFirstStep = {
 
 
 const setSearchResponse = async (state, dispatch, propertyId, tenantId, action) => {
+  debugger;
   const response = await httpRequest(
     "post",
     "/property-services/property/_search",

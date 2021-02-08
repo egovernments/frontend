@@ -4,7 +4,7 @@ import { getLocaleLabels, getTransformedLocalStorgaeLabels, getStatusKey } from 
 // import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 // import store from "ui-redux/store";
 import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
 
@@ -311,6 +311,7 @@ const applicationNumberClick = async (item) => {
 }
 
 const propertyIdClick = (item) => {
+  item.tenantId=getTenantId();
   navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
 }
 

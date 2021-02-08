@@ -4,6 +4,7 @@ import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField,
 import { disableField, enableField, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import compact from "lodash/compact";
 import get from "lodash/get";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../../ui-utils";
 import { prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
@@ -118,7 +119,7 @@ const getMdmsData = async (state, dispatch) => {
 
 const callBackForApply = async (state, dispatch) => {
 
-  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let tenantId = getTenantId();
   let consumerCode = getQueryArg(window.location.href, "consumerCode");
   let propertyPayload = get(
     state, "screenConfiguration.preparedFinalObject.Property");
@@ -259,6 +260,9 @@ const callBackForApply = async (state, dispatch) => {
     console.log("==========",propertyPayload.owners[0].documentType);
     if(propertyPayload.owners[0].documentType===null){
       propertyPayload.owners[0].documentType="NA"
+    }
+    if(propertyPayload.owners[0].documents[0].documentType===null){
+      propertyPayload.owners[0].documents[0].documentType="NA"
     }
     let payload = null;
     debugger;
