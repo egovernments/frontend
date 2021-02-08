@@ -200,6 +200,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading.visible",
         true
       );
+      let billingType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.billingType");
+      if(billingType === "STANDARD") {
+        dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.children.reviewBillingAmount",
+             "visible",
+             false
+          )
+        );
+      }
     } else {
       set(
         action.screenConfig,
