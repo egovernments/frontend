@@ -50,7 +50,7 @@ class WhatsAppLocality extends React.Component {
 
   componentDidMount = async () => {
     const values = queryString.parse(this.props.location.search)
-    const cityname = values.tenantId;
+    const cityname = values.tenantId || 'pb.amritsar';
     const phone = values.phone;
     // fetchLocalizationLabel(getLocale(), cityname ||"pb.amritsar", cityname||"pb.amritsar");
     this.setState({
@@ -65,7 +65,8 @@ class WhatsAppLocality extends React.Component {
     const localitylist = localityistCode.map((item) => {
       return {
         code: item.code,
-        label: item.name
+        label: item.name,
+        localisedMessage:getLocaleLabels(this.getConnvertedString(item.code),this.getConnvertedString(item.code))
       }
     })
 
@@ -110,7 +111,7 @@ class WhatsAppLocality extends React.Component {
   };
 
   getConnvertedString =(code='')=>{
-    return `${this.state.cityname.split('.')[0].toUpperCase()}_${this.state.cityname.split('.')[1].toUpperCase()}_REVENUE_${code}`;
+    return `${this.state.cityname&&this.state.cityname.split('.')[0].toUpperCase()}_${this.state.cityname&&this.state.cityname.split('.')[1].toUpperCase()}_REVENUE_${code}`;
   }
   getListItems = items =>
     items.map((item) => ({
@@ -129,7 +130,7 @@ class WhatsAppLocality extends React.Component {
   onChangeText = (searchText, localitylist, dataSource, params,) => {
     this.setState({ searchText });
     //logic to like search on items    
-    const filterData = localitylist.filter(item => getLocaleLabels(this.getConnvertedString(item.code),this.getConnvertedString(item.code)).toLowerCase().includes(searchText.toLowerCase()));
+    const filterData = localitylist.filter(item => item.localisedMessage.toLowerCase().includes(searchText.toLowerCase()));
     this.setState({
       data: filterData,
     })
