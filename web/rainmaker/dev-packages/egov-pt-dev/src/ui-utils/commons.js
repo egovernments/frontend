@@ -279,6 +279,7 @@ export const createUpdatePTApplication = async (state, dispatch, status) => {
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
+      debugger;
       response = await httpRequest(
         "post",
         "/firenoc-services/v1/_update",

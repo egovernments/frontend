@@ -7,6 +7,7 @@ import "./index.scss";
 class DownloadFileContainer extends Component {
   render() {
     const { data, documentData, ...rest } = this.props;
+    debugger;
     return (
       <MultiDownloadCard data={data} documentData={documentData} {...rest} />
     );

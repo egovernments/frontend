@@ -252,7 +252,8 @@ const commonBuildingData = buildingType => {
           md: 6
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error",
+          disabled: false
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
@@ -271,6 +272,16 @@ const commonBuildingData = buildingType => {
         dispatch(
           handleField("apply", path, "props.data", buildingSubUsageTypeData[0].BuildingSubType)
         );
+        if(get(state.screenConfiguration.preparedFinalObject, "FireNOCs[0].fireNOCDetails.action", "") === "SENDBACKTOCITIZEN") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.buildingUsageType",
+              "props.disabled",
+              true
+            )
+          );
+        }
       }
     },
     buildingSubUsageType: {
@@ -295,7 +306,8 @@ const commonBuildingData = buildingType => {
           md: 6
         },
         props:{
-          className:"applicant-details-error"
+          className:"applicant-details-error",
+          disabled: false
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
@@ -342,6 +354,16 @@ const commonBuildingData = buildingType => {
 
         // Set previous uoms array
         previousUoms = uoms;
+        if(get(state.screenConfiguration.preparedFinalObject, "FireNOCs[0].fireNOCDetails.action", "") === "SENDBACKTOCITIZEN") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.buildingSubUsageType",
+              "props.disabled",
+              true
+            )
+          );
+        }
       }
     },
     NO_OF_FLOORS: prepareSelectField("NO_OF_FLOORS", 1, 20),

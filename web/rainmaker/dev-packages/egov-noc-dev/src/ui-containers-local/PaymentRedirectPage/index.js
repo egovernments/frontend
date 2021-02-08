@@ -34,6 +34,7 @@ class PaymentRedirect extends Component {
         ]);
         set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
         set(response, "FireNOCs[0].fireNOCDetails.tenantId",get(response, "FireNOCs[0].tenantId", ""));
+        debugger;
         response = await httpRequest(
           "post",
           "/firenoc-services/v1/_update",

@@ -198,12 +198,16 @@ class WorkFlowContainer extends React.Component {
     );
     this.props.showSpinner();
     try {
-      if (beforeSubmitHook) {
-        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
-          data = await beforeSubmitHook(data);
-        } else {
-          data = beforeSubmitHook(data);
-        }
+      // if (beforeSubmitHook) {
+      //   if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
+      //     data = await beforeSubmitHook(data);
+      //   } else {
+      //     data = beforeSubmitHook(data);
+      //   }
+      // }
+      if(get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.action") === "SENDBACKTOCITIZEN") {
+        data[0].fireNOCDetails.status = "CITIZENACTIONREQUIRED";
+        data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
       }
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
@@ -295,7 +299,20 @@ class WorkFlowContainer extends React.Component {
         documents = get(data, "workflow.varificationDocuments");
       }
       if (documents && documents.length > 0) {
-        this.wfUpdate(label);
+        const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
+        const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
+        const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
+        const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
+        const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
+        const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
+        const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
+        const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
+        const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
+  
+          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
+            this.wfUpdate(label);
+          }
+
       } else {
         toggleSnackbar(
           true,

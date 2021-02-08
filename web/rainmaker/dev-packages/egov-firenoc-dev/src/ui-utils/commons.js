@@ -5,7 +5,7 @@ import {
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale, enableField, disableField } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -53,14 +53,14 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 export const getSearchResults = async (queryObject, dispatch) => {
 
   try {
-    store.dispatch(toggleSpinner());
+    // store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/firenoc-services/v1/_search",
       "",
       queryObject
     );
-    store.dispatch(toggleSpinner());
+    // store.dispatch(toggleSpinner());
 
     if (response === '') {
       store.dispatch(
@@ -217,7 +217,6 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       "screenConfiguration.preparedFinalObject.documentsUploadRedux",
       {}
     );
-debugger;
     // let isDocumentValid = true;
     // Object.keys(reduxDocuments).map((key) => {
     //     if(reduxDocuments[key].documentType==="OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)){
@@ -365,7 +364,7 @@ debugger;
       "fireNOCDetails.additionalDetail.documents",
       otherDocuments
     );
-    disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
+    // disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
     // disableField('summary',"components.div.children.footer.children.submitButton",dispatch);
 
     // Set Channel and Financial Year
@@ -403,6 +402,8 @@ debugger;
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
+      let isEdited = getQueryArg(window.location.href, "action") === "edit";
+      if(!isEdited) {
       response = await httpRequest(
         "post",
         "/firenoc-services/v1/_update",
@@ -410,12 +411,13 @@ debugger;
         [],
         { FireNOCs: payload }
       );
+     
       response = furnishNocResponse(response);
       enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
       // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
     }
-
+  }
     return { status: "success", message: response };
   } catch (error) {
     enableField('apply',"components.div.children.footer.children.nextButton",dispatch);

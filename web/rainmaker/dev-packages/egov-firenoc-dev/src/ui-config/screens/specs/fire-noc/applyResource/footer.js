@@ -96,7 +96,6 @@ const getMdmsData = async (state, dispatch) => {
     }
   };
   try {
-    debugger;
     let payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
@@ -104,7 +103,6 @@ const getMdmsData = async (state, dispatch) => {
       [],
       mdmsBody
     );
-    debugger;
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.FireNoc.Documents",
@@ -112,7 +110,6 @@ const getMdmsData = async (state, dispatch) => {
       )
     );
     prepareDocumentsUploadData(state, dispatch);
-    debugger;
   } catch (e) {
     console.log(e);
   }
@@ -263,7 +260,27 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    moveToReview(state, dispatch);
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      //EDIT FLOW
+      const businessId = getQueryArg(
+        window.location.href,
+        "applicationNumber"
+      );
+      const tenantId = getQueryArg(window.location.href, "tenantId");
+      dispatch(
+        setRoute(
+          `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
+        )
+      );
+      const updateMessage = {
+        labelName: "Rates will be updated on submission",
+        labelKey: "TL_COMMON_EDIT_UPDATE_MESSAGE"
+      };
+      dispatch(toggleSnackbar(true, updateMessage, "info"));
+    }
+    else {
+      moveToReview(state, dispatch);
+    }
   }
 
   if (activeStep !== 3) {
@@ -273,7 +290,6 @@ const callBackForNext = async (state, dispatch) => {
         prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 2) {
-        debugger;
         getMdmsData(state, dispatch);
         let response = await createUpdateNocApplication(
           state,

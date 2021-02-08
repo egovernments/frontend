@@ -265,6 +265,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
       setApplicationNumberBox(state, dispatch);
     } else if (method === "UPDATE") {
+      let isEdited = getQueryArg(window.location.href, "action") === "edit";
+      if(!isEdited) {
       response = await httpRequest(
         "post",
         "/firenoc-services/v1/_update",
@@ -275,6 +277,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       response = furnishNocResponse(response);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
     }
+  }
 
     return { status: "success", message: response };
   } catch (error) {

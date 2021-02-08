@@ -97,8 +97,8 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
+    propertyLocationDetails,
     propertyDetails,
-    propertyLocationDetails
   },
   visible: false
 };
@@ -229,7 +229,7 @@ export const prepareEditFlow = async (
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
     []
   );
-  if (applicationNumber && buildings.length == 0) {
+  if (applicationNumber) {
     let response = await getSearchResults([
       {
         key: "tenantId",
