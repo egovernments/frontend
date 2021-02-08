@@ -182,7 +182,33 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
     }
 
-
+    let providedBy = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.detailsProvidedBy");
+    if(providedBy ==="Self") {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight.children.reviewPlumberLicenseNo",
+           "visible",
+           false
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight.children.reviewPlumberMobileNo",
+           "visible",
+           false
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight.children.reviewPlumberName",
+           "visible",
+           false
+        )
+      );
+    }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
       set(
