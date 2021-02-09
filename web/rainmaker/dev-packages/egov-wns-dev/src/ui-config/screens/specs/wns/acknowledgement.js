@@ -749,7 +749,8 @@ export const downloadPrintContainer = (
               props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", maxWidth: "85%" }, className: "tl-print-button" },
               menu: printMenu
             }
-          }
+          },
+          visible : !JSON.parse(localStorageGet('isMobileApp'))
         }
 
       },
