@@ -235,6 +235,32 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     }
 };
 
+
+export const getCBMdmsData = async (dispatch,tenantId) => {
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+        moduleDetails: [
+          {
+            moduleName: "ws-services-masters", masterDetails: [
+              { name: "Documents" },
+              { name: "ModifyConnectionDocuments" } 
+            ]
+          }
+        ]
+      }
+    };
+    console.log("Common_config",commonConfig.tenantId);
+    try {
+      let payload = null;
+      payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+      console.log("Payload for ",payload);
+      dispatch(prepareFinalObject("applyScreenMdmsData.ws-services-masters.Documents", payload.MdmsRes["ws-services-masters"].Documents));
+      dispatch(prepareFinalObject("applyScreenMdmsData.ws-services-masters.ModifyConnectionDocuments", payload.MdmsRes["ws-services-masters"].ModifyConnectionDocuments));
+    } catch (e) { console.log(e); }
+  };
+
+
 export const fetchBill = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
