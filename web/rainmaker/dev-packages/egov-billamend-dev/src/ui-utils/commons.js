@@ -4,6 +4,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import { acceptedFiles } from "egov-ui-framework/ui-utils/commons";
+import { getSewerageDetails, getWaterDetails } from "../ui-config/screens/specs/bill-amend/utils";
 import { httpRequest } from "./api";
 
 export const handleFileUpload = (event, handleDocument, props) => {
@@ -144,26 +145,55 @@ export const searchBill = async (queryObject, dispatch) => {
       })
     } else {
       newQueryObj.push({
-        "key": 'consumerCode',
+        "key": 'connectionNumber',
         "value": newQuery['consumerCode']
       })
     }
+let returnObject={'Bill':[]};
+    if(newQuery['businessService']=='WS'){
+      newQueryObj.push({
+        "key": 'searchType',
+        "value":'CONNECTION'
+      })
+      newQueryObj.push({
+        "key": 'isPropertyDetailsRequired',
+        "value":true
+      })
+       
+      const response = await getWaterDetails(newQueryObj);
+      if(response !== null &&
+        response !== undefined &&
+        response.WaterConnection &&
+        response.WaterConnection.length > 0){
+          returnObject.Bill.push(...response.WaterConnection);
+      }
+      return returnObject;
+    } else  if(newQuery['businessService']=='SW'){
+      newQueryObj.push({
+        "key": 'searchType',
+        "value":'CONNECTION'
+      })
+      newQueryObj.push({
+        "key": 'isPropertyDetailsRequired',
+        "value":true
+      })
+      const response = await getSewerageDetails(newQueryObj);
+      if(response !== null &&
+        response !== undefined &&
+        response.SewerageConnections &&
+        response.SewerageConnections.length > 0){
+          returnObject.Bill.push(...response.SewerageConnections);
+      }
+      return returnObject;
+    }
 
-    const response = await httpRequest(
-      "post",
-      "/billing-service/bill/v2/_fetchbill",
-      "_search",
-      newQueryObj
-    );
-
-    return response;
   } catch (error) {
     console.error(error);
     dispatch(
       toggleSnackbar(
         true,
         { labelName: error.message, labelCode: error.message },
-        "error"
+        "warning"
       )
     );
   }

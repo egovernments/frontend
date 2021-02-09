@@ -95,7 +95,7 @@ export const setRolesList = (state, dispatch) => {
   jurisdictions.map((judis,ind)=>{
     let furnishedRolesList =judis&&judis.roles&&Array.isArray(judis.roles)&&judis.roles.map(role=>{
       return " " + role.label;
-    })
+    })||[];
     dispatch(
       prepareFinalObject(
         `Employee[0].jurisdictions[${ind}].furnishedRolesList`,

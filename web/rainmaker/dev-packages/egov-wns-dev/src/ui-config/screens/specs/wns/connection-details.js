@@ -1,5 +1,5 @@
 import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
-import { getBill } from "egov-common/ui-config/screens/specs/utils";
+
 import {
   convertEpochToDate,
   getCommonCard,
@@ -22,7 +22,7 @@ import {
   getSearchResultsForSewerage,
   serviceConst
 } from "../../../../ui-utils/commons";
-import { ifUserRoleExists } from "../utils";
+import { getDemand, ifUserRoleExists } from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
@@ -216,7 +216,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           value: "SW",
         },
       ];
-      const bill = await getBill(queryObjForBill, dispatch);
+      const bill = await getDemand(queryObjForBill, dispatch);
       let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
@@ -311,7 +311,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           value: "WS",
         },
       ];
-      const bill = await getBill(queryObjForBill, dispatch);
+      const bill = await getDemand(queryObjForBill, dispatch);
       let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
