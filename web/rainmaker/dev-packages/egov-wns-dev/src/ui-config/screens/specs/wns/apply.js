@@ -20,7 +20,7 @@ import {
   isActiveProperty,
   isModifyMode,
   isModifyModeAction, prefillDocuments, prepareDocumentsUploadData,
-  showHideFieldsFirstStep
+  showHideFieldsFirstStep, getCBMdmsData
 } from "../../../../ui-utils/commons";
 import { triggerModificationsDisplay } from "./../utils/index";
 import { additionDetails } from "./applyResource/additionalDetails";
@@ -139,6 +139,7 @@ export const documentDetails = getCommonCard({
   }
 });
 
+ 
 export const getMdmsData = async dispatch => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -150,8 +151,6 @@ export const getMdmsData = async dispatch => {
         { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
         {
           moduleName: "ws-services-masters", masterDetails: [
-            { name: "Documents" },
-            { name: "ModifyConnectionDocuments" },
             { name: "waterSource" },
             { name: "connectionType" },
             { name: "PropertySearch" },
@@ -268,6 +267,12 @@ export const getData = async (action, state, dispatch) => {
   const actionType = getQueryArg(window.location.href, "action");
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch);
+  if(tenantId){
+    await getCBMdmsData(dispatch, tenantId);
+  }
+  
+
+
   if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
@@ -929,7 +934,10 @@ const screenConfig = {
     } else {
       triggerModificationsDisplay(action, false);
     }
-    prepareDocumentsUploadData(state, dispatch);
+    if(propertyId){
+      prepareDocumentsUploadData(state, dispatch);
+    }
+    
     set(action, "screenConfig.components.div.children.stepper.props.steps", stepperData());
     set(action, 'screenConfig.components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props.labelKey', getHeaderLabel());
     dispatch(handleField("apply", "components", "div", get(action, "screenConfig.components.div", {})))
