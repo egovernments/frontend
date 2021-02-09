@@ -9,6 +9,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import { getCommonApplyFooter } from "../../utils";
 import { getQueryRedirectUrl } from "../searchResource/searchResults";
 import "./index.css";
+import cloneDeep from "lodash/cloneDeep";
 
 
 
@@ -300,13 +301,19 @@ const callBackForApply = async (state, dispatch) => {
         let unit = {};
         unit.usageCategory = propertyPayload.subUsageCategory ? propertyPayload.subUsageCategory : propertyPayload.usageCategory;
         unit.occupancyType = "SELFOCCUPIED";
-        unit.constructionDetail = {};
+        unit.constructionDetail = {
+          // carpetArea :  propertyPayload.superBuiltUpArea,
+          // builtUpArea : propertyPayload.superBuiltUpArea,
+          superBuiltUpArea : propertyPayload.superBuiltUpArea,
+          plinthArea : propertyPayload.superBuiltUpArea,
+
+        };
         propertyPayload.units = [];
-        // propertyPayload.units.push(unit);
+        propertyPayload.units.push(unit);
       }
       propertyPayload.creationReason = 'CREATE';
       let payload = null;
-      //console.log("propertyPayload at create--",propertyPayload);
+      console.log("--propertyPayload at create--",cloneDeep(propertyPayload));
      
       if(getQueryArg(window.location.href, "purpose")=='update'){
 
