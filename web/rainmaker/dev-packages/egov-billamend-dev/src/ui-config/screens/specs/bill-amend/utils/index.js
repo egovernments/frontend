@@ -10,6 +10,7 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import get from "lodash/get";
+import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 
 export const getCommonApplyFooter = (children) => {
@@ -312,6 +313,7 @@ export const submitApplication = async (state, dispatch) => {
 
   let billAmdDetails = get(state.screenConfiguration.preparedFinalObject, "Amendment", {});
   let fetchBillDetails = get(state.screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
+  let billDetail = get(state.screenConfiguration.preparedFinalObject, "billDetail", {});
   let amountType = get(state.screenConfiguration.preparedFinalObject, "BILL.AMOUNTTYPE", "");
   let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
   let documentsPreview = [], demandDetails = [];;
@@ -413,4 +415,48 @@ export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'downloa
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 
+}
+
+
+export const getSewerageDetails = async (queryObject) => {
+  try {
+      const response = await httpRequest(
+          "post",
+          "/sw-services/swc/_search",
+          "_search",
+          queryObject
+      );
+      if (
+          response !== null &&
+          response !== undefined &&
+          response.SewerageConnections &&
+          response.SewerageConnections.length > 0
+      ) {
+        return response;
+      }
+
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+export const getWaterDetails = async (queryObject) => {
+  try {
+      const response = await httpRequest(
+          "post",
+          "/ws-services/wc/_search",
+          "_search",
+          queryObject
+      );
+      if (
+          response !== null &&
+          response !== undefined &&
+          response.WaterConnection &&
+          response.WaterConnection.length > 0
+      ) {
+        return response;
+      } 
+  } catch (error) {
+      console.log(error)
+  }
 }

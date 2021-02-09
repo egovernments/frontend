@@ -1,9 +1,21 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { getBillAmendSearchResult, searchBill } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 
+const getAddress=(tenantId,locality)=>{
+  if(!tenantId&&!locality){
+    return'NA';
+  }
+  let address='';
+  let tenantList=tenantId&&tenantId.split('.')|| [];
 
+  let localityMessage=locality&&tenantId&&tenantList.length>1&&getLocaleLabels(tenantId,`TENANT_TENANTS_${tenantList[0]&&tenantList[0].toUpperCase()}_${tenantList[1]&&tenantList[1].toUpperCase()}`)||'';
+  let tenantMessage=locality&&tenantId&&getLocaleLabels(locality,`${tenantList[0]&&tenantList[0].toUpperCase()}_${tenantList[1]&&tenantList[1].toUpperCase()}_REVENUE_${locality.toUpperCase()}`)+','||'';
+  address=tenantMessage+localityMessage;
+  return address;
+}
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
 
@@ -81,58 +93,88 @@ export const searchApiCall = async (state, dispatch) => {
 
     }
     const resp = await searchBill(queryObject, dispatch)
-
-    const bills = (resp && resp.Bill) || [];
-    const respObj = {};
-    bills.map(bill => {
-      respObj[bill.consumerCode] = bill;
+    
+    const amendObj = {};
+    Amendments.map(bill => {
+      amendObj[bill.consumerCode] = bill;
     })
-    let usedBills = {};
-    const billTableData = Amendments.map(item => {
-      let billDetails = {}
-      if (respObj[get(item, "consumerCode", '')]) {
-        billDetails = respObj[get(item, "consumerCode", '')]
-        usedBills[get(item, "consumerCode", '')] = { ...billDetails }
-        delete respObj[get(item, "consumerCode", '')];
-      } else if (usedBills[get(item, "consumerCode", '')]) {
-        billDetails = usedBills[get(item, "consumerCode", '')]
-      } else {
-        billDetails = {};
-      }
+    const billTableData = resp.Bill.map(item => {
+      // let billDetails = {}
+      // if (respObj[get(item, "consumerCode", '')]) {
+      //   billDetails = respObj[get(item, "consumerCode", '')]
+      //   usedBills[get(item, "consumerCode", '')] = { ...billDetails }
+      //   delete respObj[get(item, "consumerCode", '')];
+      // } else if (usedBills[get(item, "consumerCode", '')]) {
+      //   billDetails = usedBills[get(item, "consumerCode", '')]
+      // } else {
+      //   billDetails = {};
+      // }
 
       return {
-        businessService: get(item, "businessService"),
-        amendmentId: get(item, "amendmentId", 'NA'),
-        consumerCode: get(item, "consumerCode"),
-        status: get(item, "status", "NA"),
-        consumerName: get(billDetails, "payerName", 'NA'),
-        consumerAddress: get(billDetails, "payerAddress", 'NA'),
+
+        businessService:  get(amendObj[get(item, "connectionNo", '')], "businessService", get(searchScreenObject, 'businessService', '')),
+        amendmentId:  get(amendObj[get(item, "connectionNo", '')], "amendmentId", "NA"),
+        consumerCode: get(item, "connectionNo"),
+        status: get(amendObj[get(item, "connectionNo", '')], "status", "NA"),
+        consumerName: get(item, "additionalDetails.ownerName",   "NA"),
+        consumerAddress:getAddress( get(item, "tenantId"),get(item, "additionalDetails.locality")) ,
         tenantId: get(item, "tenantId"),
-        connectionType: get(item, "additionalDetails.connectionType", 'Metered')
+        connectionType: get(item, "connectionType", 'Metered'),
       };
     });
 
 
-    if (respObj && Object.keys(respObj).length > 0) {
+    // const bills = (resp && resp.Bill) || [];
+    // const respObj = {};
+    // bills.map(bill => {
+    //   respObj[bill.connectionNo] = bill;
+    // })
+    // let usedBills = {};
+    // const billTableData = Amendments.map(item => {
+    //   let billDetails = {}
+    //   if (respObj[get(item, "consumerCode", '')]) {
+    //     billDetails = respObj[get(item, "consumerCode", '')]
+    //     usedBills[get(item, "consumerCode", '')] = { ...billDetails }
+    //     delete respObj[get(item, "consumerCode", '')];
+    //   } else if (usedBills[get(item, "consumerCode", '')]) {
+    //     billDetails = usedBills[get(item, "consumerCode", '')]
+    //   } else {
+    //     billDetails = {};
+    //   }
 
-      Object.values(respObj).map(billDetail => {
-        if (billDetail) {
-          billTableData.push({
-            businessService: get(billDetail, "businessService"),
-            amendmentId: 'NA',
-            consumerCode: get(billDetail, "consumerCode"),
-            status: "NA",
-            consumerName: get(billDetail, "payerName", 'NA'),
-            consumerAddress: get(billDetail, "payerAddress", 'NA'),
-            tenantId: get(billDetail, "tenantId"),
-            connectionType: 'Metered'
-          })
-        }
-      })
-    }
-    dispatch(
-      prepareFinalObject("searchScreenMdmsData.searchResponse", bills)
-    );
+    //   return {
+    //     businessService: get(item, "businessService"),
+    //     amendmentId: get(item, "amendmentId", 'NA'),
+    //     consumerCode: get(item, "consumerCode"),
+    //     status: get(item, "status", "NA"),
+    //     consumerName: get(billDetails, "payerName",  get(item, "additionalDetails.payerName", "NA")),
+    //     consumerAddress: get(billDetails, "payerAddress",  get(item, "additionalDetails.payerAddress", "NA")),
+    //     tenantId: get(item, "tenantId"),
+    //     connectionType: get(item, "additionalDetails.connectionType", 'Metered')
+    //   };
+    // });
+
+
+    // if (respObj && Object.keys(respObj).length > 0) {
+
+    //   Object.values(respObj).map(billDetail => {
+    //     if (billDetail) {
+    //       billTableData.push({
+    //         businessService: get(billDetail, "businessService"),
+    //         amendmentId: 'NA',
+    //         consumerCode: get(billDetail, "consumerCode"),
+    //         status: "NA",
+    //         consumerName: get(billDetail, "payerName", 'NA'),
+    //         consumerAddress: get(billDetail, "payerAddress", 'NA'),
+    //         tenantId: get(billDetail, "tenantId"),
+    //         connectionType: 'Metered'
+    //       })
+    //     }
+    //   })
+    // }
+    // dispatch(
+    //   prepareFinalObject("searchScreenMdmsData.searchResponse", bills)
+    // );
 
     try {
       let data = billTableData.map(item => ({

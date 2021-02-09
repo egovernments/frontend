@@ -129,7 +129,7 @@ class Footer extends React.Component {
       businessService.includes("ws-services-calculation") ||
       businessService.includes("sw-services-calculation")
     ) {
-      if (bill.Bill && bill.Bill.length > 0 &&isAmendmentInWorkflow) {
+      if (bill.Demands && bill.Demands.length > 0 &&isAmendmentInWorkflow) {
         downloadMenu && downloadMenu.push(BillAmendment);
       }
     }
