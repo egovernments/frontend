@@ -319,6 +319,16 @@ export const getReviewTrade = (isEditable = true) => {
           jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees",
           callBack: checkValueForNA 
         }
+      ), 
+      reviewLegacyReceipt: getLabelWithValue(
+        {
+          labelName: "Old Receipt No.",
+          labelKey: "Old Receipt No."
+        },
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.oldReceiptNumber",
+          callBack: checkValueForNA
+        }
       )
     }),
     div1: getDivider(),
