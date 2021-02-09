@@ -5,6 +5,7 @@ import DialogContainer from 'egov-pt/ui-containers-local/DialogContainer';
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
@@ -359,6 +360,7 @@ class OwnerInfo extends Component {
 
   render() {
     const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, mdmsMutationDocuments, OldProperty } = this.props;
+    properties.tenantId = getTenantId();
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
