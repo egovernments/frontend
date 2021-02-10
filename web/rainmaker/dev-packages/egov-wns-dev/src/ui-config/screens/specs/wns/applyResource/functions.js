@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getPropertyResults, isActiveProperty, showHideFieldsFirstStep, getSearchResults, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
+import { getPropertyResults, isActiveProperty, showHideFieldsFirstStep, getSearchResults, getSearchResultsForSewerage , getCBMdmsData,prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
@@ -60,6 +60,12 @@ export const propertySearchApiCall = async (state, dispatch) => {
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
         let propertyData = response.Properties[0];
+        try{
+          getCBMdmsData(dispatch,propertyData.tenantId);
+          prepareDocumentsUploadData(state,dispatch);
+        }catch(err){
+          console.log("Document related process", err);
+        }
         if(!isActiveProperty(propertyData)){
           dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyData.status}`, labelName: `Property Status is ${propertyData.status}` }, "warning"));     
           showHideFieldsFirstStep(dispatch,propertyData.propertyId,false); 

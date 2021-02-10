@@ -9,7 +9,8 @@ import {
   getDateField,
   getLabel,
   getCommonHeader,
-  getCommonGrayCard
+  getCommonGrayCard,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 //   import { searchApiCall } from "./functions";
 import commonConfig from "config/common.js";
@@ -160,7 +161,7 @@ export const additionDetails = getCommonCard({
         placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.noOfTaps",
-        pattern: /^[0-9]*$/i,
+        pattern :/^[1-9][0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
       pipeSize: getSelectField({
@@ -229,7 +230,7 @@ export const additionDetails = getCommonCard({
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.noOfWaterClosets",
-        pattern: /^[0-9]*$/i,
+        pattern: /^[1-9][0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
       noOfToilets: getTextField({
@@ -237,14 +238,14 @@ export const additionDetails = getCommonCard({
         placeholder: { labelKey: "WS_ADDN_DETAILS_NO_OF_TOILETS_PLACEHOLDER" },
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.noOfToilets",
-        pattern: /^[0-9]*$/i,
+        pattern: /^[1-9][0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
       drainageSize: getSelectField({
         label: { labelKey: "WS_SERV_DETAIL_DRAINAGE_SIZE" },
         sourceJsonPath: "applyScreenMdmsData.sw-services-calculation.drainageSize",
         placeholder: { labelKey: "WS_SERV_DETAIL_PIPE_SIZE_PLACEHOLDER" },
-        required: true,
+        
         gridDefination: { xs: 12, sm: 6 },
         jsonPath: "applyScreen.drainageSize"
       })
@@ -318,9 +319,11 @@ export const additionDetails = getCommonCard({
       subHeader: getCommonTitle({
         labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
       }),
-       roadDetails: getCommonContainer({
+     
+      //  roadDetails: getCommonContainer({
           
-       }),
+      //  }),
+       break: getBreak(),
     })
 
   }),

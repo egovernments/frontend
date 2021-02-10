@@ -321,25 +321,28 @@ const screenConfig = {
 
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
-      if (process.env.REACT_APP_NAME != "Citizen") {
-        let props = get(
-          action.screenConfig,
-          "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",
-          {}
-        );
-        props.value = tenantId;
-        props.disabled = true;
-        set(
-          action.screenConfig,
-          "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",
-          props
-        );
+      if (tenantId) {
+        dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }));
+        const ulbComponentJsonPath = "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city";
+        const disableUlb = process.env.REACT_APP_NAME === "Citizen" ? false : true;
         dispatch(
-          prepareFinalObject(
-            "Property.address.city",
+          handleField(
+            "register-property",
+            ulbComponentJsonPath,
+            "props.value",
             tenantId
           )
         );
+        dispatch(
+          handleField(
+            "register-property",
+            ulbComponentJsonPath,
+            "props.disabled",
+            disableUlb
+          )
+        );
+        dispatch(prepareFinalObject("Property.address.city", tenantId));
+ 
       }
       const mohallaLocalePrefix = {
         moduleName: tenantId,

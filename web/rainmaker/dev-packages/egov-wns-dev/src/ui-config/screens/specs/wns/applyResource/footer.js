@@ -122,59 +122,70 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  console.info("DC-Call back to next");
   window.scrollTo(0, 0);
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
   /* validations for property details screen */
   if (activeStep === 0) {
-    // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
-    //   isFormValid = await appl;
-    // }
+     validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
+     validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
+     var connectionDetailValidation =  validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
+     if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode()) {
+        if(connectionDetailValidation){
+              let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+              const uploadedDocData = application.documents;
+              const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
+                return {
+                  title: `WS_${item.documentType}`,
+                  link: item.fileUrl && item.fileUrl.split(",")[0],
+                  linkText: "View",
+                  name: item.fileName
+                };
+              });
+              dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
+              let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+              let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+              //connectionholdercode
+              let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
+              let holderData = connectionHolderObj[0];
+              if (holderData !== null && holderData !== undefined) {
+                if (holderData.sameAsPropertyAddress === true) {
+                  holderData = null
+                }
+              }
+              if (holderData == null) {
+                applyScreenObject.connectionHolders = holderData;
+              } else {
+                let arrayHolderData = [];
+                arrayHolderData.push(holderData);
+                applyScreenObj.connectionHolders = arrayHolderData;
+              }
 
-    validateFields("components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children", state, dispatch)
-    validateFields("components.div.children.formwizardFirstStep.children.connectionHolderDetails.children.cardContent.children.holderDetails.children.holderDetails.children", state, dispatch)
+              if (!isActiveProperty(applyScreenObj.property)) {
+                dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));
+                showHideFieldsFirstStep(dispatch, "", false);
+                dispatch(prepareFinalObject("applyScreen", applyScreenObj));
+                return false;
+              }
+            }
+          else{
+            isFormValid = false;
+            dispatch(toggleSnackbar(true, {
+                labelKey: "WS_FILL_REQUIRED_FIELDS",
+                labelName: "Please fill Required details"
+              },
+                "warning"
+              )
+            )
+          }
 
-    validateFields("components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children", state, dispatch)
 
-    if (getQueryArg(window.location.href, "action") === "edit" && !isModifyMode()) {
-      let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-      const uploadedDocData = application.documents;
-      const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
-        return {
-          title: `WS_${item.documentType}`,
-          link: item.fileUrl && item.fileUrl.split(",")[0],
-          linkText: "View",
-          name: item.fileName
-        };
-      });
-      dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
-      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-      let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
-      //connectionholdercode
-      let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
-      let holderData = connectionHolderObj[0];
-      if (holderData !== null && holderData !== undefined) {
-        if (holderData.sameAsPropertyAddress === true) {
-          holderData = null
-        }
-      }
-      if (holderData == null) {
-        applyScreenObject.connectionHolders = holderData;
-      } else {
-        let arrayHolderData = [];
-        arrayHolderData.push(holderData);
-        applyScreenObj.connectionHolders = arrayHolderData;
-      }
-
-      if (!isActiveProperty(applyScreenObj.property)) {
-        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));
-        showHideFieldsFirstStep(dispatch, "", false);
-        dispatch(prepareFinalObject("applyScreen", applyScreenObj));
-        return false;
-      }
-
-    } else {
+    }
+      
+    else {
+     
       const water = get(
         state.screenConfiguration.preparedFinalObject,
         "applyScreen.water"
@@ -205,6 +216,7 @@ const callBackForNext = async (state, dispatch) => {
         arrayHolderData.push(holderData);
         applyScreenObject.connectionHolders = arrayHolderData;
       }
+      console.info("DC-searchPropertyId",searchPropertyId);
       if (searchPropertyId !== undefined && searchPropertyId !== "") {
 
         if (!isActiveProperty(applyScreenObject.property)) {
@@ -356,6 +368,7 @@ const callBackForNext = async (state, dispatch) => {
           )
         }
       } else {
+        console.info("DC-else case=>isFormValid",isFormValid);
         isFormValid = false;
         dispatch(
           toggleSnackbar(
@@ -394,23 +407,32 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
 
     console.info("Validate third step"); 
+
+    // let plumberValid = true;
+    // let activateDetailValid = true;
+    // let addConnDetailValid = true;
+    // let wsConnectionTaxHeadsValid = true;
+
     let plumberValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children", state, dispatch);
     let activateDetailValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children", state, dispatch);
     let addConnDetailValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children", state, dispatch);
-    console.log("plumberValid",plumberValid ,"activateDetailValid",activateDetailValid,"addConnDetailValid",addConnDetailValid);
+    let wsConnectionTaxHeadsValid = validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children",state,dispatch);
+    let wsRoadCuttingValid = validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children",state,dispatch);
+
+    console.log("plumberValid=",plumberValid,"wsConnectionTaxHeadsValid",wsConnectionTaxHeadsValid,"wsRoadCuttingValid=",wsRoadCuttingValid);
 
     let errorMessage = {
       labelName: "Please provide valid inputs!",
       labelKey: "WS_FILL_VALID_INPUTS"
     };
-    if(!plumberValid|| !activateDetailValid||!addConnDetailValid){
+    if(!plumberValid|| !activateDetailValid||!addConnDetailValid || !wsConnectionTaxHeadsValid){
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
       return;
     }
-    let roadCuttingValidation =  checkThirdFormValid(state,dispatch,isFormValid);
-    console.info("check result==",roadCuttingValidation);
+    // let roadCuttingValidation =  checkThirdFormValid(state,dispatch,isFormValid);
+    // console.info("check result==",roadCuttingValidation);
     
-    isFormValid = roadCuttingValidation;
+    // isFormValid = roadCuttingValidation;
     hasFieldToaster = !isFormValid;
     if(isFormValid){
       if (isModifyMode()) {
@@ -465,6 +487,7 @@ const callBackForNext = async (state, dispatch) => {
     // responseStatus === "success" && changeStep(activeStep, state, dispatch);
    }
   if (activeStep !== 3) {
+    console.info("DC-going to change step---",activeStep,"isformvalid==",isFormValid);
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
@@ -508,13 +531,7 @@ const checkThirdFormValid = (state,dispatch,isFormValid) =>{
     });
 
       if(roadEstimateValidation.length>=1) {
-        // let errorMessage = {
-        //   labelName: "Please fill all fields for road cutting charges",
-        //   labelKey: "ERR_ROADCUTTING_TOAST"
-        // };
-        // console.info("show error");
-        // dispatch(toggleSnackbar(true, errorMessage, "error"));
-      return false;
+           return false;
       }
       else {
       return true;
@@ -682,6 +699,7 @@ export const changeStep = (
   mode = "next",
   defaultActiveStep = -1
 ) => {
+  console.info("DC-changeStep");
   window.scrollTo(0, 0);
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   if (defaultActiveStep === -1) {
