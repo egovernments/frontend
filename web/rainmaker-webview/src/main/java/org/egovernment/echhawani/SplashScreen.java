@@ -1,4 +1,4 @@
-package org.egovernment.mseva;
+package org.egovernment.echhawani;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
-import org.egovernment.mseva.R;
+import org.egovernment.echhawani.R;
 
 public class SplashScreen extends Activity {
 

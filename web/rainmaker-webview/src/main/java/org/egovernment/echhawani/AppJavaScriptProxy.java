@@ -1,4 +1,4 @@
-package org.egovernment.mseva;
+package org.egovernment.echhawani;
 
 import android.app.Activity;
 import android.app.NotificationChannel;
