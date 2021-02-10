@@ -320,7 +320,7 @@ const getPropertyDetails = {
           ),
           reviewPlotSize: getLabelWithValueForModifiedLabel(
             {
-              labelName: "Plot Size (in sq metres)",
+              labelName: "Total Land Area (in sq metres)",
               labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
             },
             { jsonPath: "applyScreen.property.landArea", callBack: handleNA },
@@ -328,6 +328,17 @@ const getPropertyDetails = {
               labelKey: "WS_OLD_LABEL_NAME"
             },
             { jsonPath: "applyScreenOld.property.landArea", callBack: handleNA },
+          ),
+          reviewConstructedSize: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "Total Constructed Area (in sq metres)",
+              labelKey: "WS_PROP_DETAIL_CONSTRUCTION_SIZE_LABEL"
+            },
+            { jsonPath: "applyScreen.property.superBuiltUpArea", callBack: handleNA },
+            {
+              labelKey: "WS_OLD_LABEL_NAME"
+            },
+            { jsonPath: "applyScreenOld.property.superBuiltUpArea", callBack: handleNA },
           ),
           reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
             {

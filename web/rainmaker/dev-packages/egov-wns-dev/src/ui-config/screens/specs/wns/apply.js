@@ -678,6 +678,7 @@ console.info("came for road cutting",item);
         },
         props:{
           type:"number",
+          id:`roadLength_${index}`,
         },
   
        // required: true,
@@ -701,6 +702,7 @@ console.info("came for road cutting",item);
         },
         props:{
           type:"number",
+          id:`roadBreadth_${index}`,
         },
        // required: true,
         visible: true,
@@ -723,6 +725,7 @@ console.info("came for road cutting",item);
         },
         props:{
           type:"number",
+          id:`roadDepth_${index}`,
         },
        // required: true,
         visible: true,
@@ -743,8 +746,9 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Rate",
           labelKey: "WF_ESTIMATION_RATE"
         },
-  props:{
+        props:{
           type:"number",
+          id:`roadRate_${index}`,
         },
        // required: true,
         visible: true,

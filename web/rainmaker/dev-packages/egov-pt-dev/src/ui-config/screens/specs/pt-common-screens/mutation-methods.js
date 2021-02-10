@@ -81,7 +81,7 @@ export const searchPropertyDetails = getCommonCard({
   }),
   ulbCityContainer: getCommonContainer({
     ulbCity: {
-      uiFramework: "custom-containers",
+      uiFramework: "custom-containers-local",
       moduleName: "egov-pt",
       componentPath: "AutosuggestContainer",
       props: {
