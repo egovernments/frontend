@@ -11,8 +11,11 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     propertyDetails.reviewPropertyType.localiseValue = true;
     propertyDetails.reviewPropertyUsageType.localiseValue = true;
     propertyDetails.reviewPropertySubUsageType.localiseValue = true;
+    locationDetails.reviewLocation.localiseValue = true;
     roadDetails.localiseValue = true;
     propertyOwnerDetail.gender.localiseValue = true;
+    propertyOwnerDetail.specialApplicantCategory.localiseValue = true;
+    propertyOwnerDetail.relationship.localiseValue = true;
     let propDetail = generateKeyValue(preparedFinalObject, propertyDetails);
     let propertyDetail = propDetail.map(cur => {
         if (cur.key === "Rainwater harvesting Facility") {

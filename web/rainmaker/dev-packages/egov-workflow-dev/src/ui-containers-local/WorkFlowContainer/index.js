@@ -214,9 +214,22 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
-      let payload = await httpRequest("post", updateUrl, "", [], {
-        [dataPath]: data
-      });
+      let payload;
+      try{
+          payload = await httpRequest("post", updateUrl, "", [], {
+          [dataPath]: data
+        });
+      }
+      catch(e){
+        toggleSnackbar(
+          true,
+          {
+            labelName: "ServiceFailed",
+            labelKey: "Service Failed",
+          },
+          "error"
+        );
+      }
 
       this.setState({
         open: false
