@@ -673,6 +673,7 @@ console.info("came for road cutting",item);
         },
         props:{
           type:"number",
+          id:`roadLength_${index}`,
         },
   
        // required: true,

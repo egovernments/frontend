@@ -46,7 +46,7 @@ export const OwnerInfoCard = getCommonCard({
       gridDefination: { xs: 12, sm: 6 },
       required: true,
       jsonPath: "applyScreen.proposedTaps",
-      pattern: /^[0-9]*$/i,
+      pattern: /^[1-9]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     }),
 
@@ -65,7 +65,7 @@ export const OwnerInfoCard = getCommonCard({
       gridDefination: { xs: 12, sm: 6 },
       required: true,
       jsonPath: "applyScreen.proposedWaterClosets",
-      pattern: /^[0-9]*$/i,
+      pattern: /^[1-9]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     }),
 
@@ -75,7 +75,7 @@ export const OwnerInfoCard = getCommonCard({
       required: true,
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "applyScreen.proposedToilets",
-      pattern: /^[0-9]*$/i,
+      pattern: /^[1-9]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     }),
 

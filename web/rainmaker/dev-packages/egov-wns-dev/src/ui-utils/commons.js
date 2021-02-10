@@ -385,6 +385,7 @@ export const getConsumptionDetails = async (queryObject, dispatch) => {
 };
 
 export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
+    
     let rValue = false;
     if (applyScreenObject.hasOwnProperty("property") &&
         applyScreenObject['property'] !== undefined &&
@@ -404,7 +405,7 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedTaps") &&
         applyScreenObject["proposedTaps"] !== undefined &&
         applyScreenObject["proposedTaps"] !== "" &&
-        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedTaps"].toString().match(/^[1-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedPipeSize") &&
         applyScreenObject["proposedPipeSize"] !== undefined &&
         applyScreenObject["proposedPipeSize"] !== "" &&
@@ -414,11 +415,11 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
         applyScreenObject["proposedWaterClosets"] !== undefined &&
         applyScreenObject["proposedWaterClosets"] !== "" &&
-        applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedWaterClosets"].toString().match(/^[1-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedToilets") &&
         applyScreenObject["proposedToilets"] !== undefined &&
         applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
+        applyScreenObject["proposedToilets"].toString().match(/^[1-9]*$/i)
     ) { return true; } else { return false; }
 }
 
@@ -472,7 +473,7 @@ export const validateFeildsForWater = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedTaps") &&
         applyScreenObject["proposedTaps"] !== undefined &&
         applyScreenObject["proposedTaps"] !== "" &&
-        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedTaps"].toString().match(/^[1-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedPipeSize") &&
         applyScreenObject["proposedPipeSize"] !== undefined &&
         applyScreenObject["proposedPipeSize"] !== ""
@@ -499,11 +500,11 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
         applyScreenObject["proposedWaterClosets"] !== undefined &&
         applyScreenObject["proposedWaterClosets"] !== "" &&
-        applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
+        applyScreenObject["proposedWaterClosets"].toString().match(/^[1-9]*$/i) &&
         applyScreenObject.hasOwnProperty("proposedToilets") &&
         applyScreenObject["proposedToilets"] !== undefined &&
         applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)&&
+        applyScreenObject["proposedToilets"].toString().match(/^[1-9]*$/i)&&
         applyScreenObject.hasOwnProperty("proposedDrainageSize") &&
         applyScreenObject["proposedDrainageSize"] !== undefined &&
         applyScreenObject["proposedDrainageSize"] !== ""
@@ -916,7 +917,8 @@ export const validateFields = (
       {}
     );
     let isFormValid = true;
-    for (var variable in fields) {
+    for (var variable in fields) {  
+      //  console.info("variable=",variable,"field=",fields);
       if (fields.hasOwnProperty(variable)) {
         if (
           fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" &&
@@ -961,7 +963,7 @@ export const validateFields = (
           });
           
         }
-      }
+     }
     }
     return isFormValid;
   };
