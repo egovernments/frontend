@@ -11,7 +11,7 @@ import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
-const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
+export const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
 
     console.log("usage type",usageType);
     //let noOfFloors;
@@ -30,7 +30,7 @@ const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
     }
 }
 
-const renderAreaData = (usageType, propType, dispatch, state) => {
+export const renderAreaData = (usageType, propType, dispatch, state) => {
 
     console.log("usage type",usageType);
     //let noOfFloors;
@@ -52,7 +52,7 @@ const renderAreaData = (usageType, propType, dispatch, state) => {
     }
 }
 
-const renderNoOfFlatsData = (usageType, propType, dispatch, state) => {
+export const renderNoOfFlatsData = (usageType, propType, dispatch, state) => {
 
     console.log("usage type",usageType);
     //let noOfFloors;
@@ -72,7 +72,7 @@ const renderNoOfFlatsData = (usageType, propType, dispatch, state) => {
 }
 
 
-const rendersubUsageType = (usageType, propType, dispatch, state) => {
+export const rendersubUsageType = (usageType, propType, dispatch, state) => {
   let subTypeValues = get(
     state.screenConfiguration.preparedFinalObject,
     "searchScreenMdmsData.PropertyTax.subUsageType"

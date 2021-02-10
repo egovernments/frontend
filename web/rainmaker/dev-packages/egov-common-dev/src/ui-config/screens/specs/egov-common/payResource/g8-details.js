@@ -24,6 +24,7 @@ const g8Details = getCommonGrayCard({
         labelKey: "NOC_PAYMENT_RCPT_NO_PLACEHOLDER"
       },
       // Pattern validation for the reciept
+      pattern:/^[ A-Za-z0-9./#&]*$/,
       jsonPath: "ReceiptTemp[0].Bill[0].billDetails[0].manualReceiptNumber"
     }),
     receiptIssueDate: getDateField({

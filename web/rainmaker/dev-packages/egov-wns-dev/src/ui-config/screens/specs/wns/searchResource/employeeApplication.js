@@ -33,7 +33,8 @@ export const wnsApplication = getCommonCard({
           localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
-          }
+          },
+          disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
         },  
         placeholder: {
             labelKey: "WS_PROP_DETAIL_CITY_PLACEHOLDER"
@@ -44,7 +45,7 @@ export const wnsApplication = getCommonCard({
         },
         sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
         jsonPath: "searchConnection.tenantId",//db sake
-        required: true,
+        required: true,        
         gridDefination: {
             xs: 12,
             sm: 4
