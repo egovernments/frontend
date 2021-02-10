@@ -334,6 +334,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       queryObject[0],
       "tradeLicenseDetail.applicationDocuments"
     );
+    let additionalDetail = get(
+      queryObject[0],
+      "tradeLicenseDetail.additionalDetail"
+    )?get(
+      queryObject[0],
+      "tradeLicenseDetail.additionalDetail"
+    ):null;
+    if(additionalDetail == null){
+    set(queryObject[0], "tradeLicenseDetail.additionalDetail", null);
+    }
     set(
       queryObject[0],
       "validFrom",
