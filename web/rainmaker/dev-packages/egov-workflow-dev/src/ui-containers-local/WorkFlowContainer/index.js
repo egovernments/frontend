@@ -221,11 +221,12 @@ class WorkFlowContainer extends React.Component {
         });
       }
       catch(e){
+        this.props.hideSpinner();
         toggleSnackbar(
           true,
           {
             labelName: "ServiceFailed",
-            labelKey: "Service Failed",
+            labelKey: e.message,
           },
           "error"
         );
