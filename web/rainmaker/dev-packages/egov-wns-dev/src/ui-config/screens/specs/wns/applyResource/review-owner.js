@@ -507,6 +507,23 @@ export const connectionWater={
       jsonPath: "WaterConnectionOld[0].pipeSize",
       callBack: handleNA
     }
+  ),
+  reviewSubUsageType : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Sub Usage Type",
+      labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      callBack: handleNA
+    },
+    {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      callBack: handleNA
+    }
   )
 
 
@@ -603,6 +620,23 @@ export const connectionSewerage={
       labelKey: "WS_OLD_LABEL_NAME"
     }, {
       jsonPath: "WaterConnectionOld[0].noOfToilets",
+      callBack: handleNA
+    }
+  ),
+  reviewSubUsageType : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Sub Usage Type",
+      labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      callBack: handleNA
+    },
+    {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
       callBack: handleNA
     }
   )

@@ -149,6 +149,7 @@ export const getMdmsData = async dispatch => {
             { name: "PropertySearch" },
             { name: "connectionCategory" },
             { name: "billingType" },
+            { name: "subUsageType" },
 
           ]
         },

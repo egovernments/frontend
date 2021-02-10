@@ -181,7 +181,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         }
       }
     }
-
+    let subUsageType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.waterSubUsageType");
+    let subUsageTypes = get(state, "screenConfiguration.preparedFinalObject.subUsageType", {});
+    if(subUsageType) {
+      Object.keys(subUsageTypes).forEach(key => {
+        if(subUsageTypes[key] === subUsageType) {
+          dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.waterSubUsageType", subUsageTypes["code"]));
+      }
+      });
+    }
     let providedBy = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.detailsProvidedBy");
     if(providedBy ==="Self") {
       dispatch(

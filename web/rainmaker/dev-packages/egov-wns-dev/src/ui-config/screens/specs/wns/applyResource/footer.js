@@ -381,6 +381,22 @@ const callBackForNext = async (state, dispatch) => {
         if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
           setReviewPageRoute(state, dispatch);
         }
+        let propertyUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.usageCategory", "");
+        let subUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.subUsageType", []);
+        let usageTypes = [];
+        if(propertyUsageType) {
+          subUsageType && subUsageType.map(items => {
+            if(items["parentUsageType"] === propertyUsageType) {
+              let obj = {};
+              obj.code = items.name,
+              obj.name = items.code,
+              obj.parentUsageType = items.parentUsageType,
+              obj.active = items.active
+              usageTypes.push(obj);
+            }
+          })
+        }
+        dispatch(prepareFinalObject("applyScreenMdmsData.ws-services-masters.subUsageType", usageTypes));
       }
       else {
         isFormValid = false;
