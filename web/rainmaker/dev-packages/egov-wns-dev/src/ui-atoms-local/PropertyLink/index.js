@@ -45,11 +45,11 @@ class AddLinkForProperty extends React.Component {
             labelKey="WS_SEARCH_PROPERTY" />
           </a> <span> </span>
 
-          {/* <a href="javascript:void(0)" onClick={() => routeTo(modifyLink)} >
+          <a href="javascript:void(0)" onClick={selectedPropertyId? () => routeTo(modifyLink):""} >
             <LabelContainer
               style={clickHereStyles}
               labelKey="WS_MODIFY_PROPERTY" />
-          </a> */}
+          </a>
         </div>
       );
     } else {
@@ -62,12 +62,12 @@ class AddLinkForProperty extends React.Component {
               labelKey="WS_APPLY_CLICK_HERE" />
           </a>
           <br />
-          {/* { (process.env.REACT_APP_NAME != "Citizen")?
-          <a href="javascript:void(0)" onClick={() => routeTo(modifyLink)} >
+          { (process.env.REACT_APP_NAME != "Citizen")?
+          <a href="javascript:void(0)" onClick={selectedPropertyId? () => routeTo(modifyLink):""} >
             <LabelContainer
               style={clickHereStyles}
               labelKey="WS_MODIFY_PROPERTY"  />
-          </a> : ""} */}
+          </a> : ""}
         </div>
       );
     }
