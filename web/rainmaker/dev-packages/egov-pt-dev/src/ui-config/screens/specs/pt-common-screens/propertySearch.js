@@ -6,7 +6,7 @@ import {
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
@@ -18,7 +18,7 @@ import get from "lodash/get";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
-const tenant = getTenantId();
+const tenant = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 
 
 
@@ -55,14 +55,14 @@ const getMDMSData = async (dispatch) => {
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
     payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
     dispatch(prepareFinalObject("applyScreenMdmsData.tenant", payload.MdmsRes.tenant));
-    if (process.env.REACT_APP_NAME != "Citizen") {
+    //if (process.env.REACT_APP_NAME != "Citizen") {
       dispatch(
         prepareFinalObject(
           "searchScreen.tenantId",
           tenant
         )
       );
-    }
+    //}
 
     let ptWorkflowDetails = get(payload, "MdmsRes.PropertyTax.PTWorkflow", []);
     ptWorkflowDetails.forEach(data => {

@@ -197,6 +197,7 @@ class IntegrationReactSelect extends React.Component {
       required = true,
       value,
       className,
+      disabled = false,
       inputLabelProps = {
         shrink: true
       },
@@ -229,6 +230,7 @@ class IntegrationReactSelect extends React.Component {
           components={components}
           value={value}
           placeholder={placeholder}
+          isDisabled={disabled}
           {...rest}
           onChange={this.handleChange("single")}
         />
