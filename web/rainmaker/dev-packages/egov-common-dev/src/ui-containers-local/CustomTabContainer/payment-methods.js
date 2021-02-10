@@ -190,9 +190,11 @@ export const onlineDetails = getCommonContainer({
       labelKey: "PAYMENT_TXN_NO_PLACEHOLDER"
     },
     //Pattern validation for Cheque number
+    pattern:/^[ A-Za-z0-9./#&]*$/,
     jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
     required: true
   }),
+
   txnDate: getDateField({
     label: {
       labelName: "Transaction Date",
@@ -525,6 +527,7 @@ export const cardDetails = getCommonContainer({
     },
     // Pattern validation for Transaction number
     required: true,
+    pattern:/^[ A-Za-z0-9./#&]*$/,
     jsonPath: "ReceiptTemp[0].instrument.transactionNumber"
   }),/*
   repeatTrxNo: getTextField({
