@@ -45,7 +45,7 @@ export const searchResults = {
               </span> :
               <a href="javascript:void(0)"
                 onClick={() => {
-                  let link = `/bill-amend/search-preview?tenantId=${tableMeta.rowData[6]}&applicationNumber=${tableMeta.rowData[1]}`;
+                  let link = `/bill-amend/search-preview?tenantId=${tableMeta.rowData[6]}&applicationNumber=${tableMeta.rowData[1]}&businessService=${tableMeta.rowData[0]}`;
                   routeTo(link);
                 }}
               >{value}
