@@ -10,7 +10,6 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import get from "lodash/get";
-import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 
 export const getCommonApplyFooter = (children) => {
@@ -373,7 +372,7 @@ export const submitApplication = async (state, dispatch) => {
     dispatch(prepareFinalObject("Amendment", response.Amendments[0]));
 
     dispatch(
-      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendments[0].amendmentId}&consumerCode=${response.Amendments[0].consumerCode}&tenantId=${response.Amendments[0].tenantId}`)
+      setRoute(`/bill-amend/acknowledgement?purpose=apply&status=success&applicationNumber=${response.Amendments[0].amendmentId}&consumerCode=${response.Amendments[0].consumerCode}&tenantId=${response.Amendments[0].tenantId}&businessService=${response.Amendments[0].businessService}`)
     );
 
   } catch (error) {
@@ -388,7 +387,7 @@ export const submitApplication = async (state, dispatch) => {
 export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'download') => {
   const queryStr = [
     // { key: "key", value: 'bill-amendment-summary' },
-    { key: "key", value: 'bill-amendment-credit-note' },   
+    { key: "key", value: 'bill-amendment-credit-note' },
     { key: "tenantId", value: tenantId }
   ]
   const DOWNLOADRECEIPT = {
@@ -397,7 +396,7 @@ export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'downloa
       ACTION: "_get",
     },
   };
-  Amendments&& Amendments[0] && Amendments[0].demandDetails.map(detail=>detail.taxAmount =detail.taxAmount == 0 ? "0" : Math.abs(detail.taxAmount))
+  Amendments && Amendments[0] && Amendments[0].demandDetails.map(detail => detail.taxAmount = detail.taxAmount == 0 ? "0" : Math.abs(detail.taxAmount))
 
   try {
     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Amendments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
@@ -420,43 +419,43 @@ export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'downloa
 
 export const getSewerageDetails = async (queryObject) => {
   try {
-      const response = await httpRequest(
-          "post",
-          "/sw-services/swc/_search",
-          "_search",
-          queryObject
-      );
-      if (
-          response !== null &&
-          response !== undefined &&
-          response.SewerageConnections &&
-          response.SewerageConnections.length > 0
-      ) {
-        return response;
-      }
+    const response = await httpRequest(
+      "post",
+      "/sw-services/swc/_search",
+      "_search",
+      queryObject
+    );
+    if (
+      response !== null &&
+      response !== undefined &&
+      response.SewerageConnections &&
+      response.SewerageConnections.length > 0
+    ) {
+      return response;
+    }
 
   } catch (error) {
-      console.log(error)
+    console.log(error)
   }
 }
 
 export const getWaterDetails = async (queryObject) => {
   try {
-      const response = await httpRequest(
-          "post",
-          "/ws-services/wc/_search",
-          "_search",
-          queryObject
-      );
-      if (
-          response !== null &&
-          response !== undefined &&
-          response.WaterConnection &&
-          response.WaterConnection.length > 0
-      ) {
-        return response;
-      } 
+    const response = await httpRequest(
+      "post",
+      "/ws-services/wc/_search",
+      "_search",
+      queryObject
+    );
+    if (
+      response !== null &&
+      response !== undefined &&
+      response.WaterConnection &&
+      response.WaterConnection.length > 0
+    ) {
+      return response;
+    }
   } catch (error) {
-      console.log(error)
+    console.log(error)
   }
 }

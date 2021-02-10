@@ -35,80 +35,80 @@ export const downloadPrintContainer = (
     action,
     state,
     dispatch,
-  ) => {
+) => {
     /** MenuButton data based on status */
     let downloadMenu = [];
     let printMenu = [];
     let ptMutationCertificateDownloadObject = {
-      label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
-      link: () => {
-        console.log("clicked");
-      },
-      leftIcon: "book"
+        label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
+        link: () => {
+            console.log("clicked");
+        },
+        leftIcon: "book"
     };
     let ptMutationCertificatePrintObject = {
-      label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
-      link: () => {
-        console.log("clicked");
-      },
-      leftIcon: "book"
+        label: { labelName: "PT Certificate", labelKey: "MT_CERTIFICATE" },
+        link: () => {
+            console.log("clicked");
+        },
+        leftIcon: "book"
     };
-  
 
-        downloadMenu = [ptMutationCertificateDownloadObject];
-        printMenu = [ptMutationCertificatePrintObject];
-   
+
+    downloadMenu = [ptMutationCertificateDownloadObject];
+    printMenu = [ptMutationCertificatePrintObject];
+
     /** END */
-  
+
     return {
-      rightdiv: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        props: {
-          style: { textAlign: "right", display: "flex" }
-        },
-        children: {
-          downloadMenu: {
-            uiFramework: "custom-atoms-local",
-            moduleName: "egov-billamend",
-            componentPath: "MenuButton",
+        rightdiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
             props: {
-              data: {
-                label: { labelName: "DOWNLOAD", labelKey: "BILL_AMEND_DOWNLOAD" },
-                leftIcon: "cloud_download",
-                rightIcon: "arrow_drop_down",
-                props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "pt-download-button" },
-                menu: downloadMenu
-              }
-            }
-          },
-          printMenu: {
-            uiFramework: "custom-atoms-local",
-            moduleName: "egov-billamend",
-            componentPath: "MenuButton",
-            props: {
-              data: {
-                label: { labelName: "PRINT", labelKey: "BILL_AMEND_PRINT" },
-                leftIcon: "print",
-                rightIcon: "arrow_drop_down",
-                props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-print-button" },
-                menu: printMenu
-              }
-            }
-          }
-  
-        },
-        // gridDefination: {
-        //   xs: 12,
-        //   sm: 6
-        // }
-      }
+                style: { textAlign: "right", display: "flex" }
+            },
+            children: {
+                downloadMenu: {
+                    uiFramework: "custom-atoms-local",
+                    moduleName: "egov-billamend",
+                    componentPath: "MenuButton",
+                    props: {
+                        data: {
+                            label: { labelName: "DOWNLOAD", labelKey: "BILL_AMEND_DOWNLOAD" },
+                            leftIcon: "cloud_download",
+                            rightIcon: "arrow_drop_down",
+                            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "pt-download-button" },
+                            menu: downloadMenu
+                        }
+                    }
+                },
+                printMenu: {
+                    uiFramework: "custom-atoms-local",
+                    moduleName: "egov-billamend",
+                    componentPath: "MenuButton",
+                    props: {
+                        data: {
+                            label: { labelName: "PRINT", labelKey: "BILL_AMEND_PRINT" },
+                            leftIcon: "print",
+                            rightIcon: "arrow_drop_down",
+                            props: { variant: "outlined", style: { height: "60px", color: "#FE7A51" }, className: "pt-print-button" },
+                            menu: printMenu
+                        }
+                    }
+                }
+
+            },
+            // gridDefination: {
+            //   xs: 12,
+            //   sm: 6
+            // }
+        }
     }
-  };
-  
+};
 
 
-const setDownloadMenu = (state, dispatch,  applicationNumber) => {
+
+const setDownloadMenu = (state, dispatch, applicationNumber) => {
     /** MenuButton data based on status */
     let status = get(
         state,
@@ -140,21 +140,21 @@ const setDownloadMenu = (state, dispatch,  applicationNumber) => {
         label: { labelName: "Application", labelKey: "BILL_AMEND_ACK" },
         link: () => {
             generateBillAmendAcknowledgement(get(
-            state,
-            "screenConfiguration.preparedFinalObject", {}), `billamend-acknowledgement-${applicationNumber}.pdf`);
+                state,
+                "screenConfiguration.preparedFinalObject", {}), `billamend-acknowledgement-${applicationNumber}.pdf`);
         },
         leftIcon: "assignment"
-      };
-      let applicationPrintObject = {
+    };
+    let applicationPrintObject = {
         label: { labelName: "Application", labelKey: "BILL_AMEND_ACK" },
         link: () => {
             generateBillAmendAcknowledgement(get(
-            state,
-            "screenConfiguration.preparedFinalObject", {}), 'print');
-          },
+                state,
+                "screenConfiguration.preparedFinalObject", {}), 'print');
+        },
         leftIcon: "assignment"
-      };
-    
+    };
+
 
     switch (status) {
         case "ACTIVE":
@@ -246,7 +246,7 @@ export const adjustmentAmountDetails = async (state, dispatch, amendment) => {
     }
     let billDetails = [];
     amendment.demandDetails.map(bill => {
-        if(bill && bill.taxAmount) {
+        if (bill && bill.taxAmount) {
             billDetails.push({
                 taxHeadMasterCode: bill.taxHeadMasterCode,
                 taxAmount: Math.abs(parseFloat(bill.taxAmount)),
@@ -409,6 +409,8 @@ export const onDemandRevisionBasisHidendShowFields = async (state, dispatch, act
 export const setSearchResponse = async (state, dispatch, action) => {
     const tenantId = getTenantId() || getQueryArg(window.location.href, "tenantId");
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const businessService = getQueryArg(window.location.href, "businessService");
+
     let billAMDSearch = await getBillAmdSearchResult([
         {
             key: "tenantId",
@@ -417,6 +419,10 @@ export const setSearchResponse = async (state, dispatch, action) => {
         {
             key: "amendmentId",
             value: applicationNumber
+        },
+        {
+            key: "businessService",
+            value: businessService
         }
     ], dispatch);
     let amendments = get(billAMDSearch, "Amendments", []);
@@ -426,7 +432,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
         adjustmentAmountDetails(state, dispatch, amendments[0]);
         documentDetailsPreview(state, dispatch, amendments[0]);
         onDemandRevisionBasisHidendShowFields(state, dispatch, action, amendments[0]);
-        setDownloadMenu(state, dispatch,applicationNumber);
+        setDownloadMenu(state, dispatch, applicationNumber);
         set(
             action,
             "screenConfig.components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
@@ -435,7 +441,7 @@ export const setSearchResponse = async (state, dispatch, action) => {
     }
 }
 
-export const billAmendDemandRevisionContainer ={
+export const billAmendDemandRevisionContainer = {
     demandRevisionBasis: getLabelWithValue(
         {
             labelName: "Demand Revison Basis",
@@ -522,18 +528,18 @@ const screenConfig = {
             action,
             state,
             dispatch,
-          );
-      
-          set(
+        );
+
+        set(
             action,
             "screenConfig.components.div.children.headerDiv.children.helpSection.children",
             printCont
-          );
+        );
         const businessService = "BS.AMENDMENT";
         const tenantId = getQueryArg(window.location.href, "tenantId");
         const queryObject = [
-          { key: "tenantId", value: tenantId },
-          { key: "businessServices", value: businessService }
+            { key: "tenantId", value: tenantId },
+            { key: "businessServices", value: businessService }
         ];
         setBusinessServiceDataToLocalStorage(queryObject, dispatch);
         getData(action, state, dispatch).then(responseAction => { });
@@ -580,11 +586,11 @@ const screenConfig = {
                     moduleName: "egov-workflow",
                     visible: true,
                     props: {
-                      dataPath: "AmendmentUpdate",
-                      moduleName: "Amendment",
-                      updateUrl: "billing-service/amendment/_update"
+                        dataPath: "AmendmentUpdate",
+                        moduleName: "Amendment",
+                        updateUrl: "billing-service/amendment/_update",
                     }
-                  },
+                },
                 bodyDiv: getCommonCard({
                     title: getCommonTitle({ labelName: "Summary", labelKey: "BILL_SUMMARY" }),
                     grayDiv: getCommonGrayCard({

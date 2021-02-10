@@ -191,7 +191,7 @@ class WorkFlowContainer extends React.Component {
         data.workflow.documents = data.workflow.wfDocuments;
       }
     }
-    if(moduleName === "Amendment") {
+    if (moduleName === "Amendment") {
       data.workflow = {};
       data.workflow.documents = get(data[0], "wfDocuments", []);
       data.workflow.comment = get(data[0], "comment", "");
@@ -239,7 +239,12 @@ class WorkFlowContainer extends React.Component {
           )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Assessments[0].assessmentNumber', "")}&tenantId=${get(payload, 'Assessments[0].tenantId', "")}`);
           return;
         }
-
+        if (moduleName == 'Amendment') {
+          this.props.setRoute(`acknowledgement?${this.getPurposeString(
+            label
+          )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=${get(payload, 'Amendments[0].businessService', "")}`);
+          return;
+        }
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";

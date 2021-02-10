@@ -14,10 +14,11 @@ import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
 import "./index.css";
 import { generateBillAmendPdf } from "./utils";
 
-const searchResults = async (dispatch, applicationNo, tenantId) => {
+const searchResults = async (dispatch, applicationNo, tenantId, businessService) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "amendmentId", value: applicationNo }
+    { key: "amendmentId", value: applicationNo },
+    { key: "businessService", value: businessService },
   ];
   let payload = await getBillAmendSearchResult(queryObject);
 
@@ -145,10 +146,11 @@ const getAcknowledgementCard = (
   status,
   applicationNumber,
   secondNumber,
-  tenant
+  tenant,
+  businessService
 ) => {
   if (purpose === "apply" && status === "success") {
-    searchResults(dispatch, applicationNumber, tenant);
+    searchResults(dispatch, applicationNumber, tenant, businessService);
     return {
       headerDiv: getCommonContainer({
         header: {
@@ -201,7 +203,7 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "approve" && status === "success") {
-    searchResults(dispatch, applicationNumber, tenant);
+    searchResults(dispatch, applicationNumber, tenant, businessService);
     return {
       headerDiv: getCommonContainer({
         header: {
@@ -306,6 +308,11 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
+    const businessService = getQueryArg(
+      window.location.href,
+      "businessService"
+    ) ;
+
     const secondNumber = getQueryArg(window.location.href, "consumerCode");
     const tenant = getQueryArg(window.location.href, "tenantId");
     loadUlbLogo(tenant);
@@ -316,7 +323,8 @@ const screenConfig = {
       status,
       applicationNumber,
       secondNumber,
-      tenant
+      tenant,
+      businessService
     );
     set(action, "screenConfig.components.div.children", data);
     return action;
