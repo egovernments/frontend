@@ -95,27 +95,31 @@ export const searchApiCall = async (state, dispatch) => {
     const resp = await searchBill(queryObject, dispatch)
     
     const amendObj = {};
+    const addtionalObj={}
     Amendments.map(bill => {
-      amendObj[bill.consumerCode] = bill;
+      if(amendObj[bill.consumerCode]){
+        addtionalObj[bill.amendmentId] = bill;
+      }else{
+        amendObj[bill.consumerCode] = bill;
+      }
+     
     })
+    let usedBills={}
     const billTableData = resp.Bill.map(item => {
-      // let billDetails = {}
-      // if (respObj[get(item, "consumerCode", '')]) {
-      //   billDetails = respObj[get(item, "consumerCode", '')]
-      //   usedBills[get(item, "consumerCode", '')] = { ...billDetails }
-      //   delete respObj[get(item, "consumerCode", '')];
-      // } else if (usedBills[get(item, "consumerCode", '')]) {
-      //   billDetails = usedBills[get(item, "consumerCode", '')]
-      // } else {
-      //   billDetails = {};
-      // }
+      let amendTempObj = {}
+      if (amendObj[get(item, "connectionNo")]) {
+        amendTempObj = {...amendObj[get(item, "connectionNo")]};
+        usedBills[get(item, "connectionNo", '')] = { ...item }
+        delete amendObj[get(item, "connectionNo", '')];
+      }
+      usedBills[get(item, "connectionNo")]={...item};
 
       return {
 
-        businessService:  get(amendObj[get(item, "connectionNo", '')], "businessService", get(searchScreenObject, 'businessService', '')),
-        amendmentId:  get(amendObj[get(item, "connectionNo", '')], "amendmentId", "NA"),
+        businessService:  get(amendTempObj, "businessService", get(searchScreenObject, 'businessService', '')),
+        amendmentId:  get(amendTempObj, "amendmentId", "NA"),
         consumerCode: get(item, "connectionNo"),
-        status: get(amendObj[get(item, "connectionNo", '')], "status", "NA"),
+        status: get(amendTempObj, "status", "NA"),
         consumerName: get(item, "additionalDetails.ownerName",   "NA"),
         consumerAddress:getAddress( get(item, "tenantId"),get(item, "additionalDetails.locality")) ,
         tenantId: get(item, "tenantId"),
@@ -123,7 +127,21 @@ export const searchApiCall = async (state, dispatch) => {
       };
     });
 
+    Object.keys(addtionalObj).map(key=>{
+      billTableData.push({
+        
 
+          businessService:  get(addtionalObj[key], "businessService", get(searchScreenObject, 'businessService', '')),
+          amendmentId:  get(addtionalObj[key], "amendmentId", "NA"),
+          consumerCode: get(addtionalObj[key], "consumerCode"),
+          status: get(addtionalObj[key], "status", "NA"),
+          consumerName: get(usedBills[get(addtionalObj[key], "consumerCode")], "additionalDetails.ownerName",   "NA"),
+          consumerAddress:getAddress( get(addtionalObj[key], "tenantId"),get(usedBills[get(addtionalObj[key], "consumerCode")], "additionalDetails.locality")) ,
+          tenantId: get(addtionalObj[key], "tenantId"),
+          connectionType: get(addtionalObj[key], "connectionType", 'Metered'),
+        
+      })
+    })
     // const bills = (resp && resp.Bill) || [];
     // const respObj = {};
     // bills.map(bill => {
