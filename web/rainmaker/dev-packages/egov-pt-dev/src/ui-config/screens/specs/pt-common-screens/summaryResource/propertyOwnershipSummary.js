@@ -161,20 +161,20 @@ export const applicantSummary = getCommonGrayCard({
             callBack: checkValueForNA
           }
         ),
-        reviewSameAsPropertyAddress: getLabelWithValue(
-          {
-            labelName: "Same as property address",
-            labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS"
-          },
-          {
-            jsonPath: "Property.owners[0].sameAsPeropertyAddress",
-            localePrefix: {
-              moduleName: "common-masters",
-              masterName: "OwnerType"
-            },
-            callBack: checkValueForNA
-          }
-        ),
+        // reviewSameAsPropertyAddress: getLabelWithValue(
+        //   {
+        //     labelName: "Same as property address",
+        //     labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS"
+        //   },
+        //   {
+        //     jsonPath: "Property.owners[0].sameAsPeropertyAddress",
+        //     localePrefix: {
+        //       moduleName: "common-masters",
+        //       masterName: "OwnerType"
+        //     },
+        //     callBack: checkValueForNA
+        //   }
+        // ),
         break: getBreak()
       }),
       items: [],
@@ -311,16 +311,16 @@ export const institutionSummary = getCommonGrayCard({
             callBack: checkValueForNA
           }
         ),
-        sameAsPropertyAddress: getLabelWithValue(
-          {
-            labelName: "Same as property address",
-            labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS"
-          },
-          {
-            jsonPath: "Property.owners[0].sameAsPeropertyAddress",
-            callBack: checkValueForNA
-          }
-        ),
+        // sameAsPropertyAddress: getLabelWithValue(
+        //   {
+        //     labelName: "Same as property address",
+        //     labelKey: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS"
+        //   },
+        //   {
+        //     jsonPath: "Property.owners[0].sameAsPeropertyAddress",
+        //     callBack: checkValueForNA
+        //   }
+        // ),
         break: getBreak()
       }),
       items: [],
