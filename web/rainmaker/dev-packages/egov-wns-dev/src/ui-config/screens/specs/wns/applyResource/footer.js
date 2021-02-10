@@ -407,29 +407,59 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
 
     console.info("Validate third step"); 
-
-    // let plumberValid = true;
-    // let activateDetailValid = true;
-    // let addConnDetailValid = true;
-    // let wsConnectionTaxHeadsValid = true;
-
     let plumberValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer.children.cardContent.children.plumberDetails.children", state, dispatch);
     let activateDetailValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children", state, dispatch);
     let addConnDetailValid =validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children", state, dispatch);
     let wsConnectionTaxHeadsValid = validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children",state,dispatch);
-    let wsRoadCuttingValid = validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children",state,dispatch);
+    //Check one full row is filled/not
+    let roadCuttingDataRowValidation =  checkRoadCuttingRowFilledOrNot(state,dispatch,isFormValid);
+    let roadCuttingDataValiation = true;
+    console.info("All rows filled or not?",roadCuttingDataRowValidation);
+    if(roadCuttingDataRowValidation){ //Full row is filled so check the data is valid or not
+      var objectJsonPath = "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children";
+      const fields = get(state.screenConfiguration.screenConfig["apply"],objectJsonPath,{});
+     
+      for (var eachItem in fields) { 
+        if(eachItem.includes('_')){
+          let eachRoadCuttingValidation = validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children."+eachItem+".children",state, dispatch);
+          if(!eachRoadCuttingValidation){
+            roadCuttingDataValiation = false;
+            break;
+          }
+        }          
+     }
+    }
 
-    console.log("plumberValid=",plumberValid,"wsConnectionTaxHeadsValid",wsConnectionTaxHeadsValid,"wsRoadCuttingValid=",wsRoadCuttingValid);
+    // const applicationStatus = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationStatus");
+      
+    // if(applicationStatus === "PENDING_FOR_FIELD_INSPECTION"){
+    //   console.info("Check any road cutting / tax is filled");
+    //   let roadTypeEstimate = get(state.screenConfiguration.preparedFinalObject, "applyScreen.roadTypeEst");
+    //   let taxEstimate = get(state.screenConfiguration.preparedFinalObject, "applyScreen.wsTaxHeads");
+    //   console.info("Data==",taxEstimate);
+    //   console.info("empty=", isEmpty(taxEstimate));
+
+
+    // }
+
 
     let errorMessage = {
       labelName: "Please provide valid inputs!",
       labelKey: "WS_FILL_VALID_INPUTS"
     };
-    if(!plumberValid|| !activateDetailValid||!addConnDetailValid || !wsConnectionTaxHeadsValid){
+    if(!roadCuttingDataRowValidation){
+      let  errorMessage = {
+        labelName:"Please fill all fields for road cutting charges",
+        labelKey: "ERR_ROADCUTTING_TOAST"
+      };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
       return;
     }
-    // let roadCuttingValidation =  checkThirdFormValid(state,dispatch,isFormValid);
+    else if(!plumberValid|| !activateDetailValid||!addConnDetailValid || !wsConnectionTaxHeadsValid || !roadCuttingDataValiation){
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return;
+    }
+    // let roadCuttingValidation =  checkRoadCuttingRowFilledOrNot(state,dispatch,isFormValid);
     // console.info("check result==",roadCuttingValidation);
     
     // isFormValid = roadCuttingValidation;
@@ -517,8 +547,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 };
 
-const checkThirdFormValid = (state,dispatch,isFormValid) =>{
-  console.info("Came");
+const checkRoadCuttingRowFilledOrNot = (state,dispatch,isFormValid) =>{
    let roadTypeEstimate = get(state.screenConfiguration.preparedFinalObject, "applyScreen.roadTypeEst");
    const roadEstimateValidation = [];
    roadTypeEstimate.forEach(element => {
@@ -529,13 +558,12 @@ const checkThirdFormValid = (state,dispatch,isFormValid) =>{
         roadEstimateValidation.push(element);
        }
     });
-
-      if(roadEstimateValidation.length>=1) {
-           return false;
-      }
-      else {
+    if(roadEstimateValidation.length>=1) {
+       return false;
+    }
+    else {
       return true;
-      }
+    }
  
   }
 
