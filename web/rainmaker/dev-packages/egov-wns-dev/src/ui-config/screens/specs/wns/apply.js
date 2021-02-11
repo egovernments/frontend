@@ -167,6 +167,7 @@ export const getMdmsData = async dispatch => {
   try {
     let payload = null;
     payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    console.info("Payload==>",payload);
     if (payload.MdmsRes['sw-services-calculation'].PipeSize !== undefined && payload.MdmsRes['sw-services-calculation'].PipeSize.length > 0) {
       let drainageSize = [];
       payload.MdmsRes['sw-services-calculation'].PipeSize.forEach(obj => drainageSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
@@ -652,7 +653,8 @@ console.info("came for road cutting",item);
         componentPath: "Div",
         children:{
             subHeader: getCommonTitle({
-                labelKey: `${getTransformedLocale(item.code)}`
+               // labelKey: `${getTransformedLocale(item.code)}`
+               labelKey :`WS_ROADTYPE_${(item.code)}`,
               },
               {style: {
                  fontSize: "15px",
@@ -672,10 +674,10 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Length",
           labelKey: "WF_ESTIMATION_LENGTH"
         },
-        placeholder: {
-          labelName: "Road Cutting Length",
-          labelKey: "WF_ESTIMATION_LENGTH"
-        },
+        // placeholder: {
+        //   labelName: "Road Cutting Length",
+        //   labelKey: "WF_ESTIMATION_LENGTH_PLACEHOLDER"
+        // },
         props:{
           type:"number",
           id:`roadLength_${index}`,
@@ -696,10 +698,10 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Breadth",
           labelKey: "WF_ESTIMATION_BREADTH"
         },
-        placeholder: {
-          labelName: "Road Cutting Breadth",
-          labelKey: "WF_ESTIMATION_BREADTH"
-        },
+        // placeholder: {
+        //   labelName: "Road Cutting Breadth",
+        //   labelKey: "WF_ESTIMATION_BREADTH_PLACEHOLDER"
+        // },
         props:{
           type:"number",
           id:`roadBreadth_${index}`,
@@ -719,10 +721,10 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Depth",
           labelKey: "WF_ESTIMATION_DEPTH"
         },
-        placeholder: {
-          labelName: "Road Cutting Depth",
-          labelKey: "WF_ESTIMATION_DEPTH"
-        },
+        // placeholder: {
+        //   labelName: "Road Cutting Depth",
+        //   labelKey: "WF_ESTIMATION_DEPTH_PLACEHOLDER"
+        // },
         props:{
           type:"number",
           id:`roadDepth_${index}`,
@@ -742,10 +744,10 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Rate",
           labelKey: "WF_ESTIMATION_RATE"
         },
-        placeholder: {
-          labelName: "Road Cutting Rate",
-          labelKey: "WF_ESTIMATION_RATE"
-        },
+        // placeholder: {
+        //   labelName: "Road Cutting Rate",
+        //   labelKey: "WF_ESTIMATION_RATE_PLACEHOLDER"
+        // },
         props:{
           type:"number",
           id:`roadRate_${index}`,

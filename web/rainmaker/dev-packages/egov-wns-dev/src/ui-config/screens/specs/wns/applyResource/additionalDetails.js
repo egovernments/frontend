@@ -320,9 +320,9 @@ export const additionDetails = getCommonCard({
         labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
       }),
      
-      //  roadDetails: getCommonContainer({
+       roadDetails: getCommonContainer({
           
-      //  }),
+       }),
        break: getBreak(),
     })
 
