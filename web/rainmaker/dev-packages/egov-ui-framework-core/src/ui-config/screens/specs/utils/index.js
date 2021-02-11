@@ -581,16 +581,14 @@ export const tradeValueNote = (label, value, props = {}) => {
       style: {
         marginBottom: "16px",
         wordBreak : "break-word",
-        width:"40%",
         display:"flex",
-        justifyContent:"space-between",
         flexWrap:"wrap"
       },
       ...props
     },
     children: {
-      label: getCommonCaption(label),
-      value: getCommonValue(value)
+      label: getCommonCaption(label,{style:{fontSize:"15px"}}),
+      value: getCommonValue(value,{style:{fontSize:"15px",lineHeight:"unset",marginLeft:"5px"}})
     }
   };
 };
