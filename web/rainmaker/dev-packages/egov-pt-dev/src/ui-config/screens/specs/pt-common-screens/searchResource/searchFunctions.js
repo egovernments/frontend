@@ -55,7 +55,7 @@ const searchApiCall = async (state, dispatch) => {
     (searchScreenObject["mobileNumber"] === undefined || searchScreenObject["mobileNumber"] === "") &&
     (searchScreenObject["oldpropertyids"] === undefined || searchScreenObject["oldpropertyids"] === "")
   ) {
-    dispatch(toggleSnackbar(true, { labelName:"In addition to City, please provide any one of the other parameters to search for property.",labelKey: "ERR_PT_COMMON_FILL_VALID_FIELDS" }, "warning"));
+    dispatch(toggleSnackbar(true, { labelName:"In addition to CB, please provide any one of the other parameters to search for property.",labelKey: "ERR_PT_COMMON_FILL_VALID_FIELDS" }, "warning"));
   }else{
     for (var key in searchScreenObject) {
       if (
