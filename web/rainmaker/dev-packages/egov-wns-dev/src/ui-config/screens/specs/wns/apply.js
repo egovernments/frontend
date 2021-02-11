@@ -487,6 +487,7 @@ export const getData = async (action, state, dispatch) => {
   } else if (propertyID) {
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
     getApplyPropertyDetails(queryObject, dispatch, propertyID)
+    togglePropertyFeilds(action, true);
   }
 };
 const  getApplicationNoLabel= () => {
@@ -524,6 +525,47 @@ const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
   }
   dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
   dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
+  showHideFieldsFirstStep(dispatch, propertyObj.propertyId, true);
+      if(propertyID){
+        let ownershipCategory = get(payload, "Properties[0].ownershipCategory", "");
+        
+        if (ownershipCategory.includes("INDIVIDUAL")) {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
+              "visible",
+              true
+            )
+          );
+        } else {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
+              "visible",
+              false
+            )
+          );
+        }
+      }
+  
 }
 
 let existingConnectionDetails = getExistingConnectionDetails();
