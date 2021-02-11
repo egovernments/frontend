@@ -739,7 +739,7 @@ const options = {
             razorpaySignature: response.razorpay_signature,
         };
 
-      window.location = get(getOrderData, "Transaction.callbackUrl")+"&razorpay_payment_id="+data.razorpayPaymentId+"&razorpay_order_id="+data.razorpayOrderId+"&razorpay_signature="+data.razorpaySignature;
+      window.location = get(getOrderData, "Transaction.callbackUrl")+"&razorpayPaymentId="+data.razorpayPaymentId+"&razorpayOrderId="+data.razorpayOrderId+"&razorpaySignature="+data.razorpaySignature;
     },
     prefill: {
         name: "Aarif",
