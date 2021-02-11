@@ -21,7 +21,7 @@ class LanguageSelection extends Component {
   };
 
   onLanguageSelect = () => {
-    this.props.history.push("/user/register");
+    this.props.history.push("/user/login");
   };
 
   render() {
