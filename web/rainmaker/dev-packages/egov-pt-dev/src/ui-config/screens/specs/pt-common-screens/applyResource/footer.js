@@ -24,7 +24,7 @@ export const displayEditPage = async (state, dispatch) => {
   if(window.location.href.includes("pt-common-screens/summary")) {
     let mode = getQueryArg(window.location.href, "ptmode")
     store.dispatch(
-      setRoute(`register-property?purpose=update&propertyId=${propertyPayload.propertyId}&tenantId=${propertyPayload.tenantId}&ptmode=${mode}&redirectUrl=${getQueryArg(window.location.href, "redirectUrl")}`)
+      setRoute(`register-property?purpose=update&propertyId=${propertyPayload.propertyId}&tenantId=${propertyPayload.tenantId}&ptmode=${mode}&redirectUrl=${getQueryArg(window.location.href, "redirectUrl")}&action=${getQueryArg(window.location.href, "action")}`)
     );
   }
 }
@@ -311,7 +311,7 @@ const callBackForApply = async (state, dispatch) => {
         propertyPayload.units = [];
         propertyPayload.units.push(unit);
       }
-      propertyPayload.creationReason = 'CREATE';
+      propertyPayload.creationReason = propertyPayload.creationReason || 'CREATE';
       let payload = null;
       console.log("--propertyPayload at create--",cloneDeep(propertyPayload));
      
@@ -320,7 +320,7 @@ const callBackForApply = async (state, dispatch) => {
         let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
         //propertyPayload.creationReason = 'UPDATE';
         let mode = getQueryArg(window.location.href, "ptmode")
-        if(mode=="modify"){
+        if(mode=="modify" && propertyPayload.status==='ACTIVE'){
           propertyPayload.creationReason = 'UPDATE';
         }
         set(propertyPayload, "workflow", isFromWorkflowDetails);
