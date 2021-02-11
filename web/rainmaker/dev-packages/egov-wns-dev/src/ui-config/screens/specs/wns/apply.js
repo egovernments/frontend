@@ -456,6 +456,17 @@ export const getData = async (action, state, dispatch) => {
         let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
         dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       }
+      let billingType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.billingType");
+      if( getQueryArg(window.location.href, "action") === "edit" && billingType === "STANDARD") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
+            "visible",
+            false
+          )
+        );
+      }
       //For Modify Connection hide the connection details card
       if (isModifyMode()) {
         showHideFieldModifyConnection(action);
@@ -580,7 +591,7 @@ const screenConfig = {
     const propertyId = getQueryArg(window.location.href, "propertyId");
 
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-
+    
     if (propertyId) {
       togglePropertyFeilds(action, true);
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
