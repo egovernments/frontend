@@ -12,7 +12,7 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import { getBoundaryData } from "../../../../ui-utils/commons";
 import { footer } from "./applyResource/footer";
-import { propertyAssemblyDetails } from "./applyResourceMutation/propertyAssemblyDetails";
+import { propertyAssemblyDetails, renderAreaData, renderNoOfFlatsData, renderNoOfFloorData, rendersubUsageType } from "./applyResourceMutation/propertyAssemblyDetails";
 import { propertyLocationDetails } from "./applyResourceMutation/propertyLocationDetails";
 import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -240,7 +240,99 @@ const setPropertyDetails = async (action, state, dispatch) => {
     dispatch(prepareFinalObject("Property", get(response, "Properties[0]")));
     loadWorkflowDataForUpdate(dispatch);
   }
+  const ownerDetails = get(state.screenConfiguration,
+  "preparedFinalObject.Property.ownershipCategory",
+  []
+);
+if (ownerDetails.includes("SINGLEOWNER")) {
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+    { }
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
+    { display: "none"}
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
+    { display: "none"}
+  );
+}
+else if(ownerDetails.includes("INSTITUTIONAL")){
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+    {display: "none" }
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
+    { display: "none"}
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
+    { }
+  );
 
+}
+else if(ownerDetails.includes("MULTIPLEOWNERS")){
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
+    { display: "none"}
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
+    { }
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
+    { display: "none"}
+  );
+}
+  
+
+let usageType = get(
+  state.screenConfiguration.preparedFinalObject,
+  "Property.usageCategory"
+);
+let subUsageType = get(
+  state.screenConfiguration.preparedFinalObject,
+  "Property.units[0].usageCategory"
+);
+
+if (usageType) {
+  rendersubUsageType(usageType, action.value, dispatch, state);
+  renderNoOfFloorData(usageType, action.value, dispatch, state);
+  renderNoOfFlatsData(usageType, action.value, dispatch, state);
+  renderAreaData(usageType, action.value, dispatch, state);
+  if(subUsageType)
+  set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", subUsageType);
+}
+if(getQueryArg(window.location.href, "purpose") === "update") {
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children.applicantType.props.disabled",
+    true
+  );
+
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.hasAddItem",
+    false
+  );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.isReviewPage",
+    true
+  );
+}
 }
 
 const loadWorkflowDataForUpdate = async (dispatch) => {
@@ -321,25 +413,28 @@ const screenConfig = {
 
       const queryObj = [{ key: "tenantId", value: tenantId }];
       getBoundaryData(action, state, dispatch, queryObj);
-      if (process.env.REACT_APP_NAME != "Citizen") {
-        let props = get(
-          action.screenConfig,
-          "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",
-          {}
-        );
-        props.value = tenantId;
-        props.disabled = true;
-        set(
-          action.screenConfig,
-          "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city.props",
-          props
-        );
+      if (tenantId) {
+        dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId }));
+        const ulbComponentJsonPath = "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.city";
+        const disableUlb = process.env.REACT_APP_NAME === "Citizen" ? false : true;
         dispatch(
-          prepareFinalObject(
-            "Property.address.city",
+          handleField(
+            "register-property",
+            ulbComponentJsonPath,
+            "props.value",
             tenantId
           )
         );
+        dispatch(
+          handleField(
+            "register-property",
+            ulbComponentJsonPath,
+            "props.disabled",
+            disableUlb
+          )
+        );
+        dispatch(prepareFinalObject("Property.address.city", tenantId));
+ 
       }
       const mohallaLocalePrefix = {
         moduleName: tenantId,

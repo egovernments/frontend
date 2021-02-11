@@ -169,17 +169,17 @@ const propertyLocationDetails = {
           },
           { jsonPath: "applyScreenOld.property.address.buildingName", callBack: handleNA },
         ),
-        reviewStreetName: getLabelWithValueForModifiedLabel(
-          {
-            labelName: "Street Name",
-            labelKey: "WS_PROP_DETAIL_STREET_NAME"
-          },
-          { jsonPath: "applyScreen.property.address.street", callBack: handleNA },
-          {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "applyScreenOld.property.address.street", callBack: handleNA }
-        ),
+        // reviewStreetName: getLabelWithValueForModifiedLabel(
+        //   {
+        //     labelName: "Street Name",
+        //     labelKey: "WS_PROP_DETAIL_STREET_NAME"
+        //   },
+        //   { jsonPath: "applyScreen.property.address.street", callBack: handleNA },
+        //   {
+        //     labelKey: "WS_OLD_LABEL_NAME"
+        //   },
+        //   { jsonPath: "applyScreenOld.property.address.street", callBack: handleNA }
+        // ),
         reviewLocalityOrMohalla: getLabelWithValueForModifiedLabel(
           {
             labelName: "Locality/Mohalla",
@@ -191,17 +191,17 @@ const propertyLocationDetails = {
           },
           { jsonPath: "applyScreenOld.property.address.locality.name", callBack: handleNA },
         ),
-        reviewPincode: getLabelWithValueForModifiedLabel(
-          {
-            labelName: "Pincode",
-            labelKey: "WS_PROP_DETAIL_PINCODE"
-          },
-          { jsonPath: "applyScreen.property.address.pincode", callBack: handleNA },
-          {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { jsonPath: "applyScreenOld.property.address.pincode", callBack: handleNA },
-        ),
+        // reviewPincode: getLabelWithValueForModifiedLabel(
+        //   {
+        //     labelName: "Pincode",
+        //     labelKey: "WS_PROP_DETAIL_PINCODE"
+        //   },
+        //   { jsonPath: "applyScreen.property.address.pincode", callBack: handleNA },
+        //   {
+        //     labelKey: "WS_OLD_LABEL_NAME"
+        //   },
+        //   { jsonPath: "applyScreenOld.property.address.pincode", callBack: handleNA },
+        // ),
       })
     }),
 
@@ -320,7 +320,7 @@ const getPropertyDetails = {
           ),
           reviewPlotSize: getLabelWithValueForModifiedLabel(
             {
-              labelName: "Plot Size (in sq metres)",
+              labelName: "Total Land Area (in sq metres)",
               labelKey: "WS_PROP_DETAIL_PLOT_SIZE_LABEL"
             },
             { jsonPath: "applyScreen.property.landArea", callBack: handleNA },
@@ -328,6 +328,17 @@ const getPropertyDetails = {
               labelKey: "WS_OLD_LABEL_NAME"
             },
             { jsonPath: "applyScreenOld.property.landArea", callBack: handleNA },
+          ),
+          reviewConstructedSize: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "Total Constructed Area (in sq metres)",
+              labelKey: "WS_PROP_DETAIL_CONSTRUCTION_SIZE_LABEL"
+            },
+            { jsonPath: "applyScreen.property.superBuiltUpArea", callBack: handleNA },
+            {
+              labelKey: "WS_OLD_LABEL_NAME"
+            },
+            { jsonPath: "applyScreenOld.property.superBuiltUpArea", callBack: handleNA },
           ),
           reviewNumberOfFloors: getLabelWithValueForModifiedLabel(
             {

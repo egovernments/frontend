@@ -326,23 +326,23 @@ export const reviewRoadType = getLabelWithValueForModifiedLabel(
   }
 );
 
-export const reviewArea = getLabelWithValueForModifiedLabel(
-  {
-    labelName: "Area (in sq ft)",
-    labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
-  },
-  {
-    jsonPath: "applyScreen.roadCuttingArea",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.roadCuttingArea",
-    callBack: handleNA
-  }
-);
+// export const reviewArea = getLabelWithValueForModifiedLabel(
+//   {
+//     labelName: "Area (in sq ft)",
+//     labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+//   },
+//   {
+//     jsonPath: "applyScreen.roadCuttingArea",
+//     callBack: handleNA
+//   },
+//   {
+//     labelKey: "WS_OLD_LABEL_NAME"
+//   },
+//   {
+//     jsonPath: "applyScreenOld.roadCuttingArea",
+//     callBack: handleNA
+//   }
+// );
 export const reviewConnectionExecutionDate = getLabelWithValueForModifiedLabel(
   {
     labelName: "Connection Execution Date",
@@ -499,7 +499,7 @@ const connectionChargeDetails = getCommonContainer({
 
 const roadCuttingCharges = getCommonContainer({
   reviewRoadType,
-  reviewArea
+ // reviewArea
 });
 
 const activationDetails = getCommonContainer({

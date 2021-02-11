@@ -42,7 +42,7 @@ const getMyLeaseApplications = async (action, state, dispatch) => {
 const header = getCommonHeader(
   {
     labelName: "My Applications",
-    labelKey: "LAMS_MY_APPLICATIONS_HEADER"
+    labelKey: "LAMS_CITIZEN_MY_APPLICATIONS"
   },
   {
     classes: {
@@ -83,17 +83,7 @@ const myApplications = {
       children: {
         details: getCommonCard(
           {
-            header: getCommonTitle(
-                {
-                  labelName: "My Applications",
-                  labelKey: "LAMS_CITIZEN_MY_APPLICATIONS"
-                },
-                {
-                  style: {
-                    marginBottom: 18
-                  }
-                }
-              ),
+            header: header,
               div: {
                 uiFramework: "custom-atoms",
                 componentPath: "Div",

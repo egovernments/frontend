@@ -20,7 +20,7 @@ import {
   isActiveProperty,
   isModifyMode,
   isModifyModeAction, prefillDocuments, prepareDocumentsUploadData,
-  showHideFieldsFirstStep
+  showHideFieldsFirstStep, getCBMdmsData
 } from "../../../../ui-utils/commons";
 import { triggerModificationsDisplay } from "./../utils/index";
 import { additionDetails } from "./applyResource/additionalDetails";
@@ -139,6 +139,7 @@ export const documentDetails = getCommonCard({
   }
 });
 
+ 
 export const getMdmsData = async dispatch => {
   let mdmsBody = {
     MdmsCriteria: {
@@ -150,8 +151,6 @@ export const getMdmsData = async dispatch => {
         { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
         {
           moduleName: "ws-services-masters", masterDetails: [
-            { name: "Documents" },
-            { name: "ModifyConnectionDocuments" },
             { name: "waterSource" },
             { name: "connectionType" },
             { name: "PropertySearch" },
@@ -168,6 +167,7 @@ export const getMdmsData = async dispatch => {
   try {
     let payload = null;
     payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    console.info("Payload==>",payload);
     if (payload.MdmsRes['sw-services-calculation'].PipeSize !== undefined && payload.MdmsRes['sw-services-calculation'].PipeSize.length > 0) {
       let drainageSize = [];
       payload.MdmsRes['sw-services-calculation'].PipeSize.forEach(obj => drainageSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
@@ -268,6 +268,12 @@ export const getData = async (action, state, dispatch) => {
   const actionType = getQueryArg(window.location.href, "action");
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch);
+  if(tenantId){
+    await getCBMdmsData(dispatch, tenantId);
+  }
+  
+
+
   if (applicationNo) {
     //Edit/Update Flow ----
     let queryObject = [
@@ -647,7 +653,8 @@ console.info("came for road cutting",item);
         componentPath: "Div",
         children:{
             subHeader: getCommonTitle({
-                labelKey: `${getTransformedLocale(item.code)}`
+               // labelKey: `${getTransformedLocale(item.code)}`
+               labelKey :`WS_ROADTYPE_${(item.code)}`,
               },
               {style: {
                  fontSize: "15px",
@@ -667,12 +674,13 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Length",
           labelKey: "WF_ESTIMATION_LENGTH"
         },
-        placeholder: {
-          labelName: "Road Cutting Length",
-          labelKey: "WF_ESTIMATION_LENGTH"
-        },
+        // placeholder: {
+        //   labelName: "Road Cutting Length",
+        //   labelKey: "WF_ESTIMATION_LENGTH_PLACEHOLDER"
+        // },
         props:{
           type:"number",
+          id:`roadLength_${index}`,
         },
   
        // required: true,
@@ -690,12 +698,13 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Breadth",
           labelKey: "WF_ESTIMATION_BREADTH"
         },
-        placeholder: {
-          labelName: "Road Cutting Breadth",
-          labelKey: "WF_ESTIMATION_BREADTH"
-        },
+        // placeholder: {
+        //   labelName: "Road Cutting Breadth",
+        //   labelKey: "WF_ESTIMATION_BREADTH_PLACEHOLDER"
+        // },
         props:{
           type:"number",
+          id:`roadBreadth_${index}`,
         },
        // required: true,
         visible: true,
@@ -712,12 +721,13 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Depth",
           labelKey: "WF_ESTIMATION_DEPTH"
         },
-        placeholder: {
-          labelName: "Road Cutting Depth",
-          labelKey: "WF_ESTIMATION_DEPTH"
-        },
+        // placeholder: {
+        //   labelName: "Road Cutting Depth",
+        //   labelKey: "WF_ESTIMATION_DEPTH_PLACEHOLDER"
+        // },
         props:{
           type:"number",
+          id:`roadDepth_${index}`,
         },
        // required: true,
         visible: true,
@@ -734,12 +744,13 @@ console.info("came for road cutting",item);
           labelName: "Road Cutting Rate",
           labelKey: "WF_ESTIMATION_RATE"
         },
-        placeholder: {
-          labelName: "Road Cutting Rate",
-          labelKey: "WF_ESTIMATION_RATE"
-        },
-  props:{
+        // placeholder: {
+        //   labelName: "Road Cutting Rate",
+        //   labelKey: "WF_ESTIMATION_RATE_PLACEHOLDER"
+        // },
+        props:{
           type:"number",
+          id:`roadRate_${index}`,
         },
        // required: true,
         visible: true,
@@ -929,7 +940,10 @@ const screenConfig = {
     } else {
       triggerModificationsDisplay(action, false);
     }
-    prepareDocumentsUploadData(state, dispatch);
+    if(propertyId){
+      prepareDocumentsUploadData(state, dispatch);
+    }
+    
     set(action, "screenConfig.components.div.children.stepper.props.steps", stepperData());
     set(action, 'screenConfig.components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props.labelKey', getHeaderLabel());
     dispatch(handleField("apply", "components", "div", get(action, "screenConfig.components.div", {})))

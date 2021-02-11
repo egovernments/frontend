@@ -29,8 +29,12 @@ export const propertyLocationDetails = getCommonCard({
     }
   ),
   propertyLocationDetailsContainer: getCommonContainer({
-    city: {
-      ...getSelectField({
+    city: {      
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
+      props: {
+        className: "autocomplete-dropdown",
         label: {
           labelKey: "PT_COMMON_CITY"
         },
@@ -42,13 +46,15 @@ export const propertyLocationDetails = getCommonCard({
           masterName: "TENANTS"
         },
         sourceJsonPath: "applyScreenMdmsData.common-masters.citiesByModule.wns",
-        jsonPath: "Property.address.city",//db sake
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-      }),
+        labelsFromLocalisation: true,
+        isClearable: true,
+      },      
+      jsonPath: "Property.address.city",//db sake
+      required: true,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
       beforeFieldChange: async (action, state, dispatch) => {
         //Below only runs for citizen - not required here in employee
         dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));

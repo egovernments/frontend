@@ -11,8 +11,15 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     propertyDetails.reviewPropertyType.localiseValue = true;
     propertyDetails.reviewPropertyUsageType.localiseValue = true;
     propertyDetails.reviewPropertySubUsageType.localiseValue = true;
+    locationDetails.reviewLocation.localiseValue = true;
     roadDetails.localiseValue = true;
     propertyOwnerDetail.gender.localiseValue = true;
+    propertyOwnerDetail.specialApplicantCategory.localiseValue = true;
+    propertyOwnerDetail.relationship.localiseValue = true;
+    additionDetailsWater.reviewWaterSource.localiseValue=true;
+    additionDetailsWater.reviewWaterSubSource.localiseValue=true;
+    additionDetailsWater.reviewMotorInfo.localiseValue=true;
+    additionDetailsWater.reviewAuthorizedConnection.localiseValue=true;
     let propDetail = generateKeyValue(preparedFinalObject, propertyDetails);
     let propertyDetail = propDetail.map(cur => {
         if (cur.key === "Rainwater harvesting Facility") {
@@ -32,6 +39,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     }
     let additionDetail = {};
     if (service === "WATER") {
+        //console.log("additionDetailsWater--",additionDetailsWater);
         additionDetail = generateKeyValue(preparedFinalObject, additionDetailsWater);
     } else {
         additionDetail = generateKeyValue(preparedFinalObject, additionDetailsSewerage);

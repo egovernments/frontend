@@ -4,28 +4,11 @@ import {
   getCommonContainer,
   getLabelWithValue,
   getCommonHeader,
-  getLabel
+  getLabel,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
 
-const getHeader = label => {
-  return {
-    uiFramework: "custom-molecules-local",
-    moduleName: "egov-wns",
-    componentPath: "OwnerHeader",
-    props: {
-      className: "hr-generic-divider-label",
-      labelProps: {},
-      dividerProps: {},
-      label
-    },
-    type: "array"
-  };
-};
-
-export const propertyOwnerDetailsHeader = getHeader({
-  labelKey: "WS_OWNER_HEADER_LABEL"
-});
 
 export const ownerDetailsHeader = getCommonContainer({
   header: getCommonHeader({
@@ -150,149 +133,267 @@ export const specialApplicantCategory = getLabelWithValue(
 )
 
 export const getOwnerDetails = (isEditable = true) => {
-  return getCommonGrayCard({
-    ownerHeader: getCommonSubHeader({
-      labelKey: "WS_OWN_DETAIL_HEADER_INFO"
-    }),
-    headerDiv: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        className: "common-div-css search-preview",
-        scheama: getCommonGrayCard({
-          // div1: specialApplicantCategory,
-          //   style: { marginBottom: "10px" }
-          // },
-          // children: {
-          //   header: {
-          //     gridDefination: {
-          //       xs: 12,
-          //       sm: 10
-          //     },
-          //     ...getCommonSubHeader({
-          //     labelKey:"WS_OWN_DETAIL_HEADER_INFO"
-          //     })
-          //   },
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Form",
+    props: {
+      id: "apply_form1",
+    },
+    children: {
+      applicantSummary,
+      institutionSummary,
+    },
+  };
+};
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
+};
 
-          // }
-          // },
-
-          // multiOwner: {
-          //   uiFramework: "custom-containers",
-          //   componentPath: "MultiItem",
-          //   props: {
-          //     scheama: getCommonGrayCard({
-          div3: propertyOwnerDetailsHeader,
-          viewFive: getCommonContainer({
-            ownerMobileNumber: getLabelWithValue(
-              {
-                labelName: "Mobile Number",
-                labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
-              },
-              {
-                jsonPath:
-                  "applyScreen.property.owners[0].mobileNumber",
-                  callBack: handleNA
-              }),
-            ownerName: getLabelWithValue(
-              {
-                labelName: "Name",
-                labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
-              },
-              {
-                jsonPath: "applyScreen.property.owners[0].name",
-                callBack: handleNA
-              }
-            ),
-            gender: getLabelWithValue(
-              {
-                labelName: "Gender",
-                labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
-              },
-              {
-                jsonPath: "applyScreen.property.owners[0].gender",
-                localePrefix: {
-                  moduleName: "COMMON",
-                  masterName: "GENDER"
-                },
-                callBack: handleNA
-              }
-            ),
-            // dateOfBirth: getLabelWithValue(
-            //   {
-            //     labelName: "Date Of Birth",
-            //     labelKey: "WS_OWN_DETAIL_DOB_LABEL"
-            //   },
-            //   {
-            //     jsonPath: "applyScreen.property.owners[0].dob",
-            //     callBack: convertEpochToDateAndHandleNA
-            //   }
-            // ),
-            // email: getLabelWithValue(
-            //   {
-            //     labelName: "Email",
-            //     labelKey: "WS_OWNER_DETAILS_EMAIL_LABEL"
-            //   },
-            //   {
-            //     jsonPath: "applyScreen.property.owners[0].emailId",
-            //     callBack: handleNA
-            //   }
-            // ),
-            fatherName: getLabelWithValue(
-              {
-                labelName: "Father/Husband Name",
-                labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
-              },
-              {
-                jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",
-                callBack: handleNA
-              }
-            ),
-            Relationship: getLabelWithValue(
-              {
-                labelName: "Relationship",
-                labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
-              },
-              { jsonPath: "applyScreen.property.owners[0].relationship",
+export const applicantSummary = getCommonGrayCard({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        
+      }
+    }
+  },
+ 
+  break: getBreak(),
+  cardOne: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "applicant-summary",
+      scheama: getCommonContainer({
+        ownerMobileNumber: getLabelWithValue(
+          {
+            labelName: "Mobile Number",
+            labelKey: "WS_OWN_DETAIL_MOBILE_NO_LABEL"
+          },
+          {
+            jsonPath:
+              "applyScreen.property.owners[0].mobileNumber",
+              callBack: handleNA
+          }),
+          ownerName: getLabelWithValue(
+            {
+              labelName: "Name",
+              labelKey: "WS_OWN_DETAIL_OWN_NAME_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].name",
+              callBack: handleNA
+            }
+          ),
+          gender: getLabelWithValue(
+            {
+              labelName: "Gender",
+              labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].gender",
               localePrefix: {
                 moduleName: "COMMON",
-                masterName: "RELATION"
+                masterName: "GENDER"
               },
-              callBack: handleNA }
-            ),
-            //   ownerCategory,
-
-            correspondenceAddress: getLabelWithValue(
-              {
-                labelName: "Correspondence Address",
-                labelKey: "WS_OWN_DETAIL_CROSADD"
-              },
-              { jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
-              callBack: handleNA}
-            ),
-            specialApplicantCategory: getLabelWithValue(
-              {
-                labelName: "Special Applicant Category",
-                labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
-              },
-              { jsonPath: "applyScreen.property.owners[0].ownerType",
-              localePrefix: {
-                moduleName: "COMMON_MASTERS",
-                masterName: "OWNERTYPE"
-              },
-              callBack: handleNA }
-            )
-          }),
-        }),
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "applyScreen.property.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
-        afterPrefixJsonPath: "children.value.children.key"
-      },
-      type: "array"
+              callBack: handleNA
+            }
+          ),
+          fatherName: getLabelWithValue(
+            {
+              labelName: "Father/Husband Name",
+              labelKey: "WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME"
+            },
+            {
+              jsonPath: "applyScreen.property.owners[0].fatherOrHusbandName",
+              callBack: handleNA
+            }
+          ),
+          Relationship: getLabelWithValue(
+            {
+              labelName: "Relationship",
+              labelKey: "WS_OWN_DETAIL_RELATION_LABEL"
+            },
+            { jsonPath: "applyScreen.property.owners[0].relationship",
+            localePrefix: {
+              moduleName: "COMMON",
+              masterName: "RELATION"
+            },
+            callBack: handleNA }
+          ),
+        reviewOwnerAddr: getLabelWithValue(
+          {
+            labelName: "Correspondence Address",
+            labelKey: "WS_OWN_DETAIL_CROSADD"
+          },
+          {
+            jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
+            callBack: checkValueForNA
+          }
+        ),
+        reviewOwnerSpecialCat: getLabelWithValue(
+          {
+            labelName: "Special Applicant Category",
+            labelKey: "WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL"
+          },
+          {
+            jsonPath: "applyScreen.property.owners[0].ownerType",
+            localePrefix: {
+              moduleName: "common-masters",
+              masterName: "OwnerType"
+            },
+            callBack: checkValueForNA
+          }
+        ),
+        
+        break: getBreak(),
+        break: getBreak()
+      }),
+      items: [],
+      hasAddItem: false,
+      isReviewPage: true,
+      sourceJsonPath: "applyScreen.property.owners",
+      prefixSourceJsonPath: "children",
+      afterPrefixJsonPath: "children.value.children.key"
     },
-  });
-}
+    type: "array"
+  }
+});
 
-
+export const institutionSummary = getCommonGrayCard({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        
+      }
+    }
+  },
+  breaks: getBreak(),
+  cardOne: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "applicant-summary",
+      scheama: getCommonContainer({
+  reviewInstituteName: getLabelWithValue(
+    {
+      labelName: "Institution Name",
+      labelKey: "WS_COMMON_INSTITUTION_NAME"
+    },
+    {
+      jsonPath: "applyScreen.property.institution.name",
+      callBack: checkValueForNA
+    }
+  ),
+  reviewinstituteType: getLabelWithValue(
+    {
+      labelName: "Institution Type",
+      labelKey: "WS_COMMON_INSTITUTION_TYPE"
+    },
+    {
+      jsonPath: "applyScreen.property.institution.type",
+      localePrefix: {
+        moduleName: "common-masters",
+        masterName: "OwnerShipCategory"
+      },
+      callBack: checkValueForNA
+    }
+  ),
+        break: getBreak()
+      }),
+      items: [],
+      hasAddItem: false,
+      isReviewPage: true,
+      sourceJsonPath: "applyScreen.property.owners",
+      prefixSourceJsonPath: "children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  },
+ 
+  breaks1: getBreak(),
+  cardTwo: {
+    uiFramework: "custom-containers",
+    componentPath: "MultiItem",
+    props: {
+      className: "applicant-summary",
+      scheama: getCommonContainer({
+        authorisedPersonName: getLabelWithValue(
+          {
+            labelName: "Name",
+            labelKey: "WS_COMMON_AUTHORISED_PERSON_NAME"
+          },
+          {
+            jsonPath: "applyScreen.property.owners[0].name",
+            callBack: checkValueForNA
+          }
+        ),
+        authorisedDesignationValue: getLabelWithValue(
+          {
+            labelName: "Designation",
+            labelKey: "WS_COMMON_AUTHORISED_PERSON_DESIGNATION"
+          },
+          {
+            jsonPath: "applyScreen.property.institution.designation",
+            callBack: checkValueForNA
+          }
+        ),
+        authorisedMobile: getLabelWithValue(
+          {
+            labelName: "Mobile",
+            labelKey: "WS_COMMON_AUTHORISED_MOBILE"
+          },
+          {
+            jsonPath: "applyScreen.property.owners[0].mobileNumber",
+            callBack: checkValueForNA
+          }
+        ),
+        authorisedLandline: getLabelWithValue(
+          {
+            labelName: "Landline",
+            labelKey: "WS_COMMON_AUTHORISED_LANDLINE"
+          },
+          {
+            jsonPath: "applyScreen.property.owners[0].altContactNumber",
+            callBack: checkValueForNA
+          }
+        ),
+        authorisedAddress: getLabelWithValue(
+          {
+            labelName: "Correspondence Address",
+            labelKey: "WS_COMMON_AUTHORISED_CORRESPONDENCE_ADDRESS"
+          },
+          {
+            jsonPath: "applyScreen.property.owners[0].correspondenceAddress",
+            callBack: checkValueForNA
+          }
+        ),
+       
+        break: getBreak()
+      }),
+      items: [],
+      hasAddItem: false,
+      isReviewPage: true,
+      sourceJsonPath: "applyScreen.property.owners",
+      prefixSourceJsonPath: "children",
+      afterPrefixJsonPath: "children.value.children.key"
+    },
+    type: "array"
+  },
+});

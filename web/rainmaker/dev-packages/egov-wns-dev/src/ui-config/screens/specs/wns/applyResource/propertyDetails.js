@@ -167,6 +167,16 @@ const propertyDetails = getCommonContainer({
 
     }
   ),
+  constructionSize: getLabelWithValue(
+    {
+      labelKey: "WS_PROP_DETAIL_CONSTRUCTION_SIZE_LABEL"
+    },
+    {
+      jsonPath: "applyScreen.property.superBuiltUpArea",
+      callBack: handleNA
+
+    }
+  ),
   numberOfFloors: getLabelWithValue(
     {
       labelKey: "WS_PROPERTY_NO_OF_FLOOR_LABEL",
@@ -200,16 +210,16 @@ const propertyDetails = getCommonContainer({
       callBack: handleNA
     }
   ),
-  rainwaterHarvestingFacility: getLabelWithValue(
-    {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rainwater Harvesting Facility"
-    },
-    {
-      jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
-      callBack: handleNA
-    }
-  )
+  // rainwaterHarvestingFacility: getLabelWithValue(
+  //   {
+  //     labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
+  //     labelName: "Rainwater Harvesting Facility"
+  //   },
+  //   {
+  //     jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
+  //     callBack: handleNA
+  //   }
+  // )
 })
 
 

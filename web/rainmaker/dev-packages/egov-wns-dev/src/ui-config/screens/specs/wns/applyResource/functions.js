@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getPropertyResults, isActiveProperty, showHideFieldsFirstStep, getSearchResults, getSearchResultsForSewerage } from "../../../../../ui-utils/commons";
+import { getPropertyResults, isActiveProperty, showHideFieldsFirstStep, getSearchResults, getSearchResultsForSewerage , getCBMdmsData,prepareDocumentsUploadData } from "../../../../../ui-utils/commons";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const propertySearchApiCall = async (state, dispatch) => {
@@ -12,7 +12,17 @@ export const propertySearchApiCall = async (state, dispatch) => {
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.cardContent.children.headerDiv",
+      "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary.children.cardContent.children.cardOne",
+      //"components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.cardContent.children.headerDiv",
+      "props.items",
+      []
+    )
+  );
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary.children.cardContent",
+      //"components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.cardContent.children.headerDiv",
       "props.items",
       []
     )
@@ -60,6 +70,12 @@ export const propertySearchApiCall = async (state, dispatch) => {
       let response = await getPropertyResults(queryObject, dispatch);
       if (response && response.Properties.length > 0) {
         let propertyData = response.Properties[0];
+        try{
+          getCBMdmsData(dispatch,propertyData.tenantId);
+          prepareDocumentsUploadData(state,dispatch);
+        }catch(err){
+          console.log("Document related process", err);
+        }
         if(!isActiveProperty(propertyData)){
           dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyData.status}`, labelName: `Property Status is ${propertyData.status}` }, "warning"));     
           showHideFieldsFirstStep(dispatch,propertyData.propertyId,false); 
@@ -87,6 +103,45 @@ export const propertySearchApiCall = async (state, dispatch) => {
           dispatch(prepareFinalObject("applyScreen.property", propertyData))
           showHideFields(dispatch, true);
         }
+        if(searchScreenObject["propertyIds"].trim()){
+        let ownershipCategory = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.ownershipCategory", "");
+        
+        if (ownershipCategory.includes("INDIVIDUAL")) {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
+              "visible",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
+              "visible",
+              true
+            )
+          );
+        } else {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
+              "visible",
+              true
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
+              "visible",
+              false
+            )
+          );
+        }
+      }
         //Added by vidya to get water and severage connection for a property   
         queryObject = [];
         queryObject = [{ key: "searchType", value: "CONNECTION" }];

@@ -9,6 +9,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import { getCommonApplyFooter } from "../../utils";
 import { getQueryRedirectUrl } from "../searchResource/searchResults";
 import "./index.css";
+import cloneDeep from "lodash/cloneDeep";
 
 
 
@@ -23,7 +24,7 @@ export const displayEditPage = async (state, dispatch) => {
   if(window.location.href.includes("pt-common-screens/summary")) {
     let mode = getQueryArg(window.location.href, "ptmode")
     store.dispatch(
-      setRoute(`register-property?purpose=update&propertyId=${propertyPayload.propertyId}&tenantId=${propertyPayload.tenantId}&ptmode=${mode}&redirectUrl=${getQueryArg(window.location.href, "redirectUrl")}`)
+      setRoute(`register-property?purpose=update&propertyId=${propertyPayload.propertyId}&tenantId=${propertyPayload.tenantId}&ptmode=${mode}&redirectUrl=${getQueryArg(window.location.href, "redirectUrl")}&action=${getQueryArg(window.location.href, "action")}`)
     );
   }
 }
@@ -300,20 +301,26 @@ const callBackForApply = async (state, dispatch) => {
         let unit = {};
         unit.usageCategory = propertyPayload.subUsageCategory ? propertyPayload.subUsageCategory : propertyPayload.usageCategory;
         unit.occupancyType = "SELFOCCUPIED";
-        unit.constructionDetail = {};
+        unit.constructionDetail = {
+          // carpetArea :  propertyPayload.superBuiltUpArea,
+          // builtUpArea : propertyPayload.superBuiltUpArea,
+          superBuiltUpArea : propertyPayload.superBuiltUpArea,
+          plinthArea : propertyPayload.superBuiltUpArea,
+
+        };
         propertyPayload.units = [];
-        // propertyPayload.units.push(unit);
+        propertyPayload.units.push(unit);
       }
-      propertyPayload.creationReason = 'CREATE';
+      propertyPayload.creationReason = propertyPayload.creationReason || 'CREATE';
       let payload = null;
-      //console.log("propertyPayload at create--",propertyPayload);
+      console.log("--propertyPayload at create--",cloneDeep(propertyPayload));
      
       if(getQueryArg(window.location.href, "purpose")=='update'){
 
         let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
         //propertyPayload.creationReason = 'UPDATE';
         let mode = getQueryArg(window.location.href, "ptmode")
-        if(mode=="modify"){
+        if(mode=="modify" && propertyPayload.status==='ACTIVE'){
           propertyPayload.creationReason = 'UPDATE';
         }
         set(propertyPayload, "workflow", isFromWorkflowDetails);
