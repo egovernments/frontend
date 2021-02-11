@@ -327,6 +327,11 @@ if(getQueryArg(window.location.href, "purpose") === "update") {
     "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.hasAddItem",
     false
   );
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.propertyOwnershipDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.isReviewPage",
+    true
+  );
 }
 }
 
