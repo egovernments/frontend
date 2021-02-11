@@ -311,7 +311,7 @@ const callBackForApply = async (state, dispatch) => {
         propertyPayload.units = [];
         propertyPayload.units.push(unit);
       }
-      propertyPayload.creationReason = 'CREATE';
+      propertyPayload.creationReason = propertyPayload.creationReason || 'CREATE';
       let payload = null;
       console.log("--propertyPayload at create--",cloneDeep(propertyPayload));
      
@@ -320,7 +320,7 @@ const callBackForApply = async (state, dispatch) => {
         let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
         //propertyPayload.creationReason = 'UPDATE';
         let mode = getQueryArg(window.location.href, "ptmode")
-        if(mode=="modify"){
+        if(mode=="modify" && propertyPayload.status==='ACTIVE'){
           propertyPayload.creationReason = 'UPDATE';
         }
         set(propertyPayload, "workflow", isFromWorkflowDetails);
