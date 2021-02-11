@@ -8,11 +8,18 @@ import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import Hidden from "@material-ui/core/Hidden";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }) => {
   const fields = form.fields || {};
   const submit = form.submit;
 
+  let registerUrl = "/user/register?";
+  if(getQueryArg(window.location.href, "cant"))
+    registerUrl=registerUrl+"cant="+getQueryArg(window.location.href, "cant")+"&";
+  if(getQueryArg(window.location.href, "lang"))
+    registerUrl=registerUrl+"lang="+getQueryArg(window.location.href, "lang")+"&";
+  
   return (
     <div className="rainmaker-displayInline">
      {!enableWhatsApp&&
@@ -29,7 +36,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange}  />
           <div style={{ marginBottom: "24px", position: "relative", zIndex: 10 }} className="text-right">
             <Label id="otp-trigger" className="otp-prompt" label="CORE_LOGIN_NO_ACCOUNT" />
-            <Link to="/user/register">
+            <Link to={registerUrl}>
               <div style={{ display: "inline-block" }}>
                 <Label containerStyle={{ cursor: "pointer" }} id="otp-resend" className="otp-resend" label="CORE_REGISTER_HEADING" />
               </div>
@@ -98,7 +105,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange}  />
           <div style={{ marginBottom: "24px", position: "relative", zIndex: 10 }} className="text-right">
             <Label id="otp-trigger" className="otp-prompt" label="CORE_LOGIN_NO_ACCOUNT" />
-            <Link to="/user/register">
+            <Link to={registerUrl}>
               <div style={{ display: "inline-block" }}>
                 <Label containerStyle={{ cursor: "pointer" }} id="otp-resend" className="otp-resend" label="CORE_REGISTER_HEADING" />
               </div>
@@ -169,7 +176,7 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange}  />
           <div style={{ marginBottom: "24px", position: "relative", zIndex: 10 }} className="text-right">
             <Label id="otp-trigger" className="otp-prompt" label="CORE_LOGIN_NO_ACCOUNT" />
-            <Link to="/user/register">
+            <Link to={registerUrl}>
               <div style={{ display: "inline-block" }}>
                 <Label containerStyle={{ cursor: "pointer" }} id="otp-resend" className="otp-resend" label="CORE_REGISTER_HEADING" />
               </div>
