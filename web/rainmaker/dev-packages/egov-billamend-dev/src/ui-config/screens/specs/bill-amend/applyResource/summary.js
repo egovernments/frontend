@@ -144,7 +144,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_DATE_EFFECTIVE_FROM_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.effectiveFrom"
+                    jsonPath: "AmendmentTemp.effectiveFrom"
                 }
             ),
             govtNotificationNumber: getLabelWithValue(
@@ -171,7 +171,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COMMON_FROM_DATE_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.effectiveFrom"
+                    jsonPath: "AmendmentTemp.effectiveFrom"
                 }
             ),
             toDate: getLabelWithValue(
@@ -180,7 +180,7 @@ const summary = getCommonCard({
                     labelKey: "BILL_COMMON_TO_DATE_LABEL"
                 },
                 {
-                    jsonPath: "Amendment.effectiveTill"
+                    jsonPath: "AmendmentTemp.effectiveTill"
                 }
             )
         }),
