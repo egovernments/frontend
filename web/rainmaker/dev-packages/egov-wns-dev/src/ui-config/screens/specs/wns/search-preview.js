@@ -30,7 +30,7 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
-import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
+import { reviewModificationsEffective } from "./applyResource/review-owner";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -515,9 +515,9 @@ export const taskDetails = getCommonCard({
   title,
   estimate,
   reviewConnectionDetails,
+  reviewModificationsDetails,
   reviewDocumentDetails,
   reviewOwnerDetails,
-  reviewModificationsDetails
 });
 
 export const summaryScreen = getCommonCard({
