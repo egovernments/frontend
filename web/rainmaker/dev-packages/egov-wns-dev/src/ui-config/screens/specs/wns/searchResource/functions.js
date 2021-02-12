@@ -5,7 +5,9 @@ import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerag
 import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const searchApiCall = async (state, dispatch) => {
+  dispatch(toggleSpinner());
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
@@ -17,6 +19,7 @@ export const searchApiCall = async (state, dispatch) => {
     resetFieldsForConnection(state, dispatch);
     await renderSearchApplicationTable(state, dispatch);
   }
+  dispatch(toggleSpinner());
 }
 
 const renderSearchConnectionTable = async (state, dispatch) => {
