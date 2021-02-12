@@ -17,6 +17,9 @@ class LanguageSelection extends Component {
   };
 
   componentDidMount = async () => {
+    let lang = getQueryArg(window.location.href, "lang");
+    if(["en_IN","hi_IN"].indexOf(lang) > -1)
+      this.onClick(lang);
   }
 
   onClick = (value) => {
