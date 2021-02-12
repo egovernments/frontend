@@ -550,7 +550,8 @@ class WorkFlowContainer extends React.Component {
     const roleIndex = userRoles.findIndex(item => {
       if (actions.indexOf(item.code) > -1) return true;
     });
-    if((moduleName === "NewWS1" || moduleName === "ModifyWSConnection" || moduleName === "ModifySWConnection" || moduleName === "NewSW1") && applicationState==='PENDING_APPROVAL_FOR_CONNECTION'){
+    
+    if((moduleName === "NewWS1" || moduleName === "ModifyWSConnection" || moduleName === "ModifySWConnection" || moduleName === "NewSW1") && (applicationState==='PENDING_APPROVAL_FOR_CONNECTION' || applicationState=== 'PENDING_FOR_APPROVAL')){
       state.isStateUpdatable = false;
     }
     let editAction = {};
