@@ -358,7 +358,7 @@ class TableData extends Component {
       const locality = localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
       })
-      var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
+      var sla = item.stateSla && item.stateSla / (1000 * 60 * 60 * 24);
       let row0 = { text: item.businessId, subtext: item.businessService, hiddenText: item.moduleName };
       let row1 = { text: locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality.toUpperCase().replace(/[. ]/g, "_")}`} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row2 = {
@@ -492,9 +492,9 @@ class TableData extends Component {
           let assignes = get(item, 'assignes');
           return get(assignes ? assignes[0] : {}, "uuid") === uuid
         }),
-        ["businesssServiceSla"]
+        ["stateSla"]
       );
-      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      const allData = orderBy(get(responseData, "ProcessInstances", []), ["stateSla"]);
 
 
       // const assignedDataRows = []

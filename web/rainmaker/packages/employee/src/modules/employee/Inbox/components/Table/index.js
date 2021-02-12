@@ -13,9 +13,10 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId ,localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
+import { filter } from "lodash";
 import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
@@ -123,10 +124,26 @@ class InboxData extends React.Component {
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };
 
+  getBussinessServiceData = (bService , status ) => {
+    if(bService && status){
+      let businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+      let bServcieData = filter(businessServiceData, (item) =>{return item.businessService.toUpperCase() ===bService.toUpperCase()});
+      if(bServcieData.length>0) {
+        let obj = filter(bServcieData[0].states,(item)=> {return item.applicationStatus && item.applicationStatus.toUpperCase() ===status.toUpperCase()});
+        if(obj.length> 0){
+          return obj[0].sla;
+        }
+      }
+    }
+    return 0;
+  }
+
   getSlaColor = (sla, businessService) => {
+    let bService =businessService.split("_")[1];
+    let status =businessService.split("_")[2];
     const { businessServiceSla } = this.props;
     const { wfSlaConfig } = this.state;
-    const MAX_SLA = businessServiceSla[businessService];
+    const MAX_SLA = this.getBussinessServiceData(bService,status);
     if (wfSlaConfig) {
       if ((MAX_SLA - (MAX_SLA * eval(wfSlaConfig[0].slotPercentage)) <= sla) && sla <= MAX_SLA) {
         return wfSlaConfig[0].positiveSlabColor;
@@ -214,7 +231,7 @@ class InboxData extends React.Component {
                           } else if (item.badge) {
                             return (
                               <TableCell className={classNames}>
-                                <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(item.text, row[2].text.props.label.split("_")[1]) }}>{item.text}</span>
+                                <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(item.text, row[2].text.props.label ) }}>{item.text}</span>
                               </TableCell>
                             );
                           } else if (item.historyButton) {
@@ -292,7 +309,7 @@ class InboxData extends React.Component {
                             <Label label={data.headers[4]} labelStyle={{ fontWeight: "500" }} />
                           </div>
                           <div className="card-sladiv-style">
-                            <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label.split("_")[1]) }}>{row[4].text}</span>
+                            <span class={"inbox-cell-badge-primary"} style={{ backgroundColor: this.getSlaColor(row[4].text, row[2].text.props.label ) }}>{row[4].text}</span>
                           </div>
 
                           <div className="card-viewHistory-icon" onClick={() => onHistoryClick(row[0])}>
