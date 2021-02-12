@@ -17,7 +17,7 @@ import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+enableButton = (hasButton && hasButton === "false") ||  process.env.REACT_APP_NAME == "Citizen" ? false : true;
 const tenant = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 
 
