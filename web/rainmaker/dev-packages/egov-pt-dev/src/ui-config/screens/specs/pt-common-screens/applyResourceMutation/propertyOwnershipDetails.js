@@ -166,7 +166,7 @@ const institutionInformation = () => {
           },
           required: true,
           pattern: getPattern("Landline"),
-          jsonPath: "Property.institution.landlineNumber"
+          jsonPath: "Property.owners[0].altContactNumber"
         }),
         authorisedAddress: getTextField({
           label: {
