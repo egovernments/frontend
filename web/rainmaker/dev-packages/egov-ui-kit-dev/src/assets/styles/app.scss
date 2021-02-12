@@ -137,7 +137,7 @@ body.employee-user-profile {
   font-weight: 500;
   color: #fff;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis;  
 }
 
 .screen-title-label {
@@ -157,6 +157,7 @@ body.employee-user-profile {
   .screenHeaderLabelStyle .label-text {
     color: #484848 !important;
     font-size: 20px !important;
+    padding: 6px !important;
   }
   
   .with-icon-menu{
