@@ -10,7 +10,6 @@ import {
   getMultiUnits
 } from "egov-ui-framework/ui-utils/commons";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
@@ -192,6 +191,9 @@ class WorkFlowContainer extends React.Component {
       if (data.workflow && data.workflow.wfDocuments) {
         data.workflow.documents = data.workflow.wfDocuments;
       }
+  const currentUser = JSON.parse(getUserInfo()).uuid;
+
+      data.additionalDetails={"lastModifiedBy": currentUser};
     }
 
     const applicationNumber = getQueryArg(

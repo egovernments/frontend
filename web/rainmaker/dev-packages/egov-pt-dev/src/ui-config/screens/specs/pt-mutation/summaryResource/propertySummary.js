@@ -81,6 +81,12 @@ const propertyDetails =  getCommonGrayCard({
         labelKey: "PT_PROPERTY_ADDRESS_EXISTING_PID"
       },
       { jsonPath: "Property.oldPropertyId", callBack: checkValueForNA }
+    ),UID: getLabelWithValue(
+      {
+        labelName: "Survey Id/UID",
+        labelKey: "Survey Id/UID"
+      },
+      { jsonPath: "Property.surveyId", callBack: checkValueForNA }
     ),
   })
 })
