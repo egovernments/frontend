@@ -11,6 +11,7 @@ import {
     getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { onDemandRevisionBasis } from "../../utils";
+import get from "lodash/get";
 
 export const AddAdjustmentAmount = getCommonCard({
     header: getCommonTitle(
@@ -91,7 +92,9 @@ export const AddDemandRevisionBasis = getCommonCard({
                 md: 6
             },
             afterFieldChange: (action, state, dispatch) => {
-                onDemandRevisionBasis(state, dispatch);
+                // const isPreviousDemandRevBasisValueChange = get (state.screenConfiguration.preparedFinalObject, "AmendmentTemp.isPreviousDemandRevBasisValue", false);
+                const isPreviousDemandRevBasisValueChange = get (state.screenConfiguration.preparedFinalObject, "AmendmentTemp.amendmentReason", true);
+                onDemandRevisionBasis(state, dispatch, true, isPreviousDemandRevBasisValueChange);
             }
         }),
         courtOrderNo: getTextField({

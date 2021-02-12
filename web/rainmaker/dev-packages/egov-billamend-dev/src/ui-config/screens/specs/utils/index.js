@@ -527,7 +527,7 @@ export const showApplyCityPicker = (state, dispatch) => {
   );
 };
 
-export const onDemandRevisionBasis = async (state, dispatch, isFromOk = true) => {
+export const onDemandRevisionBasis = async (state, dispatch, isFromOk = true, check = false) => {
   let demandRevisionBasis = get(
     state.screenConfiguration.preparedFinalObject,
     "Amendment.amendmentReason", ""
@@ -537,8 +537,10 @@ export const onDemandRevisionBasis = async (state, dispatch, isFromOk = true) =>
     "AmendmentTemp.amendmentReason", ""
   );
 
-  if (previousDemandRevBasisValue !== demandRevisionBasis && previousDemandRevBasisValue != "" && isFromOk) {
+  if (previousDemandRevBasisValue !== demandRevisionBasis && previousDemandRevBasisValue != "" && isFromOk && check) {
     dispatch(handleField("apply", "components.billAmdAlertDialog", "props.open", true));
+  } else if (previousDemandRevBasisValue == demandRevisionBasis && isFromOk) {
+
   } else {
     let demandArray = [];
     switch (demandRevisionBasis) {
@@ -1112,6 +1114,7 @@ export const procedToNextStep = async (state, dispatch) => {
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("documentsContract", []));
   dispatch(prepareFinalObject("AmendmentTemp.amendmentReason", demandRevBasisValue));
+  dispatch(prepareFinalObject("AmendmentTemp.isPreviousDemandRevBasisValue", true));
   dispatch(
     handleField(
       "apply",
@@ -1133,6 +1136,7 @@ export const procedToNextStep = async (state, dispatch) => {
 
 export const cancelPopUp = async (state, dispatch) => {
   const previousDemandRevBasisValue = get( state.screenConfiguration.preparedFinalObject, "AmendmentTemp.amendmentReason", "");
+  dispatch(prepareFinalObject("AmendmentTemp.isPreviousDemandRevBasisValue", false));
   dispatch(
     handleField(
       "apply",

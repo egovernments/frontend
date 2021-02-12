@@ -65,6 +65,16 @@ export const summaryAdjustmentAmountDetails = async(state, dispatch) => {
 }
 
 export const getSummaryRequiredDetails = async (state, dispatch) => {
+  const effectiveFrom = get (state.screenConfiguration.preparedFinalObject, "Amendment.effectiveFrom", "");
+  const effectiveTill = get (state.screenConfiguration.preparedFinalObject, "Amendment.effectiveTill", "");
+  if(effectiveFrom && effectiveFrom.length > 0) {
+    const formatedeffectiveFrom = effectiveFrom.split('-')[2]+ "-" +effectiveFrom.split('-')[1] + "-" + effectiveFrom.split('-')[0];
+    dispatch(prepareFinalObject("AmendmentTemp.effectiveFrom", formatedeffectiveFrom, ""));
+  }
+  if(effectiveTill && effectiveTill.length > 0) {
+    const formatedeffectiveTill = effectiveTill.split('-')[2]+ "-" + effectiveTill.split('-')[1] + "-" + effectiveTill.split('-')[0];
+    dispatch(prepareFinalObject("AmendmentTemp.effectiveTill", formatedeffectiveTill, ""));
+  }
   await onDemandRevisionBasis(state, dispatch);
   await preparingDocumentsReview(state, dispatch);
   await summaryAdjustmentAmountDetails(state, dispatch);

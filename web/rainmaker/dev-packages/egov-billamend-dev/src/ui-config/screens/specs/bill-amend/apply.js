@@ -227,6 +227,7 @@ const screenConfig = {
     dispatch(prepareFinalObject("AmendmentTemp", {}));
     dispatch(prepareFinalObject("documentsUploadRedux", {}));
     dispatch(prepareFinalObject("documentsContract", []));
+    dispatch(prepareFinalObject("AmendmentTemp.isPreviousDemandRevBasisValue", true));
     getData(action, state, dispatch).then(responseAction => {
 
     });
