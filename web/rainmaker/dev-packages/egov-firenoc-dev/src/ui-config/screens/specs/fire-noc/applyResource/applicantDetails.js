@@ -59,17 +59,17 @@ const commonApplicantInformation = () => {
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath:
           "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber",
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch, fieldInfo) => {
-              getDetailsForOwner(state, dispatch, fieldInfo);
-            }
-          }
-        },
+        // iconObj: {
+        //   iconName: "search",
+        //   position: "end",
+        //   color: "#FE7A51",
+        //   onClickDefination: {
+        //     action: "condition",
+        //     callBack: (state, dispatch, fieldInfo) => {
+        //       getDetailsForOwner(state, dispatch, fieldInfo);
+        //     }
+        //   }
+        // },
         // props: {
         //   style: {
         //     maxWidth: "450px"
