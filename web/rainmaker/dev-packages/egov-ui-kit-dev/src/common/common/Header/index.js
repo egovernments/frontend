@@ -56,8 +56,14 @@ class Header extends Component {
     });
   };
 
-  _handleBackNavigation = () => {
-    this.props.history.goBack();
+  _handleBackNavigation = () => {  
+    if(location && location.pathname && 
+      location.pathname.indexOf("/citizen/egov-common/acknowledgement") != -1){
+      this.props.history.push("/");
+    }
+    else
+      this.props.history.goBack();
+   
   };
 
   _logout = () => {

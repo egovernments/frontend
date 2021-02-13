@@ -51,7 +51,7 @@ const getMultiItem = (billingslabData, classes, style) => {
           <Label
             label={
               labelCategory === "TRADETYPE"
-                ? (item.UOM?`(₹ ${item.rate}/${item.UOM}) * ${item.count} `:`₹ ${item.rate}`)
+                ? (item.UOM?   (item.calcType!="FLAT" ? `(₹ ${item.rate}/${item.UOM}) * ${item.count} `:`(₹ ${item.rate} For ${item.count} ${item.UOM}) `):`₹ ${item.rate}`)
                 : `₹ ${item.total}`
             }
             style={{

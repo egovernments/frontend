@@ -171,12 +171,15 @@ class TableData extends Component {
   }
 
   checkSLA = (taskboardLabel, row) => {
-    const MAX_SLA = this.state.businessServiceSla[row[2].text.props.label.split('_')[1]];
+    let bService =row[2].text.props.label.split("_")[1];
+    let apptatus =row[2].text.props.label.split("_")[2];
+   // const MAX_SLA = this.state.businessServiceSla[row[2].text.props.label.split('_')[1]];
+   const MAX_SLA = this.geMaxSLAData(bService,apptatus)
     if (taskboardLabel === '' || taskboardLabel === 'WF_TOTAL_TASK') {
       return true;
     } else if ((taskboardLabel === 'WF_TOTAL_NEARING_SLA' && row[4].text > 0 && row[4].text <= (MAX_SLA - MAX_SLA / 3))) {
       return true;
-    } else if ((taskboardLabel === 'WF_ESCALATED_SLA' && row[4].text <= 0)) {
+    } else if ((taskboardLabel === 'WF_ESCALATED_SLA' && row[4].text <= 0 && apptatus != 'APPROVED' && apptatus != 'INITIATED')) {
       return true;
     } else {
       return false;
@@ -196,6 +199,21 @@ class TableData extends Component {
   convertMillisecondsToDays = (milliseconds) => {
     return (milliseconds / (1000 * 60 * 60 * 24));
   }
+
+  geMaxSLAData = (bService , status ) => {
+    if(bService && status){
+      let businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
+      let bServcieData = filter(businessServiceData, (item) =>{return item.businessService.toUpperCase() ===bService.toUpperCase()});
+      if(bServcieData.length>0) {
+        let obj = filter(bServcieData[0].states,(item)=> {return item.applicationStatus && item.applicationStatus.toUpperCase() ===status.toUpperCase()});
+        if(obj.length> 0){
+          return this.convertMillisecondsToDays(obj[0].sla);
+        }
+      }
+    }
+    return 0;
+  }
+
   applyFilter = (inboxData) => {
     this.showLoading();
     let initialInboxData = inboxData ? cloneDeep(inboxData) : cloneDeep(this.state.initialInboxData);
@@ -207,9 +225,13 @@ class TableData extends Component {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
           let isValid = this.checkRow(eachRow, filter, searchFilter, taskboardLabel);
-          if (isValid && ind === 1) {
-            let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
-            if (eachRow[4].text <= 0) {
+          if (isValid && ind === 1) {        
+            let bService =eachRow[2].text.props.label.split("_")[1];
+            let apptatus =eachRow[2].text.props.label.split("_")[2];
+
+            //let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
+            let MAX_SLA = this.geMaxSLAData(bService,apptatus)
+          if (apptatus!= "APPROVED" && apptatus!= "INITIATED" && eachRow[4].text <= 0) {
               ESCALATED_SLA.push(eachRow[4].text);
             }
             if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
@@ -230,7 +252,7 @@ class TableData extends Component {
     if (initialInboxData.length === 2) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
-          let isValid = this.checkSLA(taskboardLabel, eachRow);
+         let isValid = this.checkSLA(taskboardLabel, eachRow);
           return isValid;
         }
         )

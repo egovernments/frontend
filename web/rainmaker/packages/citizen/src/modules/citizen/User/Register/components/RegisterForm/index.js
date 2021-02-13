@@ -9,11 +9,13 @@ import Hidden from "@material-ui/core/Hidden";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsApp}) => {
   const fields = form.fields || {};
   const submit = form.submit;
+  let selectCity =  getQueryArg(window.location.href, "cant");
+  selectCity = selectCity? ("pb."+selectCity) : "";
   return (
     <div className="rainmaker-displayInline">
         {!enableWhatsApp&&
@@ -29,7 +31,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
           <Label className="heading text-center" bold={true} dark={true} fontSize={16} label="CORE_REGISTER_HEADING" />
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange} />
           <Field fieldKey="name" field={fields.name} handleFieldChange={handleFieldChange} />
-          <CityPicker onChange={handleFieldChange} fieldKey="city" field={fields.city} />
+          <CityPicker onChange={handleFieldChange} fieldKey="city" field={fields.city} selectCity={selectCity}/>
           <div style={{ marginBottom: "24px", position: "relative", zIndex: 10 }} className="text-right">
             <Label id="otp-trigger" className="otp-prompt" label="CORE_REGISTER_HAVE_ACCOUNT" />
             <Link to="/user/login">
@@ -100,7 +102,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
           <Label className="heading text-center" bold={true} dark={true} fontSize={16} label="CORE_REGISTER_HEADING" />
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange} />
           <Field fieldKey="name" field={fields.name} handleFieldChange={handleFieldChange} />
-          <CityPicker onChange={handleFieldChange} fieldKey="city" field={fields.city} />
+          <CityPicker onChange={handleFieldChange} fieldKey="city" field={fields.city} selectCity={selectCity}/>
           <div style={{ marginBottom: "24px", position: "relative", zIndex: 10 }} className="text-right">
             <Label id="otp-trigger" className="otp-prompt" label="CORE_REGISTER_HAVE_ACCOUNT" />
             <Link to="/user/login">
@@ -172,7 +174,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl ,qrCodeURL,enableWhatsAp
           <Label className="heading text-center" bold={true} dark={true} fontSize={24} label="CORE_REGISTER_HEADING" />
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange} />
           <Field fieldKey="name" field={fields.name} handleFieldChange={handleFieldChange} />
-          <CityPicker onChange={handleFieldChange} fieldKey="city" field={fields.city} />
+          <CityPicker onChange={handleFieldChange} fieldKey="city" field={fields.city} selectCity={selectCity}/>
           <div style={{ marginBottom: "24px", position: "relative", zIndex: 10 }} className="text-right">
             <Label id="otp-trigger" className="otp-prompt" label="CORE_REGISTER_HAVE_ACCOUNT" />
             <Link to="/user/login">

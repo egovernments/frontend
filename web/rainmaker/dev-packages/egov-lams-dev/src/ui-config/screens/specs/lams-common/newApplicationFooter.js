@@ -63,7 +63,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
 
   let isCitizenEditScreen = checkIfCitizenEditScreen();
   isFormValid =
-  (!process.env.REACT_APP_NAME === "Citizen")? 
+  !(process.env.REACT_APP_NAME === "Citizen")? 
     (isCitizenEditScreen? 
       (isCompulsaryDocsUploaded? true:false) : 
       (( isLeaseDetailsValid && isEmployeeDetailsValid && isCompulsaryDocsUploaded && selectorsChangesValid) ? true : false)
@@ -102,6 +102,12 @@ const checkIfFormIsValid = async (state, dispatch) => {
       //console.log("Check this ", finalDocsArray, removedDocsArray, finalDocsWithoutIds, mergedArray);
       //alert("Check once "+JSON.stringify(mergedArray));
       dispatch(prepareFinalObject("lamsStore.Lease[0].leaseDetails.applicationDocuments", mergedArray));
+
+      let months = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].months");
+      let fatherOrHusbandName = get(state.screenConfiguration.preparedFinalObject , "lamsStore.Lease[0].userDetails[0].fatherOrHusbandName");;
+
+      dispatch(prepareFinalObject("lamsStore.Lease[0].months", months));
+      dispatch(prepareFinalObject("lamsStore.Lease[0].fatherOrHusbandName", fatherOrHusbandName));
 
       const lease = get(
         state.screenConfiguration.preparedFinalObject,
@@ -236,22 +242,22 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className: "submit-btn", 
-      // style: {
-      //   minWidth: "180px",
-      //   height: "48px",
-      //   marginRight: "16px",
-      //   borderRadius: "inherit"
-      // }
+      className:"submit-btn leaseApplicationSubmitButton",
+      style: {
+        minWidth: "180px",
+        height: "48px",
+        marginRight: "16px",
+        borderRadius: "inherit"
+      }
     },
     children: {
-      previousButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      },
+      // previousButtonIcon: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Icon",
+      //   props: {
+      //     iconName: "keyboard_arrow_right"
+      //   }
+      // },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
         labelKey: "LAMS_COMMON_SUBMIT"

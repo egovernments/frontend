@@ -1,15 +1,35 @@
+
+import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+const header = getCommonHeader(
+  {
+    labelName: "How It Works",
+    labelKey: "LAMS_HOW_IT_WORKS"
+  },
+  {
+    classes: {
+      root: "common-header-cont"
+    }
+  }
+);
 const screenConfig = {
   uiFramework: "material-ui",
   name: "HowItWorks",
 
   components: {
     div: {
-      uiFramework: "custom-molecules-local",
-      moduleName: "egov-lams",
-      componentPath: "HowItWorks",
-      props: {
-        className:  "common-div-css"
-      }
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      children: {
+          header: header,
+          howitWoorksDiv:{
+            uiFramework: "custom-molecules-local",
+            moduleName: "egov-lams",
+            componentPath: "HowItWorks",
+            props: {
+              className:  "common-div-css"
+            }
+          }
+       }
     }
   }
 };

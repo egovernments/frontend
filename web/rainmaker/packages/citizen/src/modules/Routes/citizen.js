@@ -85,6 +85,7 @@ const routes = [
       hideTitle: true,
       redirectionUrl: "/user/login",
       notificationButton: true,
+      //refreshButton:true
     },
   },
   {
@@ -136,7 +137,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_NOTIFICATIONS",
-      helpButton: true,
+      helpButton: false,
     },
   },
   {
@@ -146,7 +147,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_MYCITY",
-      helpButton: true,
+      helpButton: false,
     },
   },
   {
@@ -156,7 +157,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_WHATSNEW",
-      helpButton: true,
+      helpButton: false,
     },
   },
   {
@@ -166,7 +167,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_EVENTS",
-      helpButton: true,
+      helpButton: false,
     },
   },
   {
