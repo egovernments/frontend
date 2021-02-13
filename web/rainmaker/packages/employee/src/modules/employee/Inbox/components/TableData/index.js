@@ -172,14 +172,24 @@ class TableData extends Component {
 
   checkSLA = (taskboardLabel, row) => {
     let bService =row[2].text.props.label.split("_")[1];
-    let apptatus =row[2].text.props.label.split("_")[2];
+    let apptatus  = "";
+    let n = row[2].text.props.label.indexOf("_", 3);
+    if(n>0){
+      apptatus = row[2].text.props.label.substring(n+1,  row[2].text.props.label.length);
+    }
+    else{
+      apptatus = row[2].text.props.label.split("_")[2];
+    }
+
    // const MAX_SLA = this.state.businessServiceSla[row[2].text.props.label.split('_')[1]];
    const MAX_SLA = this.geMaxSLAData(bService,apptatus)
     if (taskboardLabel === '' || taskboardLabel === 'WF_TOTAL_TASK') {
       return true;
     } else if ((taskboardLabel === 'WF_TOTAL_NEARING_SLA' && row[4].text > 0 && row[4].text <= (MAX_SLA - MAX_SLA / 3))) {
       return true;
-    } else if ((taskboardLabel === 'WF_ESCALATED_SLA' && row[4].text <= 0 && apptatus != 'APPROVED' && apptatus != 'INITIATED')) {
+    } else if (taskboardLabel === 'WF_ESCALATED_SLA' && row[4].text <= 0 && (apptatus == 'PENDINGAPPROVAL' || apptatus == 'FIELDINSPECTION'
+    && apptatus == 'PENDINGPAYMENT' || apptatus == 'APPLIED' || apptatus == 'PENDING_FOR_DOCUMENT_VERIFICATION'||
+    apptatus == 'PENDING_FOR_FIELD_INSPECTION' || apptatus == 'PENDING_APPROVAL_FOR_CONNECTION' || apptatus == 'PENDING_FOR_CONNECTION_ACTIVATION')) {
       return true;
     } else {
       return false;
@@ -227,11 +237,21 @@ class TableData extends Component {
           let isValid = this.checkRow(eachRow, filter, searchFilter, taskboardLabel);
           if (isValid && ind === 1) {        
             let bService =eachRow[2].text.props.label.split("_")[1];
-            let apptatus =eachRow[2].text.props.label.split("_")[2];
+           // let apptatus =eachRow[2].text.props.label.split("_")[2];
+           let apptatus  = "";
+           let n = eachRow[2].text.props.label.indexOf("_", 3);
+           if(n>0){
+            apptatus = eachRow[2].text.props.label.substring(n+1,  eachRow[2].text.props.label.length);
+           }
+           else{
+               apptatus = eachRow[2].text.props.label.split("_")[2];
+           }
 
             //let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
             let MAX_SLA = this.geMaxSLAData(bService,apptatus)
-          if (apptatus!= "APPROVED" && apptatus!= "INITIATED" && eachRow[4].text <= 0) {
+          if ((apptatus == 'PENDINGAPPROVAL' || apptatus == 'FIELDINSPECTION'
+          && apptatus == 'PENDINGPAYMENT' || apptatus == 'APPLIED' || apptatus == 'PENDING_FOR_DOCUMENT_VERIFICATION'||
+          apptatus == 'PENDING_FOR_FIELD_INSPECTION' || apptatus == 'PENDING_APPROVAL_FOR_CONNECTION' || apptatus == 'PENDING_FOR_CONNECTION_ACTIVATION') && eachRow[4].text <= 0) {
               ESCALATED_SLA.push(eachRow[4].text);
             }
             if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {

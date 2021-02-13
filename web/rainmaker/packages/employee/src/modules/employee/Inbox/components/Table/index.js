@@ -145,7 +145,15 @@ class InboxData extends React.Component {
 
   getSlaColor = (sla, businessService) => {
     let bService =businessService.split("_")[1];
-    let status =businessService.split("_")[2];
+    let status  = "";
+    let n = businessService.indexOf("_", 3);
+    if(n>0){
+        status = businessService.substring(n+1,  businessService.length);
+    }
+    else{
+        status = businessService.split("_")[2];
+    }
+
     const { businessServiceSla } = this.props;
     const { wfSlaConfig } = this.state;
     const MAX_SLA =this.getBussinessServiceData(bService,status);
