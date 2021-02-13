@@ -188,7 +188,7 @@ class TableData extends Component {
     } else if ((taskboardLabel === 'WF_TOTAL_NEARING_SLA' && row[4].text > 0 && row[4].text <= (MAX_SLA - MAX_SLA / 3))) {
       return true;
     } else if (taskboardLabel === 'WF_ESCALATED_SLA' && row[4].text <= 0 && (apptatus == 'PENDINGAPPROVAL' || apptatus == 'FIELDINSPECTION'
-    && apptatus == 'PENDINGPAYMENT' || apptatus == 'APPLIED' || apptatus == 'PENDING_FOR_DOCUMENT_VERIFICATION'||
+    || apptatus == 'PENDINGPAYMENT' || apptatus == 'APPLIED' || apptatus == 'PENDING_FOR_DOCUMENT_VERIFICATION'||
     apptatus == 'PENDING_FOR_FIELD_INSPECTION' || apptatus == 'PENDING_APPROVAL_FOR_CONNECTION' || apptatus == 'PENDING_FOR_CONNECTION_ACTIVATION')) {
       return true;
     } else {
@@ -250,7 +250,7 @@ class TableData extends Component {
             //let MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
             let MAX_SLA = this.geMaxSLAData(bService,apptatus)
           if ((apptatus == 'PENDINGAPPROVAL' || apptatus == 'FIELDINSPECTION'
-          && apptatus == 'PENDINGPAYMENT' || apptatus == 'APPLIED' || apptatus == 'PENDING_FOR_DOCUMENT_VERIFICATION'||
+          || apptatus == 'PENDINGPAYMENT' || apptatus == 'APPLIED' || apptatus == 'PENDING_FOR_DOCUMENT_VERIFICATION'||
           apptatus == 'PENDING_FOR_FIELD_INSPECTION' || apptatus == 'PENDING_APPROVAL_FOR_CONNECTION' || apptatus == 'PENDING_FOR_CONNECTION_ACTIVATION') && eachRow[4].text <= 0) {
               ESCALATED_SLA.push(eachRow[4].text);
             }
