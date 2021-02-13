@@ -823,7 +823,11 @@ export const connectionHolderDetails={
     {
       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
     },
-    { jsonPath: "applyScreen.connectionHolders[0].relationship", callBack: handleNA },
+    { jsonPath: "applyScreen.connectionHolders[0].relationship", callBack: handleNA,
+    localePrefix: {
+      moduleName: "COMMON",
+      masterName: "RELATION"
+    } },
     {
       labelKey: "WS_OLD_LABEL_NAME"
     },
@@ -851,7 +855,11 @@ export const connectionHolderDetails={
     },
     {
       jsonPath: "applyScreen.connectionHolders[0].ownerType",
-      callBack: handleNA
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "COMMON_MASTERS",
+        masterName: "OWNERTYPE"
+      }
     },
     {
       labelKey: "WS_OLD_LABEL_NAME"

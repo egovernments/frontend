@@ -418,18 +418,18 @@ export const propertyOwnerDetail = {
   },
     { jsonPath: "WaterConnectionOld[0].property.owners[0].name", callBack: handleNA },
   ),
-  email: getLabelWithValue(
-    {
-      labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
-    },
-    {
-      jsonPath: "WaterConnection[0].property.owners[0].emailId",
-      callBack: handleNA
-    }, {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-    { jsonPath: "WaterConnectionOld[0].property.owners[0].emailId", callBack: handleNA },
-  ),
+  // email: getLabelWithValue(
+  //   {
+  //     labelKey: "WS_OWN_DETAIL_OWN_EMAIL_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].property.owners[0].emailId",
+  //     callBack: handleNA
+  //   }, {
+  //   labelKey: "WS_OLD_LABEL_NAME"
+  // },
+  //   { jsonPath: "WaterConnectionOld[0].property.owners[0].emailId", callBack: handleNA },
+  // ),
   gender: getLabelWithValue(
     {
       labelKey: "WS_OWN_DETAIL_GENDER_LABEL"
@@ -567,7 +567,11 @@ export const connectionHolderDetails={
      },
      {
        jsonPath: "WaterConnection[0].connectionHolders[0].gender",
-       callBack: handleNA
+       callBack: handleNA,
+       localePrefix: {
+        moduleName: "COMMON",
+        masterName: "GENDER"
+      }
      },  {
       labelKey: "WS_OLD_LABEL_NAME"
     },
@@ -586,7 +590,12 @@ export const connectionHolderDetails={
      {
        labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
      },
-     { jsonPath: "WaterConnection[0].connectionHolders[0].relationship", callBack: handleNA },  {
+     { jsonPath: "WaterConnection[0].connectionHolders[0].relationship", callBack: handleNA,
+     localePrefix: {
+      moduleName: "COMMON",
+      masterName: "RELATION"
+    }
+     },  {
       labelKey: "WS_OLD_LABEL_NAME"
     },
     { jsonPath: "WaterConnectionOld[0].connectionHolders[0].relationship", callBack: handleNA },
@@ -609,7 +618,11 @@ export const connectionHolderDetails={
      },
      {
        jsonPath: "WaterConnection[0].connectionHolders[0].ownerType",
-       callBack: handleNA
+       callBack: handleNA,
+       localePrefix: {
+        moduleName: "COMMON_MASTERS",
+        masterName: "OWNERTYPE"
+      }
      },  {
       labelKey: "WS_OLD_LABEL_NAME"
     },
