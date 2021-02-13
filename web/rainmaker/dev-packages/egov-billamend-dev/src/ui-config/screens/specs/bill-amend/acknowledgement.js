@@ -1,3 +1,4 @@
+import { getAddress } from 'egov-billamend/ui-config/screens/specs/bill-amend/searchResources/function.js';
 import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
@@ -6,11 +7,10 @@ import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import get from "lodash/get";
 import set from "lodash/set";
 import commonConfig from "../../../../config/common";
-import { getBillAmendSearchResult } from "../../../../ui-utils/commons";
+import { getBillAmendSearchResult, searchBill } from "../../../../ui-utils/commons";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
-import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
 import "./index.css";
 import { generateBillAmendPdf } from "./utils";
 
@@ -28,12 +28,41 @@ const searchResults = async (dispatch, applicationNo, tenantId, businessService)
     "bill-amend-review-document-data",
     dispatch, 'BILLAMEND'
   );
+
+
+
+  let newQuery = [{
+    key: "tenantId",
+    value: tenantId
+  },
+  {
+    key: "consumerCode",
+    value: get(
+      payload,
+      "Amendments[0].consumerCode",
+      ''
+    )
+  },
+  {
+    key: "businessService",
+    value: businessService
+  }]
+  let resp = await searchBill(newQuery, dispatch);
+  let connectionDetail = get(resp, 'Bill[0]', {});
+
+  let consumerName = get(connectionDetail, "additionalDetails.ownerName", "NA");
+  let consumerAddress = getAddress(get(connectionDetail, "tenantId"), get(connectionDetail, "additionalDetails.locality"));
+  set(payload, 'Amendments[0].additionalDetails.ownerName', consumerName);
+  set(payload, 'Amendments[0].additionalDetails.ownerAddress', consumerAddress);
+
+
+
   payload && dispatch(
     prepareFinalObject(
       "Amendment", get(
         payload,
         "Amendments[0]",
-        []
+        {}
       )))
 
 };
@@ -311,7 +340,7 @@ const screenConfig = {
     const businessService = getQueryArg(
       window.location.href,
       "businessService"
-    ) ;
+    );
 
     const secondNumber = getQueryArg(window.location.href, "consumerCode");
     const tenant = getQueryArg(window.location.href, "tenantId");

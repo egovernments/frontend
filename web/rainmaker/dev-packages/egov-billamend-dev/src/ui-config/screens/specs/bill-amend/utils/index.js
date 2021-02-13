@@ -10,6 +10,7 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import get from "lodash/get";
+import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 
 export const getCommonApplyFooter = (children) => {
@@ -398,9 +399,9 @@ export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'downloa
   };
   Amendments && Amendments[0] && Amendments[0].demandDetails.map(detail => {
     if( detail.taxAmount > 0){
-      Amendments[0].additionalDetails={'noteType':'DEBIT_NOTE'}
+      set(Amendments[0],'additionalDetails.noteType','DEBIT_NOTE')
     }else{
-      Amendments[0].additionalDetails={'noteType':'CREDIT_NOTE'}
+      set(Amendments[0],'additionalDetails.noteType','CREDIT_NOTE')
     }
     detail.taxAmount = detail.taxAmount == 0 ? "0" : Math.abs(detail.taxAmount)
   })

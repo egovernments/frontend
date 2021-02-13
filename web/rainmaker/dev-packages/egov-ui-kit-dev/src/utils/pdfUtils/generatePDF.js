@@ -304,10 +304,10 @@ const getCustomCard = (body = [], width = [], layout = {}, color = 'grey') => {
 }
 const totalAmount = (arr) => {
     return arr
-        .map(item => (item.value ? item.value : 0))
+        .map(item => (item.value && !isNaN(Number(item.value))? Number(item.value) : 0))
         .reduce((prev, next) => prev + next, 0);
 }
-export const getEstimateCardDetails = (fees = [], color,firstRowEnable=true,lastRowEnable=true) => {
+export const getEstimateCardDetails = (fees = [], color,firstRowEnable=true,lastRowEnable=true,customForBillamend=false) => {
     let estimateCard = {};
 
     let total =0;
@@ -328,7 +328,7 @@ if(firstRowEnable){
     card.push(row1);
     row2.push(getLabel(' ', 'amount'))
     row2.push(getLabel(' ', 'amount'))
-    row2.push({ ...getLabel(total, 'amount'), style: "pdf-application-no-value", "alignment": "right" })
+    row2.push({ ...getLabel(customForBillamend?getLocaleLabels(total):total, 'amount'), style: "pdf-application-no-value", "alignment": "right" })
     card.push(row2);
 }
     
@@ -337,17 +337,27 @@ if(firstRowEnable){
     let rowLast = []
 
 
-    fees.map(fee => {
+    fees.map((fee,i) => {
         let row = []
-        row.push(getLabel(getLocaleLabels(fee.name.labelName, fee.name.labelKey), 'value'))
-        row.push(getLabel(fee.value, 'value'))
-        row.push(getLabel(' ', 'value'))
+
+        if(customForBillamend){
+            row.push(getLabel(getLocaleLabels(fee.name.labelName, fee.name.labelKey),i==0?"value":'header'))
+            row.push(getLabel(' ', 'header')) ;
+            row.push({ ...getLabel(customForBillamend?getLocaleLabels(fee.value):fee.value, i==0?"value":'header'), "alignment": "right"})
+            // customForBillamend?{}:row.push(getLabel(' ', 'header')) ;
+        }else{
+            row.push(getLabel(getLocaleLabels(fee.name.labelName, fee.name.labelKey),'header'))
+            row.push({ ...getLabel(fee.value, 'header'), "alignment": "right"})
+           row.push(getLabel(' ', 'header')) ;
+        }
+        
         card.push(row);
     })
     if(lastRowEnable){
         rowLast.push(getLabel(getLocaleLabels('TL_COMMON_TOTAL_AMT', 'TL_COMMON_TOTAL_AMT'), 'totalAmount'))
-        rowLast.push(getLabel(total, 'totalAmount'))
-        rowLast.push(getLabel(' ', 'header'))
+        customForBillamend?rowLast.push(getLabel(' ', 'totalAmount')):{}
+        rowLast.push({...getLabel(total, 'totalAmount'), "alignment": "right"})
+        customForBillamend?{}:rowLast.push(getLabel(' ', 'header')) ;
         card.push(rowLast);
         }
 
@@ -420,7 +430,7 @@ const getHeaderCard = (applicationData, logo) => {
     return applicationHeader
 
 }
-export const generatePDF = (logo, applicationData = {}, fileName) => {
+export const generatePDF = (logo, applicationData = {}, fileName,isCustomforBillamend=false) => {
     logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
@@ -513,7 +523,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 ]
             },
             "pdf-application-no-value": {
-                "fontSize": 12,
+                "fontSize": isCustomforBillamend?11:12,
                 "font": "Roboto",
                 italics: true,
                 "margin": [
@@ -542,7 +552,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
                 "letterSpacing": 0.6
             },
             "pdf-application-no": {
-                "fontSize": 12,
+                "fontSize": isCustomforBillamend?9:12,
                 bold: true,
                 "margin": [
                     -18,
