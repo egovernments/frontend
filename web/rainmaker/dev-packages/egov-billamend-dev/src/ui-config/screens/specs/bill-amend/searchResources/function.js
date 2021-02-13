@@ -4,7 +4,7 @@ import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { getBillAmendSearchResult, searchBill } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 
-const getAddress=(tenantId,locality)=>{
+export const getAddress=(tenantId,locality)=>{
   if(!tenantId&&!locality){
     return'NA';
   }

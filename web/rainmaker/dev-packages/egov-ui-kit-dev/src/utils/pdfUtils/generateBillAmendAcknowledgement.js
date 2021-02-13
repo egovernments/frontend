@@ -3,7 +3,13 @@
 import { billAmendDemandRevisionContainer } from "egov-billamend/ui-config/screens/specs/bill-amend/search-preview";
 import { generateKeyValue, generatePDF, getDocumentsCard, getEstimateCardDetails } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { getFromObject } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
+const getDate=(date)=>{
+
+    let dateObj=new Date(date);
+    return `${dateObj.getDate()}-${dateObj.getMonth()+1}-${dateObj.getYear()+1900}`;
+    }
 
 export const generateBillAmendAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
 
@@ -44,9 +50,14 @@ export const generateBillAmendAcknowledgement = (preparedFinalObject, fileName =
             labelName: 'BILL_TAX_HEADS',
             labelKey: 'BILL_TAX_HEADS'
         },
-        value: 'BILL_REDUCED_AMOUNT_RS'
+        value: getLocaleLabels('BILL_REDUCED_AMOUNT_RS','BILL_REDUCED_AMOUNT_RS')
     }]
     demandDetails.map(demand => {
+        if( demand.taxAmount > 0){
+            estimateCardData[0].value=getLocaleLabels('DEBIT_NOTE','DEBIT_NOTE');
+          }else{
+            estimateCardData[0].value=getLocaleLabels('CREDIT_NOTE','CREDIT_NOTE');
+          }
         estimateCardData.push({
             name: {
                 labelName: demand.taxHeadMasterCode,
@@ -58,13 +69,13 @@ export const generateBillAmendAcknowledgement = (preparedFinalObject, fileName =
 
     const documentsUploadRedux = getFromObject(preparedFinalObject, 'bill-amend-review-document-data', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
-    const estimateDetails = getEstimateCardDetails(estimateCardData, undefined, false, false)
+    const estimateDetails = getEstimateCardDetails(estimateCardData, undefined, false, true,true)
     const billAmendDemandRevisionSummary = generateKeyValue(preparedFinalObject, modifiedDemand);
 
     let pdfData = {
         header: "BILLAMEND_APPLICATION", tenantId: 'pb.amritsar',
-        applicationNoHeader: 'BILLAMEND_CONSUMERNO', applicationNoValue: Amendment.consumerCode,
-        additionalHeader: "BILLAMEND_APPLICATIONNO", additionalHeaderValue: Amendment.amendmentId,
+        applicationNoHeader: 'BILLAMEND_APPLICATIONNO', applicationNoValue: Amendment.amendmentId,
+        additionalHeader: "BILLAMEND_APPLICATIONDATE", additionalHeaderValue:getDate(Amendment.auditDetails.createdTime) ,
         cards: [
             { header: "BILL_ADJUSTMENT_AMOUNT_DETAILS", type: 'header' },
             { items: estimateDetails, type: 'estimate' },
@@ -72,5 +83,5 @@ export const generateBillAmendAcknowledgement = (preparedFinalObject, fileName =
             { header: 'BILL_DOCUMENTS', items: documentCard }]
     }
 
-    generatePDF(UlbLogoForPdf, pdfData, fileName);
+    generatePDF(UlbLogoForPdf, pdfData, fileName,true);
 }

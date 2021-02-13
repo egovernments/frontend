@@ -51,7 +51,8 @@ const styles = {
     },
     leftIcon: {
         color: "grey",
-        marginRight: 4
+        marginRight: 4,
+        position:'absolute'
     },
     taxHeadMasterCodes: {
         fontSize: "12px",
@@ -100,7 +101,7 @@ function FeesEstimateCard(props) {
                         </Grid>
                         {estimate.fees && estimate.fees.length > 0 && estimate.fees.map((fee, key) => {
                             let tooltip = fee.info ? (
-                                <Tooltip val="" icon={"info_circle"} /> //{fee.info.labelName}
+                                <Tooltip val="" icon={"info_circle"} className={'bill-estimate-infoicon'} style={{    position: 'absolute'}} /> //{fee.info.labelName}
                             ) : (
                                     ""
                                 );
@@ -161,7 +162,7 @@ function FeesEstimateCard(props) {
                                 let colRight = item.textLeft ? 6 : 10;
                                 if (item.textLeft) {
                                     textLeft = (
-                                        <Grid xs={colLeft}>
+                                        <Grid xs={colLeft} className={'bill-estimate-infotext'}>
                                             <Typography>{item.textLeft}</Typography>
                                         </Grid>
                                     );

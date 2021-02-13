@@ -1,3 +1,4 @@
+import { getAddress } from 'egov-billamend/ui-config/screens/specs/bill-amend/searchResources/function.js';
 import {
     convertEpochToDate, getBreak, getCommonCard,
     getCommonContainer,
@@ -11,23 +12,22 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-    getQueryArg,
-    getFileUrlFromAPI,
+    getFileUrl, getFileUrlFromAPI, getQueryArg,
+
     getTransformedLocale,
-    getFileUrl,
+
     setBusinessServiceDataToLocalStorage
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { generateBillAmendAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateBillAmendAcknowledgement";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { generateBillAmendAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateBillAmendAcknowledgement";
 import commonConfig from "../../../../config/common";
-import { getBillAmdSearchResult } from "../../../../ui-utils/commons";
+import { getBillAmdSearchResult, searchBill } from "../../../../ui-utils/commons";
 import { getReviewDocuments } from "./document-review";
 import { generateBillAmendPdf } from "./utils";
-
-
+import "./index.css";
 
 
 
@@ -427,6 +427,25 @@ export const setSearchResponse = async (state, dispatch, action) => {
     ], dispatch);
     let amendments = get(billAMDSearch, "Amendments", []);
     if (amendments && amendments.length > 0) {
+        let newQuery = [{
+            key: "tenantId",
+            value: tenantId
+        },
+        {
+            key: "consumerCode",
+            value: get(amendments[0], "consumerCode")
+        },
+        {
+            key: "businessService",
+            value: businessService
+        }]
+        let resp = await searchBill(newQuery, dispatch);
+        let connectionDetail = get(resp, 'Bill[0]', {});
+
+        let consumerName = get(connectionDetail, "additionalDetails.ownerName", "NA");
+        let consumerAddress = getAddress(get(connectionDetail, "tenantId"), get(connectionDetail, "additionalDetails.locality"));
+        set(amendments[0], 'additionalDetails.ownerName', consumerName);
+        set(amendments[0], 'additionalDetails.ownerAddress', consumerAddress);
         dispatch(prepareFinalObject("Amendment", amendments[0]));
         dispatch(prepareFinalObject("AmendmentUpdate", amendments[0]));
         adjustmentAmountDetails(state, dispatch, amendments[0]);
