@@ -17,7 +17,7 @@ import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+enableButton = (hasButton && hasButton === "false") ||  process.env.REACT_APP_NAME == "Citizen" ? false : true;
 const tenant = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 
 
@@ -77,6 +77,14 @@ const getMDMSData = async (dispatch) => {
     console.log(e);
   }
 };
+const ifUserRoleExists = () => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf("WS_CEMP") > -1 || roleCodes.indexOf("SW_CEMP") > -1) {
+    return true;
+  } else return false;
+}; 
 
 const header = getCommonHeader({
   labelName: "Property Registry",
@@ -120,7 +128,7 @@ const screenConfig = {
                 sm: 6,
                 align: "right"
               },
-              visible: enableButton,
+              visible: ifUserRoleExists(),
               props: {
                 variant: "contained",
                 color: "primary",

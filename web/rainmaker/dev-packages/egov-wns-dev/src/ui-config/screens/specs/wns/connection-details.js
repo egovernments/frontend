@@ -45,10 +45,38 @@ const getApplicationNumber = (dispatch, connectionsObj) => {
   } else {
     appNos = connectionsObj[0].applicationNo;
   }
-  console.log(appNos, "application numbers");
+  
   dispatch(prepareFinalObject("applicationNos", appNos));
 };
+
+const showHideServiceDetails = (dispatch,data)=>{
+  let serviceReq = getQueryArg(window.location.href, "service");
+  if (serviceReq === serviceConst.SEWERAGE) {
+    dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne",
+        "visible",
+        false
+  )
+);  
+  }
+  else{
+     dispatch(
+      handleField(
+        "connection-details",
+        "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewTwo",
+        "visible",
+        false
+  )
+);  
+    }   
+
+
+}
+
 const showHideConnectionHolder = (dispatch, connectionHolders) => {
+ 
   if (connectionHolders != "NA" && connectionHolders.length > 0) {
     dispatch(
       handleField(
@@ -112,16 +140,23 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   /**
    * This methods holds the api calls and the responses of fetch bill and search connection for both water and sewerage service
    */
+
+   
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
   ];
-  if (service === serviceConst.SEWERAGE) {
+  let serviceReq = getQueryArg(window.location.href, "service");
+ 
+  if (serviceReq === serviceConst.SEWERAGE) {
+  
+   //if (service === serviceConst.SEWERAGE) {
     let payloadData = await getSearchResultsForSewerage(
       queryObject,
       dispatch,
       true
     );
+  
     if (
       payloadData !== null &&
       payloadData !== undefined &&
@@ -135,7 +170,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         payloadData.SewerageConnections
       );
       let propTenantId = sewerageConnection.property.tenantId.split(".")[0];
-      sewerageConnection.service = service;
+      sewerageConnection.service = serviceReq;
 
       if (sewerageConnection.property.propertyType !== undefined) {
         const propertyTpe =
@@ -220,9 +255,10 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
+      showHideServiceDetails(dispatch, sewerageConnection);
     }
-  } else if (service === serviceConst.WATER) {
-    let payloadData = await getSearchResults(queryObject, true);
+  } else if (serviceReq === serviceConst.WATER) {   
+    let payloadData = await getSearchResults(queryObject, true);    
     if (
       payloadData !== null &&
       payloadData !== undefined &&
@@ -232,7 +268,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         payloadData.WaterConnection
       );
       let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
-      waterConnection.service = service;
+      waterConnection.service = serviceReq;
       let propTenantId = waterConnection.property.tenantId.split(".")[0];
       if (waterConnection.connectionExecutionDate !== undefined) {
         waterConnection.connectionExecutionDate = convertEpochToDate(
@@ -311,6 +347,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
       getApplicationNumber(dispatch, payloadData.WaterConnection);
+      showHideServiceDetails(dispatch, waterConnection);
     }
   }
 };
@@ -320,7 +357,7 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   if (connectionNumber) {
     await searchResults(action, state, dispatch, connectionNumber);
   }
-};
+ };
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({ labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER" }),
@@ -336,7 +373,9 @@ const headerrow = getCommonContainer({
 
 const serviceDetails = getServiceDetails();
 
+
 const propertyDetails = getPropertyDetails(false);
+
 
 const ownerDetails = getOwnerDetails(false);
 
@@ -409,7 +448,7 @@ const getMDMSData = async (action, state, dispatch) => {
     payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(
       (service) => service.billGineiURL
     );
-    // console.log(payload.MdmsRes,"nishant")
+    
     dispatch(prepareFinalObject("connectDetailsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -442,6 +481,7 @@ const screenConfig = {
       "components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber",
       connectionNo
     );
+    //window.location.reload(true);
     return action;
   },
 

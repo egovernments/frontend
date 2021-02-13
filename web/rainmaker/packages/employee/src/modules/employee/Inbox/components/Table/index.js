@@ -372,4 +372,3 @@ export const Taskboard = ({ data }) => {
     </div>
   );
 };
-
