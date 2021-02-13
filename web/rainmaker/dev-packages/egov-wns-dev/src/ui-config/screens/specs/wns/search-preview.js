@@ -125,7 +125,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
       console.info("data in apply screen===",applyScreenObject);
 
-      if (!applyScreenObject.connectionHolders || payload.connectionHolders === 'NA') {
+   //   if (!applyScreenObject.connectionHolders || payload.connectionHolders === 'NA') {
+    if (!applyScreenObject.connectionHolders) {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
       } else {
