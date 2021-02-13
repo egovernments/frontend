@@ -241,7 +241,11 @@ export const connectionHolderDetails={
     {
       labelKey: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
     },
-    { jsonPath: "WaterConnection[0].connectionHolders[0].relationship", callBack: handleNA },
+    { jsonPath: "WaterConnection[0].connectionHolders[0].relationship", callBack: handleNA,
+    localePrefix: {
+      moduleName: "COMMON",
+      masterName: "RELATION"
+    } },
     {
       labelKey: "WS_OLD_LABEL_NAME"
     },
@@ -269,7 +273,11 @@ export const connectionHolderDetails={
     },
     {
       jsonPath: "WaterConnection[0].connectionHolders[0].ownerType",
-      callBack: handleNA
+      callBack: handleNA,
+      localePrefix: {
+        moduleName: "COMMON_MASTERS",
+        masterName: "OWNERTYPE"
+      }
     },
     {
       labelKey: "WS_OLD_LABEL_NAME"
