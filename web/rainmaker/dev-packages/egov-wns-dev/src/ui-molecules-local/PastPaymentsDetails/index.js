@@ -123,7 +123,7 @@ class PastPayments extends Component {
                 bold={false}
               />
               <div style={{ height: "auto" }}>
-                {getItemStatus(element.totalDue, element.totalAmountPaid, element.paymentDetails[0].bill.tenantId, element.paymentDetails[0].bill.consumerCode,'',element.paymentDetails[0].businessService)}
+                {getItemStatus(element.totalDue, element.totalAmountPaid, element.paymentDetails[0].bill.tenantId, element.paymentDetails[0].receiptNumber,'',element.paymentDetails[0].businessService)}
               </div>
             </div>
           </Grid>
