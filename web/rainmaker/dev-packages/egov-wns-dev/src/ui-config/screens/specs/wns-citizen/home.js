@@ -89,15 +89,7 @@ const waterAndSewerageSearchAndResult = {
                     props: {
                         route: "my-applications"
                     }
-                },
-                listCard2: {
-                    uiFramework: "custom-molecules-local",
-                    moduleName: "egov-wns",
-                    componentPath: "PastPayments",
-                    props: {
-                        route: "my-connections"
-                    }
-                },
+                }, 
                 listCard3: {
                     uiFramework: "custom-molecules-local",
                     moduleName: "egov-wns",
