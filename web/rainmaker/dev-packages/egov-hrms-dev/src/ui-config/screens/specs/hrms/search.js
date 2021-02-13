@@ -90,11 +90,11 @@ const getMDMSData = async (action, state, dispatch) => {
 const setUlbSelect = (action, state, dispatch) => {
   let adminRoles = getAdminRole(state);
   if (adminRoles.hasAdminRole) {
-    set(
-      action.screenConfig,
-      "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb.roleDefination.roles",
-      adminRoles.configAdminRoles
-    );
+    // set(
+    //   action.screenConfig,
+    //   "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.ulb.roleDefination.roles",
+    //   adminRoles.configAdminRoles
+    // );
   } else {
     set(
       action.screenConfig,
