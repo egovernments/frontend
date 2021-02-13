@@ -6,7 +6,14 @@ import { ifUserRoleExists } from "../../utils";
 import './acknowledgementUtils.css';
 
 const getHomeButtonPath = (item) => {
-    return isPublicSearch() ? "/withoutAuth/pt-mutation/public-search" : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
+    if(JSON.parse(window.localStorage.getItem('Citizen.isMobileApp')) == true){
+        return isPublicSearch() ? "/withoutAuth/pt-mutation/public-search" : ifUserRoleExists("CITIZEN") ?  "/" : "/inbox";
+    }
+    else
+    {
+        return isPublicSearch() ? "/withoutAuth/pt-mutation/public-search" : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
+    }
+    
 }
 const isMiniReceiptBtnVisible =()=>{
     if((process.env.REACT_APP_NAME === "Employee" && JSON.parse(window.localStorage.getItem('isPOSmachine')) )

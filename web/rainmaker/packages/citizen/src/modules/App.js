@@ -69,7 +69,9 @@ class App extends Component {
       },
     };
     // can be combined into one mdms call
-    fetchLocalizationLabel(getLocale() || "en_IN");
+    let localeFromUrl = getQueryArg(window.location.href, "lang");
+    localeFromUrl = ["en_IN","hi_IN"].indexOf(localeFromUrl)>-1 ? localeFromUrl:"";
+    fetchLocalizationLabel(localeFromUrl || getLocale() || "en_IN");
     // current location
     fetchCurrentLocation();
     fetchMDMSData(requestBody);
@@ -114,7 +116,16 @@ class App extends Component {
     const isPublicSearch = location && location.pathname && location.pathname.includes("/withoutAuth/pt-mutation/public-search");
     const isPublicSearchPay = location && location.pathname && location.pathname.includes("/withoutAuth/egov-common/pay");
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy && !isPublicSearch && !isPublicSearchPay) {
-      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+      if(nextProps.hasLocalisation)
+      {
+        let url = "/language-selection?";
+        if(getQueryArg(window.location.href, "cant"))
+          url=url+"cant="+getQueryArg(window.location.href, "cant")+"&";
+        if(getQueryArg(window.location.href, "lang"))
+          url=url+"lang="+getQueryArg(window.location.href, "lang")+"&";
+
+        this.props.history.replace(url);
+      }
     }
   }
 

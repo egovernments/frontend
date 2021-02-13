@@ -317,6 +317,43 @@ export const loadMdmsData = async (action, state, dispatch) => {
   }
 }
 
+export const loadDeoMappingsFromMdms = async (action, state, dispatch) => {
+
+  let requestBody = {
+    "MdmsCriteria": {
+      "tenantId": "pb",
+      "moduleDetails": [
+        {
+          "moduleName": "Lease",
+          "masterDetails": [
+            {
+              "name": "deoMapping"
+            }
+          ]
+        }
+      ]
+    }
+  };
+
+  try{
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      requestBody
+    );
+    if (payload) {
+      dispatch(prepareFinalObject("lamsStore.deoMappings", payload.MdmsRes.Lease.deoMapping[0]));
+    }
+    return payload;
+  }
+  catch (e) {
+    console.error(e);
+  }
+}
+
 export const updateMdmsDropDowns = async ( state, dispatch ) => {
   const structType = get(
     state,

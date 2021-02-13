@@ -1267,18 +1267,20 @@ const getBillingSlabData = async (
                 {
                   let count ;
                   let UOM;
+                  let tradeType
                   if(tradeUnit){
                   count = tradeUnit.uomValue;
                   UOM = tradeUnit.uom;
                   }
-                  tradeTotal = count?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
+                  tradeTotal = item.type!="FLAT" ?(tradeTotal + item.rate * count):(tradeTotal + item.rate);
                   result.tradeUnitData.push({
                     rate: item.rate,
                     tradeTotal:tradeTotal,
                     UOM,
                     count:count,
                     category: item.tradeType,
-                    type: "trade"
+                    type: "trade",
+                    calcType : item.type
                   });
                 }
             });

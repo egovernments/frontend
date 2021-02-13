@@ -1,14 +1,33 @@
+import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+const header = getCommonHeader(
+  {
+    labelName: "How It Works",
+    labelKey: "ABG_HELP"
+  },
+  {
+    classes: {
+      root: "common-header-cont"
+    }
+  }
+);
 const screenConfig = {
   uiFramework: "material-ui",
   name: "HowItWorks",
 
   components: {
     div: {
-      uiFramework: "custom-molecules-local",
-      moduleName: "egov-abg",
-      componentPath: "HowItWorks",
-      props: {
-        className: "common-div-css"
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+          children: {
+            header: header,
+            howitWoorksDiv:{
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-abg",
+          componentPath: "HowItWorks",
+          props: {
+            className: "common-div-css"
+          }
+        }
       }
     }
   }

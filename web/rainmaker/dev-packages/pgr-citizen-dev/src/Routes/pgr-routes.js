@@ -128,7 +128,7 @@ const routes = [
       title: "COMMON_BOTTOM_NAVIGATION_COMPLAINTS",
       hideTitle: true,
       redirectionUrl: "/user/register",
-      helpButton: true
+      helpButton: false
     }
   },
   {
@@ -140,7 +140,7 @@ const routes = [
       title: "COMMON_BOTTOM_HOW_IT_WORKS",
       hideTitle: true,
       redirectionUrl: "/user/register",
-      helpButton: true
+      helpButton: false
     }
   },
   {

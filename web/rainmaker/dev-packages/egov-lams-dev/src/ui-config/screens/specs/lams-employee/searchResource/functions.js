@@ -11,7 +11,7 @@ import {
 import { toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { checkIfTheUserIsDeo, getCbsForDeoBasedOnLamsRoles} from "../../../../../ui-utils/commons";
+import { checkIfTheUserIsDeo, checkIfTheUserIsLrCe, checkIfTheUserIsCeo, getCbsForDeoBasedOnLamsRoles} from "../../../../../ui-utils/commons";
 
 //Added toggleSpinner for Search by Minju
 export const searchApiCall = async (state, dispatch) => {
@@ -24,7 +24,7 @@ export const searchApiCall = async (state, dispatch) => {
 
   if(checkIfTheUserIsDeo())
   {
-    let cbs = getCbsForDeoBasedOnLamsRoles();
+    let cbs = getCbsForDeoBasedOnLamsRoles(state,dispatch);
     let queryString = "";
     cbs.forEach(cb => {
       queryString = queryString+cb.code+","
@@ -34,9 +34,15 @@ export const searchApiCall = async (state, dispatch) => {
     queryObject.push({key: "located",value: 2})
   } 
   else
+  if(checkIfTheUserIsCeo())
   {
     queryObject.push({key: "tenantId",value: getTenantId()});
     queryObject.push({key: "located",value: 1});
+  }
+  else
+  if(checkIfTheUserIsLrCe())// For counter employee, dont put restriction on located
+  {
+    queryObject.push({key: "tenantId",value: getTenantId()});
   }
 
   let searchScreenObject = get(

@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
 	android:background="@drawable/banner" >
 
-    <ImageView
-		android:src="@raw/logo"
-        android:contentDescription=""
-        tools:ignore="ContentDescription"
-        android:layout_height="120sp"
-        android:layout_width="250sp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+<!--    <ImageView-->
+<!--		android:src="@raw/logo"-->
+<!--        android:contentDescription=""-->
+<!--        tools:ignore="ContentDescription"-->
+<!--        android:layout_height="120sp"-->
+<!--        android:layout_width="250sp"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:layout_centerHorizontal="true" />-->
 
 	<TextView
 		android:layout_width="50dp"

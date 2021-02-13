@@ -4,14 +4,14 @@ import "./index.css";
 const PrivacyPolicy = ({}) => {
   return (
     <div className="privacy-container">
-      <h3 className="privacy-main-header">Privacy Policy for mSeva</h3>
+      <h3 className="privacy-main-header">Privacy Policy for eChhawani</h3>
       <p>
-        Welcome to mSeva. mSeva app developed by eGovernments Foundation and launched in collaboration with Department of Local Government Punjab, is
+        Welcome to eChhawani. eChhawani app developed by Bharat Electronics Limited and launched in collaboration with eGovernments Foundation and DGDE, is
         an advanced citizen application enabling citizens to report a civic related issue.
       </p>
       <p>
         Our Privacy Policy explains how we and the Companies/Government offices we work with collect, use, share and protect information in relation
-        to our mobile services, web site, and any software provided on or in connection with mSeva, and your choices about the collection and use of
+        to our mobile services, web site, and any software provided on or in connection with eChhawani, and your choices about the collection and use of
         your information.
       </p>
       <p>
@@ -22,10 +22,10 @@ const PrivacyPolicy = ({}) => {
       <p>Our Policy applies to all visitors, users, and others who access the Service ("Users").</p>
       <h3 className="privacy-sub-header">1. INFORMATION WE COLLECT</h3>
       <p>We collect the following types of information.</p>
-      <p>Your names, phone numbers, city and OTP sent via SMS when you register on mSeva app.</p>
+      <p>Your names, phone numbers, city and OTP sent via SMS when you register on eChhawani app.</p>
       <p>
         Profile information that you provide for your user profile (e.g., first and last name, picture, etc. This information allows us to help you or
-        others be "found" on mSeva through user content (e.g., photos, comments, and other materials) that you post to the Service. For example, we
+        others be "found" on eChhawani through user content (e.g., photos, comments, and other materials) that you post to the Service. For example, we
         may send you Service-related emails (e.g., account verification, changes/updates to features of the Service, technical and security notices).
         Note that you may not opt out of Service-related e-mails.
       </p>
@@ -39,7 +39,7 @@ const PrivacyPolicy = ({}) => {
       <h3 className="privacy-bold">Cookies and similar technologies:</h3>
       <p>
         When you visit the Service, we may use cookies and similar technologies like pixels, web beacons, and local storage to collect information
-        about how you use mSeva and provide features to you. We may ask advertisers or other partners to serve ads or services to your devices, which
+        about how you use eChhawani and provide features to you. We may ask advertisers or other partners to serve ads or services to your devices, which
         may use cookies or similar technologies placed by us or the third party.
       </p>
       <h3 className="privacy-bold">Log file information:</h3>
@@ -59,7 +59,7 @@ const PrivacyPolicy = ({}) => {
         When you use a mobile device like a tablet or phone to access our Service, we may access, collect, monitor, store on your device, and/or
         remotely store one or more "device identifiers." Device identifiers are small data files or similar data structures stored on or associated
         with your mobile device, which uniquely identify your mobile device. A device identifier may be data stored in connection with the device
-        hardware, data stored in connection with the device's operating system or other software, or data sent to the device by mSeva.
+        hardware, data stored in connection with the device's operating system or other software, or data sent to the device by eChhawani.
       </p>
       <p>
         A device identifier may deliver information to us or to a third party partner about how you browse and use the Service and may help us or
@@ -103,29 +103,28 @@ const PrivacyPolicy = ({}) => {
           <p>Diagnose or fix technology problems</p>
         </li>
         <li>
-          <p>Automatically update the mSeva application on your device</p>
+          <p>Automatically update the eChhawani application on your device</p>
         </li>
       </ul>
       <h3 className="privacy-sub-header">3. SHARING OF YOUR INFORMATION</h3>
       <p>
-        We will not rent or sell your information to third parties outside mSeva (or the group of companies of which mSeva is a part) without your
+        We will not rent or sell your information to third parties outside eChhawani (or the group of companies of which eChhawani is a part) without your
         consent, except as noted in this Policy. Whenever you post a grievance on civic issues/violations on our apps, we pass on your details, and
-        details of the problem, to the Urban Local Bodies as per the Memorandum of Understanding signed by eGovernments Foundation and the Urban Local
-        Body.
+        details of the problem, to the Cantonment Boards as per the Memorandum of Understanding signed by eGovernments Foundation and the DGDE.
       </p>
       <p>
-        It is important we share these details as the Government Officers working with the Urban Local Body and responsible for the area where you
+        It is important we share these details as the Government Officers working with the Cantonment Board and responsible for the area where you
         located the problem will contact you with an intention to gain more details and hence work towards resolving the issue.
       </p>
       <p>
-        Other than the officials who are assigned to resolve your grievance, only people we authorise to view the mSeva administration interface will
+        Other than the officials who are assigned to resolve your grievance, only people we authorise to view the eChhawani administration interface will
         be able to see your email address, phone number and they will never use it for anything other than to help administer.
       </p>
       <p>We will never give or sell your email address to anyone else, unless we are obliged to by law.</p>
       <h3 className="privacy-bold">Parties with whom we may share your information:</h3>
       <p>
         We may share User Content and your information (including but not limited to, information from cookies, log files, device identifiers,
-        location data, and usage data) with businesses that are legally part of the same group of companies that mSeva is part of, or that become part
+        location data, and usage data) with businesses that are legally part of the same group of companies that eChhawani is part of, or that become part
         of that group ("Affiliates").
       </p>
       <p>
@@ -154,7 +153,7 @@ const PrivacyPolicy = ({}) => {
       </p>
       <h3 className="privacy-bold">What happens in the event of a change of control:</h3>
       <p>
-        If we sell or otherwise transfer part or the whole of mSeva or our assets to another organization (e.g., in the course of a transaction like a
+        If we sell or otherwise transfer part or the whole of eChhawani or our assets to another organization (e.g., in the course of a transaction like a
         merger, acquisition, bankruptcy, dissolution, liquidation), your information such as name and email address, User Content and any other
         information collected through the Service may be among the items sold or transferred. You will continue to own your User Content. The buyer or
         transferee will have to honor the commitments we have made in this Privacy Policy.
@@ -174,17 +173,17 @@ const PrivacyPolicy = ({}) => {
       <h3 className="privacy-bold">Storage and Processing:</h3>
       <p>
         Your information collected through the Service may be stored and processed in India or any other country by third party services like Amazon
-        in which mSeva, its Affiliates or Service Providers maintain facilities.
+        in which eChhawani, its Affiliates or Service Providers maintain facilities.
       </p>
       <p>
         We use commercially reasonable safeguards to help keep the information collected through the Service secure and take reasonable steps (such as
-        requesting a unique password) to verify your identity before granting you access to your account. However, mSeva cannot ensure the security of
-        any information you transmit to mSeva or guarantee that information on the Service may not be accessed, disclosed, altered, or destroyed.
+        requesting a unique password) to verify your identity before granting you access to your account. However, eChhawani cannot ensure the security of
+        any information you transmit to eChhawani or guarantee that information on the Service may not be accessed, disclosed, altered, or destroyed.
       </p>
       <p>
         Please do your part to help us. You are responsible for maintaining the secrecy of your unique password and account information, and for
-        controlling access to emails between you and mSeva, at all times. Your privacy settings may also be affected by changes the social media
-        services you connect to mSeva make to their services. We are not responsible for the functionality, privacy, or security measures of any other
+        controlling access to emails between you and eChhawani, at all times. Your privacy settings may also be affected by changes the social media
+        services you connect to eChhawani make to their services. We are not responsible for the functionality, privacy, or security measures of any other
         organization.
       </p>
       <h3 className="privacy-sub-header">5. YOUR CHOICES ABOUT YOUR INFORMATION</h3>
@@ -196,7 +195,7 @@ const PrivacyPolicy = ({}) => {
       </p>
       <h3 className="privacy-bold">How long we keep your User Content:</h3>
       <p>
-        Following termination or deactivation of your account, mSeva, its Affiliates, or its Service Providers may retain information (including your
+        Following termination or deactivation of your account, eChhawani, its Affiliates, or its Service Providers may retain information (including your
         profile information) and User Content for a commercially reasonable time for backup, archival, and/or audit purposes.
       </p>
       <h3 className="privacy-sub-header">6. OTHER WEB SITES AND SERVICES</h3>
@@ -211,10 +210,10 @@ const PrivacyPolicy = ({}) => {
 
       <h3 className="privacy-sub-header">7. CHANGES TO OUR PRIVACY POLICY</h3>
       <p>
-        mSeva may modify or update this Privacy Policy from time to time, so please review it periodically. We may provide you additional forms of
-        notice of modifications or updates as appropriate under the circumstances. Your continued use of mSeva or the Service after any modification
+        eChhawani may modify or update this Privacy Policy from time to time, so please review it periodically. We may provide you additional forms of
+        notice of modifications or updates as appropriate under the circumstances. Your continued use of eChhawani or the Service after any modification
         to this Privacy Policy will constitute your acceptance of such modification. If you have any questions about our privacy policy or wish to
-        update any of the information you have provided us, please contact us at contact@egovernments.org
+        update any of the information you have provided us, please contact us at ddgit.dgde@gmail.com
       </p>
     </div>
   );

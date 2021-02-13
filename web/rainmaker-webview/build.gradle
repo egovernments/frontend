@@ -7,7 +7,6 @@ buildscript {
 	}
 	dependencies {
 		classpath 'com.android.tools.build:gradle:3.3.2'
-
 		// NOTE: Do not place your application dependencies here; they belong
 		// in the individual module build.gradle files
 	}
@@ -25,7 +24,7 @@ android {
 	buildTypes {
 		release {
 			minifyEnabled true
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 			applicationVariants.all { variant ->
 				variant.outputs.all {
 					def date = new Date()
@@ -44,13 +43,13 @@ android {
 
 	signingConfigs {
 //		Citizen {
-//			keyAlias 'mseva.punjab.citizen'
+//			keyAlias 'echhawani.punjab.citizen'
 //			keyPassword 'egov123'
 //			storeFile file('keystore/citizen/keystore')
 //			storePassword 'egov123'
 //		}
 //		Employee {
-//			keyAlias 'mseva.punjab.employee'
+//			keyAlias 'echhawani.punjab.employee'
 //			keyPassword 'egov123'
 //			storeFile file('keystore/employee/keystore')
 //			storePassword 'egov123'
@@ -61,29 +60,35 @@ android {
 			storeFile file('/keystore/employee/keystore.jks')
 			storePassword 'bel123'
 		}
+		Citizen {
+			keyAlias 'eChhawani'
+			keyPassword 'bel123'
+			storeFile file('D:\\V2_EgovWorkspace\\frontend\\web\\rainmaker-webview\\keystore\\employee\\keystore.jks')
+			storePassword 'bel123'
+		}
 	}
 
 	flavorDimensions "default"
 	productFlavors {
 		CitizenProd {
 			minSdkVersion 19
-			applicationId 'org.egovernment.mseva.citizen'
+			applicationId 'org.egovernment.echhawani.citizen'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-			versionCode 13
-			versionName '1.0.14'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+			versionCode 3
+			versionName '1.0.1'
 			resValue "string", "app_name", "eChhawani"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 		//	signingConfig signingConfigs.Citizen
 
 			// Production
-			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/citizen/user/register"'
+			buildConfigField 'String', 'url', '"https://echhawani.gov.in/citizen/user/register"'
 		}
 		EmployeeProd {
 			minSdkVersion 19
-			applicationId 'org.egovernment.mseva.employee'
+			applicationId 'org.egovernment.echhawani.employee'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani Employee"
@@ -91,15 +96,15 @@ android {
 			signingConfig signingConfigs.Employee
 
 			// Production
-			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/employee/user/login"'
+			buildConfigField 'String', 'url', '"https://echhawani.lgpunjab.gov.in/employee/user/login"'
 		}
 		CitizenUAT {
 			minSdkVersion 19
-			applicationId 'org.egovernment.mseva.citizen'
+			applicationId 'org.egovernment.echhawani.citizen'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 			versionCode 13
-			versionName '1.0.14'
+			versionName '1.0'
 			resValue "string", "app_name", "eChhawani"
 			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
 		//	signingConfig signingConfigs.Citizen
@@ -108,7 +113,7 @@ android {
 //			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/citizen/user/register"'
 
 			// DEV
-//			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/citizen/user/register"'
+		//	buildConfigField 'String', 'url', '"https://demo.echhawani.gov.in/citizen/user/register"'
 
 			//UAT
 			//DEV2
@@ -116,9 +121,9 @@ android {
 		}
 		EmployeeUAT {
 			minSdkVersion 21
-			applicationId 'org.egovernment.mseva.employee'
+			applicationId 'org.egovernment.echhawani.employee'
 			targetSdkVersion 29
-			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 			versionCode 13
 			versionName '1.0.14'
 			resValue "string", "app_name", "eChhawani Employee"
@@ -141,6 +146,6 @@ android {
 }
 
 dependencies {
-	implementation 'com.android.support:appcompat-v7:26.1.0'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
 	implementation 'com.google.android.gms:play-services-base:15.0.1'
 }

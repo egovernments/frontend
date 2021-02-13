@@ -7,6 +7,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 import filter  from "lodash/filter";
 import { getTranslatedLabel } from "../../../utils/commons";
+import jp from "jsonpath";
 
 class CityPickerDialog extends Component {
   state = { results: [], searchTerm: "", open: false };
@@ -19,6 +20,9 @@ class CityPickerDialog extends Component {
         searchTerm: "",
       });
     }.bind(this));
+
+    this.autoSelectCity();
+
   };
 
   componentWillUnmount() {
@@ -29,6 +33,20 @@ class CityPickerDialog extends Component {
     const { localizationLabels } = this.props;
     return getTranslatedLabel(label, localizationLabels);
   };
+
+  autoSelectCity=()=>{
+    const {selectCity} = this.props;
+    if(selectCity)
+    {
+      const {cities} = this.props;
+      const cityIds = jp.query(cities, "$[*].key");
+      const { fieldKey, onChange } = this.props;
+      if(cityIds.indexOf(selectCity)>-1)
+        setTimeout(function() {
+          onChange(fieldKey, selectCity);
+        }, 1);
+    }
+  }
 
   prepareResultsForDisplay = (results = []) => {
     results.sort(function(a, b){

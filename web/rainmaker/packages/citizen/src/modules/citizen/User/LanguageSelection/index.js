@@ -9,11 +9,18 @@ import {DisclaimerInformation} from "modules/common";
 import {LanguageSelectionHeader} from "modules/common";
 import './index.css'
 import  digit from './digit.png'
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 class LanguageSelection extends Component {
   state = {
     value: getLocale()
   };
+
+  componentDidMount = async () => {
+    let lang = getQueryArg(window.location.href, "lang");
+    if(["en_IN","hi_IN"].indexOf(lang) > -1)
+      this.onClick(lang);
+  }
 
   onClick = (value) => {
     this.setState({ value });
@@ -21,7 +28,14 @@ class LanguageSelection extends Component {
   };
 
   onLanguageSelect = () => {
-    this.props.history.push("/user/register");
+    
+    let url = "/user/login?";
+    if(getQueryArg(window.location.href, "cant"))
+      url=url+"cant="+getQueryArg(window.location.href, "cant")+"&";
+    if(getQueryArg(window.location.href, "lang"))
+      url=url+"lang="+getQueryArg(window.location.href, "lang")+"&";
+    this.props.history.push(url);  
+
   };
 
   render() {

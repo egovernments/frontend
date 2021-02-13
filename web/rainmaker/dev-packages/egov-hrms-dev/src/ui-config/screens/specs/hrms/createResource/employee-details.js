@@ -203,6 +203,7 @@ export const professionalDetails = getCommonCard(
           },
           pattern: /^[a-zA-Z0-9-_]*$/i,
           jsonPath: "Employee[0].code",
+          required: true,
           props:{
             inputProps:{
               maxLength:50
