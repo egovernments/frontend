@@ -13,7 +13,8 @@ import cloneDeep from "lodash/cloneDeep";
 import { createEstimateData } from "../../utils";
 import {
   prepareFinalObject,
-  toggleSnackbar
+  toggleSnackbar,
+  toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 
@@ -22,75 +23,108 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
     get(state.screenConfiguration.preparedFinalObject, "Licenses")
   );
   set(TLRequestBody[0], "action", "ADHOC");
-  const TLpayload = await httpRequest(
-    "post",
-    "/tl-services/v1/_update",
-    "",
-    [],
-    { Licenses: TLRequestBody }
-  );
+  try{
+        dispatch(toggleSpinner());
+      const TLpayload = await httpRequest(
+        "post",
+        "/tl-services/v1/_update",
+        "",
+        [],
+        { Licenses: TLRequestBody }
+      );
+      dispatch(toggleSpinner());
+      const billPayload = await createEstimateData(
+        TLpayload.Licenses[0],
+        "LicensesTemp[0].estimateCardData",
+        dispatch,
+        window.location.href
+      );
+
+    }
+    catch(e)
+    {
+      dispatch(toggleSpinner());
+      console.log(e)
+    }
 
   // clear data from form
 
-  const billPayload = await createEstimateData(
-    TLpayload.Licenses[0],
-    "LicensesTemp[0].estimateCardData",
-    dispatch,
-    window.location.href
-  );
+ 
 
   //get deep copy of bill in redux - merge new bill after adhoc
-  const billInRedux = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
-  );
-  const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
+  // const billInRedux = cloneDeep(
+  //   get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
+  // );
+  // const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
 
-  //merge bill in Receipt obj
-  billPayload &&
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
+  // //merge bill in Receipt obj
+  // billPayload &&
+  //   dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
 
-  //set amount paid as total amount from bill
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
+  // //set amount paid as total amount from bill
+  // billPayload &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
+  //       billPayload.billResponse.Bill[0].billDetails[0].totalAmount
+  //     )
+  //   );
 
-  //set total amount in instrument
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].instrument.amount",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
+  // //set total amount in instrument
+  // billPayload &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].instrument.amount",
+  //       billPayload.billResponse.Bill[0].billDetails[0].totalAmount
+  //     )
+  //   );
 
-  //Collection Type Added in CS v1.1
-  const totalAmount = get(
-    billPayload,
-    "billResponse.Bill[0].billDetails[0].totalAmount"
-  );
-  dispatch(
-    prepareFinalObject(
-      "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
-      "COUNTER"
-    )
-  );
-  if (totalAmount) {
-    //set amount paid as total amount from bill - destination changed in CS v1.1
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
-        totalAmount
-      )
-    );
-  }
+  // //Collection Type Added in CS v1.1
+  // const totalAmount = get(
+  //   billPayload,
+  //   "billResponse.Bill[0].billDetails[0].totalAmount"
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
+  //     "COUNTER"
+  //   )
+  // );
+  // if (totalAmount) {
+  //   //set amount paid as total amount from bill - destination changed in CS v1.1
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
+  //       totalAmount
+  //     )
+  //   );
+  // }
 
   showHideAdhocPopup(state, dispatch);
 };
-
+let totalAmount = (estimateCardData) => {
+  let tlTax=0;
+  let commonRebate=0;
+  let commonPenalty=0;
+  let adhocPenalty=0;
+  estimateCardData.forEach(data => {
+   
+    if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
+      tlTax = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
+      commonRebate = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
+      commonPenalty = data.value ? data.value : 0;
+    }
+    if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
+      adhocPenalty= data.value ? data.value : 0;
+    }
+  });
+    
+  return tlTax;
+}
 const updateAdhoc = (state, dispatch) => {
   const adhocAmount = get(
     state.screenConfiguration.preparedFinalObject,
@@ -100,23 +134,59 @@ const updateAdhoc = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.adhocExemption"
   );
+  
   if (adhocAmount || rebateAmount) {
-    const totalAmount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
-    );
-    if (rebateAmount && rebateAmount > totalAmount) {
+    let flag = true;
+    const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
+    if (rebateAmount && rebateAmount >= totalAmt) {
+      flag=false;
       dispatch(
         toggleSnackbar(
           true,
           {
-            labelName: "Rebate should be less than or equal to total amount!",
+            labelName: "Rebate should be greater than or equal to total amount!",
             labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
           },
           "warning"
         )
       );
-    } else {
+    }    
+   
+    if (adhocAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Penalty amount should not be a decimal value.",
+            labelKey: "ERR_PENALTY_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+    }
+    if (rebateAmount % 1 != 0) {
+      flag=false;
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Adhoc Rebate amount should not be a decimal value.",
+            labelKey: "ERR_REBATE_NOT_DECIMAL"
+          },
+          "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
+    if(flag) {
+      if (rebateAmount && rebateAmount > 0) {
+        dispatch(prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount));
+      }
       getEstimateDataAfterAdhoc(state, dispatch);
     }
   } else {
@@ -262,16 +332,19 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "TL_ADHOC_PENDING_DUES"
+              code: "Pending Dues from earlier"
             },
             {
-              code: "TL_ADHOC_MISCALCULATION"
+              code: "Miscalculation of Earlier Assessment"
             },
             {
-              code: "TL_ADHOC_ONE_TIME_PENALTY"
+              code: "One Time Penalty"
             },
             {
-              code: "TL_ADHOC_OTHER"
+              code: "Others"
+            },
+            {
+              code: "NA"
             }
           ],
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenaltyReason"
@@ -295,7 +368,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.penaltyComments"
+        jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.penaltyComments"
       })
     },
     {
@@ -350,16 +423,19 @@ export const adhocPopup = getCommonContainer({
           },
           data: [
             {
-              code: "TL_REBATE_ADVANCED_PAID"
+              code: "Advance paid by citizen earlier"
             },
             {
-              code: "TL_REBATE_BY_COMMISSIONER"
+              code: "Rebate provided by commissioner/EO"
             },
             {
-              code: "TL_REBATE_ADDITIONAL_AMOUNT_CAHNGED"
+              code: "Additional amount charged from the citizen"
             },
             {
-              code: "TL_ADHOC_OTHER"
+              code: "Others"
+            },
+            {
+              code: "NA"
             }
           ],
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemptionReason"
@@ -382,7 +458,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.rebateComments"
+          jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.rebateComments"
         })
       })
     },

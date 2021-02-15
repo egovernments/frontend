@@ -177,6 +177,18 @@ export const getData = async (action, state, dispatch) => {
     }
     // dispatch(prepareFinalObject("LicensesTemp", []));
     await updatePFOforSearchResults(action, state, dispatch, applicationNo, tenantId);
+    //To disabled the Trade Unit and Accessories 
+   let applicationStatus = get( state.screenConfiguration.preparedFinalObject, "Licenses[0].status")
+   if(applicationStatus != "INITIATED" || applicationStatus != "PENDINGPAYMENT") {
+     let isDisabledTUData = ['tradeCategory', 'tradeType', 'tradeSubType', 'tradeUOM', 'tradeUOMValue'];
+     let isDisabledASData = ['accessoriesCount', 'accessoriesName', 'accessoriesUOM', 'accessoriesUOMValue'];
+     isDisabledTUData.forEach(value => {
+       disabledKeyValue(dispatch, 'tradeUnitCard', value);
+     });
+     isDisabledASData.forEach(value => {
+       disabledKeyValue(dispatch, 'accessoriesCard', value);
+     });
+   }
 
     if (!queryValue) {
       const oldApplicationNo = get(
@@ -273,7 +285,16 @@ export const formwizardFourthStep = {
   },
   visible: false
 };
-
+const disabledKeyValue = (dispatch, key, value ) => {
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.${key}.props.items[0].item0.children.cardContent.children.${key}Container.children.${value}`,
+      "props.disabled",
+      true
+    )
+  );
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
@@ -325,7 +346,40 @@ const screenConfig = {
         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
         "PERMANENT"
       );
+      const applicationType = get(state.screenConfiguration.preparedFinalObject, 'Licenses[0].applicationType', "");
+      debugger;
+      if(applicationType === "RENEWAL") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeLocationDetails",
+            "props.style",
+            {"pointer-events":"none"}
+          )
+         );
+        }
+         if(applicationType === "RENEWAL") {
+         dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType",
+            "props.style",
+            {"pointer-events":"none"}
+          )
+         ); 
+      }
 
+      if(getQueryArg(window.location.href, "action") === "edit" || getQueryArg(window.location.href, "action") === "EDITRENEWAL") {
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[0].item0.children.cardContent.children.tradeUnitCardContainer",
+            "props.style",
+            {"pointer-events":"none"}
+          )
+        );
+      }
+      
     });
 
     return action;

@@ -3,6 +3,9 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
+import get from "lodash/get";
+import set from "lodash/set";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -122,12 +125,22 @@ export const applicationSuccessFooter = (
   state,
   dispatch,
   applicationNumber,
-  tenant
+  tenant,
+  status
 ) => {
   //const baseURL = getBaseURL();
   const roleExists = ifUserRoleExists("CITIZEN");
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   /* Mseva 2.0 changes */
+  const aaa=  get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].status",
+    ""
+  );
+  console.log("==========aaaaa====",aaa);
+  // let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  // let tenant = getQueryArg(window.location.href, "tenantId");
+  let purpose1 = getQueryArg(window.location.href, "purpose");
   const redirectionURL = roleExists ? "/" : "/inbox";
   return getCommonApplyFooter({
     gotoHome: {
@@ -151,6 +164,41 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: redirectionURL
       }
+    },
+    proceedToPaymentButton: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+       // visible: (getButtonVisibility(purpose === "apply") || getButtonVisibility(status === "success")) ,
+        style: {
+          //  minWidth: "170px",
+          height: "48px",
+          marginRight: "45px"
+        }
+      },
+      children: {
+        proceedToPaymentButtonLabel: getLabel({
+          labelName: "Proceed to payment",
+          labelKey: "TL_PROCEED_PAYMENT"
+        })
+      },
+      //Add onClickDefination and RoleDefination later
+      onClickDefination: {
+        action: "page_change",
+        path:`search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`,
+        //    /egov-common/pay?consumerCode=PB-TL-2020-09-03-023202&tenantId=pb.mohali&businessService=TL
+       
+        // process.env.REACT_APP_SELF_RUNNING === "true"
+        //   ? `/egov-ui-framework/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+        //   : `/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+      },
+      roleDefination: {
+        rolePath: "user-info.roles",
+        action: "PAY",
+        roles: ["TL_CEMP"]
+      },
+      visible:purpose1 ==="apply" || purpose1 !="forward"|| purpose1 ==="EDITRENEWAL"|| purpose1 === "DIRECTRENEWAL" ? true :false
     },
     downloadFormButton: {
       componentPath: "Button",

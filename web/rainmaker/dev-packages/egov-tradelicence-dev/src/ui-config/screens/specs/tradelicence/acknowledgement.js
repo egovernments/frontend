@@ -209,7 +209,8 @@ const getAcknowledgementCard = (
         state,
         dispatch,
         applicationNumber,
-        tenant
+        tenant,
+        status
       )
     };
   } else if (purpose === "resubmit" && status === "success") {
@@ -254,7 +255,8 @@ const getAcknowledgementCard = (
         state,
         dispatch,
         applicationNumber,
-        tenant
+        tenant,
+        status
       )
     };
   } else if (purpose === "pay" && status === "success") {

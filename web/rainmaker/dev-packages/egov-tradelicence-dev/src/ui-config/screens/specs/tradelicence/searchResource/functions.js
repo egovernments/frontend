@@ -80,7 +80,17 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } else {
+  } 
+  else if (searchScreenObject["mobileNumber"] === "9999999999") {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE_DEFAULT_NUMBER" },
+        "warning"
+      )
+    );
+      }
+  else {
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
@@ -97,7 +107,7 @@ export const searchApiCall = async (state, dispatch) => {
             value: convertDateToEpoch(searchScreenObject[key], "dayend")
           });
         } else {
-          queryObject.push({ key: key, value: searchScreenObject[key].trim().toUpperCase() });
+          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
         }
       }
     }

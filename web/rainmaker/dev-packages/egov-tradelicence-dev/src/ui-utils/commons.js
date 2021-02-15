@@ -327,6 +327,16 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
       )
     );
+    let additionalDetail = get(
+      queryObject[0],
+      "tradeLicenseDetail.additionalDetail"
+    )?get(
+      queryObject[0],
+      "tradeLicenseDetail.additionalDetail"
+    ):null;
+    if(additionalDetail == null){
+    set(queryObject[0], "tradeLicenseDetail.additionalDetail", null);
+    }
     //------ removing null from document array ------
     let documentArray = compact(get(queryObject[0], "tradeLicenseDetail.applicationDocuments"));
     let documents = getUniqueItemsFromArray(documentArray, "fileStoreId");

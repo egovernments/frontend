@@ -1,10 +1,5 @@
 import {
-  getCommonCard,
-
-
-  getCommonContainer, getCommonGrayCard, getCommonHeader,
-
-  getCommonTitle
+  getCommonCard,getCommonContainer, getCommonGrayCard, getCommonHeader,getCommonTitle,getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -24,7 +19,7 @@ import { checkValidOwners, getSearchResults } from "../../../../ui-utils/commons
 import {
   createEstimateData,
 
-
+  showHideAdhocPopup,
   getDialogButton, getFeesEstimateCard,
   getHeaderSideText,
   getTransformedStatus, setMultiOwnerForSV,
@@ -35,6 +30,7 @@ import { downloadPrintContainer, footerReviewTop } from "./applyResource/footer"
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewTrade } from "./applyResource/review-trade";
+import { adhocPopup } from "./applyResource/adhocPopup";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -71,6 +67,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     get(payload, "Licenses[0].status"),
     get(payload, "Licenses[0].licenseNumber")
   );
+  let rebateAmount = get(payload, "Licenses[0].tradeLicenseDetail.adhocExemption");
   set(payload, "Licenses[0].headerSideText", headerSideText);
   set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
@@ -86,7 +83,9 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
       get(payload, "Licenses[0].licenseType")
     );
   }
-
+  if(rebateAmount && rebateAmount < 0){
+    set(payload, "Licenses[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+  }
   await setDocuments(
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -173,7 +172,18 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-
+    debugger;
+    if (status === "REJECTED"|| status ==="APPROVED" || status ==="APPLIED" || status ==="FIELDINSPECTION" || status ==="PENDINGAPPROVAL") {
+      debugger;
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+          "visible",
+          false
+        )
+      );
+    }
     const financialYear = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].financialYear"
@@ -289,7 +299,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       tenantId,
       financialYear
     );
-
+   
     if (status !== "INITIATED") {
       process.env.REACT_APP_NAME === "Citizen"
         ? set(
@@ -487,6 +497,27 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "ADD REBATE/PENALTY",
+        labelKey: "TL_PAYMENT_ADD_RBT_PEN"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: showHideAdhocPopup
+    },
+    roleDefination: {
+      rolePath: "user-info.roles",
+      roles: ["TL_CEMP"]
+    }
+  },
   viewBreakupButton: getDialogButton(
     "VIEW BREAKUP",
     "TL_PAYMENT_VIEW_BREAKUP",
@@ -569,7 +600,14 @@ const screenConfig = {
             dataPath: "Licenses",
             moduleName: "NewTL",
             updateUrl: "/tl-services/v1/_update",
-            beforeSubmitHook:beforeSubmitHook
+            beforeSubmitHook:
+              (data) =>{
+                 let rebateAmount = data[0].tradeLicenseDetail.adhocExemption;
+                 if(rebateAmount && rebateAmount > 0){
+                   data = set(data, "[0].tradeLicenseDetail.adhocExemption", -rebateAmount);
+                 }
+                 return data;
+              }
           }
         },
         // actionDialog: {
@@ -607,6 +645,19 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "search-preview"
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: adhocPopup
       }
     }
   }

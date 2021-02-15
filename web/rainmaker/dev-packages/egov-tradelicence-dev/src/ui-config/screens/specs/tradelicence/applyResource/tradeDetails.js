@@ -569,13 +569,14 @@ export const tradeDetails = getCommonCard({
     financialYear: {
       uiFramework: "custom-containers-local",
         moduleName: "egov-tradelicence",
+        className: "autocomplete-dropdown",
         componentPath: "AutosuggestContainer",
         jsonPath: "Licenses[0].financialYear",
         sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
          props:{
           className: "autocomplete-dropdown",
           suggestions: [],
-          disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+          disabled:getQueryArg(window.location.href, "action") === "edit"? true:false,
           label: {
             labelName: "Financial Year",
             labelKey: "TL_FINANCIAL_YEAR_LABEL"
@@ -721,7 +722,7 @@ export const tradeDetails = getCommonCard({
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
       },
       required: true,
-      pattern: getPattern("TradeName"),
+      pattern:/^[^\$\"?\\\\~`!@$%^+={}\[\]*“”‘’]{1,300}$/i,
       jsonPath: "Licenses[0].tradeName"
     }),
     tradeFromDate: {
@@ -772,10 +773,13 @@ export const tradeDetails = getCommonCard({
       uiFramework: "custom-containers",
       componentPath: "DynamicMdmsContainer",
       props: {
+        // disabled:getQueryArg(window.location.href, "action") === "edit"? true:false,
+        // isDisabled:getQueryArg(window.location.href, "action") === "edit"? true:false,
         dropdownFields: [
           {
             key : 'structureType',
-            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            isDisabled:getQueryArg(window.location.href, "action") === "edit"? true:false,
+            // disabled:getQueryArg(window.location.href, "action") === "edit"? true:false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
             isRequired : false,
@@ -784,6 +788,7 @@ export const tradeDetails = getCommonCard({
           {
             key : 'structureSubType',
             callBack : structureSubTypeChange,
+            isDisabled:getQueryArg(window.location.href, "action") === "edit"? true:false,
             fieldType : "autosuggest",
             className:"applicant-details-error autocomplete-dropdown",
             isRequired : false,
@@ -795,7 +800,6 @@ export const tradeDetails = getCommonCard({
         rootBlockSub : 'structureTypes',
         callBackEdit: updateStructureTypes
       },
-      disabled:getQueryArg(window.location.href, "action") === "RESUBMIT" || getQueryArg(window.location.href, "action") === "edit" ? true:false,
     },
     tradeCommencementDate: getDateField({
       label: {

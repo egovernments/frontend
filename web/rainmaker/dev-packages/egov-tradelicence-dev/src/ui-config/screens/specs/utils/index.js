@@ -412,11 +412,11 @@ export const getIconStyle = key => {
 
 export const showHideAdhocPopup = (state, dispatch) => {
   let toggle = get(
-    state.screenConfiguration.screenConfig["pay"],
+    state.screenConfiguration.screenConfig["search-preview"],
     "components.adhocDialog.props.open",
     false
   );
-  dispatch(handleField("pay", "components.adhocDialog", "props.open", !toggle));
+  dispatch(handleField("search-preview", "components.adhocDialog", "props.open", !toggle));
 };
 
 export const getButtonVisibility = (status, button) => {
@@ -1298,18 +1298,24 @@ const isApplicationPaid = (currentStatus, workflowCode) => {
 
   if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
-    const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
-    for (var i = 0; i < states.length; i++) {
-      if (states[i].state === currentStatus) {
-        break;
-      }
-      if (
-        states[i].actions &&
-        states[i].actions.filter(item => item.action === "PAY").length > 0
-      ) {
-        isPAID = true;
-        break;
-      }
+    const states = tlBusinessService && tlBusinessService.length > 0 &&tlBusinessService[0].states;
+    // for (var i = 0; i < states.length; i++) {
+     
+    //   if (
+    //     states[i].actions &&
+    //     states[i].actions.filter(item => item.action === "PAY").length > 0
+    //   ) {
+    //     isPAID = true;
+    //     break;
+    //   }
+    //   if (states[i].state === currentStatus) {
+    //     break;
+    //   }
+    // }
+
+    if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "PENDINGPAYMENT" && currentStatus != "CITIZENACTIONREQUIRED"){
+      isPAID = true;
+     // console.log("======current status======",currentStatus);
     }
   } else {
     isPAID = false;

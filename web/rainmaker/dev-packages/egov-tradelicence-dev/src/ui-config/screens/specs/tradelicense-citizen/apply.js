@@ -57,6 +57,10 @@ const updateSearchResults = async (
     window.location.href,
     "applicationNumber"
   );
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenalty", null));
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemption", null));
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocPenaltyReason", null));
+  dispatch(prepareFinalObject("Licenses[0].tradeLicenseDetail.adhocExemptionReason", null));
   if (!queryValueFromUrl) {
     dispatch(
       prepareFinalObject(
@@ -68,6 +72,7 @@ const updateSearchResults = async (
         )
       )
     );
+  
     dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
     dispatch(
       handleField(
@@ -78,7 +83,28 @@ const updateSearchResults = async (
       )
     );
   }
+  let applicationStatus = get( state.screenConfiguration.preparedFinalObject, "Licenses[0].status")
+  if(applicationStatus != "INITIATED" || applicationStatus != "PENDINGPAYMENT") {
+    let isDisabledTUData = ['tradeCategory', 'tradeType', 'tradeSubType', 'tradeUOM', 'tradeUOMValue'];
+    let isDisabledASData = ['accessoriesCount', 'accessoriesName', 'accessoriesUOM', 'accessoriesUOMValue'];
+    isDisabledTUData.forEach(value => {
+      disabledKeyValue(dispatch, 'tradeUnitCard', value);
+    });
+    isDisabledASData.forEach(value => {
+      disabledKeyValue(dispatch, 'accessoriesCard', value);
+    });
+  }
 };
+const disabledKeyValue = (dispatch, key, value ) => {
+  dispatch(
+    handleField(
+      "apply",
+      `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.${key}.props.items[0].item0.children.cardContent.children.${key}Container.children.${value}`,
+      "props.disabled",
+      true
+    )
+  );
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",

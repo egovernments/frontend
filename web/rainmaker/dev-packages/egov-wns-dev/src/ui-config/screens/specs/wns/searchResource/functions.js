@@ -8,18 +8,35 @@ import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
+  debugger;
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
   let currentSearchTab = getCurrentTab === undefined ? "SEARCH_CONNECTION" : getCurrentTab;
+  let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen.mobileNumber", {});
   if (currentSearchTab === "SEARCH_CONNECTION") {
     resetFieldsForApplication(state, dispatch);
     await renderSearchConnectionTable(state, dispatch);
-  } else {
+    debugger;
+  } 
+  
+  else if (searchScreenObject["mobileNumber"] === "9999999999") {
+    debugger;
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE_DEFAULT_NUMBER" },
+        "warning"
+      )
+    );
+  } 
+  else {
     resetFieldsForConnection(state, dispatch);
     await renderSearchApplicationTable(state, dispatch);
   }
+  
 }
 
 const renderSearchConnectionTable = async (state, dispatch) => {
+  debugger;
   let queryObject = [];
   queryObject.push({ key: "searchType", value: "CONNECTION" });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
@@ -29,10 +46,22 @@ const renderSearchConnectionTable = async (state, dispatch) => {
   ) {
     dispatch(toggleSnackbar(true, {labelName:"Please provide the city and any one other field information to search for property.", labelKey: "ERR_PT_COMMON_FILL_MANDATORY_FIELDS" }, "warning"));
   } else if (
+   
     (searchScreenObject["fromDate"] === undefined || searchScreenObject["fromDate"].length === 0) &&
     searchScreenObject["toDate"] !== undefined && searchScreenObject["toDate"].length !== 0) {
     dispatch(toggleSnackbar(true, { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" }, "warning"));
-  } else {
+  } 
+  else if (searchScreenObject["mobileNumber"] === "9999999999") {
+    debugger;
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE_DEFAULT_NUMBER" },
+        "warning"
+      )
+    );
+  } 
+  else {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && searchScreenObject[key].trim() !== "") {
         if (key === "fromDate") {

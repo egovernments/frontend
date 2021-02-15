@@ -443,7 +443,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
           ),
       };
 
-      let row3 = { text: <Label label={get(item, 'assignes[0].name', 'NA')} color="#000000" /> };
+      let row3 = { text: item.assignes != null  ? <Label label={item.assignes[0].name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
 

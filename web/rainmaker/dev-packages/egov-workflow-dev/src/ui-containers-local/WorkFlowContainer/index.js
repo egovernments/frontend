@@ -196,6 +196,33 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      data = data[0];
+      data.assignees = [];
+      if (data.assignee) {
+        data.assignee.forEach(assigne => {
+          data.assignees.push({
+            uuid: assigne
+          })
+        })
+      }
+      data.processInstance = {
+        documents: data.wfDocuments,
+        assignes: data.assignees,
+        comment: data.comment,
+        action: data.action
+      }
+      data.waterSource = data.waterSource + "." + data.waterSubSource;
+    }
+
+    if (moduleName === "NewSW1") {
+      dataPath = "SewerageConnection";
+    }
+    if (moduleName === "FIRENOC") {
+
+      set(data[0], "fireNOCDetails.tenantId",get(data[0], "tenantId", ""));
+
+    }
     this.props.showSpinner();
     try {
       if (beforeSubmitHook) {
@@ -311,9 +338,16 @@ class WorkFlowContainer extends React.Component {
         const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
         const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
         const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
-  
-          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
-            this.wfUpdate(label);
+        debugger;
+        if (assigneePresent || FirenocassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL") {
+          this.wfUpdate(label);
+        }
+          else {
+            toggleSnackbar(
+              true,
+              { labelName: "Please Upload file !", labelKey: "ERR_UPLOAD_FILE" },
+              "error"
+            );
           }
 
       } else {
@@ -324,7 +358,22 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else {
-      this.wfUpdate(label);
+      const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
+      const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
+      const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
+      const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
+      const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
+      const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
+      const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
+      const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
+      const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
+
+      if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
+          this.wfUpdate(label);
+       }
+       else{
+         alert("Please select Assignee Name");
+       }
     }
   };
 

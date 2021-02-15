@@ -156,7 +156,7 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
         },
-        pattern: getPattern("DoorHouseNo"),
+        // pattern: getPattern("DoorHouseNo"),
         jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo"
       }),
       tradeLocBuilidingName: getTextField({
@@ -171,7 +171,7 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Building/Colony Name",
           labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
         },
-        pattern: getPattern("BuildingStreet"),
+        pattern:/^[^\$\"?\\\\~`!@$%^+={}\[\]*“”‘’]{1,300}$/i,
         jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName"
       }),
       tradeLocStreetName: getTextField({
@@ -186,7 +186,7 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Street Name",
           labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
         },
-        pattern: getPattern("BuildingStreet"),
+        pattern: /^[^\$\"?\\\\~`!@$%^+={}\[\]*“”‘’]{1,300}$/i,
         jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
       }),
       tradeLocMohalla: {
