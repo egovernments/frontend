@@ -191,9 +191,6 @@ class WorkFlowContainer extends React.Component {
       if (data.workflow && data.workflow.wfDocuments) {
         data.workflow.documents = data.workflow.wfDocuments;
       }
-  const currentUser = JSON.parse(getUserInfo()).uuid;
-
-      data.additionalDetails={"lastModifiedBy": currentUser};
     }
 
     const applicationNumber = getQueryArg(
