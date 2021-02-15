@@ -269,7 +269,7 @@ const callBackForApply = async (state, dispatch) => {
       propertyPayload.owners.map(owner => {
         owner.status = "ACTIVE";
         owner.ownerType = 'NONE';
-        owner.altContactNumber = propertyPayload.institution.landlineNumber;
+        owner.altContactNumber = propertyPayload.owners[0].altContactNumber;
       })
       propertyPayload.owners = [
         ...propertyPayload.owners
