@@ -381,6 +381,22 @@ const callBackForNext = async (state, dispatch) => {
         if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
           setReviewPageRoute(state, dispatch);
         }
+        let propertyUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.usageCategory", "");
+        let subUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.subUsageType", []);
+        let usageTypes = [];
+        if(propertyUsageType) {
+          subUsageType && subUsageType.map(items => {
+            if(items["parentUsageType"] === propertyUsageType) {
+              let obj = {};
+              obj.code = items.name,
+              obj.name = items.code,
+              obj.parentUsageType = items.parentUsageType,
+              obj.active = items.active
+              usageTypes.push(obj);
+            }
+          })
+        }
+        dispatch(prepareFinalObject("applyScreenMdmsData.ws-services-masters.subUsageType", usageTypes));
       }
       else {
         isFormValid = false;
@@ -403,21 +419,21 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
     } else {
-      let billingType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.billingType");
-      if(billingType === "STANDARD") {
-        dispatch(
-          handleField(
-            "apply", 
-            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewBillingAmount",
-             "visible",
-             false
-          )
-        );
-      }
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
       isFormValid = true;
+    }
+    let billingType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.billingType");
+    if(billingType === "STANDARD") {
+      dispatch(
+        handleField(
+          "apply", 
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewBillingAmount",
+           "visible",
+           false
+        )
+      );
     }
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);

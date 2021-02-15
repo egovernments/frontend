@@ -309,7 +309,21 @@ export const additionDetails = getCommonCard({
         jsonPath: "applyScreen.noOfToilets",
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
-      })
+      }),
+      subUsageType: {
+        ...getSelectField({
+          label: { labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE" },
+          placeholder: { labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE_PLACEHOLDER" },
+          required: true,
+          sourceJsonPath: "applyScreenMdmsData.ws-services-masters.subUsageType",
+          gridDefination: { xs: 12, sm: 6 },
+          errorMessage: "ERR_INVALID_BILLING_PERIOD",
+          jsonPath: "applyScreen.additionalDetails.waterSubUsageType",
+          props: {
+            disabled: false
+          }
+        }),
+      },
     }),
   }),
   plumberDetailsContainer: getCommonGrayCard({

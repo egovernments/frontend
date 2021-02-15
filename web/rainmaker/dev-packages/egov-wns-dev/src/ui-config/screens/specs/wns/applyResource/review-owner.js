@@ -507,6 +507,23 @@ export const connectionWater={
       jsonPath: "WaterConnectionOld[0].pipeSize",
       callBack: handleNA
     }
+  ),
+  reviewSubUsageType : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Sub Usage Type",
+      labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      callBack: handleNA
+    },
+    {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      callBack: handleNA
+    }
   )
 
 
@@ -605,9 +622,72 @@ export const connectionSewerage={
       jsonPath: "WaterConnectionOld[0].noOfToilets",
       callBack: handleNA
     }
+  ),
+  reviewSubUsageType : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Sub Usage Type",
+      labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      callBack: handleNA
+    },
+    {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      callBack: handleNA
+    }
   )
 }
 
+export const reviewModificationsEffectiveDate = {
+  reviewModification: getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Modifications Effective Date",
+    labelKey: "WS_MODIFICATIONS_EFFECTIVE_DATE"
+  },
+  {
+    jsonPath: "WaterConnection[0].dateEffectiveFrom",
+    callBack: convertEpochToDateAndHandleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "WaterConnectionOld[0].dateEffectiveFrom",
+    callBack: convertEpochToDateAndHandleNA
+  }
+)};
+
+export const reviewModificationsEffective = () => {
+  return getCommonGrayCard({
+    headerDiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelKey: "WS_MODIFICATIONS_EFFECTIVE_FROM"
+          })
+        }
+      }
+    },
+    viewOne: modificationsEffectiveDateDetails
+  })
+};
+
+const modificationsEffectiveDateDetails = getCommonContainer(
+  reviewModificationsEffectiveDate
+);
 export const additionDetailsWater=connectionWater;
 
 export const additionDetailsSewerage=connectionSewerage;

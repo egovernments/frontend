@@ -30,7 +30,7 @@ import { getReviewDocuments } from "./applyResource/review-documents";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
-import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
+import { reviewModificationsEffective } from "./applyResource/review-owner";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -181,7 +181,15 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         }
       }
     }
-
+    let subUsageType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.waterSubUsageType");
+    let subUsageTypes = get(state, "screenConfiguration.preparedFinalObject.subUsageType", {});
+    if(subUsageType) {
+      Object.keys(subUsageTypes).forEach(key => {
+        if(subUsageTypes[key] === subUsageType) {
+          dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.waterSubUsageType", subUsageTypes["code"]));
+      }
+      });
+    }
     let providedBy = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.detailsProvidedBy");
     if(providedBy ==="Self") {
       dispatch(
@@ -507,9 +515,9 @@ export const taskDetails = getCommonCard({
   title,
   estimate,
   reviewConnectionDetails,
+  reviewModificationsDetails,
   reviewDocumentDetails,
   reviewOwnerDetails,
-  reviewModificationsDetails
 });
 
 export const summaryScreen = getCommonCard({

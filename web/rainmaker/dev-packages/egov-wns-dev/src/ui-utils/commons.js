@@ -622,6 +622,15 @@ const parserFunction = (state) => {
       estimationLetterDate: null,
         }
     }
+    let waterSubUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.additionalDetails.waterSubUsageType", "");
+    let subUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.subUsageType", []);
+    if(waterSubUsageType) {
+      subUsageType && subUsageType.map(items => {
+        if(items["code"] === waterSubUsageType) {
+            parsedObject.additionalDetails.waterSubUsageType = items.name;
+        }
+      })
+    }
     queryObject = { ...queryObject, ...parsedObject }
     return queryObject;
 }
@@ -933,6 +942,15 @@ export const applyForWater = async (state, dispatch) => {
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResults(searchQueryObject);
+            let subUsageType = get(searchResponse, "WaterConnection[0].additionalDetails.waterSubUsageType");
+            let subUsageTypes = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.subUsageType", []);
+            if(subUsageType) {
+              subUsageTypes && subUsageTypes.map(items => {
+                if(items["name"] === subUsageType) {
+                    dispatch(prepareFinalObject("subUsageType", items));
+                }
+              })
+            }
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
