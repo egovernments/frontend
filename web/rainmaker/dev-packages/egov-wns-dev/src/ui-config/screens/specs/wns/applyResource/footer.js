@@ -435,6 +435,16 @@ const callBackForNext = async (state, dispatch) => {
         )
       );
     }
+    if(!(getQueryArg(window.location.href, "action") === "edit")) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewModificationsDetails",
+          "visible",
+          false
+        )
+      );
+    }
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
     dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "props.propertyId", get(applyScreenObj, "property.propertyId", '')));
