@@ -69,7 +69,7 @@ export const callPGService = async (state, dispatch) => {
         billId: get(billPayload, "Bill[0].id"),
         consumerCode: consumerCode,
         productInfo: "Common Payment",
-        gateway: "AXIS",
+        gateway: "RAZORPAY",
         taxAndPayments,
         businessService:taxAndPayments[0].businessService,
         user,
@@ -691,5 +691,4 @@ export const footer = getCommonApplyFooter({
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
-
 

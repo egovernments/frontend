@@ -238,8 +238,6 @@ class WorkFlowContainer extends React.Component {
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
-
-
       this.setState({
         open: false
       });
@@ -310,6 +308,7 @@ class WorkFlowContainer extends React.Component {
       data = get(preparedFinalObject, dataPath, [])
       data = data[0];
     }
+    console.log(data, 'dataaaa');
     //setting the action to send in RequestInfo
     let appendToPath = ""
     if (dataPath === "FireNOCs") {
@@ -336,7 +335,7 @@ class WorkFlowContainer extends React.Component {
         const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
         const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
   
-          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
+          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
             this.wfUpdate(label);
           }
    

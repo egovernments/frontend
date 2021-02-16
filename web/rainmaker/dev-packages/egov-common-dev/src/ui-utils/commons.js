@@ -625,8 +625,6 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       {
         payloadReceiptDetails.Payments[0].paidBy=payloadReceiptDetails.Payments[0].paidBy.trim();
       }
-
-
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptNumber.includes("MP")){
         let tax,field,cgst,sgst;
 let billaccountarray=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails;
@@ -648,7 +646,6 @@ let taxheads = {
 payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads; 
 
       }
-
       let assessmentYear="";
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
