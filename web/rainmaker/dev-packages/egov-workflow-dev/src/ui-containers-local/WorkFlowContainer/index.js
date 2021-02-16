@@ -196,28 +196,28 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "applicationNumber"
     );
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      data = data[0];
-      data.assignees = [];
-      if (data.assignee) {
-        data.assignee.forEach(assigne => {
-          data.assignees.push({
-            uuid: assigne
-          })
-        })
-      }
-      data.processInstance = {
-        documents: data.wfDocuments,
-        assignes: data.assignees,
-        comment: data.comment,
-        action: data.action
-      }
-      data.waterSource = data.waterSource + "." + data.waterSubSource;
-    }
+    // if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+    //   data = data[0];
+    //   data.assignees = [];
+    //   if (data.assignee) {
+    //     data.assignee.forEach(assigne => {
+    //       data.assignees.push({
+    //         uuid: assigne
+    //       })
+    //     })
+    //   }
+    //   data.processInstance = {
+    //     documents: data.wfDocuments,
+    //     assignes: data.assignees,
+    //     comment: data.comment,
+    //     action: data.action
+    //   }
+    //   data.waterSource = data.waterSource + "." + data.waterSubSource;
+    // }
 
-    if (moduleName === "NewSW1") {
-      dataPath = "SewerageConnection";
-    }
+    // if (moduleName === "NewSW1") {
+    //   dataPath = "SewerageConnection";
+    // }
     if (moduleName === "FIRENOC") {
 
       set(data[0], "fireNOCDetails.tenantId", get(data[0], "tenantId", ""));
