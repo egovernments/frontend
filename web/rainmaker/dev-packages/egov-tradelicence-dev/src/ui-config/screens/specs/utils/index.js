@@ -1292,7 +1292,9 @@ const getBillingSlabData = async (
 const isApplicationPaid = (currentStatus, workflowCode) => {
   let isPAID = false;
   if (currentStatus === "CITIZENACTIONREQUIRED") {
+    let isPAID = true;
     return isPAID;
+    debugger;
   }
   const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 

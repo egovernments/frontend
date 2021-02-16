@@ -220,7 +220,7 @@ class WorkFlowContainer extends React.Component {
     }
     if (moduleName === "FIRENOC") {
 
-      set(data[0], "fireNOCDetails.tenantId",get(data[0], "tenantId", ""));
+      set(data[0], "fireNOCDetails.tenantId", get(data[0], "tenantId", ""));
 
     }
     this.props.showSpinner();
@@ -231,12 +231,12 @@ class WorkFlowContainer extends React.Component {
         } else {
           data = beforeSubmitHook(data);
         }
-      
-      if(get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.action") === "SENDBACKTOCITIZEN") {
-        data[0].fireNOCDetails.status = "CITIZENACTIONREQUIRED";
-        data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
+
+        if (get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.action") === "SENDBACKTOCITIZEN") {
+          data[0].fireNOCDetails.status = "CITIZENACTIONREQUIRED";
+          data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
+        }
       }
-    }
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -328,28 +328,6 @@ class WorkFlowContainer extends React.Component {
       }
       if (documents && documents.length > 0) {
         this.wfUpdate(label);
-        debugger;
-        const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
-        const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
-        const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
-        const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
-        const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
-        const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
-        const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
-        const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
-        const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
-        debugger;
-        if (assigneePresent || FirenocassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL") {
-          this.wfUpdate(label);
-        }
-          else {
-            toggleSnackbar(
-              true,
-              { labelName: "Please Upload file !", labelKey: "ERR_UPLOAD_FILE" },
-              "error"
-            );
-          }
-
       } else {
         toggleSnackbar(
           true,
@@ -358,254 +336,258 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else {
-      const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
-      const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
-      const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
-      const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
-      const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
-      const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
-      const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
-      const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
-      const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
-
-      if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
-          this.wfUpdate(label);
-       }
-       else{
-         alert("Please select Assignee Name");
-       }
+      this.wfUpdate(label);
     }
   };
+  //  else {
+  //   const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
+  //   const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
+  //   const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
+  //   const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
+  //   const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
+  //   const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
+  //   const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
+  //   const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
+  //   const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
 
-  getRedirectUrl = (action, businessId, moduleName) => {
-    const isAlreadyEdited = getQueryArg(window.location.href, "edited");
-    const tenant = getQueryArg(window.location.href, "tenantId");
-    const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
-    const { PTApplication = {} } = preparedFinalObject;
-    const { propertyId } = PTApplication;
-    let applicationStatus;
-    if (ProcessInstances && ProcessInstances.length > 0) {
-      applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
-    }
-    // needs to remove this initialization if all other module integrated this changes.
-    let baseUrl = (baseUrlTemp) ? baseUrlTemp : ""
-    let bservice = (bserviceTemp) ? bserviceTemp : ""
+  //   if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
+  //       this.wfUpdate(label);
+  //    }
+  //    else{
+  //      alert("Please select Assignee Name");
+  //    }
+// }
+//   };
 
-    if (moduleName === "FIRENOC") {
-      baseUrl = "fire-noc";
-      bservice = "FIRENOC";
-    } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
-      baseUrl = "egov-bpa";
-      if (moduleName === "BPA") {
-        bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
-      } else if (moduleName === "BPA_OC") {
-        bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
-      } else {
-        bservice = "BPA.LOW_RISK_PERMIT_FEE"
-      }
-    } else if (moduleName === "PT") {
-      bservice = "PT"
-    } else if (moduleName === "PT.CREATE") {
-      return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
-    } else if (moduleName === "PT.MUTATION") {
-      bservice = "PT.MUTATION";
-      baseUrl = "pt-mutation";
-    } else if (!baseUrl && !bservice) {
-      baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
-      bservice = "TL"
-    }
-    const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
-    switch (action) {
-      case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
-      case "EDIT": return isAlreadyEdited
-        ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-        : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
-    }
-  };
-
-
-  getHeaderName = action => {
-    return {
-      labelName: `${action} Application`,
-      labelKey: `WF_${action}_APPLICATION`
-    };
-  };
-
-  getEmployeeRoles = (nextAction, currentAction, moduleName) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: moduleName });
-    let roles = [];
-    if (nextAction === currentAction) {
-      data.states &&
-        data.states.forEach(state => {
-          state.actions &&
-            state.actions.forEach(action => {
-              roles = [...roles, ...action.roles];
-            });
-        });
-    } else {
-      const states = find(data.states, { uuid: nextAction });
-      states &&
-        states.actions &&
-        states.actions.forEach(action => {
-          roles = [...roles, ...action.roles];
-        });
-    }
-    roles = [...new Set(roles)];
-    roles.indexOf("*") > -1 && roles.splice(roles.indexOf("*"), 1);
-    return roles.toString();
-  };
-
-  checkIfTerminatedState = (nextStateUUID, moduleName) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
-    const nextState = data && data.states && data.states.length > 0 && find(data.states, { uuid: nextStateUUID });
-
-    const isLastState = data ? nextState && nextState.isTerminateState : false;
-    return isLastState;
-  };
-
-  checkIfDocumentRequired = (nextStateUUID, moduleName) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: moduleName });
-    const nextState = find(data.states, { uuid: nextStateUUID });
-    return nextState && nextState.docUploadRequired;
-  };
-
-  getActionIfEditable = (status, businessId, moduleName, applicationState) => {
-    const businessServiceData = JSON.parse(
-      localStorageGet("businessServiceData")
-    );
-    const data = find(businessServiceData, { businessService: moduleName });
-    const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
-    let actions = [];
-    state.actions &&
-      state.actions.forEach(item => {
-        actions = [...actions, ...item.roles];
-      });
-    const userRoles = JSON.parse(getUserInfo()).roles;
-    const roleIndex = userRoles.findIndex(item => {
-      if (actions.indexOf(item.code) > -1) return true;
-    });
-
-    let editAction = {};
-    // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
-    if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
-      editAction = {
-        buttonLabel: "EDIT",
-        moduleName: moduleName,
-        tenantId: state.tenantId,
-        isLast: true,
-        buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
-      };
-    }
-    return editAction;
-  };
-
-  prepareWorkflowContract = (data, moduleName) => {
-    const {
-      getRedirectUrl,
-      getHeaderName,
-      checkIfTerminatedState,
-      getActionIfEditable,
-      checkIfDocumentRequired,
-      getEmployeeRoles
-    } = this;
-    let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
-    let businessId = get(data[data.length - 1], "businessId");
-    let applicationState = get(data[data.length - 1], "state.state");
-    let filteredActions = [];
-
-    filteredActions = get(data[data.length - 1], "nextActions", []).filter(
-      item => item.action != "ADHOC"
-    );
-    let applicationStatus = get(
-      data[data.length - 1],
-      "state.applicationStatus"
-    );
-    let actions = orderBy(filteredActions, ["action"], ["desc"]);
-
-    actions = actions.map(item => {
-      return {
-        buttonLabel: item.action,
-        moduleName: data[data.length - 1].businessService,
-        isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId, businessService),
-        dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
-        roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
-        isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
-      };
-    });
-    actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
-    let editAction = getActionIfEditable(
-      applicationStatus,
-      businessId,
-      businessService,
-      applicationState
-    );
-    editAction.buttonLabel && actions.push(editAction);
-    return actions;
-  };
-
-  convertOwnerDobToEpoch = owners => {
-    let updatedOwners =
-      owners &&
-      owners
-        .map(owner => {
-          return {
-            ...owner,
-            dob:
-              owner && owner !== null && convertDateToEpoch(owner.dob, "dayend")
-          };
-        })
-        .filter(item => item && item !== null);
-    return updatedOwners;
-  };
-
-  render() {
-    const {
-      ProcessInstances,
-      prepareFinalObject,
-      dataPath,
-      moduleName
-    } = this.props;
-    const workflowContract =
-      ProcessInstances &&
-      ProcessInstances.length > 0 &&
-      this.prepareWorkflowContract(ProcessInstances, moduleName);
-    let showFooter = true;
-    if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
-      showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    }
-    if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
-      showFooter = false
-    }
-
-    return (
-      <div>
-        {ProcessInstances && ProcessInstances.length > 0 && (
-          <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName} />
-        )}
-        {showFooter &&
-          <Footer
-            handleFieldChange={prepareFinalObject}
-            variant={"contained"}
-            color={"primary"}
-            onDialogButtonClick={this.createWorkFLow}
-            contractData={workflowContract}
-            dataPath={dataPath}
-            moduleName={moduleName}
-          />}
-      </div>
-    );
+getRedirectUrl = (action, businessId, moduleName) => {
+  const isAlreadyEdited = getQueryArg(window.location.href, "edited");
+  const tenant = getQueryArg(window.location.href, "tenantId");
+  const { ProcessInstances, baseUrlTemp, bserviceTemp, preparedFinalObject } = this.props;
+  const { PTApplication = {} } = preparedFinalObject;
+  const { propertyId } = PTApplication;
+  let applicationStatus;
+  if (ProcessInstances && ProcessInstances.length > 0) {
+    applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
   }
+  // needs to remove this initialization if all other module integrated this changes.
+  let baseUrl = (baseUrlTemp) ? baseUrlTemp : ""
+  let bservice = (bserviceTemp) ? bserviceTemp : ""
+
+  if (moduleName === "FIRENOC") {
+    baseUrl = "fire-noc";
+    bservice = "FIRENOC";
+  } else if (moduleName === "BPA" || moduleName === "BPA_LOW" || moduleName === "BPA_OC") {
+    baseUrl = "egov-bpa";
+    if (moduleName === "BPA") {
+      bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
+    } else if (moduleName === "BPA_OC") {
+      bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_OC_APP_FEE" : "BPA.NC_OC_SAN_FEE");
+    } else {
+      bservice = "BPA.LOW_RISK_PERMIT_FEE"
+    }
+  } else if (moduleName === "PT") {
+    bservice = "PT"
+  } else if (moduleName === "PT.CREATE") {
+    return `/property-tax/assessment-form?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenant}&mode=WORKFLOWEDIT`
+  } else if (moduleName === "PT.MUTATION") {
+    bservice = "PT.MUTATION";
+    baseUrl = "pt-mutation";
+  } else if (!baseUrl && !bservice) {
+    baseUrl = process.env.REACT_APP_NAME === "Citizen" ? "tradelicense-citizen" : "tradelicence";
+    bservice = "TL"
+  }
+  const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
+  switch (action) {
+    case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
+    case "EDIT": return isAlreadyEdited
+      ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+      : `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+  }
+};
+
+
+getHeaderName = action => {
+  return {
+    labelName: `${action} Application`,
+    labelKey: `WF_${action}_APPLICATION`
+  };
+};
+
+getEmployeeRoles = (nextAction, currentAction, moduleName) => {
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  const data = find(businessServiceData, { businessService: moduleName });
+  let roles = [];
+  if (nextAction === currentAction) {
+    data.states &&
+      data.states.forEach(state => {
+        state.actions &&
+          state.actions.forEach(action => {
+            roles = [...roles, ...action.roles];
+          });
+      });
+  } else {
+    const states = find(data.states, { uuid: nextAction });
+    states &&
+      states.actions &&
+      states.actions.forEach(action => {
+        roles = [...roles, ...action.roles];
+      });
+  }
+  roles = [...new Set(roles)];
+  roles.indexOf("*") > -1 && roles.splice(roles.indexOf("*"), 1);
+  return roles.toString();
+};
+
+checkIfTerminatedState = (nextStateUUID, moduleName) => {
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  const data = businessServiceData && businessServiceData.length > 0 ? find(businessServiceData, { businessService: moduleName }) : [];
+  const nextState = data && data.states && data.states.length > 0 && find(data.states, { uuid: nextStateUUID });
+
+  const isLastState = data ? nextState && nextState.isTerminateState : false;
+  return isLastState;
+};
+
+checkIfDocumentRequired = (nextStateUUID, moduleName) => {
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  const data = find(businessServiceData, { businessService: moduleName });
+  const nextState = find(data.states, { uuid: nextStateUUID });
+  return nextState && nextState.docUploadRequired;
+};
+
+getActionIfEditable = (status, businessId, moduleName, applicationState) => {
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  const data = find(businessServiceData, { businessService: moduleName });
+  const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
+  let actions = [];
+  state.actions &&
+    state.actions.forEach(item => {
+      actions = [...actions, ...item.roles];
+    });
+  const userRoles = JSON.parse(getUserInfo()).roles;
+  const roleIndex = userRoles.findIndex(item => {
+    if (actions.indexOf(item.code) > -1) return true;
+  });
+
+  let editAction = {};
+  // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
+  if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
+    editAction = {
+      buttonLabel: "EDIT",
+      moduleName: moduleName,
+      tenantId: state.tenantId,
+      isLast: true,
+      buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
+    };
+  }
+  return editAction;
+};
+
+prepareWorkflowContract = (data, moduleName) => {
+  const {
+    getRedirectUrl,
+    getHeaderName,
+    checkIfTerminatedState,
+    getActionIfEditable,
+    checkIfDocumentRequired,
+    getEmployeeRoles
+  } = this;
+  let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
+  let businessId = get(data[data.length - 1], "businessId");
+  let applicationState = get(data[data.length - 1], "state.state");
+  let filteredActions = [];
+
+  filteredActions = get(data[data.length - 1], "nextActions", []).filter(
+    item => item.action != "ADHOC"
+  );
+  let applicationStatus = get(
+    data[data.length - 1],
+    "state.applicationStatus"
+  );
+  let actions = orderBy(filteredActions, ["action"], ["desc"]);
+
+  actions = actions.map(item => {
+    return {
+      buttonLabel: item.action,
+      moduleName: data[data.length - 1].businessService,
+      isLast: item.action === "PAY" ? true : false,
+      buttonUrl: getRedirectUrl(item.action, businessId, businessService),
+      dialogHeader: getHeaderName(item.action),
+      showEmployeeList: (businessService === "NewWS1" || businessService === "ModifyWSConnection" || businessService === "ModifySWConnection" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "APPROVE_CONNECTION" && item.action !== "APPROVE_FOR_CONNECTION" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+      roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
+      isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
+    };
+  });
+  actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
+  let editAction = getActionIfEditable(
+    applicationStatus,
+    businessId,
+    businessService,
+    applicationState
+  );
+  editAction.buttonLabel && actions.push(editAction);
+  return actions;
+};
+
+convertOwnerDobToEpoch = owners => {
+  let updatedOwners =
+    owners &&
+    owners
+      .map(owner => {
+        return {
+          ...owner,
+          dob:
+            owner && owner !== null && convertDateToEpoch(owner.dob, "dayend")
+        };
+      })
+      .filter(item => item && item !== null);
+  return updatedOwners;
+};
+
+render() {
+  const {
+    ProcessInstances,
+    prepareFinalObject,
+    dataPath,
+    moduleName
+  } = this.props;
+  const workflowContract =
+    ProcessInstances &&
+    ProcessInstances.length > 0 &&
+    this.prepareWorkflowContract(ProcessInstances, moduleName);
+  let showFooter = true;
+  if (moduleName === 'BPA' || moduleName === 'BPA_LOW' || moduleName === 'BPA_OC') {
+    showFooter = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+  }
+  if ((moduleName === 'Noc') && window.location.href.includes("isFromBPA=true")) {
+    showFooter = false
+  }
+
+  return (
+    <div>
+      {ProcessInstances && ProcessInstances.length > 0 && (
+        <TaskStatusContainer ProcessInstances={ProcessInstances} moduleName={moduleName} />
+      )}
+      {showFooter &&
+        <Footer
+          handleFieldChange={prepareFinalObject}
+          variant={"contained"}
+          color={"primary"}
+          onDialogButtonClick={this.createWorkFLow}
+          contractData={workflowContract}
+          dataPath={dataPath}
+          moduleName={moduleName}
+        />}
+    </div>
+  );
+}
 }
 
 const mapStateToProps = state => {

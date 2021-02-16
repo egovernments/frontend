@@ -558,6 +558,17 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       }
       // Setting the Payer and mobile from Bill to reflect it in PDF
       state = state ? state : {};
+      if(payloadReceiptDetails.Payments[0].paymentMode=="CHEQUE" || payloadReceiptDetails.Payments[0].paymentMode=="DD" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_NEFT" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_RTGS" ){
+        let ifsc = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.ifscCode", null);
+        let branchName = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.branchName", null);
+        let bank = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.bank.name", null);
+        payloadReceiptDetails.Payments[0].ifscCode=ifsc; 
+        const details = [{
+           "branchName": branchName ,
+          "bankName":bank }
+        ]       
+      payloadReceiptDetails.Payments[0].additionalDetails=details; 
+    }
       let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
       if ((billDetails && !billDetails.payerName) || !billDetails) {
         billDetails = {

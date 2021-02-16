@@ -85,6 +85,6 @@ export const gotoHomeFooter = getCommonApplyFooter({
       action: "PAY",
       roles: ["TL_CEMP",]
     },
-    visible:purpose1 ==="apply" || purpose1 ==="EDITRENEWAL"|| purpose1 === "DIRECTRENEWAL" ? true :false
+    visible:purpose1 ==="apply" || purpose1 ==="EDITRENEWAL"|| purpose1 === "DIRECTRENEWAL" || purpose1 != "forward"? true :false
   }
 });
