@@ -187,7 +187,7 @@ class ActionMenuComp extends Component {
       if (actionList[i].path !== "") {
         if (path && !path.parentMenu && actionList[i].path.startsWith(path + ".")) {
           let splitArray =  actionList[i].path && actionList[i].path.split(path + ".")[1].split(".");
-          let leftIconArray = actionList[i].leftIcon.split(".");
+          let leftIconArray = actionList[i] && actionList[i].leftIcon && actionList[i].leftIcon.split(".");
           let leftIcon =
             leftIconArray &&
             (leftIconArray.length > path.split(".").length
@@ -198,7 +198,7 @@ class ActionMenuComp extends Component {
           this.addMenuItems(path, splitArray, menuItems, i, leftIcon);
         } else if (pathParam && pathParam.parentMenu && actionList[i].navigationURL) {
           let splitArray = actionList[i].path && actionList[i].path.split(".");
-          let leftIconArray = actionList[i].leftIcon.split(".");
+          let leftIconArray = actionList[i] && actionList[i].leftIcon && actionList[i].leftIcon.split(".");
           let leftIcon = leftIconArray && leftIconArray.length >= 1 ? leftIconArray[0] : null;
           this.addMenuItems(path, splitArray, menuItems, i, leftIcon);
         }
