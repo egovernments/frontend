@@ -188,7 +188,7 @@ export const getMdmsData = async (action, state, dispatch) => {
     let taxHeadMasterMdmsDetails = get(payload, "MdmsRes.BillingService.TaxHeadMaster", []), taxHeadMasterDetails;
     if (taxHeadMasterMdmsDetails && taxHeadMasterMdmsDetails.length > 0) {
       taxHeadMasterDetails = taxHeadMasterMdmsDetails.filter(service => (service.service == businessService));
-      let billTaxHeadMasterDetails = taxHeadMasterDetails.filter(data => (data.code.includes("AMENDMENT")));
+      let billTaxHeadMasterDetails = taxHeadMasterDetails.filter(data => (data.IsBillamend== true));
       if(billTaxHeadMasterDetails && billTaxHeadMasterDetails.length > 0) {
        billTaxHeadMasterDetails.map(bill => {
           bill.reducedAmountValue = 0;
