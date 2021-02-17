@@ -69,7 +69,7 @@ export const callPGService = async (state, dispatch) => {
         billId: get(billPayload, "Bill[0].id"),
         consumerCode: consumerCode,
         productInfo: "Common Payment",
-        gateway: "RAZORPAY",
+        gateway: "AXIS",
         taxAndPayments,
         businessService:taxAndPayments[0].businessService,
         user,
@@ -117,7 +117,14 @@ export const callPGService = async (state, dispatch) => {
         )
       );
     } else {
-     displayRazorpay(goToPaymentGateway);
+    const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl") || get(goToPaymentGateway, "Transaction.callbackUrl");
+         if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar")
+         {
+          displayRazorpay(goToPaymentGateway);
+         }
+         else{
+          window.location = redirectionUrl;
+         }
     }
   } catch (e) {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
