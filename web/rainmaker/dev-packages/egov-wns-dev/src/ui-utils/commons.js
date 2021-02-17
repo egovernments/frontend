@@ -1025,6 +1025,15 @@ export const applyForSewerage = async (state, dispatch) => {
             await httpRequest("post", "/sw-services/swc/_update", "", [], { SewerageConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             let searchResponse = await getSearchResultsForSewerage(searchQueryObject, dispatch);
+            let subUsageType = get(searchResponse, "SewerageConnections[0].additionalDetails.waterSubUsageType");
+            let subUsageTypes = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.subUsageType", []);
+            if(subUsageType) {
+              subUsageTypes && subUsageTypes.map(items => {
+                if(items["name"] === subUsageType) {
+                    dispatch(prepareFinalObject("subUsageType", items));
+                }
+              })
+            }
             dispatch(prepareFinalObject("SewerageConnection", searchResponse.SewerageConnections));
             enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
             enableField('apply', "components.div.children.footer.children.payButton", dispatch);
