@@ -367,6 +367,28 @@ const callBackForNext = async (state, dispatch) => {
       }
     }
     prepareDocumentsUploadData(state, dispatch);
+    if (isModifyMode()) {
+      let propertyUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.usageCategory", "");
+      let subUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.subUsageType", []);
+      let waterSubUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.additionalDetails.waterSubUsageType", "");
+      let usageTypes = [];
+      if(propertyUsageType) {
+        subUsageType && subUsageType.map(items => {
+          if(items["parentUsageType"] === propertyUsageType) {
+            let obj = {};
+            obj.code = items.name,
+            obj.name = items.code,
+            obj.parentUsageType = items.parentUsageType,
+            obj.active = items.active
+            usageTypes.push(obj);
+            if(waterSubUsageType === items.code) {
+              dispatch(prepareFinalObject("applyScreen.additionalDetails.waterSubUsageType", items.name));
+            }
+          }
+        })
+      }
+      dispatch(prepareFinalObject("applyScreenMdmsData.ws-services-masters.subUsageType", usageTypes));
+    }
   }
 
   /* validations for Additional /Docuemnts details screen */

@@ -131,7 +131,6 @@ class DynamicMdmsContainer extends Component {
     return false;
   }
   formDropDown = () => {
-    debugger;
     let { dropdownFields, moduleName, masterName, rootBlockSub, index = 0, state } = this.props;
     let allObj = {};
     let moduleNameCaps = moduleName.toUpperCase();

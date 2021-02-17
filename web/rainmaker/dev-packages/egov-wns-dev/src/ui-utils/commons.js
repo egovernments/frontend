@@ -629,6 +629,9 @@ const parserFunction = (state) => {
         if(items["code"] === waterSubUsageType) {
             parsedObject.additionalDetails.waterSubUsageType = items.name;
         }
+        else if(items["name"] === waterSubUsageType) {
+            parsedObject.additionalDetails.waterSubUsageType = items.code;
+        }
       })
     }
     queryObject = { ...queryObject, ...parsedObject }
