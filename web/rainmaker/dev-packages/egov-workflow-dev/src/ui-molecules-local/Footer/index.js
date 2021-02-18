@@ -70,6 +70,10 @@ class Footer extends React.Component {
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
       handleFieldChange(`${dataPath}.assignees`, "");
+    } else  if (dataPath === "Property") {
+      handleFieldChange(`${dataPath}.workflow.comment`, "");
+      handleFieldChange(`${dataPath}.workflow.assignes`, []);
+      handleFieldChange(`${dataPath}.workflow.wfDocuments`, []);
     } else {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);
