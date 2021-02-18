@@ -420,10 +420,43 @@ const connectionChargeDetails = getCommonContainer({
   reviewPlumberMobileNo
 });
 
-const roadCuttingCharges = getCommonContainer({
-  reviewRoadType,
-  reviewArea
-});
+const roadCuttingCharges = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "applicant-summary",
+    scheama: getCommonContainer({
+        reviewRoadType : getLabelWithValue(
+          {
+            labelName: "Road Type",
+            labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+          },
+          {
+            jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
+            callBack: handleNA
+          }
+        ),
+        reviewArea : getLabelWithValue(
+          {
+            labelName: "Area (in sq ft)",
+            labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+          },
+          {
+            jsonPath: "applyScreen.roadCuttingInfo[0].roadCuttingArea",
+            callBack: handleNA
+          }
+        )
+        
+    }),
+    items: [],
+    hasAddItem: false,
+    isReviewPage: true,
+    sourceJsonPath: "applyScreen.roadCuttingInfo",
+    prefixSourceJsonPath: "children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
+}
 
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,
