@@ -117,10 +117,14 @@ export const callPGService = async (state, dispatch) => {
         )
       );
     } else {
-       const redirectionUrl =
-        get(goToPaymentGateway, "Transaction.redirectUrl") ||
-        get(goToPaymentGateway, "Transaction.callbackUrl");
-      window.location = redirectionUrl;
+       const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl") || get(goToPaymentGateway, "Transaction.callbackUrl");
+         if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar")
+         {
+          displayRazorpay(goToPaymentGateway);
+         }
+         else{
+          window.location = redirectionUrl;
+         }
     }
   } catch (e) {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
@@ -691,5 +695,68 @@ export const footer = getCommonApplyFooter({
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
+//--------RazorPay checkout function-------------//
+function loadScript(src) {
+  return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+          resolve(true);
+      };
+      script.onerror = () => {
+          resolve(false);
+      };
+      document.body.appendChild(script);
+  });
+}
 
+async function displayRazorpay(getOrderData) {
+const res = await loadScript(
+    "https://checkout.razorpay.com/v1/checkout.js"
+);
 
+if (!res) {
+    alert("Razorpay SDK failed to load. Are you online?");
+    return;
+}
+
+function getQueryVariable(variable)
+{
+  const query = get(getOrderData, "Transaction.redirectUrl");
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+                    var pair = vars[i].split("=");
+        if(pair[0] == variable){return pair[1];}
+         }
+         return(false);
+}
+const options = {
+    key: getQueryVariable('merchant_key'),
+    amount: get(getOrderData, "Transaction.txnAmount")*100,
+    //currency: getQueryVariable('currency'),
+    name: "mSeva | Punjab",
+    description: "Live Transaction",
+    image: "https://mseva.lgpunjab.gov.in/citizen/browser-icon.png",
+    order_id: getQueryVariable('orderId'),
+    handler: async function (response) {
+        const data = {
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+        };
+
+      window.location = get(getOrderData, "Transaction.callbackUrl")+"&razorpayPaymentId="+data.razorpayPaymentId+"&razorpayOrderId="+data.razorpayOrderId+"&razorpaySignature="+data.razorpaySignature;
+    },
+    prefill: {
+        name: get(getOrderData, "Transaction.user.userName"),
+        email: get(getOrderData, "Transaction.user.emailId"),
+        contact: get(getOrderData, "Transaction.user.mobileNumber"),
+    },
+    theme: {
+        color: "#61dafb",
+    },
+};
+
+const paymentObject = new window.Razorpay(options);
+paymentObject.open();
+}
