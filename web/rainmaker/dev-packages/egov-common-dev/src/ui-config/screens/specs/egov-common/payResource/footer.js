@@ -736,7 +736,7 @@ const options = {
     amount: get(getOrderData, "Transaction.txnAmount")*100,
     //currency: getQueryVariable('currency'),
     name: "mSeva | Punjab",
-    description: "Test Transaction",
+    description: "Live Transaction",
     image: "https://mseva.lgpunjab.gov.in/citizen/browser-icon.png",
     order_id: getQueryVariable('orderId'),
     handler: async function (response) {
@@ -749,12 +749,9 @@ const options = {
       window.location = get(getOrderData, "Transaction.callbackUrl")+"&razorpayPaymentId="+data.razorpayPaymentId+"&razorpayOrderId="+data.razorpayOrderId+"&razorpaySignature="+data.razorpaySignature;
     },
     prefill: {
-        name: "Aarif",
-        email: "java.devp.pmidc@punjab.gov.in",
-        contact: "8699223909",
-    },
-    notes: {
-        address: "Punjab Municipal Infrastructure Development Company",
+        name: get(getOrderData, "Transaction.user.userName"),
+        email: get(getOrderData, "Transaction.user.emailId"),
+        contact: get(getOrderData, "Transaction.user.mobileNumber"),
     },
     theme: {
         color: "#61dafb",
