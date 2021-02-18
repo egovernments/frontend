@@ -695,7 +695,6 @@ export const footer = getCommonApplyFooter({
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
-
 //--------RazorPay checkout function-------------//
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -761,4 +760,3 @@ const options = {
 const paymentObject = new window.Razorpay(options);
 paymentObject.open();
 }
-
