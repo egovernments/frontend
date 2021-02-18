@@ -89,8 +89,26 @@ export const searchApiCall = async (state, dispatch) => {
         "key": 'consumerCode',
         "value": get(responseFromAPI, 'Amendments[0].consumerCode', '')
       })
-    } else if (get(searchScreenObject, 'consumerCode', '') != "" && get(searchScreenObject, 'amendmentId', '') == "") {
+    } else if (get(searchScreenObject, 'mobileNumber', '') == "" &&get(searchScreenObject, 'consumerCode', '') == "" && get(searchScreenObject, 'amendmentId', '') != "") {
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.tableData",
+          []
+        )
+      );
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.rows",
+          0
+        )
+      );
 
+      showHideTable(true, dispatch);
+      return;
     }
     const resp = await searchBill(queryObject, dispatch)
     
