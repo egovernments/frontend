@@ -171,34 +171,34 @@ export const plumberDetails={
 }
 const connectionChargeDetails = getCommonContainer(plumberDetails);
 
+export const roadDetails = {
+  reviewRoadType: getLabelWithValue(
+    {
+      labelName: "Road Type",
+      labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
+    },
+    {
+      jsonPath: "WaterConnection[0].roadCuttingInfo[0].roadType",
+      callBack: handleRoadType
+    }
+  ),
+  reviewArea: getLabelWithValue(
+    {
+      labelName: "Area (in sq ft)",
+      labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
+    },
+    {
+      jsonPath: "WaterConnection[0].roadCuttingInfo[0].roadCuttingArea",
+      callBack: handleNA
+    }
+  )
+}
 export const roadCuttingCharges = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
     className: "applicant-summary",
-    scheama: getCommonContainer({
-      reviewRoadType: getLabelWithValue(
-        {
-          labelName: "Road Type",
-          labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
-        },
-        {
-          jsonPath: "WaterConnection[0].roadCuttingInfo[0].roadType",
-          callBack: handleRoadType
-        }
-      ),
-      reviewArea: getLabelWithValue(
-        {
-          labelName: "Area (in sq ft)",
-          labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
-        },
-        {
-          jsonPath: "WaterConnection[0].roadCuttingInfo[0].roadCuttingArea",
-          callBack: handleNA
-        }
-      )
-
-    }),
+    scheama: getCommonContainer(roadDetails),
     items: [],
     hasAddItem: false,
     isReviewPage: true,

@@ -7,7 +7,7 @@ import {
   getDivider,
   getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDateAndHandleNA, handleNA } from '../../utils';
+import { convertEpochToDateAndHandleNA, handleNA, handleRoadType } from '../../utils';
 import { changeStep } from "./footer";
 
 const getHeader = label => {
@@ -433,7 +433,7 @@ const roadCuttingCharges = {
           },
           {
             jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
-            callBack: handleNA
+            callBack: handleRoadType
           }
         ),
         reviewArea : getLabelWithValue(
