@@ -29,6 +29,11 @@ import commonConfig from "config/common.js";
 const isMode = isModifyMode();
 const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
+  let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+  if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+    let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value !== "");
+    dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+  }
   let tenantId = getTenantIdCommon();
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
@@ -429,6 +434,11 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 3) {
     let waterId = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].id");
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
+    let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+    if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+      let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value !== "");
+      dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+    }
     if (waterId && sewerId) {
       isFormValid = await acknoledgementForBothWaterAndSewerage(state, activeStep, isFormValid, dispatch);
     } else if (waterId) {
