@@ -25,7 +25,8 @@ export const searchResults = {
                 ]
                 download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
               }}>
-              {value}
+       
+              <a href="javascript:void(0)" >{value}</a>
             </div>
           )
         }
