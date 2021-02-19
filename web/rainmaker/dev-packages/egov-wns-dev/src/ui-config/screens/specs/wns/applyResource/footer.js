@@ -31,7 +31,7 @@ const isModeAction = isModifyModeAction();
 const setReviewPageRoute = (state, dispatch) => {
   let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
   if(roadCuttingInfo && roadCuttingInfo.length > 0) {
-    let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value !== "");
+    let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
     dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
   }
   let tenantId = getTenantIdCommon();
@@ -410,6 +410,12 @@ const callBackForNext = async (state, dispatch) => {
     } else {
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
       if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+        for (let i = 0; i < roadCuttingInfo.length; i++) {
+          if (roadCuttingInfo[i] == undefined) {
+            roadCuttingInfo[i] = {};
+            roadCuttingInfo[i].isEmpty = true;
+          }
+        }
         let filteredInfo = [];
         roadCuttingInfo.map(info => {
           if(info.isDeleted !=false) filteredInfo.push(info);
@@ -436,7 +442,7 @@ const callBackForNext = async (state, dispatch) => {
     let sewerId = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].id");
     let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
     if(roadCuttingInfo && roadCuttingInfo.length > 0) {
-      let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value !== "");
+      let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.isEmpty !== true);
       dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
     }
     if (waterId && sewerId) {
