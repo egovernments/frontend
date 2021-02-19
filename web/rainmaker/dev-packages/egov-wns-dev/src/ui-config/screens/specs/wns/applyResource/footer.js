@@ -403,6 +403,15 @@ const callBackForNext = async (state, dispatch) => {
         hasFieldToaster = false;
       }
     } else {
+      let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+        let filteredInfo = [];
+        roadCuttingInfo.map(info => {
+          if(info.isDeleted !=false) filteredInfo.push(info);
+        });
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", roadCuttingInfo));
+      }
+
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
