@@ -45,7 +45,25 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
     const buttons = get(uiCommonPayConfig, "buttons");
     const redirectionURL = isPublicSearch() ? "/withoutAuth/egov-common/pay" : "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=${businessService}`
-
+    setTimeout(function(){if(extraData!=null){
+        if(extraData.payment.paymentDetails[0].businessService=="PT"){
+          if (window.appOverrides && window.appOverrides.validateForm)
+          {
+           window.appOverrides.validateForm("PTReceiptAvailable", {extraData: extraData});
+          }
+      }
+      
+      let isUCPayment=extraData.payment.paymentDetails[0].businessService!="PT"
+      &&extraData.payment.paymentDetails[0].businessService!="TL"&&
+      extraData.payment.paymentDetails[0].businessService!="FIRENOC";
+      if(isUCPayment){
+        if (window.appOverrides && window.appOverrides.validateForm)
+        {
+         window.appOverrides.validateForm("UCEmployeeReceiptAvailable", {receipt:extraData.payment });
+        } 
+      }
+      };
+    },2000);
     // gotoHome: {
     //     componentPath: "Button",
     //     props: {

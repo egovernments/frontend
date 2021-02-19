@@ -126,6 +126,12 @@ const getAcknowledgementCard = (
     "commonPayInfo"
   );
   if (status === "success") {
+    if(businessService=="PT"){
+      if (window.appOverrides && window.appOverrides.validateForm)
+      {
+       window.appOverrides.validateForm("PTReceiptAvailable", {extraData: state.properties});
+      }
+    }
     return {
       header,
       headerdownloadprint: downloadprintMenu(
