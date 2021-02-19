@@ -128,7 +128,7 @@ class Footer extends React.Component {
       this.setState({ open : true,data: item, employeeList });
 
     }
-    this.setState({ open: true, data: item, employeeList });
+    // this.setState({ open: true, data: item, employeeList });
   };
 
   onClose = () => {
