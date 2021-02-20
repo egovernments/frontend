@@ -420,7 +420,7 @@ const callBackForNext = async (state, dispatch) => {
         roadCuttingInfo.map(info => {
           if(info.isDeleted !=false) filteredInfo.push(info);
         });
-        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", roadCuttingInfo));
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
 
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
