@@ -38,6 +38,11 @@ export const dSignConfirmationDialog = getCommonContainer({
         labelKey: "LAMS_DSIGN_TERMS"
       }),
       divider1: getDivider(),
+      value0: getCommonParagraph({
+        labelName:
+          "Important : The application form is to be signed by the original lessee or his/her successors/heir. Otherwise considered invalid.",
+        labelKey: "LAMS_DSIGN_IMP_NOTE"
+      }),
       value1: getCommonParagraph({
         labelName:
           "You can digitally sign if you have your aadhar number linked with your mobile number. ",

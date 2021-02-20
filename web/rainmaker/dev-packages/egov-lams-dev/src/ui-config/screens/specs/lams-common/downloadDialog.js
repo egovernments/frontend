@@ -32,7 +32,8 @@ export const downloadDialog = getCommonContainer(
     }),
 
     optionSelection: getCommonContainer({
-        months: getTextField({
+
+      months: getTextField({
           label: {
             labelName: "For a period of (Months)",
             labelKey: "LAMS_FOR_A_PERIOD"
@@ -87,6 +88,16 @@ export const downloadDialog = getCommonContainer(
             //onFathersNameChanged(action, state, dispatch);
           },
         }),
+        importantNote: getCommonCaption({
+          labelName: "Imp Note",
+          labelKey: "LAMS_DSIGN_IMP_NOTE"},
+          {
+            disableValidation:true,
+            style:{
+              color:"red",
+            }
+          }
+        ),
         div: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
