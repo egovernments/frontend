@@ -8,6 +8,12 @@ const TestAtoms = Loadable({
   loading: () => <Loading />
 });
 
+const LinkButton = Loadable({
+  loader: () => import("./LinkButton"),
+  loading: () => <Loading />
+});
+
 export {
-  TestAtoms
+  TestAtoms,
+  LinkButton
 };

@@ -511,7 +511,7 @@ export const loadHospitals = async (action, state, dispatch) => {
   catch(e)
   {
     //toBeRemoved
-    payload = {"hospitals":[{"id":1,"name":"St Johns Hospital"},{"id":2,"name":"Government Hospital Pune"}]};
+    payload = {"hospitals":[{"id":"asdf","name":"St Johns Hospital"},{"id":"mcd","name":"Government Hospital Pune"}]};
   }
   //console.log("Survey numbers recieved...",payload);
   if(payload.hospitals)

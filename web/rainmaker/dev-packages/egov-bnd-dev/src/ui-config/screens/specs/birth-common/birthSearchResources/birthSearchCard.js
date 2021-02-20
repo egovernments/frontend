@@ -87,6 +87,28 @@ const cbChanged = (action, state, dispatch) => {
 
 }
 
+const setVisibilityOptionsSet1 = (state, dispatch, visible) => {
+  dispatch(
+    handleField(
+      "getCertificate",
+      "components.div.children.birthSearchCard.children.cardContent.children.searchContainer1",
+      "visible",
+      visible
+    )
+  );
+}
+  
+const setVisibilityOptionsSet2 = (state, dispatch, visible) => {
+  dispatch(
+    handleField(
+      "getCertificate",
+      "components.div.children.birthSearchCard.children.cardContent.children.searchContainer2",
+      "visible",
+      visible
+    )
+  );
+}
+
 export const searchSetCommon = getCommonContainer({
   dob: getDateField({
     label: { labelName: "DOB", labelKey: "BND_BIRTH_DOB" },
@@ -172,7 +194,23 @@ export const searchSet1 = getCommonContainer({
       xs: 12,
       sm: 4
     }
-  })
+  }),
+  clickHereLink: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-bnd",
+    componentPath: "LinkButton",
+    props: { 
+      url: "teat" ,
+      labelKey:"BND_DONT_KNOW_REGNO_MSG",
+      onClickDefination: {
+        callBack: (state, dispatch) => {
+          setVisibilityOptionsSet1(state,dispatch,false);
+          setVisibilityOptionsSet2(state,dispatch,true);
+        }
+      },
+    },
+    gridDefination: { xs: 12, sm: 4, md: 4 }
+  },
 });
 
 export const searchSet2 = getCommonContainer({
@@ -307,7 +345,23 @@ export const searchSet2 = getCommonContainer({
       xs: 12,
       sm: 4
     }
-  })
+  }),
+  clickHereLink: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-bnd",
+    componentPath: "LinkButton",
+    props: { 
+      url: "teat" ,
+      labelKey:"BND_DONT_KNOW_DETAILS_MSG",
+      onClickDefination: {
+        callBack: (state, dispatch) => {
+          setVisibilityOptionsSet1(state,dispatch,true);
+          setVisibilityOptionsSet2(state,dispatch,false);
+        }
+      },
+    },
+    gridDefination: { xs: 12, sm: 4, md: 4 }
+  },
 });
 
 export const buttonContainer = getCommonContainer({
@@ -401,7 +455,25 @@ export const birthSearchCard = getCommonCard({
   searchContainerCommon: searchSetCommon,
   //break1: getBreak(),
   divider1: getDivider(),
-  searchContainer1: searchSet1,
-  searchContainer2: searchSet2,
+  searchContainer1:{
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+    },
+    children: {
+      details:  searchSet1
+    },
+    visible: true,
+  },
+  searchContainer2:{
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+    },
+    children: {
+      details: searchSet2
+    },
+    visible: false,
+  },
   buttonContainer: buttonContainer
 });
