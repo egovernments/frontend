@@ -147,7 +147,7 @@ import {
       }
       setVisibilityLeaseDetails(action, state, dispatch,true);
       setVisibilityDownloadButton(action, state, dispatch, true);
-      setVisibilityEsignButton(action, state, dispatch, false);//(process.env.REACT_APP_NAME === "Citizen")
+      setVisibilityEsignButton(action, state, dispatch, (process.env.REACT_APP_NAME === "Citizen"));
       setVisibilityDocuments(action, state, dispatch, true);;
       //setVisibilityMonths(action, state, dispatch, true);
     }
