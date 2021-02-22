@@ -126,6 +126,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
 
     if (!getQueryArg(window.location.href, "edited")) {
       (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
+    } else if(getQueryArg(window.location.href, "edited")) {
+      (await searchResults(action, state, dispatch, applicationNumber, processInstanceAppStatus));
     } else {
       let applyScreenObject = get(state.screenConfiguration.preparedFinalObject, "applyScreen");
       applyScreenObject.applicationNo.includes("WS") ? applyScreenObject.service = serviceConst.WATER : applyScreenObject.service = serviceConst.SEWERAGE;
