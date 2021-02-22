@@ -3,7 +3,7 @@ import {
   getCommonHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
@@ -112,6 +112,9 @@ const adminCityPickerCheck = (state, dispatch) => {
   let adminRoles = getAdminRole(state);
   if (adminRoles.hasAdminRole) {
     dispatch(prepareFinalObject("hrmsPickerFlag", true));
+    dispatch(handleField("search", "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.value", ""));
+    dispatch(handleField("search", "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "props.required", true));
+    dispatch(handleField("search", "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children.cityDropdown", "required", true));
     showCityPicker(state, dispatch);
   } else {
     dispatch(prepareFinalObject("hrmsPickerFlag", false));
