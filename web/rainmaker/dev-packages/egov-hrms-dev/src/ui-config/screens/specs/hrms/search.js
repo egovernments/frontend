@@ -111,8 +111,10 @@ const getData = async (action, state, dispatch) => {
 const adminCityPickerCheck = (state, dispatch) => {
   let adminRoles = getAdminRole(state);
   if (adminRoles.hasAdminRole) {
+    dispatch(prepareFinalObject("hrmsPickerFlag", true));
     showCityPicker(state, dispatch);
   } else {
+    dispatch(prepareFinalObject("hrmsPickerFlag", false));
     createEmployee(state, dispatch);
   }
 };

@@ -596,22 +596,39 @@ export const showCityPicker = (state, dispatch) => {
 };
 
 export const createEmployee = (state, dispatch) => {
-  const tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "citiesByModule.tenantId.value"
-  );
-  get(state.screenConfiguration.preparedFinalObject, "Employee") &&
-    dispatch(prepareFinalObject("Employee", []));
-  get(
-    state.screenConfiguration.preparedFinalObject,
-    "hrms.reviewScreen.furnishedRolesList"
-  ) && dispatch(prepareFinalObject("hrms.reviewScreen.furnishedRolesList", ""));
-  const tenantIdQueryString = tenantId ? `?tenantId=${tenantId}` : "";
-  const createUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/hrms/create${tenantIdQueryString}`
-      : `/hrms/create${tenantIdQueryString}`;
-  dispatch(setRoute(createUrl));
+  const hrmsPickerFlag = get( state.screenConfiguration.preparedFinalObject, "hrmsPickerFlag", false);
+  let isCityPickerValid = true;
+  if(hrmsPickerFlag) {
+    isCityPickerValid = validateFields(
+      "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+      state,
+      dispatch,
+      "search"
+    );
+    if(!isCityPickerValid) isCityPickerValid = false; 
+  }
+
+  if(isCityPickerValid) {
+    const tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "citiesByModule.tenantId"
+    ) || get(
+      state.screenConfiguration.preparedFinalObject,
+      "citiesByModule.tenantId.value"
+    );
+    get(state.screenConfiguration.preparedFinalObject, "Employee") &&
+      dispatch(prepareFinalObject("Employee", []));
+    get(
+      state.screenConfiguration.preparedFinalObject,
+      "hrms.reviewScreen.furnishedRolesList"
+    ) && dispatch(prepareFinalObject("hrms.reviewScreen.furnishedRolesList", ""));
+    const tenantIdQueryString = tenantId ? `?tenantId=${tenantId}` : "";
+    const createUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/hrms/create${tenantIdQueryString}`
+        : `/hrms/create${tenantIdQueryString}`;
+    dispatch(setRoute(createUrl));
+  }
 };
 
 // HRMS
