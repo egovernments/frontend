@@ -201,16 +201,15 @@ export const callBackForNext = async (state, dispatch) => {
     let tenants = []
     jurisdictions.map(judis => {
       judis && judis.roles && Array.isArray(judis.roles) && judis.roles.map(role => {
-
-        if (judis.boundary && judis.boundary == getQueryArg(window.location.href, 'tenantId')) {
-          baseTenant = true;
-        }
-        if (tenants.includes(judis.boundary)) {
-          repeatedTenant = true;
-        }
-        tenants.push(judis.boundary);
         rolesList.push({ ...role, tenantId: judis.boundary, code: role.value, name: role.label })
       })
+      if (judis&& judis.boundary && judis.boundary == getQueryArg(window.location.href, 'tenantId')) {
+        baseTenant = true;
+      }
+      if (judis&& judis.boundary&&tenants.includes(judis.boundary)) {
+        repeatedTenant = true;
+      }
+      tenants.push(judis.boundary);
     })
     if (!baseTenant) {
       const errorMessage2 = {
