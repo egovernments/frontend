@@ -427,7 +427,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
-    let connectionNo = getQueryArg(window.location.href, "connectionNumber");
+    let connectionNo = getQueryArg(window.location.href, "connectionNumber");   
     getDataForBillAmendment(action, state, dispatch);
 
     beforeInitFn(action, state, dispatch, connectionNo);
@@ -444,9 +444,18 @@ const screenConfig = {
     );
     set(
       action,
-      "components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber",
+      "screenConfig.components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber",
       connectionNo
     );
+    set(
+      action,
+      "screenConfig.components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.editSection.onClickDefination.path",
+      `meter-reading?connectionNos=${connectionNo}&tenantId=${getQueryArg(window.location.href, "tenantId")}`
+    );
+    
+    
+
+  
     return action;
   },
 
