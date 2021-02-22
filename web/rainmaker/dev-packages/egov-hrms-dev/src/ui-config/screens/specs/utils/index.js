@@ -2,7 +2,7 @@ import commonConfig from "config/common.js";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import "./index.css";
@@ -609,13 +609,14 @@ export const createEmployee = (state, dispatch) => {
   }
 
   if(isCityPickerValid) {
-    const tenantId = get(
+    let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
       "citiesByModule.tenantId"
     ) || get(
       state.screenConfiguration.preparedFinalObject,
       "citiesByModule.tenantId.value"
     );
+    tenantId=tenantId?tenantId:getTenantId();
     get(state.screenConfiguration.preparedFinalObject, "Employee") &&
       dispatch(prepareFinalObject("Employee", []));
     get(
