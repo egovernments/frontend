@@ -256,16 +256,7 @@ const callBackForApply = async (state, dispatch) => {
     ];
     propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
     propertyPayload.creationReason = 'MUTATION';
-    console.log("==========",propertyPayload.owners[0]);
-    console.log("==========",propertyPayload.owners[0].documentType);
-    if(propertyPayload.owners[0].documentType===null){
-      propertyPayload.owners[0].documentType="NA"
-    }
-    if(propertyPayload.owners[0].documents[0].documentType===null){
-      propertyPayload.owners[0].documents[0].documentType="NA"
-    }
     let payload = null;
-    debugger;
     payload = await httpRequest(
       "post",
       "/property-services/property/_update",
@@ -274,6 +265,26 @@ const callBackForApply = async (state, dispatch) => {
       { Property: propertyPayload }
 
     );
+    // propertyPayload.owners =propertyPayload.owners.filter(owner=>owner.isDeleted!==false);
+    // propertyPayload.creationReason = 'MUTATION';
+    // console.log("==========",propertyPayload.owners[0]);
+    // console.log("==========",propertyPayload.owners[0].documentType);
+    // if(propertyPayload.owners[0].documentType===null){
+    //   propertyPayload.owners[0].documentType="NA"
+    // }
+    // if(propertyPayload.owners[0].documents[0].documentType===null){
+    //   propertyPayload.owners[0].documents[0].documentType="NA"
+    // }
+    // let payload = null;
+    // debugger;
+    // payload = await httpRequest(
+    //   "post",
+    //   "/property-services/property/_update",
+    //   "_update",
+    //   queryObject,
+    //   { Property: propertyPayload }
+
+    // );
     // dispatch(prepareFinalObject("Properties", payload.Properties));
     // dispatch(prepareFinalObject("PropertiesTemp",cloneDeep(payload.Properties)));
     if (payload) {
