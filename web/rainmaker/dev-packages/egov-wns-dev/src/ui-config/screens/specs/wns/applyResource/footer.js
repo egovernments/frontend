@@ -405,6 +405,7 @@ const callBackForNext = async (state, dispatch) => {
         }
         let propertyUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.usageCategory", "");
         let subUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.subUsageType", []);
+        let waterSubUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.additionalDetails.waterSubUsageType", "");
         let usageTypes = [];
         if(propertyUsageType) {
           subUsageType && subUsageType.map(items => {
@@ -415,6 +416,9 @@ const callBackForNext = async (state, dispatch) => {
               obj.parentUsageType = items.parentUsageType,
               obj.active = items.active
               usageTypes.push(obj);
+              if(waterSubUsageType === items.code) {
+                dispatch(prepareFinalObject("applyScreen.additionalDetails.waterSubUsageType", items.name));
+              }
             }
           })
         }

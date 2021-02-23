@@ -136,6 +136,7 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
+    debugger;
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
@@ -218,6 +219,17 @@ class WorkFlowContainer extends React.Component {
     // if (moduleName === "NewSW1") {
     //   dataPath = "SewerageConnection";
     // }
+    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+      let subUsageType = get(data[0], "additionalDetails.waterSubUsageType");
+      let subUsageTypes = get(preparedFinalObject, "subUsageType", []);
+      if(subUsageType) {
+        subUsageTypes.forEach(items => {
+          if(items.name === subUsageType) {
+            data[0].additionalDetails.waterSubUsageType = items["code"];
+        }
+        });
+      }
+    }
     if (moduleName === "FIRENOC") {
 
       set(data[0], "fireNOCDetails.tenantId", get(data[0], "tenantId", ""));

@@ -31,6 +31,8 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewModificationsEffective } from "./applyResource/review-owner";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -89,6 +91,28 @@ const headerrow = getCommonContainer({
   })
 });
 
+export const getMdmsData = async dispatch => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "ws-services-masters", 
+          masterDetails: [
+            { name: "subUsageType" }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    if (payload.MdmsRes['ws-services-masters'].subUsageType !== undefined && payload.MdmsRes['ws-services-masters'].subUsageType.length > 0) {
+      dispatch(prepareFinalObject("subUsageType", payload.MdmsRes['ws-services-masters'].subUsageType));
+    }
+  } catch (e) { console.log(e); }
+}
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   // dispatch(handleField("apply",
   // "components",
@@ -110,7 +134,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (getQueryArg(window.location.href, "service", null) != null) {
     resetData();
   }
-
+  await getMdmsData(dispatch);
   let Response = await getWorkFlowData(queryObj);
   let processInstanceAppStatus = Response.ProcessInstances[0].state.applicationStatus;
   //Search details for given application Number
@@ -184,11 +208,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
     }
     let subUsageType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.waterSubUsageType");
-    let subUsageTypes = get(state, "screenConfiguration.preparedFinalObject.subUsageType", {});
+    let subUsageTypes = get(state, "screenConfiguration.preparedFinalObject.subUsageType", []);
     if(subUsageType) {
-      Object.keys(subUsageTypes).forEach(key => {
-        if(subUsageTypes[key] === subUsageType) {
-          dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.waterSubUsageType", subUsageTypes["code"]));
+      subUsageTypes.forEach(items => {
+        if(items.code === subUsageType) {
+          dispatch(prepareFinalObject("WaterConnection[0].additionalDetails.waterSubUsageType", items["name"]));
       }
       });
     }
@@ -821,8 +845,6 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
 
 const parserFunction = (obj) => {
   let waterDetails = get(obj, "additionalDetails", {});
-  console.log(".........",waterDetails );
-  debugger;
   let parsedObject = {
     roadCuttingArea: parseInt(obj.roadCuttingArea),
     meterInstallationDate: convertDateToEpoch(obj.meterInstallationDate),
@@ -868,7 +890,6 @@ const parserFunction = (obj) => {
   }
   obj = { ...obj, ...parsedObject }
   return obj;
-  debugger;
 }
 
 const processBills = async (data, viewBillTooltip, dispatch) => {
