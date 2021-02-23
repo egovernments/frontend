@@ -24,7 +24,6 @@ const callBackForApply = async (state, dispatch) => {
     let isFromWorkflowDetails = get ( state, "screenConfiguration.preparedFinalObject.isWorkflowDetails", null );
     set(propertyPayload, "workflow", isFromWorkflowDetails);
     let payload = null;
-    debugger;
         payload = await httpRequest(
           "post",
           "/property-services/property/_update",

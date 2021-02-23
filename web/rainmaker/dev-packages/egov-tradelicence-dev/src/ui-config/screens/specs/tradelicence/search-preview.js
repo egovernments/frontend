@@ -172,9 +172,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-    debugger;
     if (status === "REJECTED"|| status ==="APPROVED" || status ==="APPLIED" || status ==="FIELDINSPECTION" || status ==="PENDINGAPPROVAL") {
-      debugger;
       dispatch(
         handleField(
           "search-preview",

@@ -8,18 +8,15 @@ import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
-  debugger;
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
   let currentSearchTab = getCurrentTab === undefined ? "SEARCH_CONNECTION" : getCurrentTab;
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen.mobileNumber", {});
   if (currentSearchTab === "SEARCH_CONNECTION") {
     resetFieldsForApplication(state, dispatch);
     await renderSearchConnectionTable(state, dispatch);
-    debugger;
   } 
   
   else if (searchScreenObject["mobileNumber"] === "9999999999") {
-    debugger;
     dispatch(
       toggleSnackbar(
         true,
@@ -36,7 +33,6 @@ export const searchApiCall = async (state, dispatch) => {
 }
 
 const renderSearchConnectionTable = async (state, dispatch) => {
-  debugger;
   let queryObject = [];
   queryObject.push({ key: "searchType", value: "CONNECTION" });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchConnection", {});
@@ -52,7 +48,6 @@ const renderSearchConnectionTable = async (state, dispatch) => {
     dispatch(toggleSnackbar(true, { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" }, "warning"));
   } 
   else if (searchScreenObject["mobileNumber"] === "9999999999") {
-    debugger;
     dispatch(
       toggleSnackbar(
         true,

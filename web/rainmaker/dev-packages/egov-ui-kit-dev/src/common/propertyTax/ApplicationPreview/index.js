@@ -239,7 +239,6 @@ class ApplicationPreview extends Component {
     }
   }
   getApplicationType = () => {
-    debugger;
     const applicationType = getQueryValue(window.location.href, "type");
     let applicationObject = {}
     if (applicationType == "assessment") {
@@ -263,7 +262,6 @@ class ApplicationPreview extends Component {
       ]
       applicationObject.endpoint = FETCHASSESSMENTS;
     } else if (applicationType == "property") {
-      debugger;
       applicationObject.responsePath = "Properties";
       applicationObject.dataPath = "Property";
       applicationObject.moduleName = "PT.CREATE";

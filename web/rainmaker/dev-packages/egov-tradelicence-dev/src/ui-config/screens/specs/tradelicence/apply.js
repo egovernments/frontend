@@ -347,7 +347,6 @@ const screenConfig = {
         "PERMANENT"
       );
       const applicationType = get(state.screenConfiguration.preparedFinalObject, 'Licenses[0].applicationType', "");
-      debugger;
       if(applicationType === "RENEWAL") {
         dispatch(
           handleField(

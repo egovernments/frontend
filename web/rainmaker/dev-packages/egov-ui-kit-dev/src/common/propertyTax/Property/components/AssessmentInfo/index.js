@@ -160,7 +160,6 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
   return floors;
 }
 const getVasikaItems = (additionalDetails) => {
-debugger;
 var vasika_date =(additionalDetails && additionalDetails.vasikaDate)? convertLocalDate( additionalDetails.vasikaDate):null;
  var allotment_date =(additionalDetails && additionalDetails.allotmentDate)? convertLocalDate( additionalDetails.allotmentDate):null;
 

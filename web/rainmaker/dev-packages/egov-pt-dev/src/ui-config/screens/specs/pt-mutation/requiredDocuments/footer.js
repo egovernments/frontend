@@ -32,7 +32,6 @@ export const startMutationApplyFlow = (state, dispatch) => {
     "consumerCode"
   );
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  debugger;
   const applyUrl = `/pt-mutation/apply?consumerCode=${consumerCode}&tenantId=${tenantId}`;
   dispatch(setRoute(applyUrl));
 }

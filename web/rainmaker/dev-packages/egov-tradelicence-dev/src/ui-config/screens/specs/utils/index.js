@@ -1294,7 +1294,6 @@ const isApplicationPaid = (currentStatus, workflowCode) => {
   if (currentStatus === "CITIZENACTIONREQUIRED") {
     let isPAID = true;
     return isPAID;
-    debugger;
   }
   const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 

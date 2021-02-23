@@ -6,7 +6,6 @@ import OldValueLabelContainer from "../../../../../common/common/OldValueLabelCo
 import "./index.css";
 
 class PropertyInfoCard extends Component {
-  debugger;
   render() {
     const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [],items2 = [], subSection = [], hideSubsectionLabel = false } = this.props;
 
@@ -59,7 +58,6 @@ class PropertyInfoCard extends Component {
                     }
                   })}
                   {items2 && items2.map((item) => {
-                    this.debugger;
                     if (item) {
                       return (
                         <div>

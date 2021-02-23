@@ -157,7 +157,7 @@ export const getSearchResults = async (queryObject, filter = false) => {
         }
 
         let result = findAndReplace(response, null, "NA");
-        result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
+        // result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;
@@ -2142,9 +2142,9 @@ export const getWaterSource = (waterSource, waterSubSource) => {
         if (source[0] && source[0] !== "NA" && source[1] && source[1] !== "NA") {
             return waterSource;
         }
-        if (waterSubSource && waterSubSource !== 'NA') {
-            waterSource += "." + waterSubSource;
-        }
+        // if (waterSubSource && waterSubSource !== 'NA') {
+        //     waterSource += "." + waterSubSource;
+        // }
     }
     return waterSource;
 }
@@ -2203,7 +2203,7 @@ export const getOpenSearchResultsForWater = async (queryObject, requestBody, dis
         }
         let currentTime = new Date().getTime(), locality, tenantId;
         let result = findAndReplace(response, null, "NA");
-        result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
+        // result.WaterConnection[0].waterSourceSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource;
         let waterSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[0];
         let waterSubSource = result.WaterConnection[0].waterSource.includes("null") ? "NA" : result.WaterConnection[0].waterSource.split(".")[1];
         result.WaterConnection[0].waterSource = waterSource;

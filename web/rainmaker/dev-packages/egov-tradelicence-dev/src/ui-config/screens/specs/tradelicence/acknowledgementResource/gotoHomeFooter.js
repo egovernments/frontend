@@ -16,7 +16,6 @@ const getCommonApplyFooter = children => {
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let tenant = getQueryArg(window.location.href, "tenantId");
   let purpose1 = getQueryArg(window.location.href, "purpose");
-debugger;
 
 const getRedirectionURL = () => {
   /* Mseva 2.0 changes */

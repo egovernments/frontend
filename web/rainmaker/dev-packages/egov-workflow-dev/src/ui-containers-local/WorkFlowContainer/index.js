@@ -136,7 +136,6 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
-    debugger;
     if (moduleName === "NewTL") {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
