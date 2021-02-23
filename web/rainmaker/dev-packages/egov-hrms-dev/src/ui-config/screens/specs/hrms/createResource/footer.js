@@ -228,6 +228,7 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch(toggleSnackbar(true, errorMessage3, "warning"));
       return;
     }
+    dispatch(prepareFinalObject("Employee[0].jurisdictions", [...jurisdictions]));
     dispatch(prepareFinalObject("Employee[0].user.roles", rolesList))
 
     setRolesList(state, dispatch);

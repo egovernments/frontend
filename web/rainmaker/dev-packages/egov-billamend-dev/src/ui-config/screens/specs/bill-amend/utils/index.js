@@ -386,9 +386,15 @@ export const submitApplication = async (state, dispatch) => {
 
 
 export const generateBillAmendPdf = async (Amendments, tenantId, mode = 'download') => {
+
+
+  let pdfKey ='bill-amendment-credit-note' ;
+  if( get(Amendments[0],"businessService",'WS')=='SW'){
+    pdfKey ='sw-bill-amendment-credit-note' ;
+  }
   const queryStr = [
     // { key: "key", value: 'bill-amendment-summary' },
-    { key: "key", value: 'bill-amendment-credit-note' },
+    { key: "key", value: pdfKey},
     { key: "tenantId", value: tenantId }
   ]
   const DOWNLOADRECEIPT = {
