@@ -1,16 +1,18 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getGroupBillSearch } from "../../../../../ui-utils/commons";
+import { searchForBirth } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
 import { convertEpochToDate } from "../../utils/index";
 
 
 export const searchApiCall = async (state, dispatch) => {
+
   showHideTable(false, dispatch);
+
   let tenantId = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen.tenantId"
+    "bnd.birth.tenantId"
   );
   let queryObject = [
     {
@@ -19,159 +21,119 @@ export const searchApiCall = async (state, dispatch) => {
     },
     { key: "limit", value: "10" }
   ];
-  let searchScreenObject = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+  let searchSet1Visible = get(
+    state.screenConfiguration,
+    "screenConfig.getCertificate.components.div.children.birthSearchCard.children.cardContent.children.searchContainer1.visible",
     {}
   );
 
-  const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children",
+  const isSearchSet1Valid = validateFields(
+    "components.div.children.birthSearchCard.children.cardContent.children.searchContainer1.children.details.children",
     state,
     dispatch,
-    "billSearch"
+    "getCertificate"
   );
-  const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children",
+  const isSearchSet2Valid = validateFields(
+    "components.div.children.birthSearchCard.children.cardContent.children.searchContainer2.children.details.children",
     state,
     dispatch,
-    "billSearch"
+    "getCertificate"
   );
-  if (!isSearchBoxFirstRowValid || !isSearchBoxSecondRowValid) {
+  const isSearchSetCommonValid = validateFields(
+    "components.div.children.birthSearchCard.children.cardContent.children.searchContainerCommon.children",
+    state,
+    dispatch,
+    "getCertificate"
+  );
+
+  if (!isSearchSetCommonValid || (searchSet1Visible && !isSearchSet1Valid) || 
+    (!searchSet1Visible && !isSearchSet2Valid)) {
     dispatch(
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill valid fields to start search",
-          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
+          labelName: "Please fill the required fields to search.",
+          labelKey: "BND_COMMON_REQ_FIELDS_ERR"
         },
         "warning"
       )
     );
-  } else if (
-    Object.keys(searchScreenObject).length == 0 ||
-    Object.values(searchScreenObject).every(x => x === "")
-  ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to start search",
-          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
-        },
-        "warning"
-      )
-    );
-  } else {
-    for (var key in searchScreenObject) {
-      if (
-        searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
-        searchScreenObject[key].trim() !== ""
-      ) {
-        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-      }
-      if (searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key] =="") {
-          delete searchScreenObject[key];
-      }
-    }
-    let serviceObject = get(
-      state.screenConfiguration.preparedFinalObject,
-      "searchScreenMdmsData.BillingService.BusinessService"
-    ).filter(item => item.code === searchScreenObject.businesService);
-
-    searchScreenObject.url = serviceObject && serviceObject[0] && serviceObject[0].billGineiURL;
-    const isAdvancePayment = serviceObject && serviceObject[0] && serviceObject[0].isAdvanceAllowed;
-    if (!searchScreenObject.url) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Selected Service Category is Not Available for Search",
-            labelKey: "ABG_SEARCH_BILLGINEIURL_NOTFOUND"
-          },
-          "error"
-        )
-      );
-      return;
-    }
-    searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
-    const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject)
-    const bills = (responseFromAPI && responseFromAPI.Bills) || [];
-    const billTableData = bills.map(item => {
-      return {
-        billNumber: get(item, "billNumber"),
-        billId: get(item, "id"),
-        consumerCode: get(item, "consumerCode"),
-        consumerName: get(item, "payerName"),
-        billDate: get(item, "billDate"),
-        billAmount: get(item, "totalAmount"),
-        status: get(item, "status"),
-        action: getActionItem(get(item, "status")),
-        tenantId: get(item, "tenantId")
-      };
-    });
-    dispatch(
-      prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
-    );
-    const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
-    const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
-    
-    try {
-      let data = billTableData.map(item => ({
-        ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
-        ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
-        ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
-        ['ABG_COMMON_TABLE_COL_BILL_DATE']:
-          convertEpochToDate(item.billDate) || "-",
-        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount===0) ? item.billAmount : "-",
-        ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
-        ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
-        ["RECEIPT_KEY"]: get(configObject[0], "receiptKey"),
-        ["BILL_KEY"]: get(configObject[0], "billKey"),
-        ["TENANT_ID"]: item.tenantId,
-        ["BILL_ID"]: item.billId,
-        ["BILL_SEARCH_URL"]: searchScreenObject.url,
-        ["ADVANCE_PAYMENT"]: isAdvancePayment
-      }));
-      dispatch(
-        handleField(
-          "billSearch",
-          "components.div.children.searchResults",
-          "props.data",
-          data
-        )
-      );
-      dispatch(
-        handleField(
-          "billSearch",
-          "components.div.children.searchResults",
-          "props.tableData",
-          billTableData
-        )
-      );
-      dispatch(
-        handleField(
-          "billSearch",
-          "components.div.children.searchResults",
-          "props.rows",
-          billTableData.length
-        )
-      );
-
-      showHideTable(true, dispatch);
-    } catch (error) {
-      dispatch(toggleSnackbar(true, error.message, "error"));
-      console.log(error);
-    }
+    return;
   }
-};
+
+  const responseFromAPI = await searchForBirth(dispatch, queryObject)
+  const births = (responseFromAPI && responseFromAPI.births) || [{regNo:"2019-AGRA-000671","name":"Srinath","dateOfBirth":"12-12-2012","gender":"Male","mothersName":"Veena","fathersName":"Raj K T","tenantId":tenantId}];
+
+  const birthTableData = births.map(item => {
+    return {
+      regNo: get(item, "regNo"),
+      nameOfChild: get(item, "nameOfChild"),
+      dateOfBirth: get(item, "dateOfBirth"),
+      gender: get(item, "gender"),
+      mothersName: get(item, "mothersName"),
+      fathersName: get(item, "fathersName"),
+      action: getActionItem("NEW"),//getActionItem(get(item, "status")),
+      tenantId: get(item, "tenantId")
+    };
+  });
+  dispatch(
+    prepareFinalObject("bnd.birth.birthSearchResponse", births)
+  );
+
+  // const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
+  // const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
+    
+  try {
+    let data = birthTableData.map(item => ({
+      ['BND_COMMON_TABLE_REGNO']: item.regNo || "-",
+      ["BND_COMMON_NAME"]: item.nameOfChild || "-",
+      ['BND_BIRTH_DATE']: item.dateOfBirth || "-", //convertEpochToDate(item.billDate) 
+      ['BND_COMMON_GENDER']: item.gender || "-",
+      ['BND_COMMON_MOTHERSNAME']: item.mothersName || "-",
+      ['BND_COMMON_FATHERSNAME']: item.fathersName || "-",
+      ['BND_COMMON_TABLE_ACTION']: item.action || "-",
+      ["BUSINESS_SERVICE"]: "BIRTH_CERT",
+      ["TENANT_ID"]: item.tenantId,
+      // ["BILL_ID"]: item.billId,
+      // ["BILL_SEARCH_URL"]: searchScreenObject.url,
+      // ["ADVANCE_PAYMENT"]: isAdvancePayment
+    }));
+    dispatch(
+      handleField(
+        "getCertificate",
+        "components.div.children.searchResults",
+        "props.data",
+        data
+      )
+    );
+    dispatch(
+      handleField(
+        "getCertificate",
+        "components.div.children.searchResults",
+        "props.tableData",
+        birthTableData
+      )
+    );
+    dispatch(
+      handleField(
+        "getCertificate",
+        "components.div.children.searchResults",
+        "props.rows",
+        birthTableData.length
+      )
+    );
+
+    showHideTable(true, dispatch);
+  } catch (error) {
+    dispatch(toggleSnackbar(true, error.message, "error"));
+    console.log(error);
+  }
+}
 
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "billSearch",
+      "getCertificate",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow
@@ -181,10 +143,6 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 
 const getActionItem = (status) => {
   switch (status) {
-    case "ACTIVE": return "PAY";
-    case "CANCELLED":
-    case "EXPIRED": return "GENERATE NEW BILL"
-    case "PAID": return "DOWNLOAD RECEIPT"
-    case "PARTIALLY_PAID": return "PARTIALLY PAID"
+    case "NEW": return "PAY and DOWNLOAD";
   }
 }

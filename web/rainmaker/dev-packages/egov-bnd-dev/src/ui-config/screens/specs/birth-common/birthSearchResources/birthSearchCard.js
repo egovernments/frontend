@@ -200,6 +200,7 @@ export const searchSet1 = getCommonContainer({
     moduleName: "egov-bnd",
     componentPath: "LinkButton",
     props: { 
+      disableValidation:true,
       url: "teat" ,
       labelKey:"BND_DONT_KNOW_REGNO_MSG",
       onClickDefination: {
@@ -312,23 +313,23 @@ export const searchSet2 = getCommonContainer({
 
       },
   },
-  fathersName: getTextField({
-    label: {
-      labelName: "Father's Name",
-      labelKey: "BND_FATHERS_NAME_LABEL"
-    },
-    placeholder: {
-      labelName: "Father's Name",
-      labelKey: "BND_FATHERS_NAME_PLACEHOLDER"
-    },
-    required:true,
-    visible: true,
-    jsonPath: "bnd.birth.fathersName",
-    gridDefination: {
-      xs: 12,
-      sm: 4
-    }
-  }),
+  // fathersName: getTextField({
+  //   label: {
+  //     labelName: "Father's Name",
+  //     labelKey: "BND_FATHERS_NAME_LABEL"
+  //   },
+  //   placeholder: {
+  //     labelName: "Father's Name",
+  //     labelKey: "BND_FATHERS_NAME_PLACEHOLDER"
+  //   },
+  //   required:true,
+  //   visible: true,
+  //   jsonPath: "bnd.birth.fathersName",
+  //   gridDefination: {
+  //     xs: 12,
+  //     sm: 4
+  //   }
+  // }),
   mothersName: getTextField({
     label: {
       labelName: "Mother's Name",
@@ -351,6 +352,7 @@ export const searchSet2 = getCommonContainer({
     moduleName: "egov-bnd",
     componentPath: "LinkButton",
     props: { 
+      disableValidation:true,
       url: "teat" ,
       labelKey:"BND_DONT_KNOW_DETAILS_MSG",
       onClickDefination: {

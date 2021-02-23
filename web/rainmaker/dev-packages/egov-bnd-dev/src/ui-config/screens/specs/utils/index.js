@@ -86,6 +86,8 @@ export const validateFields = (
         fields[variable].props &&
         (fields[variable].props.disabled === undefined ||
           !fields[variable].props.disabled) &&
+        (fields[variable].props.disableValidation === undefined ||
+          !fields[variable].props.disableValidation) && 
         !validate(
           screen,
           {

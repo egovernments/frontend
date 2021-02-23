@@ -13,91 +13,81 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
+      // {
+      //   labelName: "Bill No.",
+      //   labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: (value, tableMeta, updateValue) => (
+      //       <a href="javascript:void(0)"
+      //         onClick={() => {
+      //           const receiptQueryString = [
+      //             {
+      //               key: 'challanNo',
+      //               value: tableMeta.rowData[1]
+      //             },
+      //             { key: 'tenantId', value: tableMeta.rowData[10] }];
+      //             downloadChallan(receiptQueryString,"download");
+      //          // downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
+      //         }}
+      //       >
+      //         {value}
+      //       </a>
+      //     )
+      //   }
+      // },
       {
-        labelName: "Bill No.",
-        labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
-        options: {
-          filter: false,
-          customBodyRender: (value, tableMeta, updateValue) => (
-            <a href="javascript:void(0)"
-              onClick={() => {
-                const receiptQueryString = [
-                  {
-                    key: 'challanNo',
-                    value: tableMeta.rowData[1]
-                  },
-                  { key: 'tenantId', value: tableMeta.rowData[10] }];
-                  downloadChallan(receiptQueryString,"download");
-               // downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
-              }}
-            >
-              {value}
-            </a>
-          )
-        }
+        labelName: "Registration Number",
+        labelKey: "BND_COMMON_TABLE_REGNO",
       },
       {
-        labelName: "Consumer Code",
-        labelKey: "PAYMENT_COMMON_CONSUMER_CODE",
-         
+        labelName: "Name",
+        labelKey: "BND_COMMON_NAME"
       },
       {
-        labelName: "Consumer Name",
-        labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_NAME"
+        labelName: "Birth Date",
+        labelKey: "BND_BIRTH_DATE"
       },
       {
-        labelName: "Bill Date",
-        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
+        labelName: "Gender",
+        labelKey: "BND_COMMON_GENDER"
       },
       {
-        labelName: "Bill Amount(Rs)",
-        labelKey: "ABG_COMMON_TABLE_COL_BILL_AMOUNT"
+        labelName: "Mother's Name",
+        labelKey: "BND_COMMON_MOTHERSNAME"
       },
       {
-        labelName: "Status",
-        labelKey: "ABG_COMMON_TABLE_COL_STATUS",
-        options:{
-          filter: false,
-          customBodyRender: value => (
-            <span>
-               {getLocaleLabels(value.toUpperCase(),value.toUpperCase())}
-            </span>
-          )
-
-        }
+        labelName: "Father's Name",
+        labelKey: "BND_COMMON_FATHERSNAME"
       },
       {
         labelName: "Action",
-        labelKey: "ABG_COMMON_TABLE_COL_ACTION",
+        labelKey: "BND_COMMON_TABLE_ACTION",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) => value === "PAY" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta):(tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
         }
       },
-      {
-        labelKey: "BUSINESS_SERVICE",
-        labelName: "Business Service",
-        options: {
-          display: false,
-          viewColumns  :false
-        }
-      },
-      {
-        labelKey: "RECEIPT_KEY",
-        labelName: "Receipt Key",
-        options: {
-          display: false,
-          viewColumns  :false
-        }
-      },
-      {
-        labelName: "Bill Key",
-        labelKey: "BILL_KEY",
-        options: {
-          display: false,
-          viewColumns  :false
-        }
-      },
+      // {
+      //   labelName: "Status",
+      //   labelKey: "ABG_COMMON_TABLE_COL_STATUS",
+      //   options:{
+      //     filter: false,
+      //     customBodyRender: value => (
+      //       <span>
+      //          {getLocaleLabels(value.toUpperCase(),value.toUpperCase())}
+      //       </span>
+      //     )
+      //   }
+      // },
+      // {
+      //   labelName: "Action",
+      //   labelKey: "ABG_COMMON_TABLE_COL_ACTION",
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: (value, tableMeta) => value === "PAY" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta):(tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
+      //   }
+      // },
       {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
@@ -107,24 +97,8 @@ export const searchResults = {
         }
       },
       {
-        labelName: "Bill Id",
-        labelKey: "BILL_ID",
-        options: {
-          display: false,
-          viewColumns  :false
-        }
-      },
-      {
-        labelName: "Bill Search Url",
-        labelKey: "BILL_SEARCH_URL",
-        options: {
-          display: false,
-          viewColumns  :false
-        }
-      },
-      {
-        labelName: "Advance Payment",
-        labelKey: "ADVANCE_PAYMENT",
+        labelName: "Business Service",
+        labelKey: "BUSINESS_SERVICE",
         options: {
           display: false,
           viewColumns  :false
@@ -133,7 +107,7 @@ export const searchResults = {
     ],
     title: {
       labelName: "Search Results for Bill",
-      labelKey: "BILL_GENIE_SEARCH_TABLE_HEADER"
+      labelKey: "BIRTH_SEARCH_TABLE_HEADER"
     },
     rows : "",
     options: {
@@ -145,7 +119,7 @@ export const searchResults = {
       rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
-      column: "Bill Date",
+      column: "Birth Date",
       sortingFn: (data, i, sortDateOrder) => {
         const epochDates = data.reduce((acc, curr) => {
           acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
