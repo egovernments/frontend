@@ -3,8 +3,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar, showSpinner, hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -101,6 +100,8 @@ export const callBackForNext = async (state, dispatch) => {
         }
       }
     }
+
+    dispatch(handleField("create", "components.div.children.formwizardSecondStep.children.jurisdictionDetails.children.cardContent.children.jurisdictionDetailsCard", "props.items", []));
   }
   if (activeStep === 1) {
     let jurisdictionDetailsPath =
@@ -194,6 +195,14 @@ export const callBackForNext = async (state, dispatch) => {
       `Employee[0].jurisdictions`,
       []
     );
+    let deletedJurisdictions = get(
+      state.screenConfiguration.preparedFinalObject,
+      `deletedJurisdiction`,
+      []
+    );
+    let deletedJurisdiction = [];
+    deletedJurisdiction = jurisdictions.filter(jurisdiction => jurisdiction.isDeleted === false && jurisdiction.isActive)
+    deletedJurisdiction = [...deletedJurisdictions, ...deletedJurisdiction]
     jurisdictions = jurisdictions.filter(jurisdiction => jurisdiction.isDeleted !== false);
     let rolesList = [];
     let baseTenant = false;
@@ -203,10 +212,10 @@ export const callBackForNext = async (state, dispatch) => {
       judis && judis.roles && Array.isArray(judis.roles) && judis.roles.map(role => {
         rolesList.push({ ...role, tenantId: judis.boundary, code: role.value, name: role.label })
       })
-      if (judis&& judis.boundary && judis.boundary == getQueryArg(window.location.href, 'tenantId')) {
+      if (judis && judis.boundary && judis.boundary == getQueryArg(window.location.href, 'tenantId')) {
         baseTenant = true;
       }
-      if (judis&& judis.boundary&&tenants.includes(judis.boundary)) {
+      if (judis && judis.boundary && tenants.includes(judis.boundary)) {
         repeatedTenant = true;
       }
       tenants.push(judis.boundary);
@@ -227,9 +236,13 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch(toggleSnackbar(true, errorMessage3, "warning"));
       return;
     }
+
+    dispatch(prepareFinalObject("deletedJurisdiction", [...deletedJurisdiction]));
+
     dispatch(prepareFinalObject("Employee[0].jurisdictions", [...jurisdictions]));
     dispatch(prepareFinalObject("Employee[0].user.roles", rolesList))
-
+    dispatch(handleField("create", "components.div.children.formwizardThirdStep.children.reviewDetails.children.cardContent.children.viewJurisdictionDetails.children.cardContent.children.viewOne", "props.items", []));
+    dispatch(handleField("create", "components.div.children.formwizardSecondStep.children.jurisdictionDetails.children.cardContent.children.jurisdictionDetailsCard", "props.items", []));
     setRolesList(state, dispatch);
   }
   if (activeStep === 2) {
