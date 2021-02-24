@@ -61,6 +61,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.consumerCodes",
+      "props.value",
+      ""
+    )
+  );
 };
 
 export const UCSearchCard = getCommonCard({
@@ -68,10 +76,10 @@ export const UCSearchCard = getCommonCard({
     labelName: "Search Receipt",
     labelKey: "UC_SEARCH_COMMON_HEADER"
   }),
-  subheader: getCommonSubHeader({
-    labelName: "Provide at least one parameter to search for an application",
-    labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
-  }),
+  // subheader: getCommonSubHeader({
+  //   labelName: "Provide at least one parameter to search for an application",
+  //   labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
+  // }),
   searchContainer: getCommonContainer({
     receiptNumber: getTextField({
       label: {
@@ -84,7 +92,24 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.receiptNumbers",
+      jsonPath: "ucSearchScreen.receiptNumbers",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
+    consumerCodes: getTextField({
+      label: {
+        labelName: "Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Consumer code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL_PLACEHOLDER"
+      },
+      required: false,
+      visible: true,
+      jsonPath: "ucSearchScreen.consumerCodes",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -94,6 +119,7 @@ export const UCSearchCard = getCommonCard({
       uiFramework: "custom-containers-local",
       moduleName: "egov-uc",
       componentPath: "AutosuggestContainer",
+      visible: false,
       props: {
         className: "autocomplete-dropdown",
         label: {
@@ -108,34 +134,34 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
-        required: true,
+        required: false,
+       
         isClearable: true,
         labelsFromLocalisation: true,
         sourceJsonPath: "applyScreenMdmsData.serviceCategories",
-        jsonPath: "searchScreen.businessServices",
+        jsonPath: "searchScreenMdmsData.businessServiceSelected",
       },
-      required: true,
-      jsonPath: "searchScreen.businessServices",
+      jsonPath: "searchScreenMdmsData.businessServiceSelected",
       gridDefination: {
         xs: 12,
         sm: 4
       },
       beforeFieldChange: async (action, state, dispatch) => {
-        // const serviceCategory = get(
-        //   state.screenConfiguration,
-        //   "preparedFinalObject.applyScreenMdmsData.serviceCategories"
-        // );
-        // const selectedCategory = serviceCategory.find(
-        //   item => item.code === action.value
-        // );
-        // const serviceTypes =
-        //   selectedCategory &&
-        //   ((selectedCategory.child &&
-        //   selectedCategory.child.length > 0) ?
-        //   selectedCategory.child.map(item => item.code) : selectedCategory.code);
-        // dispatch(
-        //   prepareFinalObject("searchScreen.businessServices", serviceTypes)
-        // );
+        const serviceCategory = get(
+          state.screenConfiguration,
+          "preparedFinalObject.applyScreenMdmsData.serviceCategories"
+        );
+        const selectedCategory = serviceCategory.find(
+          item => item.code === action.value
+        );
+        const serviceTypes =
+          selectedCategory &&
+          ((selectedCategory.child &&
+          selectedCategory.child.length > 0) ?
+          selectedCategory.child.map(item => item.code) : selectedCategory.code);
+        dispatch(
+          prepareFinalObject("ucSearchScreen.businessServices", serviceTypes)
+        );
         return action;
       }
     },
@@ -159,7 +185,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNumber"
+      jsonPath: "ucSearchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({
@@ -174,7 +200,7 @@ export const UCSearchCard = getCommonCard({
       required: false,
       visible: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.fromDate",
+      jsonPath: "ucSearchScreen.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -193,13 +219,15 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.toDate",
+      jsonPath: "ucSearchScreen.toDate",
 
       gridDefination: {
         xs: 12,
         sm: 4
       }
-    })
+    }),
+ 
+
   }),
 
   buttonContainer: getCommonContainer({
