@@ -1,10 +1,13 @@
 import RenderScreen from "egov-ui-framework/ui-molecules/RenderScreen";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getMdmsJson, getObjectKeys, getObjectValues, getQueryArg, getTLTenantId } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import cloneDeep from "lodash/cloneDeep";
 import { getSelectField } from "../../ui-config/screens/specs/utils";
+import { getLocale, getLocalization} from "egov-ui-kit/utils/localStorageUtils";
+
 class DynamicMdmsContainer extends Component {
   componentDidMount = () => {
     let { state, moduleName, rootBlockSub } = this.props;
@@ -13,7 +16,10 @@ class DynamicMdmsContainer extends Component {
     (!isMdmsData && !isMdmsApiTrigger) && this.triggerInitilaApi();
   }
   triggerInitilaApi = async () => {
-    let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0 } = this.props;
+    let { rootBlockSub, state, moduleName, masterName, filter, dispatch, callBackEdit, isDependency, dropdownFields, index = 0 , tenantId=null} = this.props;
+    if(moduleName ==="TradeLicense" && masterName ==="TradeType"){
+      tenantId=getTLTenantId();
+    }
     const isDependencyCheck = isDependency ? get(state.screenConfiguration.preparedFinalObject, isDependency, false) : true;
     if (isDependencyCheck) {
       let reqObj = {
@@ -23,7 +29,8 @@ class DynamicMdmsContainer extends Component {
         moduleName,
         name: masterName,
         rootBlockSub,
-        filter
+        filter,
+        tenantId :tenantId
       }
       dispatch(prepareFinalObject(`DynamicMdms.apiTriggered`, true));
       await getMdmsJson(state, dispatch, reqObj);
@@ -66,6 +73,11 @@ class DynamicMdmsContainer extends Component {
       this.triggerCallback(componentJsonpath, value, isIndex);
     }
   }
+  getLocalTextFromCode = (localCode) => {
+    return JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
+      item => item.code === localCode
+    );
+  } 
   getValueByKey = (key) => {
     let { state, rootBlockSub, moduleName } = this.props;
     if (key) {
@@ -140,6 +152,12 @@ class DynamicMdmsContainer extends Component {
       let { key, fieldType, isDisabled, className, isRequired = false, requiredValue = false } = entry;
       isRequired = isRequired ? this.checkValueExists(`DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`) : false;
       requiredValue = requiredValue == false ? isRequired : requiredValue;
+      let helperMsg ="Required";
+      if(getLocale()=="hi_IN"){
+        helperMsg="आवश्यक प्रविष्टि";
+      }
+        
+    
       allObj[key] = (fieldType == "autosuggest") ?
         {
           uiFramework: "custom-containers",
@@ -147,7 +165,7 @@ class DynamicMdmsContainer extends Component {
           jsonPath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
           componentJsonpath: `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${index}].${key}`,
           required: isRequired,
-          helperText: isRequired ? "Required" : "",
+          helperText: isRequired ? helperMsg : '',
           gridDefination: {
             xs: 12,
             sm: gridSm
@@ -177,7 +195,8 @@ class DynamicMdmsContainer extends Component {
             isClearable: true,
             required: isRequired,
             required: requiredValue,
-            helperText: isRequired ? "Required" : '',
+            disabled: isDisabled ? isDisabled : false,
+            helperText: isRequired ? helperMsg : '',
             inputLabelProps: {
               shrink: true
             }
@@ -241,7 +260,7 @@ const mapStateToProps = (state, ownprops) => {
    const moduleName1 = DynamicMdms[moduleName]||{};
    const rootBlockSub1 = moduleName1[rootBlockSub]||{};
    const key1 = rootBlockSub1[`${key}Transformed`]||{};
- 
+
    const allDropdown1 = key1['allDropdown']||[];
    return {moduleName1,rootBlockSub1,key1,allDropdown1}
  })
