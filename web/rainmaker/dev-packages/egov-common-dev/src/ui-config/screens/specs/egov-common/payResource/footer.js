@@ -119,7 +119,8 @@ export const callPGService = async (state, dispatch) => {
         gateway: "AXIS",
         taxAndPayments,
         user,
-        callbackUrl
+        callbackUrl,
+        businessService: businessService
       }
     };
     const goToPaymentGateway = await httpRequest(
