@@ -6,7 +6,7 @@ import {
 import { UCSearchCard } from "./universalCollectionResources/ucSearch";
 import get from "lodash/get";
 import { setServiceCategory } from "../utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
@@ -16,8 +16,8 @@ import "./index.css";
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
-  labelName: "Universal Collection",
-  labelKey: "UC_COMMON_HEADER_SEARCH"
+  labelName: "Receipt",
+  labelKey: "UC_RECEIPT"
 });
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -29,6 +29,7 @@ const getData = async (action, state, dispatch) => {
 };
 
 const getMDMSData = async (action, state, dispatch) => {
+  
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -62,10 +63,12 @@ const getMDMSData = async (action, state, dispatch) => {
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
     ); 
+    console.info("setting uiCommonConfig",payload);
+    console.info("data=",get(payload.MdmsRes ,"common-masters.uiCommonPay"));
     dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
     } catch (e) {
     console.log(e);
-    alert("Billing service data fetch failed");
+    
   }
 };
 
@@ -73,6 +76,7 @@ const ucSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("ucSearchScreen", {}));
     getData(action, state, dispatch);
     return action;
   },
@@ -97,49 +101,7 @@ const ucSearchAndResult = {
               },
               ...header
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
-
-                buttonLabel: getLabel({
-                  labelName: "NEW COLLECTION",
-                  labelKey: "UC_SEARCH_RESULTS_NEW_COLLECTION_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  openNewCollectionForm(state, dispatch);
-                }
-              }
-            }
+ 
           }
         },
         UCSearchCard,
@@ -152,12 +114,4 @@ const ucSearchAndResult = {
 
 export default ucSearchAndResult;
 
-const openNewCollectionForm = (state, dispatch) => {
-  dispatch(prepareFinalObject("Demands", []));
-  dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-  const path =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/uc/newCollection`
-      : `/uc/newCollection`;
-  dispatch(setRoute(path));
-};
+

@@ -1,7 +1,8 @@
 import React from "react";
 import {
   sortByEpoch,
-  getEpochForDate
+  getEpochForDate,
+  getTextToLocalMapping
 } from "../../utils";
 import {download} from "egov-common/ui-utils/commons"
 
@@ -17,18 +18,14 @@ export const searchResults = {
         labelKey: "UC_COMMON_TABLE_COL_RECEIPT_NO",
         options: {
           filter: false,
-          customBodyRender: (value, tableMeta, updateValue) => (
-            <div onClick={value => {
-                const receiptQueryString = [
-                  { key: "receiptNumbers", value:  tableMeta.rowData[0]},
-                  { key: "tenantId", value: tableMeta.rowData[7] }
-                ]
-                download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
-              }}>
-              {value}
-            </div>
+          customBodyRender: (value, tableMeta) => (
+              <a href="javascript:void(0)" onClick={() => onRowClick(tableMeta.rowData)}>{value}</a>
           )
         }
+      },
+      {
+        labelName: "Consumer Code",
+        labelKey: "UC_COMMON_TABLE_COL_CONSUMERCODE"
       },
       {
         labelName: "Payee Name",
@@ -48,26 +45,24 @@ export const searchResults = {
       },
       {
         labelName: "Status",
-        labelKey: "UC_COMMON_TABLE_COL_STATUS"
-      },
-      {
-        labelName: "Receipt Key",
-        labelKey: "RECEIPT_KEY",
+        labelKey: "UC_COMMON_TABLE_COL_STATUS",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       }
     ],
     title: {
-      labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",
-      labelName: "Search Results for Receipt",
+      labelName: "Search Results for Payments",
+      labelKey: "COMMON_TABLE_SEARCH_RESULT_PAYMENTS"
     },
     rows: "",
     options: {
@@ -94,4 +89,12 @@ export const searchResults = {
       }
     }
   }
+};
+
+const onRowClick = rowData => {
+  const receiptQueryString = [
+    { key: "receiptNumbers", value:  rowData[0]},
+    { key: "tenantId", value: rowData[7] }
+  ]
+  download(receiptQueryString);
 };

@@ -38,7 +38,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ucSearchScreen",
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
@@ -66,8 +66,8 @@ export const searchApiCall = async (state, dispatch) => {
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill at least one field to start search",
-          labelKey: "UC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+          labelName: "Please fill valid fields to start search",
+          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
         },
         "warning"
       )
@@ -104,30 +104,11 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
+    console.info("query obj=",queryObject);
     const responseFromAPI = await getSearchResults(queryObject);
-    const businessServices = get(searchScreenObject, 'businessServices', null);
-    const businessServiceDataList = get(
-      state.screenConfiguration.preparedFinalObject,
-      "applyScreenMdmsData.businessServiceDataList",
-      []
-    );
-    let responseFromFilter = [];
-    if(!businessServices) {
-      get(responseFromAPI, 'Payments', []).map(payment => {
-        if(businessServiceDataList.includes(get(payment, "paymentDetails[0].businessService", ""))) {
-          responseFromFilter.push(payment);
-        }
-      })
-    } else {
-      responseFromFilter = get(responseFromAPI, 'Payments', []).filter(payment => {
-        return get(payment, "paymentDetails[0].businessService", "") == businessServices
-      })
-    }
-    
     dispatch(prepareFinalObject("PaymentsSearchResponse", responseFromAPI));
 
-    // const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
-    const Payments = responseFromFilter || [];
+    const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
     const response = [];
     for (let i = 0; i < Payments.length; i++) {
       const serviceTypeLabel = getTransformedLocale(
@@ -135,7 +116,8 @@ export const searchApiCall = async (state, dispatch) => {
       );
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
-        payeeName: get(Payments[i], `payerName`),
+        consumerCode:get(Payments[i],`paymentDetails[0].bill.consumerCode`),
+        payeeName: get(Payments[i], `paidBy`), // changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
@@ -147,6 +129,7 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       let data = response.map(item => ({
         ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['UC_COMMON_TABLE_COL_CONSUMERCODE']:item.consumerCode || "-",
         ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
         ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
         ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
