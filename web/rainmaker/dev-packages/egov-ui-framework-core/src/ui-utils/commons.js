@@ -702,7 +702,6 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
       moduleDetails: moduleDetails
     }
   };
-  debugger;
   try {
     let payload = null;
     payload = await httpRequest(

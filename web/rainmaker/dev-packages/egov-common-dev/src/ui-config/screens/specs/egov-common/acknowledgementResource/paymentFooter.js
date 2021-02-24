@@ -39,7 +39,7 @@ const defaultValues = {
     ]
 }
 
-export const paymentFooter = (state, consumerCode, tenant, status, businessService) => {
+export const paymentFooter = (state, consumerCode, tenant, status, businessService, extraData) => {
 
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo", defaultValues);
     const buttons = get(uiCommonPayConfig, "buttons");
