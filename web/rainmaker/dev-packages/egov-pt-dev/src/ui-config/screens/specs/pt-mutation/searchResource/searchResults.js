@@ -311,7 +311,7 @@ const applicationNumberClick = async (item) => {
 }
 
 const propertyIdClick = (item) => {
-  item.tenantId=getTenantId();
+  item.tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
   navigate(propertyInformationScreenLink(item.propertyId,item.tenantId));
 }
 
