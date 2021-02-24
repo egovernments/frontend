@@ -386,8 +386,20 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
     }
     const channel = getQueryArg(window.location.href, "channel");
-    if(channel !=null){
-    set(queryObject[0], "tradeLicenseDetail.channel", channel);}
+    //const channel= getQueryArg("https://mseva-uat.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?tenantId=pb.testing&channel=EODB:19053028:2101468455&returnURL=https://pbindustries.gov.in/webportal/dashboard/investor-dashboard?t=RC&smsLink=true&mobileNo=9779389816", "channel");
+  
+  if(channel != null){
+      const returnURL= getQueryArg(window.location.href, "returnURL");
+      const channeld = channel.split(":");
+      set(queryObject[0], "tradeLicenseDetail.channel", channeld[0]);
+    set(queryObject[0], "tradeLicenseDetail.additionalDetail.channel_pin", channeld[1]);
+    set(queryObject[0], "tradeLicenseDetail.additionalDetail.channel_appid", channeld[2]);
+    set(queryObject[0], "tradeLicenseDetail.additionalDetail.returnURL", returnURL);
+    set(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.channel", channeld[0]);
+    set(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.channel_pin", channeld[1]);
+    set(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.channel_appid", channeld[2]);
+    set(state.screenConfiguration.preparedFinalObject.Licenses[0], "tradeLicenseDetail.additionalDetail.returnURL", returnURL);
+  }
     
     set(queryObject[0], "tenantId", tenantId);
     if (get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "APPLICATIONTYPE.RENEWAL" || get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType", "") == "RENEWAL") {

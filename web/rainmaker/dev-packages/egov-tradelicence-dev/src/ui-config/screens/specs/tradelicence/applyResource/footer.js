@@ -37,7 +37,11 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
-
+  const returnURL = get(LicenseData.tradeLicenseDetail.additionalDetail, "returnURL");
+  const channel_pin = get(LicenseData.tradeLicenseDetail.additionalDetail, "channel_pin");
+  const channel_appid = get(LicenseData.tradeLicenseDetail.additionalDetail, "channel_appid");
+  const senderName = get(LicenseData.tradeLicenseDetail.owners[0], "name");
+  const senderType = get(LicenseData.tradeLicenseDetail.owners[0], "type");
   if ( get(LicenseData.tradeLicenseDetail, "channel") == null){
   dispatch(
     setRoute(
@@ -46,7 +50,26 @@ const moveToSuccess = (LicenseData, dispatch) => {
   );}
 
   else{
-alert("Yet to add redirection url for EODB");
+ let result="false";
+//alert("Yet to add redirection url for EODB");
+var request = require('request');
+var options = {
+  'method': 'POST',
+  'url': 'https://pbindustries.gov.in/testportalnode/api/lg/UpdateStatus',
+  'headers': {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({"iPin":channel_pin,"AppId":channel_appid,"licenseNo":applicationNo,"statusId":"1","statusDesc":"DuePayment","comments":"","senderName":senderName,"senderDesignation":senderType,"receiverName":"","receiverDesignation":"","clearanceIssuedOn":"","clearanceExpiredOn":"NA","clearanceFile":"","integrationSource":"TL","statusDate":"2021-02-17"})
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+  result = response.body;
+  if(result=="true")
+{
+  window.location =returnURL;
+}
+});
 
   }
 };
