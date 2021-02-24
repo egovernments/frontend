@@ -98,7 +98,7 @@ class PTAcknowledgement extends React.Component {
       this.setState({ showPay, fetchBill });
     } catch (error) {
       this.props.toggleSnackbarAndSetText(true,  { labelName: error.message, labelKey: error.message },           error.message&& error.message.includes&& error.message.includes("No Demands Found") ? "warning" : "error");
-      console.log(e);
+      console.log(error);
     }
   };
   render() {
