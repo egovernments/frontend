@@ -724,7 +724,11 @@ class FormWizard extends Component {
       "Properties[0].propertyDetails[0].citizenInfo.name",
       get(prepareFormData, "Properties[0].propertyDetails[0].owners[0].name")
     );
-
+    set(
+      prepareFormData,
+      "Properties[0].tenantId",
+      process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity
+    );
     const properties = normalizePropertyDetails(
       prepareFormData.Properties,
       this
