@@ -14,7 +14,7 @@ import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { fetchAssessments } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { fetchFromLocalStorage, isDocumentValid } from "egov-ui-kit/utils/commons";
-import { getUserInfo, localStorageSet, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, localStorageSet, getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getEstimateFromBill, getFinancialYearFromQuery, getQueryValue, resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { addOwner, callDraft, configOwnersDetailsFromDraft, getCalculationScreenData, getHeaderLabel, getInstituteInfo, getMultipleOwnerInfo, getSelectedCombination, getSingleOwnerInfo, getSortedTaxSlab, getTargetPropertiesDetails, normalizePropertyDetails, renderPlotAndFloorDetails, validateUnitandPlotSize } from "egov-ui-kit/utils/PTCommon/FormWizardUtils";
 import { formWizardConstants, getFormattedEstimate, getPurpose, propertySubmitAction, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
@@ -724,7 +724,11 @@ class FormWizard extends Component {
       "Properties[0].propertyDetails[0].citizenInfo.name",
       get(prepareFormData, "Properties[0].propertyDetails[0].owners[0].name")
     );
-
+    set(
+      prepareFormData,
+      "Properties[0].tenantId",
+      process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity
+    );
     const properties = normalizePropertyDetails(
       prepareFormData.Properties,
       this
@@ -1208,8 +1212,7 @@ class FormWizard extends Component {
           }
         );
         //For calculation screen
-        const tenantId =
-          prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
+        const tenantId =  process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
         const calculationScreenData = await getCalculationScreenData(
           get(estimateResponse, "Calculation[0].billingSlabIds", []),
           tenantId,
