@@ -205,7 +205,7 @@ export const handleCreateUpdateEmployee = (state, dispatch) => {
 export const createUpdateEmployee = async (state, dispatch, action) => {
   const pickedTenant = get(
     state.screenConfiguration.preparedFinalObject,
-    "Employee[0].tenantId"
+    "citiesByModule.tenantId"
   );
   const tenantId = pickedTenant || getTenantId();
   let queryObject = [

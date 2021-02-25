@@ -260,16 +260,17 @@ const screenConfig = {
       dispatch(prepareFinalObject("Employee[0].tenantId", pickedTenant));
     const empTenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "Employee[0].tenantId"
+      "citiesByModule.tenantId"
     );
     set(
             action.screenConfig,
             "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children.employeeId.props.disabled",
             false
           );
- 
-    const tenantId = pickedTenant || empTenantId || getTenantId();
+    debugger;
+    const tenantId = pickedTenant || empTenantId ;
     const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
+    debugger;
     let employeeCode = getQueryArg(window.location.href, "employeeCode");
     employeeCode && getEmployeeData(state, dispatch, employeeCode, tenantId);
     getYearsList(1950, state, dispatch);

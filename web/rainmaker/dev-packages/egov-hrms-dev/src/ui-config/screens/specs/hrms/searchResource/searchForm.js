@@ -108,12 +108,12 @@ export const searchForm = getCommonCard({
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         required: true,
-        disabled: true,
-        isDisabled:true,
+        // disabled: true,
+        // isDisabled:true,
       },
       required: true,
-      disabled: true,
-      isDisabled:true,
+      // disabled: true,
+      // isDisabled:true,
     },
 
     employeeID: getTextField({

@@ -135,62 +135,64 @@ class ComponentInterface extends React.Component {
     }
     
     if (visible && !isEmpty(roleDefination)) {
-      const splitList = get(roleDefination, "rolePath").split(".");
-      const localdata = JSON.parse(localStorageGet(splitList[0]));
-      const localRoles = get(
-        localdata,
-        splitList.slice(1).join("."),
-        localdata
-      );
-      const roleCodes =
+      if(get(roleDefination, "rolePath")){
+        const splitList = get(roleDefination, "rolePath").split(".");
+        const localdata = JSON.parse(localStorageGet(splitList[0]));
+        const localRoles = get(
+          localdata,
+          splitList.slice(1).join("."),
+          localdata
+        );
+        const roleCodes =
         localRoles &&
         localRoles.map(elem => {
           return get(elem, "code");
         });
-      if (get(roleDefination, "roles")) {
-        const roles = get(roleDefination, "roles");
-        let found = roles.some(elem => roleCodes.includes(elem));
-        visible = found;
-      } else if (get(roleDefination, "path")) {
-        let isApplicable =
-          menu &&
-          menu.find(item => {
-            return item.navigationURL == get(roleDefination, "path");
+        if (get(roleDefination, "roles")) {
+          const roles = get(roleDefination, "roles");
+          let found = roles.some(elem => roleCodes.includes(elem));
+          visible = found;
+        } else if (get(roleDefination, "path")) {
+          let isApplicable =
+            menu &&
+            menu.find(item => {
+              return item.navigationURL == get(roleDefination, "path");
+            });
+          visible = isApplicable ? isApplicable : false;
+        } else if (get(roleDefination, "action")) {
+          const businessServiceData = JSON.parse(
+            localStorageGet("businessServiceData")
+          );
+          const data = find(businessServiceData, {
+            businessService: getModuleName(window.location.pathname, bpaTradeType)
           });
-        visible = isApplicable ? isApplicable : false;
-      } else if (get(roleDefination, "action")) {
-        const businessServiceData = JSON.parse(
-          localStorageGet("businessServiceData")
-        );
-        const data = find(businessServiceData, {
-          businessService: getModuleName(window.location.pathname, bpaTradeType)
-        });
-        const filteredData =
-          data &&
-          data.states &&
-          data.states.reduce((res, curr) => {
-            if (
-              curr &&
-              curr.actions &&
-              curr.applicationStatus === applicationStatus &&
-              curr.actions.filter(item =>
-                item.roles.some(elem => roleCodes.includes(elem))
-              ).length > 0
-            ) {
-              const filteredAction = curr.actions.filter(item =>
-                item.roles.some(elem => roleCodes.includes(elem))
-              );
-
-              filteredAction.forEach(item => res.push(item.action));
-            }
-            return res;
-          }, []);
-        const actions = filteredData;
-        let found =
-          actions && actions.length > 0
-            ? actions.includes(get(roleDefination, "action"))
-            : false;
-        visible = found;
+          const filteredData =
+            data &&
+            data.states &&
+            data.states.reduce((res, curr) => {
+              if (
+                curr &&
+                curr.actions &&
+                curr.applicationStatus === applicationStatus &&
+                curr.actions.filter(item =>
+                  item.roles.some(elem => roleCodes.includes(elem))
+                ).length > 0
+              ) {
+                const filteredAction = curr.actions.filter(item =>
+                  item.roles.some(elem => roleCodes.includes(elem))
+                );
+  
+                filteredAction.forEach(item => res.push(item.action));
+              }
+              return res;
+            }, []);
+          const actions = filteredData;
+          let found =
+            actions && actions.length > 0
+              ? actions.includes(get(roleDefination, "action"))
+              : false;
+          visible = found;
+        }
       }
     }
 
