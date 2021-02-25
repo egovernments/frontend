@@ -456,7 +456,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
       }
       let employee = {};
       employee = { ...employeeObject[0] }
-      set(emp, 'jurisdictions', [...employeeJurisdictions, ...deletedJurisdiction])
+      set(employee, 'jurisdictions', [...employeeJurisdictions, ...deletedJurisdiction])
       let response = await updateEmployee(
         queryObject,
         [employee],
