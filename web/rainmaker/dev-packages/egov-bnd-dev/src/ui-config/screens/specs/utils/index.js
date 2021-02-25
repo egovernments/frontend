@@ -11,6 +11,7 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import commonConfig from "config/common.js";
 import {prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
+import { downloadReceiptFromFilestoreID} from "egov-common/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -152,6 +153,7 @@ export const ifUserRoleExists = role => {
 
 export const convertEpochToDate = dateEpoch => {
   const dateFromApi = new Date(dateEpoch);
+  console.log("Check the data epoch",dateFromApi);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
   let year = dateFromApi.getFullYear();
@@ -504,8 +506,8 @@ export const loadHospitals = async (action, state, dispatch) => {
   {
     payload = await httpRequest(
       "post",
-      "/bnd-services/v1/_loadHospitals",
-      "loadHospitals",
+      "/bnd-services/hosptial/_search",
+      "search",
       queryParams,
       requestBody
     );
@@ -525,3 +527,65 @@ export const loadHospitals = async (action, state, dispatch) => {
     dispatch(prepareFinalObject("bnd.allHospitals", payload.hospitals));
   }
 }
+
+export const downloadCert = async (tenantId, id) => {
+  let requestBody = {};
+  let payload = null;
+
+  const queryParams = [
+    { key: "tenantId", value: tenantId } ,
+    { key: "id" , value: id }
+    ];
+  try
+  {
+    payload = await httpRequest(
+      "post",
+      "/birth-death-services/birth/_download",
+      "_download",
+      queryParams,
+      requestBody
+    );
+  }
+  catch(e)
+  {
+    //toBeRemoved
+    payload = {consumerCode:"CH-CB-AGRA-2020-001504", filestoreId:"4f0d9299-7fa0-4af6-9077-389ebf2367c4", tenantId: "pb.agra"};
+  }
+
+  return payload;
+}
+
+
+export const postPaymentSuccess = async(action,state,dispatch, data) => {
+  try {
+    if(data.tenantId && data.consumerCode)
+    {
+      dispatch(toggleSpinner());
+      let queryParams = [{key:"tenantId",value:tenantId},{key:"consumerCode",value:consumerCode}];
+      const response = await httpRequest(
+        "post",
+        "birth-death-services/common/getfilestoreid",
+        "getfilestoreid",
+        queryParams,
+        {}//{ searchCriteria: queryObject }
+      );
+      dispatch(toggleSpinner());
+      if(response && response.filestoreId)
+      {
+        let mode = 'download';
+        downloadReceiptFromFilestoreID(response.filestoreId);
+      }
+      return response;
+    }
+  } catch (error) {
+    dispatch(toggleSpinner());
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};

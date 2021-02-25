@@ -8,7 +8,7 @@ import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import './index.css';
 import { getHeader } from "./pay";
 import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
-
+import {postPaymentSuccess} from "egov-bnd/ui-config/screens/specs/utils";
 
 
 const downloadprintMenu = (state, applicationNumber, tenantId, uiCommonPayConfig) => {
@@ -196,6 +196,13 @@ const screenConfig = {
         const receiptNumber = getQueryArg(window.location.href, "receiptNumber");
         const tenant = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
+
+        if(businessService==="BIRTH_CERT_FEE" || businessService==="DEATH_CERT_FEE")
+        {
+            //Only for birth and death certificate.
+            postPaymentSuccess(action,state,dispatch, {consumerCode:consumerCode, tenantId:tenant, businessService: businessService});
+        }
+
         // Calling the Bill so that payer information can be set in the PDF for Citizen application
         if(process.env.REACT_APP_NAME === "Citizen") {
             generateBill(dispatch, consumerCode, tenant, businessService);

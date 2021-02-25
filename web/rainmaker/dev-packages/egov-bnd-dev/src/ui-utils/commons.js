@@ -490,15 +490,15 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
   }
 };
 
-export const searchForBirth = async (dispatch,queryObject) => {
+export const searchForBirth = async (dispatch,queryParams,queryObject) => {
   try {
     dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "bnd-services/searchForBirth",
-      "searchForBirth",
-      [],
-      { searchCriteria: queryObject }
+      "birth-death-services/birth/_search",
+      "_search",
+      queryParams,
+      {}//{ searchCriteria: queryObject }
     );
     dispatch(toggleSpinner());
     return response;

@@ -2,6 +2,7 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { searchForBirth } from "../../../../../ui-utils/commons";
+import { genderValues } from "../../../../../ui-utils/constants";
 import { validateFields } from "../../utils";
 import { convertEpochToDate } from "../../utils/index";
 
@@ -10,17 +11,38 @@ export const searchApiCall = async (state, dispatch) => {
 
   showHideTable(false, dispatch);
 
-  let tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "bnd.birth.tenantId"
-  );
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "limit", value: "10" }
+  let queryParams = [
+    //{ key: "limit", value: "10" }
   ];
+
+  let tenantId = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.tenantId");
+  if(tenantId)
+    queryParams.push({ key: "tenantId",value: tenantId});
+
+  let dateOfBirth = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.dob");
+  if(dateOfBirth)
+    queryParams.push({ key: "dateOfBirth",value: dateOfBirth});
+
+  let gender = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.gender");
+  if(gender)
+    queryParams.push({ key: "gender",value: gender});
+
+  let registrationNo = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.registrationNo");
+  if(registrationNo)
+    queryParams.push({ key: "registrationNo",value: registrationNo});
+
+  let hospitalName = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.hosptialId");
+  if(hospitalName)
+    queryParams.push({ key: "hospitalName",value: hospitalName});
+
+  let mothersName = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.mothersName");
+  if(mothersName)
+    queryParams.push({ key: "motherName",value: mothersName});
+
+  let fathersName = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.fathersName");
+  if(fathersName)
+    queryParams.push({ key: "fatherName",value: fathersName});
+
   let searchSet1Visible = get(
     state.screenConfiguration,
     "screenConfig.getCertificate.components.div.children.birthSearchCard.children.cardContent.children.searchContainer1.visible",
@@ -46,8 +68,7 @@ export const searchApiCall = async (state, dispatch) => {
     "getCertificate"
   );
 
-  if (!isSearchSetCommonValid || (searchSet1Visible && !isSearchSet1Valid) || 
-    (!searchSet1Visible && !isSearchSet2Valid)) {
+  if (!isSearchSetCommonValid) {
     dispatch(
       toggleSnackbar(
         true,
@@ -61,19 +82,36 @@ export const searchApiCall = async (state, dispatch) => {
     return;
   }
 
-  const responseFromAPI = await searchForBirth(dispatch, queryObject)
-  const births = (responseFromAPI && responseFromAPI.births) || [{regNo:"2019-AGRA-000671","name":"Srinath","dateOfBirth":"12-12-2012","gender":"Male","mothersName":"Veena","fathersName":"Raj K T","tenantId":tenantId}];
+  if(!registrationNo && !hospitalName && !mothersName && !fathersName)
+  {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill enter atleast one attribute in the non mandatory list",
+          labelKey: "BND_COMMON_REQ_FIELDS_ERR2"
+        },
+        "warning"
+      )
+    );
+    return;
+  }
+
+  const responseFromAPI = await searchForBirth(dispatch, queryParams)
+  const births = (responseFromAPI && responseFromAPI.birthCerts) || [{"id":"1","dateofbirth":1614241552,"firstname":"san","gender":"1","registrationno":"2021-1","counter":0,"birthFatherInfo":{"firstname":"abc"},"birthMotherInfo":{"firstname":"abc1"},"tenantid":"pb.agra"},{"id":"2","dateofbirth":1614241552,"firstname":"san1","gender":"1","registrationno":"2021-2","counter":0,"birthFatherInfo":{"firstname":"abcd"},"birthMotherInfo":{"firstname":"abcd1"},"tenantid":"pb.agra"}];
 
   const birthTableData = births.map(item => {
     return {
-      regNo: get(item, "regNo"),
-      nameOfChild: get(item, "nameOfChild"),
-      dateOfBirth: get(item, "dateOfBirth"),
-      gender: get(item, "gender"),
-      mothersName: get(item, "mothersName"),
-      fathersName: get(item, "fathersName"),
-      action: getActionItem("NEW"),//getActionItem(get(item, "status")),
-      tenantId: get(item, "tenantId")
+      id: get(item, "id"),
+      registrationNo: get(item, "registrationno"),
+      nameOfChild: get(item, "firstname"),
+      dateOfbirth: get(item, "dateofbirth"),
+      gender:  getGenderValue(get(item, "gender")),
+      mothersName: get(item, "birthMotherInfo.firstname"),
+      fathersName: get(item, "birthFatherInfo.firstname"),
+      action: getActionItem(get(item, "counter")),
+      tenantId: get(item, "tenantid"),
+      payRequired: get(item, "payRequired")
     };
   });
   dispatch(
@@ -85,15 +123,17 @@ export const searchApiCall = async (state, dispatch) => {
     
   try {
     let data = birthTableData.map(item => ({
-      ['BND_COMMON_TABLE_REGNO']: item.regNo || "-",
+      ['BND_COMMON_TABLE_ID']: item.id || "-",
+      ['BND_COMMON_TABLE_REGNO']: item.registrationNo || "-",
       ["BND_COMMON_NAME"]: item.nameOfChild || "-",
-      ['BND_BIRTH_DATE']: item.dateOfBirth || "-", //convertEpochToDate(item.billDate) 
+      ['BND_BIRTH_DATE']: convertEpochToDate(item.dateOfbirth),
       ['BND_COMMON_GENDER']: item.gender || "-",
       ['BND_COMMON_MOTHERSNAME']: item.mothersName || "-",
       ['BND_COMMON_FATHERSNAME']: item.fathersName || "-",
       ['BND_COMMON_TABLE_ACTION']: item.action || "-",
-      ["BUSINESS_SERVICE"]: "BIRTH_CERT",
+      ["BUSINESS_SERVICE"]: "BIRTH_CERT_FEE",
       ["TENANT_ID"]: item.tenantId,
+      //["PAYREQUIRED"]: item.payRequired,
       // ["BILL_ID"]: item.billId,
       // ["BILL_SEARCH_URL"]: searchScreenObject.url,
       // ["ADVANCE_PAYMENT"]: isAdvancePayment
@@ -141,8 +181,13 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
   );
 };
 
-const getActionItem = (status) => {
-  switch (status) {
-    case "NEW": return "PAY and DOWNLOAD";
-  }
+const getActionItem = (counter) => {
+  if(counter < 1)
+    return "FREE_DOWNLOAD";
+  else
+    return "PAY_AND_DOWNLOAD";
+}
+
+const getGenderValue = (genderCode) => {
+  return genderValues[genderCode];
 }

@@ -1,4 +1,4 @@
-import { getCommonCard, getCommonContainer, getCommonHeader, getCommonSubHeader,
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonSubHeader,getCommonCaption,
    getLabel, getPattern, getTextField,getSelectField, getDateField,getBreak, getDivider } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -146,15 +146,15 @@ export const searchSetCommon = getCommonContainer({
     },
     data: [
       {
-        code: "M",
+        code: "1",
         label: "MALE"
       },
       {
-        code: "F",
+        code: "2",
         label: "FEMALE"
       },
       {
-        code: "T",
+        code: "3",
         label: "TRANSGENDER"
       }
     ],
@@ -174,47 +174,7 @@ export const searchSetCommon = getCommonContainer({
     afterFieldChange: (action, state, dispatch) => {
     
     },
-  })
-});
-
-export const searchSet1 = getCommonContainer({
-  registrationNo: getTextField({
-    label: {
-      labelName: "Registration No",
-      labelKey: "BND_REG_NO_LABEL"
-    },
-    placeholder: {
-      labelName: "Registration No",
-      labelKey: "BND_REG_NO_PLACEHOLDER"
-    },
-    required:true,
-    visible: true,
-    jsonPath: "bnd.birth.registrationNo",
-    gridDefination: {
-      xs: 12,
-      sm: 4
-    }
   }),
-  clickHereLink: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-bnd",
-    componentPath: "LinkButton",
-    props: { 
-      disableValidation:true,
-      url: "teat" ,
-      labelKey:"BND_DONT_KNOW_REGNO_MSG",
-      onClickDefination: {
-        callBack: (state, dispatch) => {
-          setVisibilityOptionsSet1(state,dispatch,false);
-          setVisibilityOptionsSet2(state,dispatch,true);
-        }
-      },
-    },
-    gridDefination: { xs: 12, sm: 4, md: 4 }
-  },
-});
-
-export const searchSet2 = getCommonContainer({
   cantonmentSelect: {
     uiFramework: "custom-containers",
       //moduleName: "egov-lams",
@@ -264,6 +224,63 @@ export const searchSet2 = getCommonContainer({
         cbChanged(action, state, dispatch);
       },
   },
+});
+
+export const searchSet1 = getCommonContainer({
+  // registrationNo: getTextField({
+  //   label: {
+  //     labelName: "Registration No",
+  //     labelKey: "BND_REG_NO_LABEL"
+  //   },
+  //   placeholder: {
+  //     labelName: "Registration No",
+  //     labelKey: "BND_REG_NO_PLACEHOLDER"
+  //   },
+  //   required:true,
+  //   visible: true,
+  //   jsonPath: "bnd.birth.registrationNo",
+  //   gridDefination: {
+  //     xs: 12,
+  //     sm: 4
+  //   }
+  // }),
+  clickHereLink: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-bnd",
+    componentPath: "LinkButton",
+    props: { 
+      disableValidation:true,
+      url: "teat" ,
+      labelKey:"BND_DONT_KNOW_REGNO_MSG",
+      onClickDefination: {
+        callBack: (state, dispatch) => {
+          setVisibilityOptionsSet1(state,dispatch,false);
+          setVisibilityOptionsSet2(state,dispatch,true);
+        }
+      },
+    },
+    gridDefination: { xs: 12, sm: 4, md: 4 }
+  },
+});
+
+export const searchSet2 = getCommonContainer({
+  registrationNo: getTextField({
+    label: {
+      labelName: "Registration No",
+      labelKey: "BND_REG_NO_LABEL"
+    },
+    placeholder: {
+      labelName: "Registration No",
+      labelKey: "BND_REG_NO_PLACEHOLDER"
+    },
+    required:false,
+    visible: true,
+    jsonPath: "bnd.birth.registrationNo",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  }),
   hospital: {
     uiFramework: "custom-containers",
       //moduleName: "egov-lams",
@@ -291,7 +308,7 @@ export const searchSet2 = getCommonContainer({
           masterName: "TENANTS"
         },
         labelsFromLocalisation: true,
-        required: true,
+        required: false,
         jsonPath: "bnd.birth.hosptialId",
         sourceJsonPath: "bnd.allHospitals",
         inputLabelProps: {
@@ -305,7 +322,6 @@ export const searchSet2 = getCommonContainer({
         xs: 12,
         sm: 4
       },
-      required: true,
       beforeFieldChange: (action, state, dispatch) => {
 
       },
@@ -313,23 +329,23 @@ export const searchSet2 = getCommonContainer({
 
       },
   },
-  // fathersName: getTextField({
-  //   label: {
-  //     labelName: "Father's Name",
-  //     labelKey: "BND_FATHERS_NAME_LABEL"
-  //   },
-  //   placeholder: {
-  //     labelName: "Father's Name",
-  //     labelKey: "BND_FATHERS_NAME_PLACEHOLDER"
-  //   },
-  //   required:true,
-  //   visible: true,
-  //   jsonPath: "bnd.birth.fathersName",
-  //   gridDefination: {
-  //     xs: 12,
-  //     sm: 4
-  //   }
-  // }),
+  fathersName: getTextField({
+    label: {
+      labelName: "Father's Name",
+      labelKey: "BND_FATHERS_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Father's Name",
+      labelKey: "BND_FATHERS_NAME_PLACEHOLDER"
+    },
+    required:false,
+    visible: true,
+    jsonPath: "bnd.birth.fathersName",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  }),
   mothersName: getTextField({
     label: {
       labelName: "Mother's Name",
@@ -339,7 +355,7 @@ export const searchSet2 = getCommonContainer({
       labelName: "Mother's Name",
       labelKey: "BND_MOTHERS_NAME_PLACEHOLDER"
     },
-    required:true,
+    required:false,
     visible: true,
     jsonPath: "bnd.birth.mothersName",
     gridDefination: {
@@ -347,23 +363,23 @@ export const searchSet2 = getCommonContainer({
       sm: 4
     }
   }),
-  clickHereLink: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-bnd",
-    componentPath: "LinkButton",
-    props: { 
-      disableValidation:true,
-      url: "teat" ,
-      labelKey:"BND_DONT_KNOW_DETAILS_MSG",
-      onClickDefination: {
-        callBack: (state, dispatch) => {
-          setVisibilityOptionsSet1(state,dispatch,true);
-          setVisibilityOptionsSet2(state,dispatch,false);
-        }
-      },
-    },
-    gridDefination: { xs: 12, sm: 4, md: 4 }
-  },
+  // clickHereLink: {
+  //   uiFramework: "custom-atoms-local",
+  //   moduleName: "egov-bnd",
+  //   componentPath: "LinkButton",
+  //   props: { 
+  //     disableValidation:true,
+  //     url: "teat" ,
+  //     labelKey:"BND_DONT_KNOW_DETAILS_MSG",
+  //     onClickDefination: {
+  //       callBack: (state, dispatch) => {
+  //         setVisibilityOptionsSet1(state,dispatch,true);
+  //         setVisibilityOptionsSet2(state,dispatch,false);
+  //       }
+  //     },
+  //   },
+  //   gridDefination: { xs: 12, sm: 4, md: 4 }
+  // },
 });
 
 export const buttonContainer = getCommonContainer({
@@ -465,8 +481,19 @@ export const birthSearchCard = getCommonCard({
     children: {
       details:  searchSet1
     },
-    visible: true,
+    visible: false,
   },
+  importantNote: getCommonCaption({
+    labelName: "Imp Note",
+    labelKey: "BND_SELECTION_NOTE"},
+    {
+      disableValidation:true,
+      style:{
+        color:"#ff8100",
+        fontSize:"16px"
+      }
+    }
+  ),
   searchContainer2:{
     uiFramework: "custom-atoms",
     componentPath: "Div",
@@ -475,7 +502,7 @@ export const birthSearchCard = getCommonCard({
     children: {
       details: searchSet2
     },
-    visible: false,
+    visible: true,
   },
   buttonContainer: buttonContainer
 });
