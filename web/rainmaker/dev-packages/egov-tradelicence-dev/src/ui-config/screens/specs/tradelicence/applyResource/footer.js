@@ -59,7 +59,7 @@ var options = {
   'headers': {
     'Content-Type': 'application/json'
   },
-  body: JSON.stringify({"iPin":channel_pin,"AppId":channel_appid,"licenseNo":applicationNo,"statusId":"1","statusDesc":"DuePayment","comments":"","senderName":senderName,"senderDesignation":senderType,"receiverName":"","receiverDesignation":"","clearanceIssuedOn":"","clearanceExpiredOn":"NA","clearanceFile":"","integrationSource":"TL","statusDate":"2021-02-17"})
+  body: JSON.stringify({"iPin":channel_pin,"AppId":channel_appid,"licenseNo":applicationNo,"statusId":"1","statusDesc":"DuePayment","comments":"","senderName":senderName,"senderDesignation":senderType,"receiverName":"","receiverDesignation":"","clearanceIssuedOn":"","clearanceExpiredOn":"NA","clearanceFile":"","integrationSource":"LG","statusDate":"2021-02-17"})
 };
 request(options, function (error, response) {
   if (error) throw new Error(error);
