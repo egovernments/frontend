@@ -698,7 +698,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: moduleDetails[0].moduleName === "ws-services-masters" || moduleDetails[0].moduleName === "PropertyTax" ? commonConfig.tenantId : tenantId,
+      tenantId: moduleDetails[0].moduleName === "ws-services-masters" || moduleDetails[0].moduleName === "PropertyTax" || moduleDetails[0].moduleName === "FireNoc"|| moduleDetails[0].moduleName === "TradeLicense"  ? commonConfig.tenantId : tenantId,
       moduleDetails: moduleDetails
     }
   };
