@@ -472,7 +472,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterId",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirteen.children.reviewMeterId",
             "visible",
             false
           )
@@ -480,7 +480,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewMeterInstallationDate",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirteen.children.reviewMeterInstallationDate",
             "visible",
             false
           )
@@ -488,7 +488,7 @@ export const getData = async (action, state, dispatch) => {
         dispatch(
           handleField(
             "apply",
-            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTwelve.children.reviewInitialMeterReading",
+            "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewThirteen.children.reviewInitialMeterReading",
             "visible",
             false
           )
