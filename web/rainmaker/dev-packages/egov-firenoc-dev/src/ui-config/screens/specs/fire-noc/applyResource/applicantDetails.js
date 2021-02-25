@@ -549,14 +549,16 @@ export const applicantDetails = getCommonCard({
           dropdownFields: [
             {
               key : 'applicantType',
-              required: true,
+              isRequired : false,
+            requiredValue : true,
               fieldType : "autosuggest",
               className:"applicant-details-error autocomplete-dropdown",
               callBack: beforeFieldChangeApplicantType
             },
             {
               key : 'applicantSubType',
-              required: true,
+              isRequired : false,
+              requiredValue : true,
               fieldType : "autosuggest",
               className:"applicant-details-error autocomplete-dropdown",
               callBack: beforeFieldChangeApplicantSubType
