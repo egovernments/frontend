@@ -102,8 +102,9 @@ export const getReviewOwner = (isEditable = true) => {
     viewEight: connectionChargeDetails,
     viewNine: roadCuttingChargesHeader,
     viewTen: roadCuttingCharges,
-    viewEleven: activationDetailsHeader,
-    viewTwelve: activationDetails
+    viewEleven: roadCuttingExtraCharges,
+    viewTwelve: activationDetailsHeader,
+    viewThirteen: activationDetails
   })
 };
 
@@ -171,38 +172,29 @@ export const plumberDetails={
 }
 const connectionChargeDetails = getCommonContainer(plumberDetails);
 export const roadDetails={
-  reviewRoadType : getLabelWithValueForModifiedLabel(
+  reviewRoadType : getLabelWithValue(
     {
       labelName: "Road Type",
       labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
     },
     {
-      jsonPath: "WaterConnection[0].roadType",
-      callBack: handleRoadType
-    }, {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].roadType",
+      jsonPath: "WaterConnection[0].roadCuttingInfo[0].roadType",
       callBack: handleRoadType
     }
   ),
-  reviewArea : getLabelWithValueForModifiedLabel(
+  reviewArea : getLabelWithValue(
     {
       labelName: "Area (in sq ft)",
       labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].roadCuttingArea",
-      callBack: handleNA
-    }, {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].roadCuttingArea",
+      jsonPath: "WaterConnection[0].roadCuttingInfo[0].roadCuttingArea",
       callBack: handleNA
     }
   ),
+}
+
+export const roadCuttingDetails = {
   reviewCompositionFee : getLabelWithValueForModifiedLabel(
     {
       labelName: "Area (in sq ft)",
@@ -251,12 +243,24 @@ export const roadDetails={
       callBack: handleNA
     }
   )
-
 }
+const roadCuttingExtraCharges = getCommonContainer(roadCuttingDetails);
 
-const roadCuttingCharges = getCommonContainer(roadDetails);
-
-
+export const roadCuttingCharges = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "applicant-summary",
+    scheama: getCommonContainer(roadDetails),
+    items: [],
+    hasAddItem: false,
+    isReviewPage: true,
+    sourceJsonPath: "WaterConnection[0].roadCuttingInfo",
+    prefixSourceJsonPath: "children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
+};
 
 export const activateDetailsMeter={
   reviewConnectionExecutionDate : getLabelWithValueForModifiedLabel(
