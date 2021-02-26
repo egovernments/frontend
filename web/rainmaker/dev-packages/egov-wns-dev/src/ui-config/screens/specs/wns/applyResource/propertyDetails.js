@@ -177,16 +177,6 @@ const propertyDetails = getCommonContainer({
       callBack: handleNA
     }
   ),
-  rainwaterHarvestingFacility: getLabelWithValue(
-    {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rainwater Harvesting Facility"
-    },
-    {
-      jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
-      callBack: handleNA
-    }
-  )
 })
 
 

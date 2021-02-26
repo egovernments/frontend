@@ -319,23 +319,6 @@ const getPropertyDetails = {
             },
             { jsonPath: "applyScreenOld.property.noOfFloors", callBack: handleNA },
           ),
-          rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
-            {
-              labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-              labelName: "Rain Water Harvesting Facility"
-            },
-            {
-              jsonPath: "applyScreen.property.additionalDetails.isRainwaterHarvesting",
-              callBack: handleNA
-            },
-            {
-              labelKey: "WS_OLD_LABEL_NAME"
-            },
-            {
-              jsonPath: "applyScreenOld.property.additionalDetails.isRainwaterHarvesting",
-              callBack: handleNA
-            },
-          )
         })
     }),
     items: [],

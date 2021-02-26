@@ -313,20 +313,6 @@ export const propertyDetails={
       callBack: handleNA      
     }
   ),
-  rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
-    {
-      labelKey: "WS_SERV_DETAIL_CONN_RAIN_WATER_HARVESTING_FAC",
-      labelName: "Rain Water Harvesting Facility"
-    },
-    { jsonPath: "WaterConnection[0].property.additionalDetails.isRainwaterHarvesting",
-    callBack: handleNA },{
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    {
-      jsonPath: "WaterConnectionOld[0].property.additionalDetails.isRainwaterHarvesting",
-      callBack: handleNA      
-    }
-  )
 }
 
 const getPropertyDetails = {
