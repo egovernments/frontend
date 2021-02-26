@@ -7,6 +7,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
+import { convertEpochToDate, getTranslatedLabel } from "../../utils";
+import {downloadReceiptFromFilestoreID} from "../../../../../ui-utils/commons";
 import { ifUserRoleExists } from "../../utils";
 import "./index.css";
 import { prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -143,6 +145,267 @@ export const callPGService = async (state, dispatch) => {
   }
 };
 
+export const download = async (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
+  if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
+    const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+    configKey = get(uiCommonPayConfig, "receiptKey")
+  }
+ 
+
+
+  const FETCHRECEIPT = {
+    GET: {
+      URL: "/collection-services/payments/_search",
+      ACTION: "_get",
+    },
+  };
+
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  let consumerCode = getQueryArg(window.location.href, "consumerCode")?getQueryArg(window.location.href, "consumerCode"):receiptQueryString[0].value;
+  let tenantId = getQueryArg(window.location.href, "tenantId")?getQueryArg(window.location.href, "tenantId"):receiptQueryString[1].value;
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+  let queryObject = [
+    { key: "tenantId", value:tenantId },
+    { key: "applicationNumber", value: consumerCode?consumerCode:applicationNumber}
+  ];
+
+  let queryObjectForPT = [
+    { key: "tenantId", value:tenantId },
+    { key: "propertyIds", value: consumerCode?consumerCode:applicationNumber}
+  ];
+  const FETCHFIREDETAILS = {
+    GET: {
+      URL: "/firenoc-services/v1/_search",
+      ACTION: "_get",
+    },
+  };
+
+  const FETCHPROPERTYDETAILS = {
+    GET: {
+      URL: "/property-services/property/_search",
+      ACTION: "_get",
+    },
+  };
+  const FETCHTRADEDETAILS = {
+    GET: {
+      URL: "/tl-services/v1/_search",
+      ACTION: "_get",
+    },
+  };
+  const responseForTrade = await httpRequest("post", FETCHTRADEDETAILS.GET.URL, FETCHTRADEDETAILS.GET.ACTION,queryObject);
+  const response =  await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+  const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
+
+  let uuid=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
+  let data = {};
+  let bodyObject = {
+    uuid: [uuid]
+  };
+  let responseForUser = await getUserDataFromUuid(bodyObject);
+  let lastmodifier=responseForUser && responseForUser.user[0]?responseForUser.user[0].name:null;
+
+  try {
+    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+     // loadUserNameData(payloadReceiptDetails.Payments[0].auditDetails.createdBy,tenantId);
+      if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
+        console.log("Could not find any receipts");
+        store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
+          , "error"));
+        return;
+      }
+      if(payloadReceiptDetails.Payments[0].payerName!=null){
+      payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].payerName.trim();}
+      else if(payloadReceiptDetails.Payments[0].payerName == null && payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC" && payloadReceiptDetails.Payments[0].paidBy !=null)
+       { payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].paidBy.trim();
+      }
+      if(payloadReceiptDetails.Payments[0].paidBy!=null)
+      {
+        payloadReceiptDetails.Payments[0].paidBy=payloadReceiptDetails.Payments[0].paidBy.trim();
+      }
+
+
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptNumber.includes("MP")){
+        let tax,field,cgst,sgst;
+let billaccountarray=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails;
+
+billaccountarray.map(element => {
+
+if(element.taxHeadCode.includes("CGST")){  cgst=element.amount;}
+else if(element.taxHeadCode.includes("SGST")){  sgst=element.amount;}
+else if(element.taxHeadCode.includes("FIELD_FEE")){  field=element.amount;}
+else  { tax=element.amount;}
+});
+
+let taxheads = {
+  "tax": tax,
+  "fieldfee":field,
+  "cgst":cgst,
+  "sgst":sgst
+  }
+payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads; 
+
+      }
+
+      let assessmentYear="";
+      let count=0;
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
+
+      let reasonss = null;
+      let adhocPenaltyReason=null,adhocRebateReason=null;
+     if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
+        {
+          adhocPenaltyReason = get(
+          state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
+          adhocRebateReason = get(
+          state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
+          
+        }
+        reasonss = {
+          "adhocPenaltyReason": adhocPenaltyReason,
+          "adhocRebateReason":adhocRebateReason,
+          "lastModifier":lastmodifier
+          }
+      payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
+
+      
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
+        
+        if(element.amount >0 || element.amountPaid>0)
+        { count=count+1;
+          let toDate=convertEpochToDate(element.toPeriod).split("/")[2];
+          let fromDate=convertEpochToDate(element.fromPeriod).split("/")[2];
+          assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
+       }});
+      if(count==0){
+        let index=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.length;
+        let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
+        let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
+        assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
+      }
+        
+        const details = {
+          "assessmentYears": assessmentYear
+          }
+          payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
+
+      }
+
+
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
+
+        configKey="tradelicense-receipt";
+    
+        const details = {
+          "address": responseForTrade.Licenses[0].tradeLicenseDetail.address.locality.code
+          }
+    payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
+
+
+      }
+    
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
+
+      let owners=""; let contacts="";
+      response.FireNOCs[0].fireNOCDetails.applicantDetails.owners.map(ele=>{
+        if(owners=="")
+        {owners=ele.name; 
+          contacts=ele.mobileNumber;}
+        else{
+          owners=owners+","+ele.name; 
+          contacts=contacts+","+ele.mobileNumber;
+        }
+
+      });
+      payloadReceiptDetails.Payments[0].payerName=owners;
+      payloadReceiptDetails.Payments[0].mobileNumber=contacts;
+      let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
+      let year=receiptDate.split("/")[2];
+      year++;
+      var nextyear=year;
+      year--;
+      var lastyear=year-1;
+      let month=receiptDate.split("/")[1];
+      let from=null,to=null;
+      if(month<=3){ from=convertDateToEpoch("04/01/"+lastyear);
+      to=convertDateToEpoch("03/31/"+year);}
+      else{from=convertDateToEpoch("04/01/"+year);
+      to=convertDateToEpoch("03/31/"+nextyear);}
+        const details = {
+             "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
+             }
+       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
+       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod=from;
+       payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod=to; 
+ 
+
+    } 
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+    ]
+      // Setting the Payer and mobile from Bill to reflect it in PDF
+      state = state ? state : {};
+         if(payloadReceiptDetails.Payments[0].paymentMode=="CHEQUE" || payloadReceiptDetails.Payments[0].paymentMode=="DD" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_NEFT" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_RTGS" || payloadReceiptDetails.Payments[0].paymentMode=="ONLINE"){
+        let ifsc = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.ifscCode", null);
+        let branchName = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.branchName", null);
+        let bank = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.bank.name", null);
+        payloadReceiptDetails.Payments[0].ifscCode=ifsc; 
+        const details = [{
+           "branchName": branchName ,
+          "bankName":bank }
+        ]       
+      payloadReceiptDetails.Payments[0].additionalDetails=details; 
+    }
+      let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
+      if ((billDetails && !billDetails.payerName) || !billDetails) {
+        billDetails = {
+          payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
+          mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
+        };
+      }
+       if(payloadReceiptDetails.Payments[0].paymentMode=="CASH")
+      {
+        payloadReceiptDetails.Payments[0].instrumentDate=null;
+        payloadReceiptDetails.Payments[0].instrumentNumber=null;
+      }
+      if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
+        payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
+        // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
+        payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
+      }
+      if((payloadReceiptDetails.Payments[0].payerName==null || payloadReceiptDetails.Payments[0].mobileNumber==null)  && payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC" && process.env.REACT_APP_NAME === "Citizen")
+      {
+        payloadReceiptDetails.Payments[0].payerName=response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name;
+        payloadReceiptDetails.Payments[0].mobileNumber= response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber;
+      }
+      const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+      if (oldFileStoreId) {
+        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+      }
+      else {
+        const propertiesById = get(state.properties , "propertiesById");
+        const propertiesFound = propertiesById ? Object.values(propertiesById) : null;
+        let queryData = { Payments: payloadReceiptDetails.Payments };
+        if(propertiesFound) {
+          queryData.properties = propertiesFound;
+        }
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, queryData, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' });
+          
+      }
+    })
+  } catch (exception) {
+    console.log('Some Error Occured while downloading Receipt!');
+    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
+      , "error"));
+  }
+}
+
 const moveToSuccess = (dispatch, receiptNumber,paymentDetails) => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
@@ -169,7 +432,21 @@ const moveToFailure = dispatch => {
     )
   );
 };
-
+const getUserDataFromUuid = async bodyObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
 const getSelectedTabIndex = paymentType => {
   switch (paymentType) {
     case "Cash":
@@ -444,6 +721,19 @@ const callBackForPay = async (state, dispatch) => {
         [],
         {}
       );
+      const receiptQueryString = [
+        {
+          key: "consumerCodes",
+          value: response.Payments[0].paymentDetails[0].bill.consumerCode
+        },
+        {
+          key: "tenantId",
+          value: response.Payments[0].tenantId
+                  }
+      ];
+      const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
+      const receiptKey = get(uiCommonPayConfig, "receiptKey");
+      download(receiptQueryString,"donwload",receiptKey,state);
       let receiptNumber = get(
         response,
         "Payments[0].paymentDetails[0].receiptNumber",
