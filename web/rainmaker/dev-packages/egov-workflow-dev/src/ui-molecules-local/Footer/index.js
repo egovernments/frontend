@@ -111,7 +111,11 @@ class Footer extends React.Component {
         {
           key: "tenantId",
           value: tenantId
+        },{
+          key: "isActive",
+          value: true
         }
+
       ];
       const payload = await httpRequest(
         "post",
