@@ -144,6 +144,7 @@ class Footer extends React.Component {
       `Licenses`
     );
     this.props.showSpinner();
+    debugger;
     const nextFinancialYear = await getNextFinancialYearForRenewal(
       financialYear
     );
@@ -233,6 +234,7 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].financialYear`
       );
+      debugger;
       const licenseNumber = get(
         state.screenConfiguration.preparedFinalObject,
         `Licenses[0].licenseNumber`
@@ -263,8 +265,10 @@ class Footer extends React.Component {
         state.screenConfiguration.preparedFinalObject,
         `renewalPeriod`
       );
+      debugger;
       if (rolecheck && (status === "APPROVED" || status === "EXPIRED") &&
         duration <= renewalPeriod) {
+          debugger;
         const editButton = {
           label: "Edit",
           labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",

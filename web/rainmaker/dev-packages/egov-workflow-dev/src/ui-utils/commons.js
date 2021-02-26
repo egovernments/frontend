@@ -29,11 +29,10 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
       [],
       mdmsBody
     );
-
     const financialYears = get(payload.MdmsRes , "egf-master.FinancialYear");
     const currrentFYending = financialYears.filter(item => item.code === currentFinancialYear)[0]
     .endingDate;
-    return financialYears.filter(item => item.startingDate === currrentFYending)[0].code;
+    return financialYears.filter(item => item.startingDate === currrentFYending+1000)[0].code;
   }catch(e){
     console.log(e.message)
   }

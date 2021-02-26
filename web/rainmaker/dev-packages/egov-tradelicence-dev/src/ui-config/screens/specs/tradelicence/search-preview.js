@@ -221,7 +221,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     );
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: tenantId,
+        tenantId: "pb",
         moduleDetails: [
           {
             moduleName: "common-masters",
@@ -235,6 +235,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
     };
     try {
+      debugger;
       let payload = null;
       payload = await httpRequest(
         "post",

@@ -774,6 +774,7 @@ export const tradeOwnerDetails = getCommonCard({
         dropdownFields: [
           {
             key : 'ownership',
+            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
             callBack: ownerShipChange,
             fieldType : "autosuggest",
             defaultValue : "INDIVIDUAL",
@@ -781,6 +782,7 @@ export const tradeOwnerDetails = getCommonCard({
           },
           {
             key : 'subOwnership',
+            isDisabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
             callBack: subOwnerShipChange,
             defaultValue : "INDIVIDUAL.SINGLEOWNER",
             fieldType : "autosuggest",
