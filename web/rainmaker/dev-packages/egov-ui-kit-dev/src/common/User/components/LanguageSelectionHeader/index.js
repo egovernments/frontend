@@ -1,5 +1,4 @@
 import React from 'react'
-import './index.css'
 import belLogo from './bel.png'
 import  digit from './digitlogo.png'
 
