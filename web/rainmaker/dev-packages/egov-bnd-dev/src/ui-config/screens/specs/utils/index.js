@@ -506,7 +506,7 @@ export const loadHospitals = async (action, state, dispatch) => {
   {
     payload = await httpRequest(
       "post",
-      "/bnd-services/hosptial/_search",
+      "/birth-death-services/hospital/_search",
       "search",
       queryParams,
       requestBody
@@ -515,16 +515,16 @@ export const loadHospitals = async (action, state, dispatch) => {
   catch(e)
   {
     //toBeRemoved
-    payload = {"hospitals":[{"id":"asdf","name":"St Johns Hospital"},{"id":"mcd","name":"Government Hospital Pune"}]};
+    payload = {"hospitalDtls":[{"id":"asdf","name":"St Johns Hospital"},{"id":"mcd","name":"Government Hospital Pune"}]};
   }
   //console.log("Survey numbers recieved...",payload);
-  if(payload.hospitals)
+  if(payload.hospitalDtls)
   {
-    for (let hospital of payload.hospitals) {
+    for (let hospital of payload.hospitalDtls) {
       hospital.code = hospital.id;
       hospital.name = hospital.name;
     }
-    dispatch(prepareFinalObject("bnd.allHospitals", payload.hospitals));
+    dispatch(prepareFinalObject("bnd.allHospitals", payload.hospitalDtls));
   }
 }
 

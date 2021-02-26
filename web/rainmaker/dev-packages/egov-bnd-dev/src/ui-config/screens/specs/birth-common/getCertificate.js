@@ -11,7 +11,7 @@ import jp from "jsonpath";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",
-  labelKey: "BND_BIRTH_SEARCH"
+  labelKey: "BND_BIRTH_SEARCH_DOWNLOAD"
 });
 
 const getCertificate = {

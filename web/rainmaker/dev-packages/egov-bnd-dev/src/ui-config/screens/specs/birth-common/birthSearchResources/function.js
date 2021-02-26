@@ -4,7 +4,11 @@ import get from "lodash/get";
 import { searchForBirth } from "../../../../../ui-utils/commons";
 import { genderValues } from "../../../../../ui-utils/constants";
 import { validateFields } from "../../utils";
-import { convertEpochToDate } from "../../utils/index";
+import {
+  convertEpochToDate,
+  convertDateToEpoch,
+  getTextToLocalMapping
+} from "../../utils";
 
 
 export const searchApiCall = async (state, dispatch) => {
@@ -21,8 +25,9 @@ export const searchApiCall = async (state, dispatch) => {
 
   let dateOfBirth = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.dob");
   if(dateOfBirth)
-    queryParams.push({ key: "dateOfBirth",value: dateOfBirth});
-
+  {
+    queryParams.push({ key: "dateOfBirth",value: convertEpochToDate(convertDateToEpoch(dateOfBirth)).replaceAll("/","-")});
+  }
   let gender = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.gender");
   if(gender)
     queryParams.push({ key: "gender",value: gender});
@@ -31,9 +36,9 @@ export const searchApiCall = async (state, dispatch) => {
   if(registrationNo)
     queryParams.push({ key: "registrationNo",value: registrationNo});
 
-  let hospitalName = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.hosptialId");
-  if(hospitalName)
-    queryParams.push({ key: "hospitalName",value: hospitalName});
+  let hospitalId = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.hosptialId");
+  if(hospitalId)
+    queryParams.push({ key: "hospitalId",value: hospitalId});
 
   let mothersName = get(state.screenConfiguration.preparedFinalObject,"bnd.birth.mothersName");
   if(mothersName)

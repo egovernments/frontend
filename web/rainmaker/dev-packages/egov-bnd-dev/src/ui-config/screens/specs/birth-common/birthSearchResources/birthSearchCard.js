@@ -307,7 +307,7 @@ export const searchSet2 = getCommonContainer({
           moduleName: "TENANT",
           masterName: "TENANTS"
         },
-        labelsFromLocalisation: true,
+        labelsFromLocalisation: false,
         required: false,
         jsonPath: "bnd.birth.hosptialId",
         sourceJsonPath: "bnd.allHospitals",
@@ -470,6 +470,7 @@ export const birthSearchCard = getCommonCard({
   //   labelName: "Provide at least one parameter to search for an application",
   //   labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
   // }),
+  break1:getBreak(),
   searchContainerCommon: searchSetCommon,
   //break1: getBreak(),
   divider1: getDivider(),
@@ -494,6 +495,7 @@ export const birthSearchCard = getCommonCard({
       }
     }
   ),
+  break2:getBreak(),
   searchContainer2:{
     uiFramework: "custom-atoms",
     componentPath: "Div",

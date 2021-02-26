@@ -193,6 +193,7 @@ const getActionButton = (value, tableMeta) => {
 
           let tenantId = tableMeta.rowData[8];
           let id = tableMeta.rowData[0];
+          let action = tableMeta.rowData[7];
 
           downloadCert(tenantId,id).then((response) => {
 
