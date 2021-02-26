@@ -194,22 +194,22 @@ export const OwnerInfoCard = {
           required: true,
           pattern: getPattern("MobileNo"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-          iconObj: {
-            iconName: "search",
-            position: "end",
-            color: "#FE7A51",
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch, fieldInfo) => {
-                getDetailsForOwner(state, dispatch, fieldInfo);
-              }
-            }
-          },
-          title: {
-            value: "Please search owner profile linked to the mobile no.",
-            key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
-          },
-          infoIcon: "info_circle"
+          // iconObj: {
+          //   iconName: "search",
+          //   position: "end",
+          //   color: "#FE7A51",
+          //   onClickDefination: {
+          //     action: "condition",
+          //     callBack: (state, dispatch, fieldInfo) => {
+          //       getDetailsForOwner(state, dispatch, fieldInfo);
+          //     }
+          //   }
+          // },
+          // title: {
+          //   value: "Please search owner profile linked to the mobile no.",
+          //   key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
+          // },
+          // infoIcon: "info_circle"
         }),
         ownerName: getTextField({
           label: {
