@@ -12,6 +12,7 @@ import { httpRequest } from "../../../../ui-utils";
 import commonConfig from "config/common.js";
 import {prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
 import { downloadReceiptFromFilestoreID} from "egov-common/ui-utils/commons";
+import store from "ui-redux/store";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -589,3 +590,38 @@ export const postPaymentSuccess = async(action,state,dispatch, data) => {
     );
   }
 };
+
+export const triggerDownload = () => {
+
+  const state = store.getState();
+  const certificateId =get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.certificateId`);
+  const tenantId = get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.tenantId`);
+  const businessService = get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.businessService`);
+
+  downloadCert(tenantId,certificateId).then((response) => {
+
+    if(response && response.consumerCode) // Redirect to payment page
+    {
+      const url =
+      process.env.NODE_ENV === "development"
+        ? `/egov-common/pay?consumerCode=${
+            response.consumerCode
+          }&tenantId=${tenantId}&businessService=${
+            businessService
+          }`
+        : `/${appName}/egov-common/pay?consumerCode=${
+            response.consumerCode
+          }&tenantId=${tenantId}&businessService=${
+            businessService
+          }`;
+      document.location.href = `${document.location.origin}${url}`;
+    }
+    else 
+    if(response && response.filestoreId)
+    {
+      downloadReceiptFromFilestoreID(response.filestoreId,'download')
+    }
+
+  });
+
+}

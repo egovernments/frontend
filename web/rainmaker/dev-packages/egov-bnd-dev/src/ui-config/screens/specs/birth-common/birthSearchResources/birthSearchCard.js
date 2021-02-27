@@ -8,6 +8,7 @@ import "./index.css"
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import {loadHospitals} from "./../../utils"
+import {disclaimerDialog} from "./disclaimerDialog";
 
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 // console.log("tenantId--- ", tenantId);
@@ -108,6 +109,18 @@ const setVisibilityOptionsSet2 = (state, dispatch, visible) => {
     )
   );
 }
+
+export const showHideConfirmationPopup = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["getCertificate"],
+   "components.div.children.birthSearchCard.children.cardContent.children.disclaimerDialog.props.open",
+   false
+ );
+ dispatch(
+   handleField("getCertificate", 
+   "components.div.children.birthSearchCard.children.cardContent.children.disclaimerDialog", "props.open", !toggle)
+ );
+};
 
 export const searchSetCommon = getCommonContainer({
   dob: getDateField({
@@ -470,6 +483,7 @@ export const birthSearchCard = getCommonCard({
   //   labelName: "Provide at least one parameter to search for an application",
   //   labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
   // }),
+  
   break1:getBreak(),
   searchContainerCommon: searchSetCommon,
   //break1: getBreak(),
@@ -484,7 +498,7 @@ export const birthSearchCard = getCommonCard({
     },
     visible: false,
   },
-  importantNote: getCommonCaption({
+  importantNote2: getCommonCaption({
     labelName: "Imp Note",
     labelKey: "BND_SELECTION_NOTE"},
     {
@@ -506,5 +520,27 @@ export const birthSearchCard = getCommonCard({
     },
     visible: true,
   },
-  buttonContainer: buttonContainer
+  buttonContainer: buttonContainer,
+  disclaimerDialog: {
+    componentPath: "Dialog",
+    props: {
+      open: false,
+      maxWidth: "sm",
+      disableValidation: true
+    },
+    children: {
+      dialogContent: {
+        componentPath: "DialogContent",
+        props: {
+          classes: {
+            root: "city-picker-dialog-style"
+          }
+          // style: { minHeight: "180px", minWidth: "365px" }
+        },
+        children: {
+          popup: disclaimerDialog
+        }
+      }
+    }
+  }
 });

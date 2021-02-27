@@ -7,7 +7,11 @@ import {
 import { download, downloadReceiptFromFilestoreID, downloadChallan } from "egov-common/ui-utils/commons";
 import {  getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 import {downloadCert} from "../../utils"
-
+import store from "ui-redux/store";
+import {
+  prepareFinalObject,
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {showHideConfirmationPopup} from "./birthSearchCard";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -194,33 +198,14 @@ const getActionButton = (value, tableMeta) => {
           let tenantId = tableMeta.rowData[8];
           let id = tableMeta.rowData[0];
           let action = tableMeta.rowData[7];
+          let businessService = tableMeta.rowData[9];
 
-          downloadCert(tenantId,id).then((response) => {
+          store.dispatch(prepareFinalObject("bnd.birth.download.certificateId", id));
+          store.dispatch(prepareFinalObject("bnd.birth.download.tenantId", tenantId));
+          store.dispatch(prepareFinalObject("bnd.birth.download.businessService", businessService));
 
-            if(response && response.consumerCode) // Redirect to payment page
-            {
-              const url =
-              process.env.NODE_ENV === "development"
-                ? `/egov-common/pay?consumerCode=${
-                    response.consumerCode
-                  }&tenantId=${tableMeta.rowData[8]}&businessService=${
-                    tableMeta.rowData[9]
-                  }`
-                : `/${appName}/egov-common/pay?consumerCode=${
-                    response.consumerCode
-                  }&tenantId=${tableMeta.rowData[8]}&businessService=${
-                    tableMeta.rowData[9]
-                  }`;
-              document.location.href = `${document.location.origin}${url}`;
-            }
-            else 
-            if(response && response.filestoreId)
-            {
-              downloadReceiptFromFilestoreID(response.filestoreId,'download')
-            }
+          showHideConfirmationPopup(store.getState(), store.dispatch, "getCertificate")
 
-          });
-        
       //}
 
       }}
@@ -229,3 +214,4 @@ const getActionButton = (value, tableMeta) => {
     </a>
   )
 }
+
