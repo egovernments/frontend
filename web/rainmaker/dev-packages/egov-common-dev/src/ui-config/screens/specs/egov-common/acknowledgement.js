@@ -197,7 +197,7 @@ const screenConfig = {
         const tenant = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
 
-        if(businessService==="BIRTH_CERT_FEE" || businessService==="DEATH_CERT_FEE")
+        if(businessService==="BIRTH_CERT" || businessService==="DEATH_CERT")
         {
             //Only for birth and death certificate.
             postPaymentSuccess(action,state,dispatch, {consumerCode:consumerCode, tenantId:tenant, businessService: businessService});
