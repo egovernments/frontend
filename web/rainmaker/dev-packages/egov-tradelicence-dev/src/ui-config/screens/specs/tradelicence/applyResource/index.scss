@@ -82,9 +82,8 @@
     height: 150px;
     max-height: 150px;
     overflow-y: auto; }
-.autocomplete-dropdown div:nth-child(2),
-.autocomplete-dropdown div:nth-child(3),
-.autocomplete-dropdown div:nth-child(4) {
+.autocomplete-dropdown div:nth-child(2), 
+.autocomplete-dropdown div:nth-child(3) {
   display: none !important; }
 #material-ui-cardContent > div:nth-child(4) > div:nth-child(1) > div > div > button > span > span > i{
   display: none!important;
