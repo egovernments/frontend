@@ -140,7 +140,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
       },
       {
         key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
-        value: units.length>0? `${units[0].floorNo}` : "NA",
+        value: units.length>0? `${unit.floorNo}` : "NA",
       }];
       if (unit.occupancyType === "RENTED") {
         floor.push({
