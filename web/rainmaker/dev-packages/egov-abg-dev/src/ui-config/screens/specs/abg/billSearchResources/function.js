@@ -97,9 +97,7 @@ export const searchApiCall = async (state, dispatch) => {
     }
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
     const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject)
-    console.log("prasad responseFromAPI", responseFromAPI);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
-    console.log("prasad bills", bills);
 
     const billTableData = bills && bills.map(item => {
       return {
@@ -114,7 +112,6 @@ export const searchApiCall = async (state, dispatch) => {
         tenantId: get(item, "tenantId")
       };
     });
-    console.log("prasad billTableData", billTableData);
 
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
@@ -122,8 +119,6 @@ export const searchApiCall = async (state, dispatch) => {
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
     const configObject = uiConfigs && uiConfigs.filter(item => item.code === searchScreenObject.businesService);
     
-    console.log("prasad uiConfigs", uiConfigs);
-    console.log("prasad configObject", configObject);
 
     try {
       let data = billTableData.map(item => ({
@@ -144,7 +139,6 @@ export const searchApiCall = async (state, dispatch) => {
         ["ADVANCE_PAYMENT"]: isAdvancePayment
       }));
       
-      console.log("prasad data after tablemapping ", data);
 
       dispatch(
         handleField(
