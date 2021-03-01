@@ -602,6 +602,11 @@ export const triggerDownload = () => {
 
     if(response && response.consumerCode) // Redirect to payment page
     {
+      const appName =
+          process.env.REACT_APP_NAME === "Citizen"
+            ? "citizen"
+            : "employee";
+            
       const url =
       process.env.NODE_ENV === "development"
         ? `/egov-common/pay?consumerCode=${
