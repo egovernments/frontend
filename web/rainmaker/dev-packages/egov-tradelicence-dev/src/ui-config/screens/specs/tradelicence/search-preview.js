@@ -235,7 +235,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       }
     };
     try {
-      debugger;
       let payload = null;
       payload = await httpRequest(
         "post",

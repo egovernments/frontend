@@ -696,7 +696,6 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
   };
 
   try {
-    debugger;
     payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
