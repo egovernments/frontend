@@ -267,10 +267,8 @@ const screenConfig = {
             "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children.employeeId.props.disabled",
             false
           );
-    debugger;
     const tenantId = pickedTenant || empTenantId ;
     const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
-    debugger;
     let employeeCode = getQueryArg(window.location.href, "employeeCode");
     employeeCode && getEmployeeData(state, dispatch, employeeCode, tenantId);
     getYearsList(1950, state, dispatch);
