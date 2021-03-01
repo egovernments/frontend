@@ -183,8 +183,7 @@ body {
       margin: 30px 16px 88px 16px;
     }
   }
-
-  #custom-atoms-roadCuttingChargeInfoCard {
+ #custom-atoms-roadCuttingChargeInfoCard {
     width: 100% !important;
   }
 
@@ -195,3 +194,10 @@ body {
   #custom-atoms-roadCuttingChargeInfoCard div[id^="material-ui-item"] div[id^="material-ui-cardContent"] {
     padding: 16px 24px !important;
   } 
+  
+  @media only screen and (max-width: 600px) {
+    .public-domain-search-position {
+      top: 50px !important;
+      position: relative !important;
+    }
+  }
