@@ -74,7 +74,7 @@ const NOCSearchAndResult = {
     }
     const moduleDetails= [
       {
-        moduleName: "FireNoc",
+        moduleName: "firenoc",
         masterDetails: [{ name: "Documents" }]
       }
     ];
