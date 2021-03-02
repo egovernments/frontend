@@ -478,6 +478,7 @@ getActionIfEditable = (status, businessId, moduleName, applicationState) => {
   const data = find(businessServiceData, { businessService: moduleName });
   const state = applicationState ? find(data && data.states, { applicationStatus: status, state: applicationState }) : find( data && data.states, { applicationStatus: status });
   let actions = [];
+  state &&
   state.actions &&
     state.actions.forEach(item => {
       actions = [...actions, ...item.roles];
