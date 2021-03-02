@@ -489,14 +489,14 @@ getActionIfEditable = (status, businessId, moduleName, applicationState) => {
   });
 
   let editAction = {};
-  // state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
-  if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
+  //  state.isStateUpdatable = true; // Hardcoded configuration for PT mutation Edit
+  if (state && state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
     editAction = {
       buttonLabel: "EDIT",
       moduleName: moduleName,
       tenantId: state.tenantId,
       isLast: true,
-      buttonUrl: (this.props.editredirect) ? this.props.editredirect : this.getRedirectUrl("EDIT", businessId, moduleName)
+      buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
     };
   }
   return editAction;
