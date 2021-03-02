@@ -197,11 +197,9 @@ const screenConfig = {
         const tenant = getQueryArg(window.location.href, "tenantId");
         const businessService = getQueryArg(window.location.href, "businessService");
 
-		console.log("Check here ", {consumerCode:consumerCode, tenantId:tenant, businessService: businessService});
         if(businessService=="BIRTH_CERT" || businessService=="DEATH_CERT")
         {
             //Only for birth and death certificate.
-            alert("Your certificate will be downloaded now");
             postPaymentSuccess(action,state,dispatch, {consumerCode:consumerCode, tenantId:tenant, businessService: businessService});
         }
 

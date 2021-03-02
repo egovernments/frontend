@@ -558,6 +558,16 @@ export const downloadCert = async (tenantId, id) => {
 
 
 export const postPaymentSuccess = async(action,state,dispatch, data) => {
+
+  dispatch(toggleSpinner());
+  setTimeout(() => {     
+    postPaymentActivity(action,state, dispatch,data);
+    dispatch(toggleSpinner());
+  }, 4000); //Give 2 sec gap so that the screen is loaded correctly
+    
+};
+
+export const postPaymentActivity = async(action,state,dispatch, data) => {
   try {
     if(data.tenantId && data.consumerCode)
     {
