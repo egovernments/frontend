@@ -236,18 +236,18 @@ class WorkFlowContainer extends React.Component {
     }
     this.props.showSpinner();
     try {
-      if (beforeSubmitHook) {
-        if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
-          data = await beforeSubmitHook(data);
-        } else {
-          data = beforeSubmitHook(data);
-        }
+      // if (beforeSubmitHook) {
+      //   if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
+      //     data = await beforeSubmitHook(data);
+      //   } else {
+      //     data = beforeSubmitHook(data);
+      //   }
 
         if (get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.action") === "SENDBACKTOCITIZEN") {
           data[0].fireNOCDetails.status = "CITIZENACTIONREQUIRED";
           data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
         }
-      }
+      // }
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -338,7 +338,20 @@ class WorkFlowContainer extends React.Component {
         documents = get(data, "workflow.varificationDocuments");
       }
       if (documents && documents.length > 0) {
-        this.wfUpdate(label);
+        // this.wfUpdate(label);
+        const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
+        const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
+        const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
+        const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
+        const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
+        const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
+        const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
+        const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
+        const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
+
+          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
+            this.wfUpdate(label);
+          }
       } else {
         toggleSnackbar(
           true,
@@ -346,29 +359,29 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    } else {
-      this.wfUpdate(label);
-    }
+    } 
+  //   else {
+  //     this.wfUpdate(label);
+  //   }
+  // };
+   else {
+    const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
+    const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
+    const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
+    const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
+    const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
+    const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
+    const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
+    const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
+    const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
+    if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
+        this.wfUpdate(label);
+     }
+     else{
+       alert("Please select Assignee Name");
+     }
+}
   };
-  //  else {
-  //   const PTassigneeAction = get(preparedFinalObject,"Property.workflow.action", [])
-  //   const FireNOCassigneeAction = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.action", [])
-  //   const assigneeAction = get(preparedFinalObject,"Licenses[0].action", [])
-  //   const assigneeStatus = get(preparedFinalObject,"Licenses[0].status", [])
-  //   const fireNOCassigneeStatus = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.status", [])
-  //   const assigneePresent = get(preparedFinalObject,"Licenses[0].assignee", []) ? get(preparedFinalObject,"Licenses[0].assignee", []).length > 0 : false;
-  //   const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
-  //   const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
-  //   const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
-
-  //   if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
-  //       this.wfUpdate(label);
-  //    }
-  //    else{
-  //      alert("Please select Assignee Name");
-  //    }
-// }
-//   };
 
 getRedirectUrl = (action, businessId, moduleName) => {
   const isAlreadyEdited = getQueryArg(window.location.href, "edited");
@@ -431,19 +444,19 @@ getEmployeeRoles = (nextAction, currentAction, moduleName) => {
   const data = find(businessServiceData, { businessService: moduleName });
   let roles = [];
   if (nextAction === currentAction) {
-    states &&
-      data.states &&
-        data.states.forEach(state => {
-          state.actions &&
-            state.actions.forEach(action => {
-              roles = [...roles, ...action.roles];
+    data.states &&
+      data.states.forEach(state => {
+        state.actions &&
+          state.actions.forEach(action => {
+            roles = [...roles, ...action.roles];
           });
       });
   } else {
-     const states = find(data && data.states, { uuid: nextAction });
-      states && states.actions &&
-        states.actions.forEach(action => {
-          roles = [...roles, ...action.roles];
+    const states = find(data.states, { uuid: nextAction });
+    states &&
+      states.actions &&
+      states.actions.forEach(action => {
+        roles = [...roles, ...action.roles];
       });
   }
   roles = [...new Set(roles)];
@@ -467,7 +480,7 @@ checkIfDocumentRequired = (nextStateUUID, moduleName) => {
     localStorageGet("businessServiceData")
   );
   const data = find(businessServiceData, { businessService: moduleName });
-  const nextState = find(data && data.states, { uuid: nextStateUUID });
+  const nextState = find(data.states, { uuid: nextStateUUID });
   return nextState && nextState.docUploadRequired;
 };
 
@@ -476,9 +489,8 @@ getActionIfEditable = (status, businessId, moduleName, applicationState) => {
     localStorageGet("businessServiceData")
   );
   const data = find(businessServiceData, { businessService: moduleName });
-  const state = applicationState ? find(data && data.states, { applicationStatus: status, state: applicationState }) : find( data && data.states, { applicationStatus: status });
+  const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
   let actions = [];
-  state &&
   state.actions &&
     state.actions.forEach(item => {
       actions = [...actions, ...item.roles];
