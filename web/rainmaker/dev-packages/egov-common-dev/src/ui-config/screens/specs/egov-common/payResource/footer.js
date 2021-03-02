@@ -723,8 +723,8 @@ const callBackForPay = async (state, dispatch) => {
       );
       const receiptQueryString = [
         {
-          key: "consumerCodes",
-          value: response.Payments[0].paymentDetails[0].bill.consumerCode
+          key: "receiptNumbers",
+          value: response.Payments[0].paymentDetails[0].receiptNumber
         },
         {
           key: "tenantId",
@@ -733,7 +733,7 @@ const callBackForPay = async (state, dispatch) => {
       ];
       const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
       const receiptKey = get(uiCommonPayConfig, "receiptKey");
-      download(receiptQueryString,"donwload",receiptKey,state);
+      download(receiptQueryString,"download",receiptKey,state);
       let receiptNumber = get(
         response,
         "Payments[0].paymentDetails[0].receiptNumber",
