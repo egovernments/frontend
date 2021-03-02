@@ -348,8 +348,8 @@ class WorkFlowContainer extends React.Component {
         const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
         const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
         const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
-
-          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
+        const WSassigneePresent = get(preparedFinalObject,"WaterConnection[0].assignee", []) ? get(preparedFinalObject,"WaterConnection[0].assignee", []).length > 0 : false;
+          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || WSassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
             this.wfUpdate(label);
           }
       } else {
@@ -374,7 +374,8 @@ class WorkFlowContainer extends React.Component {
     const FirenocassigneePresent = get(preparedFinalObject,"FireNOCs[0].fireNOCDetails.assignee", []).length > 0;
     const PTassigneePresent = get(preparedFinalObject,"Property.workflow.assignes") ? true: false;
     const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
-    if(assigneePresent || FirenocassigneePresent || PTassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
+    const WSassigneePresent = get(preparedFinalObject,"WaterConnection[0].assignee", []) ? get(preparedFinalObject,"WaterConnection[0].assignee", []).length > 0 : false;
+    if(assigneePresent || FirenocassigneePresent || PTassigneePresent || WSassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
         this.wfUpdate(label);
      }
      else{
