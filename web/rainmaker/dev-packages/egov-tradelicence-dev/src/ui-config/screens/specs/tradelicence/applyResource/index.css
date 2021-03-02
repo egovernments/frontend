@@ -66,10 +66,15 @@
   min-width: 80%;
   position: absolute;
   z-index: 1900;
-  height: 150px;
-  max-height: 150px;
-  overflow-y: auto; }
+  height: 290px;
+  max-height: 290px;
+  overflow-y: hidden!important;
+ }
 /* .autocomplete-dropdown div:nth-child(2),
 .autocomplete-dropdown div:nth-child(3),
 .autocomplete-dropdown div:nth-child(4) {
   display: none !important; } */
+
+  #material-ui-cardContent{
+    overflow: visible!important;
+  }
