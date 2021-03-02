@@ -475,7 +475,7 @@ getActionIfEditable = (status, businessId, moduleName, applicationState) => {
     localStorageGet("businessServiceData")
   );
   const data = find(businessServiceData, { businessService: moduleName });
-  const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
+  const state = applicationState ? find(data && data.states, { applicationStatus: status, state: applicationState }) : find( data && data.states, { applicationStatus: status });
   let actions = [];
   state.actions &&
     state.actions.forEach(item => {
