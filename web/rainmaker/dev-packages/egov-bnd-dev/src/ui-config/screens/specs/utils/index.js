@@ -3,7 +3,7 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, toggleSpinner , toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
   getCommonCaption
@@ -562,7 +562,7 @@ export const postPaymentSuccess = async(action,state,dispatch, data) => {
     if(data.tenantId && data.consumerCode)
     {
       dispatch(toggleSpinner());
-      let queryParams = [{key:"tenantId",value:tenantId},{key:"consumerCode",value:consumerCode}];
+      let queryParams = [{key:"tenantId",value:data.tenantId},{key:"consumerCode",value:data.consumerCode}];
       const response = await httpRequest(
         "post",
         "birth-death-services/common/getfilestoreid",
@@ -574,7 +574,7 @@ export const postPaymentSuccess = async(action,state,dispatch, data) => {
       if(response && response.filestoreId)
       {
         let mode = 'download';
-        downloadReceiptFromFilestoreID(response.filestoreId);
+        downloadReceiptFromFilestoreID(response.filestoreId, mode);
       }
       return response;
     }
