@@ -439,11 +439,10 @@ getEmployeeRoles = (nextAction, currentAction, moduleName) => {
           });
       });
   } else {
-    const states = find(data.states, { uuid: nextAction });
-    states &&
-      states.actions &&
-      states.actions.forEach(action => {
-        roles = [...roles, ...action.roles];
+     const states = find(data && data.states, { uuid: nextAction });
+      states && states.actions &&
+        states.actions.forEach(action => {
+          roles = [...roles, ...action.roles];
       });
   }
   roles = [...new Set(roles)];
@@ -467,7 +466,7 @@ checkIfDocumentRequired = (nextStateUUID, moduleName) => {
     localStorageGet("businessServiceData")
   );
   const data = find(businessServiceData, { businessService: moduleName });
-  const nextState = find(data.states, { uuid: nextStateUUID });
+  const nextState = find(data && data.states, { uuid: nextStateUUID });
   return nextState && nextState.docUploadRequired;
 };
 
