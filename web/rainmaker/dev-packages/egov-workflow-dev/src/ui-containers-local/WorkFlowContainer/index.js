@@ -431,11 +431,12 @@ getEmployeeRoles = (nextAction, currentAction, moduleName) => {
   const data = find(businessServiceData, { businessService: moduleName });
   let roles = [];
   if (nextAction === currentAction) {
-    data.states &&
-      data.states.forEach(state => {
-        state.actions &&
-          state.actions.forEach(action => {
-            roles = [...roles, ...action.roles];
+    states &&
+      data.states &&
+        data.states.forEach(state => {
+          state.actions &&
+            state.actions.forEach(action => {
+              roles = [...roles, ...action.roles];
           });
       });
   } else {
