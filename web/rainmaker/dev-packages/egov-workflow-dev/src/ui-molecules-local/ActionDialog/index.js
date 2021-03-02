@@ -109,7 +109,7 @@ class ActionDialog extends React.Component {
       fullscreen = true;
     }
     if (dataPath === "FireNOCs") {
-      dataPath = `${dataPath}[0].fireNOCDetails.additionalDetail`
+      dataPath = `${dataPath}[0].fireNOCDetails`
     } else if (dataPath === "Assessment"||dataPath === "Property" || dataPath === "BPA" || dataPath === "Noc") {
       dataPath = `${dataPath}.workflow`;
     } else {
