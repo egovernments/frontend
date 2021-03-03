@@ -352,7 +352,11 @@ class Property extends Component {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
     }
     let button;
-    if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0){
+    // if(process.env.REACT_APP_NAME !='Citizen' && selPropertyDetails && selPropertyDetails.propertyDetails && selPropertyDetails.propertyDetails[0] &&
+    // selPropertyDetails.propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0
+    // ){
+    if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && 
+    (Payments.length <= 0 || Payments && Payments[0].paymentStatus === "CANCELLED")){
     button =
     <Button
       onClick={() => this.editDemand()}
@@ -361,6 +365,7 @@ class Property extends Component {
       style={{ lineHeight: "auto", minWidth: "inherit" }}
     />
     }
+    
     return (
       <Screen className={clsName}>
         <PTHeader header='PT_PROPERTY_INFORMATION' subHeaderTitle='PT_PROPERTY_PTUID' subHeaderValue={propertyId} />
