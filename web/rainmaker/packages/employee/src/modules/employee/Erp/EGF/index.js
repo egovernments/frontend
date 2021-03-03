@@ -39,8 +39,8 @@ class EGFFinance extends Component {
       erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
     } else {
       subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
-      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl + menuUrl;
-    }
+      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-prod" + "." + subdomainurl + menuUrl;
+   }
 
     // let erp_url='http://jalandhar.test.egov.com:8080'+menuUrl;
     console.log("ERP URL : " + erp_url);
