@@ -338,7 +338,7 @@ class Property extends Component {
   };
 
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue, loadMdmsData,propertyDetails,Payments=[]} = this.props;
+    let { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue, loadMdmsData,propertyDetails,Payments=[]} = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];
@@ -352,18 +352,21 @@ class Property extends Component {
       assessmentHistory = this.getAssessmentHistory(selPropertyDetails, receiptsByYr.receiptDetailsArray);
     }
     let button;
-    // if(process.env.REACT_APP_NAME !='Citizen' && selPropertyDetails && selPropertyDetails.propertyDetails && selPropertyDetails.propertyDetails[0] &&
-    // selPropertyDetails.propertyDetails[0].source ==='LEGACY_RECORD' && Payments.length <= 0
-    // ){
-    if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD' && 
-    (Payments.length <= 0 || Payments && Payments[0].paymentStatus === "CANCELLED")){
-    button =
-    <Button
-      onClick={() => this.editDemand()}
-      label={<Label buttonLabel={true} label="PT_EDIT_DEMAND" fontSize="16px" />}
-      primary={true}
-      style={{ lineHeight: "auto", minWidth: "inherit" }}
-    />
+    if(process.env.REACT_APP_NAME !='Citizen' && propertyDetails && propertyDetails[0] && propertyDetails[0].source ==='LEGACY_RECORD'){
+
+      let payLen = Payments && Payments.find(item =>{
+        return item && item.instrumentStatus === "APPROVED"
+      });
+      if(Payments.length <= 0 || (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED" || !payLen)){
+      
+        button =
+        <Button
+          onClick={() => this.editDemand()}
+          label={<Label buttonLabel={true} label="PT_EDIT_DEMAND" fontSize="16px" />}
+          primary={true}
+          style={{ lineHeight: "auto", minWidth: "inherit" }}
+        />
+      }
     }
     
     return (
