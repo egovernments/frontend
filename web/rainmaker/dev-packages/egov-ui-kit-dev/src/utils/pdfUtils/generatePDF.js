@@ -8,7 +8,7 @@ import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
-
+import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
 
 const vfs = { ...pdfFonts.vfs }
@@ -696,7 +696,7 @@ export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
         console.log("Base 64:",data);
     });
     
-    if (typeof mSewaApp === "undefined" && !mobileCheck())
+    if (typeof mSewaApp === "undefined" )
     {
       // we are running in browser
       receiptPDF.download(filename);
@@ -717,7 +717,7 @@ export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
   }
   
   export const openPDFFileUsingBase64 = (receiptPDF, filename) => {
-    if (typeof mSewaApp === "undefined" && !mobileCheck())
+    if (typeof mSewaApp === "undefined" )
     {
       // we are running in browser
       receiptPDF.open();
