@@ -532,6 +532,7 @@ const mapStateToProps = (state, ownProps) => {
     timeLine = selectedComplaint.actions.filter(
       action => action.status && action.status
     );
+    timeLine = timeLine.sort((timeLine1,timeLine2)=> timeLine2.when - timeLine1.when);
     isAssignedToEmployee = id == findLatestAssignee(timeLine) ? true : false; //not checking for type equality due to mismatch
     timeLine.map(action => {
       if (action && action.status && action.status === "assigned") {
