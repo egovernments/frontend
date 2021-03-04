@@ -72,37 +72,37 @@ const myApplications = {
       }
     });
 
-    dispatch(prepareFinalObject("searchResults",[{
-      "applicationCategory" : "BIRTH",
-      "regNo": "975121388",  //Reg no of downloaded certificate
-      "name": "Srikanth V",  //Name of downloaded certificate, 
-      "applicationNumber": "RC-CB-AGRA-2020-001504", 
-      "applicationDate": "54897212357",  
-      "applicationType":"DOWNLOAD_CERT",
-      "status" :"FREE_DOWNLOAD",// FREE_DOWNLOAD //PAID//PAID_DOWNLOAD 
-      "tenantId": "pb.agra"
-    },
-    {
-      "applicationCategory" : "BIRTH",
-      "regNo": "975121388",  //Reg no of downloaded certificate
-      "name": "Srikanth V",  //Name of downloaded certificate, 
-      "applicationNumber": "RC-CB-AGRA-2020-001504", 
-      "applicationDate": "54897212357",  
-      "applicationType":"DOWNLOAD_CERT",
-      "status" :"PAID",// FREE_DOWNLOAD //PAID//PAID_DOWNLOAD 
-      "tenantId": "pb.agra"
-    },
-    {
-      "applicationCategory" : "BIRTH",
-      "regNo": "975121388",  //Reg no of downloaded certificate
-      "name": "Srikanth V",  //Name of downloaded certificate, 
-      "applicationNumber": "RC-CB-AGRA-2020-001504", 
-      "applicationDate": "54897212357",  
-      "applicationType":"DOWNLOAD_CERT",
-      "status" :"PAID_DOWNLOAD",// FREE_DOWNLOAD //PAID//PAID_DOWNLOAD 
-      "tenantId": "pb.agra"
-    },
-    ]));
+    // dispatch(prepareFinalObject("searchResults",[{
+    //   "applicationCategory" : "BIRTH",
+    //   "regNo": "975121388",  //Reg no of downloaded certificate
+    //   "name": "Srikanth V",  //Name of downloaded certificate, 
+    //   "applicationNumber": "RC-CB-AGRA-2020-001504", 
+    //   "applicationDate": "54897212357",  
+    //   "applicationType":"DOWNLOAD_CERT",
+    //   "status" :"FREE_DOWNLOAD",// FREE_DOWNLOAD //PAID//PAID_DOWNLOAD 
+    //   "tenantId": "pb.agra"
+    // },
+    // {
+    //   "applicationCategory" : "BIRTH",
+    //   "regNo": "975121388",  //Reg no of downloaded certificate
+    //   "name": "Srikanth V",  //Name of downloaded certificate, 
+    //   "applicationNumber": "RC-CB-AGRA-2020-001504", 
+    //   "applicationDate": "54897212357",  
+    //   "applicationType":"DOWNLOAD_CERT",
+    //   "status" :"PAID",// FREE_DOWNLOAD //PAID//PAID_DOWNLOAD 
+    //   "tenantId": "pb.agra"
+    // },
+    // {
+    //   "applicationCategory" : "BIRTH",
+    //   "regNo": "975121388",  //Reg no of downloaded certificate
+    //   "name": "Srikanth V",  //Name of downloaded certificate, 
+    //   "applicationNumber": "RC-CB-AGRA-2020-001504", 
+    //   "applicationDate": "54897212357",  
+    //   "applicationType":"DOWNLOAD_CERT",
+    //   "status" :"PAID_DOWNLOAD",// FREE_DOWNLOAD //PAID//PAID_DOWNLOAD 
+    //   "tenantId": "pb.agra"
+    // },
+    // ]));
     return action;
   },
 
@@ -126,7 +126,7 @@ const myApplications = {
                 children: {
                   applicationsCard: {
                     uiFramework: "custom-molecules-local",
-                    moduleName: "egov-lams",
+                    moduleName: "egov-bnd",
                     componentPath: "SingleApplication",
                     visible: true,
                     props: {
@@ -156,7 +156,7 @@ const myApplications = {
                         {
                           label: "BND_BIRTH_APPL_STATUS",
                           jsonPath: "status",
-                          prefix: "STATUS_"
+                          prefix: "BND_STATUS_"
                         },
                       ],
                       moduleName: "BIRTH",

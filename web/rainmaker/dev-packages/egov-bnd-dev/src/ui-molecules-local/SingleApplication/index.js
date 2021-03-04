@@ -264,7 +264,7 @@ class SingleApplication extends React.Component {
                       </div>
                     }
 
-                    { moduleName === "TL" && /* <Link to={this.onCardClick(item)}> */
+                    { (item.status == "PAID" || item.status == "PAID_DOWNLOAD") && /* <Link to={this.onCardClick(item)}> */
                     <div style={{ cursor: "pointer" }} onClick={() => {
                       const url = this.onCardClick(item);
                       // setRoute(url);
