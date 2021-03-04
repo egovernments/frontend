@@ -350,7 +350,7 @@ class WorkFlowContainer extends React.Component {
         const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
         const WSassigneePresent = get(preparedFinalObject,"WaterConnection[0].assignee", []) ? get(preparedFinalObject,"WaterConnection[0].assignee", []).length > 0 : false;
         const WSassigneeAction = get(preparedFinalObject,"WaterConnection[0].action", "");
-          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || WSassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || WSassigneeAction === "APPROVE_FOR_CONNECTION" || "ACTIVATE_CONNECTION" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
+          if(assigneePresent || FirenocassigneePresent || PTassigneePresent || WSassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || WSassigneeAction === "APPROVE_FOR_CONNECTION" || WSassigneeAction === "ACTIVATE_CONNECTION" || assigneeAction=== "REJECT" ||  assigneeAction === "SENDBACKTOCITIZEN"|| FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" ){
             this.wfUpdate(label);
           }
       } else {
@@ -377,7 +377,7 @@ class WorkFlowContainer extends React.Component {
     const PTStatus = get(preparedFinalObject,"Property.workflow.action", []);
     const WSassigneePresent = get(preparedFinalObject,"WaterConnection[0].assignee", []) ? get(preparedFinalObject,"WaterConnection[0].assignee", []).length > 0 : false;
     const WSassigneeAction = get(preparedFinalObject,"WaterConnection[0].action", "");
-    if(assigneePresent || FirenocassigneePresent || PTassigneePresent || WSassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || WSassigneeAction === "APPROVE_FOR_CONNECTION" || "ACTIVATE_CONNECTION" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
+    if(assigneePresent || FirenocassigneePresent || PTassigneePresent || WSassigneePresent || assigneeStatus === "PENDINGAPPROVAL" || fireNOCassigneeStatus === "PENDINGAPPROVAL" || PTStatus === "APPROVE" || WSassigneeAction === "APPROVE_FOR_CONNECTION" || WSassigneeAction === "ACTIVATE_CONNECTION" || assigneeAction=== "REJECT" || assigneeAction ===  "CANCEL"|| assigneeAction ===  "RESUBMIT" || assigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "REJECT" || FireNOCassigneeAction === "SENDBACKTOCITIZEN" || FireNOCassigneeAction === "CANCEL" || PTassigneeAction === "REJECT" || PTassigneeAction === "SENDBACKTOCITIZEN" || assigneeStatus === "INITIATED"){
         this.wfUpdate(label);
      }
      else{
@@ -455,7 +455,7 @@ getEmployeeRoles = (nextAction, currentAction, moduleName) => {
           });
       });
   } else {
-    const states = find(data.states, { uuid: nextAction });
+    const states = data && data.states && find(data.states, { uuid: nextAction });
     states &&
       states.actions &&
       states.actions.forEach(action => {
@@ -483,7 +483,7 @@ checkIfDocumentRequired = (nextStateUUID, moduleName) => {
     localStorageGet("businessServiceData")
   );
   const data = find(businessServiceData, { businessService: moduleName });
-  const nextState = find(data.states, { uuid: nextStateUUID });
+  const nextState = data && data.states && find(data.states, { uuid: nextStateUUID });
   return nextState && nextState.docUploadRequired;
 };
 
@@ -492,8 +492,9 @@ getActionIfEditable = (status, businessId, moduleName, applicationState) => {
     localStorageGet("businessServiceData")
   );
   const data = find(businessServiceData, { businessService: moduleName });
-  const state = applicationState ? find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
+  const state = applicationState ? data && data.states && find(data.states, { applicationStatus: status, state: applicationState }) : find(data.states, { applicationStatus: status });
   let actions = [];
+  state &&
   state.actions &&
     state.actions.forEach(item => {
       actions = [...actions, ...item.roles];
