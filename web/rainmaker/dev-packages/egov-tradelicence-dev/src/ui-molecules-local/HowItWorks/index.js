@@ -41,8 +41,8 @@ const helpURL =gethelpURL();
           <iframe
     src = {helpURL}
     frameBorder="0"
-    scrolling="no"
-    height="100%"
+    scrolling="auto"
+    height="1000px"
     width="100%"
 ></iframe>
       {/* <p>
