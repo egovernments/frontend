@@ -575,7 +575,7 @@ export const postPaymentActivity = async(action,state,dispatch, data) => {
       let queryParams = [{key:"tenantId",value:data.tenantId},{key:"consumerCode",value:data.consumerCode}];
       const response = await httpRequest(
         "post",
-        "birth-death-services/birth/getfilestoreid",
+        "birth-death-services/birth/_getfilestoreid",
         "getfilestoreid",
         queryParams,
         {}//{ searchCriteria: queryObject }
