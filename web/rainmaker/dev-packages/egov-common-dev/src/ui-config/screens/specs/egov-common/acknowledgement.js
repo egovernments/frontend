@@ -126,12 +126,7 @@ const getAcknowledgementCard = (
     "commonPayInfo"
   );
   if (status === "success") {
-    if(businessService=="PT"){
-      if (window.appOverrides && window.appOverrides.validateForm)
-      {
-       window.appOverrides.validateForm("PTReceiptAvailable", {extraData: state.properties});
-      }
-    }
+    let extraData= {...state.properties, 'payment':state.screenConfiguration.paymentDetails}
     return {
       header,
       headerdownloadprint: downloadprintMenu(
@@ -162,7 +157,7 @@ const getAcknowledgementCard = (
                 ? `CITIZEN_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`
                 : `EMPLOYEE_SUCCESS_${transBusinessService}_PAYMENT_RECEIPT_NO`,
             },
-            number: receiptNumber,
+            number: receiptNumber
           }),
         },
       },
@@ -171,7 +166,8 @@ const getAcknowledgementCard = (
         consumerCode,
         tenant,
         status,
-        businessService
+        businessService,
+        extraData
       ),
     };
   } else if (status === "failure") {
@@ -202,7 +198,8 @@ const getAcknowledgementCard = (
         consumerCode,
         tenant,
         status,
-        businessService
+        businessService,
+        null
       ),
     };
   }

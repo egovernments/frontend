@@ -8,3 +8,4 @@ export const SHOW_NEW_TOAST = "SHOW_NEW_TOAST";
 export const TOGGLE_LOADER = "TOGGLE_LOADER";
 export const SHOW_LOADER = "SHOW_LOADER";
 export const HIDE_LOADER = "HIDE_LOADER";
+export const  SET_PAYMENT_DETAILS="SET_PAYMENT_DETAILS";

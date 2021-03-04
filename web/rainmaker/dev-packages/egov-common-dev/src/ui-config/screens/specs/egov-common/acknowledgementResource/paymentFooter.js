@@ -14,7 +14,7 @@ const getHomeButtonPath = (item) => {
     return isPublicSearch() ? url : (ifUserRoleExists("CITIZEN") ? get(item, "citizenUrl", "/") : get(item, "employeeUrl", "/inbox"));
 }
 
-const getCommonApplyFooter = children => {
+const getCommonApplyFooter = (children) => {
     return {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -22,8 +22,8 @@ const getCommonApplyFooter = children => {
             className: "apply-wizard-footer common-footer-mobile"
         },
         children
-    };
-};
+    }
+}
 
 const defaultValues = {
     "code": "DEFAULT",
@@ -40,7 +40,7 @@ const defaultValues = {
 }
 
 export const paymentFooter = (state, consumerCode, tenant, status, businessService, extraData) => {
-
+    debugger;
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo", defaultValues);
     const buttons = get(uiCommonPayConfig, "buttons");
     const redirectionURL = isPublicSearch() ? "/withoutAuth/egov-common/pay" : "/egov-common/pay";

@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar ,setPaymentDetails} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import cloneDeep from "lodash/cloneDeep";
@@ -149,6 +149,14 @@ export const callPGService = async (state, dispatch) => {
         searchResponse,
         "Payments[0].paymentDetails[0].receiptNumber"
       );
+
+      let  paymentDetails= get(
+        response,
+        "Payments[0]",
+        null
+      );
+      dispatch(setPaymentDetails(paymentDetails))
+
       const ackUrl = `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`;
       const successUrl = isPublicSearch() ? `/withoutAuth${ackUrl}` : ackUrl;
       dispatch(
@@ -178,7 +186,7 @@ export const callPGService = async (state, dispatch) => {
   }
 };
 
-const moveToSuccess = (dispatch, receiptNumber) => {
+const moveToSuccess = (dispatch, receiptNumber, paymentDetails) => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const businessService = getQueryArg(window.location, "businessService");
@@ -189,7 +197,7 @@ const moveToSuccess = (dispatch, receiptNumber) => {
   if (businessService && businessService.indexOf("BPA") > -1) {
     moduleName = "egov-bpa"
   }
-  const url = `${appendUrl}/${moduleName}/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=${"pay"}`;
+  const url = `${appendUrl}/${moduleName}/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}`;
   const ackSuccessUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
   dispatch(
     setRoute(ackSuccessUrl)
@@ -547,6 +555,13 @@ const callBackForPay = async (state, dispatch) => {
         null
       );
 
+      let  paymentDetails= get(
+        response,
+        "Payments[0]",
+        null
+      );
+      dispatch(setPaymentDetails(paymentDetails))
+
       // Search NOC application and update action to PAY
       const consumerCode = getQueryArg(window.location, "consumerCode");
       const tenantId = getQueryArg(window.location, "tenantId");
@@ -555,7 +570,8 @@ const callBackForPay = async (state, dispatch) => {
         dispatch,
         consumerCode,
         tenantId,
-        receiptNumber
+        receiptNumber,
+        paymentDetails
       );
     } catch (e) {
 

@@ -5,6 +5,7 @@ const intialState = {
   screenConfig: {},
   preparedFinalObject: { cityUpdateDialog: true },
   spinner: false,
+  paymentDetails:{},
   toastObject: {
     message: "",
     open: false,
@@ -83,6 +84,11 @@ const screenConfiguration = (state = intialState, action) => {
         ...state,
         spinner: false
       };
+    case screenActionTypes.SET_PAYMENT_DETAILS:
+      return {
+        ...state,
+       paymentDetails:action.paymentDetails
+      }
     default:
       return state;
   }
