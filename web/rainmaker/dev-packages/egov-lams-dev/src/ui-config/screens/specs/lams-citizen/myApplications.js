@@ -63,8 +63,7 @@ const myApplications = {
       //toberemoved
       if(!response || (response && !response.leases))
       {
-        alert("No data recieved. Showing sample data. ");
-        dispatch(prepareFinalObject("searchResults",sampleSearchResponse.leases));
+        alert("Looks like there was some error! Please try again later.");
       }
     });
     return action;

@@ -13,7 +13,13 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const SingleApplication = Loadable({
+  loader: () => import("./SingleApplication"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
-  HowItWorks
+  HowItWorks,
+  SingleApplication
 };
