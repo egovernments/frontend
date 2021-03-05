@@ -572,4 +572,23 @@ export const convertDateTimeToEpoch = dateTimeString => {
   } catch (e) {
     return dateTimeString;
   }
+}
+export const tradeValueNote = (label, value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: {
+        marginBottom: "16px",
+        wordBreak : "break-word",
+        display:"flex",
+        flexWrap:"wrap"
+      },
+      ...props
+    },
+    children: {
+      label: getCommonCaption(label,{style:{fontSize:"15px"}}),
+      value: getCommonValue(value,{style:{fontSize:"15px",lineHeight:"unset",marginLeft:"5px"}})
+    }
+  };
 };

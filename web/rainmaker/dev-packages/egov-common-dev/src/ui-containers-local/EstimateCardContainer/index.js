@@ -227,9 +227,9 @@ const mapStateToProps = (state, ownProps) => {
   let tenantInfo = cities && cities.filter(e => e.key === tenantId );  
 
 
-  let contactNumber = get(tenantInfo[0], "contactNumber");  
+  let contactNumber = get(tenantInfo && tenantInfo[0], "contactNumber");  
  
-  let email =  get(tenantInfo[0], "emailId");  
+  let email =  get( tenantInfo && tenantInfo[0], "emailId");  
 
   const businesService=get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
   const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0],businesService);  // const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
@@ -243,7 +243,7 @@ const mapStateToProps = (state, ownProps) => {
   {
     const finalData=getFinalData();
 
-    const latestYear = finalData[0].fromDate;
+    const latestYear = finalData && finalData[0].fromDate;
   /* for (let i = 0; billDetails && i<billDetails.length;i++) {
       for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
       {
@@ -276,7 +276,7 @@ const mapStateToProps = (state, ownProps) => {
     for (let j = 0; billDetails[i].billAccountDetails && j<billDetails[i].billAccountDetails.length;j++)
     {
       if(billDetails[i].billAccountDetails[j].taxHeadCode=== "PT_TAX" )   {     
-        if(billDetails[i].fromPeriod!==latestYear)
+        if( latestYear && billDetails[i].fromPeriod!==latestYear)
             {        
             arrears = arrears+ billDetails[i].billAccountDetails[j].amount; 
             }
