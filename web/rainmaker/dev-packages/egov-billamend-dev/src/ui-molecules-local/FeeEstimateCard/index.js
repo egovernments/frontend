@@ -54,15 +54,26 @@ const styles = {
 };
 
 function totalAmount(arr) {
-    return arr
-        .map(item => (item.value ? item.value : 0))
+    if(Array.isArray(arr)) {
+        return arr
+        .map(item => (item.taxAmount ? item.taxAmount : 0))
         .reduce((prev, next) => prev + next, 0);
+    } else {
+        return 0;
+    }
+}
+
+function getAmountType (fees) {
+    for(let i = 0; i < fees.length; i++) {
+        if (fees[i].taxAmount < 0) return "reducedAmount";
+        if (fees[i].taxAmount > 0) return "additionalAmount";
+    }
 }
 
 function FeesEstimateCard(props) {
-    console.log(props, "fees props")
     const { classes, estimate } = props;
     const total = totalAmount(estimate.fees);
+    const amountType = getAmountType(estimate.fees);
     return (
 
         <Grid container>
@@ -74,26 +85,31 @@ function FeesEstimateCard(props) {
                                 <LabelContainer labelName="Tax Heads" labelKey="BILL_TAX_HEADS" style={{fontWeight:"bold"}}/>
                             </Grid>
                             <Grid xs={6} align="right">
-                            <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_REDUCED_AMOUNT" style={{fontWeight:"bold"}}/>
+                            <LabelContainer 
+                            labelName="Reduced Amount(Rs)" 
+                            labelKey= {amountType === "reducedAmount" ? "BILL_REDUCED_AMOUNT" : "BILL_ADDITIONAL_AMOUNT"}
+                            style={{fontWeight:"bold"}}/>
                             </Grid>
                         </Grid>
                         {estimate.fees.map((fee, key) => {
                             let tooltip = fee.info ? (
-                                <Tooltip val={fee.info.labelName} icon={"info_circle"} />
+                                <Tooltip val="" icon={"info_circle"} /> //{fee.info.labelName}
                             ) : (
                                     ""
                                 );
-                            let textLeft = fee.name ? (
+                            let textLeft = fee.taxHeadMasterCode ? (
                                 <Grid container xs={8}>
-                                    <Typography>{fee.name.labelName}</Typography>
+                                    <Typography>{fee.taxHeadMasterCode}</Typography>
                                     {tooltip}
                                 </Grid>
                             ) : (
                                     <Grid xs={8} />
                                 );
-                            let textRight = fee.value ? (
+                            let textRight = fee ? (
                                 <Grid xs={4} align="right">
-                                    <Typography variant="body2">{fee.value}</Typography>
+                                    <Typography variant="body2">
+                                        {fee.taxAmount}
+                                    </Typography>
                                 </Grid>
                             ) : (
                                     <Grid xs={4} />

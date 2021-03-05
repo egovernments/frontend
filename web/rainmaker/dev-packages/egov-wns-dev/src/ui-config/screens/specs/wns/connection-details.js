@@ -2,11 +2,11 @@ import {
   convertEpochToDate,
   getCommonCard,
   getCommonContainer,
-  getCommonHeader,
+  getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
@@ -16,7 +16,7 @@ import {
   getSearchResultsForSewerage,
   serviceConst,
 } from "../../../../ui-utils/commons";
-import { ifUserRoleExists } from "../utils";
+import { ifUserRoleExists, getDemand} from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import {
@@ -30,6 +30,8 @@ import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
+import get from "lodash/get";
+import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -208,16 +210,21 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
         {
           key: "consumerCode",
-          value: sewerageConnection.applicationNo,
+          value:connectionNumber,
         },
         {
           key: "businessService",
-          value: "WS.ONE_TIME_FEE",
+          value: "SW"
+          ,
         },
       ];
-      const bill = await getBill(queryObjForBill,dispatch);
+      const bill = await getDemand(queryObjForBill,dispatch);
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
-
+      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let amendments=get(billAMDSearch, "Amendments", []);
+      amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
+      dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
+      dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
     }
@@ -299,15 +306,19 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
         {
           key: "consumerCode",
-          value: waterConnection.applicationNo,
+          value:connectionNumber,
         },
         {
           key: "businessService",
-          value: "WS.ONE_TIME_FEE",
+          value: "WS",
         },
       ];
-      const bill = await getBill(queryObjForBill,dispatch);
+      const bill = await getDemand(queryObjForBill, dispatch);
+      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let amendments=get(billAMDSearch, "Amendments", []);
+      amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
+      dispatch(prepareFinalObject("isAmendmentInWorkflow", amendments&&Array.isArray(amendments)&&amendments.length==0?true:false));
       showHideConnectionHolder(dispatch, waterConnection.connectionHolders);
       dispatch(prepareFinalObject("WaterConnection[0]", waterConnection));
       getApplicationNumber(dispatch, payloadData.WaterConnection);

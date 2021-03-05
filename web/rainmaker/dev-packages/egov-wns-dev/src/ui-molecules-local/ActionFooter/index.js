@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   getWorkFlowData,
   getDomainLink,
@@ -29,6 +29,7 @@ class Footer extends React.Component {
       applicationNos,
       businessService,
       bill,
+      isAmendmentInWorkflow
     } = this.props;
     const editButton = {
       label: "Edit",
@@ -131,7 +132,7 @@ class Footer extends React.Component {
       businessService.includes("ws-services-calculation") ||
       businessService.includes("sw-services-calculation")
     ) {
-      if (bill.Bill && bill.Bill.length > 0) {
+      if (bill.Demands&& bill.Demands.length > 0 && isAmendmentInWorkflow) {
         downloadMenu && downloadMenu.push(BillAmendment);
       }
     }
@@ -183,6 +184,11 @@ const mapStateToProps = (state) => {
     "BILL_FOR_WNS",
     ""
   );
+  let isAmendmentInWorkflow = get(
+    state.screenConfiguration.preparedFinalObject,
+    "isAmendmentInWorkflow",
+    true
+  );
   let connectDetailsData = get(
     state.screenConfiguration.preparedFinalObject,
     "connectDetailsData"
@@ -204,7 +210,7 @@ const mapStateToProps = (state) => {
       return item.businessService;
     }
   );
-  return { state, applicationNo, applicationNos, businessService, bill };
+  return { state, applicationNo, applicationNos, businessService, bill, isAmendmentInWorkflow};
 };
 
 const mapDispatchToProps = (dispatch) => {
