@@ -561,7 +561,7 @@ const screenConfig = {
             editredirect: editredirect,
             beforeSubmitHook: (data) => {
               data = data[0];
-              set(data, 'propertyId', get(data, 'property.id', null));
+              set(data, 'propertyId', get(data, 'property.propertyId', null));
               data.assignees = [];
               if (data.assignee) {
                 data.assignee.forEach(assigne => {
