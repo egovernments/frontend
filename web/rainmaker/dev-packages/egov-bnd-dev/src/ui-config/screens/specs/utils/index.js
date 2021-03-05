@@ -567,11 +567,11 @@ export const postPaymentSuccess = async(action,state,dispatch, data) => {
     
 };
 
-export const postPaymentActivity = async(action,state,dispatch, data) => {
+export const postPaymentActivity = async(data) => {
   try {
     if(data.tenantId && data.consumerCode)
     {
-      dispatch(toggleSpinner());
+      store.dispatch(toggleSpinner());
       let queryParams = [{key:"tenantId",value:data.tenantId},{key:"consumerCode",value:data.consumerCode}];
       const response = await httpRequest(
         "post",
@@ -580,7 +580,7 @@ export const postPaymentActivity = async(action,state,dispatch, data) => {
         queryParams,
         {}//{ searchCriteria: queryObject }
       );
-      dispatch(toggleSpinner());
+      store.dispatch(toggleSpinner());
       if(response && response.filestoreId)
       {
         let mode = 'download';
@@ -589,9 +589,9 @@ export const postPaymentActivity = async(action,state,dispatch, data) => {
       return response;
     }
   } catch (error) {
-    dispatch(toggleSpinner());
+    store.dispatch(toggleSpinner());
     console.error(error);
-    dispatch(
+    store.dispatch(
       toggleSnackbar(
         true,
         { labelName: error.message, labelCode: error.message },
@@ -638,5 +638,28 @@ export const triggerDownload = () => {
     }
 
   });
+
+}
+
+export const downloadReceipt = async (consumerCode,tenantId) => {
+
+  const state = store.getState();
+
+  store.dispatch(toggleSpinner());
+  let queryParams = [{key:"tenantId",value:tenantId},{key:"consumerCodes",value:consumerCode}];
+  const response = await httpRequest(
+    "post",
+    "collection-services/payments/_search",
+    "_search",
+    queryParams,
+    {}//{ searchCriteria: queryObject }
+  );
+  store.dispatch(toggleSpinner());
+  if(response && response.Payments && response.Payments.length>0 && response.Payments[0].fileStoreId)
+  {
+    let mode = 'download';
+    downloadReceiptFromFilestoreID(response.Payments[0].fileStoreId, mode);
+  }
+  return response;
 
 }

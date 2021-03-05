@@ -200,7 +200,7 @@ const screenConfig = {
         if(businessService=="BIRTH_CERT" || businessService=="DEATH_CERT")
         {
             //Only for birth and death certificate.
-            postPaymentSuccess(action,state,dispatch, {consumerCode:consumerCode, tenantId:tenant, businessService: businessService});
+            postPaymentSuccess({consumerCode:consumerCode, tenantId:tenant, businessService: businessService});
         }
 
         // Calling the Bill so that payer information can be set in the PDF for Citizen application

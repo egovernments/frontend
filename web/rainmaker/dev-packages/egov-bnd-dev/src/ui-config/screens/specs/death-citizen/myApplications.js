@@ -18,7 +18,7 @@ const getMyApplications = async (action, state, dispatch) => {
     let payload = null;
       payload = await httpRequest(
         "post",
-        "birth-death-services/birth/_searchApplications",
+        "birth-death-services/death/_searchApplications",
         "_search",
         queryParams,
         {}
@@ -82,7 +82,7 @@ const myApplications = {
     });
 
     // dispatch(prepareFinalObject("searchResults",[{
-    //   "applicationCategory" : "BIRTH",
+    //   "applicationCategory" : "DEATH",
     //   "regNo": "975121388",  //Reg no of downloaded certificate
     //   "name": "Srikanth V",  //Name of downloaded certificate, 
     //   "applicationNumber": "RC-CB-AGRA-2020-001504", 
@@ -92,7 +92,7 @@ const myApplications = {
     //   "tenantId": "pb.agra"
     // },
     // {
-    //   "applicationCategory" : "BIRTH",
+    //   "applicationCategory" : "DEATH",
     //   "regNo": "975121388",  //Reg no of downloaded certificate
     //   "name": "Srikanth V",  //Name of downloaded certificate, 
     //   "applicationNumber": "RC-CB-AGRA-2020-001504", 
@@ -102,7 +102,7 @@ const myApplications = {
     //   "tenantId": "pb.agra"
     // },
     // {
-    //   "applicationCategory" : "BIRTH",
+    //   "applicationCategory" : "DEATH",
     //   "regNo": "975121388",  //Reg no of downloaded certificate
     //   "name": "Srikanth V",  //Name of downloaded certificate, 
     //   "applicationNumber": "RC-CB-AGRA-2020-001504", 
@@ -150,26 +150,26 @@ const myApplications = {
                           isDate: true,
                         },
                         {
-                          label: "BND_BIRTH_CERT_REG_NO",
+                          label: "BND_DEATH_CERT_REG_NO",
                           jsonPath: "regNo",
                         },
                         {
-                          label: "BND_BIRTH_CERT_NAME",
+                          label: "BND_DEATH_CERT_NAME",
                           jsonPath: "name"
                         },
                         {
-                          label: "BND_BIRTH_APPL_TYPE",
+                          label: "BND_DEATH_APPL_TYPE",
                           jsonPath: "applicationType",
                           prefix: "BND_"
                         },
                         {
-                          label: "BND_BIRTH_APPL_STATUS",
+                          label: "BND_DEATH_APPL_STATUS",
                           jsonPath: "status",
                           prefix: "BND_STATUS_"
                         },
                       ],
-                      moduleName: "BIRTH",
-                      homeURL: "/birth-citizen/home",
+                      moduleName: "DEATH",
+                      homeURL: "/death-citizen/home",
                       certificateDowloadHandler:certificateDowloadHandler,
                       downloadReceiptHandler: downloadReceiptHandler
                     }

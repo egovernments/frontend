@@ -198,9 +198,18 @@ class SingleApplication extends React.Component {
     return LabelKey;
   };
 
+  onDownloadCertClicked = (item) =>{
+    const {certificateDowloadHandler} = this.props;
+    certificateDowloadHandler({tenantId:item.tenantId, consumerCode: item.applicationNumber});
+  }
+
+  onDownloadReceiptClicked = (item) =>{
+    const {downloadReceiptHandler} = this.props;
+    downloadReceiptHandler(item.applicationNumber, item.tenantId);
+  }
+
   render() {
     const { searchResults, classes, contents, moduleName, setRoute } = this.props;
-    alert("Hey");
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -263,22 +272,39 @@ class SingleApplication extends React.Component {
                         </Grid>
                       </div>
                     }
-
-                    { (item.status == "PAID" || item.status == "PAID_DOWNLOAD") && /* <Link to={this.onCardClick(item)}> */
-                    <div style={{ cursor: "pointer" }} onClick={() => {
-                      const url = this.onCardClick(item);
-                      // setRoute(url);
-                    }}>
-                      <Label
-                        labelKey={"BND_GET_RECIEPT"}
-                        textTransform={"uppercase"}
-                        style={{
-                          color: "#fe7a51",
-                          fontSize: 14,
-                          textTransform: "uppercase"
-                        }}
-                      />
-                    </div>}
+                    {
+                      <div style={{display:"flex"}}>
+                        { (item.status == "PAID_DOWNLOAD") && /* <Link to={this.onCardClick(item)}> */
+                        <div style={{ cursor: "pointer", paddingLeft:"0px" }} onClick={() => {
+                          this.onDownloadCertClicked(item);
+                        }}>
+                          <Label
+                            labelKey={"BND_DOWNLOAD_CERTIFICATE"}
+                            textTransform={"uppercase"}
+                            style={{
+                              color: "#fe7a51",
+                              fontSize: 14,
+                              textTransform: "uppercase"
+                            }}
+                          />
+                        </div>}
+                        { (item.status == "PAID" || item.status == "PAID_DOWNLOAD") && /* <Link to={this.onCardClick(item)}> */
+                        <div style={{ cursor: "pointer" , paddingLeft:"10px"}} onClick={() => {
+                          const url = this.onDownloadReceiptClicked(item);
+                          // setRoute(url);
+                        }}>
+                          <Label
+                            labelKey={"BND_GET_RECIEPT"}
+                            textTransform={"uppercase"}
+                            style={{
+                              color: "#fe7a51",
+                              fontSize: 14,
+                              textTransform: "uppercase"
+                            }}
+                          />
+                        </div>}
+                      </div>
+                    }
                     {/* </Link> */}
                   </div>
                 </CardContent>
