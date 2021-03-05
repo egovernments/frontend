@@ -43,7 +43,7 @@ const dynamic = (uom, path, buildingIndex) => {
 const prepareSelectField = (uom, start, end) => {
   let data = [];
   for (let i = start; i <= end; i++) {
-    data.push({ code: `${i}`, name: `${i}`});
+    data.push({ code: `${i}`, name: i });
   }
   return {
     uiFramework: "custom-containers-local",
