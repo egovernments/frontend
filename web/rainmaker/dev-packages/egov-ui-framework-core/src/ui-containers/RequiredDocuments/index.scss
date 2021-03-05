@@ -41,6 +41,10 @@
   bottom: 2px;
 }
 
+.footerFixed {
+   position: fixed !important;
+ }
+
 .fixedHeader {
   position: sticky;
   background: white;
