@@ -80,7 +80,7 @@ const screenConfig = {
     //     "FireNOCs[0].tenantId"
     //   );
       let userInfodata = JSON.parse(getUserInfo());
-    const tenantId = get(userInfodata, "correspondenceAddress");
+    const tenantId = get(userInfodata, "tenantId");
     let uomsObject = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
