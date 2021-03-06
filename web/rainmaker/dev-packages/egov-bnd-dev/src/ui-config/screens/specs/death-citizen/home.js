@@ -30,7 +30,7 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "BND_DEATH_MY_REQUESTS",
+      labelKey: "BND_MY_REQUESTS",
       labelName: "My Applications"
     },
     icon: <DeathIcon />,
@@ -38,7 +38,7 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "DEATH_HOW_IT_WORKS",
+      labelKey: "BND_HOW_IT_WORKS",
       labelName: "How It Works"
     },
     icon: <HelpIcon />,

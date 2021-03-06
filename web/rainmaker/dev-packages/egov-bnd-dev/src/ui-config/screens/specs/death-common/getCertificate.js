@@ -122,7 +122,7 @@ const getCertificate = {
               },
               helpButtonLabel:getLabel({
                 labelName:"Death How it Works",
-                labelKey:"BND_DEATH_HELP"
+                labelKey:"BND_HELP"
               }),
             },        
            }, 

@@ -12,74 +12,55 @@ import {disclaimerDialog} from "./disclaimerDialog";
 
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 // console.log("tenantId--- ", tenantId);
-const resetFields = (state, dispatch) => {
-  const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb",
-      "props.value",
-      tenantId
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
+const resetFields = (state, dispatch) => {//const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+
+  //Clear advanced Search
+  let componentPath = "components.div.children.birthSearchCard.children.cardContent.children.searchContainer2.children.details.children";
+  for(var child in get(state,"screenConfiguration.screenConfig.getCertificate."+componentPath))
+  {
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
       "props.value",
       ""
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.billNumber",
-      "props.value",
-      ""
-    )
-  );
-  //Added by vidya to get mobile number
-  if(ifUserRoleExists("CITIZEN")){
-    const userName = JSON.parse(getUserInfo()).userName;
-    dispatch(
-      prepareFinalObject("searchScreen.mobileNumber", userName)
-    );
-  } else{
-    dispatch(
-      handleField(
-        "billSearch",
-        "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
-        "props.value",
-        ""
-      )
-    );
-  }  
-  
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
       "props.helperText",
       ""
-    )
-  );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId ,businesService:""}));
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.error",
+      false
+    ));
+  }
+
+  //Clear Mandatory Search Attributes
+  componentPath = "components.div.children.birthSearchCard.children.cardContent.children.searchContainerCommon.children";
+  for(var child in get(state,"screenConfiguration.screenConfig.getCertificate."+componentPath))
+  {
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.value",
+      ""
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.helperText",
+      ""
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.error",
+      false
+    ));
+  }
 };
 
 const cbChanged = (action, state, dispatch) => {
@@ -477,7 +458,7 @@ export const buttonContainer = getCommonContainer({
 export const birthSearchCard = getCommonCard({
   header: getCommonHeader({
     labelName: "Search Bill",
-    labelKey: "BND_BIRTH_SEARCH"
+    labelKey: "BND_SEARCH_REGISTRY"
   }),
   // subheader: getCommonSubHeader({
   //   labelName: "Provide at least one parameter to search for an application",

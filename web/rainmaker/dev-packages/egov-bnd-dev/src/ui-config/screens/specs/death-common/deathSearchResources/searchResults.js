@@ -75,6 +75,10 @@ export const searchResults = {
         labelKey: "BND_COMMON_FATHERSNAME"
       },
       {
+        labelName: "Spouse's Name",
+        labelKey: "BND_SPOUSE_NAME_LABEL"
+      },
+      {
         labelName: "Action",
         labelKey: "BND_COMMON_TABLE_ACTION",
         options: {
@@ -129,7 +133,7 @@ export const searchResults = {
     ],
     title: {
       labelName: "Search Results for Death",
-      labelKey: "DEATH_SEARCH_TABLE_HEADER"
+      labelKey: "BND_SEARCH_TABLE_HEADER"
     },
     rows : "",
     options: {
@@ -195,10 +199,10 @@ const getActionButton = (value, tableMeta) => {
           //     }`;
           // document.location.href = `${document.location.origin}${url}`;
 
-          let tenantId = tableMeta.rowData[8];
+          let tenantId = tableMeta.rowData[9];
           let id = tableMeta.rowData[0];
-          let action = tableMeta.rowData[7];
-          let businessService = tableMeta.rowData[9];
+          let action = tableMeta.rowData[8];
+          let businessService = tableMeta.rowData[10];
 
           store.dispatch(prepareFinalObject("bnd.death.download.certificateId", id));
           store.dispatch(prepareFinalObject("bnd.death.download.tenantId", tenantId));

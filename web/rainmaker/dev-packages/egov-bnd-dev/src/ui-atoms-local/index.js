@@ -13,7 +13,13 @@ const LinkButton = Loadable({
   loading: () => <Loading />
 });
 
+const AutoSuggest = Loadable({
+  loader: () => import("./AutoSuggest"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
-  LinkButton
+  LinkButton,
+  AutoSuggest
 };

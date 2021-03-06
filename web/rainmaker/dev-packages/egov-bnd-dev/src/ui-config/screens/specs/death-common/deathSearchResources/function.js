@@ -114,6 +114,7 @@ export const searchApiCall = async (state, dispatch) => {
       gender:  getGenderValue(get(item, "gender")),
       mothersName: get(item, "deathMotherInfo.firstname")?get(item, "deathMotherInfo.firstname"):""+get(item, "deathMotherInfo.middlename")?(" "+get(item, "deathMotherInfo.middlename")):""+get(item, "deathMotherInfo.lastname")?(" "+get(item, "deathMotherInfo.lastname")):"",
       fathersName: get(item, "deathFatherInfo.firstname")?get(item, "deathFatherInfo.firstname"):""+get(item, "deathFatherInfo.middlename")?(" "+get(item, "deathFatherInfo.middlename")):""+" "+get(item, "deathFatherInfo.lastname")?get(item, "deathFatherInfo.lastname"):"",
+      spouseName: get(item, "deathSpouseInfo.firstname")?get(item, "deathSpouseInfo.firstname"):""+get(item, "deathSpouseInfo.middlename")?(" "+get(item, "deathSpouseInfo.middlename")):""+" "+get(item, "deathSpouseInfo.lastname")?get(item, "deathSpouseInfo.lastname"):"",
       action: getActionItem(get(item, "counter")),
       tenantId: get(item, "tenantid"),
       payRequired: get(item, "payRequired")
@@ -135,6 +136,7 @@ export const searchApiCall = async (state, dispatch) => {
       ['BND_COMMON_GENDER']: item.gender || "-",
       ['BND_COMMON_MOTHERSNAME']: item.mothersName || "-",
       ['BND_COMMON_FATHERSNAME']: item.fathersName || "-",
+      ['BND_SPOUSE_NAME_LABEL']: item.spouseName || "-",
       ['BND_COMMON_TABLE_ACTION']: item.action || "-",
       ["BUSINESS_SERVICE"]: "DEATH_CERT",
       ["TENANT_ID"]: item.tenantId,

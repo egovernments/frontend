@@ -10,76 +10,60 @@ import get from "lodash/get";
 import {loadHospitals} from "./../../utils"
 import {disclaimerDialog} from "./disclaimerDialog";
 
+
 // const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
 // console.log("tenantId--- ", tenantId);
 const resetFields = (state, dispatch) => {
-  const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.ulb",
-      "props.value",
-      tenantId
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.consumerCode",
+  //const tenantId = process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+
+  //Clear advanced Search
+  let componentPath = "components.div.children.deathSearchCard.children.cardContent.children.searchContainer2.children.details.children";
+  for(var child in get(state,"screenConfiguration.screenConfig.getCertificate."+componentPath))
+  {
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
       "props.value",
       ""
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.billNumber",
-      "props.value",
-      ""
-    )
-  );
-  //Added by vidya to get mobile number
-  if(ifUserRoleExists("CITIZEN")){
-    const userName = JSON.parse(getUserInfo()).userName;
-    dispatch(
-      prepareFinalObject("searchScreen.mobileNumber", userName)
-    );
-  } else{
-    dispatch(
-      handleField(
-        "billSearch",
-        "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
-        "props.value",
-        ""
-      )
-    );
-  }  
-  
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
-      "props.error",
-      false
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
       "props.helperText",
       ""
-    )
-  );
-  dispatch(prepareFinalObject("searchScreen", { tenantId: tenantId ,businesService:""}));
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.error",
+      false
+    ));
+  }
+
+  //Clear Mandatory Search Attributes
+  componentPath = "components.div.children.deathSearchCard.children.cardContent.children.searchContainerCommon.children";
+  for(var child in get(state,"screenConfiguration.screenConfig.getCertificate."+componentPath))
+  {
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.value",
+      ""
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.helperText",
+      ""
+    ));
+    dispatch(handleField(
+      "getCertificate",
+      componentPath+"."+child,
+      "props.error",
+      false
+    ));
+  }
+
 };
 
 const cbChanged = (action, state, dispatch) => {
@@ -190,15 +174,15 @@ export const searchSetCommon = getCommonContainer({
   }),
   cantonmentSelect: {
     uiFramework: "custom-containers",
-      //moduleName: "egov-lams",
+      moduleName: "egov-abg",
       componentPath: "AutosuggestContainer",
       jsonPath: "bnd.death.tenantId",
       sourceJsonPath: "bnd.allTenants",
       visible:true,
-      autoSelect:true,
+      autoSelect:false,
       props:{
-        autoSelect:true,
-        //isClearable:true,
+        autoSelect:false,
+        isClearable:true,
         className: "autocomplete-dropdown",
         suggestions: [],
         disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
@@ -277,6 +261,40 @@ export const searchSet1 = getCommonContainer({
 });
 
 export const searchSet2 = getCommonContainer({
+  nameOfPerson: getTextField({
+    label: {
+      labelName: "Name",
+      labelKey: "BND_PERSON_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Name",
+      labelKey: "BND_PERSON_NAME_PLACEHOLDER"
+    },
+    required:false,
+    visible: true,
+    jsonPath: "bnd.death.name",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  }),
+  spouseName: getTextField({
+    label: {
+      labelName: "Spouse Name",
+      labelKey: "BND_SPOUSE_NAME_LABEL"
+    },
+    placeholder: {
+      labelName: "Name",
+      labelKey: "BND_SPOUSE_NAME_PLACEHOLDER"
+    },
+    required:false,
+    visible: true,
+    jsonPath: "bnd.death.spouseName",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  }),
   registrationNo: getTextField({
     label: {
       labelName: "Registration No",
@@ -296,7 +314,7 @@ export const searchSet2 = getCommonContainer({
   }),
   hospital: {
     uiFramework: "custom-containers",
-      //moduleName: "egov-lams",
+      moduleName: "egov-bnd",
       componentPath: "AutosuggestContainer",
       jsonPath: "bnd.death.hosptialId",
       sourceJsonPath: "bnd.allHospitals",
@@ -477,7 +495,7 @@ export const buttonContainer = getCommonContainer({
 export const deathSearchCard = getCommonCard({
   header: getCommonHeader({
     labelName: "Search Bill",
-    labelKey: "BND_DEATH_SEARCH"
+    labelKey: "BND_SEARCH_REGISTRY"
   }),
   // subheader: getCommonSubHeader({
   //   labelName: "Provide at least one parameter to search for an application",

@@ -129,7 +129,7 @@ export const searchResults = {
     ],
     title: {
       labelName: "Search Results for Birth",
-      labelKey: "BIRTH_SEARCH_TABLE_HEADER"
+      labelKey: "BND_SEARCH_TABLE_HEADER"
     },
     rows : "",
     options: {

@@ -517,3 +517,28 @@ export const searchForBirth = async (dispatch,queryParams,queryObject) => {
   }
 };
 
+export const searchForDeath = async (dispatch,queryParams,queryObject) => {
+  try {
+    dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "birth-death-services/death/_search",
+      "_search",
+      queryParams,
+      {}//{ searchCriteria: queryObject }
+    );
+    dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    dispatch(toggleSpinner());
+    console.error(error);
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+

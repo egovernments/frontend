@@ -122,7 +122,7 @@ const getCertificate = {
               },
               helpButtonLabel:getLabel({
                 labelName:"Birth How it Works",
-                labelKey:"BND_BIRTH_HELP"
+                labelKey:"BND_HELP"
               }),
             },        
            }, 

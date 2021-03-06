@@ -150,20 +150,20 @@ const myApplications = {
                           isDate: true,
                         },
                         {
-                          label: "BND_DEATH_CERT_REG_NO",
+                          label: "BND_CERT_REG_NO",
                           jsonPath: "regNo",
                         },
                         {
-                          label: "BND_DEATH_CERT_NAME",
+                          label: "BND_CERT_NAME",
                           jsonPath: "name"
                         },
                         {
-                          label: "BND_DEATH_APPL_TYPE",
+                          label: "BND_APPL_TYPE",
                           jsonPath: "applicationType",
                           prefix: "BND_"
                         },
                         {
-                          label: "BND_DEATH_APPL_STATUS",
+                          label: "BND_APPL_STATUS",
                           jsonPath: "status",
                           prefix: "BND_STATUS_"
                         },

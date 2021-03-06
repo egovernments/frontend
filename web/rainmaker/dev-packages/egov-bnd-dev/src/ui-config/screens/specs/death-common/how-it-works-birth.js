@@ -2,7 +2,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 const header = getCommonHeader(
   {
     labelName: "How It Works",
-    labelKey: "BND_DEATH_HELP"
+    labelKey: "BND_HELP"
   },
   {
     classes: {

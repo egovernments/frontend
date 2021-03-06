@@ -328,7 +328,7 @@ class SingleApplication extends React.Component {
                 color="primary"
                 onClick={this.onButtonCLick}
               >
-                <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+                <Label labelKey={`BND_NEW_APPLICATION`} />
               </Button>
             </div>
           )}

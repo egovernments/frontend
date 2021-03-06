@@ -18,8 +18,13 @@ const SingleApplication = Loadable({
   loading: () => <Loading />
 });
 
+const AutosuggestContainer = Loadable({
+  loader: () => import("./AutosuggestContainer"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   HowItWorks,
-  SingleApplication
+  AutosuggestContainer
 };

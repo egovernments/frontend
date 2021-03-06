@@ -30,7 +30,7 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "BND_BIRTH_MY_REQUESTS",
+      labelKey: "BND_MY_REQUESTS",
       labelName: "My Applications"
     },
     icon: <BirthIcon />,
@@ -38,7 +38,7 @@ const cardItems = [
   },
   {
     label: {
-      labelKey: "BIRTH_HOW_IT_WORKS",
+      labelKey: "BND_HOW_IT_WORKS",
       labelName: "How It Works"
     },
     icon: <HelpIcon />,
