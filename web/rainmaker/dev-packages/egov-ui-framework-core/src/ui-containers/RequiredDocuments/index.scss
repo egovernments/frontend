@@ -4,7 +4,7 @@
     -webkit-box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
     box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
     /* padding: 8px; */
-    position: fixed !important;
+    position: relative !important;
     bottom: 0;
     left: 0;
     width: 100vw;
@@ -19,6 +19,7 @@
     border: none;
     margin: 0 !important;
     border-radius: none !important;
+    min-width: 0 !important;
   }
 }
   @media only screen and (min-width: 768px) {
@@ -42,7 +43,7 @@
 }
 
 .footerFixed {
-   position: absolute !important;
+   position: relative !important;
  }
 
 .fixedHeader {
