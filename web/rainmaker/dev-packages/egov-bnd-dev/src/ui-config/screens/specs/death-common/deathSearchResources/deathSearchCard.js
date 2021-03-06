@@ -295,23 +295,6 @@ export const searchSet2 = getCommonContainer({
       sm: 4
     }
   }),
-  registrationNo: getTextField({
-    label: {
-      labelName: "Registration No",
-      labelKey: "BND_REG_NO_LABEL"
-    },
-    placeholder: {
-      labelName: "Registration No",
-      labelKey: "BND_REG_NO_PLACEHOLDER"
-    },
-    required:false,
-    visible: true,
-    jsonPath: "bnd.death.registrationNo",
-    gridDefination: {
-      xs: 12,
-      sm: 4
-    }
-  }),
   hospital: {
     uiFramework: "custom-containers",
       moduleName: "egov-bnd",
@@ -328,11 +311,11 @@ export const searchSet2 = getCommonContainer({
         disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         label: {
           labelName: "Select Hospital",
-          labelKey: "BND_APPL_HOSP"
+          labelKey: "BND_BIRTH_APPL_HOSP"
         },
         placeholder: {
           labelName: "Select Hospital",
-          labelKey: "BND_APPL_HOSP_PLACEHOLDER"
+          labelKey: "BND_DEATH_APPL_HOSP_PLACEHOLDER"
         },
         localePrefix: {
           moduleName: "TENANT",
@@ -360,6 +343,23 @@ export const searchSet2 = getCommonContainer({
 
       },
   },
+  registrationNo: getTextField({
+    label: {
+      labelName: "Registration No",
+      labelKey: "BND_REG_NO_LABEL"
+    },
+    placeholder: {
+      labelName: "Registration No",
+      labelKey: "BND_REG_NO_PLACEHOLDER"
+    },
+    required:false,
+    visible: true,
+    jsonPath: "bnd.death.registrationNo",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  }),
   fathersName: getTextField({
     label: {
       labelName: "Father's Name",

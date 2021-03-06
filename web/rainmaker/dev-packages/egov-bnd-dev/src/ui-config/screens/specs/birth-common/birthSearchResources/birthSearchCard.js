@@ -291,11 +291,11 @@ export const searchSet2 = getCommonContainer({
         disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         label: {
           labelName: "Select Hospital",
-          labelKey: "BND_APPL_HOSP"
+          labelKey: "BND_BIRTH_APPL_HOSP"
         },
         placeholder: {
           labelName: "Select Hospital",
-          labelKey: "BND_APPL_HOSP_PLACEHOLDER"
+          labelKey: "BND_BIRTH_APPL_HOSP_PLACEHOLDER"
         },
         localePrefix: {
           moduleName: "TENANT",
