@@ -370,7 +370,6 @@ export const submitApplication = async (state, dispatch) => {
       [],
       { Amendment: billAmdDetails }
     );
-    debugger;
     dispatch(prepareFinalObject("Amendment", response.Amendments[0]));
 
     dispatch(

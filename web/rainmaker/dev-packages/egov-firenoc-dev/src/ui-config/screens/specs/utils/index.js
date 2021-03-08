@@ -669,17 +669,8 @@ const isApplicationPaid = (currentStatus, workflowCode) => {
   if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
-    for (var i = 0; i < states.length; i++) {
-      if (states[i].state === currentStatus) {
-        break;
-      }
-      if (
-        states[i].actions &&
-        states[i].actions.filter(item => item.action === "PAY").length > 0
-      ) {
-        isPAID = true;
-        break;
-      }
+    if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "CITIZENACTIONREQUIRED"){
+      isPAID = true;
     }
   } else {
     isPAID = false;
@@ -751,8 +742,21 @@ export const generateBill = async (dispatch, applicationNumber, tenantId, status
         }
       ];
       const isPAID = isApplicationPaid(status, "FIRENOC");
-      const payload = isPAID ? await getReceiptData(billQueryObj) : await createBill(queryObj, dispatch);
-      let estimateData = payload ? isPAID ? payload && payload.Payments && payload.Payments.length > 0 && createEstimateData(payload.Payments[0].paymentDetails[0].bill, dispatch) : payload && createEstimateData(payload.Bill[0], dispatch) : [];
+      const fetchBillResponse = await createBill(queryObj, dispatch);
+      const payload = isPAID
+        ? await getReceiptData(billQueryObj.filter(item => item.key !== "businessService"))
+        : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
+      let estimateData = payload
+      ? isPAID
+      ? payload &&
+      payload.Payments &&
+      payload.Payments.length > 0 &&
+      createEstimateData(
+        payload.Payments[0].paymentDetails[0].bill,
+        dispatch
+      )
+      : payload && createEstimateData(payload, dispatch)
+      : [];
       estimateData = estimateData || [];
       set(estimateData, "payStatus", isPAID);
       dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", estimateData));

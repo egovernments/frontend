@@ -282,7 +282,6 @@ const footerCallBackForRequiredDataModal = (moduleName, closePopUp) => {
   const connectionNumber = getQueryArg( window.location.href, "connectionNumber");
   const tenantId = getQueryArg( window.location.href, "tenantId");
   const businessService = getQueryArg( window.location.href, "service")==="WATER" ? "WS" : "SW";
-debugger;
   switch (moduleName) {
    
     case "BillAmendment":
