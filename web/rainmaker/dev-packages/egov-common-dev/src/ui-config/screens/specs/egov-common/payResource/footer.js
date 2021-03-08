@@ -120,7 +120,8 @@ export const callPGService = async (state, dispatch) => {
         taxAndPayments,
         user,
         callbackUrl,
-        additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false }
+        additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false,
+      isMobileApk:  window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp()?true:false }
       }
     };
     const goToPaymentGateway = await httpRequest(
@@ -161,6 +162,7 @@ export const callPGService = async (state, dispatch) => {
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
       window.location = redirectionUrl;
+      window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
     }
   } catch (e) {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
