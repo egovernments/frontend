@@ -493,11 +493,13 @@ export const loadMdmsData = async (action, state, dispatch) => {
   }
 }
 
-export const loadHospitals = async (action, state, dispatch) => {
+export const loadHospitals = async (action, state, dispatch, module) => {
   let requestBody = {};
   let payload = null;
 
-  const tenantId = get(state.screenConfiguration.preparedFinalObject.bnd.birth,"tenantId");
+  const tenantId = (module=="birth")?
+    get(state.screenConfiguration.preparedFinalObject.bnd.birth,"tenantId"):
+    get(state.screenConfiguration.preparedFinalObject.bnd.death,"tenantId");
 
   const queryParams = [
     { key: "tenantId", value: tenantId }  
@@ -549,8 +551,17 @@ export const downloadCert = async (tenantId, id) => {
   }
   catch(e)
   {
+    console.error(e);
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Could not initiate download",
+        labelKey: "ERR_API_ERROR"
+      },
+      "error"
+    );
     //toBeRemoved
-    payload = {consumerCode:"CH-CB-AGRA-2020-001504", filestoreId:"4f0d9299-7fa0-4af6-9077-389ebf2367c4", tenantId: "pb.agra"};
+    //payload = {consumerCode:"CH-CB-AGRA-2020-001504", filestoreId:"4f0d9299-7fa0-4af6-9077-389ebf2367c4", tenantId: "pb.agra"};
   }
 
   return payload;

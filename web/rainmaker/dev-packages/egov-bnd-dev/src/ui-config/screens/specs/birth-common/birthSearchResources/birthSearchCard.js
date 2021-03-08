@@ -65,7 +65,7 @@ const resetFields = (state, dispatch) => {//const tenantId = process.env.REACT_A
 
 const cbChanged = (action, state, dispatch) => {
 
-  loadHospitals(action, state, dispatch);
+  loadHospitals(action, state, dispatch, "birth");
 
 }
 

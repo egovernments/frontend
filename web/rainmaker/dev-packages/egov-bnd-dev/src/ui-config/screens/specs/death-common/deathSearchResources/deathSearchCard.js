@@ -68,7 +68,7 @@ const resetFields = (state, dispatch) => {
 
 const cbChanged = (action, state, dispatch) => {
 
-  loadHospitals(action, state, dispatch);
+  loadHospitals(action, state, dispatch, "death");
 
 }
 
