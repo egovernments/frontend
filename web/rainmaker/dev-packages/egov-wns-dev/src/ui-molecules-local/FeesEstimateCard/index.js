@@ -104,7 +104,7 @@ function FeesEstimateCard(props) {
                             </Typography>
                         </Grid>
                     </Grid>
-                    {sortedArray.length > 0 && sortedArray.map(fee =>
+                    {sortedArray && sortedArray.length > 0 && sortedArray.map(fee =>
                         <div>
                             <Grid container>
                                 <Grid item xs={4}>

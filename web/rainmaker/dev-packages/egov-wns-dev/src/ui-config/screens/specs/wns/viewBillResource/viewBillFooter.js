@@ -6,7 +6,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const connectionNo = getQueryArg(window.location.href, "connectionNumber");
 const tenantId = getQueryArg(window.location.href, "tenantId");
-const businessService = connectionNo.includes("WS") ? "WS" : "SW";
+const businessService = getQueryArg(window.location.href, "service")==="WATER" ? "WS" : "SW";
 
 const callDownloadBill = ( mode) => {
   const val = [
