@@ -507,8 +507,8 @@ export const loadHospitals = async (action, state, dispatch) => {
   {
     payload = await httpRequest(
       "post",
-      "/birth-death-services/hospital/_search",
-      "search",
+      "birth-death-services/common/getHospitals",
+      "getHospitals",
       queryParams,
       requestBody
     );

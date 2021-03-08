@@ -311,7 +311,7 @@ export const searchSet2 = getCommonContainer({
         disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
         label: {
           labelName: "Select Hospital",
-          labelKey: "BND_BIRTH_APPL_HOSP"
+          labelKey: "BND_DEATH_APPL_HOSP"
         },
         placeholder: {
           labelName: "Select Hospital",

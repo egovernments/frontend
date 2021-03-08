@@ -47,6 +47,14 @@ export const searchApiCall = async (state, dispatch) => {
   let fathersName = get(state.screenConfiguration.preparedFinalObject,"bnd.death.fathersName");
   if(fathersName)
     queryParams.push({ key: "fatherName",value: fathersName});
+  
+  let spouseName = get(state.screenConfiguration.preparedFinalObject,"bnd.death.spouseName");
+  if(spouseName)
+    queryParams.push({ key: "spouseName",value: spouseName});
+  
+  let name = get(state.screenConfiguration.preparedFinalObject,"bnd.death.name");
+  if(name)
+    queryParams.push({ key: "name",value: name});
 
   let searchSet1Visible = get(
     state.screenConfiguration,
