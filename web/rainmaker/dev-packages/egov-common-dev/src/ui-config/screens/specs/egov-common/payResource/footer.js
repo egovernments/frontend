@@ -162,7 +162,9 @@ export const callPGService = async (state, dispatch) => {
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
       window.location = redirectionUrl;
-      window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
+      setTimeout(()=>{
+        window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
+      },3000)
     }
   } catch (e) {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
