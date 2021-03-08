@@ -84,6 +84,9 @@ export const propertySearchApiCall = async (state, dispatch) => {
               }
             }    
           }
+          if(propertyData && propertyData.owners && propertyData.owners.length > 0) {
+            propertyData.owners = propertyData.owners.filter(owner => owner.status == "ACTIVE");
+          }
           dispatch(prepareFinalObject("applyScreen.property", propertyData))
           showHideFields(dispatch, true);
         }

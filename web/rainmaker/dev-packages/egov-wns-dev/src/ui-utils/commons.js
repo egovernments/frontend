@@ -135,6 +135,9 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
             }
         }
     }
+    if(get(waterConnection[0], "property.owners")) {
+        waterConnection[0].property.owners = waterConnection[0].property.owners.filter(owner => owner.status == "ACTIVE");
+    }
     return waterConnection;
 }
 

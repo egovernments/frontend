@@ -477,6 +477,9 @@ const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
     dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyObj.status}`, labelName: `Property Status is ${propertyObj.status}` }, "warning"));
     showHideFieldsFirstStep(dispatch, propertyObj.propertyId, false);
   }
+  if(propertyObj && propertyObj.owners && propertyObj.owners.length > 0) {
+    propertyObj.owners = propertyObj.owners.filter(owner => owner.status == "ACTIVE");
+  }
   dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
   dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
 }
