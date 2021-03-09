@@ -1,5 +1,6 @@
 import { handleScreenConfigurationFieldChange as handleField } from "../../../../ui-redux/screen-configuration/actions";
 import { getTranslatedLabel } from "../../../../ui-utils/commons";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const appCardHeaderStyle = (colorOne = "#ec407a", colorTwo = "#d81b60") => {
   return {
@@ -541,9 +542,19 @@ export const getTab = (label, props = {}) => {
 };
 
 export const getPattern = type => {
+  const locale = getLocale();
   switch (type) {
     case "Name":
-      return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
+      if(locale == "en_IN" || locale == "hi_IN" )
+      { 
+        return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,_:;“”‘’]{1,50}$/i;
+      }
+        
+      else  
+      {
+        return /^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,50}$/i;
+      } 
+     // return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
@@ -556,7 +567,15 @@ export const getPattern = type => {
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+      //return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+      if(locale == "en_IN" || locale == "hi_IN" )
+      { 
+        return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
+      }       
+      else  
+      {
+        return /^[#.0-9a-zA-Z\s,-]{1,500}$/i;
+      }  
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
@@ -573,9 +592,25 @@ export const getPattern = type => {
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
+      //return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
+      if(locale == "en_IN" || locale == "hi_IN" )
+      { 
+        return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,50}$/i;
+      }       
+      else  
+      {
+        return /^[#.0-9a-zA-Z\s,-]{1,50}$/i;
+      }  
     case "BuildingStreet":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
+      ///return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
+      if(locale == "en_IN" || locale == "hi_IN" )
+      { 
+        return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i;
+      }       
+      else  
+      {
+        return /^[#.0-9a-zA-Z\s,-]{1,64}$/i;
+      }  
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
     case "Landline":
@@ -602,7 +637,15 @@ export const getPattern = type => {
     case "ChequeNo":
         return /^(?!0{6})[0-9]{6}$/;
     case "Comments":
-        return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
+       // return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
+       if(locale == "en_IN" || locale == "hi_IN" )
+       { 
+         return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,50}$/i;
+       }       
+       else  
+       {
+         return /^[#.0-9a-zA-Z\s,-]{1,50}$/i;
+       }  
     case "OldLicenceNo":
         return /^[a-zA-Z0-9-/]{0,64}$/;
 
