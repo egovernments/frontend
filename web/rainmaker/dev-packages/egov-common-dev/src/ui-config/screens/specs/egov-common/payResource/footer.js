@@ -650,45 +650,45 @@ export const footer = getCommonApplyFooter({
     // },
     visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
   },
-  // makePayment: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "contained",
-  //     color: "primary",
-  //     className: "make-payment-com",
-  //     // style: {
-  //     //   width: "363px",
-  //     //   height: "48px ",
-  //     //   right: "19px",
-  //     //   position: "relative",
-  //     //   borderRadius: "0px "
-  //     // }
-  //   },
-  //   children: {
-  //     submitButtonLabel: getLabel({
-  //       labelName: "MAKE PAYMENT",
-  //       labelKey: "COMMON_MAKE_PAYMENT"
-  //     }),
-  //     submitButtonIcon: {
-  //       uiFramework: "custom-atoms",
-  //       componentPath: "Icon",
-  //       props: {
-  //         iconName: "keyboard_arrow_right",
-  //         className: ""
-  //       }
-  //     }
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: callPGService
-  //   },
-  //   // roleDefination: {
-  //   //   rolePath: "user-info.roles",
-  //   //   roles: ["CITIZEN"],
-  //   //   action: "PAY"
-  //   // },
-  //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
-  // },
+  makePayment: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      className: "make-payment-com",
+      // style: {
+      //   width: "363px",
+      //   height: "48px ",
+      //   right: "19px",
+      //   position: "relative",
+      //   borderRadius: "0px "
+      // }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "MAKE PAYMENT",
+        labelKey: "COMMON_MAKE_PAYMENT"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right",
+          className: ""
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callPGService
+    },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   roles: ["CITIZEN"],
+    //   action: "PAY"
+    // },
+    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+  },
   makePayment1: {
     componentPath: "Button",
     props: {
