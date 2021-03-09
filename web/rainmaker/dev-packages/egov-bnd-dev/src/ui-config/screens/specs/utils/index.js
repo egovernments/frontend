@@ -497,9 +497,7 @@ export const loadHospitals = async (action, state, dispatch, module) => {
   let requestBody = {};
   let payload = null;
 
-  const tenantId = (module=="birth")?
-    get(state.screenConfiguration.preparedFinalObject.bnd.birth,"tenantId"):
-    get(state.screenConfiguration.preparedFinalObject.bnd.death,"tenantId");
+  const tenantId = get(state.screenConfiguration.preparedFinalObject.bnd,`${module}.tenantId`);
 
   const queryParams = [
     { key: "tenantId", value: tenantId }  
@@ -531,7 +529,7 @@ export const loadHospitals = async (action, state, dispatch, module) => {
   }
 }
 
-export const downloadCert = async (tenantId, id) => {
+export const downloadCert = async (tenantId, id, module) => {
   let requestBody = {};
   let payload = null;
 
@@ -543,7 +541,7 @@ export const downloadCert = async (tenantId, id) => {
   {
     payload = await httpRequest(
       "post",
-      "/birth-death-services/birth/_download",
+      `/birth-death-services/${module}/_download`,
       "_download",
       queryParams,
       requestBody
@@ -615,15 +613,11 @@ export const postPaymentActivity = async(data) => {
 export const triggerDownload = (module) => {
 
   const state = store.getState();
-  const certificateId =(module=="birth") ?
-    get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.certificateId`):
-    get(state,`screenConfiguration.preparedFinalObject.bnd.death.download.certificateId`);
-  const tenantId = (module=="birth") ?
-    get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.tenantId`):
-    get(state,`screenConfiguration.preparedFinalObject.bnd.death.download.tenantId`);
-  const businessService = get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.businessService`);
+  const certificateId = get(state,`screenConfiguration.preparedFinalObject.bnd.${module}.download.certificateId`);
+  const tenantId = get(state,`screenConfiguration.preparedFinalObject.bnd.${module}.download.tenantId`);
+  const businessService = get(state,`screenConfiguration.preparedFinalObject.bnd.${module}.download.businessService`);
 
-  downloadCert(tenantId,certificateId).then((response) => {
+  downloadCert(tenantId,certificateId, module).then((response) => {
 
     if(response && response.consumerCode) // Redirect to payment page
     {
