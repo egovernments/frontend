@@ -714,7 +714,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
     const moduleName = moduleDetails[0].moduleName;
     let documents = get(
       payload.MdmsRes,
-      `${moduleName}.Documents`,
+      `${moduleName}.Documents[0].allowedDocs`,
       []
     );
 
@@ -722,6 +722,7 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
       payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
     }
     const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName, closePopUp));
+    console.log(reqDocuments, "reqqqqq");
     set(
       action,
       "screenConfig.components.adhocDialog.children.popup",
