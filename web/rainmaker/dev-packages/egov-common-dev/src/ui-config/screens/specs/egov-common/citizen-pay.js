@@ -61,13 +61,7 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "citizen-pay",
     beforeInitScreen: (action, state, dispatch) => {
-        let consumerCode = getQueryArg(
-            window.location.href,
-            "consumerCode"
-        );
-        let tenantId = getQueryArg(window.location.href, "tenantId");
-        let businessService = getQueryArg(window.location.href, "businessService");
-        fetchBill(state, dispatch, consumerCode, tenantId, businessService);
+
         return action;
     },
     components: {
@@ -101,8 +95,6 @@ const screenConfig = {
                                 labelName: "Payment Collection Details",
                                 labelKey: "NOC_PAYMENT_HEAD"
                             }),
-                            estimateDetails,
-                            AmountToBePaid
                         })
                     }
                 },

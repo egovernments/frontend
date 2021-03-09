@@ -180,6 +180,21 @@ export const callPGService = async (state, dispatch) => {
   }
 };
 
+const callMyMethid = async (state, dispatch) => {
+
+
+  const url =  "egov-common/paymentRedirectPage";
+  const redirectUrl = process.env.NODE_ENV === "production" ? `citizen/${url}` : url;
+  // const businessService = getQueryArg(window.location.href, "businessService"); businessService
+  let callbackUrl = `${window.origin}/${redirectUrl}`;
+ 
+      window.location = redirectionUrl;
+      window.customFun1&&window.customFun1(callbackUrl);
+      window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
+      window.customFun2&&window.customFun2(callbackUrl);
+  
+};
+
 const moveToSuccess = (dispatch, receiptNumber) => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
@@ -635,19 +650,52 @@ export const footer = getCommonApplyFooter({
     // },
     visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
   },
+  // makePayment: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "contained",
+  //     color: "primary",
+  //     className: "make-payment-com",
+  //     // style: {
+  //     //   width: "363px",
+  //     //   height: "48px ",
+  //     //   right: "19px",
+  //     //   position: "relative",
+  //     //   borderRadius: "0px "
+  //     // }
+  //   },
+  //   children: {
+  //     submitButtonLabel: getLabel({
+  //       labelName: "MAKE PAYMENT",
+  //       labelKey: "COMMON_MAKE_PAYMENT"
+  //     }),
+  //     submitButtonIcon: {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Icon",
+  //       props: {
+  //         iconName: "keyboard_arrow_right",
+  //         className: ""
+  //       }
+  //     }
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: callPGService
+  //   },
+  //   // roleDefination: {
+  //   //   rolePath: "user-info.roles",
+  //   //   roles: ["CITIZEN"],
+  //   //   action: "PAY"
+  //   // },
+  //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+  // },
   makePayment: {
     componentPath: "Button",
     props: {
       variant: "contained",
       color: "primary",
       className: "make-payment-com",
-      // style: {
-      //   width: "363px",
-      //   height: "48px ",
-      //   right: "19px",
-      //   position: "relative",
-      //   borderRadius: "0px "
-      // }
+
     },
     children: {
       submitButtonLabel: getLabel({
@@ -665,13 +713,9 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callPGService
+      callBack: callMyMethid
     },
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   roles: ["CITIZEN"],
-    //   action: "PAY"
-    // },
+
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
