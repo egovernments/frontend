@@ -167,7 +167,7 @@ export const disclaimerDialog = getCommonContainer({
               let iAgree = get(state.screenConfiguration.preparedFinalObject , dSignAgreePath);
               if(iAgree)
               {
-                triggerDownload(state, dispatch, true);
+                triggerDownload("birth");
                 showHideConfirmationPopup(state, dispatch, "getCertificate");
                 //prepareForDSign(state,dispatch)
               }

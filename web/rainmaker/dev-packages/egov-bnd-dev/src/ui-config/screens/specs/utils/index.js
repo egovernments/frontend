@@ -612,11 +612,15 @@ export const postPaymentActivity = async(data) => {
   }
 };
 
-export const triggerDownload = () => {
+export const triggerDownload = (module) => {
 
   const state = store.getState();
-  const certificateId =get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.certificateId`);
-  const tenantId = get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.tenantId`);
+  const certificateId =(module=="birth") ?
+    get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.certificateId`):
+    get(state,`screenConfiguration.preparedFinalObject.bnd.death.download.certificateId`);
+  const tenantId = (module=="birth") ?
+    get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.tenantId`):
+    get(state,`screenConfiguration.preparedFinalObject.bnd.death.download.tenantId`);
   const businessService = get(state,`screenConfiguration.preparedFinalObject.bnd.birth.download.businessService`);
 
   downloadCert(tenantId,certificateId).then((response) => {
