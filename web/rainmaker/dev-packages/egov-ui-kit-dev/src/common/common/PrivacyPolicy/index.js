@@ -39,8 +39,7 @@ const PrivacyPolicy = ({}) => {
       <h3 className="privacy-bold">Cookies and similar technologies:</h3>
       <p>
         When you visit the Service, we may use cookies and similar technologies like pixels, web beacons, and local storage to collect information
-        about how you use eChhawani and provide features to you. We may ask advertisers or other partners to serve ads or services to your devices, which
-        may use cookies or similar technologies placed by us or the third party.
+        about how you use eChhawani and provide features to you.
       </p>
       <h3 className="privacy-bold">Log file information:</h3>
       <p>
@@ -88,7 +87,7 @@ const PrivacyPolicy = ({}) => {
           <p> Remember information so you will not have to re-enter it during your visit or the next time you visit the Service</p>
         </li>
         <li>
-          <p>Provide personalized content and information to you and others, which could include online ads or other forms of marketing.</p>
+          <p>Provide personalized content and information to you and others.</p>
         </li>
         <li>
           <p> Provide, improve, test, and monitor the effectiveness of our Service</p>
@@ -138,10 +137,6 @@ const PrivacyPolicy = ({}) => {
         information as is reasonably necessary to provide the Service under reasonable confidentiality terms.
       </p>
       <p>
-        We may also share certain information such as cookie data with third-party advertising partners. This information would allow third-party ad
-        networks to, among other things, deliver targeted advertisements that they believe will be of most interest to you.
-      </p>
-      <p>
         We may remove parts of data that can identify you and share anonymized data with other parties. We may also combine your information with
         other information in a way that it is no longer associated with you and share that aggregated information.
       </p>
@@ -172,7 +167,7 @@ const PrivacyPolicy = ({}) => {
       <h3 className="privacy-sub-header">4. HOW WE STORE YOUR INFORMATION</h3>
       <h3 className="privacy-bold">Storage and Processing:</h3>
       <p>
-        Your information collected through the Service may be stored and processed in India or any other country by third party services like Amazon
+        Your information collected through the Service may be stored and processed in India or any other country by third party services like NIC
         in which eChhawani, its Affiliates or Service Providers maintain facilities.
       </p>
       <p>
