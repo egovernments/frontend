@@ -188,7 +188,7 @@ const callMyMethid = async (state, dispatch) => {
   // const businessService = getQueryArg(window.location.href, "businessService"); businessService
   let callbackUrl = `${window.origin}/${redirectUrl}`;
  
-      window.location = redirectionUrl;
+      
       window.customFun1&&window.customFun1(callbackUrl);
       window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
       window.customFun2&&window.customFun2(callbackUrl);
