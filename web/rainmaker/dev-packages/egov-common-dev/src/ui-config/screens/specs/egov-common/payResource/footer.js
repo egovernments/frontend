@@ -162,7 +162,7 @@ export const callPGService = async (state, dispatch) => {
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
       window.location = redirectionUrl;
-      window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
+      window.mSewaApp&& window.mSewaApp.quitApp3&& setTimeout(window.mSewaApp.quitApp3(),1200);
     }
   } catch (e) {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
@@ -190,7 +190,7 @@ const callMyMethid = async (state, dispatch) => {
  
       
       window.customFun1&&window.customFun1(callbackUrl);
-      window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
+      // window.mSewaApp&& window.mSewaApp.quitApp&& window.mSewaApp.quitApp();
       window.customFun2&&window.customFun2(callbackUrl);
   
 };
@@ -689,7 +689,7 @@ export const footer = getCommonApplyFooter({
   //   // },
   //   visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   // },
-  makePayment: {
+  makePayment1: {
     componentPath: "Button",
     props: {
       variant: "contained",
@@ -716,7 +716,7 @@ export const footer = getCommonApplyFooter({
       callBack: callMyMethid
     },
 
-    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+    visible: getQueryArg(window.location, "showThisCustom") ? true : false
   }
 });
 
