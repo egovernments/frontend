@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         //Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
+		webView.getSettings().setJavaScriptEnabled(false);
 		webView.addJavascriptInterface(proxy, "mSewaApp");
 
 		String versionName = "";
@@ -204,6 +205,21 @@ public class MainActivity extends AppCompatActivity {
         }
         webView.setVerticalScrollBarEnabled(false);
         webView.setWebViewClient(new CustomWebView());
+
+        /** created a WebViewClient to shouldOverrideUrlLoading to support 3 rd party payment    **/
+//		webView.setWebViewClient(new WebViewClient() {
+//			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//				// do your handling codes here, which url is the requested url
+//				// probably you need to open that url rather than redirect:
+//				if (url.contains("migs.mastercard.co.in")) {
+//					view.loadUrl(url);
+//					return false; // then it is not handled by default action
+//				}
+//				return true;
+//			}
+//		});
+
+
 		webView.getSettings().setGeolocationDatabasePath(getFilesDir().getPath());
 		if (BuildConfig.DEBUG) {
 			webView.setWebContentsDebuggingEnabled(true);
@@ -448,7 +464,12 @@ public class MainActivity extends AppCompatActivity {
 //		else if (url.contains("98jf4")) {
 //			loadView(url, true);
 //			//Opening external URLs in android default web browser
-//		} 
+//		}
+		/** added a new condition  to support 3 rd party payment    **/
+		else if (url.contains("migs.mastercard.co.in")) {
+			view.loadUrl(url);
+			return false;
+		}
 		else if (!getHost(url).equals(HOST)) {
 			try {
 				Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
