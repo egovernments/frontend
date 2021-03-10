@@ -55,6 +55,16 @@ export const construtCardCongtentObj = (moduleName, purpose, status) => {
 					`A notification regarding ${moduleName} Rejection has been sent to building owner at registered Mobile No.`,
 				labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_SUBHEAD`)
 			}
+		},"application-rejected": {
+			header: {
+				labelName: `${moduleName} Application Rejected`,
+				labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_HEAD`)
+			},
+			body: {
+				labelName:
+					`A notification regarding ${moduleName} Rejection has been sent to building owner at registered Mobile No.`,
+				labelKey: getTransformedLocale(`${moduleName}_APPROVAL_REJ_MESSAGE_SUBHEAD`)
+			}
 		},
 		"application-cancelled": {
 			header: {
