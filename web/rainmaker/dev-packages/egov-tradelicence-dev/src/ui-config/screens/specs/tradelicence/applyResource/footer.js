@@ -1219,7 +1219,7 @@ export const footerReviewTop = (
               label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "60px", width: "200px",color: "#FE7A51", marginRight: "5px" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
