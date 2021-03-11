@@ -451,6 +451,12 @@ export const loadCertDetails = async (action, state, dispatch,data) => {
     { key: "id", value: data.id}    
   ];
 
+  if(data.birthcertificateno)
+    queryParams.push({ key: "birthcertificateno", value: data.birthcertificateno})
+  else
+  if(data.deathcertificateno)
+    queryParams.push({ key: "deathcertificateno", value: data.deathcertificateno})
+
   try{
     let payload = null;
     payload = await httpRequest(
