@@ -23,7 +23,8 @@ import "datatables.net-buttons/js/buttons.colVis.min.js";
 import { getResultUrl } from "./commons/url";
 import Label from "egov-ui-kit/utils/translationNode";
 import commonConfig from "config/common.js";
-import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, setReturnUrl, localStorageSet ,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels ,getDefaultFontStyle} from "egov-ui-framework/ui-utils/commons.js";
 import "./index.css";
 
 import pdfFonts from "./vfs_fonts";
@@ -35,7 +36,27 @@ const font = {
         italics: 'Cambay-Regular.ttf',
         bolditalics: 'Cambay-Regular.ttf',
 
-    }
+      },
+      kannada: {
+          bold: "tungab.ttf",
+          normal: "tunga.ttf",
+          italics: "tunga.ttf",
+        },
+      malyalam: {
+          bold: "kartika-bold.ttf",
+          normal: "kartika-regular.ttf",
+          italics: "kartika-regular.ttf",
+        },
+      tamil: {
+          bold: "lathab.ttf",
+          normal: "latha.ttf",
+          italics: "latha.ttf",
+        },
+      SakalBharati: {
+          bold: "SakalBharati.ttf",
+          normal: "SakalBharati.ttf",
+          italics: "SakalBharati.ttf",
+        }
 };
 pdfMake.vfs = vfs;
 pdfMake.fonts = font;
@@ -110,6 +131,7 @@ class ShowField extends Component {
     const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
     let reportTitle = this.getReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
+    let fontStyle = getDefaultFontStyle(getLocale());
 
     const buttons = [
       {
@@ -125,7 +147,7 @@ class ShowField extends Component {
         pageSize: pageSize,
         footer: true,
         customize: function(doc) {
-          doc.defaultStyle.font = 'Camby';
+          doc.defaultStyle.font = fontStyle;//'Camby';
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "eChhawani System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
