@@ -12,7 +12,8 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     propertyDetails.reviewPropertyUsageType.localiseValue = true;
     propertyDetails.reviewPropertySubUsageType.localiseValue = true;
     locationDetails.reviewLocation.localiseValue = true;
-    roadDetails.localiseValue = true;
+    //roadDetails.localiseValue = true;
+    roadDetails.getCommonContainerreviewRoadType.localiseValue = true;
     propertyOwnerDetail.gender.localiseValue = true;
     propertyOwnerDetail.specialApplicantCategory.localiseValue = true;
     propertyOwnerDetail.relationship.localiseValue = true;

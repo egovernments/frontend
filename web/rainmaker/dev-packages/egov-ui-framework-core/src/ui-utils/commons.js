@@ -923,3 +923,21 @@ export const sortDropdownLabels = (e1, e2) => {
     return 1;
   }
 }
+
+export const getDefaultFontStyle = (locale = "en_IN") => {
+  let fontStyle = 'Camby';
+  if (locale != undefined && locale != "") {
+    switch (locale) {
+      case 'kn_IN':
+        fontStyle = 'kannada'
+        break;
+      case 'hi_IN':
+      case 'en_IN':
+          fontStyle = 'Camby'
+          break;
+      default:
+         fontStyle = 'Camby';
+  }
+}
+return fontStyle;  
+}

@@ -2,13 +2,14 @@ import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "egov-ui-framework/ui-redux/store";
 import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
+import { getLocaleLabels ,getDefaultFontStyle} from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
 import get from "lodash/get";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "./vfs_fonts";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+
 
 
 const vfs = { ...pdfFonts.vfs }
@@ -25,7 +26,27 @@ const font = {
         bold: 'Roboto-Regular.ttf',
         italics: 'Roboto-Regular.ttf',
         bolditalics: 'Roboto-Regular.ttf',
-    }
+    },
+    kannada: {
+        bold: "tungab.ttf",
+        normal: "tunga.ttf",
+        italics: "tunga.ttf",
+      },
+    malyalam: {
+        bold: "kartika-bold.ttf",
+        normal: "kartika-regular.ttf",
+        italics: "kartika-regular.ttf",
+      },
+    tamil: {
+        bold: "lathab.ttf",
+        normal: "latha.ttf",
+        italics: "latha.ttf",
+      },
+    SakalBharati: {
+        bold: "SakalBharati.ttf",
+        normal: "SakalBharati.ttf",
+        italics: "SakalBharati.ttf",
+      }
 };
 pdfMake.vfs = vfs;
 pdfMake.fonts = font;
@@ -451,10 +472,11 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     let borderKey = [true, true, false, true];
     let borderValue = [false, true, true, true];
     let receiptTableWidth = ["*", "*", "*", "*"];
-
+    let fontStyle = getDefaultFontStyle(getLocale());
+    console.log("fontStyle--",fontStyle); 
     data = {
         defaultStyle: {
-            font: "Camby"
+            font: fontStyle
         },
         content: [
 
