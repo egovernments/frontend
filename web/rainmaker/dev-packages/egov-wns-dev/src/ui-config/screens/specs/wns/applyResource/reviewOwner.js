@@ -330,7 +330,23 @@ export const reviewSubUsageType = getLabelWithValueForModifiedLabel(
     callBack: handleNA
   }
 );
-
+export const reviewUnitUsageType = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Sub Usage Type",
+    labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE"
+  },
+  {
+    jsonPath: "applyScreen.additionalDetails.unitUsageType",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.additionalDetails.unitUsageType",
+    callBack: handleNA
+  }
+);
 export const reviewPlumberProvidedBy = getLabelWithValueForModifiedLabel(
   {
     labelName: "Plumber Provided By",
@@ -584,7 +600,8 @@ const connectionDetails = getCommonContainer({
   // reviewBillingType,
   reviewWaterClosets,
   reviewNumberOfToilets,
-  reviewSubUsageType
+  reviewSubUsageType,
+  reviewUnitUsageType
 });
 
 const connectionChargeDetails = getCommonContainer({

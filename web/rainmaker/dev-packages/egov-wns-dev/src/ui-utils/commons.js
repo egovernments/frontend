@@ -577,7 +577,6 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
 const parserFunction = (state) => {
     let queryObject = JSON.parse(JSON.stringify(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {})));
     let waterDetails =get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0]", {});
-    console.log(".........",waterDetails );
     let parsedObject = {
         roadCuttingArea: parseInt(queryObject.roadCuttingArea),
         meterInstallationDate: convertDateToEpoch(queryObject.meterInstallationDate),
@@ -609,6 +608,7 @@ const parserFunction = (state) => {
       compositionFee: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.compositionFee): null,
       userCharges: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.userCharges) : null,
       othersFee: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.othersFee) : null,
+      unitUsageType: queryObject && queryObject.additionalDetails ? queryObject.additionalDetails.unitUsageType: null,
       //meterStatus: waterDetails && waterDetails ? waterDetails.meterStatus : null,
       // detailsProvidedBy : null,
       adhocPenalty: null,

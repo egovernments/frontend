@@ -408,6 +408,27 @@ const callBackForNext = async (state, dispatch) => {
         if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
           setReviewPageRoute(state, dispatch);
         }
+        let UsageType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
+        if (UsageType === "MIXED") {
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.unitUsageType",
+              "visible",
+              true
+            )
+          );
+        }
+        else{
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.unitUsageType",
+              "visible",
+              false
+            )
+          );
+        }
         let propertyUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.usageCategory", "");
         let subUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.ws-services-masters.subUsageType", []);
         let waterSubUsageType = get(state.screenConfiguration.preparedFinalObject, "applyScreen.additionalDetails.waterSubUsageType", "");

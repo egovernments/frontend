@@ -150,6 +150,7 @@ export const getMdmsData = async dispatch => {
             { name: "connectionCategory" },
             { name: "billingType" },
             { name: "subUsageType" },
+            { name: "unitUsageType" },
 
           ]
         },
@@ -157,9 +158,21 @@ export const getMdmsData = async dispatch => {
       ]
     }
   };
+  let mdmsBody1 = {
+    MdmsCriteria: {
+      tenantId: "pb",
+      moduleDetails: [
+        {
+          moduleName: "ws-services-masters", masterDetails: [{ name: "unitUsageType" }]
+        }
+      ]
+    }
+  };
   try {
     let payload = null;
+    let payload1 = null;
     payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    payload1 = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody1);
     if (payload.MdmsRes['ws-services-calculation'].PipeSize !== undefined && payload.MdmsRes['ws-services-calculation'].PipeSize.length > 0) {
       let pipeSize = [];
       payload.MdmsRes['ws-services-calculation'].PipeSize.forEach(obj => pipeSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
@@ -224,7 +237,9 @@ export const getMdmsData = async dispatch => {
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    dispatch(prepareFinalObject("unitUsageTypeMdmsData", payload1.MdmsRes));
   } catch (e) { console.log(e); }
+
 };
 
 const showHideFieldModifyConnection = (action) => {
@@ -456,6 +471,7 @@ export const getData = async (action, state, dispatch) => {
         let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
         dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       }
+      let UsageType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
       let billingType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.billingType");
       if( getQueryArg(window.location.href, "action") === "edit" && billingType === "STANDARD") {
         dispatch(
@@ -597,6 +613,7 @@ const screenConfig = {
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     pageReset(dispatch);
+    
     getData(action, state, dispatch).then(() => {
       let ownershipCategory = get(
         state,

@@ -891,6 +891,7 @@ const parserFunction = (obj) => {
       compositionFee: waterDetails && waterDetails ? parseFloat(waterDetails.compositionFee) : null,
       userCharges: waterDetails && waterDetails ? parseFloat(waterDetails.userCharges) : null,
       othersFee: waterDetails && waterDetails ? parseFloat(waterDetails.othersFee) : null,
+      unitUsageType: waterDetails && waterDetails ? waterDetails.unitUsageType : null,
       //meterStatus: waterDetails && waterDetails ? waterDetails.meterStatus : null,
       // detailsProvidedBy : null,
       adhocPenalty: null,

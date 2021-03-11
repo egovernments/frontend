@@ -371,7 +371,23 @@ export const additionDetails = getCommonCard({
             disabled: false
           }
         }),
+       
       },
+      unitUsageType: {
+        ...getSelectField({
+          label: { labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE" },
+          placeholder: { labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE_PLACEHOLDER" },
+          required: true,
+          sourceJsonPath: "unitUsageTypeMdmsData.ws-services-masters.unitUsageType",
+          gridDefination: { xs: 12, sm: 6 },
+          errorMessage: "ERR_INVALID_BILLING_PERIOD",
+          jsonPath: "applyScreen.additionalDetails.unitUsageType",
+          props: {
+            disabled: false
+          }
+        }),
+
+      }
     }),
   }),
   plumberDetailsContainer: getCommonGrayCard({
@@ -723,3 +739,4 @@ const showHideFeilds = (dispatch, value) => {
     )
   );
 }
+
