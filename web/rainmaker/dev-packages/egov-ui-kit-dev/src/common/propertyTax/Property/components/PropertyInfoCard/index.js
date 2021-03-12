@@ -80,10 +80,10 @@ class PropertyInfoCard extends Component {
                   return <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                     {!hideSubsectionLabel&&<Label
                       labelStyle={{ letterSpacing: "0.67px", marginTop: 15, color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                      label={'PROPERTYTAX_FLOOR_'+unitIndex}
+                      label={'PROPERTYTAX_FLOOR_'+units.floorNo}
                       fontSize="18px"
                     />}
-                    {units.map((unit, index) => {
+                    {units.floorDetails && units.floorDetails.map((unit, index) => {
                       const subUnitHeader=hideSubsectionLabel?undefined:`${getTranslatedLabel("PT_PROPERTY_UNIT", localizationLabelsData)} - ` + (index + 1);
                       return <PropertyInfoCard backgroundColor='white' items={unit} header={subUnitHeader}></PropertyInfoCard>
                     })}
