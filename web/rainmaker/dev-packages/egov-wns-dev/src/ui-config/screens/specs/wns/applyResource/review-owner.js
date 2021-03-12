@@ -531,7 +531,7 @@ export const connectionWater={
   ),
   reviewUnitUsageType : getLabelWithValueForModifiedLabel(
     {
-      labelName: "Sub Usage Type",
+      labelName: "Unit Usage Type",
       labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE"
     },
     {
@@ -663,11 +663,11 @@ export const connectionSewerage={
   ),
   reviewUnitUsageType : getLabelWithValueForModifiedLabel(
     {
-      labelName: "Sub Usage Type",
+      labelName: "Unit Usage Type",
       labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE"
     },
     {
-      jsonPath: "WaterConnection[0].additionalDetails.waterSubUsageType",
+      jsonPath: "WaterConnection[0].additionalDetails.unitUsageType",
       callBack: handleNA
     },
     {

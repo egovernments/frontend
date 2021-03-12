@@ -332,7 +332,7 @@ export const reviewSubUsageType = getLabelWithValueForModifiedLabel(
 );
 export const reviewUnitUsageType = getLabelWithValueForModifiedLabel(
   {
-    labelName: "Sub Usage Type",
+    labelName: "Unit Usage Type",
     labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE"
   },
   {
