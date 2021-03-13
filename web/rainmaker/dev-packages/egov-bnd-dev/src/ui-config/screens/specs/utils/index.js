@@ -555,7 +555,7 @@ export const loadHospitals = async (action, state, dispatch, module) => {
   catch(e)
   {
     //toBeRemoved
-    payload = {"hospitalDtls":[{"id":"asdf","name":"St Johns Hospital"},{"id":"mcd","name":"Government Hospital Pune"}]};
+    //payload = {"hospitalDtls":[{"id":"asdf","name":"St Johns Hospital"},{"id":"mcd","name":"Government Hospital Pune"}]};
   }
   //console.log("Survey numbers recieved...",payload);
   if(payload.hospitalDtls)
@@ -564,6 +564,7 @@ export const loadHospitals = async (action, state, dispatch, module) => {
       hospital.code = hospital.id;
       hospital.name = hospital.name;
     }
+    payload.hospitalDtls.push({code:0,name:"Others / Non Institutional"})
     dispatch(prepareFinalObject("bnd.allHospitals", payload.hospitalDtls));
   }
 }
