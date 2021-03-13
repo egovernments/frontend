@@ -22,8 +22,9 @@ const viewCertificate = {
     let id = getQueryArg(window.location.href, "id");
     let birthcertificateno = getQueryArg(window.location.href, "birthcertificateno");
     let deathcertificateno = getQueryArg(window.location.href, "deathcertificateno");
+    let module = getQueryArg(window.location.href, "module");
 
-    let data = {tenantId:tenantId, id:id, birthcertificateno: birthcertificateno, deathcertificateno:deathcertificateno};
+    let data = {tenantId:tenantId, id:id, birthcertificateno: birthcertificateno, deathcertificateno:deathcertificateno, module:module};
     
     loadCertDetails(action, state, dispatch, data).then((response) => {
       if (response && response.BirthCertificate && response.BirthCertificate.length>0) {
