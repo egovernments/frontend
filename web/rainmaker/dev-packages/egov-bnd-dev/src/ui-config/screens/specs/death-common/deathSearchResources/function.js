@@ -117,12 +117,12 @@ export const searchApiCall = async (state, dispatch) => {
     return {
       id: get(item, "id"),
       registrationNo: get(item, "registrationno"),
-      nameOfChild: get(item, "firstname")?get(item, "firstname"):""+ get(item, "middlename")?(" "+get(item, "middlename")):""+" "+get(item, "lastname")?get(item, "lastname"):"",
+      nameOfChild: get(item, "fullName"),
       dateOfdeath: get(item, "dateofdeath"),
       gender:  getGenderValue(get(item, "gender")),
-      mothersName: get(item, "deathMotherInfo.firstname")?get(item, "deathMotherInfo.firstname"):""+get(item, "deathMotherInfo.middlename")?(" "+get(item, "deathMotherInfo.middlename")):""+get(item, "deathMotherInfo.lastname")?(" "+get(item, "deathMotherInfo.lastname")):"",
-      fathersName: get(item, "deathFatherInfo.firstname")?get(item, "deathFatherInfo.firstname"):""+get(item, "deathFatherInfo.middlename")?(" "+get(item, "deathFatherInfo.middlename")):""+" "+get(item, "deathFatherInfo.lastname")?get(item, "deathFatherInfo.lastname"):"",
-      spouseName: get(item, "deathSpouseInfo.firstname")?get(item, "deathSpouseInfo.firstname"):""+get(item, "deathSpouseInfo.middlename")?(" "+get(item, "deathSpouseInfo.middlename")):""+" "+get(item, "deathSpouseInfo.lastname")?get(item, "deathSpouseInfo.lastname"):"",
+      mothersName: get(item, "deathMotherInfo.fullName"),
+      fathersName: get(item, "deathFatherInfo.fullName"),
+      spouseName: get(item, "deathSpouseInfo.fullName"),
       action: getActionItem(get(item, "counter")),
       tenantId: get(item, "tenantid"),
       payRequired: get(item, "payRequired")

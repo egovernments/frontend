@@ -109,11 +109,11 @@ export const searchApiCall = async (state, dispatch) => {
     return {
       id: get(item, "id"),
       registrationNo: get(item, "registrationno"),
-      nameOfChild: get(item, "firstname")?get(item, "firstname"):""+ get(item, "middlename")?(" "+get(item, "middlename")):""+" "+get(item, "lastname")?get(item, "lastname"):"",
+      nameOfChild: get(item, "fullName"),
       dateOfbirth: get(item, "dateofbirth"),
       gender:  getGenderValue(get(item, "gender")),
-      mothersName: get(item, "birthMotherInfo.firstname")?get(item, "birthMotherInfo.firstname"):""+get(item, "birthMotherInfo.middlename")?(" "+get(item, "birthMotherInfo.middlename")):""+get(item, "birthMotherInfo.lastname")?(" "+get(item, "birthMotherInfo.lastname")):"",
-      fathersName: get(item, "birthFatherInfo.firstname")?get(item, "birthFatherInfo.firstname"):""+get(item, "birthFatherInfo.middlename")?(" "+get(item, "birthFatherInfo.middlename")):""+" "+get(item, "birthFatherInfo.lastname")?get(item, "birthFatherInfo.lastname"):"",
+      mothersName: get(item, "birthMotherInfo.fullName"),
+      fathersName: get(item, "birthFatherInfo.fullName"),
       action: getActionItem(get(item, "counter")),
       tenantId: get(item, "tenantid"),
       payRequired: get(item, "payRequired")
