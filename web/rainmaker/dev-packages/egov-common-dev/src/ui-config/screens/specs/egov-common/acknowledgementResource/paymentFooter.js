@@ -40,7 +40,6 @@ const defaultValues = {
 }
 
 export const paymentFooter = (state, consumerCode, tenant, status, businessService, extraData) => {
-    debugger;
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo", defaultValues);
     const buttons = get(uiCommonPayConfig, "buttons");
     const redirectionURL = isPublicSearch() ? "/withoutAuth/egov-common/pay" : "/egov-common/pay";

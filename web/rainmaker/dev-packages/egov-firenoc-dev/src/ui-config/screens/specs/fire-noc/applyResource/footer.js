@@ -91,7 +91,7 @@ const getMdmsData = async (state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        { moduleName: "firenoc", masterDetails: [{ name: "Documents" }] }
+        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
       ]
     }
   };
@@ -103,13 +103,16 @@ const getMdmsData = async (state, dispatch) => {
       [],
       mdmsBody
     );
+    console.log("==============payload", payload);
+    debugger;
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.firenoc.Documents
+        payload.MdmsRes.FireNoc.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
+    debugger;
   } catch (e) {
     console.log(e);
   }
