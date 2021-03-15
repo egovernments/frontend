@@ -206,19 +206,6 @@ public class MainActivity extends AppCompatActivity {
         webView.setVerticalScrollBarEnabled(false);
         webView.setWebViewClient(new CustomWebView());
 
-        /** created a WebViewClient to shouldOverrideUrlLoading to support 3 rd party payment    **/
-//		webView.setWebViewClient(new WebViewClient() {
-//			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//				// do your handling codes here, which url is the requested url
-//				// probably you need to open that url rather than redirect:
-//				if (url.contains("migs.mastercard.co.in")) {
-//					view.loadUrl(url);
-//					return false; // then it is not handled by default action
-//				}
-//				return true;
-//			}
-//		});
-
 
 		webView.getSettings().setGeolocationDatabasePath(getFilesDir().getPath());
 		if (BuildConfig.DEBUG) {
@@ -466,8 +453,7 @@ public class MainActivity extends AppCompatActivity {
 //			//Opening external URLs in android default web browser
 //		}
 		/** added a new condition  to support 3 rd party payment    **/
-		else if (url.contains("migs.mastercard.co.in")) {
-			view.loadUrl(url);
+		else if (getHost(url).contains("migs.mastercard.co.in")) {
 			return false;
 		}
 		else if (!getHost(url).equals(HOST)) {
@@ -487,6 +473,9 @@ public class MainActivity extends AppCompatActivity {
 				loadView(url,false);
 			}
 
+		}
+		else if(!getHost(url).contains("digit.org")){
+			return true;
 		} else {
 			returnValue  = false;
 		}
