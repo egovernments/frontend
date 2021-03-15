@@ -712,9 +712,15 @@ export const getRequiredDocData = async (action, dispatch, moduleDetails, closeP
       mdmsBody
     );
     const moduleName = moduleDetails[0].moduleName;
-    let documents = get(
+    debugger;
+    
+    let documents = moduleName==="FireNoc" ? get(
       payload.MdmsRes,
       `${moduleName}.Documents[0].allowedDocs`,
+      []
+    ):  get(
+      payload.MdmsRes,
+      `${moduleName}.Documents`,
       []
     );
 
