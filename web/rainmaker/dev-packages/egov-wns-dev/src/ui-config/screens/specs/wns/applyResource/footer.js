@@ -484,7 +484,7 @@ const callBackForNext = async (state, dispatch) => {
 };
 
 const moveToSuccess = (combinedArray, dispatch) => {
-  const tenantId = get(combinedArray[0].property, "tenantId");
+  const tenantId = get(combinedArray[0].property, "tenantId") || get(combinedArray[0], "tenantId");
   const purpose = "apply";
   const status = "success";
   const applicationNoWater = get(combinedArray[0], "applicationNo");
