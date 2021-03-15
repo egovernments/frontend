@@ -559,6 +559,14 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    
+    // dispatch(prepareFinalObject("applyScreen.water", true));
+    // dispatch(prepareFinalObject("applyScreen.sewerage", false));
+    const propertyId = getQueryArg(window.location.href, "propertyId");
+
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+    if (getQueryArg(window.location.href, "edited") != "true") {
     pageReset(dispatch);
     getData(action, state, dispatch).then(() => {
       let ownershipCategory = get(
@@ -575,10 +583,6 @@ const screenConfig = {
     });
     dispatch(prepareFinalObject("applyScreen.water", true));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
-    const propertyId = getQueryArg(window.location.href, "propertyId");
-
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-
     if (propertyId) {
       togglePropertyFeilds(action, true);
       if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
@@ -617,6 +621,30 @@ const screenConfig = {
         toggleSewerageFeilds(action, false);
       }
     }
+  } else {
+    togglePropertyFeilds(action, true);
+      if (applicationNumber.includes("SW")) {
+        dispatch(prepareFinalObject("applyScreen.water", false));
+        dispatch(prepareFinalObject("applyScreen.sewerage", true));
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, true);
+      } else {
+        dispatch(prepareFinalObject("applyScreen.water", true));
+        dispatch(prepareFinalObject("applyScreen.sewerage", false));
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, false);
+      }
+      set(
+        action,
+        `screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.visible`,
+        true
+      );
+      set(
+        action,
+        `screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.number`,
+        applicationNumber
+      );
+  }
     if (isModifyMode()) {
       triggerModificationsDisplay(action, true);
     } else {
