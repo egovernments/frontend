@@ -54,7 +54,7 @@ const commonApplicantInformation = () => {
           value: "Please search profile linked to the mobile no.",
           key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
         },
-        infoIcon: "info_circle",
+        // infoIcon: "info_circle",
         pattern: getPattern("MobileNo"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath:
