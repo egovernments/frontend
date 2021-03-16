@@ -64,6 +64,7 @@ const formConfig = {
     },
     ownerRelationship: {
       id: "ownerRelationship",
+      required: true,
       jsonPath: "Properties[0].propertyDetails[0].owners[0].relationship",
       type: "AutocompleteDropdown",
       localePrefix: "PT_RELATION",
