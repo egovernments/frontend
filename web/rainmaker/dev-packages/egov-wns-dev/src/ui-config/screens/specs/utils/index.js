@@ -166,6 +166,56 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
     "components.adhocDialog.props.open",
     false
   );
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
+      "props.value",
+      ""
+    )
+  );
+
   dispatch(handleField(screenKey, "components.adhocDialog", "props.open", !toggle));
 };
 
