@@ -242,7 +242,7 @@ export const getMultipleItemCard = (itemsInfo, itemHeader = "COMMON_OWNER", hide
     return multipleItems;
 }
 export const getDocumentsCard = (documentsUploadRedux) => {
-    return documentsUploadRedux.map(item => {
+    return documentsUploadRedux&&Array.isArray(documentsUploadRedux)&&documentsUploadRedux.map(item => {
         return { key: getLocaleLabels(item.title, item.title), value: item.name }
     })
 }
