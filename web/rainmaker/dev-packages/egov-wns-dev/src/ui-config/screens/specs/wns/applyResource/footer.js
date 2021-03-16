@@ -501,6 +501,17 @@ const callBackForNext = async (state, dispatch) => {
         )
       );
     }
+    let unitUsageTypee = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
+    if(unitUsageTypee != "MIXED") {
+      dispatch(
+        handleField(
+          "apply", 
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewUnitUsageType",
+           "visible",
+           false
+        )
+      );
+    }
     if(!(getQueryArg(window.location.href, "action") === "edit")) {
       dispatch(
         handleField(

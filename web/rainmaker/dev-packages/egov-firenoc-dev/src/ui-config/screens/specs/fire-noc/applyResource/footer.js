@@ -103,8 +103,6 @@ const getMdmsData = async (state, dispatch) => {
       [],
       mdmsBody
     );
-    console.log("==============payload", payload);
-    debugger;
     dispatch(
       prepareFinalObject(
         "applyScreenMdmsData.FireNoc.Documents",
@@ -112,7 +110,6 @@ const getMdmsData = async (state, dispatch) => {
       )
     );
     prepareDocumentsUploadData(state, dispatch);
-    debugger;
   } catch (e) {
     console.log(e);
   }
