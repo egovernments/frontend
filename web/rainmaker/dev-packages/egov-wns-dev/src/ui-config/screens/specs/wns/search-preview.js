@@ -717,7 +717,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     } else {
       set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible", false);
     }
-
+    dispatch(prepareFinalObject("DocumentsData",[]));
     // to set documents 
     if (payload.WaterConnection[0].documents !== null && payload.WaterConnection[0].documents !== "NA") {
       await setDocuments(
@@ -797,7 +797,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     } else {
       set(action.screenConfig, "components.div.children.headerDiv.children.header1.children.connection.children.connectionNumber.visible", false);
     }
-
+    dispatch(prepareFinalObject("DocumentsData",[]));
     // to set documents 
     if (payload.SewerageConnections[0].documents !== null && payload.SewerageConnections[0].documents !== "NA") {
       await setDocuments(
