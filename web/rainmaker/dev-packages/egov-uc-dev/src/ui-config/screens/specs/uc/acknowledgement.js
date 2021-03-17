@@ -126,7 +126,7 @@ const screenConfig = {
     const tenant = getQueryArg(window.location.href, "tenantId");
     const serviceCategory = getQueryArg(
       window.location.href,
-      "serviceCategory"
+      "businessService"
     );
     const tenantId = getTenantId();
     const queryObject = [
