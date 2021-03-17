@@ -22,6 +22,7 @@ const defaultStyle = {
   lineHeight: "44px",
   width: "28.48%",
   padding: "0 16px",
+  marginBottom : "10px"
 };
 
 const defaultLabelStyle = {
