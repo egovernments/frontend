@@ -480,6 +480,10 @@ const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
   if(propertyObj && propertyObj.owners && propertyObj.owners.length > 0) {
     propertyObj.owners = propertyObj.owners.filter(owner => owner.status == "ACTIVE");
   }
+  if(propertyObj.units == "NA" && propertyObj.additionalDetails && propertyObj.additionalDetails.subUsageCategory) {
+    propertyObj.units = [];
+    propertyObj.units.push({usageCategory: propertyObj.additionalDetails.subUsageCategory})
+  }
   dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
   dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
 }
