@@ -138,6 +138,10 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
     if(get(waterConnection[0], "property.owners")) {
         waterConnection[0].property.owners = waterConnection[0].property.owners.filter(owner => owner.status == "ACTIVE");
     }
+    if(get(waterConnection[0], "property.units") == "NA" && get(waterConnection[0], "property.additionalDetails") && get(waterConnection[0], "property.additionalDetails.subUsageCategory")) {
+        waterConnection[0].property.units = [];
+        waterConnection[0].property.units.push({usageCategory: get(waterConnection[0], "property.additionalDetails.subUsageCategory")})
+      } 
     return waterConnection;
 }
 
