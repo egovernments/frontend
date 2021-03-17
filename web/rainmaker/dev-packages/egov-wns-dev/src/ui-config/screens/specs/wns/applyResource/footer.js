@@ -176,6 +176,10 @@ const callBackForNext = async (state, dispatch) => {
         dispatch(prepareFinalObject("applyScreen", applyScreenObj));
         return false;
       }
+      let roadCuttingInfoDetails = get(state.screenConfiguration.preparedFinalObject, "applyScreen.roadCuttingInfo")
+      if(roadCuttingInfoDetails === null) {
+        dispatch(prepareFinalObject("applyScreen.roadCuttingInfo", []));
+      }
 
     } else {
       const water = get(
