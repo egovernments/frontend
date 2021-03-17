@@ -520,13 +520,13 @@ const screenConfig = {
     editredirect = isAlreadyEdited ? `apply?${redirectQueryString}&action=edit&edited=true` : `apply?${redirectQueryString}&action=edit`;  
     set(action, 'screenConfig.components.div.children.taskStatus.props.editredirect', editredirect);
     if(isAlreadyEdited) {
-      if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.service", "") === "WATER" || get(state.screenConfiguration.preparedFinalObject, "applyScreen.service", "") === "Water") {
+      if(applicationNumber.includes("WS")) {
         set(action, `screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForSW.visible`,false);
         set(action, `screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForWater.visible`,true);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
       }
-      if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.service", "") === "SEWERAGE" || get(state.screenConfiguration.preparedFinalObject, "applyScreen.service", "") === "Sewerage") {
+      if(applicationNumber.includes("SW")) {
         set(action, `screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForSW.visible`,true);
         set(action,`screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForWater.visible`,false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
