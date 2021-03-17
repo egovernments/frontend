@@ -27,7 +27,7 @@ class PropertyInfoCard extends Component {
   }
 
   render(){
-    const { editIcon, header, backgroundColor = 'rgb(242, 242, 242)', items = [], subSection = [] ,hideSubsectionLabel=false, ownershipTransfer=false, viewHistory=false } = this.props;
+    let { editIcon, header, backgroundColor = 'rgb(242, 242, 242)', items = [], subSection = [] ,hideSubsectionLabel=false, ownershipTransfer=false, viewHistory=false } = this.props;
 
     return (
       <div>
@@ -76,13 +76,13 @@ class PropertyInfoCard extends Component {
             </div>
             {subSection &&
               <div>
-                {subSection.map((units, unitIndex) => {
+                {subSection && Array.isArray(subSection)&&subSection.length>0&&Object.values(subSection).map((units, unitIndex) => {
                   let floorNo = units.floorNo || unitIndex;
                   units = units.floorDetails || units;
                   return <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                     {!hideSubsectionLabel&&<Label
                       labelStyle={{ letterSpacing: "0.67px", marginTop: 15, color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                      label={'PROPERTYTAX_FLOOR_'+floorNo}
+                      label={"PROPERTYTAX_FLOOR_" + Object.keys(subSection)[unitIndex]}
                       fontSize="18px"
                     />}
                     {units && units.map((unit, index) => {

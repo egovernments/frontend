@@ -203,7 +203,7 @@ properties.push({
 };
 
 
-const getUnitInfo = (units = [],usageCategoryMajor="",buildUpArea,basements) => {
+const getUnitInfo = (units = [],usageCategoryMajor="",buildUpArea) => {
   units = units || [];
   let floors = [];
   units && units.length>0 ? units.forEach((unit={}, index) => {
@@ -274,25 +274,12 @@ const getUnitInfo = (units = [],usageCategoryMajor="",buildUpArea,basements) => 
         value: unit.arv ? unit.arv + '' : "NA",
       })
     // }
-    if( basements){
-      floors.push({
-        floorNo:unit.floorNo,
-        floorDetails:[floor]
-      })
+    if (!floors[unit['floorNo']]) {
+      floors[unit['floorNo']] = [floor];
+    } else {
+      floors[unit['floorNo']].push(floor);
     }
-    else{
-      if (!floors[unit['floorNo']]) {
-        floors[unit['floorNo']] = {
-          floorNo:unit.floorNo,
-          floorDetails:[floor]
-        };
-      } else {
-        floors[unit['floorNo']].push({
-          floorNo:unit.floorNo,
-          floorDetails:[floor]
-        });
-      }
-    }
+   
   }}): []
   return floors;
 }
@@ -308,17 +295,8 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
   if (properties) {
     const { propertyDetails } = properties;
-    if (propertyDetails && propertyDetails.length > 0) {
-      var units = propertyDetails[0].units && propertyDetails[0].units.filter((unit,unInde) =>{
-        if(unit.floorNo <0){
-          return unit;
-        }
-      })
+    if (propertyDetails && propertyDetails.length > 0) {     
       subUnitItems = getUnitInfo(propertyDetails[0]['units'],propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"",propertyDetails[0]['buildUpArea']);
-      if(units && units.length>0){
-        let ssub = getUnitInfo(units,propertyDetails[0]['usageCategoryMajor']?propertyDetails[0]['usageCategoryMajor']:"",propertyDetails[0]['buildUpArea'],true);
-        subUnitItems = ssub.concat(subUnitItems)
-      }
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
       if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
         hideSubsectionLabel = true;
