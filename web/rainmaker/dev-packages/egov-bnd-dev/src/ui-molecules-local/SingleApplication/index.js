@@ -274,7 +274,7 @@ class SingleApplication extends React.Component {
                     }
                     {
                       <div style={{display:"flex"}}>
-                        { (item.status == "PAID_DOWNLOAD") && /* <Link to={this.onCardClick(item)}> */
+                        { (item.status == "PAID") && /* <Link to={this.onCardClick(item)}> */
                         <div style={{ cursor: "pointer", paddingLeft:"0px" }} onClick={() => {
                           this.onDownloadCertClicked(item);
                         }}>
