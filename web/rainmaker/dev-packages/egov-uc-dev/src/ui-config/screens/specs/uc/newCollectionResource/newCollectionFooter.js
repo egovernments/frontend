@@ -188,12 +188,7 @@ const prepareObj =(state,dispatch) =>{
     set(eChallans[0], "taxPeriodTo", convertDateToEpoch(eChallans[0].taxPeriodTo));
     set(eChallans[0], "payer.mobileNumber", eChallans[0].citizen.mobileNumber);
     set(eChallans[0], "payer.name",  eChallans[0].citizen.name);
-    //glcode
-    // for (let i = 0; i < state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping.length; i++) {
-    //   if ((state.screenConfiguration.preparedFinalObject.Challan[0].businessService === state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].code) && (state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].cb === state.screenConfiguration.preparedFinalObject.Challan[0].tenantId)) {
-    //     set(eChallans[0], "additionalDetail.GLcode", state.screenConfiguration.preparedFinalObject.applyScreenMdmsData.GLCodeMapping[i].glcode);
-    //   }
-    // }
+
     //Check if tax period fall between the tax periods coming from MDMS -- Not required as of now
     const taxPeriodValid = isTaxPeriodValid(dispatch, eChallans[0], state);
     if (taxPeriodValid) {

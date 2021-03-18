@@ -67,7 +67,7 @@ const getData = async (action, state, dispatch) => {
     let helpUrl = get(payload, "MdmsRes.common-masters.Help", []).filter(
       (item) => item.code === "UC"
     );
-    dispatch(prepareFinalObject("helpFileUrl", helpUrl[0].URL));
+    dispatch(prepareFinalObject("helpFileUrl", helpUrl&&Array.isArray(helpUrl)&&helpUrl.length>1&&helpUrl[0]&&helpUrl[0].URL));
 
     try {
       let payload = await httpRequest(

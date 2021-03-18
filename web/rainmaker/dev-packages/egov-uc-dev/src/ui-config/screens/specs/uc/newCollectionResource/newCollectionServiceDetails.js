@@ -87,9 +87,6 @@ export const newCollectionServiceDetailsCard = getCommonCard(
                       {
                         name: "TaxPeriod",
                       },
-                      {
-                        name: "ServiceGLCODEMapping",
-                      },
                     ],
                   },
                 ],
@@ -110,12 +107,6 @@ export const newCollectionServiceDetailsCard = getCommonCard(
                 prepareFinalObject(
                   "applyScreenMdmsData.BillingService",
                   payload.MdmsRes.BillingService
-                )
-              );
-              dispatch(
-                prepareFinalObject(
-                  "applyScreenMdmsData.GLCodeMapping",
-                  payload.MdmsRes.BillingService.ServiceGLCODEMapping
                 )
               );
               setServiceCategory(

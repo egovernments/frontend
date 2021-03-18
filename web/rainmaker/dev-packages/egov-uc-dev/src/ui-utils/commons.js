@@ -62,7 +62,6 @@ export const getSearchResults = async queryObject => {
       "",
       queryObject
     );
-      console.info("got receipt response==",response);
     return response;
   } catch (error) {
     console.error(error);
