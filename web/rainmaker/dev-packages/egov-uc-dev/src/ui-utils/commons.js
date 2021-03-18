@@ -25,7 +25,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-framework/ui-utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage ,getFileUrl, enableFieldAndHideSpinner} from "egov-ui-framework/ui-utils/commons";
-import {getPaymentSearchAPI} from "egov-ui-kit/utils/commons";
+// import {getPaymentSearchAPI} from "egov-ui-kit/utils/commons";
 export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
@@ -54,80 +54,21 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   }
 };
 
-// export const getSearchResults = async queryObject => {
-//   try {
-//     const response = await httpRequest(
-//       "post",
-//       "collection-services/payments/_search",
-//       "",
-//       queryObject
-//     );
-
-//     return response;
-//   } catch (error) {
-//     console.error(error);
-//     store.dispatch(
-//       toggleSnackbar(
-//         true,
-//         { labelName: error.message, labelCode: error.message },
-//         "error"
-//       )
-//     );
-//   }
-// };
 export const getSearchResults = async queryObject => {
+  const businessService = getQueryArg(
+    window.location.href,
+    "businessService"
+  );
   try {
-    let businessService = '';
-    queryObject && Array.isArray(queryObject) && queryObject.map(query => {
-      if (query.key == "businessServices") {
-        businessService = query.value;
-        if (typeof businessService == 'object') {
-          query.value = businessService.join();
-        }
-      }
-    })
-    if (typeof businessService == 'string') {
-      const response = await httpRequest(
-        "post",
-        getPaymentSearchAPI(businessService),
-        "",
-        queryObject
-      );
+    const response = await httpRequest(
+      "post",
+      "collection-services/payments/"+businessService,"_search",
+      "",
+      queryObject
+    );
 
-      return response;
-    } else if (process.env.REACT_APP_NAME === "Citizen"){
-      const response = await httpRequest(
-        "post",
-        getPaymentSearchAPI('-1'),
-        "",
-        queryObject
-      );
-
-      return response;
-    }else if (typeof businessService == 'object') {
-      const response = { "Payments": [] };
-      businessService.map(async (businessSer) => {
-        try {
-          let respo = await httpRequest(
-            "post",
-            getPaymentSearchAPI(businessSer),
-            "",
-            queryObject
-          )
-          response.Payments.push(...respo.Payments);
-
-        } catch (e) {
-          console.log(e);
-        }
-      })
-      if (response.Payments.length == 0) {
-        throw { message: 'PAYMENT_SEARCH_FAILED' };
-      }
-      return response;
-    }
-
+    return response;
   } catch (error) {
-    enableFieldAndHideSpinner('search', "components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton", store.dispatch);
     console.error(error);
     store.dispatch(
       toggleSnackbar(
@@ -138,6 +79,69 @@ export const getSearchResults = async queryObject => {
     );
   }
 };
+// export const getSearchResults = async queryObject => {
+//   try {
+//     let businessService = '';
+//     queryObject && Array.isArray(queryObject) && queryObject.map(query => {
+//       if (query.key == "businessServices") {
+//         businessService = query.value;
+//         if (typeof businessService == 'object') {
+//           query.value = businessService.join();
+//         }
+//       }
+//     })
+//     if (typeof businessService == 'string') {
+//       const response = await httpRequest(
+//         "post",
+//         getPaymentSearchAPI(businessService),
+//         "",
+//         queryObject
+//       );
+
+//       return response;
+//     } else if (process.env.REACT_APP_NAME === "Citizen"){
+//       const response = await httpRequest(
+//         "post",
+//         getPaymentSearchAPI('-1'),
+//         "",
+//         queryObject
+//       );
+
+//       return response;
+//     }else if (typeof businessService == 'object') {
+//       const response = { "Payments": [] };
+//       businessService.map(async (businessSer) => {
+//         try {
+//           let respo = await httpRequest(
+//             "post",
+//             getPaymentSearchAPI(businessSer),
+//             "",
+//             queryObject
+//           )
+//           response.Payments.push(...respo.Payments);
+
+//         } catch (e) {
+//           console.log(e);
+//         }
+//       })
+//       if (response.Payments.length == 0) {
+//         throw { message: 'PAYMENT_SEARCH_FAILED' };
+//       }
+//       return response;
+//     }
+
+//   } catch (error) {
+//     enableFieldAndHideSpinner('search', "components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton", store.dispatch);
+//     console.error(error);
+//     store.dispatch(
+//       toggleSnackbar(
+//         true,
+//         { labelName: error.message, labelCode: error.message },
+//         "error"
+//       )
+//     );
+//   }
+// };
 const setDocsForEditFlow = async (state, dispatch) => {
   const applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,

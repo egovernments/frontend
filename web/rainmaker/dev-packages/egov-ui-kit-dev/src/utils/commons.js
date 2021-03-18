@@ -601,20 +601,21 @@ export const hasTokenExpired = (status, data) => {
 };
 
 
-export const getPaymentSearchAPI = (businessService='')=>{
+// export const getPaymentSearchAPI = (businessService='')=>{
   
-  if(businessService=='-1'){
-    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
-  }else if (process.env.REACT_APP_NAME === "Citizen") {
-    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
-  }
-  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
-}
+//   if(businessService=='-1'){
+//     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+//   }else if (process.env.REACT_APP_NAME === "Citizen") {
+//     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+//   }
+//   debugger;
+//   return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+// }
 
-export const getFetchBillAPI = () => {
-  return `${FETCHBILL.GET.URL}`
-}
-export const convertLocalDate=(date=Date())=>{
-  let convertedDate=new Date(date).toLocaleDateString().split('/');
-  return convertedDate&&Array.isArray(convertedDate)&&convertedDate.length>2&&`${convertedDate[1]}-${convertedDate[0]}-${convertedDate[2]}`;
-}
+// export const getFetchBillAPI = () => {
+//   return `${FETCHBILL.GET.URL}`
+// }
+// export const convertLocalDate=(date=Date())=>{
+//   let convertedDate=new Date(date).toLocaleDateString().split('/');
+//   return convertedDate&&Array.isArray(convertedDate)&&convertedDate.length>2&&`${convertedDate[1]}-${convertedDate[0]}-${convertedDate[2]}`;
+// }
