@@ -140,7 +140,7 @@ const screenConfig = {
         value: receiptNumber
       },
       {
-        key: "businessCodes",
+        key: "businessServices",
         value: serviceCategory
       }
     ];
