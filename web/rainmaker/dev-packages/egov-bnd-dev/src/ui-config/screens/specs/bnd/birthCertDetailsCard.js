@@ -43,7 +43,7 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Name"
           },
           {
-            jsonPath: inJsonPath + ".fullname",
+            jsonPath: inJsonPath + ".fullName",
             callBack: checkNoData
           }
         ),
@@ -91,7 +91,7 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Name of Mother"
           },
           {
-            jsonPath: inJsonPath + ".birthMotherInfo.fullname",
+            jsonPath: inJsonPath + ".birthMotherInfo.fullName",
             callBack: checkNoData
           }
         ),
@@ -101,7 +101,7 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Name of Father"
           },
           {
-            jsonPath: inJsonPath + ".birthFatherInfo.fullname",
+            jsonPath: inJsonPath + ".birthFatherInfo.fullName",
             callBack: checkNoData
           }
         ),
@@ -114,36 +114,6 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
     ),
     divider2: getDivider(),
     certDetailsContainer4: getCommonContainer(
-      {
-        mothersUid: getLabelWithValue(
-          {
-            labelName: "Mother's UID No",
-            labelKey: "Mother's UID No"
-          },
-          {
-            jsonPath: inJsonPath + "birthMotherInfo.aadharno",
-            callBack: checkNoData
-          }
-        ),
-        fathersUid: getLabelWithValue(
-          {
-            labelName: "Father's UID No",
-            labelKey: "Father's UID No"
-          },
-          {
-            jsonPath: inJsonPath + "birthFatherInfo.aadharno",
-            callBack: checkNoData
-          }
-        ),
-      },
-      {
-        style: {
-          overflow: "visible"
-        }
-      }
-    ),
-    divider3: getDivider(),
-    certDetailsContainer5: getCommonContainer(
       {
         mothersUid: getLabelWithValue(
           {
@@ -232,13 +202,25 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
         }
       }
     ),
-    // caption2: getCommonCaption({
-    //   labelName: "Details and Mutation Date",
-    //   labelKey: "LAMS_DETAILSMUTDATE"
-    // }),
-    // value2: getCommonValue({
-    //   jsonPath: inJsonPath + ".detailsAndMutDate",
-    //   callBack: addSpace
-    // })
+    divider6: getDivider(),
+    certDetailsContainer8: getCommonContainer(
+      {
+        dateOfIssue: getLabelWithValue(
+          {
+            labelName: "Date of Issue",
+            labelKey: "Date of Issue"
+          },
+          {
+            jsonPath: inJsonPath + ".dateofissue",
+            callBack: convertEpochToDate
+          }
+        ),
+      },
+      {
+        style: {
+          overflow: "visible"
+        }
+      }
+    )
   });
 }
