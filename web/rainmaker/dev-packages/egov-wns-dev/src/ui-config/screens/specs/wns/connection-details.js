@@ -217,7 +217,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getDemand(queryObjForBill, dispatch);
-      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let billAMDSearch = process.env.REACT_APP_NAME !== "Citizen" ? await getBillAmdSearchResult(queryObjForBill, dispatch): [];
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
@@ -312,7 +312,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getDemand(queryObjForBill, dispatch);
-      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let billAMDSearch = process.env.REACT_APP_NAME !== "Citizen" ? await getBillAmdSearchResult(queryObjForBill, dispatch): [];
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
