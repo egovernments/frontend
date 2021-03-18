@@ -99,7 +99,7 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-      const responseFromAPI = await getSearchResults(queryObject);
+      const responseFromAPI = await getSearchResults(queryObject, state);
       dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
       const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
       const response = [];

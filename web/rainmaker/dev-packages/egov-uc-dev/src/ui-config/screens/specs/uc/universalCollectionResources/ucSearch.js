@@ -108,7 +108,7 @@ export const UCSearchCard = getCommonCard({
           labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
         },
         // required: true,
-        jsonPath: "searchScreenMdmsData.businessServiceSelected",
+        jsonPath: "searchScreen.businessServices",
         localePrefix: {
           masterName: "BusinessService",
           moduleName: "BillingService"
@@ -117,23 +117,23 @@ export const UCSearchCard = getCommonCard({
           xs: 12,
           sm: 4
         },
-        sourceJsonPath: "applyScreenMdmsData.serviceCategories"
+        sourceJsonPath:"applyScreenMdmsData.serviceCategories"
       }),
       beforeFieldChange: async (action, state, dispatch) => {
-        const serviceCategory = get(
-          state.screenConfiguration,
-          "preparedFinalObject.applyScreenMdmsData.serviceCategories"
-        );
-        const selectedCategory = serviceCategory.find(
-          item => item.code === action.value
-        );
-        const serviceTypes =
-          selectedCategory &&
-          selectedCategory.child &&
-          selectedCategory.child.map(item => item.code);
-        dispatch(
-          prepareFinalObject("searchScreen.businessServices", serviceTypes)
-        );
+        // const serviceCategory = get(
+        //   state.screenConfiguration,
+        //   "preparedFinalObject.applyScreenMdmsData.serviceCategories"
+        // );
+        // const selectedCategory = serviceCategory.find(
+        //   item => item.code === action.value
+        // );
+        // const serviceTypes =
+        //   selectedCategory &&
+        //   selectedCategory.child &&
+        //   selectedCategory.child.map(item => item.code);
+        // dispatch(
+        //   prepareFinalObject("searchScreen.businessServices", serviceTypes)
+        // );
         return action;
       }
     },

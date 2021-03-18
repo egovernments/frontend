@@ -54,10 +54,18 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   }
 };
 
-export const getSearchResults = async queryObject => {
+export const getSearchResults = async (queryObject, state) => {
   const businessService = getQueryArg(
     window.location.href,
     "businessService"
+  ) ? getQueryArg(
+    window.location.href,
+    "businessService"
+  ) :
+   get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen.businessServices",
+    []
   );
   try {
     const response = await httpRequest(
@@ -473,7 +481,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { key: "tenantId", value: queryObject[0].tenantId },
         { key: "applicationNumber", value: queryObject[0].applicationNumber }
       ];
-      let searchResponse = await getSearchResults(searchQueryObject);
+      let searchResponse = await getSearchResults(searchQueryObject, state);
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
