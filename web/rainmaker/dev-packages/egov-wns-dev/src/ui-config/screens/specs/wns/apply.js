@@ -509,6 +509,14 @@ export const getData = async (action, state, dispatch) => {
             false
           )
         );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.unitUsageType",
+            "visible",
+            false
+          )
+        );
         showHideFieldModifyConnection(action);
       }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
