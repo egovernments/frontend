@@ -602,6 +602,7 @@ export const hasTokenExpired = (status, data) => {
 
 
 export const getPaymentSearchAPI = (businessService='')=>{
+  
   if(businessService=='-1'){
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
   }else if (process.env.REACT_APP_NAME === "Citizen") {
