@@ -176,7 +176,7 @@ class ActionDialog extends React.Component {
       `screenConfiguration.preparedFinalObject.Licenses[0].status`,
       null
     );
-    if(status!=null){
+    if((moduleName=='NewTL' || moduleName=='EDITRENEWAL') && status!=null){
       if(status=="FIELDINSPECTION"){
           showSubTradeField=true;
       }else if(status=="PENDINGAPPROVAL"){

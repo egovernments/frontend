@@ -309,7 +309,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   createWorkFLow = async (label, isDocRequired) => {
-    const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
+    const { toggleSnackbar, dataPath, preparedFinalObject,moduleName } = this.props;
     let data = {};
 
     if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property" || dataPath === "Noc") {
@@ -348,7 +348,7 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    } else if(tlAppStatus!=null) {
+    } else if((moduleName=='NewTL' || moduleName=='EDITRENEWAL') && tlAppStatus!=null) {
       let pattern = getPattern("Comments");
       const comments = get(
         preparedFinalObject,
