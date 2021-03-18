@@ -291,6 +291,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
            false
         )
       );
+      dispatch(
+        handleField(
+          "search-preview", 
+          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.children.reviewUnitUsageType",
+           "visible",
+           false
+        )
+      );
     }
     let connectionType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].connectionType");
     if (connectionType === "Metered") {
