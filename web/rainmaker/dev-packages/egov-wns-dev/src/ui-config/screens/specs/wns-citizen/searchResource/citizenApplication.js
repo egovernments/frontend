@@ -87,11 +87,7 @@ export const citizenApplication = getCommonCard({
               sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
             },
             required: true,
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-              md: 6
-            },
+            gridDefination: { xs: 12, sm: 4 },
           },
         propertyid: getTextField({
             label: {
