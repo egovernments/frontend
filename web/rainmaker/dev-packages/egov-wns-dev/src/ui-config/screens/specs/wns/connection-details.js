@@ -225,6 +225,26 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
+      if(sewerageConnection && sewerageConnection.length > 0 && sewerageConnection[0].uom) {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.unitOfMeasurement",
+            "visible",
+            true
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.unitOfMeasurement",
+            "visible",
+            false
+          )
+        );
+      }
+      
     }
   } else if (service === serviceConst.WATER) {
     let payloadData = await getSearchResults(queryObject, true);
