@@ -40,3 +40,14 @@
 // #custom-atoms-roadCuttingChargeInfoCard div[id^="material-ui-item"] div[id^="material-ui-cardContent"] {
 //     padding: 16px 24px !important;
 //   }
+
+@media only screen and (min-width: 768px) {
+  .tl-download-button {
+    margin-left: 0px !important;
+    width: 0px !important;
+  }
+  .tl-print-button {
+    margin-left: 0px !important;
+    width: 0px !important;
+  }
+}
