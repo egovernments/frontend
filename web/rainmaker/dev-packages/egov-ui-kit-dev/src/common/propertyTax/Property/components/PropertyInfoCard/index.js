@@ -67,7 +67,7 @@ class PropertyInfoCard extends Component {
                                 fontWeight: "400",
                                 lineHeight: "19px",
                               }}
-                              label={"PROPERTYTAX_FLOOR_" + Object.keys(subSection)[unitIndex]}
+                              label={"PROPERTYTAX_FLOOR_" +  (parseInt(Object.keys(subSection)[unitIndex])-4).toString()}
                               fontSize="18px"
                             />
                           )}
