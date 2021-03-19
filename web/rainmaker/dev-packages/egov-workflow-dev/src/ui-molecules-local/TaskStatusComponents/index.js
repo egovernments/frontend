@@ -145,7 +145,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
             body2: "body2-word-wrap"
           }}
         >
-          <LabelContainer labelName={get(currentObj, "comment")} />
+          <LabelContainer labelName={get(currentObj, "comment") ? get(currentObj, "comment") : "NA"} />
         </Typography>
       </Grid>
       {get(currentObj, "documents") && (
