@@ -230,6 +230,13 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
 
 export const loadReceiptData = async (consumerCode, tenant) => {
   let data = {};
+  let businessServices;
+  if(consumerCode.includes("WS")) {
+    businessServices = "WS";
+  }
+  else {
+    businessServices = "SW";
+  }
   let queryObject = [
     {
       key: "tenantId",
@@ -238,9 +245,13 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     {
       key: "consumerCode",
       value: consumerCode
+    },
+    {
+      key: "businessServices",
+      value: businessServices
     }
   ];
-  let response = await getReceiptData(queryObject);
+  let response = await getReceiptData(queryObject, businessServices);
 
   if (response && response.Receipt && response.Receipt.length > 0) {
     data.receiptNumber = nullToNa(
