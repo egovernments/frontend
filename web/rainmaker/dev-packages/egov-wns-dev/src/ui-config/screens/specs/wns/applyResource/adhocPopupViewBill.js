@@ -107,7 +107,7 @@ const updateAdhoc = (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "billData.totalAmount"
     );
-    if (parseFloat(rebateAmount) && parseFloat(rebateAmount) > parseFloat(totalAmount)) {
+    if (parseFloat(rebateAmount) && parseFloat(rebateAmount) >= parseFloat(totalAmount)) {
       dispatch(
         toggleSnackbar(
           true,
