@@ -39,7 +39,8 @@ const styles = {
 
 class downloadFile extends React.Component {
   render() {
-    const { label = {}, linkDetail= {}, value, classes, localizationLabels  } = this.props;
+    const { label = {}, linkDetail= {}, classes, localizationLabels  } = this.props;
+    let { value } = this.props;
     let translatedLabel = getLocaleLabels(
       label.labelName,
       label.labelKey,
@@ -50,7 +51,11 @@ class downloadFile extends React.Component {
       linkDetail.labelKey,
       localizationLabels
     );
-
+    let downloadLink;
+    if(value && !value.includes("https") && window.location.href.includes("https")) {
+      downloadLink = value.replace(/http/g, "https")
+    }
+    value = downloadLink ? downloadLink : value;
     return (
       <div>
         <div className={classes.root}>{translatedLabel}</div>
@@ -73,3 +78,4 @@ const mapStateToProps = (state, ownprops) => {
 };
 
 export default withStyles(styles)(connect(mapStateToProps)(downloadFile));
+
