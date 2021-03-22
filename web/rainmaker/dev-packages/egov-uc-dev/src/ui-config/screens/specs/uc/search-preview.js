@@ -25,13 +25,13 @@ import {
   import orderBy from "lodash/orderBy";
   import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
   import { download,downloadChallan } from "egov-common/ui-utils/commons";
-  import { getChallanSearchResult } from "../../../../ui-utils/commons";
+  import { getChallanSearchResult, getSearchResults } from "../../../../ui-utils/commons";
   import { confirmationDialog } from "./confirmationDialog";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
   import './index.css';
   import "../../../../index.css";
-
+  import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let tenantId = getQueryArg(window.location.href, "tenantId");
@@ -177,10 +177,18 @@ import {
       "screenConfiguration.preparedFinalObject.Payments[0].paymentDetails[0].receiptNumber",
       null
     );
+    const businessService = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Payments[0].paymentDetails[0].businessService",
+      null
+    );
+    
     if(receiptNumber){
       const receiptQueryString = [
         { key: "receiptNumbers", value: receiptNumber },
         { key: "tenantId", value: tenantId },
+        { key: "businessService", value: businessService }
+        
       ];
       download(receiptQueryString, mode, "consolidatedreceipt", state);
     }
@@ -194,7 +202,6 @@ import {
           { key: "challanNo", value: applicationNumber },
           { key: "tenantId", value: tenantId }
         ]
-        console.info("in ackmt==data got=",Challan);
         downloadChallan(Challan,"download");         
         //download(Challan,"download" ,"mcollect-challan",state)
       },
@@ -213,7 +220,6 @@ import {
       leftIcon: "assignment"
     };
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
-    console.info("uiCommonPayConfig--",uiCommonPayConfig);
     const receiptKey = get(uiCommonPayConfig, "receiptKey")
     let receiptDownloadObject = {
       label: { labelName: "Receipt", labelKey: "UC_RECEIPT" },
@@ -680,12 +686,12 @@ import {
         value: consumerCode
       },
       {
-        key: "businessService",
+        key: "businessServices",
         value: billBusinessService
       }
     ];
     const fetchBillResponse = await getBill(getBillQueryObj);
-    const paymentObject = await getReceipt(queryObj);
+    const paymentObject = await getSearchResults(queryObj);
     let bill = get(paymentObject, "Payments[0].paymentDetails[0].bill", null);
     if (bill == null) {
       bill = get(fetchBillResponse, "Bill[0]", {});
@@ -721,7 +727,7 @@ import {
     try {
       const response = await httpRequest(
         "post",
-        "/collection-services/payments/_search",
+        getPaymentSearchAPI(businessService),
         "",
         queryObject
       );
