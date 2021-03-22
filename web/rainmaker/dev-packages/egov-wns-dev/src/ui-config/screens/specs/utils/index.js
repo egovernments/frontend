@@ -190,18 +190,24 @@ export const objectToDropdown = object => {
 
 // Search API call
 export const getSearchResults = async queryObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/tl-services/v1/_search",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-    return {};
+  debugger;
+ const applicationNumberWater = getQueryArg(window.location.href, "applicationNumber").includes("SW");
+ const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumber").includes("WS");
+  if(!(applicationNumberWater || applicationNumberSewerage)){
+    try {
+      const response = await httpRequest(
+        "post",
+        "/tl-services/v1/_search",
+        "",
+        queryObject
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      return {};
+    }
   }
+  
 };
 
 export const getBill = async queryObject => {
@@ -1654,7 +1660,7 @@ const setVisible = (key, status, action) => {
 export const triggerModificationsDisplay = (action, isModeEnable) => {  
     setVisible('modificationsEffectiveFrom', isModeEnable, action);
     setVisible('plumberDetailsContainer', !isModeEnable, action);
-    setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+    // setVisible('roadCuttingChargeContainer', !isModeEnable, action);
 }
 
 export const getDemand = async (queryObject, dispatch) => {

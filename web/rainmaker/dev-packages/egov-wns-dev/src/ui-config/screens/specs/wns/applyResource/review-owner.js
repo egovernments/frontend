@@ -192,9 +192,6 @@ export const roadDetails={
       callBack: handleNA
     }
   ),
-}
-
-export const roadCuttingDetails = {
   reviewCompositionFee : getLabelWithValueForModifiedLabel(
     {
       labelName: "Area (in sq ft)",
@@ -244,6 +241,57 @@ export const roadCuttingDetails = {
     }
   )
 }
+
+export const roadCuttingDetails = {
+  // reviewCompositionFee : getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Area (in sq ft)",
+  //     labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].additionalDetails.compositionFee",
+  //     callBack: handleNA
+  //   }, {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].additionalDetails.compositionFee",
+  //     callBack: handleNA
+  //   }
+  // ),
+  // reviewUserCharges : getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Area (in sq ft)",
+  //     labelKey: "WS_ADDN_USER_CHARGES_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].additionalDetails.userCharges",
+  //     callBack: handleNA
+  //   }, {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].additionalDetails.userCharges",
+  //     callBack: handleNA
+  //   }
+  // ),
+  // reviewOthersFee : getLabelWithValueForModifiedLabel(
+  //   {
+  //     labelName: "Area (in sq ft)",
+  //     labelKey: "WS_ADDN_OTHER_FEE_LABEL"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnection[0].additionalDetails.othersFee",
+  //     callBack: handleNA
+  //   }, {
+  //     labelKey: "WS_OLD_LABEL_NAME"
+  //   },
+  //   {
+  //     jsonPath: "WaterConnectionOld[0].additionalDetails.othersFee",
+  //     callBack: handleNA
+  //   }
+  // )
+}
 const roadCuttingExtraCharges = getCommonContainer(roadCuttingDetails);
 
 export const roadCuttingCharges = {
@@ -252,6 +300,7 @@ export const roadCuttingCharges = {
   props: {
     className: "applicant-summary",
     scheama: getCommonContainer(roadDetails),
+    
     items: [],
     hasAddItem: false,
     isReviewPage: true,

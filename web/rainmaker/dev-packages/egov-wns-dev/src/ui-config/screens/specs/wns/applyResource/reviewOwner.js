@@ -421,7 +421,7 @@ export const reviewRoadType = getLabelWithValueForModifiedLabel(
     labelKey: "WS_ADDN_DETAIL_ROAD_TYPE"
   },
   {
-    jsonPath: "applyScreen.roadType",
+    jsonPath: "applyScreen.roadCuttingInfo[0].roadType",
     // localePrefix: {
     //   moduleName: "WS",
     //   masterName: "ROADTYPE"
@@ -443,7 +443,7 @@ export const reviewArea = getLabelWithValueForModifiedLabel(
     labelKey: "WS_ADDN_DETAILS_AREA_LABEL"
   },
   {
-    jsonPath: "applyScreen.roadCuttingArea",
+    jsonPath: "applyScreen.roadCuttingInfo[0].roadCuttingArea",
     callBack: handleNA
   },
   {
@@ -636,7 +636,10 @@ const roadCuttingCharges = {
             jsonPath: "applyScreen.roadCuttingInfo[0].roadCuttingArea",
             callBack: handleNA
           }
-        )
+        ),
+        reviewCompositionFee,
+        reviewUserCharges,
+        reviewOthersFee
 
     }),
     items: [],
@@ -650,9 +653,9 @@ const roadCuttingCharges = {
 }
 
 const roadCuttingExtraCharges = getCommonContainer({
-  reviewCompositionFee,
-  reviewUserCharges,
-  reviewOthersFee
+  // reviewCompositionFee,
+  // reviewUserCharges,
+  // reviewOthersFee
 });
 
 const activationDetails = getCommonContainer({
