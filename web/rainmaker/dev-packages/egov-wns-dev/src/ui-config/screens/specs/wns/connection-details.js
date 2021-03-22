@@ -217,7 +217,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getDemand(queryObjForBill, dispatch);
-      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let billAMDSearch = process.env.REACT_APP_NAME !== "Citizen" ? await getBillAmdSearchResult(queryObjForBill, dispatch): [];
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));
@@ -225,6 +225,26 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
       dispatch(prepareFinalObject("WaterConnection[0]", sewerageConnection));
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
+      if(sewerageConnection && sewerageConnection.length > 0 && sewerageConnection[0].uom) {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.unitOfMeasurement",
+            "visible",
+            true
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.viewOne.children.unitOfMeasurement",
+            "visible",
+            false
+          )
+        );
+      }
+      
     }
   } else if (service === serviceConst.WATER) {
     let payloadData = await getSearchResults(queryObject, true);
@@ -312,7 +332,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
       ];
       const bill = await getDemand(queryObjForBill, dispatch);
-      let billAMDSearch = await getBillAmdSearchResult(queryObjForBill, dispatch);
+      let billAMDSearch = process.env.REACT_APP_NAME !== "Citizen" ? await getBillAmdSearchResult(queryObjForBill, dispatch): [];
       let amendments=get(billAMDSearch, "Amendments", []);
       amendments=amendments&&Array.isArray(amendments)&&amendments.filter(amendment=>amendment.status==='INWORKFLOW');
       dispatch(prepareFinalObject("BILL_FOR_WNS", bill));

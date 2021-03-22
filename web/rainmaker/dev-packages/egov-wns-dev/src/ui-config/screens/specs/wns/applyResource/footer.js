@@ -38,7 +38,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const applicationNumber = get(state, "screenConfiguration.preparedFinalObject.applyScreen.applicationNo");
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited="true"`;
+  let reviewUrl = `${appendUrl}/wns/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}&edited=true&history=true&isValidEdit=true`;
   if (isModifyMode() && isModifyModeAction()) {
     reviewUrl += "&mode=MODIFY"
   }
@@ -175,6 +175,10 @@ const callBackForNext = async (state, dispatch) => {
         showHideFieldsFirstStep(dispatch, "", false);
         dispatch(prepareFinalObject("applyScreen", applyScreenObj));
         return false;
+      }
+      let roadCuttingInfoDetails = get(state.screenConfiguration.preparedFinalObject, "applyScreen.roadCuttingInfo")
+      if(roadCuttingInfoDetails === null) {
+        dispatch(prepareFinalObject("applyScreen.roadCuttingInfo", []));
       }
 
     } else {
@@ -377,8 +381,18 @@ const callBackForNext = async (state, dispatch) => {
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 1) {
     if (isModifyMode()) {
-      isFormValid = true;
-      hasFieldToaster = false;
+      let validate = validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.modificationsEffectiveFrom.children.cardContent.children.modificationEffectiveDate.children", state, dispatch)
+      if(validate) {
+        isFormValid = true;
+        hasFieldToaster = false;
+      } else {
+        let errorMessage = {
+          labelName: "Please fill all mandatory fields!",
+          labelKey: "WS_FILL_REQUIRED_FIELDS"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return
+      }
     } else {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
@@ -484,7 +498,7 @@ const callBackForNext = async (state, dispatch) => {
 };
 
 const moveToSuccess = (combinedArray, dispatch) => {
-  const tenantId = get(combinedArray[0].property, "tenantId");
+  const tenantId = get(combinedArray[0].property, "tenantId") || get(combinedArray[0], "tenantId");
   const purpose = "apply";
   const status = "success";
   const applicationNoWater = get(combinedArray[0], "applicationNo");

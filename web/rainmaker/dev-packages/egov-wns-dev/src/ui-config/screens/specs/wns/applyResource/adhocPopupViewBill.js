@@ -105,14 +105,15 @@ const updateAdhoc = (state, dispatch) => {
   if (adhocAmount || rebateAmount) {
     const totalAmount = get(
       state.screenConfiguration.preparedFinalObject,
-      "dataCalculation.totalAmount"
+      "billData.totalAmount"
     );
-    if (rebateAmount && rebateAmount > totalAmount) {
+    
+    if (parseFloat(rebateAmount) && parseFloat(rebateAmount) >= parseFloat(totalAmount)) {
       dispatch(
         toggleSnackbar(
           true,
           {
-            labelKey: "ERR_WS_REBATE_GREATER_THAN_AMOUNT"
+            labelKey: "ERR_WS_REBATE_GREATER_THAN_FEE_AMOUNT"
           },
           "warning"
         )

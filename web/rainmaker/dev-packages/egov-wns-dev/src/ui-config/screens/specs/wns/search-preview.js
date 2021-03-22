@@ -38,6 +38,7 @@ let service = getQueryArg(window.location.href, "service");
 let serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
 let serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
 let redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+let isAlreadyEdited = getQueryArg(window.location.href, "edited", false);
 let editredirect = `apply?${redirectQueryString}&action=edit`;
 let headerLabel = "WS_TASK_DETAILS"
 
@@ -47,7 +48,7 @@ const resetData = () => {
   serviceModuleName = service === serviceConst.WATER ? "NewWS1" : "NewSW1";
   serviceUrl = serviceModuleName === "NewWS1" ? "/ws-services/wc/_update" : "/sw-services/swc/_update";
   redirectQueryString = `applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-  editredirect = `apply?${redirectQueryString}&action=edit`;
+  editredirect = isAlreadyEdited ? `apply?${redirectQueryString}&action=edit&edited=true` : `apply?${redirectQueryString}&action=edit`;
   if (isModifyMode()) {
     redirectQueryString += '&mode=MODIFY';
     editredirect += '&mode=MODIFY&modeaction=edit';
@@ -179,6 +180,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         if (estimate !== null && estimate !== undefined) {
           createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
         }
+      }
+      if (!get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].connectionHolders") || get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].connectionHolders") === 'NA') {
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
+      } else {
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", true);
       }
     }
 
@@ -508,7 +516,23 @@ const screenConfig = {
     set(action, 'screenConfig.components.div.children.taskStatus.props.updateUrl', serviceUrl);
     set(action, 'screenConfig.components.div.children.taskStatus.props.bserviceTemp', (service === serviceConst.WATER) ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE");
     set(action, 'screenConfig.components.div.children.taskStatus.props.redirectQueryString', redirectQueryString);
+    isAlreadyEdited = getQueryArg(window.location.href, "edited", false);
+    editredirect = isAlreadyEdited ? `apply?${redirectQueryString}&action=edit&edited=true` : `apply?${redirectQueryString}&action=edit`;  
     set(action, 'screenConfig.components.div.children.taskStatus.props.editredirect', editredirect);
+    if(isAlreadyEdited) {
+      if(applicationNumber.includes("WS")) {
+        set(action, `screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForSW.visible`,false);
+        set(action, `screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForWater.visible`,true);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
+      }
+      if(applicationNumber.includes("SW")) {
+        set(action, `screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForSW.visible`,true);
+        set(action,`screenConfig.components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFour.props.scheama.children.cardContent.children.serviceCardContainerForWater.visible`,false);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
+        set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false); 
+      }
+    }
     return action;
   },
 
