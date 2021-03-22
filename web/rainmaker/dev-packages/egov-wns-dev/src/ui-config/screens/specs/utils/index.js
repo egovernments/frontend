@@ -312,11 +312,11 @@ export const convertDateTimeToEpoch = dateTimeString => {
   }
 };
 
-export const getReceiptData = async queryObject => {
+export const getReceiptData = async (queryObject, businessServices) => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      `collection-services/payments/${businessServices}/_search`,
       "",
       queryObject
     );

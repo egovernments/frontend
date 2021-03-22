@@ -321,13 +321,6 @@ export const reviewSubUsageType = getLabelWithValueForModifiedLabel(
   {
     jsonPath: "applyScreen.additionalDetails.waterSubUsageType",
     callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.additionalDetails.waterSubUsageType",
-    callBack: handleNA
   }
 );
 export const reviewUnitUsageType = getLabelWithValueForModifiedLabel(
