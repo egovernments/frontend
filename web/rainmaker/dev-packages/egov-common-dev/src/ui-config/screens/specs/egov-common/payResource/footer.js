@@ -145,7 +145,7 @@ export const callPGService = async (state, dispatch) => {
   }
 };
 
-export const download = async (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
+export const download = async (receiptQueryString, mode = "download" ,configKey , state) => {
   if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey")
