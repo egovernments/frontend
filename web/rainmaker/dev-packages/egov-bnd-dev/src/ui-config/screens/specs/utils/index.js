@@ -482,6 +482,39 @@ export const loadCertDetails = async (action, state, dispatch,data) => {
   }
 }
 
+export const loadFullCertDetails = async (action, state, dispatch,data) => {
+
+  let requestBody = {};
+  const queryParams = [
+    { key: "tenantId", value: data.tenantId},
+    { key: "id", value: data.id}    
+  ];
+
+  try{
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      `/birth-death-services/${data.module}/_viewCertData`,
+      "_viewCertData",
+      queryParams,
+      requestBody
+    );
+    return payload;
+  }
+  catch (e) {
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Api Error",
+        labelKey: "ERR_API_ERROR"
+      },
+      "error"
+    );
+    console.error(e);
+    //return {"RequestInfo":{"apiId":"Mihy","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"BirthCertificate":[{"id":"1","createdby":null,"createdtime":null,"dateofbirth":1614063655148,"dateofreport":1614063655148,"firstname":"san","gender":1,"hospitalname":null,"informantsaddress":null,"informantsname":null,"lastname":null,"middlename":null,"placeofbirth":"Bangalore","registrationno":"2021-1","remarks":null,"lastmodifiedby":null,"lastmodifiedtime":null,"counter":0,"tenantid":null,"fullname":"SRI V S","birthFatherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"R S H"},"birthMotherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc1","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"S V H"},"birthPermaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"},"birthPresentaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"}}]};
+  }
+}
+
 export const loadMdmsData = async (action, state, dispatch) => {
 
   let requestBody = {
@@ -532,11 +565,9 @@ export const loadMdmsData = async (action, state, dispatch) => {
   }
 }
 
-export const loadHospitals = async (action, state, dispatch, module) => {
+export const loadHospitals = async (action, state, dispatch, module, tenantId) => {
   let requestBody = {};
   let payload = null;
-
-  const tenantId = get(state.screenConfiguration.preparedFinalObject.bnd,`${module}.tenantId`);
 
   const queryParams = [
     { key: "tenantId", value: tenantId }  
@@ -554,19 +585,17 @@ export const loadHospitals = async (action, state, dispatch, module) => {
   }
   catch(e)
   {
-    //toBeRemoved
-    payload = {"hospitalDtls":[{"id":"asdf","name":"St Johns Hospital"},{"id":"mcd","name":"Government Hospital Pune"}]};
+    toggleSnackbar(
+      true,
+      {
+        labelName: "",
+        labelKey: "ERR_API_ERROR"
+      },
+      "error"
+    );
+    console.error(e);
   }
-  //console.log("Survey numbers recieved...",payload);
-  if(payload && payload.hospitalDtls)
-  {
-    for (let hospital of payload.hospitalDtls) {
-      hospital.code = hospital.id;
-      hospital.name = hospital.name;
-    }
-    payload.hospitalDtls.push({code:"0",name:"Others / Non Institutional"})
-    dispatch(prepareFinalObject("bnd.allHospitals", payload.hospitalDtls));
-  }
+  return payload;
 }
 
 export const downloadCert = async (tenantId, id, module) => {
@@ -713,3 +742,5 @@ export const downloadReceipt = async (consumerCode,tenantId) => {
   return response;
 
 }
+
+

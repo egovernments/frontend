@@ -8,6 +8,7 @@ import {searchResults} from "./deathSearchResources/searchResults";
 import {loadMdmsData} from "./../utils";
 import {get,set} from "lodash";
 import jp from "jsonpath";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const header = getCommonHeader({
   labelName: "Search Certificate",

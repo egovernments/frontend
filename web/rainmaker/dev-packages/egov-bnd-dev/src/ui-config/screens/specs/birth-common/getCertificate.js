@@ -8,6 +8,8 @@ import {searchResults} from "./birthSearchResources/searchResults";
 import {loadMdmsData} from "./../utils";
 import {get,set} from "lodash";
 import jp from "jsonpath";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const header = getCommonHeader({
   labelName: "Search Certificate",
@@ -18,7 +20,7 @@ const getCertificate = {
   uiFramework: "material-ui",
   name: "getCertificate",
   beforeInitScreen:(action, state, dispatch) => {
-
+  
     loadMdmsData(action, state, dispatch).then((response) => {
       const tenants = get(response, "MdmsRes.tenant.tenants");
       //Requires City Module Updations of MDMS? tobechanged

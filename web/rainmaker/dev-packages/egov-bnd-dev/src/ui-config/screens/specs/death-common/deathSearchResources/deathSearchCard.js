@@ -68,7 +68,19 @@ const resetFields = (state, dispatch) => {
 
 const cbChanged = (action, state, dispatch) => {
 
-  loadHospitals(action, state, dispatch, "death");
+  let tenantId = get(state.screenConfiguration.preparedFinalObject.bnd.death,"tenantId");
+
+  loadHospitals(action, state, dispatch, "death",tenantId).then((response)=>{
+    if(response && response.hospitalDtls)
+    {
+      for (let hospital of response.hospitalDtls) {
+        hospital.code = hospital.id;
+        hospital.name = hospital.name;
+      }
+      response.hospitalDtls.push({code:"0",name:"Others / Non Institutional"})
+      dispatch(prepareFinalObject("bnd.allHospitals", response.hospitalDtls));
+    }
+  });
 
 }
 

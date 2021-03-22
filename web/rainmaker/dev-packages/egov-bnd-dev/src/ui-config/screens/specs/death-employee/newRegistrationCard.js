@@ -31,7 +31,7 @@ export const getPersonDetailsForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["name"],
-      jsonPath: `bnd.birth.newRegistration.${type}.firstname`,
+      jsonPath: `bnd.death.newRegistration.${type}.firstname`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -49,7 +49,7 @@ export const getPersonDetailsForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["name"],
-      jsonPath: `bnd.birth.newRegistration.${type}.middlename`,
+      jsonPath: `bnd.death.newRegistration.${type}.middlename`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -67,7 +67,7 @@ export const getPersonDetailsForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["name"],
-      jsonPath: `bnd.birth.newRegistration.${type}.lastname`,
+      jsonPath: `bnd.death.newRegistration.${type}.lastname`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -87,7 +87,7 @@ export const getPersonDetailsForm = (type) =>{
       },
       required: false,
       pattern: getPattern("AadharNo"),
-      jsonPath: `bnd.birth.newRegistration.${type}.aadharno`,
+      jsonPath: `bnd.death.newRegistration.${type}.aadharno`,
       // iconObj: {
       //   iconName: "search",
       //   position: "end",
@@ -124,7 +124,7 @@ export const getPersonDetailsForm = (type) =>{
       },
       required: false,
       pattern: getPattern("Email"),
-      jsonPath: `bnd.birth.newRegistration.${type}.emailid`,
+      jsonPath: `bnd.death.newRegistration.${type}.emailid`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -144,107 +144,7 @@ export const getPersonDetailsForm = (type) =>{
       },
       required: false,
       pattern: getPattern("MobileNo"),
-      jsonPath: `bnd.birth.newRegistration.${type}.mobileno`,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-    education: getTextField({
-      label: {
-        labelName: "Education",
-        labelKey: "BND_EDUCATION"
-      },
-      props:{
-        className:"applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Education",
-        labelKey: "BND_EDUCATION"
-      },
-      required: false,
-      //pattern: getPattern("MobileNo"),
-      jsonPath: `bnd.birth.newRegistration.${type}.education`,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-    education: getTextField({
-      label: {
-        labelName: "Education",
-        labelKey: "BND_EDUCATION"
-      },
-      props:{
-        className:"applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Education",
-        labelKey: "BND_EDUCATION"
-      },
-      required: false,
-      //pattern: getPattern("MobileNo"),
-      jsonPath: `bnd.birth.newRegistration.${type}.education`,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-    profession: getTextField({
-      label: {
-        labelName: "Profession",
-        labelKey: "BND_PROFESSION"
-      },
-      props:{
-        className:"applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Profession",
-        labelKey: "BND_PROFESSION"
-      },
-      required: false,
-      //pattern: getPattern("MobileNo"),
-      jsonPath: `bnd.birth.newRegistration.${type}.profession`,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-    nationality: getTextField({
-      label: {
-        labelName: "nationality",
-        labelKey: "BND_NATIONALITY"
-      },
-      props:{
-        className:"applicant-details-error"
-      },
-      placeholder: {
-        labelName: "nationality",
-        labelKey: "BND_NATIONALITY"
-      },
-      required: false,
-      pattern: patterns["addressSmall"],
-      jsonPath: `bnd.birth.newRegistration.${type}.nationality`,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-    religion: getTextField({
-      label: {
-        labelName: "religion",
-        labelKey: "BND_RELIGION"
-      },
-      props:{
-        className:"applicant-details-error"
-      },
-      placeholder: {
-        labelName: "religion",
-        labelKey: "BND_RELIGION"
-      },
-      required: false,
-      pattern: patterns["addressSmall"],
-      jsonPath: `bnd.birth.newRegistration.${type}.religion`,
+      jsonPath: `bnd.death.newRegistration.${type}.mobileno`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -267,7 +167,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressBig"],
-      jsonPath: `bnd.birth.newRegistration.${type}.buildingno`,
+      jsonPath: `bnd.death.newRegistration.${type}.buildingno`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -285,7 +185,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressBig"],
-      jsonPath: `bnd.birth.newRegistration.${type}.houseno`,
+      jsonPath: `bnd.death.newRegistration.${type}.houseno`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -303,7 +203,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressBig"],
-      jsonPath: `bnd.birth.newRegistration.${type}.streetname`,
+      jsonPath: `bnd.death.newRegistration.${type}.streetname`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -321,7 +221,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressBig"],
-      jsonPath: `bnd.birth.newRegistration.${type}.locality`,
+      jsonPath: `bnd.death.newRegistration.${type}.locality`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -339,7 +239,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressBig"],
-      jsonPath: `bnd.birth.newRegistration.${type}.tehsil`,
+      jsonPath: `bnd.death.newRegistration.${type}.tehsil`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -357,7 +257,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressSmall"],
-      jsonPath: `bnd.birth.newRegistration.${type}.district`,
+      jsonPath: `bnd.death.newRegistration.${type}.district`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -375,7 +275,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressSmall"],
-      jsonPath: `bnd.birth.newRegistration.${type}.city`,
+      jsonPath: `bnd.death.newRegistration.${type}.city`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -393,7 +293,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressSmall"],
-      jsonPath: `bnd.birth.newRegistration.${type}.state`,
+      jsonPath: `bnd.death.newRegistration.${type}.state`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -411,7 +311,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: getPattern("Pincode"),
-      jsonPath: `bnd.birth.newRegistration.${type}.pinno`,
+      jsonPath: `bnd.death.newRegistration.${type}.pinno`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -429,7 +329,7 @@ export const getAddressForm = (type) =>{
       required:false,
       visible: true,
       pattern: patterns["addressSmall"],
-      jsonPath: `bnd.birth.newRegistration.${type}.country`,
+      jsonPath: `bnd.death.newRegistration.${type}.country`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -461,7 +361,7 @@ export const newRegistrationForm = getCommonCard(
           labelKey:"BND_IS_LEGACY_RECORD",
           labelName: "BND_IS_LEGACY_RECORD"
         },
-        jsonPath: "bnd.birth.newRegistration.isLegacyRecord",
+        jsonPath: "bnd.death.newRegistration.isLegacyRecord",
       },
     },
     registrationInfo: getCommonGrayCard({
@@ -489,7 +389,7 @@ export const newRegistrationForm = getCommonCard(
             required:true,
             visible: true,
             pattern: patterns["addressSmall"],
-            jsonPath: "bnd.birth.newRegistration.registrationno",
+            jsonPath: "bnd.death.newRegistration.registrationno",
             gridDefination: {
               xs: 12,
               sm: 4
@@ -499,7 +399,7 @@ export const newRegistrationForm = getCommonCard(
             uiFramework: "custom-containers",
               //moduleName: "egov-lams",
               componentPath: "AutosuggestContainer",
-              jsonPath: "bnd.birth.newRegistration.hospitalname",
+              jsonPath: "bnd.death.newRegistration.hospitalname",
               sourceJsonPath: "bnd.allHospitals",
               visible:true,
               autoSelect:true,
@@ -511,11 +411,11 @@ export const newRegistrationForm = getCommonCard(
                 disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
                 label: {
                   labelName: "Select Hospital",
-                  labelKey: "BND_BIRTH_APPL_HOSP"
+                  labelKey: "BND_DEATH_APPL_HOSP"
                 },
                 placeholder: {
                   labelName: "Select Hospital",
-                  labelKey: "BND_BIRTH_APPL_HOSP_PLACEHOLDER"
+                  labelKey: "BND_DEATH_APPL_HOSP_PLACEHOLDER"
                 },
                 localePrefix: {
                   moduleName: "TENANT",
@@ -523,7 +423,7 @@ export const newRegistrationForm = getCommonCard(
                 },
                 labelsFromLocalisation: false,
                 required: false,
-                jsonPath: "bnd.birth.hosptialId",
+                jsonPath: "bnd.death.hosptialId",
                 sourceJsonPath: "bnd.allHospitals",
                 inputLabelProps: {
                   shrink: true
@@ -571,12 +471,12 @@ export const newRegistrationForm = getCommonCard(
             }
           },
           dateOfReporting: getDateField({
-            label: { labelName: "DOB", labelKey: "BND_DOR" },
+            label: { labelName: "DOB", labelKey: "BND_DEATH_DOR" },
             placeholder: {
               labelName: "Date of Reporting",
-              labelKey: "BND_DOR_PLACEHOLDER"
+              labelKey: "BND_DEATH_DOR_PLACEHOLDER"
             },
-            jsonPath: "bnd.birth.newRegistration.dateofreportepoch",
+            jsonPath: "bnd.death.newRegistration.dateofreportepoch",
             gridDefination: {
               xs: 12,
               sm: 4
@@ -592,11 +492,11 @@ export const newRegistrationForm = getCommonCard(
           })
         })
     }),
-    childInfo: getCommonGrayCard({
+    deceasedInfo: getCommonGrayCard({
       header: getCommonSubHeader(
         {
           labelName: "",
-          labelKey: "BND_INFO_OF_CHILD"
+          labelKey: "BND_INFO_OF_DECEASED"
         },
         {
           style: {
@@ -604,14 +504,14 @@ export const newRegistrationForm = getCommonCard(
           }
         }
       ),
-      infoOfChild: getCommonContainer({
+      infoOfDeceased: getCommonContainer({
         dob: getDateField({
-          label: { labelName: "DOB", labelKey: "BND_BIRTH_DOB" },
+          label: { labelName: "DOB", labelKey: "BND_DEATH_DOB" },
           placeholder: {
-            labelName: "Date of Birth",
-            labelKey: "BND_BIRTH_DOB"
+            labelName: "Date of Death",
+            labelKey: "BND_DEATH_DOB"
           },
-          jsonPath: "bnd.birth.newRegistration.dateofbirthepoch",
+          jsonPath: "bnd.death.newRegistration.dateofdeathepoch",
           gridDefination: {
             xs: 12,
             sm: 4
@@ -660,7 +560,7 @@ export const newRegistrationForm = getCommonCard(
             xs: 12,
             sm: 4
           },
-          jsonPath: "bnd.birth.newRegistration.genderStr",
+          jsonPath: "bnd.death.newRegistration.genderStr",
           autoSelect: true,
           visible: true,
           beforeFieldChange: (action, state, dispatch) => {
@@ -682,7 +582,7 @@ export const newRegistrationForm = getCommonCard(
           required:false,
           visible: true,
           pattern: patterns["name"],
-          jsonPath: "bnd.birth.newRegistration.firstname",
+          jsonPath: "bnd.death.newRegistration.firstname",
           gridDefination: {
             xs: 12,
             sm: 4
@@ -700,7 +600,7 @@ export const newRegistrationForm = getCommonCard(
           required:false,
           visible: true,
           pattern: patterns["name"],
-          jsonPath: "bnd.birth.newRegistration.middlename",
+          jsonPath: "bnd.death.newRegistration.middlename",
           gridDefination: {
             xs: 12,
             sm: 4
@@ -718,19 +618,103 @@ export const newRegistrationForm = getCommonCard(
           required:false,
           visible: true,
           pattern: patterns["name"],
-          jsonPath: "bnd.birth.newRegistration.lastname",
+          jsonPath: "bnd.death.newRegistration.lastname",
           gridDefination: {
             xs: 12,
             sm: 4
           }
-        })
+        }),
+        eidNo: getTextField({
+          label: {
+            labelName: "Eid No",
+            labelKey: "BND_EIDNO"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          placeholder: {
+            labelName: "Eid No",
+            labelKey: "BND_EIDNO"
+          },
+          required: false,
+          pattern: patterns["eidno"],
+          jsonPath: `bnd.death.newRegistration.eidno`,
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }),
+        aadharNo: getTextField({
+          label: {
+            labelName: "Aadhar No",
+            labelKey: "BND_AADHAR_NO"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          placeholder: {
+            labelName: "Aadhar No",
+            labelKey: "BND_AADHAR_NO"
+          },
+          required: false,
+          pattern: getPattern("AadharNo"),
+          jsonPath: `bnd.death.newRegistration.aadharno`,
+          title: {
+            value: "Please search owner profile linked to the mobile no.",
+            key: "BND_AADHAR_NO"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }),
+        nationality: getTextField({
+          label: {
+            labelName: "nationality",
+            labelKey: "BND_NATIONALITY"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          placeholder: {
+            labelName: "nationality",
+            labelKey: "BND_NATIONALITY"
+          },
+          required: false,
+          pattern: patterns["addressSmall"],
+          jsonPath: `bnd.death.newRegistration.nationality`,
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }),
+        religion: getTextField({
+          label: {
+            labelName: "religion",
+            labelKey: "BND_RELIGION"
+          },
+          props:{
+            className:"applicant-details-error"
+          },
+          placeholder: {
+            labelName: "religion",
+            labelKey: "BND_RELIGION"
+          },
+          required: false,
+          pattern: patterns["addressSmall"],
+          jsonPath: `bnd.death.newRegistration.religion`,
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }),
       })
     }),
     placeInfo: getCommonGrayCard({
       header: getCommonSubHeader(
         {
           labelName: "",
-          labelKey: "BND_BIRTH_PLACE"
+          labelKey: "BND_DEATH_INFO"
         },
         {
           style: {
@@ -738,26 +722,58 @@ export const newRegistrationForm = getCommonCard(
           }
         }
       ),
-      placeOfBirth:getCommonContainer({
-        firstName: getTextField({
+      deathInfo:getCommonContainer({
+        placeOfdeath: getTextField({
           label: {
-            labelName: "Place of Birth",
-            labelKey: "BND_BIRTH_PLACE"
+            labelName: "Place of Death",
+            labelKey: "BND_DEATH_PLACE"
           },
           placeholder: {
-            labelName: "Place of Birth",
-            labelKey: "BND_BIRTH_PLACE"
+            labelName: "Place of Death",
+            labelKey: "BND_DEATH_PLACE"
           },
           required:false,
           visible: true,
           pattern: patterns["addressBig"],
-          jsonPath: "bnd.birth.newRegistration.placeofbirth",
+          jsonPath: "bnd.death.newRegistration.placeofdeath",
           gridDefination: {
             xs: 12,
             sm: 4
           }
-        })
+        }),
+        icdCode: getTextField({
+          label: {
+            labelName: "",
+            labelKey: "BND_ICDCODE"
+          },
+          placeholder: {
+            labelName: "",
+            labelKey: "BND_ICDCODE"
+          },
+          required:false,
+          visible: true,
+          pattern: patterns["icdcode"],
+          jsonPath: "bnd.death.newRegistration.icdcode",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }),
       }),
+    }),
+    spouseInfo: getCommonGrayCard({
+      header: getCommonSubHeader(
+        {
+          labelName: "",
+          labelKey: "BND_SPOUSES_INFO"
+        },
+        {
+          style: {
+            marginBottom: 18
+          }
+        }
+      ),
+      spouseInfo: getPersonDetailsForm("deathSpouseInfo")
     }),
     fathersInfo: getCommonGrayCard({
       header: getCommonSubHeader(
@@ -771,7 +787,7 @@ export const newRegistrationForm = getCommonCard(
           }
         }
       ),
-      fathersInfo: getPersonDetailsForm("birthFatherInfo")
+      fathersInfo: getPersonDetailsForm("deathFatherInfo")
     }),
     mothersInfo: getCommonGrayCard({
       header: getCommonSubHeader(
@@ -785,13 +801,13 @@ export const newRegistrationForm = getCommonCard(
           }
         }
       ),
-      mothersInfo: getPersonDetailsForm("birthMotherInfo")
+      mothersInfo: getPersonDetailsForm("deathMotherInfo")
     }),
-    addrTimeOfBirth: getCommonGrayCard({
+    addrTimeOfdeath: getCommonGrayCard({
       header: getCommonSubHeader(
         {
           labelName: "",
-          labelKey: "BND_PRESENT_ADDR_DURING_BIRTH"
+          labelKey: "BND_PRESENT_ADDR_DURING_DEATH"
         },
         {
           style: {
@@ -799,13 +815,13 @@ export const newRegistrationForm = getCommonCard(
           }
         }
       ),
-      addrTimeOfBirth: getAddressForm("birthPresentaddr")
+      addrTimeOfdeath: getAddressForm("deathPresentaddr")
     }),
     permAddressofParents: getCommonGrayCard({
       header: getCommonSubHeader(
         {
           labelName: "",
-          labelKey: "BND_BIRTH_ADDR_PERM"
+          labelKey: "BND_DEATH_ADDR_PERM"
         },
         {
           style: {
@@ -813,7 +829,7 @@ export const newRegistrationForm = getCommonCard(
           }
         }
       ),
-      permAddressofParents: getAddressForm("birthPermaddr")
+      permAddressofParents: getAddressForm("deathPermaddr")
     }),
     informantsInfo: getCommonGrayCard({
       header: getCommonSubHeader(
@@ -839,7 +855,7 @@ export const newRegistrationForm = getCommonCard(
           },
           required:false,
           visible: true,
-          jsonPath: "bnd.birth.newRegistration.informantsname",
+          jsonPath: "bnd.death.newRegistration.informantsname",
           gridDefination: {
             xs: 12,
             sm: 4
@@ -856,7 +872,7 @@ export const newRegistrationForm = getCommonCard(
           },
           required:false,
           visible: true,
-          jsonPath: "bnd.birth.newRegistration.informantsaddress",
+          jsonPath: "bnd.death.newRegistration.informantsaddress",
           gridDefination: {
             xs: 12,
             sm: 4
@@ -876,7 +892,7 @@ export const newRegistrationForm = getCommonCard(
       required:false,
       visible: true,
       pattern: patterns["remarks"],
-      jsonPath: "bnd.birth.newRegistration.remarks",
+      jsonPath: "bnd.death.newRegistration.remarks",
       gridDefination: {
         xs: 12,
         sm: 4

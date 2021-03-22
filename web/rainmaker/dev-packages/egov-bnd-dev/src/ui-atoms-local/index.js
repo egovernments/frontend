@@ -18,8 +18,14 @@ const AutoSuggest = Loadable({
   loading: () => <Loading />
 });
 
+const Checkbox = Loadable({
+  loader: () => import("./Checkbox"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   LinkButton,
-  AutoSuggest
+  AutoSuggest,
+  Checkbox,
 };

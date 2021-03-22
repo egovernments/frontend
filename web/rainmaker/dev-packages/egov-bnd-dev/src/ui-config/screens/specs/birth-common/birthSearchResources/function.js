@@ -103,7 +103,7 @@ export const searchApiCall = async (state, dispatch) => {
   // }
 
   const responseFromAPI = await searchForBirth(dispatch, queryParams)
-  const births = (responseFromAPI && responseFromAPI.birthCerts); //|| [{"id":"1","dateofbirth":1614241552,"firstname":"san","gender":"1","registrationno":"2021-1","counter":0,"birthFatherInfo":{"firstname":"abc"},"birthMotherInfo":{"firstname":"abc1"},"tenantid":"pb.agra"},{"id":"2","dateofbirth":1614241552,"firstname":"san1","gender":"1","registrationno":"2021-2","counter":0,"birthFatherInfo":{"firstname":"abcd"},"birthMotherInfo":{"firstname":"abcd1"},"tenantid":"pb.agra"}];
+  const births = (responseFromAPI && responseFromAPI.birthCerts) || []; //|| [{"id":"1","dateofbirth":1614241552,"firstname":"san","gender":"1","registrationno":"2021-1","counter":0,"birthFatherInfo":{"firstname":"abc"},"birthMotherInfo":{"firstname":"abc1"},"tenantid":"pb.agra"},{"id":"2","dateofbirth":1614241552,"firstname":"san1","gender":"1","registrationno":"2021-2","counter":0,"birthFatherInfo":{"firstname":"abcd"},"birthMotherInfo":{"firstname":"abcd1"},"tenantid":"pb.agra"}];
 
   const birthTableData = births.map(item => {
     return {
@@ -116,7 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
       fathersName: get(item, "birthFatherInfo.fullName"),
       action: getActionItem(get(item, "counter")),
       tenantId: get(item, "tenantid"),
-      payRequired: get(item, "payRequired")
+      payRequired: get(item, "payRequired"),
     };
   });
   dispatch(
@@ -138,6 +138,7 @@ export const searchApiCall = async (state, dispatch) => {
       ['BND_COMMON_TABLE_ACTION']: item.action || "-",
       ["BUSINESS_SERVICE"]: "BIRTH_CERT",
       ["TENANT_ID"]: item.tenantId,
+      ["BND_VIEW_CERTIFICATE"]: "BND_VIEW_CERTIFICATE"
       //["PAYREQUIRED"]: item.payRequired,
       // ["BILL_ID"]: item.billId,
       // ["BILL_SEARCH_URL"]: searchScreenObject.url,

@@ -28,15 +28,15 @@ const checkIfFormIsValid = async (state, dispatch) => {
     "newRegistration"
   );  
 
-  const placeOfBirth = validateFields(
-    "components.div2.children.details.children.cardContent.children.placeInfo.children.cardContent.children.placeOfBirth.children",
+  const placeOfdeath = validateFields(
+    "components.div2.children.details.children.cardContent.children.placeInfo.children.cardContent.children.placeOfdeath.children",
     state,
     dispatch,
     "newRegistration"
   );  
 
   const childsInfo = validateFields(
-    "components.div2.children.details.children.cardContent.children.childInfo.children.cardContent.children.infoOfChild.children",
+    "components.div2.children.details.children.cardContent.children.deceasedInfo.children.cardContent.children.infoOfDeceased.children",
     state,
     dispatch,
     "newRegistration"
@@ -63,17 +63,17 @@ const checkIfFormIsValid = async (state, dispatch) => {
     "newRegistration"
   ); 
 
-  const addrTimeOfBirth = validateFields(
+  const addrTimeOfdeath = validateFields(
     "components.div2.children.details.children.cardContent.children.informantsInfo.children.cardContent.children.informantInfo.children",
     state,
     dispatch,
     "newRegistration"
   ); 
 
-  console.log(newRegistration,permAddr,placeOfBirth,childsInfo,fathersInfo,mothersInfo,addrTimeOfBirth);
+  console.log(newRegistration,permAddr,placeOfdeath,childsInfo,fathersInfo,mothersInfo,addrTimeOfdeath);
 
-  if(!(newRegistration && permAddr && placeOfBirth &&
-      childsInfo && fathersInfo && mothersInfo && addrTimeOfBirth))
+  if(!(newRegistration && permAddr && placeOfdeath &&
+      childsInfo && fathersInfo && mothersInfo && addrTimeOfdeath))
   {
     isFormValid = false;
     dispatch(toggleSnackbar(
@@ -87,22 +87,22 @@ const checkIfFormIsValid = async (state, dispatch) => {
     return;
   }
 
-  if(!get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.firstname") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.middlename") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.lastname") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.birthFatherInfo.firstname") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.birthFatherInfo.middlename") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.birthFatherInfo.lastname") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.birthMotherInfo.firstname") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.birthMotherInfo.middlename") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.birthMotherInfo.lastname"))
+  if(!get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.firstname") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.middlename") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.lastname") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathFatherInfo.firstname") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathFatherInfo.middlename") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathFatherInfo.lastname") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathMotherInfo.firstname") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathMotherInfo.middlename") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathMotherInfo.lastname"))
   {
     isFormValid = false;
     dispatch(toggleSnackbar(
       true,
       {
-        labelName: "Please enter child's name or father's name or mother's name",
-        labelKey: "Please enter child's name or father's name or mother's name"
+        labelName: "Please enter deceased's name or father's name or mother's name",
+        labelKey: "Please enter deceased's name or father's name or mother's name"
       },
       "info"
     ));
@@ -124,7 +124,7 @@ export const postData = async(state,dispatch) => {
 
     const newRegData = _.clone(get(
       state.screenConfiguration.preparedFinalObject,
-      "bnd.birth.newRegistration",
+      "bnd.death.newRegistration",
       []
     ),true);
     newRegData["tenantid"] = getTenantId()
@@ -133,17 +133,17 @@ export const postData = async(state,dispatch) => {
 
     if(newRegData["dateofreportepoch"]!=null)
       newRegData["dateofreportepoch"] = convertDateToEpoch(newRegData["dateofreportepoch"])/1000;
-    if(newRegData["dateofbirthepoch"]!=null)
-      newRegData["dateofbirthepoch"] = convertDateToEpoch(newRegData["dateofbirthepoch"])/1000;
+    if(newRegData["dateofdeathepoch"]!=null)
+      newRegData["dateofdeathepoch"] = convertDateToEpoch(newRegData["dateofdeathepoch"])/1000;
     
     let payload = {
-      birthCerts: [newRegData],
+      deathCerts: [newRegData],
     };
 
     payload = await httpRequest(
       "post",
-      "birth-death-services/common/saveBirthImport",
-      "saveBirthImport",
+      "birth-death-services/common/saveDeathImport",
+      "saveDeathImport",
       [],
       payload);
   
@@ -238,6 +238,7 @@ export const footer = getCommonApplyFooter({
       }
     },
     visible: (getQueryArg(window.location.href, "action")!="VIEW"),
+
   },
   submitButton: {
     componentPath: "Button",
