@@ -190,7 +190,6 @@ export const objectToDropdown = object => {
 
 // Search API call
 export const getSearchResults = async queryObject => {
-  debugger;
  const applicationNumberWater = getQueryArg(window.location.href, "applicationNumber").includes("SW");
  const applicationNumberSewerage = getQueryArg(window.location.href, "applicationNumber").includes("WS");
   if(!(applicationNumberWater || applicationNumberSewerage)){
