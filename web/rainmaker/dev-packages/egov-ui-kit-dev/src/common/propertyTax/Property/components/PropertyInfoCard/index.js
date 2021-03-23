@@ -1,104 +1,121 @@
 import React, { Component } from "react";
-import { Card,Grid } from "components";
+import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
-import PendingAmountDialog from "../PendingAmountDue";
-import ViewHistoryDialog from "../ViewHistory";
-import { getTranslatedLabel} from "egov-ui-kit/utils/commons"
-import {ViewHistory, TransferOwnership} from "../ActionItems";
-import { from } from "rxjs";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-
-const locale = getLocale() || "en_IN";
-const localizationLabelsData = initLocalizationLabels(locale);
+import "./index.css";
+import { parseInt } from "lodash";
 
 class PropertyInfoCard extends Component {
-  state = {
-    amount: "4500.00",
-    pendingAmountDue: false,
-    viewHistory: false
-  }
-  openDialog = (dialogName) => {
-    this.setState({[dialogName]: true});
-  }
+  render() {
+    let { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
 
-  closeDialogue = (dialogName)=>{
-    this.setState({[dialogName]: false});
-  }
 
-  render(){
-    let { editIcon, header, backgroundColor = 'rgb(242, 242, 242)', items = [], subSection = [] ,hideSubsectionLabel=false, ownershipTransfer=false, viewHistory=false } = this.props;
+    var arr = []
 
+    if (subSection.length) {
+      for (var key of Object.keys(subSection)) {
+        {
+      
+          arr.push({
+            "floor": key,
+            "data": subSection[key]
+          });
+
+
+        }
+      }
+      function compare(a, b) {
+        const floorA = parseInt(a.floor);
+        const floorB = parseInt(b.floor);
+        let comparison = 0;
+        if (floorA > floorB) {
+          comparison = 1;
+        } else if (floorA < floorB) {
+          comparison = -1;
+        }
+        return comparison;
+
+
+      }
+      arr.sort(compare);
+    }
     return (
       <div>
-        {items && <Card style={{ backgroundColor ,boxShadow:'none'}}
-        textChildren={
-          <div >
-            <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between", margin: '5px 0px 5px 0px' }}>
-              <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '13px' }}>
-                {header&&<Label
-                  labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                  label={header}
-                  fontSize="18px"
-                />}
-              </div>
-              {{ editIcon } && <span style={{ alignItems: "right" }} >{editIcon}</span>}
-              {/* Transfer ownership button and View History button */}
-              {(viewHistory || ownershipTransfer) && <div style={{ display: "flex" }}>
-                  {/* <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} /> */}
-                  {/* <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} /> */}
-              </div>}
-              {/* ------------------------- */}
-            </div>
-            <div>
-              {items.map(
-                (item) => {
-                  return (<div>
-                    <div className=" col-md-4 col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5, minHeight:60 }}>
-                      <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                        <Label
-                          labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
-                          label={item.key ? item.key : "NA"}
-                          fontSize="12px"
-                        />
-                      </div>
-                      <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                        <Label
-                          labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                          label={item.value ? item.value : "NA"}
-                          fontSize="15px"
-                        />
-                      </div>
-                    </div>
-                  </div>)
-                }
-              )}
-            </div>
-            {subSection &&
+        {items && (
+          <Card
+            style={{ backgroundColor, boxShadow: "none" }}
+            className={ownerInfo ? 'pt-info-card-style' : ""}
+            textChildren={
               <div>
-                {subSection && Array.isArray(subSection)&&subSection.length>0&&Object.values(subSection).map((units, unitIndex) => {
-                  let floorNo = units.floorNo || unitIndex;
-                  units = units.floorDetails || units;
-                  return <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-                    {!hideSubsectionLabel&&<Label
-                      labelStyle={{ letterSpacing: "0.67px", marginTop: 15, color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
-                      label={"PROPERTYTAX_FLOOR_" + Object.keys(subSection)[unitIndex]}
-                      fontSize="18px"
-                    />}
-                    {units && units.map((unit, index) => {
-                      const subUnitHeader=hideSubsectionLabel?undefined:`${getTranslatedLabel("PT_PROPERTY_UNIT", localizationLabelsData)} - ` + (index + 1);
-                      return <PropertyInfoCard backgroundColor='white' items={unit} header={subUnitHeader}></PropertyInfoCard>
+                <div >
+                  {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 20 }}>
+                    {header && (
+                      <Label
+                        labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                        label={header}
+                        fontSize="18px"
+                      />
+                    )}
+                    {{ editIcon } && <span style={{ position: "absolute", right: "25px" }}>{editIcon}</span>}
+                  </div>}
+
+                  {items.map((item) => {
+                    if (item) {
+                      return (
+                        <div>
+                          <div className={item.key === "Property Type" ? "col-sm-3 col-xs-12 assessment-property-type" : "col-sm-3 col-xs-12"}
+                            style={{ marginBottom: 10, marginTop: 5 }}>
+                            <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <Label
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
+                                label={item.key ? item.key : "NA"}
+                                fontSize="12px"
+                              />
+                            </div>
+                            <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <Label
+                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                                label={item.value ? item.value : "NA"}
+                                fontSize="16px"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+                {subSection && (
+                  <div>
+                    {arr && Array.isArray(arr) && arr.length > 0 && Object.values(arr).map((data, index) => {
+
+                      return (
+                        <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
+                          {!hideSubsectionLabel && (
+                            <Label
+                              labelStyle={{
+                                letterSpacing: "0.67px",
+                                marginTop: 15,
+                                color: "rgba(0, 0, 0, 0.87)",
+                                fontWeight: "400",
+                                lineHeight: "19px",
+                              }}
+                              label={"PROPERTYTAX_FLOOR_" + arr[index].floor}
+                              fontSize="18px"
+                            />
+                          )}
+                          { arr[index].data && arr[index].data.map((unit, index) => {
+                            const subUnitHeader = hideSubsectionLabel ? undefined : "Unit - " + (index + 1);
+                            return <PropertyInfoCard backgroundColor="white" items={unit} header={subUnitHeader}></PropertyInfoCard>;
+                          })}
+                        </div>
+                      );
                     })}
                   </div>
-                })}
+                )}
               </div>
             }
-          </div>
-        }
-      />}
-      {this.state.pendingAmountDue && (<PendingAmountDialog open={this.state.pendingAmountDue} amount={this.state.amount} closeDialogue={()=>this.closeDialogue("pendingAmountDue")}></PendingAmountDialog>)}
-
-      {this.state.viewHistory && (<ViewHistoryDialog open={this.state.viewHistory} amount={this.state.amount} closeDialogue={()=>this.closeDialogue("viewHistory")}></ViewHistoryDialog>)}
+          />
+        )}
       </div>
     );
 
