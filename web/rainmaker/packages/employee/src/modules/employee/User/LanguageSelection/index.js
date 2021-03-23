@@ -15,6 +15,11 @@ class LanguageSelection extends Component {
     value: getLocale(),
   };
 
+  onChange = (event)=>{
+    this.setState({value:event.value})
+    this.props.fetchLocalizationLabel(event.value);
+  }
+
   onClick = (value) => {
     this.setState({ value });
     this.props.fetchLocalizationLabel(value);
@@ -26,8 +31,8 @@ class LanguageSelection extends Component {
 
   render() {
     const { value } = this.state;
-    const { onLanguageSelect, onClick } = this;
-    const { bannerUrl, logoUrl, languages } = this.props;
+    const { onLanguageSelect, onClick,onChange } = this;
+    const { bannerUrl, logoUrl, languages ,regionalLanguages,commonLanguages} = this.props;
 
     return (
 
@@ -38,7 +43,7 @@ class LanguageSelection extends Component {
       <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
        
         <div>
-           <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
+           <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} regionalLanguages ={regionalLanguages} commonLanguages ={commonLanguages} onChange={onChange}/>
         </div>   
          {/* <DisclaimerInformation/>             */}
       </Banner>
@@ -68,7 +73,9 @@ const mapStateToProps = ({ common }) => {
   let bannerUrl = get(stateInfoById, "0.bannerUrl");
   let logoUrl = get(stateInfoById, "0.logoUrl");
   let languages = get(stateInfoById, "0.languages", []);
-  return { bannerUrl, logoUrl, languages };
+  let regionalLanguages = get(stateInfoById, "0.languagesRegional", []);
+  let commonLanguages = get(stateInfoById, "0.languagesCommon", []);
+  return { bannerUrl, logoUrl, languages,regionalLanguages,commonLanguages};
 };
 
 const mapDispatchToProps = (dispatch) => {

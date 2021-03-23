@@ -97,7 +97,7 @@ class AutoSuggestDropdown extends React.Component {
     }
     const items = list && list.length > 0 && list.sort((a,b)=>a.label - b.label);
     return (
-      <div style={{ display: "flex", position: "relative", width: "100%" }}>
+      <div style={{ display: "flex", position: "relative", width: "100%",justifyContent:"center" }}>
         <AutoComplete
           className={`autosuggest ${className}`}
           floatingLabelFixed={true}
@@ -127,7 +127,7 @@ class AutoSuggestDropdown extends React.Component {
           ]}
           {...restProps}
         />
-        <DownArrow style={{ position: "absolute", top: "24px", right: 0, color: "#969696" }} />
+        <DownArrow style={{ position: "relative", top: "24px", right: 0, color: "#969696" }} />
       </div>
     );
   }
