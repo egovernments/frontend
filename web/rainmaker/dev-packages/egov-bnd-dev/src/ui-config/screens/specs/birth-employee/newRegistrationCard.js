@@ -170,26 +170,6 @@ export const getPersonDetailsForm = (type) =>{
         sm: 4
       }
     }),
-    education: getTextField({
-      label: {
-        labelName: "Education",
-        labelKey: "BND_EDUCATION"
-      },
-      props:{
-        className:"applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Education",
-        labelKey: "BND_EDUCATION"
-      },
-      required: false,
-      //pattern: getPattern("MobileNo"),
-      jsonPath: `bnd.birth.newRegistration.${type}.education`,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
     profession: getTextField({
       label: {
         labelName: "Profession",
@@ -204,7 +184,7 @@ export const getPersonDetailsForm = (type) =>{
       },
       required: false,
       //pattern: getPattern("MobileNo"),
-      jsonPath: `bnd.birth.newRegistration.${type}.profession`,
+      jsonPath: `bnd.birth.newRegistration.${type}.proffession`,
       gridDefination: {
         xs: 12,
         sm: 4
@@ -635,10 +615,10 @@ export const newRegistrationForm = getCommonCard(
             labelKey: "BND_GENDER_PLACEHOLDER"
           },
           required: true,
-          localePrefix: {
-            moduleName: "BND",
-            masterName: "GENDER"
-          },
+          // localePrefix: {
+          //   moduleName: "BND",
+          //   masterName: "GENDER"
+          // },
           data: [
             {
               code: "Male",
@@ -653,6 +633,7 @@ export const newRegistrationForm = getCommonCard(
               label: "TRANSGENDER"
             }
           ],
+          labelsFromLocalisation: false,
           props:{
             disabled: false,
           },

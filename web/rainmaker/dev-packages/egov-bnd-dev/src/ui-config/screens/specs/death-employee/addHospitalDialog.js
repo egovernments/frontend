@@ -13,7 +13,7 @@ import {patterns} from "../utils/constants";
 const addHospitalDataToDropDown = (state,dispatch) =>{
   
   let newHospitalName = get(state.screenConfiguration.preparedFinalObject,"bnd.newHospitalName");
-  let existingHospitals = get(state.screenConfiguration.preparedFinalObject,"bnd.allHospitals");
+  let existingHospitals = get(state.screenConfiguration.preparedFinalObject,"bnd.allHospitals") || [];
 
   if(!newHospitalName || !(new RegExp(patterns["hospitalName"])).test(newHospitalName))
   {
@@ -31,7 +31,7 @@ const addHospitalDataToDropDown = (state,dispatch) =>{
   let hospitalExists = false;
   for(var hospital in existingHospitals)
   {
-    if(hospital.name == newHospitalName)
+    if(existingHospitals[hospital].name == newHospitalName)
     {
       dispatch(toggleSnackbar(
         true,
@@ -84,12 +84,12 @@ export const addHospitalDialog = getCommonContainer({
 
           hospitalName: getTextField({
             label: {
-              labelName: "First Name",
-              labelKey: "BND_FIRSTNAME_LABEL"
+              labelName: "",
+              labelKey: "BND_HOSPITALNAME_LABEL"
             },
             placeholder: {
-              labelName: "First Name",
-              labelKey: "BND_FIRSTNAME_LABEL"
+              labelName: "",
+              labelKey: "BND_HOSPITALNAME_LABEL"
             },
             required:false,
             visible: true,

@@ -95,14 +95,17 @@ const checkIfFormIsValid = async (state, dispatch) => {
     !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathFatherInfo.lastname") &&
     !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathMotherInfo.firstname") &&
     !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathMotherInfo.middlename") &&
-    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathMotherInfo.lastname"))
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathMotherInfo.lastname") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathSpouseInfo.firstname") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathSpouseInfo.middlename") &&
+    !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.deathSpouseInfo.lastname"))
   {
     isFormValid = false;
     dispatch(toggleSnackbar(
       true,
       {
-        labelName: "Please enter deceased's name or father's name or mother's name",
-        labelKey: "Please enter deceased's name or father's name or mother's name"
+        labelName: "Please enter deceased's name or father's name or mother's name or spouse's name",
+        labelKey: "Please enter deceased's name or father's name or mother's name or spouse's name"
       },
       "info"
     ));

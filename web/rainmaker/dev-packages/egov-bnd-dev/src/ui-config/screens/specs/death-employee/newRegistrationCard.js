@@ -535,10 +535,10 @@ export const newRegistrationForm = getCommonCard(
             labelKey: "BND_GENDER_PLACEHOLDER"
           },
           required: true,
-          localePrefix: {
-            moduleName: "BND",
-            masterName: "GENDER"
-          },
+          // localePrefix: {
+          //   moduleName: "BND",
+          //   masterName: "GENDER"
+          // },
           data: [
             {
               code: "Male",
@@ -553,6 +553,7 @@ export const newRegistrationForm = getCommonCard(
               label: "TRANSGENDER"
             }
           ],
+          labelsFromLocalisation: false,
           props:{
             disabled: false,
           },

@@ -27,8 +27,12 @@ const viewCertificate = {
     let data = {tenantId:tenantId, id:id, birthcertificateno: birthcertificateno, deathcertificateno:deathcertificateno, module:module};
     
     loadCertDetails(action, state, dispatch, data).then((response) => {
-      if (response && response.BirthCertificate && response.BirthCertificate.length>0) {
+      if (module=="birth" && response && response.BirthCertificate && response.BirthCertificate.length>0) {
         dispatch(prepareFinalObject("bnd.viewCertDetails", response.BirthCertificate[0]));
+      }
+      else
+      if (module=="death" && response && response.DeathCertificate && response.DeathCertificate.length>0) {
+        dispatch(prepareFinalObject("bnd.viewCertDetails", response.DeathCertificate[0]));
       }
     });
 

@@ -490,11 +490,11 @@ export const loadFullCertDetails = async (action, state, dispatch,data) => {
     { key: "id", value: data.id}    
   ];
 
+  let payload = null;
   try{
-    let payload = null;
     payload = await httpRequest(
       "post",
-      `/birth-death-services/${data.module}/_viewCertData`,
+      `/birth-death-services/${data.module}/_viewfullCertData`,
       "_viewCertData",
       queryParams,
       requestBody
@@ -511,6 +511,7 @@ export const loadFullCertDetails = async (action, state, dispatch,data) => {
       "error"
     );
     console.error(e);
+    return payload;
     //return {"RequestInfo":{"apiId":"Mihy","ver":".01","ts":null,"resMsgId":"uief87324","msgId":"20170310130900|en_IN","status":"successful"},"BirthCertificate":[{"id":"1","createdby":null,"createdtime":null,"dateofbirth":1614063655148,"dateofreport":1614063655148,"firstname":"san","gender":1,"hospitalname":null,"informantsaddress":null,"informantsname":null,"lastname":null,"middlename":null,"placeofbirth":"Bangalore","registrationno":"2021-1","remarks":null,"lastmodifiedby":null,"lastmodifiedtime":null,"counter":0,"tenantid":null,"fullname":"SRI V S","birthFatherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"R S H"},"birthMotherInfo":{"id":null,"aadharno":null,"createdby":null,"createdtime":null,"education":null,"emailid":null,"firstname":"abc1","lastname":null,"middlename":null,"mobileno":null,"nationality":null,"proffession":null,"religion":null,"lastmodifiedby":null,"lastmodifiedtime":null,"fullname":"S V H"},"birthPermaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"},"birthPresentaddr":{"fullAddress":"100 112 CROSS 108 Church Servant Qtr. Jalapahar"}}]};
   }
 }

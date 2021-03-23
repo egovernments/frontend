@@ -110,7 +110,7 @@ export const searchApiCall = async (state, dispatch) => {
       id: get(item, "id"),
       registrationNo: get(item, "registrationno"),
       nameOfChild: get(item, "fullName"),
-      dateOfbirth: get(item, "dateofbirth"),
+      dateOfbirth: get(item, "dateofbirthepoch"),
       gender:  getGenderValue(get(item, "gender")),
       mothersName: get(item, "birthMotherInfo.fullName"),
       fathersName: get(item, "birthFatherInfo.fullName"),

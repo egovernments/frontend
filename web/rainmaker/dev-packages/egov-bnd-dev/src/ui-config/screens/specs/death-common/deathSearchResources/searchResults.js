@@ -211,7 +211,7 @@ const getViewButton = (value, tableMeta) => {
       }}
       onClick={value => {
           let id = tableMeta.rowData[0];
-          let url = `/death-employee/newRegistration?action=VIEW&certificateId=${id}&module=death`;
+          let url = `/bnd-common/fullViewCertificate?tenantId=${tenantId}&certificateId=${id}&module=death`;
           document.location.href = `${document.location.origin}${url}`;
       }}
     >
