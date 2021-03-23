@@ -186,13 +186,17 @@ export const additionDetails = getCommonCard({
               key : 'waterSourceType',
               fieldType : "autosuggest",
               className:"applicant-details-error autocomplete-dropdown",
-              callBack: waterSourceTypeChange 
+              callBack: waterSourceTypeChange,
+              isRequired: false,
+              requiredValue: false
             },
             {
               key : 'waterSubSource',
               fieldType : "autosuggest",
               className:"applicant-details-error autocomplete-dropdown",
-              callBack: waterSubSourceChange 
+              callBack: waterSubSourceChange,
+              isRequired: false,
+              requiredValue: false
             }
           ],
           moduleName: "ws-services-masters",
