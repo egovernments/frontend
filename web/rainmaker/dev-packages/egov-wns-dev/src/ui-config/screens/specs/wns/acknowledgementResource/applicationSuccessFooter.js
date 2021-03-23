@@ -9,6 +9,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { generateWSAcknowledgement } from "egov-ui-kit/utils/pdfUtils/generateWSAcknowledgement";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import cloneDeep from "lodash/cloneDeep";
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
+
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
