@@ -246,7 +246,8 @@ export const DownloadAndPrint = (state,
       onClickDefination: {
         action: "condition",
         callBack: () => { handleAppDownloadAndPrint(state, dispatch, "print") }
-      }
+      },
+      visible : !JSON.parse(localStorageGet('isMobileApp'))
     }
   })
 
