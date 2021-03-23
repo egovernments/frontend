@@ -1726,3 +1726,64 @@ export const getDemand = async (queryObject, dispatch) => {
       );
   }
 };
+
+export const validateFieldOfWNS = (
+  objectJsonPath,
+  state,
+  dispatch,
+  screen = "apply"
+) => {
+  const fields = get(
+    state.screenConfiguration.screenConfig[screen],
+    objectJsonPath,
+    {}
+  );
+  let isFormValid = true;
+  for (var variable in fields) {
+    if (fields.hasOwnProperty(variable)) {
+      if (
+        fields[variable] && fields[variable].componentPath != "DynamicMdmsContainer" &&
+        fields[variable].props && fields[variable].jsonPath &&
+        (fields[variable].props.disabled === undefined ||
+          !fields[variable].props.disabled) &&
+        !validate(
+          screen,
+          {
+            ...fields[variable],
+            value: get(
+              state.screenConfiguration.preparedFinalObject,
+              fields[variable].jsonPath
+            )
+          },
+          dispatch,
+          true
+        )
+      ) {
+        isFormValid = false;
+      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props && fields[variable].visible != false){
+        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+        let isIndex = fields[variable].index || 0;
+        dropdownFields.forEach((item, i) => {
+          let isValid = get(
+            state.screenConfiguration.preparedFinalObject ,
+            `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
+            ''
+          );
+          if(isValid == '' || isValid == 'none' || isValid == null || isValid.includes("null")) {
+            isFormValid = false;
+            dispatch(
+              handleField(
+                "apply",
+                `${fields[variable].componentJsonpath}.props.dropdownFields[${i}]`,
+                "isRequired",
+                true
+              )
+            );
+          }
+        });
+        
+      }
+    }
+  }
+  return isFormValid;
+}; 
