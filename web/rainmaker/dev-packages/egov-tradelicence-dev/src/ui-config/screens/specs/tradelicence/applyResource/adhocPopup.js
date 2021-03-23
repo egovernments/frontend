@@ -112,14 +112,14 @@ let totalAmount = (estimateCardData) => {
     if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
       tlTax = data.value ? data.value : 0;
     }
-    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
-      commonRebate = data.value ? data.value : 0;
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_REBATE'){
+      tlTax = data.value ? tlTax+data.value : tlTax;
     }
-    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
-      commonPenalty = data.value ? data.value : 0;
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_PENALTY'){
+      tlTax = data.value ? tlTax+data.value : tlTax;
     }
     if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
-      adhocPenalty= data.value ? data.value : 0;
+      tlTax= data.value ? tlTax+data.value : tlTax;
     }
   });
     
