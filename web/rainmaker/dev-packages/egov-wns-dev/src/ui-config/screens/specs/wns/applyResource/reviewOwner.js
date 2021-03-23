@@ -630,10 +630,6 @@ const roadCuttingCharges = {
             callBack: handleNA
           }
         ),
-        reviewCompositionFee,
-        reviewUserCharges,
-        reviewOthersFee
-
     }),
     items: [],
     hasAddItem: false,
@@ -646,9 +642,9 @@ const roadCuttingCharges = {
 }
 
 const roadCuttingExtraCharges = getCommonContainer({
-  // reviewCompositionFee,
-  // reviewUserCharges,
-  // reviewOthersFee
+  reviewCompositionFee,
+  reviewUserCharges,
+  reviewOthersFee
 });
 
 const activationDetails = getCommonContainer({
