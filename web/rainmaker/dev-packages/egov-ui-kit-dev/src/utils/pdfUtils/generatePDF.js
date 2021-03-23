@@ -42,6 +42,11 @@ const font = {
         normal: "latha.ttf",
         italics: "latha.ttf",
       },
+    telugu: {
+        bold: "gautamib.ttf",
+        normal: "gautami.ttf",
+        italics: "gautami.ttf",
+      },
     SakalBharati: {
         bold: "SakalBharati.ttf",
         normal: "SakalBharati.ttf",
