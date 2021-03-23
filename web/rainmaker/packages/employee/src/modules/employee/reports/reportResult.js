@@ -31,32 +31,43 @@ import pdfFonts from "./vfs_fonts";
 const vfs = { ...pdfFonts.vfs }
 const font = {
     Camby: {
-        normal: 'Cambay-Regular.ttf',
-        bold: 'Cambay-Regular.ttf',
-        italics: 'Cambay-Regular.ttf',
-        bolditalics: 'Cambay-Regular.ttf',
+      normal: 'Cambay-Regular.ttf',
+      bold: 'Cambay-Regular.ttf',
+      italics: 'Roboto-Regular.ttf',
+      bolditalics: 'Cambay-Regular.ttf',
 
-      },
-      kannada: {
-          bold: "tungab.ttf",
-          normal: "tunga.ttf",
-          italics: "tunga.ttf",
-        },
-      malyalam: {
-          bold: "kartika-bold.ttf",
-          normal: "kartika-regular.ttf",
-          italics: "kartika-regular.ttf",
-        },
-      tamil: {
-          bold: "lathab.ttf",
-          normal: "latha.ttf",
-          italics: "latha.ttf",
-        },
-      SakalBharati: {
-          bold: "SakalBharati.ttf",
-          normal: "SakalBharati.ttf",
-          italics: "SakalBharati.ttf",
-        }
+  },
+  Roboto: {
+      normal: 'Roboto-Regular.ttf',
+      bold: 'Roboto-Regular.ttf',
+      italics: 'Roboto-Regular.ttf',
+      bolditalics: 'Roboto-Regular.ttf',
+  },
+  kannada: {
+      bold: "tungab.ttf",
+      normal: "tunga.ttf",
+      italics: "tunga.ttf",
+    },
+  malyalam: {
+      bold: "kartika-bold.ttf",
+      normal: "kartika-regular.ttf",
+      italics: "kartika-regular.ttf",
+    },
+  tamil: {
+      bold: "lathab.ttf",
+      normal: "latha.ttf",
+      italics: "latha.ttf",
+    },
+  telugu: {
+      bold: "gautamib.ttf",
+      normal: "gautami.ttf",
+      italics: "gautami.ttf",
+    },
+  SakalBharati: {
+      bold: "SakalBharati.ttf",
+      normal: "SakalBharati.ttf",
+      italics: "SakalBharati.ttf",
+    }
 };
 pdfMake.vfs = vfs;
 pdfMake.fonts = font;
