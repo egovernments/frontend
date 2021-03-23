@@ -565,6 +565,7 @@ export const applicantDetails = getCommonCard({
             }
           ],
           required: true,
+          callBackEdit: ()=>{},
           moduleName: "common-masters",
           masterName: "OwnerShipCategory",
           rootBlockSub : 'applicantDetails',

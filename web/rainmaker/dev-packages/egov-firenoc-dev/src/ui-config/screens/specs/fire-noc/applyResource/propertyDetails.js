@@ -263,6 +263,7 @@ const commonBuildingData = buildingType => {
             callBack: buildingSubUsageTypeChange
           }
         ],
+        callBackEdit: ()=>{},
         moduleName: "firenoc",
         masterName: "BuildingType",
         rootBlockSub : 'buildings',
