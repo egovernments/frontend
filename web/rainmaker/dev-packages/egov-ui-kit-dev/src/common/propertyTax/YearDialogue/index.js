@@ -133,7 +133,7 @@ const mapStateToProps = (state) => {
   const { common, form } = state;
   const { generalMDMSDataById } = common;
   const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
-  const getYearList = FinancialYear && Object.keys(FinancialYear);
+  const getYearList = FinancialYear?Object.keys(FinancialYear).sort().reverse():null;
   return { getYearList, form };
 };
 

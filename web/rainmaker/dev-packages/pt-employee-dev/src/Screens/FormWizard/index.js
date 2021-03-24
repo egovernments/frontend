@@ -780,6 +780,88 @@ class FormWizard extends Component {
                       }
                     }
                     if (floorValidation) {
+                      		
+                      const isbussiFormValid = validateForm(bussinessDetails);
+                      let getUsageType = get(form, "basicInformation.fields.typeOfUsage.value", "");
+                      if (getUsageType === "COMMERCIAL") {
+                        if (isbussiFormValid) {
+                          let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
+                          let intPlot = parseInt(getPlotSizeValue);
+                           if(intPlot < 0)
+                           {
+                             alert("Please Enter the plot size greater than 0 sq yards")
+                             displayFormErrorsAction("plotDetails");
+                             break;
+     
+                           }
+                           else{
+                            callDraft(this);
+                            window.scrollTo(0, 0);
+                            this.setState({
+                              selected: index,
+                              formValidIndexArray: [...formValidIndexArray, selected]
+                            });
+                           }
+                        }
+                        else {
+                          displayFormErrorsAction("bussinessDetails");
+                          break;
+                        }
+                      }
+                      let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
+                     let intPlot = parseInt(getPlotSizeValue);
+                      if(intPlot < 0)
+                      {
+                        alert("Please Enter the plot size greater than 0 sq yards")
+                        displayFormErrorsAction("plotDetails");
+                        break;
+                      }
+                      else{
+                        callDraft(this);
+                        window.scrollTo(0, 0);
+                        this.setState({
+                          selected: index,
+                          formValidIndexArray: [...formValidIndexArray, selected]
+                        });
+                      }
+                    }
+                  } else {
+                    const isbussiFormValid = validateForm(bussinessDetails);
+                    let getUsageType = get(form, "basicInformation.fields.typeOfUsage.value", "");
+                    if (getUsageType === "COMMERCIAL") {
+                      let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
+                      let intPlot = parseInt(getPlotSizeValue);
+                       if(intPlot < 0)
+                       {
+                         alert("Please Enter the plot size greater than 0 sq yards")
+                         displayFormErrorsAction("plotDetails");
+                         break;
+  
+                       }
+                      if (isbussiFormValid) {
+                        callDraft(this);
+                        window.scrollTo(0, 0);
+                        this.setState({
+                          selected: index,
+                          formValidIndexArray: [...formValidIndexArray, selected]
+                        });
+                      }
+                      else {
+                        displayFormErrorsAction("bussinessDetails");
+                        break;
+                      }
+                    }
+ 
+                     else{
+                      let getPlotSizeValue = get(form, "plotDetails.fields.plotSize.value", "");
+                      let intPlot = parseInt(getPlotSizeValue);
+                       if(intPlot < 0)
+                       {
+                         alert("Please Enter the plot size greater than 0 sq yards")
+                         displayFormErrorsAction("plotDetails");
+                         break;
+  
+                       }
                       callDraft(this);
                       window.scrollTo(0, 0);
                       this.setState({

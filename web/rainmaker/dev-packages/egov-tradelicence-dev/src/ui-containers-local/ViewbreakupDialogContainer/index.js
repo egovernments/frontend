@@ -165,8 +165,8 @@ class ViewBreakupContainer extends React.Component {
       classes,
       estimateCardData
     } = this.props;
-    const RebateArray=estimateCardData&&estimateCardData.length>1  && estimateCardData.filter(item => item.name.labelKey === "TL_RENEWAL_REBATE");
-    const PenaltyArray=estimateCardData && estimateCardData.length>1 &&estimateCardData.filter(item => item.name.labelKey === "TL_RENEWAL_PENALTY");
+    const RebateArray=estimateCardData&&estimateCardData.length>1  && estimateCardData.filter(item => item.name.labelKey === "TL_REBATE");
+    const PenaltyArray=estimateCardData && estimateCardData.length>1 &&estimateCardData.filter(item => item.name.labelKey === "TL_PENALTY");
     const RebateTotal=RebateArray&& get(RebateArray[0],"value",0);
     const PenaltyTotal=PenaltyArray&& get(PenaltyArray[0],"value",0);
     const { style } = this.state;
@@ -244,10 +244,10 @@ class ViewBreakupContainer extends React.Component {
                 accessoriesUnitData.length > 0 &&
                 getGridItem(accessoriesTotal, classes)}
              {RebateArray&&RebateArray.length>0 && (
-              this.getRebatePenalty("TL_RENEWAL_REBATE",RebateTotal,classes,style)
+              this.getRebatePenalty("TL_REBATE",RebateTotal,classes,style)
               )}
               {PenaltyArray&&PenaltyArray.length >0 && (
-              this.getRebatePenalty("TL_RENEWAL_PENALTY",PenaltyTotal,classes,style)
+              this.getRebatePenalty("TL_PENALTY",PenaltyTotal,classes,style)
               )}
               {getGridItem(totalBill, classes, style)}
             </div>
@@ -266,10 +266,10 @@ class ViewBreakupContainer extends React.Component {
                 />
               </div>
               {RebateArray&&RebateArray.length>0 && (
-              this.getRebatePenalty("TL_RENEWAL_REBATE",RebateTotal,classes,style)
+              this.getRebatePenalty("TL_REBATE",RebateTotal,classes,style)
               )}
               {PenaltyArray&&PenaltyArray.length >0 && (
-              this.getRebatePenalty("TL_RENEWAL_PENALTY",PenaltyTotal,classes,style)
+              this.getRebatePenalty("TL_PENALTY",PenaltyTotal,classes,style)
               )}
               {getGridItem(totalBill, classes, style)}
             </div>

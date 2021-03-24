@@ -136,6 +136,23 @@ const formConfig = {
       pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i,
       toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64
+    },
+    UID: {
+      id: "UID",
+      type: "textfield",
+      className: "pt-old-pid-text-field",
+      // text: "PT_SEARCH_BUTTON",
+      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      jsonPath: "Properties[0].surveyId",
+      floatingLabelText: "Survey Id/UID",
+      hintText: "Enter Survey Id/UID",
+      numcols: 6,
+      errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      // toolTip: true,
+      //pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
+      // toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
+      maxLength: 64,
     }
   },
   afterInitForm: (action, store, dispatch) => {

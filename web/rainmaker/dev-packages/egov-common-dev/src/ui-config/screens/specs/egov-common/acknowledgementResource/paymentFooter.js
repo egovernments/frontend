@@ -28,7 +28,7 @@ const getCommonApplyFooter = (children) => {
 const defaultValues = {
     "code": "DEFAULT",
     "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
-    "receiptKey": "consolidatedreceipt",
+    "receiptKey": "property-receipt",
     "billKey": "consolidatedbill",
     "buttons": [
         {

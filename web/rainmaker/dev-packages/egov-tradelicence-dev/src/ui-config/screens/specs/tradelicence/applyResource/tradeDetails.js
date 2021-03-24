@@ -865,6 +865,21 @@ export const tradeDetails = getCommonCard({
       },
       pattern: getPattern("NoOfEmp"),
       jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees"
+    }),
+    tradeLegacyReceipt: getTextField({
+      label: {
+        labelName: "Old Receipt No.",
+        labelKey: "Old Receipt No."
+      },
+      props:{
+        className:"applicant-details-error",
+        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+      },
+      placeholder: {
+        labelName: "Enter Old Receipt No.",
+        labelKey: "Enter Old Receipt No."
+      },
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.oldReceiptNumber"
     })
   },
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
