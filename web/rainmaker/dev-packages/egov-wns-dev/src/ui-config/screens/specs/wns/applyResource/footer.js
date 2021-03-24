@@ -398,7 +398,7 @@ const callBackForNext = async (state, dispatch) => {
                       _.capitalize(serviceConst.SEWERAGE)
                     )
                   );
-                  await applyForSewerage(state, dispatch);
+                  if (!window.location.href.includes("mode=MODIFY&action=edit")) await applyForSewerage(state, dispatch);
                 } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated)) {
                   dispatch(
                     prepareFinalObject(
@@ -406,7 +406,7 @@ const callBackForNext = async (state, dispatch) => {
                       _.capitalize(serviceConst.WATER)
                     )
                   );
-                  await applyForWater(state, dispatch);
+                  if (!window.location.href.includes("mode=MODIFY&action=edit")) await applyForWater(state, dispatch);
                 }
               } else if (waterChecked && sewerChecked) {
                 dispatch(
@@ -415,7 +415,7 @@ const callBackForNext = async (state, dispatch) => {
                     "Water And Sewerage"
                   )
                 );
-                if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (waterData.length === 0 && sewerData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (waterChecked) {
                 dispatch(
                   prepareFinalObject(
@@ -423,10 +423,10 @@ const callBackForNext = async (state, dispatch) => {
                     _.capitalize(serviceConst.WATER)
                   )
                 );
-                if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (waterData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (sewerChecked) {
                 dispatch(prepareFinalObject("applyScreen.service", _.capitalize(serviceConst.SEWERAGE)))
-                if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (sewerData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               }
             }
           } else {
@@ -459,6 +459,17 @@ const callBackForNext = async (state, dispatch) => {
       }
     }
     prepareDocumentsUploadData(state, dispatch);
+
+
+
+
+
+
+
+
+
+
+
   }
 
   /* validations for Additional /Docuemnts details screen */
@@ -617,19 +628,6 @@ const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
-      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
-        for (let i = 0; i < roadCuttingInfo.length; i++) {
-          if (roadCuttingInfo[i] == undefined) {
-            roadCuttingInfo[i] = {};
-            roadCuttingInfo[i].isEmpty = true;
-          }
-        }
-        let filteredInfo = [];
-        roadCuttingInfo.map(info => {
-          if(info.isDeleted !=false) filteredInfo.push(info);
-        });
-        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
-      }
       let applicationStatus = get(state.screenConfiguration.preparedFinalObject, "applyScreen.applicationStatus", "");
       if(applicationStatus === "PENDING_FOR_CONNECTION_ACTIVATION") {
         let waterSourceType = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", "");
@@ -684,6 +682,19 @@ const callBackForNext = async (state, dispatch) => {
           dispatch(toggleSnackbar(true, errorMessage, "warning"));
           return
         }
+      }
+      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+        for (let i = 0; i < roadCuttingInfo.length; i++) {
+          if (roadCuttingInfo[i] == undefined) {
+            roadCuttingInfo[i] = {};
+            roadCuttingInfo[i].isEmpty = true;
+          }
+        }
+        let filteredInfo = [];
+        roadCuttingInfo.map(info => {
+          if(info.isDeleted !=false) filteredInfo.push(info);
+        });
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
       
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
@@ -750,9 +761,18 @@ const moveToSuccess = (combinedArray, dispatch) => {
   const tenantId = get(combinedArray[0].property, "tenantId") || get(combinedArray[0], "tenantId");
   const purpose = "apply";
   const status = "success";
-  const applicationNoWater = get(combinedArray[0], "applicationNo");
-  const applicationNoSewerage = get(combinedArray[1], "applicationNo");
-  let mode = (isModifyMode()) ? "&mode=MODIFY" : ""
+  let applicationNoWater = get(combinedArray[0], "applicationNo");
+  let applicationNoSewerage = get(combinedArray[1], "applicationNo");
+  let mode = (isModifyMode()) ? "&mode=MODIFY" : "";
+  if(isModifyMode()) {
+    if (get(combinedArray[0], "applicationNo").includes("WS")) {
+      applicationNoWater = get(combinedArray[0], "applicationNo");
+      applicationNoSewerage = "";
+    } else {
+      applicationNoSewerage = get(combinedArray[0], "applicationNo");
+      applicationNoWater  = "";
+    }
+  }
   if (applicationNoWater && applicationNoSewerage) {
     dispatch(
       setRoute(
