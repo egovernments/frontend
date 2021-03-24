@@ -24,8 +24,8 @@ export const searchResults = {
                 { key: "tenantId", value: tableMeta.rowData[8] },
                 { key: "businessService", value: tableMeta.rowData[9] }
               ]
-              download(receiptQueryString , "download" ,tableMeta.rowData[7]) ;
-            }} style={{color:'#2196F3'}}>
+              tableMeta.rowData.includes("CANCELLED") ? null : download(receiptQueryString , "download" ,tableMeta.rowData[7]) ;
+            }} style={{color: tableMeta.rowData.includes("CANCELLED") ? 'rgba(0, 0, 0, 0.87)' : '#2196F3'}}>
               {value}
             </div>
           )
