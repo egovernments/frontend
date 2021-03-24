@@ -331,7 +331,7 @@ export const getData = async (action, state, dispatch) => {
       // For Modify connection details
       if (isModifyMode() && !isModifyModeAction()) {
         // this delete for initiate modify connection 
-        delete combinedArray[0].id; combinedArray[0].documents = [];
+        if (!window.location.href.includes("mode=MODIFY&action=edit")) delete combinedArray[0].id; combinedArray[0].documents = [];
       }
       if (isModifyMode() && isModifyModeAction()) {
         // ModifyEdit should not call create.
