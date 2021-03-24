@@ -67,7 +67,7 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Date of Birth"
           },
           {
-            jsonPath: inJsonPath + ".dateofbirth",
+            jsonPath: inJsonPath + ".dateofbirthepoch",
             callBack: convertEpochToDate
           }
         ),
@@ -191,7 +191,7 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Date of Registration"
           },
           {
-            jsonPath: inJsonPath + ".dateofreport",
+            jsonPath: inJsonPath + ".dateofreportepoch",
             callBack: convertEpochToDate
           }
         ),

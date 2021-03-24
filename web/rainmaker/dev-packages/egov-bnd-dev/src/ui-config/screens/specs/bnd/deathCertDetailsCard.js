@@ -67,7 +67,7 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
             labelKey: "Date of Death"
           },
           {
-            jsonPath: inJsonPath + ".dateofdeath",
+            jsonPath: inJsonPath + ".dateofdeathepoch",
             callBack: convertEpochToDate
           }
         ),
@@ -191,7 +191,7 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
             labelKey: "Date of Registration"
           },
           {
-            jsonPath: inJsonPath + ".dateofreport",
+            jsonPath: inJsonPath + ".dateofreportepoch",
             callBack: convertEpochToDate
           }
         ),
