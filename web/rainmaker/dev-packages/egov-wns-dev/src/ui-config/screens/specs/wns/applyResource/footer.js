@@ -605,6 +605,11 @@ const callBackForNext = async (state, dispatch) => {
         if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
           setReviewPageRoute(state, dispatch);
         }
+        let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+        if (roadCuttingInfo && roadCuttingInfo.length > 0) {
+          let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.emptyObj !== true);
+          dispatch(prepareFinalObject("applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+        }
       }
       else {
         isFormValid = false;
@@ -691,9 +696,26 @@ const callBackForNext = async (state, dispatch) => {
           }
         }
         let filteredInfo = [];
-        roadCuttingInfo.map(info => {
-          if(info.isDeleted !=false) filteredInfo.push(info);
+        roadCuttingInfo.forEach(info => {
+          if(info.isDeleted ==false) {
+            info.status = "INACTIVE"
+          }
         });
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfos", roadCuttingInfo));
+        for(let j = 0; j < roadCuttingInfo.length; j ++) {
+          if(roadCuttingInfo[j].isDeleted !=false) {
+            filteredInfo.push(roadCuttingInfo[j]);
+          } else {
+            filteredInfo.push({emptyObj: true})
+          }
+        }
+        // roadCuttingInfo.forEach(info => {
+        //   if(info.isDeleted !=false) filteredInfo.push(info);
+        //   else filteredInfo.push({isEmpty: true})
+        // });
+        // roadCuttingInfo.map(info => {
+        //   if(info.isDeleted !=false) filteredInfo.push(info);
+        // });
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
       
