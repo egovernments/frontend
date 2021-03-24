@@ -216,6 +216,14 @@ class WorkFlowContainer extends React.Component {
           data = beforeSubmitHook(data);
         }
       }
+
+      if (window.location.href.includes("wns/search-preview")) {
+          if(data.roadCuttingInfo && data.roadCuttingInfo.length > 0) {
+            data.roadCuttingInfo = [];
+            data.roadCuttingInfo = data.roadCuttingInfos || [];
+            data.roadCuttingInfos = [];
+          }
+      }
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
