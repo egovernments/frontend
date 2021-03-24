@@ -606,8 +606,11 @@ const callBackForNext = async (state, dispatch) => {
           setReviewPageRoute(state, dispatch);
         }
         let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+        let raodCuttingInfos = get(state, "screenConfiguration.preparedFinalObject.applyScreen.raodCuttingInfos", []);
+  
         if (roadCuttingInfo && roadCuttingInfo.length > 0) {
-          let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.emptyObj !== true);
+          dispatch(prepareFinalObject("applyScreen.tempRoadCuttingInfo", roadCuttingInfo));
+          let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.emptyObj !== true); 
           dispatch(prepareFinalObject("applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
         }
       }
@@ -633,6 +636,8 @@ const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+      let roadCuttingInfos = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfos", []);
+
       let applicationStatus = get(state.screenConfiguration.preparedFinalObject, "applyScreen.applicationStatus", "");
       if(applicationStatus === "PENDING_FOR_CONNECTION_ACTIVATION") {
         let waterSourceType = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", "");
@@ -686,6 +691,13 @@ const callBackForNext = async (state, dispatch) => {
           };
           dispatch(toggleSnackbar(true, errorMessage, "warning"));
           return
+        }
+      }
+      if(roadCuttingInfos && roadCuttingInfos.length > 0) {
+        for(let b =0; b < roadCuttingInfo.length ; b++) {
+          if(get(roadCuttingInfos[b], "status") == "INACTIVE") {
+            roadCuttingInfo.push(roadCuttingInfos[b]);
+          }
         }
       }
       if(roadCuttingInfo && roadCuttingInfo.length > 0) {
