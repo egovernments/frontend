@@ -114,7 +114,7 @@ export const wnsApplication = getCommonCard({
             sm: 4
         },
         required: false,
-        pattern: /^[a-zA-Z0-9-]*$/i,
+        // pattern: /^[a-zA-Z0-9-]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "searchConnection.oldConnectionNumber"
     })
