@@ -118,7 +118,7 @@ export const searchApiCall = async (state, dispatch) => {
       id: get(item, "id"),
       registrationNo: get(item, "registrationno"),
       nameOfChild: get(item, "fullName"),
-      dateOfdeath: get(item, "dateofdeathepoch"),
+      dateOfdeath: get(item, "dateofdeath"),
       gender:  getGenderValue(get(item, "gender")),
       mothersName: get(item, "deathMotherInfo.fullName"),
       fathersName: get(item, "deathFatherInfo.fullName"),

@@ -253,7 +253,7 @@ export const getFullDeathCertDetailsCard = (inJsonPath) =>
               labelKey: "BND_DOR_PLACEHOLDER"
             },
             {
-              jsonPath: inJsonPath + ".dateofreportepoch",
+              jsonPath: inJsonPath + ".dateofreport",
               callBack: convertEpochToDate
             }
           )
@@ -278,7 +278,7 @@ export const getFullDeathCertDetailsCard = (inJsonPath) =>
             labelKey: "BND_DEATH_DOB"
           },
           {
-            jsonPath: inJsonPath + ".dateofdeathepoch",
+            jsonPath: inJsonPath + ".dateofdeath",
             callBack: convertEpochToDate
           }
         ),

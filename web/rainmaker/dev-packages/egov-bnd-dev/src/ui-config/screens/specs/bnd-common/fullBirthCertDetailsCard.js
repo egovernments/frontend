@@ -293,7 +293,7 @@ export const getFullBirthCertDetailsCard = (inJsonPath) =>
               labelKey: "BND_DOR_PLACEHOLDER"
             },
             {
-              jsonPath: inJsonPath + ".dateofreportepoch",
+              jsonPath: inJsonPath + ".dateofreport",
               callBack: convertEpochToDate
             }
           )
@@ -318,7 +318,7 @@ export const getFullBirthCertDetailsCard = (inJsonPath) =>
             labelKey: "BND_BIRTH_DOB"
           },
           {
-            jsonPath: inJsonPath + ".dateofbirthepoch",
+            jsonPath: inJsonPath + ".dateofbirth",
             callBack: convertEpochToDate
           }
         ),
