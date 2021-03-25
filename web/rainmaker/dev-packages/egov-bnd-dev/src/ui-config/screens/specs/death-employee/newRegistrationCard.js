@@ -411,11 +411,11 @@ export const newRegistrationForm = getCommonCard(
                 disabled:false,//getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
                 label: {
                   labelName: "Select Hospital",
-                  labelKey: "BND_DEATH_APPL_HOSP"
+                  labelKey: "BND_HOSPITALNAME_LABEL"
                 },
                 placeholder: {
                   labelName: "Select Hospital",
-                  labelKey: "BND_DEATH_APPL_HOSP_PLACEHOLDER"
+                  labelKey: "BND_HOSPITALNAME_LABEL_PLACEHOLDER"
                 },
                 localePrefix: {
                   moduleName: "TENANT",
