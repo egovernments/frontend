@@ -311,7 +311,7 @@ const callBackForNext = async (state, dispatch) => {
                       _.capitalize(serviceConst.SEWERAGE)
                     )
                   );
-                  await applyForSewerage(state, dispatch);
+                  if (!window.location.href.includes("mode=MODIFY&action=edit")) await applyForSewerage(state, dispatch);
                 } else if ((waterChecked && waterData.length === 0) || (isModifyMode() && waterData.length === 1 && !modifyAppCreated)) {
                   dispatch(
                     prepareFinalObject(
@@ -319,7 +319,7 @@ const callBackForNext = async (state, dispatch) => {
                       _.capitalize(serviceConst.WATER)
                     )
                   );
-                  await applyForWater(state, dispatch);
+                  if (!window.location.href.includes("mode=MODIFY&action=edit")) await applyForWater(state, dispatch);
                 }
               } else if (waterChecked && sewerChecked) {
                 dispatch(
@@ -328,7 +328,7 @@ const callBackForNext = async (state, dispatch) => {
                     "Water And Sewerage"
                   )
                 );
-                if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (waterData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (waterChecked) {
                 dispatch(
                   prepareFinalObject(
@@ -339,7 +339,7 @@ const callBackForNext = async (state, dispatch) => {
                 if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (sewerChecked) {
                 dispatch(prepareFinalObject("applyScreen.service", _.capitalize(serviceConst.SEWERAGE)))
-                if (sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (sewerData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               }
             }
           } else {
@@ -472,6 +472,61 @@ const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+      let applicationStatus = get(state.screenConfiguration.preparedFinalObject, "applyScreen.applicationStatus", "");
+      if(applicationStatus === "PENDING_FOR_CONNECTION_ACTIVATION") {
+        let waterSourceType = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", "");
+        let waterSubSource = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", "");
+        if(waterSourceType == null || waterSourceType == "null" || waterSourceType == "NA") {
+          dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", ""));
+        }
+        if(waterSubSource.includes("null") || waterSubSource == "NA") {
+          dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSubSource", ""));
+        }
+      }
+
+      // Multiple roadtype cards validations
+      let multipleRoadTypeCardPath = "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.roadCuttingChargeContainer.children.cardContent.children.applicantTypeContainer.children.roadCuttingChargeInfoCard.children.multipleApplicantInfo.props.items";
+      let multipleRoadTypeCardItems = get(
+        state.screenConfiguration.screenConfig.apply,
+        multipleRoadTypeCardPath,
+        []
+      );
+      let isMultipleRoadTypeCardValid = true;
+      for (var j = 0; j < multipleRoadTypeCardItems.length; j++) {
+        if (
+          (multipleRoadTypeCardItems[j].isDeleted === undefined ||
+            multipleRoadTypeCardItems[j].isDeleted !== false) &&
+          !validateFields(
+            `${multipleRoadTypeCardPath}[${j}].item${j}.children.cardContent.children.roadDetails.children`,
+            state,
+            dispatch,
+            "apply"
+          )
+        )
+        isMultipleRoadTypeCardValid = false;
+      }
+
+      if(!isMultipleRoadTypeCardValid) {
+        let errorMessage = {
+          labelName: "Please fill all mandatory fields!",
+          labelKey: "WS_FILL_REQUIRED_FIELDS"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return
+      }
+
+      if(applicationStatus === "PENDING_FOR_CONNECTION_ACTIVATION") {
+        let connectionDetailsCard = validateFieldOfWNS("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children", state, dispatch, "apply");
+        let activeDetailsCard = validateFields("components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children", state, dispatch, "apply");
+        if(!activeDetailsCard || !connectionDetailsCard) {
+          let errorMessage = {
+            labelName: "Please fill all mandatory fields!",
+            labelKey: "WS_FILL_REQUIRED_FIELDS"
+          };
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          return
+        }
+      }
       if(roadCuttingInfo && roadCuttingInfo.length > 0) {
         for (let i = 0; i < roadCuttingInfo.length; i++) {
           if (roadCuttingInfo[i] == undefined) {
@@ -485,42 +540,11 @@ const callBackForNext = async (state, dispatch) => {
         });
         dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
+      
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
       isFormValid = true;
-    }
-    let billingType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.billingType");
-    if(billingType === "STANDARD") {
-      dispatch(
-        handleField(
-          "apply", 
-          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewBillingAmount",
-           "visible",
-           false
-        )
-      );
-    }
-    let unitUsageTypee = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
-    if(unitUsageTypee != "MIXED") {
-      dispatch(
-        handleField(
-          "apply", 
-          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewUnitUsageType",
-           "visible",
-           false
-        )
-      );
-    }
-    if(!(getQueryArg(window.location.href, "action") === "edit")) {
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewModificationsDetails",
-          "visible",
-          false
-        )
-      );
     }
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
@@ -581,9 +605,18 @@ const moveToSuccess = (combinedArray, dispatch) => {
   const tenantId = get(combinedArray[0].property, "tenantId");
   const purpose = "apply";
   const status = "success";
-  const applicationNoWater = get(combinedArray[0], "applicationNo");
-  const applicationNoSewerage = get(combinedArray[1], "applicationNo");
-  let mode = (isModifyMode()) ? "&mode=MODIFY" : ""
+  let applicationNoWater = get(combinedArray[0], "applicationNo");
+  let applicationNoSewerage = get(combinedArray[1], "applicationNo");
+  let mode = (isModifyMode()) ? "&mode=MODIFY" : "";
+  if(isModifyMode()) {
+    if (get(combinedArray[0], "applicationNo").includes("WS")) {
+      applicationNoWater = get(combinedArray[0], "applicationNo");
+      applicationNoSewerage = "";
+    } else {
+      applicationNoSewerage = get(combinedArray[0], "applicationNo");
+      applicationNoWater  = "";
+    }
+  }
   if (applicationNoWater && applicationNoSewerage) {
     dispatch(
       setRoute(
