@@ -508,7 +508,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
-      const tradeTemp = updatedtradeUnits.map((item, index) => {
+      const tradeTemp = updatedtradeUnits && updatedtradeUnits.map((item, index) => {
         return {
           tradeSubType: item.tradeType.split(".")[1],
           tradeType: item.tradeType.split(".")[0]
