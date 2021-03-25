@@ -34,19 +34,21 @@ class WorkFlowContainer extends React.Component {
       { key: "history", value: true },
       { key: "tenantId", value: tenantId }
     ];
-    try {
-      const payload = await httpRequest(
-        "post",
-        "egov-workflow-v2/egov-wf/process/_search",
-        "",
-        queryObject
-      );
-      if (payload && payload.ProcessInstances.length > 0) {
-        const processInstances = orderWfProcessInstances(
-          payload.ProcessInstances
+    if (this.props.moduleName === "NewWS1" || this.props.moduleName === "NewSW1") {
+      try {
+        const payload = await httpRequest(
+          "post",
+          "egov-workflow-v2/egov-wf/process/_search",
+          "",
+          queryObject
         );
-        addWflowFileUrl(processInstances, prepareFinalObject);
-      } else {
+        if (payload && payload.ProcessInstances.length >= 0) {
+          const processInstances = orderWfProcessInstances(
+            payload.ProcessInstances
+          );
+          addWflowFileUrl(processInstances, prepareFinalObject);
+        }
+      } catch (e) {
         toggleSnackbar(
           true,
           {
@@ -56,15 +58,40 @@ class WorkFlowContainer extends React.Component {
           "error"
         );
       }
-    } catch (e) {
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Workflow returned empty object !",
-          labelKey: "WRR_WORKFLOW_ERROR"
-        },
-        "error"
-      );
+    }
+    else {
+      try {
+        const payload = await httpRequest(
+          "post",
+          "egov-workflow-v2/egov-wf/process/_search",
+          "",
+          queryObject
+        );
+        if (payload && payload.ProcessInstances.length > 0) {
+          const processInstances = orderWfProcessInstances(
+            payload.ProcessInstances
+          );
+          addWflowFileUrl(processInstances, prepareFinalObject);
+        } else {
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Workflow returned empty object !",
+              labelKey: "WRR_WORKFLOW_ERROR"
+            },
+            "error"
+          );
+        }
+      } catch (e) {
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Workflow returned empty object !",
+            labelKey: "WRR_WORKFLOW_ERROR"
+          },
+          "error"
+        );
+      }
     }
   };
 
