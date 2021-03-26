@@ -79,6 +79,7 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "TradeLicense",
           masterDetails: [
+            { name: "TradeType" },
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" },
             { name: "documentObj" }
@@ -115,6 +116,11 @@ export const getMdmsData = async (action, state, dispatch) => {
       "_search",
       [],
       mdmsBody
+    );
+    set(
+      payload,
+      "MdmsRes.TradeLicense.MdmsTradeType",
+      get(payload, "MdmsRes.TradeLicense.TradeType", [])
     );
     const localities = get(
       state.screenConfiguration,
