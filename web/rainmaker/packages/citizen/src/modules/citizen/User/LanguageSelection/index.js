@@ -20,6 +20,13 @@ class LanguageSelection extends Component {
     let lang = getQueryArg(window.location.href, "lang");
     if(["en_IN","hi_IN"].indexOf(lang) > -1)
       this.onClick(lang);
+    else if(["kn_IN","ml_IN","ta_IN","te_IN","mr_IN","bn_IN"].indexOf(lang) > -1)
+    {
+      var event = new Event('input', { bubbles: true });
+      event.value = lang
+      this.onChange(event);
+    }
+
   }
 
   onClick = (value) => {
