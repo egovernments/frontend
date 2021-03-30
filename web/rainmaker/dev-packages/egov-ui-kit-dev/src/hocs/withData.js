@@ -17,9 +17,10 @@ const withData = (Component) => {
         
         searchUser();
         fetchUiCommonConstants();
+        fetchComplaintCategories();
 /*         fetchpgrConstants();
         fetchUiCommonConfig();
-        fetchComplaintCategories();
+        
        fetchGeneralMDMSData(); 
         */
        

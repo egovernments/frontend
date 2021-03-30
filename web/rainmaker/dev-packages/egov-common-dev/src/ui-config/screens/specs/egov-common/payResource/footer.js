@@ -100,14 +100,14 @@ export const callPGService = async (state, dispatch) => {
   };
   let taxAndPayments = [];
   taxAndPayments.push({
-    // taxAmount:taxAmount,
-    // businessService: businessService,
+    taxAmount:taxAmount,
+    businessService: businessService,
     billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
   });
   const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
   try {
-
+    debugger;
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
 
     const requestBody = {
