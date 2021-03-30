@@ -22,7 +22,8 @@ const instance = axios.create({
 const edcrInstance = axios.create({
   baseURL: window.location.origin,
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "auth-token": getAccessToken()
   }
 })
 
@@ -153,7 +154,8 @@ export const edcrHttpRequest = async (
 ) => {
   store.dispatch(toggleSpinner());
   let apiError = "No Record Found";
-
+  const authToken = getAccessToken();
+  headers = { "Content-Type": "application/json", "auth-token": authToken }
   if (headers)
     edcrInstance.defaults = Object.assign(edcrInstance.defaults, {
       headers

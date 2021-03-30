@@ -9,7 +9,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { edcrHttpRequest } from "../../../../ui-utils/api";
@@ -165,7 +165,7 @@ const moveToSuccess = (state, dispatch, edcrDetail, isOCApp) => {
 const getSearchResultsfromEDCR = async (action, state, dispatch) => {
   try {
     let EDCRHost = "";
-
+    const authToken = getAccessToken();
     const response = await axios.post(
       `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${getTenantId()}`,
       {
@@ -185,7 +185,7 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
           }
         }
       },
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json", "auth-token": authToken } }
     );
     return response.data;
   } catch (error) {
@@ -200,6 +200,7 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
 ) => {
   try {
     let EDCRHost = "";
+    const authToken = getAccessToken();
     const response = await axios.post(
       `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
       {
@@ -219,7 +220,7 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
           }
         }
       },
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json", "auth-token": authToken } }
     );
     return response;
   } catch (error) {
@@ -290,13 +291,13 @@ const scrutinizePlan = async (state, dispatch) => {
     var bodyFormData = new FormData();
     bodyFormData.append("edcrRequest", JSON.stringify(edcrRequest));
     bodyFormData.append("planFile", file);
-
+    const authToken = getAccessToken();
 
     let response = await axios({
       method: "post",
       url: url,
       data: bodyFormData,
-      headers: { "Content-Type": "multipart/form-data" }
+      headers: { "Content-Type": "multipart/form-data", "auth-token": authToken }
     });
     if (response) {
       let { data } = response;
