@@ -659,7 +659,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
   }
 };
 
-const isApplicationPaid = (currentStatus, workflowCode) => {
+const isApplicationPaid = (currentStatus, nextAction, workflowCode) => {
   let isPAID = false;
   if (currentStatus === "CITIZENACTIONREQUIRED") {
     return isPAID;
@@ -669,7 +669,10 @@ const isApplicationPaid = (currentStatus, workflowCode) => {
   if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
-    if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "CITIZENACTIONREQUIRED"){
+    if(currentStatus!=null && currentStatus!= "INITIATED" && currentStatus != "CITIZENACTIONREQUIRED" && currentStatus != "PENDINGPAYMENT"){
+      isPAID = true;
+    }
+    else if (nextAction) {
       isPAID = true;
     }
   } else {
@@ -717,7 +720,7 @@ export const createBill = async (queryObject, dispatch) => {
   }
 };
 
-export const generateBill = async (dispatch, applicationNumber, tenantId, status) => {
+export const generateBill = async (state, dispatch, applicationNumber, tenantId, status) => {
   try {
     if (applicationNumber && tenantId) {
       const queryObj = [
@@ -741,7 +744,12 @@ export const generateBill = async (dispatch, applicationNumber, tenantId, status
           value: applicationNumber
         }
       ];
-      const isPAID = isApplicationPaid(status, "FIRENOC");
+      const AmountPaid = get(state.screenConfiguration.preparedFinalObject, "AmountPaid");
+      let nextAction = false;
+        if( AmountPaid > 0 ) {
+          nextAction = true;
+        } 
+      const isPAID = isApplicationPaid(status, nextAction, "FIRENOC");
       const fetchBillResponse = await createBill(queryObj, dispatch);
       const payload = isPAID
         ? await getReceiptData(billQueryObj.filter(item => item.key !== "businessService"))
