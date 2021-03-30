@@ -327,7 +327,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     // Set owners & other documents
     let ownerDocuments = [];
     let otherDocuments = [];
-    jp.query(reduxDocuments, "$.*").forEach(doc => {
+    jp.query(reduxDocuments, "$.*").forEach((doc, index) => {
       if (doc.documents && doc.documents.length > 0) {
         if (doc.documentType === "OWNER") {
           ownerDocuments = [
@@ -340,6 +340,11 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
               fileStoreId: doc.documents[0].fileStoreId
             }
           ];
+          if(doc && doc.dropdown && doc.dropdown.value) {
+            ownerDocuments[index].dropdown = {
+              value : doc.dropdown.value
+            }
+          }
         } else if (!doc.documentSubCode) {
           // SKIP BUILDING PLAN DOCS
           otherDocuments = [
@@ -350,13 +355,18 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
               fileStoreId: doc.documents[0].fileStoreId
             }
           ];
+          if(doc && doc.dropdown && doc.dropdown.value) {
+            ownerDocuments[index].dropdown = {
+              value : doc.dropdown.value
+            }
+          }
         }
       }
     });
 
     set(
       payload[0],
-      "fireNOCDetails.applicantDetails.additionalDetail.documents",
+      "fireNOCDetails.applicantDetails.additionalDetail.ownerAuditionalDetail.documents",
       ownerDocuments
     );
     set(

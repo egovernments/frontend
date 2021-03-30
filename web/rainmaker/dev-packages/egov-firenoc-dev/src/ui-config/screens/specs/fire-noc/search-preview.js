@@ -191,7 +191,7 @@ export const prepareDocumentsView = async (state, dispatch) => {
   );
   let applicantDocuments = jp.query(
     firenoc,
-    "$.fireNOCDetails.applicantDetails.additionalDetail.documents.*"
+    "$.fireNOCDetails.applicantDetails.additionalDetail.ownerAuditionalDetail.documents.*"
   );
   let otherDocuments = jp.query(
     firenoc,
@@ -399,7 +399,7 @@ const setSearchResponse = async (
       printCont
     )
   }
-  generateBill(dispatch, applicationNumber, tenantId, status);
+generateBill(state, dispatch, applicationNumber, tenantId, status);
 };
 
 const screenConfig = {
