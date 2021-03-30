@@ -23,9 +23,15 @@ const Checkbox = Loadable({
   loading: () => <Loading />
 });
 
+const UploadFile = Loadable({
+  loader: () => import("./UploadFile"),
+  loading: () => <Loading />
+});
+
 export {
   TestAtoms,
   LinkButton,
   AutoSuggest,
   Checkbox,
+  UploadFile
 };

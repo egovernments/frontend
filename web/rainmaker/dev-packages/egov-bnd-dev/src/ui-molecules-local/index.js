@@ -23,8 +23,15 @@ const AutosuggestContainer = Loadable({
   loading: () => <Loading />
 });
 
+const UploadSingleFile = Loadable({
+  loader: () => import("./UploadSingleFile"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   HowItWorks,
-  AutosuggestContainer
+  AutosuggestContainer,
+  SingleApplication,
+  UploadSingleFile
 };

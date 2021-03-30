@@ -6,6 +6,7 @@ import {newRegistrationForm} from "./newRegistrationCard";
 import {footer} from "./newRegistrationFooter";
 import {confirmationDialog} from "./newRegistrationConfirmDialog";
 import {addHospitalDialog} from "./addHospitalDialog";
+import {importExcelDialog} from "./importExcelDialog";
 import get from "lodash/get";
 import {loadHospitals, loadFullCertDetails} from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -30,6 +31,17 @@ export const showHideAddHospitalDialog = (state, dispatch) => {
  );
  dispatch(
    handleField("newRegistration", "components.hospitalDialog", "props.open", !toggle)
+ );
+};
+
+export const showHideImportExcelDialog = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["newRegistration"],
+   "components.importExcelDialog.props.open",
+   false
+ );
+ dispatch(
+   handleField("newRegistration", "components.importExcelDialog", "props.open", !toggle)
  );
 };
 
@@ -130,6 +142,28 @@ const newRegistration = {
           },
           children: {
             popup: addHospitalDialog
+          }
+        }
+      }
+    },
+    importExcelDialog: {
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        disableValidation: true
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+            // style: { minHeight: "180px", minWidth: "365px" }
+          },
+          children: {
+            popup: importExcelDialog
           }
         }
       }

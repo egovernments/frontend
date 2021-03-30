@@ -194,7 +194,7 @@ export const postData = async(state,dispatch) => {
       true,
       {
         labelName: "API Error",
-        labelKey: "LAMS_API_ERROR"
+        labelKey: "ERR_API_ERROR"
       },
       "info"
     )

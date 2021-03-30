@@ -13,7 +13,7 @@ import {
   import jp from "jsonpath";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import {showHideConfirmationPopup} from "./newRegistration";
+  import {showHideConfirmationPopup, showHideImportExcelDialog} from "./newRegistration";
   import _ from 'lodash';
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
@@ -191,7 +191,7 @@ export const postData = async(state,dispatch) => {
       true,
       {
         labelName: "API Error",
-        labelKey: "LAMS_API_ERROR"
+        labelKey: "ERR_API_ERROR"
       },
       "info"
     )
@@ -212,6 +212,33 @@ const getCommonApplyFooter = children => {
 };
 
 export const footer = getCommonApplyFooter({
+  importExcel: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      className:"submit-btn leaseApplicationSubmitButton",
+      style: {
+        minWidth: "180px",
+        height: "48px",
+        marginRight: "16px",
+        borderRadius: "inherit"
+      }
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "Previous Step",
+        labelKey: "Import Excel"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        showHideImportExcelDialog(state,dispatch);
+      }
+    },
+    visible: false//!(process.env.NODE_ENV === 'production'),
+  },
   resetButton: {
     componentPath: "Button",
     props: {
