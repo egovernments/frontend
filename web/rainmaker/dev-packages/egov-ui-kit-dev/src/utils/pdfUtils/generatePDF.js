@@ -694,40 +694,40 @@ const mobileCheck = ()=> {
 
 
 export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
-    if (typeof mSewaApp === "undefined" && !mobileCheck())
+    if (typeof window.mSewaApp === "undefined" && !mobileCheck())
     {
       // we are running in browser
       receiptPDF.download(filename);
     } else {
       // we are running under webview
       receiptPDF.getBase64(data => {
-        mSewaApp.downloadBase64File(data, filename);
+        window.mSewaApp.downloadBase64File(data, filename);
       });
     }
   }
   
   export const openPDFFileUsingBase64 = (receiptPDF, filename) => {
-    if (typeof mSewaApp === "undefined" && !mobileCheck())
+    if (typeof window.mSewaApp === "undefined" && !mobileCheck())
     {
       // we are running in browser
       receiptPDF.open();
     } else {
       // we are running under webview
       receiptPDF.getBase64(data => {
-        mSewaApp.downloadBase64File(data, filename);
+        window.mSewaApp.downloadBase64File(data, filename);
       });
     }
   }
   
   export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
-    if (typeof mSewaApp === "undefined" && !mobileCheck())
+    if (typeof window.mSewaApp === "undefined" && !mobileCheck())
     {
       // we are running in browser
       receiptPDF.print();
     } else {
       // we are running under webview
       receiptPDF.getBase64(data => {
-        mSewaApp.downloadBase64File(data, filename);
+        window.mSewaApp.downloadBase64File(data, filename);
       });
     }
   }
