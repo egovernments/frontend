@@ -551,7 +551,10 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch,componentJsonpath) => {
+   
     dispatch(prepareFinalObject("BPA", {}));
+    dispatch(prepareFinalObject("documentsContract", []));
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", {}));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
