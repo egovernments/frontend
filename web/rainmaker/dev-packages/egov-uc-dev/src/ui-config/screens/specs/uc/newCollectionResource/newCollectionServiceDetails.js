@@ -121,44 +121,44 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             return action;
           },
         },
-        helpPdfButton: {
-          componentPath: "Button",
-          jsonPath: "Challan[0].ucCollection.pdf",
-          gridDefination: {
-            xs: 12,
-            sm: 6,
-          },
-          props: {
-            //variant: "outlined",
-            color: "primary",
-            style: {
-              minWidth: "180px",
-              height: "48px",
-              marginRight: "45",
-              borderRadius: "inherit",
-            },
-          },
+        // helpPdfButton: {
+        //   componentPath: "Button",
+        //   jsonPath: "Challan[0].ucCollection.pdf",
+        //   gridDefination: {
+        //     xs: 12,
+        //     sm: 6,
+        //   },
+        //   props: {
+        //     //variant: "outlined",
+        //     color: "primary",
+        //     style: {
+        //       minWidth: "180px",
+        //       height: "48px",
+        //       marginRight: "45",
+        //       borderRadius: "inherit",
+        //     },
+        //   },
 
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              downloadHelpFile(state, dispatch);
-            },
-          },
-          children: {
-            downloadButtonIcon: {
-              uiFramework: "custom-atoms",
-              componentPath: "Icon",
-              props: {
-                iconName: "cloud_download",
-              },
-            },
-            downloadButtonLabel: getLabel({
-              labelName: "Help ?",
-              labelKey: "UC_HELP_FILE",
-            }),
-          },
-        },
+        //   onClickDefination: {
+        //     action: "condition",
+        //     callBack: (state, dispatch) => {
+        //       downloadHelpFile(state, dispatch);
+        //     },
+        //   },
+        //   children: {
+        //     downloadButtonIcon: {
+        //       uiFramework: "custom-atoms",
+        //       componentPath: "Icon",
+        //       props: {
+        //         iconName: "cloud_download",
+        //       },
+        //     },
+        //     downloadButtonLabel: getLabel({
+        //       labelName: "Help ?",
+        //       labelKey: "UC_HELP_FILE",
+        //     }),
+        //   },
+        // },
 
         serviceCategory: {
           uiFramework: "custom-containers",
