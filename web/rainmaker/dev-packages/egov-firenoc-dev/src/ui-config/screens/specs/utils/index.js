@@ -3,7 +3,7 @@ import { getCommonCaption, getCommonCard, getPattern } from "egov-ui-framework/u
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels, getObjectValues } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
 import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
@@ -468,6 +468,61 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
     );
   }
 };
+
+export const updateOwnerShipEdit = async ( state, dispatch ) => {
+  let applicantSubType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType"
+  );
+  let applicantType = "";
+  if (applicantSubType) {
+    applicantType = applicantSubType.split(".")[0];
+  } else {
+    applicantType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "DynamicMdms.common-masters.applicantDetails.applicantTypeTransformed[0].code",
+      ""
+    );
+    applicantSubType = get(
+      state.screenConfiguration.preparedFinalObject,
+      `DynamicMdms.common-masters.applicantDetails.applicantTypeTransformed.${applicantType}[0].code`,
+      ""
+    );
+    set(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+      applicantSubType
+    );
+      dispatch(
+        prepareFinalObject(
+          "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
+          applicantSubType
+        )
+      );
+  }
+  set(
+    state,
+    "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
+    applicantType
+  );
+  set(
+    state,
+    "screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.applicantDetails.selectedValues[0].applicantType",
+    applicantType
+  );
+  try {
+      dispatch(
+        prepareFinalObject(
+          "DynamicMdms.common-masters.applicantDetails.selectedValues[0].applicantType",
+          applicantType
+        )
+      );
+    dispatch(prepareFinalObject( `DynamicMdms.common-masters.applicantDetails.applicantSubTypeTransformed.allDropdown[0]`, getObjectValues(get( state.screenConfiguration.preparedFinalObject, `DynamicMdms.common-masters.applicantDetails.applicantDetailsTransformed.${applicantType}`, [])) ));
+    dispatch(prepareFinalObject( `DynamicMdms.common-masters.applicantDetails.selectedValues[0].applicantSubType`, applicantSubType ));
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 export const validateOwners = (state, dispatch) => {
   let ownersJsonPath = "";

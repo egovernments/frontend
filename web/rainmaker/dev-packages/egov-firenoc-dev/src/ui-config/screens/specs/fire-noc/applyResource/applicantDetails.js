@@ -12,7 +12,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
-import { getDetailsForOwner } from "../../utils";
+import { getDetailsForOwner, updateOwnerShipEdit } from "../../utils";
 import get from "lodash/get";
 import "./index.css";
 
@@ -566,6 +566,7 @@ export const applicantDetails = getCommonCard({
           moduleName: "common-masters",
           masterName: "OwnerShipCategory",
           rootBlockSub : 'applicantDetails',
+          callBackEdit: updateOwnerShipEdit
         }
       },
     }),
