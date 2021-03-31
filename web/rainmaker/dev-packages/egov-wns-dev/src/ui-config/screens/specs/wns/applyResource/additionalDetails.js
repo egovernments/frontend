@@ -649,7 +649,7 @@ export const additionDetails = getCommonCard({
           xs: 12,
           sm: 6
         },
-        required: false,
+        required: true,
         pattern: getPattern("Date"),
         errorMessage: "ERR_INVALID_DATE",
         jsonPath: "applyScreen.dateEffectiveFrom",

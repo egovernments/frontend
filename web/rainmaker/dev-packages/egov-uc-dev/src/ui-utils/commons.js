@@ -89,11 +89,11 @@ export const getSearchResults = async queryObject => {
       return response;
     }else if (typeof businessService == 'object') {
       const response = { "Payments": [] };
-      businessService.map(async (businessSer) => {
+      // businessService.map(async (businessSer) => {
         try {
           let respo = await httpRequest(
             "post",
-            getPaymentSearchAPI(businessSer),
+            getPaymentSearchAPI(businessService[0]),
             "",
             queryObject
           )
@@ -102,7 +102,7 @@ export const getSearchResults = async queryObject => {
         } catch (e) {
           console.log(e);
         }
-      })
+      // })
       if (response.Payments.length == 0) {
         throw { message: 'PAYMENT_SEARCH_FAILED' };
       }
