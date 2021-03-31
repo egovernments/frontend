@@ -268,6 +268,7 @@ class DocumentList extends Component {
               required={(card.required)?true:false}
               onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
+              disabled={card.disabled ? card.disabled : false}
             />
           )}
         </Grid>
@@ -295,6 +296,7 @@ class DocumentList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
+            disabled={card.disabled ? card.disabled : false}
           />
         </Grid>
       </Grid>
