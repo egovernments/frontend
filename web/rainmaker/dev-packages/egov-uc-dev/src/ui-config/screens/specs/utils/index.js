@@ -165,6 +165,9 @@ export const ifUserRoleExists = role => {
 };
 
 export const convertEpochToDate = dateEpoch => {
+  if(dateEpoch==null||dateEpoch==''||dateEpoch==undefined){
+    return 'NA';
+  }
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
@@ -318,7 +321,7 @@ export const getEmployeeName = async queryObject => {
   }
 };
 
-export const setServiceCategory = (businessServiceData, dispatch,state) => {
+export const setServiceCategory = (businessServiceData, dispatch,state,setCategory=true) => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
     if (item.code && item.code.indexOf(".") > 0) {
@@ -352,7 +355,7 @@ export const setServiceCategory = (businessServiceData, dispatch,state) => {
   let serviceCategories = Object.values(nestedServiceData).filter(
     item => item.code
   );
-  dispatch(
+  setCategory&&dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.serviceCategories",
       serviceCategories
@@ -364,7 +367,6 @@ export const setServiceCategory = (businessServiceData, dispatch,state) => {
     null
   );
   if(editingMode!=null){
-    console.log("Business Service")
     dispatch(
       handleField(
         "newCollection",
@@ -398,7 +400,7 @@ export const downloadHelpFile = async (state, dispatch) => {
     "helpFileUrl",
     ""
   );   
-  window.open(helpurl,"_blank");
+  // window.open(helpurl,"_blank");
 };
 
 
