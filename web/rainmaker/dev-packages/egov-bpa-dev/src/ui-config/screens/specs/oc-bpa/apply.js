@@ -374,7 +374,16 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch, componentJsonpath) => {
     dispatch(prepareFinalObject("BPA", {}));
+    dispatch(prepareFinalObject("documentsContract", []));
+    dispatch(prepareFinalObject("documentDetailsUploadRedux", {}));
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+    const isSearch = getQueryArg(window.location.href, "isSearch", false);
+    if(edcrNumber && !isSearch) {
+      const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+      const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+      window.location.assign(`${origin}${environment}/oc-bpa/apply?tenantId=${tenantId}&edcrNumber=${edcrNumber}&isSearch=true`);
+    }
     const step = getQueryArg(window.location.href, "step");
     set(state, "screenConfiguration.moduleName", "BPA");
     const applicationNumber = getQueryArg(

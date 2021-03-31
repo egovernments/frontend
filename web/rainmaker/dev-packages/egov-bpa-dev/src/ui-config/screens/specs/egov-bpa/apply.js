@@ -551,15 +551,22 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch,componentJsonpath) => {
-   
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const isSearch = getQueryArg(window.location.href, "isSearch", false);
     dispatch(prepareFinalObject("BPA", {}));
     dispatch(prepareFinalObject("documentsContract", []));
     dispatch(prepareFinalObject("documentDetailsUploadRedux", {}));
+    const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+    if(edcrNumber && !isSearch) {
+      const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+      const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+      window.location.assign(`${origin}${environment}/egov-bpa/apply?tenantId=${tenantId}&edcrNumber=${edcrNumber}&isSearch=true`);
+    }
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
-    const tenantId = getQueryArg(window.location.href, "tenantId");
+    
     const step = getQueryArg(window.location.href, "step");
 
     //Set Module Name
@@ -575,7 +582,7 @@ const screenConfig = {
     if (applicationNumber && isEdit) {
       setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
     } else {
-      const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
+      // const edcrNumber = getQueryArg(window.location.href, "edcrNumber");
       if(edcrNumber) {
         dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
         getScrutinyDetails(state, dispatch);
