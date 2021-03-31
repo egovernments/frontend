@@ -178,14 +178,14 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
           key: "",
           msgId: "gfcfc",
           correlationId: "wefiuweiuff897",
-          authToken: "",
+          authToken: authToken,
           userInfo: {
             id: userUUid,
             tenantId: userTenant
           }
         }
       },
-      { headers: { "Content-Type": "application/json", "auth-token": authToken } }
+      { headers: { "Content-Type": "application/json" } }
     );
     return response.data;
   } catch (error) {
@@ -213,14 +213,14 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
           key: "",
           msgId: "gfcfc",
           correlationId: "wefiuweiuff897",
-          authToken: "",
+          authToken: authToken,
           userInfo: {
             id: userUUid,
             tenantId: userTenant
           }
         }
       },
-      { headers: { "Content-Type": "application/json", "auth-token": authToken } }
+      { headers: { "Content-Type": "application/json" } }
     );
     return response;
   } catch (error) {
