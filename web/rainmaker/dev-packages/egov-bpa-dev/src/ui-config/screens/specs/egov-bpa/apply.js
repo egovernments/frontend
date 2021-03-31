@@ -547,6 +547,65 @@ const setTaskStatus = async(state,applicationNumber,tenantId,dispatch,componentJ
      
     }
 }
+
+export const getMohallaDetails = async (state, dispatch, tenantId) => {
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      [{ key: "tenantId", value: tenantId }],
+      {}
+    );
+    const mohallaData =
+      payload &&
+      payload.TenantBoundary[0] &&
+      payload.TenantBoundary[0].boundary &&
+      payload.TenantBoundary[0].boundary.reduce((result, item) => {
+        result.push({
+          ...item,
+          name: `${tenantId
+            .toUpperCase()
+            .replace(
+              /[.]/g,
+              "_"
+            )}_REVENUE_${item.code
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}`
+        });
+        return result;
+      }, []);
+    dispatch(
+      prepareFinalObject(
+        "mohalla.tenant.localities",
+        mohallaData
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+        "props.suggestions",
+        mohallaData
+        // payload.TenantBoundary && payload.TenantBoundary[0].boundary
+      )
+    );
+    const mohallaLocalePrefix = {
+      moduleName: tenantId,
+      masterName: "REVENUE"
+    };
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+        "props.localePrefix",
+        mohallaLocalePrefix
+      )
+    );
+  } catch (e) {
+    console.log(e);
+  }
+}
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
@@ -579,6 +638,7 @@ const screenConfig = {
       if(edcrNumber) {
         dispatch(prepareFinalObject("BPA.edcrNumber", edcrNumber));
         getScrutinyDetails(state, dispatch);
+        getMohallaDetails(state, dispatch, tenantId);
       }
       setProposedBuildingData(state, dispatch);
       getTodaysDate(action, state, dispatch);
