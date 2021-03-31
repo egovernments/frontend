@@ -138,7 +138,7 @@ const updateAdhoc = (state, dispatch) => {
   if (adhocAmount || rebateAmount) {
     let flag = true;
     const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
-    if (rebateAmount && rebateAmount >= totalAmt) {
+    if (rebateAmount && rebateAmount > totalAmt) {
       flag=false;
       dispatch(
         toggleSnackbar(
