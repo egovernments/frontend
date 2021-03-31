@@ -107,7 +107,6 @@ export const callPGService = async (state, dispatch) => {
   });
   const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
   try {
-    debugger;
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
 
     const requestBody = {

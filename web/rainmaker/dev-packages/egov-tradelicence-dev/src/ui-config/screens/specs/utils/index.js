@@ -409,7 +409,153 @@ const style = {
 export const getIconStyle = key => {
   return style[key];
 };
+export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
+  let tradeSubOwnershipCat = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+  );
+  let tradeOwnershipCat = "";
+  if (tradeSubOwnershipCat) {
+    tradeOwnershipCat = tradeSubOwnershipCat.split(".")[0];
+  } else {
+    tradeOwnershipCat = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.common-masters.OwnerShipCategoryTransformed[0].code",
+      ""
+    );
+    tradeSubOwnershipCat = get(
+      state.screenConfiguration.preparedFinalObject,
+      `applyScreenMdmsData.common-masters.OwnerShipCategory.${tradeOwnershipCat}[0].code`,
+      ""
+    );
+    set(
+      payload,
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+      tradeSubOwnershipCat
+    );
+    payload &&
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+          payload.Licenses[0].tradeLicenseDetail.subOwnerShipCategory
+        )
+      );
+  }
 
+  set(
+    payload,
+    "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
+    tradeOwnershipCat
+  );
+
+  try {
+    payload &&
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
+          payload.LicensesTemp[0].tradeLicenseDetail.ownerShipCategory
+        )
+      );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.common-masters.subOwnerShipCategoryTransformed",
+        get(
+          state.screenConfiguration.preparedFinalObject,
+          `applyScreenMdmsData.common-masters.OwnerShipCategory.${tradeOwnershipCat}`,
+          []
+        )
+      )
+    );
+
+    //handlefield for Type of OwnerShip while setting drop down values as beforeFieldChange won't be callled
+    if (tradeOwnershipCat === "INDIVIDUAL") {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
+          "visible",
+          false
+        )
+      );
+    } else {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional",
+          "visible",
+          true
+        )
+      );
+    }
+
+    //handlefield for type of sub ownership while setting drop down values as beforeFieldChange won't be callled
+
+    if (tradeSubOwnershipCat === "INDIVIDUAL.SINGLEOWNER") {
+      const ownerInfoCards = get(
+        state.screenConfiguration.screenConfig.apply, //hardcoded to apply screen
+        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items"
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "props.hasAddItem",
+          false
+        )
+      );
+      if (ownerInfoCards && ownerInfoCards.length > 1) {
+        const singleCard = ownerInfoCards.slice(0, 1); //get the first element if multiple cards present
+
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+            "props.items",
+            singleCard
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            "Licenses[0].tradeLicenseDetail.owners",
+            get(
+              state.screenConfiguration.preparedFinalObject,
+              "Licenses[0].tradeLicenseDetail.owners"
+            ).slice(0, 1)
+          )
+        );
+      }
+    }
+
+    if (tradeSubOwnershipCat === "INDIVIDUAL.MULTIPLEOWNERS") {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard",
+          "props.hasAddItem",
+          true
+        )
+      );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const showHideAdhocPopup = (state, dispatch) => {
   let toggle = get(
     state.screenConfiguration.screenConfig["search-preview"],
@@ -2296,34 +2442,136 @@ export const updateMdmsDropDowns = async ( state, dispatch ) => {
     }
   }
 };
-export const updateStructureTypes = async ( state, dispatch ) => {
+export const updateDropDowns = async (
+  payload,
+  action,
+  state,
+  dispatch,
+  queryValue
+) => {
   const structType = get(
-    state,
-    "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.structureType"
+    payload,
+    "Licenses[0].tradeLicenseDetail.structureType"
   );
   if (structType) {
     set(
-      state,
-      "screenConfiguration.preparedFinalObject.LicensesTemp[0].tradeLicenseDetail.structureType",
+      payload,
+      "LicensesTemp[0].tradeLicenseDetail.structureType",
       structType.split(".")[0]
     );
     try {
-      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureType`, structType.split(".")[0] ));
-      
-      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.structureTypes.structureTypesTransformed.${structType.split(".")[0]}`, [])) ));
+      dispatch(
+        prepareFinalObject(
+          "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
+          get(
+            state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
+            "common-masters"
+            ],
+            `StructureType.${structType.split(".")[0]}`,
+            []
+          )
+        )
+      );
 
-      dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType`, structType ));
+      payload &&
         dispatch(
           prepareFinalObject(
             "LicensesTemp[0].tradeLicenseDetail.structureType",
-            structType
+            payload.LicensesTemp[0].tradeLicenseDetail.structureType
           )
         );
     } catch (e) {
       console.log(e);
-    }    
+    }
   }
-}
+
+  const tradeSubTypes = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.tradeUnits",
+    []
+  );
+
+  if (tradeSubTypes.length > 0) {
+    try {
+      tradeSubTypes.forEach((tradeSubType, i) => {
+        const tradeCat = tradeSubType.tradeType.split(".")[0];
+        const tradeType = tradeSubType.tradeType.split(".")[1];
+        set(payload, `LicensesTemp.tradeUnits[${i}].tradeType`, tradeCat);
+        set(payload, `LicensesTemp.tradeUnits[${i}].tradeSubType`, tradeType);
+
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
+            objectToDropdown(
+              get(
+                state.screenConfiguration.preparedFinalObject,
+                `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}`,
+                []
+              )
+            )
+          )
+        );
+
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.TradeLicense.TradeSubCategoryTransformed",
+            get(
+              state.screenConfiguration.preparedFinalObject,
+              `applyScreenMdmsData.TradeLicense.filteredTradeTypeTree.${tradeCat}.${tradeType}`,
+              []
+            )
+          )
+        );
+        payload &&
+          dispatch(
+            prepareFinalObject(
+              `LicensesTemp.tradeUnits[${i}].tradeType`,
+              tradeCat
+            )
+          );
+
+        payload &&
+          dispatch(
+            prepareFinalObject(
+              `LicensesTemp.tradeUnits[${i}].tradeSubType`,
+              tradeType
+            )
+          );
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  setOwnerShipDropDownFieldChange(state, dispatch, payload);
+};
+// export const updateStructureTypes = async ( state, dispatch ) => {
+//   const structType = get(
+//     state,
+//     "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.structureType"
+//   );
+//   if (structType) {
+//     set(
+//       state,
+//       "screenConfiguration.preparedFinalObject.LicensesTemp[0].tradeLicenseDetail.structureType",
+//       structType.split(".")[0]
+//     );
+//     try {
+//       dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureType`, structType.split(".")[0] ));
+      
+//       dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.structureSubTypeTransformed.allDropdown[0]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.common-masters.structureTypes.structureTypesTransformed.${structType.split(".")[0]}`, [])) ));
+
+//       dispatch(prepareFinalObject( `DynamicMdms.common-masters.structureTypes.selectedValues[0].structureSubType`, structType ));
+//         dispatch(
+//           prepareFinalObject(
+//             "LicensesTemp[0].tradeLicenseDetail.structureType",
+//             structType
+//           )
+//         );
+//     } catch (e) {
+//       console.log(e);
+//     }    
+//   }
+// }
 export const updateOwnerShipEdit = async ( state, dispatch ) => {
   let tradeSubOwnershipCat = get(
     state,

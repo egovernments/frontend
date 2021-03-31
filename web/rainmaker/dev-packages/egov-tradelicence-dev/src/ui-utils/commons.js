@@ -18,7 +18,10 @@ import {
   convertDateToEpoch,
   getCurrentFinancialYear, getTranslatedLabel,
   ifUserRoleExists,
-  getUniqueItemsFromArray
+  updateDropDowns,
+  getUniqueItemsFromArray,
+  setFilteredTradeTypes,
+  getTradeTypeDropdownData
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
@@ -198,7 +201,26 @@ export const updatePFOforSearchResults = async (
     dispatch(
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }
-
+  const licenseType = payload && get(payload, "Licenses[0].licenseType");
+  const structureSubtype =
+    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
+  const tradeTypes = setFilteredTradeTypes(
+    state,
+    dispatch,
+    licenseType,
+    structureSubtype
+  );
+  const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
+  tradeTypeDdData &&
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+        tradeTypeDdData
+      )
+    );
+  setDocsForEditFlow(state, dispatch);
+  updateDropDowns(payload, action, state, dispatch, queryValue);
+ 
   setDocsForEditFlow(state, dispatch);
 
   setApplicationNumberBox(state, dispatch);

@@ -19,7 +19,8 @@ import {
   fillOldLicenseData,
   getTradeTypeDropdownData,
   updateMdmsDropDowns,
-  updateStructureTypes
+  updateStructureTypes,
+  updateDropDowns
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
@@ -154,7 +155,7 @@ const structureSubTypeChange = (reqObj) => {
     let { keyValue, value, dispatch } = reqObj;
     let keyValueRow = keyValue.replace(`.${value}`, ``);
     dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", value));
-    dispatch(pFO("LicensesTemp[0].tradeLicenseDetail.structureType", keyValueRow));
+    // dispatch(pFO("LicensesTemp[0].tradeLicenseDetail.structureType", keyValueRow));
   } catch (e){
     console.log(e);
   }
