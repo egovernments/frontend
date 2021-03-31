@@ -76,10 +76,10 @@ export const UCSearchCard = getCommonCard({
     labelName: "Search Receipt",
     labelKey: "UC_SEARCH_COMMON_HEADER"
   }),
-  // subheader: getCommonSubHeader({
-  //   labelName: "Provide at least one parameter to search for an application",
-  //   labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
-  // }),
+  subheader: getCommonSubHeader({
+    labelName: "Provide at least one parameter to search for an application",
+    labelKey: "UC_SEARCH_COMMON_SUB_HEADER"
+  }),
   searchContainer: getCommonContainer({
     receiptNumber: getTextField({
       label: {
@@ -97,29 +97,10 @@ export const UCSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       }
-    }),
-    consumerCodes: getTextField({
-      label: {
-        labelName: "Consumer Code",
-        labelKey: "ABG_PT_CONSUMER_CODE_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Consumer code",
-        labelKey: "ABG_PT_CONSUMER_CODE_LABEL_PLACEHOLDER"
-      },
-      required: false,
-      visible: true,
-      jsonPath: "ucSearchScreen.consumerCodes",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    }),
-    serviceType: {
+    }),  serviceType: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-uc",
       componentPath: "AutosuggestContainer",
-      visible: false,
       props: {
         className: "autocomplete-dropdown",
         label: {
@@ -134,7 +115,7 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
-        required: false,
+        required: true,
        
         isClearable: true,
         labelsFromLocalisation: true,
@@ -166,6 +147,24 @@ export const UCSearchCard = getCommonCard({
         return action;
       }
     },
+    consumerCodes: getTextField({
+      label: {
+        labelName: "Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Consumer code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL_PLACEHOLDER"
+      },
+      required: false,
+      visible: true,
+      jsonPath: "ucSearchScreen.consumerCodes",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
+  
     mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",

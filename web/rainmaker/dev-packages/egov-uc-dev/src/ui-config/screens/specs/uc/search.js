@@ -1,18 +1,16 @@
 import {
-  getCommonHeader,
-  getLabel,
-  getBreak
+  getBreak, getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { UCSearchCard } from "./universalCollectionResources/ucSearch";
-import get from "lodash/get";
-import { setServiceCategory } from "../utils";
-
-import { searchResults } from "./universalCollectionResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { httpRequest } from "../../../../ui-utils";
+import { setServiceCategory } from "../utils";
 import "./index.css";
+import { searchResults } from "./universalCollectionResources/searchResults";
+import { UCSearchCard } from "./universalCollectionResources/ucSearch";
+
 
 const tenantId = getTenantId();
 const header = getCommonHeader({
@@ -29,7 +27,7 @@ const getData = async (action, state, dispatch) => {
 };
 
 const getMDMSData = async (action, state, dispatch) => {
-  
+
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -59,16 +57,23 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.serviceCategories",
+        get(payload, "MdmsRes.BillingService.BusinessService", [])
+      )
+    );
+    dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig", get(payload.MdmsRes, "common-masters.uiCommonPay")))
     setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
-      dispatch
-    ); 
-    console.info("setting uiCommonConfig",payload);
-    console.info("data=",get(payload.MdmsRes ,"common-masters.uiCommonPay"));
-    dispatch(prepareFinalObject("applyScreenMdmsData.uiCommonConfig" , get(payload.MdmsRes ,"common-masters.uiCommonPay")))
-    } catch (e) {
+      dispatch, null, false
+    );
+
+
+
+  } catch (e) {
     console.log(e);
-    
+
   }
 };
 
@@ -101,7 +106,7 @@ const ucSearchAndResult = {
               },
               ...header
             },
- 
+
           }
         },
         UCSearchCard,

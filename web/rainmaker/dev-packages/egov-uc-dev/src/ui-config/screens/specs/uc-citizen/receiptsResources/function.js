@@ -1,25 +1,19 @@
-import get from "lodash/get";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getTransformedLocale, transformById
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getLocalization, getTenantId
+} from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import {
-  validateFields,
-  getTextToLocalMapping,
-  convertEpochToDate,
-  convertDateToEpoch
+  convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validateFields
 } from "../../utils";
-import {
-  getTenantId,
-  getLocalization
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getLocaleLabels,
-  transformById,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -104,7 +98,6 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
 
-    console.info("query obj=",queryObject);
     const responseFromAPI = await getSearchResults(queryObject);
     dispatch(prepareFinalObject("PaymentsSearchResponse", responseFromAPI));
 
@@ -116,20 +109,20 @@ export const searchApiCall = async (state, dispatch) => {
       );
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
-        consumerCode:get(Payments[i],`paymentDetails[0].bill.consumerCode`),
+        consumerCode: get(Payments[i], `paymentDetails[0].bill.consumerCode`),
         payeeName: get(Payments[i], `paidBy`), // changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
         status: get(Payments[i], `paymentDetails[0].bill.status`),
-        tenantId : get(Payments[i], `tenantId`),
+        tenantId: get(Payments[i], `tenantId`),
       };
     }
 
     try {
       let data = response.map(item => ({
         ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
-        ['UC_COMMON_TABLE_COL_CONSUMERCODE']:item.consumerCode || "-",
+        ['UC_COMMON_TABLE_COL_CONSUMERCODE']: item.consumerCode || "-",
         ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
         ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
         ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
