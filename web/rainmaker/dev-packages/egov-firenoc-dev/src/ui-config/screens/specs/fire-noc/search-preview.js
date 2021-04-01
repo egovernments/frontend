@@ -444,7 +444,6 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "FireNOCs",
             moduleName: "FIRENOC",
@@ -460,7 +459,7 @@ const screenConfig = {
           documentsSummary: documentsSummary
         }),
         citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+          process.env.REACT_APP_NAME === "Citizen" ? {} : {}
       }
     }
   }
