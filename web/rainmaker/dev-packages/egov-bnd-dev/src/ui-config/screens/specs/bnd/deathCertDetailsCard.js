@@ -53,8 +53,8 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
             labelKey: "Gender"
           },
           {
-            jsonPath: inJsonPath + ".gender",
-            callBack: getGenderStr
+            jsonPath: inJsonPath + ".genderStr",
+            //callBack: getGenderStr
           }
         )
       }),
@@ -147,8 +147,8 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
       {
         presentAddr: getLabelWithValue(
           {
-            labelName: "ADDRESS OF PARENTS AT THE TIME OF DEATH OF THE CHILD",
-            labelKey: "Address of parents at the time of death of the child"
+            labelName: "",
+            labelKey: "Address of deceased at the time of death"
           },
           {
             jsonPath: inJsonPath + ".deathPresentaddr.fullAddress",
@@ -157,8 +157,8 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
         ),
         permenantAddr: getLabelWithValue(
           {
-            labelName: "PERMANENT ADDRESS OF THE PARENTS",
-            labelKey: "Permanent address of parent"
+            labelName: "",
+            labelKey: "Permanent address of the deceased"
           },
           {
             jsonPath: inJsonPath + ".deathPermaddr.fullAddress",

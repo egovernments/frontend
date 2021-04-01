@@ -13,7 +13,7 @@ import {
   import jp from "jsonpath";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import {showHideConfirmationPopup, showHideImportExcelDialog} from "./newRegistration";
+  import {showHideConfirmationPopup, showHideImportExcelDialog, showHideDeleteRecordsDialog} from "./newRegistration";
   import _ from 'lodash';
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
@@ -237,7 +237,36 @@ export const footer = getCommonApplyFooter({
         showHideImportExcelDialog(state,dispatch);
       }
     },
-    visible: false//!(process.env.NODE_ENV === 'production'),
+    visible: (!(process.env.NODE_ENV === 'production') && 
+      (getQueryArg(window.location.href,"showImport")=="true" || window.location.host.includes("demo.echhawani.gov.in"))),
+  },
+  deleteRecords: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      className:"submit-btn leaseApplicationSubmitButton",
+      style: {
+        minWidth: "180px",
+        height: "48px",
+        marginRight: "16px",
+        borderRadius: "inherit"
+      }
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "Delete Records",
+        labelKey: "Delete Records"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        showHideDeleteRecordsDialog(state,dispatch);
+      }
+    },
+    visible: (!(process.env.NODE_ENV === 'production') && 
+      (getQueryArg(window.location.href,"showImport")=="true" || window.location.host.includes("demo.echhawani.gov.in"))),
   },
   resetButton: {
     componentPath: "Button",

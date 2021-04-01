@@ -130,6 +130,49 @@ export const postXlsxFile = async (state, dispatch, module, file) => {
   }
 }
 
+export const deleteAllRecords = async (state, dispatch, module) => {
+
+  let requestBody = {};
+  let payload = null;
+
+  let tenantId = getTenantId();
+
+  const queryParams = [
+    { key: "tenantId", value: tenantId }  
+    ];
+
+  let endPoint = (module == "birth")?"Birth":"Death";
+  try
+  {
+    payload = await httpRequest(
+      "post",
+      'birth-death-services/common/delete'+endPoint+'Import',
+      'delete'+endPoint+'Import',
+      queryParams,
+      requestBody
+    );
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "", labelKey: payload.response },
+        "success"
+      )
+    );
+  }
+  catch(e)
+  {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "ERR_API_ERROR", labelKey: "ERR_API_ERROR" },
+        "error"
+      )
+    );
+    console.error(e);
+  }
+  return payload;
+}
+
 export const searchForBirth = async (dispatch,queryParams,queryObject) => {
   try {
     dispatch(toggleSpinner());

@@ -42,6 +42,13 @@ const checkIfFormIsValid = async (state, dispatch) => {
     "newRegistration"
   ); 
 
+  const spouseInfo = validateFields(
+    "components.div2.children.details.children.cardContent.children.spouseInfo.children.cardContent.children.spouseInfo.children",
+    state,
+    dispatch,
+    "newRegistration"
+  );
+
   const fathersInfo = validateFields(
     "components.div2.children.details.children.cardContent.children.fathersInfo.children.cardContent.children.fathersInfo.children",
     state,
@@ -64,6 +71,13 @@ const checkIfFormIsValid = async (state, dispatch) => {
   ); 
 
   const addrTimeOfdeath = validateFields(
+    "components.div2.children.details.children.cardContent.children.addrTimeOfdeath.children.cardContent.children.addrTimeOfdeath.children",
+    state,
+    dispatch,
+    "newRegistration"
+  );
+
+  const informantsInfo = validateFields(
     "components.div2.children.details.children.cardContent.children.informantsInfo.children.cardContent.children.informantInfo.children",
     state,
     dispatch,
@@ -73,7 +87,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
   console.log(newRegistration,permAddr,placeOfdeath,childsInfo,fathersInfo,mothersInfo,addrTimeOfdeath);
 
   if(!(newRegistration && permAddr && placeOfdeath &&
-      childsInfo && fathersInfo && mothersInfo && addrTimeOfdeath))
+    spouseInfo && childsInfo && fathersInfo && mothersInfo && addrTimeOfdeath))
   {
     isFormValid = false;
     dispatch(toggleSnackbar(

@@ -53,8 +53,8 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Gender"
           },
           {
-            jsonPath: inJsonPath + ".gender",
-            callBack: getGenderStr
+            jsonPath: inJsonPath + ".genderStr",
+            //callBack: getGenderStr
           }
         )
       }),

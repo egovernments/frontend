@@ -571,6 +571,24 @@ export const newRegistrationForm = getCommonCard(
           
           },
         }),
+        age: getTextField({
+          label: {
+            labelName: "Age",
+            labelKey: "BND_AGE"
+          },
+          placeholder: {
+            labelName: "Age",
+            labelKey: "BND_AGE_PLACEHOLDER"
+          },
+          required:false,
+          visible: true,
+          pattern: patterns["age"],
+          jsonPath: "bnd.death.newRegistration.age",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }),
         firstName: getTextField({
           label: {
             labelName: "First Name",

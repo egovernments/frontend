@@ -10,6 +10,7 @@ import {importExcelDialog} from "./importExcelDialog";
 import get from "lodash/get";
 import {loadHospitals, loadFullCertDetails} from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { deleteRecordsDialog } from "./deleteRecordsDialog";
 
 
 export const showHideConfirmationPopup = (state, dispatch) => {
@@ -42,6 +43,17 @@ export const showHideImportExcelDialog = (state, dispatch) => {
  );
  dispatch(
    handleField("newRegistration", "components.importExcelDialog", "props.open", !toggle)
+ );
+};
+
+export const showHideDeleteRecordsDialog = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["newRegistration"],
+   "components.deleteRecordsDialog.props.open",
+   false
+ );
+ dispatch(
+   handleField("newRegistration", "components.deleteRecordsDialog", "props.open", !toggle)
  );
 };
 
@@ -164,6 +176,28 @@ const newRegistration = {
           },
           children: {
             popup: importExcelDialog
+          }
+        }
+      }
+    },
+    deleteRecordsDialog: {
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        disableValidation: true
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+            // style: { minHeight: "180px", minWidth: "365px" }
+          },
+          children: {
+            popup: deleteRecordsDialog
           }
         }
       }
