@@ -328,7 +328,7 @@ const callBackForNext = async (state, dispatch) => {
                     "Water And Sewerage"
                   )
                 );
-                if (waterData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (waterData.length === 0 && sewerData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (waterChecked) {
                 dispatch(
                   prepareFinalObject(
@@ -336,7 +336,7 @@ const callBackForNext = async (state, dispatch) => {
                     _.capitalize(serviceConst.WATER)
                   )
                 );
-                if (waterData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
+                if (waterData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
               } else if (sewerChecked) {
                 dispatch(prepareFinalObject("applyScreen.service", _.capitalize(serviceConst.SEWERAGE)))
                 if (sewerData.length === 0) { if (!window.location.href.includes("mode=MODIFY&action=edit")) isFormValid = await applyForWaterOrSewerage(state, dispatch); }
