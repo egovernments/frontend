@@ -285,7 +285,14 @@ class WorkFlowContainer extends React.Component {
           data[0].fireNOCDetails.status = "CITIZENACTIONREQUIRED";
           data[0].fireNOCDetails.assignee = [get(preparedFinalObject, "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].uuid", "")];
         }
-      
+ 
+        if (window.location.href.includes("wns/search-preview")) {
+          if(data.roadCuttingInfo && data.roadCuttingInfo.length > 0) {
+            data.roadCuttingInfo = [];
+            data.roadCuttingInfo = data.roadCuttingInfos || [];
+            data.roadCuttingInfos = [];
+          }
+      }     
       let payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });

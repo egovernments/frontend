@@ -75,10 +75,13 @@ const mapStateToProps = (state, ownProps) => {
     complaints["byId"][
       decodeURIComponent(window.location.href.split("/").pop())
     ];
-  const selectedEmployee =
-    selectedComplaint &&
-    employeeById &&
-    employeeById[selectedComplaint.actions[0].assignee];
+    let assignee;
+    selectedComplaint && selectedComplaint.actions.map(items => {
+      if( items && items.action === "assign") {
+        assignee = items.assignee;
+      } 
+    });
+  const selectedEmployee = employeeById && assignee && employeeById[assignee]
   const employeeDetails = {
     employeeName: selectedEmployee && selectedEmployee.name,
     employeeDesignation:
