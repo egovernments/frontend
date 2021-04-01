@@ -186,7 +186,7 @@ const screenConfig = {
         false
       );
       }
-    generateBill(dispatch, applicationNumber, tenantId, status);
+    generateBill(state, dispatch, applicationNumber, tenantId, status);
     prepareDocumentsView(state, dispatch);
     return action;
   },
