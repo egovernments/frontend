@@ -84,6 +84,10 @@ export const propertySearchApiCall = async (state, dispatch) => {
               }
             }    
           }
+        if(propertyData.units == "NA" && propertyData.additionalDetails && propertyData.additionalDetails.subUsageCategory) {
+            propertyData.units = [];
+            propertyData.units.push({usageCategory: propertyData.additionalDetails.subUsageCategory})
+          }
           dispatch(prepareFinalObject("applyScreen.property", propertyData))
           showHideFields(dispatch, true);
         }
