@@ -36,6 +36,10 @@ import './index.css';
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenantId = getQueryArg(window.location.href, "tenantId");
 let businessService = getQueryArg(window.location.href, "businessService");
+export const checkValueForNA = value => {
+  return value == null || value == undefined || value == '' ? "NA" : value;
+};
+
 const searchResults = async (action, state, dispatch) => {
 
   let tenantId = getQueryArg(window.location.href, "tenantId");
@@ -491,9 +495,7 @@ export const checkChallanStatus = value => {
   return value === "CANCELLED" ? value : "NA";
 };
 
-export const checkValueForNA = value => {
-  return value == null || value == undefined || value == '' ? "NA" : value;
-};
+
 const headerrow = getCommonContainer({});
 
 
