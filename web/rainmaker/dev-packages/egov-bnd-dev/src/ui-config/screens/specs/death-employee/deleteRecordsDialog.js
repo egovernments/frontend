@@ -52,7 +52,7 @@ export const deleteRecordsDialog = getCommonContainer({
               labelKey: "Summary:"
             }),
             resultValue: getCommonValue({
-              jsonPath: "bnd.birth.deleteRecordsResult",
+              jsonPath: "bnd.death.deleteRecordsResult",
             }),
           },
           visible: false,
@@ -79,9 +79,9 @@ export const deleteRecordsDialog = getCommonContainer({
             action: "condition",
             callBack: (state, dispatch) => {
               setVisibilityResult(false);
-              deleteAllRecords(state,dispatch,"birth").then((response)=>{
+              deleteAllRecords(state,dispatch,"death").then((response)=>{
                 setVisibilityResult(true);
-                store.dispatch(prepareFinalObject("bnd.birth.deleteRecordsResult", response));
+                store.dispatch(prepareFinalObject("bnd.death.deleteRecordsResult", response));
               });
              }
           }

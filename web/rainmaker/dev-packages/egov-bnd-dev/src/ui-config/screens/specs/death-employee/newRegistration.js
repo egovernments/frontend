@@ -9,6 +9,8 @@ import {addHospitalDialog} from "./addHospitalDialog";
 import get from "lodash/get";
 import {loadHospitals, loadFullCertDetails} from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {importExcelDialog} from "./importExcelDialog";
+import { deleteRecordsDialog } from "./deleteRecordsDialog";
 
 
 export const showHideConfirmationPopup = (state, dispatch) => {
@@ -33,6 +35,28 @@ export const showHideAddHospitalDialog = (state, dispatch) => {
  );
 };
 
+export const showHideImportExcelDialog = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["newRegistration"],
+   "components.importExcelDialog.props.open",
+   false
+ );
+ dispatch(
+   handleField("newRegistration", "components.importExcelDialog", "props.open", !toggle)
+ );
+};
+
+export const showHideDeleteRecordsDialog = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["newRegistration"],
+   "components.deleteRecordsDialog.props.open",
+   false
+ );
+ dispatch(
+   handleField("newRegistration", "components.deleteRecordsDialog", "props.open", !toggle)
+ );
+};
+
 const newRegistration = {
   uiFramework: "material-ui",
   name: "newRegistration",
@@ -45,7 +69,6 @@ const newRegistration = {
     {
       loadFullCertDetails(action,state,dispatch, {tenantId:getTenantId(), id:id, module:module}).then((response)=>{
         if (response && response.DeathCertificate && response.DeathCertificate.length>0) {
-          //dispatch(prepareFinalObject("bnd.death.newRegistration", {"birthFatherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthMotherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthPresentaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"birthPermaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"registrationno":"test","hospitalname":"VAIJAYANTI HOSPITAL","dateofreportepoch":"2021-03-16","dateofbirthepoch":"2021-03-11","genderStr":"Male","firstname":"TEst","middlename":"TEst","lastname":"TEst","placeofbirth":"TEst","informantsname":"TEst","informantsaddress":"TEst","remarks":"asdf"}));
           dispatch(prepareFinalObject("bnd.death.newRegistration", response.DeathCertificate[0]));
         }
       });
@@ -128,6 +151,50 @@ const newRegistration = {
           },
           children: {
             popup: addHospitalDialog
+          }
+        }
+      }
+    },
+    importExcelDialog: {
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        disableValidation: true
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+            // style: { minHeight: "180px", minWidth: "365px" }
+          },
+          children: {
+            popup: importExcelDialog
+          }
+        }
+      }
+    },
+    deleteRecordsDialog: {
+      componentPath: "Dialog",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        disableValidation: true
+      },
+      children: {
+        dialogContent: {
+          componentPath: "DialogContent",
+          props: {
+            classes: {
+              root: "city-picker-dialog-style"
+            }
+            // style: { minHeight: "180px", minWidth: "365px" }
+          },
+          children: {
+            popup: deleteRecordsDialog
           }
         }
       }

@@ -39,7 +39,7 @@ export const getFileSize = file => {
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
-  alert("mimeType of file is ",mimeType);
+  //alert("mimeType of file is ",mimeType);
   return (
     (mimeType &&
       acceptedFiles &&
@@ -47,6 +47,19 @@ export const isFileValid = (file, acceptedFiles) => {
     false
   );
 };
+
+export const msToTime = (duration) =>{
+  var milliseconds = Math.floor((duration % 1000) / 100),
+    seconds = Math.floor((duration / 1000) % 60),
+    minutes = Math.floor((duration / (1000 * 60)) % 60),
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+  return hours + " Hours  " + minutes + " Min  " + seconds + " Seconds" ;
+}
 
 export const handleFileUpload = (event, handleDocument, props,module) => {
   const { maxFileSize, formatProps, moduleName } = props;
@@ -58,7 +71,7 @@ export const handleFileUpload = (event, handleDocument, props,module) => {
       const fileValid = isFileValid(file, acceptedFiles(formatProps.accept));
       const fileSize = getFileSize(file);
       const isSizeValid =  fileSize <= maxFileSize;
-      alert(`Size of the chosen excel is ${Math.round(fileSize )} KB `);
+      alert(`Size of the excel is ${Math.round(fileSize )} KB \nEstimated Time to upload is : ${msToTime(Math.round(fileSize)*1000/8.5)} `);
       handleDocument(file);
     });
   }
@@ -96,11 +109,12 @@ export const uploadFile = async (endPoint, module, file) => {
     const responseStatus = parseInt(response.status, 10);
     let fileStoreIds = [];
     store.dispatch(toggleSpinner());
-    if (responseStatus === 201) {
-      const responseData = response.data;
-      const files = responseData.files || [];
-      fileStoreIds = files.map(f => f.fileStoreId);
-      return fileStoreIds[0];
+    if (responseStatus === 200) {
+      return response;
+    }
+    else
+    {
+      return "Service Error. Try again by logging in.";
     }
   } catch (error) {
     store.dispatch(toggleSpinner());
@@ -112,11 +126,12 @@ export const postXlsxFile = async (state, dispatch, module, file) => {
 
   try{
     let tenantId = getTenantId();
-    const fileStoreId = await uploadFile(
+    const resp = await uploadFile(
       `birth-death-services/upload/_${module}?tenantid=${tenantId}`,
       `${module}`,
       file
-    );   
+    );
+    return resp;
   }
   catch(e){
     console.error(e);
@@ -131,6 +146,8 @@ export const postXlsxFile = async (state, dispatch, module, file) => {
 }
 
 export const deleteAllRecords = async (state, dispatch, module) => {
+
+  store.dispatch(toggleSpinner());
 
   let requestBody = {};
   let payload = null;
@@ -151,16 +168,18 @@ export const deleteAllRecords = async (state, dispatch, module) => {
       queryParams,
       requestBody
     );
+    store.dispatch(toggleSpinner());
     store.dispatch(
       toggleSnackbar(
         true,
-        { labelName: "", labelKey: payload.response },
+        { labelName: "", labelKey: payload },
         "success"
       )
     );
   }
   catch(e)
   {
+    store.dispatch(toggleSpinner());
     store.dispatch(
       toggleSnackbar(
         true,

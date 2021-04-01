@@ -6,10 +6,10 @@ import {newRegistrationForm} from "./newRegistrationCard";
 import {footer} from "./newRegistrationFooter";
 import {confirmationDialog} from "./newRegistrationConfirmDialog";
 import {addHospitalDialog} from "./addHospitalDialog";
-import {importExcelDialog} from "./importExcelDialog";
 import get from "lodash/get";
 import {loadHospitals, loadFullCertDetails} from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import {importExcelDialog} from "./importExcelDialog";
 import { deleteRecordsDialog } from "./deleteRecordsDialog";
 
 

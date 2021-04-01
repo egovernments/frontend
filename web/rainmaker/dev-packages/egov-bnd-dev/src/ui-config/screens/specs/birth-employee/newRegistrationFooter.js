@@ -237,8 +237,8 @@ export const footer = getCommonApplyFooter({
         showHideImportExcelDialog(state,dispatch);
       }
     },
-    visible: (!(process.env.NODE_ENV === 'production') && 
-      (getQueryArg(window.location.href,"showImport")=="true" || window.location.host.includes("demo.echhawani.gov.in"))),
+    visible: ((window.location.host.includes("13.71.65.215.nip.io") || window.location.host.includes("localhost")) && getQueryArg(window.location.href,"showImport")=="true") 
+      || window.location.host.includes("demo.echhawani.gov.in"),
   },
   deleteRecords: {
     componentPath: "Button",
@@ -265,8 +265,8 @@ export const footer = getCommonApplyFooter({
         showHideDeleteRecordsDialog(state,dispatch);
       }
     },
-    visible: (!(process.env.NODE_ENV === 'production') && 
-      (getQueryArg(window.location.href,"showImport")=="true" || window.location.host.includes("demo.echhawani.gov.in"))),
+    visible: ((window.location.host.includes("13.71.65.215.nip.io") || window.location.host.includes("localhost")) && getQueryArg(window.location.href,"showImport")=="true") 
+    || window.location.host.includes("demo.echhawani.gov.in"),
   },
   resetButton: {
     componentPath: "Button",

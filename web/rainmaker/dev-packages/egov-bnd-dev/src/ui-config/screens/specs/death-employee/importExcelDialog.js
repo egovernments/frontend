@@ -22,12 +22,12 @@ let setVisibilityResult = (visible) => {
 }
 
 let clearCache = () =>{
-  store.dispatch(prepareFinalObject("bnd.birth.importFile", ""));
+  store.dispatch(prepareFinalObject("bnd.death.importFile", ""));
 }
 
 let handleDocument  = async (file) => {
   
-  store.dispatch(prepareFinalObject("bnd.birth.importFile", file));
+  store.dispatch(prepareFinalObject("bnd.death.importFile", file));
 
 };
 
@@ -62,7 +62,7 @@ export const importExcelDialog = getCommonContainer({
             id : "bndImportFileUpload",
             classes: {input:"input"},
             handleFileUpload: (e) => {
-              handleFileUpload(e, handleDocument, {moduleName:"BnD", formatProps:{accept:"xlsx"},maxFileSize:20}, "birth")
+              handleFileUpload(e, handleDocument, {moduleName:"BnD", formatProps:{accept:"xlsx"},maxFileSize:20}, "death")
             },
             buttonLabel : "Upload file"
           }
@@ -79,14 +79,14 @@ export const importExcelDialog = getCommonContainer({
               labelKey: "Summary:"
             }),
             resultValue: getCommonValue({
-              jsonPath: "bnd.birth.importFileResult.summary",
+              jsonPath: "bnd.death.importFileResult.summary",
             }),
             resultHeader2: getCommonCaption({
               labelName: "",
               labelKey: "Error Details:"
             }),
             resultValue2: getCommonValue({
-              jsonPath: "bnd.birth.importFileResult.errors",
+              jsonPath: "bnd.death.importFileResult.errors",
             }),
           },
           visible: false,
@@ -112,7 +112,7 @@ export const importExcelDialog = getCommonContainer({
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              let file = get(state.screenConfiguration.preparedFinalObject,`bnd.birth.importFile`);
+              let file = get(state.screenConfiguration.preparedFinalObject,`bnd.death.importFile`);
               if(!file)
               {
                 toggleSnackbar(true,{
@@ -124,14 +124,14 @@ export const importExcelDialog = getCommonContainer({
               }
               let tic = performance.now();
               setVisibilityResult(false);
-              postXlsxFile(state,dispatch, "birth", file).then((response)=>{
+              postXlsxFile(state,dispatch, "death", file).then((response)=>{
                 let toc = performance.now();
                 console.log("Total time taken: ",toc-tic);
                 if(response && response.data)
                 {
                   setVisibilityResult(true);
-                  store.dispatch(prepareFinalObject("bnd.birth.importFileResult.summary", JSON.stringify(response.data.statsMap,null,2)));
-                  store.dispatch(prepareFinalObject("bnd.birth.importFileResult.errors", JSON.stringify(response.data.errorRowMap,null,2)));
+                  store.dispatch(prepareFinalObject("bnd.death.importFileResult.summary", JSON.stringify(response.data.statsMap,null,2)));
+                  store.dispatch(prepareFinalObject("bnd.death.importFileResult.errors", JSON.stringify(response.data.errorRowMap,null,2)));
                 }
               });
             }
