@@ -16,6 +16,7 @@ import {
   import {showHideConfirmationPopup, showHideImportExcelDialog, showHideDeleteRecordsDialog} from "./newRegistration";
   import _ from 'lodash';
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  import {validateTimeZone} from "../utils";
 
 const checkIfFormIsValid = async (state, dispatch) => {
 
@@ -70,7 +71,10 @@ const checkIfFormIsValid = async (state, dispatch) => {
     "newRegistration"
   ); 
 
-  console.log(newRegistration,permAddr,placeOfBirth,childsInfo,fathersInfo,mothersInfo,addrTimeOfBirth);
+  if(!validateTimeZone())
+  {
+    return;
+  }
 
   if(!(newRegistration && permAddr && placeOfBirth &&
       childsInfo && fathersInfo && mothersInfo && addrTimeOfBirth))
