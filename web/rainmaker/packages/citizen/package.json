@@ -31,6 +31,7 @@
     "egov-wns": "1.3.0",
     "egov-workflow": "1.2.0",
     "egov-lams": "0.0.1",
+    "egov-bnd": "0.0.1",
 
     "html2canvas": "^1.0.0-alpha.12",  
     "jsonpath": "^1.0.0",

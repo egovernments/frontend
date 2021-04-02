@@ -68,7 +68,8 @@
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
     "webfontloader": "^1.6.28",
-    "egov-lams": "0.0.1"
+    "egov-lams": "0.0.1",
+    "egov-bnd": "0.0.1"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
