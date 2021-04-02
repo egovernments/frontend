@@ -108,7 +108,7 @@ export const getPersonDetailsForm = (type, inJsonPath) =>{
         labelKey: "BND_PROFESSION"
       },
       {
-        jsonPath: inJsonPath + `${type}.proffession`,
+        jsonPath: inJsonPath + `.${type}.proffession`,
         callBack: checkNoData
       }
     ),

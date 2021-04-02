@@ -56,7 +56,17 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
             jsonPath: inJsonPath + ".genderStr",
             //callBack: getGenderStr
           }
-        )
+        ),
+        age: getLabelWithValue(
+          {
+            labelName: "Age",
+            labelKey: "Age"
+          },
+          {
+            jsonPath: inJsonPath + ".age",
+            //callBack: getGenderStr
+          }
+        ),
       }),
     //divider1: getDivider(),
     certDetailsContainer2: getCommonContainer(
@@ -121,7 +131,7 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
             labelKey: "Mother's Aadhar No"
           },
           {
-            jsonPath: inJsonPath + "deathMotherInfo.aadharno",
+            jsonPath: inJsonPath + ".deathMotherInfo.aadharno",
             //callBack: checkNoData
           }
         ),
@@ -131,7 +141,7 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
             labelKey: "Father's Aadhar No"
           },
           {
-            jsonPath: inJsonPath + "deathFatherInfo.aadharno",
+            jsonPath: inJsonPath + ".deathFatherInfo.aadharno",
             //callBack: checkNoData
           }
         ),
