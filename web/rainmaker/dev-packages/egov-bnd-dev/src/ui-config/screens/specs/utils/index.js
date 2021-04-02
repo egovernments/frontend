@@ -739,6 +739,13 @@ export const downloadReceipt = async (consumerCode,tenantId) => {
   {
     let mode = 'download';
     downloadReceiptFromFilestoreID(response.Payments[0].fileStoreId, mode);
+  }else
+  {
+    store.dispatch(
+      setRoute(
+        `/uc-citizen/search`
+      )
+    );
   }
   return response;
 

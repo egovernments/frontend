@@ -117,22 +117,22 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
       {
         mothersUid: getLabelWithValue(
           {
-            labelName: "Mother's UID No",
-            labelKey: "Mother's UID No"
+            labelName: "Mother's Aadhar No",
+            labelKey: "Mother's Aadhar No"
           },
           {
             jsonPath: inJsonPath + "birthMotherInfo.aadharno",
-            callBack: checkNoData
+            //callBack: checkNoData
           }
         ),
         fathersUid: getLabelWithValue(
           {
-            labelName: "Father's UID No",
-            labelKey: "Father's UID No"
+            labelName: "Father's Aadhar No",
+            labelKey: "Father's Aadhar No"
           },
           {
             jsonPath: inJsonPath + "birthFatherInfo.aadharno",
-            callBack: checkNoData
+            //callBack: checkNoData
           }
         ),
       },
