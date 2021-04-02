@@ -56,7 +56,17 @@ export const getDeathCertDetailsCard = (inJsonPath) => {
             jsonPath: inJsonPath + ".genderStr",
             //callBack: getGenderStr
           }
-        )
+        ),
+        age: getLabelWithValue(
+          {
+            labelName: "Age",
+            labelKey: "Age"
+          },
+          {
+            jsonPath: inJsonPath + ".age",
+            //callBack: getGenderStr
+          }
+        ),
       }),
     //divider1: getDivider(),
     certDetailsContainer2: getCommonContainer(
