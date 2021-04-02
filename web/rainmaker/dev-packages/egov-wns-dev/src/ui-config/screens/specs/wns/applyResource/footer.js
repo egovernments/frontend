@@ -619,6 +619,14 @@ const callBackForNext = async (state, dispatch) => {
         if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {
           setReviewPageRoute(state, dispatch);
         }
+        let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+        let raodCuttingInfos = get(state, "screenConfiguration.preparedFinalObject.applyScreen.raodCuttingInfos", []);
+
+        if (roadCuttingInfo && roadCuttingInfo.length > 0) {
+          dispatch(prepareFinalObject("applyScreen.tempRoadCuttingInfo", roadCuttingInfo));
+          let formatedRoadCuttingInfo = roadCuttingInfo.filter(value => value.emptyObj !== true); 
+          dispatch(prepareFinalObject("applyScreen.roadCuttingInfo", formatedRoadCuttingInfo));
+        }
         let UsageType = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
         if (UsageType === "MIXED") {
           dispatch(
@@ -683,6 +691,8 @@ const callBackForNext = async (state, dispatch) => {
       }
     } else {
       let roadCuttingInfo = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfo", []);
+      let roadCuttingInfos = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadCuttingInfos", []);
+
       let applicationStatus = get(state.screenConfiguration.preparedFinalObject, "applyScreen.applicationStatus", "");
       if(applicationStatus === "PENDING_FOR_CONNECTION_ACTIVATION") {
         let waterSourceType = get(state.screenConfiguration.preparedFinalObject, "DynamicMdms.ws-services-masters.waterSource.selectedValues[0].waterSourceType", "");
@@ -738,6 +748,43 @@ const callBackForNext = async (state, dispatch) => {
           dispatch(toggleSnackbar(true, errorMessage, "warning"));
           return
         }
+      }
+      if(roadCuttingInfos && roadCuttingInfos.length > 0) {
+        for(let b =0; b < roadCuttingInfo.length ; b++) {
+          if(get(roadCuttingInfos[b], "status") == "INACTIVE") {
+            roadCuttingInfo.push(roadCuttingInfos[b]);
+          }
+        }
+      }
+      if(roadCuttingInfo && roadCuttingInfo.length > 0) {
+        for (let i = 0; i < roadCuttingInfo.length; i++) {
+          if (roadCuttingInfo[i] == undefined) {
+            roadCuttingInfo[i] = {};
+            roadCuttingInfo[i].isEmpty = true;
+          }
+        }
+        let filteredInfo = [];
+        roadCuttingInfo.forEach(info => {
+          if(info.isDeleted ==false) {
+            info.status = "INACTIVE"
+          }
+        });
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfos", roadCuttingInfo));
+        for(let j = 0; j < roadCuttingInfo.length; j ++) {
+          if(roadCuttingInfo[j].isDeleted !=false) {
+            filteredInfo.push(roadCuttingInfo[j]);
+          } else {
+            filteredInfo.push({emptyObj: true})
+          }
+        }
+        // roadCuttingInfo.forEach(info => {
+        //   if(info.isDeleted !=false) filteredInfo.push(info);
+        //   else filteredInfo.push({isEmpty: true})
+        // });
+        // roadCuttingInfo.map(info => {
+        //   if(info.isDeleted !=false) filteredInfo.push(info);
+        // });
+        dispatch(prepareFinalObject( "applyScreen.roadCuttingInfo", filteredInfo));
       }
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
