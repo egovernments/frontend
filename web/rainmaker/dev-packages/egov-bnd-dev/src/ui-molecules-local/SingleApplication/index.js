@@ -200,7 +200,7 @@ class SingleApplication extends React.Component {
 
   onDownloadCertClicked = (item) =>{
     const {certificateDowloadHandler} = this.props;
-    certificateDowloadHandler({tenantId:item.tenantId, consumerCode: item.applicationNumber, businessService:(item.businessService == "Birth")?"BIRTH_CERT":"DEATH_CERT"});
+    certificateDowloadHandler({tenantId:item.tenantId, consumerCode: item.applicationNumber, businessService:(item.applicationCategory == "Birth")?"BIRTH_CERT":"DEATH_CERT"});
   }
 
   onDownloadReceiptClicked = (item) =>{
