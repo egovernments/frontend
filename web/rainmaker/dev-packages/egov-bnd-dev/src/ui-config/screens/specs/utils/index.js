@@ -14,6 +14,16 @@ import {prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuratio
 import { downloadReceiptFromFilestoreID} from "egov-common/ui-utils/commons";
 import store from "ui-redux/store";
 
+export const validateTimeZone = () =>{
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if(tz != "Asia/Calcutta")
+  {
+    alert("Looks like you system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again.")
+    return false;
+  }
+  return true;
+}
+
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
