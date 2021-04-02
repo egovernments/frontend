@@ -121,7 +121,7 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Mother's Aadhar No"
           },
           {
-            jsonPath: inJsonPath + "birthMotherInfo.aadharno",
+            jsonPath: inJsonPath + ".birthMotherInfo.aadharno",
             //callBack: checkNoData
           }
         ),
@@ -131,7 +131,7 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
             labelKey: "Father's Aadhar No"
           },
           {
-            jsonPath: inJsonPath + "birthFatherInfo.aadharno",
+            jsonPath: inJsonPath + ".birthFatherInfo.aadharno",
             //callBack: checkNoData
           }
         ),
