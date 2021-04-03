@@ -15,10 +15,17 @@ import { downloadReceiptFromFilestoreID} from "egov-common/ui-utils/commons";
 import store from "ui-redux/store";
 
 export const validateTimeZone = () =>{
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if(tz != "Asia/Calcutta")
+  try{
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if(tz != "Asia/Calcutta")
+    {
+      alert("Looks like your system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again.")
+      return false;
+    }
+  }
+  catch(e)
   {
-    alert("Looks like you system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again.")
+    alert("Looks like this browser is very old. Please update your browser and continue");
     return false;
   }
   return true;
