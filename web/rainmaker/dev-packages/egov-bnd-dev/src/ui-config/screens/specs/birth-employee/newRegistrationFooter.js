@@ -195,7 +195,7 @@ export const postData = async(state,dispatch) => {
       true,
       {
         labelName: "API Error",
-        labelKey: "You have logged out. Please login again and try."
+        labelKey: "Session expired. Please login again and try."
       },
       "info"
     )
