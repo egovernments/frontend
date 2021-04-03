@@ -287,10 +287,10 @@ export const getFullBirthCertDetailsCard = (inJsonPath) =>
               callBack: checkNoData
             }
           ),
-          dateOfReporting: getLabelWithValue(
+          dateOfRegistration: getLabelWithValue(
             {
-              labelName: "BND_DOR_PLACEHOLDER",
-              labelKey: "BND_DOR_PLACEHOLDER"
+              labelName: "BND_DOR",
+              labelKey: "BND_DOR"
             },
             {
               jsonPath: inJsonPath + ".dateofreport",
