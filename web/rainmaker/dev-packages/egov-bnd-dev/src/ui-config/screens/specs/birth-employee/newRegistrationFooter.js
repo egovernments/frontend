@@ -190,12 +190,12 @@ export const postData = async(state,dispatch) => {
     }
   } 
   catch (error) {
-    console.log(error)
+    console.log(error);
     dispatch(toggleSnackbar(
       true,
       {
         labelName: "API Error",
-        labelKey: "ERR_API_ERROR"
+        labelKey: "You have logged out. Please login again and try."
       },
       "info"
     )
