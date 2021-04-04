@@ -338,7 +338,7 @@ const setSearchResponse = async (
   const equals = (a, b) =>
   a.length === b.length &&
   a.every((v, i) => v === b[i]);
-  if(fireDetails && fireDetails.length > 0 && !(equals(fireDetails, response.FireNOCs))) {
+  if(fireDetails && fireDetails.length > 0 && !(equals(fireDetails, response.FireNOCs)) && (fireDetails[0].fireNOCDetails.applicationNumber === response.FireNOCs[0].fireNOCDetails.applicationNumber)) {
     // const response = sampleSingleSearch();
     dispatch(prepareFinalObject("FireNOCs", fireDetails, []));
   }
