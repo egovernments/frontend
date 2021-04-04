@@ -1,4 +1,5 @@
 import React from "react";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -14,7 +15,9 @@ const styles = {
 
 function ApplicationNoContainer(props) {
   const { number } = props;
-  return <div style={styles}>Application No. {number}</div>;
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber")
+  const applicationNo = (number === applicationNumber) ? number : applicationNumber;
+  return <div style={styles}>Application No. {applicationNo}</div>;
 }
 
 export default ApplicationNoContainer;
