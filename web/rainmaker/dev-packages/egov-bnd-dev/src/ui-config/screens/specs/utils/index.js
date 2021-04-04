@@ -16,7 +16,7 @@ import store from "ui-redux/store";
 
 export const validateTimeZone = () =>{
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if(tz != "Asia/Calcutta")
+  if(tz != "Asia/Calcutta" && tz != "Asia/Kolkata")
   {
     alert("Looks like you system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again.")
     return false;
