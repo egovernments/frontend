@@ -784,6 +784,14 @@ const accessoriesCard = {
                     false
                   )
                 );
+                dispatch(
+                  handleField(
+                    "apply",
+                    `${currentUOMValueFieldPath}.accessoriesCount`,
+                    "props.value",
+                    1
+                  )
+                );
               } else {
                 dispatch(
                   handleField(
