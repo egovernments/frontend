@@ -233,6 +233,27 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", true);
       }
+
+
+      // Multiple roadtype cards validations
+      let multipleRoadTypeCardPath = "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen.props.items";
+      let mutipleRoadTypeValues = get(state.screenConfiguration.preparedFinalObject, "applyScreen.roadCuttingInfo", []);
+     if (mutipleRoadTypeValues && mutipleRoadTypeValues.length > 0) {
+       for (var a = 0; a < mutipleRoadTypeValues.length; a++) {
+         if (mutipleRoadTypeValues[a].emptyObj) {
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewArea.props.visible`, false);
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewArea.visible`, false);
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewRoadType.props.visible`, false);
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewRoadType.visible`, false);
+         } else {
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewArea.props.visible`, true);
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewArea.visible`, true);
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewRoadType.props.visible`, true);
+           set(action.screenConfig, `${multipleRoadTypeCardPath}[${a}].item${a}.children.reviewRoadType.visible`, true);
+         }
+       }
+     }
+
     }
     let subUsageType = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].additionalDetails.waterSubUsageType");
     let subUsageTypes = get(state, "screenConfiguration.preparedFinalObject.subUsageType", []);
@@ -771,9 +792,14 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", false);
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", true);
     if (payload !== undefined && payload !== null) {
-      
+      let roadCuttingInfos = payload.WaterConnection[0].roadCuttingInfo;
+      if(payload.WaterConnection[0] && Array.isArray(payload.WaterConnection[0].roadCuttingInfo) && payload.WaterConnection[0].roadCuttingInfo.length > 0) {
+        payload.WaterConnection[0].roadCuttingInfo = Array.isArray(payload.WaterConnection[0].roadCuttingInfo) && payload.WaterConnection[0].roadCuttingInfo.filter(info => info.status == "ACTIVE");
+      }
+
       payload.WaterConnection[0].additionalDetails.waterSubUsageType = payload.WaterConnection[0].additionalDetails.waterSubUsageType ? payload.WaterConnection[0].additionalDetails.waterSubUsageType : "NA";
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
+      dispatch(prepareFinalObject("WaterConnection[0].roadCuttingInfos", roadCuttingInfos));
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
@@ -842,8 +868,14 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.visible", true);
     set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.visible", false); 
     if (payload !== undefined && payload !== null) {
+      let roadCuttingInfos = payload.WaterConnection[0].roadCuttingInfo;
+      if(payload.SewerageConnections[0] && Array.isArray(payload.SewerageConnections[0].roadCuttingInfo) && payload.SewerageConnections[0].roadCuttingInfo.length > 0) {
+        payload.SewerageConnections[0].roadCuttingInfo = Array.isArray(payload.SewerageConnections[0].roadCuttingInfo) && payload.SewerageConnections[0].roadCuttingInfo.filter(info => info.status == "ACTIVE");
+      }
       dispatch(prepareFinalObject("SewerageConnection[0]", payload.SewerageConnections[0]));
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
+      dispatch(prepareFinalObject("SewerageConnection[0].roadCuttingInfos", roadCuttingInfos));
+      dispatch(prepareFinalObject("WaterConnection[0].roadCuttingInfos", roadCuttingInfos));
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
