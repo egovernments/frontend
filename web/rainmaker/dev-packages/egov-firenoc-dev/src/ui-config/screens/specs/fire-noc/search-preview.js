@@ -294,7 +294,9 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
-  const response = await getSearchResults([
+  let edited =getQueryArg(window.location.href, "edited")
+
+  const response =edited?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}: await getSearchResults([
     {
       key: "tenantId",
       value: tenantId
@@ -304,7 +306,6 @@ const setSearchResponse = async (
   // const response = sampleSingleSearch();
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]','');
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.comment','');
-  
   set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments',[]);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
 

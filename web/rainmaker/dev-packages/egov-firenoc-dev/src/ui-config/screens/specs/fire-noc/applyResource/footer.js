@@ -11,7 +11,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   createUpdateNocApplication,
-  prepareDocumentsUploadData
+  prepareDocumentsUploadData,
+  setDocsForEditFlow
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -179,6 +180,8 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
+ setDocsForEditFlow(state, dispatch) 
+
   }
 
   if (activeStep === 2) {
