@@ -81,7 +81,87 @@ export const propertySummaryDetails={
         masterName: "BuildingType"
       }
     }
-  )
+  ),
+  buildingLandArea: getLabelWithValue(
+    {
+      labelName: "Land Area(in Sq meters)",
+      // labelKey: "NOC_PROPERTY_DETAILS_LAND_AREA_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].landArea",
+      // localePrefix: {
+      //   moduleName: "firenoc",
+      //   masterName: "BuildingLandArea"
+      // },
+    }
+  ),
+  buildingCoveredArea: getLabelWithValue(
+    {
+      labelName: "Total Covered Area(in Sq meters)",
+      // labelKey: "NOC_PROPERTY_DETAILS_COVERED_AREA_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].totalCoveredArea",
+      // localePrefix: {
+      //   moduleName: "firenoc",
+      //   masterName: "BuildingCoveredArea"
+      // },
+    }
+  ),
+  buildingParkingArea: getLabelWithValue(
+    {
+      labelName: "Parking Area",
+      labelKey: "NOC_PROPERTY_DETAILS_PARKING_AREA_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].parkingArea",
+      callBack: checkValueForNA
+      // localePrefix: {
+      //   moduleName: "firenoc",
+      //   masterName: "BuildingParkingArea"
+      // },
+    }
+  ),
+  buildingleftSurrounding: getLabelWithValue(
+    {
+      labelName: "Left surrounding",
+      // labelKey: "NOC_PROPERTY_DETAILS_LEFT_SURROUNDING_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].leftSurrounding",
+      callBack: checkValueForNA
+    }
+  ),
+  buildingrightSurrounding: getLabelWithValue(
+    {
+      labelName: "Right surrounding",
+      // labelKey: "NOC_PROPERTY_DETAILS_RIGHT_SURROUNDING_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].rightSurrounding",
+      callBack: checkValueForNA
+    }
+  ),
+  buildingfrontSurrounding: getLabelWithValue(
+    {
+      labelName: "Front surrounding",
+      // labelKey: "NOC_PROPERTY_DETAILS_FRONT_SURROUNDING_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].frontSurrounding",
+      callBack: checkValueForNA
+    }
+  ),
+  buildingbackSurrounding: getLabelWithValue(
+    {
+      labelName: "Back surrounding",
+      // labelKey: "NOC_PROPERTY_DETAILS_BACK_SURROUNDING_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].backSurrounding",
+      callBack: checkValueForNA
+    }
+  ),
 }
 const propertyDetails = {
   uiFramework: "custom-containers",
@@ -109,13 +189,46 @@ export const propertyLocationSummaryDetail={
     },
     { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId", callBack: checkValueForNA }
   ),
+  areaType: getLabelWithValue(
+    {
+      labelName: "Area Type",
+      // labelKey: "NOC_AREA_TYPE_LABEL"
+    },
+    { 
+    jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType" ,
+    }
+  ),
+  district: getLabelWithValue(
+    {
+      labelName: "District Name",
+      // labelKey: "NOC_PROPERTY_CITY_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+      localePrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      }
+    }
+  ),
+  subDistrict: getLabelWithValue(
+    {
+      labelName: "Sub District Name",
+      // labelKey: "NOC_SUB_DISTRICT_LABEL"
+    },
+    { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
+    callBack: value => {
+      return `${value}`;
+    }
+    }
+  ), 
   city: getLabelWithValue(
     {
       labelName: "City",
       labelKey: "NOC_PROPERTY_CITY_LABEL"
     },
     {
-      jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
+      jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict",
       callBack: checkValueForNA,
       localePrefix: {
         moduleName: "TENANT",
@@ -130,22 +243,42 @@ export const propertyLocationSummaryDetail={
     },
     { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo", callBack: checkValueForNA }
   ),
-  buildingCompanyName: getLabelWithValue(
-    {
-      labelName: "Building/Company Name",
-      labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
-    },
-    {
-      jsonPath:
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName", callBack: checkValueForNA
-    }
-  ),
+  // buildingCompanyName: getLabelWithValue(
+  //   {
+  //     labelName: "Building/Company Name",
+  //     labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
+  //   },
+  //   {
+  //     jsonPath:
+  //       "FireNOCs[0].fireNOCDetails.propertyDetails.address.buildingName", callBack: checkValueForNA
+  //   }
+  // ),
   streetName: getLabelWithValue(
     {
       labelName: "Street Name",
       labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
     },
     { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.street", callBack: checkValueForNA }
+  ),
+  villageName: getLabelWithValue(
+    {
+      labelName: "Village Name",
+      labelKey: "NOC_PROPERTY_DETAILS_VILL_NAME_LABEL"
+    },
+    { 
+      jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.addressLine2",
+      callBack: checkValueForNA
+    }
+  ),
+  landMarkName: getLabelWithValue( 
+    {
+      labelName: "Landmark Name",
+      labelKey: "NOC_PROPERTY_DETAILS_LANDMARK_NAME_LABEL"
+    },
+    { 
+      jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.landmark",
+      callBack: checkValueForNA 
+    },   
   ),
   mohalla: getLabelWithValue(
     {
