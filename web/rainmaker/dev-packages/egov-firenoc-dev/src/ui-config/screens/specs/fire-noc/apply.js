@@ -7,7 +7,7 @@ import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
 import { nocDetails } from "./applyResource/nocDetails";
 import { propertyDetails } from "./applyResource/propertyDetails";
-import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
+import { onchangeOfTenant, propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import { documentDetails } from "./applyResource/documentDetails";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -230,7 +230,9 @@ export const prepareEditFlow = async (
     []
   );
   if (applicationNumber && buildings.length == 0) {
-    let response = await getSearchResults([
+    let edited =getQueryArg(window.location.href, "edited")
+   
+    let response =  edited?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}:await getSearchResults([
       {
         key: "tenantId",
         value: tenantId
@@ -240,11 +242,25 @@ export const prepareEditFlow = async (
     // let response = sampleSingleSearch();
 
     response = furnishNocResponse(response);
-
+  
     dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+    await onchangeOfTenant({value:tenantId},state,dispatch);
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
+
+    dispatch(
+      handleField(
+        "apply", "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+        "props.disable",
+        true
+        ))
+        dispatch(
+          handleField(
+            "apply", "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+            "disable",
+            true
+            ))
     // Set no of buildings radiobutton and eventually the cards
     let noOfBuildings =
       get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
