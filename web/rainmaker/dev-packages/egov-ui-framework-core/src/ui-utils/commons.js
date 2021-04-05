@@ -583,14 +583,15 @@ export const validateFields = (
 };
 
 export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
-  if (typeof window.mSewaApp === "undefined") {
-    // we are running in browser
-    receiptPDF.download(filename);
-  } else {
+
+  if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
     // we are running under webview
     receiptPDF.getBase64(data => {
       window.mSewaApp.downloadBase64File(data, filename);
     });
+  } else {
+    // we are running in browser
+    receiptPDF.download(filename);
   }
 };
 
@@ -695,7 +696,7 @@ export const getStatusKey = (status) => {
 
 export const getRequiredDocData = async (action, dispatch, moduleDetails, closePopUp) => {
   let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity|| commonConfig.tenantId  : getTenantId();
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity || commonConfig.tenantId : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
