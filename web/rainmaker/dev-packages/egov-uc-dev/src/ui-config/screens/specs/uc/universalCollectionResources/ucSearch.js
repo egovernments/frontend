@@ -20,7 +20,7 @@ const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
-const resetFields = (state, dispatch) => {
+export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",

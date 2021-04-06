@@ -3,7 +3,7 @@ import {
   getLabel,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { UCSearchCard } from "./universalCollectionResources/ucSearch";
+import { UCSearchCard, resetFields } from "./universalCollectionResources/ucSearch";
 import get from "lodash/get";
 import { setServiceCategory } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -155,6 +155,7 @@ export default ucSearchAndResult;
 const openNewCollectionForm = (state, dispatch) => {
   dispatch(prepareFinalObject("Demands", []));
   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
+  resetFields(state, dispatch);
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/uc/newCollection`
