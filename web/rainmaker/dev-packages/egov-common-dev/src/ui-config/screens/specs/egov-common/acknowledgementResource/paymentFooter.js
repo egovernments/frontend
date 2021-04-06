@@ -29,7 +29,7 @@ const defaultValues = {
     "code": "DEFAULT",
     "headerBandLabel": "PAYMENT_COMMON_CONSUMER_CODE",
     "receiptKey": "property-receipt",
-    "billKey": "consolidatedbill",
+    "billKey": "property-bill",
     "buttons": [
         {
             "label": "COMMON_BUTTON_HOME",
