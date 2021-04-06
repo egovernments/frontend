@@ -14,31 +14,18 @@ class EGFFinance extends Component {
 
   render() {
     let auth_token = getAccessToken(),
-      locale = localStorage.getItem("locale"),
-      menuUrl = this.props.location.pathname,
-      loc = window.location,
-      subdomainurl,
-      hostname = loc.hostname,
-      winheight = window.innerHeight - 100,
-      erp_url,
-      tenantId = getTenantId();
-
-    if (hostname.search("dev") != -1) {
-      subdomainurl = hostname.substring(hostname.search("dev"), hostname.length);
-      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
-    } else if (hostname.search("qa") != -1) {
-      subdomainurl = hostname.substring(hostname.search("qa"), hostname.length);
-      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
-    } else if (hostname.search("uat") != -1) {
-      // subdomainurl = hostname.substring(hostname.search('uat'),hostname.length);
-      subdomainurl = "uat.digit.org";
-      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl + menuUrl;
-    } else {
-      subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
-      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl + menuUrl;
-    }
-
-    // let erp_url='http://jalandhar.test.egov.com:8080'+menuUrl;
+    locale = localStorage.getItem("locale"),
+    menuUrl = this.props.location.pathname,
+    loc = window.location,
+    subdomainurl,
+    domainurl,
+    hostname = loc.hostname,
+    winheight = window.innerHeight - 100,
+    erp_url,
+    tenantId = getTenantId();
+    domainurl = hostname.substring(hostname.indexOf(".") + 1);
+    subdomainurl = !!(process.env.REACT_APP_FIN_ENV) ? "-" + process.env.REACT_APP_FIN_ENV + "." + domainurl : "." + domainurl;
+    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + ":8080" + menuUrl;
     console.log("ERP URL : " + erp_url);
 
     return (
