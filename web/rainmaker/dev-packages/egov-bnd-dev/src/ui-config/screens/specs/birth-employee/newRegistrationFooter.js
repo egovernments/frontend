@@ -90,7 +90,21 @@ const checkIfFormIsValid = async (state, dispatch) => {
     ));
     return;
   }
-
+  let dateofreport=get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.dateofreportepoch")
+  let dateofbirth=get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.dateofbirthepoch")
+  if(dateofreport<dateofbirth)
+  {
+    isFormValid = false;
+    dispatch(toggleSnackbar(
+      true,
+      {
+        labelName: "",
+        labelKey:  "Date of Registration should not be before Date of Birth"
+      },
+      "info"
+    ));
+    return;
+  }
   if(!get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.firstname") &&
     !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.middlename") &&
     !get(state.screenConfiguration.preparedFinalObject,"bnd.birth.newRegistration.lastname") &&
@@ -143,14 +157,14 @@ export const postData = async(state,dispatch) => {
     let payload = {
       birthCerts: [newRegData],
     };
-
+    let actionmode = (getQueryArg(window.location.href, "action")=="EDIT")?'updateBirthImport':'saveBirthImport';
     payload = await httpRequest(
       "post",
-      "birth-death-services/common/saveBirthImport",
-      "saveBirthImport",
+      `birth-death-services/common/${actionmode}`,
+      `${actionmode}`,
       [],
       payload);
-  
+
     if (payload) {
       if(payload.errorRowMap && Object.keys(payload.errorRowMap).length > 0)
       {
@@ -297,7 +311,7 @@ export const footer = getCommonApplyFooter({
         location.reload();
       }
     },
-    visible: (getQueryArg(window.location.href, "action")!="VIEW"),
+    visible: (getQueryArg(window.location.href, "action")!="EDIT"),
   },
   submitButton: {
     componentPath: "Button",
@@ -315,13 +329,13 @@ export const footer = getCommonApplyFooter({
     children: {
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "CORE_COMMON_SUBMIT"
+        labelKey: (getQueryArg(window.location.href, "action")=="EDIT")?"CORE_COMMON_UPDATE":"CORE_COMMON_SUBMIT"
       })
     },
     onClickDefination: {
       action: "condition",
       callBack: callBackSubmit
     },
-    visible: (getQueryArg(window.location.href, "action")!="VIEW"),
+    //visible: (getQueryArg(window.location.href, "action")!="VIEW"),
   }
 });

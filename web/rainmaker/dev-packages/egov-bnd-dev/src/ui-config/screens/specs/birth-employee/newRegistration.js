@@ -11,6 +11,8 @@ import {loadHospitals, loadFullCertDetails} from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {importExcelDialog} from "./importExcelDialog";
 import { deleteRecordsDialog } from "./deleteRecordsDialog";
+import { convertEpochToDateCustom} from "../utils";
+
 
 
 export const showHideConfirmationPopup = (state, dispatch) => {
@@ -57,6 +59,32 @@ export const showHideDeleteRecordsDialog = (state, dispatch) => {
  );
 };
 
+const prepareEditScreenData = (action,state,dispatch,response) => {
+  setTimeout(() => {     
+    if(response.BirthCertificate[0].dateofbirth)
+    {  
+      dispatch(
+        handleField("newRegistration", "components.div2.children.details.children.cardContent.children.childInfo.children.cardContent.children.infoOfChild.children.dob", "props.value", 
+        convertEpochToDateCustom(response.BirthCertificate[0].dateofbirth)
+      ));
+    }
+    if(response.BirthCertificate[0].dateofreport)
+    {  
+      dispatch(
+        handleField("newRegistration", "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.dateOfReporting", "props.value", 
+        convertEpochToDateCustom(response.BirthCertificate[0].dateofreport)
+      ));
+    }
+    if(response.BirthCertificate[0].hospitalname)
+    {  
+      dispatch(
+        handleField("newRegistration", "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.hospitalName", "props.value", 
+        response.BirthCertificate[0].hospitalname
+      ));
+    }
+  }, 1); 
+}
+
 const newRegistration = {
   uiFramework: "material-ui",
   name: "newRegistration",
@@ -65,31 +93,32 @@ const newRegistration = {
     let userAction = getQueryArg(window.location.href, "action");
     let id = getQueryArg(window.location.href, "certificateId");
     let module = getQueryArg(window.location.href, "module");
-    if(userAction=="VIEW" && id && module)
-    {
-      loadFullCertDetails(action,state,dispatch, {tenantId:getTenantId(), id:id, module:module}).then((response)=>{
-        //response = {BirthCertificate:[{"birthFatherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthMotherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthPresentaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"birthPermaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"registrationno":"test","hospitalname":"VAIJAYANTI HOSPITAL","dateofreportepoch":"2021-03-16","dateofbirthepoch":"2021-03-11","genderStr":"Male","firstname":"TEst","middlename":"TEst","lastname":"TEst","placeofbirth":"TEst","informantsname":"TEst","informantsaddress":"TEst","remarks":"asdf"}]};
-        if (response && response.BirthCertificate && response.BirthCertificate.length>0) {
-          //dispatch(prepareFinalObject("bnd.birth.newRegistration", {"birthFatherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthMotherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthPresentaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"birthPermaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"registrationno":"test","hospitalname":"VAIJAYANTI HOSPITAL","dateofreportepoch":"2021-03-16","dateofbirthepoch":"2021-03-11","genderStr":"Male","firstname":"TEst","middlename":"TEst","lastname":"TEst","placeofbirth":"TEst","informantsname":"TEst","informantsaddress":"TEst","remarks":"asdf"}));
-          dispatch(prepareFinalObject("bnd.birth.newRegistration", response.BirthCertificate[0]));
+    loadHospitals(action, state, dispatch, "birth",getTenantId()).then((response)=>{
+
+      if(response && response.hospitalDtls)
+      {
+        for (let hospital of response.hospitalDtls) {
+          hospital.code = hospital.name;
+          hospital.name = hospital.name;
         }
-      });
-    }
-    else
-    {
-      dispatch(prepareFinalObject("bnd.birth.newRegistration", {"birthFatherInfo":{},"birthMotherInfo":{},"birthPresentaddr":{},"birthPermaddr":{}}));
-      //dispatch(prepareFinalObject("bnd.birth.newRegistration", {"birthFatherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthMotherInfo":{"firstname":"TEst","middlename":"TEst","lastname":"TEst","aadharno":"111111111111","emailid":"test@test.com","mobileno":"9444444444","education":"TEst","profession":"TEst","nationality":"TEst","religion":"TEst"},"birthPresentaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"birthPermaddr":{"buildingno":"TEst","houseno":"TEst","streetname":"TEst","locality":"TEst","tehsil":"TEst","district":"TEst","city":"TEst","state":"TEst","pinno":"512465","country":"TEst"},"registrationno":"test","hospitalname":"VAIJAYANTI HOSPITAL","dateofreportepoch":"2021-03-16","dateofbirthepoch":"2021-03-11","genderStr":"Male","firstname":"TEst","middlename":"TEst","lastname":"TEst","placeofbirth":"TEst","informantsname":"TEst","informantsaddress":"TEst","remarks":"asdf"}));
-      loadHospitals(action, state, dispatch, "birth",getTenantId()).then((response)=>{
-        if(response && response.hospitalDtls)
-        {
-          for (let hospital of response.hospitalDtls) {
-            hospital.code = hospital.name;
-            hospital.name = hospital.name;
+        dispatch(prepareFinalObject("bnd.allHospitals", response.hospitalDtls));
+      }
+
+      if(userAction=="EDIT" && id && module)
+      {
+        loadFullCertDetails(action,state,dispatch, {tenantId:getTenantId(), id:id, module:module}).then((response)=>{
+          if (response && response.BirthCertificate && response.BirthCertificate.length>0) {
+            dispatch(prepareFinalObject("bnd.birth.newRegistration", response.BirthCertificate[0]));
+            prepareEditScreenData(action,state, dispatch,response);
           }
-          dispatch(prepareFinalObject("bnd.allHospitals", response.hospitalDtls));
-        }
-      });
-    }
+        });
+      }
+      else
+      {
+        dispatch(prepareFinalObject("bnd.birth.newRegistration", {"birthFatherInfo":{},"birthMotherInfo":{},"birthPresentaddr":{},"birthPermaddr":{}}));
+      }
+
+    })
 
     return action;
   },
