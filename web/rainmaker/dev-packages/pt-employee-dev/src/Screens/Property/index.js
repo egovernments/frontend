@@ -296,7 +296,7 @@ const getAddressInfo = (addressObj, extraItems) => {
 const transform = (floor, key, generalMDMSDataById) => {
   const { masterName, dataKey } = key;
   if (!masterName) {
-    return floor["occupancyType"] === "RENTED"
+    return floor["occupancyType"] === "RENTED" || floor["occupancyType"] === "PG"
       ? `INR ${floor["arv"]}`
       : `${floor[dataKey]} sq yards`;
   } else {
