@@ -176,7 +176,7 @@ export const getMdmsData = async (action, state, dispatch) => {
       "MdmsRes.egf-master.FinancialYear",
       []
     ).filter(item => item.module === "TL"&& item.active === true);
-    set(payload, "MdmsRes.egf-master.FinancialYear", financialYearData);
+    set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData.sort().reverse());
     console.log("========getCurrentFinancialYear",getCurrentFinancialYear());
   } catch (e) {
     console.log(e);
