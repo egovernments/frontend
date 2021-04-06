@@ -379,7 +379,32 @@ const setSearchResponse = async (
       )
     );
   }
-
+  let value = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.propertyDetails.address.areaType","");
+  if( value === 'Urban' ) {           
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.subDistrict.visible",
+      false
+    );   
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.villageName.visible",
+      false
+    );  
+  } else {      
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.city.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardTwo.children.cardContent.children.propertyLocationContainer.children.mohalla.visible",
+      false
+    );
+  }
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
