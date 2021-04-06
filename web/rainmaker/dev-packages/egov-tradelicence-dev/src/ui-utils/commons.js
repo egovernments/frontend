@@ -181,7 +181,10 @@ export const updatePFOforSearchResults = async (
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
   if (isEditRenewal) {
-    const nextYear = generateNextFinancialYear(state);
+    var nextYear = generateNextFinancialYear(state);
+    if(payload.Licenses[0].financialYear=='2019-20'){
+      nextYear=getCurrentFinancialYear();
+    }
     dispatch(
       prepareFinalObject("Licenses[0].financialYear", nextYear));
   }

@@ -26,7 +26,22 @@ class Footer extends React.Component {
     employeeList: []
     //responseLength: 0
   };
-
+ getCurrentFinancialYear = () => {
+    var today = new Date();
+    var curMonth = today.getMonth();
+    var fiscalYr = "";
+    if (curMonth >= 3) {
+      var nextYr1 = (today.getFullYear() + 1).toString();
+      var nextYr1format=nextYr1.substring(2,4);
+      fiscalYr = today.getFullYear().toString() + "-" + nextYr1format;
+    } else {
+      var nextYr2 = today.getFullYear().toString();
+      var nextYr2format=nextYr2.substring(2,4);
+      fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2format;
+    }
+    return fiscalYr;
+  };
+  
   getDownloadData = () => {
     const { dataPath, state } = this.props;
     const data = get(
@@ -145,9 +160,14 @@ class Footer extends React.Component {
       `Licenses`
     );
     this.props.showSpinner();
-    const nextFinancialYear = await getNextFinancialYearForRenewal(
+    var nextFinancialYear = await getNextFinancialYearForRenewal(
       financialYear
     );
+    var currentFinancialYear=this.getCurrentFinancialYear();
+
+    if(licences[0].financialYear=='2019-20'){
+      nextFinancialYear=currentFinancialYear;
+    }
 
     const wfCode = "DIRECTRENEWAL";
     set(licences[0], "action", "INITIATE");

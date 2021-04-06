@@ -14,7 +14,8 @@ import {
   createEstimateData,
   validateFields,
   downloadAcknowledgementForm,
-  downloadCertificateForm
+  downloadCertificateForm,
+  getCurrentFinancialYear
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -643,8 +644,11 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
 }
   const tenantId= get(licences[0] , "tenantId");
 
-  const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+  var nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
 
+  if(licences[0].financialYear=='2019-20'){
+    nextFinancialYear=getCurrentFinancialYear();
+  }
   const wfCode = "DIRECTRENEWAL";
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);
