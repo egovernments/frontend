@@ -328,7 +328,7 @@ export const getFullDeathCertDetailsCard = (inJsonPath) =>
             labelKey: "BND_EIDNO"
           },
           {
-            jsonPath: inJsonPath + ".lastname",
+            jsonPath: inJsonPath + ".eidno",
             callBack: checkNoData
           }
         ),

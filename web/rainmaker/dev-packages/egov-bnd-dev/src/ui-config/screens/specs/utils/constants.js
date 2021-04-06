@@ -1,5 +1,5 @@
 export const patterns = {
-  hospitalName :  /^.{1,500}$/,
+  hospitalName :  /^.{1,500}$/, 
   registrationNo : /^.{1,64}$/,
   name : /^.{0,200}$/,
   addressBig : /^.{0,1000}$/,
