@@ -11,7 +11,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
-import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields} from "../../utils";
+import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields,getCurrentFinancialYear} from "../../utils";
 import "./index.css";
 
 const moveToSuccess = (LicenseData, dispatch) => {
@@ -626,8 +626,10 @@ export const renewTradelicence = async (financialYear, state, dispatch) => {
 
   const tenantId = get(licences[0], "tenantId");
 
-  const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
-
+  var nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
+  if(licences[0].financialYear=='2019-20'){
+    nextFinancialYear=getCurrentFinancialYear();
+  }
   const wfCode = "DIRECTRENEWAL";
   set(licences[0], "action", "INITIATE");
   set(licences[0], "workflowCode", wfCode);

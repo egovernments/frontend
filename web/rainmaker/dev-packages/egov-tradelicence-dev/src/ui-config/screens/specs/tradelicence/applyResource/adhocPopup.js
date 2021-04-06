@@ -112,10 +112,10 @@ let totalAmount = (estimateCardData) => {
     if(data.name.labelKey === 'TL_TAX' || data.name.labelKey === 'TL_RENEWAL_TAX'){
       tlTax = data.value ? data.value : 0;
     }
-    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_REBATE'){
+    if(data.name.labelKey === 'TL_COMMON_REBATE'|| data.name.labelKey === 'TL_RENEWAL_REBATE'){
       tlTax = data.value ? tlTax+data.value : tlTax;
     }
-    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_PENALTY'){
+    if(data.name.labelKey === 'TL_COMMON_PEN' || data.name.labelKey === 'TL_RENEWAL_PENALTY'){
       tlTax = data.value ? tlTax+data.value : tlTax;
     }
     if(data.name.labelKey === 'TL_ADHOC_PENALTY'){
@@ -138,7 +138,7 @@ const updateAdhoc = (state, dispatch) => {
   if (adhocAmount || rebateAmount) {
     let flag = true;
     const totalAmt = totalAmount(get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].estimateCardData"));
-    if (rebateAmount && rebateAmount >= totalAmt) {
+    if (rebateAmount && rebateAmount > totalAmt) {
       flag=false;
       dispatch(
         toggleSnackbar(

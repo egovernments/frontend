@@ -142,7 +142,27 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
         }, Address: ${data.address}`;
 
     let qrcode = await getQRCode(qrText);
-
+    const uomsMap = getFromObject(FireNOC, "fireNOCDetails.buildings[0].uomsMap", {});
+    const areaType = getFromObject(FireNOC, "fireNOCDetails.propertyDetails.address.areaType", "");
+    if( propertySummary && propertySummary.length > 0 ) {
+        Object.keys(uomsMap).map(function(key, index) {
+            propertySummary.push({
+                "key": getMessageFromLocalization(`NOC_PROPERTY_DETAILS_${key}_LABEL`),
+                "value": uomsMap[key] 
+            })
+          });
+    }
+    propertyLocationSummary.map(( items, index ) => {
+        if( areaType === "Urban") {
+            if ( items.key === "Sub District Name" || items.key === "Village Name" ) {
+                propertyLocationSummary.splice(index, 1);
+            }
+       } else if ( areaType === "Rural") {
+        if ( items.key === "City" || items.key === "Mohalla" ) {
+            propertyLocationSummary.splice(index, 1);
+        }
+       }
+    });
     let pdfData = {
         header: "NOC_APPLICATION", tenantId: FireNOC.tenantId, qrcode: qrcode,
         applicationNoHeader: 'NOC_PDF_APPLICATION_NO', applicationNoValue: FireNOC.fireNOCDetails.applicationNumber,
