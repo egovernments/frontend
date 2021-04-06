@@ -14,7 +14,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
   const { propertySubType, usageCategoryMajor } = propertyDetails;
   const { masterName, dataKey } = key;
   if (!masterName) {
-    return floor["occupancyType"] === "RENTED" ? `INR ${floor["arv"]}` : `${Math.round(floor[dataKey] * 100) / 100} sq yards`;
+    return floor["occupancyType"] === "RENTED" || floor["occupancyType"] === "PG" ? `INR ${floor["arv"]}` : `${Math.round(floor[dataKey] * 100) / 100} sq yards`;
   } else {
     if (floor[dataKey]) {
       if (dataKey === "usageCategoryDetail") {
@@ -142,7 +142,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
         key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
         value: units.length>0? `${unit.floorNo}` : "NA",
       }];
-      if (unit.occupancyType === "RENTED") {
+      if (unit.occupancyType === "RENTED" || floor["occupancyType"] === "PG" ) {
         floor.push({
           key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
           value: unit.arv ? unit.arv + '' : "NA",
