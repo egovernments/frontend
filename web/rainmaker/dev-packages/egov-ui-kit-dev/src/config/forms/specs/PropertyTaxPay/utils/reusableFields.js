@@ -136,6 +136,9 @@ export const occupancy = {
         case "RENTED":
           setDependentFields(dependentFields1, dispatch, formKey, false);
           break;
+        case "PG":
+          setDependentFields(dependentFields1, dispatch, formKey, false);
+          break;  
         default:
           setDependentFields(dependentFields1, dispatch, formKey, true);
           break;
