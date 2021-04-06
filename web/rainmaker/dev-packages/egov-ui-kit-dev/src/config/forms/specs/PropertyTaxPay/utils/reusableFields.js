@@ -368,7 +368,7 @@ export const beforeInitForm = {
         )
       );
     }
-    if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED") {
+    if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED" || get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "PG") {
       set(action, "form.fields.annualRent.hideField", false);
     } else {
       set(action, "form.fields.annualRent.hideField", true);
@@ -458,7 +458,7 @@ export const beforeInitFormForPlot = {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 2));
       // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, -1));
     }
-    if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED") {
+    if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED" || get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "PG") {
       set(action, "form.fields.annualRent.hideField", false);
     } else {
       set(action, "form.fields.annualRent.hideField", true);
