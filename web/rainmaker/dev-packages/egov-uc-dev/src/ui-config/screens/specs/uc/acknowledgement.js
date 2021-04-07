@@ -1,48 +1,46 @@
-import { getCommonHeader,
-  getCommonContainer
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
-  acknowledgementSuccesFooter,
-  acknowledgementFailureFooter
-} from "./acknowledgementResource/acknowledgementFooter";
+  getCommonContainer, getCommonHeader
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { download,downloadChallan } from  "egov-common/ui-utils/commons";;
+import { downloadEchallan, printEchallan } from "../utils";
+import {
+  acknowledgementFailureFooter, acknowledgementSuccesFooter
+} from "./acknowledgementResource/acknowledgementFooter";
+import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import './index.css';
+;
 const header = getCommonHeader({
   labelName: `mCollect`,
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
- });
+});
 
 
 
-const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
+const downloadprintMenu = (state, dispatch, applicationNumber, tenantId) => {
   let applicationDownloadObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
-    link: () => {  
+    link: () => {
       //const { Challan } = state.screenConfiguration.preparedFinalObject;
       const Challan = [
         { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
-      console.info("in ackmt==data got=",Challan);
-      downloadChallan(Challan,"download" ,"mcollect-challan",state);          
+      downloadEchallan(Challan, `CHALLAN-${applicationNumber}.pdf`);
     },
     leftIcon: "assignment"
   };
   let applicationPrintObject = {
     label: { labelName: "Challan", labelKey: "UC_CHALLAN" },
     link: () => {
-      
+
       const Challan = [
         { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
-     // downloadChallan(Challan,"print");   
-     downloadChallan(Challan,"print" ,"mcollect-challan",state);        
+      printEchallan(Challan);
     },
     leftIcon: "assignment"
   };
@@ -55,11 +53,11 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
-    visible:!JSON.parse(window.localStorage.getItem('isPOSmachine')),
-     
+    visible: !JSON.parse(window.localStorage.getItem('isPOSmachine')),
+
     props: {
       className: "downloadprint-commonmenu",
-      style: { textAlign: "right", display: "flex",paddingTop: "10px" }
+      style: { textAlign: "right", display: "flex", paddingTop: "10px" }
     },
     children: {
       downloadMenu: {
@@ -70,12 +68,14 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
             label: { labelName: "DOWNLOAD", labelKey: "TL_DOWNLOAD" },
             leftIcon: "cloud_download",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", 
-            style: { 
-              height: "60px", color: "#FE7A51", 
-              marginRight: "5px" 
+            props: {
+              variant: "outlined",
+              style: {
+                height: "60px", color: "#FE7A51",
+                marginRight: "5px"
+              },
+              className: "uc-download-button"
             },
-            className: "uc-download-button" },
             menu: downloadMenu
           }
         }
@@ -88,9 +88,11 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
             label: { labelName: "PRINT", labelKey: "TL_PRINT" },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", 
-            style: { height: "60px", color: "#FE7A51" },
-            className: "uc-print-button" },
+            props: {
+              variant: "outlined",
+              style: { height: "60px", color: "#FE7A51" },
+              className: "uc-print-button"
+            },
             menu: printMenu
           }
         }
@@ -101,18 +103,18 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
 
 }
 
-const consumerCode =(challanNumber) =>{ 
-  return {   
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-common",
-          componentPath: "ApplicationNoContainer",
-          props: {
-              number: challanNumber,
-              label: {
-                  labelKey:   "PAYMENT_UC_CONSUMER_CODE",
-              },
-          }    
+const consumerCode = (challanNumber) => {
+  return {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-common",
+    componentPath: "ApplicationNoContainer",
+    props: {
+      number: challanNumber,
+      label: {
+        labelKey: "PAYMENT_UC_CONSUMER_CODE",
+      },
     }
+  }
 }
 /*icon- success/failure icon Tick/Cross
 * color-background color of icon Green/Red
@@ -120,8 +122,8 @@ const consumerCode =(challanNumber) =>{
 * bodyKey,bodyname - message body display localization code
 * billNumber - bill number related to challan for cancel and failure bill number will be null
 */
-const applicationSuccessNotificationCard =(icon,color,headerkey,headername,bodykey,bodyname,billNumber)=>{
-  return{
+const applicationSuccessNotificationCard = (icon, color, headerkey, headername, bodykey, bodyname, billNumber) => {
+  return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     children: {
@@ -133,7 +135,7 @@ const applicationSuccessNotificationCard =(icon,color,headerkey,headername,bodyk
           labelKey: headerkey
         },
         body: {
-          labelName:bodyname,
+          labelName: bodyname,
           labelKey: bodykey
         },
         tailText: {
@@ -152,19 +154,19 @@ const getAcknowledgementCard = (
   purpose,
   status,
   billNumber,
-  challanNumber ,
+  challanNumber,
   tenantId
- 
- ) => {
-   if(purpose === "challan" && status === "success"){     
-     return {      
-      header :getCommonContainer({
-        header:header,
-        consumerCode : consumerCode(challanNumber),    
+
+) => {
+  if (purpose === "challan" && status === "success") {
+    return {
+      header: getCommonContainer({
+        header: header,
+        consumerCode: consumerCode(challanNumber),
       }),
-      headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
-      applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_GENERATED_SUCCESS_MESSAGE","create","UC_BILL_GENERATION_MESSAGE_SUB","createsuccessmsg",billNumber),
-      
+      headerdownloadprint: downloadprintMenu(state, dispatch, challanNumber, tenantId),
+      applicationSuccessCard: applicationSuccessNotificationCard("done", "#39CB74", "UC_BILL_GENERATED_SUCCESS_MESSAGE", "create", "UC_BILL_GENERATION_MESSAGE_SUB", "createsuccessmsg", billNumber),
+
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"
@@ -172,45 +174,45 @@ const getAcknowledgementCard = (
       applicationSuccessFooter: acknowledgementSuccesFooter
     };
   }
-  else if(purpose === "update" && status === "success"){     
-    return {      
-     header :getCommonContainer({
-       header:header,
-       consumerCode : consumerCode(challanNumber),    
-     }),
-     headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
-     applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_UPDATED_SUCCESS_MESSAGE","update","UC_BILL_GENERATION_MESSAGE_SUB","updatesuccessmsg",billNumber),
-     
-     iframeForPdf: {
-       uiFramework: "custom-atoms",
-       componentPath: "Div"
-     },
-     applicationSuccessFooter: acknowledgementSuccesFooter
-   };
- }
- else if (purpose === "cancel" && status === "success") {
-   return{
-    header :getCommonContainer({
-      header:header,
-      consumerCode : consumerCode(challanNumber),     
-    }),
-    headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),
-    applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_CANCELLED_SUCCESS_MESSAGE","cancel","UC_BILL_GENERATION_MESSAGE_SUB","cancelmsg",null),
-     
-     iframeForPdf: {
-       uiFramework: "custom-atoms",
-       componentPath: "Div"
-     },
-     paymentFailureFooter: acknowledgementFailureFooter
-   }
- }
+  else if (purpose === "update" && status === "success") {
+    return {
+      header: getCommonContainer({
+        header: header,
+        consumerCode: consumerCode(challanNumber),
+      }),
+      headerdownloadprint: downloadprintMenu(state, dispatch, challanNumber, tenantId),
+      applicationSuccessCard: applicationSuccessNotificationCard("done", "#39CB74", "UC_BILL_UPDATED_SUCCESS_MESSAGE", "update", "UC_BILL_GENERATION_MESSAGE_SUB", "updatesuccessmsg", billNumber),
+
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: acknowledgementSuccesFooter
+    };
+  }
+  else if (purpose === "cancel" && status === "success") {
+    return {
+      header: getCommonContainer({
+        header: header,
+        consumerCode: consumerCode(challanNumber),
+      }),
+      headerdownloadprint: downloadprintMenu(state, dispatch, challanNumber, tenantId),
+      applicationSuccessCard: applicationSuccessNotificationCard("done", "#39CB74", "UC_BILL_CANCELLED_SUCCESS_MESSAGE", "cancel", "UC_BILL_GENERATION_MESSAGE_SUB", "cancelmsg", null),
+
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      paymentFailureFooter: acknowledgementFailureFooter
+    }
+  }
   // else if (purpose === "challan" && status === "failure") {
   //   return{
   //     header :getCommonContainer({
   //       header:header        
   //     }),
   //     applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_FAILURE_MESSAGE","failure","UC_FAILURE_MESSAGE_BODY","failuremsg",null),
-       
+
   //      iframeForPdf: {
   //        uiFramework: "custom-atoms",
   //        componentPath: "Div"
@@ -221,22 +223,22 @@ const getAcknowledgementCard = (
 
   //For all kinds of failures irrespective of create/update/cancel
   else {
-    return{
-      header :getCommonContainer({
-        header:header        
+    return {
+      header: getCommonContainer({
+        header: header
       }),
-      applicationSuccessCard:applicationSuccessNotificationCard("close","#E54D42","UC_FAILURE_MESSAGE","failure","UC_FAILURE_MESSAGE_BODY","failuremsg",null),
-       
-       iframeForPdf: {
-         uiFramework: "custom-atoms",
-         componentPath: "Div"
-       },
-       paymentFailureFooter: acknowledgementFailureFooter
-     }
-  
-    
+      applicationSuccessCard: applicationSuccessNotificationCard("close", "#E54D42", "UC_FAILURE_MESSAGE", "failure", "UC_FAILURE_MESSAGE_BODY", "failuremsg", null),
+
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      paymentFailureFooter: acknowledgementFailureFooter
+    }
+
+
   }
-  
+
 };
 
 const getSearchData = async (dispatch, queryObj) => {
@@ -269,8 +271,8 @@ const screenConfig = {
     const billNumber = getQueryArg(window.location.href, "billNumber");
     const challanNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const businessService = getQueryArg(window.location.href,"serviceCategory");
-  
+    const businessService = getQueryArg(window.location.href, "serviceCategory");
+
     const data = getAcknowledgementCard(
       state,
       dispatch,

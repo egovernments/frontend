@@ -5,6 +5,7 @@ import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
 import pdfMake from "pdfmake/build/pdfmake";
+import { downloadPdfFile } from "../api";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import logoNotFound from './logoNotFound.png';
 import pdfFonts from "./vfs_fonts";
@@ -730,5 +731,11 @@ export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
     }
 };
 
+export const searchAndDownloadPdf=(url,queryObj,fileName)=>{
+    downloadPdfFile(url,'post',queryObj,{},{},false,fileName);
+}
 
+export const searchAndPrintPdf=(url,queryObj)=>{
+    downloadPdfFile(url,'post',queryObj,{},{},false,'print');
+}
 

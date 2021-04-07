@@ -1,4 +1,4 @@
-import { download, downloadChallan } from "egov-common/ui-utils/commons";
+import { download } from "egov-common/ui-utils/commons";
 import {
   getCommonCard,
 
@@ -27,10 +27,11 @@ import "../../../../index.css";
 import { httpRequest } from "../../../../ui-utils";
 import { getChallanSearchResult, getSearchResults } from "../../../../ui-utils/commons";
 import {
-  convertEpochToDate, getFeesEstimateCard
+  convertEpochToDate, downloadEchallan, getFeesEstimateCard, printEchallan
 } from "../utils";
 import { confirmationDialog } from "./confirmationDialog";
 import './index.css';
+
 
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -206,8 +207,7 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId, status)
         { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
-      downloadChallan(Challan, "download");
-      //download(Challan,"download" ,"mcollect-challan",state)
+      downloadEchallan(Challan, `CHALLAN-${applicationNumber}.pdf`);
     },
     leftIcon: "assignment"
   };
@@ -218,8 +218,7 @@ const downloadprintMenu = (state, dispatch, applicationNumber, tenantId, status)
         { key: "challanNo", value: applicationNumber },
         { key: "tenantId", value: tenantId }
       ]
-      downloadChallan(Challan, "print");
-      //download(Challan,"print" ,"mcollect-challan",state);          
+      printEchallan(Challan);
     },
     leftIcon: "assignment"
   };
