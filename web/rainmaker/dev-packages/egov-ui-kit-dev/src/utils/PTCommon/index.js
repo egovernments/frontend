@@ -341,7 +341,7 @@ export const getEstimateFromBill = (bill) => {
 
 export const transformPropertyDataToAssessInfo = (data) => {
   const propertyType = data["Properties"][0]["propertyDetails"][0]["propertyType"];
-  const propertySubType = data["Properties"][0]["propertyDetails"][0]["propertySubType"];
+  const propertySubType = data["Properties"][0]["propertyDetails"][0]["propertySubType"] ? data["Properties"][0]["propertyDetails"][0]["propertySubType"] : data["Properties"][0]["propertyDetails"][0]["propertyType"];
   const usageCategoryMajor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMajor"];
   const usageCategoryMinor = data["Properties"][0]["propertyDetails"][0]["usageCategoryMinor"];
   const propType = propertySubType === null ? propertyType : propertySubType;
