@@ -104,6 +104,21 @@ const checkIfFormIsValid = async (state, dispatch) => {
     ));
     return;
   }
+  let dateofreport=get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.dateofreportepoch")
+  let dateofdeath=get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.dateofdeathepoch")
+  if(dateofreport<dateofdeath)
+  {
+    isFormValid = false;
+    dispatch(toggleSnackbar(
+      true,
+      {
+        labelName: "",
+        labelKey:  "Date of Registration should not be before Date of Death"
+      },
+      "info"
+    ));
+    return;
+  }
 
   if(!get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.firstname") &&
     !get(state.screenConfiguration.preparedFinalObject,"bnd.death.newRegistration.middlename") &&
@@ -160,11 +175,11 @@ export const postData = async(state,dispatch) => {
     let payload = {
       deathCerts: [newRegData],
     };
-
+    let actionmode = (getQueryArg(window.location.href, "action")=="EDIT")?'updateDeathImport':'saveDeathImport';
     payload = await httpRequest(
       "post",
-      "birth-death-services/common/saveDeathImport",
-      "saveDeathImport",
+      `birth-death-services/common/${actionmode}`,
+      `${actionmode}`,
       [],
       payload);
   
@@ -314,7 +329,7 @@ export const footer = getCommonApplyFooter({
         location.reload();
       }
     },
-    visible: (getQueryArg(window.location.href, "action")!="VIEW"),
+    visible: (getQueryArg(window.location.href, "action")!="EDIT"),
 
   },
   submitButton: {
@@ -333,13 +348,13 @@ export const footer = getCommonApplyFooter({
     children: {
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "CORE_COMMON_SUBMIT"
+        labelKey: (getQueryArg(window.location.href, "action")=="EDIT")?"CORE_COMMON_UPDATE":"CORE_COMMON_SUBMIT"
       })
     },
     onClickDefination: {
       action: "condition",
       callBack: callBackSubmit
     },
-    visible: (getQueryArg(window.location.href, "action")!="VIEW"),
+    //visible: (getQueryArg(window.location.href, "action")!="VIEW"),
   }
 });
