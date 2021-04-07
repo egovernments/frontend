@@ -9,6 +9,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import orderBy from "lodash/orderBy";
+import { searchAndDownloadPdf, searchAndPrintPdf } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 
 
 export const getCommonApplyFooter = children => {
@@ -458,3 +459,11 @@ export const getTextToLocalMapping = label => {
   }
 };
 
+
+export const downloadEchallan =(queryObj,fileName)=>{
+  searchAndDownloadPdf('/egov-pdf/download/UC/mcollect-challan',queryObj,fileName)
+}
+
+export const printEchallan =(queryObj)=>{
+  searchAndPrintPdf('/egov-pdf/download/UC/mcollect-challan',queryObj)
+}
