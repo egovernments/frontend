@@ -19,12 +19,14 @@ class EGFFinance extends Component {
     loc = window.location,
     subdomainurl,
     domainurl,
+    finEnv,
     hostname = loc.hostname,
     winheight = window.innerHeight - 100,
     erp_url,
     tenantId = getTenantId();
     domainurl = hostname.substring(hostname.indexOf(".") + 1);
-    subdomainurl = !!(process.env.REACT_APP_FIN_ENV) ? "-" + process.env.REACT_APP_FIN_ENV + "." + domainurl : "." + domainurl;
+    finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
+    subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
     erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + ":8080" + menuUrl;
     console.log("ERP URL : " + erp_url);
 
@@ -65,6 +67,9 @@ class EGFFinance extends Component {
   getSubdomain() {
     let hostname = window.location.hostname;
     return hostname.substring(hostname.indexOf(".") + 1);
+  }
+  globalConfigExists() {
+    return typeof window.globalConfigs !== "undefined" && typeof window.globalConfigs.getConfig === "function";
   }
 }
 
