@@ -27,7 +27,7 @@ class EGFFinance extends Component {
     domainurl = hostname.substring(hostname.indexOf(".") + 1);
     finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
     subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
-    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + ":8080" + menuUrl;
+    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
     console.log("ERP URL : " + erp_url);
 
     return (
