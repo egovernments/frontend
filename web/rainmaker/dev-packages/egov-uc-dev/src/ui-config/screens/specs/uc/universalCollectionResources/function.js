@@ -4,7 +4,7 @@ import { getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtil
 import get from "lodash/get";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validateFields } from "../../utils";
-
+import { resetFields } from "./ucSearch";
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
 const tenantId = getTenantId();
@@ -162,6 +162,7 @@ export const searchApiCall = async (state, dispatch) => {
     //   );
     // }
   }
+  resetFields(state, dispatch);
 };
 
 const checkEmptyFields = (searchScreenObject) => {
