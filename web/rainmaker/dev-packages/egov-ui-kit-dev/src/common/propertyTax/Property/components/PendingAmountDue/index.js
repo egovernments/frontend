@@ -41,7 +41,7 @@ class PendingAmountDialog extends Component {
             <Label label="PT_PENDING_AMOUNT_DUE" fontSize="20px" labelClassName="pending-amount-due" />
             <br />
             <p className="dialog-content">
-              <Label fontSize="18px" className="dialog-content-label pendingAmountDialog" label="PT_YOU_HAVE" />&nbsp;<Label className="dialog-content-label" labelClassName="dialog-content-label pendingAmountDialog" fontSize="18px" label="PT_MUTATION_RS" />&nbsp;<div className="dialog-content-amount pendingAmountDialog">{amount}</div>&nbsp;<Label className="dialog-content-label pendingAmountDialog" label="PT_PENDING_AMOUNT" fontSize="18px" />
+              <Label fontSize="18px" className="dialog-content-label pendingAmountDialog" label="PT_YOU_HAVE" />&nbsp;<Label className="dialog-content-label pendingAmountDialog" labelClassName="dialog-content-label" fontSize="18px" label="PT_MUTATION_RS" />&nbsp;<div className="dialog-content-amount pendingAmountDialog">{amount}</div>&nbsp;<Label className="dialog-content-label pendingAmountDialog" label="PT_PENDING_AMOUNT" fontSize="18px" />
               <Label fontSize="18px" label="PT_INORDER_TO_TRANSFER" />
             </p>
 
