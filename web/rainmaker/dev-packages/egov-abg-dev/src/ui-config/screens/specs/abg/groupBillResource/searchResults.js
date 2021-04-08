@@ -48,7 +48,7 @@ const getBillDetails = billResponse => {
 const onDownloadClick = async rowData => {
   const queryObject1 = [
     {
-      key: "ids",
+      key: "propertyIds",
       value: rowData["Property ID"]
     },
 
@@ -69,7 +69,7 @@ const onDownloadClick = async rowData => {
     }
   ];
 
-  const propertyendpoint = "/pt-services-v2/property/_search";
+  const propertyendpoint = "/property-services/property/_search";
   const propertyResponse = await httpRequest(
     "post",
     propertyendpoint,

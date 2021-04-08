@@ -686,36 +686,98 @@ export const getFileUrlFromAPI = async fileStoreId => {
 
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
-    if (receiptQueryString) {
-      // dispatch(downloadReceiptPending());
+   
+    if (receiptQueryString) { 
+      
+      // dispatch(downloadReceiptPending()); const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
+      const FETCHPROPERTYDETAILS = {
+        GET: {
+          URL: "/property-services/property/_search",
+          ACTION: "_get",
+        },
+      };
+      const USER = {
+        SEARCH: {
+          URL: "/user/_search",
+          ACTION: "search",
+        },
+      };
       try {
-        let businessService = '';
-        receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
-          if (query.key == "businessService") {
-            businessService = query.value;
-          }
-        })
-        receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
-       
-        const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
-  
-        const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
-        const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
-        if (oldFileStoreId && paymentStatus!="CANCELLED") {
-          downloadReceiptFromFilestoreID(oldFileStoreId, "download")
-        }
-        else if(oldFileStoreId && paymentStatus=="CANCELLED"){
-          getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
-            if(fileRes&&fileRes[oldFileStoreId]){
-            var win = window.open(fileRes[oldFileStoreId], '_blank');
-            win.focus();}
-            else{
-              download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+        const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
+        let queryObjectForPT = [
+          { key: "tenantId", value:receiptQueryString[1].value},
+          { key: "propertyIds", value: payloadReceiptDetails.Payments[0].paymentDetails[0].bill.consumerCode}
+        ];
+        const responseForPT =  await httpRequest(FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
+     
+  let uuid=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
+  let data = {};
+  let bodyObject = {
+    uuid: [uuid]
+  };
+  let responseForUser= await httpRequest(USER.SEARCH.URL, USER.SEARCH.ACTION,null, bodyObject);
+
+  let lastmodifier=responseForUser && responseForUser.user[0]?responseForUser.user[0].name:null;
+        const oldFileStoreId=get(payloadReceiptDetails.Payments[0],"fileStoreId");
+        const businessModule=get(payloadReceiptDetails.Payments[0].paymentDetails[0],"businessService");
+        console.log("businee serice"+ businessModule);
+
+        let assessmentYear="";
+      let count=0;
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
+        let reasonss = null;
+        let adhocPenaltyReason=null,adhocRebateReason=null;
+        reasonss = {
+            "adhocPenaltyReason": adhocPenaltyReason,
+            "adhocRebateReason":adhocRebateReason,
+            "lastModifier":lastmodifier
             }
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
+  
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
+        
+        if(element.amount >0 || element.amountPaid>0)
+        { count=count+1;
+          let toDate=convertEpochToDate(element.toPeriod).split("/")[2];
+          let fromDate=convertEpochToDate(element.fromPeriod).split("/")[2];
+          assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
+       }});
+      if(count==0){
+        let index=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.length;
+        let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
+        let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
+        assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
+      }
+        
+        const details = {
+          "assessmentYears": assessmentYear
+          }
+          payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
+      }
+      if(oldFileStoreId){
+        downloadReceiptFromFilestoreID(oldFileStoreId,"download")
+      }
+     else{
+        const queryStrReceipt = [
+          { key: "key", value: "property-receipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
+        ]
+      
+        const queryStrConsltdReceipt = [
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
+        ]
+        
+        let queryStr = businessModule === "PT" ?  queryStrReceipt: queryStrConsltdReceipt;
+    
+        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+        .then(res => {
+          getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+            win.focus();
           });
-        }
-        else {
-          download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+        });
+
         }
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
