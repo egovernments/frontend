@@ -28,8 +28,15 @@ let clearCache = () =>{
 let handleDocument  = async (file) => {
   
   store.dispatch(prepareFinalObject("bnd.birth.importFile", file));
+  setDisabledProceedButton(false);
 
 };
+
+let setDisabledProceedButton = (disabled) =>{
+  store.dispatch(
+    handleField("newRegistration", "components.importExcelDialog.children.dialogContent.children.popup.children.confirmationContents.children.div.children.yesButton", "props.disabled", disabled)
+  );
+}
 
 export const importExcelDialog = getCommonContainer({
   header: getCommonHeader({
@@ -94,6 +101,7 @@ export const importExcelDialog = getCommonContainer({
         yesButton: {
           componentPath: "Button",
           props: {
+            disabled: true,
             variant: "contained",
             color: "primary",
             style: {
@@ -106,7 +114,7 @@ export const importExcelDialog = getCommonContainer({
           children: {
             previousButtonLabel: getLabel({
               labelName: "YES",
-              labelKey: "BND_DOWNLOAD_PROCEED"
+              labelKey: "UPLOAD"
             })
           },
           onClickDefination: {
@@ -123,6 +131,7 @@ export const importExcelDialog = getCommonContainer({
                 return;
               }
               let tic = performance.now();
+              setDisabledProceedButton(true);
               setVisibilityResult(false);
               postXlsxFile(state,dispatch, "birth", file).then((response)=>{
                 let toc = performance.now();
