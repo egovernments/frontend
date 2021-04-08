@@ -531,6 +531,7 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     const isEdit = getQueryArg(window.location.href, "action") === "edit";
+    dispatch(prepareFinalObject("Property",{}));
     dispatch(
       prepareFinalObject(
         "Property.additionalDetails",
