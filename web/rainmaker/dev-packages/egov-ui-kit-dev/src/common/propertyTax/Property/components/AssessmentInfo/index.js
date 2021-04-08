@@ -135,7 +135,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
       }, {
 
         key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-        value: unit.unitArea ? unit.unitArea + '' : "NA",
+        value: unit.unitArea ? Math.round(unit.unitArea) + '' : "NA",
         oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (`${Math.round(oldPropertydetails.units[index].unitArea * 9 * 100) / 100}`) || "NA",
       },
       {
