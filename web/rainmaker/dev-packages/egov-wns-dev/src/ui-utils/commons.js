@@ -1703,7 +1703,7 @@ export const billingPeriodMDMS = (toPeriod, payloadbillingPeriod, service) => {
     return toPeriod + demandExipryDate;
 }
 
-export const downloadBill = (receiptQueryString, mode) => {
+export const downloadBill = async(receiptQueryString, mode) => {
     const FETCHBILL = {
         GET: {
             URL: "/billing-service/bill/v2/_fetchbill",
@@ -1716,6 +1716,24 @@ export const downloadBill = (receiptQueryString, mode) => {
             ACTION: "_get",
         },
     };
+
+    const queryObject = [
+        { key: "connectionNumber", value: receiptQueryString[0] },
+        { key: "tenantId", value: receiptQueryString[1] }
+    ]
+    const responseSewerage = await httpRequest(
+        "post",
+        "/sw-services/swc/_search",
+        "_search",
+        queryObject
+      );
+
+      const responseWater = await httpRequest(
+        "post",
+        "/ws-services/wc/_search",
+        "_search",
+        queryObject
+      );
 
     const requestBody = {
         "MdmsCriteria": {
@@ -1730,8 +1748,27 @@ export const downloadBill = (receiptQueryString, mode) => {
     try {
 
         httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+            var key='WS',addDetail=null;
+            if(payloadReceiptDetails.Bill[0].businessService=='SW')
+            {
+                key='SW';
+                addDetail = {
+                    "propertyId": responseSewerage.SewerageConnections[0].propertyId
+                    }
+                payloadReceiptDetails.Bill[0].additionalDetails=addDetail;
+            }
+            else
+            {
+                key='WS';
+                addDetail = {
+                    "propertyId": responseWater.WaterConnection[0].propertyId
+                    }
+                payloadReceiptDetails.Bill[0].additionalDetails=addDetail;
+            }
+
+           
             const queryStr = [
-                { key: "key", value: "ws-bill" },
+                { key: "key", value: key },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
             ]
             let data = [];
