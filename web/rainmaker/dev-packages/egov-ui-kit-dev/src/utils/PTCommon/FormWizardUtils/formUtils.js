@@ -189,7 +189,13 @@ export const convertToOldPTObject = (newObject) => {
     // unit.constructionDetail = {
     //   builtUpArea: unit.unitArea,
     // };
-    unit.unitArea = unit.constructionDetail.builtUpArea;
+    let value = unit.constructionDetail.builtUpArea;;
+    value = value * 9.0;
+    value = Math.round(value * 100) / 100;
+    unit.unitArea =Math.round( value);
+
+    // unit.unitArea = unit.constructionDetail.builtUpArea;
+    // console.log("===================", unit.unitArea);
     return { ...unit }
   })
   localStorageSet("previousFloorNo", newProperty.noOfFloors)
