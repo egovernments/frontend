@@ -7,7 +7,8 @@ import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils"
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import "./index.css";
 import { getHeader } from "./pay";
-
+import { httpRequest } from "../../../../ui-utils/api";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 const downloadprintMenu = (
   state,
   applicationNumber,
@@ -16,9 +17,12 @@ const downloadprintMenu = (
 ) => {
   const receiptKey = get(
     uiCommonPayConfig,
-    "receiptKey",
-    "consolidatedreceipt"
+    "receiptKey"
   );
+
+  const businessService=get(state.screenConfiguration.preparedFinalObject,"Licenses[0].businessService");
+  const applicationType=get(state.screenConfiguration.preparedFinalObject,"Licenses[0].applicationType")?get(state.screenConfiguration.preparedFinalObject,"Licenses[0].applicationType"):"NA";
+  const workflowCode=get(state.screenConfiguration.preparedFinalObject,"Licenses[0].workflowCode")?get(state.screenConfiguration.preparedFinalObject,"Licenses[0].workflowCode"):"NA";
   let receiptDownloadObject = {
     label: {
       labelName: "DOWNLOAD RECEIPT",
@@ -37,6 +41,22 @@ const downloadprintMenu = (
     },
     leftIcon: "receipt",
   };
+  let tlCertificateDownloadObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses,applicationNumber,tenantId,);
+    },
+    leftIcon: "book"
+  };
+  let tlCertificatePrintObject = {
+    label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+    link: () => {
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses,applicationNumber,tenantId,'print');
+    },
+    leftIcon: "book"
+  };
   let receiptPrintObject = {
     label: { labelName: "PRINT RECEIPT", labelKey: "COMMON_PRINT_RECEIPT" },
     link: () => {
@@ -54,9 +74,15 @@ const downloadprintMenu = (
   };
   let downloadMenu = [];
   let printMenu = [];
-  downloadMenu = [receiptDownloadObject];
-  printMenu = [receiptPrintObject];
-
+  if(businessService == "TL" && applicationType == "RENEWAL" && workflowCode == "DIRECTRENEWAL")
+    {
+        downloadMenu = [receiptDownloadObject,tlCertificateDownloadObject];
+        printMenu = [receiptPrintObject,tlCertificatePrintObject];
+    }
+    else{
+        downloadMenu = [receiptDownloadObject];
+        printMenu = [receiptPrintObject];
+    } 
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
@@ -202,6 +228,66 @@ const getAcknowledgementCard = (
         null
       ),
     };
+  }
+};
+const downloadCertificateForm = async(LicensesOld,applicationNumber,tenantId,mode='download') => {
+  const applicationType= LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"applicationType") : "NEW";
+  const workflowCode=LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"workflowCode"):"EDITRENEWAL";
+
+   const queryStr = [
+     { key: "key", value:workflowCode==="DIRECTRENEWAL"?"tlrenewalcertificate": "tlcertificate" },
+     { key: "tenantId", value: "pb" }
+   ]
+   const DOWNLOADRECEIPT = {
+     GET: {
+       URL: "/pdf-service/v1/_create",
+       ACTION: "_get",
+     },
+   };
+   let queryObject = [
+     { key: "tenantId", value: tenantId},
+     {
+       key: "applicationNumber",
+       value: LicensesOld[0].applicationNumber
+     }
+   ];
+   const LicensesPayload = await getSearchResults(queryObject);
+   const Licenses=get(LicensesPayload,"Licenses");
+   const oldFileStoreId=get(Licenses[0],"fileStoreId")
+   if(oldFileStoreId){
+     downloadReceiptFromFilestoreID(oldFileStoreId,mode)
+   }
+   else{
+   try { 
+     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+       .then(res => {
+         res.filestoreIds[0]
+         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+           res.filestoreIds.map(fileStoreId => {
+             downloadReceiptFromFilestoreID(fileStoreId,mode)
+           })
+         } else {
+           console.log("Error In Acknowledgement form Download");
+         }
+       });
+   } catch (exception) {
+     alert('Some Error Occured while downloading Acknowledgement form!');
+   }
+ }
+ };
+
+ const getSearchResults = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/tl-services/v1/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
   }
 };
 const screenConfig = {

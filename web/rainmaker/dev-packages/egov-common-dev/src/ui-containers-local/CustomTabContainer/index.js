@@ -25,9 +25,9 @@ class MultiItem extends React.Component {
   }
 
   fieldsToReset = [
-    "ReceiptTemp[0].Bill[0].payer",
-    "ReceiptTemp[0].Bill[0].paidBy",
-    "ReceiptTemp[0].Bill[0].payerMobileNumber",
+    //"ReceiptTemp[0].Bill[0].payer",
+    //"ReceiptTemp[0].Bill[0].paidBy",
+    //"ReceiptTemp[0].Bill[0].payerMobileNumber",
     "ReceiptTemp[0].instrument.transactionNumber",
     "ReceiptTemp[0].instrument.transactionDateInput",
     "ReceiptTemp[0].instrument.ifscCode",

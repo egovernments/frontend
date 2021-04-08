@@ -480,7 +480,21 @@ const moveToFailure = dispatch => {
     )
   );
 };
-
+const getUserDataFromUuid = async bodyObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
 const getSelectedTabIndex = paymentType => {
   switch (paymentType) {
     case "CASH":
@@ -757,9 +771,14 @@ const callBackForPay = async (state, dispatch) => {
     ReceiptBodyNew.Payment["instrumentDate"] =
       finalReceiptData.instrument.instrumentDate;
   }
-  if (finalReceiptData.instrument.ifscCode) {
+  if( finalReceiptData.instrument.instrumentType.name != "Cash" && finalReceiptData.instrument.ifscCode){
     ReceiptBodyNew.Payment["ifscCode"] =
       finalReceiptData.instrument.ifscCode;
+      const details = [{
+        "branchName": finalReceiptData.instrument.branchName ,
+       "bankName":finalReceiptData.instrument.bank.name }]
+
+     ReceiptBodyNew.Payment["additionalDetails"] =details;
   }
   let amtPaid =
     state.screenConfiguration.preparedFinalObject.AmountType ===
