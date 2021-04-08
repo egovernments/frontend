@@ -791,6 +791,17 @@ const callBackForNext = async (state, dispatch) => {
       }
       isFormValid = true;
     }
+    let unitUsageTypee = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
+    if(unitUsageTypee != "MIXED" ) {
+      dispatch(
+        handleField(
+          "apply", 
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewUnitUsageType",
+           "visible",
+           false
+        )
+      );
+    }
     let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
     let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
     dispatch(handleField("apply", "components.div.children.formwizardFourthStep.children.snackbarWarningMessage", "props.propertyId", get(applyScreenObj, "property.propertyId", '')));
