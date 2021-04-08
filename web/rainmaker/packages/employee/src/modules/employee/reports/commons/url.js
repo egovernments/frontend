@@ -16,7 +16,7 @@ export const getResultUrl = (moduleName,reportName) => {
 }
 
 export const getMetaDataUrl = (moduleName,reportName) => {
-  let metaDataUrl = `/report/${moduleName}/${reportName}/metadata/_get`;
+  let metaDataUrl = `/report/${moduleName}/metadata/_get`;
   return metaDataUrl;
 };
 

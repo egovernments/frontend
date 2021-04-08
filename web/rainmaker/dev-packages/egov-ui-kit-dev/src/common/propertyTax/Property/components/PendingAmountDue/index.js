@@ -41,12 +41,12 @@ class PendingAmountDialog extends Component {
             <Label label="PT_PENDING_AMOUNT_DUE" fontSize="20px" labelClassName="pending-amount-due" />
             <br />
             <p className="dialog-content">
-              <Label fontSize="18px" className="dialog-content-label" label="PT_YOU_HAVE" />&nbsp;<Label className="dialog-content-label" labelClassName="dialog-content-label" fontSize="18px" label="PT_MUTATION_RS" />&nbsp;<div className="dialog-content-amount">{amount}</div>&nbsp;<Label className="dialog-content-label" label="PT_PENDING_AMOUNT" fontSize="18px" />
+              <Label fontSize="18px" className="dialog-content-label pendingAmountDialog" label="PT_YOU_HAVE" />&nbsp;<Label className="dialog-content-label pendingAmountDialog" labelClassName="dialog-content-label" fontSize="18px" label="PT_MUTATION_RS" />&nbsp;<div className="dialog-content-amount pendingAmountDialog">{amount}</div>&nbsp;<Label className="dialog-content-label pendingAmountDialog" label="PT_PENDING_AMOUNT" fontSize="18px" />
               <Label fontSize="18px" label="PT_INORDER_TO_TRANSFER" />
             </p>
 
             <div className="text-right" style={{ marginTop: 10 }}>
-              <Label className="footer-amount" labelClassName="footer-amount" label="PT_MUTATION_RS" fontSize="24px" /><span className="footer-amount-no" > {amount}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <Label className="footer-amount pendingAmountDialog" labelClassName="footer-amount" label="PT_MUTATION_RS" fontSize="24px" /><span className="footer-amount-no" > {amount}</span>&nbsp;&nbsp;&nbsp;&nbsp;
               <Button
                 label={<Label buttonLabel={true} label="PT_PROCEED_TO_PAY" fontSize="16px" labelClassName="footer-button-label" />}
                 primary={true}

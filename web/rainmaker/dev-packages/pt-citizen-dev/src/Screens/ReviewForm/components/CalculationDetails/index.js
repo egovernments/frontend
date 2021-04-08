@@ -12,6 +12,7 @@ const CalculationDetails = ({ open, closeDialogue, data }) => {
           <div style={{ margin: "20px 0px" }}>
             <Label dark={true} label="PT_CALCULATION_LOGIC" containerStyle={{ marginBottom: 5 }} />
             <Label label="PT_CALCULATION_LOGIC_TEXT" />
+            <Label label="* 5% increase in Gross Tax is applicable for FY 2021-22 " />
           </div>
           <div className="clearfix">
             <Label containerStyle={{ marginBottom: 5 }} dark={true} label="PT_CHARGE_SLABS" />
