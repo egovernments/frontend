@@ -289,7 +289,12 @@ export const propertyLocationSummaryDetail={
       jsonPath:
         "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
       callBack: value => {
-        return `${getTransformedLocale(tenantId)}_REVENUE_${value}`;
+        let mtenanatId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+        ); 
+        let res = value && value.replace("-", "_");
+        return `${getTransformedLocale(mtenanatId)}_REVENUE_${res}`;
       }
     }
   ),
