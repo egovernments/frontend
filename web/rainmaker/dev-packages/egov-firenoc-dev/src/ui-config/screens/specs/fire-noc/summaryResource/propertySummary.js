@@ -11,6 +11,11 @@ import {
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import store from "ui-redux/store";
+
+
+let state = store.getState();
 
 const test = value => {
   value = value ? value.split(".")[0] : "NA";
