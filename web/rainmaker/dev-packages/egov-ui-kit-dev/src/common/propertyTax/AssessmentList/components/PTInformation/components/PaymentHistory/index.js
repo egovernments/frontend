@@ -7,7 +7,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
 import { getFullRow } from "../AssessmentHistory";
-import { downloadReceipt } from "egov-ui-kit/redux/properties/actions";
+import { downloadReceiptpt } from "egov-ui-kit/redux/properties/actions";
 
 class PaymentHistory extends Component {
     constructor(props) {
@@ -41,7 +41,7 @@ class PaymentHistory extends Component {
             outline: "none",
             alignItems: "right",
         };
-        const { Payments = [] ,downloadReceipt} = this.props;
+        const { Payments = [] ,downloadReceiptpt} = this.props;
         const paymentHistoryItems = Payments.map((payment, index) => {
             const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
@@ -63,7 +63,7 @@ class PaymentHistory extends Component {
                                             { key: "tenantId", value: payment.paymentDetails[0].tenantId },
                                             { key: "businessService", value: 'PT' }
                                           ]
-                                    downloadReceipt(receiptQueryString)
+                                    downloadReceiptpt(receiptQueryString)
                                     // lastElement.onClick();
                                 }}
                             ></Button>
@@ -107,7 +107,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-     downloadReceipt: (receiptQueryString) => dispatch(downloadReceipt(receiptQueryString)),
+     downloadReceiptpt: (receiptQueryString) => dispatch(downloadReceiptpt(receiptQueryString)),
     };
   };
 //   [

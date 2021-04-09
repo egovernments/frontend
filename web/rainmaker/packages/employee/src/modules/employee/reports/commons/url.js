@@ -11,7 +11,7 @@
 // };
 
 export const getResultUrl = (moduleName,reportName) => {
-  let reportResultUrl = `/report/${moduleName}/${reportName}/_get`;
+  let reportResultUrl = `/report/${moduleName}/_get`;
   return reportResultUrl;
 }
 
