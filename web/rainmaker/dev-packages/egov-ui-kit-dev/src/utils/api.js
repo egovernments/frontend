@@ -347,6 +347,7 @@ export const commonApiPost = (
             var _tntId = getTenantId() || "default";
             var lang_response = localStorageGet("lang_response");
             localStorage.clear();
+            sessionStorage.clear();
             setLocale(locale);
             setTenantId(_tntId);
             localStorageSet("lang_response", lang_response);
