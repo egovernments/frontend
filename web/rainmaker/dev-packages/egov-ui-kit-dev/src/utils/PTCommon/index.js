@@ -449,7 +449,7 @@ export const convertUnitsToSqFt = (unitArray) => {
     let value = unit.unitArea;
     value = value * 9.0;
     value = Math.round(value * 100) / 100;
-    unit.unitArea =Math.round( value);
+    unit.unitArea =Math.round( value)/9;
     return unit;
   });
 };
