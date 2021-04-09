@@ -785,7 +785,45 @@ export const downloadReceipt = (receiptQueryString) => {
     }
   }
 }
-
+export const downloadReceiptpt = (receiptQueryString) => {
+  return async (dispatch) => {
+    if (receiptQueryString) {
+      // dispatch(downloadReceiptPending());
+      try {
+        let businessService = '';
+        receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+          if (query.key == "businessService") {
+            businessService = query.value;
+          }
+        })
+        receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+       
+        const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
+  
+        const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+        const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
+        if (oldFileStoreId && paymentStatus!="CANCELLED") {
+          downloadReceiptFromFilestoreID(oldFileStoreId, "download")
+        }
+        else if(oldFileStoreId && paymentStatus=="CANCELLED"){
+          getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
+            if(fileRes&&fileRes[oldFileStoreId]){
+            var win = window.open(fileRes[oldFileStoreId], '_blank');
+            win.focus();}
+            else{
+              download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+            }
+          });
+        }
+        else {
+          download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0] )
+        }
+      } catch (error) {
+        dispatch(downloadReceiptError(error.message));
+      }
+    }
+  }
+}
 const download =(Payments,tenant)=>{
   const queryStr = [
     { key: "key", value: "consolidatedreceipt" },
