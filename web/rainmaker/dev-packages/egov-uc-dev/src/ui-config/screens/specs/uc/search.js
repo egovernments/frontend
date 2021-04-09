@@ -74,6 +74,7 @@ const ucSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
+    resetFields(state, dispatch);
     return action;
   },
   components: {
@@ -155,7 +156,6 @@ export default ucSearchAndResult;
 const openNewCollectionForm = (state, dispatch) => {
   dispatch(prepareFinalObject("Demands", []));
   dispatch(prepareFinalObject("ReceiptTemp[0].Bill", []));
-  resetFields(state, dispatch);
   const path =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/uc/newCollection`
