@@ -28,6 +28,16 @@ export const nocSummaryDetail={
       jsonPath: "FireNOCs[0].provisionFireNOCNumber",
       callBack: checkValueForNA
     }
+  ),
+  oldFireNocNumber: getLabelWithValue(
+    {
+      labelName: "Old Fire NoC Number",
+      // labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
+    },
+    {
+      jsonPath: "FireNOCs[0].oldFireNOCNumber",
+      callBack: checkValueForNA
+    }
   )
 }
 

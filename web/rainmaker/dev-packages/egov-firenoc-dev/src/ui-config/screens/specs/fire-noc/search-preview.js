@@ -409,6 +409,30 @@ const setSearchResponse = async (
       false
     );
   }
+  let NOCTypeDta= get(response,
+    "FireNOCs[0].fireNOCDetails.fireNOCType",
+      ""
+    )
+    if(NOCTypeDta === "RENEWAL"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber",
+          "visible",
+          false
+        )
+      );
+    }
+    else{
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber",
+          "visible",
+          false
+        )
+      );
+    }
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
