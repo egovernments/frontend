@@ -1098,6 +1098,15 @@ export const downloadPrintContainer = (
     case "CITIZENACTIONREQUIRED":
     case "FIELDINSPECTION":
     case "PENDINGAPPROVAL":
+      downloadMenu = [
+        receiptDownloadObject,
+        applicationDownloadObject
+      ];
+      printMenu = [
+        receiptPrintObject,
+        applicationPrintObject
+      ];
+      break;
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
