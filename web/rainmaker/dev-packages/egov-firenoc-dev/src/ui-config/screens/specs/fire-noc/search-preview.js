@@ -345,13 +345,17 @@ const setSearchResponse = async (
   const equals = (a, b) =>
   a.length === b.length &&
   a.every((v, i) => v === b[i]);
-  if(fireDetails && fireDetails.length > 0 && !(equals(fireDetails, response.FireNOCs)) && (fireDetails[0].fireNOCDetails.applicationNumber === response.FireNOCs[0].fireNOCDetails.applicationNumber)) {
-    // const response = sampleSingleSearch();
-    dispatch(prepareFinalObject("FireNOCs", fireDetails, []));
+  if( getQueryArg(window.location.href, "edited") ) {
+    if(fireDetails && fireDetails.length > 0 && !(equals(fireDetails, response.FireNOCs)) && (fireDetails[0].fireNOCDetails.applicationNumber === response.FireNOCs[0].fireNOCDetails.applicationNumber)) {
+      // const response = sampleSingleSearch();
+      dispatch(prepareFinalObject("FireNOCs", fireDetails, []));
+    }
+    else {
+      dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+    }
   }
   else {
     dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-
   }
   // const response = sampleSingleSearch();
   // set(response,'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]','');
@@ -412,6 +416,30 @@ const setSearchResponse = async (
       false
     );
   }
+  let NOCTypeDta= get(response,
+    "FireNOCs[0].fireNOCDetails.fireNOCType",
+      ""
+    )
+    if(NOCTypeDta === "RENEWAL"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.fireNocNumber",
+          "visible",
+          false
+        )
+      );
+    }
+    else{
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.body.children.oldFireNocNumber",
+          "visible",
+          false
+        )
+      );
+    }
   prepareDocumentsView(state, dispatch);
   prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);

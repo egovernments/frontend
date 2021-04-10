@@ -593,8 +593,8 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     payload[0].fireNOCDetails.buildings[0].landArea = parseInt(payload[0].fireNOCDetails.buildings[0].landArea);
     payload[0].fireNOCDetails.buildings[0].parkingArea = parseInt(payload[0].fireNOCDetails.buildings[0].parkingArea);
     payload[0].fireNOCDetails.buildings[0].totalCoveredArea = parseInt(payload[0].fireNOCDetails.buildings[0].totalCoveredArea);
+    payload[0].fireNOCDetails.tenantId = get(payload[0], "tenantId", "");
     let response;
-    console.log("===============",payload);
     if (method === "CREATE") {
   
       response = await httpRequest(

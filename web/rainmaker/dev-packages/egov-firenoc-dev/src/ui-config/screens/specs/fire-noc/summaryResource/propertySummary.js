@@ -11,6 +11,11 @@ import {
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import store from "ui-redux/store";
+
+
+let state = store.getState();
 
 const test = value => {
   value = value ? value.split(".")[0] : "NA";
@@ -289,7 +294,12 @@ export const propertyLocationSummaryDetail={
       jsonPath:
         "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
       callBack: value => {
-        return `${getTransformedLocale(tenantId)}_REVENUE_${value}`;
+        let mtenanatId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "FireNOCs[0].fireNOCDetails.propertyDetails.address.subDistrict"
+        ); 
+        let res = value && value.replace("-", "_");
+        return `${getTransformedLocale(mtenanatId)}_REVENUE_${res}`;
       }
     }
   ),
