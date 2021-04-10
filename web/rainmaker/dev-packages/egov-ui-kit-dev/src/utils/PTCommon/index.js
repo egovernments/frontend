@@ -487,8 +487,8 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
   }).then(canvas => {
    
     var data = canvas.toDataURL("image/png", 1);
-    var imgWidth = 200;
-    var pageHeight = 295;
+    var imgWidth = 165;
+    var pageHeight = 300;
     var imgHeight = (canvas.height * imgWidth) / canvas.width;
     var heightLeft = imgHeight;
     var doc = new jsPDF("p", "mm");
@@ -499,7 +499,7 @@ export const generatePdfFromDiv = (action, applicationNumber, divIdName) => {
     if (action === "download") {
       doc.save(`preview-${applicationNumber}.pdf`);
     } else if (action === "print") {
-      doc.autoPrint();
+      //doc.autoPrint();
       window.open(doc.output("bloburl"), "_blank");
     }
   });

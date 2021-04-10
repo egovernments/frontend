@@ -7,13 +7,14 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTransformedLocale, enableField, disableField } from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale, getFileUrlFromAPI,enableField, disableField } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
-import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import {convertEpochToDate, getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import axios from 'axios';
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -28,6 +29,203 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
   });
   set(jsonObject, jsonPath, modifiedArray);
 };
+export const getPaymentSearchAPI = (businessService='')=>{
+  var PAYMENTSEARCH = exports.PAYMENTSEARCH = {
+    GET: {
+      URL: "/collection-services/payments/",
+      ACTION: "_search"
+    }
+  };
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }else if (process.env.REACT_APP_NAME === "Citizen") {
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+  }
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+}
+
+export const download = async (receiptQueryString, mode = "download" ,configKey = "consolidatedreceipt" , state) => {
+
+  const FETCHRECEIPT = {
+    GET: {
+      URL: "/collection-services/payments/_search",
+      ACTION: "_get",
+    },
+  };
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+
+  
+  let consumerCode = getQueryArg(window.location.href, "consumerCode");
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+  let queryObject = [
+    { key: "tenantId", value:tenantId },
+    { key: "applicationNumber", value: consumerCode?consumerCode:applicationNumber}
+  ];
+  const FETCHFIREDETAILS = {
+    GET: {
+      URL: "/firenoc-services/v1/_search",
+      ACTION: "_get",
+    },
+  };
+  const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
+
+  try {
+		httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
+      const queryStr = [
+        { key: "key", value: configKey },
+        { key: "tenantId", value: receiptQueryString[0].value.split('.')[0] }
+      ]
+      if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
+        console.log("Could not find any receipts");
+        store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
+          , "error"));
+        return;
+      }  
+      if(payloadReceiptDetails.Payments[0].payerName!=null){
+        payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].payerName.trim();}
+        else if(payloadReceiptDetails.Payments[0].payerName == null && payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC" && payloadReceiptDetails.Payments[0].paidBy !=null)
+         { payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].paidBy.trim();
+        }
+        if(payloadReceiptDetails.Payments[0].paidBy!=null)
+        {
+          payloadReceiptDetails.Payments[0].paidBy?payloadReceiptDetails.Payments[0].paidBy.trim():payloadReceiptDetails.Payments[0].paidBy;
+        }
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC"){
+        let owners=""; let contacts="";
+        response.FireNOCs[0].fireNOCDetails.applicantDetails.owners.map(ele=>{
+          if(owners=="")
+          {owners=ele.name; 
+            contacts=ele.mobileNumber;}
+          else{
+            owners=owners+","+ele.name; 
+            contacts=contacts+","+ele.mobileNumber;
+          }
+
+        });
+        payloadReceiptDetails.Payments[0].payerName=owners;
+        payloadReceiptDetails.Payments[0].mobileNumber=contacts;
+        let receiptDate=convertEpochToDate(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate);
+        let year=receiptDate.split("/")[2];
+        year++;
+        var nextyear=year;
+        year--;        var lastyear=year-1;
+        let month=receiptDate.split("/")[1];
+        let from=null,to=null;
+        if(month<=3){ from=convertDateToEpoch("04/01/"+lastyear);
+        to=convertDateToEpoch("03/31/"+year);}
+        else{from=convertDateToEpoch("04/01/"+year);
+        to=convertDateToEpoch("03/31/"+nextyear);}
+          const details = {
+               "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
+               }
+         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
+         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod=from;
+         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod=to; 
+
+    } 
+      // Setting the Payer and mobile from Bill to reflect it in PDF
+      state = state ? state : {};
+         if(payloadReceiptDetails.Payments[0].paymentMode=="CHEQUE" || payloadReceiptDetails.Payments[0].paymentMode=="DD" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_NEFT" || payloadReceiptDetails.Payments[0].paymentMode=="OFFLINE_RTGS" ){
+        let ifsc = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.ifscCode", null);
+        let branchName = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.branchName", null);
+        let bank = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].instrument.bank.name", null);
+        payloadReceiptDetails.Payments[0].ifscCode=ifsc; 
+        const details = [{
+           "branchName": branchName ,
+          "bankName":bank }
+        ]       
+      payloadReceiptDetails.Payments[0].additionalDetails=details; 
+    }
+      let billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]", null);
+      if ((billDetails && !billDetails.payerName) || !billDetails) {
+        billDetails = {
+          payerName: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].name", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].name", null),
+          mobileNumber: get(state, "screenConfiguration.preparedFinalObject.applicationDataForReceipt.owners[0].mobile", null) || get(state, "screenConfiguration.preparedFinalObject.applicationDataForPdf.owners[0].mobile", null),
+        };
+      }
+       if(payloadReceiptDetails.Payments[0].paymentMode=="CASH")
+      {
+        payloadReceiptDetails.Payments[0].instrumentDate=null;
+        payloadReceiptDetails.Payments[0].instrumentNumber=null;
+
+      }
+      if (!payloadReceiptDetails.Payments[0].payerName && process.env.REACT_APP_NAME === "Citizen" && billDetails) {
+        payloadReceiptDetails.Payments[0].payerName = billDetails.payerName;
+        // payloadReceiptDetails.Payments[0].paidBy = billDetails.payer;
+        payloadReceiptDetails.Payments[0].mobileNumber = billDetails.mobileNumber;
+      }
+
+      const oldFileStoreId = get(payloadReceiptDetails.Payments[0], "fileStoreId")
+      if (oldFileStoreId) {
+        downloadReceiptFromFilestoreID(oldFileStoreId, mode)
+      }
+      else {
+        const propertiesById = get(state.properties , "propertiesById");
+        const propertiesFound = propertiesById ? Object.values(propertiesById) : null;
+        let queryData = { Payments: payloadReceiptDetails.Payments };
+        if(propertiesFound) {
+          queryData.properties = propertiesFound;
+        }
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, queryData, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+          .then(res => {
+            res.filestoreIds[0]
+            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+              res.filestoreIds.map(fileStoreId => {
+                downloadReceiptFromFilestoreID(fileStoreId, mode)
+              })
+            } else {
+              console.log('Some Error Occured while downloading Receipt!');
+              store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
+                , "error"));
+            }
+          });
+      }
+    })
+  } catch (exception) {
+    console.log('Some Error Occured while downloading Receipt!');
+    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
+      , "error"));
+  }
+}
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
+    if (mode === 'download') {
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
+      }
+    }
+    else {
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+
+    }
+  });
+}
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {

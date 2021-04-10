@@ -484,6 +484,7 @@ const mapStateToProps = (state, ownProps) => {
         complaints.categoriesById,
         selectedComplaint.serviceCode
       ),
+      phone:selectedComplaint.phone || "NA",
       applicationNo: selectedComplaint.serviceRequestId,
       description: selectedComplaint.description,
       submittedDate: getDateFromEpoch(

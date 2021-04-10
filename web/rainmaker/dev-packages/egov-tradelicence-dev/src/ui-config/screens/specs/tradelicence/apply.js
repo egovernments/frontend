@@ -15,7 +15,6 @@ import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 
-
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
   { labelName: "Owner Details", labelKey: "TL_COMMON_OWN_DETAILS" },
@@ -135,8 +134,9 @@ export const getMdmsData = async (action, state, dispatch) => {
       payload,
       "MdmsRes.egf-master.FinancialYear",
       []
-    ).filter(item => item.module === "TL" && item.active === true);
-    set(payload, "MdmsRes.egf-master.FinancialYear", financialYearData.sort().reverse());
+    ).filter(item => item.module === "TL"&& item.active === true && item.code === "2021-22");
+
+    set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
   } catch (e) {
     console.log(e);
   }

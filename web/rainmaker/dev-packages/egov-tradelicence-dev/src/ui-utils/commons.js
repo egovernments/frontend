@@ -427,7 +427,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         set(queryObject[0], "workflowCode", getQueryArg(window.location.href, "action"));
       }
 
-      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
+      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories")?get(queryObject[0], "tradeLicenseDetail.accessories"):[];;
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
       // const selectedTradeSubType = get(state, "screenConfiguration.preparedFinalObject.DynamicMdms.TradeLicense.tradeUnits.tradeSubType", []);
       // tradeUnits[0].tradeType = selectedTradeSubType;
@@ -544,7 +544,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
       createOwnersBackup(dispatch, searchResponse);
     } else {
-      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
+      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories")?get(queryObject[0], "tradeLicenseDetail.accessories"):[];;
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
       // let owners = get(queryObject[0], "tradeLicenseDetail.owners");
       let mergedTradeUnits =

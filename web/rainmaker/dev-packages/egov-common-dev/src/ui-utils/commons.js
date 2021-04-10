@@ -3,7 +3,7 @@
 	import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 	import { httpRequest } from "egov-ui-framework/ui-utils/api";
 	import { getFileUrlFromAPI, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-	import { downloadPdf, getPaymentSearchAPI, openPdf, printPdf } from "egov-ui-kit/utils/commons";
+	import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 	import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 	import jp from "jsonpath";
 	import get from "lodash/get";
@@ -12,6 +12,20 @@
 	import { convertEpochToDate, getTranslatedLabel } from "../ui-config/screens/specs/utils";
 	import axios from 'axios';
 	import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+	const PAYMENTSEARCH = {
+		GET: {
+		  URL: "/collection-services/payments/",
+		  ACTION: "_search",
+		},
+	  };
+	  const getPaymentSearchAPI = (businessService='')=>{
+		if(businessService=='-1'){
+		  return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+		}else if (process.env.REACT_APP_NAME === "Citizen") {
+		  return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+		}
+		return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+	  }
 	const handleDeletedCards = (jsonObject, jsonPath, key) => {
 	  let originalArray = get(jsonObject, jsonPath, []);
 	  let modifiedArray = originalArray.filter(element => {
@@ -539,8 +553,7 @@
     return {};
   }
 };
-
-	export const download = async(receiptQueryString, mode = "download", configKey, state,showConfirmation=false) => {
+export const download = async(receiptQueryString, mode = "download", configKey, state,showConfirmation=false) => {
 	  if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
 		const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
 		configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
@@ -605,7 +618,7 @@
 	  })
 	  receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
 	  try {
-		httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
+		await httpRequest("post",getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
  if(payloadReceiptDetails.Payments[0].payerName!=null){
       payloadReceiptDetails.Payments[0].payerName=payloadReceiptDetails.Payments[0].payerName.trim();}
       else if(payloadReceiptDetails.Payments[0].payerName == null && payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="FIRENOC" && payloadReceiptDetails.Payments[0].paidBy !=null)

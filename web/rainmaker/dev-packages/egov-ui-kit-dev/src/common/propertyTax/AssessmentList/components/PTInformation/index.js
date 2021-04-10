@@ -15,7 +15,7 @@ import ApplicationHistory from "./components/ApplicationHistory";
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
 import "./index.css";
-
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 const logoStyle = {
   height: "61px",
   width: "60px",
@@ -86,13 +86,15 @@ class PTInformation extends React.Component {
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
+    let datecraeted=convertEpochToDate(get(properties.auditDetails, "createdTime"));
+
     if (get(properties, "tenantId")) {
       let tenantid = get(properties, "tenantId");
       // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
       logoUrl = window.location.origin + `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
       corpCity = `TENANT_TENANTS_${get(properties, "tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
       const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties, "tenantId"));
-      ulbGrade = selectedCityObject ? `ULBGRADE_${get(selectedCityObject[0], "city.ulbGrade")}` : "MUNICIPAL CORPORATION";
+      ulbGrade = selectedCityObject ? get(selectedCityObject[0], "city.ulbType").toUpperCase() : "MUNICIPAL CORPORATION";
     }
     if (properties.status == "INWORKFLOW") {
       const updatedOnwerInfo = this.updateProperty();
@@ -127,7 +129,7 @@ class PTInformation extends React.Component {
                         isAdvanceAllowed={businessServiceInfoItem.isAdvanceAllowed}
                       />
                     }
-                    style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
+                    style={{ backgroundColor: "rgb(255,255,255)", boxShadow: "none" }}
                   />
                 )}
                 <PdfHeader header={{
@@ -136,7 +138,13 @@ class PTInformation extends React.Component {
                 }}
                   subHeader={{
                     label: "PT_PROPERTY_ID",
-                    value: `: ${get(properties, "propertyId")}`
+                    value: '${get(properties, "propertyId")}'
+                  },{
+                    label: "PT_APPLICATION_NO",
+                    value: '${get(properties, "acknowldgementNumber")}'
+                  },{
+                    label: "Date",
+                    value: '${datecraeted}'
                   }}>
                 </PdfHeader>
                 <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
@@ -150,11 +158,13 @@ class PTInformation extends React.Component {
                   viewHistory={true}
                   propertiesAudit={propertiesAudit}
                 ></OwnerInfo>
-                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                 <div id="property-assess-form">
+                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                   <AssessmentHistory></AssessmentHistory>
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
+                  <div>* This document does not certify payment of Property Tax</div>
+
                 </div>
               </div>
             }

@@ -70,6 +70,8 @@ class PTAcknowledgement extends React.Component {
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
     const { cities, generalMDMSDataById } = common;
+    const oldPropertyId =convertedResponse[0].oldPropertyId;
+    const applicationNo= convertedResponse[0].acknowldgementNumber;
     const header = getHeaderDetails(convertedResponse[0], cities, localizationLabels, true);
     let receiptDetails = {};
     receiptDetails = {
@@ -78,7 +80,9 @@ class PTAcknowledgement extends React.Component {
       owners,
       header,
       propertyId,
-    };
+      oldPropertyId,
+      applicationNo
+      };
     AcknowledgementReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, null);
   };
   getFetchBillResponse = async (propertyId, tenantId) => {
@@ -132,14 +136,14 @@ class PTAcknowledgement extends React.Component {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
         // generatePdfFromDiv("download", propertyId, "#property-review-form");
-        this.download();
-        //this.downloadAcknowledgementForm();
+        //this.download();
+        this.downloadAcknowledgementForm();
         console.log("Download");
       },
       leftIcon: "assignment",
     };
 
-    let tlCertificatePrintObject = {
+    let applicationPrintObject = {
       label: { labelName: "Application", labelKey: "PT_APPLICATION" },
       link: () => {
         this.print();
@@ -150,7 +154,7 @@ class PTAcknowledgement extends React.Component {
     };
 
     downloadMenu.push(applicationDownloadObject);
-    printMenu.push(tlCertificatePrintObject);
+    printMenu.push(applicationPrintObject);
     let icon;
     let iconColor;
     if (acknowledgeType == "success") {
