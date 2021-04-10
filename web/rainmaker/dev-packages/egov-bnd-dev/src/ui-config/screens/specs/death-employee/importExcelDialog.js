@@ -95,6 +95,13 @@ export const importExcelDialog = getCommonContainer({
             resultValue2: getCommonValue({
               jsonPath: "bnd.death.importFileResult.errors",
             }),
+            resultHeader3: getCommonCaption({
+              labelName: "",
+              labelKey: "Check Hospital List (Ensure it is hospital name only and not any other place/address/home etc):"
+            }),
+            resultValue4: getCommonValue({
+              jsonPath: "bnd.birth.importFileResult.hospitals",
+            }),
           },
           visible: false,
         },
@@ -141,6 +148,7 @@ export const importExcelDialog = getCommonContainer({
                   setVisibilityResult(true);
                   store.dispatch(prepareFinalObject("bnd.death.importFileResult.summary", JSON.stringify(response.data.statsMap,null,2)));
                   store.dispatch(prepareFinalObject("bnd.death.importFileResult.errors", JSON.stringify(response.data.errorRowMap,null,2)));
+                  store.dispatch(prepareFinalObject("bnd.birth.importFileResult.hospitals", JSON.stringify(response.data.hospitals,null,2)));
                 }
               });
             }
