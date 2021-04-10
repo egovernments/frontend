@@ -2,16 +2,31 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar ,setPaymentDetails} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
-import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
+import { transformById } from "egov-ui-kit/utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
-import { httpRequest } from "../../../../../ui-utils/api";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
 import { paybuttonJsonpath } from "./constants";
 import { convertEpochToDate, getTranslatedLabel } from "../../utils";
 import {downloadReceiptFromFilestoreID} from "../../../../../ui-utils/commons";
 import "./index.css";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+const PAYMENTSEARCH = {
+  GET: {
+    URL: "/collection-services/payments/",
+    ACTION: "_search",
+  },
+};
+const getPaymentSearchAPI = (businessService='')=>{
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }else if (process.env.REACT_APP_NAME === "Citizen") {
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+  }
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+}
 
 const checkAmount = (totalAmount, customAmount, businessService) => {
   if (totalAmount !== 0 && customAmount === 0) {
@@ -187,7 +202,7 @@ export const callPGService = async (state, dispatch) => {
   }
 };
 
-export const download = async (receiptQueryString, mode = "download" ,configKey , state) => {
+export const download = async (receiptQueryString, mode = "download" ,configKey="consolidatedreceipt" , state) => {
   if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey")
@@ -197,7 +212,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
 
   const FETCHRECEIPT = {
     GET: {
-      URL: "/collection-services/payments/_search",
+      URL: "/_search",
       ACTION: "_get",
     },
   };
@@ -251,14 +266,18 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
   };
   let responseForUser = await getUserDataFromUuid(bodyObject);
   let lastmodifier=responseForUser && responseForUser.user[0]?responseForUser.user[0].name:null;
-
+  let businessService = '';
+  receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+  if (query.key == "businessService") {
+    businessService = query.value;
+  }
+  })
+  receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
   try {
-    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-     // loadUserNameData(payloadReceiptDetails.Payments[0].auditDetails.createdBy,tenantId);
+    const payloadReceiptDetails = await httpRequest("post",getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
+    // loadUserNameData(payloadReceiptDetails.Payments[0].auditDetails.createdBy,tenantId);
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
-        store.dispatch(toggleSnackbar(true, { labelName: "Receipt not Found", labelKey: "ERR_RECEIPT_NOT_FOUND" }
-          , "error"));
         return;
       }
       if(payloadReceiptDetails.Payments[0].payerName!=null){
@@ -440,11 +459,9 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, queryData, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' });
 
       }
-    })
+  
   } catch (exception) {
     console.log('Some Error Occured while downloading Receipt!');
-    store.dispatch(toggleSnackbar(true, { labelName: "Error in Receipt Generation", labelKey: "ERR_IN_GENERATION_RECEIPT" }
-      , "error"));
   }
 }
 
@@ -755,11 +772,13 @@ const callBackForPay = async (state, dispatch) => {
 
   ReceiptBodyNew.Payment["paymentMode"] =
     finalReceiptData.instrument.instrumentType.name;
-  ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].payer;
+  ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].paidBy;
   ReceiptBodyNew.Payment["mobileNumber"] =
     finalReceiptData.Bill[0].payerMobileNumber;
-  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].paidBy ? finalReceiptData.Bill[0].paidBy : (finalReceiptData.Bill[0].payerName || finalReceiptData.Bill[0].payer);
-  if (finalReceiptData.instrument.transactionNumber) {
+    if(finalReceiptData.Bill[0].consumerCode.includes("UC"))
+    {    ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].payerName;
+  }else{
+    ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].paidBy?finalReceiptData.Bill[0].paidBy:(finalReceiptData.Bill[0].payerName||finalReceiptData.Bill[0].payer);}  if (finalReceiptData.instrument.transactionNumber) {
     ReceiptBodyNew.Payment["transactionNumber"] =
       finalReceiptData.instrument.transactionNumber;
   }
@@ -839,7 +858,11 @@ const callBackForPay = async (state, dispatch) => {
         {
           key: "tenantId",
           value: response.Payments[0].tenantId
-                  }
+        },
+        {
+          key: "businessService",
+          value: response.Payments[0].paymentDetails[0].businessService
+        }
       ];
       const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
       const receiptKey = get(uiCommonPayConfig, "receiptKey");

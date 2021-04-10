@@ -10,6 +10,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import orderby from "lodash/orderBy";
 import * as actionTypes from "./actionTypes";
+import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const reset_property_reset = () => {
   return {
@@ -684,11 +685,18 @@ export const getFileUrlFromAPI = async fileStoreId => {
   }
 };
 
-export const downloadReceipt = (receiptQueryString) => {
+export const downloadReceiptpt = (receiptQueryString) => {
   return async (dispatch) => {
    
     if (receiptQueryString) { 
-      
+      let businessService = '';
+      receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+        if (query.key == "businessService") {
+          businessService = query.value;}  });
+          receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+
+
+
       // dispatch(downloadReceiptPending()); const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
       const FETCHPROPERTYDETAILS = {
         GET: {
@@ -703,7 +711,8 @@ export const downloadReceipt = (receiptQueryString) => {
         },
       };
       try {
-        const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
+        const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
+
         let queryObjectForPT = [
           { key: "tenantId", value:receiptQueryString[1].value},
           { key: "propertyIds", value: payloadReceiptDetails.Payments[0].paymentDetails[0].bill.consumerCode}
@@ -754,9 +763,20 @@ export const downloadReceipt = (receiptQueryString) => {
           }
           payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
       }
-      if(oldFileStoreId){
-        downloadReceiptFromFilestoreID(oldFileStoreId,"download")
-      }
+      const paymentStatus = get(payloadReceiptDetails.Payments[0], "paymentStatus")
+      if(oldFileStoreId && paymentStatus!="CANCELLED"){
+        downloadReceiptFromFilestoreID(oldFileStoreId,"download");
+      } 
+      else if(oldFileStoreId && paymentStatus=="CANCELLED"){
+        getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
+          if(fileRes&&fileRes[oldFileStoreId]){
+            var win = window.open(fileRes[oldFileStoreId], '_blank');
+            win.focus();}
+            else{
+              
+              download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0],businessModule)
+            }
+        }); }
      else{
         const queryStrReceipt = [
           { key: "key", value: "property-receipt" },
@@ -785,7 +805,7 @@ export const downloadReceipt = (receiptQueryString) => {
     }
   }
 }
-export const downloadReceiptpt = (receiptQueryString) => {
+export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
     if (receiptQueryString) {
       // dispatch(downloadReceiptPending());
@@ -824,11 +844,19 @@ export const downloadReceiptpt = (receiptQueryString) => {
     }
   }
 }
-const download =(Payments,tenant)=>{
-  const queryStr = [
-    { key: "key", value: "consolidatedreceipt" },
-    { key: "tenantId", value:tenant }
+const download =(Payments,tenant,businessModule)=>{
+  const queryStrReceipt = [
+    { key: "key", value: "property-receipt" },
+    { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
   ]
+
+  const queryStrConsltdReceipt = [
+    { key: "key", value: "consolidatedreceipt" },
+    { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
+  ]
+  
+  let queryStr = businessModule === "PT" ?  queryStrReceipt: queryStrConsltdReceipt;
+
   httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
             .then(res => {
               getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {

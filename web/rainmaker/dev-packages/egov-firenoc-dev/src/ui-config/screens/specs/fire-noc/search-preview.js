@@ -1,4 +1,3 @@
-import { download } from "egov-common/ui-utils/commons";
 import { getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
@@ -7,7 +6,7 @@ import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults,download } from "../../../../ui-utils/commons";
 import { checkValueForNA, generateBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -47,6 +46,15 @@ export const downloadPrintContainer = (
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
   );
+  let applicationNumber=get(
+  state,
+  "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
+);
+let tenantId=get(
+  state,
+  "screenConfiguration.preparedFinalObject.FireNOCs[0].tenantId"
+);
+
   let downloadMenu = [];
   let printMenu = [];
   let certificateDownloadObject = {
@@ -279,9 +287,8 @@ const prepareUoms = (state, dispatch) => {
   buildings.forEach((building, index) => {
     let uoms = get(building, "uoms", []);
     let uomsMap = {};
-    uoms.forEach(uom => {
-      uomsMap[uom.code] = uom.value;
-    });
+    uoms.forEach(uom => {if(uom.active==true){
+        uomsMap[uom.code] = uom.value;} });
     dispatch(
       prepareFinalObject(
         `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap`,

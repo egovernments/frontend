@@ -307,8 +307,8 @@ export const propertyLocationSummaryDetail={
     },
     {
       jsonPath:
-        "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude",
-        callBack: checkValueForNA
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.latitude"+","+"FireNOCs[0].fireNOCDetails.propertyDetails.address.longitude",
+      callBack: checkValueForNA
     }
   ),
   applicableFireStation: getLabelWithValue(

@@ -394,7 +394,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
             },
             layout: tableborder,
           },
-
+          { text:"* This document does not certify payment of Property Tax", style: "pt-reciept-citizen-subheader" },
           { text: getLocaleLabels("Commissioner/EO", "PT_ACK_LOCALIZATION_COMMISSIONER_EO"), alignment: "right", color: "#484848", fontSize: 12, bold: true, margin: [0, 30, 0, 30] },
 
         ],

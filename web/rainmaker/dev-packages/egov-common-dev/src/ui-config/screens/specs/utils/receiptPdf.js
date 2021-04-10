@@ -442,7 +442,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
               border: [false, true, false, false]
             },
             {
-              text: "Door/House No.",
+              text: "Plot/House No.",
               border: [false, true, false, false]
             },
             {

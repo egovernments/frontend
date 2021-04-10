@@ -1,6 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generateReceipt from "../../utils/receiptPdf";
-
+import { downloadCertificateForm } from "../../utils";
+import { getTenantId }  from "egov-ui-kit/utils/localStorageUtils";
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -55,7 +56,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        generateReceipt(state, dispatch, "certificate_download");
+        downloadCertificateForm(null, state.screenConfiguration.preparedFinalObject.applicationDataForReceipt.applicationNumber,getTenantId());
       }
     }
   },
@@ -79,7 +80,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        generateReceipt(state, dispatch, "certificate_print");
+        downloadCertificateForm(null, state.screenConfiguration.preparedFinalObject.applicationDataForReceipt.applicationNumber,getTenantId(),"print");
       }
     }
   }

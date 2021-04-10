@@ -81,10 +81,35 @@ const screenConfig = {
     //   );
       let userInfodata = JSON.parse(getUserInfo());
     const tenantId = get(userInfodata, "tenantId");
-    let uomsObject = get(
-      state.screenConfiguration.preparedFinalObject,
-      "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
+    let uomsObject = {};
+    let buildings = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
+      []
     );
+    
+    buildings.forEach((building, index) => { uomsObject={};
+      let uoms = get(building, "uoms", []);
+      if(uoms){ 
+      uoms.forEach(uom => {
+        if(uom.active==true){
+          uomsObject[uom.code] = uom.value;}
+      });} else {
+        uomsObject = get(
+          state.screenConfiguration.preparedFinalObject,
+          "FireNOCs[0].fireNOCDetails.buildings[0].uomsMap"
+         );
+      }   
+        
+      set(state,"prepareFinalObject.FireNOCs[0].fireNOCDetails.buildings["+index+"].uomsMap",uomsObject);
+
+      dispatch(
+        prepareFinalObject(
+          `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap`,
+          uomsObject
+        )
+      );
+        });
     if (uomsObject) {
       for (const [key, value] of Object.entries(uomsObject)) {
         let labelElement = getLabelWithValue(

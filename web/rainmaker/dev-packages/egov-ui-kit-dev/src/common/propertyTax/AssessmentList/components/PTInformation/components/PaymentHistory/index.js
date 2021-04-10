@@ -42,7 +42,8 @@ class PaymentHistory extends Component {
             alignItems: "right",
         };
         const { Payments = [] ,downloadReceiptpt} = this.props;
-        const paymentHistoryItems = Payments.map((payment, index) => {
+        const { activePayments = Payments.filter(pp => pp.paymentStatus != "CANCELLED") ,downloadReceipt} = this.props;
+        const paymentHistoryItems = activePayments.map((payment, index) => {
             const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
                 <div>
@@ -78,9 +79,9 @@ class PaymentHistory extends Component {
     render() {
 
         const { Payments = [] } = this.props;
-
+        const { activePayments = Payments.filter(pp => pp.paymentStatus != "CANCELLED")} = this.props;
         let paymentHistoryItem = [];
-        if (Payments.length > 0) {
+        if (activePayments.length > 0) {
             paymentHistoryItem = this.getTransformedPaymentHistory();
         }
         const items = this.state.showItems ? this.state.items : [];

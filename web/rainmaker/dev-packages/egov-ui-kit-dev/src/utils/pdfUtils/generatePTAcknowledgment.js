@@ -60,8 +60,8 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
             { header: "PT_PROPERTY_ADDRESS_SUB_HEADER", items: addressCard },
             { header: "PT_ASSESMENT_INFO_SUB_HEADER", items: assessmentCard },
             { items: unitInfoCard, type: "multiItem", hide: unitInfoCard.length === 0 },
-            { header: 'PT_OWNERSHIP_INFO_SUB_HEADER', items: ownerCard, type: ownerInfo.length > 1 ? 'multiItem' : 'singleItem' },
-            { header: 'PT_COMMON_DOCS', items: documentCard }]
-    }
+            { header: 'PT_OWNERSHIP_INFO_SUB_HEADER', items: ownerCard, type: ownerInfo.length > 1 ? 'multiItem' : 'singleItem' }
+            //{ header: 'PT_COMMON_DOCS', items: documentCard }]
+        ]}
     generatePDF(UlbLogoForPdf, pdfData, fileName);
 }

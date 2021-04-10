@@ -32,7 +32,7 @@ class Details extends Component {
   };
 
   render() {
-    const { status, complaint, applicationNo, description, submittedDate, address, addressDetail, mapAction, images, action, role } = this.props;
+    const { status, phone,complaint, applicationNo, description, submittedDate, address, addressDetail, mapAction, images, action, role } = this.props;
     const { houseNoAndStreetName, landmark, mohalla, city, locality } = addressDetail || "";
     const icon = {};
     icon.name = "location";
@@ -197,6 +197,17 @@ class Details extends Component {
                     <Label
                       className="col-xs-6  col-sm-8 col-md-10 no-padding status-result-color"
                       label={landmark}
+                      id="complaint-details-submission-date"
+                      labelStyle={{ color: "inherit" }}
+                    />
+                  </div>
+                )}
+                 {phone && (
+                  <div className="complaint-detail-detail-section-status row">
+                    <Label className="col-xs-6  col-sm-4 col-md-2 status-color" label={"employee.Employee.fields.User.mobileNumber"} />
+                    <Label
+                      className="col-xs-6  col-sm-8 col-md-10 no-padding status-result-color"
+                      label={phone}
                       id="complaint-details-submission-date"
                       labelStyle={{ color: "inherit" }}
                     />
