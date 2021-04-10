@@ -16,6 +16,7 @@ import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFo
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { sendBackSuccessFooter } from "./acknowledgementResource/sendBackSuccessFooter";
 import "./index.css";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 
@@ -708,6 +709,16 @@ const screenConfig = {
       tenant
     );
     set(action, "screenConfig.components.div.children", data);
+    if( purpose === "forward") {
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.gotoHomeFooter.children.proceedToPaymentButton",
+          "props.visible", 
+          false
+        )
+      );
+    }
     return action;
   }
 };
