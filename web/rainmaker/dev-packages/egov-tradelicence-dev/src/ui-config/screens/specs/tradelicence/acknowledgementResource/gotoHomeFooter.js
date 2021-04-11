@@ -30,7 +30,7 @@ const getRedirectionTLURL = async (state, dispatch) => {
   if(!applicationNumber) {
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   }
-  const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
   const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   window.location.assign(`${origin}${environment}/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`);
 };
