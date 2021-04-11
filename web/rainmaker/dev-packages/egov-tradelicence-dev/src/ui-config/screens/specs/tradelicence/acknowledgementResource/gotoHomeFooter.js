@@ -2,6 +2,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
 
 const getCommonApplyFooter = children => {
   return {
@@ -13,10 +14,7 @@ const getCommonApplyFooter = children => {
     children
   };
 };
-let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-  let tenant = getQueryArg(window.location.href, "tenantId");
   let purpose1 = getQueryArg(window.location.href, "purpose");
-
 const getRedirectionURL = () => {
   /* Mseva 2.0 changes */
   const redirectionURL = ifUserRoleExists("CITIZEN")
@@ -26,6 +24,16 @@ const getRedirectionURL = () => {
   return redirectionURL;
 };
 
+const getRedirectionTLURL = async (state, dispatch) => {
+  let tenant = getQueryArg(window.location.href, "tenantId");
+  let applicationNumber = get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", "");
+  if(!applicationNumber) {
+    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  }
+  const environment = process.env.NODE_ENV === "production" ? "citizen" : "";
+  const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+  window.location.assign(`${origin}${environment}/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`);
+};
 export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
@@ -71,8 +79,8 @@ export const gotoHomeFooter = getCommonApplyFooter({
     },
     //Add onClickDefination and RoleDefination later
     onClickDefination: {
-      action: "page_change",
-      path:`search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`,
+      action: "condition",
+      callBack: getRedirectionTLURL
       //    /egov-common/pay?consumerCode=PB-TL-2020-09-03-023202&tenantId=pb.mohali&businessService=TL
      
       // process.env.REACT_APP_SELF_RUNNING === "true"
