@@ -174,7 +174,6 @@ class Footer extends React.Component {
     set(licences[0], "financialYear", nextFinancialYear);
     set(licences[0], "tradeLicenseDetail.adhocPenalty", null);
     try {
-      debugger;
       const response = await httpRequest(
         "post",
         "/tl-services/v1/_update",

@@ -445,7 +445,6 @@ const prepareUniqueFloorIndexObj = (units) => {
 
 export const convertUnitsToSqFt = (unitArray) => {
   return unitArray.map((unit) => {
-    debugger;
     let value = unit.unitArea;
     value = value * 9.0;
     value = Math.round(value * 100) / 100;
