@@ -710,8 +710,8 @@ const screenConfig = {
     );
     set(action, "screenConfig.components.div.children", data);
     const status1 =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].status" );
+    console.log(status1, "applStatus");
     const applicationType =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType" );
-    debugger;
     if( status1 === "PENDINGPAYMENT") {
       dispatch(
         handleField(
