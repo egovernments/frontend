@@ -6,7 +6,9 @@ import { Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import "./index.css";
-
+import {
+  getQueryArg
+} from "egov-ui-framework/ui-utils/commons";
 
 
 const theme = createMuiTheme({
@@ -115,7 +117,14 @@ const WizardComponent = ({
               selected === 7
                 ? onPayButtonClick
                 : () => {
-                  updateIndex(selected + 1);
+                  if(getQueryArg(window.location.href, "purpose") === "assess" || getQueryArg(window.location.href, "purpose") === "reassess"){
+                    if(window.confirm("Are you sure you want Assess Property?")){
+                      updateIndex(selected + 1);
+                    }
+                  }
+                  else{
+                    updateIndex(selected + 1);
+                  }
                 }
             }
             disabled={!nextButtonEnabled}

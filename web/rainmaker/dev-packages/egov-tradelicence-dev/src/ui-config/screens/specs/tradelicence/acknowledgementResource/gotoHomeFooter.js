@@ -26,10 +26,7 @@ const getRedirectionURL = () => {
 
 const getRedirectionTLURL = async (state, dispatch) => {
   let tenant = getQueryArg(window.location.href, "tenantId");
-  let applicationNumber = get( state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber", "");
-  if(!applicationNumber) {
-    applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-  }
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
   const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   window.location.assign(`${origin}${environment}/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`);
