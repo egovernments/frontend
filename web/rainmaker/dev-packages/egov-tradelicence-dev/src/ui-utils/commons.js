@@ -495,6 +495,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           )
         );
         set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
+        set(queryObject[0], "tradeLicenseDetail.adhocPenalty", null);
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
           Licenses: queryObject
         })
