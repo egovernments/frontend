@@ -130,13 +130,21 @@ export const getMdmsData = async (action, state, dispatch) => {
       payload.MdmsRes.tenant.localities = localities;
     }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-    let financialYearData = get(
-      payload,
-      "MdmsRes.egf-master.FinancialYear",
-      []
-    ).filter(item => item.module === "TL"&& item.active === true);
-
-    set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
+    if(getQueryArg(window.location.href, "action") === "EDITRENEWAL"){
+     let financialYearData = get(
+       payload,
+       "MdmsRes.egf-master.FinancialYear",
+       []
+     ).filter(item => item.module === "TL"&& item.active === true );
+     set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
+    }else{
+     let financialYearData = get(
+       payload,
+       "MdmsRes.egf-master.FinancialYear",
+       []
+     ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
+     set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
+    }
   } catch (e) {
     console.log(e);
   }
