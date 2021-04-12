@@ -238,7 +238,7 @@ export const getAddressForm = (type) =>{
       },
       required:false,
       visible: true,
-      pattern: patterns["addressBig"],
+      pattern: patterns["addressTehsil"],
       jsonPath: `bnd.death.newRegistration.${type}.tehsil`,
       gridDefination: {
         xs: 12,
@@ -388,7 +388,7 @@ export const newRegistrationForm = getCommonCard(
             },
             required:true,
             visible: true,
-            pattern: patterns["addressSmall"],
+            pattern: patterns["registrationNo"],
             jsonPath: "bnd.death.newRegistration.registrationno",
             gridDefination: {
               xs: 12,
@@ -720,7 +720,7 @@ export const newRegistrationForm = getCommonCard(
             labelKey: "BND_RELIGION"
           },
           required: false,
-          pattern: patterns["addressSmall"],
+          pattern: patterns["commonPattern"],
           jsonPath: `bnd.death.newRegistration.religion`,
           gridDefination: {
             xs: 12,
@@ -874,6 +874,7 @@ export const newRegistrationForm = getCommonCard(
           },
           required:false,
           visible: true,
+          pattern : patterns["name"],
           jsonPath: "bnd.death.newRegistration.informantsname",
           gridDefination: {
             xs: 12,
@@ -891,6 +892,7 @@ export const newRegistrationForm = getCommonCard(
           },
           required:false,
           visible: true,
+          pattern : patterns["addressBig"],
           jsonPath: "bnd.death.newRegistration.informantsaddress",
           gridDefination: {
             xs: 12,
