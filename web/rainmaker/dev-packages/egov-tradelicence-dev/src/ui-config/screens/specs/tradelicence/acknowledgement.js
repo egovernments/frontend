@@ -711,7 +711,18 @@ const screenConfig = {
     set(action, "screenConfig.components.div.children", data);
     const status1 =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].status" );
     const applicationType =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType" );
-    if( status1 === "APPLIED" &&applicationType==="NEW" || status1 === "APPLIED" &&applicationType==="RENEWAL" ) {
+    debugger;
+    if( status1 === "PENDINGPAYMENT") {
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.gotoHomeFooter.children.proceedToPaymentButton",
+          "props.visible", 
+          true
+        )
+      );
+    }
+    else{
       dispatch(
         handleField(
           "acknowledgement",
