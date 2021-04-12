@@ -711,7 +711,7 @@ const screenConfig = {
     set(action, "screenConfig.components.div.children", data);
     const status1 =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].status" );
     const applicationType =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType" );
-    if( status1 === "APPLIED" || status1 === "APPLIED" &&applicationType==="RENEWAL" ) {
+    if( status1 === "APPLIED" &&applicationType==="NEW" || status1 === "APPLIED" &&applicationType==="RENEWAL" ) {
       dispatch(
         handleField(
           "acknowledgement",

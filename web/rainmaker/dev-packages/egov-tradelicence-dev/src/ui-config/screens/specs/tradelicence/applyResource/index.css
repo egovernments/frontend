@@ -69,9 +69,9 @@
   height: 290px;
   max-height: 290px;
   overflow-y: hidden !important; }
-.autocomplete-dropdown div:nth-child(2),
+/* .autocomplete-dropdown div:nth-child(2),
 .autocomplete-dropdown div:nth-child(3) {
-  display: none !important; } 
+  display: none !important; }  */
 
 
 #material-ui-cardContent {
