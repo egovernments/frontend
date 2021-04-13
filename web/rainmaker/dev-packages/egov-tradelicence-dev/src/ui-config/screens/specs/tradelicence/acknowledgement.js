@@ -12,6 +12,7 @@ import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils"
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
+import { homeFooter } from "./acknowledgementResource/homeFooter";
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { sendBackSuccessFooter } from "./acknowledgementResource/sendBackSuccessFooter";
@@ -479,7 +480,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      homeFooter
     };
   } else if (purpose === "application" && status === "cancelled") {
     return {
@@ -625,7 +626,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      gotoHomeFooter
+      homeFooter
     };
   } else if ((purpose === "EDITRENEWAL" || purpose === "DIRECTRENEWAL") && status === "success") {
     return {
@@ -710,28 +711,8 @@ const screenConfig = {
     );
     set(action, "screenConfig.components.div.children", data);
     const status1 =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].status" );
+    console.log(status1, "applStatus");
     const applicationType =get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType" );
-    debugger;
-    if( status1 === "PENDINGPAYMENT") {
-      dispatch(
-        handleField(
-          "acknowledgement",
-          "components.div.children.gotoHomeFooter.children.proceedToPaymentButton",
-          "props.visible", 
-          true
-        )
-      );
-    }
-    else{
-      dispatch(
-        handleField(
-          "acknowledgement",
-          "components.div.children.gotoHomeFooter.children.proceedToPaymentButton",
-          "props.visible", 
-          false
-        )
-      );
-    }
     return action;
   }
 };
