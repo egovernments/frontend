@@ -263,13 +263,54 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
+    const tenantId = getQueryArg(window.location.href, "tenantId");
     if (getQueryArg(window.location.href, "action") === "edit") {
+
+
+
+let ownerDocs=[];
+let buildDocs=[];
+let docs=[];
+let docsForEdit={}
+ const documentsUploadRedux = get(state,
+  "screenConfiguration.preparedFinalObject.documentsUploadRedux",
+  {}
+);
+Object.keys(documentsUploadRedux).map((key,index)=>{
+if(documentsUploadRedux[key].documents && Array.isArray(documentsUploadRedux[key].documents) && documentsUploadRedux[key].documents.length>0){
+let documentObj={ fileName:documentsUploadRedux[key].documents[0].fileName || `Document - ${index + 1}`,
+
+fileUrl:documentsUploadRedux[key].documents[0].fileUrl,
+documentType:documentsUploadRedux[key].documents[0].documentType,
+fileStoreId:documentsUploadRedux[key].documents[0].fileStoreId,
+tenantId:tenantId};
+  if(documentsUploadRedux[key].documentType=="OWNER"){
+
+    ownerDocs.push({...documentObj})
+    docsForEdit[documentsUploadRedux[key].documentCode]={...documentObj};
+  }else if(documentsUploadRedux[key].documentType=="BUILDING"){
+    let key1 =documentsUploadRedux[key].documentSubCode?documentsUploadRedux[key].documentSubCode:documentsUploadRedux[key].documentCode
+    buildDocs.push({...documentObj,documentType:key1})
+    docsForEdit[key1]={...documentObj};
+  }
+  docs.push({...documentObj})
+
+}
+})
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.documents", [...ownerDocs]));
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.buildings[0].applicationDocuments", [...buildDocs]));
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.ownerAuditionalDetail", [...ownerDocs]));
+dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.documents", [...docs]));
+
+
+
+
       //EDIT FLOW
       const businessId = getQueryArg(
         window.location.href,
         "applicationNumber"
       );
-      const tenantId = getQueryArg(window.location.href, "tenantId");
+   
       dispatch(
         setRoute(
           `/fire-noc/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`

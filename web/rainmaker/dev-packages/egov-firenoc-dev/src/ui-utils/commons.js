@@ -86,7 +86,7 @@ export const setDocsForEditFlow = async (state, dispatch) => {
   let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
     let applicationDocument = {}
     applicationDocuments&&applicationDocuments.map(appDoc => {
-      if (appDoc.documentType == mdmsDoc.documentType) {
+      if (appDoc.documentType == mdmsDoc.code) {
         applicationDocument = { ...appDoc }
       }
     })
@@ -106,7 +106,7 @@ export const setDocsForEditFlow = async (state, dispatch) => {
     fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
   applicationDocuments &&
     applicationDocuments.forEach((item, index) => {
-      uploadedDocuments[index] = [
+      uploadedDocuments[index] = 
         {
           fileName:
             (fileUrlPayload &&
@@ -125,8 +125,9 @@ export const setDocsForEditFlow = async (state, dispatch) => {
           tenantId: item.tenantId,
           id: item.id
         }
-      ];
+      
     });
+
   dispatch(
     prepareFinalObject("documentsUploadRedux", uploadedDocuments)
   );
