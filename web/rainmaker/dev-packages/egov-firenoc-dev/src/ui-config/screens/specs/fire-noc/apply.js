@@ -318,7 +318,7 @@ export const prepareEditFlow = async (
   
     dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
     await onchangeOfTenant({value:tenantId},state,dispatch);
-    setDocsForEditFlow(state,dispatch);
+    await setDocsForEditFlow(state,dispatch);
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
@@ -420,7 +420,7 @@ const screenConfig = {
     });
 
     // Search in case of EDIT flow
-    prepareEditFlow(state, dispatch, applicationNumber, tenantId);
+    prepareEditFlow(state, dispatch, applicationNumber, tenantId).then(response => {});
 
     // // Set Property City
     // dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.propertyDetails.address.city", getTenantId()));
