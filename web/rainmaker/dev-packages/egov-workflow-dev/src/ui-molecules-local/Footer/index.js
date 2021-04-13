@@ -173,6 +173,7 @@ class Footer extends React.Component {
     set(licences[0], "applicationType", "RENEWAL");
     set(licences[0], "financialYear", nextFinancialYear);
     set(licences[0], "tradeLicenseDetail.adhocPenalty", null);
+    set(licences[0], "tradeLicenseDetail.adhocExemption", null);
     try {
       const response = await httpRequest(
         "post",
