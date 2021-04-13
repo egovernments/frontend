@@ -10,7 +10,7 @@ import { propertyDetails } from "./applyResource/propertyDetails";
 import { onchangeOfTenant, propertyLocationDetails } from "./applyResource/propertyLocationDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import { documentDetails } from "./applyResource/documentDetails";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getFileUrl, getFileUrlFromAPI, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
@@ -217,7 +217,80 @@ const setCardsIfMultipleBuildings = (state, dispatch) => {
     );
   }
 };
+const setDocsForEditFlow = async (state, dispatch) => {
+  let applicationDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.applicantDetails.additionalDetail.documents",
+    []
+  );
+  let buildingDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.buildings[0].applicationDocuments",
+    []
+  );
+  applicationDocuments=[...applicationDocuments,...buildingDocuments]
+  /* To change the order of application documents similar order of mdms order*/
+  const mdmsDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.FireNoc.Documents",
+    []
+  );
+  let orderedApplicationDocuments = mdmsDocs.map(mdmsDoc => {
+    let applicationDocument = []
+    applicationDocuments&&applicationDocuments.map(appDoc => {
+      if (appDoc.documentType == mdmsDoc.code) {
+        applicationDocument.push({ ...appDoc })
+      }
+      if (mdmsDoc.hasMultipleRows&&mdmsDoc.options.map(option=>option.code).includes(appDoc.documentType)) {
+        applicationDocument.push({ ...appDoc })
+      }  
+    })
+    return applicationDocument;
+  }
+  )
+  let newOrder=[]
+  orderedApplicationDocuments.map(orderedApplicationDocument=>{
+    newOrder.push(...orderedApplicationDocument)
+  })
+  applicationDocuments = [...newOrder];
+  dispatch(
+    prepareFinalObject("FireNocTemp[0].applicationDocuments", applicationDocuments)
+  );
 
+  let uploadedDocuments = {};
+  let uploadedDocumentObject = {};
+  let fileStoreIds =
+    applicationDocuments &&
+    applicationDocuments.map(item => item.fileStoreId).join(",");
+  const fileUrlPayload =
+    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
+  applicationDocuments &&
+    applicationDocuments.forEach((item, index) => {
+      uploadedDocuments[index] =         {
+          fileName:
+            (fileUrlPayload &&
+              fileUrlPayload[item.fileStoreId] &&
+              decodeURIComponent(
+                getFileUrl(fileUrlPayload[item.fileStoreId])
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`,
+          fileStoreId: item.fileStoreId,
+          fileUrl: Object.values(fileUrlPayload)[index],
+          documentType: item.documentType,
+          tenantId: item.tenantId,
+          id: item.id
+        }
+        uploadedDocumentObject[item.documentType]=uploadedDocuments[index]
+    });
+    let edited =getQueryArg(window.location.href, "edited");
+    edited?{} : dispatch(
+      prepareFinalObject("documentsEditFlow", uploadedDocumentObject)
+    );
+};
 export const prepareEditFlow = async (
   state,
   dispatch,
@@ -245,6 +318,7 @@ export const prepareEditFlow = async (
   
     dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
     await onchangeOfTenant({value:tenantId},state,dispatch);
+    setDocsForEditFlow(state,dispatch);
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
