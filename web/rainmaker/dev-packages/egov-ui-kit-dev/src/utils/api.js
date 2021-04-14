@@ -402,7 +402,8 @@ queryObject = [],
 requestBody = {},
 customRequestInfo = {},
 ignoreTenantId = false,
-fileName='download.pdf'
+fileName='download.pdf',
+onSuccess
 ) => {
 const tenantId = getTenantId() || commonConfig.tenantId;
   const downloadInstance = axios.create({
@@ -432,6 +433,7 @@ const tenantId = getTenantId() || commonConfig.tenantId;
     if (responseStatus === 201 || responseStatus === 200) {
      
       fileName=='print'?printPdf(new Blob([response.data], { type: "application/pdf" })):downloadPdf(new Blob([response.data], { type: "application/pdf" }), fileName);
+      onSuccess?onSuccess():{};
       store.dispatch(hideSpinner());
     }
   } catch (error) {
