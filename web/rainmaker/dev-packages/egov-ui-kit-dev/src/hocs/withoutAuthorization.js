@@ -179,7 +179,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
     const { authenticated } = state.auth;
     let { stateInfoById } = state.common || [];
     let hasLocalisation = false;
-    let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/language-selection" : "/user/login";
+    let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/user/register" : "/user/login";
     let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
     const cities = state.common.cities || [];
     const tenantId = getTenantId() || process.env.REACT_APP_DEFAULT_TENANT_ID;
