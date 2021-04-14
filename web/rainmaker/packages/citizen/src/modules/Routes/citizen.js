@@ -83,7 +83,7 @@ const routes = [
       isHomeScreen: true,
       title: "CS_HOME_HEADER_HOME",
       hideTitle: true,
-      redirectionUrl: "/user/login",
+      redirectionUrl: "/language-selection",
       notificationButton: true,
     },
   },
