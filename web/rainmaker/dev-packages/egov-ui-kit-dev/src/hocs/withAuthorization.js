@@ -281,7 +281,7 @@ const withAuthorization = (options = {}) => (Component) => {
     let { authenticated, userInfo } = state.auth;
     let { stateInfoById } = state.common || [];
     let hasLocalisation = false;
-    let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/language-selection" : "/user/login";
+    let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/user/register" : "/user/login";
     // userInfo = typeof userInfo === "string" ? JSON.parse(userInfo) : userInfo;
     if (stateInfoById && stateInfoById.length > 0) {
       hasLocalisation = stateInfoById[0].hasLocalisation;
