@@ -402,6 +402,27 @@ const createProperty = async (Properties, action, props) => {
       propertyPayload.units = propertyPayload.units.concat(results);
   }
 }
+if(propertyMethodAction==="_update" && propertyPayload.institution && newProperties[0].institution)
+{
+let newId =  propertyPayload &&  propertyPayload.institution.id && propertyPayload.institution.id;
+
+let oldId = newProperties && newProperties[0].institution.id && newProperties[0].institution.id;
+
+if (!newId)
+{
+    
+    propertyPayload.institution["id"]= oldId;
+
+}
+}
+  
+  let  ownershipCategory1 = get(propertyPayload, "ownershipCategory",'');
+if (propertyMethodAction === "_update" && propertyPayload.institution && (ownershipCategory1==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER" || ownershipCategory1==="INDIVIDUAL.INDIVIDUAL.MULTIPLEOWNERS" ) ) {
+
+  propertyPayload.institution=null;
+
+ 
+}
 
 
   /* if(ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER")
