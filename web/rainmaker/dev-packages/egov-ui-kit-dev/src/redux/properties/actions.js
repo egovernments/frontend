@@ -732,7 +732,7 @@ export const downloadReceipt = (receiptQueryString) => {
     if (receiptQueryString) {
       // dispatch(downloadReceiptPending());
       try {
-        downloadConReceipt(receiptQueryString,'consolidatedreceipt',`RECEIPT-consolidated.pdf` )
+        downloadConReceipt(receiptQueryString,'consolidatedreceipt',`PTRECEIPT-consolidated.pdf` )
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
       }

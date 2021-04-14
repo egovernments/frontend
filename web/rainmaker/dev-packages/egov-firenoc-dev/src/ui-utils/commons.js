@@ -165,11 +165,12 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     );
 
     let isDocumentValid = true;
-    Object.keys(reduxDocuments).map((key) => {
-      if (reduxDocuments[key].documentType === "OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)) {
-        isDocumentValid = false;
-      }
-    });
+    // Object.keys(reduxDocuments).map((key) => {
+    //   // if (reduxDocuments[key].documentType === "OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)) {
+    //     if (reduxDocuments[key].documentType === "OWNER" && reduxDocuments[key].documents && reduxDocuments[key].documents.length > 0 && !(reduxDocuments[key].dropdown && reduxDocuments[key].dropdown.value)) {
+    //     isDocumentValid = false;
+    //   }
+    // });
     if (!isDocumentValid) {
       dispatch(toggleSnackbar(true, { labelName: "Please select document type for uploaded document", labelKey: "ERR_DOCUMENT_TYPE_MISSING" }, "error"));
       return;

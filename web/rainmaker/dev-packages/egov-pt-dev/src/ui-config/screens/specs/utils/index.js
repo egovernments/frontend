@@ -15,6 +15,7 @@ import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
 import set from "lodash/set";
 import store from "ui-redux/store";
+import { download } from "egov-common/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getSearchResults } from "../../../../ui-utils/commons";
 
@@ -955,17 +956,8 @@ export const downloadCertificateForm = async (oldProperties, pdfcode, tenantId, 
   }
 }
 
-export const downloadReceitForm = async (Payments, pdfcode, tenantId, applicationNumber, mode = 'download') => {
-  const queryStr = [
-    { key: "key", value: pdfcode },
-    { key: "tenantId", value: tenantId }
-  ]
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
+export const downloadReceitForm = async ( tenantId, applicationNumber, mode = 'download') => {
+
   let queryObj = [
     {
       key: "tenantId",
@@ -982,28 +974,7 @@ export const downloadReceitForm = async (Payments, pdfcode, tenantId, applicatio
     
   ];
 
-  const responsePayments = await getpayments(queryObj)
-  const oldFileStoreId = get(responsePayments.Payments[0], "fileStoreId")
-  if (oldFileStoreId) {
-    downloadReceiptFromFilestoreID(oldFileStoreId, mode, tenantId)
-  }
-  else {
-    try {
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-        .then(res => {
-          res.filestoreIds[0]
-          if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-            res.filestoreIds.map(fileStoreId => {
-              downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId)
-            })
-          } else {
-            console.log("Error In Acknowledgement form Download");
-          }
-        });
-    } catch (exception) {
-      alert('Some Error Occured while downloading Acknowledgement form!');
-    }
-  }
+  download(queryObj, mode,  "consolidatedreceipt")
 }
 export const getLabelIfNotNull = (label, value, props) => {
   const labelObj = getLabelWithValue(label, value, props);
