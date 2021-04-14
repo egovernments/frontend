@@ -94,6 +94,7 @@ export const getInstituteAuthority = (propertyResponse) => {
   const { Properties } = propertyResponse;
   const instituteDataFromApi = get(Properties[0], "propertyDetails[0].owners", []);
   const designationPath = get(institutionAuthority, "fields.designation.jsonPath", "");
+  
   let instituteAuthorityForm = {};
   instituteDataFromApi.forEach((instituteDetails, index) => {
     if (!!instituteDetails.altContactNumber) {
@@ -102,13 +103,14 @@ export const getInstituteAuthority = (propertyResponse) => {
       };
     }
   });
-  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse.Properties[0], designationPath, ""));
   if (
     get(instituteAuthorityForm, "institutionAuthority.fields.mobile.value", "") ===
     get(instituteAuthorityForm, "institutionAuthority.fields.telephone.value", "")
   ) {
     set(instituteAuthorityForm, "institutionAuthority.fields.mobile.value", "");
   }
+  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse, designationPath, ""));
+  
 
   return instituteAuthorityForm;
 };
@@ -137,12 +139,14 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
 
   if (ownershipType === "MULTIPLEOWNERS" || ownershipType === "SINGLEOWNER") {
     ownerForms = getAllOwnerDetails(properties[0],ownershipType && ownershipType.includes("SINGLEOWNER"))
+  
+    set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", ownershipType === "SINGLEOWNER"? "INDIVIDUAL.SINGLEOWNER" :"INDIVIDUAL.MULTIPLEOWNERS");
+
   } else if (ownershipType.toLowerCase().indexOf("insti") !== -1 || 
   ownershipCategoryFromApi.toLowerCase().indexOf("insti") !== -1) {
     institutionAuthority = getInstituteAuthority(propertyResponse);
     institutionDetails = getInstituteDetails(properties[0]);
-    set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", 
-    get(propertyResponse, "Properties[0].propertyDetails[0].ownershipCategory", ""));
+    set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value",ownershipCategoryFromApi );
   } else {
     //TODO
     set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "INDIVIDUAL.SINGLEOWNER");
@@ -151,7 +155,7 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
   set(assessmentForms, "plotDetails.fields.plotSize.value", landArea);
 
   
-  set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", ownershipType === "SINGLEOWNER"? "INDIVIDUAL.SINGLEOWNER" :"INDIVIDUAL.MULTIPLEOWNERS");
+  //set(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", ownershipType === "SINGLEOWNER"? "INDIVIDUAL.SINGLEOWNER" :"INDIVIDUAL.MULTIPLEOWNERS");
   
   return {
     // ...res,
