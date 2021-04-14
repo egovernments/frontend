@@ -302,7 +302,7 @@ export const prepareEditFlow = async (
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
     []
   );
-  if (applicationNumber && buildings.length == 0) {
+  if (applicationNumber ) {
     let edited =getQueryArg(window.location.href, "edited")
    
     let response =  edited?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}:await getSearchResults([

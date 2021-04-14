@@ -39,7 +39,9 @@ const moveToReview = (state, dispatch) => {
 
   for (let i = 0; i < documentsFormat.length; i++) {
     let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+    // let isDocumentTypeRequired = get(documentsFormat[i], "isDocumentTypeRequired");
+    let isDocumentTypeRequired =false;
+
 
     let documents = get(documentsFormat[i], "documents");
     if (isDocumentRequired) {
