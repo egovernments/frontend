@@ -142,7 +142,7 @@ const mapStateToProps = (state, ownProps) => {
   const { spinner } = common;
   const { stateInfoById } = common || [];
   let hasLocalisation = false;
-  let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/user/register" : "/user/login";
+  let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/language-selection" : "/user/login";
   if (stateInfoById && stateInfoById.length > 0) {
     hasLocalisation = stateInfoById[0].hasLocalisation;
     defaultUrl = stateInfoById[0].defaultUrl;
