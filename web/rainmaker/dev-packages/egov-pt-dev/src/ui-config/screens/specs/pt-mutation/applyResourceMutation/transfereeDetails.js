@@ -73,7 +73,7 @@ const commonApplicantInformation = () => {
             {
               labelName: "Transgender",
               labelKey: "PT_MUTATION_TRANSFEREE_GENDER_TRANSGENDER_RADIOBUTTON",
-              value: "OTHERS"
+              value: "TRANSGENDER"
             }
           ],
           jsonPath:

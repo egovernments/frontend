@@ -78,7 +78,7 @@ export const getGenderRadioButton = {
       {
         label: "Transgender",
         labelKey: "COMMON_GENDER_TRANSGENDER",
-        value: "OTHERS"
+        value: "TRANSGENDER"
       }
     ],
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",

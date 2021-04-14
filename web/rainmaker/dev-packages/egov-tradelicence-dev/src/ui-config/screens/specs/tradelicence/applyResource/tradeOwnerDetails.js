@@ -75,7 +75,7 @@ export const getOwnerGenderField = getSelectField({
       label: "COMMON_GENDER_FEMALE"
     },
     {
-      code: "OTHERS",
+      code: "TRANSGENDER",
       label: "COMMON_GENDER_TRANSGENDER"
     }
   ]
@@ -303,7 +303,7 @@ export const OwnerInfoCard = {
                 value: "FEMALE"
               },
               {
-                label: "Others",
+                label: "TRANSGENDER",
                 labelKey: "COMMON_GENDER_TRANSGENDER",
                 value: "OTHERS"
               }
@@ -586,7 +586,7 @@ export const ownerInfoInstitutional = {
             label: "COMMON_GENDER_FEMALE"
           },
           {
-            code: "OTHERS",
+            code: "TRANSGENDER",
             label: "COMMON_GENDER_TRANSGENDER"
           }
         ]
