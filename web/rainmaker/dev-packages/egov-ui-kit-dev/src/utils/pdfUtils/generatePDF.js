@@ -731,8 +731,8 @@ export const printPDFFileUsingBase64 = (receiptPDF, filename) => {
     }
 };
 
-export const searchAndDownloadPdf=(url,queryObj,fileName)=>{
-    downloadPdfFile(url,'post',queryObj,{},{},false,fileName);
+export const searchAndDownloadPdf=(url,queryObj,fileName,onSuccess)=>{
+    downloadPdfFile(url,'post',queryObj,{},{},false,fileName,onSuccess);
 }
 
 export const searchAndPrintPdf=(url,queryObj)=>{
