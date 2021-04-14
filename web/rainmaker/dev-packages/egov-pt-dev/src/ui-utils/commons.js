@@ -645,3 +645,12 @@ export const getDomainLink = () =>{
     }
     return link
 };
+
+
+export const downloadMutationCertificate =(queryObj,fileName)=>{
+  searchAndDownloadPdf(`/egov-pdf/download/PT/ptmutationcertificate`,queryObj,fileName)
+}
+
+export const printMutationCertificate =(queryObj)=>{
+  searchAndPrintPdf(`/egov-pdf/download/PT/ptmutationcertificate`,queryObj)
+}
