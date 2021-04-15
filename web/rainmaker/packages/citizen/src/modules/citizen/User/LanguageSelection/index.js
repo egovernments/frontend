@@ -10,6 +10,10 @@ class LanguageSelection extends Component {
   state = {
     value: getLocale(),
   };
+  
+  componentDidMount=()=>{
+    this.props.fetchLocalizationLabel(this.state.value||'en_IN');
+  }
 
   onClick = (value) => {
     this.setState({ value });

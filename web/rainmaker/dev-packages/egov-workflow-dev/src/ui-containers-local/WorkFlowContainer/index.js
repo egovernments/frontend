@@ -4,7 +4,7 @@ import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/s
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { addWflowFileUrl, getMultiUnits, getQueryArg, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
-import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
@@ -568,6 +568,28 @@ getActionIfEditable = (status, businessId, moduleName, applicationState) => {
   return editAction;
 };
 
+setBusinessServiceDataToLocalStorage = async (
+  queryObject,
+) => { 
+  const payload = await httpRequest(
+    "post",
+    "egov-workflow-v2/egov-wf/businessservice/_search",
+    "_search",
+    queryObject
+  );
+  if (
+    payload &&
+    payload.BusinessServices &&
+    payload.BusinessServices.length > 0
+  ) {
+    localStorageSet(
+      "businessServiceData",
+      JSON.stringify(get(payload, "BusinessServices"))
+    );
+  }
+}
+
+
 prepareWorkflowContract = (data, moduleName) => {
   const {
     getRedirectUrl,
@@ -577,6 +599,22 @@ prepareWorkflowContract = (data, moduleName) => {
     checkIfDocumentRequired,
     getEmployeeRoles
   } = this;
+  const businessServiceData = JSON.parse(
+    localStorageGet("businessServiceData")
+  );
+  if ( businessServiceData && businessServiceData[0].businessService != data[0].businessService ) {
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      {
+        key: "businessServices",
+        value: data[0].businessService ? data[0].businessService : "NewTL"
+      }
+    ];
+
+    this.setBusinessServiceDataToLocalStorage(queryObject);
+  }
+  
   let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
   let businessId = get(data[data.length - 1], "businessId");
   let applicationState = get(data[data.length - 1], "state.state");
