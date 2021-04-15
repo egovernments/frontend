@@ -163,7 +163,7 @@ export const getPersonDetailsForm = (type) =>{
         labelKey: "BND_EDUCATION"
       },
       required: false,
-      //pattern: getPattern("MobileNo"),
+      pattern: patterns["commonPattern"],
       jsonPath: `bnd.birth.newRegistration.${type}.education`,
       gridDefination: {
         xs: 12,
@@ -183,7 +183,7 @@ export const getPersonDetailsForm = (type) =>{
         labelKey: "BND_PROFESSION"
       },
       required: false,
-      //pattern: getPattern("MobileNo"),
+      pattern: patterns["commonPattern"],
       jsonPath: `bnd.birth.newRegistration.${type}.proffession`,
       gridDefination: {
         xs: 12,
@@ -203,7 +203,7 @@ export const getPersonDetailsForm = (type) =>{
         labelKey: "BND_NATIONALITY"
       },
       required: false,
-      pattern: patterns["addressSmall"],
+      pattern: patterns["commonPattern"],
       jsonPath: `bnd.birth.newRegistration.${type}.nationality`,
       gridDefination: {
         xs: 12,
@@ -223,7 +223,7 @@ export const getPersonDetailsForm = (type) =>{
         labelKey: "BND_RELIGION"
       },
       required: false,
-      pattern: patterns["addressSmall"],
+      pattern: patterns["commonPattern"],
       jsonPath: `bnd.birth.newRegistration.${type}.religion`,
       gridDefination: {
         xs: 12,
@@ -318,7 +318,7 @@ export const getAddressForm = (type) =>{
       },
       required:false,
       visible: true,
-      pattern: patterns["addressBig"],
+      pattern: patterns["addressTehsil"],
       jsonPath: `bnd.birth.newRegistration.${type}.tehsil`,
       gridDefination: {
         xs: 12,
@@ -468,7 +468,7 @@ export const newRegistrationForm = getCommonCard(
             },
             required:true,
             visible: true,
-            pattern: patterns["addressSmall"],
+            pattern: patterns["registrationNo"],
             jsonPath: "bnd.birth.newRegistration.registrationno",
             gridDefination: {
               xs: 12,
@@ -820,6 +820,7 @@ export const newRegistrationForm = getCommonCard(
           },
           required:false,
           visible: true,
+          pattern : patterns["name"],
           jsonPath: "bnd.birth.newRegistration.informantsname",
           gridDefination: {
             xs: 12,
@@ -837,6 +838,7 @@ export const newRegistrationForm = getCommonCard(
           },
           required:false,
           visible: true,
+          pattern : patterns["addressBig"],
           jsonPath: "bnd.birth.newRegistration.informantsaddress",
           gridDefination: {
             xs: 12,

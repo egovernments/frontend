@@ -24,9 +24,19 @@ export const searchApiCall = async (state, dispatch) => {
     queryParams.push({ key: "tenantId",value: tenantId});
 
   let dateOfDeath = get(state.screenConfiguration.preparedFinalObject,"bnd.death.dob");
+  let fromdate = get(state.screenConfiguration.preparedFinalObject,"bnd.death.fromdate");
+  let todate = get(state.screenConfiguration.preparedFinalObject,"bnd.death.todate");
   if(dateOfDeath)
   {
     queryParams.push({ key: "dateOfDeath",value: convertEpochToDate(convertDateToEpoch(dateOfDeath)).replaceAll("/","-")});
+  }
+  if(fromdate)
+  {
+    queryParams.push({ key: "fromDate",value: convertEpochToDate(convertDateToEpoch(fromdate)).replaceAll("/","-")});
+  }
+  if(todate)
+  {
+    queryParams.push({ key: "toDate",value: convertEpochToDate(convertDateToEpoch(todate)).replaceAll("/","-")});
   }
   let gender = get(state.screenConfiguration.preparedFinalObject,"bnd.death.gender");
   if(gender)
@@ -93,6 +103,24 @@ export const searchApiCall = async (state, dispatch) => {
       )
     );
     return;
+  }
+  if (fromdate && todate ) {
+    let fromdateofsearch=get(state.screenConfiguration.preparedFinalObject,"bnd.death.fromdate")
+    let todateepochofsearch=get(state.screenConfiguration.preparedFinalObject,"bnd.death.todate")
+    if(fromdateofsearch>todateepochofsearch)
+    {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "",
+          labelKey: "From Date should not be before To Date "
+        },
+        "warning"
+      )
+    );
+    return;
+      }
   }
 
   // if(!registrationNo && !hospitalId && !mothersName && !fathersName)

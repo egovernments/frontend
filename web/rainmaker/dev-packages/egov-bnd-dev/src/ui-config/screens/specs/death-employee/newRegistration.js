@@ -11,6 +11,7 @@ import {loadHospitals, loadFullCertDetails} from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {importExcelDialog} from "./importExcelDialog";
 import { deleteRecordsDialog } from "./deleteRecordsDialog";
+import { convertEpochToDateCustom} from "../utils";
 
 
 export const showHideConfirmationPopup = (state, dispatch) => {
@@ -56,7 +57,31 @@ export const showHideDeleteRecordsDialog = (state, dispatch) => {
    handleField("newRegistration", "components.deleteRecordsDialog", "props.open", !toggle)
  );
 };
-
+const prepareEditScreenData = (action,state,dispatch,response) => {
+  setTimeout(() => {     
+    if(response.DeathCertificate[0].dateofdeath)
+    {  
+      dispatch(
+        handleField("newRegistration", "components.div2.children.details.children.cardContent.children.deceasedInfo.children.cardContent.children.infoOfDeceased.children.dob", "props.value", 
+        convertEpochToDateCustom(response.DeathCertificate[0].dateofdeath)
+      ));
+    }
+    if(response.DeathCertificate[0].dateofreport)
+    {  
+      dispatch(
+        handleField("newRegistration", "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.dateOfReporting", "props.value", 
+        convertEpochToDateCustom(response.DeathCertificate[0].dateofreport)
+      ));
+    }
+    if(response.DeathCertificate[0].hospitalname)
+    {  
+      dispatch(
+        handleField("newRegistration", "components.div2.children.details.children.cardContent.children.registrationInfo.children.cardContent.children.registrationInfoCont.children.hospitalName", "props.value", 
+        response.DeathCertificate[0].hospitalname
+      ));
+    }
+  }, 1); 
+}
 const newRegistration = {
   uiFramework: "material-ui",
   name: "newRegistration",
@@ -65,28 +90,31 @@ const newRegistration = {
     let userAction = getQueryArg(window.location.href, "action");
     let id = getQueryArg(window.location.href, "certificateId");
     let module = getQueryArg(window.location.href, "module");
-    if(userAction=="VIEW" && id && module)
+    loadHospitals(action, state, dispatch, "death",getTenantId()).then((response)=>{
+
+      if(response && response.hospitalDtls)
+      {
+        for (let hospital of response.hospitalDtls) {
+          hospital.code = hospital.name;
+          hospital.name = hospital.name;
+        }
+        dispatch(prepareFinalObject("bnd.allHospitals", response.hospitalDtls));
+      }
+    if(userAction=="EDIT" && id && module)
     {
       loadFullCertDetails(action,state,dispatch, {tenantId:getTenantId(), id:id, module:module}).then((response)=>{
         if (response && response.DeathCertificate && response.DeathCertificate.length>0) {
           dispatch(prepareFinalObject("bnd.death.newRegistration", response.DeathCertificate[0]));
+          prepareEditScreenData(action,state,dispatch,response)
         }
       });
     }
     else
     {
       dispatch(prepareFinalObject("bnd.death.newRegistration", {"deathSpouseInfo":{},"deathFatherInfo":{},"deathMotherInfo":{},"deathPresentaddr":{},"deathPermaddr":{}}));
-      loadHospitals(action, state, dispatch, "death",getTenantId()).then((response)=>{
-        if(response && response.hospitalDtls)
-        {
-          for (let hospital of response.hospitalDtls) {
-            hospital.code = hospital.name;
-            hospital.name = hospital.name;
-          }
-          dispatch(prepareFinalObject("bnd.allHospitals", response.hospitalDtls));
-        }
-      });
-    }
+    }  
+    });
+    
 
     return action;
   },

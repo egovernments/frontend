@@ -7,7 +7,9 @@ import {
   getLabelWithValue,
 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate, checkValueForNA } from "egov-ui-framework/ui-config/screens/specs/utils";
+import get from "lodash/get";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { convertEpochToDate, checkValueForNA,getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {genderValues} from "./../../../../ui-utils/constants";
 
 const addSpace = data => {
@@ -214,6 +216,40 @@ export const getFullDeathCertDetailsCard = (inJsonPath) =>
         }
       }
     ),
+    editButton: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "50px",
+          height: "30px",
+          float: "right",
+          borderRadius: "inherit"
+        }
+      },
+      children: {
+        previousButtonLabel: getLabel({
+          labelName: "Previous Step",
+          labelKey: "CORE_COMMON_EDIT"
+        })
+      },
+      
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          const newRegData = _.clone(get(
+            state.screenConfiguration.preparedFinalObject,
+            "bnd.viewFullCertDetails",
+            []
+          ),true);
+          let id = newRegData["id"]
+          let applyUrl = `/death-employee/newRegistration?action=EDIT&certificateId=${id}&module=death`;
+          dispatch(setRoute(applyUrl));
+        }
+      }
+      
+    },
     registrationInfo: getCommonGrayCard({
         header: getCommonSubHeader(
           {
@@ -247,10 +283,10 @@ export const getFullDeathCertDetailsCard = (inJsonPath) =>
               callBack: checkNoData
             }
           ),
-          dateOfReporting: getLabelWithValue(
+          dateOfRegistration: getLabelWithValue(
             {
-              labelName: "BND_DOR_PLACEHOLDER",
-              labelKey: "BND_DOR_PLACEHOLDER"
+              labelName: "BND_DOR",
+              labelKey: "BND_DOR"
             },
             {
               jsonPath: inJsonPath + ".dateofreport",
@@ -328,7 +364,7 @@ export const getFullDeathCertDetailsCard = (inJsonPath) =>
             labelKey: "BND_EIDNO"
           },
           {
-            jsonPath: inJsonPath + ".lastname",
+            jsonPath: inJsonPath + ".eidno",
             callBack: checkNoData
           }
         ),

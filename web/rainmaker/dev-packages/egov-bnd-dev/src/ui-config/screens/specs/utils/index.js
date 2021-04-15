@@ -11,14 +11,69 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import commonConfig from "config/common.js";
 import {prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";   //returns action object
-import { downloadReceiptFromFilestoreID} from "egov-common/ui-utils/commons";
 import store from "ui-redux/store";
+import { openPdf, printPdf } from "egov-ui-kit/utils/commons";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+
+
+export const downloadPdf = (link, openIn = '_blank') => {
+  var win = window.open(link, openIn);
+  if (win) {
+    win.focus();
+  }
+  else
+  {
+    toggleSnackbar(
+      true,
+      {
+        labelName: "",
+        labelKey: "Looks like your browser is blocking pop-ups. Allow pop-ups in your browser to download certificate."
+      },
+      "error"
+    );
+  }
+}
+
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
+  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
+    if (mode === 'download') {
+      downloadPdf(fileRes[fileStoreId]);
+    } else if (mode === 'open') {
+      openPdf(fileRes[fileStoreId], '_self')
+    }
+    else {
+      printPdf(fileRes[fileStoreId]);
+    }
+  });
+}
+
+export const convertEpochToDateCustom = dateEpoch => {
+  // Returning null in else case because new Date(null) returns initial date from calender
+  if(dateEpoch){
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${year}-${month}-${day}`;
+  } else {
+    return null;
+  }
+};
 
 export const validateTimeZone = () =>{
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if(tz != "Asia/Calcutta" && tz != "Asia/Kolkata")
+  try{
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if(tz != "Asia/Calcutta" && tz != "Asia/Kolkata")
+    {
+      alert("Looks like your system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again.")
+      return false;
+    }
+  }
+  catch(e)
   {
-    alert("Looks like you system's time zone is not correct! \nChange your system's time zone to Indian Standard Time (UTC+5:30 Chennai,Kolkata,Mumbai,NewDelhi)\nand try again.")
+    alert("Looks like this browser is very old. Please update your browser and continue");
     return false;
   }
   return true;
