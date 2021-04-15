@@ -6,16 +6,17 @@ import { getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils"
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import QRCode from "qrcode";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
+import get from "lodash/get";
 
 const getMessageFromLocalization = code => {
-    let messageObject = JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
-        item => {
-            return item.code == code;
-        }
+    let messageObject = JSON.parse(getLocalization("localization_en_IN")).find(
+      item => {
+        return item.code == code;
+      }
     );
     return messageObject ? messageObject.message : code;
-};
-
+  };
+  
 const ifNotNull = value => {
     return !["", "NA", "null", null].includes(value);
 };
@@ -50,7 +51,6 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
     propertyLocationSummaryDetail.city.localiseValue = true;
     propertyLocationSummaryDetail.applicableFireStation.localiseValue = true;
     propertyLocationSummaryDetail.mohalla.localiseValue = true;
-
     propertySummaryDetails.buildingUsageType.localiseValue = true;
     propertySummaryDetails.buildingUsageSubType.localiseValue = true;
 
@@ -81,17 +81,14 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
         )
     );
     let data = {};
-    data.city = nullToNa(
-        getMessageFromLocalization(
-            `TENANT_TENANTS_${getTransformedLocale(
-                getFromObject(
-                    preparedFinalObject,
-                    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
-                    "NA"
-                )
-            )}`
-        )
-    );
+    let district_value = nullToNa(  
+        getFromObject(preparedFinalObject, "FireNOCs[0].fireNOCDetails.propertyDetails.address.city", 
+           "NA" 
+         )         
+     );
+      let distt=district_value.split(".")[1].toUpperCase();
+      data.city = nullToNa(          
+          getMessageFromLocalization(`TENANT_TENANTS_PB_${distt}`)); 
     data.door = nullToNa(
         getFromObject(
             preparedFinalObject,
@@ -161,6 +158,11 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
         if ( items.key === "City" || items.key === "Mohalla" ) {
             propertyLocationSummary.splice(index, 1);
         }
+       }
+
+       if(items.key==="District Name")
+       {
+           items.value=data.city;
        }
     });
     let pdfData = {

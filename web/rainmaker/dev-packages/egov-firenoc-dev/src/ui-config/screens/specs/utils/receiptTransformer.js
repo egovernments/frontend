@@ -211,7 +211,6 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       };
     });
 
-
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: tenant,
@@ -322,8 +321,9 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
        )         
    );
 
-    data.city = nullToNa(          
-        getMessageFromLocalization(`TL_${city_value}` ) ); 
+   let city=city_value.split(".")[1].toUpperCase();
+   data.city = nullToNa(          
+       getMessageFromLocalization(`TENANT_TENANTS_PB_${city}`));  
 
     data.door = nullToNa(
       get(
@@ -357,9 +357,9 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
          "NA" 
        )         
    );
-
+    let distt=district_value.split(".")[1].toUpperCase();
     data.district = nullToNa(          
-        getMessageFromLocalization(`TL_${district_value}` ) );    
+        getMessageFromLocalization(`TENANT_TENANTS_PB_${distt}`));    
       
 
     data.subDistrict = nullToNa(

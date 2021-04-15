@@ -1187,14 +1187,14 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
     }
   ];
   const LicensesPayload = await getSearchResults(queryObject);
-  const updatedLicenses = get(LicensesPayload, "Licenses");
-  const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
+  Licenses = get(LicensesPayload, "Licenses");
+  const oldFileStoreId = get(Licenses[0], "fileStoreId")
   if (oldFileStoreId) {
     downloadReceiptFromFilestoreID(oldFileStoreId, mode)
   }
   else {
     try {
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {Licenses}, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           res.filestoreIds[0]
           if (res && res.filestoreIds && res.filestoreIds.length > 0) {

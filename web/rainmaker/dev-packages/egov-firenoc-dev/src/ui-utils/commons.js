@@ -48,7 +48,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
 
   const FETCHRECEIPT = {
     GET: {
-      URL: "/collection-services/payments/_search",
+      URL: "/collection-services/payments/FIRENOC/_search",
       ACTION: "_get",
     },
   };
@@ -77,7 +77,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
   const response = await httpRequest("post", FETCHFIREDETAILS.GET.URL, FETCHFIREDETAILS.GET.ACTION,queryObject);
 
   try {
-		httpRequest("post", getPaymentSearchAPI(businessService), "_search", receiptQueryString).then((payloadReceiptDetails) => {
+		httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
         { key: "tenantId", value: receiptQueryString[0].value.split('.')[0] }

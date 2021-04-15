@@ -230,9 +230,9 @@ const getAcknowledgementCard = (
     };
   }
 };
-const downloadCertificateForm = async(LicensesOld,applicationNumber,tenantId,mode='download') => {
-  const applicationType= LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"applicationType") : "NEW";
-  const workflowCode=LicensesOld &&  LicensesOld.length >0 ? get(LicensesOld[0],"workflowCode"):"EDITRENEWAL";
+const downloadCertificateForm = async(Licenses,applicationNumber,tenantId,mode='download') => {
+  const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
+  const workflowCode=Licenses &&  Licenses.length >0 ? get(Licenses[0],"workflowCode"):"EDITRENEWAL";
 
    const queryStr = [
      { key: "key", value:workflowCode==="DIRECTRENEWAL"?"tlrenewalcertificate": "tlcertificate" },
@@ -252,7 +252,7 @@ const downloadCertificateForm = async(LicensesOld,applicationNumber,tenantId,mod
      }
    ];
    const LicensesPayload = await getSearchResults(queryObject);
-   const Licenses=get(LicensesPayload,"Licenses");
+   Licenses=get(LicensesPayload,"Licenses");
    const oldFileStoreId=get(Licenses[0],"fileStoreId")
    if(oldFileStoreId){
      downloadReceiptFromFilestoreID(oldFileStoreId,mode)

@@ -382,7 +382,43 @@ const getBuildings = data => {
   return retbuildings;
 };
 const getApplicationData = async (transformedData, ulbLogo, type) => {
-  console.log("transformedData33", transformedData)
+  console.log("transformedData33", transformedData);
+  const ddi=transformedData.buildings[0].uoms;
+  var NoBase=0,NoHeight=0;
+  Object.keys(ddi).map((key,i) => {
+  if(key == "NO_OF_BASEMENTS")
+  NoBase=1;
+
+  if(key == "HEIGHT_OF_BUILDING")
+  NoHeight=1;
+  });
+  let reasonss =null;
+  if(NoBase == 0 && NoHeight >0)
+  {
+    reasonss = {
+      "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
+      "NO_OF_BASEMENTS":0,
+      "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+      }
+  }
+else if(NoBase >0 && NoHeight == 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+else 
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":0,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+
+transformedData.buildings[0].uoms=reasonss;
   transformedData=updateMohall(transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
@@ -1488,7 +1524,43 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 };
 
 const newgetApplicationData = async (transformedData, ulbLogo, type) => {
-  console.log("new type certificate data", transformedData)
+  console.log("new type certificate data", transformedData);
+  const ddi=transformedData.buildings[0].uoms;
+  var NoBase=0,NoHeight=0;
+  Object.keys(ddi).map((key,i) => {
+  if(key == "NO_OF_BASEMENTS")
+  NoBase=1;
+
+  if(key == "HEIGHT_OF_BUILDING")
+  NoHeight=1;
+  });
+  let reasonss =null;
+  if(NoBase == 0 && NoHeight >0)
+  {
+    reasonss = {
+      "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
+      "NO_OF_BASEMENTS":0,
+      "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+      }
+  }
+else if(NoBase >0 && NoHeight == 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+else 
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":0,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+
+transformedData.buildings[0].uoms=reasonss;
   transformedData=updateMohall(transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
@@ -2487,7 +2559,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
 
               {
-                text: ["                        Certified that the ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " at " , { text:`${transformedData.address}`, bold:true }, "comprised of ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor) owned/occupied by ",{ text:`${transformedData.owners[0].name}`, bold:true }, " have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ", { text:`${transformedData.issuedDate}`, bold:true }, " in the presence of ", { text:`${transformedData.owners[0].name}`, bold:true }, " (Name of the owner or his representative) and that the building/premises is fit for occupancy " , { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (As per NBC) for period of ", { text:"one year", bold:true }, " from issue date. Subject to the following conditions."],
+                text: ["                        Certified that the ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " at " , { text:`${transformedData.address}`, bold:true }, "comprised of ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`?`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`:'0', bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor) owned/occupied by ",{ text:`${transformedData.owners[0].name}`, bold:true }, " have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ", { text:`${transformedData.issuedDate}`, bold:true }, " in the presence of ", { text:`${transformedData.owners[0].name}`, bold:true }, " (Name of the owner or his representative) and that the building/premises is fit for occupancy " , { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (As per NBC) for period of ", { text:"one year", bold:true }, " from issue date. Subject to the following conditions."],
                 border: [true, false, true, false],
                 alignment: "justify",
                 preserveLeadingSpaces: true
@@ -2540,7 +2612,7 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
 
             [
               {
-                text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਕ‌ਿ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, ", ",{ text:`${transformedData.address}`, bold:true }, " ਸਮੇਤ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " ਬੇਸਮਟ ਅਤੇ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (ਉਪਰਲੀ ਮੰਜ਼ਿਲ) ਮਲਕੀਅਤ/ਕਬਜ਼ਾਦਾਰ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " ਰਾਸ਼ਟਰੀ ਬਿਲਡਿੰਗ ਕੋਡ ਅਨੁਸਾਰ ਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪ੍ਰਭਾਵ ਅਤੇ ਬਚਾਅ ਦੀਆਂ ਲੌੜਾਂ ਨੂੰ ਪੂਰਾ ਕਰਦੀ ਹੈ  ਜਿਸ ਨੂੰ ਸਬੰਧਤ ਫਾਇਰ ਅਧਿਕਾਰੀ ਵੱਲੌਂ ",{ text:`${transformedData.owners[0].name}`, bold:true }, " (ਮਾਲਕ ਜਾਂ ਉਸ ਦੇ ਪ੍ਰਤਿਨਿਧੀ ਦਾ ਨਾਮ ) ਦੀ ਮੋਜੂਦਗੀ ਵਿੱਚ ",{ text:`${transformedData.issuedDate}`, bold:true }, " ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕੀਤਾ ਗਿਆ ਅਤੇ ਇਮਾਰਤ / ਬਿਲਡਿੰਗ ",{ text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ",{ text:`${transformedData.NBCSubGroup}`, bold:true }, " (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੀ ਆਬਾਦੀ ਲਈ Issue date ਤੌਂ ",{ text:"ਇੱਕ ਸਾਲ", bold:true }, " ਤੱਕ ਯੋਗ ਹੈ ਜਿਸ ਲਈ ਨਿਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਾਂ ਹਨ।"],
+                text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਕ‌ਿ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, ", ",{ text:`${transformedData.address}`, bold:true }, " ਸਮੇਤ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`?`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`:'0', bold:true }, " ਬੇਸਮਟ ਅਤੇ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (ਉਪਰਲੀ ਮੰਜ਼ਿਲ) ਮਲਕੀਅਤ/ਕਬਜ਼ਾਦਾਰ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " ਰਾਸ਼ਟਰੀ ਬਿਲਡਿੰਗ ਕੋਡ ਅਨੁਸਾਰ ਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪ੍ਰਭਾਵ ਅਤੇ ਬਚਾਅ ਦੀਆਂ ਲੌੜਾਂ ਨੂੰ ਪੂਰਾ ਕਰਦੀ ਹੈ  ਜਿਸ ਨੂੰ ਸਬੰਧਤ ਫਾਇਰ ਅਧਿਕਾਰੀ ਵੱਲੌਂ ",{ text:`${transformedData.owners[0].name}`, bold:true }, " (ਮਾਲਕ ਜਾਂ ਉਸ ਦੇ ਪ੍ਰਤਿਨਿਧੀ ਦਾ ਨਾਮ ) ਦੀ ਮੋਜੂਦਗੀ ਵਿੱਚ ",{ text:`${transformedData.issuedDate}`, bold:true }, " ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕੀਤਾ ਗਿਆ ਅਤੇ ਇਮਾਰਤ / ਬਿਲਡਿੰਗ ",{ text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ",{ text:`${transformedData.NBCSubGroup}`, bold:true }, " (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੀ ਆਬਾਦੀ ਲਈ Issue date ਤੌਂ ",{ text:"ਇੱਕ ਸਾਲ", bold:true }, " ਤੱਕ ਯੋਗ ਹੈ ਜਿਸ ਲਈ ਨਿਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਾਂ ਹਨ।"],
                 border: [true, false, true, false],
                 alignment: "justify",
                 preserveLeadingSpaces: true
@@ -3098,7 +3170,43 @@ const newgetApplicationData = async (transformedData, ulbLogo, type) => {
 };
 
 const renewgetApplicationData = async (transformedData, ulbLogo, type) => {
-  console.log("new type certificate data", transformedData)
+  console.log("new type certificate data", transformedData);
+  const ddi=transformedData.buildings[0].uoms;
+  var NoBase=0,NoHeight=0;
+  Object.keys(ddi).map((key,i) => {
+  if(key == "NO_OF_BASEMENTS")
+  NoBase=1;
+
+  if(key == "HEIGHT_OF_BUILDING")
+  NoHeight=1;
+  });
+  let reasonss =null;
+  if(NoBase == 0 && NoHeight >0)
+  {
+    reasonss = {
+      "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
+      "NO_OF_BASEMENTS":0,
+      "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+      }
+  }
+else if(NoBase >0 && NoHeight == 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+else 
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":0,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+
+transformedData.buildings[0].uoms=reasonss;
   transformedData=updateMohall(transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
@@ -4097,7 +4205,7 @@ const renewgetApplicationData = async (transformedData, ulbLogo, type) => {
             [
 
               {
-                text: ["                        Certified that the ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " at " , { text:`${transformedData.address}`, bold:true }, "comprised of ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor) owned/occupied by ",{ text:`${transformedData.owners[0].name}`, bold:true }, " have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ", { text:`${transformedData.issuedDate}`, bold:true }, " in the presence of ", { text:`${transformedData.owners[0].name}`, bold:true }, " (Name of the owner or his representative) and that the building/premises is fit for occupancy " , { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (As per NBC) for period of ", { text:"one year", bold:true }, " from issue date. Subject to the following conditions."],
+                text: ["                        Certified that the ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " at " , { text:`${transformedData.address}`, bold:true }, "comprised of ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`?`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`:'0', bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor) owned/occupied by ",{ text:`${transformedData.owners[0].name}`, bold:true }, " have compiled with the fire prevention and fire safety requirements of National Building Code and verified by the officer concerned of fire service on ", { text:`${transformedData.issuedDate}`, bold:true }, " in the presence of ", { text:`${transformedData.owners[0].name}`, bold:true }, " (Name of the owner or his representative) and that the building/premises is fit for occupancy " , { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (As per NBC) for period of ", { text:"one year", bold:true }, " from issue date. Subject to the following conditions."],
                 border: [true, false, true, false],
                 alignment: "justify",
                 preserveLeadingSpaces: true
@@ -4150,7 +4258,7 @@ const renewgetApplicationData = async (transformedData, ulbLogo, type) => {
 
             [
               {
-                text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਕ‌ਿ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, ", ",{ text:`${transformedData.address}`, bold:true }, " ਸਮੇਤ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " ਬੇਸਮਟ ਅਤੇ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (ਉਪਰਲੀ ਮੰਜ਼ਿਲ) ਮਲਕੀਅਤ/ਕਬਜ਼ਾਦਾਰ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " ਰਾਸ਼ਟਰੀ ਬਿਲਡਿੰਗ ਕੋਡ ਅਨੁਸਾਰ ਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪ੍ਰਭਾਵ ਅਤੇ ਬਚਾਅ ਦੀਆਂ ਲੌੜਾਂ ਨੂੰ ਪੂਰਾ ਕਰਦੀ ਹੈ  ਜਿਸ ਨੂੰ ਸਬੰਧਤ ਫਾਇਰ ਅਧਿਕਾਰੀ ਵੱਲੌਂ ",{ text:`${transformedData.owners[0].name}`, bold:true }, " (ਮਾਲਕ ਜਾਂ ਉਸ ਦੇ ਪ੍ਰਤਿਨਿਧੀ ਦਾ ਨਾਮ ) ਦੀ ਮੋਜੂਦਗੀ ਵਿੱਚ ",{ text:`${transformedData.issuedDate}`, bold:true }, " ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕੀਤਾ ਗਿਆ ਅਤੇ ਇਮਾਰਤ / ਬਿਲਡਿੰਗ ",{ text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ",{ text:`${transformedData.NBCSubGroup}`, bold:true }, " (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੀ ਆਬਾਦੀ ਲਈ Issue date ਤੌਂ ",{ text:"ਇੱਕ ਸਾਲ", bold:true }, " ਤੱਕ ਯੋਗ ਹੈ ਜਿਸ ਲਈ ਨਿਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਾਂ ਹਨ।"],
+                text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਕ‌ਿ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, ", ",{ text:`${transformedData.address}`, bold:true }, " ਸਮੇਤ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`?`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`:'0', bold:true }, " ਬੇਸਮਟ ਅਤੇ ",{ text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (ਉਪਰਲੀ ਮੰਜ਼ਿਲ) ਮਲਕੀਅਤ/ਕਬਜ਼ਾਦਾਰ ",{ text:`${transformedData.buildings[0].name}`, bold:true }, " ਰਾਸ਼ਟਰੀ ਬਿਲਡਿੰਗ ਕੋਡ ਅਨੁਸਾਰ ਅੱਗ ਬੁਝਾਉਣ ਦੇ ਪ੍ਰਭਾਵ ਅਤੇ ਬਚਾਅ ਦੀਆਂ ਲੌੜਾਂ ਨੂੰ ਪੂਰਾ ਕਰਦੀ ਹੈ  ਜਿਸ ਨੂੰ ਸਬੰਧਤ ਫਾਇਰ ਅਧਿਕਾਰੀ ਵੱਲੌਂ ",{ text:`${transformedData.owners[0].name}`, bold:true }, " (ਮਾਲਕ ਜਾਂ ਉਸ ਦੇ ਪ੍ਰਤਿਨਿਧੀ ਦਾ ਨਾਮ ) ਦੀ ਮੋਜੂਦਗੀ ਵਿੱਚ ",{ text:`${transformedData.issuedDate}`, bold:true }, " ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕੀਤਾ ਗਿਆ ਅਤੇ ਇਮਾਰਤ / ਬਿਲਡਿੰਗ ",{ text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ",{ text:`${transformedData.NBCSubGroup}`, bold:true }, " (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੀ ਆਬਾਦੀ ਲਈ Issue date ਤੌਂ ",{ text:"ਇੱਕ ਸਾਲ", bold:true }, " ਤੱਕ ਯੋਗ ਹੈ ਜਿਸ ਲਈ ਨਿਮਨ ਅਨੁਸਾਰ ਹਦਾਇਤਾਂ ਹਨ।"],
                 border: [true, false, true, false],
                 alignment: "justify",
                 preserveLeadingSpaces: true
@@ -4708,7 +4816,43 @@ const renewgetApplicationData = async (transformedData, ulbLogo, type) => {
 };
 
 const provisionApplicationData = async (transformedData, ulbLogo, type) => {
-  console.log("provisional certificate", transformedData)
+  console.log("provisional certificate", transformedData);
+  const ddi=transformedData.buildings[0].uoms;
+  var NoBase=0,NoHeight=0;
+  Object.keys(ddi).map((key,i) => {
+  if(key == "NO_OF_BASEMENTS")
+  NoBase=1;
+
+  if(key == "HEIGHT_OF_BUILDING")
+  NoHeight=1;
+  });
+  let reasonss =null;
+  if(NoBase == 0 && NoHeight >0)
+  {
+    reasonss = {
+      "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
+      "NO_OF_BASEMENTS":0,
+      "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+      }
+  }
+else if(NoBase >0 && NoHeight == 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+else 
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":0,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+
+transformedData.buildings[0].uoms=reasonss;
   transformedData=updateMohall(transformedData)
   let borderLayout = {
     hLineWidth: function(i, node) {
@@ -5741,7 +5885,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
             [
 
               {
-                text:  ["                        Certified that the ", { text:`${transformedData.buildings[0].name}`, bold:true }, " at ", { text:`${transformedData.address}`, bold:true }, "has been inspected by the fire officer. This site is vacant/under-construction and is accessible to fire brigade. As per proposed drawing, building is to be constructed with", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor). Fire department has examined the fire safety layout plan/drawing and found it fit for occupancy of ", { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (as per NBC)."],
+                text:  ["                        Certified that the ", { text:`${transformedData.buildings[0].name}`, bold:true }, " at ", { text:`${transformedData.address}`, bold:true }, "has been inspected by the fire officer. This site is vacant/under-construction and is accessible to fire brigade. As per proposed drawing, building is to be constructed with", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`?`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`:'0', bold:true }, " basements and ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " (Upper floor). Fire department has examined the fire safety layout plan/drawing and found it fit for occupancy of ", { text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ", { text:`${transformedData.NBCSubGroup}`, bold:true }, " (as per NBC)."],
                 border: [true, false, true, false],
                 alignment: "justify",
                 textIndent : 50,
@@ -5793,7 +5937,7 @@ const provisionApplicationData = async (transformedData, ulbLogo, type) => {
 
             [
               {
-                text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਕਿ ",  { text:`${transformedData.buildings[0].name}`, bold:true }, ", ", { text:`${transformedData.address}`, bold:true }, " ਦੀ ਫਾਇਰ ਅਫਸਰ ਵੱਲੌਂ ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮੇਂ ਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਬ੍ਰਿਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇ ਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਬਕ ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`, bold:true }, " ਬੇਸਮਟ ਅਤੇ ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " ਮੰਜ਼ਿਲ ਹਨ। ਫਾਇਰ ਵਿਭਾਗ ਵਲੋਂ  ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੂੰ ਘੌਖਿਆ ਗਿਆ ਅਤੇ ਬਿਲਡਿੰਗ ਕੋਡ ਅਨੁਸਾਰ  ਇਮਾਰਤ / ਬਿਲਡਿੰਗ ਨੂੰ ",{ text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ",{ text:`${transformedData.NBCSubGroup}`, bold:true }, " (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੀ ਆਬਾਦੀ ਲਈ ਯੋਗ ਪਾਇਆ ਗਿਆ"] ,
+                text: ["                        ਤਸਦੀਕ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਕਿ ",  { text:`${transformedData.buildings[0].name}`, bold:true }, ", ", { text:`${transformedData.address}`, bold:true }, " ਦੀ ਫਾਇਰ ਅਫਸਰ ਵੱਲੌਂ ਪੜਤਾਲ ਕੀਤੀ ਗਈ। ਇਸ ਸਮੇਂ ਇਹ ਜਗਾ ਖਾਲੀ/ਉਸਾਰੀ ਅਧੀਨ ਹੈ ਅਤੇ ਫਾਇਰ ਬ੍ਰਿਗੇਡ ਦੀ ਪਹੁੰਚ ਦੇ ਅੰਦਰ ਹੈ। ਲੇਆਊਟ ਪਲਾਨ/ ਡਰਾਇੰਗ ਮੁਤਾਬਕ ", { text:`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`?`${transformedData.buildings[0].uoms.NO_OF_BASEMENTS}`:'0', bold:true }, " ਬੇਸਮਟ ਅਤੇ ", { text:`${transformedData.buildings[0].uoms.NO_OF_FLOORS}`, bold:true }, " ਮੰਜ਼ਿਲ ਹਨ। ਫਾਇਰ ਵਿਭਾਗ ਵਲੋਂ  ਜਮਾ ਕਰਵਾਏ ਗਏ ਫਾਇਰ ਸੇਫਟੀ ਲੇਆਊਟ ਪਲਾਨ/ਡਰਾਇੰਗ ਨੂੰ ਘੌਖਿਆ ਗਿਆ ਅਤੇ ਬਿਲਡਿੰਗ ਕੋਡ ਅਨੁਸਾਰ  ਇਮਾਰਤ / ਬਿਲਡਿੰਗ ਨੂੰ ",{ text:`${transformedData.NBCGroup}`, bold:true }, " subdivision ",{ text:`${transformedData.NBCSubGroup}`, bold:true }, " (ਐਨ. ਬੀ. ਸੀ. ਦੇ ਅਨੁਸਾਰ) ਦੀ ਆਬਾਦੀ ਲਈ ਯੋਗ ਪਾਇਆ ਗਿਆ"] ,
                 border: [true, false, true, false],
                 alignment: "justify",
                 preserveLeadingSpaces: true,
