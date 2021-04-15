@@ -138,7 +138,7 @@ export const searchSetCommon = getCommonContainer({
        max: getTodaysDateInYMD()
      }
    },
-   visible : true
+   visible: process.env.REACT_APP_NAME === "Citizen" ? true: false
  }),
  fromdate: getDateField({
    label: { labelName: "DOD", labelKey: "BND_FROM_DATE" },
@@ -159,7 +159,7 @@ export const searchSetCommon = getCommonContainer({
        max: getTodaysDateInYMD()
      }
    },
-   visible : false
+   visible: process.env.REACT_APP_NAME === "Employee" ? true: false
  }),
  todate: getDateField({
    label: { labelName: "DOD", labelKey: "BND_TO_DATE" },
@@ -180,7 +180,7 @@ export const searchSetCommon = getCommonContainer({
        max: getTodaysDateInYMD()
      }
    },
-   visible : false
+   visible: process.env.REACT_APP_NAME === "Employee" ? true: false
  }),
  gender: getSelectField({
    label: {

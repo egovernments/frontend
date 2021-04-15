@@ -858,7 +858,7 @@ export const newRegistrationForm = getCommonCard(
       },
       required:false,
       visible: true,
-      pattern: patterns["addressBig"],
+      pattern: patterns["remarks"],
       jsonPath: "bnd.birth.newRegistration.remarks",
       gridDefination: {
         xs: 12,
