@@ -111,7 +111,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
 export const createAssessmentPayload = (properties, propertyPayload) => {
   const Assessment = {
     financialYear: propertyPayload.financialYear,
-    tenantId: properties.tenantId,
+    tenantId: properties.tenantId === "pb" ? getQueryArg(window.location.href,  "tenantId") : properties.tenantId,
     propertyId: properties.propertyId,
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
