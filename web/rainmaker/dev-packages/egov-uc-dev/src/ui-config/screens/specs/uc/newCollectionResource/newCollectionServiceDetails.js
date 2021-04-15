@@ -1,23 +1,18 @@
 import {
   getCommonCard,
-  getTextField,
-  getSelectField,
   getCommonContainer,
-  getPattern,
-  getDateField,
-  getLabel,
-  getCommonTitle,
+  getCommonTitle, getDateField, getPattern, getSelectField, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { setServiceCategory, downloadHelpFile } from "../../utils";
-import get from "lodash/get";
 import find from "lodash/find";
+import get from "lodash/get";
+import { setServiceCategory } from "../../utils";
 const tenantId = getTenantId();
 
 export const newCollectionServiceDetailsCard = getCommonCard(
@@ -60,7 +55,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             },
           }),
           beforeFieldChange: async (action, state, dispatch) => {
-      
+
             const citiesByModule = get(
               state,
               "common.citiesByModule.UC.tenants",
@@ -117,7 +112,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             } catch (e) {
               console.log(e);
             }
-            
+
             return action;
           },
         },
@@ -174,7 +169,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
               width: "100%",
               cursor: "pointer",
             },
-            className :"autocomplete-dropdown",
+            className: "autocomplete-dropdown",
             label: {
               labelName: "Service Category",
               labelKey: "UC_SERVICE_CATEGORY_LABEL",
@@ -200,41 +195,41 @@ export const newCollectionServiceDetailsCard = getCommonCard(
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
-          
+
             const editingMode = get(
               state.screenConfiguration,
               "preparedFinalObject.Challan[0].id",
               null
             );
-            let selServiceType=null;
-            if(editingMode!=null){
-              selServiceType= get(
-                  state.screenConfiguration,
-                  "preparedFinalObject.Challan[0].businessService",
-                  null
-                );
-            }
-            
-              
-              dispatch(
-                handleField(
-                  "newCollection",
-                  "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                  "props.value",
-                  selServiceType
-                )
+            let selServiceType = null;
+            if (editingMode != null) {
+              selServiceType = get(
+                state.screenConfiguration,
+                "preparedFinalObject.Challan[0].businessService",
+                null
               );
-             
+            }
+
+
+            dispatch(
+              handleField(
+                "newCollection",
+                "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+                "props.value",
+                selServiceType
+              )
+            );
+
 
             //Set service type data and field if available.
             const serviceData = get(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.nestedServiceData",
               {}
-            ); 
+            );
             if (action.value) {
-          
-              let visibleFlag =false;
+
+              let visibleFlag = false;
               if (
                 serviceData[action.value] &&
                 serviceData[action.value].child &&
@@ -246,8 +241,8 @@ export const newCollectionServiceDetailsCard = getCommonCard(
                     serviceData[action.value].child
                   )
                 );
-                visibleFlag=true;
-              }  
+                visibleFlag = true;
+              }
               dispatch(
                 handleField(
                   "newCollection",
@@ -274,7 +269,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
               width: "100%",
               cursor: "pointer",
             },
-            className :"autocomplete-dropdown",
+            className: "autocomplete-dropdown",
             label: {
               labelName: "Service Type",
               labelKey: "UC_SERVICE_TYPE_LABEL",
@@ -299,7 +294,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
             },
           },
           beforeFieldChange: async (action, state, dispatch) => {
-         
+
             if (action.value) {
               setTaxHeadFields(action, state, dispatch);
             }
@@ -323,7 +318,7 @@ export const newCollectionServiceDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Challan[0].taxPeriodFrom",
           beforeFieldChange: async (action, state, dispatch) => {
-       
+
             if (action.value) {
               dispatch(
                 handleField(
@@ -426,7 +421,7 @@ const setTaxHeadFields = (action, state, dispatch) => {
       "preparedFinalObject.Challan[0].id",
       null
     );
-    if (noOfPreviousTaxHeads > 0   ) {
+    if (noOfPreviousTaxHeads > 0) {
       for (let i = 0; i < taxFieldKeys.length; i++) {
         dispatch(
           handleField(
@@ -445,28 +440,28 @@ const setTaxHeadFields = (action, state, dispatch) => {
           )
         );
       }
-      if(editingMode== null){
+      if (editingMode == null) {
         dispatch(prepareFinalObject(`Challan[0].amount`, []));
       }
     }
 
     //Show new tax head fields
     matchingTaxHeads.forEach((item, index) => {
-      
-        dispatch(
-          prepareFinalObject(`Challan[0].amount[${index}].taxHeadCode`, item.code)
-        );
-        let prevCollection =get(
-          state.screenConfiguration,
-          "preparedFinalObject.ChallanTaxHeads",
-          []
-        );
-        let colAmount =get(find(prevCollection,{"taxHeadCode" : item.code}),"amount","");
-        dispatch(
-          prepareFinalObject(`Challan[0].amount[${index}].amount`, colAmount)
-        );
- 
-      
+
+      dispatch(
+        prepareFinalObject(`Challan[0].amount[${index}].taxHeadCode`, item.code)
+      );
+      let prevCollection = get(
+        state.screenConfiguration,
+        "preparedFinalObject.ChallanTaxHeads",
+        []
+      );
+      let colAmount = get(find(prevCollection, { "taxHeadCode": item.code }), "amount", "");
+      dispatch(
+        prepareFinalObject(`Challan[0].amount[${index}].amount`, colAmount)
+      );
+
+
       dispatch(
         handleField(
           "newCollection",
@@ -486,15 +481,13 @@ const setTaxHeadFields = (action, state, dispatch) => {
               .join("_")}`,
             required: item.isRequired || false,
             pattern: getPattern("DecimalNumber"),
-           
-
             //errorMessage: "Invalid Amount",
-            visible: item.code.endsWith('_ROUNDOFF')? false: true,
+            visible: item.code.endsWith('_ROUNDOFF') ? false : true,
             // required: true,
             props: {
               // required: true
               //visible:item.code.endsWith('_ROUNDOFF')? false: true,
-              type:"number"
+              type: "text"
             },
             jsonPath: `Challan[0].amount[${index}].amount`,
           })
