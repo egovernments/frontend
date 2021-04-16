@@ -35,7 +35,7 @@ import PlotDetails from "./components/Forms/PlotDetails";
 import WizardComponent from "./components/WizardComponent";
 import "./index.css";
 import { getDocumentTypes } from "./utils/mdmsCalls";
-import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName } from "egov-ui-kit/utils/commons";
+import { generalMDMSDataRequestObj, getGeneralMDMSDataDropdownName, getQueryArg } from "egov-ui-kit/utils/commons";
 
 class FormWizard extends Component {
   state = {
@@ -1212,7 +1212,7 @@ class FormWizard extends Component {
           }
         );
         //For calculation screen
-        const tenantId =  process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+        const tenantId =  process.env.REACT_APP_NAME === "Employee" ? getTenantId() : getQueryArg(window.location.href, "tenantId");
         const calculationScreenData = await getCalculationScreenData(
           get(estimateResponse, "Calculation[0].billingSlabIds", []),
           tenantId,
