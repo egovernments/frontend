@@ -4,8 +4,9 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/utils/commons";
 import commonConfig from "config/common";
 import { debug } from "util";
-import { setLocale, localStorageSet, getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { getModule, getLocalizationLabels, setStoredModulesList, getStoredModulesList } from "../../utils/localStorageUtils";
+import { setLocale, localStorageSet, localStorageGet, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getModuleName } from "../../utils/commons";
+import { getLocalization, getLocalizationLabels, getModule, getStoredModulesList, setStoredModulesList } from "../../utils/localStorageUtils";
 
 export const updateActiveRoute = (routePath, menuName) => {
   localStorageSet("menuPath", routePath);
@@ -40,9 +41,25 @@ export const toggleSnackbarAndSetText = (open, message = {}, variant) => {
   };
 };
 
+export const checkModuleLocalisationPresent=(locale='en_IN')=>{
+  const moduleToLoad=getModuleName();
+  let isPresent=false;
+  let localizationLabels=JSON.parse(getLocalization(`localization_${locale}`))||[];
+  if(localizationLabels.length==0){
+    return true;
+  }else if(!localizationLabels.find(localizationLabel=>localizationLabel.module==moduleToLoad.split(",")[0])){
+    return true;
+  }
+  return isPresent;
+}
+
 export const fetchLocalizationLabel = (locale='en_IN', module, tenantId, isFromModule) => {
   return async (dispatch) => {
     let storedModuleList=[];
+    const isLocalizationTriggered = localStorageGet("isLocalizationTriggered");
+    if(isLocalizationTriggered === "true") {
+      return;
+    }
     if(getStoredModulesList()!==null){
         storedModuleList =JSON.parse(getStoredModulesList());
     }
@@ -71,8 +88,10 @@ export const fetchLocalizationLabel = (locale='en_IN', module, tenantId, isFromM
           if(moduleName && storedModuleList.includes(`rainmaker-common`)) isFromModule = false;
       }
 
-      if((moduleName && storedModuleList.includes(moduleName) === false) || isFromModule || isCommonScreen){
-        const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
+      
+      if((moduleName && storedModuleList.includes(moduleName) === false) || isFromModule || isCommonScreen || checkModuleLocalisationPresent(locale)){
+        localStorageSet("isLocalizationTriggered", "true");
+          const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
           { key: "module", value: localeModule },
           { key: "locale", value: locale },
           { key: "tenantId", value: commonConfig.tenantId },
@@ -102,6 +121,7 @@ export const fetchLocalizationLabel = (locale='en_IN', module, tenantId, isFromM
       }
       resultArray=[...prevLocalisationLabels, ...resultArray];
       localStorage.removeItem(`localization_${getLocale()}`);
+      localStorageSet("isLocalizationTriggered", "false");
       dispatch(setLocalizationLabels(locale, resultArray));
     } catch (error) {
       console.log(error);
