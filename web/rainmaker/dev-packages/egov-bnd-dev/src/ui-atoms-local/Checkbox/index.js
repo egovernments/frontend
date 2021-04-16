@@ -26,8 +26,12 @@ class CheckboxLabels extends React.Component {
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked });
-    const { jsonPath, prepareFinalObject } = this.props;
+    let {state, dispatchAction} = this.props;
+    const { jsonPath, prepareFinalObject, callBack} = this.props;
     prepareFinalObject(jsonPath, !this.state.checkedG);
+    if (typeof callBack === "function") {
+      callBack(state, dispatchAction);
+    }
   };
 
   render() {
@@ -66,16 +70,22 @@ CheckboxLabels.propTypes = {
 
 const mapDispatchToProps = dispatch => {
   return {
+    dispatchAction: dispatch,
     prepareFinalObject: (jsonPath, value) =>
       dispatch(prepareFinalObject(jsonPath, value))
+      
   };
+};
+const mapStateToProps = (state, ownprops) => {
+  const { screenConfiguration } = state;
+  const { preparedFinalObject } = screenConfiguration;
+  return { state, screenConfiguration, preparedFinalObject};
 };
 
 export default withStyles(styles)(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   )(CheckboxLabels)
 );
-
 //export default withStyles(styles)(CheckboxLabels);
