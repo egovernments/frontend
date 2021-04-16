@@ -592,7 +592,7 @@ class FormWizard extends Component {
       prepareFinalObject
     } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
-    let { form, common, location, hideSpinner } = this.props;
+    let { form, common, location, hideSpinner ,preparedFinalObject } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
@@ -730,7 +730,7 @@ class FormWizard extends Component {
     );
     // Create/Update property call, action will be either create or update
 
-    propertySubmitAction(properties, action, this.props, isModify, prepareFinalObject);
+    propertySubmitAction(properties, action, this.props, isModify, preparedFinalObject);
 
   };
 
@@ -1639,7 +1639,8 @@ const mapStateToProps = state => {
     propertiesEdited,
     requiredDocCount,
     Assessments,
-    propertyAdditionalDetails
+    propertyAdditionalDetails,
+    preparedFinalObject
   };
 };
 
