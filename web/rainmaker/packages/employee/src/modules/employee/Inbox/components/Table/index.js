@@ -225,7 +225,7 @@ class InboxData extends React.Component {
     if (row[0].subtext === "PT.CREATE" ) {
       queryParams += '&type=property';
     } else if (row[0].subtext === "PT.UPDATE" ) {
-      queryParams += '&type=editproperty';
+      queryParams += '&type=updateProperty';
     } 
     else if (row[0].subtext === "PT.LEGACY") {
       queryParams += '&type=legacy';
