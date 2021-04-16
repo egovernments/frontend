@@ -4,7 +4,8 @@ import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/util
 import { ACTIONMENU, EVENTSCOUNT, LOCALATION, MDMS, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
 import { getLocale, localStorageSet, setLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { debug } from "util";
-import { getLocalizationLabels, getModule, getStoredModulesList, setStoredModulesList } from "../../utils/localStorageUtils";
+import { getModuleName } from "../../utils/commons";
+import { getLocalization, getLocalizationLabels, getModule, getStoredModulesList, setStoredModulesList } from "../../utils/localStorageUtils";
 import * as actionTypes from "./actionTypes";
 
 export const updateActiveRoute = (routePath, menuName) => {
@@ -39,7 +40,17 @@ export const toggleSnackbarAndSetText = (open, message = {}, variant) => {
     variant,
   };
 };
-
+export const checkModuleLocalisationPresent=(locale='en_IN')=>{
+  const moduleToLoad=getModuleName();
+  let isPresent=false;
+  let localizationLabels=JSON.parse(getLocalization(`localization_${locale}`))||[];
+  if(localizationLabels.length==0){
+    return true;
+  }else if(!localizationLabels.find(localizationLabel=>localizationLabel.module==moduleToLoad)){
+    return true;
+  }
+  return isPresent;
+}
 export const fetchLocalizationLabel = (locale = 'en_IN', module, tenantId, isFromModule) => {
   return async (dispatch) => {
     let storedModuleList = [];
@@ -71,7 +82,7 @@ export const fetchLocalizationLabel = (locale = 'en_IN', module, tenantId, isFro
         if (moduleName && storedModuleList.includes(`rainmaker-common`)) isFromModule = false;
       }
 
-      if ((moduleName && storedModuleList.includes(moduleName) === false) || isFromModule || isCommonScreen) {
+      if ((moduleName && storedModuleList.includes(moduleName) === false) || isFromModule || isCommonScreen ||  checkModuleLocalisationPresent(locale)) {
         const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
           { key: "module", value: localeModule },
           { key: "locale", value: locale },

@@ -8,6 +8,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import SortDialog from "../common/common/Header/components/SortDialog";
+import { checkModuleLocalisationPresent } from "../redux/app/actions";
 import { getLocale, getStoredModulesList, getTenantId, getUserInfo, setModule, setStoredModulesList } from "../utils/localStorageUtils";
 import "./index.css";
 import withData from "./withData";
@@ -53,7 +54,7 @@ const withAuthorization = (options = {}) => (Component) => {
       if (getStoredModulesList() !== null) {
         storedModuleList = JSON.parse(getStoredModulesList());
       }
-      if (storedModuleList.includes(getModuleName()) === false) {
+      if (storedModuleList.includes(getModuleName()) === false || checkModuleLocalisationPresent(getLocale())) {
         setModule(getModuleName());
         storedModuleList.push(getModuleName());
         var newList = JSON.stringify(storedModuleList);
