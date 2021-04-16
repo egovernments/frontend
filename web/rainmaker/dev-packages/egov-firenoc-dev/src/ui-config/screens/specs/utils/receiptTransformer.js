@@ -321,7 +321,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
        )         
    );
 
-   let city=city_value.split(".")[1].toUpperCase();
+   let city=city_value.includes("pb")?city_value.split(".")[1].toUpperCase():city_value.toUpperCase();
    data.city = nullToNa(          
        getMessageFromLocalization(`TENANT_TENANTS_PB_${city}`));  
 
