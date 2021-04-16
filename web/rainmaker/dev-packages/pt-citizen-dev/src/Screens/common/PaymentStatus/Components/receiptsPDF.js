@@ -49,7 +49,7 @@ const generateReceipt = (role, details, generalMDMSDataById) => {
               dataRow.push(transform(unit.usageCategoryMajor, "UsageCategoryMajor"));
               dataRow.push(transform(unit.usageCategorySubMinor, "UsageCategorySubMinor"));
               dataRow.push(transform(unit.occupancyType, "OccupancyType"));
-              if (unit.occupancyType === "RENTED") {
+              if (unit.occupancyType === "RENTED"  || item.occupancyType != "PG") {
                 dataRow.push(unit.arv || "");
               } else {
                 dataRow.push(`${unit.unitArea} sq yards` || "");

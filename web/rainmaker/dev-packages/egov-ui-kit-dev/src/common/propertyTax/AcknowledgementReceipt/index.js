@@ -139,7 +139,7 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
                   "PROPERTYTAX_OCCUPANCYTYPE_" + transform(unit.occupancyType, "OccupancyType")
                 )
               );
-              if (unit.occupancyType === "RENTED") {
+              if (unit.occupancyType === "RENTED" || unit.occupancyType === "PG") {
                 dataRow.push(unit.arv || "");
               } else {
                 dataRow.push(`${Math.round(unit.unitArea)}` || "");

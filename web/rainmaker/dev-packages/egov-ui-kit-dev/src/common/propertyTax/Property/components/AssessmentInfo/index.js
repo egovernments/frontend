@@ -142,7 +142,7 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
         key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
         value: units.length>0? `${unit.floorNo}` : "NA",
       }];
-      if (unit.occupancyType === "RENTED" || floor["occupancyType"] === "PG" ) {
+      if (unit.occupancyType === "RENTED" || unit.occupancyType === "PG" ) {
         floor.push({
           key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
           value: unit.arv ? unit.arv + '' : "NA",

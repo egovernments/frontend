@@ -130,7 +130,7 @@ export const createProperty = async (Properties, action, props, isModify, prepar
             }
         }
         propertyPayload.units.map(function (item, index){
-            if(item.occupancyType != "RENTED" && item.arv){delete item.arv;}});
+            if(item.occupancyType != "RENTED" && item.occupancyType != "PG" && item.arv){delete item.arv;}});
         propertyPayload.additionalDetails?{...propertyPayload.additionalDetails,...propertyAdditionalDetails}:{...propertyAdditionalDetails};
         const propertyResponse = await httpRequest(
             `property-services/property/${propertyMethodAction}`,

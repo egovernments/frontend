@@ -87,7 +87,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                   unit.usageCategoryDetail ? "UsageCategoryDetail" : "UsageCategorySubMinor"))
               );
               dataRow.push(getLocaleLabels('PROPERTYTAX_OCCUPANCYTYPE_' + transform(unit.occupancyType, "OccupancyType"), 'PROPERTYTAX_OCCUPANCYTYPE_' + transform(unit.occupancyType, "OccupancyType")));
-              if (unit.occupancyType === "RENTED") {
+              if (unit.occupancyType === "RENTED" || unit.occupancyType === "PG") {
                 dataRow.push(unit.arv || "");
               } else {
                 dataRow.push(`${Math.round(unit.unitArea * 100) / 100}` || "");

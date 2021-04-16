@@ -79,7 +79,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
                 )
               );
               dataRow.push(transform(unit.occupancyType, "OccupancyType"));
-              if (unit.occupancyType === "RENTED") {
+              if (unit.occupancyType === "RENTED" || unit.occupancyType === "PG") {
                 dataRow.push(unit.arv || "");
               } else {
                 dataRow.push(`${Math.round(unit.unitArea * 100) / 100}` || "");
