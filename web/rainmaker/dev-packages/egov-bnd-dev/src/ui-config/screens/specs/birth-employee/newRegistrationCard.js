@@ -12,6 +12,10 @@ import {
   getCommonContainer,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions"; 
+import get from "lodash/get"; 
 import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
 import {patterns} from "../utils/constants";
 import {showHideAddHospitalDialog} from "./newRegistration";
@@ -417,6 +421,21 @@ export const getAddressForm = (type) =>{
     })
   })
 }
+export const getcheckboxvalue = (state, dispatch) => {
+  let checkBoxState= get(state.screenConfiguration.preparedFinalObject , "bnd.birth.newRegistration.checkboxforaddress"); 
+  if(checkBoxState)
+  {
+    let birthpresentmaddr=get(state.screenConfiguration.preparedFinalObject ,"bnd.birth.newRegistration.birthPresentaddr")
+    for(var key in birthpresentmaddr )
+      dispatch(prepareFinalObject(`bnd.birth.newRegistration.birthPermaddr.${key}`,get(state.screenConfiguration.preparedFinalObject ,`bnd.birth.newRegistration.birthPresentaddr.${key}`)))
+  }
+  else
+  {
+    let birthpermaddr=get(state.screenConfiguration.preparedFinalObject ,"bnd.birth.newRegistration.birthPermaddr")
+    for(var key in birthpermaddr )
+      dispatch(prepareFinalObject(`bnd.birth.newRegistration.birthPermaddr.${key}`,""))
+  }
+}
 
 export const newRegistrationForm = getCommonCard(
   { 
@@ -782,7 +801,24 @@ export const newRegistrationForm = getCommonCard(
       ),
       addrTimeOfBirth: getAddressForm("birthPresentaddr")
     }),
+    
     permAddressofParents: getCommonGrayCard({
+      checkBoxforaddress:{
+        required: true,
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-bnd",
+        componentPath: "Checkbox",
+        props: {
+          label:{
+            labelKey:"PRESENT_TO_PERM_ADDR_SWITCH_BIRTH",
+            labelName: "PRESENT_TO_PERM_ADDR_SWITCH_BIRTH"
+          },
+          jsonPath: "bnd.birth.newRegistration.checkboxforaddress",
+          callBack: (state, dispatch) => {
+              getcheckboxvalue(state,dispatch)
+            }  
+        }
+      },
       header: getCommonSubHeader(
         {
           labelName: "",
