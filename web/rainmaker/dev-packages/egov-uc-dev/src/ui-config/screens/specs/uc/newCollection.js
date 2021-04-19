@@ -15,6 +15,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import {toggleSpinner} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setServiceCategory } from "../utils";
 
 const getData = async (action, state, dispatch) => {
   
@@ -143,6 +144,55 @@ const getData = async (action, state, dispatch) => {
       dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
     }
     //End of Mohalla data
+
+    let requestBody1 = {
+      MdmsCriteria: {
+        tenantId: tenantId.split(".")[0],
+        moduleDetails: [
+          {
+            moduleName: "BillingService",
+            masterDetails: [
+              {
+                name: "BusinessService",
+                filter: "[?(@.type=='Adhoc')]",
+              },
+              {
+                name: "TaxHeadMaster",
+              },
+              {
+                name: "TaxPeriod",
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    try {
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        requestBody1
+      );
+
+      dispatch(
+        prepareFinalObject(
+          "applyScreenMdmsData.BillingService",
+          payload.MdmsRes.BillingService
+        )
+      );
+      setServiceCategory(
+        get(payload, "MdmsRes.BillingService.BusinessService", []),
+        dispatch,
+        state
+      );
+    } catch (e) {
+      console.log(e);
+    }
+
   } catch (e) {
     console.error("Unable to fetch detail", e);
     dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
