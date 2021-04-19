@@ -305,7 +305,7 @@ export const OwnerInfoCard = {
               {
                 label: "TRANSGENDER",
                 labelKey: "COMMON_GENDER_TRANSGENDER",
-                value: "OTHERS"
+                value: "TRANSGENDER"
               }
             ],
             jsonPath:
