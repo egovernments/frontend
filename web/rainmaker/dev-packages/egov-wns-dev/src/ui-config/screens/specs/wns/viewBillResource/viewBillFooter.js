@@ -4,10 +4,14 @@ import { downloadBill } from "../../../../../ui-utils/commons";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-const connectionNo = getQueryArg(window.location.href, "connectionNumber");
-const tenantId = getQueryArg(window.location.href, "tenantId");
-const businessService = getQueryArg(window.location.href, "service")==="WATER" ? "WS" : "SW";
-
+const getRedirectionWSURL = async (state, dispatch) => {
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const connectionNo = getQueryArg(window.location.href, "connectionNumber");
+  const businessService = getQueryArg(window.location.href, "service")==="WATER" ? "WS" : "SW";
+  const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
+  const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+  window.location.assign(`${origin}${environment}/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=${businessService}`);
+};
 const callDownloadBill = ( mode) => {
   const val = [
     {
@@ -64,8 +68,8 @@ export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
       })
     },
     onClickDefination: {
-      action: "page_change",
-      path: `/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=${businessService}`
+      action: "condition",
+      callBack: getRedirectionWSURL
     }
   }
 });
