@@ -11,7 +11,7 @@ import SortDialog from "../common/common/Header/components/SortDialog";
 import { getLocale, getStoredModulesList, getTenantId, getUserInfo, setModule, setStoredModulesList } from "../utils/localStorageUtils";
 import "./index.css";
 import withData from "./withData";
-import { checkModuleLocalisationPresent } from "../redux/app/actions";
+// import { checkModuleLocalisationPresent } from "../redux/app/actions";
 
 const withAuthorization = (options = {}) => (Component) => {
   class Wrapper extends React.Component {
@@ -54,7 +54,7 @@ const withAuthorization = (options = {}) => (Component) => {
       if (getStoredModulesList() !== null) {
         storedModuleList = JSON.parse(getStoredModulesList());
       }
-      if (storedModuleList.includes(getModuleName()) === false || checkModuleLocalisationPresent(getLocale())) {
+      if (storedModuleList.includes(getModuleName()) === false) {
         setModule(getModuleName());
         storedModuleList.push(getModuleName());
         var newList = JSON.stringify(storedModuleList);
