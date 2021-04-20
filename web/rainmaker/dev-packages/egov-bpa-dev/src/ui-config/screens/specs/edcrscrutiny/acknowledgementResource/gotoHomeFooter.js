@@ -89,7 +89,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      path: getRedirectionOCURL
+      callBack: getRedirectionOCURL
     },
     visible : false
   },
