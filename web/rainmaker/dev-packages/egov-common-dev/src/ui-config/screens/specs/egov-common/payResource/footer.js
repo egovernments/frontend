@@ -184,13 +184,13 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
-      // if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar")
-      //   {
-      //    displayRazorpay(goToPaymentGateway);
-      //   }
-      //   else{
+       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar")
+         {
+          displayRazorpay(goToPaymentGateway);
+         }
+         else{
          window.location = redirectionUrl;
-        // }
+         }
     }
   } catch (e) {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
