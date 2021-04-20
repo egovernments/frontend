@@ -362,7 +362,52 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
           payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
 
       }
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
+        let dcbRow=null,dcbArray=[];
+        let installment,totalamount=0;;
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
+      if(element.amountPaid >0)
+      {
+      installment=convertEpochToDate(element.fromPeriod) +"-"+convertEpochToDate(element.toPeriod);
+      element.billAccountDetails.map((dd)=>{
+      if(dd.adjustedAmount >0)
+      {
+        let code=null;
+        if(dd.taxHeadCode == "WS_CHARGE" || dd.taxHeadCode == "SW_CHARGE")
+        {
+        code="Water Charges";
+        }
+        else if( dd.taxHeadCode == "SW_CHARGE")
+        {
+        code="Sewerage Charges";
+        }
+        else if(dd.taxHeadCode == "WS_TIME_INTEREST" || dd.taxHeadCode == "SW_TIME_INTEREST")
+        {
+        code="Interest";
+        }
+        else if(dd.taxHeadCode == "WS_TIME_PENALTY" || dd.taxHeadCode == "SW_TIMEPENALTY")
+        {
+        code="Penalty";
+        }
+        dcbRow={
+          "taxhead":code + "("+installment+")",
+          "amount":dd.adjustedAmount
+        };
+        totalamount=totalamount+dd.adjustedAmount;
 
+      }
+
+      dcbArray.push(dcbRow);
+      });    
+      };
+        });
+        dcbRow={
+          "taxhead":"Total Amount Paid",
+          "amount":totalamount
+          };
+        dcbArray.push(dcbRow);
+        payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=dcbArray;
+        }
 
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
 
