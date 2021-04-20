@@ -23,7 +23,11 @@ class MultiItem extends React.Component {
     if (value === "SEARCH_CONNECTION") {
       resetFieldsForApplication({}, dispatch);
       dispatch(handleField("search", "components.div.children.searchApplicationResults", "visible", false));
-    } else {
+    } else if(value ==="SEARCH_BILL") {
+      resetFieldsForConnection({}, dispatch);
+      dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
+    }
+    else {
       resetFieldsForConnection({}, dispatch);
       dispatch(handleField("search", "components.div.children.searchResults", "visible", false));
     }
@@ -32,13 +36,16 @@ class MultiItem extends React.Component {
   onTabChange = (tabIndex, dispatch, state) => {
     switch (tabIndex) {
       case 0:
-        this.setInstrumentType("SEARCH_CONNECTION", dispatch);
+        this.setInstrumentType("SEARCH_CONNECTION1", dispatch);
         break;
       case 1:
         this.setInstrumentType("SEARCH_APPLICATION", dispatch);
         break;
+        case 2:
+        this.setInstrumentType("SEARCH_BILL", dispatch);
+        break;
       default:
-        this.setInstrumentType("SEARCH_CONNECTION", dispatch);
+        this.setInstrumentType("SEARCH_CONNECTION2", dispatch);
         break;
     }
   };

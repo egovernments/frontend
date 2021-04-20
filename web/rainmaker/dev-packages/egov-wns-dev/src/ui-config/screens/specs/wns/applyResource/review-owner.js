@@ -368,6 +368,23 @@ const activationDetails = getCommonContainer(activateDetailsMeter);
 
 
 export const connectionWater={
+
+  reviewOldConsumerNo : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "old Consumer No",
+      labelKey: "WS_OLD_CONSUMER_NO"
+    },
+    {
+      jsonPath: "WaterConnection[0].oldConnectionNo",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].oldConnectionNo",
+      callBack: handleNA
+    }
+  ),
   reviewConnectionType : getLabelWithValueForModifiedLabel(
     {
       labelName: "Connection Type",
@@ -551,6 +568,22 @@ export const connectionWater={
 }
 
 export const connectionSewerage={
+  reviewOldConsumerNo : getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Old Consumer No",
+      labelKey: "WS_OLD_CONSUMER_NO"
+    },
+    {
+      jsonPath: "WaterConnection[0].oldConnectionNo",
+      callBack: handleNA
+    }, {
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].oldConnectionNo",
+      callBack: handleNA
+    }
+  ),
   reviewConnectionType : getLabelWithValueForModifiedLabel(
     {
       labelName: "Connection Type",

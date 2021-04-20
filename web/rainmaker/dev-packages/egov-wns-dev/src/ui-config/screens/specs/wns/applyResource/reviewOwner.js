@@ -41,10 +41,27 @@ const activationDetailsHeader = getHeader({
   labelKey: "WS_ACTIVATION_DETAILS"
 });
 
+export const reviewOldConsumerNo = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Old Consumer No",
+    labelKey: "WS_OLD_CONSUMER_NO"
+  },
+  {
+    jsonPath: "applyScreen.oldConnectionNo",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.oldConnectionNo",
+    callBack: handleNA
+  }
+);
 export const reviewConnectionType = getLabelWithValueForModifiedLabel(
   {
     labelName: "Connection Type",
-    labelKey: "WS_SERV_DETAIL_CONN_TYPE"
+    labelKey: "WS_CONSUMER_NO"
   },
   {
     jsonPath: "applyScreen.connectionType",
@@ -581,6 +598,7 @@ export const reviewOwner = (isEditable = true) => {
 };
 
 const connectionDetails = getCommonContainer({
+  reviewOldConsumerNo,
   reviewConnectionType,
   reviewNumberOfTaps,
   reviewBillingType,

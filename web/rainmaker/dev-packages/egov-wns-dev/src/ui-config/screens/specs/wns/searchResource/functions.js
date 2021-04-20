@@ -3,9 +3,10 @@ import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUt
 import get from "lodash/get";
 import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerage, getWorkFlowData, serviceConst } from "../../../../../ui-utils/commons";
 import { validateFields } from "../../utils";
-import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
+import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection, resetFieldsForBill } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
+  debugger;
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
@@ -24,6 +25,10 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
+  }
+  else if (currentSearchTab === "SEARCH_BILL") {
+    resetFieldsForBill(state, dispatch);
+    await renderSearchApplicationTable1(state, dispatch);
   } 
   else {
     resetFieldsForConnection(state, dispatch);
@@ -173,6 +178,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
 }
 
 const renderSearchApplicationTable = async (state, dispatch) => {
+  debugger;
   let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
   queryObject.push({ key: "isConnectionSearch", value: true });
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
@@ -307,7 +313,142 @@ const renderSearchApplicationTable = async (state, dispatch) => {
     } catch (err) { console.log(err) }
   }
 }
+const renderSearchApplicationTable1 = async (state, dispatch) => {
+  debugger;
+  let queryObject = [{ key: "tenantId", value: getTenantIdCommon() }];
+  queryObject.push({ key: "isConnectionSearch", value: true });
+  let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
+  const isSearchBoxFirstRowValid = validateFields(
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch",
+    state,
+    dispatch,
+    "search"
+  );
 
+  const isSearchBoxSecondRowValid = validateFields(
+    "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch",
+    state,
+    dispatch,
+    "search"
+  );
+  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
+  } else if (
+    Object.keys(searchScreenObject).length == 0 ||
+    Object.values(searchScreenObject).every(x => x === "")
+  ) {
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
+  } else if (
+    (searchScreenObject["fromDate"] === undefined || searchScreenObject["fromDate"].length === 0) &&
+    searchScreenObject["toDate"] !== undefined && searchScreenObject["toDate"].length !== 0) {
+    dispatch(toggleSnackbar(true, { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" }, "warning"));
+  } else {
+    for (var key in searchScreenObject) {
+      if (searchScreenObject.hasOwnProperty(key) && searchScreenObject[key].trim() !== "") {
+        if (key === "fromDate") {
+          queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "daystart") });
+        } else if (key === "toDate") {
+          queryObject.push({ key: key, value: convertDateToEpoch(searchScreenObject[key], "dayend") });
+        } else if (key === "applicationType") {
+          queryObject.push({ key: key, value: searchScreenObject[key].replace(/ /g,'_')});
+        } else {
+          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+        }
+      }
+    }
+    try { 
+      let getSearchResult, getSearchResultForSewerage;
+      if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('water')) {
+        getSearchResult = getSearchResults(queryObject)
+      } else if (searchScreenObject.applicationType && searchScreenObject.applicationType.toLowerCase().includes('sewerage')) {
+        getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      } else {
+        getSearchResult = getSearchResults(queryObject),
+        getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+      }
+      let finalArray = [];
+      let searchWaterConnectionResults, searcSewerageConnectionResults;
+      try { searchWaterConnectionResults = await getSearchResult } catch (error) { finalArray = []; console.log(error) }
+      try { searcSewerageConnectionResults = await getSearchResultForSewerage } catch (error) { finalArray = []; console.log(error) }
+      const waterConnections = searchWaterConnectionResults ? searchWaterConnectionResults.WaterConnection.map(e => { e.service = serviceConst.WATER; return e }) : []
+      const sewerageConnections = searcSewerageConnectionResults ? searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = serviceConst.SEWERAGE; return e }) : [];
+      let combinedSearchResults = searchWaterConnectionResults || searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
+
+      let appNo = "";
+      let combinedWFSearchResults = [];
+      for (let i = 0; i < combinedSearchResults.length; i++) {
+        let element = findAndReplace(combinedSearchResults[i], null, "NA");
+        if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
+          appNo = appNo + element.applicationNo + ",";
+        }
+        if(i % 50 === 0 || i === (combinedSearchResults.length-1)) {
+          //We are trying to fetch 50 WF objects at a time
+          appNo = appNo.substring(0, appNo.length-1);
+          const queryObj = [
+            { key: "businessIds", value: appNo },
+            { key: "history", value: true },
+            { key: "tenantId", value: getTenantIdCommon() }
+          ];
+          let wfResponse = await getWorkFlowData(queryObj);
+          if(wfResponse !== null && wfResponse.ProcessInstances !== null) {
+            combinedWFSearchResults = combinedWFSearchResults.concat(wfResponse.ProcessInstances);
+          }
+          appNo = "";
+        }
+      }
+      /*const queryObj = [
+        { key: "businessIds", value: appNo },
+        { key: "history", value: true },
+        { key: "tenantId", value: getTenantIdCommon() }
+      ];
+      let Response = await getWorkFlowData(queryObj);*/
+      for (let i = 0; i < combinedSearchResults.length; i++) {
+        let element = findAndReplace(combinedSearchResults[i], null, "NA");
+        let appStatus;
+        if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
+          appStatus = combinedWFSearchResults.filter(item => item.businessId.includes(element.applicationNo))[0]
+          if (appStatus !== undefined && appStatus.state !== undefined) {
+            appStatus = appStatus.state.applicationStatus;            
+          }else{
+            appStatus = "NA";
+          }
+          if (element.property && element.property.owners &&
+            element.property.owners !== "NA" &&
+            element.property.owners !== null &&
+            element.property.owners.length > 1) {
+            let ownerName = "";
+            element.property.owners.forEach(ele => { ownerName = ownerName + ", " + ele.name })
+
+            finalArray.push({
+              connectionNo: element.connectionNo,
+              applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
+              name: ownerName.slice(2),
+              applicationStatus: appStatus,
+              address: handleAddress(element),
+              service: element.service,
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
+            })
+          } else {
+            finalArray.push({
+              connectionNo: element.connectionNo,
+              applicationNo: element.applicationNo,
+              applicationType: element.applicationType,
+              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:"",
+              applicationStatus: appStatus,
+              address: handleAddress(element),
+              service: element.service,
+              connectionType: element.connectionType,
+              tenantId: element.tenantId
+            })
+          }
+        }
+      }
+      showApplicationResults(finalArray, dispatch)
+    } catch (err) { console.log(err) }
+  }
+}
 const handleAddress = (element) => {
   let city = (
     element.property &&

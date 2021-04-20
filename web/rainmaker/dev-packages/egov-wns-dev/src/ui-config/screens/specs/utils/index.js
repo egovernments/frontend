@@ -1361,7 +1361,31 @@ export const getUniqueItemsFromArray = (data, identifier) => {
   }
   return uniqueArray;
 };
-
+export const getPaymentHistory = async (queryObject , dispatch) => {
+  try {
+    
+    const response = await httpRequest(
+      "post",
+      "collection-services/payments/WS/_search",
+       "",
+      queryObject
+    );
+    return response;
+   // set(state, "screenConfiguration.preparedFinalObject", response);
+  // debugger;
+  // console.log('response',response);
+   // dispatch(prepareFinalObject("paymentHistory", response));
+ //  debugger;
+  } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+        "warning"
+        )
+      );
+  }
+}
 export const sortByEpoch = (data, order) => {
   if (order) {
     return data.sort((a, b) => {
@@ -1483,6 +1507,65 @@ export const resetFieldsForConnection = (state, dispatch) => {
     )
   );
 }
+
+export const resetFieldsForBill = (state, dispatch) => {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.consumerNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.toDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[2].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationType",
+      "props.value",
+      ""
+    )
+  );
+};
 
 export const getCommonGrayCard = children => {
   return {

@@ -3,12 +3,12 @@ import {
   getCommonSubHeader,
   getCommonContainer,
   getLabelWithValue,
-  getLabel
+  getLabel,
+  getLabelWithValueForModifiedLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
 import { getUserInfo, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
-
 export const checkValueForNA = value => {
   return value ? value : "NA";
 };
@@ -18,6 +18,7 @@ const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
 
 export const waterDetails = () => {
+
   if (connectionType === "Metered") {
     return getCommonContainer({
       serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service" }),
@@ -27,6 +28,8 @@ export const waterDetails = () => {
       pipeSize: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_PIPE_SIZE" }, { jsonPath: "WaterConnection[0].pipeSize" }),
       connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate" }),
       waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
+      oldConsumerNo: getLabelWithValue({ labelKey: "WS_OLD_CONSUMER_NO" }, { jsonPath: "WaterConnection[0].oldConnectionNo",callBack: checkValueForNA }),
+
       // waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
       editSection: {
         componentPath: "Button",
@@ -49,7 +52,9 @@ export const waterDetails = () => {
       connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate" }),
       waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
       // waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
-      numberOfTaps: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" }, { jsonPath: "WaterConnection[0].noOfTaps" })
+      numberOfTaps: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" }, { jsonPath: "WaterConnection[0].noOfTaps" }),
+      oldConsumerNo: getLabelWithValue({ labelKey: "WS_OLD_CONSUMER_NO" }, { jsonPath: "WaterConnection[0].oldConnectionNo",callBack: checkValueForNA }),
+      
     })
   }
 }
@@ -58,7 +63,8 @@ export const sewerDetails = () => {
     serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service",callBack: checkValueForNA }),
     connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate",callBack: checkValueForNA }),
     unitOfMeasurement: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_UNIT_OF_MEASUREMENT" }, { jsonPath: "WaterConnection[0].uom",callBack: checkValueForNA }),
-    numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets",callBack: checkValueForNA })
+    numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets",callBack: checkValueForNA }),
+    oldConsumerNo: getLabelWithValue({ labelKey: "WS_OLD_CONSUMER_NO" }, { jsonPath: "WaterConnection[0].oldConnectionNo",callBack: checkValueForNA }),
   })
 }
 
@@ -82,6 +88,7 @@ export const getServiceDetails = () => {
         }
       }
     },
+    
     waterDetails:  waterDetails(),
     sewerDetails: sewerDetails(),
   });

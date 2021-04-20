@@ -32,6 +32,7 @@ import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
+import { getPaymentDetails } from "./connectionDetailsResource/paymentDetails";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let connectionNumber = getQueryArg(window.location.href, "connectionNumber");
@@ -381,6 +382,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
 
 const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   //Search details for given application Number
+  debugger;
   if (connectionNumber) {
     await searchResults(action, state, dispatch, connectionNumber);
   }
@@ -408,6 +410,8 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
+const paymentDetails = getPaymentDetails(true);
+
 const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
  
 
@@ -417,6 +421,7 @@ export const connectionDetails = getCommonCard({
   ownerDetails,
   connectionHolders,
   connectionHoldersSameAsOwner,
+  paymentDetails
 });
 const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
