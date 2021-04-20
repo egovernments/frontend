@@ -133,17 +133,16 @@ const renderSearchConnectionTable = async (state, dispatch) => {
           }
 
           let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-          billResults ? billResults.Bill.map(bill => {
-            let updatedDueDate = 0;
+          let updatedDueDate = 0;
+          billResults && billResults.Bill.length > 0 && billResults.Bill[0].billDetails.map(bill => {
             if(element.service === serviceConst.WATER) {
-              updatedDueDate = (element.connectionType === 'Metered' ?
-              (bill.billDetails[0].toPeriod+waterMeteredDemandExipryDate) :
-              (bill.billDetails[0].toPeriod+waterNonMeteredDemandExipryDate));
+              updatedDueDate = bill.expiryDate;
             } else if (element.service === serviceConst.SEWERAGE) {
-              updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
+              updatedDueDate = bill.expiryDate;
             }
-            finalArray.push({
-              due: bill.totalAmount,
+          });
+            billResults.Bill.length > 0 ? finalArray.push({
+              due: billResults.Bill[0].totalAmount,
               dueDate: updatedDueDate,
               service: element.service,
               connectionNo: element.connectionNo,
@@ -153,8 +152,8 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               connectionType: element.connectionType,
               tenantId:element.tenantId
             })
-          }) : finalArray.push({
-            due: 'NA',
+           : finalArray.push({
+            due: billResults.Bill.length > 0 ? billResults.Bill[0].totalAmount : '0',
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
