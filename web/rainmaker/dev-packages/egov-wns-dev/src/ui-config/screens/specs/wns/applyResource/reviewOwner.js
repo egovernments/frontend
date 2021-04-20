@@ -40,7 +40,23 @@ const roadCuttingChargesHeader = getHeader({
 const activationDetailsHeader = getHeader({
   labelKey: "WS_ACTIVATION_DETAILS"
 });
-
+export const reviewOldConsumerNo = getLabelWithValueForModifiedLabel(
+  {
+    labelName: "Old Consumer No",
+    labelKey: "WS_OLD_CONSUMER_NO"
+  },
+  {
+    jsonPath: "applyScreen.oldConnectionNo",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.oldConnectionNo",
+    callBack: handleNA
+  }
+);
 export const reviewConnectionType = getLabelWithValueForModifiedLabel(
   {
     labelName: "Connection Type",
@@ -581,6 +597,7 @@ export const reviewOwner = (isEditable = true) => {
 };
 
 const connectionDetails = getCommonContainer({
+  reviewOldConsumerNo,
   reviewConnectionType,
   reviewNumberOfTaps,
   reviewBillingType,
