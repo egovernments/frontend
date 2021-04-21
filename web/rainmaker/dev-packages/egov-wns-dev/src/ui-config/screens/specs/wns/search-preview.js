@@ -310,45 +310,45 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         )
       );
     }
-    let oldConsumerNo = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].oldConnectionNo");
-    debugger;
-    if(oldConsumerNo === null ) {
-      debugger;
-      dispatch(
-        handleField(
-          "search-preview", 
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.children.reviewOldConsumerNo",
-           "visible",
-           false
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview", 
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.children.reviewOldConsumerNo",
-           "visible",
-           false
-        )
-      );
-    }
-    else{
-      dispatch(
-        handleField(
-          "search-preview", 
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.children.reviewOldConsumerNo",
-           "visible",
-           true
-        )
-      );
-      dispatch(
-        handleField(
-          "search-preview", 
-          "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.children.reviewOldConsumerNo",
-           "visible",
-           true
-        )
-      );
-    }
+    // let oldConsumerNo = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].oldConnectionNo");
+    // debugger;
+    // if(oldConsumerNo === null ) {
+    //   debugger;
+    //   dispatch(
+    //     handleField(
+    //       "search-preview", 
+    //       "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.children.reviewOldConsumerNo",
+    //        "visible",
+    //        false
+    //     )
+    //   );
+    //   dispatch(
+    //     handleField(
+    //       "search-preview", 
+    //       "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.children.reviewOldConsumerNo",
+    //        "visible",
+    //        false
+    //     )
+    //   );
+    // }
+    // else{
+    //   dispatch(
+    //     handleField(
+    //       "search-preview", 
+    //       "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixWS.children.reviewOldConsumerNo",
+    //        "visible",
+    //        true
+    //     )
+    //   );
+    //   dispatch(
+    //     handleField(
+    //       "search-preview", 
+    //       "components.div.children.taskDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSixVS.children.reviewOldConsumerNo",
+    //        "visible",
+    //        true
+    //     )
+    //   );
+    // }
     let unitUsageTypee = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].property.usageCategory");
     if(unitUsageTypee != "MIXED" ) {
       dispatch(
