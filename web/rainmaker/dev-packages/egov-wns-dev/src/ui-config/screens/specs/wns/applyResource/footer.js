@@ -790,30 +790,30 @@ const callBackForNext = async (state, dispatch) => {
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
-      let oldConsumerNoSW = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].oldConnectionNo");
+    //   let oldConsumerNoSW = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].oldConnectionNo");
       
-      let oldConsumerNoWS = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].oldConnectionNo");
-    if(oldConsumerNoWS === null || oldConsumerNoSW === null ) {
-      dispatch(
-        handleField(
-          "apply", 
-          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewOldConsumerNo",
-           "visible",
-           false
-        )
-      );
-    }
-    else{
-      dispatch(
-        handleField(
-          "apply", 
-          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewOldConsumerNo",
+    //   let oldConsumerNoWS = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].oldConnectionNo");
+    // if(oldConsumerNoWS === null || oldConsumerNoSW === null ) {
+    //   dispatch(
+    //     handleField(
+    //       "apply", 
+    //       "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewOldConsumerNo",
+    //        "visible",
+    //        false
+    //     )
+    //   );
+    // }
+    // else{
+    //   dispatch(
+    //     handleField(
+    //       "apply", 
+    //       "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewOldConsumerNo",
            
-          "visible",
-           true
-        )
-      );
-    }
+    //       "visible",
+    //        true
+    //     )
+    //   );
+    // }
       isFormValid = true;
     }
     let unitUsageTypee = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
