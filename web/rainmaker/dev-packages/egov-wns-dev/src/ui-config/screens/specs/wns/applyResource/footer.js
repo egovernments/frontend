@@ -677,6 +677,7 @@ const callBackForNext = async (state, dispatch) => {
   }
   /* validations for Additional /Docuemnts details screen */
   if (activeStep === 2 && process.env.REACT_APP_NAME !== "Citizen") {
+
     if (isModifyMode()) {
       if (moveToReview(state, dispatch)) {
         await pushTheDocsUploadedToRedux(state, dispatch);
@@ -789,6 +790,30 @@ const callBackForNext = async (state, dispatch) => {
       if (getQueryArg(window.location.href, "action") === "edit" && (!isModifyMode() || (isModifyMode() && isModifyModeAction()))) {
         setReviewPageRoute(state, dispatch);
       }
+      let oldConsumerNoSW = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection[0].oldConnectionNo");
+      
+      let oldConsumerNoWS = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].oldConnectionNo");
+    if(oldConsumerNoWS === null || oldConsumerNoSW === null ) {
+      dispatch(
+        handleField(
+          "apply", 
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewOldConsumerNo",
+           "visible",
+           false
+        )
+      );
+    }
+    else{
+      dispatch(
+        handleField(
+          "apply", 
+          "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSix.children.reviewOldConsumerNo",
+           
+          "visible",
+           true
+        )
+      );
+    }
       isFormValid = true;
     }
     let unitUsageTypee = get(state, "screenConfiguration.preparedFinalObject.applyScreen.property.usageCategory");
@@ -826,6 +851,7 @@ const callBackForNext = async (state, dispatch) => {
     } else {
       isFormValid = await acknoledgementForSewerage(state, activeStep, isFormValid, dispatch);
     }
+
     // responseStatus === "success" && changeStep(activeStep, state, dispatch);
   }
   if (activeStep !== 3) {

@@ -27,6 +27,8 @@ export const waterDetails = () => {
       pipeSize: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_PIPE_SIZE" }, { jsonPath: "WaterConnection[0].pipeSize" }),
       connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate" }),
       waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
+      oldConsumerNo: getLabelWithValue({ labelKey: "WS_OLD_CONSUMER_NO" }, { jsonPath: "WaterConnection[0].oldConnectionNo",callBack: checkValueForNA }),
+      
       // waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
       editSection: {
         componentPath: "Button",
@@ -41,6 +43,7 @@ export const waterDetails = () => {
       },
     })
   } else {
+    debugger;
     return getCommonContainer({
       serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service" }),
       connectionCategory: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_CATEGORY" }, { jsonPath: "WaterConnection[0].additionalDetails.connectionCategory" }),
@@ -59,7 +62,9 @@ export const sewerDetails = () => {
     serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service",callBack: checkValueForNA }),
     connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate",callBack: checkValueForNA }),
     unitOfMeasurement: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_UNIT_OF_MEASUREMENT" }, { jsonPath: "WaterConnection[0].uom",callBack: checkValueForNA }),
-    numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets",callBack: checkValueForNA })
+    numberOfToilets: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_NO_OF_TOILETS" }, { jsonPath: "WaterConnection[0].noOfToilets",callBack: checkValueForNA }),
+    oldConsumerNo: getLabelWithValue({ labelKey: "WS_OLD_CONSUMER_NO" }, { jsonPath: "WaterConnection[0].oldConnectionNo",callBack: checkValueForNA })
+
   })
 }
 
