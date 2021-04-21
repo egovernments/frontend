@@ -167,12 +167,63 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
     false
   );
 
+  if (screenKey == "viewBill") {
+    dispatch(
+      handleField(
+        "viewBill",
+        "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
+        "props.value",
+        null
+      )
+    );
+    dispatch(
+      handleField(
+        "viewBill",
+        "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
+        "props.value",
+        null
+      )
+    );
+    dispatch(
+      handleField(
+        "viewBill",
+        "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
+        "props.value",
+        null
+      )
+    );
+    dispatch(
+      handleField(
+        "viewBill",
+        "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
+        "props.value",
+        null
+      )
+    );
+    dispatch(
+      handleField(
+        "viewBill",
+        "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
+        "props.value",
+        null
+      )
+    );
+    dispatch(
+      handleField(
+        "viewBill",
+        "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
+        "props.value",
+        null
+      )
+    );
+  }
+  
   dispatch(
     handleField(
       "search-preview",
       "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
       "props.value",
-      ""
+      null
     )
   );
   dispatch(
@@ -180,7 +231,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
       "search-preview",
       "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
       "props.value",
-      ""
+      null
     )
   );
   dispatch(
@@ -188,7 +239,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
       "search-preview",
       "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
       "props.value",
-      ""
+      null
     )
   );
   dispatch(
@@ -196,7 +247,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
       "search-preview",
       "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
       "props.value",
-      ""
+      null
     )
   );
   dispatch(
@@ -204,7 +255,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
       "search-preview",
       "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
       "props.value",
-      ""
+      null
     )
   );
   dispatch(
@@ -212,7 +263,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
       "search-preview",
       "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
       "props.value",
-      ""
+      null
     )
   );
 
