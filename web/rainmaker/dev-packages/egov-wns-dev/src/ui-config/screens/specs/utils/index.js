@@ -160,7 +160,7 @@ export const getIconStyle = key => {
   return style[key];
 };
 
-export const showHideAdhocPopup = (state, dispatch, screenKey) => {
+export const showHideAdhocPopup = (state, dispatch, screenKey, value = true, adhocDetails = {}) => {
   let toggle = get(
     state.screenConfiguration.screenConfig[screenKey],
     "components.adhocDialog.props.open",
@@ -217,56 +217,109 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
       )
     );
   }
-  
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
-      "props.value",
-      null
-    )
-  );
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
-      "props.value",
-      null
-    )
-  );
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
-      "props.value",
-      null
-    )
-  );
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
-      "props.value",
-      null
-    )
-  );
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
-      "props.value",
-      null
-    )
-  );
-  dispatch(
-    handleField(
-      "search-preview",
-      "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
-      "props.value",
-      null
-    )
-  );
 
+  if (screenKey == "search-preview") {
+    if (value) {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
+          "props.value",
+          null
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
+          "props.value",
+          null
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
+          "props.value",
+          null
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
+          "props.value",
+          null
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
+          "props.value",
+          null
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
+          "props.value",
+          null
+        )
+      );
+    } else {
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.commentsField",
+          "props.value",
+          get(adhocDetails, "adhocPenaltyComment", null)
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyAmount",
+          "props.value",
+          get(adhocDetails, "adhocPenalty", null)
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
+          "props.value",
+          get(adhocDetails, "adhocPenaltyReason", null)
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateAmount",
+          "props.value",
+          get(adhocDetails, "adhocRebate", null)
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateCommentsField",
+          "props.value",
+          get(adhocDetails, "adhocRebateComment", null)
+        )
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children.rebateReason",
+          "props.value",
+          get(adhocDetails, "adhocRebateReason", null)
+        )
+      );
+    }
+  }
+ 
   dispatch(handleField(screenKey, "components.adhocDialog", "props.open", !toggle));
 };
 
