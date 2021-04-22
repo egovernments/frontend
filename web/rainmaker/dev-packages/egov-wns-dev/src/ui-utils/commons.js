@@ -389,22 +389,22 @@ export const validateFeildsForBothWaterAndSewerage = (applyScreenObject) => {
         applyScreenObject["water"] !== "" &&
         applyScreenObject.hasOwnProperty("sewerage") &&
         applyScreenObject["sewerage"] !== undefined &&
-        applyScreenObject["sewerage"] !== "" &&
-        applyScreenObject.hasOwnProperty("proposedTaps") &&
-        applyScreenObject["proposedTaps"] !== undefined &&
-        applyScreenObject["proposedTaps"] !== "" &&
-        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
-        applyScreenObject.hasOwnProperty("proposedPipeSize") &&
-        applyScreenObject["proposedPipeSize"] !== undefined &&
-        applyScreenObject["proposedPipeSize"] !== "" &&
-        applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
-        applyScreenObject["proposedWaterClosets"] !== undefined &&
-        applyScreenObject["proposedWaterClosets"] !== "" &&
-        applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
-        applyScreenObject.hasOwnProperty("proposedToilets") &&
-        applyScreenObject["proposedToilets"] !== undefined &&
-        applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
+        applyScreenObject["sewerage"] !== "" //&&
+        // applyScreenObject.hasOwnProperty("proposedTaps") &&
+        // applyScreenObject["proposedTaps"] !== undefined &&
+        // applyScreenObject["proposedTaps"] !== "" &&
+        // applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
+        // applyScreenObject.hasOwnProperty("proposedPipeSize") &&
+        // applyScreenObject["proposedPipeSize"] !== undefined &&
+        // applyScreenObject["proposedPipeSize"] !== "" &&
+        // applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
+        // applyScreenObject["proposedWaterClosets"] !== undefined &&
+        // applyScreenObject["proposedWaterClosets"] !== "" &&
+        // applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
+        // applyScreenObject.hasOwnProperty("proposedToilets") &&
+        // applyScreenObject["proposedToilets"] !== undefined &&
+        // applyScreenObject["proposedToilets"] !== "" &&
+        // applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
     ) { return true; } else { return false; }
 }
 
@@ -454,14 +454,14 @@ export const validateFeildsForWater = (applyScreenObject) => {
         applyScreenObject["water"] !== "" &&
         applyScreenObject.hasOwnProperty("sewerage") &&
         applyScreenObject["sewerage"] !== undefined &&
-        applyScreenObject["sewerage"] !== "" &&
-        applyScreenObject.hasOwnProperty("proposedTaps") &&
-        applyScreenObject["proposedTaps"] !== undefined &&
-        applyScreenObject["proposedTaps"] !== "" &&
-        applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
-        applyScreenObject.hasOwnProperty("proposedPipeSize") &&
-        applyScreenObject["proposedPipeSize"] !== undefined &&
-        applyScreenObject["proposedPipeSize"] !== ""
+        applyScreenObject["sewerage"] !== "" //&&
+        // applyScreenObject.hasOwnProperty("proposedTaps") &&
+        // applyScreenObject["proposedTaps"] !== undefined &&
+        // applyScreenObject["proposedTaps"] !== "" &&
+        // applyScreenObject["proposedTaps"].toString().match(/^[0-9]*$/i) &&
+        // applyScreenObject.hasOwnProperty("proposedPipeSize") &&
+        // applyScreenObject["proposedPipeSize"] !== undefined &&
+        // applyScreenObject["proposedPipeSize"] !== ""
     ) { return true; } else { return false; }
 }
 
@@ -481,15 +481,15 @@ export const validateFeildsForSewerage = (applyScreenObject) => {
         applyScreenObject["water"] !== "" &&
         applyScreenObject.hasOwnProperty("sewerage") &&
         applyScreenObject["sewerage"] !== undefined &&
-        applyScreenObject["sewerage"] !== "" &&
-        applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
-        applyScreenObject["proposedWaterClosets"] !== undefined &&
-        applyScreenObject["proposedWaterClosets"] !== "" &&
-        applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
-        applyScreenObject.hasOwnProperty("proposedToilets") &&
-        applyScreenObject["proposedToilets"] !== undefined &&
-        applyScreenObject["proposedToilets"] !== "" &&
-        applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
+        applyScreenObject["sewerage"] !== "" //&&
+        // applyScreenObject.hasOwnProperty("proposedWaterClosets") &&
+        // applyScreenObject["proposedWaterClosets"] !== undefined &&
+        // applyScreenObject["proposedWaterClosets"] !== "" &&
+        // applyScreenObject["proposedWaterClosets"].toString().match(/^[0-9]*$/i) &&
+        // applyScreenObject.hasOwnProperty("proposedToilets") &&
+        // applyScreenObject["proposedToilets"] !== undefined &&
+        // applyScreenObject["proposedToilets"] !== "" &&
+        // applyScreenObject["proposedToilets"].toString().match(/^[0-9]*$/i)
     ) { return true; } else { return false }
 }
 
