@@ -31,6 +31,7 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
+import cloneDeep from "lodash/cloneDeep";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -448,7 +449,32 @@ const estimate = getCommonGrayCard({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        showHideAdhocPopup(state, dispatch, "search-preview");
+        const adhocAmount = get(
+          state.screenConfiguration.preparedFinalObject,
+          "WaterConnection[0].additionalDetails.adhocPenalty"
+        );
+        const rebateAmount = get(
+          state.screenConfiguration.preparedFinalObject,
+          "WaterConnection[0].additionalDetails.adhocRebate"
+        );
+        const adhocAmountTemp = get(
+          state.screenConfiguration.preparedFinalObject,
+          "WaterConnectionTemp[0].additionalDetails.adhocPenalty"
+        );
+        const rebateAmountTemp = get(
+          state.screenConfiguration.preparedFinalObject,
+          "WaterConnectionTemp[0].additionalDetails.adhocRebate"
+        );
+        let isAdhocOrRebateValue = true;
+        if(adhocAmountTemp || rebateAmountTemp) { isAdhocOrRebateValue = false }
+        if(adhocAmount || adhocAmount) { isAdhocOrRebateValue = false }
+        if (!isAdhocOrRebateValue) {
+          let WaterConnectionTemp = cloneDeep( get(state.screenConfiguration.preparedFinalObject, "WaterConnectionTemp[0].additionalDetails"));
+          showHideAdhocPopup(state, dispatch, "search-preview", isAdhocOrRebateValue, WaterConnectionTemp);
+        } else {
+          showHideAdhocPopup(state, dispatch, "search-preview", isAdhocOrRebateValue, {});
+        }
+        
       }
     },
     visible: false
@@ -690,6 +716,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       }
       dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
       dispatch(prepareFinalObject("WaterConnection[0].roadCuttingInfos", roadCuttingInfos));
+      dispatch(prepareFinalObject("waterConnectionTemp[0]", payload.WaterConnection[0]));
       if (get(payload, "WaterConnection[0].property.status", "") !== "ACTIVE") {
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.props.propertyId", get(payload, "WaterConnection[0].property.propertyId", ""));
         set(action.screenConfig, "components.div.children.snackbarWarningMessage.children.clickHereLink.visible", true);
@@ -804,6 +831,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
       dispatch(prepareFinalObject("SewerageConnection[0].roadCuttingInfos", roadCuttingInfos));
       dispatch(prepareFinalObject("WaterConnection[0].roadCuttingInfos", roadCuttingInfos));
+      dispatch(prepareFinalObject("waterConnectionTemp[0]", payload.SewerageConnections[0]));
       if (!payload.SewerageConnections[0].connectionHolders || payload.SewerageConnections[0].connectionHolders === 'NA') {
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewFive.visible", false);
         set(action.screenConfig, "components.div.children.taskDetails.children.cardContent.children.reviewConnectionDetails.children.cardContent.children.viewSix.visible", true);
