@@ -1819,6 +1819,25 @@ export const waterEstimateCalculation = async (queryObject, dispatch) => {
 
 };
 
+// api call to calculate water estimate
+export const waterSewerageBillingSearch = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "billing-service/bill/v2/_search",
+            "",
+            queryObject,
+        );
+        dispatch(toggleSpinner());
+        return findAndReplace(response, null, "NA");
+    } catch (error) {
+        dispatch(toggleSpinner());
+        console.log(error);
+    }
+
+};
+
 // api call to calculate sewerage estimate
 export const swEstimateCalculation = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
