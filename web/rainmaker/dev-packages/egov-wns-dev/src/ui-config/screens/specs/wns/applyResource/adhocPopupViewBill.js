@@ -41,6 +41,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
       "viewBillToolipData[0].description.demandId"
     );
 
+  const consumerCode = getQueryArg(window.location.href, "connectionNumber") || WSRequestBody[0].connectionNo;
   let serviceUrl,httpmethod;
   if (WSRequestBody[0].service === serviceConst.WATER) {
     serviceUrl = "ws-calculator/waterCalculator/_applyAdhocTax";
@@ -58,7 +59,8 @@ try{
     {
       "demandId":demandId,
       "adhocrebate" : (WSRequestBody[0].additionalDetails.adhocRebate)?WSRequestBody[0].additionalDetails.adhocRebate:0,
-      "adhocpenalty" : (WSRequestBody[0].additionalDetails.adhocPenalty)?WSRequestBody[0].additionalDetails.adhocPenalty:0
+      "adhocpenalty" : (WSRequestBody[0].additionalDetails.adhocPenalty)?WSRequestBody[0].additionalDetails.adhocPenalty:0,
+      "consumerCode": consumerCode
     }
   );
 
