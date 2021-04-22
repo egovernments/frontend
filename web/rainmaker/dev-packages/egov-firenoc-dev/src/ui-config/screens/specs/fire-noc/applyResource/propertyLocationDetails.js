@@ -240,11 +240,15 @@ export const propertyLocationDetails = getCommonCard(
             );
 
 
-            const districtList = get(
+            const districtData = get(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
               []);
+              let districtList = districtData.filter((districtlists) => {
 
+                return districtlists.city.districtTenantCode === "pb.gurdaspur"
+  
+              });
             // console.log("districtList", districtList);
 
             const districtTenantMap = districtList.map((item) => {
@@ -303,12 +307,16 @@ export const propertyLocationDetails = getCommonCard(
           else {
 
 
-            const districtList = get(
+            const districtData = get(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
               []
             );
+            let districtList = districtData.filter((districtlists) => {
 
+              return districtlists.city.districtTenantCode === "pb.gurdaspur"
+
+            });
             const districtTenantMap = districtList.map((item) => {
               return {
                 name: item.city.districtName,
@@ -476,18 +484,12 @@ export const propertyLocationDetails = getCommonCard(
               "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
               []
             );
-
-            // console.log("districtData", districtData);
-
-
-
             let districtlist = districtData.filter((districtlists) => {
 
-              return districtlists.city.districtTenantCode === action.value
+              return districtlists.city.districtTenantCode === "pb.gurdaspur"
 
             });
-
-
+            // console.log("districtData", districtData);
 
             // console.log("tenanats list", districtlist);
 
@@ -498,9 +500,6 @@ export const propertyLocationDetails = getCommonCard(
             let urbanids = districtlist.map((districtlists) => {
               return districtlists.code
             });
-
-
-
             // console.log("tenant ids", urbanids);
 
 

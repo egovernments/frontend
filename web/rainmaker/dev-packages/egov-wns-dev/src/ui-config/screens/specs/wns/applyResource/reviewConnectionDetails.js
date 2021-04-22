@@ -614,54 +614,54 @@ export const taskApplicationType = getLabelWithValueForModifiedLabel(
   },
 );
 
-export const taskNumberOfTapsPropsed = getLabelWithValueForModifiedLabel(
-  {
-    labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
-  },
-  {
-    jsonPath: "applyScreen.proposedTaps",
-    callBack: handleNA
-  },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  {
-    jsonPath: "applyScreenOld.proposedTaps",
-    callBack: handleNA
-  },
-)
-export const taskPipeSizeProposed = getLabelWithValueForModifiedLabel(
-  {
-    labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
-  },
-  { jsonPath: "applyScreen.proposedPipeSize", callBack: handleNA },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  { jsonPath: "applyScreenOld.proposedPipeSize", callBack: handleNA },
-)
+// export const taskNumberOfTapsPropsed = getLabelWithValueForModifiedLabel(
+//   {
+//     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"
+//   },
+//   {
+//     jsonPath: "applyScreen.proposedTaps",
+//     callBack: handleNA
+//   },
+//   {
+//     labelKey: "WS_OLD_LABEL_NAME"
+//   },
+//   {
+//     jsonPath: "applyScreenOld.proposedTaps",
+//     callBack: handleNA
+//   },
+// )
+// export const taskPipeSizeProposed = getLabelWithValueForModifiedLabel(
+//   {
+//     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
+//   },
+//   { jsonPath: "applyScreen.proposedPipeSize", callBack: handleNA },
+//   {
+//     labelKey: "WS_OLD_LABEL_NAME"
+//   },
+//   { jsonPath: "applyScreenOld.proposedPipeSize", callBack: handleNA },
+// )
 
-export const taskNoOfClosets = getLabelWithValueForModifiedLabel(
-  {
-    labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
-  },
-  { jsonPath: "applyScreen.proposedWaterClosets", callBack: handleNA },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  { jsonPath: "applyScreenOld.proposedWaterClosets", callBack: handleNA },
-);
+// export const taskNoOfClosets = getLabelWithValueForModifiedLabel(
+//   {
+//     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
+//   },
+//   { jsonPath: "applyScreen.proposedWaterClosets", callBack: handleNA },
+//   {
+//     labelKey: "WS_OLD_LABEL_NAME"
+//   },
+//   { jsonPath: "applyScreenOld.proposedWaterClosets", callBack: handleNA },
+// );
 
-export const taskNoOfToilets = getLabelWithValueForModifiedLabel(
-  {
-    labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
-  },
-  { jsonPath: "applyScreen.proposedToilets", callBack: handleNA },
-  {
-    labelKey: "WS_OLD_LABEL_NAME"
-  },
-  { jsonPath: "applyScreenOld.proposedToilets", callBack: handleNA },
-);
+// export const taskNoOfToilets = getLabelWithValueForModifiedLabel(
+//   {
+//     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TOILETS_PROPOSED"
+//   },
+//   { jsonPath: "applyScreen.proposedToilets", callBack: handleNA },
+//   {
+//     labelKey: "WS_OLD_LABEL_NAME"
+//   },
+//   { jsonPath: "applyScreenOld.proposedToilets", callBack: handleNA },
+// );
 
 const getConnectionDetails = () => {
   return getCommonContainer({
@@ -673,10 +673,10 @@ const getConnectionDetails = () => {
 export const renderService = () => {
   return getCommonContainer({
     taskApplicationType,
-    taskNumberOfTapsPropsed,
-    taskPipeSizeProposed,
-    taskNoOfClosets,
-    taskNoOfToilets
+    //taskNumberOfTapsPropsed,
+    //taskPipeSizeProposed,
+    //taskNoOfClosets,
+    //taskNoOfToilets
   });
 }
 
