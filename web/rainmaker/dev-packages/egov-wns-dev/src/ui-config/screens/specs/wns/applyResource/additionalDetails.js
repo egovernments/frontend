@@ -24,6 +24,7 @@ import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
 import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
 import { isModifyMode } from "../../../../../ui-utils/commons";
+import {WSledgerId,WSBillingAmount} from "../ImpelExtendedFeature/fields";
 let isMode = isModifyMode();
 
 const getPlumberRadioButton = {
@@ -291,14 +292,15 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       }),
-      billingAmount: getTextField({
-        label: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT" },
-        placeholder: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT_PLACEHOLDER" },
-        gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "applyScreen.additionalDetails.billingAmount",
-        pattern: /^[0-9]*$/i,
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      }),
+      ...WSBillingAmount,
+      // billingAmount: getTextField({
+      //   label: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT" },
+      //   placeholder: { labelKey: "WS_SERV_DETAIL_BILLING_AMOUNT_PLACEHOLDER" },
+      //   gridDefination: { xs: 12, sm: 6 },
+      //   jsonPath: "applyScreen.additionalDetails.billingAmount",
+      //   pattern: /^[0-9]*$/i,
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      // }),
       connectionCategory: getSelectField({
         label: { labelKey: "WS_SERV_CONNECTION_CATEGORY" },
         placeholder: { labelKey: "WS_SERV_CONNECTION_CATEGORY_PLACEHOLDER" },
@@ -308,14 +310,15 @@ export const additionDetails = getCommonCard({
         // pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
-      ledgerId: getTextField({
-        label: { labelKey: "WS_SERV_DETAIL_LEDGER_ID" },
-        placeholder: { labelKey: "WS_SERV_DETAIL_LEDGER_ID_PLACEHOLDER" },
-        gridDefination: { xs: 12, sm: 6 },
-        jsonPath: "applyScreen.additionalDetails.ledgerId",
-        // pattern: /^[0-9]*$/i,
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      }),
+      ...WSledgerId,
+      // ledgerId: getTextField({
+      //   label: { labelKey: "WS_SERV_DETAIL_LEDGER_ID" },
+      //   placeholder: { labelKey: "WS_SERV_DETAIL_LEDGER_ID_PLACEHOLDER" },
+      //   gridDefination: { xs: 12, sm: 6 },
+      //   jsonPath: "applyScreen.additionalDetails.ledgerId",
+      //   // pattern: /^[0-9]*$/i,
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      // }),
       dynamicMdmsWaterSource : {
         uiFramework: "custom-containers",
         componentPath: "DynamicMdmsContainer",
