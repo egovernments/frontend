@@ -76,12 +76,14 @@ export const getPaymentSearchResults = async (queryObject, dispatch) => {
   try {
     let businessService = '';
     queryObject && Array.isArray(queryObject) && queryObject.map(query => {
-      if (query.key == "businessService") {
-        businessService = query.value;
+      if (query.key == "businessServices") {
+        businessService=query.value && Array.isArray(query.value)?query.value[0]:query.value;
       }
     })
-    queryObject = queryObject && Array.isArray(queryObject) && queryObject.filter(query => query.key != "businessService")
-    const response = await httpRequest(
+
+      queryObject = queryObject && Array.isArray(queryObject) && queryObject.filter(query => query.key != "businessService")
+
+    const response=await httpRequest(
       "post",
       getPaymentSearchAPI(businessService),
       "",

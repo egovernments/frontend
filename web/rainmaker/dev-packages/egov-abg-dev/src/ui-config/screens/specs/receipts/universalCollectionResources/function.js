@@ -99,12 +99,24 @@ export const searchApiCall = async (state, dispatch) => {
       let data = response.map(item => ({
         ['CR_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
         ['CR_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
-        ['CR_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        ['CR_SERVICE_TYPE_LABEL']: item.businessService.includes(".")?getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`.replace('.','_').toUpperCase()):getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`),
         ['CR_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
         ['CR_COMMON_TABLE_CONSUMERCODE']: item.amount || "-",
         ['CR_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ['CR_COMMON_TABLE_ACTION']:item.status!=="CANCELLED"&&(item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")&&(convertedConfig[item.businessService]?convertedConfig[item.businessService].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)? "CANCEL":"NA",
-        ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
+        ['CR_COMMON_TABLE_ACTION']:item.businessService.includes(".")?
+        (item.status!=="CANCELLED"&&
+        (item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")
+        &&(convertedConfig[item.businessService.split(".")[0]]?convertedConfig[item.businessService.split(".")[0]].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)
+        
+        ? "CANCEL":"NA")
+        
+        :(
+        item.status!=="CANCELLED"&&
+        (item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")
+        &&(convertedConfig[item.businessService]?convertedConfig[item.businessService].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)
+        
+        ? "CANCEL":"NA"),
+        ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), item.receiptKey, "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-",
         ["SERVICE_TYPE"]: item.serviceType
       }));

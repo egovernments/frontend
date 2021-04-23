@@ -2,9 +2,9 @@ import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getPaymentSearchResults } from "../../../../ui-utils/commons";
 import { viewReceiptDetailsCard } from "./cancelReceiptResource/cancelReceiptDetails";
 import { viewReceiptFooter } from "./cancelReceiptResource/cancelReceiptFooter";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -25,7 +25,52 @@ const header = getCommonContainer({
     visible: true
   }
 });
+const PAYMENTSEARCH = {
+  GET: {
+    URL: "/collection-services/payments/",
+    ACTION: "_search",
+  },
+};
 
+const getPaymentSearchAPI = (businessService='')=>{
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }else if (process.env.REACT_APP_NAME === "Citizen") {
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+  }
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+}
+const getPaymentSearchResults = async (queryObject, dispatch) => {
+  try {
+    let businessService = '';
+    queryObject && Array.isArray(queryObject) && queryObject.map(query => {
+      if (query.key == "businessService") {
+        businessService=query.value;
+      }
+    })
+
+      queryObject = queryObject && Array.isArray(queryObject) && queryObject.filter(query => query.key != "businessService")
+
+    const response=await httpRequest(
+      "post",
+      getPaymentSearchAPI(businessService),
+      "",
+      queryObject
+    );
+
+    return response;
+  } catch (error) {
+    // enableFieldAndHideSpinner('search',"components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton",dispatch);
+    console.error(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
 
 const setSearchResponse = async (
   state,

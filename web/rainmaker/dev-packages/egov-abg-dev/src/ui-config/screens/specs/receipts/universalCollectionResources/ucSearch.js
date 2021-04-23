@@ -9,11 +9,11 @@ import {
   getCommonSubHeader, getLabel, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  handleScreenConfigurationFieldChange as handleField
+  handleScreenConfigurationFieldChange as handleField,prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchApiCall } from "./function";
-
+import get from "lodash/get";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -68,7 +68,7 @@ export const UCSearchCard = getCommonCard({
         required: true,
         isClearable: true,
         labelsFromLocalisation: true,
-        sourceJsonPath: "applyScreenMdmsData.businessServices",
+        sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "searchScreen.businessService",
       },
       required: true,
@@ -77,24 +77,24 @@ export const UCSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       },
-      // beforeFieldChange: async (action, state, dispatch) => {
-      //   const serviceCategory = get(
-      //     state.screenConfiguration,
-      //     "preparedFinalObject.applyScreenMdmsData.serviceCategories"
-      //   );
-      //   const selectedCategory = serviceCategory.find(
-      //     item => item.code === action.value
-      //   );
-      //   const serviceTypes =
-      //     selectedCategory &&
-      //     ((selectedCategory.child &&
-      //     selectedCategory.child.length > 0) ?
-      //     selectedCategory.child.map(item => item.code) : selectedCategory.code);
-      //   dispatch(
-      //     prepareFinalObject("searchScreen.businessServices", serviceTypes)
-      //   );
-      //   return action;
-      // }
+      beforeFieldChange: async (action, state, dispatch) => {
+        const serviceCategory = get(
+          state.screenConfiguration,
+          "preparedFinalObject.applyScreenMdmsData.serviceCategories"
+        );
+        const selectedCategory = serviceCategory.find(
+          item => item.code === action.value
+        );
+        const serviceTypes =
+          selectedCategory &&
+          ((selectedCategory.child &&
+          selectedCategory.child.length > 0) ?
+          selectedCategory.child.map(item => item.code) : selectedCategory.code);
+        dispatch(
+          prepareFinalObject("searchScreen.businessServices", serviceTypes)
+        );
+        return action;
+      }
     },
     consumerNumber: getTextField({
       label: {
