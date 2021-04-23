@@ -218,6 +218,36 @@ const setCardsIfMultipleBuildings = (state, dispatch) => {
   }
 };
 
+ const getMdmsDataForDocs = async (state, dispatch) => {
+  let tenantId = "pb";
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        { moduleName: "FireNoc", masterDetails: [{ name: "Documents" }] }
+      ]
+    }
+  };
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.FireNoc.Documents",
+        payload.MdmsRes.FireNoc.Documents
+      )
+    );
+    prepareDocumentsUploadData(state, dispatch);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const prepareEditFlow = async (
   state,
   dispatch,
@@ -230,10 +260,11 @@ export const prepareEditFlow = async (
     []
   );
   if (applicationNumber) {
+    getMdmsDataForDocs(state, dispatch);
     let response = await getSearchResults([
       {
         key: "tenantId",
-        value: tenantId
+        value: tenantId ? tenantId : getTenantId()
       },
       { key: "applicationNumber", value: applicationNumber }
     ]);
@@ -324,11 +355,11 @@ const screenConfig = {
           ownershipCategory
         )
       );
-
+      
       // Set Documents Data (TEMP)
       prepareDocumentsUploadData(state, dispatch);
     });
-
+    
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
