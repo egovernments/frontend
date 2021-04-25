@@ -315,6 +315,14 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
+
+export const handleAmount = params => {
+  if (params !== undefined && params !== null && params !== "" && params!==0) {
+    return params;
+  } else { return "0.00"; }
+}
+
+
 export const handleRoadType = params =>{
   return handleNA(params)=="NA"?"NA":'WS_ROADTYPE_'+params;
 }
@@ -1512,6 +1520,126 @@ export const getCommonGrayCard = children => {
     }
   };
 };
+
+export const getLabelOnlyValueForTableHeader1 = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 3,
+      sm: 1
+    },
+    props: {
+      style: {
+        marginBottom: "16px",
+        border:"1px solid black",
+        textAlign:"center",
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+export const getLabelOnlyValueForTableHeader2 = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 3,
+      sm: 2,
+    },
+    props: {
+      style: {
+        marginBottom: "16px",
+        border:"1px solid black",
+        textAlign:"center",
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+export const getLabelOnlyValueForTableHeader3 = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 3,
+      sm: 3,
+     
+    },
+    
+    props: {
+      style: {
+        marginBottom: "16px",
+        border:"1px solid black",
+        textAlign:"center",
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+
+export const getLabelOnlyValueforColumn = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 3,
+      sm: 1,
+      
+    },
+    props: {
+      style: {
+        marginBottom: "16px",
+        border:"1px solid black",
+        textAlign:"center",
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+
+export const getLabelOnlyValueforColumnData = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 3,
+      sm: 1,
+      
+    },
+    props: {
+      style: {
+        marginBottom: "16px",
+        border:"1px solid black",
+        textAlign:"right",
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+
+
+
 
 export const getLabelOnlyValue = (value, props = {}) => {
   return {
