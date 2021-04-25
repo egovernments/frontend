@@ -1,3 +1,4 @@
+import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
 import {
   convertEpochToDate,
   getCommonCard,
@@ -10,11 +11,15 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
+import { httpRequest } from "../../../../ui-utils/api";
 import {
   getDescriptionFromMDMS,
   getSearchResults,
   getSearchResultsForSewerage,
-  serviceConst,
+  serviceConst
 } from "../../../../ui-utils/commons";
 import { ifUserRoleExists, getDemand} from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
@@ -25,6 +30,10 @@ import {
   getOwnerDetails,
 } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
+import { getPaymentDetails } from "./connectionDetailsResource/paymentDetails";
+import { getDCBDetails } from "./connectionDetailsResource/DCBDetails";
+import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
+//import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -117,6 +126,8 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
+    { key: "consumerCodes",    value:connectionNumber }
+
   ];
   let serviceUrl = getQueryArg(window.location.href, "service");
   if (serviceUrl === serviceConst.SEWERAGE) {
@@ -215,8 +226,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
         {
           key: "businessService",
-          value: "SW"
-          ,
+          value: "SW",
         },
       ];
       const bill = await getDemand(queryObjForBill,dispatch);
@@ -384,7 +394,132 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   if (connectionNumber) {
     await searchResults(action, state, dispatch, connectionNumber);
   }
+   let serviceCode=null;
+  if(service == "SEWERAGE") 
+  serviceCode="SW";
+  else
+  serviceCode="WS";
+  const queryObjForPayment = [
+    {
+      key: "tenantId",
+      value: tenantId,
+    },
+    {
+      key: "consumerCodes",
+      value:connectionNumber,
+    },
+    {
+      key: "businessService",
+      value:serviceCode,
+    },
+    {
+      key: "consumerCode",
+      value:connectionNumber,
+    },
+    
+  ];
+  getPaymentHistory(queryObjForPayment, dispatch , serviceCode);
+  getDCBDetail(queryObjForPayment, dispatch);
 };
+export const getPaymentHistory = async (queryObject , dispatch , serviceCode) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "collection-services/payments/"+serviceCode+"/_search",
+       "",
+      queryObject
+    );
+  
+    let paymentArray = [];
+    let paymentRow=null;
+    let receiptNumber,receiptDate,totalAmountPaid,totalDue,paymentMode;
+    response.Payments.map((element,index) => {
+       paymentMode = element.paymentMode;
+       element.paymentDetails.map((dd)=>{
+       receiptDate=convertEpochToDate(dd.receiptDate);
+       receiptNumber=dd.receiptNumber;
+       totalAmountPaid = dd.totalAmountPaid;
+       totalDue = dd.totalDue;
+      });
+      paymentRow={
+        "paymentMode":paymentMode,
+        "receiptDate":receiptDate,
+        "receiptNumber":receiptNumber,
+        "totalAmountPaid":totalAmountPaid,
+        "totalDue":totalDue,
+      };
+      paymentArray.push(paymentRow);
+    });
+   dispatch(prepareFinalObject("paymentHistory", paymentArray));
+  } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+        "warning"
+        )
+      );
+  }
+}
+export const getDCBDetail = async (queryObject , dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "billing-service/demand/_search",
+       "",
+      queryObject
+    );
+    let dcbArray = [];
+    let dcbRow=null;
+    let installment,taxAmount,taxCollected,taxBalance,interestAmount,interestCollected,interestBalance,penaltyBalance,penaltyCollected,penaltyAmount;
+    response.Demands.map((element,index) => {
+  if(element.status == "ACTIVE")
+  {
+  installment=convertEpochToDate(element.taxPeriodFrom) +"-"+convertEpochToDate(element.taxPeriodTo);
+  element.demandDetails.map((dd)=>{
+    if(dd.taxHeadMasterCode=='WS_CHARGE' || dd.taxHeadMasterCode=='SW_CHARGE' ){
+      taxAmount=dd.taxAmount;
+      taxCollected=dd.collectionAmount;
+      taxBalance=dd.taxAmount-dd.collectionAmount;
+    }
+    if(dd.taxHeadMasterCode=='WS_INTEREST'  || dd.taxHeadMasterCode=='SW_INTEREST' ){
+      interestAmount=dd.taxAmount;
+      interestCollected=dd.collectionAmount;
+      interestBalance=dd.taxAmount-dd.collectionAmount;
+    }
+    if(dd.taxHeadMasterCode=='WS_PENALTY' || dd.taxHeadMasterCode=='SW_PENALTY'){
+      penaltyAmount=dd.taxAmount;
+      penaltyCollected=dd.collectionAmount;
+      penaltyBalance=dd.taxAmount-dd.collectionAmount;
+    }});
+    
+  dcbRow={
+    "installment":installment,
+    "taxAmount":taxAmount?taxAmount:0,
+    "taxCollected":taxCollected?taxCollected:0,
+    "taxBalance":taxBalance?taxBalance:0,
+    "interestAmount":interestAmount?interestAmount:0,
+    "interestCollected":interestCollected?interestCollected:0,
+    "interestBalance":interestBalance?interestBalance:0,
+    "penaltyAmount":penaltyAmount?penaltyAmount:0,
+    "penaltyCollected":penaltyCollected?penaltyCollected:0,
+    "penaltyBalance":penaltyBalance?penaltyBalance:0,
+  };
+  
+  };
+  dcbArray.push(dcbRow);
+    });
+   dispatch(prepareFinalObject("dcbDetails", dcbArray));
+  } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+        "warning"
+        )
+      );
+  }
+}
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({ labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER" }),
@@ -409,7 +544,9 @@ const connectionHolders = connHolderDetailsSummary();
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
 const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
- 
+ 	
+const paymentDetails = getPaymentDetails(true);
+const DCBDetails = getDCBDetails(true);
 
 export const connectionDetails = getCommonCard({
   serviceDetails,
@@ -417,6 +554,8 @@ export const connectionDetails = getCommonCard({
   ownerDetails,
   connectionHolders,
   connectionHoldersSameAsOwner,
+  paymentDetails,
+  DCBDetails
 });
 const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
