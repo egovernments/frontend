@@ -36,7 +36,7 @@ import { getDCBDetails } from "./connectionDetailsResource/DCBDetails";
 //import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 //import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+//import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
 import get from "lodash/get";
