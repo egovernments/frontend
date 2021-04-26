@@ -47,6 +47,11 @@ const font = {
         normal: "gautami.ttf",
         italics: "gautami.ttf",
       },
+      bangla: {
+        bold: "SolaimanLipi_Bold.ttf",
+        normal: "SolaimanLipi.ttf",
+        italics: "SolaimanLipi.ttf",
+      },
     SakalBharati: {
         bold: "SakalBharati.ttf",
         normal: "SakalBharati.ttf",
