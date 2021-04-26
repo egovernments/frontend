@@ -35,38 +35,6 @@ const font = {
       bold: 'Cambay-Regular.ttf',
       italics: 'Roboto-Regular.ttf',
       bolditalics: 'Cambay-Regular.ttf',
-
-  },
-  Roboto: {
-      normal: 'Roboto-Regular.ttf',
-      bold: 'Roboto-Regular.ttf',
-      italics: 'Roboto-Regular.ttf',
-      bolditalics: 'Roboto-Regular.ttf',
-  },
-  kannada: {
-      bold: "tungab.ttf",
-      normal: "tunga.ttf",
-      italics: "tunga.ttf",
-    },
-  malyalam: {
-      bold: "kartika-bold.ttf",
-      normal: "kartika-regular.ttf",
-      italics: "kartika-regular.ttf",
-    },
-  tamil: {
-      bold: "lathab.ttf",
-      normal: "latha.ttf",
-      italics: "latha.ttf",
-    },
-  telugu: {
-      bold: "gautamib.ttf",
-      normal: "gautami.ttf",
-      italics: "gautami.ttf",
-    },
-  SakalBharati: {
-      bold: "SakalBharati.ttf",
-      normal: "SakalBharati.ttf",
-      italics: "SakalBharati.ttf",
     }
 };
 pdfMake.vfs = vfs;
@@ -142,7 +110,7 @@ class ShowField extends Component {
     const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
     let reportTitle = this.getReportTitle();
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
-    let fontStyle = getDefaultFontStyle(getLocale());
+   // let fontStyle = getDefaultFontStyle("en_IN");
 
     const buttons = [
       {
@@ -158,7 +126,7 @@ class ShowField extends Component {
         pageSize: pageSize,
         footer: true,
         customize: function(doc) {
-          doc.defaultStyle.font = fontStyle;//'Camby';
+          doc.defaultStyle.font = 'Camby';
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "eChhawani System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
