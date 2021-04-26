@@ -12,9 +12,9 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import get from "lodash/get";
-import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
-import { httpRequest } from "../../../../ui-utils/api";
+//import get from "lodash/get";
+//import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
+//import { httpRequest } from "../../../../ui-utils/api";
 import {
   getDescriptionFromMDMS,
   getSearchResults,
