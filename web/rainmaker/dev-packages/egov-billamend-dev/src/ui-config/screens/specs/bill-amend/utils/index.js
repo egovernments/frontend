@@ -346,7 +346,7 @@ export const submitApplication = async (state, dispatch) => {
     }
   });
 
-  billAmdDetails.documents = documentsPreview && documentsPreview.length > 0 ? documentsPreview : null;
+  billAmdDetails.documents = documentsPreview && documentsPreview.length > 0 ? documentsPreview : [];
   billAmdDetails.demandDetails = demandDetails;
 
   if (get(billAmdDetails, "effectiveFrom")) {
