@@ -24,7 +24,7 @@ import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
 import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
 import { isModifyMode } from "../../../../../ui-utils/commons";
-import {WSledgerId,WSBillingAmount} from "../ImpelExtendedFeature/fields";
+import {WSledgerId,WSBillingAmount,WSbillingType,WScompositionFee,WSMeterMakes,WSunitUsageType,WSsubUsageType} from "../ImpelExtendedFeature/fields";
 let isMode = isModifyMode();
 
 const getPlumberRadioButton = {
@@ -242,48 +242,7 @@ export const additionDetails = getCommonCard({
           }
         }
       },
-      billingType: {
-        ...getSelectField({
-          label: { labelKey: "WS_SERV_DETAIL_BILLING_TYPE" },
-          placeholder: { labelKey: "WS_SERV_DETAIL_BILING_TYPE_PLACEHOLDER" },
-          required: false,
-          sourceJsonPath: "applyScreenMdmsData.ws-services-masters.billingType",
-          gridDefination: { xs: 12, sm: 6 },
-          errorMessage: "ERR_INVALID_BILLING_PERIOD",
-          jsonPath: "applyScreen.additionalDetails.billingType",
-          props: {
-            disabled: false
-          }
-        }),
-        afterFieldChange: async (action, state, dispatch) => {
-          let billingType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.additionalDetails.billingType");
-          let connType = await get(state, "screenConfiguration.preparedFinalObject.applyScreen.connectionType");
-
-          console.log('billingType');
-          console.log(billingType);
-          if (billingType != "CUSTOM") {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
-                "visible",
-                false
-              )
-            );
-          }
-          else {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.billingAmount",
-                "visible",
-                true
-              )
-            );
-          }
-
-        }
-      },
+      ...WSbillingType,
       numberOfTaps: getTextField({
         label: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS" },
         placeholder: { labelKey: "WS_SERV_DETAIL_NO_OF_TAPS_PLACEHOLDER" },
@@ -386,36 +345,38 @@ export const additionDetails = getCommonCard({
         pattern: /^[0-9]*$/i,
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
       }),
-      subUsageType: {
-        ...getSelectField({
-          label: { labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE" },
-          placeholder: { labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE_PLACEHOLDER" },
-          required: true,
-          sourceJsonPath: "applyScreenMdmsData.ws-services-masters.subUsageType",
-          gridDefination: { xs: 12, sm: 6 },
-          errorMessage: "ERR_INVALID_BILLING_PERIOD",
-          jsonPath: "applyScreen.additionalDetails.waterSubUsageType",
-          props: {
-            disabled: false
-          }
-        }),
+      ...WSsubUsageType,
+      // subUsageType: {
+      //   ...getSelectField({
+      //     label: { labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE" },
+      //     placeholder: { labelKey: "WS_SERV_DETAIL_SUB_USAGE_TYPE_PLACEHOLDER" },
+      //     required: true,
+      //     sourceJsonPath: "applyScreenMdmsData.ws-services-masters.subUsageType",
+      //     gridDefination: { xs: 12, sm: 6 },
+      //     errorMessage: "ERR_INVALID_BILLING_PERIOD",
+      //     jsonPath: "applyScreen.additionalDetails.waterSubUsageType",
+      //     props: {
+      //       disabled: false
+      //     }
+      //   }),
        
-      },
-      unitUsageType: {
-        ...getSelectField({
-          label: { labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE" },
-          placeholder: { labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE_PLACEHOLDER" },
-          required: true,
-          sourceJsonPath: "unitUsageTypeMdmsData.ws-services-masters.unitUsageType",
-          gridDefination: { xs: 12, sm: 6 },
-          errorMessage: "ERR_INVALID_BILLING_PERIOD",
-          jsonPath: "applyScreen.additionalDetails.unitUsageType",
-          props: {
-            disabled: false
-          }
-        }),
+      // },
+      ...WSunitUsageType,
+      // unitUsageType: {
+      //   ...getSelectField({
+      //     label: { labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE" },
+      //     placeholder: { labelKey: "WS_SERV_DETAIL_UNIT_USAGE_TYPE_PLACEHOLDER" },
+      //     required: true,
+      //     sourceJsonPath: "unitUsageTypeMdmsData.ws-services-masters.unitUsageType",
+      //     gridDefination: { xs: 12, sm: 6 },
+      //     errorMessage: "ERR_INVALID_BILLING_PERIOD",
+      //     jsonPath: "applyScreen.additionalDetails.unitUsageType",
+      //     props: {
+      //       disabled: false
+      //     }
+      //   }),
 
-      }
+      // }
     }),
   }),
   plumberDetailsContainer: getCommonGrayCard({
@@ -515,55 +476,57 @@ export const additionDetails = getCommonCard({
       },
     }),
     roadDetails: getCommonContainer({
-      compositionFee: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_COMPOSITION_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: getPattern("Amount"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.additionalDetails.compositionFee"
-      }),
-      userCharges: getTextField({
-        label: {
-          labelKey: "WS_ADDN_USER_CHARGES_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_USER_CHARGES_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: getPattern("Amount"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.additionalDetails.userCharges"
-      }),
-      othersFee : getTextField({
-        label: {
-          labelKey: "WS_ADDN_OTHER_FEE_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_OTHER_FEE_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: getPattern("Amount"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.additionalDetails.othersFee"
-      })
+      ...WScompositionFee,
+      // compositionFee: getTextField({
+      //   label: {
+      //     labelKey: "WS_ADDN_DETAILS_COMPOSITION_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelKey: "WS_ADDN_DETAILS_COMPOSITION_PLACEHOLDER"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   },
+      //   required: false,
+      //   pattern: getPattern("Amount"),
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      //   jsonPath: "applyScreen.additionalDetails.compositionFee"
+      // }),
+      // userCharges: getTextField({
+      //   label: {
+      //     labelKey: "WS_ADDN_USER_CHARGES_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelKey: "WS_ADDN_USER_CHARGES_PLACEHOLDER"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   },
+      //   required: false,
+      //   pattern: getPattern("Amount"),
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      //   jsonPath: "applyScreen.additionalDetails.userCharges"
+      // }),
+      // othersFee : getTextField({
+      //   label: {
+      //     labelKey: "WS_ADDN_OTHER_FEE_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelKey: "WS_ADDN_OTHER_FEE_PLACEHOLDER"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   },
+      //   required: false,
+      //   pattern: getPattern("Amount"),
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      //   jsonPath: "applyScreen.additionalDetails.othersFee"
+      // })
     }),
+    
   }),
   activationDetailsContainer: getCommonGrayCard({
     subHeader: getCommonTitle({
@@ -632,38 +595,39 @@ export const additionDetails = getCommonCard({
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "applyScreen.additionalDetails.initialMeterReading"
       }),
-      meterMake: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.additionalDetails.meterMake"
-      }),
-      averageMake: getTextField({
-        label: {
-          labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
-        },
-        placeholder: {
-          labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        },
-        required: false,
-        pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "applyScreen.additionalDetails.avarageMeterReading"
-      })
+      ...WSMeterMakes,
+      // meterMake: getTextField({
+      //   label: {
+      //     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE"
+      //   },
+      //   placeholder: {
+      //     labelKey: "WS_ADDN_DETAILS_INITIAL_METER_MAKE_PLACEHOLDER"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   },
+      //   required: false,
+      //   pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      //   jsonPath: "applyScreen.additionalDetails.meterMake"
+      // }),
+      // averageMake: getTextField({
+      //   label: {
+      //     labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE"
+      //   },
+      //   placeholder: {
+      //     labelKey: "WS_ADDN_DETAILS_INITIAL_AVERAGE_MAKE_PLACEHOLDER"
+      //   },
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 6
+      //   },
+      //   required: false,
+      //   pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+      //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      //   jsonPath: "applyScreen.additionalDetails.avarageMeterReading"
+      // })
     })
   }),
   modificationsEffectiveFrom : getCommonGrayCard({
