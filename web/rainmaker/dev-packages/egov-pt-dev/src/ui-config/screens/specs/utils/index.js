@@ -1,4 +1,4 @@
-import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import { download, downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import {
   getCommonCaption, getCommonCard, getLabelWithValue, getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -8,14 +8,13 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import {
   getFileUrl, getFileUrlFromAPI, getLocaleLabels, getQueryArg, getTransformedLocale, getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
+import { getPaymentSearchAPI, getUserSearchedResponse } from "egov-ui-kit/utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
 import set from "lodash/set";
 import store from "ui-redux/store";
-import { download } from "egov-common/ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getSearchResults } from "../../../../ui-utils/commons";
 
@@ -503,13 +502,15 @@ export const getMdmsData = async queryObject => {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    const response = await httpRequest(
-      "post",
-      "/user/_search",
-      "",
-      [],
-      bodyObject
-    );
+    // const response = await httpRequest(
+    //   "post",
+    //   "/user/_search",
+    //   "",
+    //   [],
+    //   bodyObject
+    // );
+
+    const response = getUserSearchedResponse();
     return response;
   } catch (error) {
     console.log(error);
@@ -893,11 +894,11 @@ export const fetchBill = async queryObject => {
 export const getpayments = async queryObject => {
 
   let businessService = '';
-    queryObject && Array.isArray(queryObject) && queryObject.map(query => {
-      if (query.key == "businessService") {
-        businessService = query.value;
-      }
-    })
+  queryObject && Array.isArray(queryObject) && queryObject.map(query => {
+    if (query.key == "businessService") {
+      businessService = query.value;
+    }
+  })
 
   try {
     const response = await httpRequest(
@@ -956,7 +957,7 @@ export const downloadCertificateForm = async (oldProperties, pdfcode, tenantId, 
   }
 }
 
-export const downloadReceitForm = async ( tenantId, applicationNumber, mode = 'download') => {
+export const downloadReceitForm = async (tenantId, applicationNumber, mode = 'download') => {
 
   let queryObj = [
     {
@@ -971,10 +972,10 @@ export const downloadReceitForm = async ( tenantId, applicationNumber, mode = 'd
       key: "businessService",
       value: 'PT.MUTATION'
     },
-    
+
   ];
 
-  download(queryObj, mode,  "consolidatedreceipt")
+  download(queryObj, mode, "consolidatedreceipt")
 }
 export const getLabelIfNotNull = (label, value, props) => {
   const labelObj = getLabelWithValue(label, value, props);

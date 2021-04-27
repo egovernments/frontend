@@ -3,6 +3,7 @@ import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDo
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { handleScreenConfigurationFieldChange as handleField, hideSpinner, prepareFinalObject, showSpinner, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getUserSearchedResponse } from "egov-ui-kit/utils/commons";
 import { getLocale, getLocalization, getTenantId, getUserInfo, localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -601,13 +602,15 @@ if (window) {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    const response = await httpRequest(
-      "post",
-      "/user/_search",
-      "",
-      [],
-      bodyObject
-    );
+    // const response = await httpRequest(
+    //   "post",
+    //   "/user/_search",
+    //   "",
+    //   [],
+    //   bodyObject
+    // );
+
+    const response = getUserSearchedResponse();
     return response;
   } catch (error) {
     console.log(error);
