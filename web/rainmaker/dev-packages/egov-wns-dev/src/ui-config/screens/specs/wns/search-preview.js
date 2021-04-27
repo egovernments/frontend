@@ -746,6 +746,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         "WS"
       );
     }
+    if(!window.location.href.includes("mode=MODIFY")) {
     if(processInstanceAppStatus =="CONNECTION_ACTIVATED" || processInstanceAppStatus == "PENDING_FOR_CONNECTION_ACTIVATION") {
       let estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
       estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(bill => { bill.estimateAmount = bill.amount;});
@@ -782,6 +783,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         }
       }
     }
+  }
     // estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
     // if (estimate !== null && estimate !== undefined) {
     //   if (estimate.Calculation.length > 0) {
@@ -882,7 +884,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       { key: "consumerCode", value: applicationNumber },
       { key: "Service", value: "SW.ONE_TIME_FEE" }
     ];
-
+    if(!window.location.href.includes("mode=MODIFY")) {
     if(processInstanceAppStatus =="CONNECTION_ACTIVATED" || processInstanceAppStatus == "PENDING_FOR_CONNECTION_ACTIVATION") {
       let estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
       estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(bill => { bill.estimateAmount = bill.amount;});
@@ -920,6 +922,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
       }
     }
+  }
 
     // estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
     // let viewBillTooltip = []
