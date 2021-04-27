@@ -257,25 +257,25 @@ let headerrow = getCommonContainer({
 const estimate = getCommonGrayCard({
   header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
   estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
-  addPenaltyRebateButton: {
-    componentPath: "Button",
-    props: {
-      color: "primary",
-      style: {}
-    },
-    children: {
-      previousButtonLabel: getLabel({
-        labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        showHideAdhocPopup(state, dispatch, "viewBill");
-      }
-    },
-    visible: process.env.REACT_APP_NAME !== "Citizen"
-  }
+  // addPenaltyRebateButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     color: "primary",
+  //     style: {}
+  //   },
+  //   children: {
+  //     previousButtonLabel: getLabel({
+  //       labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       showHideAdhocPopup(state, dispatch, "viewBill");
+  //     }
+  //   },
+  //   visible: process.env.REACT_APP_NAME !== "Citizen"
+  // }
 });
 
 const propertyDetails = getProperty();

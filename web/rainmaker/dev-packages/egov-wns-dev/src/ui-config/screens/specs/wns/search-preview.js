@@ -590,25 +590,25 @@ const estimate = getCommonGrayCard({
     "WS_PAYMENT_VIEW_BREAKUP",
     "search-preview"
   ),
-  addPenaltyRebateButton: {
-    componentPath: "Button",
-    props: {
-      color: "primary",
-      style: {}
-    },
-    children: {
-      previousButtonLabel: getLabel({
-        labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        showHideAdhocPopup(state, dispatch, "search-preview");
-      }
-    },
-    visible: false
-  },
+  // addPenaltyRebateButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     color: "primary",
+  //     style: {}
+  //   },
+  //   children: {
+  //     previousButtonLabel: getLabel({
+  //       labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       showHideAdhocPopup(state, dispatch, "search-preview");
+  //     }
+  //   },
+  //   visible: false
+  // },
 });
 
 export const reviewConnectionDetails = getReviewConnectionDetails(false);
