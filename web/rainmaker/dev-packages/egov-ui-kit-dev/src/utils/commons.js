@@ -1118,3 +1118,10 @@ export const getPaymentSearchAPI = (businessService='')=>{
 export const getFetchBillAPI = () => {
   return `${FETCHBILL.GET.URL}`
 }
+
+
+
+export const getUserSearchedResponse =()=>{
+  const userObject=JSON.parse(localStorage.getItem("citizen.userRequestObject"))||{};
+  return {user:[userObject]};
+}

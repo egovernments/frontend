@@ -1,42 +1,27 @@
-import {
-  getLabel,
-  getTextField,
-  getCommonSubHeader,
-  getCommonCard,
-  getCommonCaption,
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import get from "lodash/get";
-import set from "lodash/set";
-import filter from "lodash/filter";
-import { httpRequest } from "../../../../ui-utils/api";
-import {
-  prepareFinalObject,
-  initScreen
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import isUndefined from "lodash/isUndefined";
-import isEmpty from "lodash/isEmpty";
-import {
-  getTenantId,
-  getUserInfo,
-  localStorageGet
-} from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
+  getCommonCaption, getCommonCard, getLabel
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
+import { getUserSearchedResponse } from "egov-ui-kit/utils/commons";
+import {
+  getTenantId,
+  getUserInfo
+} from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
+import isUndefined from "lodash/isUndefined";
+import set from "lodash/set";
+import { httpRequest } from "../../../../ui-utils/api";
+import "./index.css";
 
-export const getCommonApplyFooter = (position,children) => {
+export const getCommonApplyFooter = (position, children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: (position === 'BOTTOM')?"apply-wizard-footer":""
+      className: (position === 'BOTTOM') ? "apply-wizard-footer" : ""
     },
     children
   };
@@ -319,7 +304,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey, value = true, adh
       );
     }
   }
- 
+
   dispatch(handleField(screenKey, "components.adhocDialog", "props.open", !toggle));
 };
 
@@ -402,20 +387,20 @@ export const convertEpochToDateAndHandleNA = dateEpoch => {
 export const handlePropertySubUsageType = params => {
   params = handleNA(params);
   if (params !== "NA" && params.split(".").length > 1) {
-    return params;  
+    return params;
   } else {
     return "NA";
   }
 }
 
 export const handleNA = params => {
-  if (params !== undefined && params !== null && params !== "" && params!==0) {
+  if (params !== undefined && params !== null && params !== "" && params !== 0) {
     return params;
   } else { return "NA"; }
 }
 
-export const handleRoadType = params =>{
-  return handleNA(params)=="NA"?"NA":'WS_ROADTYPE_'+params;
+export const handleRoadType = params => {
+  return handleNA(params) == "NA" ? "NA" : 'WS_ROADTYPE_' + params;
 }
 
 
@@ -792,13 +777,15 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 // Get user data from uuid API call
 export const getUserDataFromUuid = async bodyObject => {
   try {
-    const response = await httpRequest(
-      "post",
-      "/user/_search",
-      "",
-      [],
-      bodyObject
-    );
+    // const response = await httpRequest(
+    //   "post",
+    //   "/user/_search",
+    //   "",
+    //   [],
+    //   bodyObject
+    // );
+
+    const response = getUserSearchedResponse();
     return response;
   } catch (error) {
     console.log(error);
@@ -1554,7 +1541,7 @@ export const resetFieldsForConnection = (state, dispatch) => {
       ""
     )
   );
-  
+
   dispatch(
     handleField(
       "search",
@@ -1805,10 +1792,10 @@ const setVisible = (key, status, action) => {
     status
   );
 }
-export const triggerModificationsDisplay = (action, isModeEnable) => {  
-    setVisible('modificationsEffectiveFrom', isModeEnable, action);
-    setVisible('plumberDetailsContainer', !isModeEnable, action);
-    setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+export const triggerModificationsDisplay = (action, isModeEnable) => {
+  setVisible('modificationsEffectiveFrom', isModeEnable, action);
+  setVisible('plumberDetailsContainer', !isModeEnable, action);
+  setVisible('roadCuttingChargeContainer', !isModeEnable, action);
 }
 
 export const getDemand = async (queryObject, dispatch) => {
@@ -1821,13 +1808,13 @@ export const getDemand = async (queryObject, dispatch) => {
     );
     return response;
   } catch (error) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          { labelName: error.message, labelKey: error.message },
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
         "warning"
-        )
-      );
+      )
+    );
   }
 };
 
@@ -1864,16 +1851,16 @@ export const validateFieldOfWNS = (
         )
       ) {
         isFormValid = false;
-      } else if(fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props && fields[variable].visible != false){
-        let {masterName, moduleName, rootBlockSub, dropdownFields} = fields[variable].props;
+      } else if (fields[variable] && fields[variable].componentPath == "DynamicMdmsContainer" && fields[variable].props && fields[variable].visible != false) {
+        let { masterName, moduleName, rootBlockSub, dropdownFields } = fields[variable].props;
         let isIndex = fields[variable].index || 0;
         dropdownFields.forEach((item, i) => {
           let isValid = get(
-            state.screenConfiguration.preparedFinalObject ,
+            state.screenConfiguration.preparedFinalObject,
             `DynamicMdms.${moduleName}.${rootBlockSub}.selectedValues[${isIndex}].${item.key}`,
             ''
           );
-          if(isValid == '' || isValid == 'none' || isValid == null || isValid.includes("null")) {
+          if (isValid == '' || isValid == 'none' || isValid == null || isValid.includes("null")) {
             isFormValid = false;
             dispatch(
               handleField(
@@ -1885,9 +1872,9 @@ export const validateFieldOfWNS = (
             );
           }
         });
-        
+
       }
     }
   }
   return isFormValid;
-}; 
+};
