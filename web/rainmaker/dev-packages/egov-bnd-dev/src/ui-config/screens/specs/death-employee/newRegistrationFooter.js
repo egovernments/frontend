@@ -98,7 +98,7 @@ const checkIfFormIsValid = async (state, dispatch) => {
       true,
       {
         labelName: "Please fill the required fields.",
-        labelKey: "ERR_SELECT_MANDATORY_FIELDS"
+      labelKey: "Please fill all mandatory fields / Invalid field values !"
       },
       "info"
     ));

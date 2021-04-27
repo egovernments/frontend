@@ -320,7 +320,7 @@ export const searchSet2 = getCommonContainer({
    },
    placeholder: {
      labelName: "Registration No",
-     labelKey: "BND_REG_NO_PLACEHOLDER"
+     labelKey: "BND_REG_NO_LABEL"
    },
    required:false,
    visible: true,
