@@ -248,7 +248,7 @@ const downloadCertificateForm = async(Licenses,applicationNumber,tenantId,mode='
      { key: "tenantId", value: tenantId},
      {
        key: "applicationNumber",
-       value: LicensesOld[0].applicationNumber
+       value: Licenses[0].applicationNumber
      }
    ];
    const LicensesPayload = await getSearchResults(queryObject);
