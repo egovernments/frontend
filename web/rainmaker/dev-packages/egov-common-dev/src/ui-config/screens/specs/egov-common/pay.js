@@ -15,6 +15,7 @@ import capturePayerDetails from "./payResource/capture-payer-details";
 import capturePaymentDetails from "./payResource/capture-payment-details";
 import { paybuttonJsonpath, radioButtonJsonPath } from "./payResource/constants";
 import estimateDetails from "./payResource/estimate-details";
+import arrearsCard from "./payResource/arrears-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
 
@@ -199,6 +200,7 @@ const screenConfig = {
                                 labelKey: "NOC_PAYMENT_HEAD"
                             }),
                             estimateDetails,
+                            arrearsCard,
                             AmountToBePaid: {
                                 ...AmountToBePaid,
                                 visible: false
