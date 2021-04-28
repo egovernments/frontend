@@ -73,12 +73,19 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     if (index > -1) {
         dispatch(prepareFinalObject("commonPayInfo", commonPayDetails[index]));
         dispatch(prepareFinalObject("isArrears", get(commonPayDetails[index], "arrears", true)));
+
+
     } else {
         const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
         dispatch(prepareFinalObject("commonPayInfo", details));
         dispatch(prepareFinalObject("isArrears", get(details[0], "arrears", true)));
     }
 
+    if (get(commonPayDetails[index], "arrears", true)) {
+        dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.arrearsCard", "visible", true));
+    } else {
+        dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.arrearsCard", "visible", false));
+    }
     let header = getHeader(state);
     set(action.screenConfig, "components.div.children.headerDiv.children.header", header)
 
@@ -153,16 +160,16 @@ const screenConfig = {
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
         fetchBill(action, state, dispatch, consumerCode, tenantId, businessService);
-        localStorage.setItem('pay-businessService',businessService);
+        localStorage.setItem('pay-businessService', businessService);
         let channel = getQueryArg(window.location.href, "channel");
         let redirectNumber = getQueryArg(window.location.href, "redirectNumber");
-        if(channel){
-            localStorage.setItem('pay-channel',channel);
-            redirectNumber=!redirectNumber.includes('+91')&&redirectNumber.length==10?`+91${redirectNumber}`:redirectNumber
-            localStorage.setItem('pay-redirectNumber',redirectNumber);
-        }else{
-            localStorage.setItem('pay-channel',"");
-            localStorage.setItem('pay-redirectNumber','');
+        if (channel) {
+            localStorage.setItem('pay-channel', channel);
+            redirectNumber = !redirectNumber.includes('+91') && redirectNumber.length == 10 ? `+91${redirectNumber}` : redirectNumber
+            localStorage.setItem('pay-redirectNumber', redirectNumber);
+        } else {
+            localStorage.setItem('pay-channel', "");
+            localStorage.setItem('pay-redirectNumber', '');
         }
         // fetchBill(action,state, dispatch, consumerCode, tenantId, businessService).then(
         //     response => {
@@ -200,7 +207,10 @@ const screenConfig = {
                                 labelKey: "NOC_PAYMENT_HEAD"
                             }),
                             estimateDetails,
-                            arrearsCard,
+                            arrearsCard: {
+                                ...arrearsCard,
+                                visible: false
+                            },
                             AmountToBePaid: {
                                 ...AmountToBePaid,
                                 visible: false
