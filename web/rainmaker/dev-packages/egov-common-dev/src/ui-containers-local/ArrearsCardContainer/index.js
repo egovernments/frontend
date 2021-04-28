@@ -14,7 +14,6 @@ const getBillingPeriod = (from, to) => {
   return `${fromDate.toLocaleDateString()}-${toDate.toLocaleDateString()}`;
 }
 
-
 class ArrearsCardContainer extends Component {
   state = {
     showArrearsCard: false
@@ -28,22 +27,22 @@ class ArrearsCardContainer extends Component {
   }
   render() {
     return (<div>
-      {!this.state.showArrearsCard && <LabelContainer
+      <LabelContainer
         labelName={'CS_ARREARS_DETAILS'}
         labelKey={'CS_ARREARS_DETAILS'}
-      />}
-      {this.props.isArrears && this.state.showArrearsCard && <ArrearsMolecule fees={this.props.estimate.fees}></ArrearsMolecule>}
-      {!this.props.isArrears && this.state.showArrearsCard && <LabelContainer
+      />
+      {this.props.isArrears && this.state.showArrearsCard && <ArrearsMolecule fees={this.props.estimate.fees} arrears={this.props.estimate.arrears}></ArrearsMolecule>}
+      {!this.props.isArrears && this.state.showArrearsCard && <div> <LabelContainer
         labelName={'CS_NO_ARREARS'}
         labelKey={'CS_NO_ARREARS'}
-      />}
-      {this.state.showArrearsCard && <button style={{ float: "right", color: '#FE7A51' , border: '0px'}} onClick={this.buttonOnClick}><LabelContainer
-        labelName={'CS_SHOW_CARD'}
-        labelKey={'CS_SHOW_CARD'}
-      /></button>}
-      {!this.state.showArrearsCard && <button style={{ float: "right", color: '#FE7A51'   , border: '0px' }} onClick={this.buttonOnClick}><LabelContainer
+      /></div>}
+      {this.state.showArrearsCard && <button style={{ float: "right", color: '#FE7A51', border: '0px' }} onClick={this.buttonOnClick}><LabelContainer
         labelName={'CS_HIDE_CARD'}
         labelKey={'CS_HIDE_CARD'}
+      /></button>}
+      {!this.state.showArrearsCard && <button style={{ float: "right", color: '#FE7A51', border: '0px' }} onClick={this.buttonOnClick}><LabelContainer
+        labelName={'CS_SHOW_CARD'}
+        labelKey={'CS_SHOW_CARD'}
       /></button>}
     </div>);
   }
@@ -52,58 +51,21 @@ class ArrearsCardContainer extends Component {
 const sortBillDetails = (billDetails = []) => {
   let sortedBillDetails = [];
   sortedBillDetails = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
-  //  let billLengths=billDetails.map(bill=>bill.billAccountDetails.length);
-
-  //   let max = Math.max( ...billLengths );
-  //  let ind= billLengths.findIndex(x=>x==max)
-  //  billDetails[ind].billAccountDetails(bills=>{
-  //   bills.taxHeadCode
-  //   sortedBillDetails
-  //  })
-  //   sortedBillDetails.map(bill=>{
-  //     if(bill.billAccountDetails.length!=max){
-  //       bill.billAccountDetails.push({taxHeadCode:"NA",amount:0})
-  //     }
-  //   })
-
-
-
   return sortedBillDetails;
 }
 const formatTaxHeaders = (billDetail = {}) => {
 
-  let formattedFees = []
+  let formattedFees = {};
   const { billAccountDetails = [] } = billDetail;
   const billAccountDetailsSorted = orderBy(
     billAccountDetails,
     ["amount"],
     ["asce"]);
-  formattedFees = billAccountDetailsSorted.map((taxHead) => {
-    return {
-      info: {
-        labelKey: taxHead.taxHeadCode,
-        labelName: taxHead.taxHeadCode
-      },
-      name: {
-        labelKey: taxHead.taxHeadCode,
-        labelName: taxHead.taxHeadCode
-      },
-      value: taxHead.amount
-    }
+
+  billAccountDetailsSorted.map((taxHead) => {
+    formattedFees[taxHead.taxHeadCode] = { value: taxHead.amount, order: taxHead.order };
   })
-  formattedFees.reverse();
-  formattedFees.push({
-    info: {
-      labelKey: 'TL_COMMON_TOTAL_AMT',
-      labelName: 'TL_COMMON_TOTAL_AMT'
-    },
-    name: {
-      labelKey: 'TL_COMMON_TOTAL_AMT',
-      labelName: 'TL_COMMON_TOTAL_AMT'
-    },
-    value: billDetail.amount
-  }
-  )
+  formattedFees['TL_COMMON_TOTAL_AMT'] = { value: billDetail.amount, order: 10 }
   return formattedFees;
 }
 
