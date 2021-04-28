@@ -17,6 +17,7 @@ const styles = theme => ({
         width: '100%',
         marginTop: theme.spacing.unit * 3,
         overflowX: 'auto',
+        boxShadow: 'none'
     },
     table: {
         minWidth: 700,
@@ -27,43 +28,51 @@ const styles = theme => ({
 });
 
 function ArrearTable(props) {
-    const { classes, headers = [], values = [] } = props;
+    const { classes, headers = [], values = [], arrears = 0 } = props;
 
     return (
         <Paper className={classes.root}>
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
+                        <TableCell className={classes.cell}  ><LabelContainer
+                            labelName={'CS_BILL_PERIOD'}
+                            labelKey={'CS_BILL_PERIOD'}
+                        /></TableCell>
                         {headers.map((header, ind) => {
-                            if (ind == 0) {
-                                return (<TableCell className={classes.cell} key={ind} ><LabelContainer
-                                    labelName={header}
-                                    labelKey={header}
-                                /></TableCell>)
-                            }
+                            return (<TableCell className={classes.cell} key={ind} numeric><LabelContainer
+                                labelName={header}
+                                labelKey={header}
+                            /></TableCell>)
 
-                            else {
-                                return (<TableCell className={classes.cell} key={ind} numeric><LabelContainer
-                                    labelName={header}
-                                    labelKey={header}
-                                /></TableCell>)
-                            }
                         })}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {values.map((row, ind) => (
+                    {Object.values(values).map((row, ind) => (
                         <TableRow key={ind}>
-                            {row.map((value, i) => {
-                                if (i == 0) {
-                                    return (<TableCell className={classes.cell} key={i} component="th" scope="row">{value}</TableCell>)
-                                }
-                                else {
-                                    return (<TableCell className={classes.cell} key={i} numeric>{value}</TableCell>)
-                                }
+                            <TableCell className={classes.cell} component="th" scope="row">{Object.keys(values)[ind]}</TableCell>
+                            {headers.map((header, i) => {
+                                return (<TableCell className={classes.cell} key={i} numeric>{row[header] && row[header]['value'] || '0'}</TableCell>)
                             })}
                         </TableRow>
                     ))}
+                    <TableRow>
+                        <TableCell className={classes.cell} numeric></TableCell>
+                        {headers.map((header, ind) => {
+                            if (ind == headers.length - 1) {
+                                return (<TableCell className={classes.cell} key={ind} numeric>{arrears}</TableCell>)
+                            } else if (ind == headers.length - 2) {
+                                return (<TableCell className={classes.cell} key={ind} numeric><LabelContainer
+                                    labelName={'COMMON_ARREARS_TOTAL'}
+                                    labelKey={'COMMON_ARREARS_TOTAL'}
+                                /></TableCell>)
+                            }
+                            else {
+                                return (<TableCell className={classes.cell} key={ind} numeric></TableCell>)
+                            }
+                        })}
+                    </TableRow>
                 </TableBody>
             </Table>
         </Paper>

@@ -3,27 +3,19 @@ import ArrearTable from "../../ui-atoms-local/ArrearTable";
 import './index.css';
 
 const ArrearsMolecule = (props) => {
-    let headers = ['CS_BILL_PERIOD'];
-    let values = [];
+
+    let head = {};
     props.fees ? Object.keys(props.fees).map((key, ind) => {
         let value = [];
-        let head=[];
-        props.fees[key].map(fee => {
-            // if (ind == 0) {
-                head.push(fee.name.labelName)
-            // }
-            value.push(fee.value)
+        Object.keys(props.fees[key]).map(key1 => {
+            head[key1] = props.fees[key] && props.fees[key][key1] && props.fees[key][key1].order || 0;
         })
-
-        if(headers.length<head.length){
-            headers=['CS_BILL_PERIOD',...head];
-        }else{
-            value.splice(-1,0,0);
-        }
-        value.unshift(key);
-        values.push(value);
     }
     ) : "NA"
-    return (<ArrearTable headers={headers} values={values} ></ArrearTable>)
+    let keys = [];
+
+    keys = Object.keys(head);
+    keys.sort((x, y) => head[x] - head[y]);
+    return (<ArrearTable headers={[...keys]} values={props.fees} arrears={props.arrears}></ArrearTable>)
 }
 export default ArrearsMolecule;
