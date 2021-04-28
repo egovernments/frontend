@@ -31,8 +31,8 @@ class ArrearsCardContainer extends Component {
         labelName={'CS_ARREARS_DETAILS'}
         labelKey={'CS_ARREARS_DETAILS'}
       />
-      {this.props.isArrears && this.state.showArrearsCard && <ArrearsMolecule fees={this.props.estimate.fees} arrears={this.props.estimate.arrears}></ArrearsMolecule>}
-      {!this.props.isArrears && this.state.showArrearsCard && <div> <LabelContainer
+      {this.props.estimate.arrears != 0 && this.state.showArrearsCard && <ArrearsMolecule fees={this.props.estimate.fees} arrears={this.props.estimate.arrears}></ArrearsMolecule>}
+      {this.props.estimate.arrears == 0 && this.state.showArrearsCard && <div> <LabelContainer
         labelName={'CS_NO_ARREARS'}
         labelKey={'CS_NO_ARREARS'}
       /></div>}
