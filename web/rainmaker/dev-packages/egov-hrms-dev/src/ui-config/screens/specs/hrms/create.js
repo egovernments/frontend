@@ -260,14 +260,14 @@ const screenConfig = {
       dispatch(prepareFinalObject("Employee[0].tenantId", pickedTenant));
     const empTenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "citiesByModule.tenantId"
+      "Employee[0].tenantId"
     );
     set(
             action.screenConfig,
             "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children.employeeId.props.disabled",
             false
           );
-    const tenantId = pickedTenant || empTenantId ;
+    const tenantId = pickedTenant || empTenantId || getTenantId();
     const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
     let employeeCode = getQueryArg(window.location.href, "employeeCode");
     employeeCode && getEmployeeData(state, dispatch, employeeCode, tenantId);
