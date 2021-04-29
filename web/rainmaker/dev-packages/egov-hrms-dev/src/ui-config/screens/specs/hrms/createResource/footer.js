@@ -75,7 +75,7 @@ try {
         },
         {
           key: "tenantId",
-          value: tenantId
+          value: get(state.screenConfiguration.preparedFinalObject, "Employee[0].tenantId")
         }
       ];
       const response = await httpRequest(
