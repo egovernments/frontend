@@ -82,7 +82,10 @@ export const propertySearchApiCall = async (state, dispatch) => {
               }else{
                 propertyData.owners[i].correspondenceAddress = propertyData.owners[i].permanentAddress;
               }
-            }    
+            } 
+              if(propertyData && propertyData.owners && propertyData.owners.length > 0) {
+                propertyData.owners = propertyData.owners.filter(owner => owner.status == "ACTIVE");
+              }   
           }
         if(propertyData.units == "NA" && propertyData.additionalDetails && propertyData.additionalDetails.subUsageCategory) {
             propertyData.units = [];

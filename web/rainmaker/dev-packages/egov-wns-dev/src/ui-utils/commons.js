@@ -96,9 +96,9 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
                 let queryObject1 = [];
                 uuids = uuids.substring(0, uuids.length - 1);
                 if (process.env.REACT_APP_NAME === "Citizen") {
-                    queryObject1 = [{ key: "uuids", value: uuids }];
+                    queryObject1 = [{ key: "propertyIds", value: uuids }];
                 } else {
-                    queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "uuids", value: uuids }];
+                    queryObject1 = [{ key: "tenantId", value: getTenantIdCommon() }, { key: "propertyIds", value: uuids }];
                 }
 
                 if(locality) {
@@ -111,7 +111,7 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
                     let payload = await getPropertyResultsWODispatch(queryObject1);
                     if (payload.Properties.length > 0) {
                         for (var j = 0; j < payload.Properties.length; j++) {
-                            propertyArr[payload.Properties[j].id] = payload.Properties[j]
+                            propertyArr[payload.Properties[j].propertyId] = payload.Properties[j]
                         }
                     }
                 }
@@ -142,6 +142,9 @@ export const getPropertyObj = async (waterConnection, locality, tenantId, isFrom
         waterConnection[0].property.units = [];
         waterConnection[0].property.units.push({usageCategory: get(waterConnection[0], "property.additionalDetails.subUsageCategory")})
       }
+      if(get(waterConnection[0], "property.owners")) {
+        waterConnection[0].property.owners = waterConnection[0].property.owners.filter(owner => owner.status == "ACTIVE");
+    }
     return waterConnection;
 }
 
@@ -595,7 +598,7 @@ const parserFunction = (state) => {
         noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
-        propertyId: (queryObject.property) ? queryObject.property.id : null,
+        propertyId: (queryObject.property) ? queryObject.property.propertyId : null,
         additionalDetails: {
             initialMeterReading: (
                 queryObject.additionalDetails !== undefined &&
