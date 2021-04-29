@@ -131,11 +131,11 @@ class AddRebateExemption extends React.Component {
     const { exemptValue } = this.state;
 
 
-    let { taxHeadEstimates, totalAmount } = estimateResponse[0] || {};
-    let ownerExemption=0;
+    let { taxHeadEstimates } = estimateResponse[0] || {};
+    let ownerExemption=0,totalAmount=0;
     taxHeadEstimates.map(taxHead => {
-      if (taxHead.taxHeadCode == "PT_TAX") {
-        totalAmount = taxHead.estimateAmount;
+      if (taxHead.taxHeadCode == "PT_TAX" || taxHead.taxHeadCode == "PT_TIME_REBATE" ) {
+        totalAmount =totalAmount+taxHead.estimateAmount;
       }
       if (taxHead.taxHeadCode == "PT_OWNER_EXEMPTION") {
         ownerExemption = taxHead.estimateAmount||0;
@@ -144,7 +144,7 @@ class AddRebateExemption extends React.Component {
 
 
 
-    if (adhocExemption >= 0) {
+    if (adhocExemption > 0) {
       if (adhocExemption > totalAmount) {
         if (this.validateForm(additionalRebate)) {
           alert(
