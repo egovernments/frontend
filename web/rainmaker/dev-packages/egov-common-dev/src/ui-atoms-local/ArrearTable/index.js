@@ -35,7 +35,7 @@ function ArrearTable(props) {
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <TableCell className={classes.cell}  ><LabelContainer
+                        <TableCell className={classes.cell}  style={{fontSize: 'medium'}} ><LabelContainer
                             labelName={'CS_BILL_PERIOD'}
                             labelKey={'CS_BILL_PERIOD'}
                         /></TableCell>
@@ -43,6 +43,7 @@ function ArrearTable(props) {
                             return (<TableCell className={classes.cell} key={ind} numeric><LabelContainer
                                 labelName={header}
                                 labelKey={header}
+                                style={{fontSize: 'medium'}}
                             /></TableCell>)
 
                         })}
@@ -61,7 +62,7 @@ function ArrearTable(props) {
                         <TableCell className={classes.cell} numeric></TableCell>
                         {headers.map((header, ind) => {
                             if (ind == headers.length - 1) {
-                                return (<TableCell className={classes.cell} key={ind} numeric>{arrears}</TableCell>)
+                                return (<TableCell className={classes.cell} key={ind} numeric>{parseInt(arrears)}</TableCell>)
                             } else if (ind == headers.length - 2) {
                                 return (<TableCell className={classes.cell} key={ind} numeric><LabelContainer
                                     labelName={'COMMON_ARREARS_TOTAL'}
