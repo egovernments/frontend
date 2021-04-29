@@ -332,21 +332,21 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
         let endpoints = []
         let queries = []
         uniqueModules.map((uniqueModule, ind) => {
-          if (uniqueModule == "PT") {
-            const acknowledgementIds = [...ptApplicationNo];
-            for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
-              let acknowledgementId = acknowledgementIds.splice(0, 50);
-              if (acknowledgementId && acknowledgementId.length > 0) {
-                const query = [{ key: "tenantId", value: getTenantId() },
-                { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
-                requestBodies.push(undefined)
-                queries.push(query)
-                endpoints.push("property-services/property/_search")
-              }
-            }
-          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
+          // if (uniqueModule == "PT") {
+          //   const acknowledgementIds = [...ptApplicationNo];
+          //   for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
+          //     let acknowledgementId = acknowledgementIds.splice(0, 50);
+          //     if (acknowledgementId && acknowledgementId.length > 0) {
+          //       const query = [{ key: "tenantId", value: getTenantId() },
+          //       { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
+          //       requestBodies.push(undefined)
+          //       queries.push(query)
+          //       endpoints.push("property-services/property/_search")
+          //     }
+          //   }
+          // } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
 
-          } else {
+          // } else {
             requestBodies.push({
               searchCriteria: {
                 "referenceNumber": businessIds
@@ -354,7 +354,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
             })
             queries.push([])
             endpoints.push(`egov-searcher/locality/${uniqueModule}/_get`)
-          }
+          // }
 
         })
         const resp = await multiHttpRequest(endpoints, "search", queries, requestBodies)
