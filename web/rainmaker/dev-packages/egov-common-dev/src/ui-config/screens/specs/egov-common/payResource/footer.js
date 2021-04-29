@@ -373,7 +373,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
       if(dd.adjustedAmount >0)
       {
         let code=null;
-        if(dd.taxHeadCode == "WS_CHARGE" || dd.taxHeadCode == "SW_CHARGE")
+        if(dd.taxHeadCode == "WS_CHARGE")
         {
         code="Water Charges";
         }
