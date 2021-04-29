@@ -4,27 +4,40 @@ import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
 import ServiceList from "egov-ui-kit/common/common/ServiceList";
 import FilterDialog from "./components/FilterDialog";
+import DeclarationDialog from "./components/DeclarationDialog";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getLocale , localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions"
+import { httpRequest } from "egov-ui-kit/utils/api";
+import {toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import store from "ui-redux/store";
+import jp from "jsonpath";
 
 class Inbox extends Component {
   state = {
     actionList: [],
     hasWorkflow: false,
-    filterPopupOpen: false
+    filterPopupOpen: false,
+    declarationPopupOpen: false,
   };
 
+  openCloseDeclarationDialog = (isOpen) =>{
+    this.setState({ declarationPopupOpen: isOpen });
+  }
+
   componentDidMount = () => {
+
+    this.initCheckDeclaration();
+
     const {fetchLocalizationLabel} = this.props
     const tenantId = getTenantId();
     fetchLocalizationLabel(getLocale(), tenantId, tenantId);
-  }
 
+  }
  
   componentWillReceiveProps(nextProps) {
     const { menu } = nextProps;
@@ -45,6 +58,50 @@ class Inbox extends Component {
     });
   }
 
+  initCheckDeclaration = () =>{
+    const userInfo = JSON.parse(
+      localStorageGet("user-info")
+    );
+    let jpExpression = `$.roles[?(@.code=='TL_APPROVER')].code`;
+    let tlApproveRole = jp.query(userInfo, jpExpression);
+    if(tlApproveRole.length > 0 ) //Check and Open pop up only for TL_APPROVER role.
+    {
+      let payload = this.getDeclarationStatus().then((payload)=>{
+        if(payload && payload.completed && payload.completed != 'Y')
+        {
+          store.dispatch(prepareFinalObject("declaration.fromDate", payload.startdate));
+          store.dispatch(prepareFinalObject("declaration.toDate", payload.enddate));
+          this.openCloseDeclarationDialog(true)
+        }
+        //this.openCloseDeclarationDialog(true)
+      });
+    }
+  }
+
+  getDeclarationStatus = async () => {
+    try{
+      let payload = null;
+      payload = await httpRequest(
+        `/birth-death-services/common/checkDeclaration`,
+        "checkDeclaration",
+        [],
+        {}
+      );
+      return payload;
+    }
+    catch (e) {
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Could not check declaration status !",
+          labelKey: "Oops ! Could not check declaration status !"
+        },
+        "error"
+      );
+      console.error(e);
+    }
+  }
+
   handleClose = () => {
     this.setState({ filterPopupOpen: false });
   };
@@ -52,6 +109,10 @@ class Inbox extends Component {
   onPopupOpen = () => {
     this.setState({ filterPopupOpen: true });
   }
+
+  declarationHandleClose = () => {
+    this.openCloseDeclarationDialog(false);
+  };
 
   render() {
     const { name, history, setRoute, menu,Loading } = this.props;
@@ -94,6 +155,8 @@ class Inbox extends Component {
 
         {hasWorkflow && <TableData onPopupOpen={this.onPopupOpen} />}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
+        <DeclarationDialog popupOpen={this.state.declarationPopupOpen} popupClose={this.declarationHandleClose} />
+
       </div>
     );
   }
