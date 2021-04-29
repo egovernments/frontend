@@ -3,7 +3,7 @@ import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { disableField, enableField, getFileUrl, getFileUrlFromAPI, getQueryArg, getTransformedLocale, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getPaymentSearchAPI } from "egov-ui-kit/utils/commons";
-import { getTenantIdCommon, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantIdCommon, getUserInfo, getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
@@ -2284,3 +2284,35 @@ export const getOpenSearchResultsForSewerage = async (queryObject, requestBody, 
         console.log(error)
     }
 };
+
+export const transformById = (payload, id) => {
+    return (
+      payload &&
+      payload.reduce((result, item) => {
+        result[item[id]] = {
+          ...item
+        };
+
+        return result;
+      }, {})
+    );
+  };
+
+export const getLocaleLabels = (label, labelKey, localizationLabels) => {
+    if (!localizationLabels)
+      localizationLabels = transformById(
+        JSON.parse(getLocalization(`localization_${getLocale()}`)),
+        "code"
+      );
+    if(labelKey) {label = labelKey}
+    if (label) {
+      let translatedLabel = getTranslatedLabel(label, localizationLabels);
+      if (!translatedLabel || label === translatedLabel) {
+        return translatedLabel;
+      } else {
+        return translatedLabel;
+      }
+    } else {
+      return label;
+    }
+  };
