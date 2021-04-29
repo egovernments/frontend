@@ -3,13 +3,11 @@ import { connect } from "react-redux";
 import { AutoSuggest } from "../../ui-atoms-local";
 import { findItemInArrayOfObject } from "../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getLocaleLabels,
-  appendModulePrefix
-} from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
+import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels } from "../../ui-utils/commons";
 class AutoSuggestor extends Component {
 
   onSelect = value => {
@@ -65,7 +63,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
     Array.isArray(suggestions) &&
     suggestions.length > 0 &&
     suggestions.map((option, key) => {
-      option.name = Number(option.code) ? option.code : getLocaleLabels(
+      option.name = Number(option.code) && Number(option.code) != "NAN" ? option.code : getLocaleLabels(
         option.code,
         localePrefix && !isEmpty(localePrefix)
           ? appendModulePrefix(option.code, localePrefix)
