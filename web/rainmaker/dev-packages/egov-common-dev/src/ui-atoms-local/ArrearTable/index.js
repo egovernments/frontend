@@ -40,7 +40,7 @@ function ArrearTable(props) {
                             labelKey={'CS_BILL_PERIOD'}
                         /></TableCell>
                         {headers.map((header, ind) => {
-                            return (<TableCell className={classes.cell} key={ind} numeric><LabelContainer
+                            return (<TableCell className={classes.cell} key={ind} ><LabelContainer
                                 labelName={header}
                                 labelKey={header}
                                 style={{fontSize: 'medium'}}
