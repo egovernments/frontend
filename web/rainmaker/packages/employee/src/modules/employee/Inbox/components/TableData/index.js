@@ -333,17 +333,25 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
         let queries = []
         uniqueModules.map((uniqueModule, ind) => {
           if (uniqueModule == "PT") {
-            const acknowledgementIds = [...ptApplicationNo];
-            for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
-              let acknowledgementId = acknowledgementIds.splice(0, 50);
-              if (acknowledgementId && acknowledgementId.length > 0) {
-                const query = [{ key: "tenantId", value: getTenantId() },
-                { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
-                requestBodies.push(undefined)
-                queries.push(query)
-                endpoints.push("property-services/property/_search")
+            // const acknowledgementIds = [...ptApplicationNo];
+            // for (let i = 0; i <= ptApplicationNo.length + 50; i += 50) {
+            //   let acknowledgementId = acknowledgementIds.splice(0, 50);
+            //   if (acknowledgementId && acknowledgementId.length > 0) {
+            //     const query = [{ key: "tenantId", value: getTenantId() },
+            //     { key: "acknowledgementIds", value: acknowledgementId.join(',') }]
+            //     requestBodies.push(undefined)
+            //     queries.push(query)
+            //     endpoints.push("property-services/property/_search")
+            //   }
+            // }
+
+            requestBodies.push({
+              searchCriteria: {
+                "referenceNumber": ptApplicationNo
               }
-            }
+            })
+            queries.push([])
+            endpoints.push(`egov-searcher/locality/property-services/_get`)
           } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
 
           } else {
