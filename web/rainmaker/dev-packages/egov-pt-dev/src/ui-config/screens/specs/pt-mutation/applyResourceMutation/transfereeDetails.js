@@ -274,7 +274,7 @@ const commonApplicantInformation = () => {
           } else {
             let documentType = get(
               state,
-              "screenConfiguration.preparedFinalObject.applyScreenMdmsData.OwnerTypeDocument",
+              "screenConfiguration.preparedFinalObject.OwnerTypeDocument",
               []
             );
             documentType = documentType.filter(document => {
@@ -331,7 +331,7 @@ const commonApplicantInformation = () => {
           masterName: "ReasonForTransfer"
         },
         jsonPath: "Property.ownersTemp[0].documentType",
-        sourceJsonPath: "applyScreenMdmsData.OwnerTypeDocument",
+        sourceJsonPath: "OwnerTypeDocument",
         required: true,
         visible: false,
         gridDefination: {

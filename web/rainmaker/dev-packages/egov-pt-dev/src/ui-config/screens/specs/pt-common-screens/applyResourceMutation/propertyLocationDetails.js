@@ -198,7 +198,7 @@ export const propertyLocationDetails = getCommonCard({
         sm: 6
       },
       required: true,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: /^[a-zA-Z0-9\s]+$/i,
       errorMessage: "PT_COMMON_ERR_INVALID_BUILDING_COLONY",
       jsonPath: "Property.address.buildingName"
     })
