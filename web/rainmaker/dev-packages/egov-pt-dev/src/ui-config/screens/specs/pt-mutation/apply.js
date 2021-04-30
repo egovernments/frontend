@@ -337,7 +337,7 @@ const getSpecialCategoryDocumentTypeMDMSData = async (action, state, dispatch) =
       "MdmsRes.PropertyTax.OwnerTypeDocument"
     )
     let propertyConfiguation = get(payload, "MdmsRes.PropertyTax.PropertyConfiguration");
-    dispatch(prepareFinalObject("applyScreenMdmsData.OwnerTypeDocument", OwnerTypeDocument));
+    dispatch(prepareFinalObject("OwnerTypeDocument", OwnerTypeDocument));
     dispatch(prepareFinalObject("PropertyConfiguration", propertyConfiguation));
     showHideMutationDetailsCard(action, state, dispatch);
   } catch (e) {
@@ -375,7 +375,12 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] },
+        {
+          moduleName: "PropertyTax",
+          masterDetails: [{ name: "OwnerTypeDocument" }, { name: "PropertyConfiguration" }]
+
+        }
       ]
     }
   };
