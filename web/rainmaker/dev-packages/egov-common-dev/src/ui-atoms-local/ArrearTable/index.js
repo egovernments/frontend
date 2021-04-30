@@ -23,6 +23,7 @@ const styles = theme => ({
         minWidth: 700,
     },
     cell: {
+        textAlign: 'left',
         padding: '4px 10px'
     }
 });
@@ -35,15 +36,16 @@ function ArrearTable(props) {
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        <TableCell className={classes.cell}  style={{fontSize: 'medium'}} ><LabelContainer
+                        <TableCell className={classes.cell} style={{ fontSize: 'medium', textAlign: 'left' }} ><LabelContainer
                             labelName={'CS_BILL_PERIOD'}
                             labelKey={'CS_BILL_PERIOD'}
+                            style={{ fontSize: 'medium' }}
                         /></TableCell>
                         {headers.map((header, ind) => {
-                            return (<TableCell className={classes.cell} key={ind} ><LabelContainer
+                            return (<TableCell className={classes.cell} key={ind}  ><LabelContainer
                                 labelName={header}
                                 labelKey={header}
-                                style={{fontSize: 'medium'}}
+                                style={{ fontSize: 'medium' }}
                             /></TableCell>)
 
                         })}
@@ -52,25 +54,25 @@ function ArrearTable(props) {
                 <TableBody>
                     {Object.values(values).map((row, ind) => (
                         <TableRow key={ind}>
-                            <TableCell className={classes.cell} component="th" scope="row">{Object.keys(values)[ind]}</TableCell>
+                            <TableCell className={classes.cell} component="th" scope="row" style={{ textAlign: 'left' }}>{Object.keys(values)[ind]}</TableCell>
                             {headers.map((header, i) => {
-                                return (<TableCell className={classes.cell} key={i} numeric>{row[header] && row[header]['value'] || '0'}</TableCell>)
+                                return (<TableCell className={classes.cell} key={i} >{row[header] && row[header]['value'] || '0'}</TableCell>)
                             })}
                         </TableRow>
                     ))}
                     <TableRow>
-                        <TableCell className={classes.cell} numeric></TableCell>
+                        <TableCell className={classes.cell} style={{ textAlign: 'left' }}></TableCell>
                         {headers.map((header, ind) => {
                             if (ind == headers.length - 1) {
-                                return (<TableCell className={classes.cell} key={ind} numeric>{parseInt(arrears)}</TableCell>)
+                                return (<TableCell className={classes.cell} key={ind} >{parseInt(arrears)}</TableCell>)
                             } else if (ind == headers.length - 2) {
-                                return (<TableCell className={classes.cell} key={ind} numeric><LabelContainer
+                                return (<TableCell className={classes.cell} key={ind} ><LabelContainer
                                     labelName={'COMMON_ARREARS_TOTAL'}
                                     labelKey={'COMMON_ARREARS_TOTAL'}
                                 /></TableCell>)
                             }
                             else {
-                                return (<TableCell className={classes.cell} key={ind} numeric></TableCell>)
+                                return (<TableCell className={classes.cell} key={ind} ></TableCell>)
                             }
                         })}
                     </TableRow>
