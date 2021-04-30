@@ -68,6 +68,7 @@ export const callBackForNext = async (state, dispatch) => {
     } else {
       dispatch(showSpinner());
 try {
+  debugger;
       let queryObject = [
         {
           key: "phone",
@@ -75,7 +76,7 @@ try {
         },
         {
           key: "tenantId",
-          value: get(state.screenConfiguration.preparedFinalObject, "Employee[0].tenantId")
+          value: getTenantId()
         }
       ];
       const response = await httpRequest(
