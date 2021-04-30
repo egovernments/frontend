@@ -1,4 +1,3 @@
-import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
 import {
   convertEpochToDate,
   getCommonCard,
@@ -11,15 +10,11 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-//import get from "lodash/get";
-//import { getBillAmdSearchResult } from "egov-billamend/ui-utils/commons";
-//import { httpRequest } from "../../../../ui-utils/api";
 import {
   getDescriptionFromMDMS,
   getSearchResults,
   getSearchResultsForSewerage,
-  serviceConst
+  serviceConst,
 } from "../../../../ui-utils/commons";
 import { ifUserRoleExists, getDemand} from "../utils";
 import { connectionDetailsDownload } from "./connectionDetailsResource/connectionDetailsDownload";
@@ -30,13 +25,11 @@ import {
   getOwnerDetails,
 } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
+import { getServiceDetails } from "./connectionDetailsResource/service-details";
+import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
 import { getPaymentDetails } from "./connectionDetailsResource/paymentDetails";
 import { getDCBDetails } from "./connectionDetailsResource/DCBDetails";
-//import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
-//import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getServiceDetails } from "./connectionDetailsResource/service-details";
-//import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
-//import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
 import get from "lodash/get";
@@ -126,8 +119,6 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
   let queryObject = [
     { key: "tenantId", value: tenantId },
     { key: "connectionNumber", value: connectionNumber },
-    { key: "consumerCodes",    value:connectionNumber }
-
   ];
   let serviceUrl = getQueryArg(window.location.href, "service");
   if (serviceUrl === serviceConst.SEWERAGE) {
@@ -226,7 +217,8 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
         {
           key: "businessService",
-          value: "SW",
+          value: "SW"
+          ,
         },
       ];
       const bill = await getDemand(queryObjForBill,dispatch);
@@ -394,8 +386,9 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   if (connectionNumber) {
     await searchResults(action, state, dispatch, connectionNumber);
   }
-   let serviceCode=null;
-  if(service == "SEWERAGE") 
+
+  let serviceCode=null;
+  if(getQueryArg(window.location.href, "service") == "SEWERAGE") 
   serviceCode="SW";
   else
   serviceCode="WS";
@@ -421,8 +414,10 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   getPaymentHistory(queryObjForPayment, dispatch , serviceCode);
   getDCBDetail(queryObjForPayment, dispatch);
 };
+
 export const getPaymentHistory = async (queryObject , dispatch , serviceCode) => {
   try {
+
     const response = await httpRequest(
       "post",
       "collection-services/payments/"+serviceCode+"/_search",
@@ -450,7 +445,11 @@ export const getPaymentHistory = async (queryObject , dispatch , serviceCode) =>
       };
       paymentArray.push(paymentRow);
     });
+
+
+
    dispatch(prepareFinalObject("paymentHistory", paymentArray));
+
   } catch (error) {
       dispatch(
         toggleSnackbar(
@@ -461,8 +460,11 @@ export const getPaymentHistory = async (queryObject , dispatch , serviceCode) =>
       );
   }
 }
+
+
 export const getDCBDetail = async (queryObject , dispatch) => {
   try {
+
     const response = await httpRequest(
       "post",
       "billing-service/demand/_search",
@@ -470,7 +472,9 @@ export const getDCBDetail = async (queryObject , dispatch) => {
       queryObject
     );
     let dcbArray = [];
+    let dcbtotalArray = [];
     let dcbRow=null;
+    let dcbtotalRow=null;
     let installment,taxAmount,taxCollected,taxBalance,interestAmount,interestCollected,interestBalance,penaltyBalance,penaltyCollected,penaltyAmount;
     response.Demands.map((element,index) => {
   if(element.status == "ACTIVE")
@@ -482,34 +486,70 @@ export const getDCBDetail = async (queryObject , dispatch) => {
       taxCollected=dd.collectionAmount;
       taxBalance=dd.taxAmount-dd.collectionAmount;
     }
-    if(dd.taxHeadMasterCode=='WS_INTEREST'  || dd.taxHeadMasterCode=='SW_INTEREST' ){
+    if(dd.taxHeadMasterCode=='WS_TIME_INTEREST'  || dd.taxHeadMasterCode=='SW_TIME_INTEREST' ){
+
       interestAmount=dd.taxAmount;
       interestCollected=dd.collectionAmount;
       interestBalance=dd.taxAmount-dd.collectionAmount;
     }
-    if(dd.taxHeadMasterCode=='WS_PENALTY' || dd.taxHeadMasterCode=='SW_PENALTY'){
+    if(dd.taxHeadMasterCode=='WS_TIME_PENALTY' || dd.taxHeadMasterCode=='SW_TIME_PENALTY'){
       penaltyAmount=dd.taxAmount;
       penaltyCollected=dd.collectionAmount;
       penaltyBalance=dd.taxAmount-dd.collectionAmount;
+     
     }});
     
   dcbRow={
     "installment":installment,
     "taxAmount":taxAmount?taxAmount:0,
-    "taxCollected":taxCollected?taxCollected:0,
-    "taxBalance":taxBalance?taxBalance:0,
     "interestAmount":interestAmount?interestAmount:0,
-    "interestCollected":interestCollected?interestCollected:0,
-    "interestBalance":interestBalance?interestBalance:0,
     "penaltyAmount":penaltyAmount?penaltyAmount:0,
+    "taxCollected":taxCollected?taxCollected:0,
+    "interestCollected":interestCollected?interestCollected:0,
     "penaltyCollected":penaltyCollected?penaltyCollected:0,
+    "taxBalance":taxBalance?taxBalance:0,
+    "interestBalance":interestBalance?interestBalance:0,
     "penaltyBalance":penaltyBalance?penaltyBalance:0,
   };
   
   };
   dcbArray.push(dcbRow);
     });
+
+  const totalTaxDemand = dcbArray.reduce((tax, item) => tax + parseInt(item.taxAmount, 10), 0);
+  const totalInterestDemand = dcbArray.reduce((interest, item) => interest + parseInt(item.interestAmount, 10), 0);
+  const totalPenaltyDemand = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyAmount, 10), 0);
+ 
+  const totalTaxCollected = dcbArray.reduce((tax, item) => tax + parseInt(item.taxCollected, 10), 0);
+  const totalInterestCollected = dcbArray.reduce((interest, item) => interest + parseInt(item.interestCollected, 10), 0);
+  const totalPenaltyCollected = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyCollected, 10), 0);
+
+  const totalTaxBalance = dcbArray.reduce((tax, item) => tax + parseInt(item.taxBalance, 10), 0);
+  const totalInterestBalance = dcbArray.reduce((interest, item) => interest + parseInt(item.interestBalance, 10), 0);
+  const totalPenaltyBalance = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyBalance, 10), 0);
+
+  const totalBalance = parseInt(totalTaxBalance) + parseInt(totalInterestBalance) + parseInt(totalPenaltyBalance);  
+
+
+
+
+  dcbtotalRow={
+             
+              "totalTaxDemand":totalTaxDemand,
+              "totalInterestDemand":totalInterestDemand,
+              "totalPenaltyDemand":totalPenaltyDemand,
+              "totalTaxCollected":totalTaxCollected,
+              "totalInterestCollected":totalInterestCollected,
+              "totalPenaltyCollected":totalPenaltyCollected,
+              "totalTaxBalance":totalTaxBalance,
+              "totalInterestBalance":totalInterestBalance,
+              "totalPenaltyBalance":totalPenaltyBalance,
+              "totalBalance":totalBalance,
+   };
+   dcbtotalArray.push(dcbtotalRow);
    dispatch(prepareFinalObject("dcbDetails", dcbArray));
+   dispatch(prepareFinalObject("dcbtotalDetails", dcbtotalArray));
+  
   } catch (error) {
       dispatch(
         toggleSnackbar(
@@ -544,8 +584,9 @@ const connectionHolders = connHolderDetailsSummary();
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
 const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
- 	
+ 
 const paymentDetails = getPaymentDetails(true);
+
 const DCBDetails = getDCBDetails(true);
 
 export const connectionDetails = getCommonCard({

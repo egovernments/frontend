@@ -2,10 +2,6 @@ import {
   getCommonGrayCard,
   getCommonSubHeader,
   getCommonContainer,
-  getLabelWithValue,
-  getLabel,
-  getLabelWithValueForModifiedLabel,
-  
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getLabelOnlyValue,getLabelOnlyValueforColumnData, getLabelOnlyValueforColumn , getLabelOnlyValueForTableHeader1 ,getLabelOnlyValueForTableHeader2, getLabelOnlyValueForTableHeader3, handleAmount} from '../../utils';
 
@@ -25,16 +21,13 @@ export const Header =  () =>  {
   export const subHeader =  () =>  {
     return( 
        getCommonContainer({
-        installment: getLabelOnlyValueForTableHeader2({ labelKey: "Installments" })  ,
+        installment: getLabelOnlyValueForTableHeader2({ labelKey: " " })  ,
         taxAmount: getLabelOnlyValueforColumn({ labelKey: "Tax"}),
         interestAmount: getLabelOnlyValueforColumn({ labelKey: "Interest" })  ,
         penaltyAmount: getLabelOnlyValueforColumn({ labelKey: "Penalty" })  ,
-       
         taxCollected: getLabelOnlyValueforColumn({ labelKey: "Tax" })  ,
         interestCollected: getLabelOnlyValueforColumn({ labelKey: "Interest" })  ,
         penaltyCollected: getLabelOnlyValueforColumn({ labelKey: "Penalty" })  ,
-       
-        
         taxBalance: getLabelOnlyValueforColumn({ labelKey: "Tax" })  ,
         interestBalance: getLabelOnlyValueforColumn({ labelKey: "Interest" })  ,
         penaltyBalance: getLabelOnlyValueforColumn({ labelKey: "Penalty" })  ,
@@ -42,6 +35,60 @@ export const Header =  () =>  {
        })
      )
     }
+
+
+    export const totalRow1 =  () =>  {
+      return( 
+         getCommonContainer(
+          {
+          installmentbox: getLabelOnlyValueForTableHeader2({ labelKey: " Total " })  ,
+          taxAmountbox: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalTaxDemand" , callBack: handleAmount}),
+          interestAmountbox: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalInterestDemand" , callBack: handleAmount })  ,
+          penaltyAmountbox: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalPenaltyDemand" , callBack: handleAmount })  ,
+          taxCollectedbox: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalTaxCollected" , callBack: handleAmount })  ,
+          interestCollectedbox: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalInterestCollected" , callBack: handleAmount })  ,
+          penaltyCollectedbox: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalPenaltyCollected" , callBack: handleAmount })  ,
+          taxBalance: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+          interestBalance: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+          penaltyBalance: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+          advance: getLabelOnlyValueForTableHeader1({ labelKey: " " })  ,
+         })
+      )
+      }
+      export const totalRow2 =  () =>  {
+        return( 
+          getCommonContainer({
+            installmentbox: getLabelOnlyValueForTableHeader2({ labelKey: " " })  ,
+            taxAmountbox: getLabelOnlyValueforColumnData({ labelKey: " "}),
+            interestAmountbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+            penaltyAmountbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+            taxCollectedbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+            interestCollectedbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+            penaltyCollectedbox: getLabelOnlyValueforColumn({ labelKey: "Total" })  ,
+            taxBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalTaxBalance" , callBack: handleAmount })  ,
+            interestBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalInterestBalance" , callBack: handleAmount })  ,
+            penaltyBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalPenaltyBalance" , callBack: handleAmount })  ,
+            advance: getLabelOnlyValueForTableHeader1({ labelKey: " " })  ,
+           })
+        )
+        }
+
+        export const totalRow3 =  () =>  {
+          return( 
+            getCommonContainer({
+              installmentbox: getLabelOnlyValueForTableHeader2({ labelKey: " " })  ,
+              taxAmountbox: getLabelOnlyValueforColumnData({ labelKey: " "}),
+              interestAmountbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+              penaltyAmountbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+              taxCollectedbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+              interestCollectedbox: getLabelOnlyValueforColumnData({ labelKey: " " })  ,
+              penaltyCollectedbox: getLabelOnlyValueforColumn({ labelKey: "Total Balance" })  ,
+              taxBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalBalance" , callBack: handleAmount })  ,
+              
+             })
+          )
+          }
+
 export const resData =  () =>  {
   return( 
      getCommonContainer({
@@ -103,6 +150,9 @@ export const getDCBDetails = () => {
       
         },
         type: "array"
-      } 
+      },
+      totalRow1:totalRow1(), 
+      totalRow2:totalRow2(), 
+      totalRow3:totalRow3(), 
     });
   };

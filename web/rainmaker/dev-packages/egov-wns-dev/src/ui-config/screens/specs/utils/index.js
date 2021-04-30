@@ -315,7 +315,6 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
-
 export const handleAmount = params => {
   if (params !== undefined && params !== null && params !== "" && params!==0) {
     return params;
@@ -1527,14 +1526,22 @@ export const getLabelOnlyValueForTableHeader1 = (value, props = {}) => {
     componentPath: "Div",
     gridDefination: {
       xs: 3,
-      sm: 1
+      sm: 1,
+     
     },
     props: {
+      
+ 
       style: {
-        marginBottom: "16px",
-        border:"1px solid black",
+        color:"#000000",
+        border:"1px solid gray",
         textAlign:"center",
-      },
+        height:"30px",
+        lineHeight:"12px",
+        paddingRight:"5px",
+        paddingTop:"5px",
+        marginTop:"1px",
+        },
       ...props
     },
     children: {
@@ -1550,12 +1557,20 @@ export const getLabelOnlyValueForTableHeader2 = (value, props = {}) => {
     gridDefination: {
       xs: 3,
       sm: 2,
+      color:"black"
     },
     props: {
       style: {
-        marginBottom: "16px",
-        border:"1px solid black",
+       
+        border:"1px solid gray",
         textAlign:"center",
+        height:"30px",
+        color:"black",
+        lineHeight:"12px",
+        marginRight:"1px",
+        marginTop:"1px",
+        paddingRight:"5px",
+        paddingTop:"5px",
       },
       ...props
     },
@@ -1577,9 +1592,13 @@ export const getLabelOnlyValueForTableHeader3 = (value, props = {}) => {
     
     props: {
       style: {
-        marginBottom: "16px",
-        border:"1px solid black",
+      
+        border:"1px solid gray",
         textAlign:"center",
+        height:"30px",
+        color:"black",
+        lineHeight:"12px",
+        paddingRight:"5px",
       },
       ...props
     },
@@ -1601,9 +1620,16 @@ export const getLabelOnlyValueforColumn = (value, props = {}) => {
     },
     props: {
       style: {
-        marginBottom: "16px",
-        border:"1px solid black",
+       
+        border:"1px solid gray",
         textAlign:"center",
+        height:"30px",
+        color:"black",
+        lineHeight:"12px",
+        paddingRight:"5px",
+        paddingTop:"5px",
+        marginRight:"1px",
+        marginTop:"1px",
       },
       ...props
     },
@@ -1625,9 +1651,16 @@ export const getLabelOnlyValueforColumnData = (value, props = {}) => {
     },
     props: {
       style: {
-        marginBottom: "16px",
-        border:"1px solid black",
+     
+        border:"1px solid gray",
         textAlign:"right",
+        height:"30px",
+        color:"black",
+        lineHeight:"12px",
+        marginRight:"1px",
+        marginTop:"1px",
+        paddingRight:"5px",
+        paddingTop:"5px",
       },
       ...props
     },
@@ -1636,8 +1669,6 @@ export const getLabelOnlyValueforColumnData = (value, props = {}) => {
     }
   };
 };
-
-
 
 
 
