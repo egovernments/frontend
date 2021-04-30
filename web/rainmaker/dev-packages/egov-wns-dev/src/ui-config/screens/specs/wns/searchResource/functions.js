@@ -141,7 +141,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               updatedDueDate = bill.expiryDate;
             }
           });
-            billResults.Bill.length > 0 ? finalArray.push({
+            billResults && billResults.Bill.length > 0 ? finalArray.push({
               due: billResults.Bill[0].totalAmount,
               dueDate: updatedDueDate,
               service: element.service,
@@ -153,7 +153,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
               tenantId:element.tenantId
             })
            : finalArray.push({
-            due: billResults.Bill.length > 0 ? billResults.Bill[0].totalAmount : '0',
+            due: billResults && billResults.Bill.length > 0 ? billResults.Bill[0].totalAmount : '0',
             dueDate: 'NA',
             service: element.service,
             connectionNo: element.connectionNo,
