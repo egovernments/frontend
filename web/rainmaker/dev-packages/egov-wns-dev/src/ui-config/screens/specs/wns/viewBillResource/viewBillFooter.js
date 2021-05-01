@@ -7,12 +7,14 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const getRedirectionWSURL = async (state, dispatch) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
-  const businessService = getQueryArg(window.location.href, "service")==="WATER" ? "WS" : "SW";
   const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
   const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
   window.location.assign(`${origin}${environment}/egov-common/pay?consumerCode=${connectionNo}&tenantId=${tenantId}&businessService=${businessService}`);
 };
 const callDownloadBill = ( mode) => {
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const businessService = getQueryArg(window.location.href, "service")==="WATER" ? "WS" : "SW";
+
   const val = [
     {
       key: 'consumerCode',

@@ -1721,8 +1721,8 @@ export const downloadBill = async(receiptQueryString, mode) => {
     };
 
     const queryObject = [
-        { key: "connectionNumber", value: receiptQueryString[0] },
-        { key: "tenantId", value: receiptQueryString[1] }
+        { key: "connectionNumber", value: receiptQueryString[0].value },
+        { key: "tenantId", value: receiptQueryString[1].value }
     ]
     const responseSewerage = await httpRequest(
         "post",
@@ -1754,7 +1754,7 @@ export const downloadBill = async(receiptQueryString, mode) => {
             var key='WS',addDetail=null;
             if(payloadReceiptDetails.Bill[0].businessService=='SW')
             {
-                key='SW';
+                key='sw-bill';
                 addDetail = {
                     "propertyId": responseSewerage.SewerageConnections[0].propertyId
                     }
@@ -1762,7 +1762,7 @@ export const downloadBill = async(receiptQueryString, mode) => {
             }
             else
             {
-                key='WS';
+                key='ws-bill';
                 addDetail = {
                     "propertyId": responseWater.WaterConnection[0].propertyId
                     }
