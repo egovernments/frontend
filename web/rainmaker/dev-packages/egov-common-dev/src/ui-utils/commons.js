@@ -713,6 +713,30 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         else if(dd.taxHeadCode == "WS_TIME_PENALTY" || dd.taxHeadCode == "SW_TIME_PENALTY")
         {
         code="Penalty";
+        }  else if(dd.taxHeadCode == "WS_SCRUTINY_FEE" || dd.taxHeadCode == "SW_SCRUTINY_FEE")
+        {
+        code="Scrutiny Fee";
+        }  else if(dd.taxHeadCode == "WS_ROAD_CUTTING_CHARGE" || dd.taxHeadCode == "SW_ROAD_CUTTING_CHARGE")
+        {
+        code="Road Cutting Charges";
+        }  else if(dd.taxHeadCode == "WS_METER_TESTING_FEE" || dd.taxHeadCode == "SW_METER_TESTING_FEE")
+        {
+        code="Meter Testing Fee";
+        }  else if(dd.taxHeadCode == "WS_SECURITY_DEPOSIT" || dd.taxHeadCode == "SW_SECURITY_DEPOSIT")
+        {
+        code="Security Deposit";
+        }  else if(dd.taxHeadCode == "WS_OTHER_FEE" || dd.taxHeadCode == "SW_OTHER_FEE")
+        {
+        code="Other Fee";
+        }else if(dd.taxHeadCode == "WS_USER_CHARGE" || dd.taxHeadCode == "SW_USER_CHARGE")
+        {
+        code="User Charges";
+        }else if(dd.taxHeadCode == "WS_CONNECTION_FEE" || dd.taxHeadCode == "SW_CONNECTION_FEE")
+        {
+        code="Connection Fee";
+        }else if(dd.taxHeadCode == "WS_COMPOSITION_FEE" || dd.taxHeadCode == "SW_COMPOSITION_FEE")
+        {
+        code="Composition Fee";
         }
         dcbRow={
           "taxhead":code + "("+installment+")",
