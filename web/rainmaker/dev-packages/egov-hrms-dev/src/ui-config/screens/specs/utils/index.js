@@ -601,7 +601,7 @@ export const createEmployee = (state, dispatch) => {
     "citiesByModule.tenantId.value"
   );
   get(state.screenConfiguration.preparedFinalObject, "Employee") &&
-    dispatch(prepareFinalObject("Employee", []));
+    // dispatch(prepareFinalObject("Employee", []));
   get(
     state.screenConfiguration.preparedFinalObject,
     "hrms.reviewScreen.furnishedRolesList"

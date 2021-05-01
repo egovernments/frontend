@@ -80,7 +80,7 @@ export const cityPicker = getCommonContainer({
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
       componentPath: "AutosuggestContainer",
-      jsonPath: "citiesByModule.tenantId",
+      jsonPath: "Employee[0].tenantId",
       required: true,
       gridDefination: {
         xs: 12,
@@ -104,7 +104,7 @@ export const cityPicker = getCommonContainer({
           labelName: "Select City",
           labelKey: "HR_SELECT_CITY_PLACEHOLDER"
         },
-        jsonPath: "citiesByModule.citizenTenantId",
+        jsonPath: "Employee[0].tenantId",
         sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
         labelsFromLocalisation: true,
         fullwidth: true,

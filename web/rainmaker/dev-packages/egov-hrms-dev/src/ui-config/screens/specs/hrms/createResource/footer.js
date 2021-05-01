@@ -52,8 +52,9 @@ export const callBackForNext = async (state, dispatch) => {
     // let tenantId = getTenantId();
     let tenantId =get(
       state.screenConfiguration.preparedFinalObject,
-      "citiesByModule.tenantId"
+      "Employee[0].tenantId"
     );
+    debugger;
     const errorMessage = {
       labelName: "Mobile number already exists . Please try with different mobile number",
       labelKey: "ERR_MOBILE_NUMBER_EXISTS_FIELDS"
@@ -76,7 +77,7 @@ try {
         },
         {
           key: "tenantId",
-          value: getTenantId()
+          value: tenantId ? tenantId : getTenantId()
         }
       ];
       const response = await httpRequest(
