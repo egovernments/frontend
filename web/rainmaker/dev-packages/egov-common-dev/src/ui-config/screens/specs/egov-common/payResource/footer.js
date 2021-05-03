@@ -362,76 +362,77 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
           payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
 
       }
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
-        let dcbRow=null,dcbArray=[];
-        let installment,totalamount=0;;
-        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
-      if(element.amountPaid >0)
+     
+	  if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
+      let dcbRow=null,dcbArray=[];
+      let installment,totalamount=0;
+      payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
+    if(element.amountPaid >0 || element.amountPaid < 0)
+    {
+    installment=convertEpochToDate(element.fromPeriod) +"-"+convertEpochToDate(element.toPeriod);
+    element.billAccountDetails.map((dd)=>{
+    if(dd.adjustedAmount > 0 || dd.adjustedAmount < 0)
+    {
+      let code=null;
+      if(dd.taxHeadCode == "WS_CHARGE")
       {
-      installment=convertEpochToDate(element.fromPeriod) +"-"+convertEpochToDate(element.toPeriod);
-      element.billAccountDetails.map((dd)=>{
-      if(dd.adjustedAmount >0)
-      {
-        let code=null;
-        if(dd.taxHeadCode == "WS_CHARGE")
-        {
-        code="Water Charges";
-        }
-        else if( dd.taxHeadCode == "SW_CHARGE")
-        {
-        code="Sewerage Charges";
-        }
-        else if(dd.taxHeadCode == "WS_TIME_INTEREST" || dd.taxHeadCode == "SW_TIME_INTEREST")
-        {
-        code="Interest";
-        }
-        else if(dd.taxHeadCode == "WS_TIME_PENALTY" || dd.taxHeadCode == "SW_TIME_PENALTY")
-        {
-        code="Penalty";
-        }  else if(dd.taxHeadCode == "WS_SCRUTINY_FEE" || dd.taxHeadCode == "SW_SCRUTINY_FEE")
-        {
-        code="Scrutiny Fee";
-        }  else if(dd.taxHeadCode == "WS_ROAD_CUTTING_CHARGE" || dd.taxHeadCode == "SW_ROAD_CUTTING_CHARGE")
-        {
-        code="Road Cutting Charges";
-        }  else if(dd.taxHeadCode == "WS_METER_TESTING_FEE" || dd.taxHeadCode == "SW_METER_TESTING_FEE")
-        {
-        code="Meter Testing Fee";
-        } else if(dd.taxHeadCode == "WS_SECURITY_DEPOSIT" || dd.taxHeadCode == "SW_SECURITY_DEPOSIT")
-        {
-        code="Security Deposit";
-        }  else if(dd.taxHeadCode == "WS_OTHER_FEE" || dd.taxHeadCode == "SW_OTHER_FEE")
-        {
-        code="Other Fee";
-        }else if(dd.taxHeadCode == "WS_USER_CHARGE" || dd.taxHeadCode == "SW_USER_CHARGE")
-        {
-        code="User Charges";
-        }else if(dd.taxHeadCode == "WS_CONNECTION_FEE" || dd.taxHeadCode == "SW_CONNECTION_FEE")
-        {
-        code="Connection Fee";
-        }else if(dd.taxHeadCode == "WS_COMPOSITION_FEE" || dd.taxHeadCode == "SW_COMPOSITION_FEE")
-        {
-        code="Composition Fee";
-        }
-        dcbRow={
-          "taxhead":code + "("+installment+")",
-          "amount":dd.adjustedAmount
-        };
-        totalamount=totalamount+dd.adjustedAmount;
-
+      code="Water Charges";
       }
-
-      dcbArray.push(dcbRow);
-      });    
+      else if( dd.taxHeadCode == "SW_CHARGE")
+      {
+      code="Sewerage Charges";
+      }
+      else if(dd.taxHeadCode == "WS_TIME_INTEREST" || dd.taxHeadCode == "SW_TIME_INTEREST")
+      {
+      code="Interest";
+      }
+      else if(dd.taxHeadCode == "WS_TIME_PENALTY" || dd.taxHeadCode == "SW_TIME_PENALTY")
+      {
+      code="Penalty";
+      }  else if(dd.taxHeadCode == "WS_SCRUTINY_FEE" || dd.taxHeadCode == "SW_SCRUTINY_FEE")
+      {
+      code="Scrutiny Fee";
+      }  else if(dd.taxHeadCode == "WS_ROAD_CUTTING_CHARGE" || dd.taxHeadCode == "SW_ROAD_CUTTING_CHARGE")
+      {
+      code="Road Cutting Charges";
+      }  else if(dd.taxHeadCode == "WS_METER_TESTING_FEE" || dd.taxHeadCode == "SW_METER_TESTING_FEE")
+      {
+      code="Meter Testing Fee";
+      }  else if(dd.taxHeadCode == "WS_SECURITY_DEPOSIT" || dd.taxHeadCode == "SW_SECURITY_DEPOSIT")
+      {
+      code="Security Deposit";
+      }  else if(dd.taxHeadCode == "WS_OTHER_FEE" || dd.taxHeadCode == "SW_OTHER_FEE")
+      {
+      code="Other Fee";
+      }else if(dd.taxHeadCode == "WS_USER_CHARGE" || dd.taxHeadCode == "SW_USER_CHARGE")
+      {
+      code="User Charges";
+      }else if(dd.taxHeadCode == "WS_CONNECTION_FEE" || dd.taxHeadCode == "SW_CONNECTION_FEE")
+      {
+      code="Connection Fee";
+      }else if(dd.taxHeadCode == "WS_COMPOSITION_FEE" || dd.taxHeadCode == "SW_COMPOSITION_FEE")
+      {
+      code="Composition Fee";
+      }
+      dcbRow={
+        "taxhead":code + "("+installment+")",
+        "amount":dd.adjustedAmount
       };
-        });
-        dcbRow={
-          "taxhead":"Total Amount Paid",
-          "amount":totalamount
-          };
-        dcbArray.push(dcbRow);
-        payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=dcbArray;
-        }
+    totalamount=totalamount+dd.adjustedAmount;
+    dcbArray.push(dcbRow);
+    }
+
+   
+    });    
+    };
+      });
+  dcbRow={
+    "taxhead":"Total Amount Paid",
+    "amount":totalamount
+    };
+  dcbArray.push(dcbRow);
+      payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=dcbArray;
+      }
 
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="TL"){
 

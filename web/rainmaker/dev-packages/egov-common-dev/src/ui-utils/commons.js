@@ -691,11 +691,11 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         let dcbRow=null,dcbArray=[];
         let installment,totalamount=0;
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
-      if(element.amountPaid >0)
+      if(element.amountPaid >0 || element.amountPaid < 0)
       {
       installment=convertEpochToDate(element.fromPeriod) +"-"+convertEpochToDate(element.toPeriod);
       element.billAccountDetails.map((dd)=>{
-      if(dd.adjustedAmount >0)
+      if(dd.adjustedAmount > 0 || dd.adjustedAmount < 0)
       {
         let code=null;
         if(dd.taxHeadCode == "WS_CHARGE")
@@ -743,9 +743,10 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
           "amount":dd.adjustedAmount
         };
 totalamount=totalamount+dd.adjustedAmount;
+dcbArray.push(dcbRow);
       }
 
-      dcbArray.push(dcbRow);
+     
       });    
       };
         });
