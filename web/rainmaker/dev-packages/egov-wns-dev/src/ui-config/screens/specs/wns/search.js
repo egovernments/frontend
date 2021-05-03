@@ -46,7 +46,7 @@ const getMhollaData = async(dispatch)=>{
   let mohallaDataRow=null;
   let name,code;
   response.TenantBoundary[0].boundary.map((element,index) => {
-    name = element.name;
+    name = element.name + "( "+element.code+" )";
    // code=element.code;
     mohallaDataRow={"code":name};
    mohallaDataArray.push(mohallaDataRow);
