@@ -375,12 +375,7 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" }] },
-        {
-          moduleName: "PropertyTax",
-          masterDetails: [{ name: "OwnerTypeDocument" }, { name: "PropertyConfiguration" }]
-
-        }
+        { moduleName: "PropertyTax", masterDetails: [{ name: "MutationDocuments" },{ name: "OwnerTypeDocument" }, { name: "PropertyConfiguration" }] }
       ]
     }
   };
@@ -393,7 +388,7 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-
+    
     let OwnerShipCategory = get(
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
