@@ -1,6 +1,7 @@
 import { getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { wnsApplication } from './employeeApplication';
 import { searchApplications } from './searchApplications';
+import { generateBill } from '../viewBillResource/generateBill';
 
 export const showSearches = getCommonContainer({
   showSearchScreens: {
@@ -16,7 +17,11 @@ export const showSearches = getCommonContainer({
         {
           tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "WS_SEARCH_APPLICATIONS" },
           tabContent: { searchApplications }
-        }
+        },
+        {
+          tabButton: { labelName: "GENERATE BILL", label: "GENERATE BILL" },
+          tabContent: { generateBill }
+        },
       ],
       tabIndex : 0
     },

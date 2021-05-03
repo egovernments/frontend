@@ -27,6 +27,8 @@ import {
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
+import { getPaymentDetails } from "./connectionDetailsResource/paymentDetails";
+import { getDCBDetails } from "./connectionDetailsResource/DCBDetails";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
@@ -384,7 +386,196 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
   if (connectionNumber) {
     await searchResults(action, state, dispatch, connectionNumber);
   }
+
+  let serviceCode=null;
+  if(getQueryArg(window.location.href, "service") == "SEWERAGE") 
+  serviceCode="SW";
+  else
+  serviceCode="WS";
+  const queryObjForPayment = [
+    {
+      key: "tenantId",
+      value: tenantId,
+    },
+    {
+      key: "consumerCodes",
+      value:connectionNumber,
+    },
+    {
+      key: "businessService",
+      value:serviceCode,
+    },
+    {
+      key: "consumerCode",
+      value:connectionNumber,
+    },
+    
+  ];
+  getPaymentHistory(queryObjForPayment, dispatch , serviceCode);
+  getDCBDetail(queryObjForPayment, dispatch);
 };
+
+export const getPaymentHistory = async (queryObject , dispatch , serviceCode) => {
+  try {
+
+    const response = await httpRequest(
+      "post",
+      "collection-services/payments/"+serviceCode+"/_search",
+       "",
+      queryObject
+    );
+  
+    let paymentArray = [];
+    let paymentRow=null;
+    let receiptNumber,receiptDate,totalAmountPaid,totalDue,paymentMode;
+    response.Payments.map((element,index) => {
+       paymentMode = element.paymentMode;
+       element.paymentDetails.map((dd)=>{
+       receiptDate=convertEpochToDate(dd.receiptDate);
+       receiptNumber=dd.receiptNumber;
+       totalAmountPaid = dd.totalAmountPaid;
+       totalDue = dd.totalDue;
+      });
+      paymentRow={
+        "paymentMode":paymentMode,
+        "receiptDate":receiptDate,
+        "receiptNumber":receiptNumber,
+        "totalAmountPaid":totalAmountPaid,
+        "totalDue":totalDue,
+      };
+      paymentArray.push(paymentRow);
+    });
+
+
+
+   dispatch(prepareFinalObject("paymentHistory", paymentArray));
+
+  } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+        "warning"
+        )
+      );
+  }
+}
+
+
+export const getDCBDetail = async (queryObject , dispatch) => {
+  try {
+
+    const response = await httpRequest(
+      "post",
+      "billing-service/demand/_search",
+       "",
+      queryObject
+    );
+    let dcbArray = [];
+    let dcbtotalArray = [];
+    let dcbRow=null;
+    let dcbtotalRow=null;
+    let installment,taxAmount,taxCollected,taxBalance,interestAmount,interestCollected,interestBalance,penaltyBalance,penaltyCollected,penaltyAmount;
+    response.Demands.map((element,index) => {
+  if(element.status == "ACTIVE")
+  {
+  installment=convertEpochToDate(element.taxPeriodFrom) +"-"+convertEpochToDate(element.taxPeriodTo);
+  element.demandDetails.map((dd)=>{
+    if(dd.taxHeadMasterCode=='WS_CHARGE' || dd.taxHeadMasterCode=='SW_CHARGE' ){
+      taxAmount=dd.taxAmount;
+      taxCollected=dd.collectionAmount;
+      taxBalance=dd.taxAmount-dd.collectionAmount;
+    }
+    if(dd.taxHeadMasterCode=='WS_TIME_INTEREST'  || dd.taxHeadMasterCode=='SW_TIME_INTEREST' ){
+
+      interestAmount=dd.taxAmount;
+      interestCollected=dd.collectionAmount;
+      interestBalance=dd.taxAmount-dd.collectionAmount;
+    }
+    if(dd.taxHeadMasterCode=='WS_TIME_PENALTY' || dd.taxHeadMasterCode=='SW_TIME_PENALTY'){
+      penaltyAmount=dd.taxAmount;
+      penaltyCollected=dd.collectionAmount;
+      penaltyBalance=dd.taxAmount-dd.collectionAmount;
+     
+    }
+  
+    installment = 0,
+    taxAmount = 0,
+    taxCollected = 0,
+    taxBalance = 0,
+    interestAmount = 0,
+    interestCollected = 0,
+    interestBalance = 0,
+    penaltyBalance = 0,
+    penaltyCollected = 0,
+    penaltyAmount = 0
+
+  }
+  );
+
+
+    
+  dcbRow={
+    "installment":installment,
+    "taxAmount":taxAmount?taxAmount:0,
+    "interestAmount":interestAmount?interestAmount:0,
+    "penaltyAmount":penaltyAmount?penaltyAmount:0,
+    "taxCollected":taxCollected?taxCollected:0,
+    "interestCollected":interestCollected?interestCollected:0,
+    "penaltyCollected":penaltyCollected?penaltyCollected:0,
+    "taxBalance":taxBalance?taxBalance:0,
+    "interestBalance":interestBalance?interestBalance:0,
+    "penaltyBalance":penaltyBalance?penaltyBalance:0,
+  };
+  
+  };
+  dcbArray.push(dcbRow);
+    });
+
+  const totalTaxDemand = dcbArray.reduce((tax, item) => tax + parseInt(item.taxAmount, 10), 0);
+  const totalInterestDemand = dcbArray.reduce((interest, item) => interest + parseInt(item.interestAmount, 10), 0);
+  const totalPenaltyDemand = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyAmount, 10), 0);
+ 
+  const totalTaxCollected = dcbArray.reduce((tax, item) => tax + parseInt(item.taxCollected, 10), 0);
+  const totalInterestCollected = dcbArray.reduce((interest, item) => interest + parseInt(item.interestCollected, 10), 0);
+  const totalPenaltyCollected = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyCollected, 10), 0);
+
+  const totalTaxBalance = dcbArray.reduce((tax, item) => tax + parseInt(item.taxBalance, 10), 0);
+  const totalInterestBalance = dcbArray.reduce((interest, item) => interest + parseInt(item.interestBalance, 10), 0);
+  const totalPenaltyBalance = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyBalance, 10), 0);
+
+  const totalBalance = parseInt(totalTaxBalance) + parseInt(totalInterestBalance) + parseInt(totalPenaltyBalance);  
+
+
+
+
+  dcbtotalRow={
+             
+              "totalTaxDemand":totalTaxDemand,
+              "totalInterestDemand":totalInterestDemand,
+              "totalPenaltyDemand":totalPenaltyDemand,
+              "totalTaxCollected":totalTaxCollected,
+              "totalInterestCollected":totalInterestCollected,
+              "totalPenaltyCollected":totalPenaltyCollected,
+              "totalTaxBalance":totalTaxBalance,
+              "totalInterestBalance":totalInterestBalance,
+              "totalPenaltyBalance":totalPenaltyBalance,
+              "totalBalance":totalBalance,
+   };
+   dcbtotalArray.push(dcbtotalRow);
+   dispatch(prepareFinalObject("dcbDetails", dcbArray));
+   dispatch(prepareFinalObject("dcbtotalDetails", dcbtotalArray));
+  
+  } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelKey: error.message },
+        "warning"
+        )
+      );
+  }
+}
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({ labelKey: "WS_SEARCH_CONNECTIONS_DETAILS_HEADER" }),
@@ -410,6 +601,9 @@ const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
 const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
  
+const paymentDetails = getPaymentDetails(true);
+
+const DCBDetails = getDCBDetails(true);
 
 export const connectionDetails = getCommonCard({
   serviceDetails,
@@ -417,6 +611,8 @@ export const connectionDetails = getCommonCard({
   ownerDetails,
   connectionHolders,
   connectionHoldersSameAsOwner,
+  paymentDetails,
+  DCBDetails
 });
 const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();

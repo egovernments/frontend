@@ -30,6 +30,33 @@ const getMDMSData = (action, dispatch) => {
   }
 };
 
+const getMhollaData = async(dispatch)=>{
+  const queryObject = [
+    { key: "tenantId", value: localStorage.getItem('tenant-id') },
+     
+  ];
+  let response = await httpRequest(
+    "post",
+    "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+    "_search",
+    queryObject,
+    {}
+  );
+  let mohallaDataArray = [];
+  let mohallaDataRow=null;
+  let name,code;
+  response.TenantBoundary[0].boundary.map((element,index) => {
+    name = element.name;
+   // code=element.code;
+    mohallaDataRow={"code":name};
+   mohallaDataArray.push(mohallaDataRow);
+  
+ });
+ 
+ dispatch(prepareFinalObject("mohallaData", mohallaDataArray));
+}
+
+
 const getMDMSAppType =async (dispatch) => {
   // getMDMS data for ApplicationType
     let mdmsBody = {
@@ -147,6 +174,7 @@ const employeeSearchResults = {
     resetFieldsForApplication(state, dispatch);
     getMDMSAppType(dispatch);
     getMdmsTenantsData(dispatch);
+    getMhollaData(dispatch);
     dispatch(prepareFinalObject("searchConnection.tenantId", getTenantIdCommon()));
     dispatch(prepareFinalObject("currentTab", "SEARCH_CONNECTION"));
     return action;
