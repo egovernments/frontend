@@ -404,7 +404,7 @@ export const newRegistrationForm = getCommonCard(
             },
             placeholder: {
               labelName: "Registration No",
-              labelKey: "BND_REG_NO_PLACEHOLDER"
+              labelKey: "BND_REG_NO_LABEL"
             },
             required:true,
             visible: true,
@@ -555,25 +555,24 @@ export const newRegistrationForm = getCommonCard(
             labelKey: "BND_GENDER_PLACEHOLDER"
           },
           required: true,
-          // localePrefix: {
-          //   moduleName: "BND",
-          //   masterName: "GENDER"
-          // },
+          localePrefix: {
+            moduleName: "COMMON",
+            masterName: "GENDER"
+          },
           data: [
             {
               code: "Male",
-              label: "MALE"
+              label: "Male"
             },
             {
               code: "Female",
-              label: "FEMALE"
+              label: "Female"
             },
             {
               code: "Transgender",
-              label: "TRANSGENDER"
+              label: "Transgender"
             }
           ],
-          labelsFromLocalisation: false,
           props:{
             disabled: false,
           },
@@ -920,7 +919,7 @@ export const newRegistrationForm = getCommonCard(
         informantsAddress: getTextField({
           label: {
             labelName: "informants address",
-            labelKey: "Address"
+            labelKey: "BND_ADDRESS"
           },
           placeholder: {
             labelName: "informants address",

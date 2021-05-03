@@ -113,36 +113,36 @@ export const getBirthCertDetailsCard = (inJsonPath) => {
       }
     ),
     divider2: getDivider(),
-    certDetailsContainer4: getCommonContainer(
-      {
-        mothersUid: getLabelWithValue(
-          {
-            labelName: "Mother's Aadhar No",
-            labelKey: "Mother's Aadhar No"
-          },
-          {
-            jsonPath: inJsonPath + ".birthMotherInfo.aadharno",
-            //callBack: checkNoData
-          }
-        ),
-        fathersUid: getLabelWithValue(
-          {
-            labelName: "Father's Aadhar No",
-            labelKey: "Father's Aadhar No"
-          },
-          {
-            jsonPath: inJsonPath + ".birthFatherInfo.aadharno",
-            //callBack: checkNoData
-          }
-        ),
-      },
-      {
-        style: {
-          overflow: "visible"
-        }
-      }
-    ),
-    divider4: getDivider(),
+    // certDetailsContainer4: getCommonContainer(
+    //   {
+    //     mothersUid: getLabelWithValue(
+    //       {
+    //         labelName: "Mother's Aadhar No",
+    //         labelKey: "Mother's Aadhar No"
+    //       },
+    //       {
+    //         jsonPath: inJsonPath + ".birthMotherInfo.aadharno",
+    //         //callBack: checkNoData
+    //       }
+    //     ),
+    //     fathersUid: getLabelWithValue(
+    //       {
+    //         labelName: "Father's Aadhar No",
+    //         labelKey: "Father's Aadhar No"
+    //       },
+    //       {
+    //         jsonPath: inJsonPath + ".birthFatherInfo.aadharno",
+    //         //callBack: checkNoData
+    //       }
+    //     ),
+    //   },
+    //   {
+    //     style: {
+    //       overflow: "visible"
+    //     }
+    //   }
+    // ),
+    //divider4: getDivider(),
     certDetailsContainer6: getCommonContainer(
       {
         presentAddr: getLabelWithValue(
