@@ -876,7 +876,7 @@ dcbArray.push(dcbRow);
 	}
 
 
-	export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get") => {
+	export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get",businessService) => {
 	  const searchCriteria = {
 		consumerCode,
 		tenantId
@@ -893,13 +893,55 @@ dcbArray.push(dcbRow);
 		  ACTION: "_get",
 		},
 	  };
+
+	  const queryObject = [
+        { key: "connectionNumber", value: consumerCode},
+        { key: "tenantId", value: tenantId }
+    ]
+    const responseSewerage = await httpRequest(
+        "post",
+        "/sw-services/swc/_search",
+        "_search",
+        queryObject
+      );
+
+      const responseWater = await httpRequest(
+        "post",
+        "/ws-services/wc/_search",
+        "_search",
+        queryObject
+      );
+      let oldConnection=null,ledgerId=null,propertyId=null;
+    if(businessService=="SW")
+    {
+        oldConnection=responseSewerage.SewerageConnections[0].oldConnectionNo;
+        ledgerId=responseSewerage.SewerageConnections[0].additionalDetails.ledgerId;
+		propertyId=responseSewerage.SewerageConnections[0].propertyId
+
+    }
+    else if(businessService=="WS")
+    {
+        oldConnection=responseWater.WaterConnection[0].oldConnectionNo;
+        ledgerId=responseWater.WaterConnection[0].additionalDetails.ledgerId;
+		propertyId=responseWater.WaterConnection[0].propertyId;
+    }
 	  try {
+		 // configKey="ws-bill";
+
 		const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [], { searchCriteria });
 		const oldFileStoreId = get(billResponse.Bills[0], "fileStoreId")
 		if (oldFileStoreId) {
 		  downloadReceiptFromFilestoreID(oldFileStoreId, 'download')
 		}
 		else {
+			var addDetail=null;
+              
+			addDetail = {
+				"propertyId": propertyId,
+				"oldConnectionNo":oldConnection,
+				"ledgerId":ledgerId
+				}
+				billResponse.Bills[0].additionalDetails=addDetail;
 		  const queryStr = [
 			{ key: "key", value: configKey },
 			{ key: "tenantId", value: commonConfig.tenantId }

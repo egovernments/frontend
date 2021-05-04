@@ -6,7 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject
+  prepareFinalObject,toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
@@ -477,6 +477,9 @@ export const getDCBDetail = async (queryObject , dispatch) => {
     let dcbtotalRow=null;
     let installment,taxAmount,taxCollected,taxBalance,interestAmount,interestCollected,interestBalance,penaltyBalance,penaltyCollected,penaltyAmount;
     response.Demands.map((element,index) => {
+      taxAmount=0;taxCollected=0;taxBalance=0;interestAmount=0;
+      interestCollected=0;interestBalance=0;penaltyBalance=0;penaltyCollected=0;penaltyAmount=0;
+
   if(element.status == "ACTIVE")
   {
   installment=convertEpochToDate(element.taxPeriodFrom) +"-"+convertEpochToDate(element.taxPeriodTo);
@@ -511,9 +514,9 @@ export const getDCBDetail = async (queryObject , dispatch) => {
     "interestBalance":interestBalance?interestBalance:0,
     "penaltyBalance":penaltyBalance?penaltyBalance:0,
   };
-  
-  };
   dcbArray.push(dcbRow);
+  };
+  
     });
 
   const totalTaxDemand = dcbArray.reduce((tax, item) => tax + parseInt(item.taxAmount, 10), 0);

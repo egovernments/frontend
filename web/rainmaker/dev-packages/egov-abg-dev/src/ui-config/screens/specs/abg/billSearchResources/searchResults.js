@@ -21,7 +21,7 @@ export const searchResults = {
           customBodyRender: (value, tableMeta, updateValue) => (
             <a href="javascript:void(0)"
               onClick={() => {
-                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12]);
+                downloadBill(tableMeta.rowData[1], tableMeta.rowData[10], tableMeta.rowData[9],tableMeta.rowData[12],tableMeta.rowData[7]);
               }}
             >
               {value}
