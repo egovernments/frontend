@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 		WebSettings webSettings = webView.getSettings();
 
 		webSettings.setUserAgentString(webSettings.getUserAgentString() + " mSewa V." + versionName + "." + versionCode);
-		webSettings.setJavaScriptEnabled(true);
+		webSettings.setJavaScriptEnabled(false);
 		webSettings.setGeolocationEnabled(true);
 		webSettings.setAllowFileAccess(true);
 		webSettings.setAllowFileAccessFromFileURLs(true);
