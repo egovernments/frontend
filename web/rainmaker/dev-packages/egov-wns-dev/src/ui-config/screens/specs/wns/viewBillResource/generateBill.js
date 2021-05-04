@@ -84,22 +84,11 @@ locality: getSelectField({
     required: false,
     labelsFromLocalisation: true,
     gridDefination: {xs: 12, sm: 4},
-  
-
 }),
-     
       }),
-
-     
-
-
-
-
 //---------------------------------------------------------------------------------------
 //             Reset Button and Submit Button
 //-----------------------------------------------------------------------------------------
-
-
     button: getCommonContainer({
       buttonContainer: getCommonContainer({
 
