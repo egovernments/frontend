@@ -1737,7 +1737,17 @@ export const downloadBill = async(receiptQueryString, mode) => {
         "_search",
         queryObject
       );
-
+      let oldConnection=null,ledgerId=null;
+    if(receiptQueryString[2].value=="SW")
+    {
+        oldConnection=responseSewerage.SewerageConnections[0].oldConnectionNo;
+        ledgerId=responseSewerage.SewerageConnections[0].additionalDetails.ledgerId;
+    }
+    else if(receiptQueryString[2].value=="WS")
+    {
+        oldConnection=responseSewerage.WaterConnection[0].oldConnectionNo;
+        ledgerId=responseSewerage.WaterConnection[0].additionalDetails.ledgerId;
+    }
     const requestBody = {
         "MdmsCriteria": {
             "tenantId": getTenantIdCommon(),
@@ -1751,25 +1761,15 @@ export const downloadBill = async(receiptQueryString, mode) => {
     try {
 
         httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-            var key='WS',addDetail=null;
-            if(payloadReceiptDetails.Bill[0].businessService=='SW')
-            {
-                key='sw-bill';
+            var key='ws-bill',addDetail=null;
+              
                 addDetail = {
-                    "propertyId": responseSewerage.SewerageConnections[0].propertyId
+                    "propertyId": responseSewerage.SewerageConnections[0].propertyId,
+                    "oldConnectionNo":oldConnection,
+                    "ledgerId":ledgerId
                     }
                 payloadReceiptDetails.Bill[0].additionalDetails=addDetail;
-            }
-            else
-            {
-                key='ws-bill';
-                addDetail = {
-                    "propertyId": responseWater.WaterConnection[0].propertyId
-                    }
-                payloadReceiptDetails.Bill[0].additionalDetails=addDetail;
-            }
-
-           
+                     
             const queryStr = [
                 { key: "key", value: key },
                 { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }

@@ -70,9 +70,10 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     disableFieldAndShowSpinner('search', "components.div.children.UCSearchCard.children.cardContent.children.buttonContainer.children.searchButton", dispatch);
-    const responseFromAPI = await getPaymentSearchResults(queryObject, dispatch);
+    const responseFromAPIAll = await getPaymentSearchResults(queryObject, dispatch);
+    const responseFromAPI=responseFromAPIAll.Payments.filter(item=> item.instrumentStatus != "CANCELLED");
     dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
-    const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
+    const Payments = responseFromAPI;
     const response = [];
     for (let i = 0; i < Payments.length; i++) {
       const serviceTypeLabel = getTransformedLocale(
