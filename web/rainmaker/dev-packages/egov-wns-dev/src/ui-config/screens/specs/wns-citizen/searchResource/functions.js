@@ -109,44 +109,62 @@ export const searchApiCall = async (state, dispatch) => {
           }
 
           let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
-          billResults ? billResults.Bill.map(bill => {
-            let updatedDueDate = 0;
+          let updatedDueDate = 0;
+          billResults && billResults.Bill.length > 0 && billResults.Bill[0].billDetails.map(bill => {
             if(element.service === serviceConst.WATER) {
-              updatedDueDate = (element.connectionType === 'Metered' ?
-              (bill.billDetails[0].toPeriod+waterMeteredDemandExipryDate) :
-              (bill.billDetails[0].toPeriod+waterNonMeteredDemandExipryDate));
+              updatedDueDate = bill.expiryDate;
             } else if (element.service === serviceConst.SEWERAGE) {
-              updatedDueDate = bill.billDetails[0].toPeriod + sewerageNonMeteredDemandExpiryDate;
+              updatedDueDate = bill.expiryDate;
             }
-            let obj = {
-              due: bill.totalAmount,
-              dueDate: updatedDueDate,
-              service: element.service,
-              connectionNo: element.connectionNo,
-              name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
-              status: element.status,
-              address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
-              tenantId: element.tenantId,
-              connectionType: element.connectionType
-            }
-            finalArray.push(obj)
-          }) : finalArray.push({
-            due: 'NA',
-            dueDate: 'NA',
+          });
+          billResults && billResults.Bill.length > 0 ? finalArray.push({
+            due: billResults.Bill[0].totalAmount,
+            dueDate: updatedDueDate,
             service: element.service,
             connectionNo: element.connectionNo,
-            name: (element.property && element.property !== "NA" && element.property.owners)?element.property.owners[0].name:'',
+            name: (element.property)?element.property.owners[0].name:'',
             status: element.status,
-            address: (element.property && element.property !== "NA" && element.property.address)?element.property.address.street:'',
-            tenantId: element.tenantId,
-            connectionType: element.connectionType
+            address: handleAddress(element),
+            connectionType: element.connectionType,
+            tenantId:element.tenantId
           })
+          : finalArray.push({
+          due: billResults && billResults.Bill.length > 0 ? billResults.Bill[0].totalAmount : '0',
+          dueDate: 'NA',
+          service: element.service,
+          connectionNo: element.connectionNo,
+          name: (element.property)?element.property.owners[0].name:'',
+          status: element.status,
+          address: handleAddress(element),
+          connectionType: element.connectionType,
+          tenantId:element.tenantId
+        })
         }
       }
       showResults(finalArray, dispatch, tenantId)
     } catch (err) { console.log(err) }
   }
 }
+
+const handleAddress = (element) => {
+  let city = (
+    element.property &&
+    element.property !== "NA" &&
+    element.property.address !== undefined &&
+    element.property.address.city !== undefined &&
+    element.property.address.city !== null
+  ) ? element.property.address.city : "";
+  let localityName = (
+    element.property &&
+    element.property !== "NA" &&
+    element.property.address.locality !== undefined &&
+    element.property.address.locality !== null &&
+    element.property.address.locality.name !== null
+  ) ? element.property.address.locality.name : "";
+
+  return (city === "" && localityName === "") ? "NA" : `${localityName}, ${city}`;
+}
+
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
