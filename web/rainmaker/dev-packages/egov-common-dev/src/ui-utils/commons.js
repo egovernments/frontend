@@ -695,7 +695,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
       {
       installment=convertEpochToDate(element.fromPeriod) +"-"+convertEpochToDate(element.toPeriod);
       element.billAccountDetails.map((dd)=>{
-      if(dd.adjustedAmount > 0 || dd.adjustedAmount < 0)
+      if((dd.adjustedAmount > 0 || dd.adjustedAmount < 0) || (dd.amount < 0))
       {
         let code=null;
         if(dd.taxHeadCode == "WS_CHARGE")
@@ -737,12 +737,15 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         }else if(dd.taxHeadCode == "WS_COMPOSITION_FEE" || dd.taxHeadCode == "SW_COMPOSITION_FEE")
         {
         code="Composition Fee";
+        }else if(dd.taxHeadCode == "SW_ADVANCE_CARRYFORWARD" || dd.taxHeadCode == "WS_ADVANCE_CARRYFORWARD" )
+        {
+        code="Advance";
         }
         dcbRow={
           "taxhead":code + "("+installment+")",
-          "amount":dd.adjustedAmount
+          "amount":dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount
         };
-totalamount=totalamount+dd.adjustedAmount;
+totalamount=totalamount+(dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount);
 dcbArray.push(dcbRow);
       }
 
