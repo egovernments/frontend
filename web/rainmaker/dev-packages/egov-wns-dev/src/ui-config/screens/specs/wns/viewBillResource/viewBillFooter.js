@@ -31,29 +31,29 @@ const callDownloadBill = ( mode) => {
 
 
 export const viewBillFooter = getCommonApplyFooter("BOTTOM",{
-  downloadButton: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      downloadButton: getLabel({
-        labelKey: "WS_COMMON_DOWNLOAD_BILL"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        callDownloadBill( "download");
-      }
-    },
-  },
+  // downloadButton: {
+  //   componentPath: "Button",
+  //   props: {
+  //     variant: "outlined",
+  //     color: "primary",
+  //     style: {
+  //       minWidth: "200px",
+  //       height: "48px",
+  //       marginRight: "16px"
+  //     }
+  //   },
+  //   children: {
+  //     downloadButton: getLabel({
+  //       labelKey: "WS_COMMON_DOWNLOAD_BILL"
+  //     })
+  //   },
+  //   onClickDefination: {
+  //     action: "condition",
+  //     callBack: (state, dispatch) => {
+  //       callDownloadBill( "download");
+  //     }
+  //   },
+  // },
   payButton: {
     componentPath: "Button",
     props: {
