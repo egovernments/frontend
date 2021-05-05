@@ -184,7 +184,7 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
-       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar")
+       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali")
          {
           displayRazorpay(goToPaymentGateway);
          }
