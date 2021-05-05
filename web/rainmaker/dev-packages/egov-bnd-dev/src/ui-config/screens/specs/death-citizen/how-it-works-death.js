@@ -3,7 +3,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 const header = getCommonHeader(
   {
     labelName: "How It Works",
-    labelKey: "LAMS_HOW_IT_WORKS"
+    labelKey: "BND_HOW_IT_WORKS"
   },
   {
     classes: {
@@ -23,7 +23,7 @@ const screenConfig = {
           header: header,
           howitWoorksDiv:{
             uiFramework: "custom-molecules-local",
-            moduleName: "egov-lams",
+            moduleName: "egov-bnd",
             componentPath: "HowItWorks",
             props: {
               className:  "common-div-css"
