@@ -71,7 +71,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") },
         { key: "businessService", value:'FIRENOC' }        
       ]
-      download(receiptQueryString, "download", "consolidatedreceipt", state);
+      download(receiptQueryString, "download", "consolidatedreceipt",'PAYMENT', state);
     },
     leftIcon: "receipt"
   };
@@ -83,7 +83,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") },
         { key: "businessService", value:'FIRENOC' }      
       ]
-      download(receiptQueryString, "print", "consolidatedreceipt", state);
+      download(receiptQueryString, "print", "consolidatedreceipt",'PAYMENT', state);
     },
     leftIcon: "receipt"
   };
