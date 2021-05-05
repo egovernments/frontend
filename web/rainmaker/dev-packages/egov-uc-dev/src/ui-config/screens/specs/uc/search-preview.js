@@ -195,7 +195,7 @@ const downloadReceipt = async (mode = 'download', state) => {
       { key: "businessService", value: businessService }
 
     ];
-    download(receiptQueryString, mode, "consolidatedreceipt", state);
+    download(receiptQueryString, mode, "consolidatedreceipt",'PAYMENT', state);
   }
 };
 

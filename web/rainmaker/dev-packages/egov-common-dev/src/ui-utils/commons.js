@@ -612,7 +612,7 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showC
 } */
 
 /*  Download version with egov-pdf service  */
-export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state,showConfirmation=false) => {
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", pdfModule="PAYMENT",state,showConfirmation=false) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
@@ -656,7 +656,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
       { key: "bussinessService", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].businessService" )},
       { key: "tenantId", value: get(payloadReceiptDetails,"Payments[0].paymentDetails[0].tenantId" ) }
     ]
-    mode=='download'? downloadConReceipt(queryStr,configKey,`RECEIPT-${get(payloadReceiptDetails,"Payments[0].paymentDetails[0].receiptNumber")}.pdf`,onSuccess):printConReceipt(queryStr,configKey);  
+    mode=='download'? downloadConReceipt(queryStr,configKey,pdfModule,`RECEIPT-${get(payloadReceiptDetails,"Payments[0].paymentDetails[0].receiptNumber")}.pdf`,onSuccess):printConReceipt(queryStr,configKey,pdfModule);  
  })
  } catch (exception) {
     console.log('Some Error Occured while downloading Receipt!');
@@ -767,10 +767,12 @@ export const downloadChallan = async (queryStr, mode = 'download') => {
 
 
 
-export const downloadConReceipt =(queryObj,receiptKey='consolidatedreceipt',fileName,onSuccess)=>{
-  searchAndDownloadPdf(`/egov-pdf/download/PAYMENT/${receiptKey}`,queryObj,fileName,onSuccess)
+export const downloadConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT',fileName,onSuccess)=>{
+  receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
+  searchAndDownloadPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj,fileName,onSuccess)
 }
 
-export const printConReceipt =(queryObj,receiptKey='consolidatedreceipt')=>{
-  searchAndPrintPdf(`/egov-pdf/download/PAYMENT/${receiptKey}`,queryObj)
+export const printConReceipt =(queryObj,receiptKey='consolidatedreceipt',pdfModule='PAYMENT')=>{
+  receiptKey=pdfModule=='PAYMENT'?"consolidatedreceipt":receiptKey;
+  searchAndPrintPdf(`/egov-pdf/download/${pdfModule}/${receiptKey}`,queryObj)
 }

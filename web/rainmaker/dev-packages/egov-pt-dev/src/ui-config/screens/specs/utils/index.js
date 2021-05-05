@@ -975,7 +975,7 @@ export const downloadReceitForm = async (tenantId, applicationNumber, mode = 'do
 
   ];
 
-  download(queryObj, mode, "consolidatedreceipt")
+  download(queryObj, mode, "consolidatedreceipt",'PAYMENT')
 }
 export const getLabelIfNotNull = (label, value, props) => {
   const labelObj = getLabelWithValue(label, value, props);

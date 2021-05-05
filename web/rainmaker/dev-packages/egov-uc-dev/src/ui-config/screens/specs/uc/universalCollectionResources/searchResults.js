@@ -25,7 +25,7 @@ export const searchResults = {
                   { key: "tenantId", value: tableMeta.rowData[7] },
                   { key: "businessService", value:tableMeta.rowData[8] } 
                 ]
-                download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
+                download(receiptQueryString , "download" ,tableMeta.rowData[6]||"consolidatedreceipt",'PAYMENT') ;
               }}>
        
               <a href="javascript:void(0)" >{value}</a>
