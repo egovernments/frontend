@@ -30,6 +30,7 @@ const fixUserDob = (user = {}) => {
 export const userProfileUpdated = (payload = {}) => {
   const user = fixUserDob(payload.user[0]);
   setUserInfo(JSON.stringify(user));
+  localStorage.setItem("citizen.userRequestObject",JSON.stringify(user));
   return { type: authType.USER_PROFILE_UPDATED, user };
 };
 
