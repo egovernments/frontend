@@ -882,7 +882,34 @@ dcbArray.push(dcbRow);
 	  }
 	}
 
+	const getMdmsData = async (businesService) => {
+		let mdmsBody =null;
 
+		if(businesService=="SW"){
+			mdmsBody={MdmsCriteria: {
+			tenantId: "pb",
+			moduleDetails: [
+			  { moduleName: "sw-services-calculation", masterDetails: [{ name: "Penalty" }] }]
+		  }};
+		}
+	else{mdmsBody={MdmsCriteria: {
+		tenantId: "pb",
+		moduleDetails: [
+		  { moduleName: "ws-services-calculation", masterDetails: [{ name: "Penalty" }] }]
+	  }};}
+		try {
+		  let payload = null;
+		  payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+		  if (payload.MdmsRes['ws-services-calculation'] && payload.MdmsRes['ws-services-calculation'].Penalty !== undefined && payload.MdmsRes['ws-services-calculation'].Penalty.length > 0) {
+		return payload.MdmsRes['ws-services-calculation'].Penalty[0].rate;
+		  }
+		else if (payload.MdmsRes['sw-services-calculation'] && payload.MdmsRes['sw-services-calculation'].Penalty !== undefined && payload.MdmsRes['sw-services-calculation'].Penalty.length > 0) {
+			return payload.MdmsRes['sw-services-calculation'].Penalty[0].rate;
+		}
+		
+		} catch (e) { console.log(e); }
+	  
+	  };
 	export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get",businesService) => {
 	  const searchCriteria = {
 		consumerCode,
@@ -921,8 +948,9 @@ dcbArray.push(dcbRow);
         queryObject
       );
       let oldConnection=null,ledgerId=null,propertyId=null;
+	  let rate=await getMdmsData(businesService);
     if(businesService=="SW")
-    {
+    { 
         oldConnection=responseSewerage.SewerageConnections[0].oldConnectionNo;
         ledgerId=responseSewerage.SewerageConnections[0].additionalDetails.ledgerId;
 		propertyId=responseSewerage.SewerageConnections[0].propertyId
@@ -948,7 +976,8 @@ dcbArray.push(dcbRow);
 			addDetail = {
 				"propertyId": propertyId,
 				"oldConnectionNo":oldConnection,
-				"ledgerId":ledgerId
+				"ledgerId":ledgerId,
+				"penaltyRate":rate
 				}
 				billResponse.Bills[0].additionalDetails=addDetail;
 		  const queryStr = [
