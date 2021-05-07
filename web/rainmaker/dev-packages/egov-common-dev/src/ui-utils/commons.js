@@ -706,6 +706,10 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         {
         code="Sewerage Charges";
         }
+		else if(dd.taxHeadCode == "WS_Round_Off" || dd.taxHeadCode == "SW_Round_Off")
+        {
+        code="Round Off";
+        }
         else if(dd.taxHeadCode == "WS_TIME_INTEREST" || dd.taxHeadCode == "SW_TIME_INTEREST")
         {
         code="Interest";
