@@ -883,11 +883,11 @@ dcbArray.push(dcbRow);
 	}
 
 
-	export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get",businessService) => {
+	export const downloadBill = async (consumerCode, tenantId, configKey = "consolidatedbill", url = "egov-searcher/bill-genie/billswithaddranduser/_get",businesService) => {
 	  const searchCriteria = {
 		consumerCode,
 		tenantId,
-		businessService
+		businesService
 	  }
 	  const FETCHBILL = {
 		GET: {
@@ -895,6 +895,7 @@ dcbArray.push(dcbRow);
 		  ACTION: "_get",
 		}
 	  }
+
 	  const DOWNLOADRECEIPT = {
 		GET: {
 		  URL: "/pdf-service/v1/_create",
@@ -920,14 +921,14 @@ dcbArray.push(dcbRow);
         queryObject
       );
       let oldConnection=null,ledgerId=null,propertyId=null;
-    if(businessService=="SW")
+    if(businesService=="SW")
     {
         oldConnection=responseSewerage.SewerageConnections[0].oldConnectionNo;
         ledgerId=responseSewerage.SewerageConnections[0].additionalDetails.ledgerId;
 		propertyId=responseSewerage.SewerageConnections[0].propertyId
 
     }
-    else if(businessService=="WS")
+    else if(businesService=="WS")
     {
         oldConnection=responseWater.WaterConnection[0].oldConnectionNo;
         ledgerId=responseWater.WaterConnection[0].additionalDetails.ledgerId;
