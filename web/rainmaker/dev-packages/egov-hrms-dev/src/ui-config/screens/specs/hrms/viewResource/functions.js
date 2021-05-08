@@ -205,7 +205,7 @@ export const handleCreateUpdateEmployee = (state, dispatch) => {
 export const createUpdateEmployee = async (state, dispatch, action) => {
   const pickedTenant = get(
     state.screenConfiguration.preparedFinalObject,
-    "citiesByModule.tenantId"
+    "Employee[0].tenantId"
   );
   const tenantId = pickedTenant || getTenantId();
   let queryObject = [
@@ -219,7 +219,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     "Employee",
     []
   );
-
+  
   handleDeletedCards(employeeObject[0], "jurisdictions", "id");
   handleDeletedCards(employeeObject[0], "assignments", "id");
   handleDeletedCards(employeeObject[0], "serviceHistory", "id");
