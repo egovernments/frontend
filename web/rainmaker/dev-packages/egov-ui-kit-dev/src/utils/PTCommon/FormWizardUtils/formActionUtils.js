@@ -101,9 +101,15 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         return;
     }
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
-    const propertyPayloadTenant1 = propertyPayload.address.city;
+    
+    //const propertyPayloadTenant1 = propertyPayload.address.city;
+    //const propertyPayloadTenantt = propertyPayloadTenant1.toLowerCase();
+    //propertyPayload.tenantId =  "pb."+propertyPayloadTenantt;
+    
+    const propertyPayloadTenant1 = propertyPayload.tenantId;
     const propertyPayloadTenantt = propertyPayloadTenant1.toLowerCase();
-    propertyPayload.tenantId =  "pb."+propertyPayloadTenantt;
+    propertyPayload.tenantId =     propertyPayloadTenantt;
+    
   if(getQueryValue(search, "purpose") == 'update'){
     propertyPayload.owners=get(newProperties[0],'owners',get(propertyPayload,'owners',[]))
     propertyPayload.institution=get(newProperties[0],'institution',get(propertyPayload,'institution',[]))
