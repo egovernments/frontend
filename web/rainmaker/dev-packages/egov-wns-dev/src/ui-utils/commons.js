@@ -609,6 +609,7 @@ const parserFunction = (state) => {
                 queryObject.additionalDetails.detailsProvidedBy !== undefined &&
                 queryObject.additionalDetails.detailsProvidedBy !== null
             ) ? queryObject.additionalDetails.detailsProvidedBy : "",
+            isexempted : false,
             billingType: queryObject && queryObject.additionalDetails ? queryObject.additionalDetails.billingType : null,
       billingAmount: queryObject && queryObject.additionalDetails ? parseFloat(queryObject.additionalDetails.billingAmount) : null,
       connectionCategory: queryObject && queryObject.additionalDetails ? queryObject.additionalDetails.connectionCategory : null,
