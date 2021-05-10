@@ -8,7 +8,16 @@ import history from '../../../utils/web.history'
 const useStyles = makeStyles(styles);
 
 function handleNavigation(page) {
-  history.push(`${process.env.PUBLIC_URL}/`+ page)
+  if(page&&page.includes&&page.includes('digit-ui')){
+      window.location.href = page.startsWith('/digit') ? page : `/${page}`;
+      return;  
+  }else  if(page&&page.includes&&page.includes('fsm')){
+    window.location.href = '/digit-ui/employee/dss/dashboard';
+    return;  
+}else{
+    history.push(`${process.env.PUBLIC_URL}/`+ page);
+  }
+  
 }
 
 export default function Card(props) {
