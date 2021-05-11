@@ -13,6 +13,11 @@ const RadioButtonsGroup = Loadable({
   loading: () => <Loading />
 });
 
+const ArrearsMolecule = Loadable({
+  loader: () => import("./ArrearsMolecule"),
+  loading: () => <Loading />
+});
+
 const Tooltip = Loadable({
   loader: () => import("./Tooltip"),
   loading: () => <Loading />
@@ -47,6 +52,7 @@ const HowItWorks = Loadable({
 export {
   TestMolecules,
   RadioButtonsGroup,
+  ArrearsMolecule,
   Tooltip,
   CustomTab,
   UploadSingleFile,

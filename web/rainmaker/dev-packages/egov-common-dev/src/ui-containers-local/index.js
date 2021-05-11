@@ -12,7 +12,10 @@ const LabelContainer = Loadable({
   loader: () => import("./LabelContainer"),
   loading: () => <Loading />
 });
-
+const ArrearsCardContainer = Loadable({
+  loader: () => import("./ArrearsCardContainer"),
+  loading: () => <Loading />
+});
 const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
   loading: () => <Loading />
@@ -52,6 +55,7 @@ const TestContainer = Loadable({
 export {
   CustomTabContainer,
   LabelContainer,
+  ArrearsCardContainer,
   CheckboxContainer,
   DownloadFileContainer,
   EstimateCardContainer,
