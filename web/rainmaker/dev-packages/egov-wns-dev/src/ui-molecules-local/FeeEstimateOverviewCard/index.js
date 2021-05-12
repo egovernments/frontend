@@ -59,10 +59,10 @@ const date = (from, to) => {
 }
 
 function FeesEstimateOverviewCard(props) {
-    const { classes, estimate } = props;
+    const { classes, estimate, isMigrated } = props;
     const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
     const isPaid = (estimate.fees.appStatus === 'CONNECTION_ACTIVATED' || estimate.fees.appStatus === 'PENDING_FOR_CONNECTION_ACTIVATION')?true:false;
-
+    
     // if (estimate !== null && estimate !== undefined && estimate.fees !== undefined && estimate.fees !== null && estimate.fees.length > 0) {
     //     if (estimate.fees[0].data !== null && estimate.fees[0].data !== undefined && estimate.fees[0].data.length > 0) {
     //         totalAmount = estimate.fees[0].data[0].total;
@@ -82,7 +82,7 @@ function FeesEstimateOverviewCard(props) {
                     className="tl-total-amount-text">
                     <LabelContainer labelName="Total Amount" labelKey="WS_COMMON_TOTAL_AMT" />
                 </Typography>
-                <Typography className={totalHeadClassName} align="right" >Rs {estimate.fees.totalAmount}</Typography>
+                <Typography className={totalHeadClassName} align="right" >Rs {isMigrated ? 0 : estimate.fees.totalAmount}</Typography>
                 { isPaid? (
                     <Typography variant="body2" align="right"  style={{ color: 'green' }}>
                       <LabelContainer
@@ -116,7 +116,7 @@ function FeesEstimateOverviewCard(props) {
                                     style={styles.taxStyles}
                                     className="tl-application-table-total-value" >
                                     <Typography variant="body2">
-                                        {estimate.fees.fee}
+                                        {isMigrated ? 0 : estimate.fees.fee}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -133,7 +133,7 @@ function FeesEstimateOverviewCard(props) {
                                     style={styles.taxStyles}
                                     className="tl-application-table-total-value" >
                                     <Typography variant="body2">
-                                        {estimate.fees.charge}
+                                        {isMigrated ? 0 : estimate.fees.charge}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -150,7 +150,7 @@ function FeesEstimateOverviewCard(props) {
                                     style={styles.taxStyles}
                                     className="tl-application-table-total-value" >
                                     <Typography variant="body2">
-                                        {estimate.fees.taxAmount}
+                                        {isMigrated ? 0 : estimate.fees.taxAmount}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -168,7 +168,7 @@ function FeesEstimateOverviewCard(props) {
                             style={{ paddingRight: 0 }}
                             className="tl-application-table-total-value" >
                             <Typography variant="body2">
-                                Rs {estimate.fees.totalAmount}
+                                Rs {isMigrated ? 0 : estimate.fees.totalAmount}
                             </Typography>
                         </Grid>
                     </Grid>

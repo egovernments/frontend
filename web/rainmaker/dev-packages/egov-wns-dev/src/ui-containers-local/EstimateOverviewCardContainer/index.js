@@ -8,7 +8,7 @@ class EstimateOverviewCardContainer extends Component {
     super(props);
   }
   render() {
-    return <FeesEstimateOverviewCard estimate={this.props.estimate} />;
+    return <FeesEstimateOverviewCard estimate={this.props.estimate} isMigrated = {this.props.isMigrated} />;
   }
 }
 
@@ -19,6 +19,7 @@ const mapStateToProps = (state, ownProps) => {
     ownProps.sourceJsonPath,
     []
   );
+  const isMigrated = get(screenConfiguration.preparedFinalObject, "WaterConnection[0].additionalDetails.isMigrated");
   const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "WS_SUMMARY_FEE_EST" },
     fees,
@@ -30,7 +31,7 @@ const mapStateToProps = (state, ownProps) => {
       //   { textLeft: "Additional Penalty (20% of TL) applicable from" }
     ]
   };
-  return { estimate };
+  return { estimate, isMigrated };
 };
 
 export default connect(
