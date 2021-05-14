@@ -229,6 +229,7 @@ const callBackForNext = async (state, dispatch) => {
       dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
       let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
       let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+      applyScreenObj.additionalDetails.waterSubUsageType = applyScreenObj.additionalDetails.waterSubUsageType ? applyScreenObj.additionalDetails.waterSubUsageType : "NA";
       //connectionholdercode
       let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
       let holderData = connectionHolderObj[0];
