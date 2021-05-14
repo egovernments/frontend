@@ -535,7 +535,9 @@ let getModifiedPayment = (payments) =>{
   let rebate=0;
   let roundOff=0;
   let swatchatha=0;
-  let currentDate=convertDateToEpoch(new Date());
+  //let currentDate=convertDateToEpoch(new Date());  
+  let currentDate = payments[0].transactionDate;
+
   payments[0].paymentDetails[0].bill.billDetails.forEach(billdetail =>{
     if(billdetail.amount!==0)
     {
@@ -670,7 +672,7 @@ else if(payments[0].paymentDetails[0].businessService === 'TL'){
 }
 
 set(payments, `[0].paymentDetails[0].bill.additionalDetails.financialYear`, getFinancialYearFromEPOCH(payments[0].transactionDate));
-  return payments;
+return payments;
 }
 
 const getBankname = async(payment) =>{
