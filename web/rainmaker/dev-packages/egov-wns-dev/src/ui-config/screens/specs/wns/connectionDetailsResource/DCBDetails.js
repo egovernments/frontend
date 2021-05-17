@@ -68,7 +68,7 @@ export const Header =  () =>  {
             taxBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalTaxBalance" , callBack: handleAmount })  ,
             interestBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalInterestBalance" , callBack: handleAmount })  ,
             penaltyBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalPenaltyBalance" , callBack: handleAmount })  ,
-            advance: getLabelOnlyValueForTableHeader1({ labelKey: " " })  ,
+            advance: getLabelOnlyValueforColumnData({ jsonPath: "dcbtotalDetails[0].totalAdvance" , callBack: handleAmount })  ,
            })
         )
         }
@@ -106,7 +106,7 @@ export const resData =  () =>  {
       taxBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbDetails[0].taxBalance" , callBack: handleAmount })  ,
       interestBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbDetails[0].interestBalance" , callBack: handleAmount })  ,
       penaltyBalance: getLabelOnlyValueforColumnData({ jsonPath: "dcbDetails[0].penaltyBalance" , callBack: handleAmount })  ,
-      amount: getLabelOnlyValueforColumnData({ jsonPath: "dcbDetails[0].amount" , callBack: handleAmount })  ,
+      advance: getLabelOnlyValueforColumnData({ jsonPath: "dcbDetails[0].advance" , callBack: handleAmount })  ,
      })
    )
   }

@@ -475,7 +475,7 @@ export const getDCBDetail = async (queryObject , dispatch) => {
     let dcbtotalArray = [];
     let dcbRow=null;
     let dcbtotalRow=null;
-    let installment,taxAmount,taxCollected,taxBalance,interestAmount,interestCollected,interestBalance,penaltyBalance,penaltyCollected,penaltyAmount;
+    let installment,advance,taxAmount,taxCollected,taxBalance,interestAmount,interestCollected,interestBalance,penaltyBalance,penaltyCollected,penaltyAmount;
     response.Demands.map((element,index) => {
       taxAmount=0;taxCollected=0;taxBalance=0;interestAmount=0;
       interestCollected=0;interestBalance=0;penaltyBalance=0;penaltyCollected=0;penaltyAmount=0;
@@ -500,7 +500,11 @@ export const getDCBDetail = async (queryObject , dispatch) => {
       penaltyCollected=dd.collectionAmount;
       penaltyBalance=dd.taxAmount-dd.collectionAmount;
      
-    }});
+    } if(dd.taxHeadMasterCode == "SW_ADVANCE_CARRYFORWARD" || dd.taxHeadMasterCode == "WS_ADVANCE_CARRYFORWARD" )
+    {
+    advance=dd.taxAmount;
+    }
+    });
     
   dcbRow={
     "installment":installment,
@@ -513,6 +517,7 @@ export const getDCBDetail = async (queryObject , dispatch) => {
     "taxBalance":taxBalance?taxBalance:0,
     "interestBalance":interestBalance?interestBalance:0,
     "penaltyBalance":penaltyBalance?penaltyBalance:0,
+    "advance":advance?advance:0
   };
   dcbArray.push(dcbRow);
   };
@@ -530,8 +535,8 @@ export const getDCBDetail = async (queryObject , dispatch) => {
   const totalTaxBalance = dcbArray.reduce((tax, item) => tax + parseInt(item.taxBalance, 10), 0);
   const totalInterestBalance = dcbArray.reduce((interest, item) => interest + parseInt(item.interestBalance, 10), 0);
   const totalPenaltyBalance = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyBalance, 10), 0);
-
-  const totalBalance = parseInt(totalTaxBalance) + parseInt(totalInterestBalance) + parseInt(totalPenaltyBalance);  
+ const totalAdvance=dcbArray.reduce((advance, item) => advance + parseInt(item.advance, 10), 0);
+  const totalBalance = parseInt(totalTaxBalance) + parseInt(totalInterestBalance) + parseInt(totalPenaltyBalance)+parseInt(totalAdvance);  
 
 
 
@@ -548,6 +553,7 @@ export const getDCBDetail = async (queryObject , dispatch) => {
               "totalInterestBalance":totalInterestBalance,
               "totalPenaltyBalance":totalPenaltyBalance,
               "totalBalance":totalBalance,
+              "totalAdvance":totalAdvance
    };
    dcbtotalArray.push(dcbtotalRow);
    dispatch(prepareFinalObject("dcbDetails", dcbArray));
