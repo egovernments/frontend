@@ -1,6 +1,6 @@
 import React from "react";
 import ArrearTable from "../../ui-atoms-local/ArrearTable";
-import './index.css';
+import './index.scss';
 
 const ArrearsMolecule = (props) => {
     let head = {};
