@@ -451,7 +451,7 @@ export const getTextToLocalMapping = label => {
 export const setServiceCategory = (businessServiceData, dispatch) => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
-    if (item.code && item.code.indexOf(".") > 0) {
+    if (item.code && item.code.indexOf(".") > 0 && item.type=="Adhoc") {
       if (nestedServiceData[item.code.split(".")[0]]) {
         let child = get(
           nestedServiceData,
@@ -469,7 +469,26 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
         set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
       }
     } else {
-      set(nestedServiceData, `${item.code}`, item);
+      if(item.code.includes("WS") || item.code.includes("SW")){
+        if (nestedServiceData[item.code.split(".")[0]]) {
+          let child = get(
+            nestedServiceData,
+            `${item.code.split(".")[0]}.child`,
+            []
+          );
+          child.push(item);
+          set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
+        } else {
+          set(
+            nestedServiceData,
+            `${item.code.split(".")[0]}.code`,
+            item.code.split(".")[0]
+          );
+          set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
+        }
+      }
+else{
+      set(nestedServiceData,`${item.code}`,item);}
     }
   });
   dispatch(

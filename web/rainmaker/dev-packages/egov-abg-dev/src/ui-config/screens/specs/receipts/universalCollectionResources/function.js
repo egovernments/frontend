@@ -84,7 +84,8 @@ export const searchApiCall = async (state, dispatch) => {
         payeeName: get(Payments[i], `payerName`),
         serviceType: get(Payments[i], `paymentDetails[0].bill.businessService`),
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
-        amount: get(Payments[i], `paymentDetails[0].bill.consumerCode`),
+        consumerCode: get(Payments[i], `paymentDetails[0].bill.consumerCode`),
+        amount: get(Payments[i], `paymentDetails[0].totalAmountPaid`),
         status: get(Payments[i], `paymentStatus`),
         businessService: get(Payments[i], `paymentDetails[0].bill.businessService`),
         tenantId: get(Payments[i], `tenantId`),
@@ -102,7 +103,8 @@ export const searchApiCall = async (state, dispatch) => {
         ['CR_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
         ['CR_SERVICE_TYPE_LABEL']: item.businessService.includes(".")?getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`.replace('.','_').toUpperCase()):getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`),
         ['CR_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
-        ['CR_COMMON_TABLE_CONSUMERCODE']: item.amount || "-",
+        ['CR_COMMON_TABLE_CONSUMERCODE']: item.consumerCode || "-",       
+        ['Amount']: item.amount || "-",
         ['CR_COMMON_TABLE_COL_STATUS']: item.status || "-",
         ['CR_COMMON_TABLE_ACTION']:item.businessService.includes(".")?
         (item.status!=="CANCELLED"&&

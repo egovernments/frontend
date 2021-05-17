@@ -45,6 +45,13 @@ export const searchResults = {
         labelKey: "CR_COMMON_TABLE_COL_PAYEE_NAME"
       },
       {
+        labelName: "Amount",
+        labelKey: "Amount",
+        options: {
+          display: true
+        }
+      },
+      {
         labelName: "Service Type",
         labelKey: "CR_SERVICE_TYPE_LABEL"
       },
@@ -90,6 +97,7 @@ export const searchResults = {
           display: false
         }
       },
+     
 
     ],
     title: {
