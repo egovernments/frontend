@@ -110,6 +110,18 @@ const routes = [
   },
   {
     path: "inbox",
+    component: NewInbox,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      redirectionUrl,
+      title: "Inbox",
+      hideTitle: true,
+      isHomeScreen: true,
+    },
+  },
+  {
+    path: "old-inbox",
     component: Inbox,
     needsAuthentication: true,
     options: {
