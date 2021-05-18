@@ -478,14 +478,12 @@ export const objectToDropdown = object => {
 // Search API call
 export const getSearchResults = async queryObject => {
   try {
-    store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/tl-services/v1/_search",
       "",
       queryObject
     );
-    store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
     console.log(error);
@@ -495,14 +493,12 @@ export const getSearchResults = async queryObject => {
 
 export const getBill =  async queryObject => {
   try {
-    store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "/billing-service/bill/v2/_fetchbill",
       "",
       queryObject
     );
-    store.dispatch(toggleSpinner());
     return response;
   } catch (error) {
     console.log(error);
