@@ -21,10 +21,10 @@ export const searchResults = {
             <div onClick={value => {
               const receiptQueryString = [
                 { key: "receiptNumbers", value: tableMeta.rowData[0] },
-                { key: "tenantId", value: tableMeta.rowData[8] },
-                { key: "businessService", value: tableMeta.rowData[9] }
+                { key: "tenantId", value: tableMeta.rowData[9] },
+                { key: "businessService", value: tableMeta.rowData[10] }
               ]
-              tableMeta.rowData.includes("CANCELLED") ? null : download(receiptQueryString , "download" ,tableMeta.rowData[7]) ;
+              tableMeta.rowData.includes("CANCELLED") ? null : download(receiptQueryString , "download" ,tableMeta.rowData[8]) ;
             }} style={{color: tableMeta.rowData.includes("CANCELLED") ? 'rgba(0, 0, 0, 0.87)' : '#2196F3'}}>
               {value}
             </div>
@@ -66,11 +66,11 @@ export const searchResults = {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
             <div onClick={value => {
-              if(tableMeta.rowData[6]=='CANCEL'){
+              if(tableMeta.rowData[7]=='CANCEL'){
 
-                setRoute(`/receipts/viewReceipt?receiptNumbers=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=${tableMeta.rowData[9]}`);
+                setRoute(`/receipts/viewReceipt?receiptNumbers=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[9]}&businessService=${tableMeta.rowData[10]}`);
               }
-            }} style={{color:tableMeta.rowData[6]=='CANCEL'?'rgb(254, 122, 81)':"inherit",cursor:tableMeta.rowData[6]=='CANCEL'?'pointer':"initial"}}>
+            }} style={{color:tableMeta.rowData[7]=='CANCEL'?'rgb(254, 122, 81)':"inherit",cursor:tableMeta.rowData[7]=='CANCEL'?'pointer':"initial"}}>
               {value}
             </div>
           )
