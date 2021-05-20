@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import FilterDialog from "./components/FilterDialog";
 import TableData from "./components/TableData";
 import "./index.css";
-
+import NewTableData from './components/NewTableData'
 class Inbox extends Component {
   state = {
     actionList: [],
@@ -98,7 +98,8 @@ class Inbox extends Component {
           <ServiceList history={history} />
         </div>
 
-        {hasWorkflow && <TableData onPopupOpen={this.onPopupOpen} />}
+        {/* {hasWorkflow && <TableData onPopupOpen={this.onPopupOpen} />} */}
+        <NewTableData></NewTableData>
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
     );

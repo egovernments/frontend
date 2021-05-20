@@ -272,6 +272,9 @@ class InboxData extends React.Component {
   };
   handleChangePage = (event, page) => {
     this.setState({ page });
+    const { rows, rowsPerPage, rowsPerPageOptions } = this.state;
+    const {currentTabValue=0}=this.props;
+    this.props.loadData(page * rowsPerPage,  rowsPerPage,currentTabValue==0?false:true);
   };
 
   handleChangeRowsPerPage = event => {
@@ -284,7 +287,7 @@ class InboxData extends React.Component {
     const { isSorting, sortOrder } = this.state;
     const { rows, rowsPerPage, page, rowsPerPageOptions } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data&&data.rows&&data.rows.length - page * rowsPerPage);
-
+    // page * rowsPerPage, page * rowsPerPage + rowsPerPage
     if (isSorting) {
       // data.rows.reverse();
     }
@@ -328,7 +331,7 @@ class InboxData extends React.Component {
               </TableBody>
             ) : (
                 <TableBody>
-                  {data.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, i) => {
+                  {data.rows.map((row, i) => {
                     return (
                       <TableRow key={i} className="inbox-data-table-bodyrow">
                         {row.map((item, index) => {
@@ -381,7 +384,7 @@ class InboxData extends React.Component {
             <TableFooter>
               <TablePagination
                 rowsPerPageOptions={rowsPerPageOptions}
-                count={data.rows.length}
+                count={this.props.totalRowCount}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 labelRowsPerPage={<Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}
@@ -411,7 +414,7 @@ class InboxData extends React.Component {
             <Card textChildren={<Label labelClassName="" label="COMMON_INBOX_NO_DATA" />} />
           ) : (
               <div>
-                {data.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                {data.rows.map((row, index) => {
                   return (
                     <Card
                       key={index}
@@ -460,7 +463,7 @@ class InboxData extends React.Component {
                     <TablePagination
                       colSpan={6}
                       rowsPerPageOptions={rowsPerPageOptions}
-                      count={data.rows.length}
+                      count={this.props.totalRowCount}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       labelRowsPerPage={<Label labelClassName="" label="COMMON_INBOX_ROWS_LABEL" />}

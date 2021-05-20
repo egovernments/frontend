@@ -86,6 +86,8 @@ class App extends Component {
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
+        <div style={{textAlign:"center"}}>Powered by <span style={{fontSize: '17px',
+    fontWeight: '600'}}>DIGIT</span></div>
       </div>
     );
   }

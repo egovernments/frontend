@@ -23,6 +23,7 @@ import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
+import NewInbox from "../employee/NewInbox";
 
 // import PTHome from "modules/employee/PropertyTax/PTHome";
 
