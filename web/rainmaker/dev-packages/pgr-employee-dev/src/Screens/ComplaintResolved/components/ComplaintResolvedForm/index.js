@@ -32,7 +32,10 @@ const ComplaintResolvedForm = ({ formKey, form, handleFieldChange, onSubmit }) =
       </div>
       <div className="responsive-action-button-cont">
         <Button
-          onClick={onSubmit;callDgrApi();}
+          onClick={() => {
+          onSubmit();
+          callDgrApi();
+        }}
           className="responsive-action-button"
           id={"complaint-resolved-mark-resolved"}
           {...submit}
