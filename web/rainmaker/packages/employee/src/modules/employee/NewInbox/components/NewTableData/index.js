@@ -23,6 +23,7 @@ import Filter from "../Filter";
 import InboxData from "../Table";
 import "./index.css";
 import commonConfig from "config/common.js";
+import { async } from "babel-runtime/regenerator";
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -193,7 +194,7 @@ class NewTableData extends Component {
   }
   checkRow = (row, filter, searchFilter, taskboardLabel) => {
     if ((filter.localityFilter.selectedValue.includes('ALL') || filter.localityFilter.selectedValue.includes(row[1].text.props.label)) &&
-      (filter.moduleFilter.selectedValue.includes('ALL') || filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1])) &&
+    //   (filter.moduleFilter.selectedValue.includes('ALL') || filter.moduleFilter.selectedValue.includes(row[2].text.props.label.split('_')[1])) &&
       (filter.statusFilter.selectedValue.includes('ALL') || filter.statusFilter.selectedValue.includes(row[2].text.props.label.split('_')[2])) &&
       (searchFilter.value === '' || this.checkMatch(row, searchFilter.value)
       )
@@ -280,7 +281,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
     filter[filterName].selectedValue = value
     this.setState({ filter });
   }
-  clearFilter = () => {
+  clearFilter = async() => {
     const initialInboxData = cloneDeep(this.state.initialInboxData);
     const tempObject = cloneDeep(this.state.initialInboxData);
     const filter = {
@@ -298,13 +299,31 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
       }
     }
 
+
     this.setState({
       searchFilter: {
         value: '', typing: false
       }, filter, inboxData: initialInboxData,
       initialInboxData: tempObject
     });
+    const {rowsPerPage , value}=this.state;
+
+    if(value==1){
+       await this.loadInitialData(0,rowsPerPage,true,true);
+    }else{
+        await this.loadInitialData(0,rowsPerPage,false,true);
+    }
   }
+
+  apply=async()=>{
+    const {rowsPerPage , value}=this.state;
+
+    if(value==1){
+       await this.loadInitialData(0,rowsPerPage,true);
+    }else{
+        await this.loadInitialData(0,rowsPerPage,false);
+    }
+}
   prepareInboxDataRows = async (data, all, loadLocality = false) => {
     const { toggleSnackbarAndSetText } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
@@ -539,10 +558,10 @@ if(!locality){
   };
 
 
-handleCaching=async(requestBody, key)=>{
+handleCaching=async(requestBody, key,caching=true)=>{
 const {preparedFinalObject,prepareFinalObject}=this.props;
 let data=get(preparedFinalObject,key,false);
-if(!data){
+if(!data||!caching){
  
    data= await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
    data=cloneDeep(data);
@@ -611,12 +630,13 @@ prepareFinalObject('wf-localities', {...data,...newData});
   };
 
 
-  loadInitialData = async (offset,limit,assignedToMe=false) => {
+  loadInitialData = async (offset,limit,assignedToMe=false,filter=false) => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const tenantId = getTenantId();
     let { taskboardData, tabData,value } = this.state;
     const uuid = get(this.props, "userInfo.uuid");
     const inboxData = [{ headers: [], rows: [] }];
+    let caching=true;
     try {
       this.showLoading();
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: offset }, { key: "limit", value: limit }];
@@ -626,7 +646,15 @@ prepareFinalObject('wf-localities', {...data,...newData});
       }else{
           value=0;
       }
-      const responseData = await this.handleCaching(requestBody,`wf-${offset}-${limit}=${value}`)// httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      if(!filter){
+          if(!this.state.filter.moduleFilter.selectedValue.includes("ALL")){
+            requestBody.push({ key: "businessService", value: this.state.filter.moduleFilter.selectedValue[0] });
+            caching=false
+          }
+        // requestBody.push({ key: "businessService", value: 'service' });
+        // requestBody.push({ key: "status", value: 'service' });
+      }
+      const responseData = await this.handleCaching(requestBody,`wf-${offset}-${limit}=${value}`,caching)// httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
 
       this.loadLocalityForAllData(allData);
@@ -760,8 +788,7 @@ prepareFinalObject('wf-localities', {...data,...newData});
     let { taskboardData, tabData, inboxData } = this.state;
 
     if (this.state.loaded) {
-      const filteredData = this.applyFilter();
-      taskboardData = filteredData.taskboardData;
+      const filteredData = this.applyFilter();      taskboardData = filteredData.taskboardData;
       inboxData = filteredData.inboxData;
       tabData = filteredData.tabData;
     }
@@ -792,10 +819,10 @@ prepareFinalObject('wf-localities', {...data,...newData});
             </div>
           </div>
           <Hidden only={["xs"]} implementation="css">
-            <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter></Hidden>
+            <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} applyFilter={this.apply} filter={filter}></Filter></Hidden>
           <Hidden only={["sm", "md", "lg", "xl"]} implementation="css">
             {this.state.showFilter &&
-              <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>}
+              <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} applyFilter={this.apply} filter={filter}></Filter>}
           </Hidden>
         </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />

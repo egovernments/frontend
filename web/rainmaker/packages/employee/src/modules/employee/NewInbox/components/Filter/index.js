@@ -5,12 +5,11 @@ import "./index.css";
 
 
 
-const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
+const Filter = ({ filter, handleChangeFilter, clearFilter ,applyFilter}) => {
     return (
         <div className="row" style={{marginLeft:'-5px' ,    marginBottom: '15px'}}>
             <div className="col-md-3">
                 <MultiSelectDropdown
-                    multiple
                     onChange={(e) => { handleChangeFilter('moduleFilter', e.target.value) }}
                     floatingLabelText={<Label label="CS_INBOX_MODULE_FILTER" fontSize="12px" />}//"Module"
                     className="filter-fields"
@@ -27,25 +26,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                 />
             </div>
             <div className="col-md-3">
-                <MultiSelectDropdown
-                    multiple
-                    onChange={(e, index, value) => {
-                        handleChangeFilter('localityFilter', e.target.value)
-                    }}
-                    floatingLabelText={<Label label="CS_INBOX_LOCALITY_FILTER" fontSize="12px"/>}
-                    className="filter-fields"
-                    dropDownData={filter.localityFilter.dropdownData}
-                    value={filter.localityFilter.selectedValue}
-                    underlineStyle={{
-                        position: "absolute",
-                        bottom: -1,
-                        borderBottom: "1px solid #FE7A51",
-                        width: "90%"
-                    }}
-                />
-            </div>
-            <div className="col-md-3" >
-                <MultiSelectDropdown
+            <MultiSelectDropdown
                  multiple
                     floatingLabelText={<Label label="CS_INBOX_STATUS_FILTER" fontSize="12px"  />}
                     className="filter-fields"
@@ -62,6 +43,27 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                     }}
                     prefix ={"COMMON_"}
                 />
+                {/* <MultiSelectDropdown
+                    multiple
+                    onChange={(e, index, value) => {
+                        handleChangeFilter('localityFilter', e.target.value)
+                    }}
+                    floatingLabelText={<Label label="CS_INBOX_LOCALITY_FILTER" fontSize="12px"/>}
+                    className="filter-fields"
+                    dropDownData={filter.localityFilter.dropdownData}
+                    value={filter.localityFilter.selectedValue}
+                    underlineStyle={{
+                        position: "absolute",
+                        bottom: -1,
+                        borderBottom: "1px solid #FE7A51",
+                        width: "90%"
+                    }}
+                /> */}
+            </div>
+            <div className="col-md-3" >
+            <div className="rainmaker-displayInline filter-clear-icon" onClick={applyFilter} >
+                    <Label label="CS_INBOX_APPLY" color="#fe7a51" fontSize="15px" />
+                </div>
             </div>
             <div className="col-md-3">
                 <div className="rainmaker-displayInline filter-clear-icon" onClick={clearFilter} >
