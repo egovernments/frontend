@@ -12,6 +12,7 @@ import routes from "./Routes";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import { LoadingIndicator, CommonShareContainer } from "components";
+import { async } from "babel-runtime/regenerator";
 
 class App extends Component {
   constructor(props) {
@@ -86,6 +87,10 @@ class App extends Component {
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img style={{ display: "inline-flex", height: '1em', marginRight: '0.5em' }} src={'./powered-footer-logo.png'} ></img>
+          <img style={{ display: "inline-flex", height: '1em' }} src={'./digit-footer-logo.png'} ></img>
+        </div>
       </div>
     );
   }
