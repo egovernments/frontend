@@ -4,6 +4,7 @@ import pdfFonts from "./vfs_fonts";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { convertLocalDate } from "egov-ui-kit/utils/commons";
 
 pdfMake.vfs = pdfFonts.vfs;
 
@@ -585,13 +586,13 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
                    { text: "Vasika No.:", border: borderKey, style: "receipt-table-key" },
                    { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.vasikaNo && propertyDetails[0].additionalDetails.vasikaNo|| "NA", border: borderValue },
                    { text: "Vasika Date:", border: borderKey, style: "receipt-table-key" },
-                   { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.vasikaDate && propertyDetails[0].additionalDetails.vasikaDate|| "NA", border: borderValue },
+                   { text: convertLocalDate(propertyDetails[0].additionalDetails.vasikaDate)|| "NA", border: borderValue },
                  ],
                  [
                   { text: "Allotment Letter No.:", border: borderKey, style: "receipt-table-key" },
                   { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.allotmentNo && propertyDetails[0].additionalDetails.allotmentNo|| "NA", border: borderValue },
                   { text: "Allotment Letter Date:", border: borderKey, style: "receipt-table-key" },
-                  { text: propertyDetails[0].additionalDetails && propertyDetails[0].additionalDetails.allotmentDate && propertyDetails[0].additionalDetails.allotmentDate|| "NA", border: borderValue },
+                  { text: convertLocalDate(propertyDetails[0].additionalDetails.allotmentDate)|| "NA", border: borderValue },
                 ],
                  [
                    { text: "Firm/Business Name:", border: borderKey, style: "receipt-table-key" },
