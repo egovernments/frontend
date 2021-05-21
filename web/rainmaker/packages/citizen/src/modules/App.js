@@ -131,8 +131,8 @@ class App extends Component {
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1em', marginRight: '0.5em' }} src={'./powered-footer-logo.png'} ></img>
-          <img style={{ display: "inline-flex", height: '1em' }} src={'./digit-footer-logo.png'} ></img>
+          <img style={{ display: "inline-flex", height: '1em', marginRight: '0.5em' }} src={'./../powered-footer-logo.png'} ></img>
+          <img style={{ display: "inline-flex", height: '1em' }} src={'./../digit-footer-logo.png'} ></img>
         </div>
       </div>
     );
