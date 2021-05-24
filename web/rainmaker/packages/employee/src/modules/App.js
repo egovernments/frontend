@@ -82,7 +82,8 @@ class App extends Component {
   render() {
     const { toast, loading, defaultUrl, hasLocalisation } = this.props;
     let loginScreens = false;
-    if (['/employee/user/login', '/employee/forgot-password', '/employee/language-selection'].includes(window.location.pathname)) {
+    let logginScreensUrls=['/employee/user/login', '/employee/forgot-password', '/employee/language-selection'];
+    if (logginScreensUrls.includes(window.location.pathname)) {
       loginScreens = true;
     }
     return (
@@ -94,14 +95,12 @@ class App extends Component {
 
         {!loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <img style={{ display: "inline-flex", height: '1em', marginRight: '0.5em' }} src={'./../powered-footer-logo.png'} ></img>
-            <img style={{ display: "inline-flex", height: '1em' }} src={'./../digit-footer-logo.png'} ></img>
+          <img style={{ display: "inline-flex", height: '1em' }} src={'./digit-footer.png'} onError={"this.src='./../digit-footer.png'"}></img>
           </div>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <img style={{ display: "inline-flex", height: '1em', marginRight: '0.5em', backgroundColor: 'white' }} src={'./../powered-footer-logo.png'} ></img>
-            <img style={{ display: "inline-flex", height: '1em', backgroundColor: 'white' }} src={'./../digit-footer-logo.png'} ></img>
+          <img style={{ display: "inline-flex", height: '1em' }} src={'./digit-footer-bw.png'} onError={"this.src='./../digit-footer-bw.png'"}></img>        
           </div>
         </div>}
       </div>
