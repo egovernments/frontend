@@ -137,12 +137,12 @@ class App extends Component {
         {loading && <LoadingIndicator />}
         {!loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1em' }} src={'./digit-footer.png'} onError={"this.src='./../digit-footer.png'"}></img>
+          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={'./digit-footer.png'} onError={"this.src='./../digit-footer.png'"}></img>
           </div>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1em' }} src={'./digit-footer-bw.png'} onError={"this.src='./../digit-footer-bw.png'"}></img>        
+          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={'./digit-footer-bw.png'} onError={"this.src='./../digit-footer-bw.png'"}></img>        
           </div>
         </div>}
       </div>

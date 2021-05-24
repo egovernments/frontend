@@ -107,7 +107,7 @@ const NavigationDrawer = ({
         })}
         <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1em' }} src={'./digit-footer.png'} onError={"this.src='./../digit-footer.png'"}></img>
+          <img style={{ display: "inline-flex", height: '1em' }} alt={"Powered by DIGIT"} src={'./digit-footer.png'} onError={"this.src='./../digit-footer.png'"}></img>
           </div>
         </div>
       </div>
