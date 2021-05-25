@@ -5,6 +5,7 @@ import { TextArea } from "modules/common";
 import Axios from 'axios';
 
 const ComplaintResolvedForm = ({ formKey, form, handleFieldChange, onSubmit }) => {
+      var complaintId = (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)).replace(/%2F/gi, "/");
 const updateStatus = async () => {
       await Axios.post(
       `http://devgrievanceapi.psegs.in/api/grievance/GetComplaintStatus_PMIDC`,
