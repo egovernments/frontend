@@ -13,10 +13,16 @@ export const checkValueForNA = value => {
   return value ? value : "NA";
 };
 const tenantId = getTenantIdCommon()
-const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
 const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
 
+const getRedirectionURL = async (state, dispatch) => {
+  let tenant = getQueryArg(window.location.href, "tenantId");
+  const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+  const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
+  const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+  window.location.assign(`${origin}${environment}/wns/meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`);
+};
 export const waterDetails = () => {
   if (connectionType === "Metered") {
     return getCommonContainer({
@@ -37,8 +43,8 @@ export const waterDetails = () => {
         gridDefination: { xs: 12, sm: 12, align: "left" },
         children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
         onClickDefination: {
-          action: "page_change",
-          path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
+          action: "condition",
+          callBack: getRedirectionURL
         }
       },
     })
