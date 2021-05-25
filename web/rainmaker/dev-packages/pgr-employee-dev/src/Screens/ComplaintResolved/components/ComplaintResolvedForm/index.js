@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "components";
 import { ImageUpload } from "modules/common";
 import { TextArea } from "modules/common";
+import Axios from 'axios';
 
 const ComplaintResolvedForm = ({ formKey, form, handleFieldChange, onSubmit }) => {
 const updateStatus = async () => {
