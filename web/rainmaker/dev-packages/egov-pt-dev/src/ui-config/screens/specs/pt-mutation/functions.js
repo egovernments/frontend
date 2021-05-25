@@ -1,6 +1,6 @@
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { disableField, enableField } from "egov-ui-framework/ui-utils/commons";
+import { disableField, enableField, getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import React from "react";
 import { getSearchResults } from "../../../../ui-utils/commons";
