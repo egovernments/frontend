@@ -29,7 +29,7 @@ class OTP extends Component {
 
   sendOtpForAutoLogin = async () => {
     let { phoneNumber, setFieldProperty } = this.props;
-    if (phoneNumber && typeof phoneNumber == 'string' && phoneNumber.length > 11 && s.startsWith('91')) {
+    if (phoneNumber && typeof phoneNumber == 'string' && phoneNumber.length > 11 && phoneNumber.startsWith('91')) {
       phoneNumber = phoneNumber && phoneNumber.replace && phoneNumber.replace('91', '') || phoneNumber;
     }
     if (phoneNumber) {
@@ -92,7 +92,7 @@ class OTP extends Component {
     let { phoneNumber, loading, bannerUrl, logoUrl, history } = this.props;
     const { resendOTP, completed, reset } = this;
     const { timerSwitch, timeLeft } = this.state;
-    if (phoneNumber && typeof phoneNumber == 'string' && phoneNumber.length > 11 && s.startsWith('91')) {
+    if (phoneNumber && typeof phoneNumber == 'string' && phoneNumber.length > 11 && phoneNumber.startsWith('91')) {
       phoneNumber = phoneNumber && phoneNumber.replace && phoneNumber.replace('91', '') || phoneNumber;
     }
     return (
