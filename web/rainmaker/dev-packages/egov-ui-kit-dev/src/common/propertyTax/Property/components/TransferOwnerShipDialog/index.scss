@@ -44,4 +44,10 @@
       display: flex;
       text-align: center;
       background: white; } }
-  
+      .label-text{
+        font-size : 14px!important;
+      }
+
+      body > div:nth-child(9) > div > div:nth-child(1) > div > div > div > div:nth-child(2) > div.transfer-ownership-dialog-footer > div:nth-child(2) > button > div > div > span > div > div{
+        font-size: 14px!important;
+      }
