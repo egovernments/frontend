@@ -56,7 +56,7 @@ const mapStateToProps = (state, ownProps) => {
   const { complaints, common, form } = state;
 
   const { employeeById, departmentById, designationsById, cities } = common || {};
-  let selectedComplaint = complaints["byId"][getServiceId(ownProps.match.params.serviceRequestId)];
+  let selectedComplaint = complaints["byId"][getServiceId(ownProps.match.params.serviceRequestId)] || complaints["byId"]['24/05/2021/010389'] ;
   const reopenValidChecker = get(state, "common.pgrContants.RAINMAKER-PGR.UIConstants[0].REOPENSLA", 4232000000)
   if (selectedComplaint) {
     let details = {
