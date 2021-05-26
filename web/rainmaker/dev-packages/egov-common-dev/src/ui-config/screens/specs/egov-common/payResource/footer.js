@@ -1131,7 +1131,7 @@ const options = {
     amount: get(getOrderData, "Transaction.txnAmount")*100,
     //currency: getQueryVariable('currency'),
     name: "mSeva | Punjab",
-    description: get(getOrderData, "Transaction.businessService")+" Charge Collection"
+    description: get(getOrderData, "Transaction.businessService")+" Charge Collection",
     image: "https://mseva.lgpunjab.gov.in/citizen/browser-icon.png",
     order_id: getQueryVariable('orderId'),
     handler: async function (response) {
