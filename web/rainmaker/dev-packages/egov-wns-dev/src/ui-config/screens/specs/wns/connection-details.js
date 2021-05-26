@@ -427,14 +427,17 @@ export const getPaymentHistory = async (queryObject , dispatch , serviceCode) =>
   
     let paymentArray = [];
     let paymentRow=null;
-    let receiptNumber,receiptDate,totalAmountPaid,totalDue,paymentMode;
+    let receiptNumber,receiptDate,totalAmountPaid,totalDue,paymentMode,service,tenant;
     response.Payments.map((element,index) => {
        paymentMode = element.paymentMode;
+       tenant = element.tenantId;
+
        element.paymentDetails.map((dd)=>{
        receiptDate=convertEpochToDate(dd.receiptDate);
        receiptNumber=dd.receiptNumber;
        totalAmountPaid = dd.totalAmountPaid;
        totalDue = dd.totalDue;
+       service=dd.bill.businessService;
       });
       paymentRow={
         "paymentMode":paymentMode,
@@ -442,6 +445,8 @@ export const getPaymentHistory = async (queryObject , dispatch , serviceCode) =>
         "receiptNumber":receiptNumber,
         "totalAmountPaid":totalAmountPaid,
         "totalDue":totalDue,
+        "service":service,
+        "tenant":tenant
       };
       paymentArray.push(paymentRow);
     });
