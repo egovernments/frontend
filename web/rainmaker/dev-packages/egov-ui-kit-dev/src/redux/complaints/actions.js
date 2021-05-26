@@ -148,7 +148,52 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite) => {
     dispatch(complaintFetchPending());
     try {
       let tenantId = "";
+      const actionHistory= [
+        {
+            "actions": [
+                {
+                    "uuid": "1ba94100-b4f7-4889-abbe-d7cdc021ffd2",
+                    "tenantId": "pb.amritsar",
+                    "by": "27513:Citizen",
+                    "when": 1621863029766,
+                    "businessKey": "24/05/2021/010389",
+                    "action": "open",
+                    "status": "open"
+                }
+            ]
+        }
+    ]
+      const services =  [
+        {
+            "tenantId": "pb.amritsar",
+            "serviceCode": "GarbageNeedsTobeCleared",
+            "serviceRequestId": "24/05/2021/010389",
+            "addressId": "b716849e-0503-4e6e-ba63-f3d1bdf43546",
+            "accountId": "27513",
+            "phone": "7391904467",
+            "addressDetail": {
+                "uuid": "b716849e-0503-4e6e-ba63-f3d1bdf43546",
+                "mohalla": "SUN84",
+                "locality": "Gurudwara Niai Sahib Street 1",
+                "city": "pb.amritsar",
+                "tenantId": "pb.amritsar"
+            },
+            "active": true,
+            "status": "open",
+            "source": "whatsapp",
+            "auditDetails": {
+                "createdBy": "27513",
+                "lastModifiedBy": "27513",
+                "createdTime": 1621863029766,
+                "lastModifiedTime": 1621863029766
+            }
+        }
+    ]
       const payload = await httpRequest(COMPLAINT.GET.URL, COMPLAINT.GET.ACTION, queryObject);
+      if (payload.services && payload.services.length === 0) {
+        payload.services=[...services]   
+        payload.actionHistory=[...actionHistory]   
+      }
       if (payload.services && payload.services.length === 1) {
         tenantId = payload.services[0].tenantId;
       }
