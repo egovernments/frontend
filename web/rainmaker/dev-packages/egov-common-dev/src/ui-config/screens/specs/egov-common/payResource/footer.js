@@ -62,9 +62,13 @@ export const callPGService = async (state, dispatch) => {
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : taxAmount;
   amtToPay = amtToPay ? Number(amtToPay) : taxAmount;
-
+  
   if (amtToPay > taxAmount && !isAdvancePaymentAllowed) {
     alert("Advance Payment is not allowed");
+    return;
+  }
+  if (amtToPay < taxAmount && process.env.REACT_APP_NAME === "Citizen" && (businessService == "PT" || businessService == "WS" || businessService == "SW") ) {
+    alert("Partial Payment is not allowed");
     return;
   }
   let isFormValid = validateFields(
@@ -894,7 +898,10 @@ const callBackForPay = async (state, dispatch) => {
     alert("Advance Payment is not allowed");
     return;
   }
-
+  if (amtToPay < taxAmount && process.env.REACT_APP_NAME === "Citizen" && (businessService == "PT" || businessService == "WS" || businessService == "SW") ) {
+    alert("Partial Payment is not allowed");
+    return;
+  }
   if (checkAmount(totalAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), finalReceiptData.Bill[0].businessService)) {
     dispatch(
       toggleSnackbar(
