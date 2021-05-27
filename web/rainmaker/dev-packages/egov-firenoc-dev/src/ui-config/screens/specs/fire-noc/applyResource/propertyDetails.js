@@ -87,7 +87,7 @@ const prepareTextField = uom => {
     //     e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,2)
     // },
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      // required: true,
+      required: true,
       jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
       gridDefination: {
         xs: 12,
@@ -155,7 +155,7 @@ previousUoms.forEach(uom => {
 // Set required fields defaults
 // setMandatory(dispatch, `${path}.PLOT_SIZE`, false);
 setMandatory(dispatch, `${path}.BUILTUP_AREA`, false);
-setMandatory(dispatch, `${path}.HEIGHT_OF_BUILDING`, false);
+setMandatory(dispatch, `${path}.HEIGHT_OF_BUILDING`, true);
 
 // Dynamically create UOM's based on building subtype selection
 uoms.forEach(uom => {
@@ -339,7 +339,7 @@ const commonBuildingData = buildingType => {
         // Set required fields defaults
         // setMandatory(dispatch, `${path}.PLOT_SIZE`, false);
         setMandatory(dispatch, `${path}.BUILTUP_AREA`, false);
-        setMandatory(dispatch, `${path}.HEIGHT_OF_BUILDING`, false);
+        setMandatory(dispatch, `${path}.HEIGHT_OF_BUILDING`, true);
 
         // Dynamically create UOM's based on building subtype selection
         uoms.forEach(uom => {
