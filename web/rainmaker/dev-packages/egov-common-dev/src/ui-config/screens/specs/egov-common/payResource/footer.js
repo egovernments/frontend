@@ -898,7 +898,7 @@ const callBackForPay = async (state, dispatch) => {
     alert("Advance Payment is not allowed");
     return;
   }
-  if (amtToPay < taxAmount && process.env.REACT_APP_NAME === "Citizen" && (businessService == "PT" || businessService == "WS" || businessService == "SW") ) {
+  if (amtPaid < totalAmount && process.env.REACT_APP_NAME === "Citizen" && (businessService == "PT" || businessService == "WS" || businessService == "SW") ) {
     alert("Partial Payment is not allowed");
     return;
   }
