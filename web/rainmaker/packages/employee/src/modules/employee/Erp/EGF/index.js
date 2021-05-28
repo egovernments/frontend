@@ -51,6 +51,7 @@ class EGFFinance extends Component {
           <input readOnly hidden="true" name="auth_token" value={auth_token} />
           <input readOnly hidden="true" name="tenantId" value={tenantId} />
           <input readOnly hidden="true" name="locale" value={locale} />
+	  <input readOnly hidden="true" name="formPage" value="true" />
         </form>
       </div>
     );
