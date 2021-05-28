@@ -494,6 +494,22 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
             get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].tradeLicenseDetail.owners", [])
           )
         );
+
+if(activeIndex === 1){
+  let newModifiedOwners=[{
+    "mobileNumber": owners[0].mobileNumber,
+    "name": owners[0].name,
+    "fatherOrHusbandName": owners[0].fatherOrHusbandName,
+    "relationship": owners[0].relationship,
+    "dob": owners[0].dob,
+    "gender": owners[0].gender,
+    "permanentAddress": owners[0].permanentAddress,
+    "ownerType": owners[0].ownerType,
+    "emailId": owners[0].emailId,
+    "pan":owners[0].pan,
+    "userActive":true
+  }];
+set(queryObject[0], "tradeLicenseDetail.owners",newModifiedOwners);}
         set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
         set(queryObject[0], "tradeLicenseDetail.adhocPenalty", null);
         set(queryObject[0], "tradeLicenseDetail.adhocExemption", null);
