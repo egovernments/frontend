@@ -495,7 +495,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           )
         );
 
-if(activeIndex === 1){
+if(activeIndex === 1 && queryObject[0].status == 'APPROVED' && queryObject[0].applicationType == "RENEWAL" &&  queryObject[0].workflowCode == "EDITRENEWAL"){
   let newModifiedOwners=[{
     "mobileNumber": owners[0].mobileNumber,
     "name": owners[0].name,
