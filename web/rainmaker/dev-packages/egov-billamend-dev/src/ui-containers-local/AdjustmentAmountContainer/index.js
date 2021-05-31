@@ -112,13 +112,19 @@ const themeStyles = (theme) => ({
     "& input": {
       display: "none",
     },
-  },
+  }
 });
 
 const lableStyle = {
   display: "flex",
   alignItems: "center",
 };
+
+
+ const  taxAmountStyle={
+    fontWeight: "500",
+    color: 'rgba(0, 0, 0, 0.87)'
+  }
 const taxHeadsLabel = {
   display: "flex",
   alignItems: "center",
@@ -199,15 +205,18 @@ class AdjustmentAmountContainer extends Component {
     }
   };
   getHeaderTaxCard = (card, key) => {
-    const { classes, amountType, ...rest } = this.props;
+    const { classes, amountType,searchBillDetails={} ,...rest } = this.props;
     let disableValue = (amountType == "reducedAmount") ? true : false;
     return (
       <React.Fragment>
         <Grid container={true}>
-          <Grid item={true} xs={4} sm={4} md={3} style={lableStyle}>
+          <Grid item={true} xs={3} sm={3} md={3} style={lableStyle}>
             <LabelContainer labelKey={getTransformedLocale(`BILL_${card.taxHeadCode}`)} />
           </Grid>
-          <Grid item={true} xs={4} sm={4} md={3}>
+          <Grid item={true}  xs={3} sm={3} md={3} style={lableStyle}>
+            <LabelContainer classes={taxAmountStyle} labelKey={get(searchBillDetails,card.taxHeadCode,'0')||'0'} />
+          </Grid>
+          <Grid item={true}  xs={3} sm={3} md={3}>
             <TextField
               variant="outlined"
               name={getTransformedLocale(card.taxHeadCode)}
@@ -225,7 +234,7 @@ class AdjustmentAmountContainer extends Component {
               }}
             />
           </Grid>
-          <Grid item={true} xs={4} sm={4} md={3}>
+          <Grid item={true}  xs={3} sm={3} md={3}>
             <TextField
               variant="outlined"
               value={card.additionalAmountValue ? card.additionalAmountValue : 0}
@@ -254,10 +263,13 @@ class AdjustmentAmountContainer extends Component {
     return (
       <div>
         <Grid container={true}>
-          <Grid item={true} xs={4} sm={4} md={3} style={taxHeadsLabel}>
+          <Grid item={true} xs={3} sm={3} md={3} style={taxHeadsLabel}>
             <LabelContainer labelKey={getTransformedLocale("TAX_HEADS")} />
           </Grid>
-          <Grid item={true} xs={4} sm={4} md={3}>
+          <Grid item={true} xs={3} sm={3} md={3} style={taxHeadsLabel}>
+            <LabelContainer labelKey={getTransformedLocale("TAX_CURRENT_AMOUNT")} />
+          </Grid>
+          <Grid item={true} xs={3} sm={3} md={3}>
             <CheckBoxContainer
               labelName="Reduced Amount (Rs)"
               labelKey="BILL_REDUCED_AMOUNT_RS"
@@ -266,7 +278,7 @@ class AdjustmentAmountContainer extends Component {
               changeMethod={this.handleCheckBoxChange}
             />
           </Grid>
-          <Grid item={true} xs={4} sm={4} md={3}>
+          <Grid item={true} xs={3} sm={3} md={3}>
             <CheckBoxContainer
               labelName="Additional Amount (Rs)"
               labelKey="BILL_ADDITIONAL_AMOUNT_RS"
@@ -291,20 +303,27 @@ class AdjustmentAmountContainer extends Component {
 
 const mapStateToProps = (state) => {
   const { screenConfiguration } = state;
-  const { moduleName } = screenConfiguration;
+  const { moduleName,preparedFinalObject } = screenConfiguration;
+
   const amount = get(
-    screenConfiguration.preparedFinalObject,
+    preparedFinalObject,
     "BILL.AMOUNT",
     []
   );
   const amountType = get(
-    screenConfiguration.preparedFinalObject,
+    preparedFinalObject,
     "BILL.AMOUNTTYPE",
     ""
   );
+  const searchBillDetails = get(
+    preparedFinalObject,
+    "searchBillDetails-bill",
+    {}
+  );
+  
 
-  let data = get( screenConfiguration.preparedFinalObject, "fetchBillDetails", []);
-  return { amount, moduleName, data, amountType };
+  let data = get( preparedFinalObject, "fetchBillDetails", []);
+  return { amount, moduleName, data, amountType ,searchBillDetails};
 };
 
 const mapDispatchToProps = (dispatch) => {
