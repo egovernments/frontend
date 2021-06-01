@@ -174,8 +174,10 @@ function FeesEstimateCard(props) {
                         <Grid item xs={6}>
                             <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_ADJUSTMENT_AMOUNT_TOTAL" style={{ fontWeight: "bold" }} />
                         </Grid>
-                        <Grid item xs={6} align="right" style={{ paddingRight: 0 }}>
+                        <Grid item xs={3} align="right" style={{ paddingRight: 0 }}>
                             <Typography variant="body2">{total}</Typography>
+                        </Grid>
+                        <Grid item xs={3} align="right" style={{ paddingRight: 0 }}>
                         </Grid>
                     </Grid>
                 </div>
