@@ -260,7 +260,6 @@ export const prepareEditFlow = async (
     []
   );
   if (applicationNumber) {
-    getMdmsDataForDocs(state, dispatch);
     let response = await getSearchResults([
       {
         key: "tenantId",
@@ -355,6 +354,7 @@ const screenConfig = {
           ownershipCategory
         )
       );
+      getMdmsDataForDocs(state, dispatch);
       
       // Set Documents Data (TEMP)
       prepareDocumentsUploadData(state, dispatch);
