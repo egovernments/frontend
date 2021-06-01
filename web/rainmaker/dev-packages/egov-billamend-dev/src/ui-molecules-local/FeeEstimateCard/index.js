@@ -99,14 +99,14 @@ function FeesEstimateCard(props) {
                             <Grid container xs={3}>
                                 <LabelContainer labelName="Tax Heads" labelKey="BILL_TAX_HEADS" style={{ fontWeight: "bold" }} />
                             </Grid>
+                            <Grid align="right" xs={3}>
+                                <LabelContainer labelName="Tax Heads" labelKey="BILL_OLD_AMOUNT" style={{ fontWeight: "bold" }} />
+                            </Grid>
                             <Grid xs={3} align="right">
                                 <LabelContainer
                                     labelName="Reduced Amount(Rs)"
                                     labelKey={get(estimate, "fees[0].amountType", "") === "reducedAmount" ? "BILL_REDUCED_AMOUNT_RS" : "BILL_ADDITIONAL_AMOUNT_RS"}
                                     style={{ fontWeight: "bold" }} />
-                            </Grid>
-                            <Grid align="right" xs={3}>
-                                <LabelContainer labelName="Tax Heads" labelKey="BILL_OLD_AMOUNT" style={{ fontWeight: "bold" }} />
                             </Grid>
                             <Grid xs={3} align="right">
                                 <LabelContainer labelName="Tax Heads" labelKey="BILL_UPDATED_AMOUNT" style={{ fontWeight: "bold" }} />
@@ -182,7 +182,7 @@ function FeesEstimateCard(props) {
             </Grid>
             <Grid xs={12} sm={12}>
                 <Card className={classes.whiteCard}>
-                    <Grid container style={{ display: "flex" }}>
+                    <Grid container style={{ display: "flex" ,flexFlow: "row" }}>
                         <Grid item><ErrorIcon className={classes.leftIcon} /></Grid>
                         <Grid>
                             {estimate.extra.map((item, key) => {
@@ -191,7 +191,7 @@ function FeesEstimateCard(props) {
                                 let colRight = item.textLeft ? 6 : 10;
                                 if (item.textLeft) {
                                     textLeft = (
-                                        <Grid xs={colLeft} className={'bill-estimate-infotext'}>
+                                        <Grid xs={colLeft} >
                                             <Typography>{item.textLeft}</Typography>
                                         </Grid>
                                     );
