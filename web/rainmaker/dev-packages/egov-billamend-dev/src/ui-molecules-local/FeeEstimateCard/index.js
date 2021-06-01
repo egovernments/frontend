@@ -26,7 +26,7 @@ const styles = {
         marginTop: 24,
         boxShadow: "none",
         borderRadius: 0,
-        display:"flex"
+        display: "flex"
     },
     whiteCardText: {
         padding: 8,
@@ -52,7 +52,6 @@ const styles = {
     leftIcon: {
         color: "grey",
         marginRight: 4,
-        position:'absolute'
     },
     taxHeadMasterCodes: {
         fontSize: "12px",
@@ -61,10 +60,10 @@ const styles = {
 };
 
 function totalAmount(arr) {
-    if(Array.isArray(arr)) {
+    if (Array.isArray(arr)) {
         return arr
-        .map(item => (item.taxAmount ? item.taxAmount : 0))
-        .reduce((prev, next) => prev + next, 0);
+            .map(item => (item.taxAmount ? item.taxAmount : 0))
+            .reduce((prev, next) => prev + next, 0);
     } else {
         return 0;
     }
@@ -79,57 +78,93 @@ function totalAmount(arr) {
 // }
 
 function FeesEstimateCard(props) {
-    const { classes, estimate } = props;
+    const { classes, estimate, searchBillDetails = {} } = props;
     const total = totalAmount(estimate.fees);
     // const amountType = getAmountType(estimate.fees);
     return (
 
         <Grid container>
-            <Grid xs={12} sm={7}>
-                <div style={{ marginTop: 48, maxWidth: 400 }}>
+            <Grid xs={12} sm={12}>
+                <Typography variant="body2" align="right">
+                    Total Amount
+                </Typography>
+                <Typography className={classes.bigheader} align="right">
+                    Rs {total}
+                </Typography>
+            </Grid>
+            <Grid xs={12} sm={12}>
+                <div>
                     <Grid container >
                         <Grid container style={{ marginBottom: 10 }}>
-                            <Grid container xs={6}>
-                                <LabelContainer labelName="Tax Heads" labelKey="BILL_TAX_HEADS" style={{fontWeight:"bold"}}/>
+                            <Grid container xs={3}>
+                                <LabelContainer labelName="Tax Heads" labelKey="BILL_TAX_HEADS" style={{ fontWeight: "bold" }} />
                             </Grid>
-                            <Grid xs={6} align="right">
-                            <LabelContainer 
-                            labelName="Reduced Amount(Rs)" 
-                            labelKey= {get(estimate, "fees[0].amountType", "") === "reducedAmount" ? "BILL_REDUCED_AMOUNT_RS" : "BILL_ADDITIONAL_AMOUNT_RS"}
-                            style={{fontWeight:"bold"}}/>
+                            <Grid xs={3} align="right">
+                                <LabelContainer
+                                    labelName="Reduced Amount(Rs)"
+                                    labelKey={get(estimate, "fees[0].amountType", "") === "reducedAmount" ? "BILL_REDUCED_AMOUNT_RS" : "BILL_ADDITIONAL_AMOUNT_RS"}
+                                    style={{ fontWeight: "bold" }} />
+                            </Grid>
+                            <Grid align="right" xs={3}>
+                                <LabelContainer labelName="Tax Heads" labelKey="BILL_OLD_AMOUNT" style={{ fontWeight: "bold" }} />
+                            </Grid>
+                            <Grid xs={3} align="right">
+                                <LabelContainer labelName="Tax Heads" labelKey="BILL_UPDATED_AMOUNT" style={{ fontWeight: "bold" }} />
                             </Grid>
                         </Grid>
                         {estimate.fees && estimate.fees.length > 0 && estimate.fees.map((fee, key) => {
                             let tooltip = fee.info ? (
-                                <Tooltip val="" icon={"info_circle"} className={'bill-estimate-infoicon'} style={{    position: 'absolute'}} /> //{fee.info.labelName}
+                                <Tooltip val="" icon={"info_circle"} className={'bill-estimate-infoicon'} style={{ position: 'absolute' }} /> //{fee.info.labelName}
                             ) : (
-                                    ""
-                                );
+                                ""
+                            );
                             let textLeft = fee.taxHeadMasterCode ? (
-                                <Grid container xs={8}>
-                                    <LabelContainer 
-                                        labelKey = {getTransformedLocale(`BILL_${fee.taxHeadMasterCode}`)}
+                                <Grid container xs={3}>
+                                    <LabelContainer
+                                        labelKey={getTransformedLocale(`BILL_${fee.taxHeadMasterCode}`)}
                                         className={classes.taxHeadMasterCodes}
                                     />
                                     {/* <Typography>{`BILL_${fee.taxHeadMasterCode}`}</Typography> */}
                                     {tooltip}
                                 </Grid>
                             ) : (
-                                    <Grid xs={8} />
-                                );
+                                <Grid xs={3} />
+                            );
+                            let oldAmount = fee ? (
+                                <Grid xs={3} align="right">
+                                    <Typography variant="body2" className={classes.taxHeadMasterCodes}>
+                                        {get(searchBillDetails, fee.taxHeadMasterCode, 0)}
+                                    </Typography>
+                                </Grid>
+                            ) : (
+                                <Grid xs={3} />
+                            );
+                            let newAmount = fee ? (
+                                <Grid xs={3} align="right">
+                                    <Typography variant="body2" className={classes.taxHeadMasterCodes}>
+                                        {get(estimate, "fees[0].amountType", "") === "reducedAmount" ? Number(get(searchBillDetails, fee.taxHeadMasterCode, 0)) - Number(fee.taxAmount) : Number(get(searchBillDetails, fee.taxHeadMasterCode, 0)) + Number(fee.taxAmount)}
+                                    </Typography>
+                                </Grid>
+                            ) : (
+                                <Grid xs={3} />
+                            );
                             let textRight = fee ? (
-                                <Grid xs={4} align="right">
+                                <Grid xs={3} align="right">
                                     <Typography variant="body2" className={classes.taxHeadMasterCodes}>
                                         {fee.taxAmount}
                                     </Typography>
                                 </Grid>
                             ) : (
-                                    <Grid xs={4} />
-                                );
+                                <Grid xs={3} />
+                            );
                             return (
                                 <Grid container>
                                     {textLeft}
+                                    {oldAmount}
+
                                     {textRight}
+
+                                    {newAmount}
                                 </Grid>
                             );
                         })}
@@ -137,7 +172,7 @@ function FeesEstimateCard(props) {
                     <Divider style={{ marginBottom: 5 }} />
                     <Grid container>
                         <Grid item xs={6}>
-                        <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_ADJUSTMENT_AMOUNT_TOTAL" style={{fontWeight:"bold"}}/>
+                            <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_ADJUSTMENT_AMOUNT_TOTAL" style={{ fontWeight: "bold" }} />
                         </Grid>
                         <Grid item xs={6} align="right" style={{ paddingRight: 0 }}>
                             <Typography variant="body2">{total}</Typography>
@@ -145,15 +180,9 @@ function FeesEstimateCard(props) {
                     </Grid>
                 </div>
             </Grid>
-            <Grid xs={12} sm={5}>
-                <Typography variant="body2" align="right">
-                    Total Amount
-        </Typography>
-                <Typography className={classes.bigheader} align="right">
-                    Rs {total}
-                </Typography>
+            <Grid xs={12} sm={12}>
                 <Card className={classes.whiteCard}>
-                    <Grid container style={{display:"flex"}}>
+                    <Grid container style={{ display: "flex" }}>
                         <Grid item><ErrorIcon className={classes.leftIcon} /></Grid>
                         <Grid>
                             {estimate.extra.map((item, key) => {
