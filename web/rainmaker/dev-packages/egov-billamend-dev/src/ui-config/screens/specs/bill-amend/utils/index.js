@@ -360,7 +360,9 @@ export const submitApplication = async (state, dispatch) => {
   // if (get(billAmdDetails, "dateEffectiveFrom")) {
   //   billAmdDetails.dateEffectiveFrom = convertDateToEpoch(get(billAmdDetails, "dateEffectiveFrom"));
   // }
-
+  let billAmdDetails = get(state.screenConfiguration.preparedFinalObject, "Amendment", {});
+  let searchBillDetails = get(state.screenConfiguration.preparedFinalObject, "searchBillDetails-bill", {});
+  set(billAmdDetails,'additionalDetails.searchBillDetails',{...searchBillDetails});
   try {
 
     let response = await httpRequest(

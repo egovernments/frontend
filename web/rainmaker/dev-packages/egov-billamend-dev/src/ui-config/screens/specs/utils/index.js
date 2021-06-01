@@ -524,6 +524,8 @@ export const searchBill = async(state, dispatch, action, queryObject) => {
       "",
       queryObject
     );
+    const billdetails=get(response,'Bill[0].billDetails',[]);
+    set(response,'Bill[0].billDetails',billdetails.sort((x,y)=>y.fromPeriod-x.fromPeriod));
     return response;
   } catch (error) {
     dispatch(
