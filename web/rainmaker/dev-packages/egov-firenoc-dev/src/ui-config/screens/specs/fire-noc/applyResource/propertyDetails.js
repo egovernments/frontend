@@ -367,7 +367,7 @@ const commonBuildingData = buildingType => {
       }
     },
     NO_OF_FLOORS: prepareSelectField("NO_OF_FLOORS", 1, 20),
-    NO_OF_BASEMENTS: prepareSelectField("NO_OF_BASEMENTS", 0, 5),
+    NO_OF_BASEMENTS: prepareSelectField("NO_OF_BASEMENTS", 1, 5),
     // PLOT_SIZE: prepareTextField("PLOT_SIZE"),
     BUILTUP_AREA: prepareTextField("BUILTUP_AREA"),
     HEIGHT_OF_BUILDING: prepareTextField("HEIGHT_OF_BUILDING"),
