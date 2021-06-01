@@ -469,7 +469,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           { key: "applicationNumber", value: queryObject[0].applicationNumber }
         ];
         const renewalResponse = await getSearchResults(renewalSearchQueryObject);
-        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments");
+        const renewalDocuments = get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments")?get(renewalResponse, "Licenses[0].tradeLicenseDetail.applicationDocuments"):[];
         for (let i = 1; i <= documents.length; i++) {
           if (i > renewalDocuments.length) {
             renewalDocuments.push(documents[i - 1])
@@ -495,7 +495,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           )
         );
 
-if(activeIndex === 1 && queryObject[0].status == 'APPROVED' && queryObject[0].applicationType == "RENEWAL" &&  queryObject[0].workflowCode == "EDITRENEWAL"){
+if(activeIndex === 1 && queryObject[0].applicationType == "RENEWAL" &&  queryObject[0].workflowCode == "EDITRENEWAL"){
   let newModifiedOwners=[{
     "mobileNumber": owners[0].mobileNumber,
     "name": owners[0].name,
@@ -507,10 +507,15 @@ if(activeIndex === 1 && queryObject[0].status == 'APPROVED' && queryObject[0].ap
     "ownerType": owners[0].ownerType,
     "emailId": owners[0].emailId,
     "pan":owners[0].pan,
-    "userActive":true
+    "userActive":true,
   }];
-set(queryObject[0], "tradeLicenseDetail.owners",newModifiedOwners);}
-        set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
+set(queryObject[0], "tradeLicenseDetail.owners",newModifiedOwners);
+set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwnersForRenewal(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
+}
+else {        
+  set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
+}
+
         set(queryObject[0], "tradeLicenseDetail.adhocPenalty", null);
         set(queryObject[0], "tradeLicenseDetail.adhocExemption", null);
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
@@ -542,7 +547,7 @@ set(queryObject[0], "tradeLicenseDetail.owners",newModifiedOwners);}
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
-        dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        dispatch(prepareFinalObject("Licenses", searchResponse?searchResponse.Licenses:queryObject));
       }
       enableField('apply',"components.div.children.footer.children.nextButton",dispatch);
       enableField('apply',"components.div.children.footer.children.payButton",dispatch);
@@ -767,6 +772,17 @@ export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
         }
     }   
 }
+oldOwners=oldOwners&&Array.isArray(oldOwners)&&oldOwners.map(owner=>{
+  return {...owner, userActive :false}
+})
+currentOwners=currentOwners&&Array.isArray(currentOwners)&&currentOwners.map(owner=>{
+  return {...owner, userActive :true}
+})
+
+return [...currentOwners, ...oldOwners];
+ }
+ export const checkValidOwnersForRenewal=(currentOwners=[],oldOwners=[])=>{
+
 oldOwners=oldOwners&&Array.isArray(oldOwners)&&oldOwners.map(owner=>{
   return {...owner, userActive :false}
 })
