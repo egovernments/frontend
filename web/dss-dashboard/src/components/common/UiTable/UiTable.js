@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import Arrow_Downward from '../../../images/arrows/Arrow_Downward.svg';
 import Arrow_Upward from '../../../images/arrows/Arrow_Upward.svg';
-import { convertLabelValue } from '../../../utils/commons';
+import { convertLabelValue, getLocaleLabels } from '../../../utils/commons';
 import ExportToExcel from '../ExportToExel';
 import TableSearch from '../TableSearch/TableSearch';
 import UiTableHead from './UiTableHead';
@@ -194,7 +194,7 @@ class EnhancedTable extends React.Component {
     if (rowName === 'Complaint Date') {
       return value && Number(value) && new Date(Number(value)).toLocaleDateString();
     }
-    return value;
+    return getLocaleLabels(value);
   }
 
   getFilter(value) {
