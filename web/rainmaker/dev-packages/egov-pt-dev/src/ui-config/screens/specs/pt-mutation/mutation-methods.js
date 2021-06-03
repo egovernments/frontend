@@ -1,18 +1,79 @@
 
 import {
-  getTextField,
-  getSelectField,
-  getCommonContainer,
-  getPattern,
-  getCommonCard,
-  getCommonTitle,
-  getCommonParagraph,
-  getLabel
+  getCommonCard, getCommonContainer, getCommonParagraph, getCommonTitle, getLabel, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { propertySearch, applicationSearch } from "./functions";
-// import "./index.css";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getMohallaData } from "egov-ui-kit/utils/commons";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
+import { applicationSearch, propertySearch } from "./functions";
 
+
+export const ComponentJsonPath = {
+  ulbCity:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+  locality:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
+  ownerName:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+  ownerMobNo:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+  propertyID:
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyID",
+};
+
+const applyMohallaData = (mohallaData, tenantId, dispatch) => {
+  dispatch(
+    prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData)
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.data",
+      mohallaData
+      // payload.TenantBoundary && payload.TenantBoundary[0].boundary
+    )
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.value", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.error", false)
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "isFieldValid", true)
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.errorMessage", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.locality, "props.helperText", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.helperText", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.error", false)
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
+  );
+  dispatch(prepareFinalObject("ptSearchScreen.locality", ""));
+  const mohallaLocalePrefix = {
+    moduleName: tenantId,
+    masterName: "REVENUE",
+  };
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.localePrefix",
+      mohallaLocalePrefix
+    )
+  );
+};
 
 export const resetFields = (state, dispatch) => {
   if (process.env.REACT_APP_NAME == "Citizen") {
@@ -45,7 +106,7 @@ export const resetFields = (state, dispatch) => {
         false
       )
     );
-  }else{
+  } else {
     dispatch(
       handleField(
         "propertySearch",
@@ -116,6 +177,52 @@ export const resetFields = (state, dispatch) => {
     "ptSearchScreen.acknowledgementIds",
     ''
   ))
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.errorMessage", "")
+  );
+
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.helperText", "")
+  );
+  dispatch(
+    handleField("propertySearch", ComponentJsonPath.ulbCity, "props.error", false)
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.helperText",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      ComponentJsonPath.locality,
+      "props.errorMessage",
+      ""
+    )
+  );
+  dispatch(prepareFinalObject(
+    "ptSearchScreen.locality",
+    ''
+  ))
   dispatch(prepareFinalObject(
     "ptSearchScreen.ids",
     ''
@@ -131,7 +238,22 @@ export const resetFields = (state, dispatch) => {
 
 };
 
-
+export const cityChange = async (dispatch, value = "") => {
+  try {
+    dispatch(fetchLocalizationLabel(getLocale(), value, value));
+    let payload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      [{ key: "tenantId", value: value }],
+      {}
+    );
+    const mohallaData = getMohallaData(payload, value);
+    applyMohallaData(mohallaData, value, dispatch);
+  } catch (e) {
+    console.log(e);
+  }
+}
 export const searchPropertyDetails = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Property",
@@ -178,8 +300,45 @@ export const searchPropertyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4
+      },
+      beforeFieldChange: async (action, state, dispatch) => {
+        if (action.value) {
+          cityChange(dispatch, action.value)
+        }
       }
     },
+    locality: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
+      props: {
+        label: {
+          labelName: "Locality",
+          labelKey: "PT_SEARCH_LOCALITY"
+        },
+        placeholder: {
+          labelName: "Select Locality",
+          labelKey: "PT_SEARCH_LOCALITY_PLACEHOLDER"
+        },
+        localePrefix: {
+          moduleName: "TENANT",
+          masterName: "TENANTS"
+        },
+        required: true,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        jsonPath: "ptSearchScreen.locality",
+        sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+        className: "locality-dropdown autocomplete-dropdown"
+      },
+      required: true,
+      jsonPath: "ptSearchScreen.locality",
+      gridDefination: {
+        xs: 12,
+        sm: 3
+      }
+    },
+
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
