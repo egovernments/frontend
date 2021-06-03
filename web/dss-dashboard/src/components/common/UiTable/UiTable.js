@@ -214,7 +214,7 @@ class EnhancedTable extends React.Component {
   }
 
   renderCenterTable(n, idx) {
-    const { classes, columnData, needHash } = this.props
+    const { classes, columnData, needHash,strings={} } = this.props
     const isSelected = this.isSelected(n.Email);
     let lydata = this.renderLastYearRowData(n, idx);
     var existingFilters = this.props.filters;
@@ -314,7 +314,7 @@ class EnhancedTable extends React.Component {
               component='td' scope='row' data-title={d} >
               {title === 'CUSTOM' ?
                 d === this.props.column ?
-                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{convertLabelValue(n[d][1])}</span>
+                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{convertLabelValue(n[d][1],strings,'')}</span>
                   : (typeof n[d] === 'object') ?
 
                     this.convertToDateString(n[d][1], d)
@@ -331,7 +331,7 @@ class EnhancedTable extends React.Component {
                     </div>
                 :
                 d === this.props.column ?
-                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{convertLabelValue(n[d][1])}</span>
+                  <span onClick={this.cellClick.bind(this, n)} className={classes.link}>{convertLabelValue(n[d][1],strings,'')}</span>
                   : (typeof n[d] === 'object') ?
                     this.convertToDateString(n[d][1], d)
                     :

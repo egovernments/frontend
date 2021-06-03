@@ -36,15 +36,15 @@ export const fetchLocalisationRequest = (language) => {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     };
-    const reqUrl = `${CONFIGS.LOCALISATION_URL}?locale=${language}&tenantId=${getTenantId().split('.')[0]}&module=rainmaker-common,rainmaker-dss`;
+    const reqUrl = `${CONFIGS.LOCALISATION_URL}?locale=${language}&tenantId=${getTenantId().split('.')[0]}&module=rainmaker-common,rainmaker-dss,rainmaker-pt,rainmaker-pgr,rainmaker-tl`;
     const reqBody = {}
     return { reqHeaders, reqBody, reqUrl };
 }
-export const convertLabelValue=(label='',strings={})=>{
+export const convertLabelValue=(label='',strings={},localePrefix="DSS_TB_")=>{
     switch(label){
         case "Boundary":
             return getLocaleLabels('DSS_TB_CITY',strings);
         default:
-            return getLocaleLabels(`DSS_TB_${label}`,strings);
+            return getLocaleLabels(`${localePrefix}${label}`,strings);
     }
 }
