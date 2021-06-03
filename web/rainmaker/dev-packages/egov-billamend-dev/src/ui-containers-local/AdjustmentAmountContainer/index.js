@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
-import get from "lodash/get";
-
-import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-import CheckBoxContainer from "../CheckBoxContainer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import CheckBoxContainer from "../CheckBoxContainer";
+
 
 const styles = (theme) => ({
   textField: {
     textAlign: "right",
-    maxWidth:"90%",
+    maxWidth: "90%",
   },
   input: {
     padding: "10px 0px 2px 10px !important",
@@ -121,10 +121,10 @@ const lableStyle = {
 };
 
 
- const  taxAmountStyle={
-    fontWeight: "500",
-    color: 'rgba(0, 0, 0, 0.87)'
-  }
+const taxAmountStyle = {
+  fontWeight: "500",
+  color: 'rgba(0, 0, 0, 0.87)'
+}
 const taxHeadsLabel = {
   display: "flex",
   alignItems: "center",
@@ -154,22 +154,22 @@ class AdjustmentAmountContainer extends Component {
   handleAmountChange = (e, field, key) => {
     const { data, ...rest } = this.props;
     const re = /^(\d+)?([.]?\d{0,2})?$/; ///^[0-9\b]+$/;
-      if (e.target.value === '' || re.test(e.target.value)) {
-        const event = e.target;
-        let details = { ...data }, value = event.value,
-          endSplitValue = e.target.value.split('.')[1],
-          initialSplitValue = e.target.value.split('.')[0];
-        if (endSplitValue && endSplitValue.length > 0) {
-          value = `${initialSplitValue * 1}.${endSplitValue}`;
-        } else if (initialSplitValue && initialSplitValue.length > 0 && endSplitValue != "") {
-          value = initialSplitValue * 1;
-        } else if (endSplitValue == "") {
-          value = `${initialSplitValue * 1}.`;
-        }
-        if (field == "reducedAmount") details[key]["reducedAmountValue"] = value;
-        if (field == "additionalAmount") details[key]["additionalAmountValue"] = value;
-        this.props.prepareFinalObject("fetchBillDetailsssss", details);
+    if (e.target.value === '' || re.test(e.target.value)) {
+      const event = e.target;
+      let details = { ...data }, value = event.value,
+        endSplitValue = e.target.value.split('.')[1],
+        initialSplitValue = e.target.value.split('.')[0];
+      if (endSplitValue && endSplitValue.length > 0) {
+        value = `${initialSplitValue * 1}.${endSplitValue}`;
+      } else if (initialSplitValue && initialSplitValue.length > 0 && endSplitValue != "") {
+        value = initialSplitValue * 1;
+      } else if (endSplitValue == "") {
+        value = `${initialSplitValue * 1}.`;
       }
+      if (field == "reducedAmount") details[key]["reducedAmountValue"] = value;
+      if (field == "additionalAmount") details[key]["additionalAmountValue"] = value;
+      this.props.prepareFinalObject("fetchBillDetailsssss", details);
+    }
   };
   handleCheckBoxChange = (field) => {
     const { data, ...rest } = this.props;
@@ -180,7 +180,7 @@ class AdjustmentAmountContainer extends Component {
         if (typeof details == "object") {
           details = Object.values(details);
         }
-        details.forEach( data => {
+        details.forEach(data => {
           if (data.additionalAmountValue) data.additionalAmountValue = 0;
         });
         this.props.prepareFinalObject("fetchBillDetailsssss", details);
@@ -194,8 +194,8 @@ class AdjustmentAmountContainer extends Component {
         if (typeof details == "object") {
           details = Object.values(details);
         }
-        details.forEach( data => {
-          if (data.reducedAmountValue){ data.reducedAmountValue = 0 }
+        details.forEach(data => {
+          if (data.reducedAmountValue) { data.reducedAmountValue = 0 }
         });
         this.props.prepareFinalObject("fetchBillDetailsssss", details);
         this.setState({ reducedAmount: true });
@@ -205,7 +205,7 @@ class AdjustmentAmountContainer extends Component {
     }
   };
   getHeaderTaxCard = (card, key) => {
-    const { classes, amountType,searchBillDetails={} ,...rest } = this.props;
+    const { classes, amountType, searchBillDetails = {}, ...rest } = this.props;
     let disableValue = (amountType == "reducedAmount") ? true : false;
     return (
       <React.Fragment>
@@ -213,10 +213,10 @@ class AdjustmentAmountContainer extends Component {
           <Grid item={true} xs={3} sm={3} md={3} style={lableStyle}>
             <LabelContainer labelKey={getTransformedLocale(`BILL_${card.taxHeadCode}`)} />
           </Grid>
-          <Grid item={true}  xs={3} sm={3} md={3} style={lableStyle}>
-            <LabelContainer classes={taxAmountStyle} labelKey={get(searchBillDetails,card.taxHeadCode,'0')||'0'} />
+          <Grid item={true} xs={3} sm={3} md={3} style={lableStyle}>
+            <LabelContainer classes={taxAmountStyle} labelKey={get(searchBillDetails, card.taxHeadCode, '0') || '0'} />
           </Grid>
-          <Grid item={true}  xs={3} sm={3} md={3}>
+          <Grid item={true} xs={3} sm={3} md={3}>
             <TextField
               variant="outlined"
               name={getTransformedLocale(card.taxHeadCode)}
@@ -234,7 +234,7 @@ class AdjustmentAmountContainer extends Component {
               }}
             />
           </Grid>
-          <Grid item={true}  xs={3} sm={3} md={3}>
+          <Grid item={true} xs={3} sm={3} md={3}>
             <TextField
               variant="outlined"
               value={card.additionalAmountValue ? card.additionalAmountValue : 0}
@@ -287,7 +287,7 @@ class AdjustmentAmountContainer extends Component {
               changeMethod={this.handleCheckBoxChange}
             />
           </Grid>
-        
+
         </Grid>
         <div>
           {data &&
@@ -303,7 +303,7 @@ class AdjustmentAmountContainer extends Component {
 
 const mapStateToProps = (state) => {
   const { screenConfiguration } = state;
-  const { moduleName,preparedFinalObject } = screenConfiguration;
+  const { moduleName, preparedFinalObject } = screenConfiguration;
 
   const amount = get(
     preparedFinalObject,
@@ -320,10 +320,10 @@ const mapStateToProps = (state) => {
     "searchBillDetails-bill",
     {}
   );
-  
 
-  let data = get( preparedFinalObject, "fetchBillDetails", []);
-  return { amount, moduleName, data, amountType ,searchBillDetails};
+
+  let data = get(preparedFinalObject, "fetchBillDetails", []);
+  return { amount, moduleName, data, amountType, searchBillDetails };
 };
 
 const mapDispatchToProps = (dispatch) => {
