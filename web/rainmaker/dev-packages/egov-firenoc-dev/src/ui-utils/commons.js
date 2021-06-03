@@ -330,6 +330,9 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
+    if(payload[0]&&payload[0].provisionFireNOCNumber==""){
+      delete payload[0].provisionFireNOCNumber;
+    }
 
     let response;
     if (method === "CREATE") {
@@ -357,6 +360,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
       // enableField('summary',"components.div.children.footer.children.submitButton",dispatch);
       dispatch(prepareFinalObject("FireNOCs", response.FireNOCs));
+      dispatch(prepareFinalObject("DYNAMIC_MDMS_Trigger", false));
     } else if (method === 'edit') {
 
       enableField('apply', "components.div.children.footer.children.nextButton", dispatch);
