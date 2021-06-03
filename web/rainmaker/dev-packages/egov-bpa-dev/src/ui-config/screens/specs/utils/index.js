@@ -3087,6 +3087,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             );
             currOwnersArr = scrutinyData[0];
             dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
+            let occupancyObj = get(currOwnersArr, "planDetail.occupancies[0].typeHelper.type", {});
+            dispatch(prepareFinalObject("BPA.OccupanciesList", [occupancyObj]));
+            dispatch(prepareFinalObject("scrutinyDetails.planDetail.planInformation.occupancies", occupancyObj.code));
             // await riskType(state, dispatch);
             await edcrDetailsToBpaDetails(state, dispatch);
             await residentialType(state, dispatch);
@@ -4128,7 +4131,7 @@ const prepareFieldDocumentsUploadData = async (state, dispatch, action, fieldInf
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropDownValues) {
         let dropDownValues = {};
-        dropDownValues.label = "Select Documents";
+        dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required ? true : false;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
           return item.active;
@@ -4332,22 +4335,22 @@ export const getLoggedinUserRole = (wfState) => {
       if (wfState) {
         wfState = wfState.state;
         if (wfState === "SEND_TO_CITIZEN") {
-          currentRole = "BPA Architect"
+          currentRole = "BPA_ARCHITECT"
         }
         else if (wfState === "DOC_VERIFICATION_PENDING") {
-          currentRole = "BPA Document Verifier"
+          currentRole = "BPA_DOC_VERIFIER"
         }
         else if (wfState === "FIELDINSPECTION_PENDING") {
-          currentRole = "BPA Field Inspector"
+          currentRole = "BPA_FIELD_INSPECTOR"
         }
         else if (wfState === "NOC_VERIFICATION_PENDING") {
-          currentRole = "BPA Noc Verifier"
+          currentRole = "BPA_NOC_VERIFIER"
         }
         else if (window.location.href.includes("noc-search-preview")) {
-          currentRole = "NOC Approver"
+          currentRole = "BPA_F_NOC_VERIFIER"
         }
         else {
-          currentRole = "BPA Architect"
+          currentRole = "BPA_ARCHITECT"
         }
       }
 
@@ -4536,7 +4539,7 @@ export const prepareNocFinalCards = async (state, dispatch, isVisibleTrue) => {
     card["required"] = doc.required ? true : false;
     if (doc.hasDropdown && doc.dropDownValues) {
       let dropDownValues = {};
-      dropDownValues.label = "Select Documents";
+      dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
       dropDownValues.required = doc.required;
       dropDownValues.menu = doc.dropDownValues.filter(item => {
         return item.active;
@@ -4872,7 +4875,7 @@ export const prepareDocsInEmployee = (state, dispatch, action, appState, uploade
       card["orderNumber"] = get(doc, "order");
       if (doc.hasDropdown && doc.dropDownValues) {
         let dropDownValues = {};
-        dropDownValues.label = "Select Documents";
+        dropDownValues.label = "BPA_SELECT_DOCS_LABEL";
         dropDownValues.required = doc.required;
         dropDownValues.menu = doc.dropDownValues.filter(item => {
           return item.active;
@@ -5255,9 +5258,10 @@ export const downloadFeeReceipt = async (state, dispatch, status, serviceCode, m
 }
 
 const getFloorDetails = (index) => {
-  let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
+  // let floorNo = ['Ground', 'First', 'Second', 'Third', 'Forth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth']
   if (index) {
-    return `${floorNo[index]} floor`;
+    return `BPA_FLOOR_NAME_${index}`
+    // return `${floorNo[index]} floor`;
   }
 };
 
@@ -5307,16 +5311,17 @@ export const setProposedBuildingData = async (state, dispatch, action, value) =>
   let tableData = [];
   if (response && response.length > 0) {
     for (var j = 0; j < response.length; j++) {
-      let title = `Block ${j + 1}`;
+      let blockName = getLocaleLabels("", "BLOCK");
+      let title = `BLOCK_${j + 1}`;
       let floors = response[j] && response[j].building && response[j].building.floors;
       let block = await floors.map((item, index) => (
         {
-          [getBpaTextToLocalMapping("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
-          [getBpaTextToLocalMapping("Level")]: item.number,
-          [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: getLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
-          [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "0",
-          [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "0",
-          [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "0",
+          [("Floor Description")]: getFloorDetails((item.number).toString()) || '-',
+          [("Level")]: item.number,
+          [("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "NA",//getLocaleLabels("-", item.occupancies[0].type),//getLocaleLabels("-", item.occupancies[0].type, getLocalLabels),
+          [("Buildup Area")]: item.occupancies[0].builtUpArea || 0,
+          [("Floor Area")]: item.occupancies[0].floorArea || 0,
+          [("Carpet Area")]: item.occupancies[0].carpetArea || 0,
         }));
       let occupancyTypeCheck = [],
         floorNo = response[j].number
