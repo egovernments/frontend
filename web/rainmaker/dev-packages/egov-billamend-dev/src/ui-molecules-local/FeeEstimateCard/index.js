@@ -1,17 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
-import { Tooltip } from "egov-ui-framework/ui-molecules";
+import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import ErrorIcon from "@material-ui/icons/Error";
-import { getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
+import { Tooltip } from "egov-ui-framework/ui-molecules";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
+import PropTypes from "prop-types";
+import React from "react";
 
 
 const styles = {
@@ -77,19 +75,43 @@ function totalAmount(arr) {
 //     }
 // }
 
+
+const updateEstimate = (fees = [], searchBillDetails = {}) => {
+    let amountType = "reducedAmount";
+
+    let newFee = {};
+    fees && Array.isArray(fees) && fees.map(fee => {
+        amountType = fee.amountType;
+        newFee[fee.taxHeadMasterCode] = { ...fee }
+    })
+    let newFees = [];
+    Object.keys(searchBillDetails).map(key => {
+        if (key != 'TOTAL') {
+            newFees.push({ taxHeadMasterCode: key, taxAmount: get(newFee, `${key}.taxAmount`, 0), amountType });
+        }
+
+    })
+
+    return newFees;
+}
 function FeesEstimateCard(props) {
     const { classes, estimate, searchBillDetails = {} } = props;
     const total = totalAmount(estimate.fees);
+    estimate.fees = updateEstimate(estimate.fees, searchBillDetails); // to show All Tax heads in UI to 
+
+    let billTotal = searchBillDetails && searchBillDetails.TOTAL || 0;
+    let updatedTotal = get(estimate, "fees[0].amountType", "") === "reducedAmount" ? billTotal - total : billTotal + total;
     // const amountType = getAmountType(estimate.fees);
     return (
 
         <Grid container>
             <Grid xs={12} sm={12}>
                 <Typography variant="body2" align="right">
-                    Total Amount
+
+                    <LabelContainer labelName="Tax Heads" labelKey="BILL_TOTAL_AMOUNT" />
                 </Typography>
                 <Typography className={classes.bigheader} align="right">
-                    Rs {total}
+                    <LabelContainer labelName="Tax Heads" labelKey="BILL_RS_HEADER" style={{ fontWeight: "bold" }} />  {total}
                 </Typography>
             </Grid>
             <Grid xs={12} sm={12}>
@@ -171,26 +193,30 @@ function FeesEstimateCard(props) {
                     </Grid>
                     <Divider style={{ marginBottom: 5 }} />
                     <Grid container>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <LabelContainer labelName="Reduced Amount(Rs)" labelKey="BILL_ADJUSTMENT_AMOUNT_TOTAL" style={{ fontWeight: "bold" }} />
+                        </Grid>
+                        <Grid item xs={3} align="right" style={{ paddingRight: 0 }}>
+                            <Typography variant="body2">{billTotal}</Typography>
                         </Grid>
                         <Grid item xs={3} align="right" style={{ paddingRight: 0 }}>
                             <Typography variant="body2">{total}</Typography>
                         </Grid>
                         <Grid item xs={3} align="right" style={{ paddingRight: 0 }}>
+                            <Typography variant="body2">{updatedTotal}</Typography>
                         </Grid>
                     </Grid>
                 </div>
             </Grid>
             <Grid xs={12} sm={12}>
                 <Card className={classes.whiteCard}>
-                    <Grid container style={{ display: "flex" ,flexFlow: "row" }}>
+                    <Grid container style={{ display: "flex", flexFlow: "row" }}>
                         <Grid item><ErrorIcon className={classes.leftIcon} /></Grid>
                         <Grid>
                             {estimate.extra.map((item, key) => {
                                 let textLeft, textRight;
-                                let colLeft = item.textRight ? 6 : 10;
-                                let colRight = item.textLeft ? 6 : 10;
+                                let colLeft = item.textRight ? 12 : 12;
+                                let colRight = item.textLeft ? 12 : 12;
                                 if (item.textLeft) {
                                     textLeft = (
                                         <Grid xs={colLeft} >
