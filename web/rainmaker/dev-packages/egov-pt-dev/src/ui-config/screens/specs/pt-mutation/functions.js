@@ -155,29 +155,7 @@ const searchApiCall = async (state, dispatch, index) => {
     query = {}
   }
 
-  let formValid = false;
-  if (index == 0) {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '') {
-      formValid = true;
-    }
-  } else {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
-      formValid = true;
-    }
-  }
-  if (!formValid) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Please fill valid fields to search",
-          labelKey: "ERR_PT_FILL_VALID_FIELDS"
-        },
-        "error"
-      )
-    );
-    return;
-  }
+ 
   let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
   let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
@@ -196,6 +174,12 @@ const searchApiCall = async (state, dispatch, index) => {
     dispatch,
     "propertySearch"
   );
+  const isownerLocalityRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.locality == "";
 
 
   const isownerMobNoRowValid = validateFields(
@@ -237,7 +221,29 @@ const searchApiCall = async (state, dispatch, index) => {
     "propertySearch"
   ) || searchScreenObject.ids == '';
 
-
+  let formValid = false;
+  if (index == 0) {
+    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '')) {
+      formValid = true;
+    }
+  } else {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+      formValid = true;
+    }
+  }
+  if (!formValid) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
+        },
+        "error"
+      )
+    );
+    return;
+  }
 
 
   if (!(isSearchBoxFirstRowValid)) {
@@ -253,7 +259,7 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
-  if (index == 0 && !(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid)) {
+  if (index == 0 && !(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid && isownerLocalityRowValid)) {
     dispatch(
       toggleSnackbar(
         true,
