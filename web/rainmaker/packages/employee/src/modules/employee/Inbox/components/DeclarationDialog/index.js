@@ -8,6 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import { TextField } from '@material-ui/core';
 import get from "lodash/get";
 import store from "ui-redux/store";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const DeclarationDialog = ({ popupClose, popupOpen }) => {
 
@@ -83,6 +85,7 @@ const DeclarationDialog = ({ popupClose, popupOpen }) => {
     }
   }
   
+  let tenant = getTenantId().split(".").length>1? getTenantId().split(".")[1].toUpperCase():"";
   return (
     <Dialog
       open={popupOpen}
@@ -91,7 +94,7 @@ const DeclarationDialog = ({ popupClose, popupOpen }) => {
         <Label label={"Declaration"} bold={true} color="rgba(0, 0, 0, 0.8700000047683716)" fontSize="20px" labelStyle={{ padding: "16px 0px 0px 24px" }} />
       }
       children={[
-        <Label label={`It is confirmed that all services available on the e-Chhawani Portal are being processed on the Portal by ${localStorage.getItem("tenant-id").split(".")[1].toUpperCase()} Cantonment Board and no manual processing is being done in such matters.`} 
+        <Label label={`It is confirmed that all services available on the e-Chhawani Portal are being processed on the Portal by ${tenant} Cantonment Board and no manual processing is being done in such matters.`} 
           bold={false} color="rgba(0, 0, 0, 0.8700000047683716)" 
           fontSize="15px" 
           labelStyle={{ padding: "16px 0px 0px 24px" }} />,
