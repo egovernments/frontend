@@ -2,7 +2,8 @@ import {
   convertEpochToDate,
   getCommonCard,
   getCommonContainer,
-  getCommonHeader
+  getCommonHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -29,7 +30,7 @@ import { getServiceDetails } from "./connectionDetailsResource/service-details";
 import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
 import { getPaymentDetails } from "./connectionDetailsResource/paymentDetails";
 import { getDCBDetails } from "./connectionDetailsResource/DCBDetails";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
 import get from "lodash/get";
@@ -377,6 +378,37 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           true
         )
       );
+      const tenantId = getTenantIdCommon();
+      const service = getQueryArg(window.location.href, "service");
+      const connectionType = getQueryArg(window.location.href, "connectionType");
+      const getRedirectionURL = async (state, dispatch) => {
+        let tenant = getQueryArg(window.location.href, "tenantId");
+        const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
+        const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
+        const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
+        window.location.assign(`${origin}${environment}/wns/meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`);
+      };
+      const editSection= {
+        componentPath: "Button",
+        props: { color: "primary", style: { margin: "-16px" } },
+        visible: true,
+        gridDefination: { xs: 12, sm: 12, align: "left" },
+        children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
+        onClickDefination: {
+          action: "condition",
+          callBack: getRedirectionURL
+        }
+      }
+      if( service === "WATER" && connectionType === "Metered") {
+      dispatch(
+        handleField(
+          "connection-details",
+          "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails.children",
+          "editSection",
+          editSection
+        )
+      );
+      }
     }
   }
 };
