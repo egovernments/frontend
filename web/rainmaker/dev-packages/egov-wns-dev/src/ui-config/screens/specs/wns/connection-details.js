@@ -482,6 +482,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "connection-details",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("WaterConnection[0]", {}));
     let connectionNo = getQueryArg(window.location.href, "connectionNumber");   
     getDataForBillAmendment(action, state, dispatch);
 
