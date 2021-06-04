@@ -91,7 +91,7 @@ const DeclarationDialog = ({ popupClose, popupOpen }) => {
         <Label label={"Declaration"} bold={true} color="rgba(0, 0, 0, 0.8700000047683716)" fontSize="20px" labelStyle={{ padding: "16px 0px 0px 24px" }} />
       }
       children={[
-        <Label label={"I here by declare that, I have performed all the transactions digitally for the below mentioned period of time."} 
+        <Label label={`It is confirmed that all services available on the e-Chhawani Portal are being processed on the Portal by ${localStorage.getItem("tenant-id").split(".")[1].toUpperCase()} Cantonment Board and no manual processing is being done in such matters.`} 
           bold={false} color="rgba(0, 0, 0, 0.8700000047683716)" 
           fontSize="15px" 
           labelStyle={{ padding: "16px 0px 0px 24px" }} />,
