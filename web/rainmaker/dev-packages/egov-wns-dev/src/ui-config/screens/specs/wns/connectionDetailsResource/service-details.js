@@ -15,14 +15,6 @@ export const checkValueForNA = value => {
 const tenantId = getTenantIdCommon()
 const service = getQueryArg(window.location.href, "service")
 const connectionType = getQueryArg(window.location.href, "connectionType")
-
-const getRedirectionURL = async (state, dispatch) => {
-  let tenant = getQueryArg(window.location.href, "tenantId");
-  const connectionNumber = getQueryArg(window.location.href, "connectionNumber");
-  const environment = process.env.NODE_ENV === "production" ? process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee" : "";
-  const origin =  process.env.NODE_ENV === "production" ? window.location.origin + "/" : window.location.origin;
-  window.location.assign(`${origin}${environment}/wns/meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`);
-};
 export const waterDetails = () => {
   if (connectionType === "Metered") {
     return getCommonContainer({
@@ -34,19 +26,6 @@ export const waterDetails = () => {
       connectionExecutionDate: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_EXECUTION_DATE" }, { jsonPath: "WaterConnection[0].connectionExecutionDate" }),
       waterSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SOURCE" }, { jsonPath: "WaterConnection[0].waterSource" }),
       oldConsumerNo: getLabelWithValue({ labelKey: "WS_OLD_CONSUMER_NO" }, { jsonPath: "WaterConnection[0].oldConnectionNo",callBack: checkValueForNA }),
-      
-      // waterSubSource: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_WATER_SUB_SOURCE" }, { jsonPath: "WaterConnection[0].waterSubSource" }),
-      editSection: {
-        componentPath: "Button",
-        props: { color: "primary", style: { margin: "-16px" } },
-        visible: true,
-        gridDefination: { xs: 12, sm: 12, align: "left" },
-        children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
-        onClickDefination: {
-          action: "condition",
-          callBack: getRedirectionURL
-        }
-      },
     })
   } else {
     return getCommonContainer({
