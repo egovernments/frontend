@@ -45,7 +45,7 @@ const prepareSelectField = (uom, start, end) => {
   for (let i = start; i <= end; i++) {
     data.push({ code: `${i}`, name: i });
   }
-  return {
+   return {
     uiFramework: "custom-containers-local",
     moduleName: "egov-firenoc",
     componentPath: "AutosuggestContainer",
@@ -100,7 +100,34 @@ const prepareTextField = uom => {
     })
   };
 };
-
+const prepareTextFieldForBasement = uom => {
+  return {
+    ...getTextField({
+      label: {
+        labelKey: `NOC_PROPERTY_DETAILS_${uom}_LABEL`
+      },
+      placeholder: {
+        labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
+      },
+      pattern: /^\d{0,10}$/i,
+      
+    //   onInput:(e)=>{ 
+    //     e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,2)
+    // },
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      required: false,
+      jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props:{
+        className:"applicant-details-error"
+      }
+    })
+  };
+};
 const checkUomIsDefault = uom => {
   if (
     [
@@ -367,7 +394,7 @@ const commonBuildingData = buildingType => {
       }
     },
     NO_OF_FLOORS: prepareSelectField("NO_OF_FLOORS", 1, 20),
-    NO_OF_BASEMENTS: prepareSelectField("NO_OF_BASEMENTS", 0, 5),
+    NO_OF_BASEMENTS: prepareTextFieldForBasement("NO_OF_BASEMENTS", 1, 5),
     // PLOT_SIZE: prepareTextField("PLOT_SIZE"),
     BUILTUP_AREA: prepareTextField("BUILTUP_AREA"),
     HEIGHT_OF_BUILDING: prepareTextField("HEIGHT_OF_BUILDING"),
