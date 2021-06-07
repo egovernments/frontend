@@ -173,15 +173,28 @@ const getPropertyData = async (action, state, dispatch) => {
     }
     const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     payload.Properties[0].additionalDetails = { previousPropertyUuid };
+    let owners=payload.Properties[0].owners
+    let phoneno = /^[6-9][0-9]{9}$/; 
+    let isOldNumberValid=true;
+    for(let i=0;i<owners.length;i++){
+  if((!owners[i].mobileNumber.match(phoneno) && owners[i].status=='ACTIVE'))
+  {
+  
+    isOldNumberValid=false
+    break;
+  }
+
+}
+
+    
+    dispatch(prepareFinalObject("isOldNumberValid",isOldNumberValid));
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
   
     setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     dispatch(prepareFinalObject("PropertyOld",{}));
-    let oldmob=payload.Properties[0].owners[0].mobileNumber
-    
-    dispatch(prepareFinalObject("PropertyOldNumber",oldmob));
+   
 
   } catch (e) {
     console.log(e);
@@ -579,34 +592,21 @@ const screenConfig = {
       );
      
 
-let oldMobileNumber = get(state, "screenConfiguration.preparedFinalObject.PropertyOldNumber");
+let isOldNumberValid = get(state, "screenConfiguration.preparedFinalObject.isOldNumberValid");
 
-let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
-let phoneno = /^[6-9][0-9]{9}$/; 
-let flag=false
-//if any owner is having wrong number flag will become true and the input feild will show
-if(owners){
-owners.map(owner => {
-  if(!owner.mobileNumber.match(phoneno) && owner.status=='ACTIVE')
+//if any owner is having wrong number flag will become false and the input feild will show
+
+
+  if(isOldNumberValid)
   {
-    flag=true
-  }
-
-})}
-if(!flag)
-{
-  set(
-    action.screenConfig,
-    "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
-     { visibility: "hidden" }
-  );
-}
-
-   
-        
     
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
+       { visibility: "hidden" }
+    );
 
-
+  }
 
     
       buildingUsageTypeData = getFirstListFromDotSeparated(
