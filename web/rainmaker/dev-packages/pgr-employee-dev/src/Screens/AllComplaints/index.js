@@ -36,6 +36,7 @@ class AllComplaints extends Component {
     value: 0,
     sortPopOpen: false,
     errorText: "",
+    mobileErrorText: ""
   };
   style = {
     iconStyle: {
@@ -217,6 +218,13 @@ class AllComplaints extends Component {
   onMobileChange = (e) => {
     const inputValue = e.target.value;
     this.setState({ mobileNo: inputValue });
+    if (inputValue.length < 10) {
+      this.setState({
+        mobileErrorText: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      });
+    } else {
+      this.setState({ mobileErrorText: "" });
+    }
   };
 
   onSearch = () => {
@@ -248,7 +256,19 @@ class AllComplaints extends Component {
         );
       }
     } else if (mobileNo) {
-      fetchComplaints(queryObj, true, true);
+      if(mobileNo.length < 10) {
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Entered value is less than 10 characters in length.",
+            labelKey: `ERR_VALUE_LESS_THAN_TEN_CHARACTERS`,
+          },
+          "error"
+        );
+      }
+      else {
+        fetchComplaints(queryObj, true, true);
+      }
     }
     this.setState({ search: true });
   };
@@ -273,6 +293,7 @@ class AllComplaints extends Component {
       search,
       sortPopOpen,
       errorText,
+      mobileErrorText
     } = this.state;
   
     const tabStyle = {
@@ -494,9 +515,10 @@ class AllComplaints extends Component {
                         fontSize="12px"
                       />
                     }
+                    errorText={<Label label={mobileErrorText} color="red" />}
                     onChange={(e, value) => this.onMobileChange(e)}
-                    underlineStyle={{ bottom: 7 }}
-                    underlineFocusStyle={{ bottom: 7 }}
+                    underlineStyle={{ bottom: 7, borderBottom: "1px solid #e0e0e0" }}
+                    underlineFocusStyle={{ bottom: 7, borderBottom: "1px solid #e0e0e0" }}
                     hintStyle={{ width: "100%" }}
                   />
                 </div>
@@ -644,9 +666,10 @@ class AllComplaints extends Component {
                         fontSize="12px"
                       />
                     }
+                    errorText={<Label label={mobileErrorText} color="red" />}
                     onChange={(e, value) => this.onMobileChange(e)}
-                    underlineStyle={{ bottom: 7 }}
-                    underlineFocusStyle={{ bottom: 7 }}
+                    underlineStyle={{ bottom: 7, borderBottom: "1px solid #e0e0e0" }}
+                    underlineFocusStyle={{ bottom: 7, borderBottom: "1px solid #e0e0e0" }}
                     hintStyle={{ width: "100%" }}
                   />
                 </div>
