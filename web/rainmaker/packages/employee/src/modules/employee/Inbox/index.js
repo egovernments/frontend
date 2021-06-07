@@ -54,7 +54,7 @@ class Inbox extends Component {
   }
 
   render() {
-    const { name, history, setRoute, menu, Loading } = this.props;
+    const { name, history, setRoute, menu, Loading,inboxLoading ,inbox,loaded} = this.props;
     const { hasWorkflow } = this.state;
     const a = menu ? menu.filter(item => item.url === "quickAction") : [];
     const downloadMenu = a.map((obj, index) => {
@@ -97,8 +97,8 @@ class Inbox extends Component {
         <div className={"inbox-service-list"}>
           <ServiceList history={history} />
         </div>
-
-        {hasWorkflow && <TableData onPopupOpen={this.onPopupOpen} />}
+        {hasWorkflow&&inboxLoading && <div className="jk-spinner-wrapper"><div className="jk-inbox-loader"></div></div>}
+        {hasWorkflow&&!inboxLoading &&loaded&& <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
     );
@@ -107,13 +107,14 @@ class Inbox extends Component {
 
 const mapStateToProps = (state) => {
   const { auth, app, screenConfiguration } = state;
-  const { menu } = app;
+  const { menu ,inbox} = app;
+  const {loading:inboxLoading,loaded}=inbox||{};
   const { userInfo } = auth;
   const name = auth && userInfo.name;
   const { preparedFinalObject } = screenConfiguration;
   const { Loading = {} } = preparedFinalObject;
   const { isLoading } = Loading;
-  return { name, menu, Loading, isLoading };
+  return { name, menu, Loading, isLoading,inboxLoading ,inbox,loaded};
 };
 
 const mapDispatchToProps = (dispatch) => {

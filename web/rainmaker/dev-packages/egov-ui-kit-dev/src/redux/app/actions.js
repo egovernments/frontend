@@ -4,6 +4,8 @@ import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/util
 import { ACTIONMENU, EVENTSCOUNT, LOCALATION, MDMS, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
 import { getLocale, localStorageSet, setLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { debug } from "util";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { INBOXRECORDS, INBOXRECORDSCOUNT } from "../../utils/endPoints";
 import { getLocalizationLabels, getModule, getStoredModulesList, setStoredModulesList } from "../../utils/localStorageUtils";
 import * as actionTypes from "./actionTypes";
 
@@ -117,6 +119,29 @@ const setActionItems = (payload) => {
   };
 };
 
+const fetchInboxCount = (payload) => {
+  return {
+    type: actionTypes.FETCH_INBOX_COUNT,
+    payload,
+  };
+};
+const fetchInboxRecords = (payload) => {
+  return {
+    type: actionTypes.FETCH_INBOX_RECORDS,
+    payload,
+  };
+};
+const fetchInboxRecordsError = (payload) => {
+  return {
+    type: actionTypes.FETCH_INBOX_RECORDS_ERROR,
+    payload
+  };
+};
+const fetchInboxRecordsPending = () => {
+  return {
+    type: actionTypes.FETCH_INBOX_RECORDS_PENDING,
+  };
+};
 const setCurrentLocation = (currentLocation) => {
   return {
     type: actionTypes.SET_USER_CURRENT_LOCATION,
@@ -138,13 +163,23 @@ export const fetchActionItems = (role, ts) => {
   return async (dispatch, getState) => {
     try {
       const payload = await httpRequest(ACTIONMENU.GET.URL, ACTIONMENU.GET.ACTION, [], role, [], ts);
-
+      let inboxPath=process.env.NODE_ENV === "production"?"/employee/inbox":"/inbox";
+if(payload&&
+  window.location.pathname==inboxPath&&
+  payload.actions&&
+  Array.isArray(payload.actions)&&
+  payload.actions.some&&
+  payload.actions.some((x)=>x.name=="rainmaker-common-workflow")){
+  dispatch(fetchInboxRecordsCount());
+  dispatch(fetchRecords()) 
+}
       dispatch(setActionItems(payload.actions));
     } catch (error) {
       // dispatch(complaintFetchError(error.message));
     }
   };
 };
+
 
 export const setUiCommonConfig = (payload) => {
   return {
@@ -266,6 +301,33 @@ export const getNotifications = (queryObject, requestBody) => {
       dispatch(setNotificationsComplete(transformedEvents));
     } catch (error) {
       dispatch(setNotificationsError(error.message));
+    }
+  };
+};
+
+export const fetchInboxRecordsCount = () => {
+  return async (dispatch, getState) => {
+    try {
+      const tenantId=getTenantId();
+      const requestBody = [{ key: "tenantId", value: tenantId }];
+      const payload = await httpRequest(INBOXRECORDSCOUNT.GET.URL, INBOXRECORDSCOUNT.GET.ACTION,requestBody);
+      dispatch(fetchInboxCount(payload));
+    } catch (error) {
+      dispatch(fetchInboxRecordsError(error.message));
+ 
+    }
+  };
+};
+export const fetchRecords = () => {
+  return async (dispatch, getState) => {
+    dispatch(fetchInboxRecordsPending());
+    try {
+      const tenantId=getTenantId();
+      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: 100 }];
+      const payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION,requestBody);
+      dispatch(fetchInboxRecords(payload.ProcessInstances));
+    } catch (error) {
+      dispatch(fetchInboxRecordsError(error.message));
     }
   };
 };

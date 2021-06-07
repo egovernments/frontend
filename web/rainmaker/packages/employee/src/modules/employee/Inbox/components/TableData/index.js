@@ -130,7 +130,7 @@ class TableData extends Component {
     color: "rgb(53,152,219)",
     timeoutForTyping: false,
     loadLocalityForInitialData: false,
-    showLoadingTaskboard:false
+    showLoadingTaskboard: false
   };
 
   getUniqueList = (list = []) => {
@@ -247,16 +247,17 @@ class TableData extends Component {
 
 
 
-    let { taskboardData, tabData , showLoadingTaskboard } = this.state;
-if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
-  
-  this.setState({showLoadingTaskboard:true})
-}
-    taskboardData[0].head = showLoadingTaskboard?totalRows.length: totalRowCount;
-    taskboardData[1].head = totalRows.length == totalRowCount || showLoadingTaskboard ? NEARING_SLA.length : 'LOADING';
-    taskboardData[2].head = totalRows.length == totalRowCount || showLoadingTaskboard ? ESCALATED_SLA.length : 'LOADING';
+    let { taskboardData, tabData, showLoadingTaskboard } = this.state;
+    if (totalRows.length == totalRowCount && showLoadingTaskboard == false) {
+
+      this.setState({ showLoadingTaskboard: true })
+    }
+    taskboardData[0].head = showLoadingTaskboard ? totalRows.length : totalRowCount;
+    let counts=totalRowCount<100?totalRowCount-1:100;
+    taskboardData[1].head = totalRows.length > counts || showLoadingTaskboard ? NEARING_SLA.length : 'LOADING';
+    taskboardData[2].head = totalRows.length > counts || showLoadingTaskboard ? ESCALATED_SLA.length : 'LOADING';
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
-    tabData[1].dynamicArray = [showLoadingTaskboard?totalRows.length: totalRowCount];
+    tabData[1].dynamicArray = [showLoadingTaskboard ? totalRows.length : totalRowCount];
     this.hideLoading();
     return {
       inboxData: initialInboxData,
@@ -304,7 +305,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
   prepareInboxDataRows = async (data, all, loadLocality = false) => {
     const { toggleSnackbarAndSetText } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
-    if (isEmpty(data)) return{ allData: [], assignedToMe: [] };
+    if (isEmpty(data)) return { allData: [], assignedToMe: [] };
     let businessServices = [];
     let businessIds = [];
     let ptApplicationNo = []
@@ -447,8 +448,8 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
             color="#000000"
           />
         ) : (
-            "NA"
-          ),
+          "NA"
+        ),
       };
 
       let row3 = { text: <Label label={get(item, 'assignes[0].name', 'NA')} color="#000000" /> };
@@ -546,19 +547,19 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
-     if(e&&e.message&&e.message.includes('setItem')){
+      if (e && e.message && e.message.includes('setItem')) {
 
-     }else{
-      toggleSnackbarAndSetText(
-        true,
-        {
-          labelName: "Not authorized to access Business Service!",
-          labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE",
-        },
-        "error"
-      );
-     }
-   
+      } else {
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Not authorized to access Business Service!",
+            labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE",
+          },
+          "error"
+        );
+      }
+
     }
   };
 
@@ -567,20 +568,27 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
     this.getMaxSLA();
   };
   loadInitialData = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
+    const { toggleSnackbarAndSetText, prepareFinalObject,workflowData } = this.props;
     const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
     const inboxData = [{ headers: [], rows: [] }];
     try {
       this.showLoading();
-      const requestBody1 = [{ key: "tenantId", value: tenantId }];
-      let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
-      maxCount = maxCount ;
-      const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? 200 : maxCount }];
-      const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+
+      const {count=0,records=[]}=workflowData;
+      let maxCount=count;
+      let responseData={"ProcessInstances":[...records]};
+
+
+      // const requestBody1 = [{ key: "tenantId", value: tenantId }];
+      // let maxCount = await httpRequest("egov-workflow-v2/egov-wf/process/_count", "_search", requestBody1);
+      // maxCount = maxCount;
+      // const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? 200 : maxCount }];
+      // const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
-      if (maxCount > 500) {
-        this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: 200 }, { key: "limit", value: maxCount-200 }], responseData)
+      if (maxCount > 100) {
+        this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: 100 }, { key: "limit", value: maxCount - 100 }], responseData)
       } else {
         this.loadLocalityForAllData(allData);
       }
@@ -750,11 +758,11 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
   };
   showLoading() {
     const { prepareFinalObject } = this.props;
-    prepareFinalObject('Loading.isLoading', true);
+    // prepareFinalObject('Loading.isLoading', true);
   }
   hideLoading() {
     const { prepareFinalObject } = this.props;
-    prepareFinalObject('Loading.isLoading', false);
+    // prepareFinalObject('Loading.isLoading', false);
   }
   render() {
     const { value, filter, searchFilter, businessServiceSla } = this.state;
@@ -769,7 +777,7 @@ if(totalRows.length == totalRowCount && showLoadingTaskboard==false){
       tabData = filteredData.tabData;
     }
     return (
-      <div className="col-md-12 col-sm-12 col-xs-12" style={{marginBottom:"30px"}}>
+      <div className="col-md-12 col-sm-12 col-xs-12" style={{ marginBottom: "30px" }}>
         <div>
           <div className="row" style={{ marginBottom: '5px', marginTop: '5px', marginLeft: '-20px' }}>
             <div className="col-md-9 col-sm-9 col-xs-12" style={{ marginTop: '5px' }}>
