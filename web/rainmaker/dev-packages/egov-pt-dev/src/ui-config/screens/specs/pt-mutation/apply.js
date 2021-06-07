@@ -194,6 +194,22 @@ const getPropertyData = async (action, state, dispatch) => {
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     dispatch(prepareFinalObject("PropertyOld",{}));
+
+let isOldNumberValid1 = get(state, "screenConfiguration.preparedFinalObject.isOldNumberValid");
+
+//if any owner is having wrong number flag will become false and the input feild will show
+
+
+  if(isOldNumberValid1)
+  {
+    
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
+       { visibility: "hidden" }
+    );
+
+  }
    
 
   } catch (e) {
@@ -592,21 +608,6 @@ const screenConfig = {
       );
      
 
-let isOldNumberValid = get(state, "screenConfiguration.preparedFinalObject.isOldNumberValid");
-
-//if any owner is having wrong number flag will become false and the input feild will show
-
-
-  if(isOldNumberValid)
-  {
-    
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
-       { visibility: "hidden" }
-    );
-
-  }
 
     
       buildingUsageTypeData = getFirstListFromDotSeparated(
