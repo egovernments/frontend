@@ -645,48 +645,135 @@ let taxheads = {
   }
 payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads; 
       }
-      let assessmentYear="";
+      let assessmentYear="",assessmentYearForReceipt="";
       let count=0;
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
-      let reasonss = null;
-      let adhocPenaltyReason=null,adhocRebateReason=null;
-     if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
-        {
-          adhocPenaltyReason = get(
-          state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
-          adhocRebateReason = get(
-          state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
+	  if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
+        let reasonss = null;
+        let adhocPenaltyReason=null,adhocRebateReason=null;
+       if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
+          {
+            adhocPenaltyReason = get(
+            state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
+            adhocRebateReason = get(
+            state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
+            
+          }
+          reasonss = {
+            "adhocPenaltyReason": adhocPenaltyReason,
+            "adhocRebateReason":adhocRebateReason,
+            "lastModifier":lastmodifier
+            }
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
+          let arrearRow={};  let arrearArray=[];
+  let roundoff=0,tax=0,firecess=0,cancercess=0,penalty=0,rebate=0,interest=0,usage_exemption=0,special_category_exemption=0,adhoc_penalty=0,adhoc_rebate=0,total=0;
+  
+          payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
+
+          if(element.amount >0 || element.amountPaid>0)
+          { count=count+1;
+            let toDate=convertEpochToDate(element.toPeriod).split("/")[2];
+            let fromDate=convertEpochToDate(element.fromPeriod).split("/")[2];
+            assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
+         assessmentYearForReceipt=fromDate+"-"+toDate;
+       
+    element.billAccountDetails.map(ele => {
+    if(ele.taxHeadCode == "PT_TAX")
+    {tax=ele.adjustedAmount;}
+    else if(ele.taxHeadCode == "PT_TIME_REBATE")
+    {rebate=ele.adjustedAmount;}
+    else if(ele.taxHeadCode == "PT_CANCER_CESS")
+    {cancercess=ele.adjustedAmount;}
+    else if(ele.taxHeadCode == "PT_FIRE_CESS")
+    {firecess=ele.adjustedAmount;}
+    else if(ele.taxHeadCode == "PT_TIME_INTEREST")
+    {interest=ele.adjustedAmount;}
+    else if(ele.taxHeadCode == "PT_TIME_PENALTY")
+    {penalty=ele.adjustedAmount;}
+    else if(ele.taxHeadCode == "PT_OWNER_EXEMPTION")
+    {special_category_exemption=ele.adjustedAmount;}	
+    else if(ele.taxHeadCode == "PT_ROUNDOFF")
+    {roundoff=ele.adjustedAmount;}	
+    else if(ele.taxHeadCode == "PT_UNIT_USAGE_EXEMPTION")
+    {usage_exemption=ele.adjustedAmount;}	
+    else if(ele.taxHeadCode == "PT_ADHOC_PENALTY")
+    {adhoc_penalty=ele.adjustedAmount;}
+    else if(ele.taxHeadCode == "PT_ADHOC_REBATE")
+    {adhoc_rebate=ele.adjustedAmount;}
+  
+    //total=total+ele.adjustedAmount;
+    });
+  arrearRow={
+  "year":assessmentYearForReceipt,
+  "tax":tax,
+  "firecess":firecess,
+  "cancercess":cancercess,
+  "penalty":penalty,
+  "interest":interest,
+  "usage_exemption":usage_exemption,
+  "special_category_exemption": special_category_exemption,
+  "adhoc_penalty":adhoc_penalty,
+  "adhoc_rebate":adhoc_rebate,
+  "roundoff":roundoff,
+  "total":element.amountPaid
+  };
+  arrearArray.push(arrearRow);
+            } 
+          });
+  
+        if(count==0){  total=0;
+          let index=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.length;
+          let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
+          let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
+          assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
+          payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(ele => {
+            if(ele.taxHeadCode == "PT_TAX")
+            {tax=ele.adjustedAmount;}
+            else if(ele.taxHeadCode == "PT_TIME_REBATE")
+            {rebate=ele.adjustedAmount;}
+            else if(ele.taxHeadCode == "PT_CANCER_CESS")
+            {cancercess=ele.adjustedAmount;}
+            else if(ele.taxHeadCode == "PT_FIRE_CESS")
+            {firecess=ele.adjustedAmount;}
+            else if(ele.taxHeadCode == "PT_TIME_INTEREST")
+            {interest=ele.adjustedAmount;}
+            else if(ele.taxHeadCode == "PT_TIME_PENALTY")
+            {penalty=ele.adjustedAmount;}
+            else if(ele.taxHeadCode == "PT_OWNER_EXEMPTION")
+            {special_category_exemption=ele.adjustedAmount;}	
+            else if(ele.taxHeadCode == "PT_ROUNDOFF")
+            {roundoff=ele.adjustedAmount;}	
+            else if(ele.taxHeadCode == "PT_UNIT_USAGE_EXEMPTION")
+            {usage_exemption=ele.adjustedAmount;}	
+            else if(ele.taxHeadCode == "PT_ADHOC_PENALTY")
+            {adhoc_penalty=ele.adjustedAmount;}
+            else if(ele.taxHeadCode == "PT_ADHOC_REBATE")
+            {adhoc_rebate=ele.adjustedAmount;}
           
+            total=total+ele.adjustedAmount;
+            });
+          arrearRow={
+          "year":assessmentYearForReceipt,
+          "tax":tax,
+          "firecess":firecess,
+          "cancercess":cancercess,
+          "penalty":penalty,
+          "interest":interest,
+          "usage_exemption":usage_exemption,
+          "special_category_exemption": special_category_exemption,
+          "adhoc_penalty":adhoc_penalty,
+          "adhoc_rebate":adhoc_rebate,
+          "roundoff":roundoff,
+          "total":total
+          };
+          arrearArray.push(arrearRow);
+		}
+          
+          const details = {
+            "assessmentYears": assessmentYear,
+        "arrearArray":arrearArray
+            }
+            payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
         }
-        reasonss = {
-          "adhocPenaltyReason": adhocPenaltyReason,
-          "adhocRebateReason":adhocRebateReason,
-          "lastModifier":lastmodifier
-          }
-      payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
-      
-        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element => {
-        
-        if(element.amount >0 || element.amountPaid>0)
-        { count=count+1;
-          let toDate=convertEpochToDate(element.toPeriod).split("/")[2];
-          let fromDate=convertEpochToDate(element.fromPeriod).split("/")[2];
-          assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
-       }});
-      if(count==0){
-        let index=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.length;
-        let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
-        let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
-        assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
-      }
-        
-        const details = {
-          "assessmentYears": assessmentYear
-          }
-          payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
-      }
-
-
 	  if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
         let dcbRow=null,dcbArray=[];
         let installment,totalamount=0;
