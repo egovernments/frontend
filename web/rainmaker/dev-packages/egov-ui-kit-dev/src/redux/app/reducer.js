@@ -30,6 +30,14 @@ const initialState = {
     loading: false,
     notifications: [],
   },
+  inbox:{
+    count:0,
+    records:[],
+    loading:false,
+    error:false,
+    errorMessage:'',
+    loaded:false
+  }
 };
 
 const appReducer = (state = initialState, action) => {
@@ -60,7 +68,8 @@ const appReducer = (state = initialState, action) => {
       return { ...state, currentLocation: action.currentLocation };
     case actionTypes.FETCH_ACTIONMENU:
       return { ...state, menu: action.payload };
-
+    case actionTypes.FETCH_ACTIONMENU:
+      return { ...state, menu: action.payload };
     case actionTypes.ADD_BREADCRUMB_ITEM:
       if (process.env.NODE_ENV !== "development" && action.url && action.url.title !== "" && action.url.path !== "") {
         action.url.path = action.url.path && action.url.path.split("/citizen").pop();
@@ -114,6 +123,45 @@ const appReducer = (state = initialState, action) => {
         ...state,
         notificationObj: {
           loading: false,
+        },
+      };
+    case actionTypes.FETCH_INBOX_COUNT: 
+    return {
+      ...state,
+      inbox: {
+        ...state.inbox,
+        count: action.payload,
+      },
+    };
+    case actionTypes.FETCH_INBOX_RECORDS: 
+      return { 
+        ...state,
+        inbox: {
+          ...state.inbox,
+          loading: false,
+          loaded:true,
+          records: action.payload,
+        },
+      };
+    case actionTypes.FETCH_INBOX_RECORDS_PENDING:
+      return {
+        ...state,   
+        inbox: {
+          ...state.inbox,
+          loading: true,
+          loaded:false,
+          error:false,
+          errorMessage:""
+        },
+      };
+    case actionTypes.FETCH_INBOX_RECORDS_ERROR:
+      return {
+        ...state,
+        inbox: {
+          ...state.inbox,
+          loading: false,
+          error:true,
+          errorMessage:action.payload
         },
       };
     default:
