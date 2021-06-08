@@ -42,6 +42,7 @@ class SearchScreen extends Component {
     search: false,
     value: 0,
     errorText: "",
+    mobileErrorText: "",
     noComplaintMessage: "ES_MYCOMPLAINTS_NO_COMPLAINTS_ASSIGNED"
   };
 
@@ -82,6 +83,13 @@ class SearchScreen extends Component {
   onMobileChange = e => {
     const inputValue = e.target.value;
     this.setState({ mobileNo: inputValue });
+    if (inputValue.length < 10) {
+      this.setState({
+        mobileErrorText: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      });
+    } else {
+      this.setState({ mobileErrorText: "" });
+    }
   };
 
   onSearch = () => {
@@ -109,7 +117,19 @@ class SearchScreen extends Component {
         );
       }
     } else if (mobileNo) {
-      fetchComplaints(queryObj, true, true);
+      if(mobileNo.length < 10) {
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: "Entered value is less than 10 characters in length.",
+            labelKey: `ERR_VALUE_LESS_THAN_TEN_CHARACTERS`,
+          },
+          "error"
+        );
+      }
+      else {
+        fetchComplaints(queryObj, true, true);
+      }
     }
     // if (complaintNo || mobileNo) {
     //   fetchComplaints(queryObj, true, true);
@@ -149,7 +169,8 @@ class SearchScreen extends Component {
       complaintNo,
       search,
       errorText,
-      noComplaintMessage
+      noComplaintMessage,
+      mobileErrorText
     } = this.state;
     const { onComplaintClick } = this;
     return (
@@ -193,9 +214,10 @@ class SearchScreen extends Component {
                         fontSize="12px"
                       />
                     }
+                    errorText={<Label label={mobileErrorText} color="red" />}
                     onChange={(e, value) => this.onMobileChange(e)}
-                    underlineStyle={{ bottom: 7 }}
-                    underlineFocusStyle={{ bottom: 7 }}
+                    underlineStyle={{ bottom: 7, borderBottom: "1px solid #e0e0e0" }}
+                    underlineFocusStyle={{ bottom: 7, borderBottom: "1px solid #e0e0e0" }}
                     hintStyle={{ width: "100%" }}
                   />
                 </div>
