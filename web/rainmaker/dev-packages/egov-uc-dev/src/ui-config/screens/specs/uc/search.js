@@ -131,10 +131,10 @@ const ucSearchAndResult = {
                   }
                 },
 
-                buttonLabel: getLabel({
-                  labelName: "NEW COLLECTION",
-                  labelKey: "UC_SEARCH_RESULTS_NEW_COLLECTION_BUTTON"
-                })
+                // buttonLabel: getLabel({
+                //   labelName: "NEW COLLECTION",
+                //   labelKey: "UC_SEARCH_RESULTS_NEW_COLLECTION_BUTTON"
+                // })
               },
               onClickDefination: {
                 action: "condition",
