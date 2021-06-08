@@ -163,15 +163,19 @@ const callBackForApply = async (state, dispatch) => {
       owner.status = "INACTIVE";
 
     })
-    
     var phoneno = /^[6-9][0-9]{9}$/;
-     var newMob= propertyPayload.oldmobileNumber;
+    var newMob=null;
+    propertyPayload.ownersTemp.map(owner => {
+      if(owner.mobileNumber.match(phoneno))
+      {
+        newMob=owner.mobileNumber;
+      }
 
+    })
     propertyPayload.owners.map(owner => {
       if(!owner.mobileNumber.match(phoneno))
       {
         owner.mobileNumber=newMob;
-
       }
 
     })
