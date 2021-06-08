@@ -130,7 +130,10 @@ class TableData extends Component {
     color: "rgb(53,152,219)",
     timeoutForTyping: false,
     loadLocalityForInitialData: false,
-    showLoadingTaskboard: false
+    showLoadingTaskboard: false,
+    loadedRemainingData:false,
+    loadingLocality:false,
+    loadedLocality:false
   };
 
   getUniqueList = (list = []) => {
@@ -253,7 +256,7 @@ class TableData extends Component {
       this.setState({ showLoadingTaskboard: true })
     }
     taskboardData[0].head = showLoadingTaskboard ? totalRows.length : totalRowCount;
-    let counts=totalRowCount<100?totalRowCount-1:100;
+    let counts = totalRowCount < 100 ? totalRowCount - 1 : 100;
     taskboardData[1].head = totalRows.length > counts || showLoadingTaskboard ? NEARING_SLA.length : 'LOADING';
     taskboardData[2].head = totalRows.length > counts || showLoadingTaskboard ? ESCALATED_SLA.length : 'LOADING';
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
@@ -353,7 +356,7 @@ class TableData extends Component {
             })
             queries.push([])
             endpoints.push(`egov-searcher/locality/property-services/_get`)
-          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services") {
+          } else if (uniqueModule == "pt-services" || uniqueModule == "pgr-services" || uniqueModule == "BS") {
 
           } else {
             requestBodies.push({
@@ -566,18 +569,33 @@ class TableData extends Component {
   componentDidMount = async () => {
     this.loadInitialData();
     this.getMaxSLA();
+    this.setState({loadedRemainingData:false,loadingLocality:false,loadedLocality:false});
   };
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    // If we have a snapshot value, we've just added new items.
+    // Adjust scroll so these new items don't push the old ones out of view.
+    // (snapshot here is the value returned from getSnapshotBeforeUpdate)
+  
+    if ( this.props.remainingDataLoaded&&this.props.workflowData.loaded&&this.props.remainingRecords.length>0&&this.state.loadingLocality==false&&this.state.loadedLocality==false) {
+      const { remainingRecords = [], workflowData } = this.props;
+      const { records = [] } = workflowData;
+      
+      this.loadRemainingData({ "ProcessInstances": [...remainingRecords] }, { "ProcessInstances": [...records] });
+      this.setState({loadingLocality:true});
+    }
+
+  }
   loadInitialData = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject,workflowData } = this.props;
+    const { toggleSnackbarAndSetText, prepareFinalObject, workflowData } = this.props;
     const tenantId = getTenantId();
     let { taskboardData, tabData } = this.state;
     const inboxData = [{ headers: [], rows: [] }];
     try {
       this.showLoading();
 
-      const {count=0,records=[]}=workflowData;
-      let maxCount=count;
-      let responseData={"ProcessInstances":[...records]};
+      const { count = 0, records = [] } = workflowData;
+      let maxCount = count;
+      let responseData = { "ProcessInstances": [...records] };
 
 
       // const requestBody1 = [{ key: "tenantId", value: tenantId }];
@@ -585,10 +603,10 @@ class TableData extends Component {
       // maxCount = maxCount;
       // const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: maxCount > 500 ? 200 : maxCount }];
       // const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
-      
+
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
       if (maxCount > 100) {
-        this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: 100 }, { key: "limit", value: maxCount - 100 }], responseData)
+        // this.loadRemainingData([{ key: "tenantId", value: tenantId }, { key: "offset", value: 100 }, { key: "limit", value: maxCount - 100 }], responseData)
       } else {
         this.loadLocalityForAllData(allData);
       }
@@ -632,12 +650,13 @@ class TableData extends Component {
     prepareFinalObject("InboxData", [...inboxData]);
     this.getMaxSLA();
   }
-  loadRemainingData = async (requestBody = [], response) => {
+  // loadRemainingData = async (requestBody = [], response) => {
+    loadRemainingData = async (responseNew, response) => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     let { taskboardData, tabData } = this.state;
     const inboxData = [{ headers: [], rows: [] }];
     try {
-      const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+      const responseData = responseNew;
       set(responseData, "ProcessInstances", [...responseData.ProcessInstances, ...response.ProcessInstances]);
 
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
@@ -672,7 +691,10 @@ class TableData extends Component {
 
       this.setState({
         loaded: true,
-        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData)
+        inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData),
+        loadedRemainingData:true,
+        loadedLocality:true,
+        loadingLocality:false
       });
     } catch (e) {
       this.hideLoading();
@@ -833,12 +855,15 @@ class TableData extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { screenConfiguration, auth } = state;
+  const { screenConfiguration, auth, app } = state;
   const { userInfo } = auth;
+  const { inboxRemData } = app;
+  const { loading: remainingDataLoading, loaded: remainingDataLoaded, records: remainingRecords = [] } = inboxRemData || {};
+
   const { preparedFinalObject } = screenConfiguration;
   const { InboxData } = preparedFinalObject;
 
-  return { InboxData, userInfo };
+  return { InboxData, userInfo, remainingDataLoading, remainingDataLoaded, remainingRecords };
 };
 
 const mapDispatchToProps = (dispatch) => {
