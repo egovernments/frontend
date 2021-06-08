@@ -148,6 +148,12 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
           value: unit.arv ? unit.arv + '' : "NA",
           oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (oldPropertydetails.units[index].arv + '') || "NA",
         })
+
+        floor.push({
+          key: "Months on Rent",
+          value: unit.plintharea ? unit.plintharea + '' : "NA",
+          oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && (oldPropertydetails.units[index].plintharea + '') || "NA",
+        })
       }
       if (!floors[unit['floorNo']]) {
         floors[unit['floorNo']] = [floor];

@@ -16,6 +16,11 @@ let floorDropDownData = [];
 for (var i = 1; i <= 25; i++) {
   floorDropDownData.push({ label: i.toString(), value: i });
 }
+let monthsDropDownData = [];
+
+for (var i = 1; i <= 12; i++) {
+  monthsDropDownData.push({ label: i.toString(), value: i });
+}
 
 export const plotSize = {
   plotSize: {
@@ -131,7 +136,7 @@ export const occupancy = {
     formName: "plotDetails",
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
-      const dependentFields1 = ["annualRent"];
+      const dependentFields1 = ["annualRent","noOfMonths"];
       switch (value) {
         case "RENTED":
           setDependentFields(dependentFields1, dispatch, formKey, false);
@@ -206,7 +211,27 @@ export const annualRent = {
     formName: "plotDetails",
   },
 };
-
+export const noOfMonths = {
+  noOfMonths: {
+    id: "assessment-number-of-months",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].plintharea",
+    type: "AutocompleteDropdown",
+    floatingLabelText: "Months on Rent",
+    hintText: "Enter Number of Months",
+    //toolTip: true,
+    defaultSort:false,
+    //fullWidth: true,
+    dropDownData: [],//toolTipMessage: "PT_NUMBER_OF_FLOORS_TOOLTIP_MESSAGE",
+    required: true,
+    numcols: 4,
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    dropDownData: monthsDropDownData,
+    formName: "plotDetails"
+  },
+};
 export const measuringUnit = {
   // measuringUnit: {
   //   id: "assessment-plot-unit",
@@ -370,8 +395,12 @@ export const beforeInitForm = {
     }
     if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED" || get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "PG") {
       set(action, "form.fields.annualRent.hideField", false);
+      set(action, "form.fields.noOfMonths.hideField", false);
+
     } else {
       set(action, "form.fields.annualRent.hideField", true);
+      set(action, "form.fields.noOfMonths.hideField", true);
+
     }
     return action;
   },
@@ -460,8 +489,12 @@ export const beforeInitFormForPlot = {
     }
     if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED" || get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "PG") {
       set(action, "form.fields.annualRent.hideField", false);
+      set(action, "form.fields.noOfMonths.hideField", false);
+
     } else {
       set(action, "form.fields.annualRent.hideField", true);
+      set(action, "form.fields.noOfMonths.hideField", true);
+
     }
     return action;
   },
