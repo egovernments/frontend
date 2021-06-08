@@ -173,45 +173,12 @@ const getPropertyData = async (action, state, dispatch) => {
     }
     const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     payload.Properties[0].additionalDetails = { previousPropertyUuid };
-    let owners=payload.Properties[0].owners
-    let phoneno = /^[6-9][0-9]{9}$/; 
-    let isOldNumberValid=true;
-    for(let i=0;i<owners.length;i++){
-  if((!owners[i].mobileNumber.match(phoneno) && owners[i].status=='ACTIVE'))
-  {
-  
-    isOldNumberValid=false
-    break;
-  }
-
-}
-
-    
-    dispatch(prepareFinalObject("isOldNumberValid",isOldNumberValid));
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
-  
+
     setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     dispatch(prepareFinalObject("PropertyOld",{}));
-
-let isOldNumberValid1 = get(state, "screenConfiguration.preparedFinalObject.isOldNumberValid");
-
-//if any owner is having wrong number flag will become false and the input feild will show
-
-
-  if(isOldNumberValid1)
-  {
-    
-    set(
-      action.screenConfig,
-      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
-       { visibility: "hidden" }
-    );
-
-  }
-   
-
   } catch (e) {
     console.log(e);
   }
@@ -252,7 +219,6 @@ const getApplicationData = async (action, state, dispatch) => {
       ]);
       let inActiveOwners = [];
       let activeOwners = [];
-
       payload.Properties[0].owners.map(owner => {
         owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
         owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
@@ -263,8 +229,7 @@ const getApplicationData = async (action, state, dispatch) => {
           inActiveOwners.push({ ...owner, status: "ACTIVE" });
         }
       });
-  let owners =  get(state, "screenConfiguration.preparedFinalObject.Property.owners");
-   
+
       payload.Properties[0].owners = inActiveOwners;
       payload.Properties[0].ownersInit = inActiveOwners;
       payload.Properties[0].ownersTemp = activeOwners;
@@ -308,8 +273,7 @@ const getApplicationData = async (action, state, dispatch) => {
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
     dispatch(prepareFinalObject("PropertyOld",cloneDeep(payload.Properties[0])));
     setCardVisibility(state, action, dispatch);
-    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)))
-    ;
+    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     // Prefilling radio buttons
     set(
       action.screenConfig,
@@ -593,8 +557,7 @@ const screenConfig = {
     );
 
     isEdit ? getApplicationData(action, state, dispatch) : getPropertyData(action, state, dispatch);
-    let owners =  get(state, "screenConfiguration.preparedFinalObject.Property.owners");
-  
+
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "pt-mutation");
 
@@ -606,10 +569,6 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
         []
       );
-     
-
-
-    
       buildingUsageTypeData = getFirstListFromDotSeparated(
         buildingUsageTypeData
       );
@@ -731,9 +690,6 @@ const screenConfig = {
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-
-   
-   
 
     return action;
   },
