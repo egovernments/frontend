@@ -137,6 +137,23 @@ const searchApiCall = async (state, dispatch, index) => {
     "searchScreen",
     {}
   );
+
+   let tenants = state.common.cities && state.common.cities;
+
+
+  if (process.env.REACT_APP_NAME === "Citizen")
+  {
+    let filterTenant = tenants && tenants.filter(m=>m.key===searchScreenObject.tenantId);
+  }
+  else
+  {
+    let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+  }
+
+
+ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+
+
   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
