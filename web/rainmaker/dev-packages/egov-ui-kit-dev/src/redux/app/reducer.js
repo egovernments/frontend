@@ -49,7 +49,8 @@ const initialState = {
   actionMenuFetch:{
     loading:false,
     loaded:false,
-    errorMessage:""
+    errorMessage:"",
+    error:false
   }
 };
 
@@ -80,11 +81,11 @@ const appReducer = (state = initialState, action) => {
     case actionTypes.SET_USER_CURRENT_LOCATION:
       return { ...state, currentLocation: action.currentLocation };
     case actionTypes.FETCH_ACTIONMENU:
-      return { ...state,actionMenuFetch:{loading:false,loaded:true,errorMessage:""}, menu: action.payload };
+      return { ...state,actionMenuFetch:{loading:false,loaded:true,errorMessage:"",error:false}, menu: action.payload };
     case actionTypes.FETCH_ACTIONMENU_PENDING:
-      return { ...state, actionMenuFetch:{loading:true,loaded:false,errorMessage:""} };
+      return { ...state, actionMenuFetch:{loading:true,loaded:false,errorMessage:"",error:false} };
     case actionTypes.FETCH_ACTIONMENU_ERROR:
-      return { ...state, actionMenuFetch:{loading:true,loaded:false,errorMessage:action.payload} ,menu:[]};
+      return { ...state, actionMenuFetch:{loading:false,loaded:false,errorMessage:'CS_INBOX_MDMS_FETCH_ERROR',error:true} ,menu:[]};
     case actionTypes.ADD_BREADCRUMB_ITEM:
       if (process.env.NODE_ENV !== "development" && action.url && action.url.title !== "" && action.url.path !== "") {
         action.url.path = action.url.path && action.url.path.split("/citizen").pop();

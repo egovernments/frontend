@@ -58,7 +58,7 @@ class Inbox extends Component {
   }
 
   render() {
-    const { name, history, setRoute, menu, Loading, inboxLoading, inbox, loaded, mdmsGetLoading } = this.props;
+    const { name, history, setRoute, menu, Loading, inboxLoading, inbox, loaded, mdmsGetLoading, errorMessage = "" ,error=false} = this.props;
     const { hasWorkflow } = this.state;
     const a = menu ? menu.filter(item => item.url === "quickAction") : [];
     const downloadMenu = a.map((obj, index) => {
@@ -109,6 +109,11 @@ class Inbox extends Component {
             <Label label={"CS_INBOX_LOADING_MSG"} />
           </div>
         </div>}
+        {!hasWorkflow && !mdmsGetLoading && errorMessage != ""&&error && <div>
+            <div className="jk-spinner-wrapper">
+              <Label label={errorMessage} />
+            </div>
+          </div>}
         {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
@@ -125,8 +130,8 @@ const mapStateToProps = (state) => {
   const { preparedFinalObject } = screenConfiguration;
   const { Loading = {} } = preparedFinalObject;
   const { isLoading } = Loading;
-  const { loading: mdmsGetLoading = false } = actionMenuFetch;
-  return { name, menu, Loading, isLoading, inboxLoading, inbox, loaded, mdmsGetLoading };
+  const { loading: mdmsGetLoading = false, errorMessage = "" ,error} = actionMenuFetch;
+  return { name, menu, Loading, isLoading, inboxLoading, inbox, loaded, mdmsGetLoading, errorMessage,error };
 };
 
 const mapDispatchToProps = (dispatch) => {
