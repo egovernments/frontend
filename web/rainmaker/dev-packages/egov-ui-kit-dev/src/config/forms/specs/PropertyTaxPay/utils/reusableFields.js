@@ -214,7 +214,7 @@ export const annualRent = {
 export const noOfMonths = {
   noOfMonths: {
     id: "assessment-number-of-months",
-    jsonPath: "Properties[0].propertyDetails[0].units[0].plintharea",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].rentedformonths",
     type: "AutocompleteDropdown",
     floatingLabelText: "Months on Rent",
     hintText: "Enter Number of Months",
