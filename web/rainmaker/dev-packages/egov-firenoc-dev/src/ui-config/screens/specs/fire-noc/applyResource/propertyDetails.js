@@ -87,13 +87,13 @@ const prepareSelectFieldForBasement = (uom, start, end) => {
       placeholder: {
         labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
       },
-      required: true,
+      required: false,
       isClearable: true,
       data: data,
       className:"applicant-details-error autocomplete-dropdown",
       jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
     },
-    required: true,
+    required: false,
     jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
     gridDefination: {
       xs: 12,
