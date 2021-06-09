@@ -9,7 +9,13 @@ const ComplaintResolvedForm = ({ formKey, form, handleFieldChange, onSubmit }) =
 const updateStatus = async () => {
       await Axios.post(
       `http://devgrievanceapi.psegs.in/api/grievance/GetComplaintStatus_PMIDC`,
-      {Complaint_Id:complaintId, Remarks:"Resolved Succesffully", Status:"resolved"}
+        {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials':true,
+          'crossDomain': true
+        },    
+      Complaint_Id:complaintId, Remarks:"Resolved Succesffully", Status:"resolved"}
     ).then((response) => {
       console.log(response);
      }, (error) => {
