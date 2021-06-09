@@ -12,7 +12,7 @@ import {
 } from "../../ui-utils/commons";
 import { sortDropdownLabels } from "egov-ui-framework/ui-utils/commons";
 
-class TextFieldContainer extends React.Component {
+class TextFieldContainer extends React.PureComponent{
   componentDidMount() {
     const { hasDependant, onChange, value } = this.props;
     if (hasDependant && value) {
