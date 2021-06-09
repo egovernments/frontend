@@ -210,7 +210,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       const queryObjForBill = [
         {
           key: "tenantId",
-          value: tenantId,
+          value: tenantId ? tenantId :getTenantId(),
         },
         {
           key: "consumerCode",
@@ -341,7 +341,7 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       const queryObjForBill = [
         {
           key: "tenantId",
-          value: tenantId,
+          value: tenantId ? tenantId :getTenantId(),
         },
         {
           key: "consumerCode",
