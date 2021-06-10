@@ -19,7 +19,38 @@ class TextFieldContainer extends React.PureComponent{
       onChange({ target: { value } });
     }
   }
+  shouldComponentUpdate=(nextProps, nextState)=>{
+  let {
+    value,
+    data = [],
+    index,
+    errorMessage,
+    error,
+    disabled=false,
+    locale
+  } = this.props;
+  let {
+    value:valueNew,
+    data:dataNew = [],
+    index:indexNew,
+    errorMessage:errorMessageNew,
+    error:errorNew,
+    disabled:disabledNew=false,
+    locale:localeNew
+  } = nextProps;
 
+  if( locale!=localeNew||
+     value!=valueNew||
+    index!=indexNew||
+    errorMessage!=errorMessageNew||
+    error!=errorNew||
+    disabled!=disabledNew||
+    Array.isArray(data)!=Array.isArray(dataNew)||
+    data.length!=dataNew.length){
+    return true
+  }
+  return false
+}
   render() {
     let {
       label = {},
@@ -46,6 +77,10 @@ class TextFieldContainer extends React.PureComponent{
       disabled=false,
       multiline=false,
       rows="1",
+      select,
+      cityDropdown,
+      autoSelect,
+      preparedFinalObject,
       ...rest
     } = this.props;
     if (!isEmpty(iconObj) && iconObj.onClickDefination) {
@@ -57,6 +92,33 @@ class TextFieldContainer extends React.PureComponent{
             componentJsonpath
           })
       };
+    }
+
+    if (select) {
+      const constructDropdown = dt => {
+        return dt.map(d => {
+          return {
+            value: d[optionValue],
+            label: d[optionLabel]
+          };
+        });
+      };
+      if (data && data.length > 0) {
+        dropdownData = constructDropdown(data || []);
+        // if autoSelect is true and dropDownData is one, then select the value by default
+        if( data.length ==1 && autoSelect){
+          value = dropdownData[0].value;
+          if(!get(preparedFinalObject,jsonPath)){
+              set(preparedFinalObject,jsonPath,value);
+          }
+       }
+      } else if (sourceJsonPath) {
+        dropdownData = constructDropdown(
+          get(preparedFinalObject, sourceJsonPath, [])
+        );
+      } else if (cityDropdown) {
+        dropdownData = constructDropdown(get(state, cityDropdown, []));
+      }
     }
 
     let translatedLabel = getLocaleLabels(
@@ -119,7 +181,7 @@ class TextFieldContainer extends React.PureComponent{
         </TextfieldWithIcon>
       );
     } else {
-      return this.props.select ? (
+      return select ? (
         <div>
           <TextfieldWithIcon
             label={translatedLabel}
@@ -183,7 +245,7 @@ const mapStateToProps = (state, ownprops) => {
     autoSelect
   } = ownprops;
   const { screenConfiguration, app } = state;
-  const { localizationLabels } = app;
+  const { localizationLabels ,locale} = app;
   const { preparedFinalObject } = screenConfiguration;
   let fieldValue =
     value === undefined ? get(preparedFinalObject, jsonPath) : value;
@@ -191,39 +253,14 @@ const mapStateToProps = (state, ownprops) => {
   if (ownprops.type && ownprops.type === "date")
     fieldValue = epochToYmd(fieldValue);
   let dropdownData = [];
-  if (select) {
-    const constructDropdown = dt => {
-      return dt.map(d => {
-        return {
-          value: d[optionValue],
-          label: d[optionLabel]
-        };
-      });
-    };
-    if (data && data.length > 0) {
-      dropdownData = constructDropdown(data || []);
-      // if autoSelect is true and dropDownData is one, then select the value by default
-      if( data.length ==1 && autoSelect){
-        fieldValue = dropdownData[0].value;
-        if(!get(preparedFinalObject,jsonPath)){
-            set(preparedFinalObject,jsonPath,fieldValue);
-        }
-     }
-    } else if (sourceJsonPath) {
-      dropdownData = constructDropdown(
-        get(preparedFinalObject, sourceJsonPath, [])
-      );
-    } else if (cityDropdown) {
-      dropdownData = constructDropdown(get(state, cityDropdown, []));
-    }
-  }
+  
   let disabled=ownprops.disabled;
 if(ownprops.checkFieldDisable){
   let dependantJsonPath=ownprops.jsonPath;
   dependantJsonPath=dependantJsonPath.replace(ownprops.jsonPathRemoveKey,ownprops.dependantField)
   disabled= get(preparedFinalObject, dependantJsonPath, false)
 }
-  return { value: fieldValue, dropdownData, state, localizationLabels ,disabled};
+  return { value: fieldValue, dropdownData, state, localizationLabels ,disabled,locale,preparedFinalObject};
 };
 
 export default connect(mapStateToProps)(TextFieldContainer);
