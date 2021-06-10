@@ -731,25 +731,10 @@ export const downloadReceiptpt = (receiptQueryString) => {
         const businessModule=get(payloadReceiptDetails.Payments[0].paymentDetails[0],"businessService");
         console.log("businee serice"+ businessModule);
 
-        let assessmentYear="";
+        let assessmentYear="",assessmentYearForReceipt ="";
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
-        let reasonss = null;
-        let adhocPenaltyReason=null,adhocRebateReason=null;
-       if(state && get(state.screenConfiguration,"preparedFinalObject") && (get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason") || get(state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason")))
-          {
-            adhocPenaltyReason = get(
-            state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
-            adhocRebateReason = get(
-            state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
-            
-          }
-          reasonss = {
-            "adhocPenaltyReason": adhocPenaltyReason,
-            "adhocRebateReason":adhocRebateReason,
-            "lastModifier":lastmodifier
-            }
-        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
+    
           let arrearRow={};  let arrearArray=[];
   let roundoff=0,tax=0,firecess=0,cancercess=0,penalty=0,rebate=0,interest=0,usage_exemption=0,special_category_exemption=0,adhoc_penalty=0,adhoc_rebate=0,total=0;
   
@@ -811,6 +796,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
           let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
           let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
           assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
+          assessmentYearForReceipt=fromDate+"-"+toDate;
           payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(ele => {
             if(ele.taxHeadCode == "PT_TAX")
             {tax=ele.adjustedAmount;}

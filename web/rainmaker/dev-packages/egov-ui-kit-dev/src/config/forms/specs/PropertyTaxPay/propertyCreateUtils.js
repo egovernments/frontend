@@ -33,9 +33,8 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
   
   properties[0].units.map((unit) => {
     unit.constructionDetail = {
-      builtUpArea: unit.unitArea,
-      rentedformonths:unit.rentedformonths
-    };
+      builtUpArea: unit.unitArea
+     };
     unit.tenantId = properties[0].tenantId;
     unit.usageCategory =
       unit.usageCategoryMajor +
@@ -51,7 +50,7 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     delete unit.usageCategoryDetail;
     delete unit.usageCategorySubMinor;
     delete unit.unitArea;
-    delete unit.rentedformonths;
+    //delete unit.additionalDetails.rentedformonths;
   });
   
   if(getQueryArg(window.location.href,  "mode") == 'WORKFLOWEDIT'){

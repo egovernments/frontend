@@ -403,6 +403,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
           let toDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod).split("/")[2];
           let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
           assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
+          assessmentYearForReceipt=fromDate+"-"+toDate;
           payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(ele => {
             if(ele.taxHeadCode == "PT_TAX")
             {tax=ele.adjustedAmount;}
