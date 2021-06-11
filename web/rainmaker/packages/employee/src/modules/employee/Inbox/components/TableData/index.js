@@ -794,7 +794,7 @@ class TableData extends Component {
   }
   render() {
     const { value, filter, searchFilter, businessServiceSla } = this.state;
-    const { classes } = this.props;
+    const { classes,remainingDataLoading } = this.props;
     const { handleChangeFilter, clearFilter, handleChangeSearch } = this;
     let { taskboardData, tabData, inboxData } = this.state;
 
@@ -853,7 +853,15 @@ class TableData extends Component {
               );
             })}
           </Tabs>
-          <InboxData businessServiceSla={businessServiceSla} data={inboxData[value]} />
+          <InboxData businessServiceSla={businessServiceSla} data={inboxData[value]} remainingDataLoading={remainingDataLoading} />
+          {remainingDataLoading&&<div>
+          <div className="jk-spinner-wrapper">
+            <div className="jk-sm-inbox-loader"></div>
+          </div>
+          <div className="jk-spinner-wrapper">
+            <Label label={"CS_INBOX_PG_LOADING_MSG"} />
+          </div>
+        </div>}
         </div>
       </div>
     );
