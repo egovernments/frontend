@@ -134,7 +134,12 @@ const commonApplicantInformation = () => {
           {
             code: "TRANSGENDER",
             label: "COMMON_GENDER_TRANSGENDER"
-          }
+          },
+          {
+            code: "OTHERS",
+            label: "COMMON_GENDER_OTHERS"
+          },
+          
         ],
         gridDefination: {
           xs: 12,
