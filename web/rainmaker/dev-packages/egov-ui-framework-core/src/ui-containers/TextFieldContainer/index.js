@@ -1,55 +1,25 @@
-import MenuItem from "@material-ui/core/MenuItem";
-import { sortDropdownLabels } from "egov-ui-framework/ui-utils/commons";
-import get from "lodash/get";
-import isEmpty from "lodash/isEmpty";
-import set from "lodash/set";
 import React from "react";
 import { connect } from "react-redux";
 import { TextfieldWithIcon, Tooltip } from "../../ui-molecules";
+import MenuItem from "@material-ui/core/MenuItem";
+import get from "lodash/get";
+import set from "lodash/set";
+import isEmpty from "lodash/isEmpty";
 import {
-  appendModulePrefix, epochToYmd,
-  getLocaleLabels
+  epochToYmd,
+  getLocaleLabels,
+  appendModulePrefix
 } from "../../ui-utils/commons";
+import { sortDropdownLabels } from "egov-ui-framework/ui-utils/commons";
 
-class TextFieldContainer extends React.Component {
+class TextFieldContainer extends React.PureComponent{
   componentDidMount() {
     const { hasDependant, onChange, value } = this.props;
     if (hasDependant && value) {
       onChange({ target: { value } });
     }
   }
-  shouldComponentUpdate = (nextProps, nextState) => {
-    let {
-      value,
-      data = [],
-      index,
-      errorMessage,
-      error,
-      disabled = false,
-      locale
-    } = this.props;
-    let {
-      value: valueNew,
-      data: dataNew = [],
-      index: indexNew,
-      errorMessage: errorMessageNew,
-      error: errorNew,
-      disabled: disabledNew = false,
-      locale: localeNew
-    } = nextProps;
 
-    if (locale != localeNew ||
-      value != valueNew ||
-      index != indexNew ||
-      errorMessage != errorMessageNew ||
-      error != errorNew ||
-      disabled != disabledNew ||
-      Array.isArray(data) != Array.isArray(dataNew) ||
-      data.length != dataNew.length) {
-      return true
-    }
-    return false
-  }
   render() {
     let {
       label = {},
@@ -73,13 +43,9 @@ class TextFieldContainer extends React.Component {
       title,
       errorMessage,
       error,
-      disabled = false,
-      multiline = false,
-      rows = "1",
-      select,
-      cityDropdown,
-      autoSelect,
-      preparedFinalObject,
+      disabled=false,
+      multiline=false,
+      rows="1",
       ...rest
     } = this.props;
     if (!isEmpty(iconObj) && iconObj.onClickDefination) {
@@ -91,33 +57,6 @@ class TextFieldContainer extends React.Component {
             componentJsonpath
           })
       };
-    }
-
-    if (select) {
-      const constructDropdown = dt => {
-        return dt.map(d => {
-          return {
-            value: d[optionValue],
-            label: d[optionLabel]
-          };
-        });
-      };
-      if (data && data.length > 0) {
-        dropdownData = constructDropdown(data || []);
-        // if autoSelect is true and dropDownData is one, then select the value by default
-        if (data.length == 1 && autoSelect) {
-          value = dropdownData[0].value;
-          if (!get(preparedFinalObject, jsonPath)) {
-            set(preparedFinalObject, jsonPath, value);
-          }
-        }
-      } else if (sourceJsonPath) {
-        dropdownData = constructDropdown(
-          get(preparedFinalObject, sourceJsonPath, [])
-        );
-      } else if (cityDropdown) {
-        dropdownData = constructDropdown(get(state, cityDropdown, []));
-      }
     }
 
     let translatedLabel = getLocaleLabels(
@@ -137,13 +76,13 @@ class TextFieldContainer extends React.Component {
     );
     errorMessage = error
       ? getLocaleLabels(
-        translateddefaultErrorMsg,
-        errorMessage,
-        localizationLabels
-      )
+          translateddefaultErrorMsg,
+          errorMessage,
+          localizationLabels
+        )
       : "";
     if (dropdownData.length > 0) {
-      dropdownData = dropdownData.sort(sortDropdownLabels)
+      dropdownData=dropdownData.sort(sortDropdownLabels)
       return (
         <TextfieldWithIcon
           label={translatedLabel}
@@ -162,25 +101,25 @@ class TextFieldContainer extends React.Component {
           </MenuItem>
           {hasLocalization === false
             ? dropdownData.map((option, key) => (
-              <MenuItem key={key} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))
+                <MenuItem key={key} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))
             : dropdownData.map((option, key) => (
-              <MenuItem key={key} value={option.value}>
-                {getLocaleLabels(
-                  option.value,
-                  localePrefix && !isEmpty(localePrefix)
-                    ? appendModulePrefix(option.value, localePrefix)
-                    : option.label,
-                  localizationLabels
-                )}
-              </MenuItem>
-            ))}
+                <MenuItem key={key} value={option.value}>
+                  {getLocaleLabels(
+                    option.value,
+                    localePrefix && !isEmpty(localePrefix)
+                      ? appendModulePrefix(option.value, localePrefix)
+                      : option.label,
+                    localizationLabels
+                  )}
+                </MenuItem>
+              ))}
         </TextfieldWithIcon>
       );
     } else {
-      return select ? (
+      return this.props.select ? (
         <div>
           <TextfieldWithIcon
             label={translatedLabel}
@@ -235,24 +174,56 @@ const mapStateToProps = (state, ownprops) => {
   const {
     jsonPath,
     value,
+    select,
+    data,
+    optionValue,
+    optionLabel,
+    sourceJsonPath,
+    cityDropdown,
+    autoSelect
   } = ownprops;
   const { screenConfiguration, app } = state;
-  const { localizationLabels, locale } = app;
-  // const { preparedFinalObject } = screenConfiguration;
-  let fieldValue = value === undefined ? get(screenConfiguration.preparedFinalObject, jsonPath) : value;
+  const { localizationLabels } = app;
+  const { preparedFinalObject } = screenConfiguration;
+  let fieldValue =
+    value === undefined ? get(preparedFinalObject, jsonPath) : value;
   // Convert epoch to YYYY-MM-DD and set date picker value
   if (ownprops.type && ownprops.type === "date")
     fieldValue = epochToYmd(fieldValue);
   let dropdownData = [];
-
-  let disabled = ownprops.disabled;
-  if (ownprops.checkFieldDisable) {
-    let dependantJsonPath = ownprops.jsonPath;
-    dependantJsonPath = dependantJsonPath.replace(ownprops.jsonPathRemoveKey, ownprops.dependantField)
-    disabled = get(screenConfiguration.preparedFinalObject, dependantJsonPath, false)
+  if (select) {
+    const constructDropdown = dt => {
+      return dt.map(d => {
+        return {
+          value: d[optionValue],
+          label: d[optionLabel]
+        };
+      });
+    };
+    if (data && data.length > 0) {
+      dropdownData = constructDropdown(data || []);
+      // if autoSelect is true and dropDownData is one, then select the value by default
+      if( data.length ==1 && autoSelect){
+        fieldValue = dropdownData[0].value;
+        if(!get(preparedFinalObject,jsonPath)){
+            set(preparedFinalObject,jsonPath,fieldValue);
+        }
+     }
+    } else if (sourceJsonPath) {
+      dropdownData = constructDropdown(
+        get(preparedFinalObject, sourceJsonPath, [])
+      );
+    } else if (cityDropdown) {
+      dropdownData = constructDropdown(get(state, cityDropdown, []));
+    }
   }
-  return { value: fieldValue, dropdownData, state, localizationLabels, disabled, locale, preparedFinalObject:screenConfiguration.preparedFinalObject
-   };
+  let disabled=ownprops.disabled;
+if(ownprops.checkFieldDisable){
+  let dependantJsonPath=ownprops.jsonPath;
+  dependantJsonPath=dependantJsonPath.replace(ownprops.jsonPathRemoveKey,ownprops.dependantField)
+  disabled= get(preparedFinalObject, dependantJsonPath, false)
+}
+  return { value: fieldValue, dropdownData, state, localizationLabels ,disabled};
 };
 
 export default connect(mapStateToProps)(TextFieldContainer);
