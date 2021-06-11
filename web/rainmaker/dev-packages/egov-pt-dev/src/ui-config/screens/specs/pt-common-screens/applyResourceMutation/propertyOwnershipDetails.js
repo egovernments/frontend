@@ -302,6 +302,11 @@ const commonApplicantInformation = () => {
               labelName: "Transgender",
               labelKey: "PT_COMMON_GENDER_TRANSGENDER",
               value: "TRANSGENDER"
+            },
+            {
+              value: "OTHERS",
+              labelKey: "COMMON_GENDER_OTHERS",
+              labelName: "Others"
             }
           ],
           jsonPath: "Property.owners[0].gender",
