@@ -4,7 +4,7 @@ import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/util
 import { ACTIONMENU, EVENTSCOUNT, LOCALATION, MDMS, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
 import { getLocale, getTenantId, localStorageSet, setLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { debug } from "util";
-import { INBOXRECORDS, INBOXRECORDSCOUNT } from "../../utils/endPoints";
+import { INBOXRECORDS, INBOXRECORDSCOUNT, INBOXESCALTEDRECORDS } from "../../utils/endPoints";
 import { getLocalizationLabels, getModule, getStoredModulesList, setStoredModulesList } from "../../utils/localStorageUtils";
 import * as actionTypes from "./actionTypes";
 
@@ -147,6 +147,12 @@ const fetchRemInboxRecords = (payload) => {
     payload,
   };
 };
+const fetchEscaltedInboxRecords = (payload) => {
+  return {
+    type: actionTypes.FETCH_ESCALATED_INBOX_RECORDS_COMPLETE,
+    payload,
+  };
+};
 const fetchResetInboxRecords = () => {
   return {
     type: actionTypes.FETCH_RESET_INBOX_RECORDS,
@@ -212,6 +218,7 @@ export const fetchActionItems = (role, ts) => {
         const { loaded = false, loading = false } = inbox || {};
         loaded == false && loading == false && dispatch(fetchInboxRecordsCount());
         loaded == false && loading == false && dispatch(fetchRecords());
+        loaded == false && loading == false && dispatch(fetchEscalatedRecords());
       }
       dispatch(setActionItems(payload.actions));
     } catch (error) {
@@ -389,6 +396,20 @@ export const fetchRemRecords = (count = 0) => {
       dispatch(fetchRemInboxRecords(payload.ProcessInstances));
     } catch (error) {
       dispatch(fetchRemInboxRecordsError(error.message));
+    }
+  };
+};
+export const fetchEscalatedRecords = () => {
+  return async (dispatch, getState) => {
+    dispatch(fetchRemInboxRecordsPending());
+    try {
+      const tenantId = getTenantId();
+      const requestBody = [{ key: "tenantId", value: tenantId }];
+      const payload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, requestBody);
+      payload.ProcessInstances && payload.ProcessInstances.length > 0 && payload.ProcessInstances.forEach(data => data.isEscalatedApplication = true)
+      dispatch(fetchEscaltedInboxRecords(payload.ProcessInstances));
+    } catch (error) {
+      dispatch(fetchInboxRecordsError(error.message));
     }
   };
 };
