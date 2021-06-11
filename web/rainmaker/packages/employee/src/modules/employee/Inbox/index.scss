@@ -52,6 +52,15 @@
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 1s linear infinite;
   }
+  .jk-sm-inbox-loader {
+    border: 0.2em solid rgb(254, 122, 81);
+    border-radius: 50%;
+    border-top: 0.2em solid #FFFFFF;
+    width: 2em;
+    height: 2em;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+  }
   
   /* Safari */
   @-webkit-keyframes spin {
