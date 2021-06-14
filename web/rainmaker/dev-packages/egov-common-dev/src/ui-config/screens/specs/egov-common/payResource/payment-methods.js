@@ -66,7 +66,7 @@ const onIconClick = (state, dispatch, index) => {
 export const payeeDetails = getCommonContainer({
   paidBy: getSelectField({
     label: {
-      labelName: "Paid By",
+      labelName: "Paid By ",
       labelKey: "NOC_PAYMENT_PAID_BY_LABEL"
     },
     placeholder: {
