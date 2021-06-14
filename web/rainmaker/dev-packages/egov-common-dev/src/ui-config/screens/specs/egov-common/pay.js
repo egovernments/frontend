@@ -111,12 +111,10 @@ const getPaymentCard = () => {
 
 
 
-    const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
-
-    await getBusinessServiceMdmsData(dispatch, tenantId);
-
-
-    await generateBill(dispatch, consumerCode, tenantId);
+const fetchBill = async(state, dispatch, consumerCode, tenantId, billBusinessService) => {
+        await getBusinessServiceMdmsData(dispatch, tenantId);
+    
+        await generateBill(dispatch, consumerCode, tenantId, billBusinessService);
 
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
