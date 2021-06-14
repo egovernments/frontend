@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -105,11 +105,19 @@ export const callPGService = async (state, dispatch) => {
         "Payments[0].paymentDetails[0].bill.businessService"
       );
 
-      dispatch(
+     /*  dispatch(
         setRoute(
           `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`
         )
+      ); */
+      const ackUrl = `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`;
+      const successUrl = isPublicSearch() ? `/withoutAuth${ackUrl}` : ackUrl;
+      dispatch(
+        setRoute(
+          successUrl
+        )
       );
+
     } else {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
@@ -165,10 +173,10 @@ const moveToSuccess = (dispatch, receiptNumber, businessService) => {
   const status = "success";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  const url = `${appendUrl}/${moduleName}/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=${"pay"}`;
+  const ackSuccessUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
   dispatch(
-    setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}`
-    )
+    setRoute(ackSuccessUrl)
   );
 };
 const moveToFailure = dispatch => {
@@ -177,11 +185,13 @@ const moveToFailure = dispatch => {
   const status = "failure";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  dispatch(
-    setRoute(
-      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
-    )
-  );
+    const url = `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
+    const ackFailureUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
+    dispatch(
+      setRoute(
+        ackFailureUrl
+      )
+    );
 };
 
 const getSelectedTabIndex = paymentType => {

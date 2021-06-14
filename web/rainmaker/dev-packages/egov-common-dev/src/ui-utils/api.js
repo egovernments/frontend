@@ -1,7 +1,8 @@
 import axios from "axios";
 import {
   fetchFromLocalStorage,
-  addQueryArg
+  addQueryArg,
+  isPublicSearch
 } from "egov-ui-framework/ui-utils/commons";
 import store from "ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -28,11 +29,12 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     action: action,
     did: "1",
     key: "",
-    msgId: "20170310130900|"+ (localStorageGet("locale")? localStorageGet("locale") : "en_IN"),
+    msgId: "20170310130900|en_IN",
     requesterId: "",
     authToken
   };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
+  if(isPublicSearch()) delete RequestInfo.authToken;
   return Object.assign(
     {},
     {
