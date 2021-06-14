@@ -14,6 +14,8 @@ import React from "react";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { showSpinner, hideSpinner } from "egov-ui-kit/redux/common/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {  PAYMENTSEARCH } from "./endPoints";
+
 
 export const statusToMessageMapping = {
   rejected: "Rejected",
@@ -944,4 +946,13 @@ export const getMohallaData = (payload, tenantId) => {
     });
     return result;
   }, []);
+}
+
+export const getPaymentSearchAPI = (businessService='')=>{
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }else if (process.env.REACT_APP_NAME === "Citizen") {
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+  }
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
 }
