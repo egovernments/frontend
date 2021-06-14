@@ -1168,3 +1168,28 @@ bills.map(item =>{
 		})
 	  });
 	}
+	export const downloadChallan = async (queryStr, mode = 'download') => {
+
+		const DOWNLOADRECEIPT = {
+		  GET: {
+			URL: "/egov-pdf/download/UC/mcollect-challan",
+			ACTION: "_get",
+		  },
+		};
+		try {
+		  httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+			.then(res => {
+			  res.filestoreIds[0]
+			  if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+				res.filestoreIds.map(fileStoreId => {
+				  downloadReceiptFromFilestoreID(fileStoreId, mode)
+				})
+			  } else {
+				console.log("Error In Acknowledgement form Download");
+			  }
+			});
+		} catch (exception) {
+		  alert('Some Error Occured while downloading Acknowledgement form!');
+		}
+	  
+	  }
