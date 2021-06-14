@@ -215,7 +215,7 @@ class TableData extends Component {
     let ESCALATED_SLA = [];
     let NEARING_SLA = [];
     let totalRows = []
-    if (initialInboxData.length === 2) {
+    if (initialInboxData.length === 3) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
           let isValid = this.checkRow(eachRow, filter, searchFilter, taskboardLabel);
@@ -239,7 +239,7 @@ class TableData extends Component {
       })
     }
 
-    if (initialInboxData.length === 2) {
+    if (initialInboxData.length === 3) {
       initialInboxData.map((row, ind) => {
         row.rows = row.rows.filter((eachRow) => {
           let isValid = this.checkSLA(taskboardLabel, eachRow);

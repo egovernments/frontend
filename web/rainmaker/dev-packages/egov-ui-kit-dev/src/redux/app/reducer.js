@@ -38,14 +38,6 @@ const initialState = {
     errorMessage:'',
     loaded:false
   },
-  inboxEscData: {
-    count:0,
-    records:[],
-    loading:false,
-    error:false,
-    errorMessage:'',
-    loaded:false
-  },
   inboxRemData:{
     count:0,
     records:[],
@@ -162,16 +154,6 @@ const appReducer = (state = initialState, action) => {
         ...state,
         inbox: {
           ...state.inbox,
-          loading: false,
-          loaded:true,
-          records: action.payload,
-        },
-      };
-      case actionTypes.FETCH_ESCALATED_INBOX_RECORDS_COMPLETE: 
-      return { 
-        ...state,
-        inboxRemData: {
-          ...state.inboxRemData,
           loading: false,
           loaded:true,
           records: action.payload,

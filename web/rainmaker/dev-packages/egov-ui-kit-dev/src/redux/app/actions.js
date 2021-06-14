@@ -147,12 +147,6 @@ const fetchRemInboxRecords = (payload) => {
     payload,
   };
 };
-const fetchEscaltedInboxRecords = (payload) => {
-  return {
-    type: actionTypes.FETCH_ESCALATED_INBOX_RECORDS_COMPLETE,
-    payload,
-  };
-};
 const fetchResetInboxRecords = () => {
   return {
     type: actionTypes.FETCH_RESET_INBOX_RECORDS,
@@ -218,7 +212,6 @@ export const fetchActionItems = (role, ts) => {
         const { loaded = false, loading = false } = inbox || {};
         loaded == false && loading == false && dispatch(fetchInboxRecordsCount());
         loaded == false && loading == false && dispatch(fetchRecords());
-        loaded == false && loading == false && dispatch(fetchEscalatedRecords());
       }
       dispatch(setActionItems(payload.actions));
     } catch (error) {
@@ -364,7 +357,7 @@ export const fetchInboxRecordsCount = () => {
       const { inboxRemData } = app;
       const { loaded: remainingDataLoaded = false } = inboxRemData || {};
 
-      remainingDataLoaded == false && dispatch(fetchRemRecords(payload))
+      remainingDataLoaded == false && dispatch(fetchRemRecords(payload));
       dispatch(fetchInboxCount(payload));
     } catch (error) {
       dispatch(fetchInboxRecordsError(error.message));
@@ -378,7 +371,16 @@ export const fetchRecords = () => {
     try {
       const tenantId = getTenantId();
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 0 }, { key: "limit", value: 100 }];
-      const payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
+      const escRequestBody = [{ key: "tenantId", value: tenantId }];
+      let payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
+      if (payload.ProcessInstances && payload.ProcessInstances.length > 0 && payload.ProcessInstances.length != 100) {
+        let escalatedPayload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, escRequestBody);
+        escalatedPayload.ProcessInstances && escalatedPayload.ProcessInstances.length > 0 && 
+        escalatedPayload.ProcessInstances.forEach(data => {
+          data.isEscalatedApplication = true;
+          payload.ProcessInstances.push(data);
+        })
+      }
       dispatch(fetchInboxRecords(payload.ProcessInstances));
     } catch (error) {
       dispatch(fetchInboxRecordsError(error.message));
@@ -392,24 +394,19 @@ export const fetchRemRecords = (count = 0) => {
       const tenantId = getTenantId();
       count = localStorage.getItem('jk-test-inbox-record-count') || count;
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 100 }, { key: "limit", value: count - 100 }];
-      const payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
+      const escRequestBody = [{ key: "tenantId", value: tenantId }];
+      let payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, escRequestBody);
+      if (payload.ProcessInstances && payload.ProcessInstances.length > 0) {
+        let escalatedPayload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, requestBody);
+        escalatedPayload.ProcessInstances && escalatedPayload.ProcessInstances.length > 0 &&
+          escalatedPayload.ProcessInstances.forEach(data => {
+            data.isEscalatedApplication = true;
+            payload.ProcessInstances.push(data);
+          })
+      }
       dispatch(fetchRemInboxRecords(payload.ProcessInstances));
     } catch (error) {
       dispatch(fetchRemInboxRecordsError(error.message));
-    }
-  };
-};
-export const fetchEscalatedRecords = () => {
-  return async (dispatch, getState) => {
-    dispatch(fetchRemInboxRecordsPending());
-    try {
-      const tenantId = getTenantId();
-      const requestBody = [{ key: "tenantId", value: tenantId }];
-      const payload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, requestBody);
-      payload.ProcessInstances && payload.ProcessInstances.length > 0 && payload.ProcessInstances.forEach(data => data.isEscalatedApplication = true)
-      dispatch(fetchEscaltedInboxRecords(payload.ProcessInstances));
-    } catch (error) {
-      dispatch(fetchInboxRecordsError(error.message));
     }
   };
 };
