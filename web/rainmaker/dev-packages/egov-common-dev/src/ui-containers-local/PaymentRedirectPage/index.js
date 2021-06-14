@@ -87,7 +87,7 @@ class PaymentRedirect extends Component {
           if (index > -1) {
             prepareFinalObject("commonPayInfo", commonPayDetails[index]);
           } else {
-            const details = commonPayDetails.filter(item => item.code === "DEFAULT");
+            const details = commonPayDetails &&  commonPayDetails.filter(item => item.code === "DEFAULT");
             prepareFinalObject("commonPayInfo", details);
           }
           let moduleName = "egov-common";
