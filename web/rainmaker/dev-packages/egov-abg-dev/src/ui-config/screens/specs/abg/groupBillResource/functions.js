@@ -13,6 +13,8 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty"
 import { loadUlbLogo } from "../../utils/receiptTransformer";
+import { getMergeAndDownloadList } from "../../utils";
+import cloneDeep from "lodash/cloneDeep";
 
 // const tenantId = getTenantId();
 const tenantId = getTenantId();
@@ -107,7 +109,10 @@ export const searchApiCall = async (state, dispatch) => {
         ["ABG_COMMON_TABLE_COL_STATUS"]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
         ["TENANT_ID"]: item.tenantId
       }));
-
+      const copyOfSearchScreenObject = cloneDeep(searchScreenObject);
+      dispatch(
+        prepareFinalObject("searchDetailsOfGroupBills", copyOfSearchScreenObject)
+      );
       dispatch(
         handleField(
           "groupBills",
@@ -123,7 +128,8 @@ export const searchApiCall = async (state, dispatch) => {
           "props.rows",
           data.length
         )
-      );      
+      );
+      getMergeAndDownloadList(state, dispatch, data.length);
       showHideTable(true, dispatch);
       if(!isEmpty(response)){
         showHideMergeButton(true, dispatch);
