@@ -395,9 +395,9 @@ export const fetchRemRecords = (count = 0) => {
       count = localStorage.getItem('jk-test-inbox-record-count') || count;
       const requestBody = [{ key: "tenantId", value: tenantId }, { key: "offset", value: 100 }, { key: "limit", value: count - 100 }];
       const escRequestBody = [{ key: "tenantId", value: tenantId }];
-      let payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, escRequestBody);
+      let payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
       if (payload.ProcessInstances && payload.ProcessInstances.length > 0) {
-        let escalatedPayload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, requestBody);
+        let escalatedPayload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, escRequestBody);
         escalatedPayload.ProcessInstances && escalatedPayload.ProcessInstances.length > 0 &&
           escalatedPayload.ProcessInstances.forEach(data => {
             data.isEscalatedApplication = true;
