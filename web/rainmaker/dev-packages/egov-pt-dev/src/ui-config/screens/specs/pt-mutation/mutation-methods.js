@@ -324,16 +324,17 @@ export const searchPropertyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4,
-
+  
       },
       iconObj: {
        // label: "PT-",
         position: "start"
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.ids"
+      //pattern: /^[0-9]*$/i,
+      pattern: getPattern("NewPropertyID"),
+      errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
+      jsonPath: "searchScreen.ids"  
     }),
     mohalla: {
       uiFramework: "custom-containers-local",
@@ -533,11 +534,11 @@ export const searchApplicationDetails = getCommonCard({
     applicationPropertyTaxUniqueId: getTextField({
       label: {
         labelName: "Property Tax Unique Id",
-        labelKey: "PT_PROPERTY_UNIQUE_ID"
+        labelKey: "PT_APP_PROPERTY_UNIQUE_ID"
       },
       placeholder: {
         labelName: "Enter Property Tax Unique Id",
-        labelKey: "PT_PROPERTY_UNIQUE_ID_PLACEHOLDER"
+        labelKey: "PT_APP_PROPERTY_UNIQUE_ID_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,

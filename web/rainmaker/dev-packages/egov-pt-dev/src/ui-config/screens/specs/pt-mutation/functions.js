@@ -3,6 +3,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 
 import {
@@ -360,7 +361,7 @@ const searchApiCall = async (state, dispatch, index) => {
         else if (key === "ids") {
           queryObject.push({
             key: "propertyIds",
-            value: searchScreenObject[key].trim()
+            value: "PT-"+tenantUniqueId+"-"+searchScreenObject[key].trim()
           });
         }
 
