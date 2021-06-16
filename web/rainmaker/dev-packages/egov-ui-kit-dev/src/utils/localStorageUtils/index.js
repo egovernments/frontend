@@ -44,7 +44,7 @@ export const setTenantId = (tenantId) => {
 export const setLocale = (locale) => {
   localStorageSet("locale", locale);
   localStorage.setItem("locale", locale);
-  sessionStorage.setItem("Digit.locale",{"value":locale});
+  sessionStorage.setItem("Digit.locale",JSON.stringify({"value":locale}));
 };
 export const setModule = (moduleName) => {
   localStorageSet("module", moduleName);
