@@ -654,9 +654,14 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
           {
             adhocPenaltyReason = get(
             state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocPenaltyReason");
-            adhocRebateReason = get(
+           adhocRebateReason = get(
             state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocExemptionReason");
-            
+            if(adhocPenaltyReason == "Others")
+            { adhocPenaltyReason=get(
+              state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocOtherPenaltyReason");}
+            if(adhocRebateReason == "Others")
+              { adhocRebateReason=get(
+                state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocOtherExemptionReason");}
           }
           reasonss = {
             "adhocPenaltyReason": adhocPenaltyReason,
