@@ -4,7 +4,7 @@ import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/util
 import { ACTIONMENU, EVENTSCOUNT, LOCALATION, MDMS, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
 import { getLocale, getTenantId, localStorageSet, setLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { debug } from "util";
-import { INBOXRECORDS, INBOXRECORDSCOUNT, INBOXESCALTEDRECORDS } from "../../utils/endPoints";
+import { INBOXESCALTEDRECORDS, INBOXRECORDS, INBOXRECORDSCOUNT } from "../../utils/endPoints";
 import { getLocalizationLabels, getModule, getStoredModulesList, setStoredModulesList } from "../../utils/localStorageUtils";
 import * as actionTypes from "./actionTypes";
 
@@ -357,7 +357,7 @@ export const fetchInboxRecordsCount = () => {
       const { inboxRemData } = app;
       const { loaded: remainingDataLoaded = false } = inboxRemData || {};
 
-      remainingDataLoaded == false && dispatch(fetchRemRecords(payload));
+      remainingDataLoaded == false && payload > 100 && dispatch(fetchRemRecords(payload))
       dispatch(fetchInboxCount(payload));
     } catch (error) {
       dispatch(fetchInboxRecordsError(error.message));
@@ -375,11 +375,11 @@ export const fetchRecords = () => {
       let payload = await httpRequest(INBOXRECORDS.GET.URL, INBOXRECORDS.GET.ACTION, requestBody);
       if (payload.ProcessInstances && payload.ProcessInstances.length > 0 && payload.ProcessInstances.length != 100) {
         let escalatedPayload = await httpRequest(INBOXESCALTEDRECORDS.GET.URL, INBOXESCALTEDRECORDS.GET.ACTION, escRequestBody);
-        escalatedPayload.ProcessInstances && escalatedPayload.ProcessInstances.length > 0 && 
-        escalatedPayload.ProcessInstances.forEach(data => {
-          data.isEscalatedApplication = true;
-          payload.ProcessInstances.push(data);
-        })
+        escalatedPayload.ProcessInstances && escalatedPayload.ProcessInstances.length > 0 &&
+          escalatedPayload.ProcessInstances.forEach(data => {
+            data.isEscalatedApplication = true;
+            payload.ProcessInstances.push(data);
+          })
       }
       dispatch(fetchInboxRecords(payload.ProcessInstances));
     } catch (error) {
