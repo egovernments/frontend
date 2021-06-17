@@ -90,6 +90,7 @@ export const getMdmsData = async (action, state, dispatch) => {
             { name: "OwnerType" },
             { name: "DocumentType" },
             { name: "UOM" },
+            { name: "StructureType" }
           ]
         },
         {
