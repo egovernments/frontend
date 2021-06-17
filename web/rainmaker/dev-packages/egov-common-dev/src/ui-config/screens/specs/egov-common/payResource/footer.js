@@ -460,7 +460,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
             payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
         }
      
-      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
         let dcbRow=null,dcbArray=[];
         let installment,totalamount=0;
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
