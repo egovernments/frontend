@@ -694,7 +694,12 @@ export const downloadReceiptpt = (receiptQueryString) => {
         if (query.key == "businessService") {
           businessService = query.value;}  });
           receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
-
+          const FETCHASSESSMENTDETAILS = {
+            GET: {
+              URL: "/property-services/assessment/_search",
+              ACTION: "_get",
+            },
+          };
 
 
       // dispatch(downloadReceiptPending()); const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
@@ -718,7 +723,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
           { key: "propertyIds", value: payloadReceiptDetails.Payments[0].paymentDetails[0].bill.consumerCode}
         ];
         const responseForPT =  await httpRequest(FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
-     
+        const responseForAssessment = await httpRequest(FETCHASSESSMENTDETAILS.GET.URL, FETCHASSESSMENTDETAILS.GET.ACTION,queryObjectForPT);
   let uuid=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
   let data = {};
   let bodyObject = {
@@ -734,7 +739,19 @@ export const downloadReceiptpt = (receiptQueryString) => {
         let assessmentYear="",assessmentYearForReceipt ="";
       let count=0;
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="PT"){
-    
+        let reasonss = null;
+        let adhocPenaltyReason=null,adhocRebateReason=null;
+       if(responseForAssessment && responseForAssessment.Assessments.length>0 && responseForAssessment.Assessments[0].additionalDetails)
+          {
+            adhocPenaltyReason = responseForAssessment.Assessments[0].additionalDetails.adhocPenaltyReason?responseForAssessment.Assessments[0].additionalDetails.adhocPenaltyReason:'NA';
+           adhocRebateReason = responseForAssessment.Assessments[0].additionalDetails.adhocExemptionReason?responseForAssessment.Assessments[0].additionalDetails.adhocExemptionReason:'NA';
+          }
+          reasonss = {
+            "adhocPenaltyReason": adhocPenaltyReason,
+            "adhocRebateReason":adhocRebateReason,
+            "lastModifier":lastmodifier
+            }
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss;
           let arrearRow={};  let arrearArray=[];
   let roundoff=0,tax=0,firecess=0,cancercess=0,penalty=0,rebate=0,interest=0,usage_exemption=0,special_category_exemption=0,adhoc_penalty=0,adhoc_rebate=0,total=0;
   

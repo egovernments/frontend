@@ -764,7 +764,7 @@ const screenConfig = {
               gridDefination: {
                 xs: 12,
                 sm: 5,
-                align: "right",
+                // align: "right",
               },
               children: {
                 connectionDetailsDownload,
