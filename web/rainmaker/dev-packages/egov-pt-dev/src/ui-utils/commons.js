@@ -46,12 +46,12 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const getSearchResults = async (queryObject, requestBody) => {
+export const getSearchResults = async (queryObject, requestBody,searchURL="/property-services/property/_search") => {
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/property-services/property/_search",
+      searchURL,
       "",
       queryObject,
       requestBody

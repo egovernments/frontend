@@ -155,7 +155,7 @@ const searchApiCall = async (state, dispatch, index) => {
     query = {}
   }
 
- 
+
   let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
   let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
@@ -180,7 +180,18 @@ const searchApiCall = async (state, dispatch, index) => {
     dispatch,
     "propertySearch"
   ) || searchScreenObject.locality == "";
-
+  const isownerDoorNoRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.doorNo == "";
+  const isownerNameRowValid = validateFields(
+    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+    state,
+    dispatch,
+    "propertySearch"
+  ) || searchScreenObject.name == "";
 
   const isownerMobNoRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
@@ -223,7 +234,7 @@ const searchApiCall = async (state, dispatch, index) => {
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '')) {
+    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '' || searchScreenObject.name != '' || searchScreenObject.doorNo != '')) {
       formValid = true;
     }
   } else {
@@ -259,7 +270,7 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
-  if (index == 0 && !(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid && isownerLocalityRowValid)) {
+  if (index == 0 && !(isSearchBoxFirstRowValid && isownerCityRowValid && ispropertyTaxUniqueIdRowValid && isexistingPropertyIdRowValid && isownerMobNoRowValid && isownerLocalityRowValid && isownerDoorNoRowValid && isownerNameRowValid)) {
     dispatch(
       toggleSnackbar(
         true,
@@ -331,7 +342,7 @@ const searchApiCall = async (state, dispatch, index) => {
     try {
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
-      const response = await getSearchResults(queryObject);
+      const response = (searchScreenObject['doorNo'] || searchScreenObject['name']) && index == 0 ? await getSearchResults(queryObject, {}, "/property-services/property/fuzzy/_search") : await getSearchResults(queryObject);
 
       // const response = searchSampleResponse();
 
