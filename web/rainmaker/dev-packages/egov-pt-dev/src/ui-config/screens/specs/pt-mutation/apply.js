@@ -174,11 +174,50 @@ const getPropertyData = async (action, state, dispatch) => {
     const previousPropertyUuid = payload.Properties[0].additionalDetails && payload.Properties[0].additionalDetails.previousPropertyUuid;
     payload.Properties[0].additionalDetails = { previousPropertyUuid };
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
-
+  
     setCardVisibility(state, action, dispatch);
 
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     dispatch(prepareFinalObject("PropertyOld",{}));
+    let oldmob=payload.Properties[0].owners[0].mobileNumber
+    
+    dispatch(prepareFinalObject("PropertyOldNumber",oldmob));
+
+
+    if(payload){
+
+      let oldMobileNumber = get(state, "screenConfiguration.preparedFinalObject.PropertyOldNumber");
+      let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+      let phoneno = /^[6-9][0-9]{9}$/; 
+      let flag=false
+    //  console.log("flag before",flag)
+      //if any owner is having wrong number flag will become true and the input feild will show
+      owners.map(owner => {
+        if(!owner.mobileNumber.match(phoneno) && owner.status=='ACTIVE')
+        {
+          flag=true
+        }
+
+      })
+     //  console.log("flag after",flag)
+        if(!flag)
+        {
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",
+            { visibility: "hidden" }
+          );
+          
+          set(
+            action.screenConfig,
+            "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.transferorMobileCard",
+            { visibility: "hidden" }
+          );
+        }
+    }
+    
+
+
   } catch (e) {
     console.log(e);
   }
@@ -219,6 +258,7 @@ const getApplicationData = async (action, state, dispatch) => {
       ]);
       let inActiveOwners = [];
       let activeOwners = [];
+
       payload.Properties[0].owners.map(owner => {
         owner.documentUid = owner.documents ? owner.documents[0].documentUid : "NA";
         owner.documentType = owner.documents ? owner.documents[0].documentType : "NA";
@@ -229,7 +269,8 @@ const getApplicationData = async (action, state, dispatch) => {
           inActiveOwners.push({ ...owner, status: "ACTIVE" });
         }
       });
-
+  let owners =  get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+   
       payload.Properties[0].owners = inActiveOwners;
       payload.Properties[0].ownersInit = inActiveOwners;
       payload.Properties[0].ownersTemp = activeOwners;
@@ -273,7 +314,8 @@ const getApplicationData = async (action, state, dispatch) => {
     dispatch(prepareFinalObject("Property", payload.Properties[0]));
     dispatch(prepareFinalObject("PropertyOld",cloneDeep(payload.Properties[0])));
     setCardVisibility(state, action, dispatch);
-    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
+    dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)))
+    ;
     // Prefilling radio buttons
     set(
       action.screenConfig,
@@ -557,7 +599,8 @@ const screenConfig = {
     );
 
     isEdit ? getApplicationData(action, state, dispatch) : getPropertyData(action, state, dispatch);
-
+    let owners =  get(state, "screenConfiguration.preparedFinalObject.Property.owners");
+  
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "pt-mutation");
 
@@ -569,6 +612,11 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.BuildingType",
         []
       );
+    
+
+
+
+    
       buildingUsageTypeData = getFirstListFromDotSeparated(
         buildingUsageTypeData
       );
@@ -690,6 +738,9 @@ const screenConfig = {
       "components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.transferorSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
+
+   
+   
 
     return action;
   },
