@@ -163,22 +163,29 @@ const callBackForApply = async (state, dispatch) => {
       owner.status = "INACTIVE";
 
     })
-    var phoneno = /^[6-9][0-9]{9}$/;
-    var newMob=null;
-    propertyPayload.ownersTemp.map(owner => {
-      if(owner.mobileNumber.match(phoneno))
-      {
-        newMob=owner.mobileNumber;
-      }
-
-    })
+   // console.log("flag",propertyPayload.oldmobileNumber)
+    let phoneno = /^[6-9][0-9]{9}$/;
+     let newMob= propertyPayload.oldmobileNumber;
+    let flag=true
     propertyPayload.owners.map(owner => {
       if(!owner.mobileNumber.match(phoneno))
       {
+
+        flag=false
         owner.mobileNumber=newMob;
+
       }
 
     })
+
+  if(!flag)
+  {
+    
+    dispatch(handleField('apply', "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",{}))
+
+   
+    
+  }
 
     
 
@@ -434,12 +441,12 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = true;
     }
     if (isFormValid) {
-      const MutationReason = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Property.additionalDetails.reasonForTransfer",
-        ''
-      );
-      if(MutationReason && MutationReason !=="NAMECORRECTION")
+       const MutationReason = get(	
+        state.screenConfiguration.preparedFinalObject,	
+        "Property.additionalDetails.reasonForTransfer",	
+        ''	
+      );	
+      if(MutationReason && MutationReason !=="NAMECORRECTION")	
       {
       errorMsg = validateMobileNumber(state);
       }
