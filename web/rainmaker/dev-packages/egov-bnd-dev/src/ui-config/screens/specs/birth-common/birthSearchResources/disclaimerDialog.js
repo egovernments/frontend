@@ -18,6 +18,23 @@ import {triggerDownload} from "../../utils";
 const dSignAgreePath =  "bnd.birth.iAgree"
 export const disclaimerDialog = getCommonContainer({
   
+  header0: getCommonHeader({
+    labelName: "Confirm Download",
+    labelKey: "BND_IMPORTANT"
+  },
+  {
+    style: {
+      fontSize: "20px"
+    }
+  }),
+  divider1: getDivider(),
+  downloadNote: getCommonContainer({
+    value0: getCommonParagraph({
+      labelName:
+        "Important : The application form is to be signed by the original lessee or his/her successors/heir. Otherwise considered invalid.",
+      labelKey: "BND_DOWNLOAD_NOTE"
+    }),
+  }),
   header: getCommonHeader({
       labelName: "Confirm Download",
       labelKey: "BND_DOWNLOAD_TERMS"
@@ -90,6 +107,7 @@ export const disclaimerDialog = getCommonContainer({
     //     content: "Test"
     //   }
     // },
+
     break1: getBreak,
     checkBox:{
       required: true,
