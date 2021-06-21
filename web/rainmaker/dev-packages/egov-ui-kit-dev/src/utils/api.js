@@ -411,7 +411,6 @@ export const downloadPdfFile = async  ( endPoint,
         "Accept": "application/pdf"
       },
     });
-  debugger;
     if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) {
       queryObject &&
         queryObject.push({
@@ -434,7 +433,6 @@ export const downloadPdfFile = async  ( endPoint,
         store.dispatch(hideSpinner());
       }
     } catch (error) {
-      debugger;
       store.dispatch(hideSpinner());
       throw new Error(error);
     }
