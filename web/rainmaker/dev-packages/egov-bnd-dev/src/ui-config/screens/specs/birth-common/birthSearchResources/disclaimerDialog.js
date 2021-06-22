@@ -19,7 +19,7 @@ const dSignAgreePath =  "bnd.birth.iAgree"
 export const disclaimerDialog = getCommonContainer({
   
   header0: getCommonHeader({
-    labelName: "Confirm Download",
+    labelName: "",
     labelKey: "BND_IMPORTANT"
   },
   {
@@ -29,11 +29,16 @@ export const disclaimerDialog = getCommonContainer({
   }),
   divider1: getDivider(),
   downloadNote: getCommonContainer({
-    value0: getCommonParagraph({
-      labelName:
-        "Important : The application form is to be signed by the original lessee or his/her successors/heir. Otherwise considered invalid.",
+    value0: getCommonCaption({
+      labelName: "",
       labelKey: "BND_DOWNLOAD_NOTE"
-    }),
+      },
+      {
+        style: {
+          fontSize: "14px"
+      }
+      }),  
+      break1 : getBreak()
   }),
   header: getCommonHeader({
       labelName: "Confirm Download",
@@ -108,7 +113,7 @@ export const disclaimerDialog = getCommonContainer({
     //   }
     // },
 
-    break1: getBreak,
+    break2: getBreak,
     checkBox:{
       required: true,
       uiFramework: "custom-atoms-local",
