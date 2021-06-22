@@ -140,7 +140,6 @@ const screenConfig = {
         );
        if(businessService!=="PT.MUTATION")
         {
-            console.log("prasad in mutation");
             set(data, "applicationSuccessFooter.children.goToApplication", {});
         } 
 
