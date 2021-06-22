@@ -412,7 +412,7 @@ export const searchPropertyDetails = getCommonCard({
       jsonPath: "ptSearchScreen.locality",
       gridDefination: {
         xs: 12,
-        sm: 3
+        sm: 4
       }
     },
 
@@ -458,7 +458,7 @@ export const searchPropertyDetails = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 3
+        sm: 4
       },
       afterFieldChange: async (action, state, dispatch) => {
         if (action.value.match(/^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i)||action.value.length==0) {
@@ -539,7 +539,7 @@ export const searchPropertyDetails = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 3
+        sm: 4
       }
     }),
   }),
