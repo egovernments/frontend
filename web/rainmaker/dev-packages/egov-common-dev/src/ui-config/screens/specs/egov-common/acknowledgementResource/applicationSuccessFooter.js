@@ -97,6 +97,7 @@ export const applicationSuccessFooter = (
                 variant: "contained",
                 color: "primary",
                 // className: "apply-wizard-footer-right-button",
+                className: "PrintButton",
                 style: {
                     minWidth: "180px",
                     height: "48px",
