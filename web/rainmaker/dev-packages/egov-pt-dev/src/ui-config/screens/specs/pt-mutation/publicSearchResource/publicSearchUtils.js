@@ -169,6 +169,11 @@ export const generateBill = async (
         key: "consumerCode",
         value: consumerCodes.join(","),
       });
+      queryObj.push({
+        key: "status",
+        value: "ACTIVE",
+      });
+
       if (businessService) {
         queryObj.push({
           key: "service",
