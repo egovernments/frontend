@@ -212,7 +212,7 @@ const searchApiCall = async (state, dispatch, index) => {
     state,
     dispatch,
     "propertySearch"
-  ) || searchScreenObject.oldpropertyids == '';
+  ) || searchScreenObject.oldPropertyId == '';
   const ispropertyTaxApplicationNoRowValid = validateFields(
     "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
     state,
@@ -234,7 +234,7 @@ const searchApiCall = async (state, dispatch, index) => {
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '' || searchScreenObject.name != '' || searchScreenObject.doorNo != '')) {
+    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldPropertyId != '' || searchScreenObject.name != '' || searchScreenObject.doorNo != '')) {
       formValid = true;
     }
   } else {
