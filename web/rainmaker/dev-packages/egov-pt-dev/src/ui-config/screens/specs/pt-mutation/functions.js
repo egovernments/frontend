@@ -479,7 +479,7 @@ const searchApiCall = async (state, dispatch, index) => {
  let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
 
-  if ((!searchScreenObject.tenantId) && index == 0) {
+/*   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
         true,
@@ -492,7 +492,7 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
 
-  }
+  } */
   let queryObject = [
     {
       key: "tenantId",
@@ -514,6 +514,8 @@ const searchApiCall = async (state, dispatch, index) => {
       formValid = true;
     }
   }
+
+  let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children", state, dispatch, "propertySearch");
   if (!formValid) {   
     dispatch(
       toggleSnackbar(
@@ -527,13 +529,11 @@ const searchApiCall = async (state, dispatch, index) => {
     );
     return;
   }
-  let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails", state, dispatch, "propertySearch");
-  let form2 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails", state, dispatch, "propertySearch");
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails"
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails"
   // "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo"
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.captureMutationDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
+  "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchProperty.children.searchPropertyDetails.children.ulbCityContainer.children",
     state,
     dispatch,
     "propertySearch"
@@ -567,24 +567,8 @@ const searchApiCall = async (state, dispatch, index) => {
     dispatch,
     "propertySearch"
   ) || searchScreenObject.oldpropertyids == '';
-  const ispropertyTaxApplicationNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.acknowledgementIds == '';
-  const ispropertyTaxApplicationOwnerNoRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.mobileNumber == '';
-  const ispropertyTaxApplicationPidRowValid = validateFields(
-    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
-    state,
-    dispatch,
-    "propertySearch"
-  ) || searchScreenObject.ids == '';
+  
+
 
 
 
