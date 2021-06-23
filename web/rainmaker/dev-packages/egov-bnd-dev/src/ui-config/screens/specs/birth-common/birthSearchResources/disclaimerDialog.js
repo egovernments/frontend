@@ -18,6 +18,28 @@ import {triggerDownload} from "../../utils";
 const dSignAgreePath =  "bnd.birth.iAgree"
 export const disclaimerDialog = getCommonContainer({
   
+  header0: getCommonHeader({
+    labelName: "",
+    labelKey: "BND_IMPORTANT"
+  },
+  {
+    style: {
+      fontSize: "20px"
+    }
+  }),
+  divider1: getDivider(),
+  downloadNote: getCommonContainer({
+    value0: getCommonCaption({
+      labelName: "",
+      labelKey: "BND_DOWNLOAD_NOTE"
+      },
+      {
+        style: {
+          fontSize: "14px"
+      }
+      }),  
+      break1 : getBreak()
+  }),
   header: getCommonHeader({
       labelName: "Confirm Download",
       labelKey: "BND_DOWNLOAD_TERMS"
@@ -90,7 +112,8 @@ export const disclaimerDialog = getCommonContainer({
     //     content: "Test"
     //   }
     // },
-    break1: getBreak,
+
+    break2: getBreak,
     checkBox:{
       required: true,
       uiFramework: "custom-atoms-local",
