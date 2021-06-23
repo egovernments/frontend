@@ -23,21 +23,24 @@ class AutoSuggestor extends Component {
       suggestions = [],
       disabled = false,
       locale,
-      required
+      required,
+      localizationLabels={}
     } = this.props;
     let {
       value: valueNew,
       suggestions: suggestionsNew = [],
       disabled: disabledNew = false,
       locale: localeNew,
-      required: requiredNew
+      required: requiredNew,
+      localizationLabels:localizationLabelsNew={}
     } = nextProps;
     if (locale != localeNew ||
       value != valueNew ||
       disabled != disabledNew ||
       required != requiredNew ||
       Array.isArray(suggestionsNew) != Array.isArray(suggestions) ||
-      suggestions.length != suggestionsNew.length) {
+      suggestions.length != suggestionsNew.length||
+      Object.keys(localizationLabels).length!=Object.keys(localizationLabelsNew).length) {
       return true
     }
     return false

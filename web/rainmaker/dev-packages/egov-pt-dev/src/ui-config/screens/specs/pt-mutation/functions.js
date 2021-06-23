@@ -336,7 +336,7 @@ const searchApiCall = async (state, dispatch, index) => {
     let queryObject = [];
     Object.keys(query).map(key => {
       queryObject.push({
-        key: key, value: query[key]
+        key: key, value: key=="doorNo"?encodeURIComponent(query[key]):query[key]
       })
     })
     try {
