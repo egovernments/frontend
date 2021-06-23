@@ -9,6 +9,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTransformedLocale, getFileUrlFromAPI,enableField, disableField } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { downloadPdf, openPdf, printPdf } from "egov-ui-kit/utils/commons";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -80,7 +81,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
 		httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
-        { key: "tenantId", value: receiptQueryString[0].value.split('.')[0] }
+        { key: "tenantId", value: tenantId.split('.')[0] }
       ]
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
@@ -194,36 +195,40 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
       , "error"));
   }
 }
-export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
-  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
-    if (mode === 'download') {
-      var win = window.open(fileRes[fileStoreId], '_blank');
-      if(win){
-        win.focus();
-      }
+export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId,showConfirmation=false) => {
+  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
+  if (fileRes && !fileRes[fileStoreId]) {
+    console.error('ERROR IN DOWNLOADING RECEIPT');
+    return;
+  }
+  if (mode === 'download') {
+    if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
+    setTimeout(()=>{
+      const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
+      window.location.href = weblink
+    },1500)
     }
-    else {
-     // printJS(fileRes[fileStoreId])
-      var response =await axios.get(fileRes[fileStoreId], {
-        //responseType: "blob",
-        responseType: "arraybuffer",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/pdf"
-        }
-      });
-      console.log("responseData---",response);
-      const file = new Blob([response.data], { type: "application/pdf" });
-      const fileURL = URL.createObjectURL(file);
-      var myWindow = window.open(fileURL);
-      if (myWindow != undefined) {
-        myWindow.addEventListener("load", event => {
-          myWindow.focus();
-          myWindow.print();
-        });
-      }
-
+    downloadPdf(fileRes[fileStoreId]);
+    if(showConfirmation){
+    store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+    , "success"));
     }
+  } else if (mode === 'open') {
+    if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
+    setTimeout(()=>{
+      const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
+      window.location.href = weblink
+    },1500)
+    }
+    openPdf(fileRes[fileStoreId], '_self')
+    if(showConfirmation){
+    store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
+    , "success"));
+    }
+  }
+  else {
+    printPdf(fileRes[fileStoreId]);
+  }
   });
 }
 
