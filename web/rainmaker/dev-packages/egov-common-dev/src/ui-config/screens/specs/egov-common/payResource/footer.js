@@ -40,7 +40,7 @@ const checkAmount = (totalAmount, customAmount, businessService) => {
 
 export const callPGService = async (state, dispatch) => {
   const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const tenantId = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
   const businessService = get(
     state,
