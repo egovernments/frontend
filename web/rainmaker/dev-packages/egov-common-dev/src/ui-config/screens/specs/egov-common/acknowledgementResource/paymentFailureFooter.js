@@ -1,5 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 
 const businessService = getQueryArg(window.location.href, "businessService");
 const getCommonApplyFooter = children => {
