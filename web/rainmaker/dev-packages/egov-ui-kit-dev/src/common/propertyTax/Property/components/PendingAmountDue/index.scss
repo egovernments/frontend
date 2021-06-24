@@ -88,3 +88,20 @@
       .pendingAmountDialog {
         display: inline-block !important;
       }
+
+      .pending-dues {
+        button {
+          div {
+              div, div:hover {
+                  height: auto !important;
+                  background-color: transparent !important;
+              }
+          }
+        }
+      }
+
+      .pending-dues {
+        button[disabled] {
+          background-color: transparent !important;
+        }
+      }

@@ -1,7 +1,7 @@
 import { Card } from "components";
 import commonConfig from "config/common.js";
 import Label from "egov-ui-kit/utils/translationNode";
-import { businessServiceInfo } from "egov-ui-kit/utils/commons";
+import { businessServiceInfo, getDuesForPTMutation, searchConsumer, fetchConsumerBill } from "egov-ui-kit/utils/commons";
 import get from "lodash/get";
 import React from "react";
 import { connect } from "react-redux";
@@ -16,6 +16,9 @@ import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
 import "./index.css";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "egov-ui-kit/utils/api";
+
 const logoStyle = {
   height: "61px",
   width: "60px",
@@ -23,9 +26,12 @@ const logoStyle = {
 
 class PTInformation extends React.Component {
   state = {
-    businessServiceInfoItem: {}
+    businessServiceInfoItem: {},
+    totalDues: {},
+    waterDetails: {},
+    sewerDetails: {}
   }
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const mdmsBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -39,6 +45,56 @@ class PTInformation extends React.Component {
     };
     const businessServiceInfoItem = businessServiceInfo(mdmsBody, "PT");
     this.setState({businessServiceInfoItem});
+    let requestObject = {
+      MdmsCriteria: {
+        tenantId: "pb",
+        moduleDetails: [
+          {
+            moduleName: "PropertyTax",
+            masterDetails: [
+              {
+                name: "DuesOnPTMutation",
+              },
+            ]
+          }
+        ]
+      }
+    }
+    const payload = await httpRequest(
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      requestObject
+    );
+    let totalDues = {};
+    let getDuesForPTMutation = payload && payload.MdmsRes.PropertyTax.DuesOnPTMutation;
+    console.log(getDuesForPTMutation, "rakesh getDuesForPTMutation");
+    if (getDuesForPTMutation && getDuesForPTMutation.length > 0) {
+      let queryObject = [];
+          queryObject.push(
+            { key: "searchType", value: "CONNECTION" },
+            { key: "propertyId", value: window.location.href.split('/')[5] },
+            { key: "tenantId", value: getTenantId() }
+          );
+      getDuesForPTMutation.map( async (items) => {
+        if (!items.enabled) {
+          const consumerDetails = await searchConsumer(items, queryObject);
+          if (consumerDetails && consumerDetails.length > 0) {
+            const billDetails = await fetchConsumerBill(items, consumerDetails);
+            if ( billDetails && billDetails.length > 0 && items.module === "WS") {
+              totalDues.waterDue =  billDetails[0] && billDetails[0].totalAmount && billDetails[0].totalAmount;
+              this.setState({totalDues});
+              this.setState({waterDetails: consumerDetails[0]});
+            }
+            else if (billDetails && billDetails.length > 0 && items.module === "SW") {
+              totalDues.sewerDue = billDetails[0] && billDetails[0].totalAmount && billDetails[0].totalAmount;
+              this.setState({totalDues});
+              this.setState({sewerDetails: consumerDetails[0]});
+            }
+          }
+        }
+      })  
+    }
   }
   updateProperty = () => {
     let {
@@ -82,7 +138,7 @@ class PTInformation extends React.Component {
       cities,
       propertiesAudit
     } = this.props;
-    const { businessServiceInfoItem } = this.state;
+    const { businessServiceInfoItem, totalDues, waterDetails, sewerDetails } = this.state;
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
@@ -154,6 +210,9 @@ class PTInformation extends React.Component {
                   properties={properties}
                   generalMDMSDataById={generalMDMSDataById}
                   totalBillAmountDue={totalBillAmountDue}
+                  totalDues={totalDues}
+                  waterDetails={waterDetails}
+                  sewerDetails={sewerDetails}
                   ownershipTransfer={true}
                   viewHistory={true}
                   propertiesAudit={propertiesAudit}
@@ -178,7 +237,7 @@ class PTInformation extends React.Component {
 const mapStateToProps = (state) => {
   const { screenConfiguration = {} } = state;
   const { cities } = state.common || [];
-
+  
   const { preparedFinalObject } = screenConfiguration;
   let { propertiesAudit = [] } = preparedFinalObject;
   return { cities, propertiesAudit };
