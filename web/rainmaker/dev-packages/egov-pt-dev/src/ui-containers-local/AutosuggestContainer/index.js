@@ -41,9 +41,10 @@ class AutoSuggestor extends Component {
       Array.isArray(suggestionsNew) != Array.isArray(suggestions) ||
       suggestions.length != suggestionsNew.length||
       Object.keys(localizationLabels).length!=Object.keys(localizationLabelsNew).length) {
-      return true
+      // return true
     }
-    return false
+    // return false
+    return true
   }
 
   render() {
