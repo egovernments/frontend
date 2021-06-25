@@ -73,7 +73,7 @@ class PTInformation extends React.Component {
       let queryObject = [];
           queryObject.push(
             { key: "searchType", value: "CONNECTION" },
-            { key: "propertyId", value: window.location.href.split('/')[5] },
+            { key: "propertyId", value: window.location.href.split('/')[6] },
             { key: "tenantId", value: getTenantId() }
           );
       getDuesForPTMutation.map( async (items) => {
