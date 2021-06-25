@@ -77,7 +77,7 @@ class PTInformation extends React.Component {
             { key: "tenantId", value: getTenantId() }
           );
       getDuesForPTMutation.map( async (items) => {
-        if (!items.enabled) {
+        if (items.enabled) {
           const consumerDetails = await searchConsumer(items, queryObject);
           if (consumerDetails && consumerDetails.length > 0) {
             const billDetails = await fetchConsumerBill(items, consumerDetails);

@@ -1079,7 +1079,7 @@ export const businessServiceInfo = async (mdmsBody, businessService) => {
 
 export const searchConsumer = async (items, queryObject) => {
   const payload = await httpRequest(
-    `/${items.fetchWaterConnectionUrl}`,
+    `/${items.fetchConsumerUrl}`,
     "_search",
     queryObject
   );

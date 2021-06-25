@@ -77,7 +77,7 @@ class PendingAmountDialog extends Component {
               </div>
             </div><br/>
             <div>
-              <Label fontSize="18px" label="PT_SEWER_BILL_DUE" />
+              <Label fontSize="18px" label="PT_SEWERAGE_BILL_DUE" />
               <div style={payNowButton} >
               <div style={labelStyle}>Rs {sewerDue}</div>
               <Button disabled={sewerDue <= 0} className="pending-dues" style={buttonStyle}  label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(sewerDetails &&sewerDetails.connectionNo, "SW") }}/>
