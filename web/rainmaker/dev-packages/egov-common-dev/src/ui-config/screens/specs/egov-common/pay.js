@@ -12,6 +12,7 @@ import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
 import AmountToBePaid from "./payResource/amount-to-be-paid";
+import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../utils";
@@ -57,6 +58,25 @@ const getPaymentCard = () => {
                         labelKey: "NOC_PAYMENT_HEAD"
                     }),
                     estimateDetails,
+                    AmountToBePaid: {
+                        ...AmountToBePaid,
+                        visible: false
+                    }
+                })
+            }
+        }
+    }  if (isPublicSearch) {
+        return {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+                paymentDetails: getCommonCard({
+                    header: getCommonTitle({
+                        labelName: "Payment Collection Details",
+                        labelKey: "NOC_PAYMENT_HEAD"
+                    }),
+                    estimateDetails,
+                    capturePaymentDetails,
                     AmountToBePaid: {
                         ...AmountToBePaid,
                         visible: false
@@ -174,8 +194,14 @@ const fetchBill = async(state, dispatch, consumerCode, tenantId, billBusinessSer
 
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "COMMON_OWNER"));
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName")));
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
-
+     if(isPublicSearch)
+    {
+        //dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
+    }
+    else
+    {      
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
+    } 
 
     // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "Owner"));
     // const payerComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payer";
