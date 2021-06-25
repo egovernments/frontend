@@ -43,6 +43,7 @@ class TextFieldContainer extends React.PureComponent{
       title,
       errorMessage,
       error,
+      defaultSort=true,
       disabled=false,
       multiline=false,
       rows="1",
@@ -82,7 +83,7 @@ class TextFieldContainer extends React.PureComponent{
         )
       : "";
     if (dropdownData.length > 0) {
-      dropdownData=dropdownData.sort(sortDropdownLabels)
+      dropdownData=defaultSort?dropdownData&&Array.isArray(dropdownData)&&dropdownData.sort(sortDropdownLabels):dropdownData||[];
       return (
         <TextfieldWithIcon
           label={translatedLabel}
