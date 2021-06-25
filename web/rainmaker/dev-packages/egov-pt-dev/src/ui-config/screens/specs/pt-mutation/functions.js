@@ -135,6 +135,9 @@ const searchApiCall = async (state, dispatch, index) => {
     "ptSearchScreen",
     {}
   );
+  Object.keys(searchScreenObject).map(key=>{
+    searchScreenObject[key]=searchScreenObject[key]&&typeof searchScreenObject[key]=='string'&&searchScreenObject[key].trim();
+  })
   if ((!searchScreenObject.tenantId) && index == 0) {
     dispatch(
       toggleSnackbar(
