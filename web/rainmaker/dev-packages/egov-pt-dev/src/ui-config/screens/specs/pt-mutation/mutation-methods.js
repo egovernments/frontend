@@ -428,6 +428,8 @@ export const searchPropertyDetails = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4,
+
+
       },
       iconObj: {
         label: "+91 |",
@@ -459,7 +461,7 @@ export const searchPropertyDetails = getCommonCard({
         sm: 4
       },
       afterFieldChange: async (action, state, dispatch) => {
-        if (action.value.match(/^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{4,50}$/i)||action.value.length==0) {
+        if (action.value.match(/^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i)||action.value.length==0) {
           dispatch(
             handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", false)
           );
@@ -477,7 +479,7 @@ export const searchPropertyDetails = getCommonCard({
             handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", false)
           );
           dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage",action.value.length<4? getLocaleLabels("PT_ERR_MIN3CHAR","PT_ERR_MIN3CHAR"):getLocaleLabels("PT_ERR_INVALID_TEXT","PT_ERR_INVALID_TEXT"))
+            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage",action.value.length<3? getLocaleLabels("PT_ERR_MIN3CHAR","PT_ERR_MIN3CHAR"):getLocaleLabels("PT_ERR_INVALID_TEXT","PT_ERR_INVALID_TEXT"))
           );
         }
       }
