@@ -1124,10 +1124,12 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
 
 
 export const getPaymentSearchAPI = (businessService='')=>{
+  debugger;
+  console.log("==========businessService=",businessService);
   if(businessService=='-1'){
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
   }else if (process.env.REACT_APP_NAME === "Citizen") {
-    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+    return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
   }
   return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
 }
