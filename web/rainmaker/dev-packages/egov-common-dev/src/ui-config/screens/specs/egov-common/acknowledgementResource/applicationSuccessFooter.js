@@ -13,7 +13,11 @@ const getCommonApplyFooter = children => {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-            className: "apply-wizard-footer footer-com-style"
+            className: "apply-wizard-footer footer-com-style",
+            style: {
+                width: "100%",
+                
+            },
         },
         children
     };
