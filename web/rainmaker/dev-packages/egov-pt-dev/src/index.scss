@@ -16,7 +16,9 @@ body {
 .mihy-stepper-overide {
   margin-top: 32px;
 }
-
+#custom-atoms-applicationSuccessFooter{
+  width:100% !important;
+}
 .apply-application-for-new {
   color: #484848;
   font-family: Roboto;
@@ -164,6 +166,7 @@ input[type="date"]:valid::before {
     font-size: 18px;
   }
   #custom-atoms-paymentSuccessFooter #material-ui-printReceiptButton {
+   
     margin-right: 16px !important;
   }
   #custom-atoms-applicationSuccessCard {
@@ -173,12 +176,7 @@ input[type="date"]:valid::before {
     width: 100% !important;
   } */
 }
-
-@media only screen and (min-width: 768px) {
-  .common-div-css {
-    margin: 30px 16px 88px 16px;
-  }
-  .pt-apply-wizard-footer{
+.pt-apply-wizard-footer{
     width:100% !important;
   
   }
@@ -190,4 +188,13 @@ input[type="date"]:valid::before {
     width:100% !important;
   
   }
+
+@media only screen and (min-width: 768px) {
+  .common-div-css {
+    margin: 30px 16px 88px 16px;
+  }
+  #custom-atoms-applicationSuccessFooter{
+  width:100% !important;
+}
+  
 }
