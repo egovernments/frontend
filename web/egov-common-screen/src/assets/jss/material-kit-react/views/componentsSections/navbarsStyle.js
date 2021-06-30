@@ -26,7 +26,7 @@ const navbarsStyle = (theme) => ({
     backgroundPosition: "center center",
     backgroundSize: "cover",
     marginTop: "0",
-    minHeight: "740px",
+    minHeight: "440px",
   },
   formControl: {
     margin: "0 !important",

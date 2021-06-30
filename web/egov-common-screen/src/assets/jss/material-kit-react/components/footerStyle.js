@@ -11,6 +11,7 @@ const footerStyle = {
     textDecoration: "none",
     position: "relative",
     display: "block",
+    width: "274px !important",
   },
   left: {
     float: "left!important",
@@ -27,6 +28,8 @@ const footerStyle = {
     display: "flex",
     zIndex: "2",
     position: "relative",
+    backgroundColor: "#141a38",
+    color: "white",
   },
   a: {
     color: primaryColor,
