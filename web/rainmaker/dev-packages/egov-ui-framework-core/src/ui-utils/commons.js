@@ -384,7 +384,7 @@ export const acceptedFiles = acceptedExt => {
   return acceptedFileTypes;
 };
 
-export const handleFileUpload = (event, handleDocument, props) => {
+export const handleFileUpload = (event, handleDocument, props,afterFileSelected) => {
   const S3_BUCKET = {
     endPoint: "filestore/v1/files"
   };
@@ -406,6 +406,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
         uploadDocument = false;
       }
       if (uploadDocument) {
+        afterFileSelected&&typeof afterFileSelected=='function'&&afterFileSelected()
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(
             S3_BUCKET.endPoint,
