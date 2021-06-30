@@ -8,13 +8,13 @@ import { Screen } from "modules/common";
 import { resetFiles } from "egov-ui-kit/redux/form/actions";
 import { fetchComplaints } from "egov-ui-kit/redux/complaints/actions";
 import { getDateFromEpoch, mapCompIDToName, isImage, fetchImages, getPropertyFromObj } from "egov-ui-kit/utils/commons";
-
+import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
 import "./index.css";
 
 class ComplaintDetails extends Component {
   componentDidMount() {
-    let { fetchComplaints, match, resetFiles } = this.props;
-
+    let { fetchComplaints, match, resetFiles,fetchComplaintCategories } = this.props;
+    fetchComplaintCategories();
     fetchComplaints([{ key: "serviceRequestId", value: match.params.serviceRequestId }]);
     if (this.props.form && this.props.form.complaint) {
       resetFiles("complaint");
@@ -101,6 +101,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    fetchComplaintCategories: () => dispatch(fetchComplaintCategories())
     fetchComplaints: (criteria) => dispatch(fetchComplaints(criteria)),
     resetFiles: (formKey) => dispatch(resetFiles(formKey)),
   };
