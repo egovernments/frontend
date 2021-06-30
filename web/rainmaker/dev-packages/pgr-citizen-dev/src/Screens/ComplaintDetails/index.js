@@ -101,7 +101,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchComplaintCategories: () => dispatch(fetchComplaintCategories())
+    fetchComplaintCategories: () => dispatch(fetchComplaintCategories()),
     fetchComplaints: (criteria) => dispatch(fetchComplaints(criteria)),
     resetFiles: (formKey) => dispatch(resetFiles(formKey)),
   };
