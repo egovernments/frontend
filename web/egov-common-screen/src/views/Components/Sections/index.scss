@@ -2,7 +2,33 @@
 {
 /*     width: 300px;
  */}
-@media only screen and (min-width: 768px) {
+
+ #message{
+    background-color: #f3e5de;
+    color: #f49666;
+    border-radius: 15px;            
+}
+@media only screen and (max-width: 550px) {
+    #card1
+            {
+                height: 230px;
+             
+            }
+            #card2
+            {
+                height: 230px;
+              
+            }
+            #card3
+            {
+                height: 230px;
+              
+            }
+
+}
+
+
+@media only screen and (max-width: 768px) {
 
             #card1
             {
@@ -24,6 +50,12 @@
                 margin-top: 250px;
                 width: 436px;
             }
+            #message{
+                margin-left: 59px;
+                width: 92%;
+                background-color: #f3e5de;
+                color: #f49666;
+                border-radius: 15px;            }
             #leftImage
             {
                 height: 40px;
@@ -32,23 +64,7 @@
  }
 
 
- .faq-row-wrapper {
-    .faq-title {
-        margin-left: 15px;
-    }
 
-    .faq-body {
-        .faq-row {
-            .row-title {
-            }
-
-            .row-content {
-                .row-content-text {
-                }
-            }
-        }
-    }
-}
 
 .faq-row 
 {
@@ -58,4 +74,9 @@
 .faq-title 
 {
     margin-left: 10px;
+}
+
+.faq-row-wrapper
+{
+    border-radius: 15px;
 }

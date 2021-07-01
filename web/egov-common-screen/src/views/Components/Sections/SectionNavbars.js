@@ -20,6 +20,7 @@ import Button from "components/CustomButtons/Button.js";
 import image from "assets/img/bg.jpg";
 import leftImage from "assets/img/stateLogo.png";
 import rightImage from "assets/img/logo.png";
+import propertyTaxImage from "assets/img/property_tax.png"
 import  "./index.scss"
 
 
@@ -88,10 +89,20 @@ export default function SectionNavbars() {
             <GridItem xs={12} sm={6} md={4}>
               <Card id="card1" 
                    >
+                     
                   <h4 style={{
-                     marginLeft: "59px",
+                     marginLeft: "65px",
+                     fontWeight: "500"
                   }}>PropetyTax</h4>
-                <CardBody style={{  marginLeft: "31px"}}>
+                    <img
+              src={propertyTaxImage}
+              alt="..."              
+              id = ""
+              style = {{height: "59px",
+              width: "65px",
+              marginTop: "-44px"}}
+            />
+                <CardBody style={{  marginLeft: "34px"}}>
                   <p className={classes.description} style={{marginTop: "-36px"}}><br />
                   PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
                     <br />
@@ -105,9 +116,18 @@ export default function SectionNavbars() {
             <GridItem xs={12} sm={6} md={4}>
               <Card id="card2"  >
                   <h4 style={{
-                     marginLeft: "59px",
+                     marginLeft: "65px",
+                     fontWeight: "500"
+
                   }}>TradeLicence</h4>
-                <CardBody style={{  marginLeft: "31px"}}>
+                   <img
+              src={propertyTaxImage}
+              alt="..."              
+              id = ""
+              style = {{height: "59px",
+              width: "65px",
+              marginTop: "-44px"}} />
+                <CardBody style={{  marginLeft: "34px"}}>
                   <p className={classes.description} style={{marginTop: "-36px"}} ><br />
                 PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
                     <br />
@@ -120,9 +140,17 @@ export default function SectionNavbars() {
             <GridItem xs={12} sm={6} md={4}>
               <Card   id="card2">
                   <h4 style={{
-                     marginLeft: "59px",
+                     marginLeft: "65px",
+                     fontWeight: "500"
                   }}>Road Cutting</h4>
-                <CardBody style={{  marginLeft: "31px"}}>
+                  <img
+              src={propertyTaxImage}
+              alt="..."              
+              id = ""
+              style = {{height: "59px",
+              width: "65px",
+              marginTop: "-44px"}} />
+                <CardBody style={{  marginLeft: "34px"}}>
                 <p className={classes.description} style={{marginTop: "-36px"}}><br />
                 PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
                     <br />

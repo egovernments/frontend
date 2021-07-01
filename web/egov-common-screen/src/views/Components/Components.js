@@ -12,8 +12,8 @@ import Footer from "components/Footer/Footer.js";
 //import GridItem from "components/Grid/GridItem.js";
 //import Button from "components/CustomButtons/Button.js";
 //import Parallax from "components/Parallax/Parallax.js";
-//import Card from "components/Card/Card.js";
-//import CardBody from "components/Card/CardBody.js";
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
 // sections for this page
 import TeamSection from "../LandingPage/Sections/TeamSection";
 //import SectionBasics from "./Sections/SectionBasics.js";
@@ -39,8 +39,14 @@ export default function Components() {
   return (
     <div>
       <SectionNavbars />
+            <Card  id="message" >                   
+                <CardBody >
+                <h4 >Pay your property tax before March 31st get 10% Rebate</h4>
+              
+                </CardBody>               
+              </Card>
       <div id="faqs"><SectionFAQs /> </div>
-      <TeamSection />
+      <div id="testimonials"><TeamSection /></div>
       <Footer />
     </div>
   );
