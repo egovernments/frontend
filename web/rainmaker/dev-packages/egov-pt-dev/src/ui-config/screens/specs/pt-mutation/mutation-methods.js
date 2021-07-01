@@ -497,37 +497,7 @@ export const searchPropertyDetails = getCommonCard({
       
     },
   }),
-  locality: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-pt",
-    componentPath: "AutosuggestContainer",
-    props: {
-      label: {
-        labelName: "Locality",
-        labelKey: "PT_SEARCH_LOCALITY"
-      },
-      placeholder: {
-        labelName: "Select Locality",
-        labelKey: "PT_SEARCH_LOCALITY_PLACEHOLDER"
-      },
-      localePrefix: {
-        moduleName: "TENANT",
-        masterName: "TENANTS"
-      },
-      required: true,
-      isClearable: true,
-      labelsFromLocalisation: true,
-      jsonPath: "ptSearchScreen.locality",
-      sourceJsonPath: "searchScreenMdmsData.tenant.localities",
-      className: "locality-dropdown autocomplete-dropdown"
-    },
-    required: true,
-    jsonPath: "ptSearchScreen.locality",
-    gridDefination: {
-      xs: 12,
-      sm: 4
-    }
-  },
+  
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
