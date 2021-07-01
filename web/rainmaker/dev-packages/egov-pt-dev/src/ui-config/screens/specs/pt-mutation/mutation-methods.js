@@ -653,25 +653,7 @@ export const searchPropertyDetails = getCommonCard({
           sm: 4
         }}),
 
-    houseNumber: getTextField({
-      label: {
-        labelName: "House/Shop No.",
-        labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
-      },
-      placeholder: {
-        labelName: "Enter House no.",
-        labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-        
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.doorNo"
-    }),
+    
     existingPropertyId: getTextField({
       label: {
         labelName: "Existing Property ID",
