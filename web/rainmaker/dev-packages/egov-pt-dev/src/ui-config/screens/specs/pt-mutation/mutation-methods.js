@@ -677,11 +677,11 @@ export const searchPropertyDetails = getCommonCard({
   doorNo: getTextField({
     label: {
       labelName: "Owner Name",
-      labelKey: "PT_SEARCHPROPERTY_TABEL_DOOR_NO"
+      labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
     },
     placeholder: {
       labelName: "Enter Property Owner Name",
-      labelKey: "PT_SEARCH_DOOR_NO_PLACEHOLDER"
+      labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
     },
     pattern: getPattern("DoorHouseNo"),
     errorMessage: "Invalid No",
