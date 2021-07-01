@@ -107,7 +107,7 @@ export default function Footer(props) {
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               
-            <p>
+            <p className={classes.block}>
                 <b>Citizen Details</b>
               </p>
               <a
@@ -148,16 +148,14 @@ export default function Footer(props) {
               
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-           
-              <a
-                href="https://www.creative-tim.com/license?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                About Us
-              </a>
-              <p>
-                <b>Nagar Nigam</b>
+              <p  className={classes.block}>
+                <b>About Us</b>
+              </p>
+              <p className={classes.block}>
+                Nagar Nigam
+              </p>
+              <p className={classes.block}>
+                About Nagarsewa
               </p>
             </ListItem>
           </List>

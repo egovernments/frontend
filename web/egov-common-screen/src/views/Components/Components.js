@@ -18,6 +18,8 @@ import Footer from "components/Footer/Footer.js";
 import TeamSection from "../LandingPage/Sections/TeamSection";
 //import SectionBasics from "./Sections/SectionBasics.js";
 import SectionNavbars from "./Sections/SectionNavbars.js";
+import SectionFAQs from "./Sections/SectionFAQs.js";
+import  "./index.scss"
 //import SectionTabs from "./Sections/SectionTabs.js";
 //import SectionPills from "./Sections/SectionPills.js";
 //import SectionNotifications from "./Sections/SectionNotifications.js";
@@ -37,6 +39,7 @@ export default function Components() {
   return (
     <div>
       <SectionNavbars />
+      <div id="faqs"><SectionFAQs /> </div>
       <TeamSection />
       <Footer />
     </div>
