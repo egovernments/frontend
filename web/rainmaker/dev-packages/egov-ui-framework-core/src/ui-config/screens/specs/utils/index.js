@@ -544,6 +544,8 @@ export const getPattern = type => {
   switch (type) {
     case "Name":
       return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
+      case "SearchOwnerName":
+        return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i;
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "NewPropertyID":
