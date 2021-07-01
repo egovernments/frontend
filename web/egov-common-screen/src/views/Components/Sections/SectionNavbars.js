@@ -14,11 +14,14 @@ import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import Header from "components/Header/Header.js";
-import CardHeader from "components/Card/CardHeader.js";
+//import CardHeader from "components/Card/CardHeader.js";
 //import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Button from "components/CustomButtons/Button.js";
 import image from "assets/img/bg.jpg";
-import image2 from "assets/img/stateLogo.png";
+import leftImage from "assets/img/stateLogo.png";
+import rightImage from "assets/img/logo.png";
+import  "./index.scss"
+
 
 import styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
 
@@ -37,11 +40,13 @@ export default function SectionNavbars() {
             //brand="UKD LOGO"
             leftLinks={
               <img
-              src={image2}
+              src={leftImage}
               alt="..."
-              style={{
-               height:"43px"
-              }}
+               /* style={{
+               height:"43px",
+               marginLeft: "-182px"
+              }} */
+              id = "leftImage"
             />
             }
             rightLinks={
@@ -53,7 +58,7 @@ export default function SectionNavbars() {
                     onClick={(e) => e.preventDefault()}
                     color="transparent"
                   >
-                    English
+                    <b>EmployeeLogin</b>
                   </Button>
                 </ListItem>
                 <ListItem className={classes.listItem}>
@@ -63,65 +68,67 @@ export default function SectionNavbars() {
                     onClick={(e) => e.preventDefault()}
                     color="transparent"
                   >
-                    EmployeeLogin
+                    <b>English</b>
                   </Button>
                 </ListItem>
                 <ListItem className={classes.listItem}>
-                  <Button
-                    href="#pablo"
-                    className={classes.registerNavLink}
-                    onClick={(e) => e.preventDefault()}
-                    color="rose"
-                    round
-                  >
-                    Register
-                  </Button>
+                    <img
+                  src={rightImage}
+                  alt="..."
+                  style={{
+                  height:"43px",
+                  marginRight: "-129px"
+                  }}
+                />
                 </ListItem>
               </List>
             }
           />
           <GridContainer>
             <GridItem xs={12} sm={6} md={4}>
-              <Card>
-                <CardHeader color="primary" className={classes.cardHeader}>
-                  <h4>PropetyTax</h4>
-                </CardHeader>
-                <CardBody>
-                  <p className={classes.description}>
-                    somesomesomesomesomesome
+              <Card id="card1" 
+                   >
+                  <h4 style={{
+                     marginLeft: "59px",
+                  }}>PropetyTax</h4>
+                <CardBody style={{  marginLeft: "31px"}}>
+                  <p className={classes.description} style={{marginTop: "-36px"}}><br />
+                  PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
                     <br />
-                    <a href="#pablo">links</a>
+                    <a href="#pablo">Pay Property Tax </a> <br /> 
+                    <a href="#pablo">Register Property </a><br />
+                    <a href="#pablo">Apply for Ownership Transfer </a><br />
                   </p>
                 </CardBody>
               </Card>
             </GridItem>
             <GridItem xs={12} sm={6} md={4}>
-              <Card>
-                <CardHeader color="primary" className={classes.cardHeader}>
-                  <h4>TradeLicence</h4>
-                </CardHeader>
-                <CardBody>
-                  <p className={classes.description}>
-                    somesomesomesomesomesome
+              <Card id="card2"  >
+                  <h4 style={{
+                     marginLeft: "59px",
+                  }}>TradeLicence</h4>
+                <CardBody style={{  marginLeft: "31px"}}>
+                  <p className={classes.description} style={{marginTop: "-36px"}} ><br />
+                PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
+                    <br />
+                    <a href="#pablo">New Application</a> <br /> 
+                    <a href="#pablo">Renewal of Licence </a><br />
                   </p>
                 </CardBody>
               </Card>
             </GridItem>
             <GridItem xs={12} sm={6} md={4}>
-              <Card>
-                <CardHeader color="primary" className={classes.cardHeader}>
-                  <h4>Road Cutting</h4>
-                </CardHeader>
-                <CardBody>
-                  <p className={classes.description}>
-                    somesomesomesomesomesome
+              <Card   id="card2">
+                  <h4 style={{
+                     marginLeft: "59px",
+                  }}>Road Cutting</h4>
+                <CardBody style={{  marginLeft: "31px"}}>
+                <p className={classes.description} style={{marginTop: "-36px"}}><br />
+                PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
+                    <br />
+                    <a href="#pablo">Apply</a> <br /> 
                   </p>
-                </CardBody>
-                <CardBody>
-                  <p className={classes.description}>
-                    somesomesomesomesomesome
-                  </p>
-                </CardBody>
+                </CardBody>               
               </Card>
             </GridItem>
           </GridContainer>

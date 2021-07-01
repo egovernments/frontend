@@ -35,7 +35,7 @@ export default function TeamSection() {
       <div>
         <GridContainer>
           <GridItem xs={6} sm={3} md={3}>
-            <Card plain>
+            <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team1} alt="..." className={imageClasses} />
               </GridItem>
@@ -55,7 +55,7 @@ export default function TeamSection() {
             </Card>
           </GridItem>
           <GridItem xs={6} sm={3} md={3}>
-            <Card plain>
+            <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team1} alt="..." className={imageClasses} />
               </GridItem>
@@ -75,7 +75,7 @@ export default function TeamSection() {
             </Card>
           </GridItem>
           <GridItem xs={6} sm={3} md={3}>
-            <Card plain>
+            <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team2} alt="..." className={imageClasses} />
               </GridItem>
@@ -95,7 +95,7 @@ export default function TeamSection() {
             </Card>
           </GridItem>
           <GridItem xs={6} sm={3} md={3}>
-            <Card plain>
+            <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team3} alt="..." className={imageClasses} />
               </GridItem>

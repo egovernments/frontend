@@ -32,53 +32,42 @@ export default function Footer(props) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a
-                href="https://www.creative-tim.com/?ref=mkr-footer"
+              <p>
+                <b>Contact Details</b>
+              </p>
+              <p>
+                Office Address: <br />
+                Near Doon Hopstital , New road<br />
+                Dehradun District , Dehradun<br />
+                Uttarakhand-248001<br />
+                </p>
+                <p>
+                Call Us<br />
+                +91 99999999999<br />             
+                </p><p>
+                Email Us<br />
+                nagarnigam.ddn@gmail.com<br />             
+                </p> 
+                <a
+                href="https://www.facebook.com"
                 className={classes.block}
                 target="_blank"
               >
-                Creative Tim
+                <i className={classes.socialIcons + " fab fa-facebook"} />
               </a>
-              <a
-                href="https://www.creative-tim.com/?ref=mkr-footer"
+                <a
+                href="https://www.twitter.com"  
                 className={classes.block}
+
                 target="_blank"
-              >
-                Creative Tim
-              </a><a
-                href="https://www.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                Creative Tim
-              </a><a
-                href="https://www.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                Creative Tim
-              </a><a
-                href="https://www.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                Creative Tim
-              </a><a
-                href="https://www.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                Creative Tim
-              </a>
+              >          
+                <i className={classes.socialIcons + " fab fa-twitter"} /></a> 
+
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                About us
-              </a>
+            <p                 className={classes.block}>
+                <b>Other Departments</b>
+              </p>
               <a
                 href="https://www.creative-tim.com/presentation?ref=mkr-footer"
                 className={classes.block}
@@ -117,65 +106,59 @@ export default function Footer(props) {
 
             </ListItem>
             <ListItem className={classes.inlineBlock}>
+              
+            <p>
+                <b>Citizen Details</b>
+              </p>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
                 className={classes.block}
                 target="_blank"
               >
-                Blog
+                Property Tax
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
                 className={classes.block}
                 target="_blank"
               >
-                Blog
+                Trade Licence
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
                 className={classes.block}
                 target="_blank"
               >
-                Blog
+                Right way of Road Cutting/Road digging
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
                 className={classes.block}
                 target="_blank"
               >
-                Blog
+                Complaints
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
                 className={classes.block}
                 target="_blank"
               >
-                Blog
-              </a>
-              <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                Blog
-              </a>
-              <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                Blog
+                Apply for Dog Licence
               </a>
               
             </ListItem>
             <ListItem className={classes.inlineBlock}>
+           
               <a
                 href="https://www.creative-tim.com/license?ref=mkr-footer"
                 className={classes.block}
                 target="_blank"
               >
-                Licenses
+                About Us
               </a>
+              <p>
+                <b>Nagar Nigam</b>
+              </p>
             </ListItem>
           </List>
       </div>
