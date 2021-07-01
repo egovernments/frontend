@@ -73,7 +73,7 @@ const applyMohallaData = (mohallaData, tenantId, dispatch) => {
   dispatch(
     handleField("propertySearch", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
   );
-  dispatch(prepareFinalObject("ptSearchScreen.locality", ""));
+  dispatch(prepareFinalObject("searchScreen.locality", ""));
   const mohallaLocalePrefix = {
     moduleName: tenantId,
     masterName: "REVENUE",
@@ -230,7 +230,7 @@ export const resetFields = (state, dispatch) => {
     )
   );
   dispatch(prepareFinalObject(
-    "ptSearchScreen.name",
+    "searchScreen.name",
     ''
   ))
 
@@ -267,7 +267,7 @@ export const resetFields = (state, dispatch) => {
     )
   );
   dispatch(prepareFinalObject(
-    "ptSearchScreen.doorNo",
+    "searchScreen.doorNo",
     ''
   ))
 
@@ -534,7 +534,7 @@ export const searchPropertyDetails = getCommonCard({
       pattern: getPattern("SearchOwnerName"),
       errorMessage: "Invalid Name",
       helperText:"PT_MIN_3CHAR",
-      jsonPath: "ptSearchScreen.name",
+      jsonPath: "searchScreen.name",
       props: {
         className: "applicant-details-error"
       },
@@ -685,7 +685,7 @@ export const searchPropertyDetails = getCommonCard({
     },
     pattern: getPattern("DoorHouseNo"),
     errorMessage: "Invalid No",
-    jsonPath: "ptSearchScreen.doorNo",
+    jsonPath: "searchScreen.doorNo",
     props: {
       className: "applicant-details-error"
     },
