@@ -52,12 +52,14 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const getSearchResults = async (queryObject, dispatch) => {
+
+export const getSearchResults = async (queryObject,requestBody,searchURL="/property-services/property/_search") => {
   try {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/firenoc-services/v1/_search",
+     // "/firenoc-services/v1/_search",
+     searchURL,
       "",
       queryObject
     );
