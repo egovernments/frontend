@@ -541,11 +541,12 @@ const searchApiCall = async (state, dispatch, index) => {
   if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
     queryObject = [];
   }
-
+  let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children", state, dispatch, "propertySearch");
+ 
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '' || (searchScreenObject.locality && searchScreenObject.doorNo) ) {
+    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != ''|| searchScreenObject.name != '' || searchScreenObject.doorNo != '')) {
       formValid = true;
     }
   } else {
@@ -553,9 +554,7 @@ const searchApiCall = async (state, dispatch, index) => {
       formValid = true;
     }
   }
-
-  let form1 = validateFields("components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children", state, dispatch, "propertySearch");
-  if (!formValid) {   
+  if (!formValid) {
     dispatch(
       toggleSnackbar(
         true,
