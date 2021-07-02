@@ -17,7 +17,7 @@ import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 
 
 export const downloadPdf = (link, openIn = '_blank') => {
-  var win = window.open(link, openIn);
+  var win = window.open(link, '_self');
   if (win) {
     win.focus();
   }
