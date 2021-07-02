@@ -780,10 +780,10 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
             }
             payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
         }
-	  if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
-		configKey="ws-onetime-receipt";
-		let dcbRow=null,dcbArray=[];
-        let installment,totalamount=0;
+		if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
+			configKey="ws-onetime-receipt";
+			let dcbRow=null,dcbArray=[];
+        	let installment,totalamount=0;
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
       if(element.amountPaid >0 || element.amountPaid < 0)
       {
@@ -1123,3 +1123,28 @@ dcbArray.push(dcbRow);
 		})
 	  });
 	}
+	export const downloadChallan = async (queryStr, mode = 'download') => {
+
+		const DOWNLOADRECEIPT = {
+		  GET: {
+			URL: "/egov-pdf/download/UC/mcollect-challan",
+			ACTION: "_get",
+		  },
+		};
+		try {
+		  httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+			.then(res => {
+			  res.filestoreIds[0]
+			  if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+				res.filestoreIds.map(fileStoreId => {
+				  downloadReceiptFromFilestoreID(fileStoreId, mode)
+				})
+			  } else {
+				console.log("Error In Acknowledgement form Download");
+			  }
+			});
+		} catch (exception) {
+		  alert('Some Error Occured while downloading Acknowledgement form!');
+		}
+	  
+	  }

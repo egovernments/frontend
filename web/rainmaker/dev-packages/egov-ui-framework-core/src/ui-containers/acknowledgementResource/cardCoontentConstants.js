@@ -136,6 +136,20 @@ export const construtCardCongtentObj = (moduleName, purpose, status) => {
 			tailText: {
 				labelName: "Application No.",
 				labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
+			},
+		},
+		"sendbacktocitizen-success": {
+			header: {
+				labelName: "Application sent back Successfully",
+				labelKey: getTransformedLocale(`${moduleName}_SENDBACKTOCITIZEN_SUCCESS_MESSAGE_MAIN`)
+			},
+			body: {
+				labelName: "Application has been sent back successfully",
+				labelKey: getTransformedLocale(`${moduleName}_APPLICATION_SENDBACKTOCITIZEN_SUCCESS`)
+			},
+			tailText: {
+				labelName: "Application No.",
+				labelKey: getTransformedLocale(`${moduleName}_HOME_SEARCH_RESULTS_APP_NO_LABEL`)
 			}
 		}
 	}

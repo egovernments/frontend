@@ -65,6 +65,7 @@ class PTInformation extends React.Component {
       [],
       requestObject
     );
+
     let waterDetails = [];
     let sewerDetails = [];
     let getDuesForPTMutation = payload && payload.MdmsRes.PropertyTax.DuesOnPTMutation;

@@ -1,7 +1,8 @@
 import React from "react";
 import {
   sortByEpoch,
-  getEpochForDate
+  getEpochForDate,
+  getTextToLocalMapping
 } from "../../utils";
 import {download} from "egov-common/ui-utils/commons"
 
@@ -22,14 +23,19 @@ export const searchResults = {
                 const receiptQueryString = [
                   { key: "receiptNumbers", value:  tableMeta.rowData[0]},
                   { key: "tenantId", value: tableMeta.rowData[7] },
-                  { key: "businessService", value: tableMeta.rowData[8] }
+                  { key: "businessService", value:tableMeta.rowData[8] } 
                 ]
-                download(receiptQueryString , "download" ,tableMeta.rowData[6]) ;
+                download(receiptQueryString , "download" ,tableMeta.rowData[6]||"consolidatedreceipt",'PAYMENT') ;
               }}>
-              {value}
+       
+              <a href="javascript:void(0)" >{value}</a>
             </div>
           )
         }
+      },
+      {
+        labelName: "Consumer Code",
+        labelKey: "UC_COMMON_TABLE_COL_CONSUMERCODE"
       },
       {
         labelName: "Payee Name",
@@ -49,32 +55,31 @@ export const searchResults = {
       },
       {
         labelName: "Status",
-        labelKey: "UC_COMMON_TABLE_COL_STATUS"
-      },
-      {
-        labelName: "Receipt Key",
-        labelKey: "RECEIPT_KEY",
+        labelKey: "UC_COMMON_TABLE_COL_STATUS",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       },
       {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
         options: {
-          display: false
+          display: false,
+          viewColumns  :false
         }
       }, {
-        labelName: "SERVICE TYPE",
-        labelKey: "SERVICE_TYPE",
+        labelName: "Service Type",
+        labelKey: "SERVICE",
         options: {
           display: false
         }
       }
+      
     ],
     title: {
-      labelKey: "COMMON_TABLE_SEARCH_RESULT_RECIEPT",
-      labelName: "Search Results for Receipt",
+      labelName: "Search Results for Payments",
+      labelKey: "COMMON_TABLE_SEARCH_RESULT_PAYMENTS"
     },
     rows: "",
     options: {
@@ -101,4 +106,12 @@ export const searchResults = {
       }
     }
   }
+};
+
+const onRowClick = rowData => {
+  const receiptQueryString = [
+    { key: "receiptNumbers", value:  rowData[0]},
+    { key: "tenantId", value: rowData[7] }
+  ]
+  download(receiptQueryString);
 };

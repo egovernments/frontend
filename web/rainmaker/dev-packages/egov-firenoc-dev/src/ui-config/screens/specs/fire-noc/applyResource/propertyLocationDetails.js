@@ -245,9 +245,7 @@ export const propertyLocationDetails = getCommonCard(
               "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
               []);
               let districtList = districtData.filter((districtlists) => {
-
                 return districtlists.city.districtTenantCode === "pb.gurdaspur" || districtlists.city.districtTenantCode=== "pb.jalandhar"
-  
               });
             // console.log("districtList", districtList);
 
@@ -313,9 +311,7 @@ export const propertyLocationDetails = getCommonCard(
               []
             );
             let districtList = districtData.filter((districtlists) => {
-
               return districtlists.city.districtTenantCode === "pb.gurdaspur" || districtlists.city.districtTenantCode === "pb.jalandhar"
-
             });
             const districtTenantMap = districtList.map((item) => {
               return {
@@ -485,9 +481,7 @@ export const propertyLocationDetails = getCommonCard(
               []
             );
             let districtlist = districtData.filter((districtlists) => {
-
               return districtlists.city.districtTenantCode === "pb.gurdaspur" || districtlists.city.districtTenantCode === "pb.jalandhar"
-
             });
             // console.log("districtData", districtData);
 

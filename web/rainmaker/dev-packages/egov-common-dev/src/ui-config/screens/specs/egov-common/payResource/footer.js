@@ -340,7 +340,6 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
             if(adhocRebateReason == "Others")
               { adhocRebateReason=get(
                 state.screenConfiguration.preparedFinalObject,"adhocExemptionPenalty.adhocOtherExemptionReason");}
-
           }
           reasonss = {
             "adhocPenaltyReason": adhocPenaltyReason,
