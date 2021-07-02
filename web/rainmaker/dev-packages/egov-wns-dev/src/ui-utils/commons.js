@@ -1379,7 +1379,7 @@ export const getPastPaymentsForWater = async (dispatch) => {
         },
         {
             key: "businessService",
-            value: "WS"
+            value: "WS,WS.ONE_TIME_FEE"
         },
         {
             key: "uuid",
@@ -1418,7 +1418,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
         },
         {
             key: "businessService",
-            value: "SW"
+            value: "SW,SW.ONE_TIME_FEE",
         },
         {
             key: "uuid",
