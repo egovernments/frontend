@@ -91,21 +91,23 @@ class PTInformation extends React.Component {
                   bills.map(bill => {
                     waterDetails.push({
                       waterDue: bill.totalAmount,
-                      connectionNo: details.connectionNo,
+                      connectionNo: bill.consumerCode,
                       module: items.module
                     })
                   })
                   this.setState({waterDetails});
+                  waterDetails = [];
                 }
                 else if (bills && bills.length > 0 && items.module === "SW") {
                   bills.map(bill => {
                     sewerDetails.push({
                       sewerDue: bill.totalAmount,
-                      connectionNo: details.connectionNo,
+                      connectionNo: bill.consumerCode,
                       module: items.module
                     })
                   })
                   this.setState({sewerDetails});
+                  sewerDetails = [];
                 }
               } catch (error) {
                 console.log(error)
