@@ -1087,19 +1087,13 @@ export const searchConsumer = async (items, queryObject) => {
   return consumerDetails;
 }
 
-export const fetchConsumerBill = async (items, consumerDetails) => {
-  let queryObject = [];
-      queryObject.push(
-        { key: "businessService", value: items.module },
-        { key: "consumerCode", value: consumerDetails[0].connectionNo },
-        { key: "tenantId", value: getTenantId() }
+export const fetchConsumerBill = async (items, queryObject) => {
+      const response = await httpRequest(
+        `/${items.fecthBillUrl}`,
+        "_search",
+        queryObject
       );
-  const response = await httpRequest(
-    `/${items.fecthBillUrl}`,
-    "_search",
-    queryObject
-  );
-  return response.Bill;
+      return response && response.Bill && response.Bill[0];
 }
 
 export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessService) => {

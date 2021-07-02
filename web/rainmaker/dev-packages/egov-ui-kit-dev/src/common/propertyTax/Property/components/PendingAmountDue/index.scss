@@ -91,6 +91,7 @@
 
       .pending-dues {
         button {
+          cursor: pointer !important;
           div {
               div, div:hover {
                   height: auto !important;
@@ -103,5 +104,6 @@
       .pending-dues {
         button[disabled] {
           background-color: transparent !important;
+          cursor: default !important;
         }
       }
