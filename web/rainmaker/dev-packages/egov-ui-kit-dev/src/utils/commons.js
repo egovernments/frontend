@@ -1086,20 +1086,25 @@ export const searchConsumer = async (items, queryObject) => {
   return consumerDetails;
 }
 
-export const fetchConsumerBill = async (items, consumerDetails) => {
-  let queryObject = [];
-      queryObject.push(
-        { key: "businessService", value: items.module },
-        { key: "consumerCode", value: consumerDetails[0].connectionNo },
-        { key: "tenantId", value: getTenantId() }
-      );
-  const response = await httpRequest(
-    `/${items.fecthBillUrl}`,
+export const searchConsumer = async (items, queryObject) => {
+  const payload = await httpRequest(
+    `/${items.fetchConsumerUrl}`,
     "_search",
     queryObject
   );
-  return response.Bill;
+  let consumerDetails =  payload && payload.WaterConnection ? payload.WaterConnection : payload.SewerageConnections;
+  return consumerDetails;
 }
+
+export const fetchConsumerBill = async (items, queryObject) => {
+      const response = await httpRequest(
+        `/${items.fecthBillUrl}`,
+        "_search",
+        queryObject
+      );
+      return response && response.Bill && response.Bill[0];
+}
+
 export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessService) => {
   let mdmsBody = {
     MdmsCriteria: {

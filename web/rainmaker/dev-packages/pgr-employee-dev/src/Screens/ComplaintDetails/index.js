@@ -45,7 +45,7 @@ class ComplaintDetails extends Component {
       resetFiles,
       transformedComplaint,
       prepareFormData,
-      fetchComplaintCategories,
+      fetchComplaintCategories
     } = this.props;
     prepareFormData("complaints", transformedComplaint);
     fetchComplaintCategories();

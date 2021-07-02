@@ -27,9 +27,8 @@ const logoStyle = {
 class PTInformation extends React.Component {
   state = {
     businessServiceInfoItem: {},
-    totalDues: {},
-    waterDetails: {},
-    sewerDetails: {}
+    waterDetails: [],
+    sewerDetails: []
   }
   componentDidMount = async () => {
     const mdmsBody = {
@@ -66,31 +65,53 @@ class PTInformation extends React.Component {
       [],
       requestObject
     );
-    let totalDues = {};
+
+    let waterDetails = [];
+    let sewerDetails = [];
     let getDuesForPTMutation = payload && payload.MdmsRes.PropertyTax.DuesOnPTMutation;
-    console.log(getDuesForPTMutation, "rakesh getDuesForPTMutation");
     if (getDuesForPTMutation && getDuesForPTMutation.length > 0) {
-      let queryObject = [];
-          queryObject.push(
+      let queryObjectForConsumer = [];
+      queryObjectForConsumer.push(
             { key: "searchType", value: "CONNECTION" },
             { key: "propertyId", value: window.location.href.split('/')[6] },
             { key: "tenantId", value: getTenantId() }
           );
       getDuesForPTMutation.map( async (items) => {
         if (items.enabled) {
-          const consumerDetails = await searchConsumer(items, queryObject);
+          const consumerDetails = await searchConsumer(items, queryObjectForConsumer);
           if (consumerDetails && consumerDetails.length > 0) {
-            const billDetails = await fetchConsumerBill(items, consumerDetails);
-            if ( billDetails && billDetails.length > 0 && items.module === "WS") {
-              totalDues.waterDue =  billDetails[0] && billDetails[0].totalAmount && billDetails[0].totalAmount;
-              this.setState({totalDues});
-              this.setState({waterDetails: consumerDetails[0]});
-            }
-            else if (billDetails && billDetails.length > 0 && items.module === "SW") {
-              totalDues.sewerDue = billDetails[0] && billDetails[0].totalAmount && billDetails[0].totalAmount;
-              this.setState({totalDues});
-              this.setState({sewerDetails: consumerDetails[0]});
-            }
+            let bills = [];
+            consumerDetails.map(async (details) => {
+              try {
+                const billDetails = await fetchConsumerBill(items, 
+                  [{ key: "businessService", value: items.module },
+                { key: "consumerCode", value: details.connectionNo },
+                { key: "tenantId", value: getTenantId() }]);
+                bills.push(billDetails);
+                if ( bills && bills.length > 0 && items.module === "WS") {
+                  bills.map(bill => {
+                    waterDetails.push({
+                      waterDue: bill.totalAmount,
+                      connectionNo: details.connectionNo,
+                      module: items.module
+                    })
+                  })
+                  this.setState({waterDetails});
+                }
+                else if (bills && bills.length > 0 && items.module === "SW") {
+                  bills.map(bill => {
+                    sewerDetails.push({
+                      sewerDue: bill.totalAmount,
+                      connectionNo: details.connectionNo,
+                      module: items.module
+                    })
+                  })
+                  this.setState({sewerDetails});
+                }
+              } catch (error) {
+                console.log(error)
+              }
+            })
           }
         }
       })  
@@ -138,7 +159,7 @@ class PTInformation extends React.Component {
       cities,
       propertiesAudit
     } = this.props;
-    const { businessServiceInfoItem, totalDues, waterDetails, sewerDetails } = this.state;
+    const { businessServiceInfoItem, waterDetails, sewerDetails } = this.state;
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
@@ -210,7 +231,6 @@ class PTInformation extends React.Component {
                   properties={properties}
                   generalMDMSDataById={generalMDMSDataById}
                   totalBillAmountDue={totalBillAmountDue}
-                  totalDues={totalDues}
                   waterDetails={waterDetails}
                   sewerDetails={sewerDetails}
                   ownershipTransfer={true}

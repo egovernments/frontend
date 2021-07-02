@@ -700,8 +700,6 @@ export const downloadReceiptpt = (receiptQueryString) => {
               ACTION: "_get",
             },
           };
-
-
       // dispatch(downloadReceiptPending()); const responseForPT =  await httpRequest("post", FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
       const FETCHPROPERTYDETAILS = {
         GET: {
@@ -715,6 +713,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
           ACTION: "search",
         },
       };
+
       try {
         const payloadReceiptDetails = await httpRequest(getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
 
@@ -751,7 +750,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
             "adhocRebateReason":adhocRebateReason,
             "lastModifier":lastmodifier
             }
-        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss;
+        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.additionalDetails=reasonss; 
           let arrearRow={};  let arrearArray=[];
   let roundoff=0,tax=0,firecess=0,cancercess=0,penalty=0,rebate=0,interest=0,usage_exemption=0,special_category_exemption=0,adhoc_penalty=0,adhoc_rebate=0,total=0;
   

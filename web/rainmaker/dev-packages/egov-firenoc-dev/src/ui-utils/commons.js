@@ -81,7 +81,7 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
 		httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
       const queryStr = [
         { key: "key", value: configKey },
-        {key: "tenantId", value: tenantId.split('.')[0]}
+        { key: "tenantId", value: tenantId.split('.')[0] }
       ]
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");

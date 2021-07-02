@@ -759,12 +759,13 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end" }, //, dsplay: "block"
+                style: { justifyContent: "flex-end" },
+                //display: "block"
               },
               gridDefination: {
                 xs: 12,
                 sm: 5,
-                // align: "right",
+              //  align: "right",
               },
               children: {
                 connectionDetailsDownload,

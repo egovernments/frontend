@@ -359,7 +359,7 @@ class OwnerInfo extends Component {
 
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, totalDues, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty } = this.props;
     properties.tenantId = getTenantId();
     let ownerInfo = [];
     let multipleOwner = false;
@@ -378,7 +378,6 @@ class OwnerInfo extends Component {
         }
       }
     }
-
     return (
       <div>
         {ownerInfo && (
@@ -450,7 +449,6 @@ class OwnerInfo extends Component {
           <PendingAmountDialog
             open={this.state.pendingAmountDue}
             amount={totalBillAmountDue}
-            totalDues={totalDues}
             waterDetails={waterDetails}
             sewerDetails={sewerDetails}
             tenantId={properties.tenantId}
