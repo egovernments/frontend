@@ -177,7 +177,7 @@ class PTAcknowledgement extends React.Component {
     let ptSubMsg = {};
     let Button1 = { name: "", onClick: "", visibility: false };
     let Button2 = { name: "", onClick: "", visibility: false };
-    let Button3 = { name: "", onClick: "", visibility: false };
+    //let Button3 = { name: "", onClick: "", visibility: false };
     let downloadButton = { menu: downloadMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let printButton = { menu: printMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let statusIcon = {};
@@ -211,7 +211,7 @@ class PTAcknowledgement extends React.Component {
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
       Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
-      Button3 = { name: "PT_ADD_DEMAND", buttonClick: this.onDCBClick, visibility:   process.env.REACT_APP_NAME === "Citizen" ?false:true };
+     // Button3 = { name: "PT_ADD_DEMAND", buttonClick: this.onDCBClick, visibility:   process.env.REACT_APP_NAME === "Citizen" ?false:true };
 
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
@@ -549,7 +549,7 @@ class PTAcknowledgement extends React.Component {
                       style={{ float: "right", right: "20px", width: "auto" }}
                     >
                       {/* //&& properties.source != "MUNICIPAL_RECORDS" */}
-                      {properties && properties.source != "MUNICIPAL_RECORDS" && Button3 && Button3.visibility && (
+                      {/* {properties && properties.source != "MUNICIPAL_RECORDS" && Button3 && Button3.visibility && (
                         <Button
                         className="tax-button"
                           onClick={Button3.buttonClick}
@@ -557,7 +557,7 @@ class PTAcknowledgement extends React.Component {
                           primary={true}
                           style={{ marginLeft :"20px",lineHeight: "auto", minWidth: "inherit", width: "200px", backgroundColor: "white" }}
                         />
-                      )}
+                      )} */}
                     </div>
                     <div className="button-container col-xs-12 col-md-4 col-lg-2 property-info-access-btn" style={{ float: "right", right: "30px" }}>
                       {Button2 && Button2.visibility && (
