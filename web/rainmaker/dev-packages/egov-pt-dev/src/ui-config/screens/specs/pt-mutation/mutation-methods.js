@@ -646,7 +646,7 @@ export const searchPropertyDetails = getCommonCard({
         required: true,
         props: {
           required: true,
-          disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+    //      disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
         },
         gridDefination: {
           xs: 12,
