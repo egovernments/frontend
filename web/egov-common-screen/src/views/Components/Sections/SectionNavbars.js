@@ -102,7 +102,7 @@ export default function SectionNavbars() {
                   alt="..."
                   style={{
                   height:"43px",
-                  marginRight: "-129px"
+                  marginRight: "-99px"
                   }}
                 />
                 </ListItem>

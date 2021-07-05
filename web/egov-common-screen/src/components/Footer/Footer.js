@@ -69,10 +69,11 @@ export default function Footer(props) {
             </ListItem>
             <ListItem className={classes.inlineBlock} id="footer2">
             <p              >
-                <h5>Other Departments</h5>
+                <h5><b>Other Departments</b></h5>
               </p>
               <a
                 href="#"
+                id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
@@ -80,6 +81,7 @@ export default function Footer(props) {
               </a>
               <a
                 href="#"
+                id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
@@ -87,6 +89,7 @@ export default function Footer(props) {
               </a>
               <a
                 href="#"
+                id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
@@ -104,6 +107,7 @@ export default function Footer(props) {
                 href="#"
                 //className={classes.block}
                 target="_blank"
+                id ="flink"
               >
                 Link
               </a>
@@ -111,12 +115,14 @@ export default function Footer(props) {
             </ListItem>
             <ListItem className={classes.inlineBlock} id = "footer3">
                <p              >
-                <h5>Citizen Details</h5>
+                <h5><b>Citizen Details</b></h5>
               </p>       
               <a
                 href="#"
                 //className={classes.block}
                 target="_blank"
+                id ="flink"
+
               >
                 Property Tax
               </a>
@@ -124,6 +130,8 @@ export default function Footer(props) {
                 href="#"
                 //className={classes.block}
                 target="_blank"
+                id ="flink"
+
               >
                 Trade Licence
               </a>
@@ -131,6 +139,8 @@ export default function Footer(props) {
                 href="#"
                 //className={classes.block}
                 target="_blank"
+                id ="flink"
+
               >
                 Right way of Road Cutting/Road digging
               </a>
@@ -138,6 +148,8 @@ export default function Footer(props) {
                 href="#"
                 //className={classes.block}
                 target="_blank"
+                id ="flink"
+
               >
                 Complaints
               </a>
@@ -145,14 +157,16 @@ export default function Footer(props) {
                 href="#"
                 //className={classes.block}
                 target="_blank"
+                id ="flink"
+
               >
                 Apply for Dog Licence
               </a>
               
             </ListItem>
             <ListItem className={classes.inlineBlock} id="footer4">
-              <p  >
-                <b>About Us</b>
+              <p>
+                <h5><b>About Us</b></h5>
               </p>
               <p >
                 Nagar Nigam
