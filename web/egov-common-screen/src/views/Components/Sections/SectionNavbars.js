@@ -16,7 +16,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Header from "components/Header/Header.js";
 //import CardHeader from "components/Card/CardHeader.js";
 //import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
-import Button from "components/CustomButtons/Button.js";
+//import Button from "components/CustomButtons/Button.js";
 import image from "assets/img/bg.jpg";
 import leftImage from "assets/img/stateLogo.png";
 import rightImage from "assets/img/logo.png";
@@ -31,8 +31,30 @@ const useStyles = makeStyles(styles);
 export default function SectionNavbars() {
   const classes = useStyles();
   return (
-    <div className={classes.section}>
+    <div className={classes.section}> 
+       
+      
       <div id="navbar" className={classes.navbar}>
+{/*       <div> 
+    <div style={{float:"left"}}><a
+              href="/employee/user/login"
+              className={classes.navLink}
+              //onClick={(e) => e.preventDefault()}
+              color="transparent"
+            >
+              <b>EmployeeLogin</b>
+            </a>
+            </div> 
+            <div style={{float:"right"}}><a
+              href="/employee/user/login"
+              className={classes.navLink}
+              //onClick={(e) => e.preventDefault()}
+              color="transparent"
+            >
+              <b>EmployeeLogin</b>
+            </a>
+            </div> 
+        </div> */}
         <div
           className={classes.navigation}
           style={{ backgroundImage: "url(" + image + ")" ,
@@ -55,24 +77,24 @@ export default function SectionNavbars() {
             rightLinks={
               <List className={classes.list}>
                 <ListItem className={classes.listItem}>
-                  <Button
+                  <a
                     href="/employee/user/login"
                     className={classes.navLink}
-                    onClick={(e) => e.preventDefault()}
+                    //onClick={(e) => e.preventDefault()}
                     color="transparent"
                   >
                     <b>EmployeeLogin</b>
-                  </Button>
+                  </a>
                 </ListItem>
                 <ListItem className={classes.listItem}>
-                  <Button
+                  <a
                     href="#pablo"
                     className={classes.navLink}
                     onClick={(e) => e.preventDefault()}
                     color="transparent"
                   >
                     <b>English</b>
-                  </Button>
+                  </a>
                 </ListItem>
                 <ListItem className={classes.listItem}>
                     <img

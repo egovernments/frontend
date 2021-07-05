@@ -12,6 +12,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Favorite from "@material-ui/icons/Favorite";
 
 import styles from "assets/jss/material-kit-react/components/footerStyle.js";
+import  "./index.scss"
+
 
 const useStyles = makeStyles(styles);
 
@@ -28,13 +30,13 @@ export default function Footer(props) {
   });
   return (
     <footer className={footerClasses}>
-      <div className={classes.container}>
-        <div className={classes.left}>
+      <div className={classes.container} id="container" >
+      <div className={classes.left}>
           <List className={classes.list}>
-            <ListItem className={classes.inlineBlock}>
-              <p>
+            <ListItem className={classes.inlineBlock} id="footer1" >
+             <h5>
                 <b>Contact Details</b>
-              </p>
+              </h5>
               <p>
                 Office Address: <br />
                 Near Doon Hopstital , New road<br />
@@ -50,117 +52,118 @@ export default function Footer(props) {
                 </p> 
                 <a
                 href="https://www.facebook.com"
-                className={classes.block}
+                //className={classes.block}
                 target="_blank"
               >
-                <i className={classes.socialIcons + " fab fa-facebook"} />
+                <p className={classes.socialIcons + " fab fa-facebook"} />
               </a>
                 <a
                 href="https://www.twitter.com"  
-                className={classes.block}
+                //className={classes.block}
 
                 target="_blank"
               >          
-                <i className={classes.socialIcons + " fab fa-twitter"} /></a> 
+                <p className={classes.socialIcons + " fab fa-twitter"} />
+                </a> 
 
             </ListItem>
-            <ListItem className={classes.inlineBlock}>
-            <p                 className={classes.block}>
-                <b>Other Departments</b>
+            <ListItem className={classes.inlineBlock} id="footer2">
+            <p              >
+                <h5>Other Departments</h5>
               </p>
               <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
-                className={classes.block}
+                href="#"
+                //className={classes.block}
                 target="_blank"
               >
-                About us
+                Link
               </a>
               <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
-                className={classes.block}
+                href="#"
+                //className={classes.block}
                 target="_blank"
               >
-                About us
+                Link
               </a>
               <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
-                className={classes.block}
+                href="#"
+                //className={classes.block}
                 target="_blank"
               >
-                About us
+                Link
               </a>
               <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
-                className={classes.block}
+                href="#"
+                id ="flink"
+                //className={classes.block}
                 target="_blank"
               >
-                About us
+                Link
               </a>
               <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
-                className={classes.block}
+                href="#"
+                //className={classes.block}
                 target="_blank"
               >
-                About us
+                Link
               </a>
 
             </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              
-            <p className={classes.block}>
-                <b>Citizen Details</b>
-              </p>
+            <ListItem className={classes.inlineBlock} id = "footer3">
+               <p              >
+                <h5>Citizen Details</h5>
+              </p>       
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
+                //className={classes.block}
                 target="_blank"
               >
                 Property Tax
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
+                //className={classes.block}
                 target="_blank"
               >
                 Trade Licence
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
+                //className={classes.block}
                 target="_blank"
               >
                 Right way of Road Cutting/Road digging
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
+                //className={classes.block}
                 target="_blank"
               >
                 Complaints
               </a>
               <a
                 href="http://blog.creative-tim.com/?ref=mkr-footer"
-                className={classes.block}
+                //className={classes.block}
                 target="_blank"
               >
                 Apply for Dog Licence
               </a>
               
             </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <p  className={classes.block}>
+            <ListItem className={classes.inlineBlock} id="footer4">
+              <p  >
                 <b>About Us</b>
               </p>
-              <p className={classes.block}>
+              <p >
                 Nagar Nigam
               </p>
-              <p className={classes.block}>
+              <p >
                 About Nagarsewa
               </p>
             </ListItem>
           </List>
       </div>
-     </div>
+      </div>
     </footer>
   );
 }

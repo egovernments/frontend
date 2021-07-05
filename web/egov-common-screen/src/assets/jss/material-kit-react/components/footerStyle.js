@@ -11,7 +11,7 @@ const footerStyle = {
     textDecoration: "none",
     position: "relative",
     display: "block",
-    width: "274px !important",
+    width: "50%",
   },
   left: {
     float: "left!important",

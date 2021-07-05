@@ -42,13 +42,13 @@ export default function Components() {
       <SectionNavbars />
       <div id="homepagecards"> <SelectCards /> </div>
             <Card  id="message" >                   
-                <CardBody >
+                <CardBody  style={{padding: "0.375rem 0.875rem"}}>
                 <h4 >Pay your property tax before March 31st get 10% Rebate</h4>
               
                 </CardBody>               
               </Card>
               <div  id="faqheader" style ={{marginTop: "100px",fontWeight: "bold"}}>                   
-                <center ><b><h2  style ={{fontWeight: "bold"}}>Frequently Asked Questions</h2></b>
+                <center ><b><h3  style ={{fontWeight: "bold"}}>Frequently Asked Questions</h3></b>
                 </center>
                 <div  
               style={{marginLeft: "45%",
@@ -60,7 +60,7 @@ export default function Components() {
                       
           <div id="faqs"><SectionFAQs /> </div>
           <div  id="citizenheader" >                   
-                <center ><b><h2 style ={{fontWeight: "bold"}}>Citizen Speaks</h2></b>
+                <center ><b><h3 style ={{fontWeight: "bold"}}>Citizen Speaks</h3></b>
                 </center>
                 <div  
                 style={{marginLeft: "45%",

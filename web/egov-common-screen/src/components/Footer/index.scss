@@ -1,0 +1,157 @@
+@media only screen and (min-width: 768px) {
+
+    #container
+    {
+        width: 1600px
+    }
+
+    #footer1
+    {
+        margin-left: -68px;   
+    }
+    #footer2
+    {   
+        width: 256px;
+        margin-left: 147px;
+    }
+    #footer3
+    {   
+        width: 241px;
+        margin-left: 61px;
+    }
+    #footer4
+    {
+        width: 150px;
+        margin-left: 112px;
+    }
+    
+}
+
+@media only screen and (max-width: 551px) {
+    #container
+    {
+        width: 550px
+    }
+    #footer1
+    {
+        //margin-left: -68px;   
+    }
+    #footer2
+    {   
+        margin-left: -42px;  
+    }
+    #footer3
+    {   
+        margin-left: 49px;
+
+    }
+    #footer4
+    {
+        margin-left: -68px; 
+    }
+}
+
+@media only screen and (max-width: 415px) {
+    #container
+    {
+        width: 414px
+    }
+    #footer1
+    {
+        margin-left: -97px;
+    }
+    #footer2
+    {   
+        margin-left: 9%;
+    margin-right: 182px;
+    }
+    #footer3
+    {   
+        margin-left: -3%;
+    }
+    #footer4
+    {
+        margin-left: 3%;
+    margin-right: 189px;
+    }
+    
+
+}
+
+@media only screen and (max-width: 361px) {
+    #container
+    {
+        width: 360px
+    }
+    #footer1
+    {
+        //margin-left: -68px;   
+    }
+    #footer2
+    {   
+        margin-left: 7%;
+    }
+    #footer3
+    {   
+        margin-left: -3%;;
+
+    }
+    #footer4
+    {
+       // margin-left: -26%;
+    }
+
+}
+@media only screen and (max-width: 321px) {
+    #container
+    {
+        width: 321px
+    }
+    #footer1
+    {
+        //margin-left: -68px;  
+        margin-left: -33px; 
+    }
+    #footer2
+    {   
+        margin-left: 12%;
+    }
+    #footer3
+    {   
+        margin-left: 12%;;
+
+    }
+    #footer4
+    {
+        margin-left: 13%;
+    }
+
+}
+
+
+/* @media only screen and (max-width: 360px) {
+    #container
+    {
+        width: 360px
+    }
+    #footer1
+    {
+        //margin-left: -68px;   
+    }
+    #footer2
+    {   
+        margin-left: 17%;
+    }
+    #footer3
+    {   
+        margin-left: 18%;;
+
+    }
+    #footer4
+    {
+        margin-left: -26%;
+    }
+
+}
+
+ */
