@@ -14,7 +14,14 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
     ...properties[0].propertyDetails[0],
     source: "MUNICIPAL_RECORDS",
     channel: "CFC_COUNTER",
-  };
+  }; 
+
+  if(window.location.href.includes('dataentry'))
+  {
+    properties[0].source = "LEGACY_RECORD"
+    properties[0].status = "ACTIVE"
+
+  }
   if (properties[0].owners && properties[0].owners.length) {
     properties[0].owners.map((obj) => {
       if (obj.documents && Array.isArray(obj.documents) && obj.documents.length) {
@@ -32,9 +39,16 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
   }
   
   properties[0].units.map((unit) => {
+    if(properties[0].propertyType=== "VACANT"){
+    unit.constructionDetail = {
+      builtUpArea: 1,
+    };
+  }
+  else {
     unit.constructionDetail = {
       builtUpArea: unit.unitArea,
     };
+  }
     unit.tenantId = properties[0].tenantId;
     unit.usageCategory =
       unit.usageCategoryMajor +

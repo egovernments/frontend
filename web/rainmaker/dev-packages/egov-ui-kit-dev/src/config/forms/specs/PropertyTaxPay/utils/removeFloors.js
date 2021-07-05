@@ -37,7 +37,7 @@ export const removeFormKey = (formKey, field, dispatch, state) => {
     }
 
   if (floorCards.length > 0) {
-    if (window.confirm("Are you sure you want delete the floors entered?")) {
+    //if (window.confirm("Are you sure you want delete the floors entered?")) {
       if (formKey === "basicInformation") {
         dispatch(setFieldProperty("plotDetails", "floorCount", "value", 0));
       }
@@ -47,6 +47,6 @@ export const removeFormKey = (formKey, field, dispatch, state) => {
       });
 
 
-    }
+    //}
   }
 };

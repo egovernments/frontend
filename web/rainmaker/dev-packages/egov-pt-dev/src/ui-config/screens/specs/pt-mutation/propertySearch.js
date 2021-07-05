@@ -2,7 +2,7 @@ import commonConfig from "config/common.js";
 import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg, getRequiredDocData,showHideAdhocPopup } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import get from "lodash/get";
 import { resetFields } from "./mutation-methods";
@@ -12,7 +12,7 @@ const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 const tenant = getTenantId();
-
+const citizentenant = JSON.parse(getUserInfo()).permanentCity;
 //console.log(captureMutationDetails);
 
 const getMDMSData = async (action, dispatch) => {
@@ -42,7 +42,15 @@ const getMDMSData = async (action, dispatch) => {
             tenant
           )
         );
-      }
+       }
+       else {
+        dispatch(
+          prepareFinalObject(
+            "ptSearchScreen.tenantId",
+            citizentenant
+          )
+        );
+       }
       const tenants=get(payload,'payload.MdmsRes.tenant.tenants',[]).sort((t1,t2)=>t1.code.localeCompare(t2.code))
       dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
@@ -136,7 +144,7 @@ const screenConfig = {
                 sm: 6,
                 align: "right"
               },
-              visible: enableButton,
+              visible: false,
               props: {
                 variant: "contained",
                 color: "primary",

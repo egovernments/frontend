@@ -35,6 +35,11 @@ export const textToLocalMapping = {
     "PT_COMMON_COL_EXISTING_PROP_ID",
     getTransformedLocalStorgaeLabels()
   ),
+  "ABAS Id": getLocaleLabels(
+    "ABAS Id",
+    "PT_ABAS_ID",
+    getTransformedLocalStorgaeLabels()
+  ),
   "Address": getLocaleLabels(
     "Address",
     "PT_COMMON_COL_ADDRESS",
@@ -113,10 +118,12 @@ export const searchPropertyTable = {
   visible: false,
   props: {
     className: "propertyTab",
+   
     columns: [
       {
         labelName: "Unique Property ID",
         labelKey: "PT_COMMON_TABLE_COL_PT_ID",
+       
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
@@ -129,6 +136,7 @@ export const searchPropertyTable = {
       {labelName: "Owner Name", labelKey: "PT_COMMON_TABLE_COL_OWNER_NAME"},
       {labelName: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
       {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
+      {labelName: "ABAS Id", labelKey: "PT_ABAS_ID"},
       {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
       {
         labelName: "Status",
@@ -286,12 +294,12 @@ export const searchApplicationTable = {
 
 
 const onPropertyTabClick = (tableMeta) => {
-  switch (tableMeta.rowData[5]) {
+  switch (tableMeta.rowData[6]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}`;
+      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[7]}`;
       break;
     default:
-      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[6]));
+      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[7]));
       break;
   }
 };

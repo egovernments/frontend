@@ -67,7 +67,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "propertyIds", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
-        queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
+        queryParams.push({ key: "oldpropertyid", value: oldpropertyids.value });
       }
       if (mobileNumber && mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });

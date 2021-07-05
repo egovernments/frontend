@@ -29,7 +29,7 @@ const formConfig = {
       jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryMinor",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       type: "singleValueList",
-      floatingLabelText: "PT_FORM2_USAGE_TYPE",
+      floatingLabelText: "PT_COMMON_USAGE_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
       numcols: 4,

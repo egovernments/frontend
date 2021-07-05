@@ -414,8 +414,7 @@ class TableData extends Component {
             "NA"
           ),
       };
-
-      let row3 = { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> };
+      let row3 = { text: <Label label={get(item,"assignes[0].name","NA")} color="#000000" /> };
       let row4 = { text: Math.round(sla), badge: true };
       let row5 = { historyButton: true };
 

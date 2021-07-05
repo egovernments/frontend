@@ -177,13 +177,26 @@ const getDocumentDetailsCard = () => {
   }
 }
 
-const getHeader = (applicationNumber, moduleName) => {
+const getHeader = (secondNumber, moduleName) => {
   if (moduleName == 'PT.CREATE') {
     return getCommonContainer({
       header: getCommonHeader({
         labelName: `Application for Transfer of Ownership`,
         labelKey: "PT_CREATE_APPLICATION_HEADER"
       }),
+      number:{
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-pt",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: secondNumber,
+        label: {
+          labelValue: "Property ID.",
+          labelKey: "PT_PROPERTY_ID"
+        }
+      }
+    }
+      
     })
   } else if (moduleName == 'ASMT') {
     return getCommonContainer({
@@ -224,7 +237,7 @@ const getAcknowledgementCard = (
   if (purpose === "apply" && status === "success") {
     // loadPdfGenerationData(applicationNumber, tenant);
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       dpmenu: downloadprintMenu(state, applicationNumber, tenant, purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -265,7 +278,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "apply" && status === "failure") {
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -289,7 +302,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "resubmit" && status === "success") {
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -332,7 +345,7 @@ const getAcknowledgementCard = (
 
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       // dpmenu:downloadprintMenu(state,applicationNumber,tenant,purpose,moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -365,7 +378,7 @@ const getAcknowledgementCard = (
   else if (purpose === "verified" && status === "failure") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -396,7 +409,7 @@ const getAcknowledgementCard = (
   else if (purpose === "verify" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       // dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -430,7 +443,7 @@ const getAcknowledgementCard = (
   else if (purpose === "sendback" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -460,7 +473,7 @@ const getAcknowledgementCard = (
   } else if (purpose === "sendbacktocitizen" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -490,7 +503,7 @@ const getAcknowledgementCard = (
   } else if (purpose === "reopen" && status === "success") {
     // loadReceiptGenerationData(applicationNumber, tenant);
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -514,7 +527,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "rejected") {
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -538,7 +551,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "application" && status === "cancelled") {
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -567,7 +580,7 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "forward" && status === "success") {
     return {
-      header: getHeader(applicationNumber, moduleName),
+      header: getHeader(secondNumber, moduleName),
       // dpmenu: downloadprintMenu(state,applicationNumber,tenant,purpose),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",

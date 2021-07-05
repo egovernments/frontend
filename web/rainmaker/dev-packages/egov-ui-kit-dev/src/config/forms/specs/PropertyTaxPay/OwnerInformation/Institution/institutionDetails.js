@@ -20,12 +20,12 @@ const formConfig = {
       id: "institution-type",
       jsonPath: "Properties[0].propertyDetails[0].institution.type",
       type: "AutocompleteDropdown",
-      localePrefix: "PROPERTYTAX_BILLING_SLAB",
+      localePrefix: { moduleName: "PROPERTYTAX", masterName: "BILLING_SLAB" },
       floatingLabelText: "PT_INSTITUTION_TYPE",
       numcols: 6,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
-      labelsFromLocalisation:false,
+      labelsFromLocalisation:true,
       gridDefination: {
         xs: 12,
         sm: 6

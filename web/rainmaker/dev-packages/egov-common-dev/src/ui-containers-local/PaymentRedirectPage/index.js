@@ -88,6 +88,9 @@ class PaymentRedirect extends Component {
           [],
           {}
         );
+        searchResponse.Payments = searchResponse.Payments.sort(function(x, y){
+          return  y.auditDetails.createdTime-x.auditDetails.createdTime;
+          });
         const businessService = get(searchResponse, "Payments[0].paymentDetails[0].businessService");
         let transactionId = get(searchResponse, "Payments[0].paymentDetails[0].receiptNumber");
         this.getBusinessServiceMdmsData(tenantId).then(response => {

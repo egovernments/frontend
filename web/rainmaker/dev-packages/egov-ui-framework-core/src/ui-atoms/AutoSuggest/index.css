@@ -17,4 +17,5 @@
   white-space: pre-line; }
 
 p[class^="MuiFormHelperText-root"] {
-  font-size: 14px !important; }
+  font-size: 14px !important;
+  color: #f44336; }

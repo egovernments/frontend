@@ -83,7 +83,7 @@ class ApplicationHistory extends Component {
                             {getFullRow("PT_MUTATION_CREATION_DATE", item.auditDetails && item.auditDetails.createdTime ? convertEpochToDate(item.auditDetails.createdTime) : "NA", 12)}
                             {getFullRow("PT_MUTATION_STATUS", item.status ? item.status : "NA", 12)}
 
-                                <div className="application-history" style={{ float: "left",marginLeft: "15px" }}>
+                                {/* <div className="application-history" style={{ float: "left",marginLeft: "15px" }}>
                                     <a
                                         onClick={() => {
                                              this.navigateToApplication(item.acknowldgementNumber, item.tenantId, item.creationReason,history,item.propertyId)
@@ -92,7 +92,7 @@ class ApplicationHistory extends Component {
                                     >
                                         <Label buttonLabel={true} label='PT_VIEW_DETAILS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />
                                     </a>
-                                </div>
+                                </div> */}
         
                         </div>
                         )

@@ -206,7 +206,7 @@ export const configOwnersDetailsFromDraft = (ownerFormKeys, component) => {
 };
 
 const convertBuiltUpAreaToSqFt = (builtUpArea) => {
-  const builtUpAreaTransform = builtUpArea * 9;
+  const builtUpAreaTransform = builtUpArea;
   return Math.round(builtUpAreaTransform * 100) / 100;
 };
 
@@ -428,7 +428,7 @@ export const getHeaderLabel = (selected, role) => {
           containerStyle={{ marginTop: 12 }}
           fontSize="16px"
           color="#484848"
-          label={role === "citizen" ? "PT_FORM1_HEADER_MESSAGE" : "PT_EMP_FORM1_HEADER_MESSAGE"}
+          label={role === "citizen" ? "PT_FORM1_HEADER_MESSAGE" : "PT_PROPERTY_DETAILS_FORM_HEADING"}
         />
       );
     case 1:
@@ -437,7 +437,7 @@ export const getHeaderLabel = (selected, role) => {
           containerStyle={{ marginTop: 12 }}
           fontSize="16px"
           color="#484848"
-          label={role === "citizen" ? "PT_FORM2_HEADER_MESSAGE" : "PT_EMP_FORM2_HEADER_MESSAGE"}
+          label={role === "citizen" ? "PT_FORM2_HEADER_MESSAGE" : "PT_ASSESMENT_INFO_SUB_HEADER"}
         />
       );
     case 2:
@@ -446,7 +446,7 @@ export const getHeaderLabel = (selected, role) => {
           containerStyle={{ marginTop: 12 }}
           fontSize="16px"
           color="#484848"
-          label={role === "citizen" ? "PT_FORM3_HEADER_MESSAGE" : "PT_EMP_FORM3_HEADER_MESSAGE"}
+          label={role === "citizen" ? "PT_FORM3_HEADER_MESSAGE" : "PT_OWNERSHIP_INFO_SUB_HEADER"}
         />
       );
     case 3:
@@ -496,7 +496,7 @@ export const normalizePropertyDetails = (properties, self) => {
   }
   var sumOfUnitArea = 0;
   units.forEach((unit) => {
-    let unitAreaInSqYd = parseFloat(unit.unitArea) / 9;
+    let unitAreaInSqYd = parseFloat(unit.unitArea);
     unit.unitArea = Math.round(unitAreaInSqYd * 100) / 100;
     sumOfUnitArea += unit.unitArea;
   });
@@ -512,7 +512,7 @@ export const normalizePropertyDetails = (properties, self) => {
   return propertyInfo;
 };
 
-export const validateUnitandPlotSize = (plotDetails, form) => {
+export const validateUnitandPlotSize = (plotDetails, form, toggleSnackbarAndSetText) => {
   //needs to be in utils
   let isValid = true;
   Object.keys(form).forEach((formKey, ind) => {
@@ -530,9 +530,24 @@ export const validateUnitandPlotSize = (plotDetails, form) => {
         return unitTotal;
       }, 0);
       const plotSizeInFt = parseFloat(plotDetails.fields.plotSize.value) * 9;
-      if (unitTotal > plotSizeInFt) {
-        alert(`Total area of floor ${floorNo} has exceeded the plot size`);
-        isValid = false;
+      const plotSizeInsqft = parseFloat(plotDetails.fields.plotSize.value)
+      if (unitTotal > plotSizeInsqft) {
+       // alert(`Built-up area of floor ${floorNo} has exceeded the plot size`);
+       if(toggleSnackbarAndSetText){
+        toggleSnackbarAndSetText(
+          true,
+          {
+            labelName: `Built-up area of floor ${floorNo} has exceeded the plot size`,
+            labelKey: `Built-up area of floor ${floorNo} has exceeded the plot size`
+          },
+          "error"
+        );
+    
+        
+       }
+       else
+       alert(`Built-up area of floor ${floorNo} has exceeded the plot size`);
+       isValid = false;
       }
     }
   });

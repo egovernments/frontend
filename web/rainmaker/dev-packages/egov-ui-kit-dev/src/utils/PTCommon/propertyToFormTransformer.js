@@ -69,6 +69,7 @@ export const getAllOwnerDetails = (property, isSingleOwner = false) => {
 export const getpropertyAddressDetails = (propertyRes) => {
   const { Properties } = propertyRes;
   const oldPIDPath = get(propertyAddress, "fields.oldPID.jsonPath", "");
+  const abasPIDPath = get(propertyAddress, "fields.abasPID.jsonPath", "");
   const mohallaPath = get(propertyAddress, "fields.mohalla.jsonPath", "");
   let propertyAddressForm = {
     propertyAddress: addData(cloneDeep(propertyAddress), get(Properties[0], "address", {})),
@@ -76,6 +77,7 @@ export const getpropertyAddressDetails = (propertyRes) => {
   set(propertyAddressForm, "propertyAddress.fields.oldPID.value", get(propertyRes, oldPIDPath, ""));
   set(propertyAddressForm, "propertyAddress.fields.mohalla.value", get(propertyRes, mohallaPath, ""));
   set(propertyAddressForm, "propertyAddress.fields.city.value", get(Properties[0], "tenantId", ""));
+  set(propertyAddressForm, "propertyAddress.fields.abasPID.value", get(propertyRes, abasPIDPath, ""));
 
   return propertyAddressForm;
 };
@@ -99,14 +101,14 @@ export const getInstituteAuthority = (propertyResponse) => {
       };
     }
   });
-  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse.Properties[0], designationPath, ""));
   if (
     get(instituteAuthorityForm, "institutionAuthority.fields.mobile.value", "") ===
     get(instituteAuthorityForm, "institutionAuthority.fields.telephone.value", "")
   ) {
     set(instituteAuthorityForm, "institutionAuthority.fields.mobile.value", "");
   }
-
+  console.log("get(propertyResponse, designationPath, ):::",get(propertyResponse, designationPath, ""))
+  set(instituteAuthorityForm, "institutionAuthority.fields.designation.value", get(propertyResponse, designationPath, ""));
   return instituteAuthorityForm;
 };
 
@@ -128,7 +130,6 @@ export const convertRawDataToFormConfig = (propertyResponse) => {
   const ownershipType = get(ownerShipForm, "ownershipType.fields.typeOfOwnership.value", "");
   const typeOfOwnershipPath = get(ownerShipForm, "ownershipType.fields.ownershipCategory.jsonPath", "");
   const ownershipCategoryFromApi = get(properties[0], "propertyDetails[0].ownershipCategory", "");
-
   if (ownershipType === "MULTIPLEOWNERS" || ownershipType === "SINGLEOWNER") {
     ownerForms = getAllOwnerDetails(properties[0], ownershipType === "SINGLEOWNER");
   } else if (ownershipType.toLowerCase().indexOf("insti") !== -1 || ownershipCategoryFromApi.toLowerCase().indexOf("insti") !== -1) {

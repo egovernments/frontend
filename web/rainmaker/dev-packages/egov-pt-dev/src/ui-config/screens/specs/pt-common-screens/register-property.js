@@ -12,7 +12,7 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
 import { getBoundaryData } from "../../../../ui-utils/commons";
 import { footer } from "./applyResource/footer";
-import { propertyAssemblyDetails, renderAreaData, renderNoOfFlatsData, renderNoOfFloorData, rendersubUsageType } from "./applyResourceMutation/propertyAssemblyDetails";
+import { propertyAssemblyDetails, renderAreaData, renderNoOfFlatsData, renderNoOfFloorData, rendersubUsageType, renderARVData } from "./applyResourceMutation/propertyAssemblyDetails";
 import { propertyLocationDetails } from "./applyResourceMutation/propertyLocationDetails";
 import { propertyOwnershipDetails } from './applyResourceMutation/propertyOwnershipDetails';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -238,6 +238,8 @@ const setPropertyDetails = async (action, state, dispatch) => {
       }]
     );
     dispatch(prepareFinalObject("Property", get(response, "Properties[0]")));
+    let arvvalue = get(response, "Properties[0].units[0].arv", "");
+    dispatch(prepareFinalObject("Property.arvValue", arvvalue));
     loadWorkflowDataForUpdate(dispatch);
   }
   const ownerDetails = get(state.screenConfiguration,
@@ -312,6 +314,7 @@ if (usageType) {
   renderNoOfFloorData(usageType, action.value, dispatch, state);
   renderNoOfFlatsData(usageType, action.value, dispatch, state);
   renderAreaData(usageType, action.value, dispatch, state);
+  renderARVData(usageType, action.value, dispatch, state);
   if(subUsageType)
   set(state.screenConfiguration.preparedFinalObject,"Property.subUsageCategory", subUsageType);
 }

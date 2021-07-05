@@ -26,6 +26,12 @@
   justify-content: center;
 }
 
+.fix-for-layout-break {
+  margin-bottom: 10px;
+  width: 80%;
+}
+
+
 @media only screen and (max-width: 360px) {
   .button-toggle-container button {
     padding: 0 10px !important;

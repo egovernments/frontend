@@ -291,6 +291,29 @@ const propertyReducer = (state = initialState, action) => {
       };
     case actionTypes.RESET_PROPERTY_STATE:
       return initialState;
+    case actionTypes.PROPERTY_FETCH_AMENDMENT_PENDING:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+        errorMessage: "",
+      };
+    case actionTypes.PROPERTY_FETCH_AMENDMENT_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+      };
+    case actionTypes.PROPERTY_FETCH_AMENDMENT_COMPLETE:
+      const Amendment=action.payload.Amendments;
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        Amendment
+      };
     default:
       return state;
   }

@@ -31,7 +31,7 @@ const AcknowledgementCard = (props) => {
             </div>
             <div className="ack-body"  id="custom-atoms-body" >
               <h1 className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-header">
-                <span id="custom-containers-key"> <Label label={messageHeader} color='rgba(0, 0, 0, 0.87)' fontSize= '24px'  fontWeight='400' fontFamily= "Roboto"  lineHeight='1.35417em'/></span>
+                <span id="custom-containers-key"> <Label label={messageHeader} color='rgba(0, 0, 0, 0.87)' fontSize= '24px'  fontWeight='400' fontFamily= "Roboto"  lineHeight='1.35417em' className="acknowledgment-card"/></span>
               </h1>
               <div className="ack-sub-body" id="custom-atoms-paragraph">
                 <span > <Label label={message} color='rgba(0, 0, 0, 0.6)'fontFamily= 'Roboto'  /></span>

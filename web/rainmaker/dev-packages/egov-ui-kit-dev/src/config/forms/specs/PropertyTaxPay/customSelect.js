@@ -3,6 +3,7 @@ import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/acti
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
 import get from "lodash/get";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 const formConfig = {
   name: "customSelect",
@@ -11,10 +12,11 @@ const formConfig = {
       id: "floorName",
       type: "singleValueList",
       localePrefix: { moduleName: "PropertyTax", masterName: "Floor" },
-      floatingLabelText: "PT_FORM2_SELECT_FLOOR",
-      hintText: "PT_FORM2_SELECT_FLOOR",
+      floatingLabelText: "PT_FLOOR_NO",
+      hintText: "PT_FLOOR_NO",
       numcols: 12,
       errorMessage: "",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
       required: true,
       className: "pt-floor-name",
       beforeFieldChange: ({ action, dispatch, state }) => {
@@ -32,7 +34,15 @@ const formConfig = {
           return floorvalue === value;
         });
         if (valueExists && get(state, `form[${action.formKey}].fields[${action.fieldKey}].value`) !== action.value) {
-          alert("This floor is already selected, please select another floor");
+          dispatch(toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "This floor is already selected, please select another floor.",
+              labelKey: "ERR_FLOOR_VALIDATIONS_FAILED"
+            },
+            "error"
+          ));
+          //alert("This floor is already selected, please select another floor");
           action.value = "";
         }
         return action;

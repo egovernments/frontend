@@ -20,9 +20,9 @@ const GenericForm = ({ form, handleFieldChange, cardTitle, formKey, containerSty
           {Object.keys(fields).map((fieldKey, index) => {
             return (
               // <div key={index}>
-              fieldKey === "dummy" ? (
-                <div className="col-xs-6 dummy-field" style={{ height: 72, marginTop: 14 }} />
-              ) : (
+              // fieldKey === "dummy" ? (
+              //   <div className="col-xs-6 dummy-field" style={{ height: 72, marginTop: 14 }} />
+                
                 <div
                   style={
                     fields[fieldKey].hideField
@@ -46,7 +46,7 @@ const GenericForm = ({ form, handleFieldChange, cardTitle, formKey, containerSty
                     <ToolTipUi id={"form-wizard-tooltip"} title={fields[fieldKey].toolTipMessage} />
                   )}
                 </div>
-              )
+              
               // </div>
             );
           })}

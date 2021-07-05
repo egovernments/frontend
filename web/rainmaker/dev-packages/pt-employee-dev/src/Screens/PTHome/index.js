@@ -137,20 +137,20 @@ class PTHome extends Component {
         <div style={{ padding: "0px 8px" }}>
           <Card
             className="property-tax-card"
-            textChildren={
-              <List
-                innerDivStyle={innerDivStyle}
-                onItemClick={handleItemClick}
-                listItemStyle={{
-                  padding: "0px 20px",
-                  borderWidth: "10px 10px 0px"
-                }}
-                nestedListStyle={{ padding: "0px", background: "#f2f2f2" }}
-                autoGenerateNestedIndicator={false}
-                primaryTogglesNestedList={true}
-                items={getlistItems()}
-              />
-            }
+            // textChildren={
+            //   <List
+            //     innerDivStyle={innerDivStyle}
+            //     onItemClick={handleItemClick}
+            //     listItemStyle={{
+            //       padding: "0px 20px",
+            //       borderWidth: "10px 10px 0px"
+            //     }}
+            //     nestedListStyle={{ padding: "0px", background: "#f2f2f2" }}
+            //     autoGenerateNestedIndicator={false}
+            //     primaryTogglesNestedList={true}
+            //     items={getlistItems()}
+            //   />
+            // }
           />
         </div>
       </Screen>

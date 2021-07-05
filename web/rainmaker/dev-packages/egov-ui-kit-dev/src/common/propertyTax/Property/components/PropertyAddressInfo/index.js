@@ -27,8 +27,13 @@ export const getAddressItems = (properties, OldProperty) => {
     address && [
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
-        value: address.city || "NA",
-        oldValue: OldProperty && OldProperty.address && OldProperty.address.city
+        value: (getTranslatedLabel((`TENANT_TENANTS_PB_${address.city}`).toUpperCase(), localizationLabelsData)) || "NA",
+        oldValue: OldProperty && OldProperty.address &&  (getTranslatedLabel((`TENANT_TENANTS_PB_${address.city}`.toUpperCase()), localizationLabelsData)) || "NA"
+      },
+      {
+        key: getTranslatedLabel("PT_COMMON_PROPERTY_LOCATION", localizationLabelsData),
+        value: (getTranslatedLabel((`PT_COMMON_PROPERTY_LOCATION_${address.location}`), localizationLabelsData)) || "NA",
+        oldValue: OldProperty && OldProperty.address && (getTranslatedLabel((`PT_COMMON_PROPERTY_LOCATION_${address.location}`), localizationLabelsData)) || "NA"
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_HOUSE_NO", localizationLabelsData),
@@ -59,6 +64,11 @@ export const getAddressItems = (properties, OldProperty) => {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_EXISTING_PID", localizationLabelsData),
         value: properties.oldPropertyId || "NA",
         oldValue: OldProperty && OldProperty.oldPropertyId
+      },
+      {
+        key: getTranslatedLabel("PT_ABAS_ID", localizationLabelsData),
+        value: properties.abasPropertyId || "NA",
+        oldValue: OldProperty && OldProperty.abasPropertyId
       }
     ]
   );

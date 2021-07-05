@@ -21,6 +21,9 @@ export const getLocale = () => {
 export const getModule = () => {
   return localStorage.getItem("module");
 };
+export const getFinalData = () => {
+  return JSON.parse(localStorage.getItem("finalData"));
+};
 
 //SET methods
 export const setUserInfo = (userInfo) => {

@@ -23,8 +23,8 @@ const formConfig = {
     payerMobile: {
       id: "ownerMobile",
       type: "textfield",
-      floatingLabelText: "TL_PAYMENT_PAYER_MOB_LABEL",
-      hintText: "PT_FORM3_MOBILE_NO_PLACEHOLDER",
+      floatingLabelText: "PT_OWNER_MOBILE_NO",
+      hintText: "PT_COMMON_APPLICANT_MOBILE_NO_PLACEHOLDER",
       jsonPath: "Receipt[0].Bill[0].mobileNumber",
       required: true,
       pattern: /^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i,

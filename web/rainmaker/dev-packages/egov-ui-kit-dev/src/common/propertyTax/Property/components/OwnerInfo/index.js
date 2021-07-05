@@ -58,13 +58,13 @@ export const getOwnershipInfoUserCategory = (owner, generalMDMSDataById) => {
     generalMDMSDataById &&
     generalMDMSDataById["OwnerType"] &&
     generalMDMSDataById["OwnerType"][owner.ownerType] &&
-    generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
+    getTranslatedLabel('PROPERTYTAX_OWNERTYPE_' +  generalMDMSDataById["OwnerType"][owner.ownerType].code,localizationLabelsData)) ||
   "NA";
 }
 
 export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldPropertydetails={}) => {
   const isInstitution =
-    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+    latestPropertyDetails.ownershipCategory.includes("INSTITUTIONALPRIVATE") || latestPropertyDetails.ownershipCategory.includes("INSTITUTIONALGOVERNMENT");
   let { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
   let owner = [];
   ownerDetails=ownerDetails&&Array.isArray(ownerDetails)&&ownerDetails.sort((owner1,owner2)=>owner1.name.localeCompare(owner2.name));
@@ -110,8 +110,8 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_GENDER", localizationLabelsData),
-              value: owner.gender || "NA",
-              oldValue: oldPropertydetails && oldPropertydetails.owners && Array.isArray( oldPropertydetails.owners) && oldPropertydetails.owners[index].gender,
+              value: (getTranslatedLabel((`PT_COMMON_GENDER_${owner.gender}`).toUpperCase(), localizationLabelsData)) || "NA",
+              oldValue: oldPropertydetails && oldPropertydetails.owners && (getTranslatedLabel((`PT_COMMON_GENDER_${owner.gender}`).toUpperCase(), localizationLabelsData)) || "NA",
               jsonPath:'gender'
             },
           isInstitution
@@ -254,7 +254,7 @@ class OwnerInfo extends Component {
         }
       } else {
         owner = {
-          "PT_OWNER_NAME": item.name || "NA",
+          "PT_COMMON_TABLE_COL_OWNER_NAME": item.name || "NA",
           "PT_GUARDIANS_NAME": item.fatherOrHusbandName || "NA",
           "PT_GENDER": item.gender || "NA",
           // "PT_OWNERSHIP_INFO_DOB": convertEpochToDate(item.dob) || "NA",
@@ -391,12 +391,12 @@ class OwnerInfo extends Component {
                   </div>
                   {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
                   {/* Transfer ownership button and View History button */}
-                  {(viewHistory || ownershipTransfer) && (
+                  {/* {(viewHistory || ownershipTransfer) && (
                     <div id="pt-header-button-container" className="header-button-container">
                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
                       <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
                     </div>
-                  )}
+                  )} */}
                   {/* ------------------------- */}
                 </div>
                 <div>

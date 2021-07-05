@@ -15,6 +15,7 @@ const formConfig = {
       jsonPath: "PropertiesTemp[0].address.city",
       required: true,
       type: "singleValueList",
+      localePrefix: "TENANT_TENANTS",
       floatingLabelText: "CORE_COMMON_CITY",
       className: "pt-emp-property-address-city",
       disabled: true,
@@ -90,6 +91,9 @@ const formConfig = {
                   },
                   {
                     name: "UsageCategorySubMinor"
+                  },
+                  {
+                    name: "PropertyLocation"
                   }
                 ]
               }
@@ -109,9 +113,17 @@ const formConfig = {
             "UsageCategoryDetail",
             "UsageCategoryMajor",
             "UsageCategoryMinor",
-            "UsageCategorySubMinor"
+            "UsageCategorySubMinor",
+            "PropertyLocation"
           ])
         );
+        dispatch(fetchGeneralMDMSData(
+          null,
+          "BillingService",
+          ["TaxPeriod", "TaxHeadMaster"],
+          "",
+          field.value
+        ));
       }
     },
     ...dummy,
@@ -122,15 +134,15 @@ const formConfig = {
     ...pincode,
     oldPID: {
       id: "oldpid",
-      type: "textFieldIcon",
-      className: "pt-old-pid-text-field",
-      text: "PT_SEARCH_BUTTON",
-      iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      type: "textfield",
+   className: "pt-old-pid-text-field",
+     // text: "PT_SEARCH_BUTTON",
+    //  iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
       jsonPath: "Properties[0].oldPropertyId",
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
       numcols: 6,
-      errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
+      errorMessage: "PT_PROPERTY_DETAILS_EXISTING_PID_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       toolTip: true,
       pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i,

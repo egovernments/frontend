@@ -3,7 +3,7 @@ import { getCreatePropertyResponse, setPTDocuments } from "egov-ui-kit/config/fo
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
-import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT } from "egov-ui-kit/utils/endPoints";
+import { BOUNDARY, DOWNLOADRECEIPT, DRAFT, FETCHASSESSMENTS, FETCHBILL, FETCHRECEIPT, PGService, PROPERTY, RECEIPT,FETCHAMENDMENT } from "egov-ui-kit/utils/endPoints";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { getCommonTenant } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import cloneDeep from "lodash/cloneDeep";
@@ -235,6 +235,27 @@ const mohallaFetchComplete = (payload) => {
     payload,
   };
 };
+
+const fetchAmendmentPending = () => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_AMENDMENT_PENDING,
+  };
+};
+
+const fetchAmendmentComplete = (payload) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_AMENDMENT_COMPLETE,
+    payload,
+  };
+};
+
+const fetchAmendmentError = (error) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_AMENDMENT_ERROR,
+    error,
+  };
+};
+
 
 const fetchMohalla = (queryObj) => {
   return async (dispatch) => {
@@ -621,11 +642,11 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         const payloadProperty = await httpRequest(FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, fetchBillQueryObject);
         dispatch(fetchBillComplete(payloadProperty));
       } catch (error) {
-        dispatch(toggleSnackbarAndSetText(
-          true,
-          { labelName: error.message, labelKey: error.message },
-          "error"
-        ))
+        // dispatch(toggleSnackbarAndSetText(
+        //   true,
+        //   { labelName: error.message, labelKey: error.message },
+        //   "error"
+        // ))
         dispatch(fetchBillError(error.message));
       }
     }
@@ -657,6 +678,19 @@ export const fetchAssessments = (fetchAssessmentsQueryObject) => {
     }
   }
 }
+export const fetchAmendment = (fetchAmendmentQueryObject) => {
+  return async (dispatch) => {
+    if (fetchAmendmentQueryObject) {
+      dispatch(fetchAmendmentPending());
+      try {
+        const payloadProperty = await httpRequest(FETCHAMENDMENT.GET.URL, FETCHAMENDMENT.GET.ACTION, fetchAmendmentQueryObject);
+        dispatch(fetchAmendmentComplete(payloadProperty));
+      } catch (error) {
+        dispatch(fetchAmendmentError(error.message));
+      }
+    }
+  }
+}
 export const getFileUrlFromAPI = async fileStoreId => {
   const queryObject = [
     { key: "tenantId", value: getCommonTenant() },
@@ -678,6 +712,7 @@ export const getFileUrlFromAPI = async fileStoreId => {
 
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
+    let DOWNLOADRECEIPT = {}
     if (receiptQueryString) {
       // dispatch(downloadReceiptPending());
       try {
@@ -690,15 +725,34 @@ export const downloadReceipt = (receiptQueryString) => {
         if (oldFileStoreId) {
           downloadReceiptFromFilestoreID(oldFileStoreId, "download")
         }
-        else {
-          httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-            .then(res => {
-              getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                win.focus();
-              });
+        else { 
+          DOWNLOADRECEIPT = {
+          GET: {
+            URL: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
+            ACTION: "_get",
+          },
+        };
+        try {
 
+          httpRequest( DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, receiptQueryString, {},{ 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+            .then(res => {
+              if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+                res.filestoreIds.map(fileStoreId => {
+                  downloadReceiptFromFilestoreID(fileStoreId, "download")
+                })
+              } else {
+                console.log('Some Error Occured while downloading Receipt!');
+                dispatch(downloadReceiptError("Error in Receipt Generation"));
+
+              }
             });
+      
+      
+        } catch (exception) {
+          console.log('Some Error Occured while downloading Receipt!');
+          dispatch(downloadReceiptError("Error in Receipt Generation"));
+
+        }
         }
       } catch (error) {
         dispatch(downloadReceiptError(error.message));

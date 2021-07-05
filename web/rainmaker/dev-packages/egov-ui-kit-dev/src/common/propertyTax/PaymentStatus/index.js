@@ -45,7 +45,7 @@ const PaymentStatus = ({ assessmentYear,
   return (
     <div>
       <div key={1} style={{ marginBottom: "50px" }} className=" col-md-12 col-lg-12">
-        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
+        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} tenantId={tenantId}/>
         <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader={paymentHeader} message={paymentMessage} receiptNo={ReceiptNo} />
       </div>
       <div

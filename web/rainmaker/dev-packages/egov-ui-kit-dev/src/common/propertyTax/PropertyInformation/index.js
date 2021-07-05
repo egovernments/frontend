@@ -73,6 +73,9 @@ class Property extends Component {
               {
                 name: "UsageCategory",
               },
+              {
+                name: "PropertyLocation"
+              },
             ],
           },
         ],
@@ -85,8 +88,16 @@ class Property extends Component {
       "UsageCategorySubMinor",
       "OccupancyType",
       "PropertyType",
-      "UsageCategory"
+      "UsageCategory",
+      "PropertyLocation"
     ]);
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      commonConfig.tenantId
+    );
     const { pathname } = location;
     if (!(localStorageGet("path") === pathname)) {
       customTitle && addBreadCrumbs({ title: customTitle, path: window.location.pathname });
@@ -236,7 +247,7 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
       tableHeaderItems: [
         {
           key: "Plot Size:",
-          value: propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${propertyDetails.landArea} sq yards`,
+          value: propertyDetails.uom ? `${propertyDetails.landArea} ${propertyDetails.uom}` : `${propertyDetails.landArea} sq ft`,
         },
         {
           key: "Type of Building:",

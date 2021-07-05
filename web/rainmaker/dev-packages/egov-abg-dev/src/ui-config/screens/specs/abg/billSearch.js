@@ -60,7 +60,7 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL);
+    payload.MdmsRes.BillingService.BusinessService = payload.MdmsRes.BillingService.BusinessService.filter(service => service.billGineiURL && service.type && service.type=='Adhoc');
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -135,7 +135,7 @@ const billSearchAndResult = {
                 sm: 6,
                 align: "right"
               },
-              visible: enableButton,
+              visible: process.env.REACT_APP_NAME === "Employee" ? enableButton : false,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -159,7 +159,7 @@ const billSearchAndResult = {
                     ? `/egov-ui-framework/abg/groupBills`
                     : `/abg/groupBills`
               },
-              visible: false
+              visible: false //process.env.REACT_APP_NAME === "Employee" ? true : false,
             },
             howitWorksButton:{
               componentPath:"Button",

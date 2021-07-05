@@ -1,5 +1,6 @@
 import { handleScreenConfigurationFieldChange as handleField } from "../../../../ui-redux/screen-configuration/actions";
 import { getTranslatedLabel } from "../../../../ui-utils/commons";
+import get from "lodash/get";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const appCardHeaderStyle = (colorOne = "#ec407a", colorTwo = "#d81b60") => {
@@ -543,6 +544,8 @@ export const getTab = (label, props = {}) => {
 
 export const getPattern = type => {
   const locale = getLocale();
+  //console.log("locale:",locale);
+
   switch (type) {
     case "Name":
       if(locale == "en_IN" || locale == "hi_IN" )
@@ -554,7 +557,7 @@ export const getPattern = type => {
       {
         return /^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,50}$/i;
       } 
-     // return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
+        
     case "MobileNo":
       return /^[6789][0-9]{9}$/i;
     case "Amount":
@@ -567,7 +570,6 @@ export const getPattern = type => {
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":
-      //return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
       if(locale == "en_IN" || locale == "hi_IN" )
       { 
         return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
@@ -575,7 +577,7 @@ export const getPattern = type => {
       else  
       {
         return /^[#.0-9a-zA-Z\s,-]{1,500}$/i;
-      }  
+      }      
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
@@ -592,7 +594,6 @@ export const getPattern = type => {
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":
-      //return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
       if(locale == "en_IN" || locale == "hi_IN" )
       { 
         return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,50}$/i;
@@ -601,8 +602,8 @@ export const getPattern = type => {
       {
         return /^[#.0-9a-zA-Z\s,-]{1,50}$/i;
       }  
+     // return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,50}$/i;
     case "BuildingStreet":
-      ///return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
       if(locale == "en_IN" || locale == "hi_IN" )
       { 
         return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i;
@@ -611,6 +612,7 @@ export const getPattern = type => {
       {
         return /^[#.0-9a-zA-Z\s,-]{1,64}$/i;
       }  
+      //return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
     case "Pincode":
       return /^[1-9][0-9]{5}$/i;
     case "Landline":
@@ -637,21 +639,32 @@ export const getPattern = type => {
     case "ChequeNo":
         return /^(?!0{6})[0-9]{6}$/;
     case "Comments":
+      if(locale == "en_IN" || locale == "hi_IN" )
+      { 
+        return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,50}$/i;
+      }       
+      else  
+      {
+        return /^[#.0-9a-zA-Z\s,-]{1,50}$/i;
+      }  
        // return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
-       if(locale == "en_IN" || locale == "hi_IN" )
-       { 
-         return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,50}$/i;
-       }       
-       else  
-       {
-         return /^[#.0-9a-zA-Z\s,-]{1,50}$/i;
-       }  
     case "OldLicenceNo":
         return /^[a-zA-Z0-9-/]{0,64}$/;
+    case "meterReading":
+        return /^[1-9]\d*$/i;
 
   }
 };
 
 export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
+};
+
+export const downloadHelpFile = async (state) => {  
+  console.info("download the help file");
+  const helpurl = get(state.screenConfiguration.preparedFinalObject,
+    "helpFileUrl",
+    ""
+  );   
+  window.open(helpurl,"_blank");
 };

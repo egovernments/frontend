@@ -10,21 +10,24 @@ import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
 import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import { CITY } from "egov-ui-kit/utils/endPoints";
+import commonConfig from "config/common.js";
 
 let floorDropDownData = [];
 
-for (var i = 1; i <= 25; i++) {
+for (var i = 1; i <= 17; i++) {
   floorDropDownData.push({ label: i.toString(), value: i });
 }
 
 export const plotSize = {
   plotSize: {
     id: "assessment-plot-size",
-    jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    jsonPath: "Properties[0].propertyDetails[0].landArea",
     type: "number",
-    floatingLabelText: "PT_FORM2_PLOT_SIZE",
+    floatingLabelText: "PT_ASSESMENT_INFO_PLOT_SIZE",
     hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
     required: true,
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
@@ -46,7 +49,7 @@ export const floorCount = {
     id: "assessment-number-of-floors",
     jsonPath: "Properties[0].propertyDetails[0].noOfFloors",
     type: "AutocompleteDropdown",
-    floatingLabelText: "PT_FORM2_NUMBER_OF_FLOORS",
+    floatingLabelText: "PT_COMMON_NO_OF_FLOORS",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     toolTip: true,
     fullWidth: true,
@@ -57,6 +60,7 @@ export const floorCount = {
       xs: 12,
       sm: 6
     },
+    
     dropDownData: floorDropDownData,
     formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
@@ -88,8 +92,12 @@ export const subUsageType = {
     id: "assessment-subUsageType",
     jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryDetail",
     type: "AutocompleteDropdown",
-    localePrefix: "PROPERTYTAX_BILLING_SLAB",
-    floatingLabelText: "PT_FORM2_SUB_USAGE_TYPE",
+    localePrefix: {
+      moduleName: "PROPERTYTAX",
+      masterName: "BILLING_SLAB"
+    },
+    labelsFromLocalisation: true,
+    floatingLabelText: "PT_COMMON_SUB_USAGE_TYPE",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     dropDownData: [],
@@ -117,8 +125,12 @@ export const occupancy = {
     id: "assessment-occupancy",
     jsonPath: "Properties[0].propertyDetails[0].units[0].occupancyType",
     type: "AutocompleteDropdown",
-    localePrefix: { moduleName: "PropertyTax", masterName: "OccupancyType" },
-    floatingLabelText: "PT_FORM2_OCCUPANCY",
+    localePrefix: {
+      moduleName: "PROPERTYTAX",
+      masterName: "OCCUPANCYTYPE"
+    },
+    labelsFromLocalisation: true,
+    floatingLabelText: "PT_ASSESMENT_INFO_OCCUPLANCY",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     required: true,
     numcols: 4,
@@ -128,18 +140,21 @@ export const occupancy = {
     },
     dropDownData: [],
     formName: "plotDetails",
-    updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
-      const { value } = sourceField;
-      const dependentFields1 = ["annualRent"];
-      switch (value) {
-        case "RENTED":
-          setDependentFields(dependentFields1, dispatch, formKey, false);
-          break;
-        default:
-          setDependentFields(dependentFields1, dispatch, formKey, true);
-          break;
-      }
-    },
+    // updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
+    //   const { value } = sourceField;
+    //   const dependentFields1 = ["annualRent"];
+    //   switch (value) {
+    //     case "RENTED":
+    //       setDependentFields(dependentFields1, dispatch, formKey, false);
+    //       break;
+    //       case "SELFOCCUPIED":
+    //         setDependentFields(dependentFields1, dispatch, formKey, false);
+    //         break;
+    //     default:
+    //       setDependentFields(dependentFields1, dispatch, formKey, true);
+    //       break;
+    //   }
+    // },
   },
 };
 
@@ -148,9 +163,10 @@ export const builtArea = {
     id: "assessment-built-area",
     jsonPath: "Properties[0].propertyDetails[0].units[0].unitArea",
     type: "number",
-    floatingLabelText: "PT_FORM2_BUILT_AREA",
+    floatingLabelText: "PT_ASSESMENT_INFO_BUILT_UP_AREA",
     hintText: "PT_FORM2_BUILT_UP_AREA_PLACEHOLDER",
     errorMessage: "PT_BUILT_AREA_ERROR_MESSAGE",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
     toolTip: true,
     toolTipMessage: "PT_BUILT_UP_AREA_TOOLTIP_MESSAGE",
     required: true,
@@ -166,12 +182,12 @@ export const superArea = {
     id: "assessment-super-area",
     jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
     type: "number",
-    floatingLabelText: "PT_FORM2_TOTAL_BUILT_AREA",
+    floatingLabelText: "PT_ASSESMENT_INFO_BUILT_UP_AREA",
     hintText: "PT_FORM2_TOTAL_BUILT_AREA_PLACEHOLDER",
-    ErrorText: "Enter a valid super area size",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    ErrorText: "Enter a valid super built area size",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
     toolTip: true,
-    toolTipMessage: "Total Carpet Area + Total balcony area + Total thickness of outer walls + Total common area (lift, stairs, lobby etc.)",
+    toolTipMessage: "PT_BUILT_UP_AREA_TOOLTIP_MESSAGE",
     required: true,
     numcols: 4,
     hideField: false,
@@ -189,15 +205,16 @@ export const annualRent = {
     id: "assessment-annual-rent",
     jsonPath: "Properties[0].propertyDetails[0].units[0].arv",
     type: "number",
-    floatingLabelText: "PT_FORM2_TOTAL_ANNUAL_RENT",
+    floatingLabelText: "PT_ASSESMENT_INFO_AREA_RENT",
     hintText: "PT_FORM2_TOTAL_ANNUAL_RENT_PLACEHOLDER",
     ErrorText: "Enter a valid amount",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
     toolTip: true,
     toolTipMessage: "PT_TOTAL_ANNUAL_RENT_TOOLTIP_MESSAGE",
     required: true,
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
-    hideField: true,
+    pattern: /^([1-9]\d{0,11})(\.(\d{1,2})?)?$/,
+    errorMessage: "PT_ANNUAL_RENT_ERROR_MESSAGE",
+    hideField: false,
     numcols: 4,
     formName: "plotDetails",
   },
@@ -220,15 +237,17 @@ export const floorName = {
   floorName: {
     id: "floorName",
     type: "AutocompleteDropdown",
-    floatingLabelText: "PT_FORM2_SELECT_FLOOR",
-    localePrefix: { moduleName: "PropertyTax", masterName: "Floor" },
-    hintText: "PT_FORM2_SELECT_FLOOR",
+    floatingLabelText: "PT_FLOOR_NO",
+    localePrefix: { moduleName: "PROPERTYTAX", masterName: "FLOOR" },
+    labelsFromLocalisation: true,
+    hintText: "PT_FLOOR_NO",
     numcols: 4,
     gridDefination: {
       xs: 12,
       sm: 4
     },
     errorMessage: "",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
     required: true,
     jsonPath: "Properties[0].propertyDetails[0].units[0].floorNo",
     hideField: true,
@@ -363,11 +382,15 @@ export const beforeInitForm = {
         )
       );
     }
-    if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED") {
+    // if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED") {
+    //   set(action, "form.fields.annualRent.hideField", false);
+    // } 
+    // else if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "SELFOCCUPIED") {
+    //   set(action, "form.fields.annualRent.hideField", false);
+    // }
+    // else {
       set(action, "form.fields.annualRent.hideField", false);
-    } else {
-      set(action, "form.fields.annualRent.hideField", true);
-    }
+    // }
     return action;
   },
 };
@@ -376,17 +399,29 @@ export const beforeInitFormForPlot = {
   beforeInitForm: (action, store) => {
     let state = store.getState();
     let { dispatch } = store;
+    // const { form } = action;
+   const { name: formKey, fields } = action;
     const propertyType = get(state, "form.basicInformation.fields.typeOfBuilding.value");
     const { Floor } = state.common && state.common.generalMDMSDataById;
+    const { localizationLabels } = state.app;
     if (get(action, "form.fields.floorName")) {
       if (propertyType === "SHAREDPROPERTY") {
         set(action, "form.fields.floorName.hideField", false);
         set(action, "form.fields.floorName.dropDownData", prepareDropDownData(Floor));
       } else {
         set(action, "form.fields.floorName.hideField", true);
+        
       }
     }
+    
     if (propertyType != "VACANT") {
+
+      let usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
+    if (usageCategoryMajor !== "MIXED") {
+      const usageTypeValue = get(action, "form.fields.usageType.value");
+      set(action, "form.fields.usageType.value", getTranslatedLabel(usageTypeValue, localizationLabels));
+      dispatch(setFieldProperty(formKey, "usageType", "value", getTranslatedLabel(usageTypeValue, localizationLabels)));
+    }
       var occupancy = get(state, "common.generalMDMSDataById.OccupancyType");
       var usageCategoryMinor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
       var usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
@@ -446,18 +481,29 @@ export const beforeInitFormForPlot = {
         );
       }
     }
-    if (propertyType == "VACANT") {
+     if (propertyType == "VACANT") {
+      var usageCategoryMinor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMinor");
+    var usageCategoryMajor = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].usageCategoryMajor");
+     dispatch(prepareFormData("Properties[0].propertyDetails[0].units[0].usageCategoryMinor", usageCategoryMinor));
+     dispatch(prepareFormData("Properties[0].propertyDetails[0].units[0].usageCategoryMajor", usageCategoryMajor));
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 1));
-    }
+     dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].occupancyType`, "SELFOCCUPIED"));
+      
+
+     }
     if (propertyType == "SHAREDPROPERTY") {
       dispatch(prepareFormData(`Properties[0].propertyDetails[0].noOfFloors`, 2));
+      //dispatch(prepareFormData(`Properties[0].propertyDetails[0].landArea`, 0));
       // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].floorNo`, -1));
     }
-    if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED") {
+    // if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED" ) {
+    //   set(action, "form.fields.annualRent.hideField", false);
+    // } else if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "SELFOCCUPIED" ) {
+    //   set(action, "form.fields.annualRent.hideField", false);
+    // }
+    // else {
       set(action, "form.fields.annualRent.hideField", false);
-    } else {
-      set(action, "form.fields.annualRent.hideField", true);
-    }
+    // }
     return action;
   },
 };
@@ -467,7 +513,8 @@ export const city = {
     id: "city",
     jsonPath: "Properties[0].address.city",
     required: true,
-    localePrefix: { moduleName: "tenant", masterName: "tenants" },
+    localePrefix: { moduleName: "TENANT", masterName: "TENANTS" },
+    labelsFromLocalisation: true,
     type: "AutocompleteDropdown",
     floatingLabelText: "CORE_COMMON_CITY",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
@@ -509,8 +556,40 @@ export const city = {
 
 export const dummy = {
   dummy: {
+    id: "dummy",
+    jsonPath: "Properties[0].address.location",
+    required: true,
+    type: "singleValueList",
+    floatingLabelText: "PT_COMMON_PROPERTY_LOCATION",
+    hintText: "PT_COMMON_PROPERTY_LOCATION_PLACEHOLDER",
+    localePrefix: "PT_COMMON_PROPERTY_LOCATION",//{ moduleName: "PropertyTax", masterName: "PropertyLocation" },
     numcols: 6,
-    type: "dummy",
+    fullWidth: true,
+    errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
+    maxLength: 64,
+    dataFetchConfig: {
+      url: CITY.GET.URL,
+      action: CITY.GET.ACTION,
+      queryParams: [],
+      requestBody: {
+        MdmsCriteria: {
+          tenantId: commonConfig.tenantId,
+          moduleDetails: [
+            {
+              moduleName: "PropertyTax",
+              masterDetails: [
+                {
+                  name: "PropertyLocation",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      dataPath: ["MdmsRes.PropertyTax.PropertyLocation"],
+    },
+    formName: "propertyAddress",
   },
 };
 
@@ -525,6 +604,7 @@ export const houseNumber = {
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     maxLength: 64,
+    pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,50}$/i,
   },
 };
 
@@ -553,6 +633,7 @@ export const street = {
     errorMessage: "PT_PROPERTY_DETAILS_STREET_ERRORMSG",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     maxLength: 64,
+   // pattern:/^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i,
   },
 };
 
@@ -561,7 +642,7 @@ export const mohalla = {
     id: "mohalla",
     jsonPath: "Properties[0].address.locality.code",
     type: "AutocompleteDropdown",
-    floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
+    floatingLabelText: "PT_PROPERTY_ADDRESS_MOHALLA",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     fullWidth: true,
     toolTip: true,
@@ -601,15 +682,15 @@ export const mohalla = {
 export const pincode = {
   pincode: {
     id: "pincode",
-    type: "number",
+    type: "textfield",
     jsonPath: "Properties[0].address.pincode",
-    floatingLabelText: "PT_PROPERTY_DETAILS_PINCODE",
+    floatingLabelText: "PT_PROPERTY_ADDRESS_PINCODE",
     hintText: "PT_PROPERTY_DETAILS_PINCODE_PLACEHOLDER",
     numcols: 6,
     //errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
     errorMessage: "PT_PINCODE_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    pattern: "^([0-9]){6}$",
+    pattern: /^[1-9][0-9]{5}$/i,
   },
 };
 
@@ -657,6 +738,7 @@ export const mergeMaster = (masterOne, masterTwo, parentName = "") => {
   }
   let masterOneData = getAbsentMasterObj(prepareDropDownData(masterOne, true), prepareDropDownData(masterTwo, true), parentName);
   for (var i = 0; i < masterOneData.length; i++) {
+    if(masterOneData[i].code != "SLUM" )
     dropDownData.push({ label: masterOneData[i].name, value: masterOneData[i].code });
   }
   return dropDownData;

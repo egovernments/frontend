@@ -6,13 +6,25 @@
         margin-bottom: 15px !important;
         top: -10px;
         position: relative;
+        margin-right: 15px !important;
     }
     .header-buttons{
         margin-top: 10px !important;
+        div:nth-child(1){
+            div{
+              span{
+                //line-height: 2 !important;
+                margin-left: 1px;
+                margin-right: 0px !important;
+              }
+              
+            }
+          }
+          
         div{
             div{
                 button{
-                    display: block !important;
+                    // display: block !important;
                     height: 65px !important;
                     width: 157px !important;
                 }

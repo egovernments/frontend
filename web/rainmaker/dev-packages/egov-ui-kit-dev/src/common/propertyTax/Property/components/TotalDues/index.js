@@ -9,7 +9,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { TotalDuesButton } from "./components";
 import "./index.css";
-
+import RebateDialogue from '../RebateDialogue'
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest as httpRequestnew } from "egov-ui-framework/ui-utils/api";
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
   fontWeight: 400,
@@ -22,13 +25,140 @@ const labelStyle = {
 class TotalDues extends React.Component {
   state = {
     url: "",
+    isDialog:false,
+    isRebateApplicable:false,
+    rebateForCurrYear : {}
   };
+
+    getCurrentFinancialYear = () => {
+    var today = new Date();
+    var curMonth = today.getMonth();
+    var fiscalYr = "";
+    if (curMonth > 3) {
+      var nextYr1 = (today.getFullYear() + 1).toString();
+      fiscalYr = today.getFullYear().toString() + "-" + nextYr1.substr(2);
+    } else {
+      var nextYr2 = today.getFullYear().toString();
+      fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2.substr(2);
+    }
+    return fiscalYr;
+  };
+
+  componentDidMount = async () => {
+    const { tenantId,prepareFinalObject } = this.props;
+    const curentFinYear = this.getCurrentFinancialYear();
+    console.log(curentFinYear);
+    const requestBody = {
+      MdmsCriteria: {
+        tenantId: tenantId,
+        moduleDetails: [
+          {
+            moduleName: "PropertyTax",
+            masterDetails: [
+              {
+                name: "Rebate",
+              },
+            ],
+          },
+        ],
+      },
+    };
+    const payload = await httpRequestnew(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      requestBody
+    );
+
+    let rebateData = get(
+      payload,
+      "MdmsRes.PropertyTax.Rebate",
+      []
+    );
+    if (rebateData.length === 0) {
+      this.setState({
+        isRebateApplicable: false
+      })
+    }
+    else {
+      console.log("rebateData::" + JSON.stringify(rebateData))
+      let rebateForCurrYear = rebateData && rebateData.filter(item => item.fromFY === curentFinYear)[0];
+      if (!rebateForCurrYear)
+        rebateForCurrYear = rebateData[rebateData.length - 1];
+      console.log("rebateForCurrYear:::" + JSON.stringify(rebateForCurrYear))
+      let startDate = rebateForCurrYear.endingDay;
+      startDate = startDate + "/" + curentFinYear.split('-')[0];
+      rebateForCurrYear.endDate = startDate;
+      console.log("startDate::" + startDate)
+      let parts = startDate.split('/');
+      let currentDate = new Date();
+      const rebateEndDate = new Date(parts[2], parts[1] - 1, parts[0]);
+      console.log(rebateEndDate, "--rebateEndDate");
+      console.log(currentDate, "--currentDate");
+      
+
+      if (currentDate <= rebateEndDate)
+        this.setState({
+          isRebateApplicable: true,
+          rebateForCurrYear:rebateForCurrYear
+        })
+    }
+  }
+
+
   onClickAction = async (consumerCode, tenantId) => {
     this.setState({
       url: await downloadBill(consumerCode, tenantId, "property-bill"),
     });
   };
-  payAction = (consumerCode, tenantId) => {
+  payAction = async (consumerCode, tenantId) => {
+    const {isRebateApplicable} = this.state;
+    const { showSpinner,hideSpinner } = this.props;
+    if(isRebateApplicable){
+    this.setState({
+      isDialog: true
+    })
+  }
+  else{
+     showSpinner();
+    const payload = await httpRequestnew(
+      "post",
+      `/pt-calculator-v2/propertytax/_updatedemand?tenantId=${tenantId}&consumerCodes=${consumerCode}&isFullPayment=false`,
+      "",
+      [],
+      {}
+      );
+      hideSpinner();
+    routeToCommonPay(consumerCode, tenantId);
+  }
+    // const status = get(this.props, 'propertyDetails[0].status', '');
+    // if (status != "ACTIVE") {
+    //   this.props.toggleSnackbarAndSetText(
+    //     true,
+    //     { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
+    //     "error"
+    //   );
+    // } else {
+    //   routeToCommonPay(consumerCode, tenantId);
+    // }
+  }
+
+  redirectToPay= async (isFullPayment,selectedOption) => {
+    // this.setState({
+    //   isDialog: true
+    // })
+    const { showSpinner,hideSpinner } = this.props;
+    if(selectedOption.length==0){
+      this.props.toggleSnackbarAndSetText(
+            true,
+            { labelName: "Pls Select the option", labelKey: "Pls select option" },
+            "error"
+          );
+    }else{
+      prepareFinalObject("isFullPayment",isFullPayment);
+  
+    const { consumerCode, tenantId } = this.props;
     const status = get(this.props, 'propertyDetails[0].status', '');
     if (status != "ACTIVE") {
       this.props.toggleSnackbarAndSetText(
@@ -37,12 +167,28 @@ class TotalDues extends React.Component {
         "error"
       );
     } else {
+      showSpinner();
+      const payload = await httpRequestnew(
+        "post",
+        `/pt-calculator-v2/propertytax/_updatedemand?tenantId=${tenantId}&consumerCodes=${consumerCode}&isFullPayment=${isFullPayment}`,
+        "",
+        [],
+        {}
+        );
+        hideSpinner();
       routeToCommonPay(consumerCode, tenantId);
     }
   }
+  }
+
+  closeRebateDialogue = () => {
+    this.setState({ isDialog: false });
+  };
 
   render() {
     const { totalBillAmountDue, consumerCode, tenantId, isAdvanceAllowed, history } = this.props;
+    const {closeRebateDialogue,redirectToPay} = this;
+    const {isDialog,rebateForCurrYear} = this.state;
     const envURL = "/egov-common/pay";
     const { payAction } = this;
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
@@ -64,7 +210,7 @@ class TotalDues extends React.Component {
           className="totaldues-tooltip-icon"
           val={data}
           icon={"info_circle"}
-          style={{ position: "absolute", left: "160px", top: "30px" }}
+          style={{ position: "absolute", left: "160px", top: "30px", display: "flex", paddingLeft: "18px" }}
         />
         <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
         </div>
@@ -89,7 +235,11 @@ class TotalDues extends React.Component {
               />
             </div>
           </div>
+
+
         )}
+        {isDialog && <RebateDialogue open={true} closeRebateDialogue = {closeRebateDialogue} redirectToPay={redirectToPay} rebateForCurrYear={rebateForCurrYear}/>}
+
       </div>
     );
   }
@@ -110,6 +260,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+    prepareFinalObject: (jsonPath, value) =>
+    dispatch(prepareFinalObject(jsonPath, value)),
+    showSpinner: () => dispatch(showSpinner()),
+    hideSpinner: () => dispatch(hideSpinner()),
   };
 };
 

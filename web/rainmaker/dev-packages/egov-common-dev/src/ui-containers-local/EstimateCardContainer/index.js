@@ -15,15 +15,12 @@ const sortBillDetails = (billDetails = []) => {
   sortedBillDetails = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
   return sortedBillDetails;
 }
-const formatTaxHeaders = (billDetail = {}) => {
+const formatTaxHeaders = (billDetail = {},businesService) => {
 
   let formattedFees = []
-  const { billAccountDetails = [] } = billDetail;
-const billAccountDetailsSorted=  orderBy(
-    billAccountDetails,
-    ["amount"],
-    ["asce"]);
-  formattedFees = billAccountDetailsSorted.map((taxHead) => {
+  const { billAccountDetails = [],fromPeriod, toPeriod } = billDetail;
+
+  formattedFees = billAccountDetails.map((taxHead) => {
     return {
       info: {
         labelKey: taxHead.taxHeadCode,
@@ -33,7 +30,7 @@ const billAccountDetailsSorted=  orderBy(
         labelKey: taxHead.taxHeadCode,
         labelName: taxHead.taxHeadCode
       },
-      value: taxHead.amount
+      value: ((fromPeriod < Date.now() && Date.now() < toPeriod) || businesService!="PT") ? billDetail.amount!==0 ? taxHead.amount : 0 :0
     }
   })
   formattedFees.reverse();
@@ -45,25 +42,37 @@ const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
 
 
+  const businesService=get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
 
-  const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0]);
+  const fees = formatTaxHeaders(sortBillDetails(get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []))[0],businesService);
   // const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
   const billDetails = get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []);
   let totalAmount = 0;
   let arrears=0;
-  for (let billDetail of billDetails) {
+  let current = 0;
+ /* for (let billDetail of billDetails) {
     totalAmount += billDetail.amount;
 
   }
 if(totalAmount>0){
   arrears=totalAmount-billDetails[0].amount;
   arrears = arrears.toFixed(2);
+}*/
+for (let billDetail of billDetails) {
+  if(billDetail.fromPeriod < Date.now() && Date.now() < billDetail.toPeriod) {
+    current = billDetail.amount;
+  }
+  totalAmount += billDetail.amount;
+
+}
+if(totalAmount>0){
+ arrears=totalAmount-current;
 }
   const estimate = {
     header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
     fees,
     totalAmount,
-    //arrears
+    arrears
   };
   return { estimate };
 };

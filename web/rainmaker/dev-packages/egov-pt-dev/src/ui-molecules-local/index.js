@@ -57,6 +57,11 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const PropertyCostDetail = Loadable({
+  loader: () => import("./PropertyCostDetail"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -68,5 +73,6 @@ export {
   FeesEstimateCard,
   DividerWithLabel,
   Table,
-  HowItWorks
+  HowItWorks,
+  PropertyCostDetail
 };

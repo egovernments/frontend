@@ -74,6 +74,7 @@ class Footer extends React.Component {
     } else {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);
+      handleFieldChange(`${dataPath}[0].wfDocuments`, []);
       const tlAppStatus = get(
         state,
         `screenConfiguration.preparedFinalObject.Licenses[0].status`,null
@@ -209,7 +210,7 @@ class Footer extends React.Component {
           labelName: { buttonLabel },
           labelKey: `WF_${appName.toUpperCase()}_${moduleName.toUpperCase()}_${buttonLabel}`,
           link: () => {
-            (moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && buttonLabel==="APPLY" ? onDialogButtonClick(buttonLabel, isDocRequired) : 
+           ((moduleName === "NewTL" || moduleName === "EDITRENEWAL" ) && buttonLabel==="APPLY") || (((moduleName === "NewWS1" || moduleName === "ModifyWSConnection" || moduleName === "ModifySWConnection" || moduleName === "NewSW1")) && buttonLabel==="SUBMIT_APPLICATION") ? onDialogButtonClick(buttonLabel, isDocRequired) : 
             this.openActionDialog(item);
           }
         };

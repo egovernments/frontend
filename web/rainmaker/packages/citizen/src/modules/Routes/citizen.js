@@ -137,7 +137,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_NOTIFICATIONS",
-      helpButton: false,
+      helpButton: false
     },
   },
   {
@@ -147,7 +147,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_MYCITY",
-      helpButton: false,
+      helpButton: false
     },
   },
   {
@@ -157,7 +157,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_WHATSNEW",
-      helpButton: false,
+      helpButton: false
     },
   },
   {
@@ -167,7 +167,7 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_EVENTS",
-      helpButton: false,
+      helpButton: false
     },
   },
   {

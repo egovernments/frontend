@@ -15,6 +15,9 @@ import ApplicationHistory from "./components/ApplicationHistory";
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
 import "./index.css";
+import Button from '@material-ui/core/Button';
+import TaxBreakup from "../../../TaxBreakup";
+ 
 
 const logoStyle = {
   height: "61px",
@@ -23,7 +26,8 @@ const logoStyle = {
 
 class PTInformation extends React.Component {
   state = {
-    businessServiceInfoItem: {}
+    businessServiceInfoItem: {},
+    openBreakup:false
   }
   componentDidMount = () => {
     const mdmsBody = {
@@ -70,6 +74,15 @@ class PTInformation extends React.Component {
     const filteredCity = cities && cities.length > 0 && cities.filter(item => item.code === tenantId);
     return filteredCity ? get(filteredCity[0], "logoId") : "";
   }
+  openBreakUpDialog = () =>{
+   this.setState({
+    openBreakup:true
+   })
+  }
+
+  closeBreakupDialogue = () => {
+    this.setState({ openBreakup: false });
+  };
 
   render() {
     const {
@@ -82,7 +95,8 @@ class PTInformation extends React.Component {
       cities,
       propertiesAudit
     } = this.props;
-    const { businessServiceInfoItem } = this.state;
+    const { businessServiceInfoItem,openBreakup } = this.state;
+    const {closeBreakupDialogue } = this;
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
@@ -100,6 +114,12 @@ class PTInformation extends React.Component {
       properties.propertyDetails[0].institution = updatedOnwerInfo.institution;
       properties.propertyDetails[0].ownershipCategory = updatedOnwerInfo.ownershipCategory;
     }
+    let isLegary ;
+
+     if (properties && properties.source==='LEGACY_RECORD')
+     {
+      isLegary =true;
+     }
     return (
       <div className="form-without-button-cont-generic">
         {label && (
@@ -117,18 +137,25 @@ class PTInformation extends React.Component {
             textChildren={
               <div id="property-review-form" className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                 {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && businessServiceInfoItem.isAdvanceAllowed)) && (
-                  <Card
-                    textChildren={
-                      <TotalDues
-                        history
-                        tenantId={properties.tenantId}
-                        consumerCode={properties.propertyId}
-                        totalBillAmountDue={totalBillAmountDue}
-                        isAdvanceAllowed={businessServiceInfoItem.isAdvanceAllowed}
-                      />
-                    }
-                    style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
-                  />
+                  <div>
+                    <Card
+                      textChildren={
+                        <TotalDues
+                          history
+                          tenantId={properties.tenantId}
+                          consumerCode={properties.propertyId}
+                          totalBillAmountDue={totalBillAmountDue}
+                          isAdvanceAllowed={businessServiceInfoItem.isAdvanceAllowed}
+                        />
+                      }
+                      style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
+                    />
+                    { openBreakup && ( <TaxBreakup open={true}  closeBreakupDialogue = {closeBreakupDialogue}/>)}
+                    <Button onClick={() => this.openBreakUpDialog()} color="primary" >
+                      {<Label buttonLabel={false} label="BILL_BREAKUP" fontSize="16px" color="#fe7a51" />}
+                    </Button>
+
+                  </div>
                 )}
                 <PdfHeader header={{
                   logoUrl: logoUrl, corpCity: corpCity, ulbGrade: ulbGrade,
@@ -150,9 +177,11 @@ class PTInformation extends React.Component {
                   viewHistory={true}
                   propertiesAudit={propertiesAudit}
                 ></OwnerInfo>
-                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
-                <div id="property-assess-form">
-                  <AssessmentHistory></AssessmentHistory>
+                        {/* {!isLegary && */}
+            <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
+             {/* } */}
+           <div id="property-assess-form">
+                 {/* <AssessmentHistory></AssessmentHistory>  */}
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
                 </div>

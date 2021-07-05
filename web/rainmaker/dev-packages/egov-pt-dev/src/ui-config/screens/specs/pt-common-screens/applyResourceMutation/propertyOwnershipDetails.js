@@ -249,7 +249,7 @@ const commonApplicantInformation = () => {
         },
         required: true,
         pattern: getPattern("Name"),
-        errorMessage: "Invalid Name",
+        errorMessage: "PT_NAME_ERROR_MESSAGE",
         jsonPath: "Property.owners[0].name",
         props: {
           className: "applicant-details-error"
@@ -307,7 +307,7 @@ const commonApplicantInformation = () => {
         },
         required: true,
         pattern: getPattern("Name"),
-        errorMessage: "Invalid Name",
+        errorMessage: "PT_NAME_ERROR_MESSAGE",
         jsonPath: "Property.owners[0].fatherOrHusbandName",
         gridDefination: {
           xs: 12,
@@ -329,7 +329,7 @@ const commonApplicantInformation = () => {
         },
         required: true,
         jsonPath: "Property.owners[0].relationship",
-        data: [{ code: "FATHER" }, { code: "HUSBAND" }],
+        data: [{ code: "PARENT" }, { code: "SPOUSE" }, { code: "GUARDIAN" }],
         localePrefix: {
           moduleName: "common-masters",
           masterName: "OwnerType"
@@ -352,7 +352,7 @@ const commonApplicantInformation = () => {
         },
         pattern: getPattern("Address"),
         required: true,
-        errorMessage: "Invalid Address",
+        errorMessage: "ADDRESS_ERROR_MESSAGE",
         jsonPath: "Property.owners[0].correspondenceAddress",
         gridDefination: {
           xs: 12,

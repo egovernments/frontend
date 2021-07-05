@@ -50,9 +50,34 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     const addressCard = getAddressItems(property);
     const ownerCard = getMultipleItemCard(ownerInfo, 'PT_OWNER');
     const assessmentCard = getAssessmentInfo(get(property, 'propertyDetails[0]', {}), generalMDMSDataById,property);
-    const documentCard = getDocumentsCard(property.documentsUploaded);
+    let isLegacy =false;
+    let isDocAvbl =false;
 
-    let pdfData = {
+    // if(property && property.source==='LEGACY_RECORD')
+    // {
+    //         isLegacy=true
+    // }
+    if(property && property.documentsUploaded && property.documentsUploaded.length > 0 )
+    {
+        isDocAvbl = true;
+
+    }
+   const documentCard = isDocAvbl ? getDocumentsCard(property.documentsUploaded):"N/A";
+   //const documentCard = getDocumentsCard(property.documentsUploaded);
+
+    let legacyPdfData = {
+        header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
+        applicationNoHeader: 'PT_PROPERTY_PTUID', applicationNoValue: property.propertyId,
+        additionalHeader: "PT_APPLICATION_NO_LABEL", additionalHeaderValue: property.acknowldgementNumber,
+        cards: [
+            { header: "PT_PROPERTY_ADDRESS_SUB_HEADER", items: addressCard },
+            { header: "PT_ASSESMENT_INFO_SUB_HEADER", items: assessmentCard },
+            { items: unitInfoCard, type: "multiItem", hide: unitInfoCard.length === 0 },
+            { header: 'PT_OWNERSHIP_INFO_SUB_HEADER', items: ownerCard, type: ownerInfo.length > 1 ? 'multiItem' : 'singleItem' },
+        ]
+    }
+
+    let assessmentPdfData = {
         header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
         additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,
@@ -63,5 +88,8 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
             { header: 'PT_OWNERSHIP_INFO_SUB_HEADER', items: ownerCard, type: ownerInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'PT_COMMON_DOCS', items: documentCard }]
     }
+
+    let pdfData ={} ;
+    pdfData = isDocAvbl ? assessmentPdfData:legacyPdfData;
     generatePDF(UlbLogoForPdf, pdfData, fileName);
 }

@@ -10,6 +10,24 @@ import get from 'lodash/get';
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
+export const renderARVData = (usageType, propType, dispatch, state) => {
+
+    console.log("usage type",usageType);
+    //let noOfFloors;
+    let propertyType = get(
+            state.screenConfiguration.preparedFinalObject,
+            "Property.propertyType"
+          ); 
+    console.log("propertyType",propertyType);
+    const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.arv"; 
+    if (propertyType === "VACANT") {
+        set(state.screenConfiguration.preparedFinalObject,"Property.arvValue", "");
+        dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", true));
+       // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
+    }else{
+        dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", false));
+    }
+}
 
 export const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
 
@@ -21,10 +39,10 @@ export const renderNoOfFloorData = (usageType, propType, dispatch, state) => {
           ); 
     console.log("propertyType",propertyType);
     const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFloors"; 
-    if (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "VACANT") {
+    if (propertyType === "VACANT") {
         set(state.screenConfiguration.preparedFinalObject,"Property.noOfFloors", "");
         dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", true));
-       // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
+       //dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
     }else{
         dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", false));
     }
@@ -62,7 +80,7 @@ export const renderNoOfFlatsData = (usageType, propType, dispatch, state) => {
           ); 
     console.log("propertyType",propertyType);
     const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.noOfFlats"; 
-    if (propertyType === "BUILTUP.INDEPENDENTPROPERTY" || propertyType === "VACANT") {
+    if (propertyType === "VACANT") {
         set(state.screenConfiguration.preparedFinalObject,"Property.noOfFlats", "");
         dispatch(handleField('register-property', additionalDetailsJson, "props.disabled", true));
        // dispatch(handleField('register-property', additionalDetailsJson, "props.visible", false));
@@ -81,11 +99,12 @@ export const rendersubUsageType = (usageType, propType, dispatch, state) => {
     state.screenConfiguration.preparedFinalObject,
     "Property.propertyType"
   );  
-const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType"; 
+  const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.propertyAssemblyDetails.children.cardContent.children.propertyAssemblyDetailsContainer.children.subUsageType"; 
 
   let subUsage;
     if (propertyType === "BUILTUP.SHAREDPROPERTY" || propertyType === "BUILTUP.INDEPENDENTPROPERTY") {
-        if (usageType === "NONRESIDENTIAL.COMMERCIAL" || usageType === "NONRESIDENTIAL.INDUSTRIAL" || usageType === "NONRESIDENTIAL.INSTITUTIONAL") {
+        if (usageType === "NONRESIDENTIAL.COMMERCIAL" || usageType === "NONRESIDENTIAL.INDUSTRIAL" || usageType === "NONRESIDENTIAL.INSTITUTIONAL"
+        || usageType === "NONRESIDENTIAL.OTHERS") {
             dispatch(handleField('register-property', additionalDetailsJson, "visible", true));
             dispatch(handleField('register-property', additionalDetailsJson, "props.visible", true));
             if (usageType === "MIXED") {
@@ -176,6 +195,7 @@ export const propertyAssemblyDetails = getCommonCard({
           renderNoOfFloorData(usageType, action.value, dispatch, state)
           renderNoOfFlatsData(usageType, action.value, dispatch, state)
           renderAreaData(usageType, action.value, dispatch, state)
+          renderARVData(usageType, action.value, dispatch, state)
         // }
       }
     }),
@@ -191,7 +211,8 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_LAND_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: /^[1-9]\d{0,9}(\.\d{1,3})?%?$/,
+      //pattern: /^[1-9]\d{0,7}(\.\d{1,2})?%?$/,
+      pattern: /^[1-9]\d{0,7}?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.landArea"
     }),
@@ -207,7 +228,7 @@ export const propertyAssemblyDetails = getCommonCard({
         labelKey: "PT_COMMON_TOTAL_CONSTRUCTED_AREA_PLACEHOLDER"
       },
       required: true,
-      pattern: /^[1-9]\d{0,9}(\.\d{1,3})?%?$/,
+      pattern: /^[1-9]\d{0,7}?%?$/,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Property.superBuiltUpArea"
     }),
@@ -240,32 +261,50 @@ export const propertyAssemblyDetails = getCommonCard({
         rendersubUsageType(action.value, propType, dispatch, state)
       }
     }),
-    subUsageType: getSelectField({
-      label: {
-        labelName: "Sub Usage Type",
-        labelKey: "PT_COMMON_SUB_USAGE_TYPE"
-      },
-      placeholder: {
-        labelName: "Select Sub Usage Type",
-        labelKey: "PT_COMMON_SUB_USAGE_TYPE_PLACEHOLDER"
-      },
-      required: true,
-      visible: false,
-      jsonPath: "Property.subUsageCategory",
-      sourceJsonPath: "propsubusagetypeForSelectedusageCategory",
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
-      props:{
-       
-      },
-      localePrefix: {
-        moduleName: "COMMON",
-        masterName: "PROPSUBUSGTYPE"
-      },
-    }),
+
+subUsageType:{
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-pt",
+    componentPath: "AutosuggestContainer",
+    props: {
+        style: {
+            width: "100%",
+            cursor: "pointer"
+          },
+        label: {
+            labelName: "Sub Usage Type",
+            labelKey: "PT_COMMON_SUB_USAGE_TYPE"
+        },
+  
+        placeholder: {
+            labelName: "Select Sub Usage Type",
+            labelKey: "PT_COMMON_SUB_USAGE_TYPE_PLACEHOLDER"
+        },
+     
+        localePrefix: {
+            moduleName: "COMMON",
+       			 masterName: "PROPSUBUSGTYPE"
+        },
+        jsonPath: "Property.subUsageCategory",
+        sourceJsonPath:"propsubusagetypeForSelectedusageCategory",
+        className: "autocomplete-dropdown pds-search",
+        labelsFromLocalisation: true,
+        required: true,        
+        disabled: false,
+        isClearable: true,      
+        fullwidth: true,
+     
+    },
+    required: true,
+    visible: false,
+    jsonPath: "Property.subUsageCategory",
+    gridDefination: {
+        xs: 12,
+        sm:12,
+        md: 6
+    },
+    
+ },
     noOfFloors: getTextField({
           label: {
             labelName: "No of Floors",
@@ -277,8 +316,8 @@ export const propertyAssemblyDetails = getCommonCard({
             labelName: "Enter Number of Floors",
             labelKey: "PT_COMMON_NO_OF_FLOORS_PLACEHOLDER"
           },
-          required: true,
-          pattern: /^[1-9]\d{0,9}(\.\d{1,3})?%?$/,
+          required: false,
+          pattern: /^[1-9]\d{0,9}?%?$/,
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           jsonPath: "Property.noOfFloors"
         }),
@@ -293,10 +332,32 @@ export const propertyAssemblyDetails = getCommonCard({
                 labelName: "Enter Number of Flats",
                 labelKey: "PT_COMMON_NO_OF_FLATS_PLACEHOLDER"
               },
-              required: true,
-              pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+              required: false,
+              pattern: /^[1-9]\d{0,9}?%?$/,
               errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
               jsonPath: "Property.noOfFlats"
-            })
+            }),
+        arv:getTextField({
+                  label: {
+                    labelName: "ARV",
+                    labelKey: "PT_COMMON_ARV"
+                  },
+                  props: {
+                  },
+                  placeholder: {
+                    labelName: "Enter Arv",
+                    labelKey: "PT_COMMON_ARV_PLACEHOLDER"
+                  },
+                  required: false,
+                  pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+                  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+                  jsonPath: "Property.arvValue"
+                })
   })
-});
+},
+{
+    style: {
+      overflow: "visible"
+    }
+  }
+  );

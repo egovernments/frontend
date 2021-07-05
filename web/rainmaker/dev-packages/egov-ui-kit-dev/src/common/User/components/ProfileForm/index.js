@@ -13,7 +13,7 @@ const ProfileForm = ({ name, emailId, handleMailChange, handleNameChange }) => {
           fullWidth={true}
           value={name}
           hintText={<Label label="CORE_COMMON_NAME_PLACEHOLDER" />}
-          floatingLabelText={<Label label="PT_OWNER_NAME" />}
+          floatingLabelText={<Label label="PT_COMMON_TABLE_COL_OWNER_NAME" />}
           onChange={handleNameChange}
           isRequired={true}
         />

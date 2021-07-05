@@ -4,7 +4,12 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import commonConfig from "config/common.js";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
+const locale = getLocale() || "en_IN";
+const localizationLabelsData = initLocalizationLabels(locale);
 const formConfig = {
   name: "ownerInfo",
   fields: {
@@ -12,8 +17,8 @@ const formConfig = {
       id: "ownerName",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].name",
       type: "textfield",
-      floatingLabelText: "PT_OWNER_NAME",
-      hintText: "PT_FORM3_OWNER_NAME_PLACEHOLDER",
+      floatingLabelText: "PT_COMMON_TABLE_COL_OWNER_NAME",
+      hintText: "PT_SEARCH_OWNER_NAME_PLACEHOLDER",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: /^[a-zA-Z\.\s]{1,64}$/i,
@@ -24,8 +29,8 @@ const formConfig = {
       id: "ownerMobile",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].mobileNumber",
       type: "textfield",
-      floatingLabelText: "PT_FORM3_MOBILE_NO",
-      hintText: "PT_FORM3_MOBILE_NO_PLACEHOLDER",
+      floatingLabelText: "PT_OWNER_MOBILE_NO",
+      hintText: "PT_COMMON_APPLICANT_MOBILE_NO_PLACEHOLDER",
       required: true,
       pattern: /^([0]|((\+\d{1,2}[-]{0,1})))?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i,
       errorMessage: "PT_MOBILE_NUMBER_ERROR_MESSAGE",
@@ -38,7 +43,7 @@ const formConfig = {
         "Properties[0].propertyDetails[0].owners[0].fatherOrHusbandName",
       type: "textfield",
       floatingLabelText: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
-      hintText: "PT_FORM3_GUARDIAN_PLACEHOLDER",
+      hintText: "PT_COMMON_ENTER_FATHER_OR_HUSBAND_NAME",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       disabled: true
@@ -56,8 +61,8 @@ const formConfig = {
       id: "ownerEmail",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].emailId",
       type: "textfield",
-      floatingLabelText: "PT_FORM3_EMAIL_ID",
-      hintText: "PT_FORM3_EMAIL_ID_PLACEHOLDER",
+      floatingLabelText: "PT_OWNERSHIP_INFO_EMAIL_ID",
+      hintText: "PT_MUTATION_APPLICANT_EMAIL_PLACEHOLDER",
       errorMessage: "Enter valid email id",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/
@@ -66,8 +71,8 @@ const formConfig = {
       id: "ownerAddress",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].permanentAddress",
       type: "textfield",
-      floatingLabelText: "PT_FORM3_CORRESPONDENCE_ADDRESS",
-      hintText: "PT_FORM3_CORRESPONDENCE_ADDRESS_PLACEHOLDER",
+      floatingLabelText: "PT_OWNERSHIP_INFO_CORR_ADDR",
+      hintText: "PT_COMMON_AUTHORISED_ADDRESS_PLACEHOLDER",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: /^[<>()\-+_\|\[\]\\.,;:\s$*@'"\/#%& 0-9A-Za-z]{1,500}$/,
       errorMessage: "PT_ADDRESS_ERROR_MESSAGE"
@@ -90,8 +95,9 @@ const formConfig = {
       required: true,
       jsonPath: "Properties[0].propertyDetails[0].owners[0].ownerType",
       type: "singleValueList",
-      floatingLabelText: "PT_FORM3_SPECIAL_CATEGORY",
-      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      defaultSort:false,
+      floatingLabelText: "PT_OWNERSHIP_INFO_USER_CATEGORY",
+      hintText: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER",
       dropDownData: [],
       fullWidth: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
@@ -234,10 +240,10 @@ const formConfig = {
       floatingLabelText: "PT_FORM3_DOCUMENT_ID_NO",
       hintText: "PT_FORM3_DOCUMENT_ID_NO_PLACEHOLDER",
       hideField: true,
-      toolTip: true,
-      toolTipMessage: "PT_DOCUMENT_ID_TOOLTIP_MESSAGE",
+      //toolTip: true,
+     // toolTipMessage: "PT_DOCUMENT_ID_TOOLTIP_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      disabled: true
+      disabled: true,
     },
     ownerCategoryIdType: {
       id: "ownerCategoryIdType",
@@ -249,8 +255,8 @@ const formConfig = {
       hideField: true,
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
-      toolTip: true,
-      toolTipMessage: "PT_DOCUMENT_ID_TYPE_TOOLTIP_MESSAGE",
+     // toolTip: true,
+     // toolTipMessage: "PT_DOCUMENT_ID_TYPE_TOOLTIP_MESSAGE",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       dropDownData: [], //[{ label: "AADHAR", value: "Aadhar" }, { label: "Driving License", value: "Driving License" }],
       updateDependentFields: ({
@@ -278,9 +284,9 @@ const formConfig = {
             )
           );
         } else {
-          dispatch(setFieldProperty(formKey, "ownerCategoryId", "pattern", ""));
+          dispatch(setFieldProperty(formKey, "ownerCategoryId", "maxLength", 50));
           dispatch(
-            setFieldProperty(formKey, "ownerCategoryId", "errorMessage", "")
+            setFieldProperty(formKey, "ownerCategoryId", "errorMessage", "Enter upto 50 character ID number.")
           );
         }
       },
@@ -297,7 +303,7 @@ const formConfig = {
       type: "checkbox",
       jsonPath: "",
       errorMessage: "",
-      floatingLabelText: "PT_FORM3_ADDRESS_CHECKBOX",
+      floatingLabelText: "PT_COMMON_SAME_AS_PROPERTY_ADDRESS",
       value: "",
       updateDependentFields: ({
         formKey,
@@ -319,15 +325,14 @@ const formConfig = {
           mohalla.dropDownData.find(
             mohallaData => mohallaData.value === get(mohalla, "value", "")
           );
-        if (iscorrAddrSameProp) {
+          const cityValue = (getTranslatedLabel((`TENANT_TENANTS_PB_${city.value}`).replace('.','_').toUpperCase(), localizationLabelsData))
+          if (iscorrAddrSameProp) {
           const correspondingAddress = [
             `${get(houseNumber, "value", "")}`,
             `${get(colony, "value", "")}`,
             `${get(street, "value", "")}`,
             `${get(mohallaDetails, "label", "")}`,
-            `${get(city, "value", "")
-              .split(".")
-              .pop()}`,
+            `${cityValue}`,
             `${get(pincode, "value", "")}`
           ]
             .join(", ")

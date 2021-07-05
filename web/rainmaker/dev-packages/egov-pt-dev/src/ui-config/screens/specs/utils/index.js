@@ -473,7 +473,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      "collection-services/payments/_search",
       "",
       queryObject
     );
@@ -483,7 +483,20 @@ export const getReceiptData = async queryObject => {
     return {};
   }
 };
-
+export const getTransactionDetails = async queryObject => {
+  try {
+    let response = await httpRequest(
+      "post",
+      "pg-service/transaction/v1/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
 export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
@@ -771,7 +784,13 @@ export const getTextToLocalMapping = label => {
         "PT_COMMON_COL_EXISTING_PROP_ID",
         localisationLabels
       );
-
+      case "ABAS Id":
+        return getLocaleLabels(
+          "ABAS Id",
+          "PT_ABAS_ID",
+          localisationLabels
+        );
+  
     case "Address":
       return getLocaleLabels(
         "Address",

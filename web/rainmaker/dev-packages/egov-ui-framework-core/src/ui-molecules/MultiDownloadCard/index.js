@@ -38,6 +38,11 @@ const documentTitle = {
 
 function MultiCardDownloadGrid(props) {
   const { classes, data, ...rest } = props;
+  data && data.sort(function(a, b){
+    if(a.title < b.title) { return -1; }
+    if(a.title > b.title) { return 1; }
+    return 0;
+})
   return (
     <Grid container {...rest}>
       {data && data.length && data.map((item, key) => {

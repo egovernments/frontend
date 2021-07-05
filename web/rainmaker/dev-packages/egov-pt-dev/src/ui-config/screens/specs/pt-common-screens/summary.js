@@ -48,6 +48,8 @@ const setSearchResponse = async (state, dispatch, propertyId, tenantId, action) 
     }]
   );
   dispatch(prepareFinalObject("Property", get(response, "Properties[0]")));
+  let arvvalue = get(response, "Properties[0].units[0].arv", "");
+  dispatch(prepareFinalObject("Property.arvValue", arvvalue));
   let ownershipCategory = get(response, "Properties[0].ownershipCategory", "");
   if (ownershipCategory.includes("INDIVIDUAL")) {
     dispatch(

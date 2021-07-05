@@ -16,7 +16,7 @@ const formConfig = {
       id: "mohalla",
       jsonPath: "Properties[0].address.locality.code",
       type: "textfield",
-      floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
+      floatingLabelText: "PT_PROPERTY_ADDRESS_MOHALLA",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       fullWidth: true,
       boundary: true,
@@ -35,7 +35,7 @@ const formConfig = {
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
       numcols: 6,
-      errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
+      errorMessage: "PT_PROPERTY_DETAILS_EXISTING_PID_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i,
       maxLength: 64

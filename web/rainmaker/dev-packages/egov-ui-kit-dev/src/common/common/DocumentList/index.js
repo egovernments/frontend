@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import UploadSingleFile from "../UploadSingleFile";
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -253,9 +254,10 @@ class DocumentList extends Component {
 
   handleDocument = async (file, fileStoreId) => {
     let { uploadedDocIndex } = this.state;
-    const { prepareFinalObject, documentsUploadRedux } = this.props;
+    const { prepareFinalObject, documentsUploadRedux, showSpinner,hideSpinner } = this.props;
+    showSpinner();
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
-
+    
     prepareFinalObject("documentsUploadRedux", {
       ...documentsUploadRedux,
       [uploadedDocIndex]: {
@@ -269,6 +271,8 @@ class DocumentList extends Component {
         ]
       }
     });
+
+    hideSpinner();
   };
 
   removeDocument = remDocIndex => {
@@ -365,7 +369,7 @@ class DocumentList extends Component {
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
             buttonLabel={this.props.buttonLabel}
-            disabled={card.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
+           // disabled={card.disabled && documentsUploadRedux[key] && documentsUploadRedux[key].documents ? true : false}
           />
         </Grid>
       </Grid>
@@ -445,7 +449,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     prepareFinalObject: (jsonPath, value) =>
-      dispatch(prepareFinalObject(jsonPath, value))
+      dispatch(prepareFinalObject(jsonPath, value)),
+      showSpinner: () => dispatch(showSpinner()),
+    hideSpinner: () => dispatch(hideSpinner()),
   };
 };
 

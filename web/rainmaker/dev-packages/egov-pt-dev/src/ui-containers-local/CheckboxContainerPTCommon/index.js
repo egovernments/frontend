@@ -45,6 +45,10 @@ class CheckboxLabels extends React.Component {
 
   validator = () => {
     const { preparedFinalObject } = this.props;
+    let tenantId = get(
+      preparedFinalObject,
+      "searchScreen.tenantId"
+    );
     let city = get(
       preparedFinalObject,
       "Property.address.city"
@@ -62,10 +66,12 @@ class CheckboxLabels extends React.Component {
       "Property.address.buildingName"
     );
     if (
+      !_.isUndefined(tenantId) &&
       !_.isUndefined(city) &&
-      !_.isUndefined(locality) &&
-      !_.isUndefined(doorNo) &&
-      !_.isUndefined(buildingName)
+      !_.isUndefined(locality) 
+      // &&
+      // !_.isUndefined(doorNo) &&
+      // !_.isUndefined(buildingName)
     ) {
       return true
     } else {
@@ -83,40 +89,66 @@ class CheckboxLabels extends React.Component {
     } = this.props;
 
     if (this.validator()) {
-       let city = get(
-          preparedFinalObject,
-          "Property.address.city"
-        );
-        let locality = get(
-          preparedFinalObject,
-          "Property.address.locality.code"
-        );
-        let doorNo = get(
-          preparedFinalObject,
-          "Property.address.doorNo"
-        );
-        let buildingName = get(
-          preparedFinalObject,
-          "Property.address.buildingName"
-        );
-      let finalAddress = doorNo + ", " + buildingName + ", " + getTextToLocalMapping(city.toUpperCase().replace(/[.]/g,"_") + '_REVENUE_' + locality) + ", " + city.split(".")[1];
+      let tenantId = get(
+        preparedFinalObject,
+        "searchScreen.tenantId"
+      );
+      let city = get(
+        preparedFinalObject,
+        "Property.address.city"
+      );
+      let locality = get(
+        preparedFinalObject,
+        "Property.address.locality.code"
+      );
+      let doorNo = get(
+        preparedFinalObject,
+        "Property.address.doorNo"
+      );
+      let buildingName = get(
+        preparedFinalObject,
+        "Property.address.buildingName"
+      );
+      let finalAddress = doorNo + ", " + buildingName + ", " + getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+      if((doorNo == null || doorNo =="")){
+        if(buildingName == null || buildingName == ""){
+          finalAddress = getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+        }else{
+          finalAddress = buildingName + ", " + getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+        }
+      }else{
+        if(buildingName == null || buildingName == ""){
+          finalAddress =  doorNo + ", " + getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+        }else{
+          finalAddress =  doorNo + ", " + buildingName + ", " + getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+        }
+      }
+      // if((doorNo == null || doorNo =="") && (buildingName != null || buildingName != "")){
+      //   finalAddress = buildingName + ", " + getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+      // } else if((doorNo != null || doorNo !="") && (buildingName == null || buildingName == "")){
+      //   finalAddress = doorNo + ", " + getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+      // } else if((doorNo == null || doorNo =="") && (buildingName == null || buildingName == "")){
+      //   finalAddress = getTextToLocalMapping(tenantId.toUpperCase().replace(/[.]/g, "_") + '_REVENUE_' + locality) + ", " + getTextToLocalMapping('TENANT_TENANTS_' + tenantId.toUpperCase().replace(/[.]/g, "_"));
+      // }
+
       this.setState({ [name]: event.target.checked }, () => {
         approveCheck(jsonPath, this.state.checkedG);
-        finalAddress = (this.state.checkedG)?finalAddress:''
-        let itemObj = jsonPath.lastIndexOf('.')        
-        approveCheck(jsonPath.substring(0,itemObj+1) + destinationJsonPath, finalAddress);
-      });      
-      
+        finalAddress = (this.state.checkedG) ? finalAddress : ''
+        let itemObj = jsonPath.lastIndexOf('.')
+        approveCheck(jsonPath.substring(0, itemObj + 1) + destinationJsonPath, finalAddress);
+      });
+
     } else {
       raiseSnackbarAlert(
-        "PT_COMMON_PROPERTY_LOCATION_FIELD_REQUIRED",
+        "PT_COMMON_PROPERTY_LOCATION_FIELD_REQUIRED", 
         "warning"
       );
     }
   };
-
   render() {
-    const { classes, labelKey, required } = this.props;
+    const { classes, labelKey, required, preparedFinalObject, jsonPath } = this.props;
+     let fieldValue = this.state.checkedG
+    if (jsonPath) fieldValue = get(preparedFinalObject, jsonPath);
 
     return (
       <div
@@ -132,7 +164,7 @@ class CheckboxLabels extends React.Component {
               classes={{ label: "checkbox-button-label" }}
               control={
                 <Checkbox
-                  checked={this.state.checkedG}
+                  checked={fieldValue || this.state.checkedG}
                   onChange={this.handleChange("checkedG")}
                   classes={{
                     root: classes.radioRoot,

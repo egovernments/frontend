@@ -29,11 +29,12 @@ class PaymentHistory extends Component {
             letterSpacing: 1.2,
             fontWeight: "600",
             lineHeight: "35px",
+            paddingTop: "6px",
         };
         const buttonStyle = {
             float: 'right',
             lineHeight: "35px",
-            height: "35px",
+            height: "45px",
             backgroundColor: "rgb(242, 242, 242)",
             boxShadow: "none",
             border: "1px solid rgb(254, 122, 81)",

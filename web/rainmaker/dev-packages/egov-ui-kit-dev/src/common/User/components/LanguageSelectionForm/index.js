@@ -6,6 +6,9 @@ import logo from "egov-ui-kit/assets/images/logo_black.png";
 import filter from "lodash/filter";
 import "./index.css";
 
+
+
+
 const selectedLabelStyle = {
   color: "#ffffff",
 };
@@ -19,7 +22,7 @@ const defaultStyle = {
   border: "1px solid #484848",
   borderRadius: "1px",
   marginRight: "4.65%",
-  height: "44px",
+  height: "44px",          
   lineHeight: "44px",
   width: "28.48%",
   padding: "0 16px",
@@ -67,6 +70,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick,regiona
                   );
                 })}
             </div>
+             
             <div className="button-toggle-container">
               <ButtonGroup
                 items={commonLanguages}

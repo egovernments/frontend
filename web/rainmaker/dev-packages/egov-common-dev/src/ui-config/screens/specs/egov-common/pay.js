@@ -51,6 +51,24 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
     let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
 
+    let rebate = 0;
+    const billDetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails", []);
+    for (let billDetail of billDetails) {
+    if(billDetail.fromPeriod < Date.now() && Date.now() < billDetail.toPeriod) {
+      
+        billDetail.billAccountDetails.forEach(cur => {
+          if (cur.taxHeadCode.indexOf("REBATE") > -1) {
+            rebate = rebate + cur.amount
+          }
+        
+      }); 
+console.log("rebate:::"+rebate)
+      if(rebate!=0){
+        dispatch(prepareFinalObject("isFullPayment", true));
+      }
+    }
+
+    }
     //Collection Type Added in CS v1.1
     payload && dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].billDetails[0].collectionType", "COUNTER"));
     const businessService = get(
@@ -81,7 +99,9 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
 
 
     const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
-    if (isPartialPaymentAllowed) {
+    let isFullPayment =  get(state, "screenConfiguration.preparedFinalObject.isFullPayment",false);
+    dispatch(prepareFinalObject("isFullPayment", isFullPayment));
+    if (isPartialPaymentAllowed && !isFullPayment) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
     }
     if (get(payload, "amount") != undefined) {
@@ -147,6 +167,7 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "pay",
     beforeInitScreen: (action, state, dispatch) => {
+        let isFullPayment = get(state, "screenConfiguration.preparedFinalObject.isFullPayment",false);
         dispatch(unMountScreen("acknowledgement"));
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");

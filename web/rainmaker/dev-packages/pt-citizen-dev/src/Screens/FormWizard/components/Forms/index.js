@@ -7,9 +7,9 @@ import Label from "egov-ui-kit/utils/translationNode";
 import get from "lodash/get";
 
 const options = [
-  { value: "Male", label: <Label label="PT_FORM3_MALE" /> },
-  { value: "Female", label: <Label label="PT_FORM3_FEMALE" /> },
-  { value: "OTHERS", label: <Label label="PT_FORM3_TRANSGENDER" /> },
+  { value: "Male", label: <Label label="PT_COMMON_GENDER_MALE" /> },
+  { value: "Female", label: <Label label="PT_COMMON_GENDER_FEMALE" /> },
+  { value: "OTHERS", label: <Label label="PT_COMMON_GENDER_TRANSGENDER" /> },
 ];
 
 // const guardianOptions = [{ value: "Husband", label: <Label label="Husband" /> }, { value: "Father ", label: <Label label="Father" /> }];
@@ -76,7 +76,7 @@ const OwnerInformation = ({
               <Field fieldKey="ownerName" field={fields["ownerName"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
             <div className="col-sm-6">
-              <Label label={"PT_FORM3_GENDER"} required fontSize={12} labelStyle={styles.labelStyle} bold={true} />
+              <Label label={"PT_GENDER"} required fontSize={12} labelStyle={styles.labelStyle} bold={true} />
               <RadioButton
                 id="gender-selection"
                 name="gender-selection"

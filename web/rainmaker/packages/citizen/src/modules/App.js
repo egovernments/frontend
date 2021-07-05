@@ -116,7 +116,8 @@ class App extends Component {
     const isPublicSearch = location && location.pathname && location.pathname.includes("/withoutAuth/pt-mutation/public-search");
     const isPublicSearchPay = location && location.pathname && location.pathname.includes("/withoutAuth/egov-common/pay");
     const isBirthDeathCertView = location && location.pathname && location.pathname.includes("/withoutAuth/bnd/viewCertificate");
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy && !isPublicSearch && !isPublicSearchPay && !isBirthDeathCertView) {
+    const isPTReceiptView = location && location.pathname && location.pathname.includes("/withoutAuth/pt-mutation/viewReceipt");
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy && !isPublicSearch && !isPublicSearchPay && !isBirthDeathCertView && !isPTReceiptView) {
       if(nextProps.hasLocalisation)
       {
         let url = "/language-selection?";

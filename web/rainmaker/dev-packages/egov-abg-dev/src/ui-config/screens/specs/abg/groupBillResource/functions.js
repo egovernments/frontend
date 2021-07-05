@@ -93,7 +93,9 @@ export const searchApiCall = async (state, dispatch) => {
           ownerName: get(bills[i], "payerName"),
           billDate: get(bills[i], "billDate"),
           status : get(bills[i], "status"),
-          tenantId: tenantId
+          tenantId: tenantId,
+          service:get(bills[i], "businessService"),
+
         })
       }      
     }
@@ -105,7 +107,8 @@ export const searchApiCall = async (state, dispatch) => {
         ["ABG_COMMON_TABLE_COL_BILL_DATE"]:
           convertEpochToDate(item.billDate) || "-",
         ["ABG_COMMON_TABLE_COL_STATUS"]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
-        ["TENANT_ID"]: item.tenantId
+        ["TENANT_ID"]: item.tenantId,
+        ["SERVICE"]: item.service,
       }));
 
       dispatch(

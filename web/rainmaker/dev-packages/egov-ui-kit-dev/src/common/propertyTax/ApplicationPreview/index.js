@@ -22,7 +22,8 @@ import OwnerInfo from "../Property/components/OwnerInfo";
 import PdfHeader from "../Property/components/PdfHeader";
 import PropertyAddressInfo from "../Property/components/PropertyAddressInfo";
 import "./index.css";
-
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
+import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
 
 const innerDivStyle = {
   padding: "0",
@@ -104,6 +105,9 @@ class ApplicationPreview extends Component {
               {
                 name: "SubOwnerShipCategory",
               },
+            {
+              name: "PropertyLocation"
+            },
             ],
           },
         ],
@@ -120,6 +124,7 @@ class ApplicationPreview extends Component {
       "OwnerType",
       "UsageCategoryDetail",
       "SubOwnerShipCategory",
+      "PropertyLocation",
     ]);
     
     const queryObject = [
@@ -133,12 +138,15 @@ class ApplicationPreview extends Component {
     this.fetchApplication();
   };
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
-    const { toggleSnackbarAndSetText } = this.props;
+    const { toggleSnackbarAndSetText,showSpinner, hideSpinner, } = this.props;
     try {
+      showSpinner();
       const payload = await httpRequest("egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      hideSpinner();
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
+      hideSpinner();
       toggleSnackbarAndSetText(
         true,
         {
@@ -150,11 +158,13 @@ class ApplicationPreview extends Component {
     }
   };
   fetchApplication = async () => {
+    const { showSpinner, hideSpinner, } = this.props;
     const applicationType = this.getApplicationType();
     try {
+      showSpinner();
       const payload = await httpRequest(applicationType.endpoint.GET.URL, applicationType.endpoint.GET.ACTION, applicationType.queryParams
       );
-
+      hideSpinner();
       const responseObject = payload[applicationType.responsePath] && payload[applicationType.responsePath].length > 0 && payload[applicationType.responsePath][0];
       if (!responseObject.workflow) {
 
@@ -181,6 +191,7 @@ class ApplicationPreview extends Component {
       }
       this.props.prepareFinalObject(applicationType.dataPath, payload[applicationType.responsePath] && responseObject)
     } catch (e) {
+      hideSpinner();
       console.log(e);
 
     }
@@ -201,6 +212,7 @@ class ApplicationPreview extends Component {
 
   }
   getPropertyId = async (applicationNumber, tenantId) => {
+    const { showSpinner, hideSpinner, } = this.props;
     const applicationType = getQueryValue(window.location.href, "type");
     if (applicationType == 'assessment') {
       const queryObject = [
@@ -208,15 +220,18 @@ class ApplicationPreview extends Component {
         { key: "tenantId", value: tenantId }
       ];
       try {
+        showSpinner();
         const payload = await httpRequest(
           "property-services/assessment/_search",
           "_search",
           queryObject
         );
+        hideSpinner();
         if (payload && payload.Assessments.length > 0) {
           return payload.Assessments[0].propertyId;
         }
       } catch (e) {
+        hideSpinner();
         console.log(e);
       }
     } else {
@@ -225,15 +240,18 @@ class ApplicationPreview extends Component {
         { key: "tenantId", value: tenantId }
       ];
       try {
+        showSpinner();
         const payload = await httpRequest(
           "property-services/property/_search",
           "_search",
           queryObject
         );
+        hideSpinner();
         if (payload && payload.Properties.length > 0) {
           return payload.Properties[0].propertyId;
         }
       } catch (e) {
+        hideSpinner();
         console.log(e);
       }
     }
@@ -289,6 +307,14 @@ class ApplicationPreview extends Component {
     const filteredCity = cities && cities.length > 0 && cities.filter(item => item.code === tenantId);
     return filteredCity ? get(filteredCity[0], "logoId") : "";
   }
+  download() {
+    const { UlbLogoForPdf, properties, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(properties, generalMDMSDataById, UlbLogoForPdf, `pt-acknowledgement-${properties.propertyId}.pdf`);
+  }
+  print() {
+    const { UlbLogoForPdf, properties, generalMDMSDataById } = this.props;
+    generatePTAcknowledgment(properties, generalMDMSDataById, UlbLogoForPdf, 'print');
+  }
 
   render() {
     const { location, documentsUploaded } = this.props;
@@ -322,8 +348,9 @@ class ApplicationPreview extends Component {
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
+    let tenantid = getQueryValue(window.location.href, "tenantId");
     if (get(properties, "tenantId")) {
-      let tenantid = get(properties, "tenantId");
+    tenantid = get(properties, "tenantId");
       // logoUrl = get(properties, "tenantId") ? this.getLogoUrl(get(properties, "tenantId")) : "";
       logoUrl = window.location.origin + `/${commonConfig.tenantId}-egov-assets/${tenantid}/logo.png`;
       corpCity = `TENANT_TENANTS_${get(properties, "tenantId").toUpperCase().replace(/[.:-\s\/]/g, "_")}`;
@@ -332,7 +359,7 @@ class ApplicationPreview extends Component {
     }
     return <div>
       <Screen className={""}>
-        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} />
+        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} tenantId={tenantid} downloadPrintButton={true} download={() => this.download()} print={() => this.print()}/>
         <div className="form-without-button-cont-generic" >
           <div>
             <WorkFlowContainer dataPath={applicationType.dataPath}
@@ -370,11 +397,11 @@ const mapStateToProps = (state, ownProps) => {
   const { propertiesById, loading, } = state.properties || {};
   const { location } = ownProps;
   const { search } = location;
-
   const { preparedFinalObject = {} } = screenConfiguration;
   const { PTApplication = {} } = preparedFinalObject;
   const { propertyId = '' } = PTApplication;
   const { cities } = state.common || [];
+  const { UlbLogoForPdf = '' } = preparedFinalObject;
 
 
 
@@ -382,7 +409,7 @@ const mapStateToProps = (state, ownProps) => {
   const { documentsUploaded } = properties || [];
   return {
     ownProps,
-    generalMDMSDataById, properties, documentsUploaded, propertyId, cities
+    generalMDMSDataById, properties, documentsUploaded, propertyId, cities,UlbLogoForPdf
   };
 };
 
@@ -392,7 +419,9 @@ const mapDispatchToProps = (dispatch) => {
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
-    fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
+    fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId)),
+    showSpinner: () => dispatch(showSpinner()),
+    hideSpinner: () => dispatch(hideSpinner()),
   };
 };
 

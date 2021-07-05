@@ -23,7 +23,7 @@ import "datatables.net-buttons/js/buttons.colVis.min.js";
 import { getResultUrl } from "./commons/url";
 import Label from "egov-ui-kit/utils/translationNode";
 import commonConfig from "config/common.js";
-import { getTenantId, setReturnUrl, localStorageSet ,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, setReturnUrl, localStorageSet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { getLocaleLabels ,getDefaultFontStyle} from "egov-ui-framework/ui-utils/commons.js";
 import "./index.css";
 
@@ -31,10 +31,11 @@ import pdfFonts from "./vfs_fonts";
 const vfs = { ...pdfFonts.vfs }
 const font = {
     Camby: {
-      normal: 'Cambay-Regular.ttf',
-      bold: 'Cambay-Regular.ttf',
-      italics: 'Roboto-Regular.ttf',
-      bolditalics: 'Cambay-Regular.ttf',
+        normal: 'Cambay-Regular.ttf',
+        bold: 'Cambay-Regular.ttf',
+        italics: 'Cambay-Regular.ttf',
+        bolditalics: 'Cambay-Regular.ttf',
+
     }
 };
 pdfMake.vfs = vfs;
@@ -326,7 +327,19 @@ class ShowField extends Component {
         (reportResult.reportHeader[i].type == "currency" || reportResult.reportHeader[i].total)
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
-      } else {
+      } else 
+      if (
+        reportResult &&
+        reportResult.reportHeader &&
+        reportResult.reportHeader.length &&
+        reportResult.reportHeader[i] &&
+        reportResult.reportHeader[i].type == "string" && val &&
+        (val.indexOf("\n") > -1 )
+      ) {
+        return <pre>{val}</pre>;
+      }
+      else
+      {
         return val;
       }
     }

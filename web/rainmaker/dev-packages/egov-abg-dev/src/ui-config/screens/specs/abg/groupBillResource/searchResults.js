@@ -98,7 +98,7 @@ export const searchResults = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) => (
-              <a href="javascript:void(0)" onClick={() => downloadBill(tableMeta.rowData[1], tableMeta.rowData[5])}>{value}</a>
+              <a href="javascript:void(0)" onClick={() => downloadBill(tableMeta.rowData[1], tableMeta.rowData[5],'','',tableMeta.rowData[6])}>{value}</a>
           )
         }
       },  
@@ -109,6 +109,13 @@ export const searchResults = {
       {
         labelName: "Tenant Id",
         labelKey: "TENANT_ID",
+        options: {
+          display: false
+        }
+      },
+      {
+        labelName: "Business service",
+        labelKey: "SERVICE",
         options: {
           display: false
         }

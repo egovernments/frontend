@@ -17,6 +17,8 @@ import store from "ui-redux/store";
 import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import PTInformation from "../AssessmentList/components/PTInformation";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 class PTAcknowledgement extends React.Component {
@@ -28,10 +30,12 @@ class PTAcknowledgement extends React.Component {
   };
 
   componentDidMount = () => {
-    const { fetchProperties, location } = this.props;
+    const { fetchProperties, location,fetchLocalizationLabel } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const tenantId = getQueryValue(search, "tenantId");
+    const locale = getLocale() || "en_IN";
+    fetchLocalizationLabel(locale, tenantId, tenantId);
     fetchProperties([
       { key: "propertyIds", value: propertyId },
       { key: "tenantId", value: tenantId },
@@ -39,8 +43,14 @@ class PTAcknowledgement extends React.Component {
     this.setState({ propertyId: propertyId });
     loadUlbLogo(tenantId);
   };
+  onDCBClick = () => {
+    const { location } = this.props;
+    const { search } = location;
+    const propertyId = getQueryValue(search, "propertyId");
+    store.dispatch(setRoute(`/property-tax/demand-and-collection?propertyId=${propertyId}`));
+  };
   onGoHomeClick = () => {
-    process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/pt-mutation/propertySearch")) : store.dispatch(setRoute("/property-tax"));
+    process.env.REACT_APP_NAME === "Employee" ? store.dispatch(setRoute("/inbox")) : store.dispatch(setRoute("/property-tax"));
   };
   download() {
     const { UlbLogoForPdf, selPropertyDetails, generalMDMSDataById } = this.props;
@@ -108,6 +118,7 @@ class PTAcknowledgement extends React.Component {
       receiptNo = "",
       generalMDMSDataById,
       propertiesById,
+      totalBillAmountDue
     } = this.props;
     const purpose = getPurpose();
     const status = getQueryArg(window.location.href, "status");
@@ -166,6 +177,7 @@ class PTAcknowledgement extends React.Component {
     let ptSubMsg = {};
     let Button1 = { name: "", onClick: "", visibility: false };
     let Button2 = { name: "", onClick: "", visibility: false };
+    let Button3 = { name: "", onClick: "", visibility: false };
     let downloadButton = { menu: downloadMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let printButton = { menu: printMenu, onClick: "", visibility: (purpose === PROPERTY_FORM_PURPOSE.CREATE || purpose === PROPERTY_FORM_PURPOSE.UPDATE) && status === "success" ? true : false };
     let statusIcon = {};
@@ -199,6 +211,8 @@ class PTAcknowledgement extends React.Component {
       };
       Button1 = { name: "PT_GOHOME", buttonClick: this.onGoHomeClick, visibility: true };
       Button2 = { name: "PT_PROCEED_PAYMENT", buttonClick: this.onAssessPayClick, visibility: false };
+      Button3 = { name: "PT_ADD_DEMAND", buttonClick: this.onDCBClick, visibility:   process.env.REACT_APP_NAME === "Citizen" ?false:true };
+
       // downloadButton={menu:downloadMenu,visibility:true} ;
       // printButton={menu:printMenu,visibility:true} ;
     } else if (purpose === PROPERTY_FORM_PURPOSE.UPDATE && status === "success") {
@@ -406,7 +420,7 @@ class PTAcknowledgement extends React.Component {
     return (
       <div>
         <div className="mainContainer flex-container">
-          <PTHeader header={ptHeader && ptHeader.labelKey} subHeaderTitle="PT_PROPERTY_ID" subHeaderValue={propertyId} />
+          <PTHeader header={ptHeader && ptHeader.labelKey} subHeaderTitle="PT_PROPERTY_ID" subHeaderValue={propertyId} totalBillAmountDue={totalBillAmountDue} tenantId={tenantId}/>
           {/* <Label
           label={ptHeader&&ptHeader.labelKey}
           color="rgba(0, 0, 0, 0.87)"
@@ -522,10 +536,26 @@ class PTAcknowledgement extends React.Component {
                     >
                       {Button1 && Button1.visibility && (
                         <Button
+                        className="tax-button"
                           onClick={Button1.buttonClick}
                           label={<Label buttonLabel={true} label={Button1.name} fontSize="16px" />}
                           primary={true}
                           style={{ lineHeight: "auto", minWidth: "inherit", width: "200px" }}
+                        />
+                      )}
+                      </div>
+                       <div
+                      className="button-container col-xs-12 col-md-4 col-lg-2 property-info-access-btn first-button"
+                      style={{ float: "right", right: "20px", width: "auto" }}
+                    >
+                      {/* //&& properties.source != "MUNICIPAL_RECORDS" */}
+                      {properties && properties.source != "MUNICIPAL_RECORDS" && Button3 && Button3.visibility && (
+                        <Button
+                        className="tax-button"
+                          onClick={Button3.buttonClick}
+                          label={<Label buttonLabel={true} label={Button3.name} fontSize="16px" />}
+                          primary={true}
+                          style={{ marginLeft :"20px",lineHeight: "auto", minWidth: "inherit", width: "200px", backgroundColor: "white" }}
                         />
                       )}
                     </div>
@@ -589,6 +619,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
+    fetchLocalizationLabel: (locale, moduleName, tenantId)=> dispatch(fetchLocalizationLabel(locale, moduleName, tenantId))
   };
 };
 

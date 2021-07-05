@@ -1,15 +1,43 @@
 import React, { Component } from "react";
 import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import OldValueLabelContainer from "../../../../../common/common/OldValueLabelContainer";
 import "./index.css";
+import { parseInt } from "lodash";
 
 class PropertyInfoCard extends Component {
   render() {
-    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
+    let { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
 
-    const isModify = getQueryArg(window.location.href, "mode") == 'WORKFLOWEDIT';
+
+    var arr = []
+
+    if (subSection.length) {
+      for (var key of Object.keys(subSection)) {
+        {
+      
+          arr.push({
+            "floor": key,
+            "data": subSection[key]
+          });
+
+
+        }
+      }
+      function compare(a, b) {
+        const floorA = parseInt(a.floor);
+        const floorB = parseInt(b.floor);
+        let comparison = 0;
+        if (floorA > floorB) {
+          comparison = 1;
+        } else if (floorA < floorB) {
+          comparison = -1;
+        }
+        return comparison;
+
+
+      }
+      arr.sort(compare);
+    }
     return (
       <div>
         {items && (
@@ -19,7 +47,7 @@ class PropertyInfoCard extends Component {
             textChildren={
               <div>
                 <div >
-                {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px",marginTop:20 }}>
+                  {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 20 }}>
                     {header && (
                       <Label
                         labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
@@ -29,12 +57,13 @@ class PropertyInfoCard extends Component {
                     )}
                     {{ editIcon } && <span style={{ position: "absolute", right: "25px" }}>{editIcon}</span>}
                   </div>}
-                  
+
                   {items.map((item) => {
-                    if(item){
+                    if (item) {
                       return (
                         <div>
-                          <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                          <div className={item.key === "Property Type" ? "col-sm-3 col-xs-12 assessment-property-type" : "col-sm-3 col-xs-12"}
+                            style={{ marginBottom: 10, marginTop: 5 }}>
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
@@ -49,9 +78,6 @@ class PropertyInfoCard extends Component {
                                 fontSize="16px"
                               />
                             </div>
-                            {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
-                              <OldValueLabelContainer value={item.value} jsonPath={item.jsonPath} oldValue={item.oldValue} />
-                            </div>}
                           </div>
                         </div>
                       );
@@ -60,7 +86,8 @@ class PropertyInfoCard extends Component {
                 </div>
                 {subSection && (
                   <div>
-                    {subSection.map((units, unitIndex) => {
+                    {arr && Array.isArray(arr) && arr.length > 0 && Object.values(arr).map((data, index) => {
+
                       return (
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                           {!hideSubsectionLabel && (
@@ -72,11 +99,11 @@ class PropertyInfoCard extends Component {
                                 fontWeight: "400",
                                 lineHeight: "19px",
                               }}
-                              label={"PROPERTYTAX_FLOOR_" + unitIndex}
+                              label={"PROPERTYTAX_FLOOR_" + arr[index].floor}
                               fontSize="18px"
                             />
                           )}
-                          {units.map((unit, index) => {
+                          { arr[index].data && arr[index].data.map((unit, index) => {
                             const subUnitHeader = hideSubsectionLabel ? undefined : "Unit - " + (index + 1);
                             return <PropertyInfoCard backgroundColor="white" items={unit} header={subUnitHeader}></PropertyInfoCard>;
                           })}

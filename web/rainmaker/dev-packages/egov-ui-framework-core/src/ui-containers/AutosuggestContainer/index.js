@@ -112,7 +112,7 @@ const mapStateToProps = (state, ownprops) => {
     formName
   } = ownprops;
   let errorText = helperText ? helperText : (formName && state.form[formName] && state.form[formName].fields ? getErrorText(state.form[formName].fields, id) : "");
-  console.log("ERROR text ",errorText);
+  console.log("ERROR text ",formName);
   let suggestions =
     data && data.length > 0
       ? data

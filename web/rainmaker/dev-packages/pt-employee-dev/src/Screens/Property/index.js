@@ -87,6 +87,9 @@ class Property extends Component {
               },
               {
                 name: "SubOwnerShipCategory"
+              },
+              {
+                name: "PropertyLocation"
               }
             ]
           }
@@ -103,8 +106,16 @@ class Property extends Component {
       "PropertySubType",
       "OwnerType",
       "UsageCategoryDetail",
-      "SubOwnerShipCategory"
+      "SubOwnerShipCategory",
+      "PropertyLocation"
     ]);
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      commonConfig.tenantId
+    );
     fetchProperties([
       { key: "propertyIds", value: this.props.match.params.propertyId },
       { key: "tenantId", value: this.props.match.params.tenantId }

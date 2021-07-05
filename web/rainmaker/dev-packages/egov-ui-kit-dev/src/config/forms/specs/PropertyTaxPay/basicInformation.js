@@ -23,8 +23,9 @@ const formConfig = {
       jsonPath: "Properties[0].propertyDetails[0].usageCategoryMinor",
       type: "singleValueList",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
-      floatingLabelText: "PT_COMMONS_PROPERTY_USAGE_TYPE",
+      floatingLabelText: "PT_COMMON_USAGE_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
       required: true,
       formName: "basicInformation",
       fullWidth: true,
@@ -52,8 +53,9 @@ const formConfig = {
       jsonPath: "Properties[0].propertyDetails[0].propertySubType",
       type: "singleValueList",
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
-      floatingLabelText: "PT_COMMONS_PROPERTY_TYPE",
+      floatingLabelText: "PT_COMMON_PROPERTY_TYPE",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
       required: true,
       formName: "basicInformation",
       fullWidth: true,
@@ -67,7 +69,7 @@ const formConfig = {
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].landArea`, null));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].buildUpArea`, null));
-        dispatch(removeForm("plotDetails"));
+        //dispatch(removeForm("plotDetails"));
         removeFormKey(formKey, field, dispatch, state);
         let subTypeObject = get(state, `common.generalMDMSDataById.PropertySubType[${field.value}]`);
         if (!isEmpty(subTypeObject)) {
@@ -76,6 +78,7 @@ const formConfig = {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertyType", field.value));
           dispatch(prepareFormData("Properties[0].propertyDetails[0].propertySubType", null));
         }
+        
       },
       dropDownData: [],
     },
@@ -137,7 +140,8 @@ const mergeMaster = (masterOne, masterTwo, parentName = "") => {
   // console.log(masterOneData);
   for (var i = 0; i < masterOneData.length; i++) {
     // masterOneData[i][parentName]=masterOneData[i].code;
-    dropDownData.push({ label: masterOneData[i].name, value: masterOneData[i].code });
+    if(masterOneData[i].code != "SLUM" )
+       dropDownData.push({ label: masterOneData[i].name, value: masterOneData[i].code });
   }
   return dropDownData;
 };

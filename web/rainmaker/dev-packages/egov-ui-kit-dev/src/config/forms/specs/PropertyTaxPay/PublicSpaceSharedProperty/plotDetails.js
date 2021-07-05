@@ -1,5 +1,5 @@
 import { MDMS } from "egov-ui-kit/utils/endPoints";
-import { subUsageType, occupancy, measuringUnit, annualRent, beforeInitFormForPlot, superArea } from "../utils/reusableFields";
+import { subUsageType, occupancy, measuringUnit, annualRent, beforeInitFormForPlot, superArea ,floorName} from "../utils/reusableFields";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 
 const formConfig = {
@@ -9,7 +9,7 @@ const formConfig = {
       id: "assessment-usageType",
       jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryMinor",
       type: "textfield",
-      floatingLabelText: "PT_FORM2_USAGE_TYPE",
+      floatingLabelText: "PT_COMMON_USAGE_TYPE",
       //value: "Public Space",
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       value: "PROPERTYTAX_BILLING_SLAB_PUBLIC_SPACE",
@@ -22,6 +22,7 @@ const formConfig = {
     ...occupancy,
     ...superArea,
     ...measuringUnit,
+    ...floorName,
     ...annualRent,
   },
   isFormValid: false,

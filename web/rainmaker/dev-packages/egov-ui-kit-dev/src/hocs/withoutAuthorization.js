@@ -99,7 +99,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
       const { isOpenLink, ulbLogo, defaultTitle, ulbName, hasLocalisation, languages, ...rest } = this.props;
       const { languageSelected } = this.state;
       const isPublicSearch = this.checkForPublicSeach();
-      const logoClassName = isPublicSearch ? "citizen-header-logo public-search-logo" : "citizen-header-logo"
+      const logoClassName = isPublicSearch ? "public-search-logo" : "citizen-header-logo"
       const { style } = this;
       return (
         <div>

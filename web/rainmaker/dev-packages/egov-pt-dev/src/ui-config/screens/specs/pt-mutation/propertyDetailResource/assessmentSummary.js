@@ -139,7 +139,7 @@ export const assessmentSummary = getCommonGrayCard({
           unitArea: getLabelWithValue(
             {
               labelName: "Built-up area (sq ft)",
-              labelKey: "PT_FORM2_BUILT_AREA"
+              labelKey: "PT_ASSESMENT_INFO_BUILT_UP_AREA"
             },
             {
               jsonPath:
@@ -152,7 +152,7 @@ export const assessmentSummary = getCommonGrayCard({
           annualRent: getLabelWithValue(
             {
               labelName: "Total Annual Rent (INR)",
-              labelKey: "PT_FORM2_TOTAL_ANNUAL_RENT"
+              labelKey: "PT_ASSESMENT_INFO_AREA_RENT"
             },
             {
               jsonPath:

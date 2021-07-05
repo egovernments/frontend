@@ -48,11 +48,20 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "propertySearch",
-      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.oldPropertyCode",
       "props.value",
       ""
     )
   );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.abasPropertyId",
+      "props.value",
+      ""
+    )
+  );
+  
   dispatch(prepareFinalObject(
     "searchScreen.propertyIds",
     ''
@@ -61,10 +70,7 @@ export const resetFields = (state, dispatch) => {
     "searchScreen.mobileNumber",
     ''
   ))
-  dispatch(prepareFinalObject(
-    "searchScreen.oldpropertyids",
-    ''
-  ))
+  
 
 };
 
@@ -183,28 +189,50 @@ export const searchPropertyDetails = getCommonCard({
       errorMessage: "ERR_INVALID_PROPERTY_ID",
       jsonPath: "searchScreen.propertyIds"
     }),
-    // propertyTaxUniqueId: getTextField({
-    //   label: {
-    //     labelName: "Unique Property Id",
-    //     labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_PROPERTY_UNIQUE_ID"
-    //   },
-    //   placeholder: {
-    //     labelName: "Enter Property Tax Unique Id",
-    //     labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_PROPERTY_UNIQUE_ID_PLACEHOLDER"
-    //   },
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4,
+    oldPropertyCode: getTextField({
+      label: {
+        labelName: "Old Property Code",
+        labelKey: "PT_EXISTING_PROPERTY_ID"
+      },
+      placeholder: {
+        labelName: "Enter Old Property Code",
+        labelKey: "PT_EXISTING_PROPERTY_ID_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4,
 
-    //   },
-    //   props:{
-    //     visible: false
-    //   },      
-    //   required: false,
-    //   pattern: /^[a-zA-Z0-9/-]*$/i,
-    //   errorMessage: "ERR_INVALID_PROPERTY_ID",
-    //   jsonPath: "searchScreen.oldpropertyids"
-    // })
+      },
+      props:{
+        visible: false
+      },      
+      required: false,
+      // pattern: /^[a-zA-Z0-9/-]*$/i,
+      errorMessage: "ERR_INVALID_PROPERTY_CODE",
+      jsonPath: "searchScreen.oldpropertyid"
+    }),
+    abasPropertyId: getTextField({
+      label: {
+        labelName: "ABAS Property Id",
+        labelKey: "PT_EXISTING_ABAS_ID"
+      },
+      placeholder: {
+        labelName: "Enter ABAS Property Id",
+        labelKey: "PT_EXISTING_ABAS_ID_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+
+      },
+      props:{
+        visible: false
+      },      
+      required: false,
+      //pattern: /^[a-zA-Z0-9/-]*$/i,
+      errorMessage: "ERR_INVALID_ABAS_ID",
+      jsonPath: "searchScreen.abasPropertyids"
+    })
 
   }),
   button: getCommonContainer({

@@ -198,3 +198,9 @@ export const PAYMENTSEARCH = {
     ACTION: "_search",
   },
 };
+export const FETCHAMENDMENT = {
+  GET: {
+    URL: "/billing-service/amendment/_search",
+    ACTION: "_search",
+  },
+};

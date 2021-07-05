@@ -127,12 +127,15 @@ span{
   @media only screen and (max-width: 768px) {
    .button-container{
      right:0px !important;
+  }
+  .tax-button {
+    padding-top: 10px;
    }
    .first-button{
      min-width: -webkit-fill-available;
    }
    .mainContainer {
-     margin-top: 25% !important;
+     margin-top: 20% !important;
      display: block !important;
      overflow-x: hidden;
      div:nth-child(1){
