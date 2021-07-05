@@ -1,11 +1,17 @@
 @media only screen and (min-width: 768px) {
 #faqs
 {
-    margin-left: 57px;
-    margin-right: 67px;
+    margin-left: 129px;
+    margin-right: 117px;
 }
 #testimonials{
-    margin-left : 20px;
-    margin-right : 20px;
+    margin-left: 129px;
+    margin-right: 80px;
 }
+}
+@media only screen and (max-width: 550px) {
+
+        #testimonials{
+        margin-left: 10%;
+        }
 }

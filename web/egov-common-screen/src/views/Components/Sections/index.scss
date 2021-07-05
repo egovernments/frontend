@@ -6,9 +6,10 @@
  #message{
     background-color: #f3e5de;
     color: #f49666;
-    border-radius: 15px;            
+    border-radius: 10px;            
 }
 @media only screen and (max-width: 550px) {
+    
     #card1
             {
                 height: 230px;
@@ -29,37 +30,50 @@
 
 
 @media only screen and (min-width: 768px) {
+            #container
+            {
+                margin-left: 50px;
+
+            }
+            #griditem
+            {
+                width: auto;
+                z-index: 100;
+            }
 
             #card1
             {
                 height: 230px;
-                margin-top: 250px;
+                margin-top: -214px;
                 margin-left: 61px;
                 width: 436px;
             }
             #card2
             {
                 height: 230px;
-                margin-top: 250px;
+                margin-top: -214px;
                 width: 436px;
                 margin-left: 30px;
             }
             #card3
             {
                 height: 230px;
-                margin-top: 250px;
+                margin-top: -214px;
                 width: 436px;
             }
             #message{
-                margin-left: 59px;
-                width: 92%;
+                margin-left: 128px;
+                width: 85%;
                 background-color: #f3e5de;
                 color: #f49666;
-                border-radius: 15px;            }
+                border-radius: 15px;     
+                margin-top:-76px;      
+                opacity: .8;
+            }
             #leftImage
             {
                 height: 40px;
-                margin-left: -260px;
+                margin-left: -218px;
             }
  }
 
@@ -73,10 +87,13 @@
 
 .faq-title 
 {
-    margin-left: 10px;
+    margin-left: 33%;
+    margin-right: 33%;
+    border-bottom: 10px #f49666;
+
 }
 
 .faq-row-wrapper
 {
-    border-radius: 15px;
+    border-radius: 10px;
 }
