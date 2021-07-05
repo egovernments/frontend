@@ -114,35 +114,35 @@ export default function Footer(props) {
                 <h5>Citizen Details</h5>
               </p>       
               <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
+                href="#"
                 //className={classes.block}
                 target="_blank"
               >
                 Property Tax
               </a>
               <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
+                href="#"
                 //className={classes.block}
                 target="_blank"
               >
                 Trade Licence
               </a>
               <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
+                href="#"
                 //className={classes.block}
                 target="_blank"
               >
                 Right way of Road Cutting/Road digging
               </a>
               <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
+                href="#"
                 //className={classes.block}
                 target="_blank"
               >
                 Complaints
               </a>
               <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
+                href="#"
                 //className={classes.block}
                 target="_blank"
               >
