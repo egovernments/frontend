@@ -86,7 +86,7 @@ export default function SectionNavbars() {
               </Card>
             </GridItem>
             <GridItem xs={12} sm={6} md={4} id="griditem" >
-              <Card   id="card2">
+              <Card   id="card3">
                   <h4 style={{
                      marginLeft: "65px",
                      fontWeight: "500"

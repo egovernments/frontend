@@ -3,7 +3,7 @@ import headerLinksStyle from "assets/jss/material-kit-react/components/headerLin
 
 const navbarsStyle = (theme) => ({
   section: {
-    padding: "70px 0",
+    //padding: "70px 0",
     paddingTop: "0",
   },
   container,

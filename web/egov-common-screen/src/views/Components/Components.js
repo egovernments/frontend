@@ -40,7 +40,7 @@ export default function Components() {
   return (
     <div style={{backgroundColor: "#f3f4f5 !important"}}>
       <SectionNavbars />
-      <SelectCards /> 
+      <div id="homepagecards"> <SelectCards /> </div>
             <Card  id="message" >                   
                 <CardBody >
                 <h4 >Pay your property tax before March 31st get 10% Rebate</h4>
