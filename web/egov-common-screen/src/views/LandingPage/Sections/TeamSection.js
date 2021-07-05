@@ -36,7 +36,7 @@ export default function TeamSection() {
           <GridItem xs={12} sm={3} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
-                <img src={team1} style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
+                <img src={team1} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
                 Gigi Hadid
@@ -56,7 +56,7 @@ export default function TeamSection() {
           <GridItem xs={12} sm={3} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
-                <img src={team1} style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
+                <img src={team1} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
                 Gigi Hadid
@@ -76,7 +76,7 @@ export default function TeamSection() {
           <GridItem xs={12} sm={3} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
-                <img src={team2} style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
+                <img src={team2} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
                 Christian Louboutin
