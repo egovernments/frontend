@@ -19,9 +19,19 @@ class PaymentHistory extends Component {
         };
     }
     getBillPeriod(billDetails = []) {
-        billDetails = billDetails.filter(bd => bd.amountPaid > 0);
-        let latest = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
-        const billPeriod = getFormattedDate(latest[latest.length - 1].fromPeriod) + ' to ' + getFormattedDate(latest[0].toPeriod);
+        let billDetailsNew = billDetails.filter(bd => bd.amountPaid > 0);
+        let latest=null;
+        let billPeriod=null;
+        if(billDetailsNew.length ==0)
+        {
+        latest = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
+        billPeriod = getFormattedDate(latest[0].fromPeriod) + ' to ' + getFormattedDate(latest[0].toPeriod);
+        }
+        else
+        {
+        latest = billDetailsNew.sort((x, y) => y.fromPeriod - x.fromPeriod);
+        billPeriod = getFormattedDate(latest[latest.length - 1].fromPeriod) + ' to ' + getFormattedDate(latest[0].toPeriod);
+        }
         return billPeriod;
 
     }
