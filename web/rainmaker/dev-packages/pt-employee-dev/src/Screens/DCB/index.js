@@ -272,7 +272,7 @@ class FormWizardDataEntry extends Component {
                 (item, i) => {
                   if (
                     generalMDMSDataById.TaxPeriod[item].fromDate ===
-                    demand.taxPeriodFrom
+                    demand.taxPeriodFrom && generalMDMSDataById.TaxPeriod[item].service==='PT'
                   ) {
                     finalYear = 
                     generalMDMSDataById.TaxPeriod[item].financialYear;
@@ -620,7 +620,7 @@ class FormWizardDataEntry extends Component {
               (item, i) => {
                 if (
                   generalMDMSDataById.TaxPeriod[item].fromDate ===
-                  demand.taxPeriodFrom
+                  demand.taxPeriodFrom && generalMDMSDataById.TaxPeriod[item].service==='PT'
                 ) {
                   finalYear = 
                   generalMDMSDataById.TaxPeriod[item].financialYear;
