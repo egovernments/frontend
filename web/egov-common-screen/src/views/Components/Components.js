@@ -43,7 +43,7 @@ export default function Components() {
   return (
     <div style={{backgroundColor: "#f3f4f5 !important"}}>
     <div id="flex-container">
-    <div style={{width: "50%", float:"left", marginLeft: "9%"}}><img
+    <div style={{width: "40%", float:"left", marginLeft: "9%"}}><img
                       src={leftImage}
                       alt="..."
                       style={{
@@ -52,7 +52,7 @@ export default function Components() {
                       }}
                     /></div>
 
-  <div style={{width: "50%", float:"right", marginRight: "5%"}}>
+  <div style={{width: "60%", float:"right", marginRight: "5%"}}>
     <div id = "links" ><h4     style={{padding: "10px", fontWeight:"500"}}>
       <a href="/employee/user/login"  >Employee Login </a></h4>
     <h4 style={{padding: "10px", fontWeight:"500"}} ><a href="" style={{color: "black"}}>   English</a></h4>

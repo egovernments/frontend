@@ -6,11 +6,20 @@
     }
         #bannerimage
         {
-            width:1600px;
+              width: 1519px;
         }
    
     }
 @media only screen and (max-width: 1366px) {
+    #bannerimage
+        {
+              width: 1348px;
+        }
+        #links
+        {
+            display: inline-flex; 
+            margin-left: 100px;
+        }
       
     }
 @media only screen and (min-width: 1200px) {
