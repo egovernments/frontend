@@ -546,7 +546,7 @@ const searchApiCall = async (state, dispatch, index) => {
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.locality != "" && (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != ''|| searchScreenObject.name != '' || searchScreenObject.doorNo != '')) {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != ''|| searchScreenObject.name != '' || searchScreenObject.doorNo != '') {
       formValid = true;
     }
   } else {
