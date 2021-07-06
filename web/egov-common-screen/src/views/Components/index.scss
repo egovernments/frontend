@@ -1,4 +1,4 @@
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 1200px) {
 #faqs
 {
     margin-left: 129px;
@@ -13,7 +13,38 @@
     margin-right: 21px;
 }
 }
-@media only screen and (max-width: 550px) {
+
+@media only screen and (min-width: 992px){
+    #faqs
+    {
+        margin-left: 129px;
+        margin-right: 117px;
+    }
+    #testimonials{
+        margin-left: 129px;
+        margin-right: 80px;
+    }
+    #homepagecards{
+        margin-left: 66px;
+        margin-right: 21px;
+    }
+    }
+    @media only screen and (min-width: 768px){
+        #faqs
+        {
+            margin-left: 124px;
+            margin-right: 70px;
+        }
+        #testimonials{          
+            margin-left: 129px;
+            margin-right: 46px;
+        }
+        #homepagecards{
+            margin-left: 66px;
+            margin-right: 21px;
+        }
+        }
+@media only screen and (max-width: 576px) {
 
         #testimonials{
         margin-left: 10%;
