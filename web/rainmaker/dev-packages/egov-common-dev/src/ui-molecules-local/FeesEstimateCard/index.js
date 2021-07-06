@@ -234,7 +234,11 @@ function FeesEstimateCard(props) {
                     labelKey="pt.amount.message"
                     dynamicArray={[estimate.contactNumber, estimate.email]}
                   /></Typography>
-                 
+                  <br></br>
+                  <Typography variant="body2">  <LabelContainer
+                    labelName="There might be an issue with PNB Bank cards, please use an alternative if possible."
+                    labelKey="NOC_PAYMENT_CAP_PMT_DISCLAIMER"
+                  /></Typography>
                 
             </Grid> ):"" }             
 
