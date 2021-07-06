@@ -30,7 +30,7 @@ export default function Footer(props) {
   });
   return (
     <footer className={footerClasses}>
-      <div className={classes.container} id="footercontainer" >
+      <div  id="footercontainer" >
       <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock} id="footer1" >

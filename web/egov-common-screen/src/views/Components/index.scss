@@ -1,4 +1,20 @@
+@media only screen and (max-width: 1600px) {
+    #links
+    {
+        display: inline-flex; 
+        margin-left: 130px;
+    }
+        #bannerimage
+        {
+            width:1600px;
+        }
+   
+    }
+@media only screen and (max-width: 1366px) {
+      
+    }
 @media only screen and (min-width: 1200px) {
+  
 #faqs
 {
     margin-left: 129px;
@@ -30,6 +46,12 @@
     }
     }
     @media only screen and (min-width: 768px){
+        #links
+        {
+            display: inline-flex; 
+            margin-left: 130px;            
+        }
+        
         #faqs
         {
             margin-left: 124px;
@@ -42,11 +64,32 @@
         #homepagecards{
             margin-left: 66px;
             margin-right: 21px;
+            //margin-top: 20%;
         }
         }
-@media only screen and (max-width: 576px) {
 
+@media only screen and (max-width: 576px) {
+        #links
+        {
+            display: inline-flex; 
+            margin-left: 30px;
+        }
+        #bannerimage
+        {
+            width:auto;
+        }
         #testimonials{
         margin-left: 10%;
         }
 }
+
+#flex-container {
+    display: flex;
+    background-color: #FFF;
+  }
+  #flex-container > div {
+   // background-color: #f1f1f1;
+   margin: 1px;
+  // padding: 16px;
+   font-size: 16px;
+  }
