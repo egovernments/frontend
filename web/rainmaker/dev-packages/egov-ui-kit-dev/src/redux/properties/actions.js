@@ -797,6 +797,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
   "firecess":firecess,
   "cancercess":cancercess,
   "penalty":penalty,
+  "rebate": rebate,
   "interest":interest,
   "usage_exemption":usage_exemption,
   "special_category_exemption": special_category_exemption,
