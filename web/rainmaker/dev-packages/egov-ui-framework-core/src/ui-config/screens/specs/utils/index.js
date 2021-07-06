@@ -582,7 +582,7 @@ export const getPattern = type => {
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":
-      return /^[^\$\"'<>?\\\\~`!@$%^={}\[\]*:;“”‘’]{1,50}$/i;
+      return /^[^\$\"'<>?~`!@$%^={}\[\]*:;“”‘’]{1,50}$/i;
     case "BuildingStreet":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,64}$/i;
     case "Pincode":
