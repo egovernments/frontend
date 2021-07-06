@@ -643,9 +643,9 @@ export const searchPropertyDetails = getCommonCard({
         errorMessage: "ERR_REQUIRED_FILED",    
         jsonPath: "searchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
-        required: true,
+        //required: true,
         props: {
-          required: true,
+          //required: true,
     //      disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
         },
         gridDefination: {
