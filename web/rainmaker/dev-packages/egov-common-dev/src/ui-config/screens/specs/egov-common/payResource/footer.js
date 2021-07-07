@@ -6,7 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { convertDateToEpoch, ifUserRoleExists, validateFields } from "../../utils";
+import { convertDateToEpoch, ifUserRoleExists, validateFields,getBill } from "../../utils";
 import { paybuttonJsonpath } from "./constants";
 import "./index.css";
 import $ from 'jquery';
@@ -202,7 +202,7 @@ export const callPGService = async (state, dispatch) => {
   }
 };
 
-const moveToSuccess = (dispatch, receiptNumber) => {
+const moveToSuccess = async (dispatch, receiptNumber) => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const businessService = getQueryArg(window.location, "businessService");
@@ -213,6 +213,24 @@ const moveToSuccess = (dispatch, receiptNumber) => {
   if (businessService && businessService.indexOf("BPA") > -1) {
     moduleName = "egov-bpa"
   }
+  const queryObj = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    {
+      key: "consumerCode",
+      value: consumerCode
+    }
+  ];
+  if(businessService){
+    queryObj.push({
+      key: "businessService",
+      value: businessService
+    });
+  }
+  const payload = await getBill(queryObj,dispatch);
+
   const url = `${appendUrl}/${moduleName}/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}&businessService=${businessService}&purpose=${"pay"}`;
   const ackSuccessUrl = isPublicSearch() ? `/withoutAuth${url}` : url;
   dispatch(
