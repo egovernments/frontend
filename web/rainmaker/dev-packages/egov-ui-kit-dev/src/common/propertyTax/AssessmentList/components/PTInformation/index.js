@@ -87,7 +87,7 @@ class PTInformation extends React.Component {
                   [{ key: "businessService", value: items.module },
                 { key: "consumerCode", value: details.connectionNo },
                 { key: "tenantId", value: getTenantId() }]);
-                bills.push(billDetails);
+                billDetails && bills.push(billDetails);
                 if ( bills && bills.length > 0 && items.module === "WS") {
                   bills.map(bill => {
                     waterDetails.push({

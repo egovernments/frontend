@@ -320,9 +320,9 @@ class OwnerInfo extends Component {
   }
   
   openDialog = async (dialogName) => {
-    const { properties, totalDues } = this.props;
+    const { properties, waterDetails, sewerDetails } = this.props;
     const { propertyId, tenantId } = properties;
-    if (this.props.totalBillAmountDue === 0 && Object.keys(totalDues).length <= 0 && dialogName !== "viewHistory") {
+    if (this.props.totalBillAmountDue === 0 && waterDetails.length == 0 && sewerDetails.length == 0 && dialogName !== "viewHistory") {
       if (properties.status != "ACTIVE") {
         this.props.toggleSnackbarAndSetText(
           true,
@@ -345,7 +345,7 @@ class OwnerInfo extends Component {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
 
     }
-    else if(this.props.totalBillAmountDue !== 0 || Object.keys(totalDues).length > 0){
+    else if(this.props.totalBillAmountDue !== 0 || waterDetails.length > 0 || sewerDetails.length > 0){
       this.setState({ pendingAmountDue: true });
     }
      else {

@@ -714,6 +714,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
   "cancercess":cancercess,
   "penalty":penalty,
   "interest":interest,
+  "rebate": rebate,
   "usage_exemption":usage_exemption,
   "special_category_exemption": special_category_exemption,
   "adhoc_penalty":adhoc_penalty,
