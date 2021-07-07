@@ -40,9 +40,9 @@ if(typeof key!='string'){
 }
 key=key.trim&&key.trim()||key;
 key=key.toUpperCase&&key.toUpperCase()||key;
+key=key.replace(/[.:-\s\/]/g, "_")||key;
 return key;
 }
-
 
 
 class ShowField extends Component {
