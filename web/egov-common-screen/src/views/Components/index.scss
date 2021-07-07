@@ -1,104 +1,151 @@
 @media only screen and (max-width: 1600px) {
-    #links
-    {
-        display: inline-flex; 
+    #links {
+        display: inline-flex;
         margin-left: 130px;
     }
-        #bannerimage
-        {
-              width: 1519px;
-        }
-   
+
+    #bannerimage {
+        width: 1519px;
     }
-@media only screen and (max-width: 1366px) {
-    #bannerimage
-        {
-              width: 1348px;
-        }
-        #links
-        {
-            display: inline-flex; 
-            margin-left: 100px;
-        }
-      
-    }
-@media only screen and (min-width: 1200px) {
-  
-#faqs
-{
-    margin-left: 129px;
-    margin-right: 117px;
-}
-#testimonials{
-    margin-left: 129px;
-    margin-right: 80px;
-}
-#homepagecards{
-    margin-left: 66px;
-    margin-right: 21px;
-}
+
 }
 
-@media only screen and (min-width: 992px){
-    #faqs
-    {
+@media only screen and (max-width: 1366px) {
+    #bannerimage {
+        width: 1348px;
+    }
+
+    #links {
+        display: inline-flex;
+        margin-left: 100px;
+    }
+
+}
+
+@media only screen and (min-width: 1200px) {
+
+    #faqs {
         margin-left: 129px;
         margin-right: 117px;
     }
-    #testimonials{
+
+    #testimonials {
         margin-left: 129px;
         margin-right: 80px;
     }
-    #homepagecards{
+
+    #homepagecards {
         margin-left: 66px;
         margin-right: 21px;
     }
+}
+
+@media only screen and (min-width: 992px) {
+    #faqs {
+        margin-left: 129px;
+        margin-right: 117px;
     }
-    @media only screen and (min-width: 768px){
-        #links
-        {
-            display: inline-flex; 
-            margin-left: 130px;            
-        }
-        
-        #faqs
-        {
-            margin-left: 124px;
-            margin-right: 70px;
-        }
-        #testimonials{          
-            margin-left: 129px;
-            margin-right: 46px;
-        }
-        #homepagecards{
-            margin-left: 66px;
-            margin-right: 21px;
-            //margin-top: 20%;
-        }
-        }
+
+    #testimonials {
+        margin-left: 129px;
+        margin-right: 80px;
+    }
+
+    #homepagecards {
+        margin-left: 66px;
+        margin-right: 21px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    #links {
+        display: inline-flex;
+        margin-left: 130px;
+    }
+
+    #faqs {
+        margin-left: 124px;
+        margin-right: 70px;
+    }
+
+    #testimonials {
+        margin-left: 129px;
+        margin-right: 46px;
+    }
+
+    #homepagecards {
+        margin-left: 66px;
+        margin-right: 21px;
+        //margin-top: 20%;
+    }
+}
 
 @media only screen and (max-width: 576px) {
-        #links
-        {
-            display: inline-flex; 
-            margin-left: 30px;
-        }
-        #bannerimage
-        {
-            width:auto;
-        }
-        #testimonials{
+    #links {
+        display: inline-flex;
+        margin-left: 30px;
+    }
+
+    #bannerimage {
+        width: auto;
+    }
+
+    #testimonials {
         margin-left: 10%;
-        }
+    }
 }
 
 #flex-container {
     display: flex;
     background-color: #FFF;
-  }
-  #flex-container > div {
-   // background-color: #f1f1f1;
-   margin: 1px;
-  // padding: 16px;
-   font-size: 16px;
-  }
+}
+
+#flex-container>div {
+    // background-color: #f1f1f1;
+    margin: 1px;
+    // padding: 16px;
+    font-size: 16px;
+}
+
+/*   @media only screen and (max-width: 576px) {
+    #root
+    {
+        margin-right: -20%;
+    }
+  } */
+@media only screen and (max-width: 320px) {
+    #root {
+        margin-right: -1%;
+        margin-left: 1%;
+    }
+}
+
+@media screen and (min-width: 321px) and (max-width: 360px) {
+
+
+    #root {
+        margin-right: -5%;
+    }
+}
+
+@media screen and (min-width: 361px) and (max-width: 375px) {
+
+
+    #root {
+        margin-right: 2%;
+    }
+}
+
+@media screen and (min-width: 378px) and (max-width: 413px) {
+    #root {
+        margin-right: 0%;
+        margin-left: 1%;
+    }
+}
+
+@media screen and (min-width: 414px) and (max-width: 555px) {
+    #root {
+        margin-right: 10%;
+        margin-left: 1%;
+    }
+}
