@@ -128,15 +128,7 @@ const propertyLocationDetails = {
               masterName: "PB"
             },
              jsonPath: "applyScreen.property.address.city", callBack: handleNA },
-          {
-            labelKey: "WS_OLD_LABEL_NAME"
-          },
-          { 
-            localePrefix: {
-              moduleName: "TENANT_TENANTS",
-              masterName: "PB"
-            },
-            jsonPath: "applyScreenOld.property.address.city", callBack: handleNA },
+
         ),
         reviewLocation: getLabelWithValueForModifiedLabel(
           {
