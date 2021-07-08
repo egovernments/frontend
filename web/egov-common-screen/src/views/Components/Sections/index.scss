@@ -1,7 +1,7 @@
-#navbar
+/* #navbar
 {
 /*     width: 300px;
- */}
+ } */
 
  #message{
     background-color: #f3e5de;
@@ -29,12 +29,12 @@
 }
 
 
-@media only screen and (min-width: 768px) {
-            #container
+@media only screen and (min-width: 800px) {
+           /*  #container
             {
                 //margin-left: 50px;
 
-            }
+            } */
             #griditem
             {
                 width: auto;
@@ -79,11 +79,11 @@
 
 @media only screen and (min-width: 992px) {
 
-    #container
+  /*   #container
     {
         //margin-left: 50px;
 
-    }
+    } */
     #griditem
     {
         width: auto;
@@ -128,11 +128,11 @@
 
 @media only screen and (min-width: 1200px) {
 
-    #container
+    /* #container
     {
         //margin-left: 50px;
 
-    }
+    } */
     #griditem
     {
         width: auto;
