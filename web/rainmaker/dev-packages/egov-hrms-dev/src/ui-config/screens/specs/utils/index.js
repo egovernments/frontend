@@ -655,7 +655,14 @@ export const resetFieldsForApplication = (state, dispatch) => {
       ""
     )
   );
-  
+  dispatch(
+    handleField(
+      "create",
+      "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children.employeeId",
+      "props.value",
+      ""
+    )
+  );
 };
 export const resetFieldsForApplicationn = (state, dispatch) => {
   dispatch(
