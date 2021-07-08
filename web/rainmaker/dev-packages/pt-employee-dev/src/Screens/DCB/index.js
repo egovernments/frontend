@@ -1319,10 +1319,11 @@ class FormWizardDataEntry extends Component {
                 let hasPropertyTax = false;
                 let propertyTaxAmount = 0;
                 let totalRebateAmount = 0;
-               let totalCollectedAmount =0;
+               let totalCollectedAmount = 0;
                 // let previousYear=data1;
                 Object.keys(data.demand[data1]).forEach((data2, key2) => {
-                  totalCollectedAmount = totalCollectedAmount + parseFloat(data.demand[data1][data2].PT_COLLECTED);
+                  totalCollectedAmount = totalCollectedAmount + parseFloat((data.demand[data1][data2].PT_COLLECTED));
+                  if (isNaN(totalCollectedAmount)) totalCollectedAmount = 0; 
                   if (
                     !data.demand[data1][data2].PT_DEMAND &&
                     data.demand[data1][data2].PT_COLLECTED &&
@@ -1397,9 +1398,10 @@ class FormWizardDataEntry extends Component {
                     // }
                   }
                 });  
-                if(!Number.isInteger(totalCollectedAmount)) {
+                
+               if(!Number.isInteger(totalCollectedAmount)) {
                   errorCode = "ERR09_DEMAND_ENTER_THE_DATA";
-                }              
+                }            
                 if (!currentYearEnteredValueLength) {
                   arrayOfEmptyYears.push(key);
                 } else {
