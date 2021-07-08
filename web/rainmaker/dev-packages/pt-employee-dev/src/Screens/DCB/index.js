@@ -294,7 +294,7 @@ class FormWizardDataEntry extends Component {
                  ),
                  prepareFinalObject(
                    `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
-                   `${Math.trunc(demandData.collectionAmount)}`
+                   `${(demandData.collectionAmount)}`
                  );
                prepareFinalObject(
                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].ID`,
@@ -1319,8 +1319,10 @@ class FormWizardDataEntry extends Component {
                 let hasPropertyTax = false;
                 let propertyTaxAmount = 0;
                 let totalRebateAmount = 0;
+               let totalCollectedAmount =0;
                 // let previousYear=data1;
                 Object.keys(data.demand[data1]).forEach((data2, key2) => {
+                  totalCollectedAmount = totalCollectedAmount + parseFloat(data.demand[data1][data2].PT_COLLECTED);
                   if (
                     !data.demand[data1][data2].PT_DEMAND &&
                     data.demand[data1][data2].PT_COLLECTED &&
@@ -1328,6 +1330,7 @@ class FormWizardDataEntry extends Component {
                   ) {
                     errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
                   }
+            
                   if (data.demand[data1][data2].PT_DEMAND) {
                     currentYearEnteredValueLength++;
                     if (previousKey != -1) {
@@ -1393,7 +1396,10 @@ class FormWizardDataEntry extends Component {
                     
                     // }
                   }
-                });                
+                });  
+                if(!Number.isInteger(totalCollectedAmount)) {
+                  errorCode = "ERR09_DEMAND_ENTER_THE_DATA";
+                }              
                 if (!currentYearEnteredValueLength) {
                   arrayOfEmptyYears.push(key);
                 } else {
@@ -1477,7 +1483,12 @@ class FormWizardDataEntry extends Component {
               "The Collection amount is greater than zero value "
             );
             break;  
-            
+            case "ERR09_DEMAND_ENTER_THE_DATA":
+              callToggleSnackbar(
+                "ERR09_DEMAND_ENTER_THE_DATA",
+                "The total collection amount should be whole number "
+              );
+              break;
           default:
             if (arrayOfEmptyYears.length > 0) {
               prepareFinalObject("DemandProperties", DemandProperties);
@@ -2343,11 +2354,11 @@ class FormWizardDataEntry extends Component {
                 taxAmount:
                   demandValue.PT_DEMAND != "" ? demandValue.PT_DEMAND : 0
                 ,
-                collectionAmount: parseInt(
+                collectionAmount: 
                   demandValue.PT_COLLECTED != ""
                     ? demandValue.PT_COLLECTED
                     : 0
-                )
+                
               });
             });
 
