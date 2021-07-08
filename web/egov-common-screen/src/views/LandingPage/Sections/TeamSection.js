@@ -33,7 +33,7 @@ export default function TeamSection() {
     <div className={classes.section}>
       <div>
         <GridContainer>
-          <GridItem xs={12} sm={3} md={3}>
+          <GridItem xs={12} sm={6} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team1} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
@@ -53,7 +53,7 @@ export default function TeamSection() {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={3} md={3}>
+          <GridItem xs={12} sm={6} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team1} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
@@ -73,7 +73,7 @@ export default function TeamSection() {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={3} md={3}>
+          <GridItem xs={12} sm={6} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team2} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
@@ -93,7 +93,7 @@ export default function TeamSection() {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={3} md={3}>
+          <GridItem xs={12} sm={6} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
                 <img src={team3} style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
