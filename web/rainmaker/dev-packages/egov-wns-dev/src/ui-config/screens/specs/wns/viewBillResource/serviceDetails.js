@@ -14,6 +14,10 @@ export const serviceType = getLabelWithValue(
         labelKey: "WS_SERV_DETAIL_SERV_LABEL"
     },
     {
+        localePrefix: {
+            moduleName: "WS",
+            masterName: "APPLY"
+        },
         jsonPath: "WaterConnection[0].service"
     }
 );

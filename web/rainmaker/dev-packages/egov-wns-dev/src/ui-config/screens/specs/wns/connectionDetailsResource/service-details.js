@@ -27,7 +27,7 @@ export const renderService1 = () => {
   
     if (connectionType === "Metered") {
       return getCommonContainer({
-        serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { jsonPath: "WaterConnection[0].service" }),
+        serviceType: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_SERV_LABEL" }, { localePrefix: { moduleName: "WS", masterName: "APPLY" }, jsonPath: "WaterConnection[0].service" }),
         //connectionCategory: getLabelWithValue({ labelKey: "WS_SERV_DETAIL_CONN_CATEGORY" }, { jsonPath: "WaterConnection[0].connectionCategory" }),
         oldConnectionNo : getLabelWithValue({ labelKey: "WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL" }, { jsonPath: "WaterConnection[0].oldConnectionNo" }),
 
