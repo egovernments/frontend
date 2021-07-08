@@ -54,9 +54,9 @@ export default function SectionNavbars() {
                   <p className={classes.description} style={{marginTop: "-36px"}}><br />
                   PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
                     <br />
-                    <a href="#pablo">Pay Property Tax </a> <br /> 
-                    <a href="#pablo">Register Property </a><br />
-                    <a href="#pablo">Apply for Ownership Transfer </a><br />
+                    <a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax </a> <br /> 
+                    <a href="/citizen/user/login">Register Property </a><br />
+                    <a href="/citizen/user/login">Apply for Ownership Transfer </a><br />
                   </p>
                 </CardBody>
               </Card>
@@ -79,8 +79,8 @@ export default function SectionNavbars() {
                   <p className={classes.description} style={{marginTop: "-36px"}} ><br />
                 PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
                     <br />
-                    <a href="#pablo">New Application</a> <br /> 
-                    <a href="#pablo">Renewal of Licence </a><br />
+                    <a href="/citizen/user/login">New Application</a> <br /> 
+                    <a href="/citizen/user/login">Renewal of Licence </a><br />
                   </p>
                 </CardBody>
               </Card>
@@ -102,7 +102,7 @@ export default function SectionNavbars() {
                 <p className={classes.description} style={{marginTop: "-36px"}}><br />
                 PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
                     <br />
-                    <a href="#pablo">Apply</a> <br /> 
+                    <a href="http://enagarsewa.uk.gov.in/" target="_blank" rel="noreferrer">Apply</a> <br /> 
                   </p>
                 </CardBody>               
               </Card>
