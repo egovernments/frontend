@@ -23,6 +23,7 @@ import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
+import cloneDeep from "lodash/cloneDeep";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -900,7 +901,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
    
     if(process.env.REACT_APP_NAME != "Citizen" ){
       //Manipulate waterSrc and SubSrc for calculator
-      let billEstimateWaterObj = convPayload.WaterConnection[0];
+      let billEstimateWaterObj = cloneDeep(convPayload.WaterConnection[0]);
       billEstimateWaterObj.waterSource = convPayload.WaterConnection[0].waterSourceSubSource;
       let queryObjectForEst = [{
         applicationNo: applicationNumber,
