@@ -8,6 +8,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 
 const getHeader = label => {
@@ -120,11 +122,21 @@ const propertyLocationDetails = {
             labelName: "City",
             labelKey: "WS_PROP_DETAIL_CITY"
           },
-          { jsonPath: "applyScreen.property.address.city", callBack: handleNA },
+          {
+            localePrefix: {
+              moduleName: "TENANT_TENANTS",
+              masterName: "PB"
+            },
+             jsonPath: "applyScreen.property.address.city", callBack: handleNA },
           {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "applyScreenOld.property.address.city", callBack: handleNA },
+          { 
+            localePrefix: {
+              moduleName: "TENANT_TENANTS",
+              masterName: "PB"
+            },
+            jsonPath: "applyScreenOld.property.address.city", callBack: handleNA },
         ),
         reviewLocation: getLabelWithValueForModifiedLabel(
           {
@@ -185,11 +197,13 @@ const propertyLocationDetails = {
             labelName: "Locality/Mohalla",
             labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
           },
-          { jsonPath: "applyScreen.property.address.locality.name", callBack: handleNA },
+          {             
+            jsonPath: "applyScreen.property.address.locality.name", callBack: handleNA },
           {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "applyScreenOld.property.address.locality.name", callBack: handleNA },
+          {             
+            jsonPath: "applyScreenOld.property.address.locality.name", callBack: handleNA },
         ),
         // reviewPincode: getLabelWithValueForModifiedLabel(
         //   {
@@ -260,7 +274,7 @@ const getPropertyDetails = {
               jsonPath: "applyScreenOld.property.propertyType",
               callBack: handleNA,
               localePrefix: {
-                moduleName: "WS",
+                moduleName: "PT",
                 masterName: "PROPTYPE"
               }
             }
@@ -361,6 +375,17 @@ const getPropertyDetails = {
               labelKey: "WS_OLD_LABEL_NAME"
             },
             { jsonPath: "applyScreenOld.property.noOfFlats", callBack: handleNA },
+          ),
+          reviewArv: getLabelWithValueForModifiedLabel(
+            {
+              labelName: "ARV",
+              labelKey: "WS_PROP_DETAIL_ARV_LABEL"
+            },
+            { jsonPath: "applyScreen.property.units[0].arv", callBack: handleNA },
+            {
+              labelKey: "WS_OLD_LABEL_NAME"
+            },
+            { jsonPath: "applyScreenOld.property.units[0].arv", callBack: handleNA },
           ),
           // rainwaterHarvestingFacility: getLabelWithValueForModifiedLabel(
           //   {
@@ -670,6 +695,10 @@ export const taskApplicationType = getLabelWithValueForModifiedLabel(
     labelKey: "WS_APPLY_FOR"
   },
   {
+    localePrefix: {
+      moduleName: "WS",
+      masterName: "APPLY"
+    },
     jsonPath: "applyScreen.service",
     callBack: handleNA
   },
@@ -708,6 +737,26 @@ export const taskPipeSizeProposed = getLabelWithValueForModifiedLabel(
   },
   { jsonPath: "applyScreenOld.proposedPipeSize", callBack: handleNA },
 )
+
+export const taskUsageCategoryProposed = getLabelWithValueForModifiedLabel(
+  {
+      labelName:"No of  usage category proposed",
+      labelKey: "WS_COMMON_USAGE_TYPE",        
+  },
+  {
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "WSUSGTYPE"
+      },
+      jsonPath: "applyScreen.proposedUsageCategory",
+      callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  { jsonPath: "applyScreenOld.proposedUsageCategory", callBack: handleNA },
+  
+  );
 
 export const taskNoOfClosets = getLabelWithValueForModifiedLabel(
   {
@@ -754,6 +803,7 @@ export const renderService = () => {
     taskApplicationType,
     taskNumberOfTapsPropsed,
     taskPipeSizeProposed,
+    taskUsageCategoryProposed,
     taskNoOfClosets,
     taskNoOfToilets,
     taskDrainageSizeProposed

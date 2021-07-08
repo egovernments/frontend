@@ -33,11 +33,12 @@ import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 let headerLabel = "WS_APPLICATION_NEW_CONNECTION_HEADER";
 const applicationNo = getQueryArg(window.location.href, "applicationNumber");
 if(isModifyMode()){
-  if(applicationNo.includes("WS")){
-  headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
-  }else{
-  headerLabel = "SW_APPLICATION_MODIFY_CONNECTION_HEADER";
-  }
+  headerLabel = "WS_MODIFY_CONNECTION_HEADER";
+  // if(applicationNo.includes("WS")){
+  // headerLabel = "WS_APPLICATION_MODIFY_CONNECTION_HEADER";
+  // }else{
+  // headerLabel = "SW_APPLICATION_MODIFY_CONNECTION_HEADER";
+  // }
 }
 
 const headerrow = getCommonContainer({
@@ -520,6 +521,43 @@ const getAcknowledgementCard = (
         tenant
       )
     };
+  } else if (purpose === "resubmit" && status === "success") {
+    return {
+      commonHeader: commonHeader(state,
+        dispatch,
+        applicationNumber,
+        tenant),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Re-Submitted Successfully",
+              labelKey: "TL_APPLICATION_RESUBMIT_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to registered Mobile No.",
+              labelKey: "WS_APPLICATION_FORWARD_SUCCESS_SUBHEAD"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "WS_ACK_COMMON_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
   } else if (purpose === "activate" && status === "success") {
 
     return {
@@ -704,8 +742,16 @@ export const downloadPrintContainer = (
       break;
     case "PENDING_FOR_CONNECTION_ACTIVATION":
     case "CONNECTION_ACTIVATED":
+      if(isModifyMode())
+      {
+        downloadMenu = [wsEstimateDownloadObject, applicationDownloadObject];
+        printMenu = [wsEstimatePrintObject, applicationPrintObject];
+      }
+      else
+      {
       downloadMenu = [sanctionDownloadObject, wsEstimateDownloadObject, applicationDownloadObject];
       printMenu = [sanctionPrintObject, wsEstimatePrintObject, applicationPrintObject];
+      }
       break;
     case "REJECTED":
       downloadMenu = [applicationDownloadObject];

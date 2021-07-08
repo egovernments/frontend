@@ -45,11 +45,11 @@ class AddLinkForProperty extends React.Component {
             labelKey="WS_SEARCH_PROPERTY" />
           </a> <span> </span>
 
-          <a href="javascript:void(0)" onClick={selectedPropertyId? () => routeTo(modifyLink):""} >
+          {/* <a href="javascript:void(0)" onClick={selectedPropertyId? () => routeTo(modifyLink):""} >
             <LabelContainer
               style={clickHereStyles}
               labelKey="WS_MODIFY_PROPERTY" />
-          </a>
+          </a> */}
         </div>
       );
     } else {

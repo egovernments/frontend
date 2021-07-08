@@ -4,11 +4,12 @@ import {
   getCommonContainer, getCommonHeader,
   getTextField,
   getSelectField,
+  getLabel,
   getPattern,
   getCommonParagraph, getCommonTitle, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {disableField,enableField, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { set } from "lodash";
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
@@ -31,12 +32,14 @@ import { getOwnerDetails, ownerDetailsHeader, ownershipType } from "./applyResou
 import { getExistingConnectionDetails } from "./applyResource/existingConnectionDetails";
 import { getPropertyDetails } from "./applyResource/property-locationDetails";
 import { getPropertyIDDetails, propertyHeader, propertyID } from "./applyResource/propertyDetails";
-import { reviewConnectionDetails, snackbarWarningMessage,reviewRoadCuttingUserEntry } from "./applyResource/reviewConnectionDetails";
+import { reviewConnectionDetails, snackbarWarningMessage, reviewRoadCuttingUserEntry } from "./applyResource/reviewConnectionDetails";
 import { reviewDocuments } from "./applyResource/reviewDocuments";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import { reviewOwner } from "./applyResource/reviewOwner";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
-
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { WaterSewerageOnProperty } from "./applyResource/functions";
 import './index.css'
 
 let isMode = isModifyMode();
@@ -58,6 +61,16 @@ export const getHeaderLabel = () => {
   }
   return process.env.REACT_APP_NAME === "Citizen" ? "WS_APPLY_NEW_CONNECTION_HEADER" : "WS_APPLICATION_NEW_CONNECTION_HEADER"
 }
+
+const headerrow = getCommonContainer({
+  header: getCommonTitle(
+    {
+      labelName: "Required Documents",
+      labelKey: "WS_DOCUMENT_DETAILS_HEADER"
+    },
+  )
+});
+
 
 export const header = getCommonContainer({
   headerDiv: getCommonContainer({
@@ -92,8 +105,6 @@ export const reviewDocumentDetails = reviewDocuments();
 
 export const reviewModificationsDetails = (isModifyMode()) ? reviewModificationsEffective(process.env.REACT_APP_NAME !== "Citizen") : {};
 
-//export const reviewRoadCuttingUserEntry = reviewRoadCuttingUserEntryDetails();
-//export const reviewRoadCuttingUserEntry = reviewRoadCuttingUserEntry ();
 
 const summaryScreenCitizen = getCommonCard({
   reviewConnDetails,
@@ -104,22 +115,88 @@ const summaryScreenEMP = getCommonCard({
   reviewModificationsDetails,
   reviewDocumentDetails,
   reviewOwnerDetails,
- // reviewRoadCuttingUserEntry
+  // reviewRoadCuttingUserEntry
 })
 
 
 let summaryScreen = process.env.REACT_APP_NAME === "Citizen" ? summaryScreenCitizen : summaryScreenEMP;
+
+
 export const documentDetails = getCommonCard({
-  header: getCommonTitle(
-    { labelName: "Required Documents", labelKey: "WS_DOCUMENT_DETAILS_HEADER" },
-    { style: { marginBottom: 18 } }
-  ),
-  subText: getCommonParagraph({
-    labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "WS_DOCUMENT_DETAILS_SUBTEXT"
-  }),
-  break: getBreak(),
+  div: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    children: {
+      
+      headerDiv: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+         children: {
+          header1: {
+            gridDefination: {
+              xs: 8,
+              sm: 8
+            },
+            ...headerrow
+          }
+          ,
+       
+          helpSection: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+              color: "primary",
+              style: { justifyContent: "flex-end" }, 
+            },
+            gridDefination: {
+            
+              xs: 4,
+              sm: 4,
+              align: "right"
+            },
+            children : {
+              helpPdfButton:{
+                componentPath:"Button", 
+               
+         
+                props:{
+                  //variant: "outlined",
+                  color:"primary",                 
+                  style: { textAlign: "right", display: "flex" },
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: (state, dispatch) => {
+                  downloadSelfDeclerationForm(state, dispatch);
+                  }
+                },
+                children:{
+                  
+                  nextButtonIcon:{
+                    uiFramework:"custom-atoms",
+                    componentPath:"Icon",
+                    props:{
+                      iconName:"cloud_download"
+                    }
+                  },
+                  nextButtonLabel:getLabel({
+                    labelName:"Self Declearation Form",
+                    labelKey:"WS_SELFDECLERATION_FORM"
+                  }),
+                },
+                            
+               }
+            }
+          }
+        }
+       },      
+       paragraph: getCommonParagraph({
+        labelName:
+          "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
+        labelKey: "WS_DOCUMENT_DETAILS_SUBTEXT"
+      }),
+    }
+  },
   documentList: {
     uiFramework: "custom-containers-local",
     moduleName: "egov-wns",
@@ -139,15 +216,29 @@ export const documentDetails = getCommonCard({
   }
 });
 
- 
+
+
+export const downloadSelfDeclerationForm = async (state, dispatch) => {  
+  try{
+    const helpurl = get(state.screenConfiguration.preparedFinalObject,
+      "selfDecFormURL",
+      ""
+    );  
+    window.open(helpurl,"_blank");
+  }catch(er){
+    console.log("errror in opening pdf ",er);
+  }
+  
+}
+
 export const getMdmsData = async dispatch => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
       moduleDetails: [
-        { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" }] },
-        { moduleName: "tenant", masterDetails: [{ name: "tenants" }] },
-        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" },{ name: "PipeSize" }] },
+        { moduleName: "common-masters", masterDetails: [{ name: "OwnerType" }, { name: "OwnerShipCategory" },{ name: "Help" }] },
+        { moduleName: "tenant", masterDetails: [{ name: "tenants" }, { name: "citymodule" }] },
+        { moduleName: "sw-services-calculation", masterDetails: [{ name: "Documents" }, { name: "RoadType" }, { name: "PipeSize" }] },
         { moduleName: "ws-services-calculation", masterDetails: [{ name: "PipeSize" }] },
         {
           moduleName: "ws-services-masters", masterDetails: [
@@ -157,17 +248,25 @@ export const getMdmsData = async dispatch => {
             { name: "TaxHeadMaster" },
             { name: "motorInfo" },
             { name: "authorizedConnection" },
-            { name: "workflowBasedCardPermission" }
+            { name: "workflowBasedCardPermission" },
+            { name: "waterUsage"}
           ]
         },
-        { moduleName: "PropertyTax", masterDetails: [{ name: "PTWorkflow" },{ name: "PropertyOwnershipCategory" }]}
+        { moduleName: "PropertyTax", 
+             masterDetails: 
+             [{ name: "PTWorkflow" }, 
+             { name: "PropertyOwnershipCategory" }
+            //  { name: "UsageCategory" },
+            //  { name: "UsageCategoryMajor" },
+            //  { name: "UsageCategoryMinor" },
+            //  { name: "UsageCategorySubMinor" },
+            ]}
       ]
     }
   };
   try {
-    let payload = null;
-    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-    console.info("Payload==>",payload);
+    let payload = null;    
+    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);   
     if (payload.MdmsRes['sw-services-calculation'].PipeSize !== undefined && payload.MdmsRes['sw-services-calculation'].PipeSize.length > 0) {
       let drainageSize = [];
       payload.MdmsRes['sw-services-calculation'].PipeSize.forEach(obj => drainageSize.push({ code: obj.size, name: obj.id, isActive: obj.isActive }));
@@ -214,6 +313,40 @@ export const getMdmsData = async dispatch => {
       payload.MdmsRes['ws-services-masters'].SURFACE = SURFACE;
       payload.MdmsRes['ws-services-masters'].PIPE = PIPE;
     }
+    //Water usage type
+    let waterUsage = [], waterSubUsage = [];   
+    payload.MdmsRes['ws-services-masters'].waterUsage.forEach(obj => {
+      if(obj.code.includes('.')){
+        waterSubUsage.push({
+          code: obj.code,
+          name: obj.name,
+          isActive: obj.active
+        });
+      }
+      else{
+        waterUsage.push({
+          code: obj.code,
+          name: obj.name,
+          isActive: obj.active
+        }); 
+      }
+         
+    })    
+    
+    payload.MdmsRes['ws-services-masters'].waterSubUsage = waterSubUsage;
+    payload.MdmsRes['ws-services-masters'].waterUsage = waterUsage;
+
+    // let filteredWaterUsage = waterUsage.reduce((filteredWaterUsage, item) => {
+    //   if (!filteredWaterUsage.some(filteredItem => JSON.stringify(filteredItem.code) == JSON.stringify(item.code)))
+    //   filteredWaterUsage.push(item)
+    //   return filteredWaterUsage
+    // }, [])
+    
+    // payload.MdmsRes['ws-services-masters'].waterSubUsage = payload.MdmsRes['ws-services-masters'].waterUsage;
+    // payload.MdmsRes['ws-services-masters'].waterUsage = filteredWaterUsage;
+    
+    //Water usage type
+
 
     //related to ownershipcategory
     let OwnerShipCategory = get(
@@ -237,17 +370,28 @@ export const getMdmsData = async dispatch => {
     payload.MdmsRes['common-masters'].Institutions = institutions;
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
 
-    
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    
+      let selfDecFormURL = get(
+        payload,
+        "MdmsRes.common-masters.Help",
+        []
+        ).filter(item =>item.code ==="WS_SELFDECLERATION_FORM" );
+ 
+  dispatch(prepareFinalObject("selfDecFormURL", selfDecFormURL[0].URL)); 
+  
+  
   } catch (e) { console.log(e); }
 };
 
 const showHideFieldModifyConnection = (action) => {
   let fieldsChanges = [
-    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard", false],
+    ["components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink",false],
+    ["components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.wnsPtySearchButton",false],
+    ["components.div.children.formwizardFirstStep.children.OwnerInfoCard", false],     
     ["components.div.children.formwizardFourthStep.children.snackbarWarningMessage.children.clickHereLink", true],
-    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven", false],
-    ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight", false],
+   // ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewSeven", false],
+   // ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewEight", false],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewNine", false],
     ["components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewTen", false],
   ]
@@ -260,7 +404,7 @@ const showHideFieldModifyConnection = (action) => {
   }
 }
 
-export const getData = async (action, state, dispatch) => {
+export const getData = async (action, state, dispatch) => { 
   let applicationNo = getQueryArg(window.location.href, "applicationNumber");
   const connectionNo = getQueryArg(window.location.href, "connectionNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -268,49 +412,48 @@ export const getData = async (action, state, dispatch) => {
   const actionType = getQueryArg(window.location.href, "action");
   let mStep = (isModifyMode()) ? 'formwizardSecondStep' : 'formwizardThirdStep';
   await getMdmsData(dispatch);
-  if(tenantId){
+  if (tenantId) {
     await getCBMdmsData(dispatch, tenantId);
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
   }
-  
-
-
+        
   if (applicationNo) {
-    //Edit/Update Flow ----
+    //Edit/Update Flow ----   
     let queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNo }
-    ];
-    if (actionType && (actionType.toUpperCase() === "EDIT")) {
+     ];
+     if (actionType && (actionType.toUpperCase() === "EDIT")) {
       if (connectionNo) {
         handleApplicationNumberDisplay(dispatch, connectionNo)
       } else {
         handleApplicationNumberDisplay(dispatch, applicationNo)
       }
       let payloadWater, payloadSewerage;
-      if (applicationNo.includes("SW")) {
-        try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
-        payloadSewerage.SewerageConnections[0].water = false;
-        payloadSewerage.SewerageConnections[0].sewerage = true;
-        payloadSewerage.SewerageConnections[0].service = "Sewerage";
-        dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
-      } else {
-        try { payloadWater = await getSearchResults(queryObject) } catch (error) { console.error(error); };
-        payloadWater.WaterConnection[0].water = true;
-        payloadWater.WaterConnection[0].sewerage = false;
-        payloadWater.WaterConnection[0].service = "Water";
-        dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
-        if (get(payloadWater, "WaterConnection[0].waterSource", null) && get(payloadWater, "WaterConnection[0].waterSubSource", null)) {
-          dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", [{
-            waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
-            waterSubSource: get(payloadWater, "WaterConnection[0].waterSourceSubSource", null)
-          }]))
-        } else if (get(payloadWater, "WaterConnection[0].waterSource", null)) {
-          dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", [{
-            waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
-            waterSubSource: get(payloadWater, "WaterConnection[0].waterSourceSubSource", null)
-          }]))
-        }
-      }
+       if (applicationNo.includes("SW")) {
+         try { payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch) } catch (error) { console.error(error); }
+         payloadSewerage.SewerageConnections[0].water = false;
+         payloadSewerage.SewerageConnections[0].sewerage = true;
+         payloadSewerage.SewerageConnections[0].service = "Sewerage";
+         dispatch(prepareFinalObject("SewerageConnection", payloadSewerage.SewerageConnections));
+       } else {
+         try { payloadWater = await getSearchResults(queryObject) } catch (error) { console.error(error); };
+         payloadWater.WaterConnection[0].water = true;
+         payloadWater.WaterConnection[0].sewerage = false;
+         payloadWater.WaterConnection[0].service = "Water";
+         dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
+         if (get(payloadWater, "WaterConnection[0].waterSource", null) && get(payloadWater, "WaterConnection[0].waterSubSource", null)) {
+           dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", [{
+             waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
+             waterSubSource: get(payloadWater, "WaterConnection[0].waterSourceSubSource", null)
+           }]))
+         } else if (get(payloadWater, "WaterConnection[0].waterSource", null)) {
+           dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", [{
+             waterSourceType: get(payloadWater, "WaterConnection[0].waterSource", null),
+             waterSubSource: get(payloadWater, "WaterConnection[0].waterSourceSubSource", null)
+           }]))
+         }
+       }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
       if (waterConnections.length > 0) {
         waterConnections[0].additionalDetails.locality = get(waterConnections[0], "property.address.locality.code");
@@ -331,11 +474,16 @@ export const getData = async (action, state, dispatch) => {
       if (isModifyMode() && !isModifyModeAction()) {
         // this delete for initiate modify connection 
         delete combinedArray[0].id; combinedArray[0].documents = [];
+        
+        if (waterConnections.length > 0)
+           waterConnections[0].plumberInfo =[];
+        if (sewerageConnections.length > 0) 
+           sewerageConnections[0].plumberInfo =[];
       }
       if (isModifyMode() && isModifyModeAction()) {
-        // ModifyEdit should not call create.
+        // ModifyEdit should not call create.       
         dispatch(prepareFinalObject("modifyAppCreated", true));
-      }
+      }      
 
       dispatch(prepareFinalObject("applyScreen", findAndReplace(combinedArray[0], "null", "NA")));
       // For oldvalue display
@@ -506,36 +654,87 @@ export const getData = async (action, state, dispatch) => {
           )
         );
       }
-    
-      
-      if (propertyID) {
+
+
+      if (propertyID) {       
         let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-        getApplyPropertyDetails(queryObject, dispatch, propertyID)
-      } else {
-        let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")
+        getApplyPropertyDetails(queryObject, dispatch, propertyID, tenantId, state)
+      } else {       
+        let propId = get(state.screenConfiguration.preparedFinalObject, "applyScreen.property.propertyId")       
+        //Aleady existing connection count
+        let queryObjectProperty = [];
+        queryObjectProperty = [{ key: "searchType", value: "CONNECTION" }];
+        queryObjectProperty.push({ key: "tenantId", value: tenantId });
+        queryObjectProperty.push({ key: "propertyId", value: propId });
+        try {           
+          let payloadWater = await getSearchResults(queryObjectProperty);
+          let wsConns = get(payloadWater,"WaterConnection",[]); 
+          let count = wsConns.length; 
+          let connStr =[];         
+          wsConns.forEach(obj => connStr.push(obj.connectionNo));
+          dispatch(prepareFinalObject("applyScreen.existingWaterConnCount", count));
+          dispatch(prepareFinalObject("applyScreen.existingWaterConn", connStr.join(", ")));          
+        } catch (error) { console.error(error); };
+        try {
+          let payloadSewerage = await getSearchResultsForSewerage(queryObject, dispatch);
+          let swConns = get(payloadSewerage, "SewerageConnections", []);
+          let count = swConns.length;
+          let connStr = [];
+          swConns.forEach(obj => connStr.push(obj.connectionNo));
+          dispatch(prepareFinalObject("applyScreen.existingSewerageConnCount", count));
+          dispatch(prepareFinalObject("applyScreen.existingSewerageConn", connStr.join(", ")));
+        } catch (error){ console.error(error); };
+        //Connection count
         dispatch(prepareFinalObject("searchScreen.propertyIds", propId));
       }
       //For Modify Connection hide the connection details card
       if (isModifyMode()) {
         showHideFieldModifyConnection(action);
+        //Disable property Id field
+        disableField('apply', "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID", dispatch);
+
+        if(data.waterSource == "OTHERS")
+        {         
+          enableField('apply', 'components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo', dispatch);
+        }
+        else
+        {
+          disableField('apply', 'components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.sourceInfo', dispatch);
+        }
       }
       let docs = get(state, "screenConfiguration.preparedFinalObject");
       await prefillDocuments(docs, "displayDocs", dispatch);
     }
-  } else if (propertyID) {
+  } else if (propertyID) {   
     let queryObject = [{ key: "tenantId", value: tenantId }, { key: "propertyIds", value: propertyID }];
-    getApplyPropertyDetails(queryObject, dispatch, propertyID)
+    getApplyPropertyDetails(queryObject, dispatch, propertyID, tenantId, state)
+    WaterSewerageOnProperty(tenantId, propertyID, dispatch)
+    if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+      toggleWaterFeilds(action, true);
+      toggleSewerageFeilds(action, true);
+    } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+      toggleWaterFeilds(action, false);
+      toggleSewerageFeilds(action, true);
+    } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water")) {
+      toggleWaterFeilds(action, true);
+      toggleSewerageFeilds(action, false);
+    }
+    else {
+      toggleWaterFeilds(action, false);
+      toggleSewerageFeilds(action, false);
+    }
     togglePropertyFeilds(action, true);
   }
 };
-const  getApplicationNoLabel= () => {
-  if (isModifyMode()&& !isModifyModeAction()) {
+const getApplicationNoLabel = () => {
+  if (isModifyMode() && !isModifyModeAction()) {
     return "WS_ACKNO_CONNECTION_NO_LABEL";
   }
-  return  "WS_ACKNO_APP_NO_LABEL" ;
+  return "WS_ACKNO_APP_NO_LABEL";
 }
 
-const checkCardPermission =(state,cardName) =>{
+const checkCardPermission = (state, cardName) => {
+  
   let workFlowStatus = get(
     state,
     "screenConfiguration.preparedFinalObject.applyScreen.applicationStatus",
@@ -546,63 +745,141 @@ const checkCardPermission =(state,cardName) =>{
     "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.workflowBasedCardPermission",
     []
   );
-  cardList = cardList.filter( (card) => card.code.includes(cardName));
-  if(cardList.length >0 && cardList[0].status.includes(workFlowStatus) ){
-    return true;
+  
+  let appType =isModifyMode()?"MODIFY":"NEW";
+
+  cardList = cardList.filter((card) => card.code.includes(cardName) && card.workflow.includes(appType) );
+
+  let accessFlag = false;
+  if(cardList.length > 0 ){    
+    for(var i=0;i<cardList.length;i++){
+        if(cardList[i].status.includes(workFlowStatus)){
+          console.info("YES, present so return true")
+          accessFlag = true;
+          break;
+        }                
+    }   
   }
-  return false;
+  return accessFlag;    
+  }
+ 
+ 
+ 
+//   if (cardList.length > 0 && cardList[0].status.includes(workFlowStatus)) {
+//     return true;
+//   }
+//   return false;
+// }
 
-}
-
-const getApplyPropertyDetails = async (queryObject, dispatch, propertyID) => {
+const getApplyPropertyDetails = async (queryObject, dispatch, propertyID, tenantId, state) => {
   let payload = await getPropertyResults(queryObject, dispatch);
-  let propertyObj = payload.Properties[0];
+  let propertyObj = payload.Properties[0]; 
   if (!isActiveProperty(propertyObj)) {
     dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${propertyObj.status}`, labelName: `Property Status is ${propertyObj.status}` }, "warning"));
     showHideFieldsFirstStep(dispatch, propertyObj.propertyId, false);
   }
+  if (propertyObj && propertyObj.owners && propertyObj.owners.length > 0) {
+    propertyObj.owners = propertyObj.owners.filter(owner => owner.status == "ACTIVE");
+  }
   dispatch(prepareFinalObject("applyScreen.property", findAndReplace(propertyObj, null, "NA")));
   dispatch(prepareFinalObject("searchScreen.propertyIds", propertyID));
   showHideFieldsFirstStep(dispatch, propertyObj.propertyId, true);
-      if(propertyID){
-        let ownershipCategory = get(payload, "Properties[0].ownershipCategory", "");
-        if (ownershipCategory.includes("INDIVIDUAL")) {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
-              "visible",
-              true
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
-              "visible",
-              false
-            )
-          );
-        }
+  if (propertyID) {
+    const mohallaLocalePrefix = {
+      moduleName: tenantId,
+      masterName: "REVENUE"
+    };
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.Details.children.cardContent.children.propertyDetail.children.viewFour.children.locality.children.value.children.key",
+        "props.localePrefix",
+        mohallaLocalePrefix
+      )
+    );
+
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFourthStep.children.summaryScreen.children.cardContent.children.reviewConnDetails.children.cardContent.children.viewTwo.props.items[0].item0.children.cardContent.children.propertyLocationDetailsContainer.children.reviewLocalityOrMohalla.children.value1.children.key",
+        "props.localePrefix",
+        mohallaLocalePrefix
+      )
+    );
+
+
+    let ownershipCategory = get(payload, "Properties[0].ownershipCategory", "");
+    if (ownershipCategory.includes("INDIVIDUAL")) {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
+          "visible",
+          true
+        )
+      );      
+    } else {
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.institutionSummary",
+          "visible",
+          true
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.ownerDetail.children.applicantSummary",
+          "visible",
+          false
+        )
+      );
+    }
+  }
+
+  let tenantIdProp = get(payload, "Properties[0].tenantId", "");
+  if (tenantIdProp) {
+    const wsTenant = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.tenant.citymodule").filter(city => city.code == 'WS')[0].tenants.filter(tenant => tenant.code == tenantIdProp);
+    const swTenant = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.tenant.citymodule").filter(city => city.code == 'SW')[0].tenants.filter(tenant => tenant.code == tenantIdProp);
+    if (wsTenant.length > 0) {
+      if (swTenant.length == 0) {
+        dispatch(prepareFinalObject("applyScreen.water", true));
+        dispatch(prepareFinalObject("applyScreen.sewerage", false));
       }
-  
+      dispatch(prepareFinalObject("disableWS", false));
+      //toggleSewerageFeilds(action, true);
+      // toggleWaterFeilds(action, true);
+    }
+    else {
+      dispatch(prepareFinalObject("disableWS", true));
+      //toggleWaterFeilds(action, false);            
+    }
+    if (swTenant.length > 0) {
+      if (wsTenant.length == 0) {
+        dispatch(prepareFinalObject("applyScreen.water", false));
+        dispatch(prepareFinalObject("applyScreen.sewerage", true));
+      }
+      dispatch(prepareFinalObject("disableSW", false));
+      //toggleSewerageFeilds(action, true);
+    }
+    else {
+      dispatch(prepareFinalObject("disableSW", true));
+      // toggleSewerageFeilds(action, false);
+    }
+
+  }
+
+
+
 }
 
 let existingConnectionDetails = getExistingConnectionDetails();
@@ -621,7 +898,7 @@ export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: { id: "apply_form1" },
-  children: { IDDetails, Details,existingConnection, ownerDetails, connectionHolderDetails, OwnerInfoCard }
+  children: { IDDetails, Details, existingConnection, ownerDetails, connectionHolderDetails, OwnerInfoCard }
 };
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
@@ -667,6 +944,7 @@ const pageReset = (dispatch) => {
   dispatch(prepareFinalObject("documentsUploadRedux", {}));
   dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", []));
   dispatch(prepareFinalObject("editWSFlow", false));
+
   existingConnectionDetails = getExistingConnectionDetails();
   propertyDetail = getPropertyDetails();
   propertyIDDetails = getPropertyIDDetails();
@@ -679,189 +957,202 @@ const pageReset = (dispatch) => {
   connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
 }
 
-const getIndividualTaxheads = (item,index,dispatch) =>{
-  console.info("came to create each item==",cloneDeep(item));
+const getIndividualTaxheads = (item, index, dispatch) => {
+
   //return{
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children",
-        `taxheadField_${item.code.split(".").join("_")}`,
-        getTextField({
-          label: {
-            labelName: "Tax Amount",
-            labelKey: `${getTransformedLocale(item.code)}`,
-          },
-          placeholder: {
-            labelName: "Enter Tax Amount",
-            labelKey: "UC_AMOUNT_TO_BE_COLLECTED_PLACEHOLDER",
-          },
-         
-          componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children.taxheadField_${item.code.split(".").join("_")}`,
-          pattern: getPattern("DecimalNumber"),
-         // visible:true,
-         visible: item.code.endsWith('_ROAD_CUTTING_CHARGE')? false: true,
-          jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
-
-          props: {
-            type:"number",
-            jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
-          },
-          jsonPath:`applyScreen.wsTaxHeads[${index}].amount`,
-          
-   
-        
-      })
-     
-      )
-    )
-   
-}
-
-
-const setRoadCuttingEstimate = (item,index,dispatch) =>{
-console.info("came for road cutting",item);
   dispatch(
     handleField(
       "apply",
-     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children",
-     `roadCutting_${index}`,
-     getCommonContainer({
-      roadTypeDiv:{
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children:{
-            subHeader: getCommonTitle({
-               // labelKey: `${getTransformedLocale(item.code)}`
-               labelKey :`WS_ROADTYPE_${(item.code)}`,
-              },
-              {style: {
-                 fontSize: "15px",
-                // overflow-wrap: "break-word"
-                overflowWrap: 'break-word'
-                }}
-            )},
-        gridDefination: {
-            xs: 12,
-            sm: 2
-          },
-    },
-  
-      
-       RoadCuttingLength:getTextField({
+      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children",
+      `taxheadField_${item.code.split(".").join("_")}`,
+      getTextField({
         label: {
-          labelName: "Road Cutting Length",
-          labelKey: "WF_ESTIMATION_LENGTH"
+          labelName: "Tax Amount",
+          labelKey: `${getTransformedLocale(item.code)}`,
         },
-        // placeholder: {
-        //   labelName: "Road Cutting Length",
-        //   labelKey: "WF_ESTIMATION_LENGTH_PLACEHOLDER"
-        // },
-        props:{
-          type:"number",
-          id:`roadLength_${index}`,
+        placeholder: {
+          labelName: "Enter Tax Amount",
+          labelKey: "UC_AMOUNT_TO_BE_COLLECTED_PLACEHOLDER",
         },
-  
-       // required: true,
-        visible: true,
-        pattern: getPattern("DecimalNumber"),
-        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingLength`,
-        jsonPath: `applyScreen.roadTypeEst[${index}].length`,
-        gridDefination: {
-            xs: 12,
-            sm: 2
-          },
-      }),
-      RoadCuttingBreadth:getTextField({
-        label: {
-          labelName: "Road Cutting Breadth",
-          labelKey: "WF_ESTIMATION_BREADTH"
+
+        componentJsonpath: `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children.taxheadField_${item.code.split(".").join("_")}`,
+        pattern: getPattern("DecimalNumber"),       
+        visible: item.code.endsWith('_ROAD_CUTTING_CHARGE') ? false : true,
+        jsonPath: `applyScreen.wsTaxHeads[${index}].amount`,
+
+        props: {
+          type: "number",
+          jsonPath: `applyScreen.wsTaxHeads[${index}].amount`,
         },
-        // placeholder: {
-        //   labelName: "Road Cutting Breadth",
-        //   labelKey: "WF_ESTIMATION_BREADTH_PLACEHOLDER"
-        // },
-        props:{
-          type:"number",
-          id:`roadBreadth_${index}`,
-        },
-       // required: true,
-        visible: true,
-        pattern: getPattern("DecimalNumber"),
-        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingBreadth`,
-        jsonPath: `applyScreen.roadTypeEst[${index}].breadth`,
-        gridDefination: {
-            xs: 12,
-            sm: 2
-          },
-      }),
-      RoadCuttingDepth:getTextField({
-        label: {
-          labelName: "Road Cutting Depth",
-          labelKey: "WF_ESTIMATION_DEPTH"
-        },
-        // placeholder: {
-        //   labelName: "Road Cutting Depth",
-        //   labelKey: "WF_ESTIMATION_DEPTH_PLACEHOLDER"
-        // },
-        props:{
-          type:"number",
-          id:`roadDepth_${index}`,
-        },
-       // required: true,
-        visible: true,
-        pattern: getPattern("DecimalNumber"),
-       componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingDepth`,
-       jsonPath: `applyScreen.roadTypeEst[${index}].depth`,
-        gridDefination: {
-            xs: 12,
-            sm: 2
-          },
-      }),
-      RoadCuttingRate:getTextField({
-        label: {
-          labelName: "Road Cutting Rate",
-          labelKey: "WF_ESTIMATION_RATE"
-        },
-        // placeholder: {
-        //   labelName: "Road Cutting Rate",
-        //   labelKey: "WF_ESTIMATION_RATE_PLACEHOLDER"
-        // },
-        props:{
-          type:"number",
-          id:`roadRate_${index}`,
-        },
-       // required: true,
-        visible: true,
-        pattern: getPattern("DecimalNumber"),
-        componentJsonpath:`components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingRate`,
-        jsonPath: `applyScreen.roadTypeEst[${index}].rate`,
-        gridDefination: {
-            xs: 12,
-            sm: 2
-          },
-      }),
-      
-     }),
-    
-  
-     )
+        jsonPath: `applyScreen.wsTaxHeads[${index}].amount`,
+
+
+
+      })
+
     )
-  
+  )
 
 }
- 
+
+
+const setRoadCuttingEstimate = (item, index, dispatch) => {
+
+  dispatch(
+    handleField(
+      "apply",
+      "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children",
+      `roadCutting_${index}`,
+      getCommonContainer({
+        roadTypeDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          props: {
+            style: {
+              display: "table",
+              width: "100%",
+              height: "100%",
+            },
+          },
+
+
+
+          children: {
+            subHeader: getCommonTitle({
+              // labelKey: `${getTransformedLocale(item.code)}`
+              labelKey: `WS_ROADTYPE_${(item.code)}`,
+             },
+              {
+                style: {
+                  fontSize: "15px",
+                  overflowWrap: 'break-word',
+                  textAlign: "left",
+                  display: "table-cell",
+                  verticalAlign: "middle"
+                }
+              }
+            )
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+
+        },
+
+
+        RoadCuttingLength: getTextField({
+          label: {
+            labelName: "Road Cutting Length",
+            labelKey: "WF_ESTIMATION_LENGTH"
+          },
+          // placeholder: {
+          //   labelName: "Road Cutting Length",
+          //   labelKey: "WF_ESTIMATION_LENGTH_PLACEHOLDER"
+          // },
+          props: {
+            type: "number",
+            id: `roadLength_${index}`,
+          },
+
+          // required: true,
+          visible: true,
+          pattern: getPattern("ThreeDigitDecimalNumber"),
+          componentJsonpath: `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingLength`,
+          jsonPath: `applyScreen.roadTypeEst[${index}].length`,
+          gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+        }),
+        RoadCuttingBreadth: getTextField({
+          label: {
+            labelName: "Road Cutting Breadth",
+            labelKey: "WF_ESTIMATION_BREADTH"
+          },
+          // placeholder: {
+          //   labelName: "Road Cutting Breadth",
+          //   labelKey: "WF_ESTIMATION_BREADTH_PLACEHOLDER"
+          // },
+          props: {
+            type: "number",
+            id: `roadBreadth_${index}`,
+          },
+          // required: true,
+          visible: true,
+          pattern: getPattern("ThreeDigitDecimalNumber"),
+          componentJsonpath: `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingBreadth`,
+          jsonPath: `applyScreen.roadTypeEst[${index}].breadth`,
+          gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+        }),
+        RoadCuttingDepth: getTextField({
+          label: {
+            labelName: "Road Cutting Depth",
+            labelKey: "WF_ESTIMATION_DEPTH"
+          },
+          // placeholder: {
+          //   labelName: "Road Cutting Depth",
+          //   labelKey: "WF_ESTIMATION_DEPTH_PLACEHOLDER"
+          // },
+          props: {
+            type: "number",
+            id: `roadDepth_${index}`,
+          },
+          // required: true,
+          visible: true,
+          pattern: getPattern("ThreeDigitDecimalNumber"),
+          componentJsonpath: `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingDepth`,
+          jsonPath: `applyScreen.roadTypeEst[${index}].depth`,
+          gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+        }),
+        RoadCuttingRate: getTextField({
+          label: {
+            labelName: "Road Cutting Rate",
+            labelKey: "WF_ESTIMATION_RATE"
+          },
+          // placeholder: {
+          //   labelName: "Road Cutting Rate",
+          //   labelKey: "WF_ESTIMATION_RATE_PLACEHOLDER"
+          // },
+          props: {
+            type: "number",
+            id: `roadRate_${index}`,
+          },
+          // required: true,
+          visible: true,
+          pattern: getPattern("DecimalNumber"),
+          componentJsonpath: `components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.roadCuttingChargeContainer.children.roadCutting_${index}.children.RoadCuttingRate`,
+          jsonPath: `applyScreen.roadTypeEst[${index}].rate`,
+          gridDefination: {
+            xs: 12,
+            sm: 2
+          },
+        }),
+
+      }),
+    )
+  )
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    //prevent the createCall at last step.
+    dispatch(prepareFinalObject("modifyAppCreated", false));
     pageReset(dispatch);
     dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, []));
     //Road cutting charges
     dispatch(prepareFinalObject(`applyScreen.roadTypeEst`, []));
 
-    dispatch(prepareFinalObject("applyScreen.water", true));
+    dispatch(prepareFinalObject("applyScreen.water", false));
     dispatch(prepareFinalObject("applyScreen.sewerage", false));
 
     const propertyId = getQueryArg(window.location.href, "propertyId");
@@ -873,15 +1164,10 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
         []
       );
-      dispatch(
-        prepareFinalObject(
-          "OwnershipCategory",
-          ownershipCategory
-         )
-       );
+      dispatch(prepareFinalObject("OwnershipCategory", ownershipCategory));
 
-       //Make taxHead visible to false initially
-       dispatch(
+      //Make estimation/activation containers visible to false initially
+      dispatch(
         handleField(
           "apply",
           "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer",
@@ -890,139 +1176,224 @@ const screenConfig = {
         )
       );
 
-       //Setting Tax heads and Road Types
-          if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
-            //show tax head estimates to only field inspector and doc verifier
-            if(checkCardPermission(state , "wsConnectionTaxHeadsContainer")){
-              dispatch(
-                handleField(
-                  "apply",
-                  "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer",
-                  "visible",
-                  true
-                )
-              );
-            }
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.modificationsEffectiveFrom",
+          "visible",
+          false
+        )
+      );
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer",
+          "visible",
+          false
+        )
+      );
 
-            //Create tax head object ---start
-            let taxHeadDetails = get(
-              state,
-              "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
-              []
-            );
-            //Filter for tax heads 
-            let applicationType =applicationNumber.includes("SW") ?"SW" : "WS";
-            taxHeadDetails = taxHeadDetails.filter( (taxHead) => taxHead.service.includes(applicationType));
-            console.info("Tax details===",taxHeadDetails);
-            //Read existing tax heads
-            let existingTaxHeads=get(state, "screenConfiguration.preparedFinalObject.applyScreen.wsTaxHeads",[]);
-            let taxHeads={};
-            existingTaxHeads.forEach(obj =>taxHeads[obj.taxHeadCode]=obj );
 
-            for(var i=0;i<taxHeadDetails.length ;i++){      
-              taxHeadDetails[i]={...taxHeadDetails[i] , amount : null,taxHeadCode : taxHeadDetails[i].code, id : null } ;
-              if(taxHeads[taxHeadDetails[i].code]){
-                taxHeadDetails[i].amount=taxHeads[taxHeadDetails[i].code].amount;
-                taxHeadDetails[i].id=taxHeads[taxHeadDetails[i].code].id;
-              }  
-            }
-            dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, taxHeadDetails) );
+      //Setting Tax heads and Road Types
+      if (applicationNumber && getQueryArg(window.location.href, "action") === "edit" && process.env.REACT_APP_NAME !== "Citizen") {
 
-            //Filter for road types
-            let roadTypes = get(
-              state,
-              "screenConfiguration.preparedFinalObject.applyScreenMdmsData.sw-services-calculation.RoadType",
-              []
-            ); 
-            let existingRoadDetail=get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadTypeEst",[]);
-            let roadDetails={};
-            existingRoadDetail.forEach(obj =>obj['code']=obj.roadType );
-            existingRoadDetail.forEach(obj =>roadDetails[obj.roadType]=obj );
+        //show tax head estimates to only field inspector and doc verifier
+        let chkwsConnectionTaxHeadsContainer = checkCardPermission(state, "wsConnectionTaxHeadsContainer");
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer",
+            "visible",
+            chkwsConnectionTaxHeadsContainer
+          )
+        );
 
-            for(var i=0;i<roadTypes.length ;i++){     
-              roadTypes[i]={...roadTypes[i], roadType :roadTypes[i].code , length : null, depth : null ,breadth : null,rate : null };
-              if(roadDetails[roadTypes[i].code]){ 
-                roadTypes[i] =roadDetails[roadTypes[i].code]; 
-              }  
-            }
-            dispatch(
-              prepareFinalObject(`applyScreen.roadTypeEst`, roadTypes )
-            );
 
-            //create component
-            for(var i=0;i<taxHeadDetails.length ;i++){        
-              getIndividualTaxheads(taxHeadDetails[i],i,dispatch);
+         //  if (!isModifyMode()) {
+
+          let chkplumberDetailsContainer = checkCardPermission(state, "plumberDetailsContainer");
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.plumberDetailsContainer",
+              "visible",
+              chkplumberDetailsContainer
+            )
+          );
+          let chkconnectiondetailscontainer = checkCardPermission(state, "connectiondetailscontainer");
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer",
+              "visible",
+              chkconnectiondetailscontainer
+            )
+          );
+
+          let chkActivationDetailsContainer = checkCardPermission(state, "activationDetailsContainer");
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer",
+              "visible",
+              chkActivationDetailsContainer
+            )
+          );
+
+          //Fill tax heads and road cutting charges
+          //Create tax head object ---start
+          let taxHeadDetails = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.ws-services-masters.TaxHeadMaster",
+            []
+          );
+          //Filter for tax heads 
+          let applicationType = applicationNumber.includes("SW") ? "SW" : "WS";
+          taxHeadDetails = taxHeadDetails.filter((taxHead) => taxHead.service.includes(applicationType));
+
+          //Read existing tax heads
+          let existingTaxHeads = get(state, "screenConfiguration.preparedFinalObject.applyScreen.wsTaxHeads", []);
+          let taxHeads = {};
+          existingTaxHeads.forEach(obj => taxHeads[obj.taxHeadCode] = obj);
+
+       
+          for (var i = 0; i < taxHeadDetails.length; i++) {           
+            taxHeadDetails[i] = { ...taxHeadDetails[i], amount: null, taxHeadCode: taxHeadDetails[i].code, id: null };
+           
+            if (taxHeads[taxHeadDetails[i].code]) { //If amt = 0 then put amt = null else estimate page will be populated with all 0 values
+              taxHeadDetails[i].amount = taxHeads[taxHeadDetails[i].code].amount !=0 ? taxHeads[taxHeadDetails[i].code].amount : null;
+              taxHeadDetails[i].id = taxHeads[taxHeadDetails[i].code].id;
             }
-            for(var i=0;i<roadTypes.length;i++){ 
-              setRoadCuttingEstimate(roadTypes[i],i,dispatch);
-            }
-            dispatch(prepareFinalObject("editWSFlow", true));
           }
-       });
-
-
-      // dispatch(prepareFinalObject("applyScreen.water", true));
-      // dispatch(prepareFinalObject("applyScreen.sewerage", false));
-
-
-        // const propertyId = getQueryArg(window.location.href, "propertyId");
-        // const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-
-        if (propertyId) {
-          togglePropertyFeilds(action, true);
-          if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, true);
-          } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, false);
-            toggleSewerageFeilds(action, true);
-          } else {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, false);
-          }          
-        } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {   
-
-          togglePropertyFeilds(action, true);
-          if (applicationNumber.includes("SW")) {
-            dispatch(prepareFinalObject("applyScreen.water", false));
-            dispatch(prepareFinalObject("applyScreen.sewerage", true));
-            toggleWaterFeilds(action, false);
-            toggleSewerageFeilds(action, true);
-            } 
-          else {
-            dispatch(prepareFinalObject("applyScreen.water", true));
-            dispatch(prepareFinalObject("applyScreen.sewerage", false));
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, false);
-            }
-        } else {
-          togglePropertyFeilds(action, false)
-          if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, true);
-          } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
-            toggleWaterFeilds(action, false);
-            toggleSewerageFeilds(action, true);
-          } else {
-            toggleWaterFeilds(action, true);
-            toggleSewerageFeilds(action, false);
-          }
-        }
          
+          dispatch(prepareFinalObject(`applyScreen.wsTaxHeads`, taxHeadDetails));
 
-   // });
+          //Filter for road types
+          let roadTypes = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.sw-services-calculation.RoadType",
+            []
+          );
+          let existingRoadDetail = get(state, "screenConfiguration.preparedFinalObject.applyScreen.roadTypeEst", []);
+          let roadDetails = {};
+          existingRoadDetail.forEach(obj => obj['code'] = obj.roadType);
+          existingRoadDetail.forEach(obj => roadDetails[obj.roadType] = obj);
+           //If road cutting filled then populate that value else put null else 0 will be populated 
+          for (var i = 0; i < roadTypes.length; i++) {
+            roadTypes[i] = { ...roadTypes[i], roadType: roadTypes[i].code, length: null, depth: null, breadth: null, rate: null };
+            if (roadDetails[roadTypes[i].code]) {
+              roadTypes[i] = (roadDetails[roadTypes[i].code].length != 0 && roadDetails[roadTypes[i].code].breadth != 0 && roadDetails[roadTypes[i].code].depth != 0 && roadDetails[roadTypes[i].code].rate != 0)? roadDetails[roadTypes[i].code] : roadTypes[i];
+            }
+          }
+          dispatch(
+            prepareFinalObject(`applyScreen.roadTypeEst`, roadTypes)
+          );
+
+          //create component
+          for (var i = 0; i < taxHeadDetails.length; i++) {
+            getIndividualTaxheads(taxHeadDetails[i], i, dispatch);
+          }
+          for (var i = 0; i < roadTypes.length; i++) {
+            setRoadCuttingEstimate(roadTypes[i], i, dispatch);
+          }
+
+          let chkModificationsEffectiveFrom = checkCardPermission(state, "modificationsEffectiveFrom");
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.modificationsEffectiveFrom",
+              "visible",
+              chkModificationsEffectiveFrom
+            )
+          );
+
+     //   }
+     //   else {
+          // dispatch(
+          //   handleField(
+          //     "apply",
+          //     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.modificationsEffectiveFrom",
+          //     "visible",
+          //     true
+          //   )
+          // );
+
+          // dispatch(
+          //   handleField(
+          //     "apply",
+          //     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer",
+          //     "visible",
+          //     true
+          //   )
+          // );
+      //  }
+
+      }
+      if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+        dispatch(prepareFinalObject("editWSFlow", true));
+      }
+    });
 
 
 
-    if (isModifyMode()) {
-      triggerModificationsDisplay(action, true);
+    if (propertyId) {
+      togglePropertyFeilds(action, true);
+      if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, true);
+      } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, true);
+      } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water")) {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, false);
+      } else {
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, false);
+      }
+    } else if (applicationNumber && getQueryArg(window.location.href, "action") === "edit") {
+      togglePropertyFeilds(action, true);
+      if (applicationNumber.includes("SW")) {
+        dispatch(prepareFinalObject("applyScreen.water", false));
+        dispatch(prepareFinalObject("applyScreen.sewerage", true));
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, true);
+      } else {
+        dispatch(prepareFinalObject("applyScreen.water", true));
+        dispatch(prepareFinalObject("applyScreen.sewerage", false));
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, false);
+      }
     } else {
-      triggerModificationsDisplay(action, false);
+
+      togglePropertyFeilds(action, false)
+      if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water") && get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, true);
+      } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, true);
+      } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.water")) {
+        toggleWaterFeilds(action, true);
+        toggleSewerageFeilds(action, false);
+      } else {
+        toggleWaterFeilds(action, false);
+        toggleSewerageFeilds(action, false);
+      }
     }
-    if(propertyId){
+
+
+    // if (isModifyMode()) {
+    //   triggerModificationsDisplay(action, true);
+    // }
+    // else {
+    //   triggerModificationsDisplay(action, false);
+    // }
+
+    if (propertyId) {
       prepareDocumentsUploadData(state, dispatch);
     }
-    
+
     set(action, "screenConfig.components.div.children.stepper.props.steps", stepperData());
     set(action, 'screenConfig.components.div.children.headerDiv.children.header.children.headerDiv.children.header.children.key.props.labelKey', getHeaderLabel());
     dispatch(handleField("apply", "components", "div", get(action, "screenConfig.components.div", {})))
@@ -1032,11 +1403,12 @@ const screenConfig = {
     let tenantId = getQueryArg(window.location.href, "tenantId");
     let action1 = getQueryArg(window.location.href, "action");
 
-let modeaction1 = getQueryArg(window.location.href, "modeaction");
+    let modeaction1 = getQueryArg(window.location.href, "modeaction");
 
-let mode = getQueryArg(window.location.href, "mode");
+    let mode = getQueryArg(window.location.href, "mode");
     let modifyLink;
-    if (isMode === "MODIFY" || action1 ==="edit") {
+    //When application comes for modification comes here
+    if (isMode === "MODIFY" || action1 === "edit") {
       modifyLink = `/wns/apply?`;
       modifyLink = applicationNumber ? modifyLink + `applicationNumber=${applicationNumber}` : modifyLink;
       modifyLink = connectionNumber ? modifyLink + `&connectionNumber=${connectionNumber}` : modifyLink;
@@ -1044,25 +1416,19 @@ let mode = getQueryArg(window.location.href, "mode");
       modifyLink = modeaction1 ? modifyLink + `&modeaction=${modeaction1}` : modifyLink;
       modifyLink = isMode ? modifyLink + `&mode=${isMode}` : modifyLink;
       modifyLink = tenantId ? modifyLink + `&tenantId=${tenantId}` : modifyLink;
-      
+
     } else {
       modifyLink = "/wns/apply"
     }
 
-
-
-
-
-   // set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children", taxHeads);
+    // set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children", taxHeads);
     //set(action, "screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer.children.cardContent.children.wsConnectionTaxHeads.children.taxheads", taxHeads);
-    set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberSewerage.props.mode",isModifyMode() && !isModifyModeAction());
-    set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.mode",isModifyMode() && !isModifyModeAction());
+    set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberSewerage.props.mode", isModifyMode() && !isModifyModeAction());
+    set(action, "screenConfig.components.div.children.headerDiv.children.header.children.applicationNumberWater.props.mode", isModifyMode() && !isModifyModeAction());
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.url", modifyLink)
     set(action, "screenConfig.components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.clickHereLink.props.isMode", isMode)
-   
-   
-  
-   
+
+
     return action;
   },
 

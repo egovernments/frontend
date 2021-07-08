@@ -32,13 +32,13 @@ class MultiItem extends React.Component {
   onTabChange = (tabIndex, dispatch, state) => {
     switch (tabIndex) {
       case 0:
-        this.setInstrumentType("SEARCH_CONNECTION", dispatch);
-        break;
-      case 1:
         this.setInstrumentType("SEARCH_APPLICATION", dispatch);
         break;
-      default:
+      case 1:
         this.setInstrumentType("SEARCH_CONNECTION", dispatch);
+        break;
+      default:
+        this.setInstrumentType("SEARCH_APPLICATION", dispatch);
         break;
     }
   };

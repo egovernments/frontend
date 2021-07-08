@@ -36,6 +36,11 @@ const ViewBreakupContainer = Loadable({
   loading: () => <Loading />
 });
 
+const ViewBillEstimateContainer = Loadable({
+  loader: () => import("./ViewBillEstimateDialogContainer"),
+  loading: () => <Loading />
+});
+
 const RadioGroupContainer = Loadable({
   loader: () => import("./RadioGroupContainer"),
   loading: () => <Loading />
@@ -66,6 +71,7 @@ export {
   EstimateCardContainer,
   DocumentListContainer,
   ViewBreakupContainer,
+  ViewBillEstimateContainer,
   DialogContainer,
   RadioGroupContainer,
   EstimateOverviewCardContainer,

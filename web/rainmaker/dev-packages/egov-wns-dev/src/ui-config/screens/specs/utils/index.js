@@ -260,6 +260,15 @@ export const handleNA = params => {
   } else { return "NA"; }
 }
 
+export const handleMeterReading = params =>{
+    if(params === 0 || params === null || isNaN(params)){
+    return "0";
+  }
+ else if (params !== undefined && params !== null && params !== "") {
+       return params;
+  } else { return "NA"; }
+}
+
 export const handleRoadType = params =>{
   return handleNA(params)=="NA"?"NA":'WS_ROADTYPE_'+params;
 }
@@ -1261,6 +1270,18 @@ export const showHideBreakupPopup = (state, dispatch, screenKey) => {
     handleField(screenKey, "components.breakUpDialog", "props.open", !toggle)
   );
 };
+
+export const showHideBillEstimatePopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.billEstimateDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.billEstimateDialog", "props.open", !toggle)
+  );
+};
+
 export const getDialogButton = (name, key, screenKey) => {
   return {
     componentPath: "Button",
@@ -1281,6 +1302,30 @@ export const getDialogButton = (name, key, screenKey) => {
       }
     }
     //visible: false
+  };
+};
+
+export const getBillEstimateDialogButton =(name,key,screenKey) => {
+  return {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: name,
+        labelKey: key
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        showHideBillEstimatePopup(state, dispatch, screenKey);
+      }
+    },
+    //visible: false
+    visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
   };
 };
 
@@ -1328,7 +1373,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.consumerNo",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.consumerNo",
       "props.value",
       ""
     )
@@ -1336,7 +1381,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationNo",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationNo",
       "props.value",
       ""
     )
@@ -1344,7 +1389,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.ownerMobNo",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.ownerMobNo",
       "props.value",
       ""
     )
@@ -1352,7 +1397,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus",
       "props.value",
       ""
     )
@@ -1360,7 +1405,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.fromDate",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.fromDate",
       "props.value",
       ""
     )
@@ -1368,7 +1413,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.toDate",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.toDate",
       "props.value",
       ""
     )
@@ -1376,7 +1421,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationType",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationType",
       "props.value",
       ""
     )
@@ -1384,7 +1429,7 @@ export const resetFieldsForApplication = (state, dispatch) => {
   dispatch(
     handleField(
       'search', 
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus", 
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.searchApplications.children.cardContent.children.wnsApplicationSearch.children.applicationstatus", 
       "props.disabled", true
     )
   );
@@ -1394,7 +1439,7 @@ export const resetFieldsForConnection = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerid",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerid",
       "props.value",
       ""
     )
@@ -1402,7 +1447,7 @@ export const resetFieldsForConnection = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
       "props.value",
       ""
     )
@@ -1411,7 +1456,7 @@ export const resetFieldsForConnection = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.oldConsumerid",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.oldConsumerid",
       "props.value",
       ""
     )
@@ -1420,7 +1465,7 @@ export const resetFieldsForConnection = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
       "props.value",
       ""
     )
@@ -1429,7 +1474,7 @@ export const resetFieldsForConnection = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.showSearches.children.showSearchScreens.props.tabs[0].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
+      "components.div.children.showSearches.children.showSearchScreens.props.tabs[1].tabContent.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.propertyid",
       "props.value",
       ""
     )
@@ -1657,11 +1702,14 @@ const setVisible = (key, status, action) => {
     `screenConfig.components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.${key}.visible`,
     status
   );
+
+  
 }
-export const triggerModificationsDisplay = (action, isModeEnable) => {  
-    setVisible('modificationsEffectiveFrom', isModeEnable, action);
-    setVisible('plumberDetailsContainer', !isModeEnable, action);
-    //setVisible('roadCuttingChargeContainer', !isModeEnable, action);
+export const triggerModificationsDisplay = (action, isModeEnable) => { 
+  console.info("triggerModificationsDisplay=action=",action,"isModeEnable=",isModeEnable) ;
+    //setVisible('modificationsEffectiveFrom', isModeEnable, action);
+    //setVisible('activationDetailsContainer',isModeEnable, action);
+    setVisible('plumberDetailsContainer',  !isModeEnable, action);
     setVisible('wsConnectionTaxHeadsContainer',!isModeEnable, action);
 }
 

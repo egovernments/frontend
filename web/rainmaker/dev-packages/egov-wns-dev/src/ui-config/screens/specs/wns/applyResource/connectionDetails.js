@@ -1,4 +1,12 @@
 import { getCommonCard, getPattern, getCommonSubHeader, getTextField, getSelectField, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
+import get from 'lodash/get';
+import set from 'lodash/set';
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
+
 
 // export const getGenderRadioButton = {
 //   uiFramework: "custom-containers",
@@ -30,7 +38,9 @@ export const getCheckboxContainer = {
   type: "array",
 };
 
-export const OwnerInfoCard = getCommonCard({
+
+
+ export const OwnerInfoCard = getCommonCard({
 
   header: getCommonSubHeader(
     { labelName: "Connection Details", labelKey: "WS_COMMON_CONNECTION_DETAILS" },
@@ -59,7 +69,68 @@ export const OwnerInfoCard = getCommonCard({
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "applyScreen.proposedPipeSize"
     }),
+    // Added usage and sub usage - Ajmer observation
+    proposedUsageCategory: getSelectField({
+            label: {
+              labelName: "Usage Type",
+              labelKey: "WS_COMMON_USAGE_TYPE"
+            },
+           
+            required: true,
+            jsonPath: "applyScreen.proposedUsageCategory",
+            sourceJsonPath: "applyScreenMdmsData.ws-services-masters.waterUsage",     
+            placeholder: { labelKey: "WS_COMMON_USAGE_TYPE_PLACEHOLDER" },
+            gridDefination: { xs: 12, sm: 6 },
+            localePrefix: {
+              moduleName: "WS",
+              masterName: "WSUSGTYPE"
+            },
+      //       beforeFieldChange: async (action, state, dispatch) => {
+      //            renderProposedSubUsageType(action.value,  dispatch, state)
+      //       }
+       }),
+    // proposedSubUsageCategory:{
+    //     uiFramework: "custom-containers-local",
+    //     moduleName: "egov-pt",
+    //     componentPath: "AutosuggestContainer",
+    //     props: {
+    //         style: {
+    //             width: "100%",
+    //             cursor: "pointer"
+    //           },
+    //         label: {
+    //             labelName: "Sub Usage Type",
+    //             labelKey: "WS_SUB_USAGE_TYPE"
+    //         },
+    //         placeholder: {
+    //           labelName: "Select Sub usage",
+    //           labelKey: "WS_COMMON_SUB_USAGE_TYPE_PLACEHOLDER"
+    //       },
+      
+                      
+    //         localePrefix: {
+    //             moduleName: "WS",
+    //        			 masterName: "WSSUBUSGTYPE"
+    //         },
+    //         jsonPath: "applyScreen.proposedSubUsageCategory",
+    //         sourceJsonPath:"proposedSubUsagetypeForSelectedUsageCategory",
+    //         className: "autocomplete-dropdown pds-search",
+    //         labelsFromLocalisation: true,
+    //         required: false,        
+    //         disabled: false,
+    //         isClearable: true,      
+    //         fullwidth: true,
+         
+    //     },
+    //     required: false,
+    //     visible: false,
+    //     jsonPath: "applyScreen.proposedSubUsageCategory",
+    //     gridDefination: { xs: 12, sm: 6 },
+        
+    //  },
 
+
+    //Added usage and sub usage
     numberOfWaterClosets: getTextField({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS" },
       placeholder: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS_PLACEHOLDER" },
@@ -92,4 +163,43 @@ export const OwnerInfoCard = getCommonCard({
       jsonPath: "applyScreen.proposedDrainageSize"
     })
   })
+},
+{
+  style: { overflow: "visible" }
 });
+
+//Wont show subusage for the time being since while updateing it is not getting populating
+// export const renderProposedSubUsageType = (usageType, dispatch, state) => {  
+//     let subTypeValues = get(
+//       state.screenConfiguration.preparedFinalObject,
+//       "applyScreenMdmsData.ws-services-masters.waterSubUsage"
+//     );
+ 
+//     const additionalDetailsJson = "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.proposedSubUsageCategory"; 
+  
+//     let proposedSubUsage;     
+            
+//           if (usageType == "COMMERCIAL" || usageType == "RESIDENTIAL") {        
+//               dispatch(handleField("apply", additionalDetailsJson, "visible", true));
+//               dispatch(handleField("apply", additionalDetailsJson, "props.visible", true));
+//               proposedSubUsage = subTypeValues.filter(cur => {
+//                 return (cur.code.startsWith(usageType))
+//             })
+          
+//           } else {
+//               set(state.screenConfiguration.preparedFinalObject,"applyScreen.proposedSubUsageCategory", ""); 
+//               set(state.screenConfiguration.preparedFinalObject,"applyScreen.proposedSubUsageCategory", ""); 
+//               dispatch(handleField("apply", additionalDetailsJson, "visible", false));
+//               dispatch(handleField("apply", additionalDetailsJson, "props.visible", false));        
+//           } 
+ 
+  
+//           console.info("DC-subusage got=",proposedSubUsage)
+//     dispatch(
+//       prepareFinalObject(
+//         "proposedSubUsagetypeForSelectedUsageCategory",
+//         proposedSubUsage
+//       )
+//     )
+  
+//   }

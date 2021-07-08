@@ -18,14 +18,37 @@ export const serviceType = getLabelWithValue(
     }
 );
 
-export const propertyUsage = getLabelWithValue(
+// export const propertyUsage = getLabelWithValue(
+//     {
+//         labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
+//     },
+//     {
+//         jsonPath: "WaterConnection[0].property.usageCategory",
+//         localePrefix: {
+//             moduleName: "WS",
+//             masterName: "WSUSGTYPE"
+//         } 
+//     }
+// );
+
+export const propertyUsage = getLabelWithValue (
     {
-        labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
+      labelName: "Usage Type",
+      labelKey: "WS_COMMON_USAGE_TYPE"
     },
     {
-        jsonPath: "WaterConnection[0].property.usageCategory"
-    }
-);
+      localePrefix: {
+        moduleName: "WS",
+        masterName: "WSUSGTYPE"
+      },
+      jsonPath: "WaterConnection[0].usageCategory",
+      
+    },
+  );
+
+
+
+
 
 export const connType = getLabelWithValue(
     {

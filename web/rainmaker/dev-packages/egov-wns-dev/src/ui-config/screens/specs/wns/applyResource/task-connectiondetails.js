@@ -6,6 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { serviceConst } from "../../../../../ui-utils/commons";
+import {handleNA}from '../../utils';
 
 const service = getQueryArg(window.location.href, "service")
 const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -92,7 +93,37 @@ export const getConnectionDetails = () => {
         { jsonPath: "WaterConnection[0].proposedPipeSize" },  {
             labelKey: "WS_OLD_LABEL_NAME"
           },
-          { jsonPath: "WaterConnectionOld[0].proposedPipeSize" })
+          { jsonPath: "WaterConnectionOld[0].proposedPipeSize" }),
+
+
+        taskProposedUsageCategory: getLabelWithValueForModifiedLabel(
+            {
+                labelName:"No of  usage category proposed",
+                labelKey: "WS_COMMON_USAGE_TYPE",        
+            },
+            {
+                localePrefix: {
+                  moduleName: "WS",
+                  masterName: "WSUSGTYPE"
+                },
+                jsonPath: "WaterConnection[0].proposedUsageCategory",
+                callBack: handleNA
+            }),
+
+        // taskProposedSubUsageCategory: getLabelWithValueForModifiedLabel(
+        //     {
+        //         labelName:"No of  usage category proposed",
+        //         labelKey: "WS_SUB_USAGE_TYPE",              
+        //     },
+        //     {
+        //         localePrefix: {
+        //           moduleName: "WS",
+        //        	  masterName: "WSSUBUSGTYPE"
+        //         },
+        //         jsonPath: "WaterConnection[0].proposedSubUsageCategory",
+        //         callBack: handleNA
+        //     })
+
 
 }
  export const connectionDetailsSewerage={

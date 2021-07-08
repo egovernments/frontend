@@ -126,6 +126,20 @@ const saveData = async (state, dispatch) => {
         if (data.currentReading === undefined || data.currentReading === null || data.currentReading === '') {
             return;
         }
+        let pattern = getPattern("meterReading");
+        if (!pattern.test(data.currentReading)) {
+            dispatch(
+                toggleSnackbar(
+                    true,
+                    {
+                        labelName: "Please enter a whole number for current reading.",
+                        labelKey: "ERR_INVALID_CURRENT_READING"
+                    },
+                    "warning"
+                )
+            );
+            return;
+        }
         if (data.currentReading < data.lastReading) {
             dispatch(
                 toggleSnackbar(
@@ -290,14 +304,14 @@ export const meterReadingEditable =
                                     true
                                 )
                             );
-                            dispatch(
+                           /* dispatch(
                                 handleField(
                                     "meter-reading",
                                     "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
                                     "disabled",
                                     true
                                 )
-                            );
+                            );*/
                             dispatch(
                                 handleField(
                                     "meter-reading",
@@ -570,8 +584,8 @@ export const meterReadingEditable =
                             sm: 3
                         },
                         required: true,
-                        pattern: /^[1-9]\d*(\.\d+)?$/i,
-                        // errorMessage: "ERR_INVALID_CONSUMER_NO",
+                        pattern: getPattern("meterReading"),
+                        // errorMessage: "ERR_INVALID_CURRENT_READING",
                         jsonPath: "metereading.currentReading"
                     }),
                     afterFieldChange: async (action, state, dispatch) => {

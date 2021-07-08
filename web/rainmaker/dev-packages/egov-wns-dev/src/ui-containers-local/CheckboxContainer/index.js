@@ -73,9 +73,12 @@ class CheckboxLabels extends React.Component {
   }
 
   render() {
-    const { classes, required, preparedFinalObject,editWSFlow  } = this.props;
+    const { classes, required, preparedFinalObject,editWSFlow,disableWS,disableSW,onFieldChange } = this.props;
     let checkedWater, checkedSewerage;
     let disabled = editWSFlow ? editWSFlow : false;
+    let disableWS1 = disableWS ? disableWS : false;
+    let disableSW1 = disableSW ? disableSW : false;
+
     if (this.state.interChange) {
       checkedWater = this.state.checkedWater;
       checkedSewerage = this.state.checkedSewerage;
@@ -83,6 +86,15 @@ class CheckboxLabels extends React.Component {
       checkedWater = (preparedFinalObject && preparedFinalObject.applyScreen.water) ? preparedFinalObject.applyScreen.water : false;
       checkedSewerage = (preparedFinalObject && preparedFinalObject.applyScreen.sewerage) ? preparedFinalObject.applyScreen.sewerage : false;
     }
+    if (checkedSewerage) {
+      toggleSewerage(onFieldChange, true);
+    } 
+    else { toggleSewerage(onFieldChange, false); }
+    
+    if (checkedWater) {
+      toggleWater(onFieldChange, true);
+    } 
+    else { toggleWater(onFieldChange, false); }
 
     return (
       <div className={classes.root}>
@@ -99,7 +111,7 @@ class CheckboxLabels extends React.Component {
                   onChange={this.handleWater("checkedWater")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
-                  disabled ={disabled}
+                  disabled ={disableWS1?disableWS1:disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_WATER" />}
             />
@@ -111,7 +123,7 @@ class CheckboxLabels extends React.Component {
                   onChange={this.handleSewerage("checkedSewerage")}
                   classes={{ root: classes.radioRoot, checked: classes.checked }}
                   color="primary"
-                  disabled ={disabled}
+                  disabled ={disableSW1?disableSW1:disabled}
                 />}
               label={<LabelContainer labelKey="WS_APPLY_SEWERAGE" />}
             />
@@ -126,8 +138,8 @@ const mapStateToProps = (state, ownprops) => {
   const { screenConfiguration } = state;
   const { jsonPathWater, jsonPathSewerage } = ownprops;
   const { preparedFinalObject } = screenConfiguration; 
-  const { editWSFlow } = preparedFinalObject; 
-  return { preparedFinalObject, jsonPathWater, jsonPathSewerage, editWSFlow  };
+  const { editWSFlow,disableSW,disableWS } = preparedFinalObject; 
+  return { preparedFinalObject, jsonPathWater, jsonPathSewerage, editWSFlow,disableSW,disableWS  };
 };
 
 const mapDispatchToProps = dispatch => {

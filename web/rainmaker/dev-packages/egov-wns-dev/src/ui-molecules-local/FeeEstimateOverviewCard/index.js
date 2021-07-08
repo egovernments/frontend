@@ -140,7 +140,7 @@ function FeesEstimateOverviewCard(props) {
                             <Grid container>
                                 <Grid item xs={4}>
                                     <Typography variant="body2" >
-                                        <LabelContainer labelKey="WS_TAX_HEADER" />
+                                        <LabelContainer labelKey="WS_FEE_ROUND_OFF" />
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={2}>
@@ -150,7 +150,7 @@ function FeesEstimateOverviewCard(props) {
                                     style={styles.taxStyles}
                                     className="tl-application-table-total-value" >
                                     <Typography variant="body2">
-                                        {estimate.fees.taxAmount}
+                                        {estimate.fees.taxAmount || estimate.fees.rebate}
                                     </Typography>
                                 </Grid>
                             </Grid>

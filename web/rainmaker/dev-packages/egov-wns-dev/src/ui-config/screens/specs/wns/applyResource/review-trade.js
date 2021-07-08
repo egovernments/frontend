@@ -9,6 +9,7 @@ import {
 import { getConnectionDetails } from './../applyResource/task-connectiondetails';
 import { propertyOwnerDetails } from "../applyResource/task-owner-details";
 import { convertEpochToDateAndHandleNA, handlePropertySubUsageType, handleNA } from '../../utils';
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const getHeader = label => {
   return {
@@ -106,13 +107,22 @@ export const locationDetails={
       labelKey: "WS_PROP_DETAIL_CITY"
     },
     {
+      localePrefix: {
+        moduleName: "TENANT_TENANTS",
+        masterName: "PB"
+      },
       jsonPath:
         "WaterConnection[0].property.address.city",
         callBack: handleNA
     },  {
       labelKey: "WS_OLD_LABEL_NAME"
     },
-    { jsonPath: "WaterConnectionOld[0].property.address.city", callBack: handleNA },
+    { 
+      localePrefix: {
+        moduleName: "TENANT_TENANTS",
+        masterName: "PB"
+      },
+      jsonPath: "WaterConnectionOld[0].property.address.city", callBack: handleNA },
   ),
   reviewLocation: getLabelWithValueForModifiedLabel(
     {
@@ -174,11 +184,21 @@ export const locationDetails={
       labelName: "Locality/Mohalla",
       labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
     },
-    { jsonPath: "WaterConnection[0].property.address.locality.name",
+    { 
+      localePrefix: {
+        moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : "",
+        masterName: "REVENUE"
+      },
+      jsonPath: "WaterConnection[0].property.address.locality.code",
     callBack: handleNA },  {
       labelKey: "WS_OLD_LABEL_NAME"
     },
-    { jsonPath: "WaterConnectionOld[0].property.locality.name", callBack: handleNA },
+    { 
+      localePrefix: {
+        moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : "",
+        masterName: "REVENUE"
+      },
+      jsonPath: "WaterConnectionOld[0].property.locality.code", callBack: handleNA },
   ),
   //commented by vidya
   // reviewPincode: getLabelWithValueForModifiedLabel(
@@ -347,6 +367,20 @@ export const propertyDetails={
     },
     {
       jsonPath: "WaterConnectionOld[0].property.noOfFlats",
+      callBack: handleNA      
+    }
+  ),
+  reviewArv: getLabelWithValueForModifiedLabel(
+    {
+      labelName: "Arv",
+      labelKey: "WS_PROPERTY_ARV_LABEL"
+    },
+    { jsonPath: "WaterConnection[0].property.units[0].arv",
+    callBack: handleNA },{
+      labelKey: "WS_OLD_LABEL_NAME"
+    },
+    {
+      jsonPath: "WaterConnectionOld[0].property.units[0].arv",
       callBack: handleNA      
     }
   ),

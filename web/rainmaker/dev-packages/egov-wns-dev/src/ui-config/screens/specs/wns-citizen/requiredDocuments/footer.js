@@ -1,6 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const printDiv = () => {
@@ -61,7 +62,7 @@ export const footer = {
           labelKey: "NOC_COMMON_BUTTON_PRINT"
         })
       },
-      visible: true,
+      visible:  !JSON.parse(localStorageGet('isMobileApp')),
       onClickDefination: {
         action: "condition",
         callBack: printDiv

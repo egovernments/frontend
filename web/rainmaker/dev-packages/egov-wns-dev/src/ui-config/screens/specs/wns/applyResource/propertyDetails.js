@@ -190,7 +190,7 @@ const propertyDetails = getCommonContainer({
         let finalValue;
        // console.log("state---"+JSON.stringify(state.screenConfiguration.preparedFinalObject))
           let propertyType = get( state.screenConfiguration.preparedFinalObject.applyScreen, "property.propertyType" );
-          console.log("usage type is---"+propertyType)
+          
           if ( propertyType !== "VACANT") {
               finalValue = value;
           }
@@ -208,6 +208,16 @@ const propertyDetails = getCommonContainer({
     {
       jsonPath: "applyScreen.property.noOfFlats",
       callBack: handleNA
+    }
+  ),
+  arv: getLabelWithValue(
+    {
+      labelKey: "WS_PROP_DETAIL_ARV_LABEL"
+    },
+    {
+      jsonPath: "applyScreen.property.units[0].arv",
+      callBack: handleNA
+
     }
   ),
   // rainwaterHarvestingFacility: getLabelWithValue(

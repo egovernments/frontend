@@ -12,15 +12,23 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
     propertyDetails.reviewPropertyUsageType.localiseValue = true;
     propertyDetails.reviewPropertySubUsageType.localiseValue = true;
     locationDetails.reviewLocation.localiseValue = true;
+    connectionHolderDetails.gender.localiseValue = true;
+    connectionHolderDetails.relationship.localiseValue = true;
+    connectionHolderDetails.specialApplicantCategory.localiseValue = true;
+    plumberDetails.reviewPlumberProvidedBy.localiseValue = true;
+    roadDetails.reviewRate.localiseValue = true;
     //roadDetails.localiseValue = true;
     roadDetails.getCommonContainerreviewRoadType.localiseValue = true;
     propertyOwnerDetail.gender.localiseValue = true;
     propertyOwnerDetail.specialApplicantCategory.localiseValue = true;
     propertyOwnerDetail.relationship.localiseValue = true;
     additionDetailsWater.reviewWaterSource.localiseValue=true;
+    additionDetailsWater.reviewConnectionType.localiseValue=true;
     additionDetailsWater.reviewWaterSubSource.localiseValue=true;
     additionDetailsWater.reviewMotorInfo.localiseValue=true;
     additionDetailsWater.reviewAuthorizedConnection.localiseValue=true;
+    additionDetailsWater.reviewUsageType.localiseValue=true;
+    additionDetailsWater.reviewSubUsageType.localiseValue=true;
     let propDetail = generateKeyValue(preparedFinalObject, propertyDetails);
     let propertyDetail = propDetail.map(cur => {
         if (cur.key === "Rainwater harvesting Facility") {
@@ -85,7 +93,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
 
     let ownerDetail = []
     let ownerDetailInfo = []
-    if (WaterConnection.property.owners.length > 1) {
+    if (WaterConnection.property && WaterConnection.property.owners && WaterConnection.property.owners.length > 1) {
         ownerDetailInfo = getMultiItems(preparedFinalObject, propertyOwnerDetail, 'WaterConnection[0].property.owners')
         ownerDetail = getMultipleItemCard(ownerDetailInfo, 'WS_OWNER');
     } else {
@@ -126,7 +134,7 @@ export const generateWSAcknowledgement = (preparedFinalObject, fileName = "print
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_PLUMBER_DETAILS_HEADER', items: plumberDetail, hide: plumberDetail.length === 0 },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ROAD_CHARGES_HEADER', items: roadDetail, hide: roadDetail.length === 0,type: roadDetailInfo.length > 1 ? 'multiItem' : 'singleItem' },
             { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_ACTIVATION_DETAILS_HEADER', items: activateDetail },
-            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_MODIFY_EFFECTIVE_DATE_HEADER', items: reviewModificationsEffective, hide: reviewModificationsEffective.length === 0 },
+            { header: 'PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_MODIFY_EFFECTIVE_FROM_HEADER', items: reviewModificationsEffective, hide: reviewModificationsEffective.length === 0 },
 
         ]
  

@@ -1,25 +1,128 @@
-import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-// import get from "lodash/get";
-import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS, serviceConst } from "../../../../ui-utils/commons";
-import set from "lodash/set";
-import get from "lodash/get";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+    getCommonCard,
+    getCommonContainer,
+    getCommonHeader,
+    getCommonTitle,
+    getCommonGrayCard,
+    getCommonSubHeader,convertEpochToDate
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { 
-  createEstimateData,
-  getFeesEstimateCard,
-  showHideAdhocPopup
- } from "../utils";
-import { getProperty } from "./viewBillResource/propertyDetails";
-import { getOwner } from "./viewBillResource/ownerDetails";
-import { getService } from "./viewBillResource/serviceDetails";
-import { viewBillFooter } from "./viewBillResource/viewBillFooter";
-import { adhocPopupViewBill } from "./applyResource/adhocPopupViewBill";
+    createEstimateData,
+    getFeesEstimateCard,
+    showHideAdhocPopup,
+    ifUserRoleExists
+   } from "../utils";
+//import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS, serviceConst } from "../../../../ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import set from "lodash/set";
+import { httpRequest } from "../../../../ui-utils";
+import { freezeConnDetailsFooter } from "./freezeConnection/freezeConnDetailsFooter";
+import './freezeConnection/index.css'
+import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, billingPeriodMDMS, serviceConst } from "../../../../ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { additionDetails } from "./applyResource/additionalDetails";
 
-let consumerCode = getQueryArg(window.location.href, "connectionNumber");
-const tenantId = getQueryArg(window.location.href, "tenantId")
-const service = getQueryArg(window.location.href, "service")
+
+
+const getConnectionDetailsFooterAction =  freezeConnDetailsFooter;
+
+
+const pageReset = (dispatch) => {
+  dispatch(handleField("freezeConn",
+    "components",
+    "div", {}));
+
+    dispatch(
+      handleField(
+        "freezeConn",
+        "components.div.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.connectionExecutionDate",
+        "visible",
+        false
+      )
+    );
+
+    dispatch(
+      handleField(
+        "freezeConn",
+        "components.div.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.initialMeterReading",
+        "visible",
+        false
+      )
+    );
+
+    dispatch(
+      handleField(
+        "freezeConn",
+        "components.div.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterInstallationDate",
+        "visible",
+        false
+      )
+    );
+
+    dispatch(
+      handleField(
+        "freezeConn",
+        `components.div.children.additionDetails.children.cardContent.children.connectiondetailscontainer`,
+        "visible",
+        false
+      )
+    );
+
+    dispatch(
+      handleField(
+        "freezeConn",
+        `components.div.children.additionDetails.children.cardContent.children.modificationsEffectiveFrom`,
+        "visible",
+        false
+      )
+    );
+
+    dispatch(
+      handleField(
+        "freezeConn",
+        `components.div.children.additionDetails.children.cardContent.children.wsConnectionTaxHeadsContainer`,
+        "visible",
+        false
+      )
+    );
+  console.log("setting all cards as false");
+  // dispatch(handleField("search",
+  // "components",
+  // "div", {}));
+  // dispatch(handleField("search-preview",
+  // "components",
+  // "div", {}));
+ // dispatch(unMountScreen("search"));
+ // dispatch(unMountScreen("search-preview"));
+ // dispatch(prepareFinalObject("WaterConnection", []));
+ // dispatch(prepareFinalObject("SewerageConnection", []));
+  dispatch(prepareFinalObject("applyScreen", {}));
+  //dispatch(prepareFinalObject("searchScreen", {}));
+ // dispatch(prepareFinalObject("connectionHolders", []));
+ // dispatch(prepareFinalObject("documentsUploadRedux", {}));
+ // dispatch(prepareFinalObject("DynamicMdms.ws-services-masters.waterSource.selectedValues", []));
+ // dispatch(prepareFinalObject("editWSFlow", false));
+
+ // existingConnectionDetails = getExistingConnectionDetails();
+ // propertyDetail = getPropertyDetails();
+ // propertyIDDetails = getPropertyIDDetails();
+ // ownerDetail = getOwnerDetails();
+ // holderDetails = getHolderDetails();
+ // existingConnection = getCommonCard({ existingConnectionDetails });
+ // ownerDetails = getCommonCard({ ownerDetailsHeader, ownershipType, ownerDetail });
+ // IDDetails = getCommonCard({ propertyHeader, propertyID, propertyIDDetails });
+ // Details = getCommonCard({ propertyDetail });
+ // connectionHolderDetails = getCommonCard({ holderHeader, sameAsOwner, holderDetails })
+}
+
+export const viewBill = getCommonCard({ estimate });
+
+        let consumerCode = getQueryArg(window.location.href, "connectionNumber");
+        let tenantId = getQueryArg(window.location.href, "tenantId");
+        let service = getQueryArg(window.location.href, "service");
+
 
 const processBills = async (state, data, viewBillTooltip, dispatch) => {
   data.Bill[0].billDetails.forEach(bills => {
@@ -103,23 +206,7 @@ const processBills = async (state, data, viewBillTooltip, dispatch) => {
   })
 }
 
-const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
-  const requestBody = { 
-    "MdmsCriteria": { 
-        "tenantId": tenantId,
-          "moduleDetails": [            
-            { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
-            { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
-          ]
-        }
-    }
-  try{
-    let response = await getDescriptionFromMDMS(requestBody,dispatch);
-    dispatch(prepareFinalObject("billingPeriodMDMS", response.MdmsRes))
-  } catch (error) {        
-      console.log(error);
-  }
-}
+
 const searchResults = async (action, state, dispatch, consumerCode) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "connectionNumber", value: consumerCode }]
   let queryObjectForConsumptionDetails = [{ key: "tenantId", value: tenantId }, { key: "connectionNos", value: consumerCode }]
@@ -202,33 +289,39 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
   createEstimateData(data, "screenConfiguration.preparedFinalObject.billData.billDetails", dispatch, {}, {});
 };
 
-const validatePropertyTaxName = (mdmsPropertyUsageType) => {
-  if (
-    mdmsPropertyUsageType !== undefined &&
-    mdmsPropertyUsageType !== null &&
-    mdmsPropertyUsageType.MdmsRes !== undefined &&
-    mdmsPropertyUsageType.MdmsRes !== null &&
-    mdmsPropertyUsageType.MdmsRes.PropertyTax !== undefined &&
-    mdmsPropertyUsageType.MdmsRes.PropertyTax !== null &&
-    mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor !== undefined &&
-    mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor !== null &&
-    mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor.length > 0
-  ) { return mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name }
-  else { return "NA" }
+
+const fetchMDMSForBillPeriod = async(action,state,dispatch) => {
+  const requestBody = { 
+    "MdmsCriteria": { 
+        "tenantId": tenantId,
+          "moduleDetails": [            
+            { "moduleName": "ws-services-masters", "masterDetails": [{ "name": "billingPeriod" }]},
+            { "moduleName": "sw-services-calculation", "masterDetails": [{ "name": "billingPeriod" }]}
+          ]
+        }
+    }
+  try{
+    let response = await getDescriptionFromMDMS(requestBody,dispatch);
+    dispatch(prepareFinalObject("billingPeriodMDMS", response.MdmsRes))
+  } catch (error) {        
+      console.log(error);
+  }
 }
 
 const beforeInitFn = async (action, state, dispatch, consumerCode) => {
+    console.log("consumerCode---"+consumerCode);
   if (consumerCode) {
     await fetchMDMSForBillPeriod(action, state, dispatch);
     await searchResults(action, state, dispatch, consumerCode);
   }
 };
 
+
 const billHeader = () => {
   if (service === serviceConst.WATER) {
-    return getCommonHeader({ labelKey: "WS_COMMON_WATER_BILL_HEADER" })
+    return getCommonHeader({ labelKey: "WS_COMMON_WATER_PENDING_BILL_HEADER" })
   } else if (service === serviceConst.SEWERAGE) {
-    return getCommonHeader({ labelKey: "WS_COMMON_SEWERAGE_BILL_HEADER" })
+    return getCommonHeader({ labelKey: "WS_COMMON_WATER_PENDING_BILL_HEADER" })
   }
 }
 
@@ -243,81 +336,94 @@ let headerrow = getCommonContainer({
 });
 
 const estimate = getCommonGrayCard({
-  header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
-  estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
-  addPenaltyRebateButton: {
-    componentPath: "Button",
-    props: {
-      color: "primary",
-      style: {}
-    },
-    children: {
-      previousButtonLabel: getLabel({
-        labelKey: "WS_PAYMENT_ADD_REBATE_PENALTY"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        showHideAdhocPopup(state, dispatch, "viewBill");
-      }
-    },
-    visible: process.env.REACT_APP_NAME !== "Citizen"
-  }
-});
+    header: getCommonSubHeader({ labelKey: "WS_VIEWBILL_DETAILS_HEADER" }),
+    estimateSection: getFeesEstimateCard({ sourceJsonPath: "viewBillToolipData" }),
+     
+  });
 
-const propertyDetails = getProperty();
-const ownerDetails = getOwner();
-const serviceDetails = getService();
-
-export const viewBill = getCommonCard({ estimate, serviceDetails, propertyDetails, ownerDetails });
-
-const screenConfig = {
-  uiFramework: "material-ui",
-  name: "viewBill",
-  beforeInitScreen: (action, state, dispatch) => {
-    consumerCode = getQueryArg(window.location.href, "connectionNumber");
-    // To set the application no. at the  top
-    set(
+/*const screenConfig = {
+    uiFramework: "material-ui",
+    name: "freezeConn",
+    beforeInitScreen: (action, state, dispatch) => {
+       // pageReset(dispatch);
+       console.log("in this paage ---------->>>");
+       beforeInitFn(action, state, dispatch, consumerCode);
+        set(
       action.screenConfig,
       "components.div.children.headerDiv.children.header1.children.consumerCode.props.number",
       consumerCode
     );
-    set(action,"screenConfig.components.adhocDialog.children.popup",adhocPopupViewBill);
-    beforeInitFn(action, state, dispatch, consumerCode);
-    return action;
-  },
-
-  components: {
-    div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: { className: "common-div-css search-preview" },
-      children: {
-        headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-          children: { header1: { gridDefination: { xs: 12, sm: 8 }, ...headerrow } }
-        },
-        viewBill,
-        viewBillFooter
-      }
+        return action;
     },
-    adhocDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-wns",
-      componentPath: "DialogContainer",
-      props: {
-        open: false,
-        maxWidth: "sm",
-        screenKey: "viewBill"
-      },
-      children: {
-        popup: {}
-      },
-      visible: process.env.REACT_APP_NAME !== "Citizen"
+    components: {
+        div: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            props: { className: "common-div-css search-preview" },
+            children: {
+                headerDiv: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Container"
+                   
+                },
+                formwizardFirstStep: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Div",
+                    children: {
+                        paymentDetails: getCommonCard({
+                            header: getCommonTitle({
+                                labelName: "Payment Collection Details",
+                                labelKey: "NOC_PAYMENT_HEAD"
+                            }),
+                             estimate
+                        })
+                    }
+                }
+             
+              
+            }
+          },
     }
-  }
+};*/
+
+const screenConfig = {
+    uiFramework: "material-ui",
+    name: "freezeConn",
+    beforeInitScreen: (action, state, dispatch) => {
+       // pageReset(dispatch);
+       console.log("in this paage ---------->>>");
+       beforeInitFn(action, state, dispatch, consumerCode);
+        set(
+      action.screenConfig,
+      "components.div.children.headerDiv.children.header1.children.consumerCode.props.number",
+      consumerCode
+    );
+     set(
+      action,
+      "components.div.children.getConnectionDetailsFooterAction.children.takeAction.props.connectionNumber",
+      consumerCode
+    );
+   
+    pageReset(dispatch);
+        return action;
+    },
+    components: {
+        div: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            props: { className: "common-div-css search-preview" },
+            children: {
+                 headerDiv: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Container",
+                    children: { header1: { gridDefination: { xs: 12, sm: 8 }, ...headerrow } }
+                        },
+                        estimate,
+                        additionDetails,
+                        getConnectionDetailsFooterAction
+            }
+          }
+    }
 };
 
 export default screenConfig;

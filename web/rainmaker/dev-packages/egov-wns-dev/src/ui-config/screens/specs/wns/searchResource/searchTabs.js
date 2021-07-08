@@ -10,13 +10,13 @@ export const showSearches = getCommonContainer({
     props: {
       tabs: [
         {
-          tabButton: { labelName: "SEARCH CONNECTIONS", labelKey: "WS_SEARCH_CONNECTIONS" },
-          tabContent: { wnsApplication }
-        },
-        {
           tabButton: { labelName: "SEARCH APPLICATIONS", labelKey: "WS_SEARCH_APPLICATIONS" },
           tabContent: { searchApplications }
-        }
+        },
+        {
+          tabButton: { labelName: "SEARCH CONNECTIONS", labelKey: "WS_SEARCH_CONNECTIONS" },
+          tabContent: { wnsApplication }
+        }        
       ],
       tabIndex : 0
     },

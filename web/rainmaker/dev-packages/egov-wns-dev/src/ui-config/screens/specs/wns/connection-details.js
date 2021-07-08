@@ -10,6 +10,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
+import get from "lodash/get";
 import {
   getDescriptionFromMDMS,
   getSearchResults,
@@ -26,7 +27,7 @@ import {
 } from "./connectionDetailsResource/owner-deatils";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
-//import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
+import { getRequiredDocData } from "egov-billamend/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils/api";
 import { getBill } from "egov-common/ui-config/screens/specs/utils";
@@ -59,7 +60,7 @@ const showHideServiceDetails = (dispatch,data)=>{
         "visible",
         false
   )
-);  
+  );  
   }
   else{
      dispatch(
@@ -113,13 +114,22 @@ const showHideConnectionHolder = (dispatch, connectionHolders) => {
     );
   }
 };
-export const sortpayloadDataObj = (connectionObj) => {
-  return connectionObj.sort((a, b) =>
-    a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate
-      ? 1
-      : -1
-  );
-};
+// export const sortpayloadDataObj = (connectionObj) => {
+//   return connectionObj.sort((a, b) =>
+//     a.additionalDetails.appCreatedDate < b.additionalDetails.appCreatedDate
+//       ? 1
+//       : -1
+//   );
+// };
+
+export const sortpayloadDataObj =(connectionObj)=>{ 
+ 
+  return connectionObj.sort(function(x, y){
+    return  y.auditDetails.createdTime-x.auditDetails.createdTime;
+  });
+}
+
+
 
 const getActiveConnectionObj = (connectionsObj) => {
   let getActiveConnectionObj = "";
@@ -162,13 +172,15 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       payloadData !== undefined &&
       payloadData.SewerageConnections.length > 0
     ) {
-      payloadData.SewerageConnections = sortpayloadDataObj(
-        payloadData.SewerageConnections
-      );
-
-      let sewerageConnection = getActiveConnectionObj(
-        payloadData.SewerageConnections
-      );
+      //sorting
+      payloadData.SewerageConnections = payloadData.SewerageConnections.sort(function(x, y){
+        return  y.auditDetails.createdTime-x.auditDetails.createdTime;
+        });
+       
+      // payloadData.SewerageConnections = sortpayloadDataObj(payloadData.SewerageConnections);
+    
+      //let sewerageConnection = payloadData.SewerageConnections[0];
+      let sewerageConnection = getActiveConnectionObj(payloadData.SewerageConnections);
       let propTenantId = sewerageConnection.property.tenantId.split(".")[0];
       sewerageConnection.service = serviceReq;
 
@@ -257,17 +269,33 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       getApplicationNumber(dispatch, payloadData.SewerageConnections);
       showHideServiceDetails(dispatch, sewerageConnection);
     }
-  } else if (serviceReq === serviceConst.WATER) {   
-    let payloadData = await getSearchResults(queryObject, true);    
+  } else if (serviceReq === serviceConst.WATER) {  
+    
+    let payloadData = await getSearchResults(queryObject, true);  
+   
     if (
       payloadData !== null &&
       payloadData !== undefined &&
       payloadData.WaterConnection.length > 0
     ) {
-      payloadData.WaterConnection = sortpayloadDataObj(
-        payloadData.WaterConnection
-      );
-      let waterConnection = getActiveConnectionObj(payloadData.WaterConnection);
+     //payloadData.WaterConnection = sortpayloadDataObj(payloadData.WaterConnection);
+      payloadData.WaterConnection = payloadData.WaterConnection.sort(function(x, y){
+            return  y.auditDetails.createdTime-x.auditDetails.createdTime;
+       });    
+
+       let waterConnection = getActiveConnectionObj(payloadData.WaterConnection); 
+          
+      if(waterConnection.waterSubSource == undefined ){  //"undefined" case for OTHERS use case       
+        waterConnection.waterSubSource = "NA"
+      }
+      if(waterConnection.waterSource.includes('.')){ // waterConnection have ACTIVE and OTHER-STATE connection obj
+        let waterSource = waterConnection.waterSource.includes("null") ? "NA" : waterConnection.waterSource.split(".")[0];
+        let waterSubSource = waterConnection.waterSource.includes("null") ? "NA" : waterConnection.waterSource.split(".")[1];
+        waterConnection.waterSource = waterSource;
+        waterConnection.waterSubSource = waterSubSource;       
+      
+      }
+
       waterConnection.service = serviceReq;
       let propTenantId = waterConnection.property.tenantId.split(".")[0];
       if (waterConnection.connectionExecutionDate !== undefined) {
@@ -335,11 +363,13 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
         },
         {
           key: "consumerCode",
-          value: waterConnection.applicationNo,
+         // value: waterConnection.applicationNo,
+         value: waterConnection.connectionNo,
         },
         {
           key: "businessService",
-          value: "WS.ONE_TIME_FEE",
+         // value: "WS.ONE_TIME_FEE",
+         value: "WS",
         },
       ];
       const bill = await getBill(queryObjForBill,dispatch);
@@ -383,8 +413,8 @@ const connectionHolders = connHolderDetailsSummary();
 
 const connectionHoldersSameAsOwner = connHolderDetailsSameAsOwnerSummary();
 
-//const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP')) ? connectionDetailsFooter : {};
-const getConnectionDetailsFooterAction =   {};
+const getConnectionDetailsFooterAction =  (ifUserRoleExists('WS_CEMP') || ifUserRoleExists('SW_CEMP')  || ifUserRoleExists('WS_FIELD_INSPECTOR')) ? connectionDetailsFooter : {};
+//const getConnectionDetailsFooterAction =   {};
 
 
 export const connectionDetails = getCommonCard({
@@ -432,12 +462,12 @@ const getMDMSData = async (action, state, dispatch) => {
     },
   };
   try {
-    // getRequiredDocData(action, dispatch, [
-    //   {
-    //     moduleName: "BillAmendment",
-    //     masterDetails: [{ name: "documentObj" }],
-    //   },
-    // ]);
+    getRequiredDocData(action, dispatch, [
+      {
+        moduleName: "BillAmendment",
+        masterDetails: [{ name: "documentObj" }],
+      },
+    ]);
     const payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
@@ -465,12 +495,12 @@ const screenConfig = {
     getDataForBillAmendment(action, state, dispatch);
 
     beforeInitFn(action, state, dispatch, connectionNo);
-    // getRequiredDocData(action, dispatch, [
-    //   {
-    //     moduleName: "BillAmendment",
-    //     masterDetails: [{ name: "documentObj" }],
-    //   },
-    // ]);
+    getRequiredDocData(action, dispatch, [
+      {
+        moduleName: "BillAmendment",
+        masterDetails: [{ name: "documentObj" }],
+      },
+    ]);
     set(
       action,
       "screenConfig.components.div.children.headerDiv.children.header1.children.connectionNumber.props.number",

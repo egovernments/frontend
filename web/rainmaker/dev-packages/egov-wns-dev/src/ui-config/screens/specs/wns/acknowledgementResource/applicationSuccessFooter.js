@@ -147,6 +147,7 @@ const handleAppDownloadAndPrint = async(state, dispatch, action) => {
   filteredDocs && filteredDocs.map(val => {
     if (val.title.includes("WS_OWNER.IDENTITYPROOF.")) { val.title = "WS_OWNER.IDENTITYPROOF"; }
     else if (val.title.includes("WS_OWNER.ADDRESSPROOF.")) { val.title = "WS_OWNER.ADDRESSPROOF"; }
+    else if (val.title.includes("WS_OWNER.NOC_")) { val.title = "NOC"; }
   });
   if (applicationNumberWater && applicationNumberSewerage) {
     WaterConnection[0].pdfDocuments = filteredDocs;

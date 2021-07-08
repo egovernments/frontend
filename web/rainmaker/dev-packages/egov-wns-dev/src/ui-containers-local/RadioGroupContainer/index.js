@@ -46,8 +46,10 @@ class RadioButtonsGroup extends React.Component {
     const { screenKey, componentJsonpath, onFieldChange, onChange } = this.props;
     onChange ? onChange(event) : onFieldChange(screenKey, componentJsonpath, "props.value", event.target.value);
     if (event.target.value === "Self") {
+      //console.info("toggling radio btns---",false);
       togglePlumberFeilds(onFieldChange, false);
     } else {
+      //console.info("toggling radio btns---",true)
       togglePlumberFeilds(onFieldChange, true);
     }
   };
@@ -57,6 +59,7 @@ class RadioButtonsGroup extends React.Component {
     const { applyScreen } = preparedFinalObject;
     const { additionalDetails } = applyScreen;
     let value = (additionalDetails !== undefined && additionalDetails.detailsProvidedBy !== undefined) ? additionalDetails.detailsProvidedBy : "";
+    if(!value || value =="NA") value = "ULB"; 
     return (
       <div className={classes.root}>
         <FormControl

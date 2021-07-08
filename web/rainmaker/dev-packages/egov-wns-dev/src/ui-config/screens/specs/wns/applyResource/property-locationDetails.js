@@ -5,13 +5,19 @@ import {
     getLabelWithValue,
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  import { handleNA } from '../../utils';
+  import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
   export const propertyLocationDetails = getCommonContainer({
     city: getLabelWithValue(
       {
         labelKey: "WS_PROP_DETAIL_CITY"
       },
       {
+        localePrefix: {
+          moduleName: "TENANT_TENANTS",
+          masterName: "PB"
+        },
         jsonPath: "applyScreen.property.address.city",
       }
     ),
@@ -35,6 +41,7 @@ import {
       },
       {
         jsonPath: "applyScreen.property.address.doorNo",
+        callBack: handleNA
       }
     ),
     buildingOrColonyName: getLabelWithValue(
@@ -42,7 +49,8 @@ import {
         labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
       },
       {
-        jsonPath: "applyScreen.property.address.buildingName"
+        jsonPath: "applyScreen.property.address.buildingName",
+        callBack: handleNA
       }
     ),
     // streetName: getLabelWithValue(
@@ -59,7 +67,11 @@ import {
         labelName:"Locality/Mohalla"
       },
       {
-        jsonPath: "applyScreen.property.address.locality.name",
+        localePrefix: {
+          moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.', '_').toUpperCase() : getTenantIdCommon(),
+          masterName: "REVENUE"
+        },
+        jsonPath: "applyScreen.property.address.locality.code",
       }
     ),
     // pincode: getLabelWithValue(

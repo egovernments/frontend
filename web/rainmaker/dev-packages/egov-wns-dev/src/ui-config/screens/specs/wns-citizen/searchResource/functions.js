@@ -48,7 +48,7 @@ export const searchApiCall = async (state, dispatch) => {
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
-        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+        queryObject.push({ key: key, value: encodeURIComponent(searchScreenObject[key].trim()) });
       }
     }
     let tenantId = get(state, "screenConfiguration.preparedFinalObject.searchScreen.tenantId");

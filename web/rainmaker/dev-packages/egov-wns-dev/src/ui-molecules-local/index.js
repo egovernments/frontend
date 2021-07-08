@@ -100,6 +100,11 @@ const ActionFooter = Loadable({
   loading: () => <Loading />
 });
 
+const FreezeAction = Loadable({
+  loader: () => import("./FreezeAction"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   Tooltip,
@@ -120,5 +125,6 @@ export {
   WnsHowItWorks,
   FeesEstimateOverviewCard,
   OwnerHeader,
-  ActionFooter
+  ActionFooter,
+  FreezeAction
 };

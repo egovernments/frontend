@@ -13,11 +13,7 @@ const header = getCommonHeader(
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "my-connections",
-  beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch);
-    return action;
-  },
+  name: "HowItWorksWS",
   components: {
     div: {
       uiFramework: "custom-atoms",
