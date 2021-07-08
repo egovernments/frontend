@@ -13,6 +13,7 @@ import { createEmployee, getAdminRole, showCityPicker } from "../utils";
 import { cityPicker } from "./createResource/cityPicker";
 import { searchForm } from "./searchResource/searchForm";
 import { searchResults } from "./searchResource/searchResults";
+import { resetFieldsForApplicationn } from "../utils/index";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -121,6 +122,7 @@ const employeeSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
+    resetFieldsForApplicationn(state, dispatch);
     dispatch(prepareFinalObject("hrmsSearchScreen", {}));
     getData(action, state, dispatch);
     setUlbSelect(action, state, dispatch);

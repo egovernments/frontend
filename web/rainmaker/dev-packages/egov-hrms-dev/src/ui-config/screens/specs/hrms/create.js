@@ -8,7 +8,7 @@ import map from "lodash/map";
 import "../../../../index.css";
 import { httpRequest } from "../../../../ui-utils";
 import { assignmentDetails } from "./createResource/assignment-details";
-
+import { resetFieldsForApplication } from "../utils/index";
 import {
   employeeDetails,
   professionalDetails
@@ -254,6 +254,7 @@ const screenConfig = {
   name: "create",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    resetFieldsForApplication(state, dispatch);
     dispatch(prepareFinalObject("empPhoneNumber", ""));
     const pickedTenant = getQueryArg(window.location.href, "tenantId");
     pickedTenant &&
