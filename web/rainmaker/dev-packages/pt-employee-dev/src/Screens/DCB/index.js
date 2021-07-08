@@ -1323,7 +1323,9 @@ class FormWizardDataEntry extends Component {
                 // let previousYear=data1;
                 Object.keys(data.demand[data1]).forEach((data2, key2) => {
                   totalCollectedAmount = totalCollectedAmount + parseFloat((data.demand[data1][data2].PT_COLLECTED));
-                  if (isNaN(totalCollectedAmount)) totalCollectedAmount = 0; 
+                 if (data.demand[data1][data2].PT_DEMAND || isNaN(totalCollectedAmount)) totalCollectedAmount = 0; 
+                  console.log(parseFloat(data.demand[data1][data2].PT_DEMAND) + "ttt")
+                  console.log(totalCollectedAmount+ "totalCollectedAmountt")
                   if (
                     !data.demand[data1][data2].PT_DEMAND &&
                     data.demand[data1][data2].PT_COLLECTED &&
