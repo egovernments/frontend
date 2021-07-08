@@ -5,27 +5,21 @@ const data = {
     title: "",
     rows: [
         {
-            title: "Lorem ipsum dolor sit amet,",
-            content: `&nbsp; Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed tempor sem. Aenean vel turpis feugiat,
-              ultricies metus at, consequat velit. Curabitur est nibh, varius in tellus nec, mattis pulvinar metus.
-              In maximus cursus lorem, nec laoreet velit eleifend vel. Ut aliquet mauris tortor, sed egestas libero interdum vitae.
-              Fusce sed commodo purus, at tempus turpis.`,
+            title: "What is a Property Tax Assessment?",
+            content: `An assessment is a declaration of the details of a particular Property to your local municipal government for a particular year. The payable Property Tax is calculated based on these details. An Assessment is completed when your Municipality receives the full payment of your Property Tax.`,
         },
         {
-            title: "Nunc maximus, magna at ultricies elementum",
+            title: "What is the difference between Existing Property ID & Property Tax Unique ID?",
             content:
-                "Nunc maximus, magna at ultricies elementum, risus turpis vulputate quam, vitae convallis ex tortor sed dolor.",
+                "Existing Property ID has been assigned to you by your local municipal government prior to your using this platform to pay your Property Taxes. Property Tax Unique ID is a new ID being assigned to identify your property.",
         },
         {
-            title: "Curabitur laoreet, mauris vel blandit fringilla",
-            content: `Curabitur laoreet, mauris vel blandit fringilla, leo elit rhoncus nunc, ac sagittis leo elit vel lorem.
-            Fusce tempor lacus ut libero posuere viverra. Nunc velit dolor, tincidunt at varius vel, laoreet vel quam.
-            Sed dolor urna, lobortis in arcu auctor, tincidunt mattis ante. Vivamus venenatis ultricies nibh in volutpat.
-            Cras eu metus quis leo vestibulum feugiat nec sagittis lacus.Mauris vulputate arcu sed massa euismod dignissim. `,
+            title: "What should I do if i have assessed and paid with incorrect details by mistake?",
+            content: `You can re-assess your property. This option is available in your Assessment History in your list of properties (My properties). `,
         },
         {
-            title: "What is the package version",
-            content: <p>current version is 1.2.1</p>,
+            title: "Is Property tax receipt a legal proof of property ownership?",
+            content: 'Yes. But keep in mind that Payment of Property tax does not serve as a proof of ownership of the property.',
         },
     ],
 };
