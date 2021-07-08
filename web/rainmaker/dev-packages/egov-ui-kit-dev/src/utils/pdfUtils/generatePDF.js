@@ -537,7 +537,7 @@ export const generatePDF = (logo, applicationData = {}, fileName) => {
     let addlHeader = "";
     if(applicationData)
     {
-        if(applicationData.applicationNoHeader){
+        if(applicationData.applicationNoHeader && applicationData.applicationNoValue){
             applNo = applicationData.applicationNoValue.indexOf("PT-") === -1? getLocaleLabels(applicationData.applicationNoHeader,applicationData.applicationNoHeader) + ":": getLocaleLabels(applicationData.applicationNoHeader,applicationData.applicationNoHeader);
         }
         if(applicationData.additionalHeaderValue){

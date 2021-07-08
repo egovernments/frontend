@@ -136,7 +136,8 @@ class InboxData extends React.Component {
       let businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
       let bServcieData = filter(businessServiceData, (item) =>{return item.businessService.toUpperCase() ===bService.toUpperCase()});
       if(bServcieData.length>0) {
-        let obj = filter(bServcieData[0].states,(item)=> {return item.applicationStatus && item.applicationStatus.toUpperCase() ===status.toUpperCase()});
+        let obj =  bService === "PT.CREATE"?filter(bServcieData[0].states,(item)=> {return item.state && item.state.toUpperCase() ===status.toUpperCase()}):
+        filter(bServcieData[0].states,(item)=> {return item.applicationStatus && item.applicationStatus.toUpperCase() ===status.toUpperCase()});
         if(obj.length> 0){
           return this.convertMillisecondsToDays( obj[0].sla);
         }

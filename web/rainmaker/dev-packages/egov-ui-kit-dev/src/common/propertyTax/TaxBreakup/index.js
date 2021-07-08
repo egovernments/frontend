@@ -35,7 +35,7 @@ class TaxBreakup extends Component {
     }
 
     const { collectedAmount, billAccountDetails } = current;
-    const taxHeadsFromAPI = billAccountDetails.map((item) => {
+    const taxHeadsFromAPI = billAccountDetails && billAccountDetails.map((item) => {
       return item.taxHeadCode;
     });
 
@@ -45,7 +45,7 @@ class TaxBreakup extends Component {
     estimate.collectedAmount = collectedAmount;
     estimate.arrears = arrears;
 
-    const taxHeadEstimates = taxHeadsFromAPI.reduce((taxHeadEstimates, current) => {
+    const taxHeadEstimates = taxHeadsFromAPI && taxHeadsFromAPI.reduce((taxHeadEstimates, current) => {
       const taxHeadContent = billAccountDetails.filter((item) => item.taxHeadCode && item.taxHeadCode === current);
       taxHeadContent &&
         taxHeadContent[0] &&
@@ -58,7 +58,7 @@ class TaxBreakup extends Component {
       return taxHeadEstimates;
     }, []);
     let  sortedEstimateDetails =[];
-    sortedEstimateDetails = taxHeadEstimates.sort((a, b) => a.order - b.order);
+    sortedEstimateDetails = taxHeadEstimates && taxHeadEstimates.sort((a, b) => a.order - b.order);
 
     estimate.taxHeadEstimates = sortedEstimateDetails;
     return [{ ...estimate }];

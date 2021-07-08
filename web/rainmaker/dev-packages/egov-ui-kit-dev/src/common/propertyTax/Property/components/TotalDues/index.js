@@ -13,6 +13,8 @@ import RebateDialogue from '../RebateDialogue'
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest as httpRequestnew } from "egov-ui-framework/ui-utils/api";
 import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
   fontWeight: 400,
@@ -50,7 +52,7 @@ class TotalDues extends React.Component {
     console.log(curentFinYear);
     const requestBody = {
       MdmsCriteria: {
-        tenantId: tenantId,
+        tenantId: tenantId || this.props.match.params.tenantId,
         moduleDetails: [
           {
             moduleName: "PropertyTax",

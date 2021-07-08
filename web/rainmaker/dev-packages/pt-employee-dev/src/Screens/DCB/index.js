@@ -272,7 +272,7 @@ class FormWizardDataEntry extends Component {
                 (item, i) => {
                   if (
                     generalMDMSDataById.TaxPeriod[item].fromDate ===
-                    demand.taxPeriodFrom
+                    demand.taxPeriodFrom && generalMDMSDataById.TaxPeriod[item].service==='PT'
                   ) {
                     finalYear = 
                     generalMDMSDataById.TaxPeriod[item].financialYear;
@@ -620,7 +620,7 @@ class FormWizardDataEntry extends Component {
               (item, i) => {
                 if (
                   generalMDMSDataById.TaxPeriod[item].fromDate ===
-                  demand.taxPeriodFrom
+                  demand.taxPeriodFrom && generalMDMSDataById.TaxPeriod[item].service==='PT'
                 ) {
                   finalYear = 
                   generalMDMSDataById.TaxPeriod[item].financialYear;
@@ -648,7 +648,7 @@ class FormWizardDataEntry extends Component {
                ),
                prepareFinalObject(
                  `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_COLLECTED`,
-                 `${Math.trunc(demandData.collectionAmount)}`
+                 `${(demandData.collectionAmount)}`
                );
              prepareFinalObject(
                `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].ID`,
@@ -2284,7 +2284,7 @@ class FormWizardDataEntry extends Component {
         (years, keys) => {
           if (
             generalMDMSDataById.TaxPeriod[years].fromDate ===
-            obj.taxPeriodFrom
+            obj.taxPeriodFrom && generalMDMSDataById.TaxPeriod[years].service == "PT"
           ) {
             finaYr = generalMDMSDataById.TaxPeriod[years].financialYear;
           }
