@@ -91,24 +91,9 @@ export const searchResult = {
 };
 
 const onRowClick = rowData => {
-  // const bussinessservice = rowData[3];
-  // if(bussinessservice.indexOf("Property Tax") != -1){
-  //   const receiptQueryString = [
-  //     { key: "propertyId", value: rowData[1] },
-  //     { key: "tenantId", value: rowData[7] },
-  //     { key: "receiptNo", value: rowData[0]}
-  // ]
-
-  // download(receiptQueryString, "download", "newpt-receipt");
-
-  // }
-  // else
-  // {
-    const receiptQueryString = [
-      { key: "receiptNumbers", value:  rowData[0]},
-      { key: "tenantId", value: rowData[7] }
-    ]
-    download(receiptQueryString);
-  //}
-
+  const receiptQueryString = [
+    { key: "receiptNumbers", value:  rowData[0]},
+    { key: "tenantId", value: rowData[7] }
+  ]
+  download(receiptQueryString);
 };

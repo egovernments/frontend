@@ -9,16 +9,9 @@ import {
 } from "./acknowledgementResource/acknowledgementFooter";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-//import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { download,downloadChallan } from  "egov-common/ui-utils/commons";;
 import './index.css';
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-
-import {
-  handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,  
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
 const header = getCommonHeader({
   labelName: `mCollect`,
   labelKey: "ACTION_TEST_UNIVERSAL_COLLECTION",
@@ -79,7 +72,7 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", 
             style: { 
-              height: "60px", width: "200px",color: "#FE7A51", 
+              height: "60px", width:"210px",color: "#FE7A51", 
               marginRight: "5px" 
             },
             className: "uc-download-button" },
@@ -96,7 +89,7 @@ const downloadprintMenu = (state, dispatch,applicationNumber,tenantId) => {
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
             props: { variant: "outlined", 
-            style: { height: "60px", color: "#FE7A51" },
+            style: { height: "60px",  width:"180px",color: "#FE7A51" },
             className: "uc-print-button" },
             menu: printMenu
           }
@@ -127,7 +120,7 @@ const consumerCode =(challanNumber) =>{
 * bodyKey,bodyname - message body display localization code
 * billNumber - bill number related to challan for cancel and failure bill number will be null
 */
-const applicationSuccessNotificationCard =(icon,color,headerkey,headername,bodykey,bodyname /*,billNumber*/)=>{
+const applicationSuccessNotificationCard =(icon,color,headerkey,headername,bodykey,bodyname,billNumber)=>{
   return{
     uiFramework: "custom-atoms",
     componentPath: "Div",
@@ -147,8 +140,7 @@ const applicationSuccessNotificationCard =(icon,color,headerkey,headername,bodyk
           labelName: "Bill No.",
           labelKey: "UC_BILL_NO_LABEL"
         },
-        // number: billNumber
-        number:"-"
+        number: billNumber
       })
     }
   }
@@ -159,12 +151,11 @@ const getAcknowledgementCard = (
   dispatch,
   purpose,
   status,
-  //billNumber,
+  billNumber,
   challanNumber ,
   tenantId
  
  ) => {
- 
    if(purpose === "challan" && status === "success"){     
      return {      
       header :getCommonContainer({
@@ -172,7 +163,7 @@ const getAcknowledgementCard = (
         consumerCode : consumerCode(challanNumber),    
       }),
       headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
-      applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_GENERATED_SUCCESS_MESSAGE","create","UC_BILL_GENERATION_MESSAGE_SUB","createsuccessmsg"/*,billNumber*/),
+      applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_GENERATED_SUCCESS_MESSAGE","create","UC_BILL_GENERATION_MESSAGE_SUB","createsuccessmsg",billNumber),
       
       iframeForPdf: {
         uiFramework: "custom-atoms",
@@ -188,7 +179,7 @@ const getAcknowledgementCard = (
        consumerCode : consumerCode(challanNumber),    
      }),
      headerdownloadprint:downloadprintMenu(state, dispatch,challanNumber,tenantId),  
-     applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_UPDATED_SUCCESS_MESSAGE","update","UC_BILL_GENERATION_MESSAGE_SUB","updatesuccessmsg"/*,billNumber*/),
+     applicationSuccessCard:applicationSuccessNotificationCard("done","#39CB74","UC_BILL_UPDATED_SUCCESS_MESSAGE","update","UC_BILL_GENERATION_MESSAGE_SUB","updatesuccessmsg",billNumber),
      
      iframeForPdf: {
        uiFramework: "custom-atoms",
@@ -275,19 +266,17 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-   // const billNumber = getQueryArg(window.location.href, "billNumber");
+    const billNumber = getQueryArg(window.location.href, "billNumber");
     const challanNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const businessService = getQueryArg(window.location.href,"serviceCategory");
-   if(purpose === "challan"|| purpose === "update")
-      getBillDetails(state,dispatch);
-   
+  
     const data = getAcknowledgementCard(
       state,
       dispatch,
       purpose,
       status,
-     // billNumber,
+      billNumber,
       challanNumber,
       tenantId
     );
@@ -296,40 +285,4 @@ const screenConfig = {
   }
 };
 
-const getBillDetails = async ( state,dispatch) =>{
-  const purpose = getQueryArg(window.location.href, "purpose");
-    const status = getQueryArg(window.location.href, "status");
-   // const billNumber = getQueryArg(window.location.href, "billNumber");
-    const consumerCode = getQueryArg(window.location.href, "challanNumber");
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-    const businessService = getQueryArg(window.location.href,"serviceCategory");
-  console.info("Fetch bill here",consumerCode,  tenantId,  businessService);
- // if(purpose !="cancel"){
-    try {
-      const response = await httpRequest(
-        "post",
-        `/billing-service/bill/v2/_fetchbill?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
-        "",
-        [],
-        {}
-      );
-      if (response && response.Bill[0]) {
-        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", response.Bill));
-        console.info("response of search bill=====>",response.Bill[0].billNumber);
-        dispatch(
-          handleField(
-            "acknowledgement",
-            "components.div.children.applicationSuccessCard.children.card.children.cardContent.children.applicationSuccessContainer.children.tail.children.paragraph.children.key",
-            "props.labelName",
-            response.Bill[0].billNumber
-          )
-        );
-      }
-     
-      //return response;
-    } catch (error) {
-      console.log(error);
-    }
-
-}
 export default screenConfig;
