@@ -452,11 +452,8 @@ class Property extends Component {
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit", marginLeft:"10px" }}
             />  
-        }        
-
-                      
-{isMigratedProperty && isCounterEmp && !isCitizen && (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
-        || !payLen ) &&
+        }                     
+{isMigratedProperty && isCounterEmp && !isCitizen && 
            <Button
            className="tax-button"
               label={
