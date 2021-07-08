@@ -13,7 +13,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner,showSpinner,hideSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import "../../../../../index.css";
 
@@ -203,30 +203,38 @@ const prepareObj =(state,dispatch) =>{
   
 };
  
-const postUpdate=async(state,dispatch,payload,operation) =>{
-  const consumerCode = get(payload, "challans[0].challanNo");
-  const businessService = get(payload, "challans[0].businessService");
-  set(payload, "challans[0].mobileNumber", get(payload, "challans[0].citizen.mobileNumber"));
-  set(payload, "challans[0].consumerName", get(payload, "challans[0].citizen.name"));
-  //set(payload,"challans[0].businessService",businessService.split(".")[0]);
-  dispatch(prepareFinalObject("Challan", payload.challans[0]));         
-  let tenant=getTenantId(); 
-  await generateBill(consumerCode, tenant, businessService,operation, dispatch);
-}
+// const postUpdate=async(state,dispatch,payload,operation) =>{
+//   const consumerCode = get(payload, "challans[0].challanNo");
+//   const businessService = get(payload, "challans[0].businessService");
+//   set(payload, "challans[0].mobileNumber", get(payload, "challans[0].citizen.mobileNumber"));
+//   set(payload, "challans[0].consumerName", get(payload, "challans[0].citizen.name"));
+//   //set(payload,"challans[0].businessService",businessService.split(".")[0]);
+//   dispatch(prepareFinalObject("Challan", payload.challans[0]));         
+//   let tenant=getTenantId(); 
+//   await generateBill(consumerCode, tenant, businessService,operation, dispatch);
+// }
 
 const createChallan = async(state,dispatch,challan) =>{
   var operation="challan";
   try{
+    
     if(challan!=null){
+     
       const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_create", "", [], {
         Challan: challan
       });
       if (payload.challans.length > 0) {
-        await postUpdate(state,dispatch,payload,operation);
+       // dispatch(toggleSpinner());
+        dispatch(prepareFinalObject("Challan", payload.challans[0]));
+        const consumerCode = get(payload, "challans[0].challanNo");
+        const businessService = get(payload, "challans[0].businessService");
+        dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=success&tenantId=${tenantId}&serviceCategory=${businessService}&challanNumber=${consumerCode}`));
+       // dispatch(toggleSpinner());
       } else {
         console.info("some error  happened while generating challan");
         dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
       }
+     
     }
   }catch(e){
     console.info("error in challan creation==",e);
@@ -252,15 +260,26 @@ const updateChallan = async(state,dispatch,challan) =>{
   var operation="update";
   try{
     if(challan!=null){
+     
       const payload = await httpRequest("post", "/echallan-services/eChallan/v1/_update", "", [], {
         Challan: challan
       });
       if (payload.challans.length > 0) {
-        await postUpdate(state,dispatch,payload,operation);
+        //dispatch(toggleSpinner());
+        //await postUpdate(state,dispatch,payload,operation);
+        dispatch(prepareFinalObject("Challan", payload.challans[0]));
+        const consumerCode = get(payload, "challans[0].challanNo");
+        const businessService = get(payload, "challans[0].businessService");  
+       
+         dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=success&tenantId=${tenantId}&serviceCategory=${businessService}&challanNumber=${consumerCode}`));
+        // dispatch(toggleSpinner());
+        
+       
       } else {
         console.info("some error  happened while updating challan");
         dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
       }
+      
     }
   }catch(e){
     dispatch(setRoute(`/uc/acknowledgement?purpose=${operation}&status=failure`));
