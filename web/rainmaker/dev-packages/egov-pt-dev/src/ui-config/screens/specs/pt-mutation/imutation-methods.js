@@ -353,8 +353,27 @@ import {
           sm: 12,
           md: 6
         },
-        beforeFieldChange: async (action, state, dispatch) => {
-          let value = action.value;
+        beforeFieldChange:(action, state, dispatch) => {
+          if(action.value==="OptionPID")
+          {
+            dispatch(
+              handleField(
+             "iSearch",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName.visible",
+             false
+              ))
+           }
+
+          else
+          {
+            dispatch(
+              handleField(
+             "iSearch",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName.visible",
+             true
+              ))
+
+            } 
         },
         jsonPath:
           "iSearchScreen.selected",
@@ -365,12 +384,12 @@ import {
             {
               labelName: "I Know My Property ID",
               labelKey: "I_KNOW_MY_PROPERTYID",
-              value: "Option1"
+              value: "OptionPID"
             },
             {
               labelName: "Property Search Using Property Details",
               labelKey: "PT_SEARCH_USING_PROPERTY_DETAILS",
-              value: "Option2"
+              value: "OptionPD"
             }
          ],
          jsonPath:
@@ -559,15 +578,18 @@ import {
         position: "start"
       },
       required: false,
+      visible:false,
       pattern: getPattern("MobileNo"),
       jsonPath: "iSearchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     }),
+    
     ownerName: getTextField({
       label: {
         labelName: "Owner Name",
         labelKey: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
       },
+      visible:false,
       placeholder: {
         labelName: "Enter Property Owner Name",
         labelKey: "PT_SEARCH_OWNER_NAME_PLACEHOLDER"
@@ -631,43 +653,7 @@ import {
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
       jsonPath: "iSearchScreen.ids"  
     }),
-/*   mohalla: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-pt",
-      componentPath: "AutosuggestContainer",
-      props: {
-        className: "autocomplete-dropdown autocomplete-mohalla",
-        suggestions: [],
-        label: {
-          labelName: "Mohalla",
-          labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
-        },
-        placeholder: {
-          labelName: "Select mohala",
-          labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName:getTenantId(),
-          masterName: "REVENUE"
-        },
-        jsonPath: "iSearchScreen.locality",
-        sourceJsonPath: "searchScreenMdmsData.tenant.localities",
-        labelsFromLocalisation: true,
-        required: true,
-        isClearable: true,
-        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-        inputLabelProps: {
-          shrink: true
-        }
-      },
-      // required: true,
-      jsonPath: "iSearchScreen.locality",
-      sourceJsonPath: "searchScreenMdmsData.tenant.localities",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      }
-    },   */
+
       mohalla: getSelectField({
         label: {
           labelName: "Mohalla",
@@ -680,7 +666,8 @@ import {
         localePrefix: {
           moduleName:getTenantId(),
           masterName: "REVENUE"
-        },   
+        },
+        visible:false,   
         errorMessage: "ERR_REQUIRED_FILED",    
         jsonPath: "iSearchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
@@ -693,8 +680,27 @@ import {
           xs: 12,
           sm: 4
         }}),
-
-    
+        doorNo: getTextField({
+          label: {
+            labelName: "Owner Name",
+            labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
+          },
+          placeholder: {
+            labelName: "Enter Property Owner Name",
+            labelKey: "PT_PROPERTY_DETAILS_DOOR_NUMBER"
+          },
+          pattern: getPattern("DoorHouseNo"),
+          errorMessage: "Invalid No",
+          jsonPath: "iSearchScreen.doorNo",
+          props: {
+            className: "applicant-details-error"
+          },
+          visible:false,   
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }),    
     existingPropertyId: getTextField({
       label: {
         labelName: "Existing Property ID",

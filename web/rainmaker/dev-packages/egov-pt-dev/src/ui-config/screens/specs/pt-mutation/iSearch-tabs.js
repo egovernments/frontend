@@ -2,7 +2,7 @@
 import {
     getCommonCard
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { searchPropertyDetails, searchApplicationDetails } from "./imutation-methods";
+  import { searchPropertyDetails } from "./imutation-methods";
  // import "./index.css"
   
   const iSearchTabs = getCommonCard({

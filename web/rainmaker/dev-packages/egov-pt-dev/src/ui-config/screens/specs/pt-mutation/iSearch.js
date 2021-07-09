@@ -125,6 +125,12 @@ const screenConfig = {
     dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
 
+    set(
+        action.screenConfig,
+          "components.div.children.searchPropertyDetails.children.cardContent.children.selectionContainer.children.genderRadioGroup.props.value",
+          "OptionPID"
+        )
+
    /*  if(citizenSearch) 
      {
           set(
