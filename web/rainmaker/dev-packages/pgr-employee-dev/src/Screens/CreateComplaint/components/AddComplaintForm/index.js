@@ -23,12 +23,14 @@ const AddComplaintForm = ({
   const { name, phone, mohalla, city, address, landmark, houseNo } = fields;
   const submit = form.submit;
   if(city && city.dropDownData && city.dropDownData.length > 0) {
+    debugger;
     city.dropDownData.map((item, key)=>{
       city.dropDownData[key].code = item.value;
       city.dropDownData[key].name = item.label;
     })
   }
   if(mohalla && mohalla.dropDownData && mohalla.dropDownData.length > 0) {
+    debugger;
     mohalla.dropDownData.map((item, key)=>{
       mohalla.dropDownData[key].code = item.value;
       mohalla.dropDownData[key].name = item.label;
