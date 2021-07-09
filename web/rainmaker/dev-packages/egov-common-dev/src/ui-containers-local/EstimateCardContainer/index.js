@@ -65,7 +65,7 @@ for (let billDetail of billDetails) {
   totalAmount += billDetail.amount;
 
 }
-if(totalAmount>0){
+if(totalAmount>0 && (businesService=='PT' || businesService=='WS'||businesService=='SW') ){
  arrears=totalAmount-current;
 }
   const estimate = {
