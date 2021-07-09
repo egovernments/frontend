@@ -68,22 +68,23 @@ export const renderService1 = () => {
           },
         ),
 
-        editSection: {
-          componentPath: "Button",
-          props: { color: "primary", style: { margin: "-16px" } },
-          visible: true,
-          gridDefination: { xs: 12, sm: 12, align: "left" },
-          children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
-          onClickDefination: {
-            //action: "page_change",
-            //path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
-            action: "condition",
-            callBack: (state, dispatch) => {
-               getRedirectionUrlToAddMeterReading( state, dispatch);
-            }
+        //-commented for production release -PT
+        // editSection: {
+        //   componentPath: "Button",
+        //   props: { color: "primary", style: { margin: "-16px" } },
+        //   visible: true,
+        //   gridDefination: { xs: 12, sm: 12, align: "left" },
+        //   children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
+        //   onClickDefination: {
+        //     //action: "page_change",
+        //     //path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
+        //     action: "condition",
+        //     callBack: (state, dispatch) => {
+        //        getRedirectionUrlToAddMeterReading( state, dispatch);
+        //     }
 
-          }
-        },
+        //   }
+        // },
       })
     } else {
       return getCommonContainer({
