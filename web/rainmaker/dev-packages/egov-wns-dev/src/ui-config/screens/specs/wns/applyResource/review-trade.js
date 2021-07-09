@@ -114,15 +114,7 @@ export const locationDetails={
       jsonPath:
         "WaterConnection[0].property.address.city",
         callBack: handleNA
-    },  {
-      labelKey: "WS_OLD_LABEL_NAME"
-    },
-    { 
-      localePrefix: {
-        moduleName: "TENANT_TENANTS",
-        masterName: "PB"
-      },
-      jsonPath: "WaterConnectionOld[0].property.address.city", callBack: handleNA },
+    }
   ),
   reviewLocation: getLabelWithValueForModifiedLabel(
     {
