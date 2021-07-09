@@ -75,7 +75,7 @@ class Footer extends React.Component {
 
   openActionDialog = async (item,label) => {
     const { handleFieldChange, setRoute, dataPath,onDialogButtonClick  } = this.props;
-    let employeeList = [];
+    let employeeList = [],empList=[]; 
     if (item.buttonLabel === "ACTIVATE_CONNECTION") {
       if (item.moduleName === "NewWS1" || item.moduleName === "NewSW1") {
         item.showEmployeeList = false;
@@ -117,22 +117,56 @@ class Footer extends React.Component {
           value: tenantId
         }
       ];
-      const payload = await httpRequest(
-        "post",
-        "/egov-hrms/employees/_search",
-        "",
-        queryObj
-      );
-      employeeList =
-        payload &&
-        payload.Employees.map((item, index) => {
-          const name = get(item, "user.name");
-          return {
-            value: item.uuid,
-            label: name
-          };
-        });
+    //   const payload = await httpRequest(
+    //     "post",
+    //     "/egov-hrms/employees/_search",
+    //     "",
+    //     queryObj
+    //   );
+    //   employeeList =
+    //     payload &&
+    //     payload.Employees.map((item, index) => {
+    //       const name = get(item, "user.name");
+    //       return {
+    //         value: item.uuid,
+    //         label: name
+    //       };
+    //     });
+    // }
+
+    const payload = await httpRequest(
+      "post",
+      "/egov-hrms/employees/_search",
+      "",
+      queryObj
+    );
+    empList =payload && payload.Employees.map((item, index) => {
+    // Add only User With Active Status 
+     const active = JSON.stringify(item.user.active);
+      if(active=="true")
+      {
+        const name = get(item, "user.name");
+        return {
+          value: item.uuid,
+          label: name
+        };
+      }
+      else{
+        return { value: item.uuid,
+                 label: 'blank'
+      };
     }
+    });
+     empList.forEach((res, index) => {
+      if (res.label=='blank') {
+        empList.splice(index, 1) // remove element
+  };
+})
+    for (var i of empList) {
+  employeeList.push(i);
+}  
+}
+
     if(label === "APPROVE"){
       this.setState({ data: item, employeeList });
       onDialogButtonClick(label,false);
