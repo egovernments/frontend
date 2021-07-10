@@ -747,9 +747,18 @@ export const downloadPTBill = async (queryStr, mode = 'download') => {
       ACTION: "_get",
     },
   };
+  let propertyId;
+  let tenantId;
+  queryStr.forEach(query => {
+    if(query.key=="propertyId")
+      propertyId=query.value;
+    if(query.key=="tenantId")
+      tenantId = query.value
+  
+  });
   try {
     store.dispatch(toggleSpinner());
-    httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+    httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, [], {propertyId:propertyId,tenantId:tenantId},{ 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
         store.dispatch(toggleSpinner());
         res.filestoreIds[0]
