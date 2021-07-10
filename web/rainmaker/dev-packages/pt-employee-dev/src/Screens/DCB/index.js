@@ -211,10 +211,10 @@ class FormWizardDataEntry extends Component {
                   {
                     ptPromotionRebate =  ptPromotionRebate+1
                   }
-                  else if(demand.demandDetails[i].taxHeadMasterCode==="PT_TIME_REBATE")
-                  {
-                    ptRebate =  ptRebate+1
-                  }
+                  // else if(demand.demandDetails[i].taxHeadMasterCode==="PT_TIME_REBATE")
+                  // {
+                  //   ptRebate =  ptRebate+1
+                  // }
               
              }
                 if(ptTax>1 || ptSwatchatha> 1 || ptInterest>1 ||ptPromotionRebate>1 || ptRebate>1)
@@ -553,10 +553,10 @@ class FormWizardDataEntry extends Component {
                 {
                   ptPromotionRebate =  ptPromotionRebate+1
                 }
-                else if(demand.demandDetails[i].taxHeadMasterCode==="PT_TIME_REBATE")
-                {
-                  ptRebate =  ptRebate+1
-                }
+                // else if(demand.demandDetails[i].taxHeadMasterCode==="PT_TIME_REBATE")
+                // {
+                //   ptRebate =  ptRebate+1
+                // }
             
            }
               if(ptTax>1 || ptSwatchatha> 1 || ptInterest>1 ||ptPromotionRebate>1 || ptRebate>1)
