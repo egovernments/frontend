@@ -1,7 +1,7 @@
 import DownloadPrintButton from "egov-ui-framework/ui-molecules/DownloadPrintButton";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale,localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import { generatePdfFromDiv } from "../../../utils/PTCommon";
@@ -15,6 +15,8 @@ const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeade
   let isCitizen = process.env.REACT_APP_NAME === "Citizen";
   let downloadButton;
   let printButton
+  let isMobileApp = JSON.parse(localStorageGet('isMobileApp'));
+    console.log("isMobileApp"+isMobileApp);
 //let tenantId = getTenantId();
   if (downloadPrintButton) {
     
@@ -70,6 +72,7 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
     
     }
 
+    
     
    
     if(totalBillAmountDue!=0){
@@ -127,6 +130,7 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
             menu: downloadButton.menu,
           }}
         />
+        { !isMobileApp && 
         <DownloadPrintButton
           data={{
             label: {
@@ -135,10 +139,13 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
             },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: 65, marginLeft: 10, color: "#FE7A51" } },
+            props: { variant: "outlined",style: { height: 65, marginLeft: 10, color: "#FE7A51" } },
             menu: printButton.menu,
+          
+            
           }}
         />
+        } 
       </div>}
     </div>
 

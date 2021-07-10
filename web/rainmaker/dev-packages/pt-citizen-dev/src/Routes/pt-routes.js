@@ -76,7 +76,7 @@ const routes = [
       hideFooter: true,
       title: "PT_HOME_PROPERTY_TAX",
       hideTitle: true,
-      helpButton: true
+      helpButton: false
     }
   },
   {
