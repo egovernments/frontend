@@ -137,6 +137,21 @@ const searchApiCall = async (state, dispatch, index) => {
     {}
   );
 
+  let tenants = state.common.cities && state.common.cities;
+
+  let filterTenant ;
+
+ if (process.env.REACT_APP_NAME === "Citizen")
+ {
+    filterTenant = tenants && tenants.filter(m=>m.key===searchScreenObject.tenantId);
+ }
+ else
+ {
+    filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+ }
+
+
+let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
 
 
   
@@ -175,7 +190,7 @@ const searchApiCall = async (state, dispatch, index) => {
         else if (key === "ids") {
           queryObject.push({
             key: "propertyIds",
-            value: "PT-"+tenantUniqueId+"-"+searchScreenObject[key].trim()
+            value: tenantUniqueId && "PT-"+tenantUniqueId+"-"+searchScreenObject[key].trim()
           });
         }
 
@@ -249,14 +264,14 @@ const searchApiCall = async (state, dispatch, index) => {
           response.Properties.length
         )
       );
-      dispatch(
+     /*  dispatch(
         handleField(
           "iSearch",
           "components.div.children.searchApplicationTable",
           "props.data",
           applicationData
         )
-      );
+      ); */
       dispatch(
         handleField(
           "iSearch",

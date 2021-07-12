@@ -362,6 +362,18 @@ import {
              "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName.visible",
              false
               ))
+           dispatch(
+                handleField(
+               "iSearch",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla.visible",
+               false
+                ))
+         dispatch(
+                  handleField(
+                 "iSearch",
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo.visible",
+                 false
+                  ))                
            }
 
           else
@@ -372,6 +384,18 @@ import {
              "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName.visible",
              true
               ))
+            dispatch(
+                handleField(
+               "iSearch",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla.visible",
+               true
+                ))
+            dispatch(
+                  handleField(
+                 "iSearch",
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo.visible",
+                 true
+              )) 
 
             } 
         },
@@ -491,7 +515,7 @@ import {
            dispatch(
             handleField(
                 "iSearch",
-                "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+                "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
                 "label",
                 tenantUniqueId
             )
@@ -510,7 +534,7 @@ import {
            dispatch(
             handleField(
                 "iSearch",
-                "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+                "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
                 "label",
                 tenantUniqueId
             )
@@ -723,6 +747,11 @@ import {
         labelName: "Enter Existing Property ID",
         labelKey: "PT_EXISTING_PROPERTY_ID_PLACEHOLDER"
       },
+      title: {
+        value: "Fill the form by searching your old approved trade license",
+        key: "EXISTING_PID_INFO"
+      },
+      infoIcon: "info_circle",
       gridDefination: {
         xs: 12,
         sm: 4,
