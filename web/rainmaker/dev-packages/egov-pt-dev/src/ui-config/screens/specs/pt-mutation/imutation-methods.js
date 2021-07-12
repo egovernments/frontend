@@ -359,20 +359,23 @@ import {
             dispatch(
               handleField(
              "iSearch",
-             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName.visible",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+             "visible",
              false
               ))
            dispatch(
                 handleField(
                "iSearch",
-               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla.visible",
-               false
+               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+               "visible",
+             false
                 ))
          dispatch(
                   handleField(
                  "iSearch",
-                 "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo.visible",
-                 false
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+                 "visible",
+             false
                   ))                
            }
 
@@ -381,20 +384,23 @@ import {
             dispatch(
               handleField(
              "iSearch",
-             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName.visible",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+             "visible",
              true
               ))
             dispatch(
                 handleField(
                "iSearch",
-               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla.visible",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+               "visible",
                true
                 ))
             dispatch(
                   handleField(
                  "iSearch",
-                 "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo.visible",
-                 true
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+                 "visible",
+               true
               )) 
 
             } 
