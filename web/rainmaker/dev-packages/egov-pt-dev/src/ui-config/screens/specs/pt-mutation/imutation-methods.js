@@ -647,6 +647,19 @@ import {
        // label: "PT-",
         position: "start"
       },
+      afterFieldChange: async (action, state, dispatch) => {
+        if(action.value)
+        {
+          dispatch(
+            handleField(
+              "iSearch",
+              "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+              "props.value",
+              ""
+            )
+          );
+        }
+        },
       required: false,
       //pattern: /^[0-9]*$/i,
       pattern: getPattern("NewPropertyID"),
@@ -718,7 +731,20 @@ import {
       required: false,
       pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "iSearchScreen.oldpropertyids"
+      jsonPath: "iSearchScreen.oldpropertyids",
+      afterFieldChange: async (action, state, dispatch) => {
+      if(action.value)
+      {
+        dispatch(
+          handleField(
+            "iSearch",
+            "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+            "props.value",
+            ""
+          )
+        );
+      }
+      }
     })
   }),
     
