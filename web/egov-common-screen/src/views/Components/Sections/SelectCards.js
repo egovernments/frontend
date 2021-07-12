@@ -52,8 +52,8 @@ export default function SectionNavbars() {
             />
                 <CardBody style={{  marginLeft: "34px"}}>
                   <p className={classes.description} style={{marginTop: "-36px"}}><br />
-                  PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
-                    <br />
+                  Property Tax or House Tax is a local tax levied by municipal authorities for maintaining civic amenities in your area and is paid by occupier of that property                    
+                  <br />
                     <a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax </a> <br /> 
                     <a href="/citizen/user/login">Register Property </a><br />
                     <a href="/citizen/user/login">Apply for Ownership Transfer </a><br />
@@ -77,7 +77,7 @@ export default function SectionNavbars() {
               marginTop: "-44px"}} />
                 <CardBody style={{  marginLeft: "34px"}}>
                   <p className={classes.description} style={{marginTop: "-36px"}} ><br />
-                PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
+                  A Trade License is permission issued by an Urban Local Body (ULB) to conduct specific trade or business according to the relevant rules, standards and safety guidelines on premises for which it has been issued
                     <br />
                     <a href="/citizen/user/login">New Application</a> <br /> 
                     <a href="/citizen/user/login">Renewal of Licence </a><br />
@@ -100,7 +100,7 @@ export default function SectionNavbars() {
               marginTop: "-44px"}} />
                 <CardBody style={{  marginLeft: "34px"}}>
                 <p className={classes.description} style={{marginTop: "-36px"}}><br />
-                PropetyTax or housetax is a local tax levised by municipal authorities for maintaining basic civic amentities in your area
+                Road Cutting charges are levied by ULBs to recover cost for maintaining roads when they are cut for laying pipes, installing electricity lines, internet lines etc
                     <br />
                     <a href="http://enagarsewa.uk.gov.in/" target="_blank" rel="noreferrer">Apply</a> <br /> 
                   </p>

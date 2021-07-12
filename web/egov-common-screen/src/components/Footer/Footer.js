@@ -39,16 +39,17 @@ export default function Footer(props) {
               </h5>
               <p>
                 Office Address: <br />
-                Near Doon Hopstital , New road<br />
-                Dehradun District , Dehradun<br />
-                Uttarakhand-248001<br />
+                Urban Development Directorate <br />
+                31/62 Rajpur Road,<br />
+                Dehradun,<br />
+                Uttarakhand - 248001<br />
                 </p>
                 <p>
                 Call Us<br />
-                +91 99999999999<br />             
+                +91 (0135) 2741541<br />             
                 </p><p>
                 Email Us<br />
-                nagarnigam.ddn@gmail.com<br />             
+                enagarsewauk@gmail.com<br />             
                 </p> 
                 <a
                 href="https://www.facebook.com"
@@ -72,50 +73,50 @@ export default function Footer(props) {
                 <h5><b>Other Departments</b></h5>
               </p>
               <a
-                href="#"
+                href="https://uk.gov.in/"
                 id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
-                Link
+                Uttarakhand State Government
               </a>
               <a
-                href="#"
+                href="https://udd.uk.gov.in/"
                 id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
-                Link
+                Urban Development Directorate
               </a>
               <a
-                href="#"
+                href="http://mohua.gov.in/"
                 id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
-                Link
+                MoHUA
               </a>
               <a
-                href="#"
+                href="https://lgdirectory.gov.in/"
                 id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
-                Link
+                Local Government Directory
               </a>
               <a
-                href="#"
+                href="http://smartcitydehradun.uk.gov.in/"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
               >
-                Link
+                Dehradun Smart City
               </a>
 
             </ListItem>
             <ListItem className={classes.inlineBlock} id = "footer3">
                <p              >
-                <h5><b>Citizen Details</b></h5>
+                <h5><b>Citizen Services</b></h5>
               </p>       
               <a
                 href="#"
@@ -144,7 +145,7 @@ export default function Footer(props) {
               >
                 Right way of Road Cutting/Road digging
               </a>
-              <a
+            {/*   <a
                 href="#"
                 //className={classes.block}
                 target="_blank"
@@ -161,19 +162,37 @@ export default function Footer(props) {
 
               >
                 Apply for Dog Licence
-              </a>
+              </a> */}
               
             </ListItem>
             <ListItem className={classes.inlineBlock} id="footer4">
               <p>
                 <h5><b>About Us</b></h5>
-              </p>
-              <p >
-                Nagar Nigam
-              </p>
-              <p >
-                About Nagarsewa
-              </p>
+              </p>              
+              <a
+                href="https://udd.uk.gov.in/pages/display/2-about-us"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+              >
+              About UDD
+              </a>
+              <a
+                href="https://smartnet.niua.org/nuis"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+              >
+              About NUIS
+              </a>
+              <a
+                href=" http://egov.org.in/"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+              >
+              About eGov Foundation
+              </a>
             </ListItem>
           </List>
       </div>

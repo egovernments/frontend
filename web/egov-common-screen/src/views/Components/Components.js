@@ -77,7 +77,7 @@ export default function Components() {
       <div id="homepagecards"> <SelectCards /> </div>
             <Card  id="message" >                   
                 <CardBody  style={{padding: "0.375rem 0.875rem"}}>
-                <h4 >Pay your property tax before March 31st get 10% Rebate</h4>
+                <h4 >Pay your Property Tax or avail Trade Licenses online and easily sitting at your home</h4>
               
                 </CardBody>               
               </Card>
