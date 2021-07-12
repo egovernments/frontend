@@ -24,7 +24,7 @@ const footerStyle = {
   },
   footer: {
     padding: "0.9375rem 0",
-    textAlign: "center",
+    //textAlign: "center",
     display: "flex",
     zIndex: "2",
     position: "relative",

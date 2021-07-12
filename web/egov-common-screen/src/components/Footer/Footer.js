@@ -7,6 +7,9 @@ import classNames from "classnames";
 // material-ui core components
 import { List, ListItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import GridContainer from "components/Grid/GridContainer.js";
+import GridItem from "components/Grid/GridItem.js";
+
 
 // @material-ui/icons
 import Favorite from "@material-ui/icons/Favorite";
@@ -33,7 +36,10 @@ export default function Footer(props) {
       <div  id="footercontainer" >
       <div className={classes.left}>
           <List className={classes.list}>
-            <ListItem className={classes.inlineBlock} id="footer1" >
+          <GridContainer>
+          <GridItem xs={12} sm={6} md={3} id="fgrid">
+          <ListItem className={classes.inlineBlock} >
+
              <h5>
                 <b>Contact Details</b>
               </h5>
@@ -65,11 +71,13 @@ export default function Footer(props) {
                 target="_blank"
               >          
                 <p className={classes.socialIcons + " fab fa-twitter"} />
-                </a> 
-
-            </ListItem>
-            <ListItem className={classes.inlineBlock} id="footer2">
-            <p              >
+                </a>
+                </ListItem>
+                </GridItem>
+                
+          <GridItem xs={12} sm={6} md={3} id="fgrid">
+          <ListItem className={classes.inlineBlock} >
+            <p>
                 <h5><b>Other Departments</b></h5>
               </p>
               <a
@@ -112,9 +120,10 @@ export default function Footer(props) {
               >
                 Dehradun Smart City
               </a>
-
-            </ListItem>
-            <ListItem className={classes.inlineBlock} id = "footer3">
+              </ListItem>
+            </GridItem>
+            <GridItem xs={12} sm={6} md={3} id="fgrid">
+            <ListItem className={classes.inlineBlock} >
                <p              >
                 <h5><b>Citizen Services</b></h5>
               </p>       
@@ -143,7 +152,7 @@ export default function Footer(props) {
                 id ="flink"
 
               >
-                Right way of Road Cutting/Road digging
+                Right way of <br/>Road Cutting/Road digging
               </a>
             {/*   <a
                 href="#"
@@ -163,9 +172,10 @@ export default function Footer(props) {
               >
                 Apply for Dog Licence
               </a> */}
-              
-            </ListItem>
-            <ListItem className={classes.inlineBlock} id="footer4">
+              </ListItem>
+              </GridItem>
+            <GridItem xs={12} sm={6} md={3} id="fgrid">
+            <ListItem className={classes.inlineBlock} >
               <p>
                 <h5><b>About Us</b></h5>
               </p>              
@@ -193,7 +203,9 @@ export default function Footer(props) {
               >
               About eGov Foundation
               </a>
-            </ListItem>
+              </ListItem>
+              </GridItem>
+              </GridContainer>
           </List>
       </div>
       </div>

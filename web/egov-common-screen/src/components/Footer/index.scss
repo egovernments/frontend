@@ -6,7 +6,14 @@
 
     #footercontainer
     {
-        margin: 0 13%;
+        margin: 0px 10% 5% 10%;
+    }
+    #fgrid
+    {
+        width: 445px;
+        margin-left: -48px;
+
+
     }
 
     #footer1
@@ -34,7 +41,12 @@
 
     #footercontainer
     {
-        margin: 0px 15%;
+        margin: 0px 10% 5% 10%;
+    }
+    #fgrid
+    {
+        width: 445px;
+        margin-left: -48px;
     }
 
     #footer1
@@ -58,11 +70,30 @@
     }
     
 }
+
+@media only screen and (max-width: 1025px) {
+
+    #footercontainer
+    {
+        margin: 0px 10% 5% 10%;
+    }
+    #fgrid
+    {
+        width: 300px;
+        margin-left: -48px;
+
+    }
+    
+}
 @media only screen and (max-width: 1279px) {
 
     #footercontainer
     {
-        margin: 0px 15%;
+        margin: 0px 10% 5% 10%;
+    }
+    #fgrid
+    {
+        width: auto;
     }
 
     #footer1
@@ -152,6 +183,12 @@
         width: 550px;
         margin-left : 10%;
     }
+    #fgrid
+    {
+        width: auto;
+        margin-left: 2px;
+    }
+
     /* #footer1
     {
         //margin-left: -68px;   
@@ -170,112 +207,3 @@
         margin-left: -68px; 
     }
 }
-
-@media only screen and (max-width: 415px) {
-    #footercontainer
-    {
-        width: 414px;
-        margin-left : 10%;
-
-    }
-    #footer1
-    {
-        margin-left: -97px;
-    }
-    #footer2
-    {   
-        margin-left: 9%;
-    margin-right: 182px;
-    }
-    #footer3
-    {   
-        margin-left: -3%;
-    }
-    #footer4
-    {
-        margin-left: 3%;
-    margin-right: 179px;
-    }
-    
-
-}
-
-@media only screen and (max-width: 361px) {
-    #footercontainer
-    {
-        width: 360px;
-        margin-left: 0px;
-    }
-   /*  #footer1
-    {
-        //margin-left: -68px;   
-    } */
-    #footer2
-    {   
-        margin-left: 12%;
-        }
-    #footer3
-    {   
-        margin-left: 0px;
-
-    }
-    #footer4
-    {
-        margin-left: 10%;
-        margin-right: 189px;
-    }
-
-}
-@media only screen and (max-width: 321px) {
-    #footercontainer
-    {
-        width: 321px
-    }
-    #footer1
-    {
-        //margin-left: -68px;  
-        margin-left: -33px; 
-    }
-    #footer2
-    {   
-        margin-left: 18%;
-    }
-    #footer3
-    {   
-        margin-left: 12%;;
-
-    }
-    #footer4
-    {
-        margin-left: 16%;
-    }
-
-}
-
-
-/* @media only screen and (max-width: 360px) {
-    #footercontainer
-    {
-        width: 360px
-    }
-    #footer1
-    {
-        //margin-left: -68px;   
-    }
-    #footer2
-    {   
-        margin-left: 17%;
-    }
-    #footer3
-    {   
-        margin-left: 18%;;
-
-    }
-    #footer4
-    {
-        margin-left: -26%;
-    }
-
-}
-
- */
