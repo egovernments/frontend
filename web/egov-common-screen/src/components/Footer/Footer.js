@@ -116,7 +116,7 @@ export default function Footer(props) {
                 <h5><b>Citizen Services</b></h5>
               </p>       
               <a
-                href="#"
+                href="/citizen/user/login"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
@@ -125,7 +125,7 @@ export default function Footer(props) {
                 Property Tax
               </a>
               <a
-                href="#"
+                href="/citizen/user/login"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
@@ -134,7 +134,7 @@ export default function Footer(props) {
                 Trade Licence
               </a>
               <a
-                href="#"
+                href="http://enagarsewa.uk.gov.in/"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
