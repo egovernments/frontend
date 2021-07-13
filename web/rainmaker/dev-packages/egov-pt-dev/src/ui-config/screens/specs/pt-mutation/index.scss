@@ -11,7 +11,7 @@
 #material-ui-ulbCityContainer {
   div{
     div{
-      background-color: white;
+     // background-color: white;
     }
 }
 }
@@ -47,6 +47,30 @@ div[class^="NavPills-root"] {
 //         }
 //     }
 // }
+
+#material-ui-iulbCityContainer{
+  height: 114px;
+  background-color: #fafafa;
+  border-radius: 5px;
+  padding-left: 10px;
+  border: 2px solid #aca9a9;
+  box-sizing: border-box;
+}
+
+#custom-containers-ORButton
+{
+  height: 50px;
+  width: 50px;
+  padding-left: 14px;
+  padding-top: 15px;
+  background-color: #245e75;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: -52px;
+  margin-top: 23px;
+  color: white;
+  margin-right: 19px;
+}
 #material-ui-searchPropertyDetails{
    /*  margin-right: -20px;
     margin-left: -20px; */
