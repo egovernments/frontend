@@ -21,19 +21,19 @@ import {
   
   export const ComponentJsonPath = {
     ulbCity:
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
     locality:
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.locality",
     ownerName:
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
     ownerMobNo:
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
     propertyID:
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyID",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyID",
       ownerName:
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
       doorNo:
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.doorNo",
      
     };
   const applyMohallaData = (mohallaData, tenantId, dispatch) => {
@@ -96,7 +96,7 @@ import {
       dispatch(
         handleField(
           "iSearch",
-          "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
+          "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ulbCity",
           "props.value",
           ""
         )
@@ -111,7 +111,7 @@ import {
     dispatch(
       handleField(
         "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+        "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
         "props.value",
         ""
       )
@@ -119,7 +119,7 @@ import {
     dispatch(
       handleField(
         "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+        "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
         "props.value",
         ""
       )
@@ -127,7 +127,7 @@ import {
     dispatch(
       handleField(
         "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+        "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
         "props.value",
         ""
       )
@@ -159,7 +159,7 @@ import {
     dispatch(
       handleField(
         "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+        "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
         "props.value",
         ""
       )
@@ -167,7 +167,7 @@ import {
     dispatch(
       handleField(
         "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.houseNumber",
+        "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.houseNumber",
         "props.value",
         ""
       )
@@ -359,6 +359,20 @@ import {
             dispatch(
               handleField(
              "iSearch",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+             "visible",
+             true
+              ))
+              dispatch(
+                handleField(
+               "iSearch",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+               "visible",
+               true
+                ))
+            dispatch(
+              handleField(
+             "iSearch",
              "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerName",
              "visible",
              false
@@ -381,6 +395,20 @@ import {
 
           else
           {
+            dispatch(
+              handleField(
+             "iSearch",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+             "visible",
+             false
+              ))
+              dispatch(
+                handleField(
+               "iSearch",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+               "visible",
+               false
+                ))
             dispatch(
               handleField(
              "iSearch",
@@ -466,7 +494,7 @@ import {
         dispatch(
           handleField(
               "iSearch",
-              "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+              "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
               "label",
               ""
           )
@@ -574,7 +602,7 @@ import {
             dispatch(
               handleField(
                 "iSearch",
-                "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
+                "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.mohalla",
                 "props.localePrefix",
                 mohallaLocalePrefix
               )

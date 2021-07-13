@@ -19,7 +19,7 @@ const removeValidation = (state, dispatch, index) => {
   dispatch(
     handleField(
       "iSearch",
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
       "props.error",
       false
     )
@@ -27,7 +27,7 @@ const removeValidation = (state, dispatch, index) => {
   dispatch(
     handleField(
       "iSearch",
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
       "props.error",
       false
     )
@@ -35,7 +35,7 @@ const removeValidation = (state, dispatch, index) => {
   dispatch(
     handleField(
       "iSearch",
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
       "props.error",
       false
     )
@@ -69,7 +69,7 @@ const removeValidation = (state, dispatch, index) => {
   dispatch(
     handleField(
       "iSearch",
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.ownerMobNo",
       "isFieldValid",
       true
     )
@@ -77,7 +77,7 @@ const removeValidation = (state, dispatch, index) => {
   dispatch(
     handleField(
       "iSearch",
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.propertyTaxUniqueId",
       "isFieldValid",
       true
     )
@@ -85,7 +85,7 @@ const removeValidation = (state, dispatch, index) => {
   dispatch(
     handleField(
       "iSearch",
-      "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
+      "components.div.children.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.existingPropertyId",
       "isFieldValid",
       true
     )
