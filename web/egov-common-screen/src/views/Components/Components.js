@@ -55,7 +55,6 @@ export default function Components() {
   <div style={{width: "60%", float:"right", marginRight: "5%"}}>
     <div id = "links" ><h4     style={{padding: "10px", fontWeight:"500"}}>
       <a href="/employee/user/login"  >Employee Login </a></h4>
-    <h4 style={{padding: "10px", fontWeight:"500"}} ><a href="" style={{color: "black"}}>   English</a></h4>
       </div>
       <img
                       src={rightImage}
@@ -77,7 +76,7 @@ export default function Components() {
       <div id="homepagecards"> <SelectCards /> </div>
             <Card  id="message" >                   
                 <CardBody  style={{padding: "0.375rem 0.875rem"}}>
-                <h4 >Pay your Property Tax or avail Trade Licenses online and easily sitting at your home</h4>
+                <center><h4 >Pay your Property Tax or avail Trade Licenses online and easily sitting at your home</h4></center>
               
                 </CardBody>               
               </Card>
@@ -94,7 +93,7 @@ export default function Components() {
                       
           <div id="faqs"><SectionFAQs /> </div>
           <div  id="citizenheader" >                   
-                <center ><b><h3 style ={{fontWeight: "bold"}}>Citizen Speaks</h3></b>
+                <center ><b><h3 style ={{fontWeight: "bold"}}>User Testimonials</h3></b>
                 </center>
                 <div  
                 style={{marginLeft: "45%",

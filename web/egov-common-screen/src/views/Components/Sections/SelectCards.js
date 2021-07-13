@@ -41,7 +41,7 @@ export default function SectionNavbars() {
                   <h4 style={{
                      marginLeft: "65px",
                      fontWeight: "500"
-                  }}>PropetyTax</h4>
+                  }}>Propety Tax</h4>
                     <img
               src={propertyTaxImage}
               alt="..."              
@@ -54,7 +54,7 @@ export default function SectionNavbars() {
                   <p className={classes.description} style={{marginTop: "-36px"}}><br />
                   Property Tax or House Tax is a local tax levied by municipal authorities for maintaining civic amenities in your area and is paid by occupier of that property                    
                   <br />
-                    <a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax </a> <br /> 
+                    <b><a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax </a></b> <br /> 
                     <a href="/citizen/user/login">Register Property </a><br />
                     <a href="/citizen/user/login">Apply for Ownership Transfer </a><br />
                   </p>
@@ -67,7 +67,7 @@ export default function SectionNavbars() {
                      marginLeft: "65px",
                      fontWeight: "500"
 
-                  }}>TradeLicence</h4>
+                  }}>Trade Licence</h4>
                    <img
               src={propertyTaxImage}
               alt="..."              

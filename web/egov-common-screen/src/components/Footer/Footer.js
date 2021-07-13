@@ -55,23 +55,11 @@ export default function Footer(props) {
                 +91 (0135) 2741541<br />             
                 </p><p>
                 Email Us<br />
-                enagarsewauk@gmail.com<br />             
+                < a href="mailto:enagarsewauk@gmail.com">enagarsewauk@gmail.com</a>
+                <br />             
                 </p> 
-                <a
-                href="https://www.facebook.com"
-                //className={classes.block}
-                target="_blank"
-              >
-                <p className={classes.socialIcons + " fab fa-facebook"} />
-              </a>
-                <a
-                href="https://www.twitter.com"  
-                //className={classes.block}
-
-                target="_blank"
-              >          
-                <p className={classes.socialIcons + " fab fa-twitter"} />
-                </a>
+               
+                
                 </ListItem>
                 </GridItem>
                 
@@ -207,6 +195,7 @@ export default function Footer(props) {
               </GridItem>
               </GridContainer>
           </List>
+          <center><p>Last Updated July 2020</p></center>
       </div>
       </div>
     </footer>
