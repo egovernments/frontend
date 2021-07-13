@@ -319,7 +319,7 @@ class ShowField extends Component {
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
       }
-      else if (val && i && reportResult &&
+      else if (val && reportResult &&
         reportResult.reportHeader &&
         reportResult.reportHeader.length &&
         reportResult.reportHeader[i] &&
