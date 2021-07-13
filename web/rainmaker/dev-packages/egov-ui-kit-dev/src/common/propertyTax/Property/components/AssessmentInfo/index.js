@@ -253,7 +253,7 @@ export const getUnitInfo = (units = [],usageCategoryMajor="") => {
         })
       }
       if (!floors[unit['floorNo']]) {
-        floors[unit['floorNo']] = [floor];
+        floors[parseInt(unit['floorNo'])+4] = [floor];
       } else {
         floors[unit['floorNo']].push(floor);
       }
