@@ -769,6 +769,16 @@ export const downloadPTBill = async (queryStr, mode = 'download') => {
         } else {
           console.log("Error In Downloading Bill");
         }
+      }).catch(err => {
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: 'Some Error Occured while downloading Bill!' },
+            "error"
+          )
+        );
+       // alert('Some Error Occured while downloading Bill!');
+        store.dispatch(toggleSpinner());
       });
   } catch (exception) {
     store.dispatch(toggleSpinner());
