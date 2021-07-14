@@ -356,7 +356,15 @@ import {
         beforeFieldChange:(action, state, dispatch) => {
           if(action.value==="OptionPID")
           {
+            
             dispatch(
+              handleField(
+             "iSearch",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ORButton",
+             "visible",
+             true             
+              ))
+              dispatch(
               handleField(
              "iSearch",
              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
@@ -395,6 +403,14 @@ import {
 
           else
           {
+
+            dispatch(
+              handleField(
+             "iSearch",
+             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ORButton",
+             "visible",
+             false             
+              ))
             dispatch(
               handleField(
              "iSearch",
@@ -437,7 +453,7 @@ import {
           "iSearchScreen.selected",
         props: {
           label: { name: "Search Property ", key: "SEARCH_PROPERTY" },
-          className: "applicant-details-error",
+          className: "SearchRadio",
           buttons: [
             {
               labelName: "I Know My Property ID",
