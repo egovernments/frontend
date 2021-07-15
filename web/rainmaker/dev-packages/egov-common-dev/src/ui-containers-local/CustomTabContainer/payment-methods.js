@@ -383,12 +383,48 @@ export const poDetails = getCommonContainer({
     }
   })
 });
-
+export const qrCodeDetails = getCommonContainer({
+  txnNo: getTextField({
+    label: {
+      labelName: "Transaction No.",
+      labelKey: "PAYMENT_TXN_NO_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Transaction  no.",
+      labelKey: "PAYMENT_TXN_NO_PLACEHOLDER"
+    },
+    jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
+    required: true
+  }),
+  txnDate: getDateField({
+    label: {
+      labelName: "Transaction Date",
+      labelKey: "PAYMENT_TXN_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "dd/mm/yy",
+      labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
+    },
+    pattern: getPattern("Date"),
+    errorMessage: "PAYMENT_TX_ERROR_MESSAGE",
+    required: true,
+    isDOB: true,
+    jsonPath: "ReceiptTemp[0].instrument.transactionDateInput",
+    props: {
+      inputProps: {
+        max: getTodaysDateInYMD()
+      }
+    }
+  })
+});
 export const cheque = getCommonContainer({
   payeeDetails,
   chequeDetails
 });
-
+export const qr_code = getCommonContainer({
+  payeeDetails,
+  onlineDetails: { ...qrCodeDetails }
+});
 export const offline_neft = getCommonContainer({
   payeeDetails,
   onlineDetails: { ...onlineDetails }
@@ -586,6 +622,12 @@ export const paymentMethods = [
     tabButton: "COMMON_POSTAL_ORDER",
     tabIcon: "Schedule",
     tabContent: { postal_order }
+  },
+  {
+    code: "QR_CODE",
+    tabButton: "COMMON_QR_CODE",
+    tabIcon: "Schedule",
+    tabContent: { qr_code }
   }
 ]
 
