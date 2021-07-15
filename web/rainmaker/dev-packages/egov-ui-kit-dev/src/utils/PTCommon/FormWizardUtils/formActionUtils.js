@@ -105,8 +105,8 @@ export const createProperty = async (Properties, action, props, isModify, prepar
     const propertyMethodAction = action;
     const currentAction = isEditInWorkflow ? 'CORRECTIONPENDING' : null;
    
-    // if(isLegacy !== "LEGACY_RECORD")
-    // {
+    if(isLegacy !== "LEGACY_RECORD")
+     {
     if (action === "_update") {
         const workflow = {
             "businessService": "PT.CREATE",
@@ -119,7 +119,7 @@ export const createProperty = async (Properties, action, props, isModify, prepar
             propertyPayload.workflow = workflow
         }
     }
-    //}
+    }
     try {
         if(!isEditInWorkflow){
             propertyPayload.creationReason = action == '_create' ? 'CREATE' :  'UPDATE';
