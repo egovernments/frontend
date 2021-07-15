@@ -1,18 +1,17 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
-import { connect } from "react-redux";
-import { Toast } from "components";
-import { addBodyClass } from "egov-ui-kit/utils/commons";
-import { fetchCurrentLocation, fetchLocalizationLabel, toggleSnackbarAndSetText, setRoute } from "egov-ui-kit/redux/app/actions";
-import { fetchMDMSData } from "egov-ui-kit/redux/common/actions";
-import Router from "./Router";
+import { CommonShareContainer, LoadingIndicator, Toast } from "components";
 import commonConfig from "config/common";
-// import logoMseva from "egov-ui-kit/assets/images/logo-white.png";
-import routes from "./Routes";
+import { fetchCurrentLocation, fetchLocalizationLabel, setRoute, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
+import { fetchMDMSData } from "egov-ui-kit/redux/common/actions";
+import { addBodyClass } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
-import { LoadingIndicator, CommonShareContainer } from "components";
-import "./app.css";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import './index.css';
+import Router from "./Router";
+// import logoMseva from "egov-ui-kit/assets/images/logo-white.png";
+import routes from "./Routes";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -36,12 +35,6 @@ class App extends Component {
           {
             moduleName: "common-masters",
             masterDetails: [
-              {
-                name: "Department",
-              },
-              {
-                name: "Designation",
-              },
               {
                 name: "StateInfo",
               },
@@ -79,7 +72,6 @@ class App extends Component {
     }
 
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
-
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
@@ -87,12 +79,42 @@ class App extends Component {
 
   render() {
     const { toast, loading, defaultUrl, hasLocalisation } = this.props;
+    let loginScreens = false;
+    let logginScreensUrls = ['/employee/user/login', '/employee/forgot-password', '/employee/language-selection'];
+    if (logginScreensUrls.includes(window.location.pathname)) {
+      loginScreens = true;
+    }
+    let sourceUrl = `${window.location.origin}/employee`;
+    let isFixedFooter=false;
+    let otherScreensUrls = ['/employee/inbox', '/inbox','/employee/integration/dss/home', '/employee/integration/dss/propertytax','/employee/integration/dss/tradelicense','/employee/integration/dss/overview','/employee/integration/dss/pgr'];
+    if (otherScreensUrls.includes(window.location.pathname)) {
+      isFixedFooter = true;
+    }
+
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
+
+        {!loginScreens && isFixedFooter&& <div className={"jk-footer"}>
+          <img style={{ height: '1.3em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"} onClick={() => {
+            window.open('https://www.digit.org/', '_blank').focus();
+          }}></img>
+        </div>}
+        {!loginScreens && !isFixedFooter&&<div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}></img>
+          </div>
+        </div>}
+        {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img style={{ display: "inline-flex", height: '1em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer-bw.png`} onError={"this.src='./../digit-footer-bw.png'"} onClick={() => {
+              window.open('https://www.digit.org/', '_blank').focus();
+            }}></img>
+          </div>
+        </div>}
       </div>
     );
   }
