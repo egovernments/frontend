@@ -12,78 +12,51 @@
     
     #card1
             {
-                height: 230px;
-             
+                height: auto !important;
+                width: auto !important;
+                margin-top: 10px!important;
+                margin-left: auto !important; 
             }
             #card2
             {
-                height: 230px;
+                height: auto !important;
+                width: auto !important; 
+                margin-top: auto !important; 
+                margin-left: auto !important; 
               
             }
             #card3
             {
-                height: 230px;
+                height: auto !important;
+                margin-top: auto !important; 
+                margin-left: auto !important; 
+                width: 100% !important;
               
+            }
+
+            #message{     
+                margin-left: 19px !important;
+                width: 89% !important;
+                background-color: #f3e5de !important;
+                color: #c94806 !important;
+                border-radius: 15px !important;
+                opacity: .8 !important;
             }
 
 }
 
 
-@media only screen and (min-width: 800px) {
-           /*  #container
-            {
-                //margin-left: 50px;
 
-            } */
-            #griditem
-            {
-                width: auto;
-                z-index: 100;
-            }
+@media only screen and (max-width: 1600px) {
 
-            #card1
-            {
-                height: 230px;
-                margin-top: -214px;
-                margin-left: 61px;
-                width: 400px;
-            }
-            #card2
-            {
-                height: 230px;
-                margin-top: -214px;
-                width: 400px;
-                margin-left: 30px;
-            }
-            #card3
-            {
-                height: 230px;
-                margin-top: -214px;
-                width: 400px;
-            }
-            #message{
-                margin-left: 128px;
-                width: 85%;
-                background-color: #f3e5de;
-                color: #c94806;
-                border-radius: 15px;     
-                //margin-top:-76px;      
-                opacity: .8;
-            }
-            #leftImage
-            {
-                height: 40px;
-                margin-left: -137px;
-            }
- }
-
-@media only screen and (min-width: 992px) {
-
-  /*   #container
+     #container
     {
-        //margin-left: 50px;
+        margin-left: 2%;
+    margin-right: 2%;
 
-    } */
+    } 
+
+
     #griditem
     {
         width: auto;
@@ -93,26 +66,25 @@
     #card1
     {
         height: 240px;
-        margin-top: -214px;
-        margin-left: 61px;
-        width: 400px;
+        margin-top: -114px;
+        width: auto;
     }
     #card2
     {
         height: 240px;
-        margin-top: -214px;
-        width: 400px;
-        margin-left: 30px;
+        margin-top: -114px;
+        width: auto;
+      
     }
     #card3
     {
         height: 240px;
-        margin-top: -214px;
-        width: 400px;
+        margin-top: -114px;
+        width: auto;
     }
     #message{
-        margin-left: 128px;
-        width: 85%;
+        margin-left: 118px;
+        width: 88%;
         background-color: #f3e5de;
         color: #c94806;
         border-radius: 15px;     
@@ -126,7 +98,53 @@
     }
 }
 
-@media only screen and (min-width: 1200px) {
+@media only screen and (max-width: 1367px) {
+    #message
+    {
+        margin-left: 108px;
+    width: 88%;
+    background-color: #f3e5de;
+    color: #c94806;
+    border-radius: 15px;
+    opacity: .8;
+    }
+
+    #card1
+    {
+        height: 260px;
+        margin-top: -114px;
+        width: auto;
+    }
+    #card2
+    {
+        height: 260px;
+        margin-top: -114px;
+        width: auto;
+      
+    }
+    #card3
+    {
+        height: 260px;
+        margin-top: -114px;
+        width: auto;
+    }
+    #message{
+        margin-left: 100px;
+        width: 87%;
+        background-color: #f3e5de;
+        color: #c94806;
+        border-radius: 15px;
+        opacity: .8;
+    }
+    #leftImage
+    {
+        height: 40px;
+        margin-left: -137px;
+    }
+
+}
+
+@media only screen and (max-width: 1200px) {
 
     /* #container
     {
@@ -179,7 +197,40 @@
 
 
 
-
+@media only screen and (max-width: 1025px)
+{
+    #card1
+    {
+        height: 350px;
+        margin-top: -114px;
+        margin-left: 50px; 
+        width: 250px;
+    }
+    #card2
+    {
+        height: 350px;
+        margin-top: -114px;
+        width: 250px;
+        margin-left: 10px;
+        //margin-left: 30px;
+    }
+    #card3
+    {
+        height: 350px;
+        margin-top: -114px;
+        width: 250px;
+        margin-right: 50px;
+    }
+    #message{
+        margin-left: 118px;
+        width: 80%;
+        background-color: #f3e5de;
+        color: #c94806;
+        border-radius: 15px;     
+        //margin-top:-76px;      
+        opacity: .8;
+    }
+}
 
 .faq-row 
 {

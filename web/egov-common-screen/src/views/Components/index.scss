@@ -7,22 +7,56 @@
     #bannerimage {
         width: 1519px;
     }
+    #faqs {
+        margin-left: 7%;
+    margin-right: 4%;
+    }
+    #homepagecards {
+        margin-left: 66px;
+        margin-right: 21px;
+    }
+    #testimonials {
+    margin-left: 5%;
+    //margin-right: 5%;
+    }
 
 }
 
-@media only screen and (max-width: 1366px) {
+@media only screen and (max-width: 1367px) {
     #bannerimage {
-        width: 1348px;
+        width: 1349px;
     }
 
     #links {
         display: inline-flex;
-        margin-left: 47%;
+        margin-left: 34%;
     }
+    #faqs {
+        margin-left: 7%;
+    margin-right: 5%;
+    }
+    #testimonials {
+        margin-left: 8%;
+    margin-right: 3%;
+        }
 
 }
 
-@media only screen and (min-width: 1200px) {
+@media only screen and (max-width: 1025px) {
+    #bannerimage {
+        width: auto;
+    }
+
+    #links {
+        display: inline-flex;
+        margin-left: 22%;    }
+        
+
+}
+
+
+
+@media only screen and (max-width: 1200px) {
 
     #faqs {
         margin-left: 129px;
@@ -40,20 +74,10 @@
     }
 }
 
-@media only screen and (min-width: 992px) {
-    #faqs {
-        margin-left: 129px;
-        margin-right: 117px;
-    }
 
-    #testimonials {
-        margin-left: 129px;
-        margin-right: 80px;
-    }
-
-    #homepagecards {
-        margin-left: 66px;
-        margin-right: 21px;
+@media only screen and (max-width: 1025px) {
+    #bannerimage {
+        width: auto;
     }
 }
 @media only screen and (max-width: 800px) {
@@ -62,7 +86,7 @@
     }
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (max-width: 800px) {
     #links {
         display: inline-flex;
         margin-left: 47%;
@@ -90,6 +114,10 @@
         display: inline-flex;
         margin-left: 47%;
     }
+    #homepagecards {
+        margin-left: 3px;
+        margin-right: 3px;
+    }
 
     #bannerimage {
         width: auto;
@@ -97,6 +125,11 @@
 
     #testimonials {
         margin-left: 10%;
+        margin-right: 5%;
+    }
+    #faqs {
+        margin-left: 10px;
+        margin-right: 10px;
     }
 }
 
@@ -120,8 +153,8 @@
   } */
 @media only screen and (max-width: 320px) {
     #root {
-        margin-right: -1%;
-        margin-left: 1%;
+        margin-right: 2%;
+        margin-left: 2%;
     }
 }
 
@@ -129,7 +162,8 @@
 
 
     #root {
-        margin-right: -5%;
+        margin-right: 2%;
+        margin-left: 2%;
     }
 }
 
@@ -138,19 +172,23 @@
 
     #root {
         margin-right: 2%;
+        margin-left: 2%;
+
     }
 }
 
 @media screen and (min-width: 378px) and (max-width: 413px) {
     #root {
-        margin-right: 0%;
-        margin-left: 1%;
+        margin-right: 2%;
+        margin-left: 2%;
+
     }
 }
 
 @media screen and (min-width: 414px) and (max-width: 555px) {
     #root {
-        margin-right: 10%;
-        margin-left: 1%;
+        margin-right: 2%;
+        margin-left: 2%;
+
     }
 }
