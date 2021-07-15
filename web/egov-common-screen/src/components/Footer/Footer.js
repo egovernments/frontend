@@ -116,7 +116,7 @@ export default function Footer(props) {
                 <h5><b>Citizen Services</b></h5>
               </p>       
               <a
-                href="/citizen/user/login"
+                href="/ukd-assets/PT_English_UserManual_Citizen.pdf"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
@@ -125,7 +125,7 @@ export default function Footer(props) {
                 Property Tax
               </a>
               <a
-                href="/citizen/user/login"
+                href="/citizen/trade-license/how-it-works"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
