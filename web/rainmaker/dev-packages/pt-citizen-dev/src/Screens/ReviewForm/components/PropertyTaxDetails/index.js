@@ -197,7 +197,7 @@ class PropertyTaxDetails extends React.Component {
                       label="PT_CALCULATION_DETAILS"
                       bold={true}
                       fontSize="12px"
-                      color="rgb(254, 122, 81)"
+                      color="mediumpurple"
                     />
                   }
                   primary={true}
