@@ -66,7 +66,7 @@ class PendingAmountDialog extends Component {
               <Label fontSize="18px" label="PT_PROPERTY_DUE" />
               <div style={payNowButton} >
                 <div style={labelStyle}><Label label="PT_MUTATION_RS" labelClassName="rupees-label" /> {amount}</div>
-                <Button disabled={amount <= 0} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(consumerCode, "PT") }}/>
+                <Button disabled={amount <= 0} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "mediumpurple"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(consumerCode, "PT") }}/>
               </div>
             </div><br/>
             <div>
@@ -77,7 +77,7 @@ class PendingAmountDialog extends Component {
                     return (
                       <div style={payNowButton} >
                         <div style={labelStyle}><Label label="PT_MUTATION_RS" labelClassName="rupees-label" /> {items.waterDue}</div>
-                        <Button disabled={items.waterDue <= 0} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
+                        <Button disabled={items.waterDue <= 0} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "mediumpurple"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
                       </div>
                     )
                   }
@@ -85,7 +85,7 @@ class PendingAmountDialog extends Component {
                 ) : (
                   <div style={payNowButton} >
                     <div style={labelStyle}><Label label="PT_MUTATION_RS" labelClassName="rupees-label" /> {0}</div>
-                    <Button disabled={true} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
+                    <Button disabled={true} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "mediumpurple"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
                   </div>
                 )
               }
@@ -98,7 +98,7 @@ class PendingAmountDialog extends Component {
                     return (
                       <div style={payNowButton} >
                         <div style={labelStyle}><Label label="PT_MUTATION_RS" labelClassName="rupees-label" /> {items.sewerDue}</div>
-                        <Button disabled={items.sewerDue <= 0} className="pending-dues" style={buttonStyle}  label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
+                        <Button disabled={items.sewerDue <= 0} className="pending-dues" style={buttonStyle}  label={<Label buttonLabel={true} color= "mediumpurple"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
                       </div>
                     )
                   }
@@ -106,7 +106,7 @@ class PendingAmountDialog extends Component {
                 ) : (
                   <div style={payNowButton} >
                     <div style={labelStyle}><Label label="PT_MUTATION_RS" labelClassName="rupees-label" /> {0}</div>
-                    <Button disabled={true} className="pending-dues" style={buttonStyle}  label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
+                    <Button disabled={true} className="pending-dues" style={buttonStyle}  label={<Label buttonLabel={true} color= "mediumpurple"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>
                   </div>
                 )
               }
