@@ -231,6 +231,50 @@
     }
 }
 
+
+@media only screen and (max-width: 800px)
+{
+    #container
+    {
+        margin-left: 0%;
+    margin-right: 0%;
+
+    } 
+    #card1
+    {
+        height: 350px;
+        margin-top: -114px;
+        margin-left: 50px; 
+        width: 250px;
+    }
+    #card2
+    {
+        height: 350px;
+        margin-top: -114px;
+        width: 250px;
+        margin-left: 10px;
+        //margin-left: 30px;
+    }
+    #card3
+    {
+        margin-left: 47px !important;
+        margin-top: 50px !important;
+        height: 350px;
+        width: 250px;
+        margin-right: 50px;
+    }
+    #message{
+        margin-left: 118px;
+        width: 80%;
+        background-color: #f3e5de;
+        color: #c94806;
+        border-radius: 15px;     
+        //margin-top:-76px;      
+        opacity: .8;
+    }
+}
+
+
 .faq-row 
 {
     margin-left: 15px;
