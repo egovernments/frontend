@@ -225,7 +225,7 @@ const isownerNameRowValid = validateFields(
    state,
    dispatch,
    "propertySearch"
- ) || searchScreenObject.oldpropertyids == '';
+ ) || searchScreenObject.oldPropertyId == '';
  const ispropertyTaxApplicationNoRowValid = validateFields(
    "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
    state,
@@ -247,7 +247,7 @@ const isownerNameRowValid = validateFields(
 
  let formValid = false;
  if (index == 0) {
-   if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '' || (searchScreenObject.locality && searchScreenObject.doorNo  )|| searchScreenObject.name != '' || searchScreenObject.doorNo != '' ) {
+   if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldPropertyId != '' || (searchScreenObject.locality && searchScreenObject.doorNo  )|| searchScreenObject.name != '' || searchScreenObject.doorNo != '' ) {
      formValid = true;
    }
  } else {
@@ -546,7 +546,7 @@ const searchApiCall = async (state, dispatch, index) => {
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != ''|| searchScreenObject.name != '' || searchScreenObject.doorNo != '') {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldPropertyId != ''|| searchScreenObject.name != '' || searchScreenObject.doorNo != '') {
       formValid = true;
     }
   } else {
@@ -604,7 +604,7 @@ const searchApiCall = async (state, dispatch, index) => {
     state,
     dispatch,
     "propertySearch"
-  ) || searchScreenObject.oldpropertyids == '';
+  ) || searchScreenObject.oldPropertyId == '';
   
 
 

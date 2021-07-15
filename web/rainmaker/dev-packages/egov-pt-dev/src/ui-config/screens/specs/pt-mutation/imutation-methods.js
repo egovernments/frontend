@@ -186,7 +186,7 @@ import {
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.oldpropertyids",
+      "iSearchScreen.oldPropertyId",
       ''
     ))
     dispatch(prepareFinalObject(
@@ -814,7 +814,7 @@ import {
       required: false,
       pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "iSearchScreen.oldpropertyids",
+      jsonPath: "iSearchScreen.oldPropertyId",
       afterFieldChange: async (action, state, dispatch) => {
       if(action.value)
       {

@@ -186,7 +186,7 @@ export const resetFields = (state, dispatch) => {
     ''
   ))
   dispatch(prepareFinalObject(
-    "searchScreen.oldpropertyids",
+    "searchScreen.oldPropertyId",
     ''
   ))
   dispatch(prepareFinalObject(
@@ -671,7 +671,7 @@ export const searchPropertyDetails = getCommonCard({
       required: false,
       pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "searchScreen.oldpropertyids"
+      jsonPath: "searchScreen.oldPropertyId"
     })
   }),
   doorNo: getTextField({
