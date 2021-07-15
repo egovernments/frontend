@@ -37,7 +37,7 @@ export default function Footer(props) {
       <div className={classes.left}>
           <List className={classes.list}>
           <GridContainer>
-          <GridItem xs={12} sm={8} md={3} id="fgrid">
+          <GridItem xs={12} sm={6} md={3} id="fgrid">
           <ListItem className={classes.inlineBlock} >
 
              <h5>
@@ -63,7 +63,7 @@ export default function Footer(props) {
                 </ListItem>
                 </GridItem>
                 
-          <GridItem xs={12} sm={8} md={3} id="fgrid">
+          <GridItem xs={12} sm={6} md={3} id="fgrid">
           <ListItem className={classes.inlineBlock} >
             <p>
                 <h5><b>Other Departments</b></h5>
@@ -110,7 +110,7 @@ export default function Footer(props) {
               </a>
               </ListItem>
             </GridItem>
-            <GridItem xs={12} sm={8} md={3} id="fgrid">
+            <GridItem xs={12} sm={6} md={3} id="fgrid">
             <ListItem className={classes.inlineBlock} >
                <p              >
                 <h5><b>Citizen Services</b></h5>
@@ -162,7 +162,7 @@ export default function Footer(props) {
               </a> */}
               </ListItem>
               </GridItem>
-            <GridItem xs={12} sm={8} md={3} id="fgrid">
+            <GridItem xs={12} sm={6} md={3} id="fgrid">
             <ListItem className={classes.inlineBlock} >
               <p>
                 <h5><b>About Us</b></h5>
