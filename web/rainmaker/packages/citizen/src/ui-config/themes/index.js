@@ -2,7 +2,7 @@ const themeObject = {
   palette: {
     primary: {
       main: "mediumpurple",
-      dark: "#DB6844",
+      dark: "#7059AB",
       contrastText: "#fff",
     },
     secondary: {

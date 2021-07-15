@@ -163,7 +163,7 @@ class PropertyTaxDetails extends React.Component {
                       buttonLabel={true}
                       bold={true}
                       fontSize="12px"
-                      color="rgb(254, 122, 81)"
+                      color="mediumpurple"
                     />
                   }
                   primary={true}
@@ -190,7 +190,7 @@ class PropertyTaxDetails extends React.Component {
                       buttonLabel={true}
                       bold={true}
                       fontSize="12px"
-                      color="rgb(254, 122, 81)"
+                      color="mediumpurple"
                     />
                   }
                   primary={true}
