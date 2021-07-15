@@ -1039,6 +1039,10 @@ export const downloadCertificateForm = async (Licenses, mode = 'download') => {
       value: applicationNumber
     }
   ];
+  TL_
+  Licenses[0].TradeTypeMessage=getLocaleLabels(
+    `TL_${get(Licenses[0],"tradeLicenseDetail.tradeUnits[0].tradeType",'NA')}`
+    `TL_${get(Licenses[0],"tradeLicenseDetail.tradeUnits[0].tradeType",'NA')}`);
   const LicensesPayload = await getSearchResults(queryObject);
   const updatedLicenses = get(LicensesPayload, "Licenses");
   const oldFileStoreId = get(updatedLicenses[0], "fileStoreId")
