@@ -551,3 +551,31 @@ export const getMergeAndDownloadList = (state, dispatch, dataLength = 0) => {
     }
   }
 }
+
+export const createEstimateData = async (
+  billData,
+  jsonPath,
+  dispatch,
+  href = {},
+  getFromReceipt
+) => {
+  const payload = billData
+  const estimateData = payload
+  dispatch(prepareFinalObject(jsonPath, estimateData));
+  var event = new CustomEvent("estimateLoaded", { detail: true });
+  window.parent.document.dispatchEvent(event);
+  return payload;
+};
+
+export const getFeesEstimateCard = props => {
+  const { sourceJsonPath, ...rest } = props;
+  return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "EstimateCardContainer",
+    props: {
+      sourceJsonPath,
+      ...rest
+    }
+  };
+};
