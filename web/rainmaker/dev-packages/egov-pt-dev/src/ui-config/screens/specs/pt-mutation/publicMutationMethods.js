@@ -353,7 +353,7 @@ import {
           sm: 12,
           md: 6
         },
-        beforeFieldChange:(action, state, dispatch) => {
+     beforeFieldChange:(action, state, dispatch) => {
           if(action.value==="OptionPID")
           {
             
@@ -378,6 +378,27 @@ import {
                "visible",
                true
                 ))
+                dispatch(
+                  handleField(
+                 "public-search",
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
+                 "props.value",
+                 ""
+                  ))
+               dispatch(
+                    handleField(
+                   "public-search",
+                   "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
+                   "props.value",
+                   ""
+                    ))
+             dispatch(
+                      handleField(
+                     "public-search",
+                     "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
+                     "props.value",
+                     ""
+                      )) 
             dispatch(
               handleField(
              "public-search",
@@ -425,6 +446,21 @@ import {
                "visible",
                false
                 ))
+              
+                dispatch(
+                  handleField(
+                 "public-search",
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
+                 "props.value",
+                 ""
+                  ))
+                  dispatch(
+                    handleField(
+                   "public-search",
+                   "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
+                   "props.value",
+                   null
+                    ))
             dispatch(
               handleField(
              "public-search",
