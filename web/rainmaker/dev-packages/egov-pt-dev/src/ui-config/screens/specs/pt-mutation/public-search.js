@@ -7,7 +7,7 @@ import "./index.css";
 import { resetFields } from "./publicMutationMethods";
 import iSearchTabs from "./iSearch-tabs";
 import iCitizenSearchTabs from "./iCitizenSearchTabs";
-import { searchApplicationTable, searchPropertyTable } from "./implementationSearchResources/searchResults";
+import { searchApplicationTable} from "./implementationSearchResources/searchResults";
 import { showHideAdhocPopup } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -15,6 +15,8 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import get from "lodash/get";
 import set from "lodash/set";
 import { searchPropertyDetails} from "./publicMutationMethods";
+import { searchPropertyTable } from "./publicSearchResource/search-table";
+
 
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -271,9 +273,10 @@ const screenConfig = {
           }
         },
        // iCitizenSearchTabs,
-        searchPropertyDetails,
-        breakAfterSearch: getBreak(),
-        searchPropertyTable,
+       searchPropertyDetails,
+       breakAfterSearch3: getBreak(),
+       searchPropertyTable,
+       breakAfterSearch4: getBreak()
         //searchApplicationTable
 
       }
