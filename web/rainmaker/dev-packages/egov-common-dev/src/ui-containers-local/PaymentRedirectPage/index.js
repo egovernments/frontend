@@ -63,8 +63,7 @@ class PaymentRedirect extends Component {
       let consumerCode = get(pgUpdateResponse, "Transaction[0].consumerCode");
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
-        let serviceBusiness=get(pgUpdateResponse, "Transaction[0].module", localStorage.getItem('pay-businessService');
-        const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${serviceBusiness}`;
+        const url = `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=${get(pgUpdateResponse, "Transaction[0].module", localStorage.getItem('pay-businessService'))}`;
         const ackFailureUrl = isPublicSearch ? `/withoutAuth${url}` : url;
         this.props.setRoute(ackFailureUrl);
       } else {
