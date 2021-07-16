@@ -228,7 +228,7 @@ const screenConfig = {
       window.location.href,
       "businessService"
     );
-    if (status == 'success' && localStorage.getItem('pay-channel') && localStorage.getItem('pay-redirectNumber')) {
+    if (status == 'success'||status == 'failure' && localStorage.getItem('pay-channel') && localStorage.getItem('pay-redirectNumber')) {
       setTimeout(() => {
         const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
         window.location.href = weblink
