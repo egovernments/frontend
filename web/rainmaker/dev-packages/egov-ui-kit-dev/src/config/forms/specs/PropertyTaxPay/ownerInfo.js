@@ -288,12 +288,12 @@ const formConfig = {
       // if (get(state, `form.${formKey}.fields.ownerRelationship.value`, "NONE") === "NONE") {
       //   dispatch(handleFieldChange(formKey, "ownerRelationship", "FATHER"));
       // }
-      if(getQueryArg(window.location.href,  "purpose") == 'update'){
-        dispatch(setFieldProperty(formKey, "ownerName", "disabled", true));
-      } else {
-        dispatch(setFieldProperty(formKey, "ownerName", "disabled", false));
+      // if(getQueryArg(window.location.href,  "purpose") == 'update'){
+      //   dispatch(setFieldProperty(formKey, "ownerName", "disabled", true));
+      // } else {
+      //   dispatch(setFieldProperty(formKey, "ownerName", "disabled", false));
 
-      }
+      // }
       if (get(state, `form.${formKey}.fields.ownerCategory.value`, "NONE") === "NONE") {
         dispatch(setFieldProperty(formKey, "ownerCategoryId", "hideField", true));
         dispatch(setFieldProperty(formKey, "ownerCategoryIdType", "hideField", true));
