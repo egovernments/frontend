@@ -138,6 +138,18 @@ const searchApiCall = async (state, dispatch, index) => {
   );
 
   console.log("prasad searchScreenObject", searchScreenObject);
+  if(searchScreenObject.selected=="OptionPID")
+  {
+    searchScreenObject.doorNo="";
+    searchScreenObject.name="";
+    searchScreenObject.locality="";
+  }
+  else if(searchScreenObject.selected=="OptionPD")
+  {
+    searchScreenObject.ids="";
+    searchScreenObject.oldPropertyId="";
+    
+  }
 
   let tenants = state.common.cities && state.common.cities;
 
