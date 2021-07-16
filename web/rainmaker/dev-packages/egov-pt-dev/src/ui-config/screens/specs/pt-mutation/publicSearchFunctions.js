@@ -5,7 +5,12 @@ import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount } from "./publicSearchResource/publicSearchUtils";
 
+import {
+  getPayload,
+  getTenantName
+} from "./publicSearchResource/publicSearchUtils";
 import {
   enableField,disableField
  } from "egov-ui-framework/ui-utils/commons";
@@ -228,22 +233,30 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
     try {
       disableField('public-search',"components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       disableField('public-search', "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-     const response = await getSearchResults(queryObject);
+      const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+    const querryObject = getPayload(searchScreenObject);
+      const response = await getSearchResults(queryObject);
 
+      
       // const response = searchSampleResponse();
-
-      let propertyData = response.Properties.map(item => ({
-        ["PT_COMMON_TABLE_COL_PT_ID"]:
+      const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);
+         
+      
+      let propertyData = finalResponse.Properties.map(item => ({
+        ["PT_MUTATION_PID"]:
           item.propertyId || "-",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
-        ["PT_GUARDIAN_NAME"]:
-          item.owners[0].fatherOrHusbandName || "-",
-        ["PT_COMMON_COL_EXISTING_PROP_ID"]:
-          item.oldPropertyId || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
-        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
+        ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed },
+    
+               
+       
+
       }));
 
      /*  let applicationData = response.Properties.map(item => ({
@@ -262,7 +275,8 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       }));
       enableField('public-search',"components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       enableField('public-search', "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-      */ dispatch(
+      */ 
+     dispatch(
         handleField(
           "public-search",
           "components.div.children.searchPropertyTable",
@@ -294,6 +308,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
           response.Properties.length
         )
       );
+      console.log("saumyaaaa",propertyData)
       //showHideProgress(false, dispatch);
       showHideTable(true, dispatch, index);
     } catch (error) {
