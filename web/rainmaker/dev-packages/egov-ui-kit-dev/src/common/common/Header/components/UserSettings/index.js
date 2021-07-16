@@ -81,7 +81,7 @@ class UserSettings extends Component {
   };
 
   handleClose = () => {
-    this.setState({ ...this.state, open: false });
+    this.setState({ ...this.state, open: false, displayAccInfo: false });
   };
   onLanguageChange = (event, index, value) => {
     //const {setRote} = this.props;
@@ -110,12 +110,12 @@ class UserSettings extends Component {
     });
   }
 
-  handleClose = event => {
-    // if (this.anchorEl.contains(event.target)) {
-    //   return;
-    // }
-    this.setState({ displayAccInfo: false });
-  };
+  // handleClose = event => {
+  //   // if (this.anchorEl.contains(event.target)) {
+  //   //   return;
+  //   // }
+  //   this.setState({ displayAccInfo: false });
+  // };
 
   render() {
     const { languageSelected, displayAccInfo, tenantSelected, open } = this.state;

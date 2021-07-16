@@ -337,6 +337,7 @@ class TableData extends Component {
     const businessIds = data.map((item) => {
       return item.businessId;
     });
+    
     const businessServiceData = this.getBussinessServiceData();
     const modules =
       businessServiceData &&
@@ -344,7 +345,12 @@ class TableData extends Component {
         return item.business;
       });
     const uniqueModules = uniq(modules)
-
+   let ptData= data.filter(item => {
+      return item.moduleName=='PT';
+    });
+    const businessIdsForPT = ptData.map((item) => {
+      return item.businessId;
+    });
     let localitymap = [];
     try {
       for (var i = 0; i < uniqueModules.length; i++) {
@@ -358,8 +364,8 @@ class TableData extends Component {
             const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [], requestBody);
             localitymap = [...localitymap, ...moduleWiseLocality.Localities];
           } else {
-            const acknowledgementIds = [...businessIds];
-            for (let i = 0; i <= businessIds.length + 200; i += 200) {
+            const acknowledgementIds = [...businessIdsForPT];
+            for (let i = 0; i <= businessIdsForPT.length + 200; i += 200) {
               let acknowledgementId = acknowledgementIds.splice(0, 200);
               if (acknowledgementId && acknowledgementId.length > 0) {
                 const query = [{ key: "tenantId", value: getTenantId() },
