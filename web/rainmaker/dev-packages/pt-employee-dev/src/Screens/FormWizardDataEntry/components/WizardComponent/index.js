@@ -26,7 +26,6 @@ const ptSteps = [
   "PT_PROPERTY_ADDRESS_SUB_HEADER",
   "PT_ASSESMENT_INFO_SUB_HEADER",
   "PT_OWNERSHIP_INFO_SUB_HEADER",
-  "PT_DOCUMENT_INFO",
   "PT_COMMON_SUMMARY",
 ];
 
@@ -48,8 +47,8 @@ const WizardComponent = ({
   nextButtonEnabled,
   propertyId
 }) => {
-  ((selected == 5 || selected == 7)
-    ? ((selected == 5) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))
+  ((selected == 3 || selected == 5)
+    ? ((selected == 3) ? (backLabel = 'PT_APPLICATION_BUTTON_DOWN_CONF') : (backLabel = 'PT_ASSESS_PAY_FOR_NEW_YEAR'))
     : (backLabel))
     return (
     <div className={`wizard-cont active-step-${selected}`}>
@@ -80,13 +79,13 @@ const WizardComponent = ({
         </MuiThemeProvider>
 
       </div>}
-      {selected < 4 && <div>{header}</div>}
+      {selected < 3 && <div>{header}</div>}
       <div className="wizard-content clearfix">{content}</div>
       {footer}
       <div id="tax-wizard-buttons" className="wizard-footer col-sm-10" style={{ textAlign: "right" }}>
         <div className="button-container col-xs-10" style={{ float: "right" }}>
           {
-            selected !=0 && selected != 5 && selected != 4 && <Button
+            selected !=0 && selected != 3 && selected != 4 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               selected - 1 === -1 ? history.push("/pt-mutation/propertySearch") : onTabClick(selected - 1);
@@ -95,7 +94,7 @@ const WizardComponent = ({
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
-          {/* {selected == 5 && <Button
+           { selected == 5 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               downloadAcknowledgementForm();
@@ -103,8 +102,8 @@ const WizardComponent = ({
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
-          />}
-        */}
+          />} 
+        
 
 
           <Button

@@ -475,7 +475,7 @@ class FormWizardDataEntry extends Component {
       case "INSTITUTIONALGOVERNMENT":
         return (
           <div>
-            <InstitutionHOC disabled={disableOwner}/>
+            <InstitutionHOC />
             <InstitutionAuthorityHOC
               cardTitle={
                 <Label
@@ -573,9 +573,9 @@ class FormWizardDataEntry extends Component {
             {getOwnerDetails(ownerType)}
           </div>
         );
+      //  case 3:
+      //   return (<Card textChildren={<DocumentsUpload></DocumentsUpload>} />);
        case 3:
-        return (<Card textChildren={<DocumentsUpload></DocumentsUpload>} />);
-       case 4:
         return (
           <div className="review-pay-tab">
             <ReviewForm
@@ -648,7 +648,7 @@ class FormWizardDataEntry extends Component {
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
 
     let buttonLabel = "PT_COMMON_BUTTON_NEXT";
-    if (index == 4) {
+    if (index == 3) {
       propertyId ? buttonLabel = 'PT_UPDATE_PROPERTY' :  buttonLabel = "PT_ADD_ASSESS_PROPERTY" ;
     } else if (index == 5) {
       buttonLabel = 'PT_PROCEED_PAYMENT'
@@ -711,7 +711,7 @@ class FormWizardDataEntry extends Component {
               headerObj.subHeaderValue = '',
               headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
         break;
-       case 3:
+     /*  case 3:
         headerObj.subHeaderValue = propertyId;
         headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
@@ -721,8 +721,8 @@ class FormWizardDataEntry extends Component {
             (headerObj.headerValue = "",
               headerObj.subHeaderValue = '',
               headerObj.header = "PT_PROPERTY_CREATE_HEADER")));
-        break; 
-      case 4:
+        break; */
+      case 3:
         headerObj.subHeaderValue = propertyId;
         headerObj.headerValue = '(' + assessmentYear + ')';
         (isAssesment ?
@@ -1006,7 +1006,7 @@ class FormWizardDataEntry extends Component {
         }
 
         break;
-       case 3:
+       /*case 3:
         window.scrollTo(0, 0);
         const newDocs = {};
         const uploadedDocs = get(this.props, "documentsUploadRedux");
@@ -1039,9 +1039,9 @@ class FormWizardDataEntry extends Component {
           "Properties[0].additionalDetails", {})
         this.props.prepareFinalObject('propertyAdditionalDetails', additionalDetails);
        
-        break; 
+        break; */
       // createAndUpdate(index);
-      case 4:
+      case 3:
       /*   let { assessedPropertyDetails: asd = {} } = this.state;
         const { Properties: pts = [] } = asd;
         */
@@ -2060,9 +2060,9 @@ class FormWizardDataEntry extends Component {
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     // let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if (propertyId && selected == 3 &&!propertiesEdited) {
+    if (propertyId && selected == 2 &&!propertiesEdited) {
       this.setState({
-        selected: 4,
+        selected: 3,
         formValidIndexArray: [...formValidIndexArray, 3]
       });
     }
