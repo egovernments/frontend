@@ -5,7 +5,7 @@ import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/comm
 import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import { resetFields } from "./publicMutationMethods";
-import iSearchTabs from "./iSearch-tabs";
+import iSearchTabs from "./propertySearch-tabs";
 import iCitizenSearchTabs from "./iCitizenSearchTabs";
 import { searchApplicationTable} from "./implementationSearchResources/searchResults";
 import { showHideAdhocPopup } from "../utils";

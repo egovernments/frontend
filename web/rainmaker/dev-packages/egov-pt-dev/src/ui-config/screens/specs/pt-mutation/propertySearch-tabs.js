@@ -5,7 +5,7 @@ import {
   import { searchPropertyDetails } from "./imutation-methods";
  // import "./index.css"
   
-  const iSearchTabs = getCommonCard({
+  const propertySearchTabs = getCommonCard({
     searchPropertyDetails
     // header: getCommonSubHeader(
     //   { labelName: "Capture Payment", labelKey: "NOC_PAYMENT_CAP_PMT" },
@@ -36,5 +36,5 @@ import {
     } */
   });
   
-  export default iSearchTabs;
+  export default propertySearchTabs;
   

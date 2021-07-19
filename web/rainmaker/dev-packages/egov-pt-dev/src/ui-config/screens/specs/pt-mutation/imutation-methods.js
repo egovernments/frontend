@@ -9,7 +9,7 @@ import {
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { iSearch, applicationSearch } from "./iFunctions";
+  import { propertySearch, applicationSearch } from "./iFunctions";
   import { getTenantId, getUserInfo,getLocale } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -42,7 +42,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.locality,
         "props.data",
         mohallaData
@@ -50,37 +50,37 @@ import {
       )
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.locality, "props.value", "")
+      handleField("propertySearch", ComponentJsonPath.locality, "props.value", "")
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.locality, "props.error", false)
+      handleField("propertySearch", ComponentJsonPath.locality, "props.error", false)
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.locality, "isFieldValid", true)
+      handleField("propertySearch", ComponentJsonPath.locality, "isFieldValid", true)
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.locality, "props.errorMessage", "")
+      handleField("propertySearch", ComponentJsonPath.locality, "props.errorMessage", "")
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.locality, "props.helperText", "")
+      handleField("propertySearch", ComponentJsonPath.locality, "props.helperText", "")
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.ulbCity, "props.helperText", "")
+      handleField("propertySearch", ComponentJsonPath.ulbCity, "props.helperText", "")
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.ulbCity, "props.error", false)
+      handleField("propertySearch", ComponentJsonPath.ulbCity, "props.error", false)
     );
     dispatch(
-      handleField("iSearch", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
+      handleField("propertySearch", ComponentJsonPath.ulbCity, "props.isFieldValid", true)
     );
-    dispatch(prepareFinalObject("iSearchScreen.locality", ""));
+    dispatch(prepareFinalObject("propertySearchScreen.locality", ""));
     const mohallaLocalePrefix = {
       moduleName: tenantId,
       masterName: "REVENUE",
     };
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.locality,
         "props.localePrefix",
         mohallaLocalePrefix
@@ -95,22 +95,22 @@ import {
     if (process.env.REACT_APP_NAME == "Citizen") {
       dispatch(
         handleField(
-          "iSearch",
-          "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ulbCity",
+          "propertySearch",
+          "components.div.children.searchPropertyDetails.children.cardContent.children.ulbTenantContainer.children.ulbCity",
           "props.value",
           ""
         )
       );
   
       dispatch(prepareFinalObject(
-        "iSearchScreen.tenantId",
+        "propertySearchScreen.tenantId",
         ''
       ))
     }
   
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerMobNo",
         "props.value",
         ""
@@ -118,7 +118,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
         "props.value",
         ""
@@ -126,7 +126,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
         "props.value",
         ""
@@ -134,31 +134,31 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+        "propertySearch",
+        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
         "props.value",
         ""
       )
     );
     dispatch(
       handleField(
-        "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+        "propertySearch",
+        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
         "props.value",
         ""
       )
     );
     dispatch(
       handleField(
-        "iSearch",
-        "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+        "propertySearch",
+        "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
         "props.value",
         ""
       )
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
         "props.value",
         ""
@@ -166,7 +166,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.houseNumber",
         "props.value",
         ""
@@ -174,32 +174,32 @@ import {
     );
     
     dispatch(prepareFinalObject(
-      "iSearchScreen.acknowledgementIds",
+      "propertySearchScreen.acknowledgementIds",
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.ids",
+      "propertySearchScreen.ids",
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.mobileNumber",
+      "propertySearchScreen.mobileNumber",
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.oldPropertyId",
+      "propertySearchScreen.oldPropertyId",
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.locality",
+      "propertySearchScreen.locality",
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.doorNo",
+      "propertySearchScreen.doorNo",
       ''
     ))
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.ownerName,
         "props.value",
         ""
@@ -207,7 +207,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.ownerName,
         "props.error",
         false
@@ -215,7 +215,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.ownerName,
         "props.helperText",
         ""
@@ -223,20 +223,20 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.ownerName,
         "props.errorMessage",
         ""
       )
     );
     dispatch(prepareFinalObject(
-      "iSearchScreen.name",
+      "propertySearchScreen.name",
       ''
     ))
   
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.doorNo,
         "props.value",
         ""
@@ -244,7 +244,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.doorNo,
         "props.error",
         false
@@ -252,7 +252,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.doorNo,
         "props.helperText",
         ""
@@ -260,14 +260,14 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         ComponentJsonPath.doorNo,
         "props.errorMessage",
         ""
       )
     );
     dispatch(prepareFinalObject(
-      "iSearchScreen.doorNo",
+      "propertySearchScreen.doorNo",
       ''
     ))
   
@@ -278,7 +278,7 @@ import {
     
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
         "props.value",
         ""
@@ -286,7 +286,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
         "props.value",
         ""
@@ -294,7 +294,7 @@ import {
     );
     dispatch(
       handleField(
-        "iSearch",
+        "propertySearch",
         "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
         "props.value",
         ""
@@ -302,15 +302,15 @@ import {
     );  
     
     dispatch(prepareFinalObject(
-      "iSearchScreen.acknowledgementIds",
+      "propertySearchScreen.acknowledgementIds",
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.ids",
+      "propertySearchScreen.ids",
       ''
     ))
     dispatch(prepareFinalObject(
-      "iSearchScreen.mobileNumber",
+      "propertySearchScreen.mobileNumber",
       ''
     ))
   
@@ -359,63 +359,63 @@ import {
             
             dispatch(
               handleField(
-             "iSearch",
+             "propertySearch",
              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ORButton",
              "visible",
              true             
               ))
               dispatch(
               handleField(
-             "iSearch",
+             "propertySearch",
              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
              "visible",
              true
               ))
               dispatch(
                 handleField(
-               "iSearch",
+               "propertySearch",
                "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
                "visible",
                true
                 ))
             dispatch(
               handleField(
-             "iSearch",
+             "propertySearch",
              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
              "props.value",
                 ""
                   ))
               dispatch(
                     handleField(
-                  "iSearch",
+                  "propertySearch",
                   "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
                   "props.value",
                   ""
                     ))
             dispatch(
                       handleField(
-                    "iSearch",
+                    "propertySearch",
                     "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
                     "props.value",
                     ""
                       )) 
             dispatch(
               handleField(
-            "iSearch",
+            "propertySearch",
             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
             "visible",
             false
               ))
           dispatch(
                 handleField(
-              "iSearch",
+              "propertySearch",
               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
               "visible",
             false
                 ))
         dispatch(
                   handleField(
-                "iSearch",
+                "propertySearch",
                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
                 "visible",
             false
@@ -427,21 +427,21 @@ import {
 
             dispatch(
               handleField(
-            "iSearch",
+            "propertySearch",
             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ORButton",
             "visible",
             false             
               ))
             dispatch(
               handleField(
-            "iSearch",
+            "propertySearch",
             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
             "visible",
             false
               ))
               dispatch(
                 handleField(
-              "iSearch",
+              "propertySearch",
               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
               "visible",
               false
@@ -449,35 +449,35 @@ import {
               
                 dispatch(
                   handleField(
-                "iSearch",
+                "propertySearch",
                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
                 "props.value",
                 ""
                   ))
                   dispatch(
                     handleField(
-                  "iSearch",
+                  "propertySearch",
                   "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
                   "props.value",
                   null
                     ))
             dispatch(
               handleField(
-            "iSearch",
+            "propertySearch",
             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
             "visible",
             true
               ))
             dispatch(
                 handleField(
-              "iSearch",
+              "propertySearch",
               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
               "visible",
               true
                 ))
             dispatch(
                   handleField(
-                "iSearch",
+                "propertySearch",
                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
                 "visible",
               true
@@ -486,7 +486,7 @@ import {
             } 
         },
         jsonPath:
-          "iSearchScreen.selected",
+          "propertySearchScreen.selected",
         props: {
           label: { name: "Search Property ", key: "SEARCH_PROPERTY" },
           className: "SearchRadio",
@@ -503,7 +503,7 @@ import {
             }
          ],
          jsonPath:
-              "iSearchScreen.selected",          
+              "propertySearchScreen.selected",          
 
           required: true,
           errorMessage: "Required",
@@ -530,7 +530,7 @@ import {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
-          jsonPath: "iSearchScreen.tenantId",
+          jsonPath: "propertySearchScreen.tenantId",
           sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
           className: "autocomplete-dropdown",
           labelsFromLocalisation: true,
@@ -539,7 +539,7 @@ import {
           isClearable: true
         },
       // required: true,
-        jsonPath: "iSearchScreen.tenantId",
+        jsonPath: "propertySearchScreen.tenantId",
         gridDefination: {
           xs: 12,
           sm: 4
@@ -552,7 +552,7 @@ import {
   
         dispatch(
           handleField(
-              "iSearch",
+              "propertySearch",
               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
               "label",
               ""
@@ -588,7 +588,7 @@ import {
               let enableButton = enabledCities && enabledCities.includes(action.value)?true:false;
             dispatch(
                 handleField(
-                    "iSearch",
+                    "propertySearch",
                     "components.div.children.headerDiv.children.newApplicationButton",
                     "visible",
                     enableButton
@@ -607,7 +607,7 @@ import {
   
            dispatch(
             handleField(
-                "iSearch",
+                "propertySearch",
                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
                 "label",
                 tenantUniqueId
@@ -626,7 +626,7 @@ import {
   
            dispatch(
             handleField(
-                "iSearch",
+                "propertySearch",
                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
                 "label",
                 tenantUniqueId
@@ -660,7 +660,7 @@ import {
             };
             dispatch(
               handleField(
-                "iSearch",
+                "propertySearch",
                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
                 "props.localePrefix",
                 mohallaLocalePrefix
@@ -696,7 +696,7 @@ import {
       required: false,
       visible:false,
       pattern: getPattern("MobileNo"),
-      jsonPath: "iSearchScreen.mobileNumber",
+      jsonPath: "propertySearchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     }),
     
@@ -713,7 +713,7 @@ import {
       pattern: getPattern("SearchOwnerName"),
       errorMessage: "Invalid Name",
       helperText:"PT_MIN_3CHAR",
-      jsonPath: "iSearchScreen.name",
+      jsonPath: "propertySearchScreen.name",
       props: {
         className: "applicant-details-error"
       },
@@ -768,7 +768,7 @@ import {
         {
           dispatch(
             handleField(
-              "iSearch",
+              "propertySearch",
               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
               "props.value",
               ""
@@ -780,7 +780,7 @@ import {
       //pattern: /^[0-9]*$/i,
       pattern: getPattern("NewPropertyID"),
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
-      jsonPath: "iSearchScreen.ids"  
+      jsonPath: "propertySearchScreen.ids"  
     }),
     mohalla: {
       uiFramework: "custom-containers-local",
@@ -799,7 +799,7 @@ import {
           moduleName: "TENANT",
           masterName: "TENANTS"
         },
-        jsonPath: "iSearchScreen.locality",
+        jsonPath: "propertySearchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
         className: "autocomplete-dropdown",
         labelsFromLocalisation: true,
@@ -807,7 +807,7 @@ import {
         isClearable: true
       },
       visible:false,
-      jsonPath: "iSearchScreen.locality",
+      jsonPath: "propertySearchScreen.locality",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -824,7 +824,7 @@ import {
           },
           pattern: getPattern("DoorHouseNo"),
           errorMessage: "Invalid No",
-          jsonPath: "iSearchScreen.doorNo",
+          jsonPath: "propertySearchScreen.doorNo",
           props: {
             className: "applicant-details-error"
           },
@@ -860,13 +860,13 @@ import {
       required: false,
       pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "iSearchScreen.oldPropertyId",
+      jsonPath: "propertySearchScreen.oldPropertyId",
       afterFieldChange: async (action, state, dispatch) => {
       if(action.value)
       {
         dispatch(
           handleField(
-            "iSearch",
+            "propertySearch",
             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
             "props.value",
             ""
@@ -935,7 +935,7 @@ import {
        },
        onClickDefination: {
          action: "condition",
-         callBack: iSearch
+         callBack: propertySearch
        }
      }
     })
@@ -974,7 +974,7 @@ import {
         required: false,
         pattern: /^[a-zA-Z0-9-]*$/i,
         errorMessage: "ERR_INVALID_APPLICATION_NO",
-        jsonPath: "iSearchScreen.acknowledgementIds"
+        jsonPath: "propertySearchScreen.acknowledgementIds"
       }),
       ownerMobNoProp: getTextField({
         label: {
@@ -997,7 +997,7 @@ import {
         },
         required: false,
         pattern: getPattern("MobileNo"),
-        jsonPath: "iSearchScreen.mobileNumber",
+        jsonPath: "propertySearchScreen.mobileNumber",
         errorMessage: "ERR_INVALID_MOBILE_NUMBER"
       }),
       applicationPropertyTaxUniqueId: getTextField({
@@ -1017,7 +1017,7 @@ import {
         required: false,
         pattern: /^[a-zA-Z0-9-]*$/i,
         errorMessage: "ERR_INVALID_PROPERTY_ID",
-        jsonPath: "iSearchScreen.ids"
+        jsonPath: "propertySearchScreen.ids"
       }),
     }),
     button: getCommonContainer({

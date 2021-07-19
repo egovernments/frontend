@@ -8,7 +8,7 @@ import {
     getCommonParagraph,
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { iSearch, applicationSearch } from "./iFunctions";
+  import { propertySearch, applicationSearch } from "./iFunctions";
   import { citizenResetFields } from "./imutation-methods";
 
  
@@ -42,7 +42,7 @@ import {
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_INVALID_APPLICATION_NO",
-            jsonPath: "iSearchScreen.acknowledgementIds"
+            jsonPath: "propertySearchScreen.acknowledgementIds"
           }),
           ownerMobNoProp: getTextField({
             label: {
@@ -65,7 +65,7 @@ import {
             },
             required: false,
             pattern: getPattern("MobileNo"),
-            jsonPath: "iSearchScreen.mobileNumber",
+            jsonPath: "propertySearchScreen.mobileNumber",
             errorMessage: "ERR_INVALID_MOBILE_NUMBER"
           }),
           applicationPropertyTaxUniqueId: getTextField({
@@ -85,7 +85,7 @@ import {
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_INVALID_PROPERTY_ID",
-            jsonPath: "iSearchScreen.ids"
+            jsonPath: "propertySearchScreen.ids"
           }),
         }),
         button: getCommonContainer({
