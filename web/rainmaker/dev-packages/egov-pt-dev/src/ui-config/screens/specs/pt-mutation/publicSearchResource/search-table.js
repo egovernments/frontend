@@ -81,7 +81,7 @@ export const searchPropertyTable = {
 };
 
 const payAmount = (tableMeta) => {
-    setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}&businessService=PT`);
+    setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[7]}&businessService=PT`);
 };
 
 const getPayButton = (tableMeta) => {
