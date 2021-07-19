@@ -8,6 +8,7 @@ import {
     getCommonParagraph,
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
   import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { iSearch, applicationSearch } from "./publicSearchFunctions";
   import { getTenantId, getUserInfo,getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -92,11 +93,11 @@ import {
   
   
   export const resetFields = (state, dispatch) => {
-    if (process.env.REACT_APP_NAME == "Citizen") {
+    if (process.env.REACT_APP_NAME == "Citizen" || isPublicSearch) {
       dispatch(
         handleField(
           "public-search",
-          "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ulbCity",
+          "components.div.children.searchPropertyDetails.children.cardContent.children.ulbTenantContainer.children.ulbCity",
           "props.value",
           ""
         )
