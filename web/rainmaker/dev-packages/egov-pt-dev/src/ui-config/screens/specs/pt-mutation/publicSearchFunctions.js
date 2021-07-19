@@ -142,7 +142,6 @@ const searchApiCall = async (state, dispatch, index) => {
     {}
   );
 
-  console.log("prasad searchScreenObject", searchScreenObject);
   if(searchScreenObject.selected=="OptionPID")
   {
     searchScreenObject.doorNo="";
@@ -155,6 +154,21 @@ const searchApiCall = async (state, dispatch, index) => {
     searchScreenObject.oldPropertyId="";
     
   }
+
+  if (!searchScreenObject.tenantId ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_PT_FILL_VALID_FIELDS"
+        },
+        "error"
+      )
+    );
+    return;
+
+  } 
 
   let tenants = state.common.cities && state.common.cities;
 
@@ -308,7 +322,6 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
           response.Properties.length
         )
       );
-      console.log("saumyaaaa",propertyData)
       //showHideProgress(false, dispatch);
       showHideTable(true, dispatch, index);
     } catch (error) {
