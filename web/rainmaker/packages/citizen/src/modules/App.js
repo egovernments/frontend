@@ -131,6 +131,7 @@ class App extends Component {
       loginScreens = true;
     }
     let sourceUrl = `${window.location.origin}/citizen`;
+    const isPublicSearch = window.location && window.location.pathname && (window.location.pathname.includes("/withoutAuth/pt-mutation/public-search") );
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
@@ -138,7 +139,12 @@ class App extends Component {
         {loading && <LoadingIndicator />}
         {!loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}></img>
+            <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={window.location.origin+"/ukd-assets/Stateimages/digit-footer.png"} onError={"this.src='./../digit-footer.png'"}></img>
+          </div>
+        </div>}
+        {isPublicSearch && <div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img style={{ display: "inline-flex", height: '1.4em',marginTop:"500px" }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={window.location.origin+"/ukd-assets/Stateimages/digit-footer.png"} onError={"this.src='./../digit-footer.png'"}></img>
           </div>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
