@@ -788,12 +788,12 @@ import {
       componentPath: "AutosuggestContainer",
       props: {
         label: {
-          labelName: "ULB/City",
-          labelKey: "PT_SEARCH_ULB_CITY"
+          labelName: "Mohalla",
+          labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
         },
         placeholder: {
-          labelName: "Select ULB/City",
-          labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
+          labelName: "Select mohalla",
+          labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
         },
         localePrefix: {
           moduleName: "TENANT",
