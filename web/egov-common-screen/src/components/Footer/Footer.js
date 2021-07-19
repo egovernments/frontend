@@ -133,14 +133,17 @@ export default function Footer(props) {
               >
                 Trade Licence
               </a>
+              
+                Road Cutting
+              
               <a
-                href="http://enagarsewa.uk.gov.in/"
+                href="https://www.youtube.com/channel/UCnRHcTjQ1ylEBR8nV6re1ZA"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
 
               >
-                Right way of <br/>Road Cutting/Road digging
+                NagarSewa YouTube Channel
               </a>
             {/*   <a
                 href="#"
@@ -195,7 +198,7 @@ export default function Footer(props) {
               </GridItem>
               </GridContainer>
           </List>
-          <center><p>Last Updated July 2020</p></center>
+          <center><p>Last Updated July 2021</p></center>
       </div>
       </div>
     </footer>
