@@ -585,7 +585,7 @@ import {
           ).then(res => {         
               citywiseconfig:res.MdmsRes.tenant.citywiseconfig
               let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
-              let enableButton = enabledCities && enabledCities.includes(action.value);
+              let enableButton = enabledCities && enabledCities.includes(action.value)?true:false;
             dispatch(
                 handleField(
                     "public-search",
