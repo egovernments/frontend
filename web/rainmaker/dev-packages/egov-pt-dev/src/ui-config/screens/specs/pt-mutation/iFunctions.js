@@ -137,6 +137,34 @@ const searchApiCall = async (state, dispatch, index) => {
     {}
   );
 
+  if(searchScreenObject.selected=="OptionPID")
+  {
+    searchScreenObject.doorNo="";
+    searchScreenObject.name="";
+    searchScreenObject.locality="";
+  }
+  else if(searchScreenObject.selected=="OptionPD")
+  {
+    searchScreenObject.ids="";
+    searchScreenObject.oldPropertyId="";
+    
+  }
+
+  if (!searchScreenObject.tenantId ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to search",
+          labelKey: "ERR_PT_FILL_TENATID_FIELD"
+        },
+        "error"
+      )
+    );
+    return;
+
+  } 
+
   let tenants = state.common.cities && state.common.cities;
 
   let filterTenant ;

@@ -382,69 +382,105 @@ import {
               handleField(
              "iSearch",
              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
-             "visible",
-             false
+             "props.value",
+                ""
+                  ))
+              dispatch(
+                    handleField(
+                  "iSearch",
+                  "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
+                  "props.value",
+                  ""
+                    ))
+            dispatch(
+                      handleField(
+                    "iSearch",
+                    "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
+                    "props.value",
+                    ""
+                      )) 
+            dispatch(
+              handleField(
+            "iSearch",
+            "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
+            "visible",
+            false
               ))
-           dispatch(
+          dispatch(
                 handleField(
-               "iSearch",
-               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
-               "visible",
-             false
+              "iSearch",
+              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
+              "visible",
+            false
                 ))
-         dispatch(
+        dispatch(
                   handleField(
-                 "iSearch",
-                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
-                 "visible",
-             false
+                "iSearch",
+                "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
+                "visible",
+            false
                   ))                
-           }
+          }
 
           else
           {
 
             dispatch(
               handleField(
-             "iSearch",
-             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ORButton",
-             "visible",
-             false             
+            "iSearch",
+            "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ORButton",
+            "visible",
+            false             
               ))
             dispatch(
               handleField(
-             "iSearch",
-             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
-             "visible",
-             false
+            "iSearch",
+            "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
+            "visible",
+            false
               ))
               dispatch(
                 handleField(
-               "iSearch",
-               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
-               "visible",
-               false
+              "iSearch",
+              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
+              "visible",
+              false
                 ))
+              
+                dispatch(
+                  handleField(
+                "iSearch",
+                "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
+                "props.value",
+                ""
+                  ))
+                  dispatch(
+                    handleField(
+                  "iSearch",
+                  "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
+                  "props.value",
+                  null
+                    ))
             dispatch(
               handleField(
-             "iSearch",
-             "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
-             "visible",
-             true
+            "iSearch",
+            "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
+            "visible",
+            true
               ))
             dispatch(
                 handleField(
-               "iSearch",
-               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
-               "visible",
-               true
+              "iSearch",
+              "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
+              "visible",
+              true
                 ))
             dispatch(
                   handleField(
-                 "iSearch",
-                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
-                 "visible",
-               true
+                "iSearch",
+                "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
+                "visible",
+              true
               )) 
 
             } 
@@ -477,26 +513,33 @@ import {
       },
   }),
     ulbTenantContainer: getCommonContainer({      
-      ulbCity: getSelectField({
-        label: {
-          labelName: "City",
-          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY"
-        },
-        placeholder: {
-          labelName: "Select City",
-          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        },
-        jsonPath: "iSearchScreen.tenantId",
-        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-        required: true,
+      ulbCity: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
         props: {
-          required: true,
+          label: {
+            labelName: "ULB/City",
+            labelKey: "PT_SEARCH_ULB_CITY"
+          },
+          placeholder: {
+            labelName: "Select ULB/City",
+            labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          },
+          jsonPath: "iSearchScreen.tenantId",
+          sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+          className: "autocomplete-dropdown",
+          labelsFromLocalisation: true,
+          //required: true,
           disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          isClearable: true
         },
+      // required: true,
+        jsonPath: "iSearchScreen.tenantId",
         gridDefination: {
           xs: 12,
           sm: 4
@@ -519,7 +562,7 @@ import {
           
           const tenantRequestBody = {
             MdmsCriteria: {
-              tenantId: getTenantId(),
+              tenantId: action.value,
               moduleDetails: [
                 {
                   moduleName: "tenant",
@@ -542,7 +585,7 @@ import {
           ).then(res => {         
               citywiseconfig:res.MdmsRes.tenant.citywiseconfig
               let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
-              let enableButton = enabledCities && enabledCities.includes(action.value);
+              let enableButton = enabledCities && enabledCities.includes(action.value)?true:false;
             dispatch(
                 handleField(
                     "iSearch",
@@ -626,12 +669,11 @@ import {
               dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
           }
         }
-        
+      }
       },
     }),
-   }),
-   iulbCityContainer: getCommonContainer({
-  
+  iulbCityContainer: getCommonContainer({
+
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
@@ -740,8 +782,11 @@ import {
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
       jsonPath: "iSearchScreen.ids"  
     }),
-
-      mohalla: getSelectField({
+    mohalla: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
+      props: {
         label: {
           labelName: "Mohalla",
           labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
@@ -751,22 +796,23 @@ import {
           labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
         },
         localePrefix: {
-          moduleName:getTenantId(),
-          masterName: "REVENUE"
+          moduleName: "TENANT",
+          masterName: "TENANTS"
         },
-        visible:false,   
-        errorMessage: "ERR_REQUIRED_FILED",    
         jsonPath: "iSearchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+        className: "autocomplete-dropdown",
+        labelsFromLocalisation: true,
         //required: true,
-        props: {
-          //required: true,
-    //      disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }}),
+        isClearable: true
+      },
+      visible:false,
+      jsonPath: "iSearchScreen.locality",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    },
         doorNo: getTextField({
           label: {
             labelName: "Owner Name",
