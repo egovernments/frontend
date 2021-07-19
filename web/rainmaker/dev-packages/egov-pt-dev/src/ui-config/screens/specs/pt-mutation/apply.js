@@ -278,6 +278,7 @@ const getApplicationData = async (action, state, dispatch) => {
     setCardVisibility(state, action, dispatch);
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     // Prefilling radio buttons
+    debugger;
     set(
       action.screenConfig,
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
@@ -524,6 +525,21 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     // dispatch(unMountScreen("propertySearch"));
     // dispatch(unMountScreen("search-preview"));
+    debugger;
+    console.log("=============",process.env.REACT_APP_NAME);
+    console.log("=============",get(state, "auth.userInfo.mobileNumber"));
+    set(
+      action.screenConfig,
+      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.mobileNumber.value",
+      "999999999"
+    );
+    // dispatch(
+    //   prepareFinalObject(
+    //     "Property.ownersTemp[0].mobileNumber",
+    //     "9999999"
+    //   )
+    // );
+    // process.env.REACT_APP_NAME === "Citizen" ?set(action, "screenConfiguration.preparedFinalObject.Property.ownersTemp[0].mobileNumber", get(state, "auth.userInfo.mobileNumber")):"";
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
