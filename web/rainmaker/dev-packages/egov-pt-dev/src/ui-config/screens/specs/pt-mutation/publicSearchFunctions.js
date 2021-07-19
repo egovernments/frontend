@@ -264,6 +264,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
+        ["PT_COMMON_COL_EXISTING_PROP_ID"]: item.oldPropertyId || "-",
         ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
         ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
         ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed },
