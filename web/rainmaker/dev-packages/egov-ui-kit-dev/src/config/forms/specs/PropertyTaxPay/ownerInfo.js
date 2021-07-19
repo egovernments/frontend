@@ -263,6 +263,7 @@ const formConfig = {
       dropdownData && dropdownData.length > 0 && dropdownData.forEach(data => { data.label = getLocaleLabels(`COMMON_MASTERS_OWNERTYPE_${data.value}`, `COMMON_MASTERS_OWNERTYPE_${data.value}`) });
       set(action, "form.fields.ownerCategory.dropDownData", dropdownData);
       const ownerShipType = get(state, "form.ownershipType.fields.typeOfOwnership.value", "");
+      set(action, "form.fields.ownerMobile.value", get(state, "auth.userInfo.mobileNumber"));
       if (ownerShipType === "SINGLEOWNER") {
         set(action, "form.fields.ownerGender.value", get(state, "form.ownerInfo.fields.ownerGender.value", "Male"));
       }
