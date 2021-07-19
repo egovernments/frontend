@@ -13,6 +13,7 @@
     "dev-packages/egov-pt-dev",
     "dev-packages/egov-billamend-dev",
     "dev-packages/egov-abg-dev",
+    "dev-packages/egov-gc-dev",
     "dev-packages/egov-firenoc-dev",
     "dev-packages/egov-bpa-dev",
     "dev-packages/egov-noc-dev",
