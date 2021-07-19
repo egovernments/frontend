@@ -562,7 +562,7 @@ import {
           
           const tenantRequestBody = {
             MdmsCriteria: {
-              tenantId: getTenantId(),
+              tenantId: action.value,
               moduleDetails: [
                 {
                   moduleName: "tenant",
