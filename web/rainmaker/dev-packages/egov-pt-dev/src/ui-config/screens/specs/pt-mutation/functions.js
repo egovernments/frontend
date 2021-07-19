@@ -409,9 +409,9 @@ const isownerNameRowValid = validateFields(
      let propertyData = response.Properties.map(item => ({
        ["PT_COMMON_TABLE_COL_PT_ID"]:
          item.propertyId || "-",
-       ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+       ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
        ["PT_GUARDIAN_NAME"]:
-         item.owners[0].fatherOrHusbandName || "-",
+         item.owners[getIndexofActive(item)].fatherOrHusbandName || "-",
        ["PT_COMMON_COL_EXISTING_PROP_ID"]:
          item.oldPropertyId || "-",
        ["PT_COMMON_COL_ADDRESS"]:
@@ -427,7 +427,7 @@ const isownerNameRowValid = validateFields(
        ["PT_COMMON_TABLE_COL_APP_TYPE"]:
          item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
        ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
-         item.owners[0].name || "-",
+         item.owners[getIndexofActive(item)].name || "-",
        ["PT_COMMON_COL_ADDRESS"]:
          getAddress(item) || "-",
        ["TENANT_ID"]: item.tenantId,
@@ -763,7 +763,7 @@ const searchApiCall = async (state, dispatch, index) => {
         ["PT_COMMON_TABLE_COL_APP_TYPE"]:
           item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
-          item.owners[0].name || "-",
+          item.owners[getIndexofActive(item)].name || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
