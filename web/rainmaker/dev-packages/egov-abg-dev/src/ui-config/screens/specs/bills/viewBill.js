@@ -282,10 +282,11 @@ const beforeInitFn = async (action, state, dispatch, consumerCode) => {
 };
 
 const billHeader = () => {
-  if (service === serviceConst.WATER) {
-    return getCommonHeader({ labelKey: "BC_COMMON_WATER_BILL_HEADER" })
-  } else if (service === serviceConst.SEWERAGE) {
-    return getCommonHeader({ labelKey: "BC_COMMON_SEWERAGE_BILL_HEADER" })
+  const service = getQueryArg(window.location.href, "service");
+  if (service === "WATER") {
+    return getCommonHeader({ labelKey: "WS_COMMON_WATER_BILL_HEADER" })
+  } else {
+    return getCommonHeader({ labelKey: "WS_COMMON_SEWERAGE_BILL_HEADER" })
   }
 }
 

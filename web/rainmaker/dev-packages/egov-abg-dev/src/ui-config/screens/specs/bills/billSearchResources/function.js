@@ -43,7 +43,7 @@ export const searchApiCall = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill at least one field to start search",
-          labelKey: "BC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
         },
         "warning"
       )
@@ -57,7 +57,7 @@ export const searchApiCall = async (state, dispatch) => {
         true,
         {
           labelName: "Please fill at least one field to start search",
-          labelKey: "BC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+          labelKey: "ABG_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
         },
         "warning"
       )
@@ -88,7 +88,7 @@ export const searchApiCall = async (state, dispatch) => {
           true,
           {
             labelName: "Selected Service Category is Not Available for Search",
-            labelKey: "BC_SEARCH_BILLGINEIURL_NOTFOUND"
+            labelKey: "ABG_SEARCH_BILLGINEIURL_NOTFOUND"
           },
           "error"
         )
@@ -122,14 +122,14 @@ export const searchApiCall = async (state, dispatch) => {
     
     try {
       let data = billTableData.map(item => ({
-        ['BC_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
         ["PAYMENT_COMMON_CONSUMER_CODE"]: item.consumerCode || "-",
-        ['BC_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
-        ['BC_COMMON_TABLE_COL_BILL_DATE']:
+        ['ABG_COMMON_TABLE_COL_CONSUMER_NAME']: item.consumerName || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_DATE']:
           convertEpochToDate(item.billDate) || "-",
-        ['BC_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount===0) ? item.billAmount : "-",
-        ['BC_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ['BC_COMMON_TABLE_COL_ACTION']: item.action || "-",
+        ['ABG_COMMON_TABLE_COL_BILL_AMOUNT']: (item.billAmount || item.billAmount===0) ? item.billAmount : "-",
+        ['ABG_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ['ABG_COMMON_TABLE_COL_ACTION']: item.action || "-",
         ["BUSINESS_SERVICE"]: searchScreenObject.businesService,
         ["RECEIPT_KEY"]: get(configObject[0], "receiptKey","consolidatedreceipt")||"consolidatedreceipt",
         ["BILL_KEY"]: get(configObject[0], "billKey","consolidatedbill")||"consolidatedbill",
@@ -184,6 +184,6 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
 
 const getActionItem = (status) => {
   switch (status) {
-    case "ACTIVE": return "BC_CANCEL_BILL";
+    case "ACTIVE": return "ABG_CANCEL_BILL";
   }
 }

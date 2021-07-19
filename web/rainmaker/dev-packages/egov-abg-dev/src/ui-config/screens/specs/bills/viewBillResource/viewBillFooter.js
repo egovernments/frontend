@@ -10,7 +10,7 @@ import { ifUserRoleExists, validateFields } from "../../utils";
 
 
 export const getRedirectionURL = () => {
-  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/uc/pay" : "/inbox";
+  const redirectionURL = ifUserRoleExists("EMPLOYEE") ? "/inbox" : "/inbox";
   return redirectionURL;
 };
 
@@ -47,13 +47,12 @@ export const cancelBillFooter = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "PREVIOUS STEP",
-        labelKey: "BC_PREV_STEP_BUTTON"
+        labelKey: "PT_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        // processDemand(state, dispatch);
         dispatch(setRoute(`/bills/viewBill?connectionNumber=${getQueryArg(window.location.href, "consumerNumber")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&edit=true&service=${getQueryArg(window.location.href, "service")}`));
       }
     },
@@ -73,7 +72,7 @@ export const cancelBillFooter = getCommonApplyFooter({
     children: {
       downloadReceiptButtonLabel: getLabel({
         labelName: "CANCEL BILL",
-        labelKey: "BC_BILL_CANCEL_BUTTON"
+        labelKey: "ABG_UPPER_CANCEL_BILL"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -86,10 +85,7 @@ export const cancelBillFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        // processDemand(state, dispatch);
-
         cancelReceipt(state, dispatch);
-        // dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&status=success`));
       }
     }
   }
@@ -109,7 +105,7 @@ export const viewBillFooter = getCommonApplyFooter({
     children: {
       downloadReceiptButtonLabel: getLabel({
         labelName: "NEXT STEP",
-        labelKey: "BC_NEXT_STEP_BUTTON"
+        labelKey: "WS_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -122,9 +118,13 @@ export const viewBillFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        // processDemand(state, dispatch);
-        dispatch(setRoute(`/bills/cancelBill?consumerNumber=${getQueryArg(window.location.href, "connectionNumber")}&tenantId=${getQueryArg(window.location.href, "tenantId")}&service=${getQueryArg(window.location.href, "service")}`));
-
+        let preparedFinalObject = get(state, "screenConfiguration.preparedFinalObject", {});
+        const tenantId = getQueryArg(window.location.href, "tenantId");
+        const service = getQueryArg(window.location.href, "service");
+        const businessService = get(preparedFinalObject, "billData.businessService", "");
+        const consumerNumber = get(preparedFinalObject, "billData.consumerCode", "");
+        const billNumber = get(preparedFinalObject, "billData.billNumber", "");
+        dispatch(setRoute(`/bills/cancelBill?consumerNumber=${consumerNumber}&tenantId=${tenantId}&businessService=${businessService}&service=${service}&billNumber=${billNumber}`));
       }
     }
   }
@@ -139,25 +139,34 @@ const cancelReceipt = async (state, dispatch) => {
     "cancelReceipt"
   );
 
-  let paymentWorkflows = get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows', []);
+  let UpdateBillCriteria = get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria', []);
 
-  if (isFormValid && paymentWorkflows && Array.isArray(paymentWorkflows) && paymentWorkflows.length > 0) {
+  if (isFormValid && UpdateBillCriteria && UpdateBillCriteria.additionalDetails && UpdateBillCriteria.additionalDetails.reason) {
     try {
       dispatch(showSpinner());
-      set(paymentWorkflows[0], 'action', 'CANCEL');
-      set(paymentWorkflows[0], 'tenantId', getQueryArg(window.location.href, "tenantId"));
-      set(paymentWorkflows[0], 'paymentId', get(state.screenConfiguration.preparedFinalObject, 'PaymentReceipt.id', ''));
+      const UpdateBillCriteriaObj = get(state, "screenConfiguration.preparedFinalObject.UpdateBillCriteria", {});
+      set(UpdateBillCriteria, "tenantId", getQueryArg(window.location.href, "tenantId"));
+      set(UpdateBillCriteria, "consumerCodes", [getQueryArg(window.location.href, "consumerNumber", "")]);
+      set(UpdateBillCriteria, "businessService", getQueryArg(window.location.href, "businessService"));
+      let additionalDetails = {};
+      if (get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.reason', '') == "OTHER") {
+        additionalDetails.reason = UpdateBillCriteriaObj.additionalDetails.reason;
+        additionalDetails.description = UpdateBillCriteriaObj.additionalDetails.description;
+      } else {
+        additionalDetails.reason = UpdateBillCriteriaObj.additionalDetails.reason;
+      }
+      set(UpdateBillCriteria, "additionalDetails", additionalDetails);
       let payload = await httpRequest(
         "post",
-        `${PAYMENTSEARCH.GET.URL}${getQueryArg(window.location.href, "businessService")}/_workflow`,
+        `billing-service/bill/v2/_cancelbill`,
         "_search",
         [],
-        { paymentWorkflows: paymentWorkflows }
+        { UpdateBillCriteria: UpdateBillCriteria }
       );
       if (payload) {
+        console.log(payload, "payloadpayloadpayloadpayloadpayloadpayloadpayload")
         dispatch(hideSpinner());
-        //  getCommonPayUrl(dispatch, applicationNumber, tenantId, businessService);
-        dispatch(setRoute(`/receipts/acknowledgement?purpose=apply&receiptNumbers=${getQueryArg(window.location.href, "receiptNumbers")}&status=success`));
+        dispatch(setRoute(`/bills/acknowledgement?purpose=apply&status=success&consumerNumber=${getQueryArg(window.location.href, "consumerNumber", "")}&service=${getQueryArg(window.location.href, "service", "")}&billNo=${getQueryArg(window.location.href, "billNumber", "")}`));
       }
     } catch (error) {
       dispatch(hideSpinner());

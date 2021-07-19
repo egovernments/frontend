@@ -13,7 +13,7 @@ export const searchResults = {
     columns: [
       {
         labelName: "Bill No.",
-        labelKey: "BC_COMMON_TABLE_COL_BILL_NO",
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_NO",
         options: {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
@@ -36,19 +36,19 @@ export const searchResults = {
       },
       {
         labelName: "Consumer Name",
-        labelKey: "BC_COMMON_TABLE_COL_CONSUMER_NAME"
+        labelKey: "ABG_COMMON_TABLE_COL_CONSUMER_NAME"
       },
       {
         labelName: "Bill Date",
-        labelKey: "BC_COMMON_TABLE_COL_BILL_DATE"
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_DATE"
       },
       {
         labelName: "Bill Amount(Rs)",
-        labelKey: "BC_COMMON_TABLE_COL_BILL_AMOUNT"
+        labelKey: "ABG_COMMON_TABLE_COL_BILL_AMOUNT"
       },
       {
         labelName: "Status",
-        labelKey: "BC_COMMON_TABLE_COL_STATUS",
+        labelKey: "ABG_COMMON_TABLE_COL_STATUS",
         options: {
           filter: false,
           customBodyRender: value => (
@@ -61,10 +61,10 @@ export const searchResults = {
       },
       {
         labelName: "Action",
-        labelKey: "BC_COMMON_TABLE_COL_ACTION",
+        labelKey: "ABG_COMMON_TABLE_COL_ACTION",
         options: {
           filter: false,
-          customBodyRender: (value, tableMeta) => value === "BC_CANCEL_BILL" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta) : (tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
+          customBodyRender: (value, tableMeta) => value === "ABG_CANCEL_BILL" ? (tableMeta.rowData[4] > 0 ? getActionButton(value, tableMeta) : (tableMeta.rowData[4] <= 0 && tableMeta.rowData[13] ? getActionButton(value, tableMeta) : "")) : getActionButton(value, tableMeta)
         }
       },
       {

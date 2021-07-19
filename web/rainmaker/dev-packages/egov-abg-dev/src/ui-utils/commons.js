@@ -654,7 +654,12 @@ export const fetchBill = async (queryObject, dispatch) => {
       return findAndReplace(response, null, "NA");
   } catch (error) {
       dispatch(toggleSpinner());
-      console.log(error)
+      store.dispatch(
+        toggleSnackbar(
+          true, { labelName: error.message, labelCode: error.message },
+          "error"
+        )
+      );
   }
 };
 

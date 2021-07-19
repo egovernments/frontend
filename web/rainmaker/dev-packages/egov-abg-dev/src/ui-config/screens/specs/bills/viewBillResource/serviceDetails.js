@@ -11,7 +11,7 @@ const connectionType = getQueryArg(window.location.href, "connectionType")
 
 export const serviceType = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_SERV_LABEL"
+        labelKey: "WS_SERV_DETAIL_SERV_LABEL"
     },
     {
         jsonPath: "WaterConnection[0].service"
@@ -20,7 +20,7 @@ export const serviceType = getLabelWithValue(
 
 export const propertyUsage = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
+        labelKey: "WS_SERV_DETAIL_PROP_USE_TYPE"// TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP
     },
     {
         jsonPath: "WaterConnection[0].property.usageCategory"
@@ -29,12 +29,12 @@ export const propertyUsage = getLabelWithValue(
 
 export const connType = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_CONN_TYPE"
+        labelKey: "WS_SERV_DETAIL_CONN_TYPE"
     },
     {
         jsonPath: "WaterConnection[0].connectionType",
         localePrefix: {
-            moduleName: "BC_SERVICES_MASTERS",
+            moduleName: "WS_SERVICES_MASTERS",
             masterName: "WATERSOURCE"
           },
     }
@@ -42,7 +42,7 @@ export const connType = getLabelWithValue(
 
 export const meterId = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_METER_ID"
+        labelKey: "WS_SERV_DETAIL_METER_ID"
     },
     {
         jsonPath: "WaterConnection[0].meterId"
@@ -51,7 +51,7 @@ export const meterId = getLabelWithValue(
 
 export const meterStatus = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_METER_STAT"
+        labelKey: "WS_SERV_DETAIL_METER_STAT"
     },
     {
         jsonPath: "consumptionDetails[0].meterStatus"
@@ -60,7 +60,7 @@ export const meterStatus = getLabelWithValue(
 
 export const meterReadingDate = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_METER_READ_DATE_LABEL"
+        labelKey: "WS_SERV_DETAIL_METER_READ_DATE_LABEL"
     },
     {
         jsonPath: "consumptionDetails[0].currentReadingDate"
@@ -69,7 +69,7 @@ export const meterReadingDate = getLabelWithValue(
 
 export const consumption = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_CONSUMP"
+        labelKey: "WS_SERV_DETAIL_CONSUMP"
     },
     {
         jsonPath: "WaterConnection[0].consumption",
@@ -84,7 +84,7 @@ export const consumption = getLabelWithValue(
 
 export const currentMeterReading = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_CUR_METER_READ"
+        labelKey: "WS_SERV_DETAIL_CUR_METER_READ"
     },
     {
         jsonPath: "consumptionDetails[0].currentReading"
@@ -93,7 +93,7 @@ export const currentMeterReading = getLabelWithValue(
 
 export const lastMeterReading = getLabelWithValue(
     {
-        labelKey: "BC_SERV_DETAIL_LAST_METER_READ"
+        labelKey: "WS_SERV_DETAIL_LAST_METER_READ"
     },
     {
         jsonPath: "consumptionDetails[0].lastReading"
@@ -116,7 +116,7 @@ export const getService = () => {
                     },
                     ...getCommonSubHeader(
                         {
-                            labelKey: "BC_COMMON_SERV_DETAIL"
+                            labelKey: "WS_COMMON_SERV_DETAIL"
                         },
                         {
                             style: {

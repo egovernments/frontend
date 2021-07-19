@@ -21,7 +21,7 @@ export const getOwner = () => {
                     },
                     ...getCommonSubHeader({
                         labelName: "Owner Details",
-                        labelKey: "BC_COMMON_OWN_DETAIL" //TL_COMMON_OWN_DETAILS
+                        labelKey: "WS_COMMON_OWN_DETAIL" //TL_COMMON_OWN_DETAILS
                     })
                 },
 
@@ -36,14 +36,14 @@ export const getOwner = () => {
                         reviewOwnerName: getLabelWithValue(
                             {
                                 labelName: "Name",
-                                labelKey: "BC_OWN_DETAIL_NAME"
+                                labelKey: "WS_OWN_DETAIL_NAME"
                             },
                             { jsonPath: "WaterConnection[0].property.owners[0].name" }
                         ),
                         reviewOwnerAddr: getLabelWithValue(
                             {
                                 labelName: "Corrospondence Address",
-                                labelKey: "BC_OWN_DETAIL_CROSADD"
+                                labelKey: "WS_OWN_DETAIL_CROSADD"
                             },
                             {
                                 jsonPath: "WaterConnection[0].property.owners[0].correspondenceAddress",

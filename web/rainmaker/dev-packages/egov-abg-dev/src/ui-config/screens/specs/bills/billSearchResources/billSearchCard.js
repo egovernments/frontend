@@ -68,11 +68,11 @@ const resetFields = (state, dispatch) => {
 export const billSearchCard = getCommonCard({
   header: getCommonHeader({
     labelName: "Search Bill",
-    labelKey: "BC_SEARCH_BILL_COMMON_HEADER"
+    labelKey: "ABG_SEARCH_BILL_COMMON_HEADER"
   }),
   subheader: getCommonSubHeader({
     labelName: "Provide at least one parameter to search for an application",
-    labelKey: "BC_SEARCH_BILL_COMMON_SUB_HEADER"
+    labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
   }),
   searchContainer: getCommonContainer({
     ulb: {
@@ -82,7 +82,7 @@ export const billSearchCard = getCommonCard({
       props: {
         label: {
           labelName: "ULB",
-          labelKey: "BC_ULB_LABEL"
+          labelKey: "ABG_ULB_LABEL"
         },
         labelPrefix: {
           moduleName: "TENANT",
@@ -91,7 +91,7 @@ export const billSearchCard = getCommonCard({
         optionLabel: "name",
         placeholder: {
           labelName: "Select ULB",
-          labelKey: "BC_ULB_PLACEHOLDER"
+          labelKey: "ABG_ULB_PLACEHOLDER"
         },
         required: true,
         labelsFromLocalisation: true,
@@ -114,11 +114,11 @@ export const billSearchCard = getCommonCard({
       props: {
         label: {
           labelName: "Service Category",
-          labelKey: "BC_SERVICE_CATEGORY_LABEL"
+          labelKey: "ABG_SERVICE_CATEGORY_LABEL"
         },
         placeholder: {
           labelName: "Select Service Category",
-          labelKey: "BC_SERVICE_CATEGORY_PLACEHOLDER"
+          labelKey: "ABG_SERVICE_CATEGORY_PLACEHOLDER"
         },
         required: true,
         labelsFromLocalisation: true,
@@ -140,11 +140,11 @@ export const billSearchCard = getCommonCard({
     consumerCode: getTextField({
       label: {
         labelName: "Consumer Number",
-        labelKey: "BC_WS_CONSUMER_NUMBER_LABEL"
+        labelKey: "WS_MYCONNECTIONS_CONSUMER_NO"
       },
       placeholder: {
         labelName: "Enter Consumer Number",
-        labelKey: "BC_CONSUMER_NUMBER_PLACEHOLDER"
+        labelKey: "WS_SEARCH_CONNNECTION_CONSUMER_PLACEHOLDER"
       },
       required: false,
       visible: true,
@@ -157,11 +157,11 @@ export const billSearchCard = getCommonCard({
     billNumber: getTextField({
       label: {
         labelName: "Bill No.",
-        labelKey: "BC_BILL_NUMBER_LABEL"
+        labelKey: "ABG_BILL_NUMBER_LABEL"
       },
       placeholder: {
         labelName: "Enter Bill No.",
-        labelKey: "BC_BILL_NUMBER_PLACEHOLDER"
+        labelKey: "ABG_BILL_NUMBER_PLACEHOLDER"
       },
       required: false,
       visible: true,
@@ -174,11 +174,11 @@ export const billSearchCard = getCommonCard({
     mobileNo: getTextField({
       label: {
         labelName: "Mobile No.",
-        labelKey: "BC_MOBILE_NO_LABEL"
+        labelKey: "ABG_MOBILE_NO_LABEL"
       },
       placeholder: {
         labelName: "Enter Mobile No.",
-        labelKey: "BC_MOBILE_NO_PLACEHOLDER"
+        labelKey: "ABG_MOBILE_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -225,7 +225,7 @@ export const billSearchCard = getCommonCard({
       children: {
         buttonLabel: getLabel({
           labelName: "RESET",
-          labelKey: "BC_RESET_BUTTON"
+          labelKey: "ABG_RESET_BUTTON"
         })
       },
       onClickDefination: {
@@ -254,7 +254,7 @@ export const billSearchCard = getCommonCard({
       children: {
         buttonLabel: getLabel({
           labelName: "SEARCH",
-          labelKey: "BC_SEARCH_BUTTON"
+          labelKey: "ABG_SEARCH_BUTTON"
         })
       },
       onClickDefination: {

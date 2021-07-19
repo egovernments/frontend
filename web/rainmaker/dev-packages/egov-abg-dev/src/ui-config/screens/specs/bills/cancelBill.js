@@ -11,7 +11,7 @@ import { cancelBillFooter } from "./viewBillResource/viewBillFooter";
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Cancel Bill`,
-    labelKey: "BC_CANCEL_BILL"
+    labelKey: "ABG_CANCEL_BILL"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -72,20 +72,20 @@ const screenConfig = {
   name: "cancelBill",
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
-    set(action.screenConfig, "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.reason.props.value", get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].reason', ''))
-    set(action.screenConfig, "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.addtionalPenalty.props.value", get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].additionalPenalty', ''))
+    set(action.screenConfig, "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.reason.props.value", get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.reason', ''))
+    set(action.screenConfig, "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.addtionalPenalty.props.value", get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.additionalPenalty', ''))
     const additionalDetailsJson = "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.addtionalDetails";
-    if (get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].reason', '') == "OTHER") {
-      set(action.screenConfig, `${additionalDetailsJson}.required`, true)
-      set(action.screenConfig, `${additionalDetailsJson}.props.disabled`, false)
-      set(action.screenConfig, `${additionalDetailsJson}.props.required`, true)
+    if (get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.reason', '') == "OTHER") {
+      set(action.screenConfig, `${additionalDetailsJson}.required`, true);
+      set(action.screenConfig, `${additionalDetailsJson}.props.disabled`, false);
+      set(action.screenConfig, `${additionalDetailsJson}.props.required`, true);
     } else {
-      set(action.screenConfig, `${additionalDetailsJson}.required`, false)
-      set(action.screenConfig, `${additionalDetailsJson}.props.disabled`, true)
-      set(action.screenConfig, `${additionalDetailsJson}.props.required`, false)
+      set(action.screenConfig, `${additionalDetailsJson}.required`, false);
+      set(action.screenConfig, `${additionalDetailsJson}.props.disabled`, true);
+      set(action.screenConfig, `${additionalDetailsJson}.props.required`, false);
     }
-    set(action.screenConfig, `${additionalDetailsJson}.props.value`, get(state.screenConfiguration.preparedFinalObject, 'paymentWorkflows[0].additionalDetails', ''))
-    set(action.screenConfig, `${additionalDetailsJson}.props.error`, false)
+    set(action.screenConfig, `${additionalDetailsJson}.props.value`, get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.additionalDetails', ''));
+    set(action.screenConfig, `${additionalDetailsJson}.props.error`, false);
     return action;
   },
 

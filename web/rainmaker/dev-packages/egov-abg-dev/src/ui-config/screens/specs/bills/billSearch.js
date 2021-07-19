@@ -9,7 +9,7 @@ import "./index.css";
 
 const header = getCommonHeader({
   labelName: "Bill Cancellation",
-  labelKey: "BC_BILL_CANCELLATION_HEADER"
+  labelKey: "ABG_BILL_CANCELLATION_HEADER"
 });
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;

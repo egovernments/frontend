@@ -37,7 +37,7 @@ export const cancelBillDetailsCard = getCommonCard(
             sourceJsonPath: "applyScreenMdmsData.reasonForBillCancel",
           },
           required: true,
-          jsonPath: "paymentWorkflows[0].reason",
+          jsonPath: "UpdateBillCriteria.additionalDetails.reason",
           gridDefination: {
             xs: 12,
             sm: 8
@@ -78,7 +78,7 @@ export const cancelBillDetailsCard = getCommonCard(
           visible: true,
           pattern: getPattern("Address"),
           errorMessage: "Invalid Details.",
-          jsonPath: "paymentWorkflows[0].additionalDetails"
+          jsonPath: "UpdateBillCriteria.additionalDetails.description"
         }),
         break1: getBreak(),
         break2: getBreak(),

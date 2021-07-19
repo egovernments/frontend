@@ -20,7 +20,7 @@ export const getProperty = () => {
                         sm: 10
                     },
                     ...getCommonSubHeader({
-                        labelKey: "BC_COMMON_PROP_DETAIL" //TL_COMMON_OWN_DETAILS
+                        labelKey: "WS_COMMON_PROP_DETAIL" //TL_COMMON_OWN_DETAILS
                     })
                 },
 
@@ -29,7 +29,7 @@ export const getProperty = () => {
         propertyCardContainer: getCommonContainer({
             propertyCity: getLabelWithValue(
                 {
-                    labelKey: "BC_PROP_DETAIL_CITY"
+                    labelKey: "WS_PROP_DETAIL_CITY"
                 },
                 {
                     jsonPath: "WaterConnection[0].property.address.city"
@@ -37,7 +37,7 @@ export const getProperty = () => {
             ),
             propertyDoorNo: getLabelWithValue(
                 {
-                    labelKey: "BC_PROP_DETAIL_PHNO_LABEL"
+                    labelKey: "WS_PROP_DETAIL_PHNO_LABEL"
                 },
                 {
                     jsonPath: "WaterConnection[0].property.address.doorNo"
@@ -45,7 +45,7 @@ export const getProperty = () => {
             ),
             propertyBuilding: getLabelWithValue(
                 {
-                    labelKey: "BC_PROP_DETAIL_BUILD_NAME_LABEL"
+                    labelKey: "WS_PROP_DETAIL_BUILD_NAME_LABEL"
                 },
                 {
                     jsonPath: "WaterConnection[0].property.address.buildingName"
@@ -53,7 +53,7 @@ export const getProperty = () => {
             ),
             propertyStreet: getLabelWithValue(
                 {
-                    labelKey: "BC_PROP_DETAIL_STREET_NAME"
+                    labelKey: "WS_PROP_DETAIL_STREET_NAME"
                 },
                 {
                     jsonPath: "WaterConnection[0].property.address.street"
@@ -61,7 +61,7 @@ export const getProperty = () => {
             ),
             propertyMohalla: getLabelWithValue(
                 {
-                    labelKey: "BC_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
+                    labelKey: "WS_PROP_DETAIL_LOCALITY_MOHALLA_LABEL"
                 },
                 {
                     jsonPath: "WaterConnection[0].property.address.locality.name"
@@ -69,7 +69,7 @@ export const getProperty = () => {
             ),
             propertyPincode: getLabelWithValue(
                 {
-                    labelKey: "BC_PROP_DETAIL_PINCODE"
+                    labelKey: "WS_PROP_DETAIL_PINCODE"
                 },
                 {
                     jsonPath: "WaterConnection[0].property.address.pincode"
