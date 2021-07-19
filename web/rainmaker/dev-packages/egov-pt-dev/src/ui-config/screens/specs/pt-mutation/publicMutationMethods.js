@@ -513,26 +513,33 @@ import {
       },
   }),
     ulbTenantContainer: getCommonContainer({      
-      ulbCity: getSelectField({
-        label: {
-          labelName: "City",
-          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY"
-        },
-        placeholder: {
-          labelName: "Select City",
-          labelKey: "PT_COMMON_HOME_SEARCH_RESULTS_CITY_PLACEHOLDER"
-        },
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        },
-        jsonPath: "publicSearchScreen.tenantId",
-        sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
-        required: true,
+      ulbCity: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
+        componentPath: "AutosuggestContainer",
         props: {
-          required: true,
+          label: {
+            labelName: "ULB/City",
+            labelKey: "PT_SEARCH_ULB_CITY"
+          },
+          placeholder: {
+            labelName: "Select ULB/City",
+            labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
+          },
+          localePrefix: {
+            moduleName: "TENANT",
+            masterName: "TENANTS"
+          },
+          jsonPath: "publicSearchScreen.tenantId",
+          sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+          className: "autocomplete-dropdown",
+          labelsFromLocalisation: true,
+          //required: true,
           disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          isClearable: true
         },
+       // required: true,
+        jsonPath: "publicSearchScreen.tenantId",
         gridDefination: {
           xs: 12,
           sm: 4
@@ -662,10 +669,9 @@ import {
               dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
           }
         }
-        
+      }
       },
     }),
-   }),
    iulbCityContainer: getCommonContainer({
   
     ownerMobNo: getTextField({
@@ -776,33 +782,37 @@ import {
       errorMessage: "ERR_SIX_INVALID_PROPERTY_ID",
       jsonPath: "publicSearchScreen.ids"  
     }),
-
-      mohalla: getSelectField({
+    mohalla: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pt",
+      componentPath: "AutosuggestContainer",
+      props: {
         label: {
-          labelName: "Mohalla",
-          labelKey: "PT_PROPERTY_DETAILS_MOHALLA"
+          labelName: "ULB/City",
+          labelKey: "PT_SEARCH_ULB_CITY"
         },
         placeholder: {
-          labelName: "Select mohalla",
-          labelKey: "PT_COMMONS_SELECT_PLACEHOLDER"
+          labelName: "Select ULB/City",
+          labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
         },
         localePrefix: {
-          moduleName:getTenantId(),
-          masterName: "REVENUE"
+          moduleName: "TENANT",
+          masterName: "TENANTS"
         },
-        visible:false,   
-        errorMessage: "ERR_REQUIRED_FILED",    
         jsonPath: "publicSearchScreen.locality",
         sourceJsonPath: "searchScreenMdmsData.tenant.localities",
+        className: "autocomplete-dropdown",
+        labelsFromLocalisation: true,
         //required: true,
-        props: {
-          //required: true,
-    //      disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }}),
+        isClearable: true
+      },
+      visible:false,
+      jsonPath: "publicSearchScreen.locality",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    },
         doorNo: getTextField({
           label: {
             labelName: "Owner Name",
