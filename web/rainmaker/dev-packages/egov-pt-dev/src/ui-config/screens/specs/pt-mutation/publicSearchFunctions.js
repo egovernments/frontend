@@ -206,7 +206,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
-        searchScreenObject[key].trim() !== ""
+        searchScreenObject[key] && searchScreenObject[key].trim() !== ""
       ) {
         if (key === "fromDate") {
           queryObject.push({
