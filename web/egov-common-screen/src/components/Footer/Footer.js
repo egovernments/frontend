@@ -125,7 +125,7 @@ export default function Footer(props) {
                 Property Tax
               </a>
               <a
-                href="/citizen/trade-license/how-it-works"
+                href="/ukd-assets/TL_English_UserManual_Citizen.pdf"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
