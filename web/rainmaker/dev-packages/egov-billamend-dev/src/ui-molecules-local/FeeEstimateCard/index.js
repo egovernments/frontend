@@ -85,11 +85,10 @@ const updateEstimate = (fees = [], searchBillDetails = {}) => {
         newFee[fee.taxHeadMasterCode] = { ...fee }
     })
     let newFees = [];
-    Object.keys(searchBillDetails).map(key => {
+    Object.keys(newFee).map(key => {
         if (key != 'TOTAL') {
             newFees.push({ taxHeadMasterCode: key, taxAmount: get(newFee, `${key}.taxAmount`, 0), amountType });
         }
-
     })
 
     return newFees;
