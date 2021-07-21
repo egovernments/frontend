@@ -125,6 +125,15 @@ const getAddress = (item) => {
   let city = item.address.city != null ? (item.address.city) : '';
   return (doorNo + buildingName + street + mohalla + city);
 }
+const getIndexofActive = (item) => {
+
+  for(let i=0;i<item.owners.length;i++)
+  {
+    if(item.owners[i].status=='ACTIVE')
+    return i;
+  }
+  return 0;
+}
 
 
 const searchApiCall = async (state, dispatch, index) => {
@@ -249,9 +258,9 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
         ["PT_GUARDIAN_NAME"]:
-          item.owners[0].fatherOrHusbandName || "-",
+          item.owners[getIndexofActive(item)].fatherOrHusbandName || "-",
         ["PT_COMMON_COL_EXISTING_PROP_ID"]:
           item.oldPropertyId || "-",
         ["PT_COMMON_COL_ADDRESS"]:
@@ -267,7 +276,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
         ["PT_COMMON_TABLE_COL_APP_TYPE"]:
           item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
-          item.owners[0].name || "-",
+          item.owners[getIndexofActive(item)].name || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
