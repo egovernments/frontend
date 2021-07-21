@@ -26,6 +26,9 @@ class AutoSuggestor extends Component {
       suggestions,
       className,
       localizationLabels,
+      //required,
+      //errorText,
+      disabled,
       ...rest
     } = this.props;
     let translatedLabel = getLocaleLabels(
@@ -48,7 +51,11 @@ class AutoSuggestor extends Component {
           className={className}
           label={translatedLabel}
           placeholder={translatedPlaceholder}
+          //helperText={required && errorText}
+          //error={errorText == "Required" && required}
           isClearable={true}
+          //required={required}
+          disabled={disabled}
           {...rest}
         />
       </div>
@@ -60,6 +67,7 @@ const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
   return (
     suggestions &&
     suggestions.length > 0 &&
+    Array.isArray(suggestions) &&
     suggestions.map((option, key) => {
       option.name = getLocaleLabels(
         option.code,
