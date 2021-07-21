@@ -14,7 +14,7 @@ function SimpleTooltips(props) {
   return (
     <div style={{ display: "inline-flex" }} {...rest}>
       <Tooltip
-        title={<LabelContainer labelName={val.value} labelKey={val.key} />}
+       title={<h6 style={{ color: "white", width:"auto", fontSize:"16px" }}><LabelContainer labelName={val.value} labelKey={val.key} /></h6> }
       >
         <Icon
           style={{
