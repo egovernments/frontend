@@ -76,7 +76,7 @@ export default function Components() {
       <div id="homepagecards"> <SelectCards /> </div>
             <Card  id="message" >                   
                 <CardBody  style={{padding: "0.375rem 0.875rem"}}>
-                <center><h4 >Pay your Property Tax or avail Trade Licenses online and easily sitting at your home</h4></center>
+                <center><h4 style={{fontWeight: "400"}}>Pay your Property Tax or avail Trade Licenses online and easily sitting at your home</h4></center>
               
                 </CardBody>               
               </Card>
