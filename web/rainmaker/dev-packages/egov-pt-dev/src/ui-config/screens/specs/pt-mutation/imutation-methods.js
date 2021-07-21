@@ -538,6 +538,7 @@ import {
           disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           isClearable: true
         },
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       // required: true,
         jsonPath: "propertySearchScreen.tenantId",
         gridDefination: {
@@ -804,8 +805,10 @@ import {
         className: "autocomplete-dropdown",
         labelsFromLocalisation: true,
         //required: true,
-        isClearable: true
+        isClearable: true,
+        required: false,
       },
+      required: false,
       visible:false,
       jsonPath: "propertySearchScreen.locality",
       gridDefination: {

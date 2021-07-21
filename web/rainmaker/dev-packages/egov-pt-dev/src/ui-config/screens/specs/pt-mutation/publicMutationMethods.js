@@ -805,8 +805,10 @@ import {
         className: "autocomplete-dropdown",
         labelsFromLocalisation: true,
         //required: true,
-        isClearable: true
+        isClearable: true,
+        required: false,
       },
+      required: false,      
       visible:false,
       jsonPath: "publicSearchScreen.locality",
       gridDefination: {
