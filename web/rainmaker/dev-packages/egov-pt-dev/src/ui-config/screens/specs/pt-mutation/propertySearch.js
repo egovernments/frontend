@@ -1,20 +1,47 @@
 import commonConfig from "config/common.js";
-import { getBreak, getCommonHeader, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import {
+  getBreak,
+  getCommonHeader,
+  getLabel
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getQueryArg,
+  getRequiredDocData
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getTenantId,
+  getLocale
+} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
-import { resetFields } from "./imutation-methods";
+import {
+  resetFields
+} from "./imutation-methods";
 import propertySearchTabs from "./propertySearch-tabs";
 import iCitizenSearchTabs from "./iCitizenSearchTabs";
-import { searchApplicationTable, searchPropertyTable } from "./implementationSearchResources/searchResults";
-import { showHideAdhocPopup } from "../utils";
-import { httpRequest } from "../../../../ui-utils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  searchApplicationTable,
+  searchPropertyTable
+} from "./implementationSearchResources/searchResults";
+import {
+  showHideAdhocPopup
+} from "../utils";
+import {
+  httpRequest
+} from "../../../../ui-utils";
+import {
+  fetchLocalizationLabel
+} from "egov-ui-kit/redux/app/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchPropertyDetails} from "./imutation-methods";
+import {
+  searchPropertyDetails
+} from "./imutation-methods";
 
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -26,27 +53,27 @@ const tenant = getTenantId();
 //console.log(captureMutationDetails);
 
 const getMDMSData = async (action, dispatch) => {
-  const moduleDetails= [
- 
+  const moduleDetails = [
+
     {
       moduleName: "tenant",
-      masterDetails: [
-        {
-          name: "tenants"
-        }, { name: "citymodule" }
-      ]
-    } 
+      masterDetails: [{
+        name: "tenants"
+      }, {
+        name: "citymodule"
+      },
+       {
+        name:"tenants"
+       }]
+    }
   ]
 
-  const documentModuleDetails  =
-  [
-    {
-      moduleName: "PropertyTax", 
-      masterDetails: [
-        { name: "Documents" }
-       ] 
-     },
-  ]
+  const documentModuleDetails = [{
+    moduleName: "PropertyTax",
+    masterDetails: [{
+      name: "Documents"
+    }]
+  }, ]
 
   getRequiredDocData(action, dispatch, documentModuleDetails);
 
@@ -55,7 +82,7 @@ const getMDMSData = async (action, dispatch) => {
 
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId:"uk",
+      tenantId: "uk",
       moduleDetails: moduleDetails
     }
   };
@@ -67,47 +94,81 @@ const getMDMSData = async (action, dispatch) => {
       "_search",
       [],
       mdmsBody
-    );     
+    );
+    if(payload && payload.MdmsRes && payload.MdmsRes.tenant && payload.MdmsRes.tenant.tenants)
+    {
+      let tenants = payload.MdmsRes.tenant.tenants;
+
+  
+      let filterTenant = tenants && tenants.filter(m => m.code === getTenantId());
+  
+  
+      let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+  
+      tenantUniqueId = "PT-" + tenantUniqueId + "-";
+  
+  
+      dispatch(
+        handleField(
+          "propertySearch",
+          "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+          "label",
+          tenantUniqueId
+        )
+      );
+
+    }
     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
   }
-    if(process.env.REACT_APP_NAME != "Citizen"){
+  if (process.env.REACT_APP_NAME != "Citizen") {
+    dispatch(
+      prepareFinalObject(
+        "propertySearchScreen.tenantId",
+        tenant
+      )
+    );
+  }
+  if (process.env.REACT_APP_NAME != "Citizen") {
+    let mohallaPayload = await httpRequest(
+      "post",
+      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+      "_search",
+      [{
+        key: "tenantId",
+        value: tenant
+      }], {}
+    );
+
+
+    if (mohallaPayload &&
+      mohallaPayload.TenantBoundary[0] &&
+      mohallaPayload.TenantBoundary[0].boundary) {
+
+      const mohallaData =
+        mohallaPayload.TenantBoundary[0].boundary.reduce((result, item) => {
+          result.push({
+            ...item,
+            code: item.code
+          });
+          return result;
+        }, []);
+      const mohallaLocalePrefix = {
+        moduleName: tenant,
+        masterName: "REVENUE"
+      };
       dispatch(
-        prepareFinalObject(
-          "propertySearchScreen.tenantId",
-          tenant
+        handleField(
+          "propertySearch",
+          "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
+          "props.localePrefix",
+          mohallaLocalePrefix
         )
       );
+      dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
     }
-    if (process.env.REACT_APP_NAME != "Citizen") {
-      let mohallaPayload = await httpRequest(
-        "post",
-        "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-        "_search",
-        [{ key: "tenantId", value: tenant }],
-        {}
-      );
-      if(mohallaPayload &&
-        mohallaPayload.TenantBoundary[0] &&
-        mohallaPayload.TenantBoundary[0].boundary){
-  
-          const mohallaData =
-          mohallaPayload.TenantBoundary[0].boundary.reduce((result, item) => {
-            result.push({
-              ...item,
-              code: item.code
-            });
-            return result;
-            // code: `${tenant
-            //   .toUpperCase()
-            //   .replace(/[.]/g, "_")}_REVENUE_${item.code
-            //   .toUpperCase()
-            //   .replace(/[._:-\s\/]/g, "_")}`
-          }, []);
-          dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
-        }
-      }
+  }
 
   
 };
@@ -126,74 +187,70 @@ const screenConfig = {
     getMDMSData(action, dispatch);
 
     set(
-        action.screenConfig,
-          "components.div.children.searchPropertyDetails.children.cardContent.children.selectionContainer.children.genderRadioGroup.props.value",
-          "OptionPID"
-        )
+      action.screenConfig,
+      "components.div.children.searchPropertyDetails.children.cardContent.children.selectionContainer.children.genderRadioGroup.props.value",
+      "OptionPID"
+    )
 
-   /*  if(citizenSearch) 
-     {
-          set(
-          action.screenConfig,
-            "components.div.children.propertySearchTabs",
-            {}
-          )
-     }  
-      else       
+    /*  if(citizenSearch) 
       {
-        set(
-          action.screenConfig,
-              "components.div.children.iCitizenSearchTabs",
-              {})
-      } */
- 
+           set(
+           action.screenConfig,
+             "components.div.children.propertySearchTabs",
+             {}
+           )
+      }  
+       else       
+       {
+         set(
+           action.screenConfig,
+               "components.div.children.iCitizenSearchTabs",
+               {})
+       } */
+
 
     const tenantRequestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
-        moduleDetails: [
-          {
-            moduleName: "tenant",
-            masterDetails: [
-              {
-                name: "citywiseconfig",
-                filter: "[?(@.config=='assessmentEnabledCities')]"
-              }
-            ]
-          }
-        ]
+        moduleDetails: [{
+          moduleName: "tenant",
+          masterDetails: [{
+            name: "citywiseconfig",
+            filter: "[?(@.config=='assessmentEnabledCities')]"
+          }]
+        }]
       },
     };
     let citywiseconfig = httpRequest(
-        "post",
-        "/egov-mdms-service/v1/_search",
-        "_search",
-        [],
-        tenantRequestBody
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      tenantRequestBody
     ).then(res => {
-     // debugger
-        citywiseconfig:res.MdmsRes.tenant.citywiseconfig
-        let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
-        enableButton && dispatch(
-          handleField(
-              "propertySearch",
-              "components.div.children.headerDiv.children.newApplicationButton",
-              "visible",
-              enabledCities ? enabledCities.includes(tenant) : false
-          )
-        );
-      });
-// showing fileds based on selection option
-
-   /*  dispatch(
+      // debugger
+      citywiseconfig: res.MdmsRes.tenant.citywiseconfig
+      let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
+      enableButton && dispatch(
         handleField(
-            "propertySearch",
-            "components.div.children.headerDiv.children.newApplicationButton",
-            "visible",
-            enabledCities ? enabledCities.includes(tenant) : false
+          "propertySearch",
+          "components.div.children.headerDiv.children.newApplicationButton",
+          "visible",
+          enabledCities ? enabledCities.includes(tenant) : false
         )
-    ) */
-  
+      );
+    });
+    // showing fileds based on selection option
+
+    /*  dispatch(
+         handleField(
+             "propertySearch",
+             "components.div.children.headerDiv.children.newApplicationButton",
+             "visible",
+             enabledCities ? enabledCities.includes(tenant) : false
+         )
+     ) */
+
 
     return action;
   },
@@ -270,7 +327,7 @@ const screenConfig = {
             }
           }
         },
-       // iCitizenSearchTabs,
+        // iCitizenSearchTabs,
         searchPropertyDetails,
         breakAfterSearch: getBreak(),
         searchPropertyTable,
@@ -294,4 +351,3 @@ const screenConfig = {
 };
 
 export default screenConfig;
-
