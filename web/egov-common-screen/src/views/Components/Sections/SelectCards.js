@@ -41,7 +41,7 @@ export default function SectionNavbars() {
                   <h4 style={{
                      marginLeft: "65px",
                      fontWeight: "500"
-                  }}>Propety Tax</h4>
+                  }}>Property Tax</h4>
                     <img
               src={propertyTaxImage}
               alt="..."              

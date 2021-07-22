@@ -113,7 +113,7 @@ export default function Footer(props) {
             <GridItem xs={12} sm={6} md={3} id="fgrid">
             <ListItem className={classes.inlineBlock} >
                <p              >
-                <h5><b>Citizen Services</b></h5>
+                <h5><b>User Manuals</b></h5>
               </p>       
               <a
                 href="/ukd-assets/PT_English_UserManual_Citizen.pdf"
