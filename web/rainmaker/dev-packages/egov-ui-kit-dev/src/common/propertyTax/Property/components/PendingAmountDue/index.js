@@ -83,7 +83,10 @@ class PendingAmountDialog extends Component {
                   }
                 })
                 ) : (
-                  <span></span>
+                  <div style={payNowButton} >
+                  <div style={labelStyle}><Label label="PT_MUTATION_RS" labelClassName="rupees-label" />{0}</div>
+                  {/* {amount > 0 && <Button disabled={true} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>} */}
+                </div>
                 )
               }
             </div><br/>
@@ -101,7 +104,10 @@ class PendingAmountDialog extends Component {
                   }
                 }) 
                 ) : (
-                 <span></span>
+                  <div style={payNowButton} >
+                  <div style={labelStyle}><Label label="PT_MUTATION_RS" labelClassName="rupees-label" />{0}</div>
+                  {/* {amount > 0 && <Button disabled={true} className="pending-dues" style={buttonStyle} label={<Label buttonLabel={true} color= "rgb(254, 122, 81)"  label="CS_COMMON_PAY_NOW" fontSize="16px" />} onClick={() => { this.navigateToCommonPay(items.connectionNo, items.module) }}/>} */}
+                </div>
                 )
               }
             </div>
