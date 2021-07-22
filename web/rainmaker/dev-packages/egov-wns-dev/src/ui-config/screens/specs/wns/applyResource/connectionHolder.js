@@ -73,11 +73,6 @@ import {
             labelName: "Transgender",
             labelKey: "WS_CONN_HOLDER_COMMON_GENDER_TRANSGENDER",
             value: "TRANSGENDER"
-          },
-          {
-            value: "OTHERS",
-            labelName: "Others",
-            labelKey: "COMMON_GENDER_OTHERS"
           }
         ],
         jsonPath: "connectionHolders[0].gender",

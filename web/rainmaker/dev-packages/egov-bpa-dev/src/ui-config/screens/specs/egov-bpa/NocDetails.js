@@ -95,10 +95,6 @@ const nocDetails = getCommonCard({
               {
                 value: "TRANSGENDER",
                 label: "COMMON_GENDER_TRANSGENDER"
-              },
-              {
-                value: "OTHERS",
-                label: "COMMON_GENDER_OTHERS"
               }
             ],
             optionValue: "value",
