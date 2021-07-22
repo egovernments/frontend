@@ -331,10 +331,7 @@ const commonApplicantInformation = () => {
               labelName: "Transgender",
               labelKey: "NOC_GENDER_TRANSGENDER_RADIOBUTTON",
               value: "TRANSGENDER"
-            } ,  {  labelName: "Others",
-            labelKey: "COMMON_GENDER_OTHERS",
-            value: "OTHERS"
-          }
+            }
           ],
           jsonPath:
             "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
