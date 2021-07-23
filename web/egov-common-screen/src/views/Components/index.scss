@@ -5,7 +5,30 @@
     }
 
     #bannerimage {
-        width: 1519px;
+        width: 1582px;    }
+    #faqs {
+        margin-left: 7%;
+    margin-right: 4%;
+    }
+    #homepagecards {
+        margin-left: 66px;
+        margin-right: 21px;
+    }
+    #testimonials {
+        margin-left: 7%;
+        margin-right: 2%;
+    }
+
+}
+
+@media only screen and (max-width: 1440px) {
+    #links {
+        display: inline-flex;
+        margin-left: 27%;
+    }
+
+    #bannerimage {
+        width: 1424px;    
     }
     #faqs {
         margin-left: 7%;
@@ -29,7 +52,7 @@
 
     #links {
         display: inline-flex;
-        margin-left: 34%;
+        margin-left: 27%;
     }
     #faqs {
         margin-left: 7%;
@@ -42,9 +65,9 @@
 
 }
 
-@media only screen and (max-width: 1025px) {
+@media only screen and (max-width: 1280px) {
     #bannerimage {
-        width: auto;
+        width: 1260px;
     }
 
     #links {
@@ -54,9 +77,27 @@
 
 }
 
+@media only screen and (max-width: 1025px) {
+    #bannerimage {
+        width: auto;
+    }
+
+    #links {
+        display: inline-flex;
+        margin-left: 18%;    }
+        
+    #homepagecards
+    {
+        margin-left: 16px;
+        margin-right: 21px;
+    }
+        
+
+}
 
 
-@media only screen and (max-width: 1200px) {
+
+/* @media only screen and (max-width: 1200px) {
 
     #faqs {
         margin-left: 129px;
@@ -73,7 +114,7 @@
         margin-right: 21px;
     }
 }
-
+ */
 
 @media only screen and (max-width: 1025px) {
     #bannerimage {
