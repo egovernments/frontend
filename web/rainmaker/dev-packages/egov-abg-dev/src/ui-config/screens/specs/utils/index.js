@@ -510,11 +510,11 @@ export const getMergeAndDownloadList = (state, dispatch, dataLength = 0) => {
             [
               {
                 label: { labelName: "WATER CONNECTION", labelKey: "ABG_GROUP_BILLS_WATER_CONNECTION_BUTTON", },
-                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, false, "WS"); }
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, false, "WS", searchScreenObject.consumerCode); }
               },
               {
                 label: { labelName: "WATER & SEWERAGE CONNECTION", labelKey: parseInt(dataLength) == 1 ? "ABG_GROUP_BILLS_SINGLAR_WATER_AND_SEWERAGE_CONNECTION_BUTTON" : "ABG_GROUP_BILLS_WATER_AND_SEWERAGE_CONNECTION_BUTTON" },
-                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, true, "WS"); }
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, true, "WS", searchScreenObject.consumerCode); }
               }
             ]
           )
@@ -529,11 +529,11 @@ export const getMergeAndDownloadList = (state, dispatch, dataLength = 0) => {
             [
               {
                 label: { labelName: "SEWERAGE CONNECTION", labelKey: "ABG_GROUP_BILLS_SEWERAGE_CONNECTION_BUTTON", },
-                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, false, "SW"); }
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, false, "SW", searchScreenObject.consumerCode); }
               },
               {
                 label: { labelName: "WATER & SEWERAGE CONNECTION", labelKey: parseInt(dataLength) == 1 ? "ABG_GROUP_BILLS_SINGLAR_WATER_AND_SEWERAGE_CONNECTION_BUTTON" : "ABG_GROUP_BILLS_WATER_AND_SEWERAGE_CONNECTION_BUTTON" },
-                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, true, "SW"); }
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, true, "SW", searchScreenObject.consumerCode); }
               }
             ]
           )

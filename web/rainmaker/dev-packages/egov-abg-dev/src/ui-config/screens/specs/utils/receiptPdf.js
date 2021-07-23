@@ -217,7 +217,7 @@ export const generateMultipleBill = async (state, dispatch, type) => {
   dispatch(toggleSpinner());
 };
 
-export const downloadMultipleBills = async (bills = [], configKey, tenantId, locality, isConsolidated, businesService) => {
+export const downloadMultipleBills = async (bills = [], configKey, tenantId, locality, isConsolidated, businesService, consumerCode) => {
   try {
     const DOWNLOADRECEIPT = {
       GET: {
@@ -234,8 +234,11 @@ export const downloadMultipleBills = async (bills = [], configKey, tenantId, loc
     if(businesService) {
       queryStr.push({key: "bussinessService", value: businesService})
     }
+    if(consumerCode) {
+      queryStr.push({key: "consumerCode", value: consumerCode})
+    }
 
-    downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{ Bill: bills },{},false, `${businesService}_${locality}`);
+    downloadPdfFile(DOWNLOADRECEIPT.GET.URL,'post',queryStr,{},{},false, `${businesService}_${locality}`); //{ Bill: bills }
   
   } catch (error) {
     console.log(error);
@@ -245,7 +248,7 @@ export const downloadMultipleBills = async (bills = [], configKey, tenantId, loc
 }
 
 //generateMutlipleBills PDF
-export const generateMultipleBills = async (state, dispatch, tenantId, locality, isConsolidated, businesService) => {
+export const generateMultipleBills = async (state, dispatch, tenantId, locality, isConsolidated, businesService, consumerCode) => {
   dispatch(toggleSpinner());
   let allBills = get(
     state.screenConfiguration,
@@ -274,7 +277,7 @@ export const generateMultipleBills = async (state, dispatch, tenantId, locality,
     billkey = get(details, 'billKey', '');
   }
   allBills = allBills.filter(bill => bill.status === 'ACTIVE');
-  allBills && allBills.length > 0 && await downloadMultipleBills(allBills, billkey, tenantId, locality, isConsolidated, businesService);
+  allBills && allBills.length > 0 && await downloadMultipleBills(allBills, billkey, tenantId, locality, isConsolidated, businesService, consumerCode);
   dispatch(toggleSpinner());
 };
 
