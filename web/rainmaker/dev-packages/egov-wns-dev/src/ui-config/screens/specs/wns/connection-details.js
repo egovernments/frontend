@@ -406,6 +406,15 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
           editSection
         )
       );
+      } else {
+        dispatch(
+          handleField(
+            "connection-details",
+            "components.div.children.connectionDetails.children.cardContent.children.serviceDetails.children.cardContent.children.waterDetails.children",
+            "editSection",
+            {}
+          )
+        );
       }
     }
   }
