@@ -347,7 +347,8 @@ import {
     }), */
     selectionContainer: getCommonContainer({
       genderRadioGroup: {
-        uiFramework: "custom-containers",
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pt",
         componentPath: "RadioGroupContainer",
         gridDefination: {
           xs: 12,
@@ -423,7 +424,7 @@ import {
                   ))                
            }
 
-          else
+           if(action.value==="OptionPD")
           {
 
             dispatch(
@@ -484,13 +485,61 @@ import {
                true
               )) 
 
-            } 
+            }
+            if(action.value==="OptionNOPID")
+            {
+              dispatch(
+                handleField(
+               "public-search",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ORButton",
+               "visible",
+               false             
+                ))
+              dispatch(
+                handleField(
+               "public-search",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
+               "visible",
+               false
+                ))
+                dispatch(
+                  handleField(
+                 "public-search",
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.existingPropertyId",
+                 "visible",
+                 false
+                  ))                
+               
+              dispatch(
+                handleField(
+               "public-search",
+               "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.ownerName",
+               "visible",
+               false
+                ))
+              dispatch(
+                  handleField(
+                 "public-search",
+                 "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.mohalla",
+                 "visible",
+                 false
+                  ))
+              dispatch(
+                    handleField(
+                   "public-search",
+                   "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.doorNo",
+                   "visible",
+                   false
+                )) 
+             
+            }
         },
         jsonPath:
           "publicSearchScreen.selected",
         props: {
           label: { name: "Search Property ", key: "SEARCH_PROPERTY" },
           className: "SearchRadio",
+          
           buttons: [
             {
               labelName: "I Know My Property ID",
@@ -501,7 +550,12 @@ import {
               labelName: "Property Search Using Property Details",
               labelKey: "PT_SEARCH_USING_PROPERTY_DETAILS",
               value: "OptionPD"
-            }
+            },
+          /*   {
+              labelName: "Property Search Using Property Details",
+              labelKey: "PT_SEARCH_ID_NOT_FOUND",
+              value: "OptionNOPID"
+            } */
          ],
          jsonPath:
               "publicSearchScreen.selected",          
@@ -701,51 +755,56 @@ import {
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
     }),
     
-    ownerName: getTextField({
+    existingPropertyId: getTextField({
       label: {
-        labelName: "Owner Name",
-        labelKey: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
+        labelName: "Existing Property ID",
+        labelKey: "PT_EXISTING_PROPERTY_ID"
       },
-      visible:false,
       placeholder: {
-        labelName: "Enter Property Owner Name",
-        labelKey: "PT_SEARCH_OWNER_NAME_PLACEHOLDER"
+        labelName: "Enter Existing Property ID",
+        labelKey: "PT_EXISTING_PROPERTY_ID_PLACEHOLDER"
       },
-      pattern: getPattern("SearchOwnerName"),
-      errorMessage: "Invalid Name",
-      helperText:"PT_MIN_3CHAR",
-      jsonPath: "publicSearchScreen.name",
-      props: {
-        className: "applicant-details-error"
+      title: {
+        value: "Fill the form by searching your old approved trade license",
+        key: "EXISTING_PID_INFO"
       },
+      infoIcon: "info_circle",
       gridDefination: {
         xs: 12,
-        sm: 4
+        sm: 4,
+
       },
+      required: false,
+      pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
+      errorMessage: "ERR_INVALID_PROPERTY_ID",
+      jsonPath: "publicSearchScreen.oldPropertyId",
       afterFieldChange: async (action, state, dispatch) => {
-        if (action.value.match(/^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i)||action.value.length==0) {
-          dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", false)
-          );
-          dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", true)
-          );
-          dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage", "")
-          );
-          }else{
-          dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", true)
-          );
-          dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", false)
-          );
-          dispatch(
-            handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage",action.value.length<3? getLocaleLabels("PT_ERR_MIN3CHAR","PT_ERR_MIN3CHAR"):getLocaleLabels("PT_ERR_INVALID_TEXT","PT_ERR_INVALID_TEXT"))
-          );
-        }
+      if(action.value)
+      {
+        dispatch(
+          handleField(
+            "public-search",
+            "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
+            "props.value",
+            ""
+          )
+        );
+      }
       }
     }),
+    ORButton: getLabel({
+      labelName: "Edit",
+      labelKey: "OR"
+    }), 
+    /* message: 
+
+
+    getCommonParagraph({
+      labelName: 'Provide at least one non-mandatory parameter to search for property<',
+      dynamicArray: ["getCurrentFinancialYear()"],
+      labelKey:'PT_PID_NOT_FOUND_MESSAGE'
+        
+    }), */
     propertyTaxUniqueId: getTextField({
       label: {
         labelName: "Property Tax Unique Id",
@@ -836,48 +895,60 @@ import {
             xs: 12,
             sm: 4
           }
-        }),  
-        ORButton: getLabel({
-          labelName: "Edit",
-          labelKey: "OR"
-        }),  
-    existingPropertyId: getTextField({
-      label: {
-        labelName: "Existing Property ID",
-        labelKey: "PT_EXISTING_PROPERTY_ID"
-      },
-      placeholder: {
-        labelName: "Enter Existing Property ID",
-        labelKey: "PT_EXISTING_PROPERTY_ID_PLACEHOLDER"
-      },
-      title: {
-        value: "Fill the form by searching your old approved trade license",
-        key: "EXISTING_PID_INFO"
-      },
-      infoIcon: "info_circle",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
+        }),           
 
-      },
-      required: false,
-      pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
-      errorMessage: "ERR_INVALID_PROPERTY_ID",
-      jsonPath: "publicSearchScreen.oldPropertyId",
-      afterFieldChange: async (action, state, dispatch) => {
-      if(action.value)
-      {
-        dispatch(
-          handleField(
-            "public-search",
-            "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId",
-            "props.value",
-            ""
-          )
-        );
-      }
-      }
-    })
+        ownerName: getTextField({
+          label: {
+            labelName: "Owner Name",
+            labelKey: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
+          },
+          visible:false,
+          placeholder: {
+            labelName: "Enter Property Owner Name",
+            labelKey: "PT_SEARCH_OWNER_NAME_PLACEHOLDER"
+          },
+          pattern: getPattern("SearchOwnerName"),
+          errorMessage: "Invalid Name",
+          helperText:"PT_MIN_3CHAR",
+          jsonPath: "publicSearchScreen.name",
+          props: {
+            className: "applicant-details-error"
+          },
+          title: {
+            value: "If you are not able to find your property in English, please type in Hindi",
+            key: "PT_SEACH_IN_HINDI"
+          },
+          infoIcon: "info_circle",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          },          
+
+          afterFieldChange: async (action, state, dispatch) => {
+            if (action.value.match(/^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i)||action.value.length==0) {
+              dispatch(
+                handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", false)
+              );
+              dispatch(
+                handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", true)
+              );
+              dispatch(
+                handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage", "")
+              );
+              }else{
+              dispatch(
+                handleField("propertySearch", ComponentJsonPath.ownerName, "props.error", true)
+              );
+              dispatch(
+                handleField("propertySearch", ComponentJsonPath.ownerName, "isFieldValid", false)
+              );
+              dispatch(
+                handleField("propertySearch", ComponentJsonPath.ownerName, "props.errorMessage",action.value.length<3? getLocaleLabels("PT_ERR_MIN3CHAR","PT_ERR_MIN3CHAR"):getLocaleLabels("PT_ERR_INVALID_TEXT","PT_ERR_INVALID_TEXT"))
+              );
+            }
+          }
+        }),
+    
   }),
     
     
