@@ -43,8 +43,9 @@ class Footer extends React.Component {
         //let applicationNos = connectionObj.applicationNo
         
        if(connectionNumber.includes("WS")){
-          let due = 0;
-          if(bill){             
+          let due = 0; 
+               
+          if(bill && bill.Bill && Array.isArray(bill.Bill) && bill.Bill.length > 0 ){             
             due = bill.Bill[0].totalAmount
           }
            
