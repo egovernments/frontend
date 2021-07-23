@@ -1261,7 +1261,9 @@ class FormWizardDataEntry extends Component {
           rebateHeadObject.code ==="PT_ADDL_WATER_TAX" || rebateHeadObject.code === "PT_SANITARY_CESS"||
           rebateHeadObject.code === "PT_EDUCATION_CESS" || rebateHeadObject.code === "PT_SCAVENGING_TAX" ||
           rebateHeadObject.code === "PT_LIBRARY_CESS" || rebateHeadObject.code === "PT_CONSERVE_TAX" || 
-          rebateHeadObject.code === "PT_SPECIAL_CONSERVANCY_TAX") {
+          rebateHeadObject.code === "PT_SPECIAL_CONSERVANCY_TAX" || rebateHeadObject.code === "PT_CONCERVANCY_CHARGES" || 
+          rebateHeadObject.code === "PT_RECORD_MAINTENANCE_FEES" || rebateHeadObject.code === "PT_GARBAGE_COLLECTION_FEES"
+          || rebateHeadObject.code === "PT_SWATCH_BHARAT_CHARGES") {
             let rebateHeads = [];
             Object.keys(get(generalMDMSDataById, `TaxHeadMaster`, {})).forEach(
               key => {
@@ -1346,7 +1348,8 @@ class FormWizardDataEntry extends Component {
                     || data.demand[data1][data2].PT_TAXHEAD === "PT_CONSOLIDATED_PROPERTY_TAX" || data.demand[data1][data2].PT_TAXHEAD === "PT_LIGHTING_TAX"|| data.demand[data1][data2].PT_TAXHEAD === "PT_DRAINAGE_TAX"|| 
                     data.demand[data1][data2].PT_TAXHEAD ==="PT_ADDL_WATER_TAX" || data.demand[data1][data2].PT_TAXHEAD === "PT_SANITARY_CESS"||data.demand[data1][data2].PT_TAXHEAD === "PT_EDUCATION_CESS"
                     ||  data.demand[data1][data2].PT_TAXHEAD === "PT_SCAVENGING_TAX" ||data.demand[data1][data2].PT_TAXHEAD === "PT_LIBRARY_CESS" || data.demand[data1][data2].PT_TAXHEAD === "PT_CONSERVE_TAX" || 
-                    data.demand[data1][data2].PT_TAXHEAD === "PT_SPECIAL_CONSERVANCY_TAX") {
+                    data.demand[data1][data2].PT_TAXHEAD === "PT_SPECIAL_CONSERVANCY_TAX" || data.demand[data1][data2].PT_TAXHEAD === "PT_CONCERVANCY_CHARGES" || data.demand[data1][data2].PT_TAXHEAD === "PT_RECORD_MAINTENANCE_FEES" || 
+                    data.demand[data1][data2].PT_TAXHEAD === "PT_GARBAGE_COLLECTION_FEES" || data.demand[data1][data2].PT_TAXHEAD === "PT_SWATCH_BHARAT_CHARGES") {
                       hasPropertyTax = true;
                       propertyTaxAmount = data.demand[data1][data2].PT_DEMAND;
                       let collectedAmount = parseInt(data.demand[data1][data2].PT_COLLECTED);
