@@ -251,6 +251,33 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
     const querryObject = getPayload(searchScreenObject);
       const response = await getSearchResults(queryObject);
 
+      if(!response.Properties.length)
+      {     
+        const { cities } = state.common;
+
+   
+      let tenantInfo = cities && cities.filter(e => e.key === searchScreenObject.tenantId );  
+
+
+      let contactNumber = get(tenantInfo && tenantInfo.length>0 && tenantInfo[0], "contactNumber");  
+
+      
+      let email =  get(tenantInfo && tenantInfo.length>0 && tenantInfo[0], "emailId");  
+
+
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Please fill valid fields to search",
+              labelKey:"PT_NOT_FOUND_MESSAGE",
+              dynamicArray: [contactNumber, email],
+            },
+            "error"
+          )
+        );
+      }
+
       
       // const response = searchSampleResponse();
       const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");

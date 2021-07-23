@@ -95,7 +95,7 @@ const getMDMSData = async (action, dispatch) => {
       [],
       mdmsBody
     );
-    if(payload && payload.MdmsRes && payload.MdmsRes.tenant && payload.MdmsRes.tenant.tenants)
+    if(payload && payload.MdmsRes && payload.MdmsRes.tenant && payload.MdmsRes.tenant.tenants && process.env.REACT_APP_NAME === "Employee" )
     {
       let tenants = payload.MdmsRes.tenant.tenants;
 
