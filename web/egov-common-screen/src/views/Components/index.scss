@@ -1,3 +1,26 @@
+@media only screen and (max-width: 1920px) {
+    #links {
+        display: inline-flex;
+        margin-left: 47%;
+    }
+
+    #bannerimage {
+        width: 1900px;    
+    }
+    #faqs {
+        margin-left: 7%;
+    margin-right: 4%;
+    }
+    #homepagecards {
+        margin-left: 66px;
+        margin-right: 21px;
+    }
+    #testimonials {
+        margin-left: 7%;
+        margin-right: 2%;
+    }
+
+}
 @media only screen and (max-width: 1600px) {
     #links {
         display: inline-flex;
@@ -20,6 +43,7 @@
     }
 
 }
+
 
 @media only screen and (max-width: 1440px) {
     #links {

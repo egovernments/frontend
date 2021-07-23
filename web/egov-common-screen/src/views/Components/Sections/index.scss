@@ -46,6 +46,56 @@
 }
 
 
+@media only screen and (max-width: 1920px) {
+
+    #container
+   {
+       margin-left: 2%;
+   margin-right: 2%;
+
+   } 
+
+
+   #griditem
+   {
+       width: auto;
+       z-index: 100;
+   }
+
+   #card1
+   {
+       height: 240px;
+       margin-top: -114px;
+       width: auto;
+   }
+   #card2
+   {
+       height: 240px;
+       margin-top: -114px;
+       width: auto;
+     
+   }
+   #card3
+   {
+       height: 240px;
+       margin-top: -114px;
+       width: auto;
+   }
+   #message{
+    margin-left: 116px;
+    width: 90%;
+    background-color: #f3e5de;
+    color: #c94806;
+    border-radius: 15px;
+    opacity: .8;
+   }
+   #leftImage
+   {
+       height: 40px;
+       margin-left: -137px;
+   }
+}
+
 
 @media only screen and (max-width: 1600px) {
 
@@ -96,6 +146,7 @@
         margin-left: -137px;
     }
 }
+
 
 @media only screen and (max-width: 1367px) {
     #message
