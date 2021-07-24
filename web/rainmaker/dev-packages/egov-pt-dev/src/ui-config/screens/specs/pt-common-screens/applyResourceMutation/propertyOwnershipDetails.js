@@ -384,6 +384,7 @@ const commonApplicantInformation = () => {
             width: "100%",
             cursor: "pointer"
           },
+          className: "hr-generic-selectfield autocomplete-dropdown",
           label: {
             labelName: "Special Applicant Category",
             labelKey: "PT_COMMON_SPECIAL_APPLICANT_CATEGORY_LABEL"
