@@ -109,7 +109,7 @@ class DemandCollection extends React.Component {
                                  
                                   
                                   } 
-                                  else if(taxData.code ==='PT_TIME_REBATE'){
+                                  else if(taxData.code ==='PT_TIME_REBATE' || taxData.code==='PT_ADVANCE_CARRYFORWARD'){
                                     input[0].includes("-")
                                     this.setState({value:input})
                                   }
@@ -181,7 +181,7 @@ class DemandCollection extends React.Component {
                                   }
 
                                 onWheel={event => { event.preventDefault(); }}
-                                disabled={taxData.code==='PT_TIME_REBATE' || taxData.code==='PT_ADVANCE_CARRYFORWARD' || (index == 0  ? taxData.code==='PT_TIME_INTEREST' : false ) ||  taxData.code === 'PT_TIME_PENALTY' ||(index == 0 ? taxData.code==='PT_DEMANDNOTICE_CHARGE' : false) ? true : false  }
+                                disabled={taxData.code==='PT_TIME_REBATE' || (index == 0  ? taxData.code==='PT_TIME_INTEREST' : false ) ||  taxData.code === 'PT_TIME_PENALTY' ||(index == 0 ? taxData.code==='PT_DEMANDNOTICE_CHARGE' : false) ? true : false  }
                                 
                               />
                             </div>
@@ -244,7 +244,7 @@ class DemandCollection extends React.Component {
                                 }}
                                 onWheel={event => { event.preventDefault(); }}
                                // disabled={taxData.isDebit}
-                                disabled={taxData.code==='PT_TIME_REBATE' || taxData.code==='PT_ADVANCE_CARRYFORWARD' || (index == 0  ? taxData.code==='PT_TIME_INTEREST' : false ) ||(index == 0 ? taxData.code==='PT_DEMANDNOTICE_CHARGE' : false) ? true : false  }
+                                disabled={taxData.code==='PT_TIME_REBATE' || (index == 0  ? taxData.code==='PT_ADVANCE_CARRYFORWARD' : false ) || (index == 0  ? taxData.code==='PT_TIME_INTEREST' : false ) ||(index == 0 ? taxData.code==='PT_DEMANDNOTICE_CHARGE' : false) ? true : false  }
                                 
                               />
                             </div>
