@@ -110,6 +110,9 @@ class ShowField extends Component {
     const reportHeader = reportDetails.hasOwnProperty("reportHeader") ? reportDetails.reportHeader : [];
     const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
     let reportTitle = this.getReportTitle();
+    let tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
+    let cbName =  tenantId.split(".")[1];
+    cbName = cbName.toUpperCase() +" CANTONMENT BOARD";
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
    // let fontStyle = getDefaultFontStyle("en_IN");
 
@@ -129,7 +132,8 @@ class ShowField extends Component {
         customize: function(doc) {
           doc.defaultStyle.font = 'Camby';
           doc.content[0].text = [];
-          doc.content[0].text.push({ text: "eChhawani System Reports\n\n", bold: true, fontSize: 20 });
+          doc.content[0].text.push({ text: "eChhawani System Reports\n", bold: true, fontSize: 20 });
+          doc.content[0].text.push({ text: cbName +"\n", bold: true, fontSize: 18 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
         },
         exportOptions: {
