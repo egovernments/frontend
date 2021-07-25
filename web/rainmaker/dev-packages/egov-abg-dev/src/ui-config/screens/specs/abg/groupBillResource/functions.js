@@ -87,6 +87,10 @@ export const searchApiCall = async (state, dispatch) => {
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
     );
+
+    const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
+    const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
+
     const response = [];
     for (let i = 0; i < bills.length; i++) {
       if(get(bills[i], "status") === "ACTIVE"){
@@ -109,7 +113,8 @@ export const searchApiCall = async (state, dispatch) => {
           convertEpochToDate(item.billDate) || "-",
         ["ABG_COMMON_TABLE_COL_STATUS"]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
         ["TENANT_ID"]: item.tenantId,
-        ["BUSINESS_URL"]: businessUrl
+        ["BUSINESS_URL"]: businessUrl,
+        ["BILL_KEY"]: get(configObject[0], "billKey","consolidatedbill")||"consolidatedbill",
       }));
       const copyOfSearchScreenObject = cloneDeep(searchScreenObject);
       dispatch(
