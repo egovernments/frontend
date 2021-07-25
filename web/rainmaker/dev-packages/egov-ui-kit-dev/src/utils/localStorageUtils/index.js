@@ -1,4 +1,4 @@
-
+import { getUserSearchedResponse } from "egov-ui-kit/utils/commons";
 
 const appName = process.env.REACT_APP_NAME;
 
