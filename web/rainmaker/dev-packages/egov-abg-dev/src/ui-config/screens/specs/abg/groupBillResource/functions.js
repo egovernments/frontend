@@ -82,6 +82,7 @@ export const searchApiCall = async (state, dispatch) => {
     searchScreenObject.url = serviceObject&&serviceObject[0]&&serviceObject[0].billGineiURL;
     searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
+    const businessUrl = cloneDeep(searchScreenObject.url);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
@@ -107,7 +108,8 @@ export const searchApiCall = async (state, dispatch) => {
         ["ABG_COMMON_TABLE_COL_BILL_DATE"]:
           convertEpochToDate(item.billDate) || "-",
         ["ABG_COMMON_TABLE_COL_STATUS"]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
-        ["TENANT_ID"]: item.tenantId
+        ["TENANT_ID"]: item.tenantId,
+        ["BUSINESS_URL"]: businessUrl
       }));
       const copyOfSearchScreenObject = cloneDeep(searchScreenObject);
       dispatch(
