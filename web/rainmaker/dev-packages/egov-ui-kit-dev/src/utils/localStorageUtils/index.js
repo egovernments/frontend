@@ -43,6 +43,7 @@ export const setTenantId = (tenantId) => {
    if(process.env.REACT_APP_NAME!="Citizen"){
       window.sessionStorage.clear();
       Object.keys(window.localStorage).filter(key=>key.startsWith('Digit')).map(key=>localStorage.removeItem(key));
+      localStorage.setItem("citizen.userRequestObject",JSON.stringify({...JSON.parse(localStorage.getItem('citizen.userRequestObject')),tenantId:tenantId}));
       localStorage.setItem("user-info",JSON.stringify({...JSON.parse(localStorage.getItem('user-info')),tenantId:tenantId}));
       localStorage.setItem("Employee.user-info",JSON.stringify({...JSON.parse(localStorage.getItem('Employee.user-info')),tenantId:tenantId}));
    }
