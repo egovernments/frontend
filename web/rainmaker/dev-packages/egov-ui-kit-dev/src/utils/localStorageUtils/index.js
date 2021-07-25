@@ -30,7 +30,13 @@ export const getStoredModulesList = () =>{
 
 //SET methods
 export const setUserInfo = (userInfo) => {
-  localStorageSet("user-info", userInfo, null);
+  if(process.env.REACT_APP_NAME=="Citizen"){
+    localStorageSet("user-info", userInfo, null);
+  }else{
+    let userObject = JSON.parse(userInfo)||{};
+    userObject.roles=userObject.roles&&userObject.roles.filter(role=>role.tenantId==userObject.tenantId);
+    localStorageSet("user-info", JSON.stringify(userObject), null);
+  }
 };
 export const setAccessToken = (token) => {
   localStorageSet("token", token, null);
@@ -43,9 +49,11 @@ export const setTenantId = (tenantId) => {
    if(process.env.REACT_APP_NAME!="Citizen"){
       window.sessionStorage.clear();
       Object.keys(window.localStorage).filter(key=>key.startsWith('Digit')).map(key=>localStorage.removeItem(key));
-      localStorage.setItem("citizen.userRequestObject",JSON.stringify({...JSON.parse(localStorage.getItem('citizen.userRequestObject')),tenantId:tenantId}));
-      localStorage.setItem("user-info",JSON.stringify({...JSON.parse(localStorage.getItem('user-info')),tenantId:tenantId}));
-      localStorage.setItem("Employee.user-info",JSON.stringify({...JSON.parse(localStorage.getItem('Employee.user-info')),tenantId:tenantId}));
+      const userObj=getUserSearchedResponse();
+      let user=userObj&&userObj.user&&userObj.user[0] || {};
+      user={...user,tenantId:tenantId};
+      localStorage.setItem("citizen.userRequestObject",JSON.stringify({...user}));
+      setUserInfo(JSON.stringify({...user}));
    }
 };
 export const setLocale = (locale) => {
