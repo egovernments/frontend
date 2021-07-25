@@ -133,15 +133,20 @@ export const viewBillFooter = getCommonApplyFooter({
 
 const cancelReceipt = async (state, dispatch) => {
   const isFormValid = validateFields(
-    "components.div.children.cancelReceiptDetailsCard.children.cardContent.children.searchContainer.children",
+    "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children",
     state,
     dispatch,
-    "cancelReceipt"
+    "cancelBill"
   );
 
   let UpdateBillCriteria = get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria', []);
+  let descriptionCheck = true;
+  if (UpdateBillCriteria && UpdateBillCriteria.additionalDetails && UpdateBillCriteria.additionalDetails.reason == "OTHER") {
+      if(UpdateBillCriteria && UpdateBillCriteria.additionalDetails && !UpdateBillCriteria.additionalDetails.description) descriptionCheck = false;
+      else descriptionCheck = true;
+  }
 
-  if (isFormValid && UpdateBillCriteria && UpdateBillCriteria.additionalDetails && UpdateBillCriteria.additionalDetails.reason) {
+  if (UpdateBillCriteria && UpdateBillCriteria.additionalDetails && UpdateBillCriteria.additionalDetails.reason && descriptionCheck) {
     try {
       dispatch(showSpinner());
       const UpdateBillCriteriaObj = get(state, "screenConfiguration.preparedFinalObject.UpdateBillCriteria", {});

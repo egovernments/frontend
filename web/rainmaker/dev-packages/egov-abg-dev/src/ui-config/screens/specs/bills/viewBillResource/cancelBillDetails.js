@@ -46,7 +46,7 @@ export const cancelBillDetailsCard = getCommonCard(
             const additionalDetailsJson = "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.addtionalDetails";
             if (action.value == "OTHER") {
               dispatch(handleField('cancelBill', additionalDetailsJson, "props.disabled", false))
-              dispatch(handleField('cancelBill', additionalDetailsJson, "required", true))
+              // dispatch(handleField('cancelBill', additionalDetailsJson, "required", true))
               dispatch(handleField('cancelBill', additionalDetailsJson, "props.required", true))
             } else {
               dispatch(handleField('cancelBill', additionalDetailsJson, "props.disabled", true))
