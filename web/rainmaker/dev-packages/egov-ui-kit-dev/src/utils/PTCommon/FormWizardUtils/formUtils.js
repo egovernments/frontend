@@ -228,8 +228,8 @@ export const cancelAssessment = async (assessment) => {
     "Assessment": assessment
   };
   const response = await httpRequestForAssessmentCancellation("/property-services/assessment/_cancel", "_cancel",[],ReceiptBody,[],{});
-  if( response && response.Assessments && response.Assessments.length>1 && response.Assessments[0].status=="CANCELLED")
-  alert("Assessment has been cancelled properly.")
+  if( response && response.Assessments && response.Assessments.length>=1 && response.Assessments[0].status=="CANCELLED")
+  alert("Assessment has been successfully cancelled")
   else
   alert(response);
 }
