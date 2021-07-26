@@ -21,6 +21,7 @@ import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./pay
 import "./pay.css";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import capturePayerDetails from "./payResource/capture-payer-details";
 
 
 const header = getCommonContainer({
@@ -65,7 +66,7 @@ const getPaymentCard = () => {
                 })
             }
         }
-    }  if (isPublicSearch) {
+    }  if (isPublicSearch()) {
         return {
             uiFramework: "custom-atoms",
             componentPath: "Div",
@@ -76,7 +77,8 @@ const getPaymentCard = () => {
                         labelKey: "NOC_PAYMENT_HEAD"
                     }),
                     estimateDetails,
-                    capturePaymentDetails,
+                    //capturePaymentDetails,
+                    capturePayerDetails: process.env.REACT_APP_NAME === "Citizen" ? capturePayerDetails : {},
                     AmountToBePaid: {
                         ...AmountToBePaid,
                         visible: false

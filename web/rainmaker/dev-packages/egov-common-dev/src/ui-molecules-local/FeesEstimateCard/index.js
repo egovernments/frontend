@@ -9,6 +9,7 @@ import Icon from "@material-ui/core/Icon";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { ifUserRoleExists } from "egov-common/ui-config/screens/specs/utils";
+import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 
 
 const roleExists = ifUserRoleExists("CITIZEN");
@@ -226,7 +227,7 @@ function FeesEstimateCard(props) {
   
               
         </div>
-        { roleExists && estimate.businesService === 'PT'? 
+        { ((roleExists && estimate.businesService === 'PT') || isPublicSearch())? 
                 (  <Grid item xs={12} className={classes.message} >
                 
               <Typography variant="body2">  <LabelContainer

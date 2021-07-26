@@ -48,6 +48,13 @@ export const callPGService = async (state, dispatch) => {
     return;
   }
 
+  let isFormValid = validateFields(
+    "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer.children",
+    state,
+    dispatch,
+    "pay"
+  );
+
   const user = {
     name: get(billPayload, "Bill[0].payerName"),
     mobileNumber: get(billPayload, "Bill[0].mobileNumber"),
