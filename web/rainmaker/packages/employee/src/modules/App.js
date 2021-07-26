@@ -83,8 +83,7 @@ class App extends Component {
     let logginScreensUrls = ['/employee/user/login', '/employee/forgot-password', '/employee/language-selection'];
     if (logginScreensUrls.includes(window.location.pathname)) {
       loginScreens = true;
-    }
-    
+    }    
     let sourceUrl = `${window.location.origin}/employee`;
     sourceUrl="https://s3.ap-south-1.amazonaws.com/egov-qa-assets";  // changes for the image configured in s3 bucket
     let isFixedFooter=false;

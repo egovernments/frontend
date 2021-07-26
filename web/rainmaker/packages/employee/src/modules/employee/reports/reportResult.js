@@ -44,7 +44,6 @@ key=key.replace(/[.:-\s\/]/g, "_")||key;
 return key;
 }
 
-
 class ShowField extends Component {
   constructor(props) {
     super(props);

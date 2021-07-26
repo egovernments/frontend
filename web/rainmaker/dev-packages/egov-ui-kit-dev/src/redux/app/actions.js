@@ -356,7 +356,6 @@ export const fetchInboxRecordsCount = () => {
       const { app } = state;
       const { inboxRemData } = app;
       const { loaded: remainingDataLoaded = false } = inboxRemData || {};
-
       remainingDataLoaded == false && payload > 100 && dispatch(fetchRemRecords(payload))
       dispatch(fetchInboxCount(payload));
     } catch (error) {

@@ -17,7 +17,7 @@ class AutoSuggestor extends Component {
     //Storing multiSelect values not handled yet
     onChange({ target: { value: value ? value.value : null } });
   };
-  shouldComponentUpdate = (nextProps, nextState) => {
+    shouldComponentUpdate = (nextProps, nextState) => {
     let {
       value,
       suggestions = [],
