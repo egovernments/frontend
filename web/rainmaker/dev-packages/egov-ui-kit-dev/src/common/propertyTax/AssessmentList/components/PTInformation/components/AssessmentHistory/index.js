@@ -79,8 +79,8 @@ class AssessmentHistory extends Component {
             alignItems: "right",
         };
         const { Assessments = [], history, propertyId } = this.props;
-
-        const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment) => {
+        const Assessmentss = Assessments && Assessments.filter(item => item.status === "ACTIVE");
+        const assessmentHistoryItems = this.getLatestAssessments(Assessmentss).map((Assessment) => {
             return (
                 <div>
                     {getFullRow("PT_HISTORY_ASSESSMENT_DATE", Assessment.assessmentDate ? getFormattedDate(Assessment.assessmentDate) : "NA", 12)}
@@ -118,7 +118,9 @@ class AssessmentHistory extends Component {
                                             "error"
                                         );
                                     } else {
-                                        cancelAssessment(Assessment);
+                                        if(window.confirm("Are you sure you want to cancel Assessment?")){
+                                            cancelAssessment(Assessment);
+                                        }  
                                         
                                     }
                                     // lastElement.onClick();

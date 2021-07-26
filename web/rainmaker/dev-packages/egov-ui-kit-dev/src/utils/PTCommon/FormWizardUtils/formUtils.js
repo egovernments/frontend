@@ -4,7 +4,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { httpRequest } from "egov-ui-kit/utils/api";
+import { httpRequest,httpRequestForAssessmentCancellation } from "egov-ui-kit/utils/api";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -227,11 +227,11 @@ export const cancelAssessment = async (assessment) => {
   let ReceiptBody = {
     "Assessment": assessment
   };
-  const response = await httpRequest("/property-services/assessment/_cancel", "_cancel",[],ReceiptBody,[],{});
-  if(response.Assessment.status=="CANCELLED")
+  const response = await httpRequestForAssessmentCancellation("/property-services/assessment/_cancel", "_cancel",[],ReceiptBody,[],{});
+  if( response && response.Assessments && response.Assessments.length>1 && response.Assessments[0].status=="CANCELLED")
   alert("Assessment has been cancelled properly.")
   else
-  alert(response.Errors && reponse.Errors[0].message?reponse.Errors[0].message: "Some error has occured!! Please try again");
+  alert(response);
 }
 
 export const PROPERTY_FORM_PURPOSE = {
