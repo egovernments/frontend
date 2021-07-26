@@ -736,7 +736,59 @@ export const downloadChallan = async (queryStr, mode = 'download') => {
 
 }
 
+export const downloadPTGroupBill = async (queryStr, mode = 'download') => {
 
+  const DOWNLOADBILL = {
+    GET: {
+      URL: "/egov-pdf/download/PT/propertybill",
+      ACTION: "_get",
+    },
+  };
+  let propertyId;
+  let tenantId;
+  queryStr.forEach(query => {
+    if(query.key=="propertyId")
+      propertyId=query.value;
+    if(query.key=="tenantId")
+      tenantId = query.value
+  
+  });
+  try {
+    store.dispatch(toggleSpinner());
+    for (let i = 0; i <= propertyId.length + 1000; i += 50) {
+      let propertyIdsNew = propertyId.splice(0, 50);
+      if (propertyIdsNew && propertyIdsNew.length > 0) {
+    await httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, [], {propertyId:propertyIdsNew.join(','),tenantId:tenantId},{ 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        //store.dispatch(toggleSpinner());
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+          })
+        } else {
+          console.log("Error In Downloading Bill");
+        }
+      }).catch(err => {
+       
+        throw err;
+       // alert('Some Error Occured while downloading Bill!');
+      });
+    }
+  }
+  store.dispatch(toggleSpinner());
+
+  } catch (exception) {
+    store.dispatch(toggleSpinner());
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: 'Some Error Occured while downloading Bill!' },
+        "error"
+      )
+    );
+  }
+}
 
 
 export const downloadPTBill = async (queryStr, mode = 'download') => {
@@ -782,11 +834,63 @@ export const downloadPTBill = async (queryStr, mode = 'download') => {
       });
   } catch (exception) {
     store.dispatch(toggleSpinner());
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: 'Some Error Occured while downloading Bill!' },
+        "error"
+      )
+    );
+  }
+
+}
+export const downloadOriginalPTBill = async (queryStr, mode = 'download') => {
+
+  const DOWNLOADBILL = {
+    GET: {
+      URL: "/egov-pdf/download/PT/newptbill",
+      ACTION: "_get",
+    },
+  };
+  let propertyId;
+  let tenantId;
+  queryStr.forEach(query => {
+    if(query.key=="propertyId")
+      propertyId=query.value;
+    if(query.key=="tenantId")
+      tenantId = query.value
+  
+  });
+  try {
+    store.dispatch(toggleSpinner());
+    httpRequest("post", DOWNLOADBILL.GET.URL, DOWNLOADBILL.GET.ACTION, [], {propertyId:propertyId,tenantId:tenantId},{ 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        store.dispatch(toggleSpinner());
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId, mode)
+          })
+        } else {
+          console.log("Error In Downloading Bill");
+        }
+      }).catch(err => {
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: 'Some Error Occured while downloading Bill!' },
+            "error"
+          )
+        );
+       // alert('Some Error Occured while downloading Bill!');
+        store.dispatch(toggleSpinner());
+      });
+  } catch (exception) {
+    store.dispatch(toggleSpinner());
     alert('Some Error Occured while downloading Bill!');
   }
 
 }
-
 export const downloadWSBill = async (queryStr, mode = 'download') => {
 
   const DOWNLOADBILL = {
@@ -815,16 +919,17 @@ export const downloadWSBill = async (queryStr, mode = 'download') => {
 
 export const downloadMultipleBill = async (bills = [], configKey) => {
   if(bills && bills[0].businessService=='PT'){
-    let propertyIds = '';
+    let propertyIds = [];
     for (var i = 0; i < bills.length; i++) {
-      propertyIds += bills[i]['consumerCode'] + ",";
+      propertyIds.push(bills[i]['consumerCode'] );
     }
-    propertyIds = propertyIds.substring(0, propertyIds.length - 1);
-    const billQueryStr = [
-      { key: "propertyId", value: propertyIds },
-      { key: "tenantId", value: bills[0].tenantId }
-    ]
-    downloadPTBill(billQueryStr,"download"); 
+   // propertyIds = propertyIds.substring(0, propertyIds.length - 1);
+    
+        const billQueryStr = [
+          { key: "propertyId", value: propertyIds },
+          { key: "tenantId", value: bills[0].tenantId }
+        ]
+        downloadPTGroupBill(billQueryStr,"download");  
   }
   else if(bills && bills[0].businessService=='WS' || bills && bills[0].businessService=='SW'){
     let consumerNos = '';

@@ -5,7 +5,7 @@ import { getLocale,localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import { generatePdfFromDiv } from "../../../utils/PTCommon";
-import { downloadPTBill  } from "egov-common/ui-utils/commons";
+import { downloadPTBill,downloadOriginalPTBill  } from "egov-common/ui-utils/commons";
 
 import "./index.css";
 
@@ -51,6 +51,17 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
       },
       leftIcon: "assignment"
     };
+    let originalbillDownloadObject = {
+      label: { labelName: "Bill", labelKey: "PT_ORIGINAL_BILL" },
+      link: () => {
+        const billQueryStr = [
+          { key: "propertyId", value: subHeaderValue },
+          { key: "tenantId", value: tenantId}
+        ]
+        downloadOriginalPTBill(billQueryStr,"download"); 
+      },
+      leftIcon: "assignment"
+    };
 
     let billPrintObject = {
       label: { labelName: "Bill", labelKey: "PT_BILL" },
@@ -64,6 +75,18 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
       leftIcon: "book"
 
     };
+    let originalbillPrintObject = {
+      label: { labelName: "Bill", labelKey: "PT_ORIGINAL_BILL" },
+      link: () => {
+        const billQueryStr = [
+          { key: "propertyId", value: subHeaderValue },
+          { key: "tenantId", value: tenantId },
+          {key: "businessService", value: "PT"}
+        ]
+        downloadOriginalPTBill(billQueryStr,"print");       },
+      leftIcon: "book"
+
+    };
     let downloadMenu = [];
     let printMenu = [];
     if(!isCitizen){
@@ -73,9 +96,9 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
     }
 
     
-    
-   
-    if(totalBillAmountDue!=0){
+    downloadMenu.push(originalbillDownloadObject)
+    printMenu.push(originalbillPrintObject);
+    if(totalBillAmountDue!=0){    
       downloadMenu.push(billDownloadObject);
       printMenu.push(billPrintObject);
     }
