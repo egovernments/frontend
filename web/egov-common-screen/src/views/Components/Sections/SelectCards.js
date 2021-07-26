@@ -54,8 +54,10 @@ export default function SectionNavbars() {
                   <p className={classes.description} style={{marginTop: "-36px"}}><br />
                   Property Tax or House Tax is a local tax levied by municipal authorities for maintaining civic amenities in your area and is paid by occupier of that property                    
                   <br />
-                    <b><a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax </a></b> <br /> 
-                    <a href="/citizen/user/login">Register Property </a><br />
+                    <b><a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax Without Login </a></b> <br /> 
+                    <a href="/citizen/user/login">Pay Property Tax With Login </a><br /> 
+                    <a href="https://bills.pe/37IYY">Pay Property Tax (BBPS) </a><br />
+                    <a href="/citizen/user/login">Register Property </a> / 
                     <a href="/citizen/user/login">Apply for Ownership Transfer </a><br />
                   </p>
                 </CardBody>

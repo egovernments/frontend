@@ -56,7 +56,12 @@ export default function Footer(props) {
                 </p><p>
                 Email Us<br />
                 < a href="mailto:enagarsewauk@gmail.com">enagarsewauk@gmail.com</a>
-                <br />             
+                <br />  
+                < a href="https://www.facebook.com/profile.php?id=100070957113985"><i className={"fab fa-facebook"} style={{color: "white"}}/></a>
+                
+
+                < a href="https://twitter.com/NagarsewaU"> <i className={" fab fa-twitter"} style={{color: "white"}} />
+</a>           
                 </p> 
                
                 
