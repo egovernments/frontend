@@ -356,6 +356,22 @@ import {
           md: 6
         },
      beforeFieldChange:(action, state, dispatch) => {
+          dispatch(
+            handleField(
+              "public-search",
+              "components.div.children.searchPropertyTable",
+              "props.data",
+              {}
+            )
+          );
+          dispatch(
+            handleField(
+              "public-search",
+              "components.div.children.searchPropertyTable",
+              "props.rows",
+              ""
+            )
+          );
           if(action.value==="OptionPID")
           {
             
