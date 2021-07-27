@@ -130,6 +130,15 @@ export default function Footer(props) {
                 Property Tax
               </a>
               <a
+                href="https://udd.uk.gov.in/pages/display/147-property-tax"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+
+              >
+                Property Tax Demand Registers
+              </a>
+              <a
                 href="/ukd-assets/TL_English_UserManual_Citizen.pdf"
                 //className={classes.block}
                 target="_blank"
