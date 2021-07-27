@@ -5,6 +5,7 @@ import logo from "egov-ui-kit/assets/images/punjab-logo.png";
 import "./index.css";
 
 const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bannerUrl }) => {
+  bannerUrl="https://ukd-dev.egovernments.org/ukd-assets/Stateimages/banner.png";
   return (
     <div>
       <div className={`${className} user-screens-wrapper`}>
