@@ -2382,10 +2382,10 @@ class FormWizardDataEntry extends Component {
               if (!some(demandDetails1, { id: dR.demandDetails[i].id })) {
                 demandDetails1.push({
                   ...dR.demandDetails[i],
-                  taxAmount:
-                    dR.demandDetails[i].taxHeadMasterCode === "PT_ROUNDOFF"
-                      ? 0
-                      : dR.demandDetails[i].taxAmount
+                  taxAmount:dR.demandDetails[i].taxAmount
+                    // dR.demandDetails[i].taxHeadMasterCode === "PT_ROUNDOFF"
+                    //   ? 0
+                    //   : 
                 });
               }
             }
