@@ -149,7 +149,38 @@ const getAddress = (item) => {
   let city = item.address.city != null ? (item.address.city) : '';
   return (doorNo + buildingName + street + mohalla + city);
 }
+const getOwnersName=(item)=>{
+  let ownersName = "";
 
+  if(item){
+    const result = item.filter(item => item.status === "ACTIVE");
+    console.log("Length:"+result.length);
+      for(let i=0; i<result.length; i++) {
+        ownersName = ownersName+ result[i].name + ","
+        console.log(ownersName);
+    }
+    
+
+  }
+  ownersName = ownersName.replace(/,\s*$/, "");
+  return ownersName;
+}
+const getGuardianName=(item)=>{
+  let ownersName = "";
+
+  if(item){
+    const result = item.filter(item => item.status === "ACTIVE");
+    console.log("Length:"+result.length);
+      for(let i=0; i<result.length; i++) {
+        ownersName = ownersName+ result[i].fatherOrHusbandName + ","
+        console.log(ownersName);
+    }
+    
+
+  }
+  ownersName = ownersName.replace(/,\s*$/, "");
+  return ownersName;
+}
 const searchApiCall = async (state, dispatch, index) => {
   showHideTable(false, dispatch, 0);
   showHideTable(false, dispatch, 1);
@@ -365,12 +396,13 @@ const searchApiCall = async (state, dispatch, index) => {
 
       // const response = searchSampleResponse();
 
+      //[0].name
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: getOwnersName(item.owners) || "-",
         ["PT_GUARDIAN_NAME"]:
-          item.owners[0].fatherOrHusbandName || "-",
+        getGuardianName(item.owners) || "-",
         ["PT_COMMON_COL_EXISTING_PROP_ID"]:
           item.oldPropertyId || "-",
           ["PT_ABAS_ID"]:
@@ -388,7 +420,7 @@ const searchApiCall = async (state, dispatch, index) => {
         ["PT_COMMON_TABLE_COL_APP_TYPE"]:
           item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
-          item.owners[0].name || "-",
+        getOwnersName(item.owners) || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,

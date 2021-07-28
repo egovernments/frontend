@@ -1292,7 +1292,7 @@ class FormWizardDataEntry extends Component {
               ? rebateAmount
               : demandAmount + rebateAmount;
           } else {
-            return demandAmount;
+            return Math.abs(demandAmount);
           }
         };
 
@@ -1336,6 +1336,7 @@ class FormWizardDataEntry extends Component {
                   ) {
                     errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
                   }
+                  
             
                   if (data.demand[data1][data2].PT_DEMAND) {
                     currentYearEnteredValueLength++;
@@ -1343,6 +1344,9 @@ class FormWizardDataEntry extends Component {
                       if (key - previousKey > 1) {
                         errorCode = "ERR04_DEMAND_ENTER_THE_DATA";
                       }
+                    }
+                    if(data.demand[data1][data2].PT_TAXHEAD === "PT_ADVANCE_CARRYFORWARD") {
+                      hasPropertyTax = true;
                     }
                     if (data.demand[data1][data2].PT_TAXHEAD === "PT_HOUSE_TAX" || data.demand[data1][data2].PT_TAXHEAD === "PT_WATER_TAX" || data.demand[data1][data2].PT_TAXHEAD === "PT_CONSERVANCY_TAX"
                     || data.demand[data1][data2].PT_TAXHEAD === "PT_CONSOLIDATED_PROPERTY_TAX" || data.demand[data1][data2].PT_TAXHEAD === "PT_LIGHTING_TAX"|| data.demand[data1][data2].PT_TAXHEAD === "PT_DRAINAGE_TAX"|| 
@@ -1379,7 +1383,7 @@ class FormWizardDataEntry extends Component {
                         data.demand[data1][data2].PT_TAXHEAD,
                         parseInt(data.demand[data1][data2].PT_DEMAND),
                         data.demand[data1]
-                      ) < parseInt(data.demand[data1][data2].PT_COLLECTED)
+                      ) < Math.abs(parseInt(data.demand[data1][data2].PT_COLLECTED))
                     ) {
                       if(errorCode === "FINE")
                       {
@@ -1415,7 +1419,8 @@ class FormWizardDataEntry extends Component {
                 } else {
                   if (!hasPropertyTax) {
                     errorCode = "ERR05_DEMAND_ENTER_THE_DATA";
-                  } else if (parseInt(propertyTaxAmount) < totalRebateAmount) {
+                  } 
+                  else if (parseInt(propertyTaxAmount) < totalRebateAmount) {
                     errorCode = "ERR06_DEMAND_ENTER_THE_DATA";
                   }
                 }
@@ -2377,10 +2382,10 @@ class FormWizardDataEntry extends Component {
               if (!some(demandDetails1, { id: dR.demandDetails[i].id })) {
                 demandDetails1.push({
                   ...dR.demandDetails[i],
-                  taxAmount:
-                    dR.demandDetails[i].taxHeadMasterCode === "PT_ROUNDOFF"
-                      ? 0
-                      : dR.demandDetails[i].taxAmount
+                  taxAmount:dR.demandDetails[i].taxAmount
+                    // dR.demandDetails[i].taxHeadMasterCode === "PT_ROUNDOFF"
+                    //   ? 0
+                    //   : 
                 });
               }
             }

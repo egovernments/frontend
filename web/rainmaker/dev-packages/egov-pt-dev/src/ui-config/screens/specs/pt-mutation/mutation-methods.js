@@ -91,6 +91,14 @@ export const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.ulbCityContainer.children.abasId",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
       "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
       "props.value",
       ""
@@ -271,7 +279,7 @@ export const searchPropertyDetails = getCommonCard({
       },
       required: false,
       jsonPath: "ptSearchScreen.abasPropertyids"
-    })
+    }),
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
