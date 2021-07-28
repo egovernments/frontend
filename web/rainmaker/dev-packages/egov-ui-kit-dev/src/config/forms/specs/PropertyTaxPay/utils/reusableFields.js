@@ -30,7 +30,7 @@ export const plotSize = {
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5, fontSize: "14px", lineHeight:"1px" },
     required: true,
     fullWidth: true,
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    pattern: /^([1-9]\d{0,7})(\.\d{1,2})?$/,
     numcols: 6,
     formName: "plotDetails",
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
