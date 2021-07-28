@@ -715,6 +715,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
   "penalty":penalty,
   "rebate": rebate,
   "interest":interest,
+  "rebate": rebate,
   "usage_exemption":usage_exemption,
   "special_category_exemption": special_category_exemption,
   "adhoc_penalty":adhoc_penalty,
@@ -1135,3 +1136,28 @@ building = building + "," + item.name;
 		})
 	  });
 	}
+	export const downloadChallan = async (queryStr, mode = 'download') => {
+
+		const DOWNLOADRECEIPT = {
+		  GET: {
+			URL: "/egov-pdf/download/UC/mcollect-challan",
+			ACTION: "_get",
+		  },
+		};
+		try {
+		  httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+			.then(res => {
+			  res.filestoreIds[0]
+			  if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+				res.filestoreIds.map(fileStoreId => {
+				  downloadReceiptFromFilestoreID(fileStoreId, mode)
+				})
+			  } else {
+				console.log("Error In Acknowledgement form Download");
+			  }
+			});
+		} catch (exception) {
+		  alert('Some Error Occured while downloading Acknowledgement form!');
+		}
+	  
+	  }
