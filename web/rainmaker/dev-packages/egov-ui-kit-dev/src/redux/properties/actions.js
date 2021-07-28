@@ -799,6 +799,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
   "penalty":penalty,
   "rebate": rebate,
   "interest":interest,
+  "rebate": rebate,
   "usage_exemption":usage_exemption,
   "special_category_exemption": special_category_exemption,
   "adhoc_penalty":adhoc_penalty,
