@@ -1,6 +1,6 @@
 import { Button } from "components";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE ,cancelAssessment} from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -79,8 +79,8 @@ class AssessmentHistory extends Component {
             alignItems: "right",
         };
         const { Assessments = [], history, propertyId } = this.props;
-        const Assessmentss = Assessments && Assessments.filter(item => item.status === "ACTIVE");
-        const assessmentHistoryItems = this.getLatestAssessments(Assessmentss).map((Assessment) => {
+
+        const assessmentHistoryItems = this.getLatestAssessments(Assessments).map((Assessment) => {
             return (
                 <div>
                     {getFullRow("PT_HISTORY_ASSESSMENT_DATE", Assessment.assessmentDate ? getFormattedDate(Assessment.assessmentDate) : "NA", 12)}
@@ -103,25 +103,6 @@ class AssessmentHistory extends Component {
                                         history &&
                                             history.push(getPropertyLink(propertyId, Assessment.tenantId, PROPERTY_FORM_PURPOSE.REASSESS, Assessment.financialYear, Assessment.assessmentNumber)
                                             );
-                                    }
-                                    // lastElement.onClick();
-                                }}
-                            ></Button>
-                            <Button
-                                label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.CANCEL].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
-                                buttonStyle={buttonStyle}
-                                onClick={() => {
-                                    if (this.props.selPropertyDetails.status != "ACTIVE") {
-                                        this.props.toggleSnackbarAndSetText(
-                                            true,
-                                            { labelName: "Property in Workflow", labelKey: "ERROR_PROPERTY_IN_WORKFLOW" },
-                                            "error"
-                                        );
-                                    } else {
-                                        if(window.confirm("Are you sure you want to cancel Assessment?")){
-                                            cancelAssessment(Assessment);
-                                        }  
-                                        
                                     }
                                     // lastElement.onClick();
                                 }}

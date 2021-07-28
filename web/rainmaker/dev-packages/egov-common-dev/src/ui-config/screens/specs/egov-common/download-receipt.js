@@ -9,7 +9,7 @@ import { getHeader } from "./pay";
 
 
 const getReceiptData = (receiptNo) => {
-    
+ 
     return getCommonContainer({
         h1:getCommonContainer({
         header: getCommonTitle({
@@ -54,7 +54,7 @@ const loadMdms = async (action, state, dispatch, consumerCode, tenantId, busines
         { key: "tenantId", value: tenantId },
         { key: "businessService", value:businessService }        
     ]
-    download(receiptQueryString, localStorage.getItem('receipt-channel')=='whatsapp'?"download":"open", receiptKey, state,true)
+    download(receiptQueryString, "open", receiptKey, state,true)
 }
 const screenConfig = {
     uiFramework: "material-ui",
@@ -85,12 +85,12 @@ const screenConfig = {
         let channel = getQueryArg(window.location.href, "channel");
         let redirectNumber = getQueryArg(window.location.href, "redirectNumber");
         if(channel){
-            localStorage.setItem('receipt-channel',channel);
+            localStorage.setItem('pay-channel',channel);
             redirectNumber=!redirectNumber.includes('+91')&&redirectNumber.length==10?`+91${redirectNumber}`:redirectNumber
-            localStorage.setItem('receipt-redirectNumber',redirectNumber);
+            localStorage.setItem('pay-redirectNumber',redirectNumber);
         }else{
-            localStorage.setItem('receipt-channel',"");
-            localStorage.setItem('receipt-redirectNumber','');
+            localStorage.setItem('pay-channel',"");
+            localStorage.setItem('pay-redirectNumber','');
         }
         return action;
     }

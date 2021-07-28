@@ -123,19 +123,9 @@ export const download = async (receiptQueryString, mode = "download" ,configKey 
         to=convertDateToEpoch("03/31/"+year);}
         else{from=convertDateToEpoch("04/01/"+year);
         to=convertDateToEpoch("03/31/"+nextyear);}
-        let building='';
-        let length=response.FireNOCs[0].fireNOCDetails.buildings.length;
-        response.FireNOCs[0].fireNOCDetails.buildings.map( (item,index) => {
-  if(index == 0)
-        building=building + item.name;
-  else 
-  building = building + "," + item.name;
-        });
-  
-  
-        const details = {
-      "address": "Building:"+building +","+ response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
-    }
+          const details = {
+               "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
+               }
          payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
          payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod=from;
          payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod=to; 

@@ -383,7 +383,6 @@ export const poDetails = getCommonContainer({
     }
   })
 });
-
 export const qrCodeDetails = getCommonContainer({
   txnNo: getTextField({
     label: {
@@ -418,7 +417,6 @@ export const qrCodeDetails = getCommonContainer({
     }
   })
 });
-
 export const cheque = getCommonContainer({
   payeeDetails,
   chequeDetails
@@ -444,11 +442,6 @@ export const neftRtgs = getCommonContainer({
 export const postal_order = getCommonContainer({
   payeeDetails,
   poDetails: { ...poDetails }
-});
-
-export const qr_code = getCommonContainer({
-  payeeDetails,
-  onlineDetails: { ...qrCodeDetails }
 });
 
 export const demandDraftDetails = getCommonContainer({

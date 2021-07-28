@@ -1,20 +1,15 @@
-import Input from '@material-ui/core/Input';
-import { withStyles } from "@material-ui/core/styles";
-import { Icon } from "components";
-import commonConfig from "config/common";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
-import { List } from "egov-ui-kit/components";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { getLocale, setLocale, setModule } from "egov-ui-kit/utils/localStorageUtils";
-import Label from "egov-ui-kit/utils/translationNode";
-import get from "lodash/get";
-import { Screen } from "modules/common";
-import queryString from 'query-string';
 import React from "react";
-import { connect } from "react-redux";
+import { Icon } from "components";
+import { Screen } from "modules/common";
+import { withStyles } from "@material-ui/core/styles";
+import Label from "egov-ui-kit/utils/translationNode";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { List } from "egov-ui-kit/components";
+import Input from '@material-ui/core/Input';
+import get from "lodash/get";
+import queryString from 'query-string';
 import "./index.css";
+import commonConfig from "config/common";
 
 const styles = (theme) => ({
   root: {
@@ -44,7 +39,7 @@ class WhatsAppCity extends React.Component {
     data: [],
     citylist: [],
     phone: undefined,
-    stateId: undefined,
+    stateId:undefined,
   };
   getListItems = items =>
     items.map((item) => ({
@@ -61,7 +56,7 @@ class WhatsAppCity extends React.Component {
     let mdmsBody = {
 
       MdmsCriteria: {
-        tenantId: stateId || "pb.amritsar",
+        tenantId:stateId || "pb.amritsar",
         moduleDetails: [
           {
             moduleName: "tenant",
@@ -88,7 +83,6 @@ class WhatsAppCity extends React.Component {
   };
 
   componentDidMount = async () => {
-    localStorage.clear();
     const values = queryString.parse(this.props.location.search)
     const phone = values.phone;
     const stateId = values.tenantId;
@@ -99,14 +93,11 @@ class WhatsAppCity extends React.Component {
       stateId: stateId,
     })
 
-    let locale = getQueryArg(window.location.href, "locale") || 'en_IN';
-    setLocale(locale);
-    setModule('rainmaker-common');
-    this.props.fetchLocalizationLabel(getLocale(), commonConfig.tenantId, commonConfig.tenantId);
 
     const citydata = await this.getMDMSData(stateId);
+    console.log("aa",citydata)
     const citylistCodeModule = get(citydata, "MdmsRes.tenant.citymodule", []);
-    const citylistCode = citylistCodeModule.filter(item => item.module === "PGR.WHATSAPP")[0].tenants
+    const citylistCode=citylistCodeModule.filter(item=>item.module==="PGR.WHATSAPP")[0].tenants
     const citylist = citylistCode.map((item) => {
       return {
         code: item.code,
@@ -116,7 +107,6 @@ class WhatsAppCity extends React.Component {
 
     this.setState({
       citylist: citylist,
-      data: [...citylist]
     })
   };
 
@@ -180,7 +170,7 @@ class WhatsAppCity extends React.Component {
             primaryTogglesNestedList={true}
             onItemClick={(item, index) => {
               const number = this.state.phone || commonConfig.whatsappNumber;
-              const name = getLocaleLabels(item.primaryText.props.label, item.primaryText.props.label);
+              const name=item.primaryText.props.label;
               const weblink = "https://api.whatsapp.com/send?phone=" + number + "&text=" + name;
               window.location.href = weblink
             }}
@@ -196,13 +186,6 @@ class WhatsAppCity extends React.Component {
 }
 
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchLocalizationLabel: (locale, moduleName, tenantId) => dispatch(fetchLocalizationLabel(locale, moduleName, tenantId)),
-});
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(withStyles(styles)(
+export default withStyles(styles)(
   (WhatsAppCity)
-));
+);

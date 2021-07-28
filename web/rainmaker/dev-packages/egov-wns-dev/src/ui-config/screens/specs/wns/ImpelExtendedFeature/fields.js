@@ -41,7 +41,7 @@ export const WSunitUsageType = {
         errorMessage: "ERR_INVALID_BILLING_PERIOD",
         jsonPath: "applyScreen.additionalDetails.unitUsageType",
         props: {
-          disabled: false,
+          disabled: false
         }
       }),
     }

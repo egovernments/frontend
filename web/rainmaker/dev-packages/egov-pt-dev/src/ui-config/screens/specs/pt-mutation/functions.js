@@ -342,7 +342,7 @@ const searchApiCall = async (state, dispatch, index) => {
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]:item.owners.filter(itemm => itemm.status === "ACTIVE")?item.owners.filter(itemm => itemm.status === "ACTIVE")[0].name:"-",
+          ["PT_COMMON_TABLE_COL_OWNER_NAME"]:item.owners.filter(itemm => itemm.status === "ACTIVE")?item.owners.filter(itemm => itemm.status === "ACTIVE")[0].name:"-",
         ["PT_GUARDIAN_NAME"]:
         item.owners.filter(item => item.status === "ACTIVE")?item.owners.filter(itemm => itemm.status === "ACTIVE")[0].fatherOrHusbandName:"-",
         ["PT_COMMON_COL_EXISTING_PROP_ID"]:

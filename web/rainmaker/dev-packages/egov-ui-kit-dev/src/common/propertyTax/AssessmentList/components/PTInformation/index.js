@@ -65,6 +65,7 @@ class PTInformation extends React.Component {
       [],
       requestObject
     );
+
     let waterDetails = [];
     let sewerDetails = [];
     let getDuesForPTMutation = payload && payload.MdmsRes.PropertyTax.DuesOnPTMutation;
@@ -91,7 +92,7 @@ class PTInformation extends React.Component {
                   bills.map(bill => {
                     waterDetails.push({
                       waterDue: bill.totalAmount,
-                      connectionNo: bill.consumerCode,
+                      connectionNo:bill.consumerCode,
                       module: items.module
                     })
                   })
