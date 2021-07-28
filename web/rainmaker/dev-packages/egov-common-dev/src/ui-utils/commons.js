@@ -509,26 +509,26 @@
 		  return;
 		}
 		if (mode === 'download') {
-		  if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
-			setTimeout(()=>{
-			  const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
-			  window.location.href = weblink
-			},1500)
-		  }
 		  downloadPdf(fileRes[fileStoreId]);
 		  if(showConfirmation){
+			if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
+				setTimeout(() => {
+				  const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
+				  window.location.href = weblink
+				}, 1500)
+			}
 			store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
 		  , "success"));
 		  }
 		} else if (mode === 'open') {
-		  if(localStorage.getItem('pay-channel')&&localStorage.getItem('pay-redirectNumber')){
-			setTimeout(()=>{
-			  const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('pay-redirectNumber') + "&text=" + ``;
-			  window.location.href = weblink
-			},1500)
-		  }
 		  openPdf(fileRes[fileStoreId], '_self')
 		  if(showConfirmation){
+			if(localStorage.getItem('receipt-channel')=='whatsapp'&&localStorage.getItem('receipt-redirectNumber')!=''){
+				setTimeout(() => {
+				  const weblink = "https://api.whatsapp.com/send?phone=" + localStorage.getItem('receipt-redirectNumber') + "&text=" + ``;
+				  window.location.href = weblink
+				}, 1500)
+			}
 			store.dispatch(toggleSnackbar(true, { labelName: "Success in Receipt Generation", labelKey: "SUCCESS_IN_GENERATION_RECEIPT" }
 		  , "success"));
 		  }
@@ -713,6 +713,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
   "firecess":firecess,
   "cancercess":cancercess,
   "penalty":penalty,
+  "rebate": rebate,
   "interest":interest,
   "rebate": rebate,
   "usage_exemption":usage_exemption,
@@ -781,10 +782,10 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
             }
             payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=details; 
         }
-		if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
-			configKey="ws-onetime-receipt";
-			let dcbRow=null,dcbArray=[];
-        	let installment,totalamount=0;
+	  if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW"){
+		configKey="ws-onetime-receipt";
+		let dcbRow=null,dcbArray=[];
+        let installment,totalamount=0;
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
       if(element.amountPaid >0 || element.amountPaid < 0)
       {
@@ -893,9 +894,20 @@ dcbArray.push(dcbRow);
       to=convertDateToEpoch("03/31/"+year);}
       else{from=convertDateToEpoch("04/01/"+year);
       to=convertDateToEpoch("03/31/"+nextyear);}
-        const details = {
-             "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
-             }
+
+	  let building='';
+	  let length=response.FireNOCs[0].fireNOCDetails.buildings.length;
+	  response.FireNOCs[0].fireNOCDetails.buildings.map( (item,index) => {
+if(index == 0)
+	  building=building + item.name;
+else 
+building = building + "," + item.name;
+	  });
+
+
+	  const details = {
+	"address": "Building :"+building +","+ response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
+  }
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod=from;
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod=to; 

@@ -500,7 +500,6 @@ export const setOwnerShipDropDownFieldChange = (state, dispatch, payload) => {
   }
 };
 
-
 export const resetFieldsForApplication = (state, dispatch) => {
   debugger;
   dispatch(

@@ -1378,8 +1378,8 @@ export const getPastPaymentsForWater = async (dispatch) => {
             value: getTenantIdCommon()
         },
         {
-            key: "businessServices",
-            value: "WS,WS.ONE_TIME_FEE",
+            key: "businessService",
+            value: "WS,WS.ONE_TIME_FEE"
         },
         {
             key: "uuid",
@@ -1417,8 +1417,8 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
             value: getTenantIdCommon()
         },
         {
-            key: "businessServices",
-            value: "SW,SW.ONE_TIME_FEE"
+            key: "businessService",
+            value: "SW,SW.ONE_TIME_FEE",
         },
         {
             key: "uuid",

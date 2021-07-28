@@ -73,7 +73,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
 
     componentDidMount() {
       if (this.props.authenticated && !isPublicSearch()) {
-        this.props.history.push(redirectionUrl);
+        if(!this.props.isOpenLink){
+          this.props.history.push(redirectionUrl);
+        }
       }
       if(isPublicSearch()){
         this.onLanguageChange(getQueryArg(window.location.href, "locale")||'en_IN');

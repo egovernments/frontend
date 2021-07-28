@@ -8,6 +8,7 @@ const ComplaintResolvedForm = ({ formKey, form, handleFieldChange, onSubmit }) =
       var complaintId = (window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1)).replace(/%2F/gi, "/");
       const updateStatus = async () => { await httpRequest("rainmaker-pgr/v1/requests/_apicall?complaintId="+complaintId);
         };
+      
   const fields = form.fields || {};
   const submit = form.submit;
   return (

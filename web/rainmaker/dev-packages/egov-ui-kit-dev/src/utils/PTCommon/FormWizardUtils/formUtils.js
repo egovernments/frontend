@@ -4,6 +4,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { assessProperty, createProperty, routeTo } from "./formActionUtils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+import { httpRequest,httpRequestForAssessmentCancellation } from "egov-ui-kit/utils/api";
 
 const extractFromString = (str, index) => {
   if (!str) {
@@ -216,12 +217,29 @@ export const getPropertyLink = (propertyId, tenantId, purpose, financialYear, as
   return `/property-tax/assessment-form?FY=${financialYear}&assessmentId=${assessmentNumber}&purpose=${purpose}&propertyId=${
     propertyId}&tenantId=${tenantId}`;
 }
+export const cancelAssessment = async (assessment) => {
+  // const FETCHTRADEDETAILS = {
+  //   GET: {
+  //     URL: "/property-services/assessment/_cancel",
+  //     ACTION: "_get",
+  //   },
+  // };
+  let ReceiptBody = {
+    "Assessment": assessment
+  };
+  const response = await httpRequestForAssessmentCancellation("/property-services/assessment/_cancel", "_cancel",[],ReceiptBody,[],{});
+  if( response && response.Assessments && response.Assessments.length>=1 && response.Assessments[0].status=="CANCELLED")
+  alert("Assessment has been successfully cancelled")
+  else
+  alert(response);
+}
 
 export const PROPERTY_FORM_PURPOSE = {
   REASSESS: 'reassess',
   ASSESS: 'assess',
   CREATE: 'create',
   UPDATE: 'update',
+  CANCEL: 'cancel',
   SENDFOREDIT: 'sendforedit',
   DEFAULT: 'create'
 }
@@ -276,7 +294,17 @@ export const formWizardConstants = {
     isEditButton: true,
     canEditOwner: true,
     isEstimateDetails: false
-  }
+  },
+  [PROPERTY_FORM_PURPOSE.CANCEL]: {
+    header: 'PT_CANCEL_PROPERTY',
+    parentButton: 'PT_CANCEL',
+    isSubHeader: true,
+    isFinancialYear: false,
+    buttonLabel: 'PT_CANCEL_ASSESS_PROPERTY_BUTTON',
+    isEditButton: true,
+    canEditOwner: false,
+    isEstimateDetails: false
+  },
 }
 
 export const routeToCommonPay = (propertyId, tenantId, businessService = 'PT') => {

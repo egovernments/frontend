@@ -694,6 +694,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
         if (query.key == "businessService") {
           businessService = query.value;}  });
           receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+
           const FETCHASSESSMENTDETAILS = {
             GET: {
               URL: "/property-services/assessment/_search",
@@ -723,6 +724,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
         ];
         const responseForPT =  await httpRequest(FETCHPROPERTYDETAILS.GET.URL, FETCHPROPERTYDETAILS.GET.ACTION,queryObjectForPT);
         const responseForAssessment = await httpRequest(FETCHASSESSMENTDETAILS.GET.URL, FETCHASSESSMENTDETAILS.GET.ACTION,queryObjectForPT);
+
   let uuid=responseForPT && responseForPT.Properties[0]?responseForPT.Properties[0].auditDetails.lastModifiedBy:null;
   let data = {};
   let bodyObject = {
@@ -795,6 +797,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
   "firecess":firecess,
   "cancercess":cancercess,
   "penalty":penalty,
+  "rebate": rebate,
   "interest":interest,
   "rebate": rebate,
   "usage_exemption":usage_exemption,
