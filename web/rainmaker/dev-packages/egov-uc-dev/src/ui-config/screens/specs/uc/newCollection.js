@@ -395,6 +395,34 @@ const newCollection = {
             style: { textAlign: "right", display: "block" },
           },
           children: {
+            searchReceipt: {
+              componentPath: "Button",
+              props: {
+                variant: "outlined",
+                color: "primary",
+                className:"gen-challan-btn",
+                // style: {
+                //   color: "primary",
+                //   borderRadius: "2px",
+                //   width: "250px",
+                //   height: "48px",
+                //   marginRight: "16px",
+                // },
+                //className: "uc-searchAndPayBtn-button",
+              },
+              children: {
+                buttonLabel: getLabel({
+                  labelName: "Receipt Search",
+                  labelKey: "ACTION_TEST_RECEIPT_SEARCH",
+                }),
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  openReceiptSearchForm(state, dispatch);
+                },
+              },
+            },
             searchChallan: {
               componentPath: "Button",
               props: {
@@ -465,7 +493,10 @@ const newCollection = {
 
 export default newCollection;
 
-
+const openReceiptSearchForm = (state, dispatch) => {
+  const path = `/uc/search`;
+  dispatch(setRoute(path));
+};
 
 const openChallanSearchForm = (state, dispatch) => {
   const path = `/uc/searchChallan`;
