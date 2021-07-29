@@ -83,7 +83,7 @@ export const getPaymentSearchResults = async (queryObject, dispatch) => {
     queryObject = queryObject && Array.isArray(queryObject) && queryObject.filter(query => query.key != "businessService")
     const response = await httpRequest(
       "post",
-      getPaymentSearchAPI(businessService),
+      getPaymentSearchAPI('-1'),
       "",
       queryObject
     );
