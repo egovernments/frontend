@@ -149,7 +149,7 @@ const cancelReceipt = async (state, dispatch) => {
       set(paymentWorkflows[0], 'paymentId', get(state.screenConfiguration.preparedFinalObject, 'PaymentReceipt.id', ''));
       let payload = await httpRequest(
         "post",
-        `${PAYMENTSEARCH.GET.URL}${getQueryArg(window.location.href, "businessService")}/_workflow`,
+        `${PAYMENTSEARCH.GET.URL}_workflow`,
         "_search",
         [],
         { paymentWorkflows: paymentWorkflows }
