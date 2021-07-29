@@ -112,6 +112,7 @@ export const callPGService = async (state, dispatch) => {
     return;
   }
 
+  const payerInfo=get(billPayload, "Bill[0].payer",'').replace("COMMON_",'');
   const user = {
     name: get(billPayload, "Bill[0].paidBy", get(billPayload, "Bill[0].payerName")),
     mobileNumber: get(billPayload, "Bill[0].payerMobileNumber", get(billPayload, "Bill[0].mobileNumber")),
@@ -140,7 +141,9 @@ export const callPGService = async (state, dispatch) => {
         taxAndPayments,
         user,
         callbackUrl,
-        businessService: businessService
+        businessService: businessService,
+        additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false,
+        paidBy:payerInfo }
       }
     };
     const goToPaymentGateway = await httpRequest(
@@ -188,7 +191,7 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
-       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala")
+       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mandigobindgarh")
          {
           displayRazorpay(goToPaymentGateway);
          }
@@ -577,9 +580,17 @@ dcbArray.push(dcbRow);
       to=convertDateToEpoch("03/31/"+year);}
       else{from=convertDateToEpoch("04/01/"+year);
       to=convertDateToEpoch("03/31/"+nextyear);}
-        const details = {
-             "address": response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
-             }
+      let building='';
+      let length=response.FireNOCs[0].fireNOCDetails.buildings.length;
+      response.FireNOCs[0].fireNOCDetails.buildings.map( (item,index) => {
+        if(index == 0)
+              building=building + item.name;
+        else 
+        building = building + "," + item.name;
+      });
+      const details = {
+        "address": "Building :"+building +","+ response.FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress
+      }
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].additionalDetails=details; 
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod=from;
        payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].toPeriod=to; 

@@ -9,6 +9,7 @@ import { resetFiles } from "egov-ui-kit/redux/form/actions";
 import { fetchComplaints } from "egov-ui-kit/redux/complaints/actions";
 import { getDateFromEpoch, mapCompIDToName, isImage, fetchImages, getPropertyFromObj } from "egov-ui-kit/utils/commons";
 import { fetchComplaintCategories } from "egov-ui-kit/redux/complaints/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
 class ComplaintDetails extends Component {
@@ -54,7 +55,12 @@ const mapStateToProps = (state, ownProps) => {
   const { complaints, common, form } = state;
 
   const { employeeById, departmentById, designationsById, cities } = common || {};
-  let selectedComplaint = complaints["byId"][decodeURIComponent(ownProps.match.params.serviceRequestId)];
+  let selectedComplaint;
+  if(getQueryArg(window.location.href, "smsLink")){
+    selectedComplaint = complaints["byId"][decodeURIComponent(ownProps.match.params.serviceRequestId.split('&')[0])];
+  } else {
+    selectedComplaint = complaints["byId"][decodeURIComponent(ownProps.match.params.serviceRequestId)];
+  }
   const reopenValidChecker = get(state, "common.pgrContants.RAINMAKER-PGR.UIConstants[0].REOPENSLA", 4232000000)
   if (selectedComplaint) {
     let details = {
