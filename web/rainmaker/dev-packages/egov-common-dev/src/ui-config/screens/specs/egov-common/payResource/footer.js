@@ -141,9 +141,9 @@ export const callPGService = async (state, dispatch) => {
         taxAndPayments,
         user,
         callbackUrl,
-        businessService: businessService
-      //  additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false,
-     //   paidBy:payerInfo }
+        businessService: businessService,
+        additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false,
+        paidBy:payerInfo }
       }
     };
     const goToPaymentGateway = await httpRequest(
