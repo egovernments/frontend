@@ -111,8 +111,14 @@ class ShowField extends Component {
     const pageSize = (additionalConfig.print && additionalConfig.print.pdfPageSize)? additionalConfig.print.pdfPageSize: "LEGAL"
     let reportTitle = this.getReportTitle();
     let tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
-    let cbName =  tenantId.split(".")[1];
-    cbName = cbName.toUpperCase() +" CANTONMENT BOARD";
+    let cbName = tenantId;
+    if(tenantId.indexOf(".") != -1){
+      cbName =  tenantId.split(".")[1];
+      cbName = cbName.toUpperCase() +" CANTONMENT BOARD";
+    }
+    else
+      cbName = "DGDE";
+
     let orientation = reportHeader.length > 6 ? "landscape" : "portrait";
    // let fontStyle = getDefaultFontStyle("en_IN");
 

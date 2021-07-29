@@ -96,8 +96,8 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
     }
 
     
-    // downloadMenu.push(originalbillDownloadObject)
-    // printMenu.push(originalbillPrintObject);
+    downloadMenu.push(originalbillDownloadObject)
+    printMenu.push(originalbillPrintObject);
     if(totalBillAmountDue!=0){    
       downloadMenu.push(billDownloadObject);
       printMenu.push(billPrintObject);
