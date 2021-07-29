@@ -1,10 +1,6 @@
 import {
   getCommonCard,
-
   getCommonContainer,
-
-
-
   getCommonHeader,
   getCommonSubHeader, getLabel, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -52,7 +48,7 @@ export const UCSearchCard = getCommonCard({
       moduleName: "egov-uc",
       componentPath: "AutosuggestContainer",
       props: {
-        className: "autocomplete-dropdown",
+       
         label: {
           labelName: "Service Category",
           labelKey: "CR_SERVICE_CATEGORY_LABEL"
@@ -65,6 +61,7 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
+        fullwidth: true,
         required: true,
         isClearable: true,
         labelsFromLocalisation: true,
@@ -73,6 +70,10 @@ export const UCSearchCard = getCommonCard({
       },
       required: true,
       jsonPath: "searchScreen.businessService",
+      style: {
+        width: "100%",
+        cursor: "pointer"
+      },
       gridDefination: {
         xs: 12,
         sm: 4
@@ -129,6 +130,7 @@ export const UCSearchCard = getCommonCard({
         xs: 12,
         sm: 4
       }
+     
     }),
 
     mobileNumber: getTextField({
