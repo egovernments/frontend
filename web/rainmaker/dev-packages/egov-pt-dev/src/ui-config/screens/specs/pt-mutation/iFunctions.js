@@ -127,12 +127,24 @@ const getAddress = (item) => {
 }
 const getIndexofActive = (item) => {
 
-  for(let i=0;i<item.owners.length;i++)
+
+  if(item && item.status=="INWORKFLOW")
   {
-    if(item.owners[i].status=='ACTIVE')
-    return i;
+    for(let i=0;i<item.owners.length;i++)
+    {
+      if(item.owners[i].status=='INACTIVE')
+      return i;
+    }
   }
-  return 0;
+  else if(item && item.status=="ACTIVE")
+  {
+    for(let i=0;i<item.owners.length;i++)
+    {
+      if(item.owners[i].status=='ACTIVE')
+      return i;
+    }
+  }
+
 }
 
 
