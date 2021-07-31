@@ -228,6 +228,7 @@ class PTInformation extends React.Component {
                   sewerDetails={sewerDetails}
                   ownershipTransfer={true}
                   viewHistory={true}
+                  viewMobile={true}
                   propertiesAudit={propertiesAudit}
                 ></OwnerInfo>
                 <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>

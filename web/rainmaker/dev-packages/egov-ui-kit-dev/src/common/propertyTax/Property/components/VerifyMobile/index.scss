@@ -1,0 +1,93 @@
+body{
+  background-color: #9266ff;
+}
+.App{
+  background-color: #3f3160;
+  min-height:500px;
+  width: 400px;
+  margin: 40px auto;
+}
+#to-do-form{
+  text-align: left;
+}
+#to-do-form input{
+  border: 0;
+  color: #000 ;
+  width: 200px;
+  height: 35px;
+  margin: 5px 10px 0px 10px;
+  padding: 0px;
+  font-size: 16px;
+  border-bottom: 1px solid #D3D3D3;
+  border-radius: 0px;
+}
+#to-do-form input::placeholder{
+  color: rgba(255,255,255,0.5);
+}
+#to-do-form input:focus{
+  outline: none;
+}
+#to-do-form button{
+  height: 35px;
+  width: 150px;
+  border: 0;
+  font-weight: 500;
+  font-size: 16px;
+  background-color: #FE7A51;
+  cursor: pointer;
+  border-radius: 0;
+  color: #fff;
+}
+#to-do-form button:focus{
+  outline: none;
+}
+body > div:nth-child(9) > div > div:nth-child(1) > div{
+  height:230px;
+  overflow-y: scroll;
+}
+
+
+
+
+.list{
+  color: #484848 !important;
+  width: 100%;
+  margin: 3px auto;
+  height: 50px;
+  background-color:#fff;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+}
+.list p{
+  padding: 9px 10px;
+  position: relative;
+  margin:0;
+}
+#to-do-verification-input{
+  border: 0;
+  color: #000;
+  width: 200px;
+  height: 35px;
+  margin:0px;
+  padding: 0px;
+  font-size: 14px;
+  border-bottom: 1px solid #d3d3d3;
+  border-radius: 0px;
+}
+
+#to-do-verification-input:focus{
+  outline: none;
+}
+
+.otpBUtton{
+  height: 30px;
+  width: 120px;
+  border: 0;
+  font-weight: 500;
+  font-size: 12px;
+  background-color: #FE7A51;
+  cursor: pointer;
+  border-radius: 0;
+  color: #fff;
+  margin-left: 12px;
+}

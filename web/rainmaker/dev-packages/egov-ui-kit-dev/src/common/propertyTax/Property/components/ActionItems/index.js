@@ -46,6 +46,19 @@ export const ViewHistory = ({ viewHistory, openDialog }) => {
     )
   );
 };
+export const ViewMobile = ({ viewMobile, openDialog }) => {
+  return (
+    viewMobile && (
+      <div className="view-history-button"
+        onClick={() => {
+          openDialog("viewMobile");
+        }}
+      >
+      <Label buttonLabel={true} label="PT_MOBILE_VERIFICATION" color="#FF0000" height="40px" labelStyle={viewHistoryLabel} />
+      </div>
+    )
+  );
+};
 
 export const TransferOwnership = ({ ownershipTransfer, openDialog }) => {
   return (

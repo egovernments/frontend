@@ -14,11 +14,12 @@ import get from "lodash/get";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { TransferOwnership, ViewHistory } from "../ActionItems";
+import { TransferOwnership, ViewHistory, ViewMobile } from "../ActionItems";
 import PendingAmountDialog from "../PendingAmountDue";
 import PropertyInfoCard from "../PropertyInfoCard";
 import TransferOwnerShipDialog from "../TransferOwnerShipDialog";
 import ViewHistoryDialog from "../ViewHistory";
+import ViewMobileDialog from "../VerifyMobile";
 import "./index.css";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 const locale = getLocale() || "en_IN";
@@ -194,6 +195,7 @@ class OwnerInfo extends Component {
   state = {
     pendingAmountDue: false,
     viewHistory: false,
+    viewMobile: false,
     docRequired: false,
     ownershipInfo: {},
   };
@@ -319,11 +321,16 @@ class OwnerInfo extends Component {
       console.log(e);
     }
   }
+  getMobileResponse =( dialogName) => {
+        debugger;
+        this.setState({ [dialogName]: true});
+       
+  }
   
   openDialog = async (dialogName) => {
     const { properties, waterDetails, sewerDetails } = this.props;
     const { propertyId, tenantId } = properties;
-    if (this.props.totalBillAmountDue === 0 && waterDetails.length == 0 && sewerDetails.length == 0 && dialogName !== "viewHistory") {
+    if (this.props.totalBillAmountDue === 0 && waterDetails.length == 0 && sewerDetails.length == 0 && dialogName !== "viewHistory" && dialogName !== "viewMobile") {
       if (properties.status != "ACTIVE") {
         this.props.toggleSnackbarAndSetText(
           true,
@@ -344,6 +351,9 @@ class OwnerInfo extends Component {
       }
     } else if (dialogName === "viewHistory") {
       await this.getPropertyResponse(propertyId, tenantId, dialogName);
+    }
+    else if (dialogName === "viewMobile") {
+      await this.getMobileResponse( dialogName);
 
     }
     else if(this.props.totalBillAmountDue !== 0 || waterDetails.length > 0 || sewerDetails.length > 0){
@@ -360,7 +370,7 @@ class OwnerInfo extends Component {
 
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, viewMobile, totalBillAmountDue, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
@@ -398,8 +408,9 @@ class OwnerInfo extends Component {
                   </div>
                   {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
                   {/* Transfer ownership button and View History button */}
-                  {(viewHistory || ownershipTransfer) && (
+                  {(viewMobile ||viewHistory || ownershipTransfer) && (
                     <div id="pt-header-button-container" className="header-button-container">
+                      <ViewMobile viewMobile={viewMobile} openDialog={this.openDialog} />
                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
                       <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
                     </div>
@@ -464,6 +475,13 @@ class OwnerInfo extends Component {
             ownershipInfo={this.state.ownershipInfo}
             closeDialogue={() => this.closeDialogue("viewHistory")}
           ></ViewHistoryDialog>
+        )}
+        {this.state.viewMobile && (
+          <ViewMobileDialog
+            open={this.state.viewMobile}
+            ownershipInfo={this.state.ownershipInfo}
+            closeDialogue={() => this.closeDialogue("viewMobile")}
+          ></ViewMobileDialog>
         )}
       </div>
     );

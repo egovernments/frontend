@@ -18,12 +18,15 @@ import PTHeader from "../../common/PTHeader";
 import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import PTInformation from "../AssessmentList/components/PTInformation";
+import { ViewMobileDialog } from "egov-ui-kit/common/propertyTax/Property/components/VerifyMobile";
+import { ViewMobile } from "egov-ui-kit/common/propertyTax/Property/components/ActionItems/";
 import "./index.css";
 
 class PTAcknowledgement extends React.Component {
   state = {
     propertyId: "",
     fetchBill: false,
+    viewMobile: false,
     fetchingBill: false,
     showPay: false,
   };
@@ -101,6 +104,19 @@ class PTAcknowledgement extends React.Component {
       console.log(e);
     }
   };
+  closeDialogue = (dialogName) => {
+    this.setState({ [dialogName]: false });
+  };
+  openDialog = async (dialogName) => {
+     if (dialogName === "viewMobile") {
+      this.getMobileResponse( dialogName);
+    }
+  }
+  getMobileResponse =( dialogName) => {
+    debugger;
+    this.setState({ [dialogName]: true});
+   
+}
   render() {
     const {
       acknowledgeType = "success",
@@ -110,6 +126,7 @@ class PTAcknowledgement extends React.Component {
       receiptNo = "",
       generalMDMSDataById,
       propertiesById,
+      viewMobile
     } = this.props;
     const purpose = getPurpose();
     const status = getQueryArg(window.location.href, "status");
@@ -546,8 +563,22 @@ class PTAcknowledgement extends React.Component {
               </div>
             }
           />
+          {/* {
+            (viewMobile) && (
+              <div id="pt-header-button-container" className="header-button-container"> that is mobile
+              <ViewMobile viewMobile={viewMobile} openDialog={this.openDialog} />
+            </div>
+            )
+          }
+         {this.state.viewMobile && (
+          <ViewMobileDialog
+            open={this.state.viewMobile}
+            closeDialogue={() => this.closeDialogue("viewMobile")}
+          ></ViewMobileDialog>
+        )} */}
         </div>
         <div className="print-application-conainer" style={{ position: "fixed", opacity: 0, zIndex: -9999, height: "100%" }}>
+          
           {properties && (
             <PTInformation
               properties={properties}
@@ -556,6 +587,7 @@ class PTAcknowledgement extends React.Component {
               totalBillAmountDue={this.props.totalBillAmountDue}
             />
           )}
+          
         </div>
       </div>
     );
