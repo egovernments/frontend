@@ -384,7 +384,7 @@ class Property extends Component {
     }
     let isMigratedProperty =false;
 
-    if(selPropertyDetails.source!=="MUNICIPAL_RECORDS")
+    if(selPropertyDetails.source !=="MUNICIPAL_RECORDS" && selPropertyDetails.source !== "WATER_CHARGES")
     {
       isMigratedProperty =true;
     }
@@ -443,7 +443,7 @@ class Property extends Component {
               style={{ lineHeight: "auto", minWidth: "inherit", marginLeft:"10px" }}
             />
         } */}
-        {!isMigratedProperty && 
+        {/* {!isMigratedProperty && 
 
          <Button
          className="tax-button"
@@ -452,7 +452,7 @@ class Property extends Component {
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit", marginLeft:"10px" }}
             />  
-        }                     
+        }                      */}
 {isMigratedProperty && isCounterEmp && !isCitizen && 
            <Button
            className="tax-button"

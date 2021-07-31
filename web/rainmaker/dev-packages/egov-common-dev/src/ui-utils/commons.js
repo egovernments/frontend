@@ -740,7 +740,7 @@ export const downloadPTGroupBill = async (queryStr, mode = 'download') => {
 
   const DOWNLOADBILL = {
     GET: {
-      URL: "/egov-pdf/download/PT/propertybill",
+      URL: "/egov-pdf/download/PT/newptbill",
       ACTION: "_get",
     },
   };
