@@ -319,6 +319,10 @@ class OwnerInfo extends Component {
       console.log(e);
     }
   }
+  getMobileResponse =( dialogName) => {
+        this.setState({ [dialogName]: true});
+       
+  }
   
   openDialog = async (dialogName) => {
     const { properties, waterDetails, sewerDetails } = this.props;

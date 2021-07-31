@@ -101,6 +101,18 @@ class PTAcknowledgement extends React.Component {
       console.log(e);
     }
   };
+  closeDialogue = (dialogName) => {
+    this.setState({ [dialogName]: false });
+  };
+  openDialog = async (dialogName) => {
+     if (dialogName === "viewMobile") {
+      this.getMobileResponse( dialogName);
+    }
+  }
+  getMobileResponse =( dialogName) => {
+    this.setState({ [dialogName]: true});
+   
+}
   render() {
     const {
       acknowledgeType = "success",
