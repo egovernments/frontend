@@ -24,10 +24,10 @@ export default class ViewMobileDialog extends React.Component {
   }
   addItem(e) {
     e.preventDefault();
-    debugger;
+    
     const newItem = this.state.currentItem;
     console.log("==========newItem", newItem);
-    debugger;
+    
     if (newItem.key === "") {
       window.alert("Please enter the phone number");
     }
@@ -44,10 +44,10 @@ export default class ViewMobileDialog extends React.Component {
         }
       })
     }
-    debugger;
+    
   }
   handleInput = args => (e) => {
-    debugger;
+    
     this.setState({
       currentItem: {
         ...this.state.currentItem,
@@ -56,7 +56,7 @@ export default class ViewMobileDialog extends React.Component {
     })
   }
   // handleInputSecond(e){
-  //   debugger;
+  //   
   //   this.setState({
   //     currentItem:{
   //       key:e.target.value,

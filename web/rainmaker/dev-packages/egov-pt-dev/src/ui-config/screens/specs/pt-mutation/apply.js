@@ -557,7 +557,6 @@ const screenConfig = {
     //   "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item4.children.cardContent.children.applicantCard.children.mobileNumber.props.value",
     //   verifyMobile
     // );
-    // debugger;
     // dispatch(
     //   prepareFinalObject(
     //     "Property.ownersTemp[0].mobileNumber",

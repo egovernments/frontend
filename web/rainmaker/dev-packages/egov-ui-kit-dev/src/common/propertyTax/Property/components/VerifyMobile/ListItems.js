@@ -19,7 +19,7 @@ export default class ListItems extends Component {
 
     addVerifyItem(e) {
         e.preventDefault();
-        debugger;
+        
         const newItem = this.state.currentItem;
         console.log("=======Verify===newItem", newItem);
 
@@ -32,10 +32,10 @@ export default class ListItems extends Component {
                 }
             })
         }
-        debugger;
+        
     }
     getVerifyResponse = async (items,e) => {
-        debugger;
+        
         console.log("====this.props.items",items[0].key);
         let body = {
             otp:
@@ -56,7 +56,7 @@ export default class ListItems extends Component {
         } catch (e) {
             console.log(e);
         }
-        debugger;
+        
         this.setState(
             {
                 verify: true
@@ -64,7 +64,7 @@ export default class ListItems extends Component {
         )
     }
     getOtpResponse = async (e) => {
-        debugger;
+        
         console.log("--------otp-------", this.state.currentItem.verifytext);
         console.log("----------eeee-----", e);
         let body = {
@@ -78,20 +78,20 @@ export default class ListItems extends Component {
             }
         };
         try {
-            debugger;
+            
             const payload = await httpRequest(
                 "user/citizen/_create",
                 "_create",
                 [], body
             );
-                debugger;
+                
         } catch (e) {
             console.log(e);
         }
-        debugger;
+        
     }
     handleVerify = args => (e) => {
-        debugger;
+        
         this.setState({
           currentItem: {
             ...this.state.currentItem,
@@ -101,7 +101,7 @@ export default class ListItems extends Component {
       }
 
     // handleInputSecond(e){
-    //   debugger;
+    //   
     //   this.setState({
     //     currentItem:{
     //       verifytext:e.target.value,
