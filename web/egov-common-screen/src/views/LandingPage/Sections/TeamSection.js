@@ -18,7 +18,9 @@ import styles from "assets/jss/material-kit-react/views/landingPageSections/team
 
 import team1 from "assets/img/faces/KKshukla.jpg";
 import team2 from "assets/img/faces/munikireti.jpg";
-import team3 from "assets/img/faces/kendall.jpg";
+import team3 from "assets/img/faces/MaheshChandraPandey.jpeg";
+import team4 from "assets/img/faces/SPRawat.jpeg";
+
 
 const useStyles = makeStyles(styles);
 
@@ -76,16 +78,13 @@ export default function TeamSection() {
                 <img src={team3} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
-                Christian Louboutin
+              Shri Mahesh Chandra Pandey
                 <br />
-                <small className={classes.smallTitle}>Designer</small>
+                <small className={classes.smallTitle}>Hotel Owner</small>
               </h4>
               <CardBody>
               <p className={classes.description} style={{height:"250px"}}>
-                  You can write here details about one of your team members. You
-                  can give more details about what they do. Feel free to add
-                  some <a href="#pablo">links</a> for people to be able to
-                  follow them outside the site.
+              It was a good experience. As earlier we have to come to Nigam for Trade License but with this newly launched website, we can pay fees by sitting at home which is a very useful feature in this time of pandemic.
                 </p>
               </CardBody>
             </Card>
@@ -93,19 +92,16 @@ export default function TeamSection() {
           <GridItem xs={12} sm={6} md={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
               <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
-                <img src={team3} style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
+                <img src={team4} style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
-                Kendall Jenner
+              Shri S P Rawat
                 <br />
-                <small className={classes.smallTitle}>Model</small>
+                <small className={classes.smallTitle}>Senior Officer (Retd.), ONGC</small>
               </h4>
               <CardBody>
               <p className={classes.description} style={{height:"250px"}}>
-                  You can write here details about one of your team members. You
-                  can give more details about what they do. Feel free to add
-                  some <a href="#pablo">links</a> for people to be able to
-                  follow them outside the site.
+              It was a good experience, as initially I got some problem in depositing house tax online but with the support of their helpdesk, I have deposited my tax successfully. I pay sincere thanks to their helpdesk for their dedication and Valuable Support provided to me and I wish them success in this initiative.
                 </p>
               </CardBody>
             </Card>
