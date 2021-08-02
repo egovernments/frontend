@@ -114,7 +114,8 @@ class Inbox extends Component {
               <Label label={errorMessage} />
             </div>
           </div>}
-        {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />}
+          <iframe src={`${window.location.origin}/digit-ui/employee/pt/inbox`} frameBorder={"0"} allowFullScreen style={{width:"100%", height:"100%"}} />
+        {/* {hasWorkflow && !inboxLoading && loaded && <TableData onPopupOpen={this.onPopupOpen} workflowData={inbox} />} */}
         <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
     );
