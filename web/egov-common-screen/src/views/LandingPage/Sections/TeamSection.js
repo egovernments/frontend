@@ -41,16 +41,14 @@ export default function TeamSection() {
                 <img src={team1} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
-              KKshukla
+              Shri K K Shukla
                 <br />
-                <small className={classes.smallTitle}>GroupB-Gazetted officer</small>
+                <small className={classes.smallTitle}>Survey of India,Govt of India</small>
+                <small className={classes.smallTitle}></small>
               </h4>
               <CardBody>
-                <p className={classes.description} style={{height:"250px"}}>
-                It was a good experience with the newly launched portal.
-                It is user friendly interface and a common people can use and pay his or her property tax while sitting in the home.
-                In this way time and energy is saved . Money transactions are safe and receipt generated through the portal is nice feature of this portal.
-                I wish this team all the best.
+                <p className={classes.description} style={{height:"270px"}}>
+                It was a good experience with the newly launched portal. Portal is user friendly interface and common people can use and pay his or her property tax while sitting in the home. In this way time and energy is saved. Money transactions are safe and receipt generated through the portal is nice feature of this portal. I wish this team all the best.
                 </p>
               </CardBody>
             </Card>
@@ -61,14 +59,13 @@ export default function TeamSection() {
                 <img src={team2} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
-              MunikiReti
+              अधिशासी अधिकारी
                 <br />
-                <small className={classes.smallTitle}>ULB</small>
+                <small className={classes.smallTitle}>मुनी की रेती नगर पालिका परिषद</small>
               </h4>
               <CardBody>
-              <p className={classes.description} style={{height:"250px"}}>
-                नगर सेवा के पोर्टल से नगर पालिका परिषद मुनिकीरेती को काफी सुगमता हो रही है इससे नगर पालिका डिजिटल की ओर बढ़ रहा है एवम इससे पालिका को सभी करो को एकत्रित करने में काफी सुगमता मिल रही है इसके साथ ही सभी करो के कलेक्शन को single window सिस्टम के माध्यम से हो रहा है इससे सभी को समय की बचत भी हो रही ह
-                </p>
+              <p className={classes.description} style={{height:"270px"}}>
+              नगरसेवा पोर्टल से नगर पालिका परिषद मुनी की रेती को काफी सुगमता हो रही है. इससे नगर पालिका डिजिटल की ओर बढ़ रहा है एवम इससे पालिका को सभी करो को एकत्रित करने में काफी सुगमता मिल रही है. इसके साथ ही सभी करो का कलेक्शन single window सिस्टम के माध्यम से हो रहा है और सभी के समय की बचत भी हो रही है        </p>
               </CardBody>
             </Card>
           </GridItem>
@@ -83,7 +80,7 @@ export default function TeamSection() {
                 <small className={classes.smallTitle}>Hotel Owner</small>
               </h4>
               <CardBody>
-              <p className={classes.description} style={{height:"250px"}}>
+              <p className={classes.description} style={{height:"270px"}}>
               It was a good experience. As earlier we have to come to Nigam for Trade License but with this newly launched website, we can pay fees by sitting at home which is a very useful feature in this time of pandemic.
                 </p>
               </CardBody>
@@ -100,7 +97,7 @@ export default function TeamSection() {
                 <small className={classes.smallTitle}>Senior Officer (Retd.), ONGC</small>
               </h4>
               <CardBody>
-              <p className={classes.description} style={{height:"250px"}}>
+              <p className={classes.description} style={{height:"270px"}}>
               It was a good experience, as initially I got some problem in depositing house tax online but with the support of their helpdesk, I have deposited my tax successfully. I pay sincere thanks to their helpdesk for their dedication and Valuable Support provided to me and I wish them success in this initiative.
                 </p>
               </CardBody>
