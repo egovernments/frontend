@@ -15,6 +15,7 @@ import {
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import "./index.css";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 const tenantId = getTenantId();
@@ -95,6 +96,7 @@ const processDemand = async (state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "Demands[0].mobileNumber"
       );
+      dispatch(toggleSpinner());
       let payload = await httpRequest(
         "post",
         `/user/_search?tenantId=${commonConfig.tenantId}`,
@@ -105,6 +107,7 @@ const processDemand = async (state, dispatch) => {
           userName: mobileNumber
         }
       );
+      dispatch(toggleSpinner());
       if (payload ) {
         const uuid = get(payload , "user[0].uuid");
         dispatch(prepareFinalObject("Demands[0].payer.uuid" , uuid));
@@ -121,7 +124,9 @@ const processDemand = async (state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "Demands[0].tenantId"
         );
-        getCommonPayUrl(dispatch, applicationNumber, tenantId);
+        const bs = get(state.screenConfiguration.preparedFinalObject, "Demands[0].serviceType");
+
+        getCommonPayUrl(dispatch, applicationNumber, tenantId, bs);
       }
     } catch (error) {}
   } else {
@@ -177,9 +182,11 @@ if(Object.keys(demands[0].payer).length === 0) {
       ? "/billing-service/demand/_update"
       : "/billing-service/demand/_create";
     try {
+      dispatch(toggleSpinner());
       const payload = await httpRequest("post", url, "", [], {
         Demands: demands
       });
+      dispatch(toggleSpinner());
       if (payload.Demands.length > 0) {
         //const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
@@ -219,6 +226,7 @@ const generateBill = async (
   dispatch
 ) => {
   try {
+    dispatch(toggleSpinner());
     const payload = await httpRequest(
       "post",
       `/billing-service/bill/_generate?consumerCode=${consumerCode}&businessService=${businessService}&tenantId=${tenantId}`,
@@ -226,6 +234,7 @@ const generateBill = async (
       [],
       {}
     );
+    dispatch(toggleSpinner());
     if (payload && payload.Bill[0]) {
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
       const estimateData = createEstimateData(payload.Bill[0]);
