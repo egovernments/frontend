@@ -59,9 +59,9 @@ export default function TeamSection() {
                 <img src={team2} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
-              अधिशासी अधिकारी
+              Muni Ki Reti
                 <br />
-                <small className={classes.smallTitle}>मुनी की रेती नगर पालिका परिषद</small>
+                <small className={classes.smallTitle}>अधिशासी अधिकारी</small>
               </h4>
               <CardBody>
               <p className={classes.description} style={{height:"270px"}}>
