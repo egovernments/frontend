@@ -2,15 +2,21 @@ import React, { Component } from 'react'
 import "./index.css"
 import { Dialog, Button } from "components";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { TextField } from "components";
+
 export default class ListItems extends Component {
     constructor(props) {
         super(props);
         this.state = {
             verify: false,
+            updatte: false,
+            phoneNumber:[],
+            
             submitButton: false,
             verifyItems: [],
             currentItem: {
-                verifytext: ''
+                verifytext: '',
+                updatedMobile:'',
             }
         }
         this.addVerifyItem = this.addVerifyItem.bind(this);
@@ -19,9 +25,8 @@ export default class ListItems extends Component {
 
     addVerifyItem(e) {
         e.preventDefault();
-        
+
         const newItem = this.state.currentItem;
-        console.log("=======Verify===newItem", newItem);
 
         if (newItem.text !== "") {
             const verifyItems = [...this.state.verifyItems, newItem];
@@ -32,11 +37,11 @@ export default class ListItems extends Component {
                 }
             })
         }
-        
+
     }
-    getVerifyResponse = async (items,e) => {
-        
-        console.log("====this.props.items",items[0].key);
+    getVerifyResponse = async (items, e) => {
+        debugger;
+
         let body = {
             otp:
             {
@@ -50,56 +55,76 @@ export default class ListItems extends Component {
             const payload = await httpRequest(
                 "user-otp/v1/_send",
                 "_send",
-                [], body,null,null,true
+                [], body, null, null, true
             );
-
         } catch (e) {
             console.log(e);
         }
-        
         this.setState(
             {
-                verify: true
+                verify: true,
+                phoneNumber : items[0].key
             }
         )
     }
-    getOtpResponse = async (e) => {
-        
-        console.log("--------otp-------", this.state.currentItem.verifytext);
-        console.log("----------eeee-----", e);
+    getUpdateResponse = async (items, e) => {
+        this.setState(
+            {   
+                verify: true,
+                update: true
+            }
+        )
+    }
+    getOtpResponse = async (phonenumber, e) => {
+        debugger;
         let body = {
-            user:
+            User:
             {
                 "name": "p",
                 "otpReference": this.state.currentItem.verifytext,
                 "permanentCity": "pb.amritsar",
-                "tenantId": "pb",
-                "username": "7013637446"
+                "tenantId":"pb.amritsar",
+                "username": phonenumber
             }
         };
         try {
-            
+
             const payload = await httpRequest(
                 "user/citizen/_create",
                 "_create",
                 [], body
             );
-                
+                console.log("===================payload=",payload);
         } catch (e) {
             console.log(e);
         }
-        
+    }
+    getNextResponse = async (items, e) => {
+        e.preventDefault();
+        this.setState(
+            {   
+                verify: false,
+                update: true
+            }
+        )
     }
     handleVerify = args => (e) => {
-        
-        this.setState({
-          currentItem: {
-            ...this.state.currentItem,
-            [args]: e.target.value,
-          }
-        })
-      }
 
+        this.setState({
+            currentItem: {
+                ...this.state.currentItem,
+                [args]: e.target.value,
+            }
+        })
+    }
+    handleUpdate =args => (e) => {
+        this.setState({
+            currentItem: {
+                ...this.state.currentItem,
+                [args]: e.target.value,
+            }
+        })
+    }
     // handleInputSecond(e){
     //   
     //   this.setState({
@@ -110,35 +135,48 @@ export default class ListItems extends Component {
     // }
     render() {
         const items = this.props.items;
+        const phonenumber= this.state.phoneNumber;
+        const updateNumbers= this.state.currentItem.updatedMobile;
+        debugger;
+
         const listItems = items.map(item => {
             return <div className="list" key={item.key}>
                 <p>
                     <div style={{ width: "24%", display: "inline-block", fontSize: "14px" }}>{item.text} </div>
 
-                    {!this.state.verify && <div style={{ width: "75%", display: "inline-block", fontSize: "14px" }}><div style={{ width: "53%", display: "inline-block"}} >{item.key} </div> <button style={{ background: "none", color: "red", border: "none", width: "20%", display: "inline-block", fontSize: "14px" }}
+                    {!this.state.verify && <div style={{ width: "75%", display: "inline-block", fontSize: "14px" }}><div style={{ width: "53%", display: "inline-block" }} >{item.key} </div> <button style={{ background: "none", color: "red", border: "none", width: "20%", display: "inline-block", fontSize: "14px" }}
                         onClick={(e) => {
-                            this.getVerifyResponse(items,e);
+                            this.getVerifyResponse(items, e);
                         }}>VERIFY</button>
                         <button style={{ background: "none", color: "red", border: "none", width: "10%", display: "inline-block", fontSize: "14px" }} onClick={(e) => {
-                        this.getVerifyResponse(e)
-                    }}>UPDATE</button>
-                        </div>}
-                    {this.state.verify && <div style={{ width: "53%", display: "inline-block", fontSize: "14px" }}>
-                        <form id="to-do-verification" onSubmit={this.getOtpResponse(items)}  >
-                            <input type="text"
-                                id="to-do-verification-input"
+                            this.getUpdateResponse(items, e)
+                        }}>UPDATE</button>
+                    </div>}
+                    {(this.state.verify && !this.state.update) && <div style={{ width: "53%", display: "inline-block", fontSize: "14px" }}>
+                        <form id="to-do-verification" >
+                            <TextField type="text"
                                 placeholder="Enter OTP"
                                 value={this.state.currentItem.verifytext}
                                 onChange={this.handleVerify('verifytext')}>
-                            </input>
-                            <button className="otpBUtton" type="submit" >SUBMIT</button>
+                            </TextField>
+                            <button className="otpBUtton" onClick={(items, e) => {
+                                this.getOtpResponse(phonenumber, e);
+                            }}>SUBMIT</button>
                         </form>
                     </div>}
-                    
-                    
 
+                    {(this.state.update) && <div style={{ width: "53%", display: "inline-block", fontSize: "14px" }}>
+                        <form id="to-do-updation" >
+                            <TextField type="text"
+                                placeholder="Enter Mobile No."
+                                value={this.state.currentItem.updatedMobile}
+                                onChange={this.handleUpdate('updatedMobile')}>
+                            </TextField>
+                            <button className="otpBUtton" onClick={(items, e) => {
+                                this.getNextResponse(items, e)}} >NEXT</button>
+                        </form>
+                    </div>}
                 </p>
-
             </div>
         })
         return (

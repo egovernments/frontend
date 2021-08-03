@@ -558,6 +558,20 @@ class PTAcknowledgement extends React.Component {
               </div>
             }
           />
+          <div>this is ack page</div>
+          {
+            (viewMobile) && (
+              <div id="pt-header-button-container" className="header-button-container"> that is mobile
+              <ViewMobile viewMobile={viewMobile} openDialog={this.openDialog} />
+            </div>
+            )
+          }
+         {this.state.viewMobile && (
+          <ViewMobileDialog
+            open={this.state.viewMobile}
+            closeDialogue={() => this.closeDialogue("viewMobile")}
+          ></ViewMobileDialog>
+        )}
         </div>
         <div className="print-application-conainer" style={{ position: "fixed", opacity: 0, zIndex: -9999, height: "100%" }}>
           {properties && (

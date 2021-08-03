@@ -5,6 +5,7 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import ListItem from "@material-ui/core/ListItem";
 import "./index.css"
 import ListItems from "./ListItems.js"
+import { TextField } from "components";
 
 export default class ViewMobileDialog extends React.Component {
   constructor(props) {
@@ -24,10 +25,10 @@ export default class ViewMobileDialog extends React.Component {
   }
   addItem(e) {
     e.preventDefault();
-    
+    debugger;
     const newItem = this.state.currentItem;
     console.log("==========newItem", newItem);
-    
+    debugger;
     if (newItem.key === "") {
       window.alert("Please enter the phone number");
     }
@@ -44,10 +45,10 @@ export default class ViewMobileDialog extends React.Component {
         }
       })
     }
-    
+    debugger;
   }
   handleInput = args => (e) => {
-    
+    debugger;
     this.setState({
       currentItem: {
         ...this.state.currentItem,
@@ -56,7 +57,7 @@ export default class ViewMobileDialog extends React.Component {
     })
   }
   // handleInputSecond(e){
-  //   
+  //   debugger;
   //   this.setState({
   //     currentItem:{
   //       key:e.target.value,
@@ -77,21 +78,22 @@ export default class ViewMobileDialog extends React.Component {
         <br />
         <Label label="This Mobile no. will be used to notify you about property tax dues and important dates" fontSize="12px" labelClassName="owner-history" />
         <form id="to-do-form" onSubmit={this.addItem} className="list" >
-          <input type="text"
+          <TextField type="text"
             placeholder="Enter Name"
-            pattern="/^[^{0-9}^\$\<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i"     
+            className="textField"
+            // pattern="/[A-Za-z]/ig"    
             value={this.state.currentItem.text}
-            onChange={this.handleInput('text')}></input>
-          <input type="text"
+            onChange={this.handleInput('text')}></TextField>
+          <TextField type="text"
+            className="textField"
             placeholder="Enter Mobile no."
             pattern="[6789][0-9]{9}"
             value={this.state.currentItem.key}
-            onChange={this.handleInput('key')}></input>
+            onChange={this.handleInput('key')}></TextField>
           <button type="submit">ADD</button>
         </form>
         <p>{this.state.items.text}</p>
       </Dialog>
-
     )
   }
 }
