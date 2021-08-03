@@ -25,6 +25,12 @@ const instance = axios.create({
     "Content-Type": "application/json",
   },
 });
+const mobileInstance = axios.create({
+  baseURL: window.location.origin,
+  headers: {
+    "content-Type": "application/json;charset=UTF-8"
+  }
+});
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
@@ -105,14 +111,16 @@ export const httpRequest = async (
   ignoreTenantId = false,
   isGetMethod = false
 ) => {
-  const tenantId = getTenantId() || commonConfig.tenantId;
+  const tenantId ="pb";
   let apiError = "Api Error";
-
+  debugger;
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
       headers,
     });
-
+    mobileInstance.defaults = Object.assign(mobileInstance.defaults, {
+      headers
+    });
   if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) {
     queryObject &&
       queryObject.push({
