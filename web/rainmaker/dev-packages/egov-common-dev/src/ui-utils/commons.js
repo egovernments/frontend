@@ -1080,9 +1080,6 @@ building = building + "," + item.name;
 			var addDetail=null;
               
 			addDetail = {
-				"propertyId": propertyId,
-				"oldConnectionNo":oldConnection,
-				"ledgerId":ledgerId,
 				"penaltyRate":rate
 				}
 				billResponse.Bills[0].additionalDetails=addDetail;
@@ -1100,6 +1097,8 @@ building = building + "," + item.name;
 	}
 
 	export const downloadMultipleBill = async (bills = [], configKey) => {
+		let rate=await getMdmsData(businesService);
+	  
 	  try {
 		const DOWNLOADRECEIPT = {
 		  GET: {
@@ -1111,6 +1110,16 @@ building = building + "," + item.name;
 		  { key: "key", value: configKey },
 		  { key: "tenantId", value: commonConfig.tenantId }
 		]
+		var addDetail=null;
+              
+		addDetail = {		
+			"penaltyRate":rate
+			}
+			
+bills.map(item =>{
+
+	item.additionalDetails=addDetail;
+})
 		const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
 		downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
 	  } catch (error) {
