@@ -23,6 +23,7 @@ import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
+import Address from "@jagankumar-egov/react-tour/src/pages/routes/address";
 
 // import PTHome from "modules/employee/PropertyTax/PTHome";
 
@@ -57,6 +58,12 @@ const routes = [
   {
     path: "privacy-policy",
     component: PrivacyPolicy,
+    needsAuthentication: false,
+    redirectionUrl: "/",
+  },
+  {
+    path: "address",
+    component: Address,
     needsAuthentication: false,
     redirectionUrl: "/",
   },
