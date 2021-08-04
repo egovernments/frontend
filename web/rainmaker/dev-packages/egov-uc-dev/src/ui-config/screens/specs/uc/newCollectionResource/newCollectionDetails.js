@@ -148,7 +148,7 @@ export const newCollectionDetailsCard = getCommonCard(
 
           required: true,
           visible: true,
-          pattern: getPattern("Name"),
+          pattern: getPattern("UCName"),
           errorMessage: "Invalid Name.",
           jsonPath: "Demands[0].consumerName"
         }),
