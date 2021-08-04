@@ -19,6 +19,10 @@
         margin-left: 7%;
         margin-right: 2%;
     }
+    #singletestimonial
+    {
+        height: 270px;
+    }
 
 }
 @media only screen and (max-width: 1600px) {
@@ -41,7 +45,10 @@
         margin-left: 7%;
         margin-right: 2%;
     }
-
+    #singletestimonial
+    {
+        height: 270px;
+    }  
 }
 
 
@@ -86,6 +93,10 @@
         margin-left: 8%;
     margin-right: 3%;
         }
+        #singletestimonial
+        {
+            height: 300px;
+        }
 
 }
 
@@ -97,6 +108,11 @@
     #links {
         display: inline-flex;
         margin-left: 22%;    }
+
+        #singletestimonial
+        {
+            height: 300px;
+        }
         
 
 }
@@ -115,6 +131,10 @@
         margin-left: 16px;
         margin-right: 21px;
     }
+    #singletestimonial
+        {
+            height: 350px;
+        }
         
 
 }
@@ -144,11 +164,19 @@
     #bannerimage {
         width: auto;
     }
+    #singletestimonial
+        {
+            height: 350px;
+        }
 }
 @media only screen and (max-width: 800px) {
     #bannerimage {
         width: auto;
     }
+    #singletestimonial
+        {
+            height: 350px;
+        }
 }
 
 @media only screen and (max-width: 800px) {
