@@ -11,7 +11,6 @@
     "@material-ui/icons": "^2.0.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
-    "egov-ui-kit": "0.0.1",
     "egov-ui-framework": "0.1.41",
     "jsonpath": "^1.0.2",
     "lodash": "^4.17.10",
