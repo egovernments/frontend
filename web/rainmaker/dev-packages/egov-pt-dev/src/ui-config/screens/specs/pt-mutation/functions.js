@@ -6,6 +6,9 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
+import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount } from "../pt-mutation/searchApplicationResource/applicationSearchUtils";
+
+
 import {
   enableField,disableField
  } from "egov-ui-framework/ui-utils/commons";
@@ -146,9 +149,8 @@ const searchApiApplicationCall = async (state, dispatch, index) => {
    "pASearchScreen",
    {}
  );
-
-/* 
- if ((!pASearchScreenObject.tenantId) && index == 0) {
+ 
+ if (!pASearchScreenObject.tenantId) {
    dispatch(
      toggleSnackbar(
        true,
@@ -161,13 +163,16 @@ const searchApiApplicationCall = async (state, dispatch, index) => {
    );
    return;
 
- } */
+ } 
+
  let queryObject = [
-   {
+    {
      key: "tenantId",
-     value: getTenantId()
-   }
+     value: pASearchScreenObject.tenantId
+   } 
  ];
+
+
 /*  if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
    queryObject = [];
  }
@@ -402,11 +407,18 @@ const isownerNameRowValid = validateFields(
      // const response = searchSampleResponse();
       /* Fuzzy serach seperate API implementation */
       /* const response = (pASearchScreenObject['doorNo'] || pASearchScreenObject['name']) && index == 0 ? await getSearchResults(queryObject, {}, "/property-services/property/fuzzy/_search") : await getSearchResults(queryObject); */
-      const response = (pASearchScreenObject['doorNo'] || pASearchScreenObject['name']) && index == 0 ? await getSearchResults(queryObject, {}, "/property-services/property/fuzzy/_search") : await getSearchResults(queryObject);
+      const response = await getSearchResults(queryObject);
 
-    //  const response =  await getSearchResults(queryObject);
 
-     let propertyData = response.Properties.map(item => ({
+
+
+      const billResponse = await fetchBill(dispatch, response, pASearchScreenObject.tenantId, "PT.MUTATION");
+
+
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);      //  const response =  await getSearchResults(queryObject);
+
+
+      let propertyData = finalResponse.Properties.map(item => ({
        ["PT_COMMON_TABLE_COL_PT_ID"]:
          item.propertyId || "-",
        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
@@ -420,7 +432,7 @@ const isownerNameRowValid = validateFields(
        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
      }));
 
-     let applicationData = response.Properties.map(item => ({
+     let applicationData = finalResponse.Properties.map(item => ({
        ["PT_COMMON_TABLE_COL_APP_NO"]:
          item || "-",
        ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
@@ -739,7 +751,9 @@ const searchApiCall = async (state, dispatch, index) => {
     try {
       disableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       disableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
-     const response = await getSearchResults(queryObject);
+     
+
+      const response = await getSearchResults(queryObject);
 
       // const response = searchSampleResponse();
 

@@ -25,6 +25,93 @@ import {
           labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
         }),
         appNumberContainer: getCommonContainer({
+          ulbCity: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-pt",
+            componentPath: "AutosuggestContainer",
+            props: {
+              label: {
+                labelName: "ULB/City",
+                labelKey: "PT_SEARCH_ULB_CITY"
+              },
+              placeholder: {
+                labelName: "Select ULB/City",
+                labelKey: "PT_SEARCH_ULB_CITY_PLACEHOLDER"
+              },
+              localePrefix: {
+                moduleName: "TENANT",
+                masterName: "TENANTS"
+              },
+              jsonPath: "propertySearchScreen.tenantId",
+              sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+              className: "autocomplete-dropdown",
+              labelsFromLocalisation: true,
+              //required: true,
+              disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+              isClearable: true
+            },
+            disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          // required: true,
+            jsonPath: "pASearchScreen.tenantId",
+            gridDefination: {
+              xs: 12,
+              sm: 4
+            },
+          beforeFieldChange: async (action, state, dispatch) => {
+         /*    let tenant = action.value;
+           
+            dispatch(
+              handleField(
+                  "propertySearch",
+                  "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+                  "label",
+                  ""
+              )
+            ); 
+            if(process.env.REACT_APP_NAME === "Citizen" && action.value){             
+           
+      
+              let tenants = state.common.cities && state.common.cities;
+      
+              let filterTenant = tenants && tenants.filter(m=>m.key===action.value);
+      
+              let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+      
+               tenantUniqueId = "PT-"+tenantUniqueId+"-";
+      
+               dispatch(
+                handleField(
+                    "propertySearch",
+                    "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+                    "label",
+                    tenantUniqueId
+                )
+              ); 
+      
+            }
+            else if(process.env.REACT_APP_NAME === "Employee"){
+              let tenants = state.common.cities && state.common.cities;
+      
+              let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+      
+              let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+      
+              tenantUniqueId = "PT-"+tenantUniqueId+"-";
+      
+               dispatch(
+                handleField(
+                    "propertySearch",
+                    "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+                    "label",
+                    tenantUniqueId
+                )
+              );     
+            }
+            dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value)); */
+       
+          }
+          },
+          
           propertyTaxApplicationNo: getTextField({
             label: {
               labelName: "Application No",
@@ -43,30 +130,6 @@ import {
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_INVALID_APPLICATION_NO",
             jsonPath: "pASearchScreen.acknowledgementIds"
-          }),
-          ownerMobNoProp: getTextField({
-            label: {
-              labelName: "Owner Mobile No.",
-              labelKey: "PT_HOME_SEARCH_APP_OWN_MOB_LABEL"
-            },
-            placeholder: {
-              labelName: "Enter your mobile No.",
-              labelKey: "PT_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
-            },
-            gridDefination: {
-              xs: 12,
-              sm: 4,
-      
-      
-            },
-            iconObj: {
-              label: "+91 |",
-              position: "start"
-            },
-            required: false,
-            pattern: getPattern("MobileNo"),
-            jsonPath: "pASearchScreen.mobileNumber",
-            errorMessage: "ERR_INVALID_MOBILE_NUMBER"
           }),
           applicationPropertyTaxUniqueId: getTextField({
             label: {
