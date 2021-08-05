@@ -88,10 +88,10 @@ const formConfig = {
     },
     UID: {
       id: "UID",
-      type: "textfield",
+      type: "textFieldIcon",
       className: "pt-old-pid-text-field",
-      // text: "PT_SEARCH_BUTTON",
-      // iconRedirectionURL: "https://pmidc.punjab.gov.in/propertymis/search.php",
+      text: "Search",
+      iconRedirectionURL: getTenantId()=='pb.amritsar'? "https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=8b678d4d5020448499054bf346843ea9": getTenantId()=='pb.hoshiarpur'?"https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=9bc1b255320a49c590dd17d4d258e054": "https://gis.punjab.gov.in",
       jsonPath: "Properties[0].surveyId",
       floatingLabelText: "Survey Id/UID",
       hintText: "Enter Survey Id/UID",
