@@ -1,3 +1,4 @@
+import React from 'react';
 // User related routes
 import Login from "modules/employee/User/Login";
 import OTP from "modules/employee/User/OTP";
