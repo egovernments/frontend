@@ -5,7 +5,7 @@ import {
   import { searchPropertyDetails, searchApplicationDetails } from "./mutation-methods";
  // import "./index.css"
   
-  const propertySearchTabs = getCommonCard({
+  const propertyApplicationSearchTabs = getCommonCard({
     // header: getCommonSubHeader(
     //   { labelName: "Capture Payment", labelKey: "NOC_PAYMENT_CAP_PMT" },
     //   {
@@ -35,5 +35,5 @@ import {
     }
   });
   
-  export default propertySearchTabs;
+  export default propertyApplicationSearchTabs;
   

@@ -5,9 +5,9 @@ import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/comm
 import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 import { resetFields } from "./mutation-methods";
-import propertySearchOldTabs from "./property-search-tabs";
+import propertyApplicationSearchTabs from "./property-application-search-tabs";
 import citizenSearchTabs from "./citizen-search-tabs";
-import { searchApplicationTable, searchPropertyTable } from "./searchResource/searchResults";
+import { searchApplicationTable, searchPropertyTable } from "./searchApplicationResource/searchResults";
 import { showHideAdhocPopup } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -157,18 +157,18 @@ const header = getCommonHeader({
 });
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "propertySearchOld",
+  name: "propertyApplicationSearch",
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
     dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
 
-    if(citizenSearch) 
+  /*   if(citizenSearch) 
      {
           set(
           action.screenConfig,
-            "components.div.children.propertySearchOldTabs",
+            "components.div.children.propertyApplicationSearchTabs",
             {}
           )
      }  
@@ -178,7 +178,7 @@ const screenConfig = {
           action.screenConfig,
               "components.div.children.citizenSearchTabs",
               {})
-      }
+      } */
  
 
     const tenantRequestBody = {
@@ -209,7 +209,7 @@ const screenConfig = {
         let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
         enableButton && dispatch(
           handleField(
-              "propertySearchOld",
+              "propertyApplicationSearch",
               "components.div.children.headerDiv.children.newApplicationButton",
               "visible",
               enabledCities ? enabledCities.includes(tenant) : false
@@ -279,7 +279,7 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "propertySearchOld");
+                  showHideAdhocPopup(state, dispatch, "propertyApplicationSearch");
 
                 }
               },
@@ -292,7 +292,7 @@ const screenConfig = {
           }
         },
         citizenSearchTabs,
-        propertySearchOldTabs,
+        //propertyApplicationSearchTabs,
         breakAfterSearch: getBreak(),
         searchPropertyTable,
         searchApplicationTable
@@ -305,7 +305,7 @@ const screenConfig = {
       props: {
         open: false,
         maxWidth: false,
-        screenKey: "propertySearchOld"
+        screenKey: "propertyApplicationSearch"
       },
       children: {
         popup: {}
