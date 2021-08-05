@@ -24,11 +24,11 @@ import ptRoutes from "pt-employee/Routes/pt-routes";
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
 import Address from "@jagankumar-egov/react-tour/pages/routes/address";
-import Inbox from "@jagankumar-egov/react-tour/components/Inbox";
+import Inbox as JkInbox from "@jagankumar-egov/react-tour/components/Inbox";
 
 // import PTHome from "modules/employee/PropertyTax/PTHome";
 const newInbox=()=>{
-return <Inbox auth={localStorage.getItem("token")}></Inbox>
+return <JkInbox auth={localStorage.getItem("token")}></JkInbox>
 }
 
 
