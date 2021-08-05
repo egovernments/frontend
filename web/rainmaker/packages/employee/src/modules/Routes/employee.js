@@ -24,8 +24,13 @@ import ptRoutes from "pt-employee/Routes/pt-routes";
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
 import Address from "@jagankumar-egov/react-tour/pages/routes/address";
+import Workflow from "@jagankumar-egov/react-tour/components/Workflow";
 
 // import PTHome from "modules/employee/PropertyTax/PTHome";
+const newInbox=()=>{
+return <Workflow auth={localStorage.getItem("token")}></Workflow>
+}
+
 
 //Redirection Url
 const redirectionUrl = "/user/login";
@@ -54,6 +59,11 @@ const routes = [
     component: LanguageSelection,
     needsAuthentication: false,
     redirectionUrl: "/user/login",
+  },
+    {
+    path: "newInbox",
+    component: newInbox,
+    needsAuthentication: true,
   },
   {
     path: "privacy-policy",
