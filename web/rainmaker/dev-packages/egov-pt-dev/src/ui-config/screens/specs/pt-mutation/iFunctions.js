@@ -5,6 +5,7 @@ import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { convertDateToEpoch, getTextToLocalMapping, validateFields } from "../utils/index";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount } from "../pt-mutation/searchResource/searchUtils";
 
 import {
   enableField,disableField
@@ -292,9 +293,16 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
        );
      }
 
+     const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT.MUTATION");
+
+
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);   
+
+      
+
       // const response = searchSampleResponse();
 
-      let propertyData = response.Properties.map(item => ({
+      let propertyData = finalResponse.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
         ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
@@ -304,6 +312,8 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
           item.oldPropertyId || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "0",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount },
         ["TENANT_ID"]: item.tenantId,
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
       }));

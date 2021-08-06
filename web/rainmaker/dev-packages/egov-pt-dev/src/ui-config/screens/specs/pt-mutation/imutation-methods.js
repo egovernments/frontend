@@ -755,7 +755,7 @@ import {
       }
     }),
     ORButton: getLabel({
-      labelName: "Edit",
+      labelName: "ORButton",
       labelKey: "OR"
     }), 
     propertyTaxUniqueId: getTextField({

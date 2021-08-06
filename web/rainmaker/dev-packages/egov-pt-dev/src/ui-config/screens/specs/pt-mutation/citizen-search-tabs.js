@@ -112,7 +112,8 @@ import {
           }
           },
           
-          propertyTaxApplicationNo: getTextField({
+          appNumberContainer: getCommonContainer({
+            propertyTaxApplicationNo: getTextField({
             label: {
               labelName: "Application No",
               labelKey: "PT_PROPERTY_APPLICATION_NO"
@@ -131,6 +132,10 @@ import {
             errorMessage: "ERR_INVALID_APPLICATION_NO",
             jsonPath: "pASearchScreen.acknowledgementIds"
           }),
+          ORButton: getLabel({
+            labelName: "ORButton",
+            labelKey: "OR"
+          }), 
           applicationPropertyTaxUniqueId: getTextField({
             label: {
               labelName: "Property Tax Unique Id",
@@ -150,6 +155,7 @@ import {
             errorMessage: "ERR_INVALID_PROPERTY_ID",
             jsonPath: "pASearchScreen.ids"
           }),
+        }),
         }),
         button: getCommonContainer({
           buttonContainer: getCommonContainer({

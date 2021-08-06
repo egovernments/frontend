@@ -227,9 +227,8 @@ export const searchApplicationTable = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) =>
-            (value.totalAmount > 0 && value.status === "ACTIVE") ? getPayButton(tableMeta) : (
-              value.totalAmount === 0 && value.status === "ACTIVE" && value.isAdvancePaymentAllowed ? getPayButton(tableMeta) : ""
-            ),
+          (value.totalAmount > 0) ? getPayButton(tableMeta) : "" ,
+
         },
       },
       {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},

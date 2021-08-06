@@ -411,14 +411,53 @@ const isownerNameRowValid = validateFields(
 
 
 
+      let propidobj = queryObject && queryObject.find(o => o.key === "propertyIds");
+
+      //let filtedResponse = response.find( o => o.creationReason==="PT.MUTATION");
+
+
+
+
+
 
       const billResponse = await fetchBill(dispatch, response, pASearchScreenObject.tenantId, "PT.MUTATION");
-
 
       const finalResponse = getPropertyWithBillAmount(response, billResponse);      //  const response =  await getSearchResults(queryObject);
 
 
-      let propertyData = finalResponse.Properties.map(item => ({
+      let PropertiesData = finalResponse.Properties
+
+      let propertyResponse ;
+
+      if(propidobj)
+      {
+        propertyResponse= PropertiesData.filter( o => o.creationReason==="MUTATION");
+       
+      }
+      else
+      {
+        propertyResponse = PropertiesData;
+      }
+
+      let applicationData = propertyResponse.map(item => ({
+        ["PT_COMMON_TABLE_COL_APP_NO"]:
+          item || "-",
+        ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
+        ["PT_COMMON_TABLE_COL_APP_TYPE"]:
+          item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
+          item.owners[getIndexofActive(item)].name || "-",
+        ["PT_COMMON_COL_ADDRESS"]:
+          getAddress(item) || "-",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "0",
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount },
+        ["TENANT_ID"]: item.tenantId,
+        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
+        temporary: item
+      }));
+     
+
+      let propertyData = propertyResponse.map(item => ({
        ["PT_COMMON_TABLE_COL_PT_ID"]:
          item.propertyId || "-",
        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
@@ -432,21 +471,7 @@ const isownerNameRowValid = validateFields(
        ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
      }));
 
-     let applicationData = finalResponse.Properties.map(item => ({
-       ["PT_COMMON_TABLE_COL_APP_NO"]:
-         item || "-",
-       ["PT_COMMON_TABLE_COL_PT_ID"]: item || "-",
-       ["PT_COMMON_TABLE_COL_APP_TYPE"]:
-         item.creationReason ? <LabelContainer labelName={"PT." + item.creationReason} labelKey={"PT." + item.creationReason} /> : "NA",
-       ["PT_COMMON_TABLE_COL_OWNER_NAME"]:
-         item.owners[getIndexofActive(item)].name || "-",
-       ["PT_COMMON_COL_ADDRESS"]:
-         getAddress(item) || "-",
-       ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
-       ["TENANT_ID"]: item.tenantId,
-       ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-",
-       temporary: item
-     }));
+
      enableField('propertyApplicationSearch',"components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
      enableField('propertyApplicationSearch', "components.div.children.propertyApplicationSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
      dispatch(
