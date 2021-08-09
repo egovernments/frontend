@@ -193,6 +193,52 @@
     }
 
 }
+@media only screen and (max-width: 1280px) {
+
+    #message
+    {
+        margin-left: 108px;
+    width: 88%;
+    background-color: #f3e5de;
+    color: #c94806;
+    border-radius: 15px;
+    opacity: .8;
+    }
+
+    #card1
+    {
+        height: 310px;
+        margin-top: -114px;
+        width: auto;
+    }
+    #card2
+    {
+        height: 310px;
+        margin-top: -114px;
+        width: auto;
+      
+    }
+    #card3
+    {
+        height: 310px;
+        margin-top: -114px;
+        width: auto;
+    }
+    #message{
+        margin-left: 100px;
+        width: 87%;
+        background-color: #f3e5de;
+        color: #c94806;
+        border-radius: 15px;
+        opacity: .8;
+    }
+    #leftImage
+    {
+        height: 40px;
+        margin-left: -137px;
+    }
+}
+
 
 @media only screen and (max-width: 1200px) {
 

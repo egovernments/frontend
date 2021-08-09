@@ -124,6 +124,19 @@
         
 
 }
+@media only screen and (max-width: 1270px) {
+  
+         #testimonialimg3
+        {
+            width:100%;
+        }
+        #testimonialimg4
+        {
+            width:100%;
+        } 
+        
+
+}
 @media only screen and (max-width: 1152px) {
 
          #testimonialimg3
@@ -161,24 +174,16 @@
 
 
 
-/* @media only screen and (max-width: 1200px) {
+ @media only screen and (max-width: 1200px) {
 
-    #faqs {
-        margin-left: 129px;
-        margin-right: 117px;
+    #testimonialimg3{
+        width: 100%;
     }
-
-    #testimonials {
-        margin-left: 129px;
-        margin-right: 80px;
-    }
-
-    #homepagecards {
-        margin-left: 66px;
-        margin-right: 21px;
+    #testimonialimg4{
+        width: 100%;
     }
 }
- */
+ 
 
 @media only screen and (max-width: 1025px) {
     #bannerimage {
@@ -236,11 +241,12 @@
     }
     #singletestimonial
         {
-            height: 350px;
+            height: 250px;
         }
         #links {
             display: inline-flex;
-            margin-left: -6%;
+            margin-left: 14%;
+        
         }
     
         #faqs {
@@ -274,7 +280,7 @@
 @media only screen and (max-width: 800px) {
     #links {
         display: inline-flex;
-        margin-left: -35%;
+        margin-left: 0%;
     }
 
     #faqs {
@@ -312,6 +318,10 @@
     #bannerimage {
         width: auto;
     }
+    #testimonialimg1{
+        width: 200%;
+    }
+
 
     #testimonials {
         margin-left: 10%;
