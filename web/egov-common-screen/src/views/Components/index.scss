@@ -128,8 +128,8 @@
         
     #homepagecards
     {
-        margin-left: 16px;
-        margin-right: 21px;
+        margin-left: -7px;
+    margin-right: -1%;
     }
     #singletestimonial
         {
@@ -166,7 +166,19 @@
     }
     #singletestimonial
         {
-            height: 350px;
+            height: 200px;
+        }
+        #testimonialimg1{
+            width: 81%;
+        }
+        #testimonialimg2{
+            width: 81%;
+        }
+        #testimonialimg3{
+            width: 81%;
+        }
+        #testimonialimg4{
+            width: 81%;
         }
 }
 @media only screen and (max-width: 800px) {
@@ -175,25 +187,80 @@
     }
     #singletestimonial
         {
-            height: 350px;
+            height: 180px;
+        }
+        #testimonialimg2{
+            width: 200%;
+        }
+        #testimonialimg3{
+            width: 200%;
+        }
+        #testimonialimg4{
+            width: 200%;
         }
 }
 
+@media only screen and (max-width: 900px) {
+    #bannerimage {
+        width: auto;
+    }
+    #singletestimonial
+        {
+            height: 350px;
+        }
+        #links {
+            display: inline-flex;
+            margin-left: -6%;
+        }
+    
+        #faqs {
+            margin-left: 9%;
+        margin-right: 5%;
+        }
+    
+        #testimonials {
+            margin-left: 9%;
+            margin-right: 2%;
+        }
+        
+        #testimonialimg1{
+            width: 81%;
+        }
+    
+    
+        #homepagecards {
+            margin-left: 10px;
+            margin-right: 10px;
+            //margin-top: 20%;
+        }
+}
+
+@media only screen and (max-width: 700px) {
+    #links {
+        display: inline-flex;
+        margin-left: -6%;
+    }
+}
 @media only screen and (max-width: 800px) {
     #links {
         display: inline-flex;
-        margin-left: -5%;
+        margin-left: -35%;
     }
 
     #faqs {
-        margin-left: 124px;
-        margin-right: 70px;
+        margin-left: 9%;
+    margin-right: 5%;
     }
 
     #testimonials {
-        margin-left: 129px;
-        margin-right: 46px;
+        margin-left: 9%;
+        margin-right: 2%;
     }
+    
+    #testimonialimg1{
+        width: 81%;
+    }
+
 
     #homepagecards {
         margin-left: 10px;

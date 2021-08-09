@@ -254,25 +254,66 @@
         height: 416px;
         margin-top: -114px;
         margin-left: 50px; 
-        width: 250px;
+        width: 280px;
     }
     #card2
     {
         height: 416px;
         margin-top: -114px;
-        width: 250px;
+        width: 280px;
         margin-left: 23px;
     }
     #card3
     {
         height: 416px;
         margin-top: -114px;
+        width: 280px;
+        margin-right: 50px;
+    }
+    #message{
+        margin-left: 74px;
+    width: 89%;
+    background-color: #f3e5de;
+    color: #c94806;
+    border-radius: 15px;
+    opacity: .8;
+    }
+}
+
+@media only screen and (max-width: 900px)
+{
+    #container
+    {
+        margin-left: 0%;
+    margin-right: 0%;
+
+    } 
+    #card1
+    {
+        height: 420px;
+        margin-top: -114px;
+        margin-left: 50px; 
+        width: 250px;
+    }
+    #card2
+    {
+        height: 420px;
+        margin-top: -114px;
+        width: 250px;
+        margin-left: 10px;
+        //margin-left: 30px;
+    }
+    #card3
+    {
+        margin-left: 47px ;
+        margin-top: 50px ;
+        height: 420px;
         width: 250px;
         margin-right: 50px;
     }
     #message{
-        margin-left: 102px;
-        width: 81%;
+        margin-left: 80px;
+        width: 79%;
         background-color: #f3e5de;
         color: #c94806;
         border-radius: 15px;
@@ -313,12 +354,11 @@
         margin-right: 50px;
     }
     #message{
-        margin-left: 118px;
-        width: 80%;
+        margin-left: 80px;
+        width: 79%;
         background-color: #f3e5de;
         color: #c94806;
-        border-radius: 15px;     
-        //margin-top:-76px;      
+        border-radius: 15px;
         opacity: .8;
     }
 }

@@ -138,12 +138,42 @@
     }
     
 }
+@media only screen and (max-width: 900px) {
+
+    #footercontainer
+    {
+        //width: 1272px;
+        margin: 0px 1% 0% 9%;
+    }
+
+   /*  #footer1
+    {
+        //margin-left: -68px;   
+    } */
+    #footer2
+    {   
+        width: 256px;
+        //margin-left: 147px;
+    }
+    #footer3
+    {   
+        width: 240px;
+    margin-left: 52px;
+    margin-right: 100px;
+    }
+    #footer4
+    {
+        width: 150px;
+        margin-left: 9px;
+    }
+    
+}
 @media only screen and (max-width: 800px) {
 
     #footercontainer
     {
         //width: 1272px;
-        margin: 0px 1% 0% 5%;
+        margin: 0px 1% 0% 9%;
     }
 
    /*  #footer1

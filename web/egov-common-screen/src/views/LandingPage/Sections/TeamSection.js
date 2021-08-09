@@ -35,10 +35,10 @@ export default function TeamSection() {
     <div className={classes.section}>
       <div>
         <GridContainer>
-          <GridItem xs={12} sm={6} md={3}>
+          <GridItem xs={12} sm={6} md={6} lg={3} >
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
-              <GridItem xs={3} sm={6} md={3} className={classes.itemGrid}>
-                <img src={team1} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
+              <GridItem xs={3} sm={6} md={6} lg={3}  className={classes.itemGrid}>
+                <img src={team1} id="testimonialimg1" style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
               Shri K K Shukla
@@ -53,10 +53,10 @@ export default function TeamSection() {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
+          <GridItem xs={12} sm={6} md={6} lg={3} >
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
-              <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
-                <img src={team2} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
+              <GridItem xs={3} sm={3} md={6} lg={3} className={classes.itemGrid}>
+                <img src={team2} id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
               Muni Ki Reti
@@ -69,10 +69,10 @@ export default function TeamSection() {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
-              <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
-                <img src={team3} style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
+              <GridItem xs={3} sm={3} md={6} lg={3} className={classes.itemGrid}>
+                <img src={team3} id="testimonialimg3" style={{marginTop: "-50px", marginLeft: "-17px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
               Mahesh Chandra Pandey
@@ -86,10 +86,10 @@ export default function TeamSection() {
               </CardBody>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
+          <GridItem xs={12} sm={6} md={6} lg={3}>
             <Card plain style = {{background: "#ffffff", width :"91%"}}>
-              <GridItem xs={3} sm={3} md={3} className={classes.itemGrid}>
-                <img src={team4} style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
+              <GridItem xs={3} sm={3} md={6} lg={3}  className={classes.itemGrid}>
+                <img src={team4} id="testimonialimg4" style={{marginTop: "-50px"}} alt="..." className={imageClasses} />
               </GridItem>
               <h4 className={classes.cardTitle}>
               Shri S P Rawat
