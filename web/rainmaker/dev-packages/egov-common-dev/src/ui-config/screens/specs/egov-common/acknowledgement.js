@@ -74,7 +74,7 @@ const downloadprintMenu = (
   };
   let downloadMenu = [];
   let printMenu = [];
-  if(businessService == "TL" && applicationType == "RENEWAL" && workflowCode == "DIRECTRENEWAL")
+  if(businessService == "TL")
     {
         downloadMenu = [receiptDownloadObject,tlCertificateDownloadObject];
         printMenu = [receiptPrintObject,tlCertificatePrintObject];
