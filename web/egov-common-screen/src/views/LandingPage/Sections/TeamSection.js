@@ -61,11 +61,11 @@ export default function TeamSection() {
               <h4 className={classes.cardTitle}>
               Muni Ki Reti
                 <br />
-                <small className={classes.smallTitle}>अधिशासी अधिकारी</small>
+                <small className={classes.smallTitle}>Executive Officer</small>
               </h4>
               <CardBody>
               <p className={classes.description} id="singletestimonial" >
-              नगरसेवा पोर्टल से नगर पालिका परिषद मुनी की रेती को काफी सुगमता हो रही है. इससे नगर पालिका डिजिटल की ओर बढ़ रहा है एवम इससे पालिका को सभी करो को एकत्रित करने में काफी सुगमता मिल रही है. इसके साथ ही सभी करो का कलेक्शन single window सिस्टम के माध्यम से हो रहा है और सभी के समय की बचत भी हो रही है        </p>
+              Nagarsewa Portal is a very good initiative for citizens and ULB employees. It ensures contactless delivery of all essential services in the pandemic. It is fast and also ensures transparency of services for citizens. It is secured and easily accessible at door step. Also monitoring at ULB and citizen level have become a lot easier.        </p>
               </CardBody>
             </Card>
           </GridItem>
