@@ -102,7 +102,7 @@
 
 @media only screen and (max-width: 1280px) {
     #bannerimage {
-        width: 1260px;
+        width: 100%;
     }
 
     #links {
@@ -113,7 +113,27 @@
         {
             height: 300px;
         }
+       /*  #testimonialimg3
+        {
+            width:100%;
+        }
+        #testimonialimg4
+        {
+            width:100%;
+        } */
         
+
+}
+@media only screen and (max-width: 1152px) {
+
+         #testimonialimg3
+        {
+            width:100%;
+        }
+        #testimonialimg4
+        {
+            width:100%;
+        }        
 
 }
 
@@ -181,6 +201,7 @@
             width: 81%;
         }
 }
+
 @media only screen and (max-width: 800px) {
     #bannerimage {
         width: auto;

@@ -246,6 +246,59 @@
 }
 
 
+@media only screen and (max-width: 1152px) {
+
+    /* #container
+    {
+        //margin-left: 50px;
+
+    } */
+    #griditem
+    {
+        width: auto;
+        z-index: 100;
+    }
+
+    #card1
+    {
+        height: 426px;
+        margin-top: -114px;
+        margin-left: -17px;
+        width: auto;
+    }
+    #card2
+    {
+        height: 426px;;
+        margin-top: -114px;
+        width: auto;
+        margin-left: 10px;
+        //margin-left: 30px;
+    }
+    #card3
+    {
+        height: 426px;
+        margin-top: -114px;
+        width: auto;
+        margin-right: 16px;
+
+    }
+    #message{
+        margin-left: 82px;
+        width: 87%;
+        background-color: #f3e5de;
+        color: #c94806;
+        border-radius: 15px;     
+        //margin-top:-76px;      
+        opacity: .8;
+    }
+    #leftImage
+    {
+        height: 40px;
+        margin-left: -137px;
+    }
+}
+
+
 
 @media only screen and (max-width: 1025px)
 {
