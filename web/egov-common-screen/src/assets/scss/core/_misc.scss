@@ -12,8 +12,8 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 300;
+  font-family: "Roboto";
+  font-weight: 400;
   line-height: 1.5em;
 }
 h1,
@@ -62,8 +62,14 @@ h6 {
   font-weight: 500;
 }
 p {
+  font-family: Roboto;
   font-size: 14px;
-  margin: 0 0 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0px;
+  text-align: left;
+
 }
 html {
   font-family: sans-serif;
@@ -103,7 +109,9 @@ a {
   &:focus {
     color: darken($link-color, 5%);
     text-decoration: none;
-  }
+  }  
+  line-height: 28px;
+  font-size: 14px;
 }
 
 label {

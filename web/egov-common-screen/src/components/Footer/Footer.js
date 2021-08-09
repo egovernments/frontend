@@ -40,7 +40,7 @@ export default function Footer(props) {
           <GridItem xs={12} sm={6} md={3} id="fgrid">
           <ListItem className={classes.inlineBlock} >
 
-             <h5>
+             <h5 style={{fontSize: "1rem"}}>
                 <b>Contact Details</b>
               </h5>
               <p>
@@ -71,7 +71,7 @@ export default function Footer(props) {
           <GridItem xs={12} sm={6} md={3} id="fgrid">
           <ListItem className={classes.inlineBlock} >
             <p>
-                <h5><b>Other Departments</b></h5>
+                <h5 style={{fontSize: "1rem" , marginTop: "-5px"}}><b>Other Departments</b></h5>
               </p>
               <a
                 href="https://uk.gov.in/"
@@ -118,7 +118,7 @@ export default function Footer(props) {
             <GridItem xs={12} sm={6} md={3} id="fgrid">
             <ListItem className={classes.inlineBlock} >
                <p              >
-                <h5><b>User Manuals</b></h5>
+                <h5 style={{fontSize: "1rem", marginTop: "-5px"}}><b>User Manuals</b></h5>
               </p>       
               <a
                 href="/ukd-assets/PT_English_UserManual_Citizen.pdf"
@@ -182,7 +182,7 @@ export default function Footer(props) {
             <GridItem xs={12} sm={6} md={3} id="fgrid">
             <ListItem className={classes.inlineBlock} >
               <p>
-                <h5><b>About Us</b></h5>
+                <h5 style={{fontSize: "1rem", marginTop: "-5px"}}><b>About Us</b></h5>
               </p>              
               <a
                 href="https://udd.uk.gov.in/pages/display/2-about-us"
@@ -212,7 +212,7 @@ export default function Footer(props) {
               </GridItem>
               </GridContainer>
           </List>
-          <center><p>Last Updated July 2021</p></center>
+          <center><p style={{textAlign: "center"}}>Last Updated July 2021</p></center>
       </div>
       </div>
     </footer>

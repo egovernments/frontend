@@ -1,3 +1,55 @@
+/* #cardparagraph{
+       font-family: Roboto;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 16px;
+        letter-spacing: 0px;
+        text-align: left;
+}
+*/
+#cardheadings
+{
+    margin-left: 65px;
+    font-weight: 500;
+    margin-top: 30px;
+        } 
+        #singletestimonial
+        {
+            font-family: Roboto;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16px;
+            text-align: center;
+        }
+#icon
+{
+    height: 50px;
+    width: 50px;
+    background: #F47738;
+    opacity: 0.2;
+    border-radius: 115px;
+    margin-top: -43px;
+    margin-left: 3px;
+}
+#iconimg
+{
+    height: 20px;
+    width: 18px;
+    position: absolute;
+    left: 4.33%;
+    right: 8.33%;
+    top: 13.5%;
+    bottom: 12.5%;
+}
+.styles_faq-row-wrapper__3vA1D .styles_row-body__1NvUo .styles_faq-row__2YF3c .styles_row-title__1YiiY .styles_icon-wrapper__2cftw {
+color: #F47738;
+
+
+}
+
+
 @media only screen and (max-width: 1920px) {
     #links {
         display: inline-flex;

@@ -141,8 +141,12 @@ export const fetchBill = async (
 ) => {
   const consumerCodes = [];
   response.Properties.map((item) => {
-    consumerCodes.push(item.propertyId);
+    consumerCodes.push(item.acknowldgementNumber);
   });
+
+  console.log("prasad response ", response);
+  console.log("prasad consumerCodes ", consumerCodes);
+
   const billData = await generateBill(
     dispatch,
     consumerCodes,
@@ -220,6 +224,7 @@ export const getBill = async (queryObject, dispatch) => {
 };
 
 export const getPropertyWithBillAmount = (propertyResponse, billResponse) => {
+
   try {
     if(billResponse && billResponse.Bill && billResponse.Bill.length > 0) {
       propertyResponse.Properties.map((item, key) => {
