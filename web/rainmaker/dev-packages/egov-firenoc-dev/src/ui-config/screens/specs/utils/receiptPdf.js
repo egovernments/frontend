@@ -409,6 +409,14 @@ else if(NoBase >0 && NoHeight == 0)
     "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
     }
 }
+else if(NoBase >0 && NoHeight> 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
 else 
 {
   reasonss = {
@@ -1547,6 +1555,14 @@ else if(NoBase >0 && NoHeight == 0)
 {
   reasonss = {
     "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+else if(NoBase >0 && NoHeight> 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
     "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
     "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
     }
@@ -3197,6 +3213,14 @@ else if(NoBase >0 && NoHeight == 0)
     "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
     }
 }
+else if(NoBase >0 && NoHeight> 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
 else 
 {
   reasonss = {
@@ -4839,6 +4863,14 @@ else if(NoBase >0 && NoHeight == 0)
 {
   reasonss = {
     "HEIGHT_OF_BUILDING": 0,
+    "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
+    "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
+    }
+}
+else if(NoBase >0 && NoHeight> 0)
+{
+  reasonss = {
+    "HEIGHT_OF_BUILDING": transformedData.buildings[0].uoms.HEIGHT_OF_BUILDING,
     "NO_OF_BASEMENTS":transformedData.buildings[0].uoms.NO_OF_BASEMENTS,
     "NO_OF_FLOORS":transformedData.buildings[0].uoms.NO_OF_FLOORS
     }

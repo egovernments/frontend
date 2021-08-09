@@ -1,6 +1,6 @@
 import { Button } from "components";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE , cancelAssessment } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { formWizardConstants, getPropertyLink, PROPERTY_FORM_PURPOSE ,cancelAssessment} from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -79,7 +79,6 @@ class AssessmentHistory extends Component {
             alignItems: "right",
         };
         const { Assessments = [], history, propertyId } = this.props;
-
         const Assessmentss = Assessments && Assessments.filter(item => item.status === "ACTIVE");
         const assessmentHistoryItems = this.getLatestAssessments(Assessmentss).map((Assessment) => {
             return (
@@ -108,7 +107,7 @@ class AssessmentHistory extends Component {
                                     // lastElement.onClick();
                                 }}
                             ></Button>
-                            <Button
+                            <Button 
                                 label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.CANCEL].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
@@ -120,9 +119,12 @@ class AssessmentHistory extends Component {
                                         );
                                     } else {
                                         if(window.confirm("Are you sure you want to cancel Assessment?")){
+                                            if(process.env.REACT_APP_NAME === "Citizen")
+                                            alert("You are not allowed to perform this operation!!");
+                                            else
                                             cancelAssessment(Assessment);
-                                        }
-
+                                        }  
+                                        
                                     }
                                     // lastElement.onClick();
                                 }}
