@@ -56,17 +56,15 @@ export default function Components() {
                     /></div>
 
   <div style={{width: "70%", float:"right", marginRight: "5%",}}>
-    <div id = "links" ><h4     style={{padding: "10px", fontWeight:"500",color: "#F47738",}}>
+    <div id = "links" ><h4    id ="empheading" style={{fontWeight:"500",color: "#F47738",}}>
       <a href="/employee/user/login"  >Employee Login </a></h4>
       </div>
       <img
                       src={rightImage}
                       alt="..."
-                      style={{position: "absolute",
-                        width: "210px",
+                      style={{  width: "210px",
                         height: "34px",
                         right: "110px",
-                        top: "15px",
                       
                       }}
                 /></div>
@@ -82,12 +80,12 @@ export default function Components() {
       <div id="homepagecards"> <SelectCards /> </div>
             <Card  id="message" >                   
                 <CardBody  style={{padding: "0.375rem 0.875rem"}}>
-                <center><h4 style={{fontWeight: "400"}}>Pay your Property Tax Dues before 31st March and get 10% rebate</h4></center>
+                <center><h4 style={{fontWeight: "400", color: "#F47738 !important"}}>Pay your Property Tax Dues before 31st March and get 10% rebate</h4></center>
               
                 </CardBody>               
               </Card>
               <div  id="faqheader" style ={{marginTop: "100px",fontWeight: "bold"}}>                   
-                <center ><b><h3  style ={{width: "452px",height: "42px",left: "494px",top: "654px",fontfamily:"Roboto",fontStyle:"normal",fontWeight:"500", fontSize:"36px",lineHeight:"42px",textAlign:"center",color: "rgba(0, 0, 0, 0.87)",}}>Frequently Asked Questions</h3></b>
+              <center ><b><h3  style ={{fontWeight: "bold", fontSize: "36px"}}>Frequently Asked Questions</h3></b>
                 </center>
                 <div  
               style={{marginLeft: "45%",
@@ -99,7 +97,7 @@ export default function Components() {
                       
           <div id="faqs"><SectionFAQs /> </div>
           <div  id="citizenheader" >                   
-                <center ><b><h3 style ={{fontWeight: "bold",fontFamily:"Roboto",fontStyle:"normal",color: "rgba(0, 0, 0, 0.87)",}}>Citizen Speaks</h3></b>
+                <center ><b><h3 style ={{fontWeight: "bold", fontSize: "36px", fontFamily:"Roboto",fontStyle:"normal",color: "rgba(0, 0, 0, 0.87)",}}>User Testimonials</h3></b>
                 </center>
                 <div  
                 style={{marginLeft: "45%",

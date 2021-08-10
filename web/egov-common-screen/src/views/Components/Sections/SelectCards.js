@@ -42,14 +42,17 @@ export default function SectionNavbars() {
                    >
                      
                   <h4 id="cardheadings">Property Tax</h4>
-                    <div id="icon"></div>{<img
+                    <img
               src={propertyTaxImage}
               alt="..."              
-              id="iconimg"
-              
-            /> }
+              id = ""
+              style = {{height: "50px",
+              width: "50px",
+              marginTop: "-53px",
+              marginLeft: "5px"}}
+            />
                 <CardBody style={{  marginLeft: "34px"}}>
-                  <p className={classes.description} style={{marginTop: "-36px"}}><br />
+                  <p className={classes.description} style={{marginTop: "-20px",color: "rgba(0, 0, 0, 0.6)"}}><br />
                   Property Tax or House Tax is a local tax levied by municipal authorities for maintaining civic amenities in your area and is paid by occupier of that property                    
                   <br />
                     <b><a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax Without Login </a></b> <br /> 
@@ -63,14 +66,17 @@ export default function SectionNavbars() {
             </GridItem>
             <GridItem xs={12} sm={6} md={4} id="griditem" >
               <Card id="card2"  >
-              <h4 id="cardheadings">Trade Licence</h4>
-              <div id="icon"></div>
+                  <h4 id="cardheadings">Trade Licence</h4>
                    <img
               src={tradelicenceImage}
               alt="..."              
-              id="iconimg"/>
+              id = ""
+              style = {{height: "50px",
+              width: "50px",
+              marginTop: "-53px",
+              marginLeft: "5px"}} />
                 <CardBody style={{  marginLeft: "34px"}}>
-                  <p className={classes.description} style={{marginTop: "-36px"}} ><br />
+                  <p className={classes.description} style={{marginTop: "-20px",color: "rgba(0, 0, 0, 0.6)"}} ><br />
                   A Trade License is permission issued by an Urban Local Body (ULB) to conduct specific trade or business according to the relevant rules, standards and safety guidelines on premises for which it has been issued
                     <br />
                     <a href="/citizen/user/login">New Application</a> <br /> 
@@ -81,14 +87,17 @@ export default function SectionNavbars() {
             </GridItem>
             <GridItem xs={12} sm={6} md={4} id="griditem" >
               <Card   id="card3">
-              <h4 id="cardheadings">Road Cutting</h4>
-              <div id="icon"></div>
+                  <h4 id="cardheadings">Road Cutting</h4>
                   <img
               src={roadCuttingImage}
               alt="..."              
-              id="iconimg" />
+              id = ""
+              style = {{height: "50px",
+              width: "50px",
+              marginTop: "-53px",
+              marginLeft: "5px"}} />
                 <CardBody style={{  marginLeft: "34px"}}>
-                <p className={classes.description} style={{marginTop: "-36px"}}><br />
+                <p className={classes.description} style={{marginTop: "-20px",color: "rgba(0, 0, 0, 0.6)"}}><br />
                 Road Cutting charges are levied by ULBs to recover cost for maintaining roads when they are cut for laying pipes, installing electricity lines, internet lines etc
                     <br />
                     <a href="http://enagarsewa.uk.gov.in/" target="_blank" rel="noreferrer">Apply</a> <br /> 
