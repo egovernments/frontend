@@ -113,6 +113,14 @@ export default function Footer(props) {
               >
                 Dehradun Smart City
               </a>
+              <a
+                href="https://serviceonline.gov.in/"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+              >
+                NIC ServicePlus
+              </a>
               </ListItem>
             </GridItem>
             <GridItem xs={12} sm={6} md={3} id="fgrid">
