@@ -17,7 +17,7 @@ const VerifyButton = (type,openDialog) => {
                 alignItems: "center",
                 background: "#FE7A511F",color: "#FE7A51"}}>
                 <Label label="Link and Verify citizen’s mobile no. to send notifications and updates on this property" fontSize="16px"  labelStyle={{color: "#FE7A51" ,fontWeight : '400'}} />
-                <button type="button" style={{ width: "130px", height: "42px", background: "#FE7A51", color: "white", borderRadius: "2px" ,marginLeft:"10px"}} onClick={() => this.openDialog()} >LINK MOBILE NO.</button>
+                <button type="button" style={{ width: "130px", height: "42px", background: "#FE7A51", color: "white", borderRadius: "2px" ,marginLeft:"10px"}} onClick={() => openDialog()} >LINK MOBILE NO.</button>
             </div>;
         case "VERIFIED":
             return <button onClick={() => openDialog()}>Verify Mobile</button>;
