@@ -19,6 +19,7 @@ import { AcknowledgementReceipt } from "../AcknowledgementReceipt";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import PTInformation from "../AssessmentList/components/PTInformation";
 import "./index.css";
+import ViewMobileDialog from "../Property/components/VerifyMobile";
 
 class PTAcknowledgement extends React.Component {
   state = {
@@ -104,6 +105,7 @@ class PTAcknowledgement extends React.Component {
   closeDialogue = (dialogName) => {
     this.setState({ [dialogName]: false });
   };
+  
   openDialog = async (dialogName) => {
      if (dialogName === "viewMobile") {
       this.getMobileResponse( dialogName);
@@ -560,9 +562,9 @@ class PTAcknowledgement extends React.Component {
           />
           <div>this is ack page</div>
           {
-            (viewMobile) && (
+            (true) && (
               <div id="pt-header-button-container" className="header-button-container"> that is mobile
-              <ViewMobile viewMobile={viewMobile} openDialog={this.openDialog} />
+             <button onClick={()=>this.openDialog("viewMobile")}>sddsdsd</button>
             </div>
             )
           }

@@ -180,7 +180,6 @@ export const getQueryArg = (url, name) => {
 };
 
 export const addQueryArg = (url, queries = []) => {
-  debugger;
   const urlParts = url.split("?");
   const path = urlParts[0];
   let queryParts = urlParts.length > 1 ? urlParts[1].split("&") : [];
@@ -192,7 +191,6 @@ export const addQueryArg = (url, queries = []) => {
   });
   const newUrl = path + "?" + queryParts.join("&");
   return newUrl;
-  debugger;
 };
 
 export const isFieldEmpty = (field) => {

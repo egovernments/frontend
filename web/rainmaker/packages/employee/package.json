@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "license": "egov",
   "private": true,
-  "homepage": "https://qa.digit.org/employee/",
-  "proxy": "https://qa.digit.org/",
+  "homepage": "https://dev.digit.org/employee/",
+  "proxy": "https://dev.digit.org/",
   "dependencies": {
     "@babel/runtime": "7.3.1",
     "@material-ui/core": "1.5.1",
@@ -29,7 +29,7 @@
     "egov-tradelicence": "1.6.0",
     "egov-noc": "1.6.0",
     "egov-ui-framework": "0.1.41",
-    "egov-ui-kit": "0.0.1",
+  
     "egov-wns": "1.6.0",
     "egov-workflow": "1.6.0",
     "html2canvas": "1.0.0-alpha.12",

@@ -1,0 +1,78 @@
+import Label from "egov-ui-kit/components/Label";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import React from "react";
+import ViewMobileDialog from ".";
+import { VerifyIcon } from "./ListItems";
+
+
+
+const VerifyButton = (type,openDialog) => {
+    switch (type) {
+        case "VERIFY":
+            return <span><VerifyIcon /><span onClick={() => openDialog()}>VERIFY</span></span>;
+        case "LINKNUM":
+            return <div>
+                <Label label="Link and Verify citizen’s mobile no. to send notifications and updates on this property" fontSize="20px" labelClassName="owner-history" />
+                <button type="button" style={{ width: "130px", height: "42px", background: "#FE7A51", color: "white", borderRadius: "2px" }} onClick={() => this.toggleDialog()} >LINK MOBILE NO.</button>
+            </div>;
+        case "VERIFIED":
+            return <button onClick={() => openDialog()}>Verify Mobile</button>;
+        case "SIMPLEBUTTON":
+            return <button onClick={() => openDialog()}>Verify Mobile</button>;
+        default:
+            return <button onClick={() => openDialog()}>Verify Mobile</button>;
+    }
+}
+
+export default class VerifyMobile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            propertyId: "",
+            tenantId: "",
+            property: {},
+            propertyNumbers: []
+        }
+    }
+    componentDidMount = async () => {
+        this.loadProperty();
+    }
+    loadProperty = async () => {
+        let queryParams = [{ key: "propertyIds", value: 'PB-PT-2021-06-22-020790' },
+        { key: "tenantId", value: 'pb.amritsar' }]
+        const propertyResponse = await httpRequest(`property-services/property/_search`, "search", queryParams, {});
+        this.setState({ property: propertyResponse.Properties[0] });
+        const { owners = [], alternateMobileNumberDetails = [] } = propertyResponse.Properties[0];
+        let propertyNumbers = [];
+        owners && owners.map(owner => {
+            propertyNumbers.push({
+                "id": owner.id,
+                "uuid": owner.uuid,
+                "name": owner.name,
+                "mobileNumber": owner.mobileNumber,
+                "type": "owner"
+            })
+        })
+        alternateMobileNumberDetails && alternateMobileNumberDetails.map(alter => {
+            propertyNumbers.push({
+                ...alter,
+                "type": "alter"
+            })
+        })
+        this.setState({ propertyNumbers: propertyNumbers })
+
+    }
+    toggleDialog = () => {
+        this.setState({ open: !this.state.open });
+    }
+
+    render() {
+        return (<div>
+            {VerifyButton("VERIFY",this.toggleDialog)}
+            {VerifyButton("LINKNUM",this.toggleDialog)}
+            {this.state.open && <ViewMobileDialog open={this.state.open} loadProperty={this.loadProperty} property={this.state.property} propertyNumbers={this.state.propertyNumbers} closeDialog={() => this.toggleDialog()}></ViewMobileDialog>}
+        </div>)
+
+    }
+}

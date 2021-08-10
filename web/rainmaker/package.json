@@ -27,6 +27,7 @@
     "egov-ui-kit-hocs": "babel dev-packages/egov-ui-kit-dev/src/hocs --out-dir packages/lib/egov-ui-kit/hocs --copy-files",
     "egov-ui-kit-assets": "babel dev-packages/egov-ui-kit-dev/src/assets --out-dir packages/lib/egov-ui-kit/assets --copy-files",
     "egov-ui-kit": "babel dev-packages/egov-ui-kit-dev/src --out-dir packages/lib/egov-ui-kit --copy-files",
+    "kit": "babel dev-packages/egov-ui-kit-dev/src --out-dir packages/employee/node_modules/egov-ui-kit --copy-files",
     "pgr-citizen": "babel dev-packages/pgr-citizen-dev/src --out-dir packages/lib/pgr-citizen --copy-files",
     "pt-citizen": "babel dev-packages/pt-citizen-dev/src --out-dir packages/lib/pt-citizen --copy-files",
     "pgr-employee": "babel dev-packages/pgr-employee-dev/src --out-dir packages/lib/pgr-employee --copy-files",

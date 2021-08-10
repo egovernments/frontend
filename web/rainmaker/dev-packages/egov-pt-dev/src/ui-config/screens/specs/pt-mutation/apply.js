@@ -278,7 +278,6 @@ const getApplicationData = async (action, state, dispatch) => {
     setCardVisibility(state, action, dispatch);
     dispatch(prepareFinalObject("PropertiesTemp", cloneDeep(payload.Properties)));
     // Prefilling radio buttons
-    debugger;
     set(
       action.screenConfig,
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children.genderRadioGroup.props.value",
