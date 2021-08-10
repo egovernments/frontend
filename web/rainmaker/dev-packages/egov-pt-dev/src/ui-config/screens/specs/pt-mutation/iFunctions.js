@@ -293,7 +293,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
        );
      }
 
-     const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT.MUTATION");
+     const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
 
 
       const finalResponse = getPropertyWithBillAmount(response, billResponse);   

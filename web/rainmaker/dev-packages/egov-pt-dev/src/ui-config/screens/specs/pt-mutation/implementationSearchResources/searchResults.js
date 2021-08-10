@@ -300,10 +300,10 @@ export const searchApplicationTable = {
 const onPropertyTabClick = (tableMeta) => {
   switch (tableMeta.rowData[5]) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[6]}`;
+      window.location.href = `apply?applicationNumber=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}`;
       break;
     default:
-      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[6]));
+      navigate(propertyInformationScreenLink(tableMeta.rowData[0], tableMeta.rowData[8]));
       break;
   }
 };
@@ -341,7 +341,7 @@ const propertyInformationScreenLink=(propertyId,tenantId)=>{
 
 
 const payAmount = (tableMeta) => {
-  setRoute(`/withoutAuth/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[7]}&businessService=PT`);
+  setRoute(`/egov-common/pay?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=PT`);
 };
 const mutaionLink = (tableMeta) => {
   setRoute(`/pt-mutation/apply?consumerCode=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}`);
