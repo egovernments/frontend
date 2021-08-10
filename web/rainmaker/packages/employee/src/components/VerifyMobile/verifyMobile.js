@@ -11,9 +11,13 @@ const VerifyButton = (type,openDialog) => {
         case "VERIFY":
             return <span><VerifyIcon /><span onClick={() => openDialog()}>VERIFY</span></span>;
         case "LINKNUM":
-            return <div>
-                <Label label="Link and Verify citizen’s mobile no. to send notifications and updates on this property" fontSize="20px" labelClassName="owner-history" />
-                <button type="button" style={{ width: "130px", height: "42px", background: "#FE7A51", color: "white", borderRadius: "2px" }} onClick={() => this.toggleDialog()} >LINK MOBILE NO.</button>
+            return <div style={{    display: "flex",
+                flexDirection: "row",
+                height: "60px",
+                alignItems: "center",
+                background: "#FE7A511F",color: "#FE7A51"}}>
+                <Label label="Link and Verify citizen’s mobile no. to send notifications and updates on this property" fontSize="16px"  labelStyle={{color: "#FE7A51" ,fontWeight : '400'}} />
+                <button type="button" style={{ width: "130px", height: "42px", background: "#FE7A51", color: "white", borderRadius: "2px" ,marginLeft:"10px"}} onClick={() => this.openDialog()} >LINK MOBILE NO.</button>
             </div>;
         case "VERIFIED":
             return <button onClick={() => openDialog()}>Verify Mobile</button>;
