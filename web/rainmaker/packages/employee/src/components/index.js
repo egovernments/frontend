@@ -40,6 +40,7 @@ import ToolTipUi from "egov-ui-kit/components/Tooltip";
 import UploadDrawer from "egov-ui-kit/components/UploadDrawer";
 import CommonShareContainer from "./CommonShareContainer";
 import VerifyMobile from './VerifyMobile/verifyMobile';
+
 export {
   Label,
   VerifyMobile,

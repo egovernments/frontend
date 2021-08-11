@@ -430,8 +430,10 @@ class OwnerInfo extends Component {
                       </div>
                     );
                   })}
-                  <VerifyMobile></VerifyMobile>
-                </div>
+                  <VerifyMobile   tenantId={properties.tenantId}
+                                  propertyId={properties.propertyId}
+                                  type="VERIFY"></VerifyMobile>
+                </div>  
               </div>
             }
           />

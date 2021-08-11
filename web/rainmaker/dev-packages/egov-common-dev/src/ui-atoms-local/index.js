@@ -28,9 +28,14 @@ const DisabledComponent = Loadable({
   loader: () => import("./DisabledComponent"),
   loading: () => <Loading />
 });
+const LinkComponent = Loadable({
+  loader: () => import("./LinkComponent"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
+  LinkComponent,
   ArrearTable,
   AutoSuggest,
   ApplicationNoContainer,
