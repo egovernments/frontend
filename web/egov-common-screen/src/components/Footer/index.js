@@ -1,113 +1,99 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import {
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
+import "./index.css";
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor:"#0B4B66",
-    maxWidth:"100%",
-    marginTop:"5%",
-    color:"#FFFFFF"
 
-      },
-      a:{
-        color:"#FFFF"
-      }, 
-  demo: {
-    //backgroundColor: theme.palette.background.paper,
+    backgroundColor:"#0B4B66"
+
   },
   container :
-  {
-        margin: theme.spacing(1, 0, 0),
+  {    marginLeft:"10%",
+  marginRight:"10%",
+  marginTop:"10%",
+
 
   },
-  title: {
-    //margin: theme.spacing(1, 0, 2),
-    fontSize:"1rem",
-    marginLeft: "14px"
+  header :
+  {
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    fontWeight: "500",
+    fontSize: "16px",
+    lineHeight: "19px",
+    color : "#FFFFFF"
+
+  },
+  paragraph :
+  {
+    color : "#FFFFFF",
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    fontWeight: "normal",
+    fontSize: "14px",
+    lineHeight: "16px"
+
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
   },
 }));
 
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
-
-export default function InteractiveList() {
+export default function CenteredGrid() {
   const classes = useStyles();
-
 
   return (
     <div className={classes.root}>
-
-      <Grid container className={classes.container} spacing={2} >
-        <Grid item xs={12} sm={6} md={2}>
-          <Typography variant="h5" className={classes.title}>
+      <Grid container spacing={1}  className={classes.container}>
+       
+        <Grid item xs={12} sm={6} md={3}>    
+        <p>   
+        <h5 className={classes.header}  style={{fontSize: "1rem", marginTop: "-5px"}}>
                 <b>Contact Details</b>
-          </Typography>
-          <div className={classes.demo}>
-            <List>
-              
-                <ListItem>
-                  <ListItemText
-                    
-                  />
-              
+              </h5></p>
+              <p className={classes.paragraph} >
                 Office Address: <br />
                 Urban Development Directorate <br />
                 31/62 Rajpur Road,<br />
                 Dehradun,<br />
                 Uttarakhand - 248001<br />
-                            
-
-                </ListItem>
-                <ListItem>
-             
-                Call Us
-                
-                </ListItem>
-                <ListItem>
-                +91 (0135) 2741541            
-        
-                </ListItem>
-
-                <ListItem>
-
-                   Email Us
-                   
-                </ListItem>
-                <ListItem>
+                </p>
+                <p className={classes.paragraph} >
+                Call Us<br />
+                +91 (0135) 2741541<br />             
+                </p>
+                <p className={classes.paragraph} >
+                Email Us<br />
                 < a href="mailto:enagarsewauk@gmail.com">enagarsewauk@gmail.com</a>
-                </ListItem>
-                <ListItem>
+                <br />  
                 < a href="https://www.facebook.com/profile.php?id=100070957113985"><i className={"fab fa-facebook"} style={{color: "white"}}/></a>
-    
-                </ListItem>
-                <ListItem>
+                
+
                 < a href="https://twitter.com/NagarsewaU"> <i className={" fab fa-twitter"} style={{color: "white"}} />
-</a>       
-                </ListItem>
-
-              
-            </List>
-          </div>
-        </Grid>
-        <Grid item xs={12} md={2}>
-          <Typography variant="h5" className={classes.title}>
-          <b>Other Departments</b>        </Typography>
-          <div className={classes.demo}>
-            <List >
-            <ListItem>
-
+</a>           
+                </p> 
+                   </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+       
+        <p>
+                <h5 className={classes.header} style={{fontSize: "1rem" , marginTop: "-5px"}}><b>Other Departments</b></h5>
+              </p>
               <a
                 href="https://uk.gov.in/"
                 id ="flink"
@@ -115,9 +101,7 @@ export default function InteractiveList() {
                 target="_blank"
               >
                 Uttarakhand State Government
-              </a>
-              </ListItem>
-                <ListItem>
+              </a><br />
               <a
                 href="https://udd.uk.gov.in/"
                 id ="flink"
@@ -125,133 +109,125 @@ export default function InteractiveList() {
                 target="_blank"
               >
                 Urban Development Directorate
-              </a>
-
-
-             
-              
-                </ListItem>
-                <ListItem>
-                <a
+              </a><br />
+              <a
                 href="http://mohua.gov.in/"
                 id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
                 MoHUA
-              </a>  
-                </ListItem>
-                <ListItem>
-                <a
+              </a><br />
+              <a
                 href="https://lgdirectory.gov.in/"
                 id ="flink"
                 //className={classes.block}
                 target="_blank"
               >
                 Local Government Directory
-              </a>     
-                </ListItem>
-                <ListItem>
-                <a
+              </a><br />
+              <a
                 href="http://smartcitydehradun.uk.gov.in/"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
               >
                 Dehradun Smart City
-              </a>                      
-                </ListItem>
-                <ListItem>
-                <a
+              </a><br />
+              <a
                 href="https://serviceonline.gov.in/"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
               >
                 NIC ServicePlus
-              </a>               
-                  
-                </ListItem>
-            </List>
-          </div>
+              </a>
+                
+               
         </Grid>
-        <Grid item xs={12} md={2}>
-          <Typography variant="h6" className={classes.title}>
-            Text only
-          </Typography>
-          <div className={classes.demo}>
-            <List >
-            <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />
-
-
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />   
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />      
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />                        
-                </ListItem>,
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />                 
-                  
-                </ListItem>
-            </List>
-          </div>
-        </Grid>
-        <Grid item xs={12} md={2}>
-          <Typography variant="h6" className={classes.title}>
-            Text only
-          </Typography>
-          <div className={classes.demo}>
-            <List >
-            <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />
-                 
-
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />   
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />      
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />                        
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primary="Single-line item"
-                  />                 
-                  
-                </ListItem>
-            </List>
-          </div>
-        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
         
+        <p              >
+                <h5 className={classes.header} style={{fontSize: "1rem", marginTop: "-5px"}}><b>User Manuals</b></h5>
+              </p>       
+              <a
+                href="/ukd-assets/PT_English_UserManual_Citizen.pdf"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+
+              >
+                Property Tax
+              </a><br />
+              <a
+                href="https://udd.uk.gov.in/pages/display/147-property-tax"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+
+              >
+                Property Tax Demand Registers
+              </a><br />
+              <a
+                href="/ukd-assets/TL_English_UserManual_Citizen.pdf"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+
+              >
+                Trade Licence
+              </a><br />
+              
+                 <span style={{color:"#FFFFFF"}} >Road Cutting </span><br />
+              
+              <a
+                href="https://www.youtube.com/channel/UCnRHcTjQ1ylEBR8nV6re1ZA"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+
+              >
+                NagarSewa YouTube Channel
+              </a><br />
+                 
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+        
+        <p>
+                <h5 className={classes.header} style={{fontSize: "1rem", marginTop: "-5px"}}><b>About Us</b></h5>
+              </p>              
+              <a
+                href="https://udd.uk.gov.in/pages/display/2-about-us"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+              >
+              About UDD
+              </a><br />
+              <a
+                href="https://smartnet.niua.org/nuis"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+              >
+              About NUIS
+              </a><br />
+              <a
+                href=" http://egov.org.in/"
+                //className={classes.block}
+                target="_blank"
+                id ="flink"
+              >
+              About eGov Foundation
+              </a> <br />
+
+
+            </Grid>
+
+
+
+
       </Grid>
-      
     </div>
   );
 }

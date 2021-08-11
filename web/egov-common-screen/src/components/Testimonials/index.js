@@ -43,9 +43,9 @@ export default function CenteredGrid() {
     <div id="testimonials">
       <Grid container spacing={1} >
        
-        <Grid item xs={12} sm={6} md = {4} lg={3} >                 <Card id="testmonialcard" plain  /* style = {{background: "#ffffff", width :"91%"}} */>
+        <Grid item xs={12} sm={6} md = {4} lg={3} >                 <Card plain  id="testmonialcard"   /* style = {{background: "#ffffff", width :"91%"}} */>
               <Grid item xs={12} sm={6} md = {4} lg={3}  >
-                <img src={team1}  class="center" id="testmonialimg" /*  style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
+               <p> <img src={team1}  class="center" id="testmonialimg" /*  style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  /></p>
               </Grid>
               <h4 style = {{textAlign: "center"}} >
               Shri K K Shukla

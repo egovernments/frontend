@@ -52,6 +52,13 @@
     color: #F47738 !important;
     }
     
+    #faqs {
+        margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 3%;
+
+    }
+
 
 @media only screen and (max-width: 1920px) {
 
