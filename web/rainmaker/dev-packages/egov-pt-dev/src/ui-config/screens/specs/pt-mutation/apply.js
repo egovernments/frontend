@@ -187,6 +187,7 @@ const getPropertyData = async (action, state, dispatch) => {
     if(payload){
 
       let oldMobileNumber = get(state, "screenConfiguration.preparedFinalObject.PropertyOldNumber");
+      console.log("oldmob",oldMobileNumber)
       let owners = get(state, "screenConfiguration.preparedFinalObject.Property.owners");
       let phoneno = /^[6-9][0-9]{9}$/; 
       let flag=false
