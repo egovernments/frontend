@@ -545,7 +545,7 @@ export const getPattern = type => {
     case "Name":
       return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;
     case "UCName":
-        return /^[a-zA-z0-9\s\*()#$~`&@#!%\/\-]{1,50}$/i;  
+        return /^[^{0-9}^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,._:;“”‘’]{1,50}$/i;  
     case "SearchOwnerName":
         return /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{3,50}$/i;
     case "MobileNo":
