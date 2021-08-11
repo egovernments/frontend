@@ -57,7 +57,7 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     if(billDetail.fromPeriod < Date.now() && Date.now() < billDetail.toPeriod) {
       
         billDetail.billAccountDetails.forEach(cur => {
-          if (cur.taxHeadCode.indexOf("REBATE") > -1) {
+          if (cur.taxHeadCode.indexOf("PT_TIME_REBATE") > -1) {
             rebate = rebate + cur.amount
           }
         
