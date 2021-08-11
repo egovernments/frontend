@@ -7,7 +7,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
 // core components
-import styles from "assets/jss/material-kit-react/views/componentsSections/downloadStyle.js";
+import styles from "assets/jss/material-ui-react/views/componentsSections/downloadStyle.js";
 
 const useStyles = makeStyles(styles);
 
@@ -56,11 +56,9 @@ export default function SectionDownload() {
                 href="#"
                 target="_blank"
               >
-                Material Kit PRO React{" "}
+                Material UI{" "}
               </a>
-              .It has a huge number of components, sections and example pages.
-              Start Your Development With A Badass Material-UI nspired by
-              Material Design.
+              Material UIMaterial UIMaterial UIMaterial UIMaterial UIMaterial UIMaterial UIMaterial UIMaterial UIMaterial UI
             </h4>
           </GridItem>
           <GridItem xs={12} sm={8} md={6}>
@@ -70,7 +68,7 @@ export default function SectionDownload() {
               href="#"
               target="_blank"
             >
-              Material Kit PRO
+              Material UI PRO
             </Button>
             <Button
               color="rose"

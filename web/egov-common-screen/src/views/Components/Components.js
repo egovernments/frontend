@@ -34,7 +34,7 @@ import  "./index.scss"
 //import SectionExamples from "./Sections/SectionExamples.js";
 //import SectionDownload from "./Sections/SectionDownload.js";
 
-//import styles from "assets/jss/material-kit-react/views/components.js";
+//import styles from "assets/jss/material-ui-react/views/components.js";
 
 //const useStyles = makeStyles(styles);
 

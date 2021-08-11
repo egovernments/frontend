@@ -13,7 +13,7 @@ import Tab from "@material-ui/core/Tab";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 
-import styles from "assets/jss/material-kit-react/components/navPillsStyle.js";
+import styles from "assets/jss/material-ui-react/components/navPillsStyle.js";
 
 const useStyles = makeStyles(styles);
 

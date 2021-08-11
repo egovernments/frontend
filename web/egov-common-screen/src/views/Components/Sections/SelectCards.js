@@ -27,7 +27,7 @@ import tradelicenceImage from "assets/img/tradelicence.png"
 import  "./index.scss"
 
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
+import styles from "assets/jss/material-ui-react/views/componentsSections/navbarsStyle.js";
 
 const useStyles = makeStyles(styles);
 

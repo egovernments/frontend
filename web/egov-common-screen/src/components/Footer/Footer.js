@@ -14,7 +14,7 @@ import GridItem from "components/Grid/GridItem.js";
 // @material-ui/icons
 import Favorite from "@material-ui/icons/Favorite";
 
-import styles from "assets/jss/material-kit-react/components/footerStyle.js";
+import styles from "assets/jss/material-ui-react/components/footerStyle.js";
 import  "./index.scss"
 
 

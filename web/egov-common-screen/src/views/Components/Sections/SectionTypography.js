@@ -18,7 +18,7 @@ import Quote from "components/Typography/Quote.js";
 
 import image from "assets/img/faces/avatar.jpg";
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/typographyStyle.js";
+import styles from "assets/jss/material-ui-react/views/componentsSections/typographyStyle.js";
 
 const useStyles = makeStyles(styles);
 
@@ -34,43 +34,43 @@ export default function SectionTypography() {
           <GridContainer>
             <div className={classes.typo}>
               <div className={classes.note}>Header 1</div>
-              <h1>The Life of Material Kit</h1>
+              <h1>Material UI</h1>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 2</div>
-              <h2>The Life of Material Kit</h2>
+              <h2>Material UI</h2>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 3</div>
-              <h3>The Life of Material Kit</h3>
+              <h3>Material UI</h3>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 4</div>
-              <h4>The Life of Material Kit</h4>
+              <h4>Material UI</h4>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 5</div>
-              <h5>The Life of Material Kit</h5>
+              <h5>Material UI</h5>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 6</div>
-              <h6>The Life of Material Kit</h6>
+              <h6>Material UI</h6>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 1</div>
-              <h1 className={classes.title}>The Life of Material Kit</h1>
+              <h1 className={classes.title}>Material UI</h1>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 2</div>
-              <h2 className={classes.title}>The Life of Material Kit</h2>
+              <h2 className={classes.title}>Material UI</h2>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 3</div>
-              <h3 className={classes.title}>The Life of Material Kit</h3>
+              <h3 className={classes.title}>Material UI</h3>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Header 4</div>
-              <h4 className={classes.title}>The Life of Material Kit</h4>
+              <h4 className={classes.title}>Material UI</h4>
             </div>
             <div className={classes.typo}>
               <div className={classes.note}>Paragraph</div>

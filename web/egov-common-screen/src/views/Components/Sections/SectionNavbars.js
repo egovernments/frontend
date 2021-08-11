@@ -24,7 +24,7 @@ import rightImage from "assets/img/logo.png";
 import  "./index.scss"
 
 
-import styles from "assets/jss/material-kit-react/views/componentsSections/navbarsStyle.js";
+import styles from "assets/jss/material-ui-react/views/componentsSections/navbarsStyle.js";
 
 const useStyles = makeStyles(styles);
 
