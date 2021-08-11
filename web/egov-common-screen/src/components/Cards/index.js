@@ -42,7 +42,7 @@ export default function CenteredGrid() {
         <Card id="card1" 
                    >
                      
-                  <h4 id="cardheadings">Property Tax</h4>
+                  <p id="cardheadings">Property Tax</p>
                     <img
               src={propertyTaxImage}
               alt="..."              
@@ -52,8 +52,8 @@ export default function CenteredGrid() {
               marginTop: "-53px",
               marginLeft: "5px"}}
             />
-                <CardContent style={{  marginLeft: "12%"}}>
-                  <p style={{marginTop: "-17%",color: "rgba(0, 0, 0, 0.6)"}}><br />
+                <CardContent style={{  marginLeft: "49px"}}>
+                  <p id="carddescription" style={{marginTop: "-51px",color: "rgba(0, 0, 0, 0.6)"}}><br />
                   Property Tax or House Tax is a local tax levied by municipal authorities for maintaining civic amenities in your area and is paid by occupier of that property                    
                   <br />
                     <b><a href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax Without Login </a></b> <br /> 
@@ -66,7 +66,7 @@ export default function CenteredGrid() {
               </Card>        </Grid>
         <Grid item xs={12} md = {4}>
         <Card id="card2"  >
-                  <h4 id="cardheadings">Trade Licence</h4>
+                  <p id="cardheadings">Trade Licence</p>
                    <img
               src={tradelicenceImage}
               alt="..."              
@@ -75,8 +75,8 @@ export default function CenteredGrid() {
               width: "50px",
               marginTop: "-53px",
               marginLeft: "5px"}} />
-                <CardContent style={{  marginLeft: "12%"}}>
-                  <p  style={{marginTop: "-17%",color: "rgba(0, 0, 0, 0.6)"}} ><br />
+                <CardContent style={{  marginLeft: "49px"}}>
+                  <p   id="carddescription" style={{marginTop: "-51px",color: "rgba(0, 0, 0, 0.6)"}} ><br />
                   A Trade License is permission issued by an Urban Local Body (ULB) to conduct specific trade or business according to the relevant rules, standards and safety guidelines on premises for which it has been issued
                     <br />
                     <a href="/citizen/user/login">New Application</a> <br /> 
@@ -87,7 +87,7 @@ export default function CenteredGrid() {
         </Grid>
         <Grid item xs={12} md = {4}>
         <Card   id="card3">
-                  <h4 id="cardheadings">Road Cutting</h4>
+                  <p id="cardheadings">Road Cutting</p>
                   <img
               src={roadCuttingImage}
               alt="..."              
@@ -96,8 +96,8 @@ export default function CenteredGrid() {
               width: "50px",
               marginTop: "-53px",
               marginLeft: "5px"}} />
-                <CardContent style={{  marginLeft: "12%"}}>
-                <p style={{marginTop: "-17%",color: "rgba(0, 0, 0, 0.6)"}}><br />
+                <CardContent style={{  marginLeft: "49px"}}>
+                <p id ="carddescription" style={{marginTop: "-51px",color: "rgba(0, 0, 0, 0.6)"}}><br />
                 Road Cutting charges are levied by ULBs to recover cost for maintaining roads when they are cut for laying pipes, installing electricity lines, internet lines etc
                     <br />
                     <a href="http://enagarsewa.uk.gov.in/" target="_blank" rel="noreferrer">Apply</a> <br /> 

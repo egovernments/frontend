@@ -7,6 +7,8 @@ import Cards from './components/Cards';
 import Faqs from './components/Faqs';
 import Message from './components/Message';
 import Footer from './components/Footer';
+import Testimonials from './components/Testimonials';
+
 
 
 function App() {
@@ -18,7 +20,25 @@ function App() {
    <Header />
    <Cards />
    <Message />
+   <center ><p  style ={{  fontFamily: "Roboto",
+  fontStyle: "normal",
+  fontWeight: "500",
+  fontSize: "36px",
+  lineHeight: "42px",
+  textAlign: "center",
+  color:"rgba(0, 0, 0, 0.87)"
+  }}>Frequently Asked Questions</p></center >
    <Faqs />
+   <center ><p  style ={{fontFamily: "Roboto",
+  fontStyle: "normal",
+  fontWeight: "500",
+  fontSize: "36px",
+  lineHeight: "42px",
+  textAlign: "center",
+  color:"rgba(0, 0, 0, 0.87)"}}>User Testimonials</p></center >
+
+<Testimonials />
+
    <Footer />
  </div>
 

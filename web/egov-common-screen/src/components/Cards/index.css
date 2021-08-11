@@ -16,6 +16,15 @@
     border-radius: 8px;
 
 }
+
+#carddescription
+{
+    font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 16px;
+}
 @media only screen and (max-width: 576px) {
     
     #card1
@@ -232,17 +241,17 @@
 {
     #card1
     {
-        height: 416px;
+        height: 300px;
         margin-top: -114px;
     }
     #card2
     {
-        height: 416px;
+        height: 300px;
         margin-top: -114px;
     }
     #card3
     {
-        height: 416px;
+        height: 300px;
         margin-top: -114px;
     }
    
@@ -258,18 +267,19 @@
     } 
     #card1
     {
-        height: 420px;
-        margin-top: -114px;
+        height: 250px;
+        margin-top: -50px;
     }
     #card2
     {
-        height: 420px;
-        margin-top: -114px;
+        height: 250px;
+        margin-top: 0px;
     }
     #card3
     {
-        margin-top: 50px ;
-        height: 420px;
+        height: 250px;
+        margin-top: 0px;
+
     }
   
 }
@@ -285,18 +295,19 @@
     } 
     #card1
     {
-        height: 420px;
-        margin-top: -114px;
+        height: 250px;
+        margin-top: -50px;
     }
     #card2
     {
-        height: 420px;
-        margin-top: -114px;
+        height: 250px;
+        margin-top: 0px;
     }
     #card3
     {
-        margin-top: 50px ;
-        height: 420px;
+        height: 250px;
+        margin-top: 0px;
+
     }
     
 }

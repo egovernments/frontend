@@ -115,7 +115,7 @@ class Header extends React.Component {
 
       <div style={{backgroundColor: "#f3f4f5 !important"}}>
       <div id="flex-container">
-      <div style={{width: "30%", float:"left", marginLeft: "9%"}}><img
+      <div style={{width: "30%", float:"left", marginLeft: "10%"}}><img
                         src={leftImage}
                         alt="..."
                         style={{
@@ -127,16 +127,18 @@ class Header extends React.Component {
                         }}
                       /></div>
   
-    <div style={{width: "70%", float:"right", marginRight: "5%",}}>
-      <div id = "links" ><h4    id ="empheading" style={{fontWeight:"500",color: "#F47738",}}>
-        <a href="/employee/user/login"   >Employee Login </a></h4>
+    <div style={{width: "70%", float:"right", marginRight: "10%",}}>
+      <div id = "links" > <p>
+        <a href="/employee/user/login"   >Employee Login </a></p>
         </div>
         <img
                         src={rightImage}
                         alt="..."
                         style={{  width: "210px",
                           height: "34px",
-                          right: "110px",
+                          right: "10%",
+                          top: "15px",
+                          position: "absolute"
                         
                         }}
                   /></div>

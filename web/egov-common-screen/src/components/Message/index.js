@@ -53,7 +53,13 @@ class Message extends React.Component {
     return (
       <div>
           <Card  id="message" >                   
-                <center><p style={{fontWeight: "400", color: "#F47738 !important"}}>Pay your Property Tax Dues before 31st March and get 10% rebate</p></center>
+                <center><p style={{fontWeight: "400", color: "#F47738 !important",              
+              fontFamily: "Roboto",
+              fontStyle: "normal",
+              fontWeight: "normal",
+              fontSize: "16px",
+              lineHeight: "19px",
+}}>Pay your Property Tax Dues before 31st March and get 10% rebate</p></center>
               
               </Card>
         </div> 
