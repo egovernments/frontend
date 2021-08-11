@@ -13,7 +13,7 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
-    root: {
+  /*   root: {
       paddingTop: "0px",
       overflow: "visible",
       height: "100%",
@@ -35,7 +35,7 @@ const styles = (theme) => ({
       fontWeight: "680",
       lineHeight: 2,
     },
-    listStyle: {},
+    listStyle: {}, */
   });
 
 class Message extends React.Component {
@@ -53,10 +53,8 @@ class Message extends React.Component {
     return (
       <div>
           <Card  id="message" >                   
-                <CardContent  style={{padding: "0.375rem 0.875rem"}}>
-                <center><h4 style={{fontWeight: "400", color: "#F47738 !important"}}>Pay your Property Tax Dues before 31st March and get 10% rebate</h4></center>
+                <center><p style={{fontWeight: "400", color: "#F47738 !important"}}>Pay your Property Tax Dues before 31st March and get 10% rebate</p></center>
               
-                </CardContent>               
               </Card>
         </div> 
     );

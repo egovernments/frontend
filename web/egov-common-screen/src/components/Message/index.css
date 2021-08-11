@@ -1,10 +1,26 @@
 
- #message{
+/*  #message{
     background-color: #f3e5de;
     color: #F47738;
     border-radius: 10px;            
-}
+} */
+#message{
+/* position: absolute;
+width: 1180px;
+height: 56px;
+left: 130px;
+top: 578px; */
+background: #F47738;
+color: #F47738;
+opacity: 0.12;
+border-radius: 8px;
+margin-left: 10%;
+margin-right: 10%;
+margin-top: 2%;
+margin-bottom: 2%;
 
+}
+/* 
 @media only screen and (max-width: 576px) {
     
 
@@ -150,4 +166,4 @@
     }
 }
 
-}
+} */

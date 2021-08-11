@@ -7,13 +7,25 @@ body {
   font-family: 'Roboto';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #E5E5E5;
   
 }
 
-a { color: #F47738; }
+a { color: #F47738; 
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  text-decoration: none;
+}
+
+
 
 #root{
   height: 100%;
+
 }
 
 

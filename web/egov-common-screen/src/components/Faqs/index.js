@@ -41,7 +41,7 @@ const config = {
 export default function SectionFAQs() {
 
     return (
-        <div>
+        <div id="faqs">
             <Faq
                 data={data}
                 styles={styles}

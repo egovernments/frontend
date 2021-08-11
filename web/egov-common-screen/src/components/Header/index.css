@@ -29,6 +29,8 @@
     margin-left: 65px;
     font-weight: 500;
     margin-top: 30px;
+    color: black;
+
         } 
         #singletestimonial
         {
@@ -74,8 +76,8 @@
         width: 100%;    
     }
     #faqs {
-        margin-left: 7%;
-    margin-right: 4%;
+        margin-left: 10%;
+    margin-right: 10%;
     }
     #homepagecards {
         margin-left: 66px;
@@ -100,8 +102,8 @@
     #bannerimage {
         width: 100%;   }
     #faqs {
-        margin-left: 7%;
-    margin-right: 4%;
+        margin-left: 10%;
+    margin-right: 10%;
     }
     #homepagecards {
         margin-left: 66px;
@@ -128,8 +130,8 @@
         width: 1424px;    
     }
     #faqs {
-        margin-left: 7%;
-    margin-right: 4%;
+        margin-left: 10%;
+    margin-right: 10%;
     }
     #homepagecards {
         margin-left: 66px;
@@ -152,8 +154,8 @@
         margin-left: 58%;
     }
     #faqs {
-        margin-left: 7%;
-    margin-right: 5%;
+        margin-left: 10%;
+    margin-right: 10%;
     }
     #testimonials {
         margin-left: 8%;
@@ -316,8 +318,8 @@
         }
     
         #faqs {
-            margin-left: 9%;
-        margin-right: 5%;
+            margin-left: 10%;
+    margin-right: 10%;
         }
     
         #testimonials {
@@ -349,8 +351,8 @@
     }
 
     #faqs {
-        margin-left: 9%;
-    margin-right: 5%;
+        margin-left: 10%;
+    margin-right: 10%;
     }
 
     #testimonials {
