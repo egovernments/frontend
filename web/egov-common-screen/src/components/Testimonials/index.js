@@ -52,7 +52,12 @@ export default function CenteredGrid() {
              {/*  <Grid item xs={12} sm={6} md = {4} lg={3} justifyContent="center"  > */}
                 <img src={team1}    id="testmonialimg"  /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
               {/* </Grid> */}
-              <h4 style = {{textAlign: "center"}} >
+              <h4 style = {{textAlign: "center",
+            fontFamily: "Roboto",
+            fontStyle: "normal",
+            fontWeight: "normal",
+            fontSize: "16px",
+            lineHeight: "24px"}} >
               Shri K K Shukla
                 <br />
                 <small>Survey of India,Govt of India</small>
@@ -67,7 +72,12 @@ export default function CenteredGrid() {
         <Grid item xs={12} sm={6} md = {3} lg={3} >
           <Card plain id="testmonialcard" className={classes.card}>              
                 <img src={team2}   id="testmonialimg" /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
-              <h4 style = {{textAlign: "center"}} >
+              <h4 style = {{textAlign: "center", 
+            fontFamily: "Roboto",
+            fontStyle: "normal",
+            fontWeight: "normal",
+            fontSize: "16px",
+            lineHeight: "24px"}} >
               Muni Ki Reti
                 <br />
                 <small>Executive Officer</small>
@@ -81,7 +91,12 @@ export default function CenteredGrid() {
             <Grid item xs={12} sm={6} md = {3} lg={3} > 
             <Card plain id="testmonialcard" className={classes.card}>
                 <img src={team3}   id="testmonialimg" /* id="testimonialimg3" style={{marginTop: "-50px", marginLeft: "-17px"}}  */alt="..."  />
-              <h4 style = {{textAlign: "center"}}>
+              <h4 style = {{textAlign: "center", 
+            fontFamily: "Roboto",
+            fontStyle: "normal",
+            fontWeight: "normal",
+            fontSize: "16px",
+            lineHeight: "24px"}}>
               Mahesh Chandra Pandey
                 <br />
                 <small c>Hotel Owner</small>
@@ -94,7 +109,12 @@ export default function CenteredGrid() {
             </Card>       </Grid>
         <Grid item xs={12} sm={6} md = {3} lg={3}><Card plain id="testmonialcard"  className={classes.card}>
                 <img src={team4}  id="testmonialimg" /* id="testimonialimg4" style={{marginTop: "-50px"}} */ alt="..."  />
-              <h4 style = {{textAlign: "center"}}>
+              <h4 style = {{textAlign: "center",
+            fontFamily: "Roboto",
+            fontStyle: "normal",
+            fontWeight: "normal",
+            fontSize: "16px",
+            lineHeight: "24px"}}>
               Shri S P Rawat
                 <br />
                 <small >Senior Officer (Retd.), ONGC</small>

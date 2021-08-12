@@ -167,7 +167,7 @@ top: 24px;
 
         #singletestimonial
         {
-            height: 300px;
+            height: 200px;
         }
 
 }
@@ -183,7 +183,7 @@ top: 24px;
 
         #singletestimonial
         {
-            height: 300px;
+            height: 200px;
         }
        /*  #testimonialimg3
         {
@@ -246,7 +246,23 @@ top: 24px;
 
 
 
+@media only screen and (max-width: 1152px) {
+
+    #links {
+        display: inline-flex;
+        margin-left: 35%;
+    
+    }
+   
+}
+
  @media only screen and (max-width: 1200px) {
+
+    #links {
+        display: inline-flex;
+        margin-left: 48%;
+    
+    }
 
     #testimonialimg3{
         width: 100%;
