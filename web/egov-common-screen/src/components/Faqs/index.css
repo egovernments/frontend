@@ -4,15 +4,22 @@
     margin-left: 15px;
 }
 
-.faq-title 
+.row-title-text 
 {
-    margin-left: 33%;
-    margin-right: 33%;
     border-bottom: 10px #f49666;
     font-family: Roboto;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
+    line-height: 19px;
+
+}
+.styles_row-content-text__2sgAB
+{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px !important;
     line-height: 19px;
 
 }

@@ -26,6 +26,7 @@ const styles = {
     // bgColor: 'white',
     titleTextColor: "black",
     rowTitleColor: "black",
+    rowTitleTextSize: "16px",
     // rowContentColor: 'grey',
     // arrowColor: "red",   
 
