@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   {    marginLeft:"10%",
   marginRight:"10%",
   marginTop:"10%",
+  paddingRight:"18%"
 
 
   },
@@ -75,11 +76,11 @@ export default function CenteredGrid() {
                 Uttarakhand - 248001<br />
                 </p>
                 <p className={classes.paragraph} >
-                Call Us<br />
+                Call Us:<br />
                 +91 (0135) 2741541<br />             
                 </p>
                 <p className={classes.paragraph} >
-                Email Us<br />
+                Email Us:<br />
                 < a href="mailto:enagarsewauk@gmail.com">enagarsewauk@gmail.com</a>
                 <br />  
                 < a href="https://www.facebook.com/profile.php?id=100070957113985"><i className={"fab fa-facebook"} style={{color: "white"}}/></a>
