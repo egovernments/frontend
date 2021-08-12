@@ -305,11 +305,11 @@ top: 24px;
     }
     #singletestimonial
         {
-            height: 250px;
+            height: 150px;
         }
         #links {
             display: inline-flex;
-            margin-left: 14%;
+            margin-left: 35%;
         
         }
     
@@ -334,13 +334,19 @@ top: 24px;
 @media only screen and (max-width: 700px) {
     #links {
         display: inline-flex;
-        margin-left: -6%;
+        margin-left: 10%;
+    }
+}
+@media only screen and (max-width: 600px) {
+    #links {
+        display: inline-flex;
+        margin-left: 10%;
     }
 }
 @media only screen and (max-width: 800px) {
     #links {
         display: inline-flex;
-        margin-left: 0%;
+        margin-left: 10%;
     }
 
     #faqs {
@@ -387,6 +393,10 @@ top: 24px;
     #empheading
     {
         padding:1px;
+    }
+    #singletestimonial
+    {
+        height: auto;
     }
 
 

@@ -80,7 +80,7 @@ export default function CenteredGrid() {
             </Grid>
             <Grid item xs={12} sm={6} md = {4} lg={3} > 
             <Card plain id="testmonialcard" className={classes.card}>
-                <img src={team1}  class="center" id="testmonialimg" /* id="testimonialimg3" style={{marginTop: "-50px", marginLeft: "-17px"}}  */alt="..."  />
+                <img src={team3}  class="center" id="testmonialimg" /* id="testimonialimg3" style={{marginTop: "-50px", marginLeft: "-17px"}}  */alt="..."  />
               <h4 style = {{textAlign: "center"}}>
               Mahesh Chandra Pandey
                 <br />
@@ -93,7 +93,7 @@ export default function CenteredGrid() {
               </CardContent>
             </Card>       </Grid>
         <Grid item xs={12} sm={6} md = {4} lg={3}><Card plain id="testmonialcard">
-                <img src={team1}  class="center" id="testmonialimg" /* id="testimonialimg4" style={{marginTop: "-50px"}} */ alt="..."  />
+                <img src={team4}  class="center" id="testmonialimg" /* id="testimonialimg4" style={{marginTop: "-50px"}} */ alt="..."  />
               <h4 style = {{textAlign: "center"}}>
               Shri S P Rawat
                 <br />
