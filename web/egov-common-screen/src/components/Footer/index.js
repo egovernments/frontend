@@ -86,9 +86,9 @@ export default function CenteredGrid() {
                 < a href="mailto:enagarsewauk@gmail.com">enagarsewauk@gmail.com</a>
                 <br />  
                 <a href="https://www.facebook.com/profile.php?id=100070957113985">                
-                <img src={facebook}   style={{width: "7%", marginRight: "3%"}}   /></a>
+                <img src={facebook}   style={{width: "6%", marginRight: "6%"}}   /></a>
                 <a href="https://twitter.com/NagarsewaU">                                 
-                <img src={twitter}   style={{width: "7%"}}   /></a>           
+                <img src={twitter}   style={{width: "6%"}}   /></a>           
                 </p> 
                    </Grid>
         <Grid item xs={12} sm={6} md={3}>
