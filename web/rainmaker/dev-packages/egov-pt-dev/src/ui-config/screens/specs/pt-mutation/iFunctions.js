@@ -296,7 +296,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
      const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
 
 
-      const finalResponse = getPropertyWithBillAmount(response, billResponse);   
+      const finalResponse = getPropertyWithBillAmount(response, billResponse);  
 
       
 
@@ -312,7 +312,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
           item.oldPropertyId || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
-        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "0",
+        ["PT_AMOUNT_DUE"]: (item.totalAmount) ? item.totalAmount : "0",
         ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount },
         ["TENANT_ID"]: item.tenantId,
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"

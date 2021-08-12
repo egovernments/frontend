@@ -131,7 +131,7 @@ export const searchPropertyTable = {
       {labelName: "Guardian Name", labelKey: "PT_GUARDIAN_NAME"},
       {labelName: "Existing Property Id", labelKey: "PT_COMMON_COL_EXISTING_PROP_ID"},
       {labelName: "Address", labelKey: "PT_COMMON_COL_ADDRESS"},
-      {labelName: "Pending Amount", labelKey: "PT_MUTATION_PENDING_AMOUNT"},
+      {labelName: "Pending Amount", labelKey: "PT_AMOUNT_DUE"},
       {
         labelName: "Action",
         labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
