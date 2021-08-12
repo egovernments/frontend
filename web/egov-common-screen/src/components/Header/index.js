@@ -128,7 +128,7 @@ class Header extends React.Component {
                       /></div>
   
     <div style={{width: "70%", float:"right", marginRight: "10%",}}>
-      <div id = "links" > <p>
+      <div id = "links" > <p id="emplogin">
         <a href="/employee/user/login"   >Employee Login </a></p>
         </div>
         <img

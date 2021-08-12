@@ -28,6 +28,14 @@ width: 100px;
 height: 16px;
 top: 24px;
 }
+#emplogin
+{
+    font-weight: 500;
+    color: rgb(244, 119, 56);
+     font-weight: 500; 
+    font-style: normal;
+    font-family: 'Roboto';
+}
         #cardheadings
         {
             margin-left: 65px;
@@ -37,7 +45,7 @@ top: 24px;
             font-style: normal;
             font-size: 16px;
             line-height: 19px;
-            color:black;
+            color:rgba(0, 0, 0, 0.87);
         } 
         #singletestimonial
         {
