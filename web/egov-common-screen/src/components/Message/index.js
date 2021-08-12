@@ -59,7 +59,7 @@ class Message extends React.Component {
               fontWeight: "normal",
               fontSize: "16px",
               lineHeight: "19px",
-}}>Pay your Property Tax Dues before 31st March and get 10% rebate</p></center>
+}}>Pay your Property Tax or avail Trade Licenses online and easily sitting at your home</p></center>
               
               </Card>
         </div> 
