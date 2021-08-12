@@ -52,7 +52,7 @@ export default function CenteredGrid() {
              {/*  <Grid item xs={12} sm={6} md = {4} lg={3} justifyContent="center"  > */}
                 <img src={team1}    id="testmonialimg"  /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
               {/* </Grid> */}
-              <h4 style = {{textAlign: "center",
+              <p style = {{textAlign: "center",
             fontFamily: "Roboto",
             fontStyle: "normal",
             fontWeight: "normal",
@@ -61,7 +61,7 @@ export default function CenteredGrid() {
               Shri K K Shukla
                 <br />
                 <small>Survey of India,Govt of India</small>
-              </h4>
+              </p>
               <CardContent>
               <p id="singletestimonial" >
               &rdquo;It was a good experience with the newly launched portal. Portal is user friendly interface and common people can use and pay his or her property tax while sitting in the home. In this way time and energy is saved. Money transactions are safe and receipt generated through the portal is nice feature of this portal. I wish this team all the best &rdquo;       </p>
@@ -72,7 +72,7 @@ export default function CenteredGrid() {
         <Grid item xs={12} sm={6} md = {3} lg={3} >
           <Card plain id="testmonialcard" className={classes.card}>              
                 <img src={team2}   id="testmonialimg" /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
-              <h4 style = {{textAlign: "center", 
+              <p style = {{textAlign: "center", 
             fontFamily: "Roboto",
             fontStyle: "normal",
             fontWeight: "normal",
@@ -81,7 +81,7 @@ export default function CenteredGrid() {
               Muni Ki Reti
                 <br />
                 <small>Executive Officer</small>
-              </h4>
+              </p>
               <CardContent>
               <p id="singletestimonial" >
               &rdquo;Nagarsewa Portal is a very good initiative for citizens and ULB employees. It ensures contactless delivery of all essential services in the pandemic. It is fast and also ensures transparency of services for citizens. It is secured and easily accessible at door step. Also monitoring at ULB and citizen level have become a lot easier. &rdquo;       </p>
@@ -91,7 +91,7 @@ export default function CenteredGrid() {
             <Grid item xs={12} sm={6} md = {3} lg={3} > 
             <Card plain id="testmonialcard" className={classes.card}>
                 <img src={team3}   id="testmonialimg" /* id="testimonialimg3" style={{marginTop: "-50px", marginLeft: "-17px"}}  */alt="..."  />
-              <h4 style = {{textAlign: "center", 
+              <p style = {{textAlign: "center", 
             fontFamily: "Roboto",
             fontStyle: "normal",
             fontWeight: "normal",
@@ -100,7 +100,7 @@ export default function CenteredGrid() {
               Mahesh Chandra Pandey
                 <br />
                 <small c>Hotel Owner</small>
-              </h4>
+              </p>
               <CardContent>
               <p id="singletestimonial" >
               &rdquo;It was a good experience. As earlier we have to come to Nigam for Trade License but with this newly launched website, we can pay fees by sitting at home which is a very useful feature in this time of pandemic.&rdquo;
@@ -109,7 +109,7 @@ export default function CenteredGrid() {
             </Card>       </Grid>
         <Grid item xs={12} sm={6} md = {3} lg={3}><Card plain id="testmonialcard"  className={classes.card}>
                 <img src={team4}  id="testmonialimg" /* id="testimonialimg4" style={{marginTop: "-50px"}} */ alt="..."  />
-              <h4 style = {{textAlign: "center",
+              <p style = {{textAlign: "center",
             fontFamily: "Roboto",
             fontStyle: "normal",
             fontWeight: "normal",
@@ -118,7 +118,7 @@ export default function CenteredGrid() {
               Shri S P Rawat
                 <br />
                 <small >Senior Officer (Retd.), ONGC</small>
-              </h4>
+              </p>
               <CardContent>
               <p  id="singletestimonial" >
               &rdquo;It was a good experience, as initially I got some problem in depositing house tax online but with the support of their helpdesk, I have deposited my tax successfully. I pay sincere thanks to their helpdesk for their dedication and Valuable Support provided to me and I wish them success in this initiative.&rdquo;

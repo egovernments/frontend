@@ -13,6 +13,8 @@ import {
 } from "@material-ui/core";
 import "./index.css";
 
+import facebook from "../../img/facebook.png";
+import twitter from "../../img/twitter.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,11 +85,10 @@ export default function CenteredGrid() {
                 Email Us:<br />
                 < a href="mailto:enagarsewauk@gmail.com">enagarsewauk@gmail.com</a>
                 <br />  
-                < a href="https://www.facebook.com/profile.php?id=100070957113985"><i className={"fab fa-facebook"} style={{color: "white"}}/></a>
-                
-
-                < a href="https://twitter.com/NagarsewaU"> <i className={" fab fa-twitter"} style={{color: "white"}} />
-</a>           
+                <a href="https://www.facebook.com/profile.php?id=100070957113985">                
+                <img src={facebook}   style={{width: "7%", marginRight: "3%"}}   /></a>
+                <a href="https://twitter.com/NagarsewaU">                                 
+                <img src={twitter}   style={{width: "7%"}}   /></a>           
                 </p> 
                    </Grid>
         <Grid item xs={12} sm={6} md={3}>
