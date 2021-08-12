@@ -33,7 +33,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-  }, */
+  },*/
+  card: 
+  {
+    textAlign: 'center'
+  }
+
 }));
 
 export default function CenteredGrid() {
@@ -41,28 +46,27 @@ export default function CenteredGrid() {
 
   return (
     <div id="testimonials">
-      <Grid container spacing={1} >
-       
-        <Grid item xs={12} sm={6} md = {4} lg={3} >                 <Card plain  id="testmonialcard"   /* style = {{background: "#ffffff", width :"91%"}} */>
-              <Grid item xs={12} sm={6} md = {4} lg={3}  >
-               <p> <img src={team1}  class="center" id="testmonialimg" /*  style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  /></p>
-              </Grid>
+      <Grid container spacing={3}  justifyContent="center" >
+      <Grid item xs={12} sm={6} md = {4} lg={3}  >
+          <Card plain id="testmonialcard" className={classes.card} >
+             {/*  <Grid item xs={12} sm={6} md = {4} lg={3} justifyContent="center"  > */}
+                <img src={team1}    id="testmonialimg"  /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
+              {/* </Grid> */}
               <h4 style = {{textAlign: "center"}} >
               Shri K K Shukla
                 <br />
-                <small >Survey of India,Govt of India</small>
-                <small ></small>
+                <small>Survey of India,Govt of India</small>
               </h4>
               <CardContent>
-                <p  id="singletestimonial" >
-                &rdquo;It was a good experience with the newly launched portal. Portal is user friendly interface and common people can use and pay his or her property tax while sitting in the home. In this way time and energy is saved. Money transactions are safe and receipt generated through the portal is nice feature of this portal. I wish this team all the best.&rdquo;
-                </p>
+              <p id="singletestimonial" >
+              &rdquo;It was a good experience with the newly launched portal. Portal is user friendly interface and common people can use and pay his or her property tax while sitting in the home. In this way time and energy is saved. Money transactions are safe and receipt generated through the portal is nice feature of this portal. I wish this team all the best &rdquo;       </p>
               </CardContent>
-            </Card></Grid>
-        <Grid item xs={12} sm={6} md = {4} lg={3} ><Card plain id="testmonialcard"  >
-              <Grid item xs={12} sm={6} md = {4} lg={3}  >
+            </Card>        
+            </Grid>
+        
+        <Grid item xs={12} sm={6} md = {4} lg={3} >
+          <Card plain id="testmonialcard" className={classes.card}>              
                 <img src={team2}  class="center"  id="testmonialimg" /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
-              </Grid>
               <h4 style = {{textAlign: "center"}} >
               Muni Ki Reti
                 <br />
@@ -72,12 +76,11 @@ export default function CenteredGrid() {
               <p id="singletestimonial" >
               &rdquo;Nagarsewa Portal is a very good initiative for citizens and ULB employees. It ensures contactless delivery of all essential services in the pandemic. It is fast and also ensures transparency of services for citizens. It is secured and easily accessible at door step. Also monitoring at ULB and citizen level have become a lot easier. &rdquo;       </p>
               </CardContent>
-            </Card>        </Grid>
+            </Card>        
+            </Grid>
             <Grid item xs={12} sm={6} md = {4} lg={3} > 
-            <Card plain id="testmonialcard" >
-              <Grid item xs={12} sm={6} md = {4} lg={3}  >
+            <Card plain id="testmonialcard" className={classes.card}>
                 <img src={team1}  class="center" id="testmonialimg" /* id="testimonialimg3" style={{marginTop: "-50px", marginLeft: "-17px"}}  */alt="..."  />
-              </Grid>
               <h4 style = {{textAlign: "center"}}>
               Mahesh Chandra Pandey
                 <br />
@@ -90,9 +93,7 @@ export default function CenteredGrid() {
               </CardContent>
             </Card>       </Grid>
         <Grid item xs={12} sm={6} md = {4} lg={3}><Card plain id="testmonialcard">
-              <Grid item xs={12} sm={6} md = {4} lg={3} >
-                <center><img src={team1}  class="center" id="testmonialimg" /* id="testimonialimg4" style={{marginTop: "-50px"}} */ alt="..."  />
-                </center></Grid>
+                <img src={team1}  class="center" id="testmonialimg" /* id="testimonialimg4" style={{marginTop: "-50px"}} */ alt="..."  />
               <h4 style = {{textAlign: "center"}}>
               Shri S P Rawat
                 <br />
