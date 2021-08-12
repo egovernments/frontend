@@ -14,7 +14,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #E5E5E5;
   overflow-x: hidden;
-  
+}
+@media only screen and (max-width: 1024px) {
+
+  #root
+{
+  overflow-x: hidden;
+}  
 }
 
 a:hover, a:visited, a:link, a:active
@@ -33,55 +39,6 @@ a { color: #F47738;
 }
 
 
-
-#root{
-  height: 100%;
-
-}
-
-
-
-@media only screen and (max-width: 320px) {
-  #root {
-      margin-right: 2%;
-      margin-left: 2%;
-  }
-}
-
-@media screen and (min-width: 321px) and (max-width: 360px) {
-
-
-  #root {
-      margin-right: 2%;
-      margin-left: 2%;
-  }
-}
-
-@media screen and (min-width: 361px) and (max-width: 375px) {
-
-
-  #root {
-      margin-right: 2%;
-      margin-left: 2%;
-
-  }
-}
-
-@media screen and (min-width: 378px) and (max-width: 413px) {
-  #root {
-      margin-right: 2%;
-      margin-left: 2%;
-
-  }
-}
-
-@media screen and (min-width: 414px) and (max-width: 555px) {
-  #root {
-      margin-right: 2%;
-      margin-left: 2%;
-
-  }
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

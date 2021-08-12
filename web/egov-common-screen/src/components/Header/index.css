@@ -263,7 +263,7 @@ top: 24px;
     }
     #singletestimonial
         {
-            height: 200px;
+            height: 250px;
         }
         #testimonialimg1{
             width: 81%;
@@ -281,7 +281,7 @@ top: 24px;
 
 @media only screen and (max-width: 800px) {
     #bannerimage {
-        width: auto;
+        width: 100%;
     }
     #singletestimonial
         {
@@ -300,7 +300,7 @@ top: 24px;
 
 @media only screen and (max-width: 900px) {
     #bannerimage {
-        width: auto;
+        width: 100%;
     }
     #testimonialimg2{
         width: 200%;
@@ -313,7 +313,7 @@ top: 24px;
     }
     #singletestimonial
         {
-            height: 150px;
+            height: 250px;
         }
         #links {
             display: inline-flex;
@@ -377,6 +377,7 @@ top: 24px;
 
 @media only screen and (max-width: 576px) {
 
+
     #flex-container {
 
         height: 100px;
@@ -392,7 +393,7 @@ top: 24px;
     }
 
     #bannerimage {
-        width: auto;
+        width: 100%;
     }
     #testimonialimg1{
         width: 200%;
@@ -413,4 +414,54 @@ top: 24px;
         margin-right: 10px;
     }
 }
+
+@media only screen and (max-width: 411px) {
+
+    #links {
+        display: inline-flex;
+    margin-left: 53%;
+    margin-top: -28px;
+    }
+
+}
+@media only screen and (max-width: 376px) {
+
+    #links {
+        display: inline-flex;
+    margin-left: 49%;
+    margin-top: -28px;
+    }
+
+}
+@media only screen and (max-width: 360px) {
+
+    #links {
+        display: inline-flex;
+    margin-left: 49%;
+    margin-top: -28px;
+    }
+
+}
+
+@media only screen and (max-width: 280px) {
+
+    #links {
+        display: inline-flex;
+    margin-left: 53%;
+    margin-top: -28px;
+    }
+
+}
+
+
+@media only screen and (max-width: 320px) {
+
+    #links {
+        display: inline-flex;
+    margin-left: 43%;
+    margin-top: -28px;
+    }
+
+}
+
 

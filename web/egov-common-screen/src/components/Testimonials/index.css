@@ -2,7 +2,7 @@
 {
     margin-left: 10%;
     margin-right: 10%;
-    margin-top: 3%;
+    margin-top: 5%;
     z-index: 1;
 
 
@@ -30,6 +30,21 @@ img.center {
 
 }
 
+@media only screen and (max-width: 900px) {
+
+    #testmonialcard
+    {
+      margin-top: 10%;
+    }
+    }
+
+@media only screen and (max-width: 551px) {
+
+#testmonialcard
+{
+  margin-top: 10%;
+}
+}
 
 
 

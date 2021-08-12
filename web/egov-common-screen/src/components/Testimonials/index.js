@@ -47,7 +47,7 @@ export default function CenteredGrid() {
   return (
     <div id="testimonials">
       <Grid container spacing={3}  justifyContent="center" >
-      <Grid item xs={12} sm={6} md = {4} lg={3}  >
+      <Grid item xs={12} sm={6} md = {3} lg={3}  >
           <Card plain id="testmonialcard" className={classes.card} >
              {/*  <Grid item xs={12} sm={6} md = {4} lg={3} justifyContent="center"  > */}
                 <img src={team1}    id="testmonialimg"  /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
@@ -64,7 +64,7 @@ export default function CenteredGrid() {
             </Card>        
             </Grid>
         
-        <Grid item xs={12} sm={6} md = {4} lg={3} >
+        <Grid item xs={12} sm={6} md = {3} lg={3} >
           <Card plain id="testmonialcard" className={classes.card}>              
                 <img src={team2}   id="testmonialimg" /* id="testimonialimg2" style={{marginTop: "-50px", marginLeft: "-17px"}} */ alt="..."  />
               <h4 style = {{textAlign: "center"}} >
@@ -78,7 +78,7 @@ export default function CenteredGrid() {
               </CardContent>
             </Card>        
             </Grid>
-            <Grid item xs={12} sm={6} md = {4} lg={3} > 
+            <Grid item xs={12} sm={6} md = {3} lg={3} > 
             <Card plain id="testmonialcard" className={classes.card}>
                 <img src={team3}   id="testmonialimg" /* id="testimonialimg3" style={{marginTop: "-50px", marginLeft: "-17px"}}  */alt="..."  />
               <h4 style = {{textAlign: "center"}}>
@@ -92,7 +92,7 @@ export default function CenteredGrid() {
                 </p>
               </CardContent>
             </Card>       </Grid>
-        <Grid item xs={12} sm={6} md = {4} lg={3}><Card plain id="testmonialcard"  className={classes.card}>
+        <Grid item xs={12} sm={6} md = {3} lg={3}><Card plain id="testmonialcard"  className={classes.card}>
                 <img src={team4}  id="testmonialimg" /* id="testimonialimg4" style={{marginTop: "-50px"}} */ alt="..."  />
               <h4 style = {{textAlign: "center"}}>
               Shri S P Rawat

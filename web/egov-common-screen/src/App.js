@@ -26,7 +26,9 @@ function App() {
   fontSize: "36px",
   lineHeight: "42px",
   textAlign: "center",
-  color:"rgba(0, 0, 0, 0.87)"
+  color:"rgba(0, 0, 0, 0.87)",
+  marginLeft: "10%",
+  marginRight: "10%"
   }}>Frequently Asked Questions</p></center >
   <div  
               style={{marginLeft: "45%",
@@ -39,7 +41,9 @@ function App() {
   fontSize: "36px",
   lineHeight: "42px",
   textAlign: "center",
-  color:"rgba(0, 0, 0, 0.87)"}}>User Testimonials</p>
+  color:"rgba(0, 0, 0, 0.87)",
+  marginLeft: "10%",
+    marginRight: "10%"}}>User Testimonials</p>
    </center >
    <div  
               style={{marginLeft: "45%", marginTop: "-2%",
