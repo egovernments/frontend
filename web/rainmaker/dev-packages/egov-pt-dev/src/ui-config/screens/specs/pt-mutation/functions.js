@@ -173,6 +173,23 @@ const searchApiApplicationCall = async (state, dispatch, index) => {
  ];
 
 
+ let tenants = state.common.cities && state.common.cities;
+
+  let filterTenant ;
+
+ if (process.env.REACT_APP_NAME === "Citizen")
+ {
+    filterTenant = tenants && tenants.filter(m=>m.key===pASearchScreenObject.tenantId);
+ }
+ else
+ {
+    filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
+ }
+
+
+let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && filterTenant[0].city.code;
+
+
 /*  if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
    queryObject = [];
  }
@@ -376,11 +393,11 @@ const isownerNameRowValid = validateFields(
 
        }
        else if (key === "ids") {
-         queryObject.push({
-           key: "propertyIds",
-           value: pASearchScreenObject[key].trim()
-         });
-       }
+        queryObject.push({
+          key: "propertyIds",
+          value: tenantUniqueId && "PT-"+tenantUniqueId+"-"+pASearchScreenObject[key].trim()
+        });
+      }
 
        else if (key === "toDate") {
          queryObject.push({
