@@ -58,7 +58,7 @@ class Message extends React.Component {
               fontStyle: "normal",
               fontWeight: "normal",
               fontSize: "16px",
-              lineHeight: "19px",
+              lineHeight: "24px",
 }}>Pay your Property Tax or avail Trade Licenses online and easily sitting at your home</p></center>
               
               </Card>

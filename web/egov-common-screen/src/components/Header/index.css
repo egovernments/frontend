@@ -44,7 +44,7 @@ top: 24px;
             font-family: Roboto;
             font-style: normal;
             font-size: 16px;
-            line-height: 19px;
+            line-height: 24px;
             color:rgba(0, 0, 0, 0.87);
         } 
         #singletestimonial
@@ -53,7 +53,7 @@ top: 24px;
             font-style: normal;
             font-weight: normal;
             font-size: 14px;
-            line-height: 16px;
+            line-height: 20px;
             text-align: center;
             color : rgba(0, 0, 0, 0.6);
         }

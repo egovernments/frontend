@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: "normal",
     fontWeight: "500",
     fontSize: "16px",
-    lineHeight: "19px",
+    lineHeight: "24px",
     color : "#FFFFFF"
 
   },
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: "normal",
     fontWeight: "normal",
     fontSize: "14px",
-    lineHeight: "16px"
+    lineHeight: "20px"
 
   },
   paper: {
