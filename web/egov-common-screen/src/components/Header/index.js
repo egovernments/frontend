@@ -13,7 +13,7 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import rightImage from "../../img/logo.png";
-import bannerImage from "../../img/banner.png";
+import bannerImage from "../../img/banner.jpeg";
 import leftImage from "../../img/stateLogo.png";
 
 const styles = (theme) => ({
