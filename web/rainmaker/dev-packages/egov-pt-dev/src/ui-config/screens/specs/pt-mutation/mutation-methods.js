@@ -279,7 +279,7 @@ export const citizenResetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "propertyApplicationSearch",
-      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.propertyTaxApplicationNo",
       "props.value",
       ""
     )
@@ -287,7 +287,7 @@ export const citizenResetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "propertyApplicationSearch",
-      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
       "props.value",
       ""
     )
@@ -295,7 +295,7 @@ export const citizenResetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "propertyApplicationSearch",
-      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.propertyTaxApplicationNo",
+      "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.ulbCity",
       "props.value",
       ""
     )

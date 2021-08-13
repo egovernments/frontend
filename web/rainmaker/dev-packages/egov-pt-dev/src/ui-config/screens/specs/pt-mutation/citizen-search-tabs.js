@@ -10,7 +10,12 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { propertyApplicationSearch, applicationSearch } from "./functions";
   import { citizenResetFields } from "./mutation-methods";
+  import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
+  import { getTenantId, getUserInfo,getLocale } from "egov-ui-kit/utils/localStorageUtils";
+  import { httpRequest } from "../../../../ui-utils";
+  import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+  import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
  
   
   const citizenSearchTabs = 
@@ -42,7 +47,7 @@ import {
                 moduleName: "TENANT",
                 masterName: "TENANTS"
               },
-              jsonPath: "propertySearchScreen.tenantId",
+              jsonPath: "pASearchScreen.tenantId",
               sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
               className: "autocomplete-dropdown",
               labelsFromLocalisation: true,
@@ -58,18 +63,57 @@ import {
               sm: 4
             },
           beforeFieldChange: async (action, state, dispatch) => {
-         /*    let tenant = action.value;
-           
+            let tenant = action.value;
+           /*  if (action.value) {
+              cityChange(dispatch, action.value)
+            } */
+      
             dispatch(
               handleField(
-                  "propertySearch",
-                  "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+                  "propertyApplicationSearch",
+                  "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.applicationPropertyTaxUniqueId.props.iconObj",
                   "label",
                   ""
               )
             ); 
-            if(process.env.REACT_APP_NAME === "Citizen" && action.value){             
-           
+            if(process.env.REACT_APP_NAME === "Citizen" && action.value){
+              
+              /* const tenantRequestBody = {
+                MdmsCriteria: {
+                  tenantId: action.value,
+                  moduleDetails: [
+                    {
+                      moduleName: "tenant",
+                      masterDetails: [
+                        {
+                          name: "citywiseconfig",
+                          filter: "[?(@.config=='assessmentEnabledCities')]"
+                        }
+                      ]
+                    }
+                  ]
+                },
+              };
+              let citywiseconfig = httpRequest(
+                  "post",
+                  "/egov-mdms-service/v1/_search",
+                  "_search",
+                  [],
+                  tenantRequestBody
+              ).then(res => {         
+                  citywiseconfig:res.MdmsRes.tenant.citywiseconfig
+                  let enabledCities = res.MdmsRes && res.MdmsRes.tenant && res.MdmsRes.tenant.citywiseconfig && res.MdmsRes.tenant.citywiseconfig[0].enabledCities && res.MdmsRes.tenant.citywiseconfig[0].enabledCities;
+                  let enableButton = enabledCities && enabledCities.includes(action.value)?true:false;
+                dispatch(
+                    handleField(
+                        "propertySearch",
+                        "components.div.children.headerDiv.children.newApplicationButton",
+                        "visible",
+                        enableButton
+                    )
+                  );
+                });
+             */
       
               let tenants = state.common.cities && state.common.cities;
       
@@ -81,15 +125,15 @@ import {
       
                dispatch(
                 handleField(
-                    "propertySearch",
-                    "components.div.children.searchPropertyDetails.children.cardContent.children.iulbCityContainer.children.propertyTaxUniqueId.props.iconObj",
+                    "propertyApplicationSearch",
+                    "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.applicationPropertyTaxUniqueId.props.iconObj",
                     "label",
                     tenantUniqueId
                 )
               ); 
       
             }
-            else if(process.env.REACT_APP_NAME === "Employee"){
+           /*  else if(process.env.REACT_APP_NAME === "Employee"){
               let tenants = state.common.cities && state.common.cities;
       
               let filterTenant = tenants && tenants.filter(m=>m.key===getTenantId());
@@ -106,10 +150,10 @@ import {
                     tenantUniqueId
                 )
               );     
-            }
-            dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value)); */
-       
-          }
+            } */
+            dispatch(fetchLocalizationLabel(getLocale(), action.value, action.value));
+
+          } 
           },
           
           appNumberContainer: getCommonContainer({
@@ -130,7 +174,20 @@ import {
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_INVALID_APPLICATION_NO",
-            jsonPath: "pASearchScreen.acknowledgementIds"
+            jsonPath: "pASearchScreen.acknowledgementIds",
+            afterFieldChange: async (action, state, dispatch) => {
+              if(action.value)
+              {
+                dispatch(
+                  handleField(
+                    "propertyApplicationSearch",
+                    "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.applicationPropertyTaxUniqueId",
+                    "props.value",
+                    ""
+                  )
+                );
+              }
+              }
           }),
           ORButton: getLabel({
             labelName: "ORButton",
@@ -139,11 +196,11 @@ import {
           applicationPropertyTaxUniqueId: getTextField({
             label: {
               labelName: "Property Tax Unique Id",
-              labelKey: "PT_APP_PROPERTY_UNIQUE_ID"
+              labelKey: "PT_PROPERTY_UNIQUE_ID"
             },
             placeholder: {
               labelName: "Enter Property Tax Unique Id",
-              labelKey: "PT_APP_PROPERTY_UNIQUE_ID_PLACEHOLDER"
+              labelKey: "PT_PROPERTY_XXXX_ID_PLACEHOLDER"
             },
             gridDefination: {
               xs: 12,
@@ -153,7 +210,20 @@ import {
             required: false,
             pattern: /^[a-zA-Z0-9-]*$/i,
             errorMessage: "ERR_INVALID_PROPERTY_ID",
-            jsonPath: "pASearchScreen.ids"
+            jsonPath: "pASearchScreen.ids",
+            afterFieldChange: async (action, state, dispatch) => {
+              if(action.value)
+              {
+                dispatch(
+                  handleField(
+                    "propertyApplicationSearch",
+                    "components.div.children.citizenSearchTabs.children.cardContent.children.appNumberContainer.children.appNumberContainer.children.propertyTaxApplicationNo",
+                    "props.value",
+                    ""
+                  )
+                );
+              }
+              }
           }),
         }),
         }),

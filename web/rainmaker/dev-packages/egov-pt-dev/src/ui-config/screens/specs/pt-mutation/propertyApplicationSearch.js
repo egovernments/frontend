@@ -4,7 +4,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg, getRequiredDocData } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
-import { resetFields } from "./mutation-methods";
+import { citizenResetFields } from "./mutation-methods";
 import propertyApplicationSearchTabs from "./property-application-search-tabs";
 import citizenSearchTabs from "./citizen-search-tabs";
 import { searchApplicationTable, searchPropertyTable } from "./searchApplicationResource/searchResults";
@@ -160,7 +160,7 @@ const screenConfig = {
   name: "propertyApplicationSearch",
 
   beforeInitScreen: (action, state, dispatch) => {
-    resetFields(state, dispatch);
+    citizenResetFields(state, dispatch);
     dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
 

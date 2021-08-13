@@ -503,7 +503,7 @@ const isownerNameRowValid = validateFields(
          "propertyApplicationSearch",
          "components.div.children.searchApplicationTable",
          "props.rows",
-         response.Properties.length
+         propertyResponse.length
        )
      );
      //showHideProgress(false, dispatch);
