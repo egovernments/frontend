@@ -134,12 +134,8 @@ class Header extends React.Component {
         <img
                         src={rightImage}
                         alt="..."
-                        style={{  width: "210px",
-                          height: "34px",
-                          right: "10%",
-                          top: "15px",
-                          position: "absolute"
-                        
+                        id="rightimg"
+                        style={{  
                         }}
                   /></div>
   </div>

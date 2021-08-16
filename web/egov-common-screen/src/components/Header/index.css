@@ -3,6 +3,12 @@
     background-color: #FFF;
     height: 64px;
 }
+#rightimg
+{
+    width: 210px;
+    margin-bottom: -13px;
+  
+}
 
 #flex-container>div {
     margin: 1px;    
@@ -260,7 +266,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 48%;
+        margin-left: 43%;
     
     }
 
@@ -370,7 +376,7 @@ top: 24px;
 @media only screen and (max-width: 800px) {
     #links {
         display: inline-flex;
-        margin-left: 10%;
+        margin-left: 7%;
     }
 
     #faqs {
@@ -392,6 +398,14 @@ top: 24px;
 }
 
 @media only screen and (max-width: 576px) {
+    #rightimg
+    {
+
+        width: 210px;
+        margin-bottom: -13px;
+        margin-top: -5px;
+        margin-left: 14%;
+    }
 
 
     #flex-container {
@@ -431,14 +445,35 @@ top: 24px;
     }
 }
 
-@media only screen and (max-width: 411px) {
+@media only screen and (max-width: 415px) {
 
     #links {
         display: inline-flex;
     margin-left: 53%;
     margin-top: -28px;
     }
+    #rightimg
+    {
+        width: 212px;
+        margin-bottom: -13px;
+        margin-top: -5px;
+        margin-left: 6%;
+    }
+}
+@media only screen and (max-width: 412px) {
 
+    #links {
+        display: inline-flex;
+    margin-left: 53%;
+    margin-top: -28px;
+    }
+    #rightimg
+    {
+        width: 212px;
+        margin-bottom: -13px;
+        margin-top: -5px;
+        margin-left: 6%;
+    }
 }
 @media only screen and (max-width: 376px) {
 
@@ -446,6 +481,13 @@ top: 24px;
         display: inline-flex;
     margin-left: 49%;
     margin-top: -28px;
+    }
+    #rightimg
+    {
+        width: 199px;
+        margin-bottom: -13px;
+        margin-top: -5px;
+        margin-left: 6%;
     }
 
 }
@@ -455,6 +497,13 @@ top: 24px;
         display: inline-flex;
     margin-left: 49%;
     margin-top: -28px;
+    }
+    #rightimg
+    {
+    width: 210px;
+    margin-bottom: -13px;
+    margin-top: -5px;
+    margin-left: 6%;
     }
 
 }
@@ -466,6 +515,13 @@ top: 24px;
     margin-left: 53%;
     margin-top: -28px;
     }
+    #rightimg
+    {
+    width: 210px;
+    margin-bottom: -13px;
+    margin-top: -5px;
+    margin-left: 6%;
+    }
 
 }
 
@@ -474,9 +530,17 @@ top: 24px;
 
     #links {
         display: inline-flex;
-    margin-left: 43%;
-    margin-top: -28px;
+        margin-left: 49%;
+        margin-top: -28px;
     }
+    #rightimg
+    {
+        width: 196px;
+        margin-bottom: -13px;
+        margin-top: -5px;
+        margin-left: 6%;
+    }
+    
 
 }
 
