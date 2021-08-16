@@ -105,7 +105,9 @@ class App extends Component {
         </div>}
         {!loginScreens && !isFixedFooter&&<div style={{ width: '100%', display: 'flex', flexFlow: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}></img>
+          <img style={{ display: "inline-flex", height: '1.4em' }} className={"jk-footer-image-cursor"} alt={"Powered by DIGIT"} src={`${sourceUrl}/digit-footer.png`} onError={"this.src='./../digit-footer.png'"}
+          onClick={() => {
+            window.open('https://www.digit.org/', '_blank').focus();}}></img>
           </div>
         </div>}
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }}>
