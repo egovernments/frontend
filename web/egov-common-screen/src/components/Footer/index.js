@@ -233,10 +233,10 @@ export default function CenteredGrid() {
 
             </Grid>
 
+      </Grid><br />
+      <center style={{color:"#ffffff"}}>Last Updated July 2021</center> <br />        
 
 
-
-      </Grid>
     </div>
   );
 }
