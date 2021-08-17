@@ -229,7 +229,10 @@ class WorkFlowContainer extends React.Component {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
         }
         if(moduleName === "EDITRENEWAL"){
-          window.location.href = `acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenant}&action=${moduleName}`;
+          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenant}&action=${moduleName}`;
+        }
+        if(moduleName === "DIRECTRENEWAL"){
+          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenant}&action=${moduleName}`;
         }
       }
     } catch (e) {
