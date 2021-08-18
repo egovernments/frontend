@@ -15,6 +15,9 @@ import "./index.css";
 
 import facebook from "../../img/facebook.png";
 import twitter from "../../img/twitter.png";
+import chrome from "../../img/chrome.png";
+import edge from "../../img/edge.png";
+import mozilla from "../../img/mozilla.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -234,7 +237,21 @@ export default function CenteredGrid() {
             </Grid>
 
       </Grid><br />
-      <center style={{color:"#ffffff"}}>Last Updated July 2021</center> <br />        
+      <center style={{color:"#ffffff"}}>Last Updated July 2021</center> <br />    
+      <center style={{color:"#ffffff"}}><span style={{color:"red"}}>*</span>Supported browser versions</center> <br />    
+      <center ><table >
+      <tr >
+          <td style={{color:"#ffffff", width: "100px"}}><center> <img src={chrome}     /></center></td>
+          <td style={{color:"#ffffff", width: "100px"}}> <center><img src={edge}   /></center></td>
+          <td style={{color:"#ffffff", width: "100px"}}> <center><img src={mozilla}   /></center></td>
+          </tr>
+        <tr >
+          <td style={{color:"#ffffff", width: "100px"}}><center> &gt;V-81</center></td>
+          <td style={{color:"#ffffff", width: "100px"}}> <center>&gt;V-84</center></td>
+          <td style={{color:"#ffffff", width: "100px"}}> <center>&gt;V-79</center></td>
+          </tr>
+          
+          </table>     </center>
 
 
     </div>
