@@ -91,7 +91,7 @@ top: 24px;
 @media only screen and (max-width: 1920px) {
     #links {
         display: inline-flex;
-        margin-left: 57%;
+        margin-left: 55%;
     }
 
     #bannerimage {
@@ -115,7 +115,7 @@ top: 24px;
 @media only screen and (max-width: 1600px) {
     #links {
         display: inline-flex;
-        margin-left: 60%;
+        margin-left: 58%;
     }
 
     #bannerimage {
@@ -139,7 +139,7 @@ top: 24px;
 @media only screen and (max-width: 1440px) {
     #links {
         display: inline-flex;
-        margin-left: 60%;
+        margin-left: 58%;
     }
 
     #bannerimage {
@@ -164,7 +164,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 58%;
+        margin-left: 56%;
     }
     #faqs {
         margin-left: 10%;
@@ -185,7 +185,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 54%;    }
+        margin-left: 52%;    }
 
         #singletestimonial
         {
@@ -235,7 +235,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 45%;    }
+        margin-left: 43%;    }
         
     #homepagecards
     {
@@ -256,7 +256,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 35%;
+        margin-left: 33%;
     
     }
    
@@ -266,7 +266,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 43%;
+        margin-left: 41%;
     
     }
 
@@ -339,7 +339,7 @@ top: 24px;
         }
         #links {
             display: inline-flex;
-            margin-left: 35%;
+            margin-left: 33%;
         
         }
     
