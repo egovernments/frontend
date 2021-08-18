@@ -137,12 +137,12 @@ export default function CenteredGrid() {
                 Dehradun Smart City
               </a><br />
               <a
-                href="https://serviceonline.gov.in/"
+                href="https://serviceonline.gov.in/uttarakhand/"
                 //className={classes.block}
                 target="_blank"
                 id ="flink"
               >
-                NIC ServicePlus
+                Uttarakhand ServicePlus
               </a>
                 
                
