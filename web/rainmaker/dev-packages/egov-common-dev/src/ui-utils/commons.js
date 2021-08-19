@@ -1096,7 +1096,7 @@ building = building + "," + item.name;
 
 	}
 
-	export const downloadMultipleBill = async (bills = [], configKey) => {
+	export const downloadMultipleBill = async (bills = [], configKey,businesService) => {
 		let rate=await getMdmsData(businesService);
 	  
 	  try {
@@ -1115,7 +1115,7 @@ building = building + "," + item.name;
 		addDetail = {		
 			"penaltyRate":rate
 			}
-			
+			bills=bills.filter(item=> item.totalAmount>0);
 bills.map(item =>{
 
 	item.additionalDetails=addDetail;

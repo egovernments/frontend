@@ -195,7 +195,7 @@ export const generateMultipleBill = async (state, dispatch, type) => {
     billkey = get(details, 'billKey', '');
   }
   allBills = allBills.filter(bill => bill.status === 'ACTIVE');
-  allBills && allBills.length > 0 && await downloadMultipleBill(allBills, billkey);
+  allBills && allBills.length > 0 && await downloadMultipleBill(allBills, billkey,businessService);
   /* 
   To Download Files based on Filestoreid logic
   
