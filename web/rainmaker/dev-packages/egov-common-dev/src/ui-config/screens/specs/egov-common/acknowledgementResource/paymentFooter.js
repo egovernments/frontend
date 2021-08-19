@@ -67,7 +67,16 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
            window.appOverrides.validateForm("PTReceiptAvailable", {extraData: extraData});
           }
       }
-      
+        //-----------add condition for making Tradelicence Mini receipt ----------------//
+        
+       if(extraData.payment.paymentDetails[0].businessService=="TL"){
+          if (window.appOverrides && window.appOverrides.validateForm)
+          {
+           window.appOverrides.validateForm("TLReceiptAvailable", {extraData: extraData});
+          }
+      }
+        //------------- End Of Condtion For Trade Licence Minireceipt -----------------//
+        
       let isUCPayment=extraData.payment.paymentDetails[0].businessService!="PT"
       &&extraData.payment.paymentDetails[0].businessService!="TL"&&
       extraData.payment.paymentDetails[0].businessService!="FIRENOC";
