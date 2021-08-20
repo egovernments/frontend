@@ -553,7 +553,7 @@ export const getPattern = type => {
     case "NewPropertyID":
       return /^[0-9]{6}$/i;
     case "Amount":
-      return /^[0-9]{0,9}$/i;
+      return /^[0-9]{0,8}$/i;
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":
