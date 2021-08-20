@@ -76,7 +76,7 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     } else {
         const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
         dispatch(prepareFinalObject("commonPayInfo", details));
-        dispatch(prepareFinalObject("isArrears", get(details[0], "arrears", true)));
+        dispatch(prepareFinalObject("isArrears", get(details && details[0], "arrears", true)));
     }
     if (get(commonPayDetails[index], "arrears", true)) {
         dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.arrearsCard", "visible", true));

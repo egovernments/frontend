@@ -79,6 +79,10 @@ const mapStateToProps = (state, ownProps) => {
   sortedBillDetails.shift();
   sortedBillDetails.map(bill => {
     let fee = formatTaxHeaders(bill);
+    let expiryDate=new Date(bill.expiryDate);
+    // fee['CS_BILL_NO'] = { value: get(screenConfiguration, "preparedFinalObject.ReceiptTemp[0].Bill[0].billNumber", 'NA'), order: -2 }
+    fee['CS_BILL_NO'] = { value: get(bill, "billNumber", 'NA'), order: -2 }
+    fee['CS_BILL_DUEDATE'] = { value: expiryDate&&expiryDate.toLocaleDateString&&expiryDate.toLocaleDateString()||'NA', order: -1 }
     fees[getBillingPeriod(bill.fromPeriod, bill.toPeriod)] = fee;
   })
 
