@@ -242,12 +242,12 @@ export default function CenteredGrid() {
       <center ><table >
       <tr >
           <td style={{color:"#ffffff", width: "100px"}}><center> <img src={chrome}     /></center></td>
-          <td style={{color:"#ffffff", width: "100px"}}> <center><img src={edge}   /></center></td>
+          {/* <td style={{color:"#ffffff", width: "100px"}}> <center><img src={edge}   /></center></td> */}
           <td style={{color:"#ffffff", width: "100px"}}> <center><img src={mozilla}   /></center></td>
           </tr>
         <tr >
           <td style={{color:"#ffffff", width: "100px"}}><center> &gt;V-81</center></td>
-          <td style={{color:"#ffffff", width: "100px"}}> <center>&gt;V-84</center></td>
+          {/* <td style={{color:"#ffffff", width: "100px"}}> <center>&gt;V-84</center></td> */}
           <td style={{color:"#ffffff", width: "100px"}}> <center>&gt;V-79</center></td>
           </tr>
           
