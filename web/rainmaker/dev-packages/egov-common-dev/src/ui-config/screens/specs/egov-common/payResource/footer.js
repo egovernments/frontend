@@ -191,7 +191,7 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
-       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mandigobindgarh")
+       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mandigobindgarh"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.handiaya")
          {
           displayRazorpay(goToPaymentGateway);
          }
