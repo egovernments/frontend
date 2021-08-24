@@ -11,6 +11,7 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import {  prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
+import { generateMultipleBills } from "../utils/receiptPdf";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -510,3 +511,62 @@ else{
 export const checkValueForNA = value => {
   return value == null || value == undefined || value == '' ? "NA" : value;
 };
+
+export const getMergeAndDownloadList = (state, dispatch, dataLength = 0) => {
+  let searchScreenObject = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchDetailsOfGroupBills",
+    {}
+  );
+  if(searchScreenObject.businesService && searchScreenObject.tenantId && searchScreenObject.locality) {
+    switch (searchScreenObject.businesService) {
+      case "WS":
+        dispatch(
+          handleField(
+            "groupBills",
+            "components.div.children.mergeDownloadButton.children.mergeButton",
+            "props.data.menu",
+            [
+              {
+                label: { labelName: "WATER CONNECTION", labelKey: "ABG_GROUP_BILLS_WATER_CONNECTION_BUTTON", },
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, false, "WS", searchScreenObject.consumerCode); }
+              },
+              {
+                label: { labelName: "WATER & SEWERAGE CONNECTION", labelKey: parseInt(dataLength) == 1 ? "ABG_GROUP_BILLS_SINGLAR_WATER_AND_SEWERAGE_CONNECTION_BUTTON" : "ABG_GROUP_BILLS_WATER_AND_SEWERAGE_CONNECTION_BUTTON" },
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, true, "WS", searchScreenObject.consumerCode); }
+              }
+            ]
+          )
+        );
+        break;
+      case "SW":
+        dispatch(
+          handleField(
+            "groupBills",
+            "components.div.children.mergeDownloadButton.children.mergeButton",
+            "props.data.menu",
+            [
+              {
+                label: { labelName: "SEWERAGE CONNECTION", labelKey: "ABG_GROUP_BILLS_SEWERAGE_CONNECTION_BUTTON", },
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, false, "SW", searchScreenObject.consumerCode); }
+              },
+              {
+                label: { labelName: "WATER & SEWERAGE CONNECTION", labelKey: parseInt(dataLength) == 1 ? "ABG_GROUP_BILLS_SINGLAR_WATER_AND_SEWERAGE_CONNECTION_BUTTON" : "ABG_GROUP_BILLS_WATER_AND_SEWERAGE_CONNECTION_BUTTON" },
+                link: () => { generateMultipleBills(state, dispatch, searchScreenObject.tenantId, searchScreenObject.locality, true, "SW", searchScreenObject.consumerCode); }
+              }
+            ]
+          )
+        );
+        break;
+      default:
+        dispatch(
+          handleField(
+            "groupBills",
+            "components.div.children.mergeDownloadButton.children.mergeButton",
+            "props.data.menu",
+            []
+          )
+        );
+    }
+  }
+}
