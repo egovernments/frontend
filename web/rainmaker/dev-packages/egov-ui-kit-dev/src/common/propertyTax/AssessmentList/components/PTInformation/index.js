@@ -31,6 +31,42 @@ class PTInformation extends React.Component {
     sewerDetails: []
   }
   componentDidMount = async () => {
+    let {
+      propertiesAudit,
+      properties
+    } = this.props;
+    const fetchBillQueryObject=    [
+      {
+        key: "tenantId",
+        value: getTenantId()
+      },
+      {
+        key: "consumerCode",
+        value:window.location.href.split('/')[5]
+      },
+      {
+        key: "businessService",
+        value: "PT"
+      }
+    ];
+    const FETCHBILL = {
+      GET: {
+        URL: "/billing-service/bill/v2/_fetchbill",
+        ACTION: "_get",
+      },
+    };
+    const payloadProperty = await httpRequest(FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, fetchBillQueryObject);
+    let paymentDueYears="";
+    if(payloadProperty.Bill !=null)
+    {payloadProperty.Bill[0].billDetails.map(item=>{
+    if(item.amount>0){
+    let toDate=convertEpochToDate(item.toPeriod).split("/")[2];
+    let fromDate=convertEpochToDate(item.fromPeriod).split("/")[2];
+    paymentDueYears=paymentDueYears==""?fromDate+"-"+toDate+"(Rs."+item.amount+")":paymentDueYears+","+fromDate+"-"+toDate+"(Rs."+item.amount+")";
+    }});}
+    
+    this.setState({paymentDueYears});
+    
     const mdmsBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -160,7 +196,7 @@ class PTInformation extends React.Component {
       cities,
       propertiesAudit
     } = this.props;
-    const { businessServiceInfoItem, waterDetails, sewerDetails } = this.state;
+    const { businessServiceInfoItem,paymentDueYears,waterDetails, sewerDetails } = this.state;
     let logoUrl = "";
     let corpCity = "";
     let ulbGrade = "";
@@ -205,6 +241,7 @@ class PTInformation extends React.Component {
                         consumerCode={properties.propertyId}
                         totalBillAmountDue={totalBillAmountDue}
                         isAdvanceAllowed={businessServiceInfoItem.isAdvanceAllowed}
+                        paymentDueYears={paymentDueYears}
                       />
                     }
                     style={{ backgroundColor: "rgb(255,255,255)", boxShadow: "none" }}

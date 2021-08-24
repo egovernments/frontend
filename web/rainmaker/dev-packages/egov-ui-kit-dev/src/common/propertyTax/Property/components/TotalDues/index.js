@@ -42,20 +42,29 @@ class TotalDues extends React.Component {
   }
 
   render() {
-    const { totalBillAmountDue, consumerCode, tenantId, isAdvanceAllowed, history } = this.props;
+    const { totalBillAmountDue,paymentDueYears,consumerCode, tenantId, isAdvanceAllowed, history } = this.props;
     const envURL = "/egov-common/pay";
     const { payAction } = this;
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
       <div className="" id="pt-header-due-amount">
-        <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "60px" }}>
+        <div className="col-xs-12 col-sm-6" style={{ minHeight: "60px" }}>
           <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgba(0, 0, 0, 0.74)" labelStyle={labelStyle} fontSize="14px" />
           <Label
-            label="Rs "
+            label="Rs"
             secondaryText={totalBillAmountDue ? totalBillAmountDue : 0}
             labelStyle={labelStyle}
             fontSize="24px"
-            fontWeight="500"
+            fontWeight="600"
+            color="rgb(0, 0, 0, 0.87)"
+            height="35px"
+          ></Label>
+           <Label
+            label=" "
+            secondaryText={paymentDueYears ? paymentDueYears : ""}
+            labelStyle={labelStyle}
+            fontSize="19px"
+            fontWeight="300"
             color="rgb(0, 0, 0, 0.87)"
             height="35px"
           ></Label>
