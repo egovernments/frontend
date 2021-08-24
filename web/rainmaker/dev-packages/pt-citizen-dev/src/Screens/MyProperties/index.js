@@ -180,6 +180,24 @@ const mapStateToProps = (state,ownProps) => {
               color="#484848"
               labelStyle={{ letterSpacing: 0.5, marginLeft: 5 }}
             />
+            <Label
+              label="("
+              dark={true}
+              color="#484848"
+              labelStyle={{ letterSpacing: 0.5, marginLeft: 5 }}
+            />
+             <Label
+              label={property.status}
+              dark={true}
+              color="#484848"
+              labelStyle={{ letterSpacing: 0.5, marginLeft: 5 }}
+            />
+            <Label
+              label=")"
+              dark={true}
+              color="#484848"
+              labelStyle={{ letterSpacing: 0.5, marginLeft: 5 }}
+            />
           </div>
         ),
         rightIcon: (
