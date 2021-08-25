@@ -35,7 +35,26 @@ class PTInformation extends React.Component {
       propertiesAudit,
       properties
     } = this.props;
-    const fetchBillQueryObject=    [
+    let fetchBillQueryObject=null;
+    if(window.location.href.includes("citizen")){
+    fetchBillQueryObject=    [
+      {
+        key: "tenantId",
+        value: getTenantId()
+      },
+      {
+        key: "consumerCode",
+        value:window.location.href.split('/')[7]
+      },
+      {
+        key: "businessService",
+        value: "PT"
+      }
+    ];
+  }
+  else
+  {
+    fetchBillQueryObject=    [
       {
         key: "tenantId",
         value: getTenantId()
@@ -49,6 +68,7 @@ class PTInformation extends React.Component {
         value: "PT"
       }
     ];
+  }
     const FETCHBILL = {
       GET: {
         URL: "/billing-service/bill/v2/_fetchbill",
