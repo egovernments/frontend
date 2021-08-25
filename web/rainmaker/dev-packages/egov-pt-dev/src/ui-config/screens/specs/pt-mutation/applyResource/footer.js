@@ -259,7 +259,7 @@ const callBackForApply = async (state, dispatch) => {
     //delete propertyPayload.institutionTemp;
   }
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp+"."+propertyPayload.ownershipCategoryTemp+"."+propertyPayload.institution.type;
-  delete propertyPayload.ownershipCategoryTemp;
+  delete propertyPayload.ownershipCategoryInit;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
     if (document.dropdown && document.dropdown.value && document.documents && document.documents[0] && document.documents[0].fileStoreId) {
       let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
