@@ -200,14 +200,18 @@ const callBackForApply = async (state, dispatch) => {
   propertyPayload.additionalDetails.documentDate = convertDateToEpoch(
     propertyPayload.additionalDetails.documentDate);
 
-  if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
+  if (propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
+    console.log("hereee1")
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
     })
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
+  } 
+  else if (propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL"))
+   {
+    console.log("hereee2")
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
@@ -215,10 +219,14 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institution = null;
     propertyPayload.owners = [...propertyPayload.owners, ...propertyPayload.ownersTemp]
     delete propertyPayload.ownersTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL")) {
-    propertyPayload.owners.map(owner => {
+  } 
+  else if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
+    
+    try{propertyPayload.owners.map(owner => {
       owner.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     })
+    console.log("hereee3")
+    
     propertyPayload.institution = {};
     propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
@@ -231,24 +239,30 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.institutionTemp.status = "ACTIVE";
     // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryInit;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
-    delete propertyPayload.institutionTemp;
-  } else if (propertyPayload.ownershipCategory.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL")) {
-    propertyPayload.institution = {};
-    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
-    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
-    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
-    propertyPayload.institution.tenantId = tenantId;
-    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
-
-    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
-    propertyPayload.institutionTemp.ownerType = "NONE";
-    propertyPayload.institutionTemp.status = "ACTIVE";
-    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryInit;
-    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
-    delete propertyPayload.institutionTemp;
+    //delete propertyPayload.institutionTemp;
   }
-  propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryInit;
-  delete propertyPayload.ownershipCategoryInit;
+    catch (e)
+    {
+      console.log("hereeee",e)
+    }
+  } else if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL")) {
+    console.log("hereee5")
+    propertyPayload.institution = {};
+    propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
+    propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
+    propertyPayload.institution.designation = propertyPayload.institutionTemp.designation;
+    propertyPayload.institution.tenantId = tenantId;
+    propertyPayload.institution.type = propertyPayload.institutionTemp.institutionType;
+
+    propertyPayload.institutionTemp.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
+    propertyPayload.institutionTemp.ownerType = "NONE";
+    propertyPayload.institutionTemp.status = "ACTIVE";
+    // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryInit;
+    propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
+    //delete propertyPayload.institutionTemp;
+  }
+  propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp+"."+propertyPayload.ownershipCategoryTemp+"."+propertyPayload.institution.type;
+  delete propertyPayload.ownershipCategoryTemp;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
     if (document.dropdown && document.dropdown.value && document.documents && document.documents[0] && document.documents[0].fileStoreId) {
       let documentValue = document.dropdown.value.includes('TRANSFERREASONDOCUMENT') ? document.dropdown.value.split('.')[2] : document.dropdown.value;
