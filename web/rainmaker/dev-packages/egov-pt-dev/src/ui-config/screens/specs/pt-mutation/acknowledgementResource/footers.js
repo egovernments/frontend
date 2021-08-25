@@ -28,6 +28,19 @@ export const getRedirectionURL = () => {
   return redirectionURL;
 };
 
+export const getPayURL = () => {
+  const applicationNumber = getQueryArg(	
+    window.location.href,	
+    "applicationNumber"	
+  );	
+  const tenantId = getQueryArg(	
+    window.location.href,	
+    "tenantId"	
+  );
+const redirectionURL = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=PT.MUTATION`;
+  return redirectionURL;
+};
+
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -97,6 +110,29 @@ export const applicationSuccessFooter = (
       onClickDefination: {
         action: "page_change",
         path: `${getRedirectionURL()}`
+      },
+     
+    },
+    gotoHome: {
+      componentPath: "Button",
+      props: {
+        className: "pt-apply-wizard-footer1",
+        variant: "outlined",
+        color: "primary",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+        }
+      },
+      children: {
+        goToHomeButtonLabel: getLabel({
+          labelName: "Pay Mutation Fee",
+          labelKey: "PT_MUTATION_PAY"
+        })
+      },
+      onClickDefination: {
+        action: "page_change",
+        path: `${getPayURL()}`
       },
      
     },
