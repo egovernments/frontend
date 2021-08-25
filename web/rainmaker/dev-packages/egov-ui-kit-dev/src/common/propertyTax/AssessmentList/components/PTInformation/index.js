@@ -42,7 +42,7 @@ class PTInformation extends React.Component {
       },
       {
         key: "consumerCode",
-        value:window.location.href.split('/')[5]
+        value:window.location.href.split('/')[6]
       },
       {
         key: "businessService",
@@ -57,7 +57,7 @@ class PTInformation extends React.Component {
     };
     const payloadProperty = await httpRequest(FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, fetchBillQueryObject);
     let paymentDueYears="";
-    if(payloadProperty.Bill !=null)
+    if(payloadProperty.Bill !=null && payloadProperty.Bill.length > 0)
     {payloadProperty.Bill[0].billDetails.map(item=>{
     if(item.amount>0){
     let toDate=convertEpochToDate(item.toPeriod).split("/")[2];
