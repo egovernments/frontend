@@ -201,7 +201,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.additionalDetails.documentDate);
 
   if (propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
-    console.log("hereee1")
+   
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
@@ -211,7 +211,7 @@ const callBackForApply = async (state, dispatch) => {
   } 
   else if (propertyPayload.ownershipCategoryTemp.includes("INDIVIDUAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL"))
    {
-    console.log("hereee2")
+    
     propertyPayload.ownersTemp.map(owner => {
       owner.status = "ACTIVE";
       owner.ownerType = 'NONE';
@@ -222,10 +222,10 @@ const callBackForApply = async (state, dispatch) => {
   } 
   else if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INDIVIDUAL")) {
     
-    try{propertyPayload.owners.map(owner => {
+   propertyPayload.owners.map(owner => {
       owner.altContactNumber = propertyPayload.institutionTemp.landlineNumber;
     })
-    console.log("hereee3")
+    
     
     propertyPayload.institution = {};
     propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
@@ -240,13 +240,10 @@ const callBackForApply = async (state, dispatch) => {
     // propertyPayload.institutionTemp.type = propertyPayload.ownershipCategoryInit;
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     //delete propertyPayload.institutionTemp;
-  }
-    catch (e)
-    {
-      console.log("hereeee",e)
-    }
+  
+  
   } else if (propertyPayload.ownershipCategoryTemp.includes("INSTITUTIONAL") && propertyPayload.ownershipCategoryInit.includes("INSTITUTIONAL")) {
-    console.log("hereee5")
+  
     propertyPayload.institution = {};
     propertyPayload.institution.nameOfAuthorizedPerson = propertyPayload.institutionTemp.name;
     propertyPayload.institution.name = propertyPayload.institutionTemp.institutionName;
