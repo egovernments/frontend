@@ -154,6 +154,12 @@ export const getUnitInfo = (units = [], propertyDetails, oldPropertydetails) => 
           value:unit.additionalDetails && unit.additionalDetails.rentedformonths ? unit.additionalDetails.rentedformonths + '' : "NA",
           oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && ((oldPropertydetails.units[index].additionalDetails?oldPropertydetails.units[index].additionalDetails.rentedformonths:"NA") + '') || "NA",
         })
+
+        floor.push({
+          key: "Usage for Pending Months",
+          value:unit.additionalDetails && unit.additionalDetails.usageForDueMonths ? unit.additionalDetails.usageForDueMonths + '' : "NA",
+          oldValue: oldPropertydetails && oldPropertydetails.units && oldPropertydetails.units[index] && ((oldPropertydetails.units[index].additionalDetails?oldPropertydetails.units[index].additionalDetails.usageForDueMonths:"NA") + '') || "NA",
+        })
       }
       if (!floors[unit['floorNo']]) {
         floors[unit['floorNo']] = [floor];

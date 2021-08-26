@@ -21,6 +21,9 @@ let monthsDropDownData = [];
 for (var i = 1; i <= 12; i++) {
   monthsDropDownData.push({ label: i.toString(), value: i });
 }
+let usageForDueMonthsData = [];
+  usageForDueMonthsData.push({ label: "UNOCCUPIED", value: "UNOCCUPIED" });
+  usageForDueMonthsData.push({ label: "SELFOCCUPIED", value: "SELFOCCUPIED" });
 
 export const plotSize = {
   plotSize: {
@@ -136,7 +139,7 @@ export const occupancy = {
     formName: "plotDetails",
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
-      const dependentFields1 = ["annualRent","noOfMonths"];
+      const dependentFields1 = ["annualRent","noOfMonths","usageForDueMonths"];
       switch (value) {
         case "RENTED":
           setDependentFields(dependentFields1, dispatch, formKey, false);
@@ -199,7 +202,7 @@ export const annualRent = {
     jsonPath: "Properties[0].propertyDetails[0].units[0].arv",
     type: "number",
     floatingLabelText: "PT_FORM2_TOTAL_ANNUAL_RENT",
-    hintText: "PT_FORM2_TOTAL_ANNUAL_RENT_PLACEHOLDER",
+    hintText: "Enter Total Rent Collected",
     ErrorText: "Enter a valid amount",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     toolTip: true,
@@ -229,6 +232,28 @@ export const noOfMonths = {
       sm: 4
     },
     dropDownData: monthsDropDownData,
+    formName: "plotDetails"
+  },
+};
+
+export const usageForDueMonths = {
+  usageForDueMonths: {
+    id: "assessment-usage",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.usageForDueMonths",
+    type: "AutocompleteDropdown",
+    floatingLabelText: "Usage for Pending Months",
+    hintText: "Usage for Pending Months",
+    //toolTip: true,
+    defaultSort:false,
+    //fullWidth: true,
+    dropDownData: [],//toolTipMessage: "PT_NUMBER_OF_FLOORS_TOOLTIP_MESSAGE",
+    required: true,
+    numcols: 4,
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    dropDownData: usageForDueMonthsData,
     formName: "plotDetails"
   },
 };
@@ -396,10 +421,12 @@ export const beforeInitForm = {
     if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED" || get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "PG") {
       set(action, "form.fields.annualRent.hideField", false);
       set(action, "form.fields.noOfMonths.hideField", false);
+      set(action, "form.fields.usageForDueMonths.hideField", false);
 
     } else {
       set(action, "form.fields.annualRent.hideField", true);
       set(action, "form.fields.noOfMonths.hideField", true);
+      set(action, "form.fields.usageForDueMonths.hideField", true);
 
     }
     return action;
@@ -490,10 +517,12 @@ export const beforeInitFormForPlot = {
     if (get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "RENTED" || get(state, `common.prepareFormData.${get(action, "form.fields.occupancy.jsonPath")}`) === "PG") {
       set(action, "form.fields.annualRent.hideField", false);
       set(action, "form.fields.noOfMonths.hideField", false);
+      set(action, "form.fields.usageForDueMonths.hideField", false);
 
     } else {
       set(action, "form.fields.annualRent.hideField", true);
       set(action, "form.fields.noOfMonths.hideField", true);
+      set(action, "form.fields.usageForDueMonths.hideField", true);
 
     }
     return action;
