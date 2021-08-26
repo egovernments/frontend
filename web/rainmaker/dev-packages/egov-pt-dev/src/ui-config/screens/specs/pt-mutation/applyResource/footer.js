@@ -258,7 +258,7 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     //delete propertyPayload.institutionTemp;
   }
-  if(propertyPayload.institution.type)
+  if(propertyPayload.institution && propertyPayload.institution.type)
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp+"."+propertyPayload.ownershipCategoryTemp+"."+propertyPayload.institution.type;
   else
   propertyPayload.ownershipCategory=propertyPayload.ownershipCategoryInit
