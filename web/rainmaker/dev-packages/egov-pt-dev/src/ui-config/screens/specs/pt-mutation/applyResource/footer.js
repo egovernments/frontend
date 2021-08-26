@@ -258,7 +258,10 @@ const callBackForApply = async (state, dispatch) => {
     propertyPayload.owners = [...propertyPayload.owners, propertyPayload.institutionTemp]
     //delete propertyPayload.institutionTemp;
   }
+  if(propertyPayload.institution.type)
   propertyPayload.ownershipCategory = propertyPayload.ownershipCategoryTemp+"."+propertyPayload.ownershipCategoryTemp+"."+propertyPayload.institution.type;
+  else
+  propertyPayload.ownershipCategory=propertyPayload.ownershipCategoryInit
   delete propertyPayload.ownershipCategoryInit;
   let newDocuments = Object.values(documentsUploadRedux).map(document => {
     if (document.dropdown && document.dropdown.value && document.documents && document.documents[0] && document.documents[0].fileStoreId) {
