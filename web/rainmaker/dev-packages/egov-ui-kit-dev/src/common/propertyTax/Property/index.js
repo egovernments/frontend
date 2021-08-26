@@ -608,6 +608,22 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                 key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
                 value: owner.permanentAddress || "NA",
               },
+              isInstitution
+                ? {
+                  // key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
+                  // value:
+                  //   (institution &&
+                  //     institution.type &&
+                  //     generalMDMSDataById &&
+                  //     generalMDMSDataById["SubOwnerShipCategory"] &&
+                  //     generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
+                  //   "NA",
+                }
+                : {
+                  key: getTranslatedLabel("PT_OWNERSHIP_PERCENTAGE", localizationLabelsData),
+                  value: owner.ownerShipPercentage || "NA",
+                } 
+
             ],
           };
         }),

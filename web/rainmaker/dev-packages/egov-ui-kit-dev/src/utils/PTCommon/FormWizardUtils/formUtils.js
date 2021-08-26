@@ -115,7 +115,7 @@ export const convertToOldPTObject = (newObject) => {
               otpReference: null,
               tenantId: "",
               isPrimaryOwner: null,
-              ownerShipPercentage: null,
+              ownerShipPercentage: 0,
               ownerType: "",
               institutionId: null,
               documents: [],

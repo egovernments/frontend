@@ -157,6 +157,20 @@ export const applicantSummary = getCommonGrayCard({
             callBack: checkValueForNA
           }
         ),
+        ownerShipPercentage: getLabelWithValue(
+          {
+            labelName: "OWNERSHIP_PERCENTAGE",
+            labelKey: "PT_OWNERSHIP_PERCENTAGE_LABEL"
+          },
+          {
+            jsonPath: "Property.owners[0].ownerShipPercentage",
+            localePrefix: {
+              moduleName: "common-masters",
+              masterName: "OwnerShipPercentage"
+            },
+            callBack: checkValueForNA
+          }
+        ),
         reviewSameAsPropertyAddress: getLabelWithValue(
           {
             labelName: "Same as property address",

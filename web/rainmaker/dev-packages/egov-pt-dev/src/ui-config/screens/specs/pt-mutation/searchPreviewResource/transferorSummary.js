@@ -65,6 +65,17 @@ export const transferorSummaryDetails = {
       callBack: checkValueForNA
     }
   ),
+  ownerShipPercentage: getLabelWithValue(
+    {
+      labelName: "OwnerPercentage",
+      labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
+    },
+    {
+      jsonPath:
+        "Property.ownersInit[0].ownerShipPercentage",
+      callBack: checkValueForNA
+    }
+  ),
   ownerDob: getLabelWithValue(
     {
       labelName: "Special Category",

@@ -151,6 +151,29 @@ const commonApplicantInformation = () => {
           className: "applicant-details-error"
         }
       }),
+      ownershipPercentage: getTextField({
+        label: {
+          labelName: "Ownership Percentage",
+          labelKey: "PT_MUTATION_TRANSFEREE_OWNERSHIP_PERCENTAGE_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Ownership Percentage",
+          labelKey: "PT_MUTATION_TRANSFEREE_OWNERSHIP_PERCENTAGE_LABEL_PLACEHOLDER"
+        },
+        required: true,
+        pattern: /^[1-9][0-9]?$|^100$/i,
+        errorMessage: "Percentgae 1-100",
+        jsonPath:
+          "Property.ownersTemp[0].ownerShipPercentage",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
+        },
+        props: {
+          className: "applicant-details-error"
+        }
+      }),
       relationshipWithGuardian: getSelectField({
         label: {
           labelName: "Relationship with Guardian",

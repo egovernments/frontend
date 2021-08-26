@@ -144,6 +144,13 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
             value: owner.emailId ? owner.emailId || "NA" : "",
             oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].emailId
           },
+          {
+            key: getTranslatedLabel("PT_OWNERSHIP_PERCENTAGE", localizationLabelsData),
+            value: "" + (owner.ownerShipPercentage || "NA"),
+            //value: "NA",
+            //value: owner.ownerShipPercentage ? owner.ownerShipPercentage || "NA" : "",
+            oldValue: oldPropertydetails && oldPropertydetails.owners  && Array.isArray( oldPropertydetails.owners)&& oldPropertydetails.owners[index].ownerShipPercentage
+          },
           isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData),
@@ -252,6 +259,7 @@ class OwnerInfo extends Component {
           "PT_OWNERSHIP_INFO_TEL_NO": item.altContactNumber || "NA",
           "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
           "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
+
           "PT_OWNERSHIP_INFO_CORR_ADDR": item.correspondenceAddress || "NA"
         }
       } else {
@@ -263,6 +271,7 @@ class OwnerInfo extends Component {
           "PT_OWNER_MOBILE_NO": item.mobileNumber || "NA",
           "PT_MUTATION_AUTHORISED_EMAIL": item.emailId || "NA",
           "PT_MUTATION_TRANSFEROR_SPECIAL_CATEGORY": item.ownerType || "NA",
+          "PT_OWNER_PERCENTAGE": ""+(item.ownerShipPercentage || "NA"),
           "PT_OWNERSHIP_INFO_CORR_ADDR": item.permanentAddress || "NA",
         };
         const document = checkDocument(item);

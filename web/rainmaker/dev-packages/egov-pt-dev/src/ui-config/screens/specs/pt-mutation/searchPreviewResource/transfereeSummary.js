@@ -67,6 +67,17 @@ export const transfereeSummaryDetails={
       callBack: checkValueForNA
     }
   ),
+  ownerShipPercentage: getLabelWithValue(
+    {
+      labelName: "OwnerPercentage",
+      labelKey: "PT_OWNERSHIP_PERCENTAGE"
+    },
+    {
+      jsonPath:
+        "Property.ownersTemp[0].ownerShipPercentage",
+      callBack: checkValueForNA
+    }
+  ),
   ownerDob: getLabelWithValue(
     {
       labelName: "Special Category",

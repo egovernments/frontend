@@ -295,6 +295,10 @@ const getOwnerInfo = (ownerDetails) => {
               value: owner.emailId || "NA",
             },
             {
+              key: "Ownership %",
+              value: ""+(owner.ownerShipPercentage|| "NA"),
+            },
+            {
               key: "Correspondence Address:",
               value: owner.permanentAddress || "NA",
             },

@@ -142,6 +142,20 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         propertyPayload.units.map(function (item, index){
             if(item.occupancyType != "RENTED" && item.occupancyType != "PG" && item.arv){delete item.arv;}});
         propertyPayload.additionalDetails?{...propertyPayload.additionalDetails,...propertyAdditionalDetails}:{...propertyAdditionalDetails};
+        
+        
+    var psum=0;
+    for(var i=0; i< propertyPayload.owners.length;i++)
+      psum += parseInt(propertyPayload.owners[i].ownershippercentage);        
+    
+    if(psum != 100)
+      {
+        alert ("sum of Ownership Percentage of all owners must be 100");
+        //return;
+        throw new Error("sum of Ownership Percentage of all owners must be 100");
+      }
+//else{
+        
         const propertyResponse = await httpRequest(
             `property-services/property/${propertyMethodAction}`,
             `${propertyMethodAction}`,
@@ -166,7 +180,9 @@ export const createProperty = async (Properties, action, props, isModify, prepar
                 }
             }
         }
-    } catch (e) {
+    }
+//} 
+catch (e) {
         store.dispatch(hideSpinner());
         if (action == '_create') {
             routeToAcknowledgement(PROPERTY_FORM_PURPOSE.CREATE, 'failure');

@@ -50,6 +50,19 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/,
     },
+    ownerPercentage: {
+      id: "ownerPercentage",
+      jsonPath: "Properties[0].propertyDetails[0].owners[0].ownershippercentage",
+      type: "textfield",
+      floatingLabelText: "PT_SEARCHPROPERTY_TABEL_OWNERSHIPPERCENTAGE",
+      hintText: "PT_FORM3_OWNERPERCENTAGE_PLACEHOLDER",
+      pattern: /^[1-9][0-9]?$|^100$/i,
+      required: true,
+      errorMessage: "PT_PERCENTAGE_ERROR_MESSAGE",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      value:"100"
+
+    },
     ownerAddress: {
       id: "ownerAddress",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].permanentAddress",

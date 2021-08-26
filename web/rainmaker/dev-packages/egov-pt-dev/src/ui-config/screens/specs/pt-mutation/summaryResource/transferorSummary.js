@@ -133,7 +133,18 @@ export const transferorSummary = getCommonGrayCard({
               "Property.ownersInit[0].emailId",
               callBack: checkValueForNA
             }
-          ),       
+          ),
+          ownerShipPercentage: getLabelWithValue(
+            {
+              labelName: "OwnerPercentage",
+              labelKey: "PT_OWNERSHIP_PERCENTAGE"
+            },
+            {
+              jsonPath:
+              "Property.ownersInit[0].ownerShipPercentage",
+              callBack: checkValueForNA
+            }
+          ),         
           ownerDob: getLabelWithValue(
             {
               labelName: "Special Category",

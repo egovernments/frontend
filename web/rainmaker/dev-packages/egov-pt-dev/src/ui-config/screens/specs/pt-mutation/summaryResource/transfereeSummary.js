@@ -137,6 +137,24 @@ export const transfereeSummary = getCommonGrayCard({
           },
             { jsonPath: "PropertyOld.ownersTemp[0].emailId", callBack: checkValueForNA },
           ),
+
+          ownerShipPercentage: getLabelWithValue(
+            {
+              labelName: "Percentage",
+              labelKey: "PT_OWNERSHIP_PERCENTAGE"
+            },
+            {
+              jsonPath:
+                "Property.ownersTemp[0].ownerShipPercentage",
+              callBack: checkValueForNA
+            }, {
+            labelKey: "PTM_OLD_LABEL_NAME"
+          },
+            { jsonPath: "PropertyOld.ownersTemp[0].ownerShipPercentage", callBack: checkValueForNA },
+          ),
+
+
+
           ownerDob: getLabelWithValue(
             {
               labelName: "Special Category",
@@ -154,6 +172,8 @@ export const transfereeSummary = getCommonGrayCard({
           },
             { jsonPath: "PropertyOld.ownersTemp[0].ownerType", callBack: checkValueForNA },
           ),
+
+
           ownerAddress: getLabelWithValue(
             {
               labelName: "Correspondence Address",

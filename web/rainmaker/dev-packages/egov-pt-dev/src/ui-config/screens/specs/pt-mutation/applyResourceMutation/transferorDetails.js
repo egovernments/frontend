@@ -125,6 +125,20 @@ export const transferorDetails = getCommonCard(
             // }
           }
         ),
+        
+        transferorOwnershipPercentage: getLabelWithValue(
+          {
+            labelName: "Ownership Percentage",
+            labelKey: "PT_OWNER_PERCENTAGE"
+          },
+          {
+            jsonPath: "Property.owners[0].ownerShipPercentage",
+            callBack: checkValueForNA
+            // callBack: value => {
+            //   return value.split(".")[1];
+            // }
+          }
+        ),
         transferorSpecialCategory: getLabelWithValue(
           {
             labelName: "Special Category",
