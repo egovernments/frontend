@@ -113,7 +113,7 @@ export const applicationSuccessFooter = (
       },
      
     },
-    gotoHome: {
+    PayMutation: {
       componentPath: "Button",
       props: {
         className: "pt-apply-wizard-footer1",
@@ -134,6 +134,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: `${getPayURL()}`
       },
+      visible: false
      
     },
     downloadFormButton: {
