@@ -18,6 +18,58 @@ import { transfereeInstitutionSummary, transfereeSummary } from "./summaryResour
 import { transferorInstitutionSummary, transferorSummary } from "./summaryResource/transferorSummary";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "../../../../ui-utils";
+
+
+export const getBill = async (state, queryObject,dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+
+    const demandamount = response && get(response, "Bill[0].totalAmount");
+    if(demandamount)
+    {
+    if(demandamount>0)
+    {    
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.applicationSuccessFooter.children.PayMutation",
+          "visible",
+          true
+        )
+      );      
+    }
+    else
+    {
+      dispatch(
+        handleField(
+          "acknowledgement",
+          "components.div.children.applicationSuccessFooter.children.PayMutation",
+          "visible",
+          false
+        )
+      );    
+    }
+   }
+
+
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error,'error');
+  }
+};
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -924,6 +976,23 @@ const screenConfig = {
     const secondNumber = getQueryArg(window.location.href, "secondNumber");
     const tenant = getQueryArg(window.location.href, "tenantId");
     loadUlbLogo(tenant);
+    const queryObj = [
+      {
+        key: "tenantId",
+        value: tenant
+      },
+      {
+        key: "consumerCode",
+        value: applicationNumber
+      }
+    ];
+    if(moduleName){
+      queryObj.push({
+        key: "businessService",
+        value: moduleName
+      });
+    }
+    getBill(state, queryObj,dispatch);
     setData(state, dispatch, applicationNumber, tenant);
     setApplicationData(state, dispatch, applicationNumber, tenant);
     const data = getAcknowledgementCard(
