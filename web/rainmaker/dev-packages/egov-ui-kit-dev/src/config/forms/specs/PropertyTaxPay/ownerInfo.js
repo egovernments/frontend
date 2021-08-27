@@ -52,7 +52,7 @@ const formConfig = {
     },
     ownerPercentage: {
       id: "ownerPercentage",
-      jsonPath: "Properties[0].propertyDetails[0].owners[0].ownershippercentage",
+      jsonPath: "Properties[0].propertyDetails[0].owners[0].ownerShipPercentage",
       type: "textfield",
       floatingLabelText: "PT_SEARCHPROPERTY_TABEL_OWNERSHIPPERCENTAGE",
       hintText: "PT_FORM3_OWNERPERCENTAGE_PLACEHOLDER",

@@ -621,7 +621,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                 }
                 : {
                   key: getTranslatedLabel("PT_OWNERSHIP_PERCENTAGE", localizationLabelsData),
-                  value: owner.ownerShipPercentage || "NA",
+                  value: ""+(owner.ownerShipPercentage || "NA"),
                 } 
 
             ],

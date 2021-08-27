@@ -146,7 +146,7 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         
     var psum=0;
     for(var i=0; i< propertyPayload.owners.length;i++)
-      psum += parseInt(propertyPayload.owners[i].ownershippercentage);        
+      psum += parseInt(propertyPayload.owners[i].ownerShipPercentage);        
     
     if(psum != 100)
       {
