@@ -427,6 +427,31 @@ export const commonApiPost = (
     });
 };
 
+const downloadPdf = (blob, fileName) => {
+  const link = document.createElement('a');
+  // create a blobURI pointing to our Blob
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  // some browser needs the anchor to be in the doc
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // in case the Blob uses a lot of memory
+  setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+};
+
+
+const printPdf=(blob)=>{
+  const fileURL = URL.createObjectURL(blob);
+  var myWindow = window.open(fileURL);
+  if (myWindow != undefined) {
+    myWindow.addEventListener("load", event => {
+      myWindow.focus();
+      myWindow.print();
+    });
+  }
+}
+
 export const downloadPdfFile = async  ( endPoint,
   action,
   queryObject = [],
