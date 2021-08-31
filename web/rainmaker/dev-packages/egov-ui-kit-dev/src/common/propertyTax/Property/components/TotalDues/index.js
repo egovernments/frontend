@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { TotalDuesButton } from "./components";
 import "./index.css";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
