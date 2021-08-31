@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { TotalDuesButton } from "./components";
 import "./index.css";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -30,6 +30,7 @@ class TotalDues extends React.Component {
     });
   };
   payAction = (consumerCode, tenantId) => {
+    //alert(tenantId);
     const status = get(this.props, 'propertyDetails[0].status', '');
     if (status != "ACTIVE") {
       this.props.toggleSnackbarAndSetText(
@@ -46,7 +47,13 @@ class TotalDues extends React.Component {
     const { totalBillAmountDue,paymentDueYears,consumerCode, isAdvanceAllowed, history } = this.props;
     const envURL = "/egov-common/pay";
     const { payAction } = this;
-    const tenantId=getTenantId();
+    let tenantId=null;
+    if(window.location.href.includes("citizen")){
+      tenantId=window.location.href.split('/')[8]
+    }
+    else
+    tenantId=window.location.href.split('/')[7];
+    //alert(tenantId);
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
       <div className="" id="pt-header-due-amount">
