@@ -42,9 +42,10 @@ class TotalDues extends React.Component {
   }
 
   render() {
-    const { totalBillAmountDue,paymentDueYears,consumerCode, tenantId, isAdvanceAllowed, history } = this.props;
+    const { totalBillAmountDue,paymentDueYears,consumerCode, isAdvanceAllowed, history } = this.props;
     const envURL = "/egov-common/pay";
     const { payAction } = this;
+    const tenantId=getTenantId();
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
       <div className="" id="pt-header-due-amount">
