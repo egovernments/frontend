@@ -61,10 +61,19 @@ export const paymentFooter = (state, consumerCode, tenant, status, businessServi
         gobackPath = isPublicSearch() ? "/withoutAuth/uc/search" : "/uc/search";
     }
     setTimeout(function(){if(extraData!=null){
+       
         if(extraData.payment.paymentDetails[0].businessService=="PT"){
           if (window.appOverrides && window.appOverrides.validateForm)
           {
+           console.log("window.appOverrides = ",window.appOverrides);
            window.appOverrides.validateForm("PTReceiptAvailable", {extraData: extraData});
+          }
+      }
+        if(extraData.payment.paymentDetails[0].businessService=="TL"){
+          if (window.appOverrides && window.appOverrides.validateForm)
+          {
+            console.log("window.appOverrides = ",window.appOverrides);   
+           window.appOverrides.validateForm("TLReceiptAvailable", {extraData: extraData});
           }
       }
       

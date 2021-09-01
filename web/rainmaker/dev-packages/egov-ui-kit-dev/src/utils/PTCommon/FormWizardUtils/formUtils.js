@@ -237,6 +237,7 @@ export const cancelAssessment = async (assessment) => {
 export const PROPERTY_FORM_PURPOSE = {
   REASSESS: 'reassess',
   ASSESS: 'assess',
+  INACTIVE: 'inactive',
   CREATE: 'create',
   UPDATE: 'update',
   CANCEL: 'cancel',
@@ -246,6 +247,16 @@ export const PROPERTY_FORM_PURPOSE = {
 
 export const formWizardConstants = {
   [PROPERTY_FORM_PURPOSE.ASSESS]: {
+    header: 'PT_ASSESS_PROPERTY',
+    parentButton: 'PT_ASSESS',
+    isSubHeader: true,
+    isFinancialYear: true,
+    buttonLabel: 'PT_ASSESS_PROPERTY_BUTTON',
+    isEditButton: false,
+    canEditOwner: false,
+    isEstimateDetails: true
+  },
+  [PROPERTY_FORM_PURPOSE.INACTIVE]: {
     header: 'PT_ASSESS_PROPERTY',
     parentButton: 'PT_ASSESS',
     isSubHeader: true,
@@ -328,6 +339,9 @@ export const propertySubmitAction = (Properties, action, props, isModify, prepar
       createProperty(Properties, '_create', props);
       break;
     case PROPERTY_FORM_PURPOSE.SENDFOREDIT:
+      createProperty(Properties, '_create', props);
+      break;
+    case PROPERTY_FORM_PURPOSE.INACTIVE:
       createProperty(Properties, '_create', props);
       break;
     default:
