@@ -460,7 +460,7 @@ const callBackForNext = async (state, dispatch) => {
         "Property.additionalDetails.reasonForTransfer",	
         ''	
       );	
-      if(MutationReason && MutationReason !=="NAMECORRECTION")	
+      if(MutationReason && (MutationReason !=="NAMECORRECTION" && MutationReason !=="NAMECORRECTIONCLERICAL"))	
       {
       errorMsg = validateMobileNumber(state);
       }
