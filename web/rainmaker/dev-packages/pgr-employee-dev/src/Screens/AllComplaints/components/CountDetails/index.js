@@ -12,7 +12,7 @@ const CountDetails = ({ count, total,status }) => {
   return (
     <div className="box">
       <div className="count-details">
-        Showing {count} of {total} {status} complaints
+        Showing {count} of {count} {status} complaints
       </div>
     </div>
   );

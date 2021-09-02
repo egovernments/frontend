@@ -6,7 +6,7 @@ import difference from "lodash/difference";
 import uniq from "lodash/uniq";
 import commonConfig from "config/common.js";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
+import sortBy from "lodash/sortBy";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 //checking users there in action history
@@ -143,7 +143,7 @@ export const getComplaintDisplayOrder = (order) => {
   };
 };
 
-export const fetchComplaints = (queryObject, hasUsers = true, overWrite) => {
+export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo) => {
   return async (dispatch, getState) => {
     dispatch(complaintFetchPending());
     try {
@@ -153,6 +153,17 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite) => {
         tenantId = payload.services[0].tenantId;
       }
       checkUsers(dispatch, getState(), payload.actionHistory, hasUsers, tenantId);
+      let selectedComplaints=[];
+      payload.actionHistory.map(item=>{
+        item.actions=sortBy(item.actions, ite=>ite.when).reverse();
+        if(item.actions[0].assignee==userInfo.id || item.actions[0].assignee==userInfo.uuid)
+        {
+          selectedComplaints.push(item.actions[0].businessKey);
+        }
+      });
+alert(selectedComplaints.length);
+payload.services=payload.services.filter(item => selectedComplaints.includes(item.serviceRequestId));
+payload.actionHistory=payload.actionHistory.filter(item => selectedComplaints.includes(item.actions[0].businessKey));
       dispatch(complaintFetchComplete(payload, overWrite));
     } catch (error) {
       dispatch(complaintFetchError(error.message));

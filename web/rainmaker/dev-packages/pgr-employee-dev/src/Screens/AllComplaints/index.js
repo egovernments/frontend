@@ -131,7 +131,8 @@ class AllComplaints extends Component {
             },
           ],
           true,
-          false
+          false,
+          userInfo
         );
         fetchComplaints(
           [
@@ -141,7 +142,8 @@ class AllComplaints extends Component {
             },
           ],
           true,
-          false
+          false,
+          userInfo
         );
       } else {
         fetchComplaints(
@@ -155,7 +157,8 @@ class AllComplaints extends Component {
             },
           ],
           true,
-          true
+          true,
+          userInfo
         );
       }
     }
@@ -244,7 +247,7 @@ class AllComplaints extends Component {
 
     if (complaintNo) {
       if (complaintNo.length >= 6) {
-        fetchComplaints(queryObj, true, true);
+        fetchComplaints(queryObj, true, true,userInfo);
       } else {
         toggleSnackbarAndSetText(
           true,
@@ -267,7 +270,7 @@ class AllComplaints extends Component {
         );
       }
       else {
-        fetchComplaints(queryObj, true, true);
+        fetchComplaints(queryObj, true, true,userInfo);
       }
     }
     this.setState({ search: true });
@@ -277,7 +280,7 @@ class AllComplaints extends Component {
     const { fetchComplaints } = this.props;
     fetchComplaints([
       { key: "status", value: "assigned,open,reassignrequested" },
-    ]);
+    ],true,true,userInfo);
     this.setState({ mobileNo: "", complaintNo: "", search: false });
   };
 
@@ -952,8 +955,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchComplaints: (criteria, hasUsers, overWrite) =>
-      dispatch(fetchComplaints(criteria, hasUsers, overWrite)),
+    fetchComplaints: (criteria, hasUsers, overWrite,userInfo) =>
+      dispatch(fetchComplaints(criteria, hasUsers, overWrite,userInfo)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     prepareFinalObject: (jsonPath, value) =>
