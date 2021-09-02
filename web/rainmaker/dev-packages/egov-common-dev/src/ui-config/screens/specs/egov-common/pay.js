@@ -199,10 +199,10 @@ const screenConfig = {
                                 labelKey: "NOC_PAYMENT_HEAD"
                             }),
                             estimateDetails,
-                            AmountToBePaid: {
+                            /* AmountToBePaid: {
                                 ...AmountToBePaid,
                                 visible: false
-                            },
+                            }, */
                             capturePaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
                             capturePayerDetails: process.env.REACT_APP_NAME === "Citizen" ? capturePayerDetails : {},
                             g8Details: process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details

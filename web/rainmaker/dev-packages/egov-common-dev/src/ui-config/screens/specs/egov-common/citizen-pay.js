@@ -102,7 +102,7 @@ const screenConfig = {
                                 labelKey: "NOC_PAYMENT_HEAD"
                             }),
                             estimateDetails,
-                            AmountToBePaid
+                            /* AmountToBePaid */
                         })
                     }
                 },
