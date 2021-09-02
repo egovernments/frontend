@@ -880,8 +880,19 @@ class FormWizard extends Component {
             );
             if (ownershipTypeSelected === "SINGLEOWNER") {
               const { ownerInfo } = form;
+              //To check whether ownership percentage is 100 for this SingleUser
+              var isOwnerPercentValid=true;
+              //alert("percentage is "+ownerInfo.fields["ownerPercentage"].value);
+              if(ownerInfo.fields["ownerPercentage"].value!="100")
+              {
+                alert("ownership percentage must be 100 for single owner")
+                isOwnerPercentValid=false;
+                //displayFormErrorsAction("ownerInfo");
+                //isFormValid = false;
+                //break;  
+              }
               const isOwnerInfoFormValid = validateForm(ownerInfo);
-              if (isOwnerInfoFormValid) {
+              if (isOwnerInfoFormValid && isOwnerPercentValid) {
                 callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(
@@ -895,9 +906,12 @@ class FormWizard extends Component {
                 displayFormErrorsAction("ownerInfo");
               }
             } else if (ownershipTypeSelected === "MULTIPLEOWNERS") {
+              let sumPercent=0;
               let ownerValidation = true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
+                  //alert("percentage is "+form[variable].fields["ownerPercentage"].value);
+                  sumPercent=sumPercent + parseInt(form[variable].fields["ownerPercentage"].value);
                   const isDynamicFormValid = validateForm(form[variable]);
                   if (!isDynamicFormValid) {
                     displayFormErrorsAction(variable);
@@ -905,7 +919,17 @@ class FormWizard extends Component {
                   }
                 }
               }
-              if (ownerValidation) {
+              var isOwnerPercentValid=true;
+              if(sumPercent!=100)
+              {
+                alert("sum of ownership percentage must be 100 for multiple owners")
+                isOwnerPercentValid=false;
+                //displayFormErrorsAction("ownerInfo");
+                //isFormValid = false;
+                //break;  
+              }
+
+              if (ownerValidation && isOwnerPercentValid) {
                 callDraft(this);
                 window.scrollTo(0, 0);
                 this.setState(

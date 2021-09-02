@@ -135,6 +135,9 @@ const OwnerInformation = ({
             <div className="col-sm-6" style={{ paddingBottom: "4px", paddingTop: "2px" }}>
               <Field fieldKey="ownerEmail" field={fields["ownerEmail"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
+            <div className="col-sm-6" style={{ paddingBottom: "4px", paddingTop: "2px" }}>
+              <Field fieldKey="ownerPercentage" field={fields["ownerPercentage"]} handleFieldChange={handleFieldChange} disabled={disabled} />
+            </div>
             <div className="col-sm-6" style={{ paddingBottom: "8px" }}>
               <Field fieldKey="ownerAddress" field={fields["ownerAddress"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
