@@ -161,7 +161,7 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
           selectedComplaints.push(item.actions[0].businessKey);
         }
       });
-alert(selectedComplaints.length);
+//alert(selectedComplaints.length);
 payload.services=payload.services.filter(item => selectedComplaints.includes(item.serviceRequestId));
 payload.actionHistory=payload.actionHistory.filter(item => selectedComplaints.includes(item.actions[0].businessKey));
       dispatch(complaintFetchComplete(payload, overWrite));
