@@ -832,34 +832,7 @@ export const tradeDetails = getCommonCard({
     }
   ),
   tradeDetailsConatiner: getCommonContainer(
-    {
-//       financialYear: {
-//         ...getSelectField({
-//           label: {
-//             labelName: "Financial Year",
-//             labelKey: "TL_FINANCIAL_YEAR_LABEL"
-//           },
-//           placeholder: {
-//             labelName: "Select Financial Year",
-//             labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
-//           },
-//           props:{
-//             disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-//           },
-//           required: true,
-//           jsonPath: "Licenses[0].financialYear",
-//           sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-//           gridDefination: {
-//             xs: 12,
-//             sm: 6
-//           },
-//           // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-//           // props: {
-//           //   disabled: true
-//           // }
-//         })
-//       },
-      
+    { 
       financialYear: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-tradelicence",
