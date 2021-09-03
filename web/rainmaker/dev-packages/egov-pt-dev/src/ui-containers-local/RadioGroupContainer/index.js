@@ -22,7 +22,10 @@ const styles = theme => ({
   group: {
    // display: "inline-block",
     margin: 0,
-    height: '3em'
+    height: '3em',
+    [theme.breakpoints.down('xs')]: {
+      height: '10em',
+    },
   },
   radioRoot: {
     marginBottom: 12
