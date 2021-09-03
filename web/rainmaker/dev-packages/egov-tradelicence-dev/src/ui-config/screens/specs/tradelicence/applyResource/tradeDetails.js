@@ -832,33 +832,45 @@ export const tradeDetails = getCommonCard({
     }
   ),
   tradeDetailsConatiner: getCommonContainer(
-    {
+    { 
       financialYear: {
-        ...getSelectField({
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "Licenses[0].financialYear",
+        sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
+        props: {
+          className: "autocomplete-dropdown",
+          suggestions: [],
+          disabled:
+            getQueryArg(window.location.href, "action") === "EDITRENEWAL" ||
+            getQueryArg(window.location.href, "workflowService") ===
+              "EDITRENEWAL"
+              ? true
+              : false,
           label: {
             labelName: "Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_LABEL"
+            labelKey: "TL_FINANCIAL_YEAR_LABEL",
           },
           placeholder: {
             labelName: "Select Financial Year",
-            labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER"
-          },
-          props:{
-            disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+            labelKey: "TL_FINANCIAL_YEAR_PLACEHOLDER",
           },
           required: true,
+          isClearable: true,
           jsonPath: "Licenses[0].financialYear",
           sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
-          gridDefination: {
-            xs: 12,
-            sm: 6
+          inputLabelProps: {
+            shrink: true,
           },
-          // visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
-          // props: {
-          //   disabled: true
-          // }
-        })
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6,
+        },
+        required: true,
       },
+      
       applicationType: {
         ...getSelectField({
           label: {

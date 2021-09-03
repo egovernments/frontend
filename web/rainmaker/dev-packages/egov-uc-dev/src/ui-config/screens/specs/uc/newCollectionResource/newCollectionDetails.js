@@ -1,8 +1,7 @@
 import {
   getCommonCard,
-
   getCommonContainer,
-
+  getSelectField,
   getDateField, getPattern, getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
@@ -61,10 +60,7 @@ export const newCollectionDetailsCard = getCommonCard(
     searchContainer: getCommonContainer(
       {
         City: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-uc",
-          componentPath: "AutosuggestContainer",
-          props: {
+          ...getSelectField({
             label: {
               labelName: "City",
               labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
@@ -79,14 +75,15 @@ export const newCollectionDetailsCard = getCommonCard(
               labelKey: "TL_SELECT_CITY"
             },
             required: true,
-            value: tenantId,
-            disabled: true,
-            labelsFromLocalisation: true,
-            isClearable: true,
-            className: "autocomplete-dropdown",
+            props: {
+              required: true,
+              value: tenantId,
+              disabled: true
+            },
             sourceJsonPath: "applyScreenMdmsData.tenant.citiesByModule",
-          },
+          
           jsonPath: "Demands[0].tenantId",
+          }),
           gridDefination: {
             xs: 12,
             sm: 6
