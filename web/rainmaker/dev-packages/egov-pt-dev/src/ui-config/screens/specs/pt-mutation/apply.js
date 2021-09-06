@@ -473,9 +473,10 @@ const getMdmsTransferReasonData = async (action, state, dispatch) => {
       mdmsBody
     );
     
+    if(process.env.REACT_APP_NAME === "Citizen"){
    let reasonForTransfer1=[];
     payload.MdmsRes.PropertyTax.ReasonForTransfer.forEach(item=> {
-     if((item.code=="NAMECORRECTIONCLERICAL" && process.env.REACT_APP_NAME !== "Citizen")|| (item.code!="NAMECORRECTIONCLERICAL"))
+     if(item.code!="NAMECORRECTIONCLERICAL")
      {
       reasonForTransfer1.push(item);
      }
@@ -484,6 +485,7 @@ const getMdmsTransferReasonData = async (action, state, dispatch) => {
   );
 
   payload.MdmsRes.PropertyTax.ReasonForTransfer=reasonForTransfer1
+}
     dispatch(prepareFinalObject("ReasonForTransfer", payload.MdmsRes));
   } catch (e) {
     console.log(e);
