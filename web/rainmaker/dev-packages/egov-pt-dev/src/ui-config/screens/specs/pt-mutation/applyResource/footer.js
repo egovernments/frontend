@@ -381,16 +381,41 @@ const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = false;
 
   if (activeStep === 0) {
-    let isSingleOwnerValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
-      state,
-      dispatch
-    );
-    let isMutilpleOwnerValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[0].item0.children.cardContent.children.applicantCard.children",
-      state,
-      dispatch
-    );
+    let isSingleOwnerValid=false; // initialy let singleOwnerValid is False
+    // check if ownerShipCategory is SingleOwner then Check SingleOwnerVaidation
+    if(state.screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp == "INDIVIDUAL.SINGLEOWNER")
+    {
+       isSingleOwnerValid = validateFields(
+       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.children.individualApplicantInfo.children.cardContent.children.applicantCard.children",
+       state,
+       dispatch
+      );
+    }
+    //check multiple ownership validation (as per existing code validation for only first owner was being checked) 
+    //and sum of ownership percentage for mutiple owners to be 100 
+    let isMutilpleOwnerValid = false; //default, even when ownershipCateory is SINGLWOWNER
+    if(state.screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp == "INDIVIDUAL.MULTIPLEOWNERS")
+    {
+      isMutilpleOwnerValid = true; //if ownershipCategory is MULTIPLEOWNER, let it be true intialy
+
+        var i;
+        var sumP=0;
+        for(i=0;i<state.screenConfiguration.preparedFinalObject.Property.ownersTemp.length;i++)
+          {
+            isMutilpleOwnerValid = validateFields(
+              "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items["+i+"].item0.children.cardContent.children.applicantCard.children",
+              state,
+              dispatch
+              );
+            sumP=sumP+ parseInt(state.screenConfiguration.preparedFinalObject.Property.ownersTemp[i].ownerShipPercentage);
+          }
+
+          if(sumP!=100)
+          {
+          alert("total sum for ownership percentage must be 100");
+          isMutilpleOwnerValid = false;
+          }
+      }
     let isInstitutionValid = validateFields(
       "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.children.institutionInfo.children.cardContent.children.institutionDetailsContainer.children",
       state,
