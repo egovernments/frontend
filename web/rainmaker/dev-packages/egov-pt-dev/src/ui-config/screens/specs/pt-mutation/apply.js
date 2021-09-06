@@ -358,9 +358,10 @@ export const getSpecialCategoryDocumentTypeMDMSData = async (action, state, disp
 
         }
       ]
-    }
-  };
-  try {
+    }};
+  try
+  {
+  
     let payload = null;
     payload = await httpRequest(
       "post",
@@ -448,7 +449,9 @@ const getMdmsData = async (action, state, dispatch) => {
     payload.MdmsRes['common-masters'].OwnerShipCategory = OwnerShipCategory;
 
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
-  } catch (e) {
+  } 
+    catch (e) 
+    {
     console.log(e);
   }
 };
