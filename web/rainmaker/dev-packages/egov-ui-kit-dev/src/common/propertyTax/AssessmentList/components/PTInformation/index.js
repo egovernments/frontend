@@ -52,6 +52,22 @@ class PTInformation extends React.Component {
       }
     ];
   }
+  else if(window.location.href.includes("localhost")){
+    fetchBillQueryObject=    [
+      {
+        key: "tenantId",
+        value: getTenantId()
+      },
+      {
+        key: "consumerCode",
+        value:window.location.href.split('/')[5]
+      },
+      {
+        key: "businessService",
+        value: "PT"
+      }
+    ];
+  }
   else
   {
     fetchBillQueryObject=    [
