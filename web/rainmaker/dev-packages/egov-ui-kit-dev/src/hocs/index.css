@@ -110,6 +110,15 @@
   display: flex !important;
   align-items: center !important;
 }
+#citizenLogin
+{
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 32px;
+  margin-top: 17px;
+  margin-right: 5%;
+}
 
 .citizen-header-logo > img {
   height: 49px;

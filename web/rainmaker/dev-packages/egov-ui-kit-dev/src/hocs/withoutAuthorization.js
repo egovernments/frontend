@@ -113,7 +113,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                   title={
                     <div className="citizen-header-logo-label">
                       <div className={logoClassName}>
-                        <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+                        <a href="/">
+                        <img src={ulbLogo ? ulbLogo : pbLogo}  style={{height:"49px"}} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+                         </a>
                       </div>
                       {!isPublicSearch && <div className="rainmaker-displayInline">
                         <Label
@@ -132,6 +134,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                   titleStyle={style.titleStyle}
                   {...rest}
                 >
+                  <div id="citizenLogin">
+                    <a href="/citizen/user/login" style={{color:"#f47738"}}>Citizen Login </a> 
+                    </div>              
                   <Toolbar className="app-toolbar" style={{ padding: "0px", height: "64px", background: "#ffffff" }}>
                     {hasLocalisation && (
                       <div className="userSettingsContainer">
