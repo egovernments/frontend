@@ -188,15 +188,21 @@ export const callPGService = async (state, dispatch) => {
         )
       );
     } else {
-      const redirectionUrl =
-        get(goToPaymentGateway, "Transaction.redirectUrl") ||
-        get(goToPaymentGateway, "Transaction.callbackUrl");
-       if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mandigobindgarh"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.handiaya")
-         {
-          displayRazorpay(goToPaymentGateway);
+      const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl") || get(goToPaymentGateway, "Transaction.callbackUrl");
+      // if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mandigobindgarh"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.handiaya"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.sultanpurlodhi")
+      //   {
+      //    displayRazorpay(goToPaymentGateway);
+      //   }
+      //   else{
+      //   window.location = redirectionUrl;
+      //   }
+
+         if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.jalandhar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.testing")         {
+          window.location = redirectionUrl;  
          }
          else{
-         window.location = redirectionUrl;
+          displayRazorpay(goToPaymentGateway);
+        
          }
     }
   } catch (e) {
