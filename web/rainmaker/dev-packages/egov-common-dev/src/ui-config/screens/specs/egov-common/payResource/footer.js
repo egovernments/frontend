@@ -67,6 +67,8 @@ export const callPGService = async (state, dispatch) => {
     billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
   });
+  if( isFormValid) {
+    
   try {
     const requestBody = {
       Transaction: {
@@ -148,6 +150,7 @@ export const callPGService = async (state, dispatch) => {
       moveToFailure(dispatch);
     }
   }
+}
 };
 
 const postPGReqeust = (redirectionUrl) => {
