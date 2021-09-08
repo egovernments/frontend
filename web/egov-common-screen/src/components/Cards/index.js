@@ -14,6 +14,8 @@ import {
 import propertyTaxImage from "../../img/property_tax.png"
 import roadCuttingImage from "../../img/roadcutting.png"
 import tradelicenceImage from "../../img/tradelicence.png"
+import arrow from "../../img/arrow.png"
+
 import "./index.css";
 
 
@@ -42,7 +44,7 @@ export default function CenteredGrid() {
         <Card id="card1" 
                    >
                      
-                  <p id="cardheadings">Property Tax</p>
+                  <p id="cardheadingsnew">Property Tax</p>
                     <img
               src={propertyTaxImage}
               alt="..."              
@@ -52,18 +54,20 @@ export default function CenteredGrid() {
               marginTop: "-53px",
               marginLeft: "5px"}}
             />
-                <CardContent style={{  marginLeft: "49px"}}>
+                <CardContent style={{  marginTop: "5%"}}>
                   <p id="carddescription" style={{marginTop: "-51px",color: "rgba(0, 0, 0, 0.6)"}}><br />
                   Property Tax or House Tax is a local tax levied by municipal authorities for maintaining civic amenities in your area and is paid by occupier of that property                    
                   <br />
-                    <b><a href="/citizen/withoutAuth/pt-mutation/public-search">Pay</a></b> <br /> 
-                    <a href="/citizen/user/login">Apply</a> / 
+                    <p id = "paylink1"><a style={{color:"#ffffff", marginLeft: "20px"}}href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax</a> 
+                    &nbsp;
+<img   src={arrow}  id="arrowicon1" /></p> <br /> 
+                    <p style={{marginTop: "-3%"}}> <a href="/citizen/user/login">Register Property</a> </p>
                   </p>
                 </CardContent>
               </Card>        </Grid>
         <Grid item xs={12} md = {4}>
         <Card id="card2"  >
-                  <p id="cardheadings">Trade Licence</p>
+                  <p id="cardheadingsnew">Trade Licence</p>
                    <img
               src={tradelicenceImage}
               alt="..."              
@@ -72,19 +76,20 @@ export default function CenteredGrid() {
               width: "50px",
               marginTop: "-53px",
               marginLeft: "5px"}} />
-                <CardContent style={{  marginLeft: "49px"}}>
+                <CardContent style={{  marginTop: "5%"}}>
                   <p   id="carddescription" style={{marginTop: "-51px",color: "rgba(0, 0, 0, 0.6)"}} ><br />
                   A Trade License is permission issued by an Urban Local Body (ULB) to conduct specific trade or business according to the relevant rules, standards and safety guidelines on premises for which it has been issued
                     <br />
-                    <a href="/citizen/user/login">Apply</a> <br /> 
-                    <a href="/citizen/user/login">Renew </a><br />
+                    <p id = "paylink2"><a style={{color:"#ffffff", marginLeft: "20px"}} href="/citizen/user/login">New Application</a>&nbsp;
+<img   src={arrow}  id="arrowicon2" /></p> <br /> 
+                    <p style={{marginTop: "-3%"}}><a href="/citizen/user/login">Renewal of License</a></p><br />
                   </p>
                 </CardContent>
               </Card>
         </Grid>
         <Grid item xs={12} md = {4}>
         <Card   id="card3">
-                  <p id="cardheadings">Road Cutting</p>
+                  <p id="cardheadingsnew">Road Cutting</p>
                   <img
               src={roadCuttingImage}
               alt="..."              
@@ -93,11 +98,12 @@ export default function CenteredGrid() {
               width: "50px",
               marginTop: "-53px",
               marginLeft: "5px"}} />
-                <CardContent style={{  marginLeft: "49px"}}>
+                <CardContent style={{  marginTop: "5%"}}>
                 <p id ="carddescription" style={{marginTop: "-51px",color: "rgba(0, 0, 0, 0.6)"}}><br />
                 Road Cutting charges are levied by ULBs to recover cost for maintaining roads when they are cut for laying pipes, installing electricity lines, internet lines etc
                     <br />
-                    <a href="http://enagarsewa.uk.gov.in/" target="_blank" rel="noreferrer">Apply</a> <br /> 
+                    <p id = "paylink3"><a style={{color:"#ffffff", marginLeft: "20px"}} href="http://enagarsewa.uk.gov.in/" target="_blank" rel="noreferrer">Apply</a> &nbsp;
+<img   src={arrow}  id="arrowicon3" /></p><br /> 
                   </p>
                 </CardContent>               
               </Card>

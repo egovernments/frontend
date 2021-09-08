@@ -16,6 +16,62 @@
     border-radius: 8px;
 
 }
+#paylink1
+{
+    background: #F47738;
+    border-radius: 32px;
+    width: 168px;
+    height: 32px;
+    left: 146px;
+    top: 504px;
+    color:#FFFFFF;
+    margin-top: 10%;
+
+}
+#arrowicon1{
+    height: 10px;
+
+}
+#arrowicon2{
+    height: 10px;
+   
+}
+#arrowicon3{
+    height: 10px;
+
+}
+
+#paylink2
+{
+    background: #F47738;
+    border-radius: 32px;
+    width: 168px;
+    height: 32px;
+    left: 146px;
+    top: 504px;
+    color:#FFFFFF;
+    margin-top: 5%;
+
+}
+#paylink3
+{   
+    background: #F47738;
+    border-radius: 32px;
+    width: 168px;
+    height: 32px;
+    left: 146px;
+    top: 504px;
+    color:#FFFFFF;
+    margin-top: 10%;
+}
+#cardheadingsnew
+{
+    width: 104px;
+    height: 8px;
+    left: 200px;
+    top: 369px;
+    margin-left: 71px;
+}
 
 #carddescription
 {
@@ -107,18 +163,18 @@ line-height: 20px;
 
     #card1
     {
-        height: 285px;
+        height: 265px;
         margin-top: -114px;
     }
     #card2
     {
-        height: 285px;
+        height: 265px;
         margin-top: -114px;
       
     }
     #card3
     {
-        height: 285px;
+        height: 265px;
         margin-top: -114px;
     }
 
@@ -153,18 +209,18 @@ line-height: 20px;
 
     #card1
     {
-        height: 310px;
+        height: 270px;
         margin-top: -114px;
     }
     #card2
     {
-        height: 310px;
+        height: 270px;
         margin-top: -114px;
       
     }
     #card3
     {
-        height: 310px;
+        height: 270px;
         margin-top: -114px;
     }
 
@@ -241,17 +297,17 @@ line-height: 20px;
 {
     #card1
     {
-        height: 356px;
+        height: 310px;
         margin-top: -114px;
     }
     #card2
     {
-        height: 356px;
+        height: 310px;
         margin-top: -114px;
     }
     #card3
     {
-        height: 356px;
+        height: 310px;
         margin-top: -114px;
     }
    
