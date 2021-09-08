@@ -61,7 +61,7 @@ export default function CenteredGrid() {
                     <p id = "paylink1"><a style={{color:"#ffffff", marginLeft: "20px"}}href="/citizen/withoutAuth/pt-mutation/public-search">Pay Property Tax</a> 
                     &nbsp;
 <img   src={arrow}  id="arrowicon1" /></p> <br /> 
-                    <p style={{marginTop: "-3%"}}> <a href="/citizen/user/login">Register Property</a> </p>
+                    <p style={{marginTop: "-7%"}}> <a href="/citizen/user/login">Register Property</a> </p>
                   </p>
                 </CardContent>
               </Card>        </Grid>
@@ -82,7 +82,7 @@ export default function CenteredGrid() {
                     <br />
                     <p id = "paylink2"><a style={{color:"#ffffff", marginLeft: "20px"}} href="/citizen/user/login">New Application</a>&nbsp;
 <img   src={arrow}  id="arrowicon2" /></p> <br /> 
-                    <p style={{marginTop: "-3%"}}><a href="/citizen/user/login">Renewal of License</a></p><br />
+                    <p style={{marginTop: "-7%"}}><a href="/citizen/user/login">Renewal of License</a></p><br />
                   </p>
                 </CardContent>
               </Card>

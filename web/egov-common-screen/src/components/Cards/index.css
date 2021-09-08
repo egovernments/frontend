@@ -83,6 +83,7 @@ line-height: 20px;
 }
 @media only screen and (max-width: 576px) {
     
+    
     #card1
             {
                 height: auto !important;
@@ -128,18 +129,18 @@ line-height: 20px;
 
    #card1
    {
-       height: 240px;
+       height: 270px;
        margin-top: -114px;
    }
    #card2
    {
-       height: 240px;
+       height: 270px;
        margin-top: -114px;
      
    }
    #card3
    {
-       height: 240px;
+       height: 270px;
        margin-top: -114px;
    }
 
@@ -242,17 +243,17 @@ line-height: 20px;
 
     #card1
     {
-        height: 426px;;
+        height: 280px;
         margin-top: -114px;
     }
     #card2
     {
-        height: 426px;;
+        height: 280px;
         margin-top: -114px;
     }
     #card3
     {
-        height: 426px;;
+        height: 280px;
         margin-top: -114px;
     }
 
@@ -336,6 +337,36 @@ line-height: 20px;
         height: 250px;
         margin-top: 0px;
 
+    }
+    #paylink1 {
+        background: #F47738;
+        border-radius: 32px;
+        width: 168px;
+        height: 32px;
+        left: 146px;
+        top: 504px;
+        color: #FFFFFF;
+        margin-top: 7%;
+    }
+    #paylink2 {
+        background: #F47738;
+        border-radius: 32px;
+        width: 168px;
+        height: 32px;
+        left: 146px;
+        top: 504px;
+        color: #FFFFFF;
+        margin-top: 7%;
+    }
+    #paylink3 {
+        background: #F47738;
+        border-radius: 32px;
+        width: 168px;
+        height: 32px;
+        left: 146px;
+        top: 504px;
+        color: #FFFFFF;
+        margin-top: 7%;
     }
   
 }
