@@ -528,10 +528,18 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         {
         code="Advance";
         }
+        if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE")
+        {
+          dcbRow={
+            "taxhead":code ,
+            "amount":dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount
+          };
+        }
+        else{
         dcbRow={
           "taxhead":code + "("+installment+")",
           "amount":dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount
-        };
+        };}
 totalamount=totalamount+(dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount);
 dcbArray.push(dcbRow);
       }
