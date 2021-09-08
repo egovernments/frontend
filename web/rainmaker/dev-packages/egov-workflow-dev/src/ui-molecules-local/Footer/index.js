@@ -321,7 +321,7 @@ class Footer extends React.Component {
         duration <= renewalPeriod) {
         const editButton = {
           label: "Edit",
-          labelKey: "Renew",
+          labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
           link: () => {
             const baseURL =
               process.env.REACT_APP_NAME === "Citizen"
@@ -343,14 +343,14 @@ class Footer extends React.Component {
         if (responseLength > 1) {
           if (applicationType !== "NEW") {
             downloadMenu && downloadMenu.push(editButton);
-           // downloadMenu && downloadMenu.push(submitButton);
+            downloadMenu && downloadMenu.push(submitButton);
           }
 
         }
         else if (responseLength === 1) {
 
           downloadMenu && downloadMenu.push(editButton);
-         // downloadMenu && downloadMenu.push(submitButton);
+          downloadMenu && downloadMenu.push(submitButton);
         }
 
 
