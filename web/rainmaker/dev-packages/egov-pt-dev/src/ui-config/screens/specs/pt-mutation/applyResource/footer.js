@@ -410,7 +410,7 @@ const callBackForNext = async (state, dispatch) => {
             sumP=sumP+ parseInt(state.screenConfiguration.preparedFinalObject.Property.ownersTemp[i].ownerShipPercentage);
           }
 
-          if(sumP!=100)
+          if(isNaN(sumP)==false && sumP!=100)
           {
           alert("total sum for ownership percentage must be 100");
           isMutilpleOwnerValid = false;
