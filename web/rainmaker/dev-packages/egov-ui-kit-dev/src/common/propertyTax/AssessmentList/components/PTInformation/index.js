@@ -15,6 +15,7 @@ import ApplicationHistory from "./components/ApplicationHistory";
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
 import "./index.css";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -62,6 +63,23 @@ class PTInformation extends React.Component {
       {
         key: "consumerCode",
         value:window.location.href.split('/')[6]
+      },
+      {
+        key: "businessService",
+        value: "PT"
+      }
+    ];
+  }
+  else if(window.location.href.includes("pt-acknowledgment") ){
+    fetchBillQueryObject=    [
+      {
+        key: "tenantId",
+        value:getQueryArg(window.location.href, "tenantId")
+      },
+      {
+        key: "consumerCode",
+        value:getQueryArg(window.location.href, "propertyId")
+
       },
       {
         key: "businessService",
