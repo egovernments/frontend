@@ -788,7 +788,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map((element,index) => {
       if(element.amountPaid >0 || element.amountPaid < 0)
       {
-      installment=convertEpochToDate(element.fromPeriod) +"-"+convertEpochToDate(element.toPeriod);
+	  installment=convertEpochToDate(element.fromPeriod) +"-"+convertEpochToDate(element.toPeriod);
       element.billAccountDetails.map((dd)=>{
       if((dd.adjustedAmount > 0 || dd.adjustedAmount < 0) || (dd.amount < 0))
       {
@@ -840,10 +840,18 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
         {
         code="Advance";
         }
+		if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE")
+        {
+          dcbRow={
+            "taxhead":code ,
+            "amount":dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount
+          };
+        }
+        else{
         dcbRow={
           "taxhead":code + "("+installment+")",
           "amount":dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount
-        };
+        };}
 totalamount=totalamount+(dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount);
 dcbArray.push(dcbRow);
       }
@@ -1057,6 +1065,7 @@ building = building + "," + item.name;
 	  let rate=await getMdmsData(businesService);
     if(businesService=="SW")
     { 
+		configKey="sw-bill";
         oldConnection=responseSewerage.SewerageConnections[0].oldConnectionNo;
         ledgerId=responseSewerage.SewerageConnections[0].additionalDetails.ledgerId;
 		propertyId=responseSewerage.SewerageConnections[0].propertyId
@@ -1064,6 +1073,7 @@ building = building + "," + item.name;
     }
     else if(businesService=="WS")
     {
+		configKey="ws-bill";
         oldConnection=responseWater.WaterConnection[0].oldConnectionNo;
         ledgerId=responseWater.WaterConnection[0].additionalDetails.ledgerId;
 		propertyId=responseWater.WaterConnection[0].propertyId;
