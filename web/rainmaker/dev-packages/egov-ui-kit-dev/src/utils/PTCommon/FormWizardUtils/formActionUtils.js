@@ -146,9 +146,12 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         
     var psum=0;
     for(var i=0; i< propertyPayload.owners.length;i++)
-      psum += parseInt(propertyPayload.owners[i].ownerShipPercentage);        
-    
-    if(psum != 100)
+    {
+      if(propertyPayload.owners[i].status=='ACTIVE')
+        psum += parseInt(propertyPayload.owners[i].ownerShipPercentage);        
+    }
+
+    if(isNaN(psum)==false && psum != 100)
       {
         alert ("sum of Ownership Percentage of all owners must be 100");
         //return;
