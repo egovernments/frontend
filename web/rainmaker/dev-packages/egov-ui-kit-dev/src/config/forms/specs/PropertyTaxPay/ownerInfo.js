@@ -57,10 +57,10 @@ const formConfig = {
       floatingLabelText: "PT_SEARCHPROPERTY_TABEL_OWNERSHIPPERCENTAGE",
       hintText: "PT_FORM3_OWNERPERCENTAGE_PLACEHOLDER",
       pattern: /^[1-9][0-9]?$|^100$/i,
-      required: true,
+      required: false,
       errorMessage: "PT_PERCENTAGE_ERROR_MESSAGE",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      value:"100"
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 }
+      //,value:"100"
 
     },
     ownerAddress: {

@@ -883,7 +883,7 @@ class FormWizard extends Component {
               //To check whether ownership percentage is 100 for this SingleUser
               var isOwnerPercentValid=true;
               //alert("percentage is "+ownerInfo.fields["ownerPercentage"].value);
-              if(ownerInfo.fields["ownerPercentage"].value!="100")
+              if(ownerInfo.fields["ownerPercentage"].value!=null && ownerInfo.fields["ownerPercentage"].value!="" && ownerInfo.fields["ownerPercentage"].value!="100")
               {
                 alert("ownership percentage must be 100 for single owner")
                 isOwnerPercentValid=false;
@@ -908,10 +908,15 @@ class FormWizard extends Component {
             } else if (ownershipTypeSelected === "MULTIPLEOWNERS") {
               let sumPercent=0;
               let ownerValidation = true;
+              let allNull=true;
               for (const variable in form) {
                 if (variable.search("ownerInfo_") !== -1) {
                   //alert("percentage is "+form[variable].fields["ownerPercentage"].value);
                   sumPercent=sumPercent + parseInt(form[variable].fields["ownerPercentage"].value);
+                  // if ownerPercentage for this owner is not null i.e. not empty field
+                  if(form[variable].fields["ownerPercentage"].value!=null && form[variable].fields["ownerPercentage"].value!="")
+                    allNull=false;  
+            
                   const isDynamicFormValid = validateForm(form[variable]);
                   if (!isDynamicFormValid) {
                     displayFormErrorsAction(variable);
@@ -920,7 +925,7 @@ class FormWizard extends Component {
                 }
               }
               var isOwnerPercentValid=true;
-              if(sumPercent!=100)
+              if(allNull==false && sumPercent!=100)
               {
                 alert("sum of ownership percentage must be 100 for multiple owners")
                 isOwnerPercentValid=false;

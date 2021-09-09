@@ -74,7 +74,7 @@ export const validateFields = (
   for (var variable in fields) {
     if( variable == "ownershipPercentage" && state.screenConfiguration.preparedFinalObject.Property.ownershipCategoryTemp=="INDIVIDUAL.SINGLEOWNER" && parseInt(fields[variable].props.value)!="100")
       {
-        alert("Fo single owner, ownership percentage must be 100");
+        alert("For single owner, ownership percentage must be 100");
         isFormValid = false;
       }
        
