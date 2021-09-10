@@ -20,6 +20,14 @@ const styles = {
     lineHeight: "28px",
     paddingLeft: "5px"
   },
+  ptheader: {
+    color: "red",
+    fontFamily: "Roboto",
+    fontSize: "20px",
+    fontWeight: 500,
+    lineHeight: "28px",
+    paddingLeft: "5px"
+  },
   subHeader: {
     color: "gba(0, 0, 0, 0.87)",
     fontFamily: "Roboto",
@@ -52,7 +60,7 @@ const getHeader = (modulePrifx)=>{
       labelKey:getTransformedLocale(`${modulePrifx}_REQ_DOCS_HEADER`) 
     },
     {
-      style: styles.header
+      style: styles.ptheader
     }
   );
 } 
