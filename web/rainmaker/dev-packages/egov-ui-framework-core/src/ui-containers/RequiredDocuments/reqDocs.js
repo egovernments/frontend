@@ -61,13 +61,6 @@ const getHeader = (modulePrifx)=>{
     },
     {
       style: styles.ptheader
-    },
-    {
-      labelName: "aa",
-      labelKey:"bb" 
-    },
-    {
-      style: styles.header
     }
   );
 } 
