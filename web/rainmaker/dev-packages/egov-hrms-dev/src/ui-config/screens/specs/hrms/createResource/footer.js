@@ -49,11 +49,11 @@ export const callBackForNext = async (state, dispatch) => {
     if (!(isEmployeeDetailsValid && isProfessionalDetailsValid)) {
       isFormValid = false;
     }
-    let tenantId = getTenantId();
-    // let tenantId =get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "Employee[0].tenantId"
-    // );
+    //let tenantId = getTenantId();
+    let tenantId =get(
+      state.screenConfiguration.preparedFinalObject,
+      "Employee[0].tenantId"
+    );
     const errorMessage = {
       labelName: "Mobile number already exists . Please try with different mobile number",
       labelKey: "ERR_MOBILE_NUMBER_EXISTS_FIELDS"

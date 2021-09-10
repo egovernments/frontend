@@ -787,6 +787,9 @@ export const createEmployee = (state, dispatch) => {
     ) || get(
       state.screenConfiguration.preparedFinalObject,
       "citiesByModule.tenantId.value"
+    ) || get(
+      state.screenConfiguration.preparedFinalObject,
+      "Employee[0].tenantId"
     );
     tenantId=tenantId?tenantId:getTenantId();
     get(state.screenConfiguration.preparedFinalObject, "Employee") &&
