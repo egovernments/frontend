@@ -338,18 +338,28 @@ const searchApiCall = async (state, dispatch, index) => {
       const responseProperties = await getSearchResults(queryObject);
       let response={};
       let Properties=[];
-      if(queryObject[1].key=="mobileNumber")
+      let flag=1;
+      queryObject.map(pp=>{
+      if(pp.key=="mobileNumber")
       {
         responseProperties.Properties.map(item => {
+          flag=1;
         item.owners.map(owner=> {
         if(owner.status=="ACTIVE" && owner.mobileNumber==queryObject[1].value){
-            Properties.push(item);
+           flag=2;
         }
       }
       );
+      if(flag==2)
+      Properties.push(item);
         });
+        response={"Properties":Properties}; 
+
       }
-      response={"Properties":Properties};      // const response = searchSampleResponse();
+      else 
+      response=responseProperties;
+
+         });     // const response = searchSampleResponse();
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
