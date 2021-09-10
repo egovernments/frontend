@@ -335,10 +335,21 @@ const searchApiCall = async (state, dispatch, index) => {
     try {
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
-      const response = await getSearchResults(queryObject);
-
-      // const response = searchSampleResponse();
-
+      const responseProperties = await getSearchResults(queryObject);
+      let response={};
+      let Properties=[];
+      if(queryObject[1].key=="mobileNumber")
+      {
+        responseProperties.Properties.map(item => {
+        item.owners.map(owner=> {
+        if(owner.status=="ACTIVE" && owner.mobileNumber==queryObject[1].value){
+            Properties.push(item);
+        }
+      }
+      );
+        });
+      }
+      response={"Properties":Properties};      // const response = searchSampleResponse();
       let propertyData = response.Properties.map(item => ({
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
