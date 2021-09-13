@@ -7,7 +7,7 @@
 {
     width: 210px;
     margin-bottom: -13px;
-  
+    margin-left: 24px;  
 }
 
 #flex-container>div {
@@ -164,7 +164,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 56%;
+        margin-left: 54%;
     }
     #faqs {
         margin-left: 10%;
@@ -266,7 +266,7 @@ top: 24px;
 
     #links {
         display: inline-flex;
-        margin-left: 41%;
+        margin-left: 40%;
     
     }
 

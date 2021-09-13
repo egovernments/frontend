@@ -29,6 +29,7 @@ const styles = {
     rowTitleTextSize: "16px",
     // rowContentColor: 'grey',
     // arrowColor: "red",   
+    rowContentPaddingTop:"12px",
 
 };
 
