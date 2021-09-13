@@ -241,7 +241,8 @@ export const PROPERTY_FORM_PURPOSE = {
   UPDATE: 'update',
   CANCEL: 'cancel',
   SENDFOREDIT: 'sendforedit',
-  DEFAULT: 'create'
+  DEFAULT: 'create',
+  STATUS:'status'
 }
 
 export const formWizardConstants = {
@@ -266,6 +267,16 @@ export const formWizardConstants = {
     isEstimateDetails: true
   },
   [PROPERTY_FORM_PURPOSE.UPDATE]: {
+    header: 'PT_UPDATE_PROPERTY',
+    parentButton: 'PT_UPDATE',
+    isSubHeader: true,
+    isFinancialYear: false,
+    buttonLabel: 'PT_UPDATE_PROPERTY_BUTTON',
+    isEditButton: true,
+    canEditOwner: false,
+    isEstimateDetails: false
+  },
+  [PROPERTY_FORM_PURPOSE.STATUS]: {
     header: 'PT_UPDATE_PROPERTY',
     parentButton: 'PT_UPDATE',
     isSubHeader: true,
@@ -322,6 +333,9 @@ export const propertySubmitAction = (Properties, action, props, isModify, prepar
       assessProperty("_create", props);
       break;
     case PROPERTY_FORM_PURPOSE.UPDATE:
+      createProperty(Properties, '_update', props, isModify, preparedFinalObject);
+      break;
+    case PROPERTY_FORM_PURPOSE.STATUS:
       createProperty(Properties, '_update', props, isModify, preparedFinalObject);
       break;
     case PROPERTY_FORM_PURPOSE.CREATE:

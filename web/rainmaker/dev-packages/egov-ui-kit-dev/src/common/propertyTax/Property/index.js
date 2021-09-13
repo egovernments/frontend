@@ -23,6 +23,7 @@ import PTHeader from "../../common/PTHeader";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import PropertyInformation from "./components/PropertyInformation";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import "./index.css";
 
 const innerDivStyle = {
@@ -149,6 +150,45 @@ class Property extends Component {
     }
   };
 
+  onStatusChangePropertyClick = async() => {
+    const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
+    const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+    if (selPropertyDetails.status == "ACTIVE") {
+      selPropertyDetails.status="INACTIVE";
+        let payload = null;
+        let queryObject = [
+          {
+            key: "tenantId",
+            value: tenantId
+          },
+          {
+            key: "propertyIds",
+            value: propertyId
+          }
+        ];
+        selPropertyDetails.creationReason="STATUS";
+        const workflow = {
+          "businessService": "PT.CREATE",
+          "action": "OPEN",
+          "moduleName": "PT"
+        }
+        selPropertyDetails.workflow = workflow
+        payload = await httpRequest(
+          "post",
+          "/property-services/property/_update",
+          "_update",
+          queryObject,
+          { Property: selPropertyDetails }
+    
+        );
+    if(payload.Properties.length >0) alert("Property has been made inactive successfully");
+    else alert("Some error occured!! please try again.")
+  }
+
+else {
+  alert("This operation is not allowed as Property is not ACTIVE.");
+  }
+};
   getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
     let assessmentList = [];
     const { propertyDetails = [] } = selPropertyDetails;
@@ -329,23 +369,34 @@ class Property extends Component {
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
           <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
-
             <Button
-              label={
-                <Label buttonLabel={true}
-                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
-                  color="#fe7a51" />
-              }
+               label={
+                 <Label buttonLabel={true}
+                //  label={formWizardConstants[PROPERTY_FORM_PURPOSE.STATUS].parentButton} fontSize="16px"
+                  label={'Change Status'} fontSize="16px"
+                   color="#fe7a51" />
+               }
+              onClick={() => this.onStatusChangePropertyClick()}
+              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "10%" }}
+            />
+            <Button
+               label={
+                 <Label buttonLabel={true}
+                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                   color="#fe7a51" />
+               }
               onClick={() => this.onEditPropertyClick()}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
               buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "45%", marginRight: "10%" }}
+              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "10%" }}
             />
             <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
               primary={true}
-              style={{ lineHeight: "auto", minWidth: "45%" }}
+              style={{ lineHeight: "auto", minWidth: "25%" }}
             />
           </div>
         </div>
