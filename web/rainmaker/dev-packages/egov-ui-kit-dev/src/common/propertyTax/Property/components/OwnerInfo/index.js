@@ -369,7 +369,7 @@ class OwnerInfo extends Component {
 
   render() {
     const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue, waterDetails, sewerDetails, mdmsMutationDocuments, OldProperty } = this.props;
-    properties.tenantId = getTenantId();
+    // properties.tenantId = getTenantId();
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
