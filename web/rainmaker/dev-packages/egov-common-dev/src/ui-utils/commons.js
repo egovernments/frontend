@@ -1065,7 +1065,7 @@ building = building + "," + item.name;
 	  let rate=await getMdmsData(businesService);
     if(businesService=="SW")
     { 
-		//configKey="sw-bill";
+		configKey="sw-bill";
         oldConnection=responseSewerage.SewerageConnections[0].oldConnectionNo;
         ledgerId=responseSewerage.SewerageConnections[0].additionalDetails.ledgerId;
 		propertyId=responseSewerage.SewerageConnections[0].propertyId
@@ -1073,7 +1073,7 @@ building = building + "," + item.name;
     }
     else if(businesService=="WS")
     {
-		//configKey="ws-bill";
+		configKey="ws-bill";
         oldConnection=responseWater.WaterConnection[0].oldConnectionNo;
         ledgerId=responseWater.WaterConnection[0].additionalDetails.ledgerId;
 		propertyId=responseWater.WaterConnection[0].propertyId;

@@ -81,12 +81,12 @@ export const employeeDetails = getCommonCard({
         className: "hr-generic-selectfield autocomplete-dropdown",
         data: [
           {
-            code: "FATHER",
-            name: "COMMON_RELATION_FATHER"
+            code: "Father",
+            name: "Father"
           },
           {
-            code: "HUSBAND",
-            name: "COMMON_RELATION_HUSBAND"
+            code: "Husband",
+            name: "Husband"
           },
         ],
         optionValue: "value",
