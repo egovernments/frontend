@@ -119,8 +119,8 @@ class Header extends React.Component {
                         src={leftImage}
                         alt="..."
                         style={{
-                          width: "54px",
-                          height: "51px",
+                          width: "60px",
+                          height: "60px",
                           left: "130px",
                           top: "7px",
                         
