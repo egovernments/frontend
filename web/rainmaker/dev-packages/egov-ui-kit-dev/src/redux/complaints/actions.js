@@ -153,7 +153,7 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
         tenantId = payload.services[0].tenantId;
       }
       checkUsers(dispatch, getState(), payload.actionHistory, hasUsers, tenantId);
-         if(userInfo==undefined || userInfo=='')
+      if(userInfo==undefined || userInfo==''||userInfo.roles[0].code=='GRO'||userInfo.roles[0].code=='CSR')
         {
 
         }
