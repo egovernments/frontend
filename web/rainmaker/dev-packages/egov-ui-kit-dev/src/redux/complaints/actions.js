@@ -153,7 +153,7 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
         tenantId = payload.services[0].tenantId;
       }
       checkUsers(dispatch, getState(), payload.actionHistory, hasUsers, tenantId);
-         if(userInfo==undefined || userInfo=='')
+     /*    if(userInfo==undefined || userInfo=='')
         {
 
         }
@@ -169,7 +169,7 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
 //alert(selectedComplaints.length);
 payload.services=payload.services.filter(item => selectedComplaints.includes(item.serviceRequestId));
 payload.actionHistory=payload.actionHistory.filter(item => selectedComplaints.includes(item.actions[0].businessKey));
-        }
+        }*/
       dispatch(complaintFetchComplete(payload, overWrite));
     } catch (error) {
       dispatch(complaintFetchError(error.message));
