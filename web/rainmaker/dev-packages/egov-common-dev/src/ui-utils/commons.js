@@ -792,67 +792,81 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
       element.billAccountDetails.map((dd)=>{
       if((dd.adjustedAmount > 0 || dd.adjustedAmount < 0) || (dd.amount < 0))
       {
-        let code=null;
+        let code=null,amount=null;;
         if(dd.taxHeadCode == "WS_CHARGE")
         {
-        code="Water Charges";
+        code="Water Charges";         amount=dd.adjustedAmount;
+
         }
         else if( dd.taxHeadCode == "SW_CHARGE")
         {
-        code="Sewerage Charges";
+        code="Sewerage Charges";         amount=dd.adjustedAmount;
+
         }
 		else if(dd.taxHeadCode == "WS_Round_Off" || dd.taxHeadCode == "SW_Round_Off")
         {
-        code="Round Off";
+        code="Round Off";         amount=dd.adjustedAmount;
+
         }
         else if(dd.taxHeadCode == "WS_TIME_INTEREST" || dd.taxHeadCode == "SW_TIME_INTEREST")
         {
-        code="Interest";
+        code="Interest";         amount=dd.adjustedAmount;
+
         }
         else if(dd.taxHeadCode == "WS_TIME_PENALTY" || dd.taxHeadCode == "SW_TIME_PENALTY")
         {
-        code="Penalty";
+        code="Penalty";         amount=dd.adjustedAmount;
+
         }  else if(dd.taxHeadCode == "WS_SCRUTINY_FEE" || dd.taxHeadCode == "SW_SCRUTINY_FEE")
         {
-        code="Scrutiny Fee";
+        code="Scrutiny Fee";         amount=dd.adjustedAmount;
+
         }  else if(dd.taxHeadCode == "WS_ROAD_CUTTING_CHARGE" || dd.taxHeadCode == "SW_ROAD_CUTTING_CHARGE")
         {
-        code="Road Cutting Charges";
+        code="Road Cutting Charges";         amount=dd.adjustedAmount;
+
         }  else if(dd.taxHeadCode == "WS_METER_TESTING_FEE" || dd.taxHeadCode == "SW_METER_TESTING_FEE")
         {
-        code="Meter Testing Fee";
+        code="Meter Testing Fee";          amount=dd.adjustedAmount;
+
         }  else if(dd.taxHeadCode == "WS_SECURITY_DEPOSIT" || dd.taxHeadCode == "SW_SECURITY_DEPOSIT")
         {
-        code="Security Deposit";
+        code="Security Deposit";          amount=dd.adjustedAmount;
+
         }  else if(dd.taxHeadCode == "WS_OTHER_FEE" || dd.taxHeadCode == "SW_OTHER_FEE")
         {
-        code="Other Fee";
+        code="Other Fee";         amount=dd.adjustedAmount;
+
         }else if(dd.taxHeadCode == "WS_USER_CHARGE" || dd.taxHeadCode == "SW_USER_CHARGE")
         {
-        code="User Charges";
+        code="User Charges";         amount=dd.adjustedAmount;
+
         }else if(dd.taxHeadCode == "WS_CONNECTION_FEE" || dd.taxHeadCode == "SW_CONNECTION_FEE")
         {
-        code="Connection Fee";
+        code="Connection Fee";         amount=dd.adjustedAmount;
+
         }else if(dd.taxHeadCode == "WS_COMPOSITION_FEE" || dd.taxHeadCode == "SW_COMPOSITION_FEE")
         {
-        code="Composition Fee";
+        code="Composition Fee";         amount=dd.adjustedAmount;
+
         }else if(dd.taxHeadCode == "SW_ADVANCE_CARRYFORWARD" || dd.taxHeadCode == "WS_ADVANCE_CARRYFORWARD" )
         {
-        code="Advance";
+        code="Advance";         amount=-dd.amount;
+
         }
 		if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="WS.ONE_TIME_FEE" || payloadReceiptDetails.Payments[0].paymentDetails[0].businessService=="SW.ONE_TIME_FEE")
         {
           dcbRow={
             "taxhead":code ,
-            "amount":dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount
+            "amount":amount
           };
         }
         else{
         dcbRow={
           "taxhead":code + "("+installment+")",
-          "amount":dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount
+          "amount":amount
         };}
-totalamount=totalamount+(dd.adjustedAmount>0?dd.adjustedAmount:-dd.amount);
+totalamount=totalamount+amount;
 dcbArray.push(dcbRow);
       }
 
