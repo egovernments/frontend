@@ -99,7 +99,7 @@ export const employeeDetails = getCommonCard({
         required: true,
         isClearable: true,
         labelsFromLocalisation: true,
-        jsonPath: "Employee[0].user.relationship"
+        jsonPath: "Employee[0].user.guardianrelation"
       },
       required: true,
       gridDefination: {
