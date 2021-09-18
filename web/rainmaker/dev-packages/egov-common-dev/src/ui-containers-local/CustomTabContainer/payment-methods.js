@@ -265,6 +265,22 @@ import {
       jsonPath: "ReceiptTemp[0].instrument.branchName"
     })
   });
+  export const posDetails = getCommonContainer({
+    txnNo: getTextField({
+      label: {
+        labelName: "Transaction No.",
+        labelKey: "PAYMENT_TXN_NO_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Transaction  no.",
+        labelKey: "PAYMENT_TXN_NO_PLACEHOLDER"
+      },
+      //Pattern validation for Cheque number
+      jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
+      required: true
+    })
+   
+  });
   
   export const chequeDetails = getCommonContainer({
     chequeNo: getTextField({
@@ -347,41 +363,7 @@ import {
     })
   });
   
-  export const poDetails = getCommonContainer({
-    ipoNo: getTextField({
-      label: {
-        labelName: "IPO No.",
-        labelKey: "PAYMENT_IPO_NO_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter IPO No.",
-        labelKey: "PAYMENT_IPO_NO_PLACEHOLDER"
-      },
-      //Pattern validation for Cheque number
-      jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
-      required: true
-    }),
-    txnDate: getDateField({
-      label: {
-        labelName: "Transaction Date",
-        labelKey: "PAYMENT_TXN_DATE_LABEL"
-      },
-      placeholder: {
-        labelName: "dd/mm/yy",
-        labelKey: "PAYMENT_TXN_DATE_PLACEHOLDER"
-      },
-      pattern: getPattern("Date"),
-      errorMessage: "PAYMENT_TX_ERROR_MESSAGE",
-      isDOB: true,
-      required: true,
-      jsonPath: "ReceiptTemp[0].instrument.transactionDateInput",
-      props: {
-        inputProps: {
-          max: getTodaysDateInYMD()
-        }
-      }
-    })
-  });
+ 
   
   export const cheque = getCommonContainer({
     payeeDetails,
@@ -397,14 +379,14 @@ import {
     onlineDetails: { ...onlineDetails }
   });
   
-  export const neftRtgs = getCommonContainer({
-    payeeDetails,
-    onlineDetails
-  });
+  // export const neftRtgs = getCommonContainer({
+  //   payeeDetails,
+  //   onlineDetails
+  // });
   
-  export const postal_order = getCommonContainer({
+  export const pos = getCommonContainer({
     payeeDetails,
-    poDetails: { ...poDetails }
+    posDetails: { ...posDetails }
   });
   
   export const demandDraftDetails = getCommonContainer({
@@ -581,10 +563,10 @@ import {
       tabContent: { offline_rtgs }
     },
     {
-      code: "POSTAL_ORDER",
-      tabButton: "COMMON_POSTAL_ORDER",
+      code: "POS",
+      tabButton: "COMMON_POS",
       tabIcon: "Schedule",
-      tabContent: { postal_order }
+      tabContent: { pos }
     }
   ]
   
