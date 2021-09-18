@@ -117,6 +117,7 @@ top: 24px;
         display: inline-flex;
         margin-left: 58%;
     }
+   
 
     #bannerimage {
         width: 100%;   }
@@ -139,8 +140,15 @@ top: 24px;
 @media only screen and (max-width: 1440px) {
     #links {
         display: inline-flex;
-        margin-left: 58%;
+        margin-left: 56%;
     }
+    #paylink1 {
+        margin-top: 16% !important;
+        }
+    #paylink3 {
+            margin-top: 11% !important;
+      }
+    
 
     #bannerimage {
         width: 1424px;    
@@ -182,10 +190,13 @@ top: 24px;
     #bannerimage {
         width: 100%;
     }
+    #paylink1 {
+        margin-top: 12% !important;
+    }
 
     #links {
         display: inline-flex;
-        margin-left: 52%;    }
+        margin-left: 50%;    }
 
         #singletestimonial
         {
@@ -232,6 +243,7 @@ top: 24px;
     #bannerimage {
         width: auto;
     }
+    
 
     #links {
         display: inline-flex;
@@ -282,6 +294,15 @@ top: 24px;
 @media only screen and (max-width: 1025px) {
     #bannerimage {
         width: auto;
+    }
+
+    #paylink1
+    {
+        margin-top: 22% !important;
+    }
+    #paylink3
+    {
+        margin-top: 23% !important;
     }
     #singletestimonial
         {
@@ -339,7 +360,7 @@ top: 24px;
         }
         #links {
             display: inline-flex;
-            margin-left: 33%;
+            margin-left: 30%;
         
         }
     
@@ -376,7 +397,7 @@ top: 24px;
 @media only screen and (max-width: 800px) {
     #links {
         display: inline-flex;
-        margin-left: 7%;
+        margin-left: 0%;
     }
 
     #faqs {
