@@ -129,71 +129,17 @@ export const onlineDetails = getCommonContainer({
     jsonPath: "ReceiptTemp[0].instrument.transactionNumber",
     required: true
   }),
-  chequeDate: getDateField({
+  transactionDate: getDateField({
     label: {
       labelName: "Cheque Date",
-      labelKey: "NOC_PAYMENT_CHEQUE_DATE_LABEL"
+      labelKey: "NOC_PAYMENT_TRANSACTION_DATE_LABEL"
     },
     placeholder: {
       labelName: "dd/mm/yy",
-      labelKey: "NOC_PAYMENT_CHEQUE_DATE_PLACEHOLDER"
+      labelKey: "NOC_PAYMENT_TRANSACTION_DATE_PLACEHOLDER"
     },
     required: true,
     jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
-  }),
-  chequeIFSC: getTextField({
-    label: {
-      labelName: "IFSC",
-      labelKey: "NOC_PAYMENT_IFSC_CODE_LABEL"
-    },
-    placeholder: {
-      labelName: "Enter bank IFSC",
-      labelKey: "NOC_PAYMENT_IFSC_CODE_PLACEHOLDER"
-    },
-    required: true,
-    pattern:"^[A-Z]{4}0[A-Z0-9]{6}$",
-    jsonPath: "ReceiptTemp[0].instrument.ifscCode",
-    iconObj: {
-      iconName: "search",
-      position: "end",
-      color: "#FE7A51",
-      onClickDefination: {
-        action: "condition",
-        callBack: (state, dispatch) => {
-          onIconClick(state, dispatch, 1);
-        }
-      }
-    }
-  }),
-  chequeBank: getTextField({
-    label: {
-      labelName: "Bank Name",
-      labelKey: "NOC_PAYMENT_BANK_NAME_LABEL"
-    },
-    placeholder: {
-      labelName: "Enter bank name",
-      labelKey: "NOC_PAYMENT_BANK_NAME_PLACEHOLDER"
-    },
-    required: true,
-    props: {
-      disabled: true
-    },
-    jsonPath: "ReceiptTemp[0].instrument.bank.name"
-  }),
-  chequeBranch: getTextField({
-    label: {
-      labelName: "Bank Branch",
-      labelKey: "NOC_PAYMENT_BANK_BRANCH_LABEL"
-    },
-    placeholder: {
-      labelName: "Enter bank branch",
-      labelKey: "NOC_PAYMENT_BANK_BRANCH_PLACEHOLDER"
-    },
-    required: true,
-    props: {
-      disabled: true
-    },
-    jsonPath: "ReceiptTemp[0].instrument.branchName"
   })
 });
 export const posDetails = getCommonContainer({
