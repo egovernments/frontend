@@ -232,6 +232,7 @@ class AllComplaints extends Component {
 
   onSearch = () => {
     const { complaintNo, mobileNo } = this.state;
+    const userInfo = this.state.auth?this.state.auth.userInfo:null;
     const { fetchComplaints, toggleSnackbarAndSetText } = this.props;
     let queryObj = [];
     if (complaintNo) {

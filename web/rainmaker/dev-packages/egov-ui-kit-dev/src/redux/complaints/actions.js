@@ -154,7 +154,7 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
       }
       checkUsers(dispatch, getState(), payload.actionHistory, hasUsers, tenantId);
       let role = '';
-      userInfo.roles.map((item, i) =>{
+      if(userInfo){userInfo.roles.map((item, i) =>{
         
         if(item.code=='GRO'||item.code=='CSR')
          {
@@ -162,7 +162,7 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
         }
         });
       
-       
+      }
          if(userInfo==undefined || userInfo==''||role=='CSR' ||role=='GRO')
         {
 
