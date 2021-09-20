@@ -373,30 +373,30 @@ else {
                label={
                  <Label buttonLabel={true}
                 //  label={formWizardConstants[PROPERTY_FORM_PURPOSE.STATUS].parentButton} fontSize="16px"
-                  label={'Change Status'} fontSize="16px"
+                  label={'Change Status'} fontSize="14px"
                    color="#fe7a51" />
                }
               onClick={() => this.onStatusChangePropertyClick()}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
               buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "10%" }}
+              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "2%" }}
             />
             <Button
                label={
                  <Label buttonLabel={true}
-                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="16px"
+                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="14px"
                    color="#fe7a51" />
                }
               onClick={() => this.onEditPropertyClick()}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
               buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "10%" }}
+              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "2%" }}
             />
             <Button
               onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="16px" />}
+              label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="14px" />}
               primary={true}
-              style={{ lineHeight: "auto", minWidth: "25%" }}
+              style={{ lineHeight: "auto", minWidth: "20%" }}
             />
           </div>
         </div>
