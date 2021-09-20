@@ -130,7 +130,7 @@ class MultiItem extends React.Component {
       {
         index: 6,
         key: "card"
-      },
+      }
     ];
 
     keyToIndexMapping.forEach(item => {
