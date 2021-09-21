@@ -22,10 +22,11 @@
     position: fixed !important;
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     text-align: right;
     display: flex;
     padding: initial;
+    margin-left: 30px;
   }
 
   .apply-wizard-footer button {
