@@ -335,7 +335,10 @@ const searchApiCall = async (state, dispatch, index) => {
     try {
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
       disableField('propertySearch', "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton", dispatch);
-      const responseProperties = await getSearchResults(queryObject);
+      let responseProperties = await getSearchResults(queryObject);
+
+      if(process.env.REACT_APP_NAME === "Citizen")
+      responseProperties=responseProperties.Properties.length>0?responseProperties.Properties.filter(item=> item.status=="ACTIVE"):responseProperties;
       let response={};
       let Properties=[];
       let flag=1;
