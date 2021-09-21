@@ -161,20 +161,18 @@ class MultiItem extends React.Component {
       case 1:
         this.setInstrumentType("Cheque", dispatch);
         break;
-        case 2:
-          this.setInstrumentType("OFFLINE_NEFT", dispatch);
-          break;
-          case 3:
+  
+          case 2:
             this.setInstrumentType("OFFLINE_RTGS", dispatch);
             break;
-        case 4:
+        case 3:
           this.setInstrumentType("POS", dispatch);
           break;
          
-              case 5:
+              case 4:
                 this.setInstrumentType("DD", dispatch);
                 break;
-              case 6:
+              case 5:
                 this.setInstrumentType("Card", dispatch);
                 break;
       default:
