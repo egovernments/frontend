@@ -1746,7 +1746,7 @@ export const downloadBill = async(receiptQueryString, mode) => {
         oldConnection=responseSewerage.SewerageConnections[0].oldConnectionNo;
         ledgerId=responseSewerage.SewerageConnections[0].additionalDetails.ledgerId;
         propertyId=responseSewerage.SewerageConnections[0].propertyId
-        //key='sw-bill';
+        key='sw-bill';
 
     }
     else if(receiptQueryString[2].value=="WS")
@@ -1754,7 +1754,7 @@ export const downloadBill = async(receiptQueryString, mode) => {
         oldConnection=responseWater.WaterConnection[0].oldConnectionNo;
         ledgerId=responseWater.WaterConnection[0].additionalDetails.ledgerId;
         propertyId=responseWater.WaterConnection[0].propertyId;
-        //key='ws-bill';
+        key='ws-bill';
     }
     const requestBody = {
         "MdmsCriteria": {
