@@ -390,9 +390,6 @@ export const offline_rtgs = getCommonContainer({
   onlineDetails
 });
 
-export const offline_neft = getCommonContainer({
-  payeeDetails,
-  onlineDetails
-});
+
 
 
