@@ -7,10 +7,9 @@ import { connect } from "react-redux";
 import { BreadCrumbs, Icon } from "components";
 import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
-import { getCommaSeperatedAddress } from "egov-ui-kit/utils/commons";
+import { getCommaSeperatedAddress, getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
 import {getRowData} from "egov-ui-kit/utils/PTCommon";
 import {
   getUserInfo
@@ -140,7 +139,7 @@ class MyProperties extends Component {
   }
 }
 
-const mapStateToProps = (state,ownProps) => {
+const mapStateToProps = (state, ownProps) => {
   const { properties, common } = state;
   const { urls } = state.app;
   const { cities } = common;
@@ -151,7 +150,7 @@ const mapStateToProps = (state,ownProps) => {
       let date = getDateFromEpoch(property.auditDetails.createdTime);
       const userType = JSON.parse(getUserInfo()).type;
       const { history } = ownProps;
-      return getRowData(property,history);
+      return getRowData(property, history);
     }
   );
   const transformedPropertiesWeb = Object.values(propertiesById).map(

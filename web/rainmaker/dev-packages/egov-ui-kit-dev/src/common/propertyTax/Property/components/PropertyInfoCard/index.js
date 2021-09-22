@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Card } from "components";
+import { Card, UpdateMobile } from "components";
+import { getLocaleLabels, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";	
 import OldValueLabelContainer from "../../../../../common/common/OldValueLabelContainer";
 class PropertyInfoCard extends Component {
   render() {
-    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242,242,242)", items2 = [], items = [], subSection = [], hideSubsectionLabel = false } = this.props;
+    const { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)",items2 = [], items = [], subSection = [], hideSubsectionLabel = false, additionalKey = {} ,showEditNumber=false} = this.props;
     const isModify = getQueryArg(window.location.href, "mode") == 'WORKFLOWEDIT';
     return (
       <div>
@@ -17,7 +17,7 @@ class PropertyInfoCard extends Component {
             textChildren={
               <div>
                 <div >
-                {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 0.2}}>
+                {!ownerInfo && <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: "13px", marginTop: 20 }}>
                     {header && (
                       <Label
                         labelStyle={{ letterSpacing: "0.67px", color: "rgb(0, 0, 0)", fontWeight: "400", lineHeight: "0px" }}
@@ -49,7 +49,14 @@ class PropertyInfoCard extends Component {
                             {isModify && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>	
                               <OldValueLabelContainer value={item.value} jsonPath={item.jsonPath} oldValue={item.oldValue} />	
                             </div>}
-
+                            {showEditNumber&&additionalKey && additionalKey.key && additionalKey.key == item.key && <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                              <UpdateMobile
+                                number={item.value}
+                                type={"UPDATE"} 
+                                {...additionalKey}
+                                >
+                              </UpdateMobile>
+                            </div>}
                           </div>
                         </div>
                       );
@@ -82,7 +89,7 @@ class PropertyInfoCard extends Component {
                 </div>
                 {subSection && (
                   <div>
-                    {subSection&&Array.isArray(subSection)&&subSection.length>0&&Object.values(subSection).map((units, unitIndex) => {
+                    {subSection && Array.isArray(subSection) && subSection.length > 0 && Object.values(subSection).map((units, unitIndex) => {
                       return (
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
                           {!hideSubsectionLabel && (
@@ -100,7 +107,7 @@ class PropertyInfoCard extends Component {
                             />
                           )}
                           {units.map((unit, index) => {
-                            const subUnitHeader = hideSubsectionLabel ? undefined : "Unit - " + (index + 1);
+                            const subUnitHeader = hideSubsectionLabel ? undefined : `${getLocaleLabels('PT_UNIT', 'PT_UNIT')} -` + (index + 1);
                             return <PropertyInfoCard backgroundColor="white" items={unit} header={subUnitHeader}></PropertyInfoCard>;
                           })}
                         </div>
