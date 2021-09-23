@@ -55,7 +55,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
   const { propertySubType, usageCategoryMajor } = propertyDetails;
   const { masterName, dataKey } = key;
   if (!masterName) {
-    return floor["occupancyType"] === "RENTED" ? `INR ${floor["arv"]}` : `${Math.round(floor[dataKey] * 100) / 100} sq yards`;
+    return floor["occupancyType"] === "RENTED" ? `INR ${floor["arv"]}` : `${Math.round(floor[dataKey] * 100) / 100} sq feet`;
   } else {
     if (floor[dataKey]) {
       if (dataKey === "usageCategoryDetail") {
@@ -178,7 +178,7 @@ export const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
             ? "NA"
             : propertyDetails.uom
               ? `${propertyDetails.landArea} ${propertyDetails.uom}`
-              : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`,
+              : `${Math.round(propertyDetails.landArea * 100) / 100} sq feet`,
       },
       propertyDetails.propertySubType === "BUILTUP.SHAREDPROPERTY"
         ? {
