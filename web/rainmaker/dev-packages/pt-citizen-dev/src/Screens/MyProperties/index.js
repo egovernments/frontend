@@ -153,7 +153,8 @@ const mapStateToProps = (state, ownProps) => {
       return getRowData(property, history);
     }
   );
-  const transformedPropertiesWeb = Object.values(propertiesById).map(
+  const filteredProperties=Object.values(propertiesById).filter(item=> item.status!="INACTIVE");
+  const transformedPropertiesWeb = filteredProperties.map(
   
     (property, index) => {
       //if(property.status!="INACTIVE"){
@@ -224,6 +225,7 @@ const mapStateToProps = (state, ownProps) => {
     ["desc"]
   );
 
+ 
   return {
     urls,
     transformedPropertiesWeb: sortedProperties,
