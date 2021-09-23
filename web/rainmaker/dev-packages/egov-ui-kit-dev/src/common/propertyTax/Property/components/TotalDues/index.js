@@ -76,7 +76,7 @@ class TotalDues extends React.Component {
   }
 
   render() {
-    const { totalBillAmountDue, consumerCode, isAdvanceAllowed, history, properties, updateNumberConfig } = this.props;
+    const { totalBillAmountDue, consumerCode,paymentDueYears, isAdvanceAllowed, history, properties, updateNumberConfig } = this.props;
     const envURL = "/egov-common/pay";
     const { payAction } = this;
     let tenantId=null;
