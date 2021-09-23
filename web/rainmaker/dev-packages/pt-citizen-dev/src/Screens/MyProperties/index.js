@@ -156,7 +156,7 @@ const mapStateToProps = (state, ownProps) => {
   const transformedPropertiesWeb = Object.values(propertiesById).map(
   
     (property, index) => {
-      if(property.status!="INACTIVE"){
+      //if(property.status!="INACTIVE"){
       return {
         primaryText: (
           <Label
@@ -214,7 +214,7 @@ const mapStateToProps = (state, ownProps) => {
         tenantId: property.tenantId,
         modifiedTime: property.auditDetails.lastModifiedTime
       };
-    }
+    //}
     }
   );
 
