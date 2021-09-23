@@ -338,7 +338,7 @@ const searchApiCall = async (state, dispatch, index) => {
       let responseProperties = await getSearchResults(queryObject);
 
       if(process.env.REACT_APP_NAME === "Citizen")
-      responseProperties=responseProperties.Properties.length>0?responseProperties.Properties.filter(item=> item.status=="ACTIVE"):responseProperties;
+      responseProperties.Properties=responseProperties.Properties.length>0?responseProperties.Properties.filter(item=> item.status=="ACTIVE"):responseProperties.Properties;
       let response={};
       let Properties=[];
       let flag=1;
