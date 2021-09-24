@@ -123,8 +123,9 @@ class Footer extends React.Component {
     );
 
     const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
-
-    if(nextFinancialYear){
+    const wfCode = "DIRECTRENEWAL";
+    if(nextFinancialYear)
+    {
       set(licences[0], "action", "INITIATE");
       set(licences[0], "workflowCode", wfCode);
       set(licences[0], "applicationType", "RENEWAL");
@@ -135,9 +136,12 @@ class Footer extends React.Component {
       set(licences[0],"tradeLicenseDetail.adhocPenalty", null);
       set(licences[0],"tradeLicenseDetail.adhocExemption", null);
       set(licences[0],"tradeLicenseDetail.adhocPenaltyReason", null);
-      set(licences[0],"tradeLicenseDetail.adhocExemptionReason", null);}
+      set(licences[0],"tradeLicenseDetail.adhocExemptionReason", null);
+    }
       else
+      {
       alert("You can only renew application till current financial year ")
+      }
   const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
       Licenses: licences
     })
