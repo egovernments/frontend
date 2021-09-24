@@ -157,41 +157,38 @@ const callBackForApply = async (state, dispatch) => {
  tenantId,
  "action": getQueryArg(window.location.href, "action") === "edit"?"REOPEN":"OPEN",
  "moduleName": "PT"
- },
- 
- propertyPayload.owners.map(owner => {
- owner.status = "INACTIVE";
+ }
 
- })
- 
- // console.log("flag",propertyPayload.oldmobileNumber)
  let phoneno = /^[6-9][0-9]{9}$/;
+ 
  let newMob= propertyPayload.oldmobileNumber;
  if(!newMob)
  {
  newMob=propertyPayload.ownersInit[0].mobileNumber;
  }
- //console.log("hereeee",newMob)
  let flag=true
  propertyPayload.owners.map(owner => {
- if(!owner.mobileNumber.match(phoneno))
- {
-
- flag=false
- owner.mobileNumber=newMob;
-
- }
-
+                if (!owner.mobileNumber.match(phoneno)) {
+                  flag = false;
+                  owner.mobileNumber = newMob;
+                }
  })
 
- if(!flag)
- {
+if(!flag)
+{
  
  dispatch(handleField('apply', "components.div.children.formwizardFirstStep.children.transfereeDetails.children.cardContent.children.oldMobileNumberCard",{}))
 
+
  
+}
+
  
- }
+ propertyPayload.owners.map(owner => {
+ owner.status = "INACTIVE";
+
+ })
+ // console.log("flag",propertyPayload.oldmobileNumber)
 
  
 
