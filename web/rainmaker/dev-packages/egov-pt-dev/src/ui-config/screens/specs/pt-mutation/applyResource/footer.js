@@ -166,6 +166,10 @@ const callBackForApply = async (state, dispatch) => {
    // console.log("flag",propertyPayload.oldmobileNumber)
     let phoneno = /^[6-9][0-9]{9}$/;
      let newMob= propertyPayload.oldmobileNumber;
+      if(!newMob)
+     {
+     newMob=propertyPayload.ownersInit[0].mobileNumber;
+     }
     let flag=true
     propertyPayload.owners.map(owner => {
       if(!owner.mobileNumber.match(phoneno))
