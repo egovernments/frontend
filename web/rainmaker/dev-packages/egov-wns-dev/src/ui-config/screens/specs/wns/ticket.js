@@ -47,8 +47,8 @@ const ticket = {
                         subHeader1: getCommonTitle({  label: "If there is any Issue/Error regarding  Property Tax, Trade License, PGR , Miscellaneous  Collection or any other m Seva Service , please click on the Button below and follow the steps –" },
            {style: 
                         {color: "rgba(255, 0, 0, 0.60)",
-                        fontSize: "24px",
-                        fontWeight: 600,
+                        fontSize: "20px",
+                        fontWeight: 400,
                         marginBottom: 20 } }),
 
                      
@@ -79,8 +79,8 @@ const ticket = {
                               children: {
                               
                                 buttonLabel: getLabel({
-                                  labelName: "Raise Ticket",
-                                  label: "Raise Ticket"
+                                  labelName: "Raise Your Ticket",
+                                  label: "Raise Your Ticket"
                                 })
                               },
                               onClickDefination: {
@@ -98,7 +98,7 @@ const ticket = {
 
            subHeader2: getCommonTitle({  label: "1. Click the above Button to go to our Ticketing Tool." },
            {style: { marginBottom: 20 , marginTop:20 ,  fontWeight:400} }),
-           subHeader3: getCommonTitle({  label: "2. Enter your User id and Password  provided above to Login this Tool." },
+           subHeader3: getCommonTitle({  label: "2. Enter User id and Password provided to you to Login this Tool." },
            {style: { marginBottom: 20 , marginTop:20 ,  fontWeight:400} }),
            subHeader4: getCommonTitle({  label: "3. Dashboard Will Appear, in which you can see your Total Tickets / Raised Tickets / Assigned Tickets and pending Tickets." },
            {style: { marginBottom: 20 , marginTop:20 , fontWeight:400} }),
@@ -106,15 +106,15 @@ const ticket = {
            subHeader5: getCommonTitle({  label: "4. Click on Generate Tickets, Fill all the necessary Fields regarding your Issues and press Save to forward your issue to Our Team. You can also attach multiple Files. "},
            {style: { marginBottom: 20 , marginTop:20 ,  } }),
            subHeader6: getCommonTitle({  label: " In case of Multiple Bill Cancellations, Connection Disconnections, Employee id Generation We need proper Signed Letter from Senior Officers. ( Kindly keep in mind, always select PMIDC under Assignee Drop-down. )"},
-           {style: {fontSize: "24px",fontWeight: 600, marginBottom: 20 } }),
+           {style: {fontSize: "20px",fontWeight: 400, marginBottom: 20 } }),
            subHeader7: getCommonTitle({  label: "5. After entering your Issue, Go to Raised Ticket and find Ticket Number and Track your Issues."},
            {style: { marginBottom: 20 , marginTop:20 ,  fontWeight:400} }),
            subHeader8: getCommonTitle({  label: "6. Under Raised Ticket you can Find your Issues Status, Whether it is In Progress / On Hold / Resolved / Closed or Re-Opened."},
            {style: { marginBottom: 20 , marginTop:20 , fontWeight:400} }),
            subHeader9: getCommonTitle({  label: "( Kindly don't Use Whatsapp or Calls for any Issue, Login in this application, Generate your ticket, track ticket and make them resolved )"},
            {style:  {color: "rgba(255, 0, 0, 0.60)",
-           fontSize: "24px",
-           fontWeight: 600,
+           fontSize: "20px",
+           fontWeight: 400,
            marginBottom: 10 } }),
 
 
