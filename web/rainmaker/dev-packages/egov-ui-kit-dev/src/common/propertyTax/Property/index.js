@@ -182,7 +182,7 @@ class Property extends Component {
     
         );
     if(payload.Properties.length >0) 
-    alert("Property is in INWORKFLOW state. Please approve!");
+    alert("Property is now in INWORKFLOW state. Please approve it!");
     else 
     alert("Some error occured!! please try again.")
   }
