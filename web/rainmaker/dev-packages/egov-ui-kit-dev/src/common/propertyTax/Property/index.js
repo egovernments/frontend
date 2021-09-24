@@ -181,8 +181,10 @@ class Property extends Component {
           { Property: selPropertyDetails }
     
         );
-    if(payload.Properties.length >0) alert("Property has been made inactive successfully");
-    else alert("Some error occured!! please try again.")
+    if(payload.Properties.length >0) 
+    alert("Property is in INWORKFLOW state. Please approve!");
+    else 
+    alert("Some error occured!! please try again.")
   }
 
 else {
