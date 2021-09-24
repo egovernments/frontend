@@ -5,6 +5,7 @@ import { getQueryArg, isPublicSearch } from "egov-ui-framework/ui-utils/commons"
 import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
+import { posDetails } from "../../../../../ui-containers-local/CustomTabContainer/payment-methods";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
@@ -214,6 +215,18 @@ const getSelectedTabIndex = paymentType => {
         selectedTabIndex: 0,
         fieldsToValidate: ["payeeDetails"]
       };
+      case "POS":
+        return {
+          selectedPaymentMode: "pos",
+          selectedTabIndex: 3,
+          fieldsToValidate: ["payeeDetails","posDetails"]
+        };
+    case "OFFLINE_RTGS":
+          return {
+            selectedPaymentMode: "offline_rtgs",
+            selectedTabIndex: 2,
+            fieldsToValidate: ["payeeDetails","onlineDetails"]
+          };
     case "Cheque":
       return {
         selectedPaymentMode: "cheque",
@@ -223,13 +236,13 @@ const getSelectedTabIndex = paymentType => {
     case "DD":
       return {
         selectedPaymentMode: "demandDraft",
-        selectedTabIndex: 2,
+        selectedTabIndex: 4,
         fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
       };
     case "Card":
       return {
         selectedPaymentMode: "card",
-        selectedTabIndex: 3,
+        selectedTabIndex: 5,
         fieldsToValidate: ["payeeDetails", "cardDetails"]
       };
     default:
@@ -295,7 +308,7 @@ const callBackForPay = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "ReceiptTemp[0].instrument.instrumentType.name"
   );
-  const {
+   const {
     selectedTabIndex,
     selectedPaymentMode,
     fieldsToValidate
@@ -398,7 +411,7 @@ const callBackForPay = async (state, dispatch) => {
   let ReceiptBodyNew = {
     Payment: { paymentDetails: [] }
   };
-
+  console.log("hereeeeeee",ReceiptBodyNew)
   ReceiptBody.Receipt.push(finalReceiptData);
   const totalAmount = Number(finalReceiptData.Bill[0].totalAmount);
 

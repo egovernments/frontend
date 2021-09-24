@@ -110,12 +110,25 @@ class MultiItem extends React.Component {
         index: 1,
         key: "cheque"
       },
+      
       {
         index: 2,
-        key: "demandDraft"
+        key: "offline_neft"
       },
       {
         index: 3,
+        key: "offline_rtgs"
+      },
+      {
+        index: 4,
+        key: "pos"
+      },
+      {
+        index: 5,
+        key: "demandDraft"
+      },
+      {
+        index: 6,
         key: "card"
       }
     ];
@@ -148,12 +161,20 @@ class MultiItem extends React.Component {
       case 1:
         this.setInstrumentType("Cheque", dispatch);
         break;
-      case 2:
-        this.setInstrumentType("DD", dispatch);
-        break;
-      case 3:
-        this.setInstrumentType("Card", dispatch);
-        break;
+  
+          case 2:
+            this.setInstrumentType("OFFLINE_RTGS", dispatch);
+            break;
+        case 3:
+          this.setInstrumentType("POS", dispatch);
+          break;
+         
+              case 4:
+                this.setInstrumentType("DD", dispatch);
+                break;
+              case 5:
+                this.setInstrumentType("Card", dispatch);
+                break;
       default:
         this.setInstrumentType("Cash", dispatch);
         break;
