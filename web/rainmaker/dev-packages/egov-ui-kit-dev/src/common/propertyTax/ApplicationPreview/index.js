@@ -59,11 +59,12 @@ class ApplicationPreview extends Component {
       dialogueOpen: false,
       urlToAppend: "",
       showAssessmentHistory: false,
+      propertytoDisplay:null
     };
   }
 
-  componentDidMount = () => {
-    this.setPropertyId();
+  componentDidMount = async() => {
+    await this.setPropertyId();
     const { location, fetchGeneralMDMSData, fetchProperties, fetchLocalizationLabel } = this.props;
     const tenantId = getQueryValue(window.location.href, "tenantId");
     fetchLocalizationLabel(locale, tenantId, tenantId);
@@ -192,14 +193,16 @@ class ApplicationPreview extends Component {
     const tenantId = getQueryValue(window.location.href, "tenantId");
     const applicationNumber = getQueryValue(window.location.href, "applicationNumber");
     const propertyId = await this.getPropertyId(applicationNumber, tenantId);
+    const propertytoDisplay=await this.getPropertyDetails(applicationNumber, tenantId);
     this.props.fetchProperties([
       { key: "propertyIds", value: propertyId },
       { key: "tenantId", value: tenantId },
     ]);
     this.props.prepareFinalObject('PTApplication.propertyId', propertyId);
     this.setState({ propertyId });
-
-  }
+    //this.props.prepareFinalObject('PTApplication.propertytoDisplay', propertytoDisplay);
+    this.setState({propertytoDisplay: propertytoDisplay });
+      }
   getPropertyId = async (applicationNumber, tenantId) => {
     const applicationType = getQueryValue(window.location.href, "type");
     if (applicationType == 'assessment') {
@@ -237,6 +240,28 @@ class ApplicationPreview extends Component {
         console.log(e);
       }
     }
+  }
+
+
+  getPropertyDetails = async (applicationNumber,tenantId) => {
+    const applicationType = getQueryValue(window.location.href, "type");
+    const queryObject = [
+        { key: "acknowledgementIds", value: applicationNumber },
+        { key: "tenantId", value: tenantId }
+      ];
+      try {
+        const payload = await httpRequest(
+          "property-services/property/_search",
+          "_search",
+          queryObject
+        );
+        if (payload && payload.Properties.length > 0) {
+          return payload.Properties[0];
+        }
+        } catch (e) {
+        console.log(e);
+      }
+    
   }
   getApplicationType = () => {
     const applicationType = getQueryValue(window.location.href, "type");
@@ -294,8 +319,12 @@ class ApplicationPreview extends Component {
     const { location, documentsUploaded } = this.props;
     const { search } = location;
     const applicationNumber = getQueryValue(search, "applicationNumber");
-    const { generalMDMSDataById, properties, cities } = this.props;
+    const { generalMDMSDataById,properties,cities } = this.props;
     const applicationType = this.getApplicationType();
+    //console.log("Deepika- state",this.state);
+    const propertiesUpdated=this.state.propertytoDisplay;
+    if(properties && properties.propertyId)
+properties.propertyDetails[0]=propertiesUpdated;
     const applicationDownloadObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
       link: () => {

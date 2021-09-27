@@ -65,7 +65,7 @@ export const getOwnershipInfoUserCategory = (owner, generalMDMSDataById) => {
 
 export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldPropertydetails = {}) => {
   const isInstitution =
-    latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
+  latestPropertyDetails && (latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT");
   let { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
   let owner = [];
   ownerDetails = ownerDetails && Array.isArray(ownerDetails) && ownerDetails.sort((owner1, owner2) => owner1.name.localeCompare(owner2.name));

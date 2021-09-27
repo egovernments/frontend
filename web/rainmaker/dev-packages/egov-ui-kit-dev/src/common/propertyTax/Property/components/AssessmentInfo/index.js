@@ -227,7 +227,7 @@ const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById, OldProperty
   if (properties) {
     const { propertyDetails } = properties;
     const { additionalDetails } = properties;
-    if (propertyDetails && propertyDetails.length > 0) {
+    if (propertyDetails && propertyDetails.length > 0 && propertyDetails[0] !=null) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units'], propertyDetails[0], oldPropertydetails);
       subVasikaItems = getVasikaItems(additionalDetails);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById, properties, oldPropertydetails, OldProperty);
