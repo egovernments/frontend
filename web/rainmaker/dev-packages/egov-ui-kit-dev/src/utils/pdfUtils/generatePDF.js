@@ -2,6 +2,7 @@ import commonConfig from "config/common.js";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "egov-ui-framework/ui-redux/store";
 import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
+import { downloadPdfFile } from "../api";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
@@ -715,3 +716,10 @@ export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
     }
   }
 
+  export const searchAndDownloadPdf=(url,queryObj,fileName,onSuccess)=>{
+    downloadPdfFile(url,'post',queryObj,{},{},false,fileName,onSuccess);
+}
+
+export const searchAndPrintPdf=(url,queryObj)=>{
+    downloadPdfFile(url,'post',queryObj,{},{},false,'print');
+}
