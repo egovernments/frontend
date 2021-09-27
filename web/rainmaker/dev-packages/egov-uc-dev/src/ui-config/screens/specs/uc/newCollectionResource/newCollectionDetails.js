@@ -14,8 +14,7 @@ import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { setServiceCategory } from "../../utils";
-import {consumerAddresss} from "../ImpelExtendedFeature/fields";
-
+import "./index.css";
 const tenantId = getTenantId();
 
 
@@ -389,31 +388,18 @@ export const newCollectionDetailsCard = getCommonCard(
           pattern: getPattern("Date"),
           jsonPath: "Demands[0].taxPeriodTo"
         }),
-        comments: getTextField({
-          label: {
-            labelName: "Comments",
-            labelKey: "UC_COMMENT_LABEL"
+        dummyDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          gridDefination: {
+            xs: 12,
+            sm: 6
           },
-          placeholder: {
-            labelName: "Enter Comment ",
-            labelKey: "UC_COMMENT_PLACEHOLDER"
-          },
-          Required: false,
-          jsonPath: "Demands[0].additionalDetails.comment"
-        }),
-        ...consumerAddresss,
-        // dummyDiv: {
-        //   uiFramework: "custom-atoms",
-        //   componentPath: "Div",
-        //   gridDefination: {
-        //     xs: 12,
-        //     sm: 6
-        //   },
-        //   visible: true,
-        //   props: {
-        //     disabled: true
-        //   }
-        // }
+          visible: true,
+          props: {
+            disabled: true
+          }
+        }
       },
       {
         style: {
@@ -421,7 +407,20 @@ export const newCollectionDetailsCard = getCommonCard(
         }
       }
     ),
-    
+    commentsContainer: getCommonContainer({
+      comments: getTextField({
+        label: {
+          labelName: "Comments",
+          labelKey: "UC_COMMENT_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Comment ",
+          labelKey: "UC_COMMENT_PLACEHOLDER"
+        },
+        Required: false,
+        jsonPath: "Demands[0].additionalDetails.comment"
+      })
+    })
   },
   {
     style: {
@@ -549,13 +548,14 @@ const setTaxHeadFields = (value, state, dispatch) => {
               .split(".")
               .join("_")}`,
             required: item.isRequired || false,
-            pattern: getPattern("Amount"),
+            pattern: /^[0-9]{0,8}$/i,
             errorMessage: "Invalid Amount",
             visible: true,
             // required: true,
             props: {
               // required: true
             },
+            type:"number",
             jsonPath: `Demands[0].demandDetails[${index}].taxAmount`
           })
         )
