@@ -323,8 +323,26 @@ class ApplicationPreview extends Component {
     const applicationType = this.getApplicationType();
     //console.log("Deepika- state",this.state);
     const propertiesUpdated=this.state.propertytoDisplay;
-    if(properties && properties.propertyId)
+    if(properties && properties.propertyId && propertiesUpdated){
+let varOne=propertiesUpdated.usageCategory.split(".");
+propertiesUpdated.usageCategoryMajor=varOne[0]?varOne[0]:"NA";
+propertiesUpdated.usageCategoryMinor=varOne[1]?varOne[1]:"NA";
+let pp=propertiesUpdated.propertyType.split(".");
+propertiesUpdated.propertyType=pp[0]?pp[0]:"NA";
+propertiesUpdated.propertySubType=pp[1]?pp[1]:"NA";
+let varTwo=null;
+propertiesUpdated.units.map(item=> {
+varTwo=item.usageCategory.split(".");
+item.usageCategoryMajor=varTwo[0]?varTwo[0]:"NA";
+item.usageCategoryMinor=varTwo[1]?varTwo[1]:"NA";
+item.usageCategorySubMinor=varTwo[2]?varTwo[2]:"NA";
+item.usageCategoryDetail=varTwo[3]?varTwo[3]:"NA";
+item.unitArea=item.constructionDetail.builtUpArea*9;
+});
+
 properties.propertyDetails[0]=propertiesUpdated;
+    }
+
     const applicationDownloadObject = {
       label: { labelName: "PT Application", labelKey: "PT_APPLICATION" },
       link: () => {
