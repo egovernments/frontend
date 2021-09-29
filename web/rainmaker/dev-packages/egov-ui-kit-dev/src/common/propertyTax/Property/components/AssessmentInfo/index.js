@@ -40,7 +40,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 
 export const getBuildingTypeInfo = (generalMDMSDataById, propertyDetails) => {
   if (!generalMDMSDataById) {
-    return propertyDetails.propertySubType !="NA" ? propertyDetails.propertySubType : propertyDetails.propertyType != "NA" ? propertyDetails.propertyType : 'NA';
+    return propertyDetails.propertySubType && propertyDetails.propertySubType !="NA" ? propertyDetails.propertySubType : propertyDetails.propertyType && propertyDetails.propertyType != "NA" ? propertyDetails.propertyType : 'NA';
   } else {
     return get(generalMDMSDataById, `PropertySubType.${propertyDetails.propertySubType}.name`, get(generalMDMSDataById, `PropertyType.${propertyDetails.propertyType}.name`, "NA"))
   }
@@ -64,7 +64,7 @@ export const getaddressPropertyEntryTypeInfo = (properties) => {
 }
 
 export const getUnitUsageTypeInfo = (unit, propertyDetails) => {
-  return unit && unit.usageCategoryMinor !="NA" ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails && propertyDetails.usageCategoryMinor != "NA" ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails && propertyDetails.usageCategoryMinor, localizationLabelsData) :
+  return unit && unit.usageCategoryMinor && unit.usageCategoryMinor !="NA" ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMinor, localizationLabelsData) : (propertyDetails && propertyDetails.usageCategoryMinor && propertyDetails.usageCategoryMinor != "NA" ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + propertyDetails && propertyDetails.usageCategoryMinor, localizationLabelsData) :
     (unit && unit.usageCategoryMajor ? getTranslatedLabel('PROPERTYTAX_BILLING_SLAB_' + unit && unit.usageCategoryMajor, localizationLabelsData) : "NA"));
 }
 
