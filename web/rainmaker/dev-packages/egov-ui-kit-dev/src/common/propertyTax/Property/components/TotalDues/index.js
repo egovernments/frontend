@@ -1,4 +1,5 @@
 import React from "react";
+import { UpdateMobile } from "components";
 import { Tooltip } from "egov-ui-framework/ui-molecules";
 import Label from "egov-ui-kit/utils/translationNode";
 import { TotalDuesButton } from "./components";
@@ -7,6 +8,12 @@ import { downloadBill } from "egov-common/ui-utils/commons";
 import "./index.css";
 import get from "lodash/get";
 import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/formUtils";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+
+const locale = getLocale() || "en_IN";
+const localizationLabelsData = initLocalizationLabels(locale);
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -20,15 +27,46 @@ const labelStyle = {
 class TotalDues extends React.Component {
   state = {
     url: "",
+    invalidNumber: "",
+    showWarning: false,
   };
   onClickAction = async (consumerCode, tenantId) => {
     this.setState({
-      url: await downloadBill(consumerCode, tenantId , "property-bill"),
+      url: await downloadBill(consumerCode, tenantId, "property-bill"),
     });
   };
 
+  close = () => {
+    this.setState({ showWarning: false });
+  };
+
+  checkValidProeprty = () => {
+    const { properties, updateNumberConfig } = this.props;
+    let { owners = [] } = properties;
+    let returnValue = true;
+    owners = owners && owners.filter((owner) => owner.status == "ACTIVE");
+    owners &&
+      owners.map((owner) => {
+        if (process.env.REACT_APP_NAME !== "Citizen") {
+          if (owner.mobileNumber == updateNumberConfig.invalidNumber || !owner.mobileNumber.match(updateNumberConfig["invalidPattern"])) {
+            this.setState({ showWarning: true, invalidNumber: owner.mobileNumber });
+            returnValue = false;
+          }
+        } else {
+          if (
+            owner.mobileNumber == updateNumberConfig.invalidNumber ||
+            (!owner.mobileNumber.match(updateNumberConfig["invalidPattern"]) && owner.mobileNumber == JSON.parse(getUserInfo()).mobileNumber)
+          ) {
+            this.setState({ showWarning: true, invalidNumber: owner.mobileNumber });
+            returnValue = false;
+          }
+        }
+      });
+    return returnValue;
+  };
+
   payAction = (consumerCode, tenantId) => {
-  /*   const status = get(this.props, 'propertyDetails[0].status', '');
+    /*   const status = get(this.props, 'propertyDetails[0].status', '');
     if (status != "ACTIVE") {
       this.props.toggleSnackbarAndSetText(
         true,
@@ -36,11 +74,11 @@ class TotalDues extends React.Component {
         "error"
       );
     } else { */
-      routeToCommonPay(consumerCode, tenantId);
-   /*  } */
-  }
+    this.checkValidProeprty() && routeToCommonPay(consumerCode, tenantId);
+    /*  } */
+  };
   render() {
-    const { totalBillAmountDue, consumerCode, tenantId, history, citywiseconfig} = this.props;
+    const { totalBillAmountDue, consumerCode, tenantId, history, citywiseconfig, properties, updateNumberConfig } = this.props;
     let disabledCities = get(citywiseconfig, "[0].enabledCities");
     const { payAction } = this;
 
@@ -48,11 +86,10 @@ class TotalDues extends React.Component {
     const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
     return (
       <div className="">
-       <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "35px" }}>
+        <div className="col-xs-6 col-sm-3 flex-child" style={{ minHeight: "35px" }}>
           <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgba(0, 0, 0, 0.74)" labelStyle={labelStyle} fontSize="14px" />
-          </div>
-          <div className="col-xs-6 col-sm-3 flex-child" style={{ position: "absolute",
-          left: "134px", width: "30px", display: "inline-flex" }}>
+        </div>
+        <div className="col-xs-6 col-sm-3 flex-child" style={{ position: "absolute", left: "134px", width: "30px", display: "inline-flex" }}>
           <Label
             label="Rs "
             secondaryText={totalBillAmountDue ? totalBillAmountDue : 0}
@@ -63,22 +100,25 @@ class TotalDues extends React.Component {
             height="35px"
           ></Label>
         </div>
-          <Tooltip
+        <Tooltip
           className="totaldues-tooltip-icon"
           val={data}
           icon={"info_circle"}
           style={{ position: "absolute", left: "117px", width: "30px", display: "inline-flex" }}
         />
-      
+
         {totalBillAmountDue > 0 && (
           <div className="col-xs-6 col-sm-3 flex-child-button">
-            {/* <TotalDuesButton
-              labelText="PT_TOTALDUES_VIEW"
-              onClickAction={() => {
-                this.onClickAction(consumerCode, tenantId);
-                window.open(this.state.url);
-              }}
-            /> */}
+            <UpdateMobile
+              closeDue={this.close}
+              number={this.state.invalidNumber}
+              type={"WARNING"}
+              showWarning={this.state.showWarning}
+              key={getTranslatedLabel("PT_OWNERSHIP_INFO_MOBILE_NO", localizationLabelsData)}
+              tenantId={properties.tenantId}
+              propertyId={properties.propertyId}
+              updateNumberConfig={updateNumberConfig}
+            ></UpdateMobile>
           </div>
         )}
         {totalBillAmountDue > 0 && (process.env.REACT_APP_NAME !== "Citizen" || !disabledCities.includes(tenantId)) && (
