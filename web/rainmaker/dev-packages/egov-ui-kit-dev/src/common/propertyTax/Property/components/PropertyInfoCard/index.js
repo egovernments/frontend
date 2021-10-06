@@ -1,12 +1,22 @@
 import React, { Component } from "react";
-import { Card } from "components";
+import { Card, UpdateMobile } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 import { parseInt } from "lodash";
 
 class PropertyInfoCard extends Component {
   render() {
-    let { ownerInfo, header, editIcon, backgroundColor = "rgb(242, 242, 242)", items = [], subSection = [], hideSubsectionLabel = false } = this.props;
+    let {
+      ownerInfo,
+      header,
+      editIcon,
+      backgroundColor = "rgb(242, 242, 242)",
+      items = [],
+      subSection = [],
+      hideSubsectionLabel = false,
+      additionalKey = {},
+      showEditNumber = false,
+    } = this.props;
 
 
     var arr = []
@@ -62,8 +72,10 @@ class PropertyInfoCard extends Component {
                     if (item) {
                       return (
                         <div>
-                          <div className={item.key === "Property Type" ? "col-sm-3 col-xs-12 assessment-property-type" : "col-sm-3 col-xs-12"}
-                            style={{ marginBottom: 10, marginTop: 5 }}>
+                          <div
+                            className={item.key === "Property Type" ? "col-sm-3 col-xs-12 assessment-property-type" : "col-sm-3 col-xs-12"}
+                            style={{ marginBottom: 10, marginTop: 5 }}
+                          >
                             <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                               <Label
                                 labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
@@ -78,6 +90,11 @@ class PropertyInfoCard extends Component {
                                 fontSize="16px"
                               />
                             </div>
+                            {showEditNumber && additionalKey && additionalKey.key && additionalKey.key == item.key && (
+                              <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                                <UpdateMobile number={item.value} type={"UPDATE"} {...additionalKey}></UpdateMobile>
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
