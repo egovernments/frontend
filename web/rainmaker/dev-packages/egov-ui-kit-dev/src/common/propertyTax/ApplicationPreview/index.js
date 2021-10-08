@@ -331,7 +331,8 @@ let pp=propertiesUpdated.propertyType.split(".");
 propertiesUpdated.propertyType=pp[0]?pp[0]:"NA";
 propertiesUpdated.propertySubType=pp[1]?pp[1]:"NA";
 let varTwo=null;
-propertiesUpdated.units.map(item=> {
+if(propertiesUpdated.units)
+{ propertiesUpdated.units.map(item=> {
 varTwo=item.usageCategory.split(".");
 item.usageCategoryMajor=varTwo[0]?varTwo[0]:"NA";
 item.usageCategoryMinor=varTwo[1]?varTwo[1]:"NA";
@@ -339,7 +340,7 @@ item.usageCategorySubMinor=varTwo[2]?varTwo[2]:"NA";
 item.usageCategoryDetail=varTwo[3]?varTwo[3]:"NA";
 item.unitArea=item.constructionDetail.builtUpArea*9;
 });
-
+}
 properties.propertyDetails[0]=propertiesUpdated;
     }
 

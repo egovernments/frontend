@@ -375,10 +375,14 @@ else {
                label={
                  <Label buttonLabel={true}
                 //  label={formWizardConstants[PROPERTY_FORM_PURPOSE.STATUS].parentButton} fontSize="16px"
-                  label={'Change Status'} fontSize="14px"
+                  label={'Make Property Inactive'} fontSize="14px"
                    color="#fe7a51" />
                }
-              onClick={() => this.onStatusChangePropertyClick()}
+              onClick={() => 
+                { 
+                  if(window.confirm("Are you sure you want to make property Inactive?")){
+                this.onStatusChangePropertyClick()}
+                }}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
               buttonStyle={{ border: "1px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "25%", marginRight: "2%" }}
