@@ -2,7 +2,7 @@ import {
   getCommonGrayCard,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { cash, demandDraft, cheque, card ,offline_rtgs,pos } from "./payment-methods";
+import { cash, demandDraft, cheque, card } from "./payment-methods";
 
 const capturePaymentDetails = getCommonGrayCard({
   header: getCommonSubHeader(
@@ -28,28 +28,16 @@ const capturePaymentDetails = getCommonGrayCard({
           tabIcon: "Dashboard",
           tabContent: { cash }
         },
-        
         {
           tabButton: "COMMON_CHEQUE",
           tabIcon: "Schedule",
           tabContent: { cheque }
-        },
-        {
-          tabButton: "COMMON_OFFLINE_RTGS",
-          tabIcon: "Dashboard",
-          tabContent: { offline_rtgs }
-        },
-      
-        {
-          tabButton: "COMMON_POS",
-          tabIcon: "Dashboard",
-          tabContent: { pos }
-        }/* ,
+        } ,
         {
           tabButton: "COMMON_DD",
           tabIcon: "Schedule",
           tabContent: { demandDraft }
-        },
+        }/*,
         {
           tabButton: "COMMON_CREDIT_DEBIT_CARD",
           tabIcon: "Schedule",
