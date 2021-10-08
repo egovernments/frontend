@@ -6,6 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { posDetails } from "../../../../../ui-containers-local/CustomTabContainer/payment-methods";
+import {demandDraftDetails } from "../../../../../ui-containers-local/CustomTabContainer/payment-methods";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
