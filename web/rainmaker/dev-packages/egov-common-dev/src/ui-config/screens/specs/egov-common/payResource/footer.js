@@ -6,6 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { posDetails } from "../../../../../ui-containers-local/CustomTabContainer/payment-methods";
+import {demandDraftDetails } from "../../../../../ui-containers-local/CustomTabContainer/payment-methods";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
@@ -233,12 +234,12 @@ const getSelectedTabIndex = paymentType => {
         selectedTabIndex: 1,
         fieldsToValidate: ["payeeDetails", "chequeDetails"]
       };
-    case "DD":
+    case "DD": 
       return {
         selectedPaymentMode: "demandDraft",
         selectedTabIndex: 4,
         fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
-      };
+      }; 
     case "Card":
       return {
         selectedPaymentMode: "card",
