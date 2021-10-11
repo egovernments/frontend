@@ -517,8 +517,8 @@ class OwnerInfo extends Component {
     if (properties) {
       const { propertyDetails } = properties;
       if (propertyDetails && propertyDetails.length > 0) {
-        ownerInfo = this.getOwnerInfo(propertyDetails[0], generalMDMSDataById);
-        if (ownerInfo.length > 1) {
+         ownerInfo = this.getOwnerInfo(propertyDetails[0], generalMDMSDataById);
+       /* if (ownerInfo.length > 1) {
           multipleOwner = true;
         }
         let owner = [];
@@ -527,7 +527,8 @@ class OwnerInfo extends Component {
             return ownerInfo.indexOf(item2)-ownerInfo.indexOf(item1)
           })
           owner = ownerInfo[0];
-      }
+      } */
+      ownerInfo = ownerInfo.sort();
     }
   }
     return (
