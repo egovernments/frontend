@@ -378,6 +378,10 @@ import {
     payeeDetails,
     onlineDetails: { ...onlineDetails }
   });
+  export const dd = getCommonContainer({
+    payeeDetails,
+    onlineDetails
+  });
   
   // export const neftRtgs = getCommonContainer({
   //   payeeDetails,
