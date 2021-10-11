@@ -76,12 +76,12 @@ export const getOwnerInformation = (latestPropertyDetails, generalMDMSDataById) 
   let { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
   let owner = [];
   // ownerDetails = ownerDetails && Array.isArray(ownerDetails) && ownerDetails.sort((owner1, owner2) => owner1.name.localeCompare(owner2.name));
-  if (ownerDetails && ownerDetails.length > 0) {
+/*   if (ownerDetails && ownerDetails.length > 0) {
     ownerDetails = ownerDetails.sort(function (item1, item2) {
       return ownerDetails.indexOf(item2) - ownerDetails.indexOf(item1);
     });
     owner = ownerDetails[0];
-  }
+  } */
   // if (oldPropertydetails && oldPropertydetails.owners) {
   //   oldPropertydetails.owners =
   //     oldPropertydetails &&
@@ -370,12 +370,12 @@ class OwnerInfo extends Component {
       latestPropertyDetails.ownershipCategory === "INSTITUTIONALPRIVATE" || latestPropertyDetails.ownershipCategory === "INSTITUTIONALGOVERNMENT";
     let { institution = {}, owners: ownerDetails = [], subOwnershipCategory, ownershipCategory } = latestPropertyDetails || {};
     let owner = [];
-    if (ownerDetails && ownerDetails.length > 0) {
+    /* if (ownerDetails && ownerDetails.length > 0) {
       ownerDetails = ownerDetails.sort(function (item1, item2) {
         return ownerDetails.indexOf(item2) - ownerDetails.indexOf(item1);
       });
       owner = ownerDetails[0];
-    }
+    } */
     return (
       ownerDetails &&
       ownerDetails.map((owner) => {
@@ -528,7 +528,7 @@ class OwnerInfo extends Component {
           })
           owner = ownerInfo[0];
       } */
-      ownerInfo = ownerInfo.sort();
+      //ownerInfo = ownerInfo.sort();
     }
   }
     return (
