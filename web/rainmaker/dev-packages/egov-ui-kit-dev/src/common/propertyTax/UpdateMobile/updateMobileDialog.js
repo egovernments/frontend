@@ -189,7 +189,6 @@ export default class UpdateMobileDialog extends React.Component {
   updateProperty = () => {
     var myHeaders = new Headers();
     let { property, propertyNumbers, isAlternate } = this.props;
-    console.log("palak property inupdateProperty", property);
     const { mobileNumber } = this.state.fields;
 
     if (property && property.owners && property.owners.length > 0) {
@@ -200,8 +199,8 @@ export default class UpdateMobileDialog extends React.Component {
           } else {
             owner.mobileNumber = mobileNumber.value;
           }
-
           property.creationReason = "UPDATE";
+          property.isMobileNumberUpdate = true;
           let documents = this.state.documents.filter((document) => document.uploaded) || [];
           if (property.documents) {
             let docuNames = documents.map((doc) => doc.code);
@@ -486,7 +485,6 @@ export default class UpdateMobileDialog extends React.Component {
             </span>
             {process.env.REACT_APP_NAME !== "Citizen" && (
               <div style={{ marginTop: "10px" }}>
-                {console.log("palak", documents)}
                 {documents.map((document, ind) => {
                   return (
                     <div>
