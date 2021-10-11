@@ -234,12 +234,12 @@ const getSelectedTabIndex = paymentType => {
         selectedTabIndex: 3,
         fieldsToValidate: ["payeeDetails","posDetails"]
       };
-    case "DD":
+    case "DD": 
       return {
         selectedPaymentMode: "demandDraft",
         selectedTabIndex: 4,
         fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
-      };
+      }; 
     case "Card":
       return {
         selectedPaymentMode: "card",
