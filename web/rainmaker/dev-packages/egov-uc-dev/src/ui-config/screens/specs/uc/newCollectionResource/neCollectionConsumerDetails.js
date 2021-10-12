@@ -100,7 +100,7 @@ import {
                 uiFramework: "custom-containers",
                 componentPath: "AutosuggestContainer",
                 jsonPath: "Challan[0].address.locality.code",
-                required: true,
+                required: false,
                 props: {
                   style: {
                     width: "100%",
@@ -121,7 +121,7 @@ import {
                   labelsFromLocalisation: true,
                   suggestions: [],
                   fullwidth: true,
-                  required: true,
+                  required: false,
                   inputLabelProps: {
                     shrink: true
                   }                 
