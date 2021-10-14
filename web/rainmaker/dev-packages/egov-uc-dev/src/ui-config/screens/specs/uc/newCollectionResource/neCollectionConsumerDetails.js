@@ -10,6 +10,17 @@ import {
 
   import "./index.css";
 
+  var getEchallanPattern = exports.getEchallanPattern = function getEchallanPattern(type) {
+    switch (type) {
+      case "DoorHouseNo":
+        return (/^[^\$\"'<>?\\\\~`!@$%^+={}\[\]*:;“”‘’]{1,50}$/i
+        );
+      case "BuildingStreet":
+        return (/^[^\$\"'<>?\\\\~`!@$%^+={}\[\]*:;“”‘’]{1,100}$/i
+        );
+    }
+  }
+
   export const newCollectionConsumerDetailsCard = getCommonCard(
       {
         header: getCommonTitle(
@@ -68,7 +79,7 @@ import {
                   labelName: "Enter Door/House No.",
                   labelKey: "UC_DOOR_NO_PLACEHOLDER"
                 },
-                pattern: getPattern("DoorHouseNo"),
+                pattern: getEchallanPattern("DoorHouseNo"),
                 jsonPath: "Challan[0].address.doorNo"
               }),
               ConsumerBuilidingName: getTextField({
@@ -80,7 +91,7 @@ import {
                   labelName: "Enter Building/Colony Name",
                   labelKey: "UC_BLDG_NAME_PLACEHOLDER"
                 },
-                pattern: getPattern("BuildingStreet"),
+                pattern: getEchallanPattern("BuildingStreet"),
                 jsonPath: "Challan[0].address.buildingName"
               }),
               ConsumerStreetName: getTextField({
@@ -92,7 +103,7 @@ import {
                   labelName: "Enter Street Name",
                   labelKey: "UC_SRT_NAME_PLACEHOLDER"
                 },
-                pattern: getPattern("BuildingStreet"),
+                pattern: getEchallanPattern("BuildingStreet"),
                 jsonPath: "Challan[0].address.street"
               }),         
 
