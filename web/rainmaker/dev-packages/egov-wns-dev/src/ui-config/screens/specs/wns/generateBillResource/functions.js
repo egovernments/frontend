@@ -31,7 +31,9 @@ export const generateBillApiCall = async (state, dispatch) => {
     var mohallaDataCode = generateBillScreenObject["mohallaData"].substring(
       generateBillScreenObject["mohallaData"].lastIndexOf("(") + 1, 
       generateBillScreenObject["mohallaData"].lastIndexOf(")")).trim();
-var transactionType;  
+
+try {
+  let transactionType=null;  
 if(generateBillScreenObject["transactionType"]=="WS_CONNECTION_TYPE_SEWERAGE")
 {
   transactionType = "SW";
@@ -40,7 +42,6 @@ else if(generateBillScreenObject["transactionType"]=="WS_CONNECTION_TYPE_WATER")
 {
   transactionType = "WS";
 }
-try {
 let billSchedulerObject = {
   "transactionType": transactionType,
   "status":"INITIATED",
@@ -49,20 +50,31 @@ let billSchedulerObject = {
   "billingcycleEnddate":0,
   "tenantId":getTenantIdCommon(),
  }
+ let response=null;
   
-
- const response = await httpRequest(
+if(transactionType=="WS")
+{
+ response = await httpRequest(
   "post",
   "/ws-calculator/watercharges/scheduler/_create",
   "_create",
   [],
   {BillScheduler:billSchedulerObject}
   );
-
+ }
+ else{
+  response = await httpRequest(
+    "post",
+    "/sw-calculator/seweragecharges/scheduler/_create",
+    "_create",
+    [],
+    {BillScheduler:billSchedulerObject}
+    );
+ }
 
 let createBillArray = [];
     let billRow=null;
-    let transactionType,locality,billingcycleStartdate,billingcycleEnddate,status ,tenantId;
+    let locality,billingcycleStartdate,billingcycleEnddate,status ,tenantId;
 
 response.billScheduler.map((element,index) => {
   transactionType = element.transactionType;
@@ -147,14 +159,26 @@ export const searchBillApiCall = async (state, dispatch) => {
  
  try {
   let tenant_Id = getTenantIdCommon();
-  const response = await httpRequest(
+  let  response=null;
+  
+  if(transactionType=="WS")
+  {response= await httpRequest(
    "post",
    `ws-calculator/watercharges/scheduler/_search?tenantId=${tenant_Id}&locality=${mohallaDataCode}`,
    "_search",
    [],
    {}
    );
- 
+  }
+  else{
+    response= await httpRequest(
+      "post",
+      `sw-calculator/seweragecharges/scheduler/_search?tenantId=${tenant_Id}&locality=${mohallaDataCode}`,
+      "_search",
+      [],
+      {}
+      ); 
+  }
  
 
  let searchBillArray = [];
