@@ -370,7 +370,7 @@ else {
           />
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
-          <div className="button-container col-xs-4 property-info-access-btn" style={{ float: "right" }}>
+          <div className="button-container col-4 property-info-access-btn" style={{ float: "right" }}>
             <Button
                label={
                  <Label buttonLabel={true}
