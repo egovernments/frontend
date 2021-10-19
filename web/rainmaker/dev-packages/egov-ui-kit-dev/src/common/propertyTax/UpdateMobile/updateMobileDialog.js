@@ -34,7 +34,6 @@ export default class UpdateMobileDialog extends React.Component {
     }
   }
   static getDerivedStateFromProps(props, state) {
-      console.log(props, "rakesh props");
     return { ...state, documents: props.documents };
   }
 

@@ -2,15 +2,17 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getTransformedLocalStorgaeLabels, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
   getCommonCaption
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { httpRequest } from "../../../../ui-utils";
-import {  prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import commonConfig from "config/common.js";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -36,7 +38,7 @@ export const transformById = (payload, id) => {
   );
 };
 
-export const getMdmsData = async  requestBody=> {
+export const getMdmsData = async requestBody => {
   try {
     const response = await httpRequest(
       "post",
@@ -45,13 +47,91 @@ export const getMdmsData = async  requestBody=> {
       [],
       requestBody
     );
-   
+
     return response;
   } catch (error) {
     console.log(error);
     return {};
   }
 };
+
+const getMdmsDataforCollection = async (businesService) => {
+  let mdmsBody = null;
+
+  if (businesService == "SW") {
+    mdmsBody = {
+      MdmsCriteria: {
+        tenantId: "pb",
+        moduleDetails: [
+          { moduleName: "sw-services-calculation", masterDetails: [{ name: "Penalty" }] }]
+      }
+    };
+  }
+  else {
+    mdmsBody = {
+      MdmsCriteria: {
+        tenantId: "pb",
+        moduleDetails: [
+          { moduleName: "ws-services-calculation", masterDetails: [{ name: "Penalty" }] }]
+      }
+    };
+  }
+  try {
+    let payload = null;
+    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    if (payload.MdmsRes['ws-services-calculation'] && payload.MdmsRes['ws-services-calculation'].Penalty !== undefined && payload.MdmsRes['ws-services-calculation'].Penalty.length > 0) {
+      return payload.MdmsRes['ws-services-calculation'].Penalty[0].rate;
+    }
+    else if (payload.MdmsRes['sw-services-calculation'] && payload.MdmsRes['sw-services-calculation'].Penalty !== undefined && payload.MdmsRes['sw-services-calculation'].Penalty.length > 0) {
+      return payload.MdmsRes['sw-services-calculation'].Penalty[0].rate;
+    }
+
+  } catch (e) { console.log(e); }
+
+};
+
+export const downloadMultipleBill = async (bills = [], configKey, businesService) => {
+  let rate = await getMdmsDataforCollection(businesService);
+
+  try {
+    debugger;
+    const DOWNLOADRECEIPT = {
+      GET: {
+        URL: "/pdf-service/v1/_create",
+        ACTION: "_get",
+      },
+    };
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: commonConfig.tenantId }
+    ]
+    var addDetail = null;
+
+    addDetail = {
+      "penaltyRate": rate
+    }
+    bills = bills.filter(item => item.totalAmount > 0);
+    bills.map(item => {
+
+      item.additionalDetails = addDetail;
+    })
+
+    var actualBills = [], size = 100;
+
+    for (let i = 0; bills.length > 0; i++) {
+      actualBills.push(bills.splice(0, size));
+    }
+    debugger;
+    actualBills.map(async (bills) => {
+      const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+      downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
+    })
+  } catch (error) {
+    console.log(error);
+
+  }
+
+}
 
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
   let translatedLabel = null;
@@ -149,9 +229,9 @@ export const ifUserRoleExists = role => {
 };
 
 export const convertEpochToDate = dateEpoch => {
-  if(dateEpoch == null || dateEpoch == undefined || dateEpoch == ''){
-    return "NA" ;
-  } 
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == '') {
+    return "NA";
+  }
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
@@ -288,11 +368,11 @@ export const getLabelOnlyValue = (value, props = {}) => {
 };
 
 
-export const onActionClick = (rowData) =>{
-  switch(rowData[8]){
-    case "PAY" : return "";
-    case "DOWNLOAD RECEIPT" : ""
-    case "GENERATE NEW RECEIPT" : ""
+export const onActionClick = (rowData) => {
+  switch (rowData[8]) {
+    case "PAY": return "";
+    case "DOWNLOAD RECEIPT": ""
+    case "GENERATE NEW RECEIPT": ""
   }
 }
 
@@ -353,14 +433,14 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-   case "Owner Name":
+    case "Owner Name":
       return getLocaleLabels(
         "Owner Name",
         "ABG_COMMON_TABLE_COL_OWN_NAME",
         localisationLabels
       );
 
-  case "Download":
+    case "Download":
       return getLocaleLabels(
         "Download",
         "ABG_COMMON_TABLE_COL_DOWNLOAD_BUTTON"
@@ -373,77 +453,77 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-      case "ACTIVE":
+    case "ACTIVE":
       return getLocaleLabels(
         "Pending",
         "BILL_GENIE_ACTIVE_LABEL",
         localisationLabels
       );
 
-      case "CANCELLED":
+    case "CANCELLED":
       return getLocaleLabels(
         "Cancelled",
         "BILL_GENIE_CANCELLED_LABEL",
         localisationLabels
       );
 
-      case "PAID":
+    case "PAID":
       return getLocaleLabels(
         "Paid",
         "BILL_GENIE_PAID_LABEL",
         localisationLabels
       );
-      case "PAY":
-      case "PARTIALLY PAID":
+    case "PAY":
+    case "PARTIALLY PAID":
       return getLocaleLabels(
         "PAY",
         "BILL_GENIE_PAY",
         localisationLabels
       );
-      case "EXPIRED":
+    case "EXPIRED":
       return getLocaleLabels(
         "Expired",
         "BILL_GENIE_EXPIRED",
         localisationLabels
       );
-      case "GENERATE NEW BILL":
+    case "GENERATE NEW BILL":
       return getLocaleLabels(
         "GENERATE NEW BILL",
         "BILL_GENIE_GENERATE_NEW_BILL",
         localisationLabels
       );
 
-      case "DOWNLOAD RECEIPT":
-        return getLocaleLabels(
-          "DOWNLOAD RECEIPT",
-          "BILL_GENIE_DOWNLOAD_RECEIPT",
-          localisationLabels
-        );
-      case "Search Results for Bill":
-        return getLocaleLabels(
-          "Search Results for Bill",
-          "BILL_GENIE_SEARCH_TABLE_HEADER",
-          localisationLabels
-        );
-      case "PARTIALLY_PAID":
-      case "PARTIALLY PAID":
-        return getLocaleLabels(
-            "Partially Paid",
-            "BILL_GENIE_PARTIALLY_PAID",
-            localisationLabels
-          ); 
-      case "BILL_GENIE_GROUP_SEARCH_HEADER" : 
-          return getLocaleLabels(
-            "Search Results for Group Bills",
-            "BILL_GENIE_GROUP_SEARCH_HEADER",
-            localisationLabels
-          ); 
-        default :
-        return getLocaleLabels(
-          "Search Results for Group Bills",
-          label,
-          localisationLabels
-        ); 
+    case "DOWNLOAD RECEIPT":
+      return getLocaleLabels(
+        "DOWNLOAD RECEIPT",
+        "BILL_GENIE_DOWNLOAD_RECEIPT",
+        localisationLabels
+      );
+    case "Search Results for Bill":
+      return getLocaleLabels(
+        "Search Results for Bill",
+        "BILL_GENIE_SEARCH_TABLE_HEADER",
+        localisationLabels
+      );
+    case "PARTIALLY_PAID":
+    case "PARTIALLY PAID":
+      return getLocaleLabels(
+        "Partially Paid",
+        "BILL_GENIE_PARTIALLY_PAID",
+        localisationLabels
+      );
+    case "BILL_GENIE_GROUP_SEARCH_HEADER":
+      return getLocaleLabels(
+        "Search Results for Group Bills",
+        "BILL_GENIE_GROUP_SEARCH_HEADER",
+        localisationLabels
+      );
+    default:
+      return getLocaleLabels(
+        "Search Results for Group Bills",
+        label,
+        localisationLabels
+      );
   }
 };
 
@@ -451,7 +531,7 @@ export const getTextToLocalMapping = label => {
 export const setServiceCategory = (businessServiceData, dispatch) => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
-    if (item.code && item.code.indexOf(".") > 0 && item.type=="Adhoc") {
+    if (item.code && item.code.indexOf(".") > 0 && item.type == "Adhoc") {
       if (nestedServiceData[item.code.split(".")[0]]) {
         let child = get(
           nestedServiceData,
@@ -469,7 +549,7 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
         set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
       }
     } else {
-      if(item.code.includes("WS") || item.code.includes("SW")){
+      if (item.code.includes("WS") || item.code.includes("SW")) {
         if (nestedServiceData[item.code.split(".")[0]]) {
           let child = get(
             nestedServiceData,
@@ -487,8 +567,9 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
           set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
         }
       }
-else{
-      set(nestedServiceData,`${item.code}`,item);}
+      else {
+        set(nestedServiceData, `${item.code}`, item);
+      }
     }
   });
   dispatch(
