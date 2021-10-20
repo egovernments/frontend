@@ -10,7 +10,6 @@ export class Taskboard extends React.Component {
 
   render() {
     const { data, onSlaClick, color } = this.props
-    console.log(data, "rakesh data");
     return (
       <div className="inbox-taskboard">
         {data.map((item, i) => (

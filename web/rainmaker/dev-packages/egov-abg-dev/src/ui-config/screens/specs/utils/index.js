@@ -94,7 +94,6 @@ export const downloadMultipleBill = async (bills = [], configKey, businesService
   let rate = await getMdmsDataforCollection(businesService);
 
   try {
-    debugger;
     const DOWNLOADRECEIPT = {
       GET: {
         URL: "/pdf-service/v1/_create",
@@ -116,21 +115,23 @@ export const downloadMultipleBill = async (bills = [], configKey, businesService
       item.additionalDetails = addDetail;
     })
 
-    var actualBills = [], size = 75;
-
+    var actualBills = [], size = 20;
     for (let i = 0; bills.length > 0; i++) {
       actualBills.push(bills.splice(0, size));
     }
-    debugger;
-    actualBills.map(async (bills) => {
-      const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-      downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
-    })
+      for( let i = 0; i < actualBills.length; i++) {
+        await downloadPdfs(DOWNLOADRECEIPT, queryStr, actualBills[i])
+      }
   } catch (error) {
     console.log(error);
 
   }
 
+}
+
+export const downloadPdfs = async (DOWNLOADRECEIPT, queryStr, bills) => {
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
 }
 
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
