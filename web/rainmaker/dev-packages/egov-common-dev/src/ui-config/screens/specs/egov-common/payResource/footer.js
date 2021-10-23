@@ -174,7 +174,7 @@ export const callPGService = async (state, dispatch) => {
       );
 
       let  paymentDetails= get(
-        response,
+        searchResponse,
         "Payments[0]",
         null
       );
