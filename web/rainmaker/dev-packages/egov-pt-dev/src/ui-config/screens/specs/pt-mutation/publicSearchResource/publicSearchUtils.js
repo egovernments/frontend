@@ -217,65 +217,33 @@ const PAYMENTSEARCH = {
     URL: "/collection-services/payments/",
     ACTION: "_search",
   },
-  };
-  const getPaymentSearchAPI = (businessService='')=>{
-  if(businessService=='-1'){
+};
+const getPaymentSearchAPI = (businessService = '') => {
+  if (businessService == '-1') {
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
-  }else if (process.env.REACT_APP_NAME === "Citizen") {
+  } else if (process.env.REACT_APP_NAME === "Citizen") {
     return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
   }
   return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
-  };
+};
 
 export const fetchPayments = async (
   dispatch,
-  finalResponse,
+  receiptQueryString,
+  FETCHRECEIPT
 ) => {
-  const FETCHRECEIPT = {
-    GET: {
-      URL: "/collection-services/payments/_search",
-      ACTION: "_get",
-    },
-    };
-    let paymentResponse=null;
-    let businessService = '';
-    let receiptQueryString=null;
-    let assessmentYear="";
-  finalResponse.Properties.map(async(item, key) => {
-    receiptQueryString = [
-      { key: "consumerCodes", value: item.propertyId },
-      { key: "tenantId", value: item.tenantId },
-      { key: "businessService", value:'PT' }        
-    ];
-    receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
-    if (query.key == "businessService") {
-      businessService = query.value;
-    }
-    });
-    receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
-    paymentResponse=await httpRequest("post",getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
-  
-    paymentResponse.Payments.map(pay=>{
-  pay.paymentDetails[0].bill.billDetails.map(b=>{ 
-  let toDate=convertEpochToDate(b.toPeriod).split("/")[2];
-  let fromDate=convertEpochToDate(b.fromPeriod).split("/")[2];
-  assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+b.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+b.amountPaid+")";
-
-  });
-
-    });
-    finalResponse.Properties[key].assessmentYear =assessmentYear;
-  });
-
-  return finalResponse;
+  let paymentResponse = null;
+  let businessService = 'PT';
+  paymentResponse = await httpRequest("post", getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
+  return paymentResponse && paymentResponse;
 };
 
 export const getPropertyWithBillAmount = (propertyResponse, billResponse) => {
   try {
-    if(billResponse && billResponse.Bill && billResponse.Bill.length > 0) {
+    if (billResponse && billResponse.Bill && billResponse.Bill.length > 0) {
       propertyResponse.Properties.map((item, key) => {
         billResponse.Bill.map(bill => {
-          if(bill.consumerCode === item.propertyId) {
+          if (bill.consumerCode === item.propertyId) {
             propertyResponse.Properties[key].totalAmount = bill.totalAmount;
           }
         });

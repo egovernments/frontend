@@ -11,6 +11,9 @@ import {
 import { validateFields } from "../../utils/index";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { ComponentJsonPath, fetchBill, getPropertyWithBillAmount ,fetchPayments} from "./publicSearchUtils";
+import {
+  convertEpochToDate
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 
 export const propertySearch = async (state, dispatch) => {
   searchApiCall(state, dispatch);
@@ -116,27 +119,51 @@ const searchApiCall = async (state, dispatch) => {
       response.Properties=response.Properties.filter(item=> item.status!="INACTIVE");
       const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
       const finalResponse = getPropertyWithBillAmount(response, billResponse);
-      const finalResponsewithYear=await fetchPayments(dispatch,finalResponse);       
-      let propertyData = finalResponsewithYear.Properties.map(item => ({
-        ["PT_MUTATION_PID"]: item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
-        ["PT_COMMON_COL_ADDRESS"]: getAddress(item) || "-",
-        ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
-        ["PT_COMMON_PAID_YEARS"]: item.assessmentYear || "NA",
-        ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
-        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed },
-        ["TENANT_ID"]: item.tenantId || "-",
-        ["ADVANCE_PAYMENT"]: isAdvancePaymentAllowed
-      }));
-
-      dispatch(
-        handleField(
-          "public-search",
-          "components.div.children.searchPropertyTable",
-          "props.data",
-          propertyData
-        )
-      );
+      const FETCHRECEIPT = {
+        GET: {
+          URL: "/collection-services/payments/_search",
+          ACTION: "_get",
+        },
+      };
+      let propertyData = [];
+      let assessmentYear = '';
+      finalResponse.Properties.map( async (item, index) => {
+        let receiptQueryString = [
+          { key: "consumerCodes", value: item.propertyId },
+          { key: "tenantId", value: item.tenantId },
+        ];
+        const paymentResponse = await fetchPayments(dispatch,receiptQueryString, FETCHRECEIPT);  
+        if(paymentResponse && paymentResponse.Payments && paymentResponse.Payments.length > 0) {
+          paymentResponse.Payments.map(pay => {
+            pay.paymentDetails[0].bill.billDetails.map(b => {
+              let toDate = convertEpochToDate(b.toPeriod).split("/")[2];
+              let fromDate = convertEpochToDate(b.fromPeriod).split("/")[2];
+              assessmentYear = assessmentYear == "" ? fromDate + "-" + toDate + "(Rs." + b.amountPaid + ")" : assessmentYear + "," + fromDate + "-" + toDate + "(Rs." + b.amountPaid + ")";
+            });
+          });
+          item.assessmentYear = assessmentYear;
+        }
+        propertyData.push({
+          ["PT_MUTATION_PID"]: item.propertyId || "-",
+          ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+          ["PT_COMMON_COL_ADDRESS"]: getAddress(item) || "-",
+          ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
+          ["PT_COMMON_PAID_YEARS"]: item.assessmentYear || "NA",
+          ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
+          ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed },
+          ["TENANT_ID"]: item.tenantId || "-",
+          ["ADVANCE_PAYMENT"]: isAdvancePaymentAllowed
+        })
+        
+        dispatch(
+          handleField(
+            "public-search",
+            "components.div.children.searchPropertyTable",
+            "props.data",
+            propertyData
+          )
+        );
+      })
       dispatch(
         handleField(
           "public-search",
