@@ -75,7 +75,8 @@ export const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById, oldProp
   if (oldPropertydetails && oldPropertydetails.owners) {
     oldPropertydetails.owners = oldPropertydetails && oldPropertydetails.owners && Array.isArray(oldPropertydetails.owners) && oldPropertydetails.owners.sort((owner1, owner2) => owner1.name.localeCompare(owner2.name));
   }
-  
+  ownerDetails=ownerDetails.filter(item=> item.status=="ACTIVE");
+
   return (
     ownerDetails &&
     ownerDetails.map((owner, index) => {
