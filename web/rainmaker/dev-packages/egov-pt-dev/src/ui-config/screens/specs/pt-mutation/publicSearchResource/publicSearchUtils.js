@@ -6,7 +6,9 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { getSearchBillResult } from "../../../../../ui-utils/commons";
-
+import {
+  convertEpochToDate
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 export const ComponentJsonPath = {
   ulbCity:
     "components.div.children.searchPropertyDetails.children.cardContent.children.searchPropertyContainer.children.ulbCity",
@@ -209,6 +211,63 @@ export const getBill = async (queryObject, dispatch) => {
     );
     console.log(error, "fetxh");
   }
+};
+const PAYMENTSEARCH = {
+  GET: {
+    URL: "/collection-services/payments/",
+    ACTION: "_search",
+  },
+  };
+  const getPaymentSearchAPI = (businessService='')=>{
+  if(businessService=='-1'){
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`
+  }else if (process.env.REACT_APP_NAME === "Citizen") {
+    return `${PAYMENTSEARCH.GET.URL}${PAYMENTSEARCH.GET.ACTION}`;
+  }
+  return `${PAYMENTSEARCH.GET.URL}${businessService}/${PAYMENTSEARCH.GET.ACTION}`;
+  };
+
+export const fetchPayments = async (
+  dispatch,
+  finalResponse,
+) => {
+  const FETCHRECEIPT = {
+    GET: {
+      URL: "/collection-services/payments/_search",
+      ACTION: "_get",
+    },
+    };
+    let paymentResponse=null;
+    let businessService = '';
+    let receiptQueryString=null;
+    let assessmentYear="";
+  finalResponse.Properties.map(async(item, key) => {
+    receiptQueryString = [
+      { key: "consumerCodes", value: item.propertyId },
+      { key: "tenantId", value: item.tenantId },
+      { key: "businessService", value:'PT' }        
+    ];
+    receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.map(query => {
+    if (query.key == "businessService") {
+      businessService = query.value;
+    }
+    });
+    receiptQueryString = receiptQueryString && Array.isArray(receiptQueryString) && receiptQueryString.filter(query => query.key != "businessService")
+    paymentResponse=await httpRequest("post",getPaymentSearchAPI(businessService), FETCHRECEIPT.GET.ACTION, receiptQueryString);
+  
+    paymentResponse.Payments.map(pay=>{
+  pay.paymentDetails[0].bill.billDetails.map(b=>{ 
+  let toDate=convertEpochToDate(b.toPeriod).split("/")[2];
+  let fromDate=convertEpochToDate(b.fromPeriod).split("/")[2];
+  assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+b.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+b.amountPaid+")";
+
+  });
+
+    });
+    finalResponse.Properties[key].assessmentYear =assessmentYear;
+  });
+
+  return finalResponse;
 };
 
 export const getPropertyWithBillAmount = (propertyResponse, billResponse) => {

@@ -20,6 +20,7 @@ export const searchPropertyTable = {
         labelName: "Property Status",
         labelKey: "PT_COMMON_TABLE_PROPERTY_STATUS",
       },
+      { labelName: "Tax paid years", labelKey: "PT_COMMON_PAID_YEARS" },
       { labelName: "Amount Due", labelKey: "PT_AMOUNT_DUE" },
       {
         labelName: "Action",
