@@ -46,6 +46,16 @@ export const callPGService = async (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
   );
+  const bankBusinessServiceType = get(
+    state,
+    "screenConfiguration.preparedFinalObject.businessServiceInfo.type"
+  );
+  let bankBusinessService = '';
+  if (bankBusinessServiceType == "Adhoc") {
+    bankBusinessService = "MCS";
+  } else {
+    bankBusinessService = businessService
+  }
 
   const url = isPublicSearch() ? "withoutAuth/egov-common/paymentRedirectPage" : "egov-common/paymentRedirectPage";
   const redirectUrl = process.env.NODE_ENV === "production" ? `citizen/${url}` : url;
@@ -141,7 +151,7 @@ export const callPGService = async (state, dispatch) => {
         taxAndPayments,
         user,
         callbackUrl,
-        businessService: businessService,
+        businessService: bankBusinessService,
         additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false,
         paidBy:payerInfo }
       }
