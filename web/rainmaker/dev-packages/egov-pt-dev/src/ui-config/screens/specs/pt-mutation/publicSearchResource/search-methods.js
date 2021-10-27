@@ -116,7 +116,7 @@ const searchApiCall = async (state, dispatch) => {
     const querryObject = getPayload(searchScreenObject);
     try {
       let response = await getSearchResults(querryObject);
-      response.Properties=response.Properties.filter(item=> item.status!="INACTIVE");
+      response.Properties=response.Properties.filter(item=> item.status=="ACTIVE");
       const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
       const finalResponse = getPropertyWithBillAmount(response, billResponse);
       const FETCHRECEIPT = {
