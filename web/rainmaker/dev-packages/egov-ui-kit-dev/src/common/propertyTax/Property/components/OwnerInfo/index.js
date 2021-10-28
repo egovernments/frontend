@@ -508,6 +508,8 @@ class OwnerInfo extends Component {
     } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
+    let mutationCheck = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    console.log("prasad mutationCheck", mutationCheck);
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
     // let oldPropertydetails = "";
     // if (OldProperty && Object.keys(OldProperty).length > 0) {
@@ -559,7 +561,7 @@ class OwnerInfo extends Component {
                   {(viewHistory || ownershipTransfer) && (
                     <div id="pt-header-button-container" className="header-button-container">
                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
-                      <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
+                      {mutationCheck && <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />}
                     </div>
                   )}
                   {/* ------------------------- */}
