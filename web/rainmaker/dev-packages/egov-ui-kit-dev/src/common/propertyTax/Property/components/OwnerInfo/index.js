@@ -425,6 +425,7 @@ class OwnerInfo extends Component {
     const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
+    let mutationCheck = process.env.REACT_APP_NAME === "Citizen" ? false : true;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
     if (properties) {
       const { propertyDetails } = properties;
@@ -463,9 +464,9 @@ class OwnerInfo extends Component {
                   {/* Transfer ownership button and View History button */}
                   {(viewHistory || ownershipTransfer) && (
                     <div id="pt-header-button-container" className="header-button-container">
-                       <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
-                       <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
-                           </div>
+                      <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} />
+                      {mutationCheck && <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />}
+                    </div>
                   )}
                   {/* ------------------------- */}
                 </div>
