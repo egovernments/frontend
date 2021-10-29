@@ -294,13 +294,45 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "pay",
     beforeInitScreen: (action, state, dispatch) => {
+
+        // dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", ""));
+        // dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionDateInput", ""));
+        // // set(action, "screenConfiguration.screenConfig.pay.components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[2].tabContent.offline_rtgs.children.onlineDetails.children.transactionDate.componentJsonpath", "");
+        // // dispatch(prepareFinalObject("ReceiptTemp[0]",""));
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
+        dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", ""));  
+        dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionDateInput", ""));
+
+        const transactionDatepath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[2].tabContent.offline_rtgs.children.onlineDetails.children.transactionDate";
+        // const transactionDatevalue= get(transactionDatepath.props.value);
+        // // console.log("shreya log1" ,transactionDatevalue);
+        // if (transactionDatevalue)
+        // {
+         dispatch(handleField("pay", transactionDatepath, "props.value","" ));
+         dispatch(handleField("pay", transactionDatepath, "props.error",false ));
+         dispatch(handleField("pay", transactionDatepath, "isFieldValid",true ));
+        // }
+        const transactionnopath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[2].tabContent.offline_rtgs.children.onlineDetails.children.txnNo";
+        // const transactionovalue= get(transactionnopath.props.value);
+        // // console.log("shreya log2", transactionnovalue);
+        // if (transactionnovalue)
+        // {
+         dispatch(handleField("pay", transactionnopath, "props.value","" )); 
+         dispatch(handleField("pay", transactionnopath, "isFieldValid",true ));
+         dispatch(handleField("pay", transactionnopath, "props.error",false ));
+        // }
         fetchBillingServiceData(state,tenantId)
         fetchBill(state, dispatch, consumerCode, tenantId, businessService);
+        // set(action, "screenConfiguration.screenConfig.pay.components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[2].tabContent.offline_rtgs.children.onlineDetails.children.transactionDate.componentJsonpath", "");
+
         const data = getPaymentCard();
         set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
+        // // dispatch(prepareFinalObject("ReceiptTemp[0]",""));
+        // dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", ""));
+        // dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionDateInput", ""));
+       
         return action;
     },
     components: {
