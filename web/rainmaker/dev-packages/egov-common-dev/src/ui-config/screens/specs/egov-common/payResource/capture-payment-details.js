@@ -44,12 +44,12 @@ const capturePaymentDetails = getCommonGrayCard({
           tabButton: "COMMON_POS",
           tabIcon: "Dashboard",
           tabContent: { pos }
-        }/* ,
+        } ,
         {
           tabButton: "COMMON_DD",
           tabIcon: "Schedule",
           tabContent: { demandDraft }
-        },
+        }/*,
         {
           tabButton: "COMMON_CREDIT_DEBIT_CARD",
           tabIcon: "Schedule",
