@@ -297,10 +297,27 @@ const screenConfig = {
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
+        dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionNumber", ""));  
+        dispatch(prepareFinalObject("ReceiptTemp[0].instrument.transactionDateInput", ""));
+
+        const transactionDatepath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[2].tabContent.offline_rtgs.children.onlineDetails.children.transactionDate";
+        
+         dispatch(handleField("pay", transactionDatepath, "props.value","" ));
+         dispatch(handleField("pay", transactionDatepath, "props.error",false ));
+         dispatch(handleField("pay", transactionDatepath, "isFieldValid",true ));
+        
+        const transactionnopath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[2].tabContent.offline_rtgs.children.onlineDetails.children.txnNo";
+        
+         dispatch(handleField("pay", transactionnopath, "props.value","" )); 
+         dispatch(handleField("pay", transactionnopath, "isFieldValid",true ));
+         dispatch(handleField("pay", transactionnopath, "props.error",false ));
+        
         fetchBillingServiceData(state,tenantId)
         fetchBill(state, dispatch, consumerCode, tenantId, businessService);
+        
         const data = getPaymentCard();
         set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
+        
         return action;
     },
     components: {
