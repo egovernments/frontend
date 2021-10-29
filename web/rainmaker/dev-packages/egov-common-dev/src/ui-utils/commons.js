@@ -558,6 +558,7 @@ export const download = async(receiptQueryString, mode = "download", configKey, 
 		const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
 		configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
 	  }
+
  const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -577,6 +578,11 @@ export const download = async(receiptQueryString, mode = "download", configKey, 
     { key: "tenantId", value:tenantId },
     { key: "applicationNumber", value: consumerCode?consumerCode:applicationNumber}
   ];
+
+  if(consumerCode !=null && consumerCode.includes("PB-CH"))
+  {
+	configKey="consolidatedreceipt";
+  }
   let queryObjectForPT = [
     { key: "tenantId", value:tenantId },
     { key: "propertyIds", value: consumerCode?consumerCode:applicationNumber}
