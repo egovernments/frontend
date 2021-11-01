@@ -579,7 +579,7 @@ export const download = async(receiptQueryString, mode = "download", configKey, 
     { key: "applicationNumber", value: consumerCode?consumerCode:applicationNumber}
   ];
 
-  if(consumerCode !=null && consumerCode.includes("PB-CH"))
+  if(consumerCode !=null && consumerCode.includes("PG-CH"))
   {
 	configKey="consolidatedreceipt";
   }
