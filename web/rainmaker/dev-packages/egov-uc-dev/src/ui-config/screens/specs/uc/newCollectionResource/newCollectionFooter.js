@@ -185,9 +185,8 @@ const prepareObj =(state,dispatch) =>{
     });
     set(eChallans[0],"taxPeriodFrom", convertDateToEpoch(eChallans[0].taxPeriodFrom));
     set(eChallans[0], "taxPeriodTo", convertDateToEpoch(eChallans[0].taxPeriodTo));
-    if(!eChallans[0].hasOwnProperty('address')){
+    if(eChallans[0].address.locality == null){
       set(eChallans[0], "address.locality.code", null);
-      set(eChallans[0], "address.street", null);
     } 
     // set(eChallans[0], "payer.mobileNumber", eChallans[0].citizen.mobileNumber);
     // set(eChallans[0], "payer.name",  eChallans[0].citizen.name);
