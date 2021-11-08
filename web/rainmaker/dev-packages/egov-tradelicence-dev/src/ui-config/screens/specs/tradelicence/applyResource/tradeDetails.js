@@ -466,9 +466,10 @@ const tradeUnitCard = {
                       value: tradeLicenceData[0].tradeLicenseDetail.tradeUnits[cardIndex].tradeType
                     }
                   ];
+                const tenantId = getQueryArg(window.location.href, "tenantId");
                 let payload = await httpRequest(
                   "post",
-                  `/tl-calculator/billingslab/_search?tenantId=${getTenantId()}`,
+                  `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
                   "_search",
                   queryObj,
                   {}
