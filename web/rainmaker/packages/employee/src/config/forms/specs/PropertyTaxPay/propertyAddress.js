@@ -124,6 +124,10 @@ const formConfig = {
         let cityName = tenantId;
         if (tenantInfo && tenantInfo.city && tenantInfo.city.name)
             cityName = tenantInfo.city.name;
+
+        let surveyId=get(state.screenConfiguration.preparedFinalObject,"Properties[0].surveyId");
+        if(surveyId)
+        dispatch(handleFieldChange("propertyAddress", "UID", surveyId));
         dispatch(handleFieldChange("propertyAddress", "city", tenantId));
         dispatch(prepareFormData("Properties[0].address.city", cityName));
       }
