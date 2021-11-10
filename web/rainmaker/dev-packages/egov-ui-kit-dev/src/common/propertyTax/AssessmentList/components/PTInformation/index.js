@@ -12,6 +12,9 @@ import ApplicationHistory from "./components/ApplicationHistory";
 import DocumentsInfo from "../../../Property/components/DocumentsInfo";
 import get from "lodash/get";
 import "./index.css"
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { businessServiceInfo, fetchConsumerBill, searchConsumer } from "egov-ui-kit/utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 // const PTInformation = ({
 //   items,
@@ -107,7 +110,8 @@ class PTInformation extends React.Component {
       documentsUploaded,
       toggleSnackbarAndSetText,
       cities,
-      citywiseconfig
+      citywiseconfig,
+      updateNumberConfig
     } = this.props;
     let logoUrl = ""; 
     let corpCity = "";
@@ -141,29 +145,37 @@ class PTInformation extends React.Component {
           <Card
             textChildren={
               <div id="property-review-form" className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-                {(
+                {
                   <Card
                     textChildren={
                       <TotalDues
                         history
+                        properties={properties}
                         tenantId={properties.tenantId}
                         consumerCode={properties.propertyId}
                         totalBillAmountDue={totalBillAmountDue}
-                        citywiseconfig={citywiseconfig}                        
+                        citywiseconfig={citywiseconfig}
+                        updateNumberConfig={updateNumberConfig}
                       />
                     }
                     style={{ backgroundColor: "rgb(242,242,242)", boxShadow: "none" }}
                   />
-                )}
+                }
                 <div className="pdf-header" id="pdf-header">
                   <Card
-                    style={{ display : "flex" , backgroundColor : "rgb(242, 242, 242)" , minHeight: "120px" , alignItems: "center" ,paddingLeft :"10px"}}
+                    style={{ display: "flex", backgroundColor: "rgb(242, 242, 242)", minHeight: "120px", alignItems: "center", paddingLeft: "10px" }}
                     textChildren={
-                      <div style={{display : "flex" }}>
+                      <div style={{ display: "flex" }}>
                         {/* <Image  id="image-id" style={logoStyle} source={logoUrl} /> */}
-                        <div style={{marginLeft : 30}}> 
-                          <div style={{display:"flex" , marginBottom : 5}}>
-                            <Label label={corpCity} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" containerStyle={{marginRight : 10 ,textTransform: "uppercase"}}/>
+                        <div style={{ marginLeft: 30 }}>
+                          <div style={{ display: "flex", marginBottom: 5 }}>
+                            <Label
+                              label={corpCity}
+                              fontSize="20px"
+                              fontWeight="500"
+                              color="rgba(0, 0, 0, 0.87)"
+                              containerStyle={{ marginRight: 10, textTransform: "uppercase" }}
+                            />
                             <Label label={ulbGrade} fontSize="20px" fontWeight="500" color="rgba(0, 0, 0, 0.87)" />
                           </div>
                           <Label label={"PT_PDF_SUBHEADER"} fontSize="16px" fontWeight="500" />
@@ -171,10 +183,10 @@ class PTInformation extends React.Component {
                       </div>
                     }
                   />
-                  <div style={{display : "flex" , justifyContent : "space-between"}}>
-                    <div style={{display : "flex"}}>
-                      <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{marginRight : 10}}/>
-                      <Label label={`: ${get(properties,"propertyId")}`} fontSize="20px"/>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex" }}>
+                      <Label label="PT_PROPERTY_ID" color="rgba(0, 0, 0, 0.87)" fontSize="20px" containerStyle={{ marginRight: 10 }} />
+                      <Label label={`: ${get(properties, "propertyId")}`} fontSize="20px" />
                     </div>
                     {/* <div style={{display : "flex"}}>
                       <Label label="Property ID :" color="rgba(0, 0, 0, 0.87)" fontSize="20px"/>
@@ -186,7 +198,7 @@ class PTInformation extends React.Component {
                     </div> */}
                   </div>
                 </div>
-                
+
                 <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                 <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></AssessmentInfo>
                 <OwnerInfo
@@ -197,9 +209,8 @@ class PTInformation extends React.Component {
                   ownershipTransfer={true}
                   viewHistory={true}
                 ></OwnerInfo>
-                        {!isLegary &&
-            <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo> }
-           <div id="property-assess-form">
+                {!isLegary && <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>}
+                <div id="property-assess-form">
                   <AssessmentHistory></AssessmentHistory>
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
@@ -214,12 +225,13 @@ class PTInformation extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  const { screenConfiguration = {} } = state;
   const { cities } = state.common || [];
-  return { cities  };
-}
 
+  const { preparedFinalObject } = screenConfiguration;
+  let { propertiesAudit = [] } = preparedFinalObject;
+  const updateNumberConfig = get(preparedFinalObject, "updateNumberConfig", []);
+  return { cities, propertiesAudit, updateNumberConfig };
+};
 
-export default connect(
-  mapStateToProps,
-  null
-)(PTInformation);
+export default connect(mapStateToProps, null)(PTInformation);
