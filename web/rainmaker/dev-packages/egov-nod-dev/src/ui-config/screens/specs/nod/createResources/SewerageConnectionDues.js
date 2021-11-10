@@ -8,7 +8,6 @@ import {
     getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { httpRequest } from "../../../../../ui-utils";
-  //import {generateBillApiCall ,searchBillApiCall} from "../generateBillResource/functions"
   import "./index.css";
   import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -30,10 +29,10 @@ import {
   
   
   
-  export const sewageConnection = getCommonCard({
+  export const SewerageConnectionDues = getCommonCard({
  
     header: getCommonTitle(
-      { labelName: "Sewage Connection Dues", label: "Sewage Connection Dues" },
+      { labelName: "Sewerage Connection Dues", label: "Sewerage Connection Dues" },
       { style: { marginBottom: 18 } }
     ),
     PropertyBills: {

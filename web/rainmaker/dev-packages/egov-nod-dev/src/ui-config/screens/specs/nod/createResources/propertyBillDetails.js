@@ -17,8 +17,10 @@ import {
        getCommonContainer({
         billPeriod: getLabelWithValue({labelName: "Bill Period",label: "Bill Period"}, {jsonPath:"propertyBillResponse[0].billPeriod"}),
         billNo: getLabelWithValue({labelName: "Bill No",label: "Bill No"},{jsonPath:"propertyBillResponse[0].billNumber"}),
-        ReceiptNo: getLabelWithValue({labelName: "Receipt No.", label: "Receipt No."},{jsonPath:"propertyBillResponse[0].billNumber"}),
-        amountPaid: getLabelWithValue({labelName: "Amount Paid",label: "Amount Paid"},{jsonPath:"propertyBillResponse[0].billNumber"})
+        amountPaid: getLabelWithValue({labelName: "Bill Amount",label: "Bill Amount"},{jsonPath:"propertyBillResponse[0].totalAmount"}),
+        status: getLabelWithValue({labelName: "Status", label: "Status"},{jsonPath:"propertyBillResponse[0].status"}),
+
+
      })
      )
     }

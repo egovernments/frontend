@@ -20,8 +20,9 @@ import {
        getCommonContainer({
          
         applicantName: getLabelWithValue({labelName: "Name", labelKey: "NOC_APPLICANT_NAME_LABEL"},{jsonPath:"propertyOwnerResponse[0].name"}),
+        applicantguardianName: getLabelWithValue({labelName: "Guardian Name", labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"},{jsonPath:"propertyOwnerResponse[0].fatherOrHusbandName"}),
         mobileNo: getLabelWithValue({labelName: "Mobile No.",labelKey: "NOC_APPLICANT_MOBILE_NO_LABEL"},{jsonPath:"propertyOwnerResponse[0].mobileNumber"}),
-        applicantEmail: getLabelWithValue({labelName: "Email",labelKey: "NOC_APPLICANT_EMAIL_LABEL"},{jsonPath:"propertyOwnerResponse[0].emailId"}),
+        //applicantEmail: getLabelWithValue({labelName: "Email",labelKey: "NOC_APPLICANT_EMAIL_LABEL"},{jsonPath:"propertyOwnerResponse[0].emailId"}),
         applicantAddress: getLabelWithValue({labelName: "Correspondence Address",labelKey: "NOC_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"}, {jsonPath:"propertyOwnerResponse[0].permanentAddress"})
      })
      )

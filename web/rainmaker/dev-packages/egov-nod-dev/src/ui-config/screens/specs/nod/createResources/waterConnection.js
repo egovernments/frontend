@@ -9,12 +9,12 @@ import {
   import { httpRequest } from "../../../../../ui-utils";
   import "./index.css";
   import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { getWaterSewrageData } from "./functions";
+  import { getWaterData } from "./functions";
   
   export const waterConnection = getCommonCard({
  
     header: getCommonTitle(
-      { labelName: "Water & Sewage Dues", label: "Water & Sewage Dues" },
+      { labelName: "Water Dues(Please fill one of the search criteria)", label: "Water Dues(Please fill one of the search criteria)" },
       { style: { marginBottom: 18 } }
     ),
     wnsGenerateBill: getCommonContainer({
@@ -30,27 +30,11 @@ waterId: getTextField({
     xs: 12,
     sm: 3
   },
-  required: true,
+  required: false,
   visible: true,
-  errorMessage: "Invalid Mobile No.",
+  errorMessage: "Invalid Water Connection Number",
   sourceJsonPath: "WaterId",
   jsonPath: "NODScreen.WaterId"
-}),
-sewageId: getTextField({
-  label: { labelName: "Sewage Id", label: "Sewage Id" },
-  placeholder: {
-    labelName: "Sewage Id",
-    label: "Sewage Id"
-  },
-  gridDefination: {
-    xs: 12,
-    sm: 3
-  },
-  required: true,
-  visible: true,
-  errorMessage: "Invalid Mobile No.",
-  sourceJsonPath: "SewageId",
-  jsonPath: "NODScreen.SewageId"
 }),
 mobileNumber: getTextField({
   label: { labelName: "Mobile", label: "Mobile" },
@@ -62,7 +46,7 @@ mobileNumber: getTextField({
     xs: 12,
     sm: 3
   },
-  required: true,
+  required: false,
   visible: true,
   errorMessage: "Invalid Mobile No.",
   sourceJsonPath: "mobileNumber",
@@ -88,7 +72,7 @@ searchButton: {
   onClickDefination: {
  
     action: "condition",
-    callBack: getWaterSewrageData,
+    callBack: getWaterData,
               
   }
 },

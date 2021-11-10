@@ -9,8 +9,9 @@ import { createConnection } from "./createResources/createConnection";
 import { propertyAssesment } from "./createResources/propertyAssesment";
 import { propertyOwner } from "./createResources/propertyOwner";
 import { propertyBillDetails } from "./createResources/propertyBillDetails";
-import { sewageConnection } from "./createResources/sewageConnection";
 import { WaterConnectionDues } from "./createResources/WaterConnectionDues";
+import { SewerageConnectionDues } from "./createResources/SewerageConnectionDues";
+import { sewerageConnection } from "./createResources/sewerageConnection";
 import { waterConnection } from "./createResources/waterConnection";
 import { nodRemarks } from "./createResources/nodRemarks";
 import { propertySummary } from "./createResources/propertySummary";
@@ -20,7 +21,7 @@ import { remarksSummary } from "./createResources/remarksSummary";
 import { footer } from "./createResources/footer";
 import "./index.css";
 import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
-//import { documentList } from "./createResources/documentList";
+import { documentsDetails } from "./createResources/documentsDetails";
 
 
 
@@ -30,7 +31,8 @@ import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 export const stepsData = [
   { labelName: "Property Dues", label: "Property Dues" },
-  { labelName: "Water & Sewage Dues", label: "Water & Sewage Dues " },
+  { labelName: "Water Dues", label: "Water Dues" },
+  { labelName: "Sewerage Dues", label: "Sewerage Dues" },
   { labelName: "Documents", label: "Documents" },
   { labelName: "Remarks", label: "Remarks" },
   { labelName: "Summary", label: "Summary" }
@@ -47,26 +49,18 @@ const header = getCommonHeader({
     label: "Application for No Dues"
   });
 
-
-  export const documentsDetails = getCommonCard({
+// export const documentsDetails = getCommonCard({
   
-    header: getCommonTitle(
-      { labelName: "Required Documents", label: "Required Documents" },
-      { style: { marginBottom: 18 } }
-    ),
-    subText: getCommonParagraph({
-      labelName:"Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-      label: "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload"
-    }),
-    subText1: getCommonParagraph({
-      labelName:"Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-      label: "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload"
-    }),
-   // documentList
-  });
-
-
-
+//     header: getCommonTitle(
+//       { labelName: "Required Documents", label: "Required Documents" },
+//       { style: { marginBottom: 18 } }
+//     ),
+//     subText: getCommonParagraph({
+//       labelName:"Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
+//       label: "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload"
+//     }),
+//    // documentList
+//   });
 
   export const formwizardFirstStep = {
     uiFramework: "custom-atoms",
@@ -85,10 +79,20 @@ const header = getCommonHeader({
     props: {
       id: "apply_form2"
     },
-    children: {  waterConnection , sewageConnection ,WaterConnectionDues },
+    children: {  waterConnection ,WaterConnectionDues },
     visible: false
   };
+
   export const formwizardThirdStep = {
+    uiFramework: "custom-atoms",
+    componentPath: "Form",
+    props: {
+      id: "apply_form2"
+    },
+    children: { sewerageConnection ,SewerageConnectionDues },
+    visible: false
+  };
+  export const formwizardFourthStep = {
     uiFramework: "custom-atoms",
     componentPath: "Form",
     props: {
@@ -97,7 +101,7 @@ const header = getCommonHeader({
     children: {  documentsDetails },
     visible: false
   };
-  export const formwizardFourthStep = {
+  export const formwizardFifthStep = {
     uiFramework: "custom-atoms",
     componentPath: "Form",
     props: {
@@ -106,7 +110,7 @@ const header = getCommonHeader({
     children: {  nodRemarks },
     visible: false
   };
-  export const formwizardFifthStep = {
+  export const formwizardSixthStep = {
     uiFramework: "custom-atoms",
     componentPath: "Form",
     props: {

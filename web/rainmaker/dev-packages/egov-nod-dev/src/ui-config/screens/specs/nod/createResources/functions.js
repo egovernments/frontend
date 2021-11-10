@@ -7,10 +7,10 @@ import { convertDateToEpoch, convertEpochToDate } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
 
 
-export const getWaterSewrageData = async (state, dispatch) => {
+export const getWaterData = async (state, dispatch) => {
   let NodScreenObject = get(state.screenConfiguration.preparedFinalObject, "NODScreen", {});
   var WaterId = NodScreenObject["WaterId"]
-  var SewageId = NodScreenObject["SewageId"]
+  //var SewageId = NodScreenObject["SewageId"]
   var mobileNumber = NodScreenObject["mobileNumber"]
   let tenantId = localStorage.getItem('tenant-id');
 //alert("WaterId = "+WaterId);
@@ -19,11 +19,11 @@ export const getWaterSewrageData = async (state, dispatch) => {
 
 //ws-services/wc/_search?searchType=CONNECTION&tenantId=pb.fazilka&mobileNumber=9781444604
 
-if(WaterId==undefined || SewageId == undefined)
+if(WaterId==undefined || WaterId =="")
 {
-  if(mobileNumber==undefined)
+  if(mobileNumber==undefined || mobileNumber=="")
   {
-    alert("Please Provide the Registerde Mobile Number or Watee Connection Number and Sewrage Number");
+    alert("Please Provide the Registered Mobile Number or Water Connection Number");
   }
   else{
     try {
@@ -38,13 +38,103 @@ if(WaterId==undefined || SewageId == undefined)
         "/ws-services/wc/_search",
         "_search",
         queryObject,
-    
-      );
-    
-    
-   //   alert("Water Connection = "+water_connection.WaterConnection[0].connectionNo);
-     
-      let sewerage_connection = null;
+      ); 
+
+      WaterId=water_connection.WaterConnection[0].connectionNo;
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+else{
+     try {
+      let queryObject = [
+        {key: "searchType",value: "CONNECTION"},
+        {key: "tenantId",value: tenantId},
+        {key: "connectionNumber",value: WaterId}
+      ];
+      let water_connection = null;
+      water_connection = await httpRequest(
+        "post",
+        "/ws-services/wc/_search",
+        "_search",
+        queryObject,
+      ); 
+    }
+    catch (e) {
+      console.log(e);
+    }
+  }
+try {
+  let queryObjectWater = [
+    {key: "consumerCode",value: WaterId},
+    {key: "tenantId",value: tenantId},
+    {key: "businessService",value: "WS"}
+  ];
+
+  let water_connection = null;
+  water_connection = await httpRequest(
+    "post",
+    "/billing-service/bill/v2/_fetchbill",
+    "",
+    queryObjectWater,
+
+  );
+  let WaterDetailsArray = [];
+  let waterRow=null;
+  let ConsumerNo_w,OwnerName_w,ConnectionStatus_w,Address_w,Due_w;
+
+  ConsumerNo_w = water_connection.Bill[0].consumerCode;
+  OwnerName_w = water_connection.Bill[0].payerName;
+  ConnectionStatus_w = water_connection.Bill[0].status;
+  Address_w = water_connection.Bill[0].payerAddress;
+  Due_w = water_connection.Bill[0].totalAmount;
+
+  waterRow={
+    "ConsumerNo_w":ConsumerNo_w,
+    "OwnerName_w":OwnerName_w?OwnerName_w:"NA"+"  "+Address_w?Address_w:" ",
+    "ConnectionStatus_w":ConnectionStatus_w,
+    "Due_w":Due_w,
+   
+  };
+  WaterDetailsArray.push(waterRow);
+dispatch(prepareFinalObject("waterResponse", WaterDetailsArray));
+}
+catch (e) {
+  console.log(e);
+}
+}
+
+
+
+export const getSewerageData = async (state, dispatch) => {
+  let NodScreenObject = get(state.screenConfiguration.preparedFinalObject, "NODScreen", {});
+  var SewerageId = NodScreenObject["SewerageId"]
+  var mobileNumber = NodScreenObject["mobileNumber"]
+  let tenantId = localStorage.getItem('tenant-id');
+//alert("WaterId = "+WaterId);
+//alert("SewageId = "+SewageId);
+//alert("mobileNumber = "+mobileNumber);
+
+//ws-services/wc/_search?searchType=CONNECTION&tenantId=pb.fazilka&mobileNumber=9781444604
+
+if(SewerageId == undefined || SewerageId=="")
+{
+  if(mobileNumber==undefined || mobileNumber=="")
+  {
+    alert("Please Provide the Registered Mobile Number or Sewerage Number");
+  }
+  else{
+    try {
+      let queryObject = [
+        {key: "searchType",value: "CONNECTION"},
+        {key: "tenantId",value: tenantId},
+        {key: "mobileNumber",value: mobileNumber}
+      ];
+      
+       let sewerage_connection = null;
       sewerage_connection = await httpRequest(
         "post",
         "/sw-services/swc/_search",
@@ -53,7 +143,7 @@ if(WaterId==undefined || SewageId == undefined)
     
       );
     
-    
+      SewerageId=sewerage_connection.SewerageConnections[0].connectionNo;
     //  alert("Sewrage Connection = "+sewerage_connection.SewerageConnections[0].connectionNo);
     
     
@@ -70,13 +160,36 @@ if(WaterId==undefined || SewageId == undefined)
 }
 
 else{
- // alert("enter in else block");
- // billing-service/bill/v2/_fetchbill?tenantId=pb.fazilka&consumerCode=0603005184&businessService=SW
-//  billing-service/bill/v2/_fetchbill?tenantId=pb.fazilka&consumerCode=0603002456&businessService=WS
+  try {
+    let queryObject = [
+      {key: "searchType",value: "CONNECTION"},
+      {key: "tenantId",value: tenantId},
+      {key: "connectionNumber",value:SewerageId }
+    ];
+    
+     let sewerage_connection = null;
+    sewerage_connection = await httpRequest(
+      "post",
+      "/sw-services/swc/_search",
+      "_search",
+      queryObject,
+  
+    );
+  
+    SewerageId=sewerage_connection.SewerageConnection[0].connectionNo;
+  //  alert("Sewrage Connection = "+sewerage_connection.SewerageConnections[0].connectionNo);
+  
+  
+  
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
 
 try {
   let queryObjectSewrage = [
-    {key: "consumerCode",value: SewageId},
+    {key: "consumerCode",value: SewerageId},
     {key: "tenantId",value: tenantId},
     {key: "businessService",value: "SW"}
   ];
@@ -104,7 +217,7 @@ try {
 
   sewageRow={
     "ConsumerNo":ConsumerNo,
-    "OwnerName":OwnerName+"  "+Address,
+    "OwnerName":OwnerName?OwnerName:""+"  "+Address?Address:"",
     "ConnectionStatus":ConnectionStatus,
     "Due":Due,
    
@@ -113,66 +226,10 @@ try {
 
 
 dispatch(prepareFinalObject("sewrageResponse", SewrageDetailsArray));
-
-
-  let queryObjectWater = [
-    {key: "consumerCode",value: WaterId},
-    {key: "tenantId",value: tenantId},
-    {key: "businessService",value: "WS"}
-  ];
-
-  let water_connection = null;
-  water_connection = await httpRequest(
-    "post",
-    "/billing-service/bill/v2/_fetchbill",
-    "",
-    queryObjectWater,
-
-  );
-
-
- // alert("Water detais = "+JSON.stringify(water_connection));
-  let WaterDetailsArray = [];
-  let waterRow=null;
-  let ConsumerNo_w,OwnerName_w,ConnectionStatus_w,Address_w,Due_w;
-
-  ConsumerNo_w = water_connection.Bill[0].consumerCode;
-  OwnerName_w = water_connection.Bill[0].payerName;
-  ConnectionStatus_w = water_connection.Bill[0].status;
-  Address_w = water_connection.Bill[0].payerAddress;
-  Due_w = water_connection.Bill[0].totalAmount;
-
-  waterRow={
-    "ConsumerNo_w":ConsumerNo_w,
-    "OwnerName_w":OwnerName_w+"  "+Address_w,
-    "ConnectionStatus_w":ConnectionStatus_w,
-    "Due_w":Due_w,
-   
-  };
-  WaterDetailsArray.push(waterRow);
-
-
-dispatch(prepareFinalObject("waterResponse", WaterDetailsArray));
-
-
 }
 catch (e) {
   console.log(e);
 }
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
 
 }
 
@@ -210,28 +267,31 @@ export const getPropertyData = async (state, dispatch) => {
       queryObject,
 
     );
-
-
+if(payload && payload.Properties && payload.Properties.length ==0)
+{
+  alert("No Property found with this property Id. Please try again with another ID!!");
+}
+else{
    // alert(JSON.stringify(payload.Properties[0]));
     
     let createOwnerDetailsArray = [];
     let ownerRow=null;
-    let name,mobileNumber,emailId,permanentAddress;
+    let name,mobileNumber,emailId,permanentAddress,fatherOrHusbandName;
 
 
     payload.Properties[0].owners.map((element,index) => {
       //alert("Name = "+element.name + " Mobile =  "+element.mobileNumber + " emailId = "+element.emailId +" permanentAddress ="+element.permanentAddress);
    
       name = element.name;
+      fatherOrHusbandName=element.fatherOrHusbandName;
       mobileNumber = element.mobileNumber;
-      emailId = element.emailId;
       permanentAddress = element.permanentAddress;
    
       ownerRow={
         "name":name,
+        "fatherOrHusbandName":fatherOrHusbandName?fatherOrHusbandName:"NA",
         "mobileNumber":mobileNumber,
-        "emailId":emailId,
-        "permanentAddress":permanentAddress,
+        "permanentAddress":permanentAddress?permanentAddress:"NA",
        
       };
       createOwnerDetailsArray.push(ownerRow);
@@ -278,7 +338,7 @@ queryObjectforBill,
 //console.log(JSON.stringify(bill_payload));
 let createBillDetailsArray = [];
 let billRow=null;
-let billNumber,totalAmount , fromPeriod , toPeriod , billPeriod;
+let billNumber,totalAmount , fromPeriod , toPeriod , billPeriod,status;
 
 bill_payload.Bill.map((element,index) => {
  // alert("billNumber = "+element.billNumber + " totalAmount =  "+element.totalAmount + " fromPeriod = "+element.billDetails[0].fromPeriod +" toPeriod ="+element.billDetails[0].toPeriod);
@@ -288,12 +348,12 @@ bill_payload.Bill.map((element,index) => {
   fromPeriod = element.billDetails[0].fromPeriod;
   toPeriod = element.billDetails[0].toPeriod;
   billPeriod = convertEpochToDate(element.billDetails[0].toPeriod)+" - "+convertEpochToDate(element.billDetails[0].fromPeriod);
-
+status=element.status;
   billRow={
     "billNumber":billNumber,
     "totalAmount":totalAmount,
     "billPeriod":billPeriod,
-    "toPeriod":toPeriod,
+    "status":status,
    
   };
   createBillDetailsArray.push(billRow);
@@ -352,7 +412,7 @@ createAssesmentArray.push(assesmentRow);
 });  
 dispatch(prepareFinalObject("propertyAssesmentResponse", createAssesmentArray));
    // setCardVisibility(state, action, dispatch);
-
+}
   } catch (e) {
     console.log(e);
   }
