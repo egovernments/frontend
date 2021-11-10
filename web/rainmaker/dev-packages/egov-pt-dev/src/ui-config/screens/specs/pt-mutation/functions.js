@@ -348,7 +348,7 @@ const searchApiCall = async (state, dispatch, index) => {
         responseProperties.Properties.map(item => {
           flag=1;
         item.owners.map(owner=> {
-        if(owner.status=="ACTIVE" && owner.mobileNumber==queryObject[1].value){
+        if(owner.status=="ACTIVE" && owner.mobileNumber==pp.value){
            flag=2;
         }
       }
