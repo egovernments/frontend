@@ -325,6 +325,11 @@ export const getEmployeeName = async queryObject => {
 export const setServiceCategory = (businessServiceData, dispatch,state,setCategory=true) => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
+    if((""+(JSON.parse(localStorage.getItem("user-info"))).roles[0].code) == "UC_COWCESS_USER" 
+              && item.code != 'CSS.cow_cess')
+      return;
+
+
     if (item.code && item.code.indexOf(".") > 0) {
       if (nestedServiceData[item.code.split(".")[0]]) {
         let child = get(

@@ -154,10 +154,12 @@ const getData = async (action, state, dispatch) => {
             masterDetails: [
               {
                 name: "BusinessService",
-                filter: "[?(@.type=='Adhoc')]",
+                //filter: (""+((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER") ? "[?(@.code=='CSS.cow_cess')]" : "[?(@.type=='Adhoc')]"
+                filter: "[?(@.type=='Adhoc')]"
               },
               {
                 name: "TaxHeadMaster",
+
               },
               {
                 name: "TaxPeriod",
