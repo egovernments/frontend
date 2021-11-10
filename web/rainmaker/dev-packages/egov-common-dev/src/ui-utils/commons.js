@@ -609,7 +609,7 @@ let getModifiedPayment = (payments) =>{
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha.toFixed(2));
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, -rebate.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
 }
