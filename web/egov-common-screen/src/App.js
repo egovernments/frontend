@@ -8,6 +8,7 @@ import Faqs from './components/Faqs';
 import Message from './components/Message';
 import Footer from './components/Footer';
 import Testimonials from './components/Testimonials';
+import digitLogo from "./img/digit-footer.png";
 
 
 
@@ -53,7 +54,11 @@ function App() {
 
 <Testimonials />
 
-   <Footer />
+<Footer />
+<div style={{backgroundColor:"#ffffff"}}>
+  <br />
+          <center><a href="https://www.digit.org/" target="_blank"><img style ={{height:"1.4em"}}src={digitLogo}   /></a></center> <br />    
+          </div>
  </div>
 
     
