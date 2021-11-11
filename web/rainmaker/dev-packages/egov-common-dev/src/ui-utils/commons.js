@@ -571,7 +571,7 @@ let getModifiedPayment = (payments) =>{
             break;
         }
       })
-      tax = tax-Math.abs(rebate);
+      // tax = tax-Math.abs(rebate);
     }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
       billdetail.billAccountDetails.forEach(billAccountDetail =>{
         switch (billAccountDetail.taxHeadCode) {
@@ -609,11 +609,11 @@ let getModifiedPayment = (payments) =>{
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.arrear`, arrear.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.penalty`, penalty);
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.swatchatha`, swatchatha.toFixed(2));
-  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, -rebate.toFixed(2));
+  set(payments, `[0].paymentDetails[0].bill.additionalDetails.rebate`, rebate.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.interest`, interest.toFixed(2));
   set(payments, `[0].paymentDetails[0].bill.additionalDetails.roundOff`, roundOff);
 }
-  else if(payments[0].paymentDetails[0].businessService === 'PT.MUTATION'){
+  else if(payments[0].paymentDetails[0].businessService === 'PT.MUTATION'){ 
   let ptMutationFee=0;
   let ptMutationLateFee=0;
   let ptMutationApplicationFee=0;
