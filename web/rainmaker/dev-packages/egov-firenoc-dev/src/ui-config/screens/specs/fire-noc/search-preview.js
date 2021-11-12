@@ -79,7 +79,7 @@ let tenantId=get(
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.FireNOCs[0], "tenantId") },
         { key: "businessService", value:'FIRENOC' }        
       ]
-      download(receiptQueryString, "download", "consolidatedreceipt", state);
+      download(receiptQueryString, "download", "firenocreceipt", state);
     },
     leftIcon: "receipt"
   };
