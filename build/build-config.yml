@@ -39,7 +39,7 @@ config:
     - work-dir: web/ui-uploader/
       image-name: ui-uploader
 
--   name: builds/frontend/dss-dashboard
+-   name: builds/digit-impel-builds/frontend/dss-dashboard
     build:
     - work-dir: web/dss-dashboard/
       dockerfile: web/dss-dashboard/docker/Dockerfile
