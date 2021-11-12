@@ -294,7 +294,7 @@ export const footer = getCommonApplyFooter("BOTTOM", {
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForPrevious
+      callBack: callNODCreateApi
     },
     visible: false
   },

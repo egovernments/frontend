@@ -163,6 +163,7 @@ const create = {
             formwizardThirdStep,
             formwizardFourthStep,
             formwizardFifthStep,
+            formwizardSixthStep,
             footer: footer
 
 

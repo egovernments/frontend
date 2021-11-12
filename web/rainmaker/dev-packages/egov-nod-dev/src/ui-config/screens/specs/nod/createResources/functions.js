@@ -107,8 +107,6 @@ catch (e) {
 }
 }
 
-
-
 export const getSewerageData = async (state, dispatch) => {
   let NodScreenObject = get(state.screenConfiguration.preparedFinalObject, "NODScreen", {});
   var SewerageId = NodScreenObject["SewerageId"]
@@ -421,5 +419,10 @@ dispatch(prepareFinalObject("propertyAssesmentResponse", createAssesmentArray));
 
 
 }
+
+export const callNODCreateApi = async (state, dispatch) => {
+  alert("till create")
+};
+
 
 
