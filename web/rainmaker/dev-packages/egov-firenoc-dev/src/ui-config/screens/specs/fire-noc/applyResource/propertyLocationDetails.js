@@ -660,7 +660,7 @@ export const propertyLocationDetails = getCommonCard(
 
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.firestationId", "FS_BATALA_01")
+              "FireNOCs[0].fireNOCDetails.firestationId", fire_stationid)
           );
 
 
@@ -678,11 +678,13 @@ export const propertyLocationDetails = getCommonCard(
           });
 
           let props_value;
-
+          let fire_stationid;
           for (var i = 0; i < fireStations.length; i++) {
             for (var j = 0; j < fireStations[i].subDistrict.length; j++) {
               if (fireStations[i].subDistrict[j].code == action.value) {
                 props_value = fireStations[i].baseTenantId;
+                fire_stationid = fireStations[i].code
+
               }
             }
           }
@@ -690,7 +692,7 @@ export const propertyLocationDetails = getCommonCard(
           // console.log("props value", props_value);
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.firestationId", "FS_BATALA_01")
+              "FireNOCs[0].fireNOCDetails.firestationId", fire_stationid)
           );
 
           set(
@@ -784,8 +786,7 @@ export const propertyLocationDetails = getCommonCard(
 
           let props_value;
 
-          let fire_stationid;
-
+          let fire_stationid=fireStations[0].code;
 
           dispatch(
             prepareFinalObject(
@@ -794,7 +795,7 @@ export const propertyLocationDetails = getCommonCard(
 
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].fireNOCDetails.firestationId", "FS_BATALA_01")
+              "FireNOCs[0].fireNOCDetails.firestationId", fire_stationid)
           );
 
 
