@@ -8,7 +8,7 @@ import get from "lodash/get";
 
 console.log("new property form loaded");
 if(!confirm("Only one property id should be created for a single property.\nplease check and verify your existing properties.\nDo you want to create new property ?"))
-    window.location.href=`${window.origin}/property-tax`;
+    window.location.href=`${window.origin}/citizen/property-tax`;
     //window.location.href="http://localhost:3000/property-tax";
   
 console.log("allowed");
