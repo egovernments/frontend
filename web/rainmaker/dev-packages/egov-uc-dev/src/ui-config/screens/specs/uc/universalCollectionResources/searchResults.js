@@ -20,12 +20,18 @@ export const searchResults = {
           filter: false,
           customBodyRender: (value, tableMeta, updateValue) => (
             <div onClick={value => {
+              if(tableMeta.rowData[6] !="CANCELLED")
+              {
                 const receiptQueryString = [
                   { key: "receiptNumbers", value:  tableMeta.rowData[0]},
                   { key: "tenantId", value: tableMeta.rowData[7] },
                   { key: "businessService", value:tableMeta.rowData[8] } 
                 ]
                 download(receiptQueryString , "download" ,"consolidatedreceipt",'PAYMENT') ;
+              }
+              else{
+                alert("Cancelled receipt cannot be downloaded!")
+              }
               }}>
        
               <a href="javascript:void(0)" >{value}</a>
