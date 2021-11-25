@@ -111,7 +111,8 @@ class PTInformation extends React.Component {
       toggleSnackbarAndSetText,
       cities,
       citywiseconfig,
-      updateNumberConfig
+      updateNumberConfig,
+      workflowStatus
     } = this.props;
     let logoUrl = ""; 
     let corpCity = "";
@@ -212,7 +213,7 @@ class PTInformation extends React.Component {
                 {!isLegary && <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>}
                 <div id="property-assess-form">
                   <AssessmentHistory></AssessmentHistory>
-                  <PaymentHistory></PaymentHistory>
+                  <PaymentHistory   properties={properties}  workflowStatus = {workflowStatus}></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
                 </div>
               </div>

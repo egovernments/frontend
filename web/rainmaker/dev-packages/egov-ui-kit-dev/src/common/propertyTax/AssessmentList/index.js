@@ -181,7 +181,8 @@ const AssessmentList = ({ properties,
   loadMdmsData,
   documentsUploaded,
   toggleSnackbarAndSetText,
-  citywiseconfig
+  citywiseconfig,
+  workflowStatus  
 }) => {
   return items.length == 0 ? (
     <BlankAssessment
@@ -216,6 +217,7 @@ const AssessmentList = ({ properties,
         documentsUploaded={documentsUploaded}
         toggleSnackbarAndSetText={toggleSnackbarAndSetText}
         citywiseconfig={citywiseconfig}
+        workflowStatus = {workflowStatus}
       />)
 
 
