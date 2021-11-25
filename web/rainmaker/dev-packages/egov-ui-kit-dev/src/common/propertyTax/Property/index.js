@@ -250,7 +250,49 @@ class Property extends Component {
       }
     }   
     fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId());
+    const ptqueryObject = [
+      { key: "propertyIds", value: this.props.match.params.propertyId },
+      { key: "tenantId", value: getTenantId()  },
+    ];
+    try {
+      const payload = await httpRequest("post","property-services/property/_search", "", ptqueryObject);
+      this.setState({businessIds: payload && payload.Properties[0].acknowldgementNumber}); 
+    }
+    catch (e)
+    {
+      console.log("error",e );
+    }
 
+
+    const queryObject = [
+       {  
+        key: "tenantId", 
+        value: getTenantId()      
+       },     
+       {      
+        key: "businessService",   
+        value: "PT.MUTATION" 
+       },
+       { 
+         key: "businessIds", 
+         value: this.state.businessIds
+       },
+     ];         
+
+   try {
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );   
+
+     this.setState({workflowStatus: payload && payload}); 
+
+    } catch (e) {
+      console.log(" workflow call error",e);
+    }
+ 
   };
 
 
@@ -473,7 +515,7 @@ class Property extends Component {
       Payments = []
     } = this.props;
     const { closeYearRangeDialogue } = this;
-    const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
+    const { dialogueOpen, urlToAppend, showAssessmentHistory, workflowStatus } = this.state;
     let urlArray = [];
     let assessmentHistory = [];
     const { pathname } = location;
@@ -523,6 +565,7 @@ class Property extends Component {
             documentsUploaded={documentsUploaded}
             toggleSnackbarAndSetText={this.props.toggleSnackbarAndSetText}
             citywiseconfig={this.state.citywiseconfig}
+            workflowStatus={this.state.workflowStatus && this.state.workflowStatus}
           />
         }
         <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>

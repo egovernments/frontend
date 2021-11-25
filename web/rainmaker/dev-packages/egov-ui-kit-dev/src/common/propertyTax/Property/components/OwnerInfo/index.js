@@ -509,7 +509,6 @@ class OwnerInfo extends Component {
     let ownerInfo = [];
     let multipleOwner = false;
     let mutationCheck = process.env.REACT_APP_NAME === "Citizen" ? false : true;
-    console.log("prasad mutationCheck", mutationCheck);
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
     // let oldPropertydetails = "";
     // if (OldProperty && Object.keys(OldProperty).length > 0) {
