@@ -6,7 +6,7 @@ ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 # copy the project files
 COPY ${WORK_DIR} .
-RUN yarn add --exact react-scripts@2.0.0
+RUN yarn add react-scripts
 RUN yarn run prod:employee
 
 # Create runtime image
