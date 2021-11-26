@@ -75,6 +75,12 @@ class PTHome extends Component {
         icon: <Icon style={iconStyle} action="custom" name="home-account" />,
         dynamicArray: [numProperties],
         route: "/property-tax/my-properties"
+      },
+      {
+        label: "PT_MUTATION_MY_APPLICATIONS",
+        icon: <Icon style={iconStyle} action="custom" name="home-account" />,
+        dynamicArray: [myApplicationsCount],
+        route: "/pt-mutation/my-applications",
       }
     ];
   };
@@ -100,7 +106,7 @@ class PTHome extends Component {
           </div>
         )
       }, */
-   /*  
+      /*  
    DRAFTS IS REMOVED FROM PT2.2
    
    {
@@ -140,21 +146,14 @@ class PTHome extends Component {
   };
 
   componentDidMount = () => {
-    const {
-      addBreadCrumbs,
-      title,
-      location,
-      fetchProperties,
-      userInfo
-    } = this.props;
+    const { addBreadCrumbs, title, location, fetchProperties, userInfo } =
+      this.props;
     const { pathname } = location;
     let url = pathname && pathname.split("/").pop();
     (title || url) &&
       url === "property-tax" &&
       addBreadCrumbs({ title: "", path: "" });
-    fetchProperties(
-      []
-    );
+    fetchProperties([]);
     fetchData(null, null, store.dispatch);
   };
 
@@ -264,13 +263,13 @@ class PTHome extends Component {
   }
 }
 
-const getTransformedItems = propertiesById => {
+const getTransformedItems = (propertiesById) => {
   return (
     propertiesById &&
     Object.values(propertiesById).reduce((acc, curr) => {
       const propertyDetail =
         curr.propertyDetails &&
-        curr.propertyDetails.map(item => {
+        curr.propertyDetails.map((item) => {
           return {
             consumerCode: `${curr.propertyId}:${item.assessmentNumber}`
           };
@@ -281,33 +280,21 @@ const getTransformedItems = propertiesById => {
   );
 };
 
-const mapStateToProps = state => {
-  const { properties, screenConfiguration} = state;
-  const {preparedFinalObject} = screenConfiguration;
-  const {myApplicationsCount=0} = preparedFinalObject;
-  const { propertiesById,  loading } =
-    properties || {};
+const mapStateToProps = (state) => {
+  const { properties, screenConfiguration } = state;
+  const { preparedFinalObject } = screenConfiguration;
+  const { myApplicationsCount = 0 } = preparedFinalObject;
+  const { propertiesById, loading } = properties || {};
   const numProperties = propertiesById && Object.keys(propertiesById).length;
-  return { numProperties,  loading, myApplicationsCount };
+  return { numProperties, loading, myApplicationsCount };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    addBreadCrumbs: url => dispatch(addBreadCrumbs(url)),
-    fetchProperties: (
-      queryObjectProperty,
-    
-    ) =>
-      dispatch(
-        fetchProperties(
-          queryObjectProperty,
-        
-        )
-      )
+    addBreadCrumbs: (url) => dispatch(addBreadCrumbs(url)),
+    fetchProperties: (queryObjectProperty) =>
+      dispatch(fetchProperties(queryObjectProperty)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PTHome);
+export default connect(mapStateToProps, mapDispatchToProps)(PTHome);
