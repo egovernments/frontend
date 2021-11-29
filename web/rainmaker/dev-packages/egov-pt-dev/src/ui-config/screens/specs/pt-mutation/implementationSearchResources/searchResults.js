@@ -138,7 +138,7 @@ export const searchPropertyTable = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) =>
-          (value.totalAmount > 0) ? getPayButton(tableMeta) : (process.env.REACT_APP_NAME == "Citizen")? " ":getMutationButton(tableMeta),
+          (value.totalAmount > 0) ? getPayButton(tableMeta) :getMutationButton(tableMeta),
 
         },
       }, 
