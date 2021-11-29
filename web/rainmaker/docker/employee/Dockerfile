@@ -1,12 +1,11 @@
 
-FROM egovio/alpine-node-builder-10:yarn AS build  
+FROM jameskyburz/node:10.15.3-alpine AS build  
 ARG WORK_DIR
 WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 # copy the project files
 COPY ${WORK_DIR} .
-RUN npm install --save --save-exact react-scripts@4.0.0
 RUN yarn run prod:employee
 
 # Create runtime image
