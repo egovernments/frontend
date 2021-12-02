@@ -1,5 +1,5 @@
 
-FROM jameskyburz/node:10.15.3-alpine AS build  
+FROM node:10.15.3-alpine AS build  
 ARG WORK_DIR
 WORKDIR /app
 ENV NODE_OPTIONS "--max-old-space-size=1792"
