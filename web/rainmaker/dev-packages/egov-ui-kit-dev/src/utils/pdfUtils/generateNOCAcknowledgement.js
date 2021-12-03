@@ -4,7 +4,7 @@ import { propertyLocationSummaryDetail, propertySummaryDetails } from "egov-fire
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getLocale, getLocalization } from "egov-ui-kit/utils/localStorageUtils";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
-import QRCode from "qrcode";
+// import QRCode from "qrcode";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 import get from "lodash/get";
 
@@ -42,8 +42,8 @@ const epochToDate = et => {
 };
 
 const getQRCode = async (qrText) => {
-    const qrcode = qrText = await QRCode.toDataURL(qrText);
-    return qrcode;
+    // const qrcode = qrText = await QRCode.toDataURL(qrText);
+    // return qrcode;
 }
 
 export const generateNOCAcknowledgement = async (preparedFinalObject, fileName = "acknowledgement.pdf") => {
@@ -138,7 +138,7 @@ export const generateNOCAcknowledgement = async (preparedFinalObject, fileName =
         FireNOC.fireNOCDetails.applicantDetails.owners[0].name
         }, Address: ${data.address}`;
 
-    let qrcode = await getQRCode(qrText);
+    // let qrcode = await getQRCode(qrText);
     const uomsMap = getFromObject(FireNOC, "fireNOCDetails.buildings[0].uomsMap", {});
     const areaType = getFromObject(FireNOC, "fireNOCDetails.propertyDetails.address.areaType", "");
     if( propertySummary && propertySummary.length > 0 ) {

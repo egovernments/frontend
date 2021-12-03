@@ -5,7 +5,7 @@ import pdfFonts from "./vfs_fonts";
 
 //import pdfFonts from "pdfmake/build/vfs_fonts";
 
-import QRCode from "qrcode";
+// import QRCode from "qrcode";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getMessageFromLocalization } from "./receiptTransformer";
 // import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js"
@@ -1332,7 +1332,7 @@ transformedData.buildings[0].uoms=reasonss;
   }
 
   // Generate QR code base64 image
-  let qrcode = await QRCode.toDataURL(qrText);
+  // let qrcode = await QRCode.toDataURL(qrText);
 
 
 
@@ -2399,7 +2399,7 @@ transformedData.buildings[0].uoms=reasonss;
   }
 
   // Generate QR code base64 image
-  let qrcode = await QRCode.toDataURL(qrText);
+  // let qrcode = await QRCode.toDataURL(qrText);
 
 
   let dd = {
@@ -4053,7 +4053,7 @@ transformedData.buildings[0].uoms=reasonss;
   }
 
   // Generate QR code base64 image
-  let qrcode = await QRCode.toDataURL(qrText);
+  // let qrcode = await QRCode.toDataURL(qrText);
 
 
   let dd = {
@@ -5766,7 +5766,7 @@ transformedData.buildings[0].uoms=reasonss;
   }
 
   // Generate QR code base64 image
-  let qrcode = await QRCode.toDataURL(qrText);
+  // let qrcode = await QRCode.toDataURL(qrText);
 
 
   let dd = {
