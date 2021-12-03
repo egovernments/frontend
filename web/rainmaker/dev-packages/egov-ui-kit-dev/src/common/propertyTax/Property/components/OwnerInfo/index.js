@@ -317,6 +317,10 @@ class OwnerInfo extends Component {
           item.owners = item.owners.filter((owner) => owner.status == "INACTIVE");
           ownershipInfo[lastModifiedDate].push(...this.transformData(item));
         });
+        Object.filter = (obj, predicate) => Object.keys(obj)
+                                 .filter( key => predicate(obj[key]) )
+                                 .reduce( (res, key) => (res[key] = obj[key], res), {} );         
+        ownershipInfo = Object.filter (ownershipInfo,e=> e.length !== 0 )
         this.setState({ [dialogName]: true, ownershipInfo });
         return true;
       }
