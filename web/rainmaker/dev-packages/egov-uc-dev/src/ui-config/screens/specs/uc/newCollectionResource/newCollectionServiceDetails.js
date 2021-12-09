@@ -382,7 +382,18 @@ export const newCollectionServiceDetailsCard = getCommonCard(
           labelKey: "UC_COMMENT_PLACEHOLDER",
         },
         Required: false,
+        maxLength: 512,
         jsonPath: "Challan[0].description",
+        afterFieldChange: async (action, state, dispatch) => {
+
+          if (action.value) {
+            if(action.value.length >512){
+            alert("Please add comments less than 512 characters!!");
+            action.value="";
+            }
+        
+          }
+        },
       }),
     }),
   },
