@@ -198,39 +198,7 @@ export const transferorSummary = getCommonGrayCard({
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
-  },
-  transferorMobileCard: getCommonGrayCard({
-    header: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      props: {
-        style: { marginBottom: "10px" }
-      },
-      children: {
-        header: {
-          gridDefination: {
-            xs: 8
-          },
-          ...getCommonSubHeader({
-            labelName: "Mobile Number To be Updated of transferor",
-            labelKey: "PT_MUTATION_TRANSFEROR_CORRECTED_NEW_NUMBER"
-          })
-        }
-      }
-    },
-    mobileNumber: getLabelWithValue(
-        {
-          labelName: "New Mobile No. of Transferor",
-          labelKey: "PT_MUTATION_TRANSFEROR_NEW_CORRECTED_NUMBER_LABEL"
-        },
-        {
-          jsonPath:
-            "Property.oldmobileNumber",
-          callBack: checkValueForNA
-        }
-      ),
-    }
-  )
+  }
   
 });
 
