@@ -108,12 +108,35 @@ function FeesEstimateCard(props) {
       value: arrears
     });
   }
+  function getNameFromTax(name)
+  {
+    
+    if(name=='PT_TAX'){
+      let fy=" ("+getCurrentFinancialYear()+")"
+    return getLocaleLabels(name,name)+fy;}
+    else 
+    return getLocaleLabels(name,name)
+  }
+  var getCurrentFinancialYear = function getCurrentFinancialYear() {
+    var today = new Date();
+    var curMonth = today.getMonth();
+    var fiscalYr = "";
+    if (curMonth > 3) {
+      var nextYr1 = (today.getFullYear() + 1).toString();
+      fiscalYr = today.getFullYear().toString() + "-" + nextYr1;
+    } else {
+      var nextYr2 = today.getFullYear().toString();
+      fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2;
+    }
+    return fiscalYr;
+  };
 
+  
   if(estimate.businesService==='PT')
     {
     for (let i=0;i<estimate.fees.length;i++)
       {
-          if(estimate.fees[i].name.labelKey==='PT_TAX')
+          if(estimate.fees[i].name.labelKey===getLocaleLabels("PT_TAX","PT_TAX"))
           {
             estimate.fees[i].name.labelKey='PT_COMMON_PAY_TAX';
           }
@@ -165,11 +188,12 @@ function FeesEstimateCard(props) {
               // ) : (
               //     ""
               //   );
+              
               let textLeft = fee.name ? (
                 <Grid container xs={8}>
                   <LabelContainer
                     labelName={fee.name.labelName}
-                    labelKey={fee.name.labelKey}
+                    labelKey={getNameFromTax(fee.name.labelKey)}
                     style={styles.taxStylesLeft}
                   />
                   {/*tooltip*/}                 
