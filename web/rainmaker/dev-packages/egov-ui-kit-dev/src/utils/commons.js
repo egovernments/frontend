@@ -809,7 +809,8 @@ export const navigateToApplication = (businessService, propsHistory, application
     setRoute(`/pt-mutation/search-preview?applicationNumber=${applicationNo}&propertyId=${propertyId}&tenantId=${tenantId}`);
   } else if (businessService == 'PT.CREATE') {
     setRoute(`/property-tax/application-preview?propertyId=${propertyId}&applicationNumber=${applicationNo}&tenantId=${tenantId}&type=property`);
-  } else {
+  }
+   else {
     process.env.REACT_APP_NAME === "Citizen" ?
       setRoute(`/property-tax/my-properties/property/${propertyId}/${tenantId}`)
       : setRoute(`/property-tax/property/${propertyId}/${tenantId}`)
@@ -828,9 +829,13 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
         return 'PT.MUTATION';
       } else if (creationReason == 'CREATE') {
         return 'PT.CREATE';
+      }
+      else if (creationReason == 'UPDATE' && applicationNumber.includes("UK-MT-")) {
+        return 'PT.MUTATION';
       } else if (creationReason == 'UPDATE') {
         return 'PT.CREATE';
       }
+    
       else {
         return 'NA';
       }
