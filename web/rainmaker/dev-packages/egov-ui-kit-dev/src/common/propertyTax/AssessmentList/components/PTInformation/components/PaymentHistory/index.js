@@ -48,6 +48,8 @@ class PaymentHistory extends Component {
         let IsDateValid   = workFlowLastModifiedDate>paymentDate;
 
         const paymentHistoryItems = Payments.map((payment, index) => {
+            
+            if(payment.paymentStatus!='CANCELLED'){
             const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
                 <div  style={{borderTop: "1px solid #474343", height: "91px" }}>
@@ -74,7 +76,7 @@ class PaymentHistory extends Component {
                         </div >
                     </div>)               
             
-        })
+        }})
         return paymentHistoryItems;
     }
 
