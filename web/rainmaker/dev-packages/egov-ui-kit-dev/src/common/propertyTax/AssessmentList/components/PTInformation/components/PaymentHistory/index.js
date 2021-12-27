@@ -12,6 +12,7 @@ import { downloadReceipt } from "egov-ui-kit/redux/properties/actions";
 class PaymentHistory extends Component {
     constructor(props) {
         super(props);
+        
         this.state = {
             items: [],
             showItems: false,
@@ -49,7 +50,8 @@ class PaymentHistory extends Component {
 
         const paymentHistoryItems = Payments.map((payment, index) => {
             
-            if(payment.paymentStatus!='CANCELLED'){
+            if(payment.paymentStatus!='CANCELLED')
+          {
             const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
                 <div  style={{borderTop: "1px solid #474343", height: "91px" }}>
@@ -85,9 +87,21 @@ class PaymentHistory extends Component {
         const { Payments = [] } = this.props;
 
         let paymentHistoryItem = [];
-        if (Payments.length > 0) {
+       
+        let finalPayments=[];
+       
+        Payments.map((payment, index) => {
+            if(payment && payment.paymentStatus!='CANCELLED')
+            {
+                finalPayments.push(payment);
+            }
+        })
+      
+        if (finalPayments.length > 0) {
+            
             paymentHistoryItem = this.getTransformedPaymentHistory();
         }
+       
         const items = this.state.showItems ? this.state.items : [];
         const errorMessage = this.state.showItems&&items.length==0 ? this.state.errorMessage : '';
         return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
