@@ -314,7 +314,7 @@ class OwnerInfo extends Component {
           if (!ownershipInfo[lastModifiedDate]) {
             ownershipInfo[lastModifiedDate] = [];
           }
-          item.owners = item.owners.filter((owner) => owner.status == "INACTIVE");
+          item.owners = item.owners.filter((owner) => owner.status == "ACTIVE");
           ownershipInfo[lastModifiedDate].push(...this.transformData(item));
         });
         Object.filter = (obj, predicate) => Object.keys(obj)
