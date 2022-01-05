@@ -822,8 +822,36 @@ export const downloadBill = async (consumerCode ,tenantId) => {
   const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
   const queryStr = [
             { key: "key", value: "consolidatedbill" },
-            { key: "tenantId", value: "pb" }
+            { key: "tenantId", value: "uk" }
         ]
   const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
+}
+
+export const downloadMultipleBill = async (bills = [], configKey) => {
+  try {
+    const DOWNLOADRECEIPT = {
+      GET: {
+        URL: "/pdf-service/v1/_create",
+        ACTION: "_get",
+      },
+    };
+    const queryStr = [
+      { key: "key", value: "consolidatedbill" },
+      { key: "tenantId", value: "uk" }
+    ]
+    var actualBills = [], size = 50;
+
+    for (let i = 0; bills.length > 0; i++) {
+      actualBills.push(bills.splice(0, size));
+    }
+    actualBills.map(async (bills) => {
+    const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
+    })
+  } catch (error) {
+    console.log(error);
+
+  }
+
 }
