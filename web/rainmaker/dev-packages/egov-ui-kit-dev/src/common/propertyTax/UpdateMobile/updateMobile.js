@@ -65,6 +65,7 @@ export default class UpdateMobile extends React.Component {
       loaded: false,
       invalidNumber: false,
       propertyNumbers: {},
+      payment:[]
     };
   }
 
@@ -79,10 +80,10 @@ export default class UpdateMobile extends React.Component {
     /* if (propertyId != prevPropertyId || tenantId != prevTenantId) { */
     !this.state.loading && !this.state.loaded && this.loadProperty();
     // }
-
+ 
     if (this.props.type == "WARNING" && this.props.showWarning == true && prevProps.showWarning == false) {
       let { owners = [] } = this.state.property;
-      let propertyNumbers = {};
+      let propertyNumbers = {};  
       owners = owners && owners.filter((owner) => owner.status == "ACTIVE");
       owners &&
         owners.map((owner) => {
@@ -133,9 +134,14 @@ export default class UpdateMobile extends React.Component {
     ];
     if (propertyId !== "" && tenantId !== "") {
       const propertyResponse = await this.getProperty(queryParams, propertyId);
+      let paymentPayload = await httpRequest(
+  
+        `collection-services/payments/_search?consumerCodes=${propertyId}`
+      ); 
       this.setState({ property: propertyResponse.Properties[0] });
       let { owners = [] } = propertyResponse.Properties[0];
       let propertyNumbers = {};
+      this.setState({ payment: paymentPayload.Payments });
       owners = owners && owners.filter((owner) => owner.status == "ACTIVE");
       owners &&
         owners.map((owner) => {
@@ -175,8 +181,16 @@ export default class UpdateMobile extends React.Component {
 
   canShowEditOption = () => {
     // const {isAlternate}=this.props;
-    if (window.location.href.includes("/property-tax/property") || window.location.href.includes("/property-tax/my-properties/property")) {
-      if (process.env.REACT_APP_NAME === "Citizen") {
+    
+    
+    if (window.location.href.includes("/property-tax/property") || window.location.href.includes("/property-tax/my-properties/property") ) {
+      if(this.state.payment.length<=0 && (this.state.property.creationReason=='CREATE') ){
+       
+        return false;
+      }
+      else
+      {
+        if (process.env.REACT_APP_NAME === "Citizen") {
         let userInfo = JSON.parse(getUserInfo()) || {};
         if (userInfo.mobileNumber && userInfo.mobileNumber == this.props.number) {
           return true;
@@ -186,6 +200,7 @@ export default class UpdateMobile extends React.Component {
       }
       return true;
     }
+  }
     return false;
   };
 
