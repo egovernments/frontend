@@ -167,6 +167,7 @@ const formConfig = {
       floatingLabelText: "PT_PROPERTY_DETAILS_BUILDING_COLONY_NAME",
       hintText: "PT_PROPERTY_DETAILS_BUILDING_COLONY_NAME_PLACEHOLDER",
       numcols: 6,
+      pattern:getPattern("DoorHouseNo"),
       errorMessage: "PT_PROPERTY_DETAILS_COLONY_NAME_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
