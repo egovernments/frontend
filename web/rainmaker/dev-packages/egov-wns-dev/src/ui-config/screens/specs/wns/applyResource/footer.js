@@ -655,7 +655,7 @@ const callBackForNext = async (state, dispatch) => {
         let usageTypes = [];
         if(propertyUsageType) {
           subUsageType && subUsageType.map(items => {
-            if(items["parentUsageType"] === (propertyUsageType.split(".")[1] || propertyUsageType)) {
+            if(items["parentUsageType"] === (propertyUsageType.split(".")[1]) || items["parentUsageType"] === propertyUsageType) {
               let obj = {};
               obj.code = items.name,
               obj.name = items.code,
