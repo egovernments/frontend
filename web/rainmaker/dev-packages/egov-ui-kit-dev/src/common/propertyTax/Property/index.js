@@ -266,18 +266,18 @@ class Property extends Component {
 
     const queryObject = [
        {  
-        key: "tenantId", 
-        value: getTenantId()      
-       },     
-       {      
-        key: "businessService",   
-        value: "PT.MUTATION" 
+        key: "tenantId",
+       value: getTenantId()
+       },
+      {
+        key: "businessService", 
+       value: "PT.MUTATION" 
        },
        { 
          key: "businessIds", 
          value: this.state.businessIds
        },
-     ];         
+    ];
 
    try {
     const payload = await httpRequest(
@@ -580,8 +580,7 @@ class Property extends Component {
         }        
 
                       
-        {isMigratedProperty && !isCitizen && (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
-        || !payLen ) &&
+        {isMigratedProperty && !isCitizen  &&
            <Button
               label={
                 <Label buttonLabel={true}
