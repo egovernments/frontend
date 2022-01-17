@@ -266,18 +266,18 @@ class Property extends Component {
 
     const queryObject = [
        {  
-        key: "tenantId",
-       value: getTenantId()
-       },
-      {
-        key: "businessService", 
-       value: "PT.MUTATION" 
+        key: "tenantId", 
+        value: getTenantId()      
+       },     
+       {      
+        key: "businessService",   
+        value: "PT.MUTATION" 
        },
        { 
          key: "businessIds", 
          value: this.state.businessIds
        },
-    ];
+     ];         
 
    try {
     const payload = await httpRequest(
@@ -547,7 +547,27 @@ class Property extends Component {
     } */
     let payLen = Payments && Payments.find(item =>{
           return item && item.instrumentStatus === "APPROVED" || item.instrumentStatus === "REMITTED"
-        });   
+        });  
+        var isRoleAdmin=()=>{
+          let userInfo = JSON.parse(localStorageGet("user-info"));
+       let flag=false;
+        userInfo.roles.forEach(role=> {
+          {
+           
+            if(role.code=='PTULBADMIN')
+            {
+    
+              flag=true;
+              }
+          }
+          
+       }
+       );
+      console.log("hereeeeeee",flag)
+        return flag;
+        }
+        
+    
     return (
       <Screen className={clsName}>
         <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} downloadPrintButton={true} download={() => this.download()} print={() => this.print()} />
@@ -580,7 +600,8 @@ class Property extends Component {
         }        
 
                       
-        {isMigratedProperty && !isCitizen  &&
+        {  isMigratedProperty && !isCitizen && (isRoleAdmin() || (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
+              || !payLen ) )&& 
            <Button
               label={
                 <Label buttonLabel={true}
