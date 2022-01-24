@@ -1,3 +1,4 @@
+"use strict";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -828,6 +829,95 @@ export const downloadBill = async (consumerCode ,tenantId) => {
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
 }
 
+let getModifiedBills = (bills) =>{
+  let tax=0;
+  let arrear=0;
+  let penalty=0;
+  let interest=0
+  let rebate=0;
+  let roundOff=0;
+  let swatchatha=0;
+  bills.forEach(bill => {
+  let currentDate = bill.billDate;
+  if(bill.businessService === 'PT'){
+  bill.billDetails.forEach(billdetail =>{
+    if(billdetail.amount!==0)
+    {
+    if(billdetail.fromPeriod<= currentDate && billdetail.toPeriod >= currentDate){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            tax = Math.round((tax+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+      // tax = tax-Math.abs(rebate);
+    }else if(!(billdetail.fromPeriod > currentDate && billdetail.toPeriod > currentDate)){
+      billdetail.billAccountDetails.forEach(billAccountDetail =>{
+        switch (billAccountDetail.taxHeadCode) {
+          case "PT_TAX":
+            arrear = Math.round((arrear+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_LATE_ASSESSMENT_PENALTY":
+            penalty = Math.round((penalty+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_ROUNDOFF":
+            roundOff = Math.round((roundOff+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_TIME_INTEREST":
+            interest = Math.round((interest+(billAccountDetail.amount))*100)/100;
+            break;
+          case "PT_PROMOTIONAL_REBATE":
+            rebate = Math.round((rebate+(billAccountDetail.amount))*100)/100;
+            break;
+          case "SWATCHATHA_TAX":
+            swatchatha = Math.round((swatchatha+(billAccountDetail.amount))*100)/100;
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  }
+  })
+}
+let totalAmount =   get(bill, `totalAmount`,null);
+  set(bill, `totalAmount`, totalAmount.toFixed(2));
+  set(bill, `additionalDetails.tax`, tax.toFixed(2));
+  set(bill, `additionalDetails.arrear`, arrear.toFixed(2));
+  set(bill, `additionalDetails.penalty`, penalty);
+  set(bill, `additionalDetails.swatchatha`, swatchatha.toFixed(2));
+  set(bill, `additionalDetails.rebate`, rebate.toFixed(2));
+  set(bill, `additionalDetails.interest`, interest.toFixed(2));
+  set(bill, `additionalDetails.roundOff`, roundOff);
+  set(bill, `additionalDetails.financialYear`, getFinancialYearFromEPOCH(bill.billDate));
+
+})
+return bills;
+}
 export const downloadMultipleBill = async (bills = [], configKey) => {
   try {
     const DOWNLOADRECEIPT = {
@@ -846,6 +936,7 @@ export const downloadMultipleBill = async (bills = [], configKey) => {
       actualBills.push(bills.splice(0, size));
     }
     actualBills.map(async (bills) => {
+    bills = getModifiedBills(bills);
     const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
     downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
     })
