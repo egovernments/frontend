@@ -283,13 +283,17 @@ class PTInformation extends React.Component {
       const selectedCityObject = cities && cities.length > 0 && cities.filter(item => item.code === get(properties, "tenantId"));
       ulbGrade = selectedCityObject ? get(selectedCityObject[0], "city.ulbType") && get(selectedCityObject[0], "city.ulbType").toUpperCase() : "MUNICIPAL CORPORATION";
     }
+    let isCitizen = process.env.REACT_APP_NAME === "Citizen" ? true : false;
+
     if (properties.status == "INWORKFLOW") {
       const updatedOnwerInfo = this.updateProperty();
       properties.propertyDetails[0].owners = updatedOnwerInfo.owners;
       properties.propertyDetails[0].institution = updatedOnwerInfo.institution;
       properties.propertyDetails[0].ownershipCategory = updatedOnwerInfo.ownershipCategory;
     }
-    return (
+    if(isCitizen)
+    {
+    return ( 
       <div className="form-without-button-cont-generic">
         {label && (
           <Label
@@ -351,19 +355,102 @@ class PTInformation extends React.Component {
                   propertiesAudit={propertiesAudit}
                 ></OwnerInfo>
                 <div id="property-assess-form">
-                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
                   <AssessmentHistory></AssessmentHistory>
                   <PaymentHistory></PaymentHistory>
                   <ApplicationHistory></ApplicationHistory>
-                  <div>* This document does not certify payment of Property Tax</div>
-
                 </div>
+               
+                <div>* This document does not certify payment of Property Tax</div>
               </div>
             }
           />
         </div>
       </div>
     );
+          }
+          else
+          {
+            return ( 
+              <div className="form-without-button-cont-generic">
+                {label && (
+                  <Label
+                    label={label}
+                    containerStyle={{ padding: "24px 0px 24px 0", marginLeft: "16px" }}
+                    dark={true}
+                    bold={true}
+                    labelStyle={{ letterSpacing: 0 }}
+                    fontSize={"20px"}
+                  />
+                )}
+                <div>
+                  <Card
+                    textChildren={
+                      <div id="property-review-form" className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
+                        {(totalBillAmountDue > 0 || (totalBillAmountDue === 0 && businessServiceInfoItem.isAdvanceAllowed)) && (
+                          <Card
+                            textChildren={
+                              <TotalDues
+                                history
+                                properties={properties}
+                                tenantId={properties.tenantId}
+                                consumerCode={properties.propertyId}
+                                totalBillAmountDue={totalBillAmountDue}
+                                isAdvanceAllowed={businessServiceInfoItem.isAdvanceAllowed}
+                                paymentDueYears={paymentDueYears}
+                                updateNumberConfig={updateNumberConfig}
+                              />
+                            }
+                            style={{ backgroundColor: "rgb(255,255,255)", boxShadow: "none" }}
+                          />
+                        )}
+                        <PdfHeader header={{
+                          logoUrl: logoUrl, corpCity: corpCity, ulbGrade: ulbGrade,
+                          label: "PT_PDF_SUBHEADER"
+                        }}
+                          subHeader={{
+                            label: "PT_PROPERTY_ID",
+                            value: '${get(properties, "propertyId")}'
+                          },{
+                            label: "PT_APPLICATION_NO",
+                            value: '${get(properties, "acknowldgementNumber")}'
+                          },{
+                            label: "Date",
+                            value: '${datecraeted}'
+                          }}>
+                        </PdfHeader>
+                        <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
+                        <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></AssessmentInfo>
+                        <OwnerInfo
+                          toggleSnackbarAndSetText={toggleSnackbarAndSetText}
+                          properties={properties}
+                          generalMDMSDataById={generalMDMSDataById}
+                          totalBillAmountDue={totalBillAmountDue}
+                          waterDetails={waterDetails}
+                          sewerDetails={sewerDetails}
+                          ownershipTransfer={true}
+                          viewHistory={true}
+                          propertiesAudit={propertiesAudit}
+                        ></OwnerInfo>
+                        <div id="property-assess-form">
+                          <AssessmentHistory></AssessmentHistory>
+                          <PaymentHistory></PaymentHistory>
+                          <ApplicationHistory></ApplicationHistory>
+                        </div>
+                        <div>
+                  
+                <DocumentsInfo documentsUploaded={documentsUploaded}></DocumentsInfo>
+               
+                </div>
+
+                        <div>* This document does not certify payment of Property Tax</div>
+                      </div>
+                    }
+                  />
+                </div>
+              </div>
+            );
+          }
+
   }
 }
 
