@@ -554,7 +554,7 @@ class Property extends Component {
         userInfo.roles.forEach(role=> {
           {
            
-            if(role.code=='PTULBADMIN')
+            if(role.code=='PTADMIN')
             {
     
               flag=true;
