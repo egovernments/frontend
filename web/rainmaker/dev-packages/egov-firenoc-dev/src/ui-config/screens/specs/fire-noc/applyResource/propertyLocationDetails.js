@@ -774,7 +774,16 @@ export const propertyLocationDetails = getCommonCard(
           let fireStations = fireStationsList.filter(firestation => {
             return firestation.baseTenantId === action.value;
           });
-
+          if(fireStations.length ==0){           
+            fireStations=fireStationsList.filter(firestation => {
+            let subdistrict=firestation.subDistrict;
+            subdistrict=subdistrict.filter(item=> {
+              return item.code.toUpperCase() === action.value.split('.')[1].toUpperCase();
+            });
+            if(subdistrict.length > 0)
+            return firestation;
+          });
+        }
           // dispatch(
           //   prepareFinalObject(
           //     "FireNOCs[0].fireNOCDetails.firestationId", fireStations[0].code)
