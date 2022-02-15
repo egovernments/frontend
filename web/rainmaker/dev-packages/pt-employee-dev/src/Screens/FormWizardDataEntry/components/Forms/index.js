@@ -195,10 +195,65 @@ const InstitutionAuthority = ({ form, formKey, handleFieldChange, cardTitle, for
   );
 };
 
+const OwnershipType=({ form, handleFieldChange, cardTitle, formKey, containerStyle, handleRemoveItem, className, formName }) => {
+  const fields = form.fields || {};
+  return (
+    <Card
+      style={containerStyle}
+      textChildren={
+        <div className={`${formKey} col-sm-12`}>
+          {handleRemoveItem && (
+            <div className="remove-unit-assessment" style={{ cursor: "pointer" }} onClick={handleRemoveItem}>
+              <Icon action="navigation" name="close" />
+            </div>
+          )}
+          {cardTitle && cardTitle}
+          {formName && <div className="text-left">{formName}</div>}
+          {Object.keys(fields).map((fieldKey, index) => {
+            return (
+              // <div key={index}>
+              fieldKey === "dummy" ? (
+                <div className="col-xs-6 dummy-field" style={{ height: 72, marginTop: 14 }} />
+              ) : (
+                <div
+                  style={
+                    fields[fieldKey].hideField
+                      ? {}
+                      : fields[fieldKey].toolTip
+                      ? { display: "flex", alignItems: "center", height: 80 }
+                      : { height: 80 }
+                  }
+                  className={
+                    fields[fieldKey].numcols ? (fields[fieldKey].hideField ? "hidden-field" : `col-sm-${fields[fieldKey].numcols}`) : `col-sm-6`
+                  }
+                >
+                  <Field
+                    fieldKey={fieldKey}
+                    field={fields[fieldKey]}
+                    handleFieldChange={handleFieldChange}
+                    disabled={true}
+                    className={className}
+                  />
+                  {fields[fieldKey].toolTip && !fields[fieldKey].hideField && (
+                    <ToolTipUi id={"form-wizard-tooltip"} title={fields[fieldKey].toolTipMessage} />
+                  )}
+                </div>
+              )
+              // </div>
+            );
+          })}
+        </div>
+      }
+      className={className}
+    />
+  );
+};
+
 const UsageInformationHOC = formHoc({ formKey: "basicInformation", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
 const PropertyAddressHOC = formHoc({ formKey: "propertyAddress", path: "PropertyTaxPay" })(GenericForm);
 //const PlotInformationHOC = formHoc({ formKey: "plotInformation", path: "PropertyTaxPay",isCoreConfiguration:true})(GenericForm);
-const OwnershipTypeHOC = formHoc({ formKey: "ownershipType", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
+const OwnershipTypeHOC = formHoc({ formKey: "ownershipType", path: "PropertyTaxPay", isCoreConfiguration: true })(OwnershipType);
+const OwnershipTypeGenericHOC = formHoc({ formKey: "ownershipType", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
 const OwnerInfoHOC = formHoc({ formKey: "ownerInfo", path: "PropertyTaxPay", isCoreConfiguration: true })(OwnerInformation);
 const ExemptionCategoryHOC = formHoc({ formKey: "exemptionCategory", path: "PropertyTaxPay", isCoreConfiguration: true })(GenericForm);
 const InstitutionHOC = formHoc({ formKey: "institutionDetails", path: "PropertyTaxPay/OwnerInformation/Institution", isCoreConfiguration: true })(
@@ -217,6 +272,7 @@ export {
   UsageInformationHOC,
   PropertyAddressHOC,
   OwnershipTypeHOC,
+  OwnershipTypeGenericHOC,
   OwnerInfoHOC,
   ExemptionCategoryHOC,
   DynamicFormHoc,
