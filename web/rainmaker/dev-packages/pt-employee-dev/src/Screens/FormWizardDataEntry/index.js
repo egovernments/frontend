@@ -21,7 +21,8 @@ import {
   OwnerInfoHOC,
   InstitutionHOC,
   OwnerInformation,
-  InstitutionAuthorityHOC
+  InstitutionAuthorityHOC,
+  OwnershipTypeGenericHOC
 } from "./components/Forms";
 import ReviewForm from "./components/ReviewForm";
 import FloorsDetails from "./components/Forms/FloorsDetails";
@@ -543,9 +544,16 @@ class FormWizardDataEntry extends Component {
           "ownershipType",
           ["typeOfOwnership"]
         );
+        const propertyId = getQueryValue(search, "propertyId");
+        // console.log("ayush",propertyId)
         return (
           <div>
-            <OwnershipTypeHOC />
+            {
+              propertyId?
+              <OwnershipTypeHOC/>:
+              <OwnershipTypeGenericHOC/>
+            }
+            
             {getOwnerDetails(ownerType)}
           </div>
         );
