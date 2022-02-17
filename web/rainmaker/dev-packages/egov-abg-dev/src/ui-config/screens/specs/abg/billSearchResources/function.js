@@ -107,7 +107,7 @@ export const searchApiCall = async (state, dispatch) => {
         billDate: get(item, "billDate"),
         billAmount: get(item, "totalAmount"),
         status: get(item, "status"),
-        action: getActionItem(get(item, "status")),
+        action: getActionItem(get(item, "status")), 
         tenantId: get(item, "tenantId")
       };
     });
@@ -115,8 +115,11 @@ export const searchApiCall = async (state, dispatch) => {
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
     );
     const uiConfigs = get(state.screenConfiguration.preparedFinalObject, "searchScreenMdmsData.common-masters.uiCommonPay");
-    const configObject = uiConfigs.filter(item => item.code === searchScreenObject.businesService);
-    
+    let configObject=[];
+    // const configObject =uiConfigs && uiConfigs.filter(item => item.code === searchScreenObject.businesService);
+    if(uiConfigs){
+      configObject=uiConfigs.filter(item => item.code === searchScreenObject.businesService);
+    }
     try {
       let data = billTableData.map(item => ({
         ['ABG_COMMON_TABLE_COL_BILL_NO']: item.billNumber || "-",
