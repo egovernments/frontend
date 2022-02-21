@@ -80,7 +80,7 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
     link: () => {
       generatePTMAcknowledgement(get(
         state,
-        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`,null);
       // generatePdfFromDiv("download", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
@@ -90,7 +90,7 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
     link: () => {
       generatePTMAcknowledgement(get(
         state,
-        "screenConfiguration.preparedFinalObject", {}), 'print');
+        "screenConfiguration.preparedFinalObject", {}), 'print',null);
       // generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"

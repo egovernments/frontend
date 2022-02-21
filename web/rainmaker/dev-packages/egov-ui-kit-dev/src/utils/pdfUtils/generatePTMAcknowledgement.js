@@ -6,7 +6,7 @@ import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
 import { generateKeyValue, generatePDF, getDocumentsCard, getMultiItems, getMultipleItemCard } from "./generatePDF";
 
-export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf") => {
+export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "acknowledgement.pdf",ulbGrade) => {
     registrationSummaryDetails.transferReason.localiseValue=true;
     transferorSummaryDetails.ownerType.localiseValue=true;
     transfereeSummaryDetails.ownerType.localiseValue=true;
@@ -70,6 +70,7 @@ export const generatePTMAcknowledgement = (preparedFinalObject, fileName = "ackn
     const documentsUploadRedux = getFromObject(preparedFinalObject, 'documentsUploadRedux', []);
     const documentCard = getDocumentsCard(documentsUploadRedux);
     let pdfData = {
+        ulbGrade:"ULB_GRADE",ulbGrade:ulbGrade,
         header: "PTM_ACKNOWLEDGEMENT", tenantId: property.tenantId,
         applicationNoHeader: 'PT_PROPERRTYID', applicationNoValue: property.propertyId,
         additionalHeader: "PT_APPLICATION_NO", additionalHeaderValue: property.acknowldgementNumber,

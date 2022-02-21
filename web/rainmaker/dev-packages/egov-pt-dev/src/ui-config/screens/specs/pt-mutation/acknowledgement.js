@@ -38,6 +38,12 @@ export const header = getCommonContainer({
 });
 
 const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleName) => {
+  let cities = get(
+    state,
+    "common.cities"
+  );
+  cities=cities.filter(item=> item.code==tenantId);
+  let ulbGrade=cities[0].city.ulbGrade;
   const certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
@@ -59,7 +65,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
     link: () => {
       generatePTMAcknowledgement(get(
         state,
-        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`);
+        "screenConfiguration.preparedFinalObject", {}), `mutation-acknowledgement-${applicationNumber}.pdf`,ulbGrade);
       // generatePdfFromDiv("download", applicationNumber, ".print-mutation-application-pdf")
 
     },
@@ -74,7 +80,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
       // downloadAcknowledgementForm(Licenses,'print');
       generatePTMAcknowledgement(get(
         state,
-        "screenConfiguration.preparedFinalObject", {}), 'print');
+        "screenConfiguration.preparedFinalObject", {}), 'print',ulbGrade);
       // generatePdfFromDiv("print", applicationNumber, ".print-mutation-application-pdf")
 
     },
