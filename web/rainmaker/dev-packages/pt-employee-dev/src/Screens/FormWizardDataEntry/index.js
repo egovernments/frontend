@@ -447,7 +447,7 @@ class FormWizardDataEntry extends Component {
     // })
     switch (ownerType) {
       case "INDIVIDUAL.SINGLEOWNER":
-        return <OwnerInfoHOC />;
+        return <OwnerInfoHOC disabled={isRoleAdmin}/>;
       case "INDIVIDUAL.MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
@@ -456,13 +456,14 @@ class FormWizardDataEntry extends Component {
             }}
             handleRemoveOwner={this.handleRemoveOwner}
             ownerDetails={this.state.ownerInfoArr}
+            disabled={isRoleAdmin}
           />
         );
       case "INSTITUTIONALPRIVATE":
       case "INSTITUTIONALGOVERNMENT":
         return (
           <div>
-            <InstitutionHOC  />
+            <InstitutionHOC  disabled={isRoleAdmin}/>
             <InstitutionAuthorityHOC
               cardTitle={
                 <Label
@@ -470,7 +471,7 @@ class FormWizardDataEntry extends Component {
                   defaultLabel="Details of authorised person"
                 />
               }
-              
+              disabled={isRoleAdmin}
             />
           </div>
         );
@@ -555,7 +556,7 @@ class FormWizardDataEntry extends Component {
         );
         return (
           <div>
-            <OwnershipTypeHOC />
+            <OwnershipTypeHOC disabled={this.state.isRoleAdmin}/>
             {getOwnerDetails(ownerType)}
           </div>
         );
