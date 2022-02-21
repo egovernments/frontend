@@ -328,8 +328,15 @@ class FormWizardDataEntry extends Component {
       renderCustomTitleForPt,
       showSpinner,
       hideSpinner,
-      fetchGeneralMDMSData, history
+      fetchGeneralMDMSData, history,
+      userInfo
     } = this.props;
+    var isRoleAdmin = false;
+    userInfo.roles.forEach((role) => {
+      if (role.code == "PTADMIN") {
+        isRoleAdmin=true
+      }
+    });
     let { search } = location;
     showSpinner();
     const { selected } = this.state;
@@ -392,7 +399,8 @@ class FormWizardDataEntry extends Component {
 
     const financialYearFromQuery = getFinancialYearFromQuery();
     this.setState({
-      financialYearFromQuery
+      financialYearFromQuery,
+      isRoleAdmin
     });
 
     const titleObject = isReasses
@@ -429,22 +437,24 @@ class FormWizardDataEntry extends Component {
   };
 
   getOwnerDetails = ownerType => {
-    const { selected } = this.state;
+    const { selected ,isRoleAdmin } = this.state;
     const {propertiesEdited}= this.props;
     const isReviewPage = selected === 3;
+    let isDisable= (isRoleAdmin ) ? true:false
     // let ownerAr = this.state.ownerInfoArr;
     // ownerAr = ownerAr && ownerAr.length>1 && ownerAr.sort(function(item1,item2){
     // return ownerAr.indexOf(item2)-ownerAr.indexOf(item1);
     // })
     switch (ownerType) {
       case "INDIVIDUAL.SINGLEOWNER":
-        return <OwnerInfoHOC  />;
+        return <OwnerInfoHOC  disabled={isDisable}/>;
       case "INDIVIDUAL.MULTIPLEOWNERS":
         return (
           <MultipleOwnerInfoHOC
             addOwner={() => {
               addOwner(false, OwnerInformation, this);
             }}
+            disabled={isDisable}
             handleRemoveOwner={this.handleRemoveOwner}
             ownerDetails={this.state.ownerInfoArr}
           />
@@ -453,9 +463,10 @@ class FormWizardDataEntry extends Component {
       case "INSTITUTIONALGOVERNMENT":
         return (
           <div>
-            <InstitutionHOC  />
+            <InstitutionHOC  disabled={isDisable} />
             <InstitutionAuthorityHOC
-              cardTitle={
+            disabled={isDisable}
+            cardTitle={
                 <Label
                   label="PT_DETAILS_OF_AUTHORISED_PERSON"
                   defaultLabel="Details of authorised person"
@@ -548,12 +559,7 @@ class FormWizardDataEntry extends Component {
         // console.log("ayush",propertyId)
         return (
           <div>
-            {
-              propertyId?
-              <OwnershipTypeHOC/>:
-              <OwnershipTypeGenericHOC/>
-            }
-            
+            <OwnershipTypeGenericHOC isDisable={propertyId?true:false}/>
             {getOwnerDetails(ownerType)}
           </div>
         );
