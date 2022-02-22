@@ -48,9 +48,9 @@ class PaymentHistory extends Component {
         const paymentDate =  Payments && Payments[0] && Payments[0].transactionDate;
         let IsDateValid   = workFlowLastModifiedDate>paymentDate;
 
-        const paymentHistoryItems = Payments.map((payment, index) => {
+        const paymentHistoryItems = Payments && Payments.map((payment, index) => {
             
-            if(payment.paymentStatus!='CANCELLED')
+            if(payment && payment.paymentStatus!='CANCELLED')
           {
             const amount=payment.totalAmountPaid==0?'0':payment.totalAmountPaid;
             return (
