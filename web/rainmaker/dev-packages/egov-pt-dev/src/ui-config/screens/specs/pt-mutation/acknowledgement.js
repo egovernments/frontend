@@ -43,7 +43,7 @@ const downloadprintMenu = (state, applicationNumber, tenantId, purpose, moduleNa
     "common.cities"
   );
   cities=cities.filter(item=> item.code==tenantId);
-  let ulbGrade=cities[0].city.ulbGrade;
+  let ulbGrade=cities[0].city.ulbType;
   const certificateDownloadObject = {
     label: { labelName: "PT Certificate", labelKey: "PT_CERTIFICATE" },
     link: () => {
