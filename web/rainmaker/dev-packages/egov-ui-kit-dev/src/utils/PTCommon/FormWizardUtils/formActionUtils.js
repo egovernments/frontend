@@ -23,6 +23,7 @@ export const assessProperty = async (action, props) => {
     );
     const financialYear = getQueryArg(window.location.href, "FY");
     const tenant = getQueryArg(window.location.href, "tenantId");
+    const propertyAddress = get(props.prepareFormData, 'Properties[0].address', {});
     let assessment = {
         "tenantId": tenant,
         "propertyId": propertyId,
@@ -30,6 +31,17 @@ export const assessProperty = async (action, props) => {
         "assessmentDate": new Date().getTime() - 60000,
         "source": "MUNICIPAL_RECORDS",
         "channel": "CFC_COUNTER",
+        "address": {
+            "city": propertyAddress.city,
+            "doorNo": propertyAddress.doorNo,
+            "buildingName": propertyAddress.buildingName,
+            "street": propertyAddress.street,
+            "locality": {
+                "code": propertyAddress.locality.code,
+                "area": propertyAddress.locality.area,
+            },
+            "pincode": propertyAddress.pincode,
+        }
     }
     const adhocExemptionPenalty = get(props, 'adhocExemptionPenalty', {});
     assessment.additionalDetails = {}
@@ -49,6 +61,7 @@ export const assessProperty = async (action, props) => {
         assessment.additionalDetails.adhocExemptionReason = adhocExemptionPenalty.adhocExemptionReason == 'Others' ? adhocExemptionPenalty.adhocOtherExemptionReason : adhocExemptionPenalty.adhocExemptionReason;
     }
     try {
+        debugger
         let assessPropertyResponse = await httpRequest(
             `property-services/assessment/${propertyMethodAction}`,
             `${propertyMethodAction}`,
