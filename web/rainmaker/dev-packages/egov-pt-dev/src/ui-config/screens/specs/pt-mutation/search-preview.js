@@ -92,10 +92,10 @@ const setDownloadMenu = (state, dispatch, tenantId, applicationNumber) => {
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "MT_APPLICATION" },
     link: () => {
-      // generatePTMAcknowledgement(get(
-      //   state,
-      //   "screenConfiguration.preparedFinalObject", {}), 'print');
-      generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
+      generatePTMAcknowledgement(get(
+        state,
+        "screenConfiguration.preparedFinalObject", {}), 'print');
+      // generatePdfFromDiv("print", applicationNumber, "#material-ui-cardContent")
     },
     leftIcon: "assignment"
   };
