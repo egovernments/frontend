@@ -570,7 +570,15 @@ class Property extends Component {
     
     return (
       <Screen className={clsName}>
-        <PTHeader header="PT_PROPERTY_INFORMATION" subHeaderTitle="PT_PROPERTY_PTUID" subHeaderValue={propertyId} downloadPrintButton={true} downloadPrintButton={true} download={() => this.download()} print={() => this.print()} />
+        <PTHeader
+          header="PT_PROPERTY_INFORMATION"
+          subHeaderTitle="PT_PROPERTY_PTUID"
+          subHeaderValue={propertyId}
+          downloadPrintButton={true}
+          downloadPrintButton={true}
+          download={() => this.download()}
+          print={() => this.print()}
+        />
         {
           <AssessmentList
             onItemClick={this.onListItemClick}
@@ -588,44 +596,49 @@ class Property extends Component {
             workflowStatus={this.state.workflowStatus && this.state.workflowStatus}
           />
         }
-        <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
-        {!isMigratedProperty && 
-
-         <Button
+        {!isMigratedProperty && (
+          <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
+            <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
               primary={true}
-              style={{ lineHeight: "auto", minWidth: "inherit", marginLeft:"10px" }}
-            />  
-        }        
-
-                      
-        {  isMigratedProperty && !isCitizen && (isRoleAdmin() || (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
-              || !payLen ) )&& 
-           <Button
-              label={
-                <Label buttonLabel={true}
-                  label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} 
-                  fontSize="16px"
-                  color="#fe7a51" />
-              }
-              onClick={() => this.onEditPropertyClick()}
-              //labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-             // buttonStyle={{ border: "1px solid #fe7a51" }}
-             style={{ lineHeight: "auto", minWidth: "inherit" }}
-             />   
-            }
-              {isMigratedProperty && !isCitizen && (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
-              || !payLen ) &&
-                
-              <Button
-              onClick={() => this.editDemand()}
-              label={<Label buttonLabel={true} label="PT_EDIT_DATAENTRY_DEMAND" fontSize="16px" />}
-              primary={true}
-              style={{ lineHeight: "auto", minWidth: "inherit" }}
+              style={{ lineHeight: "auto", minWidth: "inherit", marginLeft: "10px" }}
             />
-          }
-        </div>
+          </div>
+        )}
+        {isMigratedProperty && selPropertyDetails.status === "ACTIVE" && (
+          <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
+            {!isCitizen &&
+              (isRoleAdmin() ||
+                Payments.length <= 0 ||
+                (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") ||
+                !payLen) && (
+                <Button
+                  label={
+                    <Label
+                      buttonLabel={true}
+                      label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton}
+                      fontSize="16px"
+                      color="#fe7a51"
+                    />
+                  }
+                  onClick={() => this.onEditPropertyClick()}
+                  //labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+                  // buttonStyle={{ border: "1px solid #fe7a51" }}
+                  style={{ lineHeight: "auto", minWidth: "inherit" }}
+                />
+              )}
+            {!isCitizen &&
+              (Payments.length <= 0 || (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") || !payLen) && (
+                <Button
+                  onClick={() => this.editDemand()}
+                  label={<Label buttonLabel={true} label="PT_EDIT_DATAENTRY_DEMAND" fontSize="16px" />}
+                  primary={true}
+                  style={{ lineHeight: "auto", minWidth: "inherit" }}
+                />
+              )}
+          </div>
+        )}
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
       </Screen>
     );
