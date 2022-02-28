@@ -1,25 +1,19 @@
-import get from "lodash/get";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  getTransformedLocale, transformById
+} from "egov-ui-framework/ui-utils/commons";
+import {
+  getLocalization, getTenantId
+} from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import {
-  validateFields,
-  getTextToLocalMapping,
-  convertEpochToDate,
-  convertDateToEpoch
+  convertDateToEpoch, convertEpochToDate, getTextToLocalMapping, validateFields
 } from "../../utils";
-import {
-  getTenantId,
-  getLocalization
-} from "egov-ui-kit/utils/localStorageUtils";
-import {
-  getLocaleLabels,
-  transformById,
-  getTransformedLocale
-} from "egov-ui-framework/ui-utils/commons";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -38,7 +32,7 @@ export const searchApiCall = async (state, dispatch) => {
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
-    "searchScreen",
+    "ucSearchScreen",
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
@@ -60,14 +54,14 @@ export const searchApiCall = async (state, dispatch) => {
     );
   } else if (
     Object.keys(searchScreenObject).length == 0 ||
-    Object.values(searchScreenObject).every(x => x === "")
+    checkEmptyFields(searchScreenObject)
   ) {
     dispatch(
       toggleSnackbar(
         true,
         {
-          labelName: "Please fill at least one field to start search",
-          labelKey: "UC_SEARCH_SELECT_AT_LEAST_ONE_TOAST_MESSAGE"
+          labelName: "Please fill valid fields to start search",
+          labelKey: "UC_SEARCH_SELECT_AT_LEAST_VALID_FIELD"
         },
         "warning"
       )
@@ -82,10 +76,10 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
-      if (searchScreenObject.hasOwnProperty(key) && key === "businessCodes") {
+      if (searchScreenObject.hasOwnProperty(key) && key === "businessServices" && searchScreenObject['businessServices']) {
         queryObject.push({ key: key, value: searchScreenObject[key] });
       } else if (
-        searchScreenObject.hasOwnProperty(key) &&
+        searchScreenObject.hasOwnProperty(key) && searchScreenObject[key] &&
         searchScreenObject[key].trim() !== ""
       ) {
         if (key === "fromDate") {
@@ -115,24 +109,26 @@ export const searchApiCall = async (state, dispatch) => {
       );
       response[i] = {
         receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
-        payeeName: get(Payments[i], `payerName`),
+        consumerCode: get(Payments[i], `paymentDetails[0].bill.consumerCode`),
+        payeeName: get(Payments[i], `paidBy`), // changed by DC
         serviceType: serviceTypeLabel,
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
         status: get(Payments[i], `paymentDetails[0].bill.status`),
-        tenantId : get(Payments[i], `tenantId`),
+        tenantId: get(Payments[i], `tenantId`),
       };
     }
 
     try {
       let data = response.map(item => ({
-        [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
-        [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-        [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
-        [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
-        [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId || "-"
+        ['UC_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
+        ['UC_COMMON_TABLE_COL_CONSUMERCODE']: item.consumerCode || "-",
+        ['UC_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
+        ['UC_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        ['UC_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
+        ['UC_COMMON_TABLE_COL_AMOUNT']: item.amount || "-",
+        ['UC_COMMON_TABLE_COL_STATUS']: item.status || "-",
+        ["TENANT_ID"]: item.tenantId || "-"
       }));
       dispatch(
         handleField(
@@ -146,8 +142,8 @@ export const searchApiCall = async (state, dispatch) => {
         handleField(
           "search",
           "components.div.children.searchResult",
-          "props.title",
-          "Search Results for Payments (" + data.length + ")"
+          "props.rows",
+          data.length
         )
       );
 
@@ -170,3 +166,18 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
+
+const checkEmptyFields = (searchScreenObject) => {
+  const businessServices = get(searchScreenObject, 'businessServices', null)
+  const mobileNumber = get(searchScreenObject, 'mobileNumber', null)
+  const receiptNumbers = get(searchScreenObject, 'receiptNumbers', null)
+  if (checkEmpty(businessServices) && checkEmpty(mobileNumber) && checkEmpty(receiptNumbers)) { return true; }
+  return false;
+}
+const checkEmpty = (value) => {
+  value = typeof (value) == "string" ? value.trim() : value;
+  if (value && value != null && value.length > 0) {
+    return false;
+  }
+  return true;
+}

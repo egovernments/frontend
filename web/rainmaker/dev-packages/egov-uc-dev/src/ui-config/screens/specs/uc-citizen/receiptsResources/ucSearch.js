@@ -1,7 +1,6 @@
 import {
   getCommonCard,
   getTextField,
-  getSelectField,
   getCommonContainer,
   getPattern,
   getLabel,
@@ -16,6 +15,7 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 //const hasApproval = getQueryArg(window.location.href, "hasApproval");
@@ -40,14 +40,18 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  const userName = JSON.parse(getUserInfo()).userName;
   dispatch(
-    handleField(
-      "search",
-      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
-      "props.value",
-      ""
-    )
+    prepareFinalObject("ucSearchScreen.mobileNumber", userName)
   );
+  // dispatch(
+  //   handleField(
+  //     "search",
+  //     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
   dispatch(
     handleField(
       "search",
@@ -64,6 +68,16 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children.consumerCodes",
+      "props.value",
+      ""
+    )
+  );
+
 };
 
 export const UCSearchCard = getCommonCard({
@@ -87,7 +101,7 @@ export const UCSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.receiptNumbers",
+      jsonPath: "ucSearchScreen.receiptNumbers",
       // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
@@ -95,7 +109,10 @@ export const UCSearchCard = getCommonCard({
       }
     }),
     serviceType: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-uc",
+      componentPath: "AutosuggestContainer",
+      props: {
         label: {
           labelName: "Service Category",
           labelKey: "UC_SERVICE_CATEGORY_LABEL"
@@ -108,14 +125,19 @@ export const UCSearchCard = getCommonCard({
           masterName: "BusinessService",
           moduleName: "BillingService"
         },
-        required: false,
+        className: "autocomplete-dropdown",
+        required: true,
+        isClearable: true,
+        labelsFromLocalisation: true,
+        sourceJsonPath: "applyScreenMdmsData.serviceCategories",
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        sourceJsonPath: "applyScreenMdmsData.serviceCategories"
-      }),
+      },
+      required: true,
+      jsonPath: "searchScreenMdmsData.businessServiceSelected",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
           state.screenConfiguration,
@@ -124,14 +146,32 @@ export const UCSearchCard = getCommonCard({
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value
         );
-        const serviceTypes = selectedCategory.child.map(item => item.code);
+        const serviceTypes = selectedCategory && (selectedCategory.child && selectedCategory.child.length > 0 ? selectedCategory.child.map(item => item.code) : selectedCategory.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessCodes", serviceTypes)
+          prepareFinalObject("ucSearchScreen.businessServices", serviceTypes)
         );
         return action;
       }
     },
-    mobileNo: getTextField({
+    consumerCodes: getTextField({
+      label: {
+        labelName: "Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Consumer Code",
+        labelKey: "ABG_PT_CONSUMER_CODE_LABEL_PLACEHOLDER"
+      },
+      required: false,
+      visible: true,
+      jsonPath: "ucSearchScreen.consumerCodes",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
+   
+    mobileNumber: getTextField({
       label: {
         labelName: "Mobile No.",
         labelKey: "UC_MOBILE_NO_LABEL"
@@ -143,15 +183,18 @@ export const UCSearchCard = getCommonCard({
       gridDefination: {
         xs: 12,
         sm: 4
-      },
+      }, 
       iconObj: {
         label: "+91 |",
         position: "start"
       },
       required: false,
+      props: {
+        disabled: true
+      },      
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNo"
+      jsonPath: "ucSearchScreen.mobileNumber"
     }),
 
     fromDate: getDateField({
@@ -166,7 +209,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.fromDate",
+      jsonPath: "ucSearchScreen.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -185,7 +228,7 @@ export const UCSearchCard = getCommonCard({
       visible: false,
       required: false,
       pattern: getPattern("Date"),
-      jsonPath: "searchScreen.toDate",
+      jsonPath: "ucSearchScreen.toDate",
 
       gridDefination: {
         xs: 12,
@@ -273,4 +316,6 @@ export const UCSearchCard = getCommonCard({
       }
     }
   })
+}, {
+  style: { overflow: "visible" }
 });

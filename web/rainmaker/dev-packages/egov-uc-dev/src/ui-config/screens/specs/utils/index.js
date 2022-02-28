@@ -1,19 +1,16 @@
+import { getCommonCaption, getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getLocaleLabels, getQueryArg, getTransformedLocalStorgaeLabels } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
-import {
-  getCommonCard,
-  getCommonCaption
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-  getLocaleLabels,
-  getTransformedLocalStorgaeLabels
-} from "egov-ui-framework/ui-utils/commons";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import orderBy from "lodash/orderBy";
+import { searchAndDownloadPdf, searchAndPrintPdf } from "egov-ui-kit/utils/pdfUtils/generatePDF";
+
 
 export const getCommonApplyFooter = children => {
   return {
@@ -39,6 +36,19 @@ export const transformById = (payload, id) => {
   );
 };
 
+export const getFeesEstimateCard = props => {
+  const { sourceJsonPath, ...rest } = props;
+  return {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-uc",
+    componentPath: "EstimateCardContainer",
+    props: {
+      sourceJsonPath,
+      ...rest
+    }
+  };
+};
+
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
   let translatedLabel = null;
   if (localizationLabels && localizationLabels.hasOwnProperty(labelKey)) {
@@ -57,15 +67,19 @@ export const validateFields = (
   objectJsonPath,
   state,
   dispatch,
-  screen = "apply"
+  screen
+  //screen = "apply"
+ // screen = "newCollection"
 ) => {
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
     {}
   );
+ console.info("children==",fields);
   let isFormValid = true;
   for (var variable in fields) {
+    
     if (fields.hasOwnProperty(variable)) {
       if (
         fields[variable] &&
@@ -152,6 +166,9 @@ export const ifUserRoleExists = role => {
 };
 
 export const convertEpochToDate = dateEpoch => {
+  if(dateEpoch==null||dateEpoch==''||dateEpoch==undefined){
+    return 'NA';
+  }
   const dateFromApi = new Date(dateEpoch);
   let month = dateFromApi.getMonth() + 1;
   let day = dateFromApi.getDate();
@@ -305,7 +322,7 @@ export const getEmployeeName = async queryObject => {
   }
 };
 
-export const setServiceCategory = (businessServiceData, dispatch) => {
+export const setServiceCategory = (businessServiceData, dispatch,state,setCategory=true) => {
   let nestedServiceData = {};
   businessServiceData.forEach(item => {
     if (item.code && item.code.indexOf(".") > 0) {
@@ -329,6 +346,7 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
       set(nestedServiceData, `${item.code}`, item);
     }
   });
+  console.log("nestedServiceData",nestedServiceData);
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.nestedServiceData",
@@ -338,13 +356,54 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
   let serviceCategories = Object.values(nestedServiceData).filter(
     item => item.code
   );
-  dispatch(
+  setCategory&&dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.serviceCategories",
       serviceCategories
     )
   );
+  const editingMode = get(
+    state.screenConfiguration,
+    "preparedFinalObject.Challan[0].id",
+    null
+  );
+  if(editingMode!=null){
+    dispatch(
+      handleField(
+        "newCollection",
+        "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceCategory",
+        "props.value",
+        get(
+          state.screenConfiguration,
+          "preparedFinalObject.Challan[0].consumerType",
+          null
+        )
+      )
+    );
+    // dispatch(
+    //   handleField(
+    //     "newCollection",
+    //     "components.div.children.newCollectionServiceDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
+    //     "props.value",
+    //     get(
+    //       state.screenConfiguration,
+    //       "preparedFinalObject.Challan[0].serviceType",
+    //       null
+    //     )
+    //   )
+    // );
+  }
 };
+
+
+export const downloadHelpFile = async (state, dispatch) => {  
+  const helpurl = get(state.screenConfiguration.preparedFinalObject,
+    "helpFileUrl",
+    ""
+  );   
+  // window.open(helpurl,"_blank");
+};
+
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
@@ -391,11 +450,20 @@ export const getTextToLocalMapping = label => {
         "BILLINGSERVICE_BUSINESSSERVICE_PT",
         localisationLabels
       );
-    default : 
-    return getLocaleLabels(
-      label,
-      label,
-      localisationLabels
-    );
+    default:
+      return getLocaleLabels(
+        label,
+        label,
+        localisationLabels
+      );
   }
 };
+
+
+export const downloadEchallan =(queryObj,fileName)=>{
+  searchAndDownloadPdf('/egov-pdf/download/UC/mcollect-challan',queryObj,fileName)
+}
+
+export const printEchallan =(queryObj)=>{
+  searchAndPrintPdf('/egov-pdf/download/UC/mcollect-challan',queryObj)
+}
