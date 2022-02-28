@@ -16,6 +16,38 @@ import {
 
 export const resetAllFields = (state, dispatch) => {
 
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.applicationType",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  );
   resetFields(
     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
     state,
