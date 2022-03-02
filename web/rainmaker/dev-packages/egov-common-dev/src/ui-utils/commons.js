@@ -637,6 +637,8 @@ export const download = async(receiptQueryString, mode = "download", configKey, 
       }
       if(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptNumber.includes("MP")){
         let tax,field,cgst,sgst;
+		if(payloadReceiptDetails.Payments[0].paymentDetails[0].receiptDate <= 1638921600000)
+		configKey="consolidatedreceiptold";
 let billaccountarray=payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails;
 billaccountarray.map(element => {
 if(element.taxHeadCode.includes("CGST")){  cgst=element.amount;}
