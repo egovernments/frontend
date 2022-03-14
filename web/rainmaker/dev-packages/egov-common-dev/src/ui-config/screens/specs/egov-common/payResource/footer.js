@@ -135,7 +135,7 @@ export const callPGService = async (state, dispatch) => {
     billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
   });
-  const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
+  const buttonJsonpath = paybuttonJsonpath + `${(process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? "makePayment" : "generateReceipt"}`;
   try {
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
 
@@ -1135,7 +1135,7 @@ const callBackForPay = async (state, dispatch) => {
 
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
-    const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
+    const buttonJsonpath = paybuttonJsonpath + `${(process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? "makePayment" : "generateReceipt"}`;
     dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
     try {
       let response = await httpRequest(
@@ -1263,7 +1263,7 @@ export const footer = getCommonApplyFooter({
     //   roles: ["NOC_CEMP"],
     //   action: "PAY"
     // },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+    visible: (process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? false : true
   },
   makePayment: {
     componentPath: "Button",
@@ -1302,7 +1302,7 @@ export const footer = getCommonApplyFooter({
     //   roles: ["CITIZEN"],
     //   action: "PAY"
     // },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+    visible: (process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? true : false
   }
 });
 
