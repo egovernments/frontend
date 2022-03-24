@@ -30,6 +30,10 @@ import {
   };
   
   const getMDMSData = async (action, state, dispatch) => {
+    var filter_Service="[?(@.type=='Adhoc')]";
+    if(((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) == "UC_COWCESS_USER")
+    filter_Service="[?(@.code=='CSS.cow_cess')]";
+  
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: tenantId,
@@ -37,7 +41,7 @@ import {
           {
             moduleName: "BillingService",
             masterDetails: [
-              { name: "BusinessService", filter: "[?(@.type=='Adhoc')]" }
+              { name: "BusinessService", filter: filter_Service }
             ]
           },
           {
