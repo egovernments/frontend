@@ -163,6 +163,10 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
         });
       
       }
+
+      userInfo={
+        "id" :735227};
+
          if(userInfo==undefined || userInfo==''||role=='CSR' ||role=='GRO')
         {
 
@@ -170,6 +174,10 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
         else{
       let selectedComplaints=[];
       payload.actionHistory.map(item=>{
+       // item.actions=item.actions.filter(i => !i.by.includes("CITIZEN"));
+
+
+        item.actions=item.actions.filter(i =>i.assignee);
         item.actions=sortBy(item.actions, ite=>ite.when).reverse();
         if(item.actions[0].assignee==userInfo.id || item.actions[0].assignee==userInfo.uuid)
         {
