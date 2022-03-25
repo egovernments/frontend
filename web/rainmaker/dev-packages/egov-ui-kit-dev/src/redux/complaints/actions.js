@@ -177,7 +177,7 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
        // item.actions=item.actions.filter(i => !i.by.includes("CITIZEN"));
 
 
-        item.actions=item.actions.filter(i =>i.assignee);
+        item.actions=item.actions.filter(i =>(i.assignee || i.status=="open"));
         item.actions=sortBy(item.actions, ite=>ite.when).reverse();
         if(item.actions[0].assignee==userInfo.id || item.actions[0].assignee==userInfo.uuid)
         {
