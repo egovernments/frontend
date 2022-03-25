@@ -163,10 +163,6 @@ export const fetchComplaints = (queryObject, hasUsers = true, overWrite,userInfo
         });
       
       }
-
-      userInfo={
-        "id" :735227};
-
          if(userInfo==undefined || userInfo==''||role=='CSR' ||role=='GRO')
         {
 
