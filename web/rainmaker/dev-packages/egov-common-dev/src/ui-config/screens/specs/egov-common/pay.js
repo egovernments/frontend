@@ -108,10 +108,11 @@ const fetchBill = async (action, state, dispatch, consumerCode, tenantId, billBu
     }
 
     if (get(totalAmount, "totalAmount") === undefined) {
-        const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
+        const buttonJsonpath = paybuttonJsonpath + `${(process.env.REACT_APP_NAME === "Citizen" ) ? "makePayment" : "generateReceipt"}`;
         dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
         dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
     }
+    
 
     const consumeCodeComponentPath = 'components.div.children.headerDiv.children.header.children.consumerCode';
     const consumerCodeFromResponse = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");;
@@ -212,9 +213,9 @@ const screenConfig = {
                                 ...AmountToBePaid,
                                 visible: false
                             },
-                            capturePaymentDetails: process.env.REACT_APP_NAME === "Citizen" ? {} : capturePaymentDetails,
-                            capturePayerDetails: process.env.REACT_APP_NAME === "Citizen" ? capturePayerDetails : {},
-                            g8Details: process.env.REACT_APP_NAME === "Citizen" ? {} : g8Details
+                            capturePaymentDetails: (process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? {} : capturePaymentDetails,
+                            capturePayerDetails: (process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? capturePayerDetails : {},
+                            g8Details: (process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? {} : g8Details
                         })
                     }
                 },
