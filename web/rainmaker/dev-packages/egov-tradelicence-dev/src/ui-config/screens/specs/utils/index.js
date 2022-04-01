@@ -1371,10 +1371,12 @@ export const createEstimateData = async (
   const currentStatus = LicenseData.status;
   const isPAID = isApplicationPaid(currentStatus,workflowCode);
   const fetchBillResponse = await getBill(getBillQueryObj);
-  const payload = isPAID
+  let payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
-
+  if(isPAID && payload && payload.Payments){
+    payload["Payments"]=[...payload.Payments.filter(item=>item.paymentStatus!=="CANCELLED")]
+  }
   let estimateData = payload
     ? isPAID
       ? payload &&
