@@ -481,6 +481,20 @@ const tradeUnitCard = {
                     rate
                   )
                 );
+                let rates = 0;
+                tradeLicenceData[0].tradeLicenseDetail.tradeUnits.map(
+                  (item) => {
+                    if (!item.hasOwnProperty("isDeleted")) {
+                      rates = rates + item.rate;
+                    }
+                  }
+                );
+                dispatch(
+                  pFO(
+                    `Licenses[0].tradeLicenseDetail.rates`,
+                    rates
+                  )
+                );
                   dispatch(	
                     handleField(	
                       "apply",	
@@ -1315,7 +1329,7 @@ export const tradeDetails = getCommonCard({
               labelName: "Trade unit amount",
             },
             {
-              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].rate",
+              jsonPath: "Licenses[0].tradeLicenseDetail.rates",
             }
           ),
   // accessoriesCard
