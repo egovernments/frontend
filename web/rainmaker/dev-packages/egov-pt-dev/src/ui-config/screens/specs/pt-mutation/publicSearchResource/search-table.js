@@ -27,10 +27,11 @@ export const searchPropertyTable = {
         labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
         options: {
           filter: false,
-          customBodyRender: (value, tableMeta) =>
-            (value.totalAmount > 0 && value.status === "ACTIVE") ? getPayButton(tableMeta) : (
+          customBodyRender: (value, tableMeta) =>{
+            let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
+            return (value.totalAmount > 0 && value.status === "ACTIVE") ?  (!isOpenLink) && (process.env.REACT_APP_NAME !== "Citizen" )  && getPayButton(tableMeta) : (
               value.totalAmount === 0 && value.status === "ACTIVE" && value.isAdvancePaymentAllowed ? getPayButton(tableMeta) : ""
-            ),
+            )},
         },
       },
       {
