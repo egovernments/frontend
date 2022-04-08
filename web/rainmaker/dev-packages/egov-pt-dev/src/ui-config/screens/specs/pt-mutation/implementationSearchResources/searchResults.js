@@ -137,9 +137,10 @@ export const searchPropertyTable = {
         labelKey: "PT_COMMON_TABLE_COL_ACTION_LABEL",
         options: {
           filter: false,
-          customBodyRender: (value, tableMeta) =>
-          (value.totalAmount > 0) ? getPayButton(tableMeta) :value.status === "ACTIVE"?getMutationButton(tableMeta):<div/>,
-
+          customBodyRender: (value, tableMeta) =>{
+            let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
+            return  (value.totalAmount > 0)  ?  (!isOpenLink) && (process.env.REACT_APP_NAME !== "Citizen" )  && getPayButton(tableMeta) :value.status === "ACTIVE"?getMutationButton(tableMeta):<div/>
+          }
         },
       }, 
       {
