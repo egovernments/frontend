@@ -14,6 +14,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
+let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -121,7 +122,7 @@ class TotalDues extends React.Component {
             ></UpdateMobile>
           </div>
         )}
-        {totalBillAmountDue > 0 && (process.env.REACT_APP_NAME !== "Citizen" || !disabledCities.includes(tenantId)) && (
+        {(!isOpenLink) && (process.env.REACT_APP_NAME !== "Citizen" ) && (totalBillAmountDue > 0 && (process.env.REACT_APP_NAME !== "Citizen" || !disabledCities.includes(tenantId)) && (
           <div id="pt-flex-child-button" className="col-xs-12 col-sm-3 flex-child-button">
             <div style={{ float: "right" }}>
               <TotalDuesButton
@@ -133,7 +134,7 @@ class TotalDues extends React.Component {
               />
             </div>
           </div>
-        )}
+        ))}
       </div>
     );
   }
