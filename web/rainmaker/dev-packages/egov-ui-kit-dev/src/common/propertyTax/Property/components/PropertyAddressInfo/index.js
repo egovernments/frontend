@@ -63,6 +63,10 @@ export const getAddressItems = (properties, OldProperty) => {
       {
         key: "Survey Id/UID",
         value: properties.surveyId || "NA",
+      },
+      {
+        key: "Year of creation of Property",
+        value: properties.additionalDetails? properties.additionalDetails.yearConstruction :"NA",
       }
     ]
   );
