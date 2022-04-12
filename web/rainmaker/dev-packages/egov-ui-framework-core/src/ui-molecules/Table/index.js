@@ -63,9 +63,7 @@ class Table extends React.Component {
         MuiSvgIcon :
         {
           root:{
-            fontSize: "x-large",
-            marginLeft: "57px",
-            
+            fontSize: "x-large"
           },        
         },
         ...this.getExtraTableStyle()
@@ -186,6 +184,7 @@ class Table extends React.Component {
     const { data, columns } = this.state;
     const { options, title, rows, customSortDate } = this.props;
     options.textLabels = this.getTableTextLabel();
+    options.responsive= 'scroll'
     return (
       <MuiThemeProvider theme={this.getMuiTheme()}>
         <MUIDataTable
