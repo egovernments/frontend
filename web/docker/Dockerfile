@@ -3,14 +3,13 @@ RUN apk update && apk upgrade
 RUN apk add --no-cache git>2.30.0
 ARG WORK_DIR
 WORKDIR /app
-ENV NODE_OPTIONS "--max-old-space-size=1792"
+ENV NODE_OPTIONS "--max-old-space-size=3792"
 
 COPY ${WORK_DIR} .
 RUN ls -lah
 
 RUN node web/envs.js
 RUN cd web && git branch --show-current
-RUN cd web && ./install-deps.sh
 RUN cd web && yarn install
 RUN cd web && ls -lah
 RUN cd web && yarn build
