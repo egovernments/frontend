@@ -197,7 +197,7 @@ class Footer extends React.Component {
     );
     var currentFinancialYear=this.getCurrentFinancialYear();
 
-    if(licences[0].financialYear=='2019-20'){
+    if(licences[0].financialYear=='2019-20' || licences[0].financialYear=='2020-21'){
       nextFinancialYear=currentFinancialYear;
     }
 
