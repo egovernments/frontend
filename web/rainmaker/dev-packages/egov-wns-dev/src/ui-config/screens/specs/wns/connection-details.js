@@ -516,7 +516,7 @@ export const getDCBDetail = async (queryObject , dispatch) => {
     response.Demands.map((element,index) => {
       taxAmount=0;taxCollected=0;taxBalance=0;interestAmount=0;
       interestCollected=0;interestBalance=0;penaltyBalance=0;penaltyCollected=0;penaltyAmount=0;
-
+advance=0;
   if(element.status == "ACTIVE")
   {
   installment=convertEpochToDate(element.taxPeriodFrom) +"-"+convertEpochToDate(element.taxPeriodTo);
