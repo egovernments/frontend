@@ -97,6 +97,9 @@ const mapStateToProps = state => {
       if (document.enabledActions) {
         const purpose = getPurpose();
         let documentCode = document.code.split('.');
+        if(document.code == 'OWNER.PROPERTYIMAGE'){
+          document.getElementsByClassName('css-1pcexqc-container').style.visibility='hidden';
+        }
         document.disabled = document.enabledActions[purpose].disableUpload && uploadedDocumentTypes.includes(documentCode && documentCode.length > 1 && documentCode[1]) ? true : false;
         document.dropdown.disabled = document.enabledActions[purpose].disableDropdown && uploadedDocumentTypes.includes(documentCode && documentCode.length > 1 && documentCode[1]) ? true : false;
       }
