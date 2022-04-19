@@ -449,7 +449,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
     "adhoc_penalty":adhoc_penaltyT,
     "adhoc_rebate":adhoc_rebateT,
     "roundoff":roundoffT,
-    "total":totalT
+    "total":element.amount
     };
   arrearArray.push(arrearRow);
   taxArray.push(taxRow);
