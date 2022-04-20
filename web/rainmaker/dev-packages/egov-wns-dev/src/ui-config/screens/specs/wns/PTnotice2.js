@@ -14,7 +14,7 @@ const header = getCommonHeader({
   });
 
 
-const PTnotice = {
+const PTnotice2 = {
     uiFramework: "material-ui",
     name: "create",
     beforeInitScreen: (action, state, dispatch) => {
@@ -86,7 +86,7 @@ const PTnotice = {
                               onClickDefination: {
                                 action: "condition",
                                 callBack: (state, dispatch) => {
-                                  openPTnoticeTool(state, dispatch);
+                                  openTicketTool(state, dispatch);
                 
                                 }
                               },
@@ -147,6 +147,6 @@ const PTnotice = {
 }
 export default PTnotice2
 
-const openPTnoticeTool = (state, dispatch) => {
+const openTicketTool = (state, dispatch) => {
   window.open("https://slicksoftindia.com/streetvending/pgGenerateMultipleNoticeFromExcel.aspx", "_blank")
 };
