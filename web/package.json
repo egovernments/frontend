@@ -3,6 +3,10 @@
   "version":"1.5.0-beta.2",
   "private": true,
   "homepage": "/digit-ui",
+  "workspaces": [
+    "digit-ui-internals/packages/*",
+    "digit-ui-internals/packages/modules/*"
+  ],
   "dependencies": {
     "@egovernments/digit-ui-css": "1.5.0-beta.2",
     "@egovernments/digit-ui-libraries":"1.5.0-beta.2",
