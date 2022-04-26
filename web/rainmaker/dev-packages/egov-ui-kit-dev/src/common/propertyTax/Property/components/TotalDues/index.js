@@ -11,6 +11,7 @@ import { routeToCommonPay } from "egov-ui-kit/utils/PTCommon/FormWizardUtils/for
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "egov-pt/ui-utils";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
@@ -30,12 +31,61 @@ class TotalDues extends React.Component {
     url: "",
     invalidNumber: "",
     showWarning: false,
+    paybuttonconfig:""
   };
   onClickAction = async (consumerCode, tenantId) => {
     this.setState({
       url: await downloadBill(consumerCode, tenantId, "property-bill"),
     });
   };
+
+  componentDidMount(){
+    this.getPayButtonData()
+  }
+  getPayButtonData = async () => {
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: "uk",
+        moduleDetails: [
+          {
+            moduleName: "tenant",
+            masterDetails: [
+              {
+                name: "paybuttonconfig"
+              }
+            ]
+          }
+        ]
+      }
+    };
+    try {
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      if (
+        payload &&
+        payload.MdmsRes &&
+        payload.MdmsRes.tenant &&
+        payload.MdmsRes.tenant.paybuttonconfig
+      ) {
+        let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
+        let envs=(process.env.REACT_APP_NAME !== "Citizen" ) ? "employee":"citizen"
+        let disablePayButton= payload.MdmsRes.tenant.paybuttonconfig[0][isOpenLink?"open":envs]
+        this.setState({
+          paybuttonconfig: disablePayButton
+        })
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+
 
   close = () => {
     this.setState({ showWarning: false });
@@ -122,8 +172,8 @@ class TotalDues extends React.Component {
             ></UpdateMobile>
           </div>
         )}
-        {(!isOpenLink) && (process.env.REACT_APP_NAME !== "Citizen" ) && (totalBillAmountDue > 0 && (process.env.REACT_APP_NAME !== "Citizen" || !disabledCities.includes(tenantId)) && (
-          <div id="pt-flex-child-button" className="col-xs-12 col-sm-3 flex-child-button">
+        {totalBillAmountDue > 0 && (!this.state.paybuttonconfig) && (process.env.REACT_APP_NAME !== "Citizen" || !disabledCities.includes(tenantId)) && (
+           <div id="pt-flex-child-button" className="col-xs-12 col-sm-3 flex-child-button">
             <div style={{ float: "right" }}>
               <TotalDuesButton
                 primary={true}
@@ -134,7 +184,7 @@ class TotalDues extends React.Component {
               />
             </div>
           </div>
-        ))}
+        )}
       </div>
     );
   }

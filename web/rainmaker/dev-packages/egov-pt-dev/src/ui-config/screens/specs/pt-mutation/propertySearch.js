@@ -215,7 +215,7 @@ const getPayButtonData = async (action, dispatch) => {
       );
     }
   } catch (e) {
-    console.log("ayush",e);
+    console.log(e);
   }
 };
 
