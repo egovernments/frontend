@@ -28,10 +28,9 @@ export const searchPropertyTable = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) =>{
-            let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
-            return (value.totalAmount > 0 && value.status === "ACTIVE") ?  (!isOpenLink) && (process.env.REACT_APP_NAME !== "Citizen" )  && getPayButton(tableMeta) : (
+            return (value.totalAmount > 0 && value.status === "ACTIVE")  && (!value.disablepaybutton)? getPayButton(tableMeta) : (
               value.totalAmount === 0 && value.status === "ACTIVE" && value.isAdvancePaymentAllowed ? getPayButton(tableMeta) : ""
-            )},
+            )}
         },
       },
       {

@@ -286,7 +286,11 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
 
       const finalResponse = getPropertyWithBillAmount(response, billResponse);  
 
-      
+      const disablepaybutton =  get(
+        state.screenConfiguration.preparedFinalObject,
+        "paybuttonconfig",
+        {}
+      );
 
       // const response = searchSampleResponse();
 
@@ -301,7 +305,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["PT_AMOUNT_DUE"]: (item.totalAmount) ? item.totalAmount : "0",
-        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount },
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, disablepaybutton: disablepaybutton },
         ["TENANT_ID"]: item.tenantId,
         ["PT_COMMON_TABLE_COL_STATUS_LABEL"]: item.status || "-"
       }));

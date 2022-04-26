@@ -248,6 +248,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       disableField('public-search',"components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[0].tabContent.searchPropertyDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       disableField('public-search', "components.div.children.iSearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.button.children.buttonContainer.children.searchButton",dispatch);
       const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+      const disablepaybutton = get(state, "screenConfiguration.preparedFinalObject.paybuttonconfig");
     const querryObject = getPayload(searchScreenObject);
       const response = await getSearchResults(queryObject);
 
@@ -294,7 +295,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
         ["PT_COMMON_COL_EXISTING_PROP_ID"]: item.oldPropertyId || "-",
         ["PT_COMMON_TABLE_PROPERTY_STATUS"]: item.status || "-",
         ["PT_AMOUNT_DUE"]: (item.totalAmount || item.totalAmount===0) ? item.totalAmount : "-",
-        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed },
+        ["PT_COMMON_TABLE_COL_ACTION_LABEL"]: { status: item.status, totalAmount: item.totalAmount, isAdvancePaymentAllowed, disablepaybutton },
     
                
        
