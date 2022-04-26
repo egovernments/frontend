@@ -4,7 +4,7 @@ import { getLocaleLabels, getTransformedLocalStorgaeLabels, getStatusKey } from 
 // import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { getApplicationType,setRoute } from "egov-ui-kit/utils/commons";
 import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-
+import get from "lodash/get";
 // import store from "ui-redux/store";
 import { getEpochForDate, getTextToLocalMapping, sortByEpoch } from "../../utils";
 
@@ -138,8 +138,11 @@ export const searchPropertyTable = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) =>{
-            let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
-            return  (value.totalAmount > 0)  ?  (!isOpenLink) && (process.env.REACT_APP_NAME !== "Citizen" )  && getPayButton(tableMeta) :value.status === "ACTIVE"?getMutationButton(tableMeta):<div/>
+            return (value.totalAmount > 0) && (!value.disablepaybutton)
+              ? getPayButton(tableMeta)
+              : process.env.REACT_APP_NAME == "Citizen"
+              ? " "
+              : getMutationButton(tableMeta);
           }
         },
       }, 

@@ -173,6 +173,52 @@ const getMDMSData = async (action, dispatch) => {
   
 };
 
+const getPayButtonData = async (action, dispatch) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: "uk",
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "paybuttonconfig"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    if (
+      payload &&
+      payload.MdmsRes &&
+      payload.MdmsRes.tenant &&
+      payload.MdmsRes.tenant.paybuttonconfig
+    ) {
+      let isOpenLink = window.location.pathname.includes("openlink") || window.location.pathname.includes("withoutAuth");
+      let envs=(process.env.REACT_APP_NAME !== "Citizen" ) ? "employee":"citizen"
+      let disablePayButton= payload.MdmsRes.tenant.paybuttonconfig[0][isOpenLink?"open":envs]
+      dispatch(
+        prepareFinalObject(
+          "paybuttonconfig",
+          disablePayButton
+        )
+      );
+    }
+  } catch (e) {
+    console.log("ayush",e);
+  }
+};
+
 const header = getCommonHeader({
   labelName: "Property Tax",
   labelKey: "PROPERTY_TAX"
@@ -185,7 +231,7 @@ const screenConfig = {
     resetFields(state, dispatch);
     dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
-
+    getPayButtonData(action, dispatch);
     set(
       action.screenConfig,
       "components.div.children.searchPropertyDetails.children.cardContent.children.selectionContainer.children.genderRadioGroup.props.value",
