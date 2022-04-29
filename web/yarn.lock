@@ -2132,6 +2132,28 @@
     redux "4.1.2"
     xlsx "0.17.5"
 
+"@egovernments/digit-ui-libraries@1.5.0-beta.4":
+  version "1.5.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-libraries/-/digit-ui-libraries-1.5.0-beta.4.tgz#57f05a8006ae0a8b48f5844aa15611f0233cea8f"
+  integrity sha512-URAOaiFJCcjOcjhmRGAxbLDpDwot41Scqd1Lg+SYZ67FfgR5Tk/++FzA+DHElxW6ekqZrQn4QCH0qHgw/ySWCQ==
+  dependencies:
+    axios "0.20.0"
+    babel-preset-react "6.24.1"
+    date-fns "2.28.0"
+    dom-to-image "2.6.0"
+    html2canvas "1.4.1"
+    i18next "19.9.2"
+    i18next-react-postprocessor "3.0.7"
+    jspdf "2.5.1"
+    pdfmake "0.1.72"
+    react "17.0.2"
+    react-i18next "11.16.2"
+    react-query "3.6.1"
+    react-redux "7.2.8"
+    react-router-dom "5.3.0"
+    redux "4.1.2"
+    xlsx "0.17.5"
+
 "@egovernments/digit-ui-module-common@1.5.0-beta.2":
   version "1.5.0-beta.2"
   resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-common/-/digit-ui-module-common-1.5.0-beta.2.tgz#b355369aad58dba2b78ecf5c19ac454ff2d647cd"
@@ -2170,12 +2192,12 @@
     redux "4.1.2"
     redux-thunk "2.4.1"
 
-"@egovernments/digit-ui-module-core@1.5.0-beta.2":
-  version "1.5.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.5.0-beta.2.tgz#76876b60be80bc5498b422df547fb36704bfeb46"
-  integrity sha512-zBgqaNKRZdSJ2WoQGUtZ6NSzMDbN2eXLRbxU3cW2CMqdLGpLt/ZGCVksq2P0jKkAb4zodB5TZ1xuSbZcCtAXOQ==
+"@egovernments/digit-ui-module-core@1.5.0-alpha.3":
+  version "1.5.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@egovernments/digit-ui-module-core/-/digit-ui-module-core-1.5.0-alpha.3.tgz#7c8522bdf3957255d3b3e604af798ec53f124ea7"
+  integrity sha512-yZloCFwtqdPCMGPi1uMWqoMWsiu5upM9DwkPbC5qL+9f2MO9PfGVQ4nao/01JPcKsDMpUbMkyrVg4PmgmrSv6A==
   dependencies:
-    "@egovernments/digit-ui-libraries" "1.5.0-beta.2"
+    "@egovernments/digit-ui-libraries" "1.5.0-beta.4"
     "@egovernments/digit-ui-react-components" "1.5.0-beta.2"
     react "17.0.2"
     react-dom "17.0.2"
