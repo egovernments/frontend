@@ -122,6 +122,16 @@ const removeValidation = (state, dispatch, index) => {
 
 }
 
+const getIndexofActive = (item) => {
+
+  for(let i=0;i<item.owners.length;i++)
+  {
+    if(item.owners[i].status=='ACTIVE')
+    return i;
+  }
+  return 0;
+}
+
 const getAddress = (item) => {
   let doorNo = item.address.doorNo != null ? (item.address.doorNo + ",") : '';
   let buildingName = item.address.buildingName != null ? (item.address.buildingName + ",") : '';
@@ -288,7 +298,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       let propertyData = finalResponse.Properties.map(item => ({
         ["PT_MUTATION_PID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
