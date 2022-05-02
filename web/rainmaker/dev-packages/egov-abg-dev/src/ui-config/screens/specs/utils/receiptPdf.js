@@ -173,6 +173,7 @@ export const generateMultipleBill = async (state, dispatch, type) => {
     "preparedFinalObject.searchScreenMdmsData.billSearchResponse",
     []
   );
+
   const commonPayDetails = get(
     state.screenConfiguration,
     "preparedFinalObject.searchScreenMdmsData.common-masters.uiCommonPay",
@@ -194,7 +195,7 @@ export const generateMultipleBill = async (state, dispatch, type) => {
     const details = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
     billkey = get(details, 'billKey', '');
   }
-  allBills = allBills.filter(bill => bill.status === 'ACTIVE');
+  allBills = allBills.filter(bill => bill.status === 'ACTIVE' && bill.totalAmount >0 && bill.connection.status=="Active");
   allBills && allBills.length > 0 && await downloadMultipleBill(allBills, billkey,businessService);
   /* 
   To Download Files based on Filestoreid logic
