@@ -461,8 +461,9 @@ export const getPaymentHistory = async (queryObject , dispatch , serviceCode) =>
     let paymentRow=null;
     let receiptNumber,receiptDate,totalAmountPaid,totalDue,paymentMode,service,tenant;
 
-    response=response.filter(i=> i.paymentStatus !='CANCELLED');
+   // response=response.filter(i=> i.paymentStatus !='CANCELLED');
     response.Payments.map((element,index) => {
+      if(element.paymentStatus != 'CANCELLED'){
        paymentMode = element.paymentMode;
        tenant = element.tenantId;
 
@@ -483,6 +484,7 @@ export const getPaymentHistory = async (queryObject , dispatch , serviceCode) =>
         "tenant":tenant
       };
       paymentArray.push(paymentRow);
+    }
     });
 
 
