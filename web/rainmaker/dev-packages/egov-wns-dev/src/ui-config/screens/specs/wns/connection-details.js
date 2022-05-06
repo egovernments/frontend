@@ -450,7 +450,7 @@ const beforeInitFn = async (action, state, dispatch, connectionNumber) => {
 export const getPaymentHistory = async (queryObject , dispatch , serviceCode) => {
   try {
 
-    const response = await httpRequest(
+    let response = await httpRequest(
       "post",
       "collection-services/payments/"+serviceCode+"/_search",
        "",
@@ -460,6 +460,8 @@ export const getPaymentHistory = async (queryObject , dispatch , serviceCode) =>
     let paymentArray = [];
     let paymentRow=null;
     let receiptNumber,receiptDate,totalAmountPaid,totalDue,paymentMode,service,tenant;
+
+    response=response.filter(i=> i.paymentStatus !='CANCELLED');
     response.Payments.map((element,index) => {
        paymentMode = element.paymentMode;
        tenant = element.tenantId;
