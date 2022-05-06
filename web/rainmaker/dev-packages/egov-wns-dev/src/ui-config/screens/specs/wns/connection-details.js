@@ -522,24 +522,24 @@ advance=0;
   installment=convertEpochToDate(element.taxPeriodFrom) +"-"+convertEpochToDate(element.taxPeriodTo);
   element.demandDetails.map((dd)=>{
     if(dd.taxHeadMasterCode=='WS_CHARGE' || dd.taxHeadMasterCode=='SW_CHARGE' ){
-      taxAmount=dd.taxAmount;
-      taxCollected=dd.collectionAmount;
-      taxBalance=dd.taxAmount-dd.collectionAmount;
+      taxAmount=taxAmount+dd.taxAmount;
+      taxCollected=taxCollected+dd.collectionAmount;
+      taxBalance=taxAmount-taxCollected;
     }
     if(dd.taxHeadMasterCode=='WS_TIME_INTEREST'  || dd.taxHeadMasterCode=='SW_TIME_INTEREST' ){
 
-      interestAmount=dd.taxAmount;
-      interestCollected=dd.collectionAmount;
-      interestBalance=dd.taxAmount-dd.collectionAmount;
+      interestAmount=interestAmount+dd.taxAmount;
+      interestCollected=interestCollected+dd.collectionAmount;
+      interestBalance=interestAmount-interestCollected;
     }
     if(dd.taxHeadMasterCode=='WS_TIME_PENALTY' || dd.taxHeadMasterCode=='SW_TIME_PENALTY'){
-      penaltyAmount=dd.taxAmount;
-      penaltyCollected=dd.collectionAmount;
-      penaltyBalance=dd.taxAmount-dd.collectionAmount;
+      penaltyAmount=penaltyAmount+dd.taxAmount;
+      penaltyCollected=penaltyCollected+dd.collectionAmount;
+      penaltyBalance=penaltyAmount-penaltyCollected;
      
     } if(dd.taxHeadMasterCode == "SW_ADVANCE_CARRYFORWARD" || dd.taxHeadMasterCode == "WS_ADVANCE_CARRYFORWARD" )
     {
-    advance=dd.taxAmount;
+    advance=advance+dd.taxAmount;
     }
     });
     
