@@ -33,6 +33,7 @@ import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { loadUlbLogo } from "egov-ui-kit/utils/pdfUtils/generatePDF";
 import { generatePTAcknowledgment } from "egov-ui-kit/utils/pdfUtils/generatePTAcknowledgment";
+import { ifUserRoleExists } from "../../../utils/commons";
 
 const innerDivStyle = {
   padding: "0",
@@ -575,7 +576,6 @@ class Property extends Component {
           subHeaderTitle="PT_PROPERTY_PTUID"
           subHeaderValue={propertyId}
           downloadPrintButton={true}
-          downloadPrintButton={true}
           download={() => this.download()}
           print={() => this.print()}
         />
@@ -612,7 +612,7 @@ class Property extends Component {
               (isRoleAdmin() ||
                 Payments.length <= 0 ||
                 (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") ||
-                !payLen) && (
+                !payLen || ifUserRoleExists("PTADMIN")) && (
                 <Button
                   label={
                     <Label
@@ -629,7 +629,7 @@ class Property extends Component {
                 />
               )}
             {!isCitizen &&
-              (Payments.length <= 0 || (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") || !payLen) && (
+              (Payments.length <= 0 || (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") || !payLen || ifUserRoleExists("PTADMIN")) && (
                 <Button
                   onClick={() => this.editDemand()}
                   label={<Label buttonLabel={true} label="PT_EDIT_DATAENTRY_DEMAND" fontSize="16px" />}
