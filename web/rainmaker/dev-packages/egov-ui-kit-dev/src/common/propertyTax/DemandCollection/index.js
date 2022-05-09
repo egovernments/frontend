@@ -16,7 +16,7 @@ import set from "lodash/set";
 import Label from "egov-ui-kit/utils/translationNode";
 class DemandCollection extends React.Component {
   render() {
-    const { prepareFinalObject, preparedFinalObject,Properties = [] } = this.props;
+    const { prepareFinalObject, preparedFinalObject, isAssesment, Properties = [] } = this.props;
     const finalData=getFinalData();
      
     let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`);
@@ -102,6 +102,12 @@ class DemandCollection extends React.Component {
                                     alert( "Integer numbers are only allowed.");  
                                         
                                   } */
+                                  if(isAssesment){
+                                    console.log("ayush assessment", data)
+                                    if(taxData.code==="PT_TAX" && get(preparedFinalObject,`DemandPropertiesResponse.Demands[${index}].demandDetails[0].taxAmount`) > e.target.value){
+                                      alert("Tax value cannot be decrease");
+                                    }
+                                  }
                                   if (e.target.value.includes(".")) 
                                   {  
                                    alert( "Integer numbers are only allowed.");
@@ -163,7 +169,7 @@ class DemandCollection extends React.Component {
                                   prepareFinalObject(`DemandProperties[0].propertyDetails[0].demand[${index}].demand[${data.financialYear}][${index1}].PT_COLLECTED`, e.target.value);
                                 }}
                                 onWheel={event => { event.preventDefault(); }}
-                                disabled={taxData.isDebit}
+                                disabled={taxData.isDebit || isAssesment}
                               />
                             </div>
                           );

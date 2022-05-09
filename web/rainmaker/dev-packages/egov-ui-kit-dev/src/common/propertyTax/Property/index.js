@@ -337,8 +337,8 @@ class Property extends Component {
 
     if(process.env.REACT_APP_NAME !='citizen'){  
       let redirectTo = `/property-tax/demand-and-collection?propertyId=${propertyId}&edit=true`;
-      if (ifUserRoleExists("PTADMIN")) {
-        redirectTo = redirectTo + "assessment=true";
+      if (ifUserRoleExists("PTCEMP")) {
+        redirectTo = redirectTo + "&assessment=true";
       }
       this.props.history.push(redirectTo);
     }
@@ -359,8 +359,8 @@ class Property extends Component {
     } else if(selPropertyDetails.source === "LEGACY_RECORD"){
 
       let redirectTo = `/property-tax/assessment-form-dataentry?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenantId}`;
-      if (ifUserRoleExists("PTADMIN")) {
-        redirectTo = redirectTo + "assessment=true";
+      if (ifUserRoleExists("PTCEMP")) {
+        redirectTo = redirectTo + "&assessment=true";
       }
       this.props.history.push(redirectTo);
       }
@@ -619,7 +619,7 @@ class Property extends Component {
               (isRoleAdmin() ||
                 Payments.length <= 0 ||
                 (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") ||
-                !payLen || ifUserRoleExists("PTADMIN")) && (
+                !payLen || ifUserRoleExists("PTCEMP")) && (
                 <Button
                   label={
                     <Label
@@ -636,7 +636,7 @@ class Property extends Component {
                 />
               )}
             {!isCitizen &&
-              (Payments.length <= 0 || (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") || !payLen || ifUserRoleExists("PTADMIN")) && (
+              (Payments.length <= 0 || (Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED") || !payLen || ifUserRoleExists("PTCEMP")) && (
                 <Button
                   onClick={() => this.editDemand()}
                   label={<Label buttonLabel={true} label="PT_EDIT_DATAENTRY_DEMAND" fontSize="16px" />}
