@@ -462,9 +462,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
             let fromDate=convertEpochToDate( payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].fromPeriod).split("/")[2];
             assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
             assessmentYearForReceipt=fromDate+"-"+toDate;
-            payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails.map(element=>
-              {
-                element.billAccountDetails.map(ele => {
+            payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(ele => {
                
               if(ele.taxHeadCode == "PT_TAX")
               {tax=ele.adjustedAmount;
@@ -516,7 +514,7 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
             "adhoc_penalty":adhoc_penalty,
             "adhoc_rebate":adhoc_rebate,
             "roundoff":roundoff,
-            "total":element.amountPaid
+            "total": payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].amountPaid
             };
             taxRow={
               "year":assessmentYearForReceipt,
@@ -531,11 +529,12 @@ payloadReceiptDetails.Payments[0].paymentDetails[0].additionalDetails=taxheads;
               "adhoc_penalty":adhoc_penaltyT,
               "adhoc_rebate":adhoc_rebateT,
               "roundoff":roundoffT,
-              "total":element.amount
+              "total":payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].amount
+
               };
             arrearArray.push(arrearRow);
             taxArray.push(taxRow);
-      });
+    
     }  
           
           const details = {
