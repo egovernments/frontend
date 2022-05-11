@@ -15,7 +15,7 @@ import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 // import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
-import {initCustomisationComponents} from "./Customisations";
+import {customizations, initCustomisationComponents} from "./Customisations";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 
 initLibraries();
@@ -54,6 +54,8 @@ initCustomisationComponents();
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
 });
+
+customizations.forEach((setup) => setup());
 
 function App() {
   // const stateCode = window.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || process.env.REACT_APP_STATE_LEVEL_TENANT_ID;
