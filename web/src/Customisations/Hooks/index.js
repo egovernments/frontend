@@ -2,9 +2,8 @@ var Digit = window.Digit || {};
 
 const setupLibraries = (Library, service, method) => {
   window.Digit = window.Digit || {};
-  window.Digit["Hooks"] = window.Digit["Hooks"] || {};
-  window.Digit["Hooks"][Library] = window.Digit["Hooks"][Library] || {};
-  window.Digit["Hooks"][Library][service] = method;
+  window.Digit[Library] = window.Digit[Library] || {};
+  window.Digit[Library][service] = method;
 };
 
 const logout = async () => {

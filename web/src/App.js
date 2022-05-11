@@ -55,9 +55,9 @@ const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
 });
 
-customizations.forEach((setup) => setup());
 
 function App() {
+  customizations.forEach((setup) => setup());
   // const stateCode = window.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || process.env.REACT_APP_STATE_LEVEL_TENANT_ID;
   const stateCode = "od";
   if (!stateCode) {
