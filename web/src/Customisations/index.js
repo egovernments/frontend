@@ -1,7 +1,10 @@
 import { ptComponents } from "./pt";
 import { tlComponents } from "./tl";
 import { fsmComponents } from './fsm';
+
+import { OverideLogout } from "./Hooks";
 import { engagementComponents } from './engagement';
+
 
 var Digit = window.Digit || {};
 
@@ -17,3 +20,7 @@ export const initCustomisationComponents = () => {
         Digit.ComponentRegistryService.setComponent(key, value);
     });
 };
+
+export const customizations = [
+    OverideLogout
+];
