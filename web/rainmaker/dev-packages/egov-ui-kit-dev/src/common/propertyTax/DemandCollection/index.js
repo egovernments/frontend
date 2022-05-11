@@ -79,7 +79,7 @@ class DemandCollection extends React.Component {
                           fontSize="16px"
                         />
                         </div>
-                        {data.taxHead.map((taxData, index1) => {                        
+                        {data.taxHead.map((taxData, index1) => {                
                            return (
                             <div className={`col-xs-12`}>
                               <TextField
@@ -103,8 +103,11 @@ class DemandCollection extends React.Component {
                                         
                                   } */
                                   if(isAssesment){
-                                    console.log("ayush assessment", data)
-                                    if(taxData.code==="PT_TAX" && get(preparedFinalObject,`DemandPropertiesResponse.Demands[${index}].demandDetails[0].taxAmount`) > e.target.value){
+                                    if (
+                                      (taxData.code === "PT_TAX") &&
+                                      get(preparedFinalObject, `DemandPropertiesResponse.Demands[${index}].demandDetails[0].taxAmount`) >
+                                        e.target.value
+                                    ) {
                                       alert("Tax value cannot be decrease");
                                     }
                                   }
@@ -137,6 +140,7 @@ class DemandCollection extends React.Component {
                                    }
 
                                   }
+                                  disabled={(isAssesment && (taxData.code ==="PT_PROMOTIONAL_REBATE" || taxData.code === 'PT_TIME_REBATE' || taxData.code === 'PT_LATE_ASSESSMENT_PENALTY' || taxData.code === 'PT_ADHOC_PENALTY'))}
                                 onWheel={event => { event.preventDefault(); }}
                               />
                             </div>
