@@ -1186,15 +1186,18 @@ class FormWizardDataEntry extends Component {
       displayFormErrorsAction,
       form,
       history,
+      location,
       prepareFormData = {}
     } = this.props;
+    const { search } = location;
+    const isAssesment = getQueryValue(search, "assessment");
     switch (selected) {
       //validating property address is validated
       case 0:
       showSpinner();
         let {
           DemandProperties = [],
-          prepareFinalObject,
+          DemandPropertiesResponse ,
           generalMDMSDataById = {}
         } = this.props;
         const demand = get(
@@ -1275,7 +1278,6 @@ class FormWizardDataEntry extends Component {
             return true;
           }
         };
-
         if (!demandLength) {
           errorCode = "ERR01_DEMAND_ENTER_THE_DATA";
         } else {
@@ -1397,55 +1399,76 @@ class FormWizardDataEntry extends Component {
           errorCode = "ERR02_DEMAND_ENTER_THE_DATA";
         }
 
+        if (isAssesment) {
+          errorCode = "FINE";
+          let demandResponse = DemandPropertiesResponse.Demands
+          demand.map((item,index)=>{
+            let data = item.demand[Object.keys(item.demand)]
+            data.map((ele,i)=>{
+              if(ele.PT_TAXHEAD === "PT_TAX" || ele.PT_TAXHEAD ==="SWATCHATHA_TAX" || ele.PT_TAXHEAD === "PT_TIME_INTEREST"){
+                if(ele.PT_DEMAND < demandResponse[index].demandDetails[i].taxAmount){
+                  errorCode = "ERR09_DEMAND_ENTER_THE_DATA";
+                }
+              }
+            })
+          })
+        } 
+
         switch (errorCode) {
-          // case "ERR01_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR01_DEMAND_ENTER_THE_DATA",
-          //     "Please enter at least one year of demand and collection !"
-          //   );
-          //   break;
-          // case "ERR02_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR02_DEMAND_ENTER_THE_DATA",
-          //     "Please enter the latest year of demand and collection !"
-          //   );
-          //   break;
-          // case "ERR04_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR04_DEMAND_ENTER_THE_DATA",
-          //     "The demand entry is not sequential !"
-          //   );
-          //   break;
-          // case "ERR03_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR03_DEMAND_ENTER_THE_DATA",
-          //     "The entered collection should not greater than demand amount for any year !"
-          //   );
-          //   break;
-          // case "ERR05_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR05_DEMAND_ENTER_THE_DATA",
-          //     "The property tax amount is mandatory for given financial year !"
-          //   );
-          //   break;
-          // case "ERR06_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR06_DEMAND_ENTER_THE_DATA",
-          //     "The entered rebate should not greater than property tax amount for any year !"
-          //   );
-          //   break;
-          // case "ERR07_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR07_DEMAND_ENTER_THE_DATA",
-          //     "The property amount is greater than rebate and promotional rebate"
-          //   );
-          //   break;
-          // case "ERR08_DEMAND_ENTER_THE_DATA":
-          //   callToggleSnackbar(
-          //     "ERR08_DEMAND_ENTER_THE_DATA",
-          //     "The Collection amount is greater than zero value "
-          //   );
-          //   break;  
+          case "ERR01_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR01_DEMAND_ENTER_THE_DATA",
+              "Please enter at least one year of demand and collection !"
+            );
+            break;
+          case "ERR02_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR02_DEMAND_ENTER_THE_DATA",
+              "Please enter the latest year of demand and collection !"
+            );
+            break;
+          case "ERR04_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR04_DEMAND_ENTER_THE_DATA",
+              "The demand entry is not sequential !"
+            );
+            break;
+          case "ERR03_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR03_DEMAND_ENTER_THE_DATA",
+              "The entered collection should not greater than demand amount for any year !"
+            );
+            break;
+          case "ERR05_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR05_DEMAND_ENTER_THE_DATA",
+              "The property tax amount is mandatory for given financial year !"
+            );
+            break;
+          case "ERR06_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR06_DEMAND_ENTER_THE_DATA",
+              "The entered rebate should not greater than property tax amount for any year !"
+            );
+            break;
+          case "ERR07_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR07_DEMAND_ENTER_THE_DATA",
+              "The property amount is greater than rebate and promotional rebate"
+            );
+            break;
+          case "ERR08_DEMAND_ENTER_THE_DATA":
+            callToggleSnackbar(
+              "ERR08_DEMAND_ENTER_THE_DATA",
+              "The Collection amount is greater than zero value "
+            );
+            break;  
+          case "ERR09_DEMAND_ENTER_THE_DATA":
+              callToggleSnackbar(
+                "ERR09_DEMAND_ENTER_THE_DATA",
+                "The tax cannot be less than the previous tax"
+              );
+              break;  
             
           default:
             if (arrayOfEmptyYears.length > 0) {
