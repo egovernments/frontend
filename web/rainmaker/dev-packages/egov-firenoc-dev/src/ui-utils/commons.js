@@ -413,13 +413,13 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     }
 
     let userInfodata = JSON.parse(getUserInfo());
-    const tenantId1 = get(userInfodata, "permanentCity");
-    let tenantId2 = get(
+    //const tenantId1 = get(userInfodata, "permanentCity");
+    let tenantId = get(
       state.screenConfiguration.preparedFinalObject,
       "FireNOCs[0].tenantId",
       getTenantId()
      );
-   let tenantId = process.env.REACT_APP_NAME === "Citizen" ?  tenantId1: tenantId2;
+   //let tenantId = process.env.REACT_APP_NAME === "Citizen" ?  tenantId1: tenantId2;
 
     set(payload[0], "tenantId", tenantId);
     set(payload[0], "fireNOCDetails.action", status);

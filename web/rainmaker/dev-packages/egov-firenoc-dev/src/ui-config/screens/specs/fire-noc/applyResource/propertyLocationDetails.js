@@ -244,22 +244,7 @@ export const propertyLocationDetails = getCommonCard(
               state.screenConfiguration,
               "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
               []);
-              let districtList = districtData.filter((districtlists) => {
-
-                return districtlists.city.districtTenantCode === "pb.gurdaspur" || districtlists.city.districtTenantCode=== "pb.jalandhar" || districtlists.city.districtTenantCode=== "pb.ferozepur"
-  
-              });
-            // console.log("districtList", districtList);
-
-            const districtTenantMap = districtList.map((item) => {
-              return {
-                name: item.city.districtName,
-                code: item.city.districtTenantCode
-
-              }
-
-            });
-
+             
             // console.log("districtTenantMap", districtTenantMap);
 
             const fireStationsList = get(
@@ -268,8 +253,24 @@ export const propertyLocationDetails = getCommonCard(
               []
             );
 
-            // console.log("fireStationsList", fireStationsList);
+            const firestation=[];
+            for (let i = 0; i < fireStationsList.length; i++) {
+              firestation.push(fireStationsList[i].baseTenantId);
+            }
+            //console.log("fireStationsList",fireStationsList);
 
+            let districtList = districtData.filter((districtlists) => firestation.includes(districtlists.code));
+           
+                     // console.log("districtList", districtList);
+
+          const districtTenantMap = districtList.map((item) => {
+            return {
+              name: item.city.districtName,
+              code: item.city.districtTenantCode
+
+            }
+
+          });
 
             const districtlistRural = [];
 
@@ -312,19 +313,7 @@ export const propertyLocationDetails = getCommonCard(
               "preparedFinalObject.applyScreenMdmsData.tenant.tenants",
               []
             );
-            let districtList = districtData.filter((districtlists) => {
-
-              return districtlists.city.districtTenantCode === "pb.gurdaspur" || districtlists.city.districtTenantCode === "pb.jalandhar" || districtlists.city.districtTenantCode=== "pb.ferozepur"
-
-            });
-            const districtTenantMap = districtList.map((item) => {
-              return {
-                name: item.city.districtName,
-                //code:item.code
-                code: item.city.districtTenantCode
-              }
-
-            });
+           
 
             //console.log("districtTenantMap",districtTenantMap);
 
@@ -334,9 +323,21 @@ export const propertyLocationDetails = getCommonCard(
               []
             );
 
+            const firestation=[];
+            for (let i = 0; i < fireStationsList.length; i++) {
+              firestation.push(fireStationsList[i].baseTenantId);
+            }
             //console.log("fireStationsList",fireStationsList);
 
+            let districtList = districtData.filter((districtlists) => firestation.includes(districtlists.code));
+            const districtTenantMap = districtList.map((item) => {
+              return {
+                name: item.city.districtName,
+                //code:item.code
+                code: item.city.districtTenantCode
+              }
 
+            });
             const districtlist = [];
 
 
@@ -486,7 +487,7 @@ export const propertyLocationDetails = getCommonCard(
             );
             let districtlist = districtData.filter((districtlists) => {
 
-              return districtlists.city.districtTenantCode === "pb.gurdaspur" || districtlists.city.districtTenantCode === "pb.jalandhar" || districtlists.city.districtTenantCode=== "pb.ferozepur"
+              return districtlists.city.districtTenantCode === action.value
 
             });
             // console.log("districtData", districtData);
@@ -799,7 +800,7 @@ export const propertyLocationDetails = getCommonCard(
 
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].tenantId", props_value)
+              "FireNOCs[0].tenantId", fireStations[0].baseTenantId)
           );
 
           dispatch(
