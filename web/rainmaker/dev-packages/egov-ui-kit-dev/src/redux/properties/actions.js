@@ -849,6 +849,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
           assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
           assessmentYearForReceipt=fromDate+"-"+toDate;
           payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(ele => {
+             
             if(ele.taxHeadCode == "PT_TAX")
             {tax=ele.adjustedAmount;
               taxT=ele.amount}
@@ -899,7 +900,7 @@ export const downloadReceiptpt = (receiptQueryString) => {
           "adhoc_penalty":adhoc_penalty,
           "adhoc_rebate":adhoc_rebate,
           "roundoff":roundoff,
-          "total":total
+          "total": payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].amountPaid
           };
           taxRow={
             "year":assessmentYearForReceipt,
@@ -914,12 +915,11 @@ export const downloadReceiptpt = (receiptQueryString) => {
             "adhoc_penalty":adhoc_penaltyT,
             "adhoc_rebate":adhoc_rebateT,
             "roundoff":roundoffT,
-            "total":totalT
+            "total":payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].amount
             };
           arrearArray.push(arrearRow);
           taxArray.push(taxRow);
-		}
-          
+  }  
           const details = {
         "assessmentYears": assessmentYear,
         "arrearArray":arrearArray,

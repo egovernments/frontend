@@ -86,7 +86,7 @@ export const searchApiCall = async (state, dispatch) => {
     );
     const response = [];
     for (let i = 0; i < bills.length; i++) {
-      if(get(bills[i], "status") === "ACTIVE" &&  get(bills[i], "totalAmount")>0 && get(bills[i].connection,"status").toUpperCase() =="ACTIVE"){
+      if(get(bills[i], "status") === "ACTIVE" &&  get(bills[i], "totalAmount")>0 && get(bills[i].connection,"status").toUpperCase() === "ACTIVE"){
         response.push({
           consumerId: get(bills[i], "consumerCode"),
           billNo: get(bills[i], "billNumber"),
