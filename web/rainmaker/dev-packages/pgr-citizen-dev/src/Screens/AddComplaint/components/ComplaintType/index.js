@@ -29,7 +29,7 @@ const ComplaintTypeField = ({ additionalDetails = {}, categories, handleFieldCha
             <TextField
               id="addComplaint-additional-details"
               {...additionalDetails}
-              onChange={(e, value) => handleFieldChange("additionalDetails", value)}
+              onChange={(e, value) => handleFieldChange("additionalDetails", value.substr(0, 250))}
               name="additional-details"
               multiLine={true}
             />
