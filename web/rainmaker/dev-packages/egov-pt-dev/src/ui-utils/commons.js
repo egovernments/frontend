@@ -58,7 +58,6 @@ export const getSearchResults = async (queryObject, requestBody) => {
     );
     let newProperties=[]
     response && response.Properties && response.Properties.map(property => {
-      console.log(property)
       if (property && property.status == "INWORKFLOW") {
         let newOwnerList = [];
         let oldOwnerList = [];
