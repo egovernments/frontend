@@ -47,7 +47,12 @@ class PastPayments extends Component {
       if (from !== undefined && to !== 'NA') { return convertEpochToDate(from) + " - " + convertEpochToDate(to); }
       else { return "NA" }
     }
+    for(const ele in pastPaymentsDetails){
+      if(pastPaymentsDetails[ele].paymentDetails[0].businessService.toUpperCase() == "SW" || pastPaymentsDetails[ele].paymentDetails[0].businessService.toUpperCase() == "Ws"){
+      console.log("ddd",pastPaymentsDetails[ele].paymentDetails[0].businessService);
+     
     const data = pastPaymentsDetails.map((element) =>
+    
       <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)', flexgrow: 1 }}>
         <Grid container spacing={3}>
           <Grid item xs={8} >
@@ -162,6 +167,8 @@ class PastPayments extends Component {
       </div >
     );
   }
+}
+}
 }
 const mapStateToProps = state => {
   const pastPaymentsForWater = get(
