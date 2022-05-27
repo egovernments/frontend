@@ -164,6 +164,7 @@ const saveData = async (state, dispatch) => {
     }
     // console.log(data)
     data.tenantId = getQueryArg(window.location.href, "tenantId")
+    data.generateDemand=true;
     createMeterReading(dispatch, data)
 
 }
