@@ -2408,8 +2408,7 @@ class FormWizardDataEntry extends Component {
       source: "LEGACY_RECORD",
       channel: "CFC_COUNTER",
       status: "ACTIVE",
-      additionalDetails :{"RequestInfo": {"tt":"tt"},
-      "Demands": demandData,
+      additionalDetails :{
       "reassement": getQueryValue(search, "assessment")? true: false
      }
     } 
