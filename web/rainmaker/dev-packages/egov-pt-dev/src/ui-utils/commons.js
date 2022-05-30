@@ -58,7 +58,7 @@ export const getSearchResults = async (queryObject, requestBody) => {
     );
     let newProperties=[]
     response && response.Properties && response.Properties.map(property => {
-      if (property && property.status == "INWORKFLOW") {
+      if (property && property.status) {
         let newOwnerList = [];
         let oldOwnerList = [];
         property.owners.map(owner => {
@@ -71,6 +71,8 @@ export const getSearchResults = async (queryObject, requestBody) => {
         oldOwnerList.push(...newOwnerList);
         property.owners = oldOwnerList;
         newProperties.push(property)
+      } else{
+        newProperties.push(property);
       }
     })
     response["Properties"]=newProperties;
