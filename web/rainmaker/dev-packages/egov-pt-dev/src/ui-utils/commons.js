@@ -71,8 +71,6 @@ export const getSearchResults = async (queryObject, requestBody) => {
         oldOwnerList.push(...newOwnerList);
         property.owners = oldOwnerList;
         newProperties.push(property)
-      } else{
-        newProperties.push(property);
       }
     })
     response["Properties"]=newProperties;
