@@ -7,7 +7,7 @@ var Digit = window.Digit
 
 const EngagementCard = () => {
   const userRoles = Digit.SessionStorage.get('User')?.info?.roles
-  const isEmployee = userRoles.find((role) => role.code === 'EMPLOYEE');
+  const isEmployee = userRoles.find((role) => role.code === 'SUPEREMPLOYEE');
   
   useEffect(() => {
     Digit.SessionStorage.set("CITIZENSURVEY.INBOX", null)
