@@ -7,7 +7,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import {generateBillApiCall ,searchBillApiCall} from "../generateBillResource/functions"
   import "./index.css";
-
+ 
   export const createBill = getCommonCard({
  
   subHeader: getCommonTitle({
@@ -25,55 +25,126 @@ import {
 //  ---------------------------------------------------------------------------------------
 //             Connection Type drop down
 //-----------------------------------------------------------------------------------------
-      applicationtype: getSelectField({
+applicationtype: {
+  uiFramework: "custom-containers-local",
+  moduleName: "egov-wns",
+  componentPath: "AutosuggestContainer",
+  props: {
+    label: {
+      labelName: "Connection Type",
+      labelKey: "WS_GENERATE_BILL_CONNECTION_TYPE_LABEL"
+    },
+    labelPrefix: {
+      moduleName: "TENANT",
+      masterName: "TENANTS"
+    },
+    optionLabel: "name",
+    placeholder: {
+      labelName: "Connection Type",
+      labelKey: "WS_GENERATE_BILL_CONNECTION_TYPE_PLACEHOLDER"
+    },
+    required: true,
+    labelsFromLocalisation: true,
+    data: [
+      {
+        code: "Water",
+        value:"WS",
+      },
+      {
+        code: "Sewerage",
+        value:"SW",
+      }
+     
+    ],
+    // isClearable: true,
+    className: "autocomplete-dropdown",
+    jsonPath: "generateBillScreen.transactionType",
+    //sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+   // jsonPath: "searchScreen.tenantId",
+    //disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+  },
+  required: false,
+  
+  gridDefination: {
+    xs: 12,
+    sm: 4
+  }
+},
+//---------------------------------
+// applicationtype: getSelectField({
 
-        label: {
-          labelKey: "WS_GENERATE_BILL_CONNECTION_TYPE_LABEL"
-        },
-        placeholder: {
-          labelKey: "WS_GENERATE_BILL_CONNECTION_TYPE_PLACEHOLDER"
-        },
-        data: [
-          {
-            code: "WS_CONNECTION_TYPE_WATER",
-            value:"WS",
-          },
-          {
-            code: "WS_CONNECTION_TYPE_SEWERAGE",
-            value:"SW",
-          }
+//         label: {
+//           labelKey: "WS_GENERATE_BILL_CONNECTION_TYPE_LABEL"
+//         },
+//         placeholder: {
+//           labelKey: "WS_GENERATE_BILL_CONNECTION_TYPE_PLACEHOLDER"
+//         },
+//         data: [
+//           {
+//             code: "WS_CONNECTION_TYPE_WATER",
+//             value:"WS",
+//           },
+//           {
+//             code: "WS_CONNECTION_TYPE_SEWERAGE",
+//             value:"SW",
+//           }
          
-        ],
-       
-        gridDefination: {xs: 12, sm: 4},
-        required: false,
-        jsonPath: "generateBillScreen.transactionType",
-        labelsFromLocalisation: true,
-        fullwidth: true,
-        isClearable: true,
-        inputLabelProps: {
-        shrink: true
-        }
-      }),
+//         ],
+//         className: "autocomplete-dropdown",
+//         gridDefination: {xs: 12, sm: 4},
+//         required: false,
+//         jsonPath: "generateBillScreen.transactionType",
+//         labelsFromLocalisation: true,
+//         fullwidth: true,
+//         isClearable: true,
+//         inputLabelProps: {
+//         shrink: true
+//         }
+//       }),
+//-----------------------------------------
 
   //---------------------------------------------------------------------------------------
 //             locality drop down
 //-----------------------------------------------------------------------------------------
-locality: getSelectField({
-  jsonPath: "mohallaData.name",
-    label: { labelName: "Locality", labelKey: "WS_GENERATE_BILL_LOCALITY_LABEL" },
+locality: {
+  uiFramework: "custom-containers-local",
+  moduleName: "egov-wns",
+  componentPath: "AutosuggestContainer",
+  props: {
+    label: { labelName: "Locality", labelKey:"Locality"},
     placeholder: { labelName: "Select maholla", labelKey: "WS_GENERATE_BILL_LOCALITY_PLACEHOLDER" },
+    optionLabel: "name",
+    required: false,
+    labelsFromLocalisation: true,
+    
+    // isClearable: true,
+    className: "autocomplete-dropdown",
     sourceJsonPath: "mohallaData",
     jsonPath: "generateBillScreen.mohallaData",
-    required: false,
-    isClearable: true,
-    labelsFromLocalisation: true,
-    suggestions: [],
-    required: false,
-    labelsFromLocalisation: true,
-    gridDefination: {xs: 12, sm: 4},
-}),
-      }),
+  //  jsonPath: "searchScreen.tenantId",
+    //disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+  },
+   required: false,
+   gridDefination: {
+    xs: 12,
+    sm: 4
+  }
+},
+//-----------------------------------------------------------
+// locality: getSelectField({
+//   jsonPath: "mohallaData.name",
+//     label: { labelName: "Locality", labelKey: "WS_GENERATE_BILL_LOCALITY_LABELdddhdh" },
+//     placeholder: { labelName: "Select maholla", labelKey: "WS_GENERATE_BILL_LOCALITY_PLACEHOLDER" },
+//     sourceJsonPath: "mohallaData",
+//     jsonPath: "generateBillScreen.mohallaData",
+//     required: false,
+//     isClearable: true,
+//     labelsFromLocalisation: true,
+//     suggestions: [],
+//     labelsFromLocalisation: true,
+//     gridDefination: {xs: 12, sm: 4},
+// }),
+       }),
 //---------------------------------------------------------------------------------------
 //             Reset Button and Submit Button
 //-----------------------------------------------------------------------------------------
