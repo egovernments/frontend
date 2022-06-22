@@ -61,7 +61,7 @@ const moduleReducers = (initData) => ({
 function App() {
   customizations.forEach((setup) => setup());
   // const stateCode = window.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || process.env.REACT_APP_STATE_LEVEL_TENANT_ID;
-  const stateCode = "od";
+  const stateCode = "pb";
   if (!stateCode) {
     return <h1>stateCode is not defined</h1>
   }
