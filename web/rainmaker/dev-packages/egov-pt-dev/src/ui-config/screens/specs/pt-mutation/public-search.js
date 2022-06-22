@@ -62,6 +62,8 @@ const screenConfig = {
     setModule(getModuleName());
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+    const default_language  = getLocale() ? getLocale(): "en_IN"
+    dispatch(fetchLocalizationLabel(default_language, getTenantId(), getTenantId()));
     getMDMSData(dispatch);
 
     return action;
