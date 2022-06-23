@@ -4967,7 +4967,7 @@ transformedData.buildings[0].uoms=reasonss;
             {
             //  text: `NOC No: ${transformedData.fireNOCNumber}`,
               text: [  "NOC No:" ,
-              { text: `${transformedData.fireNOCNumber}`,
+              { text: '${transformedData.fireNOCNumber}',
               bold:true },
                ],
               border: [false, false, false, false],

@@ -564,7 +564,14 @@ advance=0;
   };
   
     });
-
+let length=response.Demands.length;
+let netAdvance=0;
+response.Demands[length-1].demandDetails.map((dd)=>{
+  if(dd.taxHeadMasterCode == "SW_ADVANCE_CARRYFORWARD" || dd.taxHeadMasterCode == "WS_ADVANCE_CARRYFORWARD" )
+  {
+    netAdvance=dd.taxAmount;
+  }
+});
   const totalTaxDemand = dcbArray.reduce((tax, item) => tax + parseInt(item.taxAmount, 10), 0);
   const totalInterestDemand = dcbArray.reduce((interest, item) => interest + parseInt(item.interestAmount, 10), 0);
   const totalPenaltyDemand = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyAmount, 10), 0);
@@ -576,7 +583,7 @@ advance=0;
   const totalTaxBalance = dcbArray.reduce((tax, item) => tax + parseInt(item.taxBalance, 10), 0);
   const totalInterestBalance = dcbArray.reduce((interest, item) => interest + parseInt(item.interestBalance, 10), 0);
   const totalPenaltyBalance = dcbArray.reduce((penalty, item) => penalty + parseInt(item.penaltyBalance, 10), 0);
- const totalAdvance=dcbArray.reduce((advance, item) => advance + parseInt(item.advance, 10), 0);
+ const totalAdvance=netAdvance;
   const totalBalance = parseInt(totalTaxBalance) + parseInt(totalInterestBalance) + parseInt(totalPenaltyBalance)+parseInt(totalAdvance);  
 
 
