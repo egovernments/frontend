@@ -56,6 +56,23 @@ const removeValidation = (state, dispatch, index) => {
       false
     )
   );
+  //-----------------------------new add--------------
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.locality",
+      "props.error",
+      false
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.name",
+      "props.error",
+      false
+    )
+  );
   dispatch(
     handleField(
       "propertySearch",
@@ -102,6 +119,23 @@ const removeValidation = (state, dispatch, index) => {
     handleField(
       "propertySearch",
       "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.ownerMobNoProp",
+      "isFieldValid",
+      true
+    )
+  );
+   //-----------------------------new add--------------
+   dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.locality",
+      "isFieldValid",
+      true
+    )
+  );
+  dispatch(
+    handleField(
+      "propertySearch",
+      "components.div.children.propertySearchTabs.children.cardContent.children.tabSection.props.tabs[1].tabContent.searchApplicationDetails.children.cardContent.children.appNumberContainer.children.name",
       "isFieldValid",
       true
     )
@@ -159,7 +193,7 @@ const searchApiCall = async (state, dispatch, index) => {
     return;
 
   }
-
+ debugger;
   let query = { "tenantId": searchScreenObject.tenantId };
   if (index == 1 && process.env.REACT_APP_NAME == "Citizen") {
     query = {}
@@ -167,11 +201,11 @@ const searchApiCall = async (state, dispatch, index) => {
 
   let formValid = false;
   if (index == 0) {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '') {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.oldpropertyids != '' || searchScreenObject.locality != '' || searchScreenObject.name != '') {
       formValid = true;
     }
   } else {
-    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '') {
+    if (searchScreenObject.ids != '' || searchScreenObject.mobileNumber != '' || searchScreenObject.acknowledgementIds != '' || searchScreenObject.locality != '' || searchScreenObject.name != '') {
       formValid = true;
     }
   }

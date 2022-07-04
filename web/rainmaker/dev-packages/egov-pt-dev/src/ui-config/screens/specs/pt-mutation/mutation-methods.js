@@ -9,8 +9,10 @@ import {
   getCommonParagraph,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { httpRequest } from "../../../../ui-utils/api";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { propertySearch, applicationSearch } from "./functions";
+import { propertySearch, applicationSearch, dumm } from "./functions";
 // import "./index.css";
 
 
@@ -128,10 +130,20 @@ export const resetFields = (state, dispatch) => {
     "ptSearchScreen.oldpropertyids",
     ''
   ))
+  dispatch(prepareFinalObject(
+    "ptSearchScreen.locality",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "ptSearchScreen.name",
+    ''
+  ))
 
 };
 
-
+export const test = () =>{
+  alert("testing");
+}
 export const searchPropertyDetails = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Property",
@@ -144,6 +156,7 @@ export const searchPropertyDetails = getCommonCard({
   }),
   ulbCityContainer: getCommonContainer({
     ulbCity: {
+      ...getSelectField({
       uiFramework: "custom-containers-local",
       moduleName: "egov-pt",
       componentPath: "AutosuggestContainer",
@@ -175,6 +188,78 @@ export const searchPropertyDetails = getCommonCard({
       required: true,
       jsonPath: "ptSearchScreen.tenantId",
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+    }),
+    beforeFieldChange: async (action, state, dispatch) => {
+      //Below only runs for citizen - not required here in employee
+
+      try {
+        let payload = await httpRequest(
+          "post",
+          "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+          "_search",
+          [{ key: "tenantId", value: action.value }],
+          {}
+        );
+        console.log("payload", payload)
+        const mohallaData =
+          payload &&
+          payload.TenantBoundary[0] &&
+          payload.TenantBoundary[0].boundary &&
+          payload.TenantBoundary[0].boundary.reduce((result, item) => {
+            result.push({
+              ...item,
+              name: `${action.value
+                .toUpperCase()
+                .replace(
+                  /[.]/g,
+                  "_"
+                )}_REVENUE_${item.code
+                  .toUpperCase()
+                  .replace(/[._:-\s\/]/g, "_")}`
+            });
+            return result;
+          }, []);
+
+        console.log(mohallaData, "mohallaData")
+
+
+
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.tenant.localities",
+            mohallaData
+          )
+        );
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+            "props.suggestions",
+            mohallaData
+          )
+        );
+        const mohallaLocalePrefix = {
+          moduleName: action.value,
+          masterName: "REVENUE"
+        };
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
+            "props.localePrefix",
+            mohallaLocalePrefix
+          )
+        );
+
+        // dispatch(
+        //   fetchLocalizationLabel(getLocale(), action.value, action.value)
+        // );
+
+      } catch (e) {
+        console.log(e);
+      }
+
+    },
       gridDefination: {
         xs: 12,
         sm: 4
@@ -241,8 +326,76 @@ export const searchPropertyDetails = getCommonCard({
       pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       errorMessage: "ERR_INVALID_PROPERTY_ID",
       jsonPath: "ptSearchScreen.oldpropertyids"
-    })
+    }),
+    
+     //-------------locality--------------
+  propertyMohalla: {
+    uiFramework: "custom-containers",
+    componentPath: "AutosuggestContainer",
+    jsonPath:"ptSearchScreen.locality",
+    required: true,
+    props: {
+      style: {
+        width: "100%",
+        cursor: "pointer"
+      },
+      label: {
+        labelName: "Locality/Mohalla",
+       // labelKey: "NOC_PROPERTY_DETAILS_MOHALLA_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Locality/Mohalla",
+        //labelKey: "NOC_PROPERTY_DETAILS_MOHALLA_PLACEHOLDER"
+      },
+      jsonPath:"ptSearchScreen.locality",
+      sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+      labelsFromLocalisation: true,
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      suggestions: [],
+      fullwidth: true,
+      required: true,
+      inputLabelProps: {
+        shrink: true
+      }
+      // className: "tradelicense-mohalla-apply"
+    },
+    beforeFieldChange: async (action, state, dispatch) => {
+      // dispatch(
+      //   prepareFinalObject(
+      //     "Licenses[0].tradeLicenseDetail.address.locality.name",
+      //     action.value && action.value.label
+      //   )
+      // );
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  },
+  //---------------locality-end--------------
+  //-------------------Owner Name----------------------
+  ownerName: getTextField({
+    label: {
+      labelName: "Owner Name",
+      labelKey: "Owner Name"
+    },
+    placeholder: {
+      labelName: "Enter Owner Name",
+      labelKey: "Owner Name"
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 4,
+
+    },
+    required: false,
+   // pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
+    errorMessage: "ERR_INVALID_PROPERTY_ID",
+    jsonPath: "ptSearchScreen.name"
   }),
+  //-------------------End Owner Name--------------------------------
+  }),
+ 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
       resetButton: {
@@ -445,6 +598,7 @@ export const searchApplicationDetails = getCommonCard({
     })
   })
 });
+
 
 export const searchProperty = getCommonContainer({
   searchPropertyDetails,
