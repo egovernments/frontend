@@ -130,6 +130,14 @@ export const resetFields = (state, dispatch) => {
     "ptSearchScreen.oldpropertyids",
     ''
   ))
+  dispatch(prepareFinalObject(
+    "ptSearchScreen.locality",
+    ''
+  ))
+  dispatch(prepareFinalObject(
+    "ptSearchScreen.name",
+    ''
+  ))
 
 };
 
@@ -383,7 +391,7 @@ export const searchPropertyDetails = getCommonCard({
     required: false,
    // pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
     errorMessage: "ERR_INVALID_PROPERTY_ID",
-    jsonPath: "ptSearchScreen.ownerName"
+    jsonPath: "ptSearchScreen.name"
   }),
   //-------------------End Owner Name--------------------------------
   }),
