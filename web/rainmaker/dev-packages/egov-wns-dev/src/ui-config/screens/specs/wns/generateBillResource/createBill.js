@@ -29,6 +29,7 @@ applicationtype: {
 uiFramework: "custom-containers-local",
 moduleName: "egov-wns",
 componentPath: "AutosuggestContainer",
+jsonPath: "generateBillScreen.transactionType",
 props: {
   label: {
     labelName: "Connection Type",
@@ -76,6 +77,7 @@ locality: {
 uiFramework: "custom-containers-local",
 moduleName: "egov-wns",
 componentPath: "AutosuggestContainer",
+jsonPath: "generateBillScreen.mohallaData",
 props: {
   label: { labelName: "Locality", labelKey:"Locality"},
   placeholder: { labelName: "Select maholla", labelKey: "WS_GENERATE_BILL_LOCALITY_PLACEHOLDER" },
