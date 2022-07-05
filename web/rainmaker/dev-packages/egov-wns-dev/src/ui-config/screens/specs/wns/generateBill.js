@@ -79,7 +79,7 @@ const getMDMSAppType =async (dispatch) => {
   }
 
 const header = getCommonHeader({
-  labelKey: "WS_GENERATE_BILL_SUB_HEADERfffffff"
+  labelKey: "WS_GENERATE_BILL_SUB_HEADER"
 });
 
 

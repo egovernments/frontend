@@ -25,10 +25,11 @@ import {
 //  ---------------------------------------------------------------------------------------
 //             Connection Type drop down
 //-----------------------------------------------------------------------------------------
-applicationtype: {
+applicationtype:{
   uiFramework: "custom-containers-local",
   moduleName: "egov-wns",
   componentPath: "AutosuggestContainer",
+  jsonPath: "generateBillScreen.transactionType",
   props: {
     label: {
       labelName: "Connection Type",
@@ -61,7 +62,7 @@ applicationtype: {
     jsonPath: "generateBillScreen.transactionType",
     //sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
    // jsonPath: "searchScreen.tenantId",
-    //disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+    disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
   },
   required: false,
   
@@ -110,6 +111,7 @@ locality: {
   uiFramework: "custom-containers-local",
   moduleName: "egov-wns",
   componentPath: "AutosuggestContainer",
+  jsonPath: "generateBillScreen.mohallaData",
   props: {
     label: { labelName: "Locality", labelKey:"Locality"},
     placeholder: { labelName: "Select maholla", labelKey: "WS_GENERATE_BILL_LOCALITY_PLACEHOLDER" },
@@ -122,7 +124,7 @@ locality: {
     sourceJsonPath: "mohallaData",
     jsonPath: "generateBillScreen.mohallaData",
   //  jsonPath: "searchScreen.tenantId",
-    //disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+    disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
   },
    required: false,
    gridDefination: {
