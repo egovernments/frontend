@@ -7,12 +7,18 @@ import {
   getPattern,
   getDateField,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  getFileUrlFromAPI,
+  handleFileUpload,
+  getTransformedLocale,
+  getFileUrl
+} from "egov-ui-framework/ui-utils/commons";
 import {generateBillApiCall ,searchBillApiCall, fileUpload} from "./functions";
 import UploadFile from "egov-ui-framework/ui-atoms/UploadFile"
 
 
 import "./index.css";
-
+debugger
 export const bulkUpload = getCommonCard({
 
    wnsGenerateBill: getCommonContainer({
@@ -38,7 +44,7 @@ export const bulkUpload = getCommonCard({
     errorMessage: "ERR_INVALID_DATE",
     required: false
   }),
-  //------------------end date------------
+  //------------------end date--------------------
   toDate: getDateField({
     label: { labelName: "Meter Reading Date", labelKey: "Meter Reading Date" },
     placeholder: {
@@ -55,8 +61,53 @@ export const bulkUpload = getCommonCard({
     required: false
   }),
   //-------------------date---------------
-
- //--------------------
+  
+  documentList: {
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-wns",
+    componentPath: "bulkUpload",
+    props: {
+      documents: [
+        {
+          name: "Identity ",
+          required: true,
+          jsonPath: "bpa.documents.identityProof",
+          selector: {
+            inputLabel: "Select Document",
+            menuItems: [
+              { value: "AADHAAR", label: "Aadhaar Card" },
+              { value: "VOTERID", label: "Voter ID Card" },
+              { value: "DRIVING", label: "Driving License" }
+            ]
+          }
+        },
+        {
+          name: "Address Proof ",
+          required: true,
+          jsonPath: "bpa.documents.addressProof",
+          selector: {
+            inputLabel: "Select Document",
+            menuItems: [
+              { value: "ELECTRICITYBILL", label: "Electricity Bill" },
+              { value: "DL", label: "Driving License" },
+              { value: "VOTERID", label: "Voter ID Card" }
+            ]
+          }
+        }
+      ],
+      buttonLabel: {
+        labelName: "UPLOAD FILE",
+        labelKey: "BPA_DOC_DET_BTN_UPLOAD_FILE"
+      },
+      // description: "Only .jpg and .pdf files. 6MB max file size.",
+      inputProps: {
+        accept: "image/*, .pdf, .png, .jpeg"
+      },
+      maxFileSize: 5000
+    },
+    type: "array"
+  },
+ //---------------------------------------------------
   searchButton: {
     componentPath: "Button",
     gridDefination: { xs: 12, sm: 3 },
@@ -79,26 +130,8 @@ export const bulkUpload = getCommonCard({
     children: { buttonLabel: getLabel({ labelKey:  "File Choose" }) },
    
   },
-  searchButtonOne:{
-    ...UploadFile({
-      classes:{input:'',button:'primary'},
-      handleFileUpload:fileUpload,
-      buttonProps:{},
-      inputProps:{},
-      accept:'jpeg',
-      buttonLabel:getLabel({ labelKey: "UploadSingle" }),
-      id:'singh'
-    }),
-    gridDefination: { xs: 12, sm: 3 },
-    jsonPath: "bpa.documents.searchButtonOne",
-    required: true,
-  },
-  // searchButtonOne: {
-  //   componentPath: "Button",
-  //   gridDefination: { xs: 12, sm: 3 },
-  //   jsonPath: "bpa.documents.searchButtonOne",
-  //   required: true,
-  //   },
+ 
+  
 //---------------------------------------------------------------------------------------
 //             Generate Bill  Button
 //-----------------------------------------------------------------------------------------
@@ -121,7 +154,7 @@ export const bulkUpload = getCommonCard({
         onClickDefination: {
        
           action: "condition",
-         // callBack: generateBillApiCall
+          callBack: fileUpload
         }
       },
     })
