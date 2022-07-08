@@ -3,7 +3,7 @@ import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import { getAssessmentInfo, getUnitInfo } from "../../common/propertyTax/Property/components/AssessmentInfo";
 import { getOwnerInfo } from "../../common/propertyTax/Property/components/OwnerInfo";
 import { getAddressItems } from "../../common/propertyTax/Property/components/PropertyAddressInfo";
-import { generatePDF, getDocumentsCard, getMultipleItemCard } from "./generatePDF";
+import { generatePDF, getMultipleItemCard } from "./generatePDF";
 
 export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoForPdf, fileName = "acknowledgement.pdf") => {
 
@@ -50,7 +50,7 @@ export const generatePTAcknowledgment = (property, generalMDMSDataById, UlbLogoF
     const addressCard = getAddressItems(property);
     const ownerCard = getMultipleItemCard(ownerInfo, 'PT_OWNER');
     const assessmentCard = getAssessmentInfo(getFromObject(property, 'propertyDetails[0]', {}), generalMDMSDataById,property);
-    const documentCard = getDocumentsCard(property.documentsUploaded);
+    //const documentCard = getDocumentsCard(property.documentsUploaded);
 
     let pdfData = {
         header: "PT_ACKNOWLEDGEMENT", tenantId: property.tenantId,
