@@ -384,8 +384,8 @@ else {
                 this.onStatusChangePropertyClick()}
                 }}
               labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51",display:"none" }}
-              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "2%", display:"none"}}
+              buttonStyle={{ border: "1px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "2%" }}
             />
             <Button
                label={
