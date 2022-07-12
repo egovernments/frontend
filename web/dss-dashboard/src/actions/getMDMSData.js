@@ -13,10 +13,19 @@ _.each(tenants,(v,k) => {
     if(v.city.ddrName){     
         tenantId = v.code;
         if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.ddrName] != 'undefined'){
+            if(v.city.pwssb) {
+                tempDRRsObj["Pwssb-DDR"].push(tenantId);
+            } 
             tempDRRsObj[v.city.ddrName].push(tenantId);
         }else{
+            if(v.city.pwssb) {
+                tempDRRsObj["Pwssb-DDR"] = [tenantId]
+            }
             tempDRRsObj[v.city.ddrName] = [tenantId]
             tempDDRs.push(v.city.ddrName);
+            if(!tempDDRs.includes("Pwssb-DDR")) {
+                tempDDRs.push("Pwssb-DDR")
+            }
         }
     }
 })
