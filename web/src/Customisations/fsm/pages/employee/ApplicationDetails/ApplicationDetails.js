@@ -193,7 +193,7 @@ const ApplicationDetails = (props) => {
   if (isLoading) {
     return <Loader />;
   }
-console.log(applicationDetails);
+
   return (
     <React.Fragment>
       {!isLoading ? (
