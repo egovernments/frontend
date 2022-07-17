@@ -100,7 +100,21 @@ const Response = (props) => {
         }
       );
     } else {
-      mutation.mutate(state, {
+      const formdata = {
+        fsm: {
+          ...state.fsm,
+          address: {
+            ...state.fsm.address,
+            street: state.fsm.address.street?.trim() || 'N/A',
+            doorNo: state.fsm.address.doorNo?.trim() || 'N/A',
+            landmark: state.fsm.address.landmark?.trim() || 'N/A',
+            // pincode: state.fsm.address.pincode || 'N/A',
+          },
+        },
+        workflow: null,
+      };
+
+      mutation.mutate(formdata, {
         onError,
         onSuccess,
       });
