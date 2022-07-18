@@ -19,7 +19,11 @@ _.each(tenants,(v,k) => {
             tempDRRsObj[v.city.ddrName].push(tenantId);
         }else{
             if(v.city.pwssb) {
-                tempDRRsObj["Pwssb-DDR"] = [tenantId]
+                if (tempDRRsObj.hasOwnProperty("Pwssb-DDR") && tempDRRsObj["Pwssb-DDR"].length > 0) {
+                    tempDRRsObj["Pwssb-DDR"].push(tenantId);
+                } else {
+                    tempDRRsObj["Pwssb-DDR"] = [tenantId];
+                }
             }
             tempDRRsObj[v.city.ddrName] = [tenantId]
             tempDDRs.push(v.city.ddrName);
