@@ -151,9 +151,9 @@ export const searchPropertyDetails = getCommonCard({
   }),
 
   subParagraph: getCommonParagraph({
-    labelName: "Provide at least one non-mandatory parameter to search for an application (In case of Search by locality and name . please select city name again)",
+    labelName: "Provide at least one non-mandatory parameter to search for an application (In case of Search by locality and name . please select city name again)fffff",
    //labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
-    labelKey: "Provide at least one non-mandatory parameter to search for an application (In case of search by locality and name . please select city name again)"
+    labelKey: "Provide at least one non-mandatory parameter to search for an application (In case of search by locality and name . please select city name again)fffff"
   }),
   ulbCityContainer: getCommonContainer({
     ulbCity: {
@@ -354,7 +354,8 @@ export const searchPropertyDetails = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       suggestions: [],
       fullwidth: true,
-      required: true,
+      required: false,
+      disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
       inputLabelProps: {
         shrink: true
       }
@@ -392,7 +393,8 @@ export const searchPropertyDetails = getCommonCard({
     required: false,
    // pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
     errorMessage: "ERR_INVALID_PROPERTY_ID",
-    jsonPath: "ptSearchScreen.name"
+    jsonPath: "ptSearchScreen.name",
+    disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
   }),
   //-------------------End Owner Name--------------------------------
   }),
