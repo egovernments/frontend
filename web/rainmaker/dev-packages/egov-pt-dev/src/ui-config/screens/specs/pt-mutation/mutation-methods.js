@@ -356,6 +356,7 @@ export const searchPropertyDetails = getCommonCard({
       fullwidth: true,
       required: false,
       disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+     // type:hidden,
       inputLabelProps: {
         shrink: true
       }
