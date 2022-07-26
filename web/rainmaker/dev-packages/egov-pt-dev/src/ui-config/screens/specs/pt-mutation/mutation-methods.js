@@ -151,9 +151,9 @@ export const searchPropertyDetails = getCommonCard({
   }),
 
   subParagraph: getCommonParagraph({
-    labelName: "Provide at least one non-mandatory parameter to search for an application (In case of Search by locality and name . please select city name again)fffff",
+    labelName: "Provide at least one non-mandatory parameter to search for an application (In case of Search by locality and name . please select city name again)",
    //labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
-    labelKey: "Provide at least one non-mandatory parameter to search for an application (In case of search by locality and name . please select city name again)fffff"
+    labelKey: "Provide at least one non-mandatory parameter to search for an application (In case of search by locality and name . please select city name again)"
   }),
   ulbCityContainer: getCommonContainer({
     ulbCity: {
