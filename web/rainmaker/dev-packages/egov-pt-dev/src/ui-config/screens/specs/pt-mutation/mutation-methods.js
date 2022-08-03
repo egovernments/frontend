@@ -329,7 +329,7 @@ export const searchPropertyDetails = getCommonCard({
       jsonPath: "ptSearchScreen.oldpropertyids"
     }),
     
-     //-------------locality--------------
+  //-------------locality--------------
   propertyMohalla: {
     uiFramework: "custom-containers",
     componentPath: "AutosuggestContainer",
@@ -354,7 +354,9 @@ export const searchPropertyDetails = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       suggestions: [],
       fullwidth: true,
-      required: true,
+      required: false,
+      disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+     // type:hidden,
       inputLabelProps: {
         shrink: true
       }
@@ -392,7 +394,8 @@ export const searchPropertyDetails = getCommonCard({
     required: false,
    // pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
     errorMessage: "ERR_INVALID_PROPERTY_ID",
-    jsonPath: "ptSearchScreen.name"
+    jsonPath: "ptSearchScreen.name",
+    disabled: process.env.REACT_APP_NAME === "Citizen" ? true : false,
   }),
   //-------------------End Owner Name--------------------------------
   }),
