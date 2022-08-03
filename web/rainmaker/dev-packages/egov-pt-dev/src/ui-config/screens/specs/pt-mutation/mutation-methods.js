@@ -329,7 +329,7 @@ export const searchPropertyDetails = getCommonCard({
       jsonPath: "ptSearchScreen.oldpropertyids"
     }),
     
-     //-------------locality--------------
+       //-------------locality--------------
   propertyMohalla: {
     uiFramework: "custom-containers",
     componentPath: "AutosuggestContainer",
