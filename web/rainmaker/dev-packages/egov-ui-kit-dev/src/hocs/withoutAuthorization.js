@@ -13,6 +13,8 @@ import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
 import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
 import { getModuleName } from "../utils/commons";
+import { getStoredModulesList, setModule } from "../utils/localStorageUtils";
+
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {
@@ -27,7 +29,7 @@ const getUlbGradeLabel = (ulbGrade) => {
 const withoutAuthorization = (redirectionUrl) => (Component) => {
   class Wrapper extends React.Component {
     state = {
-      languageSelected: getLocale(),
+      languageSelected: getLocale()||"en_IN",
     };
     style = {
       baseStyle: {
@@ -77,8 +79,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           this.props.history.push(redirectionUrl);
         }
       }
-      if(isPublicSearch()){
-        const locale=getQueryArg(window.location.href, "locale") || 'en_IN';
+      setModule(getModuleName());
+      const locale = getQueryArg(window.location.href, "locale") || "en_IN";
+      if (isPublicSearch() && locale !== "en_IN") {
         setLocale(locale);
         this.onLanguageChange(locale);
       }
