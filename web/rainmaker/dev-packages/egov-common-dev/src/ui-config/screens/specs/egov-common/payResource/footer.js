@@ -59,199 +59,198 @@ const checkAmount = (totalAmount, customAmount, businessService) => {
       alert("You are not eligible for payment");
       }
       else{
-       
+           
+      const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
+      const tenantId = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].tenantId");
+      const consumerCode = getQueryArg(window.location.href, "consumerCode");
+      const businessService = get(
+        state,
+        "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
+      );
+      const bankBusinessServiceType = get(
+        state,
+        "screenConfiguration.preparedFinalObject.businessServiceInfo.type"
+      );
+      let bankBusinessService = '';
+      if (bankBusinessServiceType == "Adhoc") {
+        bankBusinessService = "MCS";
+      } else {
+        bankBusinessService = businessService
+      }
+    
+      const url = isPublicSearch() ? "withoutAuth/egov-common/paymentRedirectPage" : "egov-common/paymentRedirectPage";
+      const redirectUrl = process.env.NODE_ENV === "production" ? `citizen/${url}` : url;
+      // const businessService = getQueryArg(window.location.href, "businessService"); businessService
+      let callbackUrl = `${window.origin}/${redirectUrl}`;
+      const { screenConfiguration = {} } = state;
+      const { preparedFinalObject = {} } = screenConfiguration;
+      const { ReceiptTemp = {} } = preparedFinalObject;
+      const billPayload = ReceiptTemp[0];
+      const taxAmount = Number(get(billPayload, "Bill[0].totalAmount"));
       
-      // const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
-      // const tenantId = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].tenantId");
-      // const consumerCode = getQueryArg(window.location.href, "consumerCode");
-      // const businessService = get(
-      //   state,
-      //   "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
-      // );
-      // const bankBusinessServiceType = get(
-      //   state,
-      //   "screenConfiguration.preparedFinalObject.businessServiceInfo.type"
-      // );
-      // let bankBusinessService = '';
-      // if (bankBusinessServiceType == "Adhoc") {
-      //   bankBusinessService = "MCS";
-      // } else {
-      //   bankBusinessService = businessService
-      // }
-    
-      // const url = isPublicSearch() ? "withoutAuth/egov-common/paymentRedirectPage" : "egov-common/paymentRedirectPage";
-      // const redirectUrl = process.env.NODE_ENV === "production" ? `citizen/${url}` : url;
-      // // const businessService = getQueryArg(window.location.href, "businessService"); businessService
-      // let callbackUrl = `${window.origin}/${redirectUrl}`;
-      // const { screenConfiguration = {} } = state;
-      // const { preparedFinalObject = {} } = screenConfiguration;
-      // const { ReceiptTemp = {} } = preparedFinalObject;
-      // const billPayload = ReceiptTemp[0];
-      // const taxAmount = Number(get(billPayload, "Bill[0].totalAmount"));
+      let amtToPay =
+        state.screenConfiguration.preparedFinalObject.AmountType ===
+          "partial_amount"
+          ? state.screenConfiguration.preparedFinalObject.AmountPaid
+          : taxAmount;
+      amtToPay = amtToPay ? Number(amtToPay) : taxAmount;
       
-      // let amtToPay =
-      //   state.screenConfiguration.preparedFinalObject.AmountType ===
-      //     "partial_amount"
-      //     ? state.screenConfiguration.preparedFinalObject.AmountPaid
-      //     : taxAmount;
-      // amtToPay = amtToPay ? Number(amtToPay) : taxAmount;
-      
-      // if (amtToPay > taxAmount && !isAdvancePaymentAllowed) {
-      //   alert("Advance Payment is not allowed");
-      //   return;
-      // }
-      // if (amtToPay < taxAmount && process.env.REACT_APP_NAME === "Citizen" && (businessService == "PT" || businessService == "WS" || businessService == "SW") ) {
-      //   alert("Partial Payment is not allowed");
-      //   return;
-      // }
-      // let isFormValid = validateFields(
-      //   "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer.children",
-      //   state,
-      //   dispatch,
-      //   "pay"
-      // );
-      // if (!isFormValid) {
-        // dispatch(
-        //   toggleSnackbar(
-        //     true,
-        //     {
-        //       labelName: "Transaction numbers don't match !",
-        //       labelKey: "ERR_FILL_ALL_FIELDS"
-        //     },
-        //     "error"
-        //   )
-        // );
-      //   return;
-      // }
-      // if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), businessService)) {
-      //   dispatch(
-      //     toggleSnackbar(
-      //       true,
-      //       { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
-      //       "error"
-      //     )
-      //   );
-      //   return;
-      // }
+      if (amtToPay > taxAmount && !isAdvancePaymentAllowed) {
+        alert("Advance Payment is not allowed");
+        return;
+      }
+      if (amtToPay < taxAmount && process.env.REACT_APP_NAME === "Citizen" && (businessService == "PT" || businessService == "WS" || businessService == "SW") ) {
+        alert("Partial Payment is not allowed");
+        return;
+      }
+      let isFormValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePayerDetails.children.cardContent.children.payerDetailsCardContainer.children",
+        state,
+        dispatch,
+        "pay"
+      );
+      if (!isFormValid) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Transaction numbers don't match !",
+              labelKey: "ERR_FILL_ALL_FIELDS"
+            },
+            "error"
+          )
+        );
+        return;
+      }
+      if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), businessService)) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
+            "error"
+          )
+        );
+        return;
+      }
     
-      // if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), businessService)) {
-      //   dispatch(
-      //     toggleSnackbar(
-      //       true,
-      //       { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
-      //       "error"
-      //     )
-      //   );
-      //   return;
-      // }
+      if (checkAmount(taxAmount, Number(state.screenConfiguration.preparedFinalObject.AmountPaid), businessService)) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Please enter an amount greater than zero!", labelKey: "ERR_ENTER_AMOUNT_MORE_THAN_ZERO" },
+            "error"
+          )
+        );
+        return;
+      }
     
-      // const payerInfo=get(billPayload, "Bill[0].payer",'').replace("COMMON_",'');
-      // const user = {
-      //   name: get(billPayload, "Bill[0].paidBy", get(billPayload, "Bill[0].payerName")),
-      //   mobileNumber: get(billPayload, "Bill[0].payerMobileNumber", get(billPayload, "Bill[0].mobileNumber")),
-      //   tenantId
-      // };
-      // let taxAndPayments = [];
-      // taxAndPayments.push({
-      //   taxAmount:taxAmount,
-      //   businessService: businessService,
-      //   billId: get(billPayload, "Bill[0].id"),
-      //   amountPaid: amtToPay
-      // });
-      // const buttonJsonpath = paybuttonJsonpath + `${(process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? "makePayment" : "generateReceipt"}`;
-      // try {
-      //   dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
+      const payerInfo=get(billPayload, "Bill[0].payer",'').replace("COMMON_",'');
+      const user = {
+        name: get(billPayload, "Bill[0].paidBy", get(billPayload, "Bill[0].payerName")),
+        mobileNumber: get(billPayload, "Bill[0].payerMobileNumber", get(billPayload, "Bill[0].mobileNumber")),
+        tenantId
+      };
+      let taxAndPayments = [];
+      taxAndPayments.push({
+        taxAmount:taxAmount,
+        businessService: businessService,
+        billId: get(billPayload, "Bill[0].id"),
+        amountPaid: amtToPay
+      });
+      const buttonJsonpath = paybuttonJsonpath + `${(process.env.REACT_APP_NAME === "Citizen" || (((JSON.parse(localStorage.getItem("user-info"))).roles[0].code) === "UC_COWCESS_USER")) ? "makePayment" : "generateReceipt"}`;
+      try {
+        dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
     
-      //   const requestBody = {
-      //     Transaction: {
-      //       tenantId,
-      //       txnAmount: amtToPay,
-      //       module: businessService,
-      //       billId: get(billPayload, "Bill[0].id"),
-      //       consumerCode: consumerCode,
-      //       productInfo: "Common Payment",
-      //       gateway: "RAZORPAY",
-      //       taxAndPayments,
-      //       user,
-      //       callbackUrl,
-      //       businessService: bankBusinessService,
-      //       additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false,
-      //       paidBy:payerInfo }
-      //     }
-      //   };
-      //   const goToPaymentGateway = await httpRequest(
-      //     "post",
-      //     "pg-service/transaction/v1/_create",
-      //     "_create",
-      //     [],
-      //     requestBody
-      //   );
+        const requestBody = {
+          Transaction: {
+            tenantId,
+            txnAmount: amtToPay,
+            module: businessService,
+            billId: get(billPayload, "Bill[0].id"),
+            consumerCode: consumerCode,
+            productInfo: "Common Payment",
+            gateway: "RAZORPAY",
+            taxAndPayments,
+            user,
+            callbackUrl,
+            businessService: bankBusinessService,
+            additionalDetails: { isWhatsapp: localStorage.getItem('pay-channel') == 'whatsapp' ? true : false,
+            paidBy:payerInfo }
+          }
+        };
+        const goToPaymentGateway = await httpRequest(
+          "post",
+          "pg-service/transaction/v1/_create",
+          "_create",
+          [],
+          requestBody
+        );
     
-      //   if (get(goToPaymentGateway, "Transaction.txnAmount") == 0) {
-      //     const srcQuery = `?tenantId=${get(
-      //       goToPaymentGateway,
-      //       "Transaction.tenantId"
-      //     )}&billIds=${get(goToPaymentGateway, "Transaction.billId")}`;
+        if (get(goToPaymentGateway, "Transaction.txnAmount") == 0) {
+          const srcQuery = `?tenantId=${get(
+            goToPaymentGateway,
+            "Transaction.tenantId"
+          )}&billIds=${get(goToPaymentGateway, "Transaction.billId")}`;
     
-      //     let searchResponse = await httpRequest(
-      //       "post",
-      //       getPaymentSearchAPI(businessService) + srcQuery,
-      //       "_search",
-      //       [],
-      //       {}
-      //     );
+          let searchResponse = await httpRequest(
+            "post",
+            getPaymentSearchAPI(businessService) + srcQuery,
+            "_search",
+            [],
+            {}
+          );
     
-      //     let transactionId = get(
-      //       searchResponse,
-      //       "Payments[0].paymentDetails[0].receiptNumber"
-      //     );
+          let transactionId = get(
+            searchResponse,
+            "Payments[0].paymentDetails[0].receiptNumber"
+          );
     
-      //     let  paymentDetails= get(
-      //       searchResponse,
-      //       "Payments[0]",
-      //       null
-      //     );
-      //     dispatch(setPaymentDetails(paymentDetails))
+          let  paymentDetails= get(
+            searchResponse,
+            "Payments[0]",
+            null
+          );
+          dispatch(setPaymentDetails(paymentDetails))
     
-      //     const ackUrl = `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`;
-      //     const successUrl = isPublicSearch() ? `/withoutAuth${ackUrl}` : ackUrl;
-      //     dispatch(
-      //       setRoute(
-      //         successUrl
-      //       )
-      //     );
-      //   } else {
-      //     const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl") || get(goToPaymentGateway, "Transaction.callbackUrl");
-      //     // if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mandigobindgarh"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.handiaya"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.sultanpurlodhi")
-      //     //   {
-      //     //    displayRazorpay(goToPaymentGateway);
-      //     //   }
-      //     //   else{
-      //     //   window.location = redirectionUrl;
-      //     //   }
+          const ackUrl = `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}&businessService=${businessService}`;
+          const successUrl = isPublicSearch() ? `/withoutAuth${ackUrl}` : ackUrl;
+          dispatch(
+            setRoute(
+              successUrl
+            )
+          );
+        } else {
+          const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl") || get(goToPaymentGateway, "Transaction.callbackUrl");
+          // if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.amritsar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mohali" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.moga" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.khanna" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.hoshiarpur" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.kapurthala" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.mandigobindgarh"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.handiaya"|| get(goToPaymentGateway, "Transaction.tenantId")=="pb.sultanpurlodhi")
+          //   {
+          //    displayRazorpay(goToPaymentGateway);
+          //   }
+          //   else{
+          //   window.location = redirectionUrl;
+          //   }
     
-      //        if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.jalandhar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.testing")         {
-      //         window.location = redirectionUrl;  
-      //        }
-      //        else{
-      //         displayRazorpay(goToPaymentGateway);
+             if( get(goToPaymentGateway, "Transaction.tenantId")=="pb.jalandhar" || get(goToPaymentGateway, "Transaction.tenantId")=="pb.testing")         {
+              window.location = redirectionUrl;  
+             }
+             else{
+              displayRazorpay(goToPaymentGateway);
             
-      //        }
-      //   }
-      // } catch (e) {
-      //   dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
-      //   dispatch(
-      //     toggleSnackbar(
-      //       true,
-      //       { labelName: e.message, labelKey: e.message },
-      //       "error"
-      //     )
-      //   );
-      //   /*     // }else{
-      //         moveToFailure(dispatch);
-      //       }
-      //    */
-      // }
+             }
+        }
+      } catch (e) {
+        dispatch(handleField("pay", buttonJsonpath, "props.disabled", false));
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: e.message, labelKey: e.message },
+            "error"
+          )
+        );
+        /*     // }else{
+              moveToFailure(dispatch);
+            }
+         */
+      }
     
     }
     };
