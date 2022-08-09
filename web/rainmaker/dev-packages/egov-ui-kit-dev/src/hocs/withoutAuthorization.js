@@ -13,7 +13,6 @@ import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
 import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
 import { getModuleName } from "../utils/commons";
-import { getStoredModulesList, setModule } from "../utils/localStorageUtils";
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {
