@@ -4,6 +4,7 @@ import { Button, Card, TextField, Image } from "components";
 import { CityPicker } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/mseva-punjab.png";
+
 import "./index.css";
 
 const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick }) => {
@@ -19,7 +20,9 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick }) => {
               className="mseva-logo employee-login-logo"
               source={`${logo}`}
             />
+             
           </div>
+         
           <Label
             style={{ marginBottom: "12px" }}
             className="text-center"
