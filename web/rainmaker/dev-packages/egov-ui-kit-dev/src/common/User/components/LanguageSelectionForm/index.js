@@ -2,8 +2,8 @@ import React from "react";
 import { ButtonGroup, Card, Image } from "components";
 import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
-//import logo from "egov-ui-kit/assets/images/logo_black.png";
-import logo from "egov-ui-kit/assets/images/mseva-pmidc-punjab.png";
+import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logoone from "egov-ui-kit/assets/images/pmidclogo.png";
 import "./index.css";
 
 const selectedLabelStyle = {
@@ -39,17 +39,22 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
       className="col-sm-offset-4 col-sm-4 user-screens-card language-selection-card"
       textChildren={
         <div>
-           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
-            <div style={{ marginBottom: "24px" }}>
+           <div className="rainmaker-displayInline msevaonelogo" >
+            <div>
               <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          {/* <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
               <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div> */}
+           </div>
           </div>
+          <div className="rainmaker-displayInline pmidclogo" style={{ justifyContent: "right" }}>
+            <div style={{ marginBottom: "24px" }}>
+              <Image className="mseva-logo" source={`${logoone}`} />
+            </div >
+            </div>
         <form>
             <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
               {items &&

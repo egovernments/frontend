@@ -6,6 +6,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "egov-ui-kit/common/common/Banner";
 // import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import logo from "egov-ui-kit/assets/images/mseva-pmidc-punjab.png";
+import logoone from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 
 const RegisterForm = ({ handleFieldChange, form }) => {
@@ -20,6 +21,12 @@ const RegisterForm = ({ handleFieldChange, form }) => {
             <Image
               className="mseva-logo employee-login-logo"
               source={`${logo}`}
+            />
+          </div>
+          <div className="web-user-logo" style={{ marginBottom: "24px" }}>
+            <Image
+              className="mseva-logo employee-login-logo"
+              source={`${logoone}`}
             />
           </div>
           <Label
