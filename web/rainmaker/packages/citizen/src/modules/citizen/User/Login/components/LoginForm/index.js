@@ -6,7 +6,8 @@ import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import Hidden from "@material-ui/core/Hidden";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+//import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/mseva-pmidc-punjab.png";
 import "./index.css";
 
 const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }) => {
@@ -24,12 +25,12 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
             <div style={{ marginBottom: "24px" }}>
               <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          {/* <div style={{marginLeft:"7px", marginBottom: "24px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
               <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
+           </div> */}
           </div>
           <Label style={{ marginBottom: "12px" }} className="text-center" bold={true} dark={true} fontSize={16} label="CORE_COMMON_LOGIN" />
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange}  />

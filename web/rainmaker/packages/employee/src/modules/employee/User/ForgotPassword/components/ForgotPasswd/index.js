@@ -2,7 +2,8 @@ import React from "react";
 import { Card, TextField, Image } from "components";
 import { Button} from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+//import logo from "egov-ui-kit/assets/images/logo_black.png";
+import logo from "egov-ui-kit/assets/images/mseva-pmidc-punjab.png";
 import "./index.css";
 import { CityPicker } from "modules/common";
 
@@ -19,12 +20,12 @@ const ForgotPasswd = ({ form, handleFieldChange }) => {
             <div style={{ marginBottom: "24px" }}>
               <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          {/* <div style={{marginLeft:"7px", marginBottom: "24px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
               <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
+           </div> */}
           </div>
           <Label
             style={{ marginBottom: "12px" }}
