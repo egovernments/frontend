@@ -12,6 +12,7 @@ export const configNOCApproverApplication = ({
   setUploadedFile,
   assigneeLabel,
   businessService,
+  error
 }) => {
 
   let isCommentRequired = false;
@@ -26,7 +27,7 @@ export const configNOCApproverApplication = ({
 
   return {
     label: {
-      heading: `WF_FORWARD_APPLICATION`,
+      heading: `WF_${action?.action}_APPLICATION`,
       submit: `WF_${businessService}_${action?.action}`,
       cancel: "CORE_LOGOUTPOPUP_CANCEL",
     },
@@ -35,7 +36,6 @@ export const configNOCApproverApplication = ({
         body: [
           {
             label: action.isTerminateState || isRejectOrRevocate ? null : t(assigneeLabel || `WF_ROLE_${action.assigneeRoles?.[0]}`),
-            // isMandatory: !action.isTerminateState,
             type: "dropdown",
             populators: action.isTerminateState || isRejectOrRevocate ? null : (
               <Dropdown
@@ -66,8 +66,9 @@ export const configNOCApproverApplication = ({
                   setUploadedFile(null);
                 }}
                 showHint={true}
-                // hintText={t("BPA_ATTACH_RESTRICTIONS_SIZE")}
                 message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                accept= "image/*, .pdf, .png, .jpeg, .jpg"
+                iserror={error}
               />
             ),
           },

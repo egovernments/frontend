@@ -43,7 +43,7 @@ const useSearchApplicationTableConfig = ({t}) => {
                 return (
                     <div>
                       <span className="cell-text">
-                      {row.original?.additionalDetails?.applicationType ? t(`WF_BPA_${row.original?.additionalDetails?.applicationType}`) : "-"}
+                      {row.original?.additionalDetails?.applicationType ? t(`WF_BPA_${row.original?.additionalDetails?.applicationType}`) : row.original?.businessService ? t(`BPA_APPLICATIONTYPE_${row?.original?.businessService}`) : "-"}
                       </span>
                     </div>
                   );
@@ -52,11 +52,12 @@ const useSearchApplicationTableConfig = ({t}) => {
         {
             Header: t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"),
             disableSortBy: true,
-            accessor: (row) => GetCell(t(row.additionalDetails?.serviceType || "-")),
+            accessor: (row) => GetCell(t(row.additionalDetails?.serviceType || t(`TRADELICENSE_TRADETYPE_${row?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}`) || "-")),
         },
         {
           Header: t("BPA_CURRENT_OWNER_HEAD"),
-          accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "-" : row?.landInfo?.owners.map( o => o.name ). join(",") || "-"),
+          accessor: (row) => GetCell(row?.assignee || "-"),
+          // accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "-" : row?.landInfo?.owners.map( o => o.name ). join(",") || "-"),
           disableSortBy: true,
         },
         {

@@ -30,7 +30,7 @@ const Response = ({ data, onSuccess }) => {
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
-  const [paymentPreference, setPaymentPreference] = useState(null)
+  const [paymentPreference, setPaymentPreference] = useState(null);
 
   const Data = mutation?.data || successData;
   const localityCode = Data?.fsm?.[0].address?.locality?.code;
@@ -41,23 +41,22 @@ const Response = ({ data, onSuccess }) => {
   });
 
   const onError = (error, variables) => {
-    setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');
+    setErrorInfo(error?.response?.data?.Errors[0]?.code || "ERROR");
     setMutationHappened(true);
   };
   useEffect(() => {
     if (mutation.data) setsuccessData(mutation.data);
   }, [mutation.data]);
-
   useEffect(() => {
     if (!mutationHappened && !errorInfo) {
       try {
         const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference, selectTripNo } = data;
         const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
-        setPaymentPreference(selectPaymentPreference.code);
+        setPaymentPreference(selectPaymentPreference?.code);
         const formdata = {
           fsm: {
             citizen: {
-              gender: selectGender?.code
+              gender: selectGender?.code,
             },
             tenantId: city.code,
             additionalDetails: {},
@@ -81,11 +80,12 @@ const Response = ({ data, onSuccess }) => {
                 additionalDetails: {},
               },
             },
-            pitDetail,
+            pitDetail: { ...pitDetail },
             source,
             sanitationtype: pitType?.code,
-            paymentPreference: selectPaymentPreference ? selectPaymentPreference.code : 'POST_PAY',
-            noOfTrips: selectTripNo ? selectTripNo?.code : 1
+            paymentPreference: selectPaymentPreference ? selectPaymentPreference?.code : "POST_PAY",
+            noOfTrips: selectTripNo ? selectTripNo?.tripNo?.code : 1,
+            vehicleCapacity: selectTripNo ? selectTripNo?.vehicleCapacity?.capacity : "",
           },
           workflow: null,
         };
@@ -96,8 +96,7 @@ const Response = ({ data, onSuccess }) => {
             onSuccess();
           },
         });
-      } catch (err) {
-      }
+      } catch (err) {}
     }
   }, []);
 
@@ -111,12 +110,14 @@ const Response = ({ data, onSuccess }) => {
   };
   const isSuccess = !successData ? mutation?.isSuccess : true;
 
-  return (mutation.isLoading || (mutation.isIdle && !mutationHappened)) ? (
+  return mutation.isLoading || (mutation.isIdle && !mutationHappened) ? (
     <Loader />
   ) : (
     <Card>
       <BannerPicker t={t} data={Data} isSuccess={isSuccess} isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading} />
-      <CardText>{t(paymentPreference && paymentPreference == 'POST_PAY' ? "CS_FILE_PROPERTY_RESPONSE_POST_PAY" : "CS_FILE_PROPERTY_RESPONSE")}</CardText>
+      <CardText>
+        {t(paymentPreference && paymentPreference == "POST_PAY" ? "CS_FILE_PROPERTY_RESPONSE_POST_PAY" : "CS_FILE_PROPERTY_RESPONSE")}
+      </CardText>
       {isSuccess && (
         <LinkButton
           label={

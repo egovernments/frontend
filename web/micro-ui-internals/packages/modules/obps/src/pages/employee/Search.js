@@ -1,21 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 const Search = ({ path }) => {
+  const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
+  const userInformation = userInfo?.value?.info;
+
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [selectedType, setSelectedType] = useState();
+  const location = useLocation();
+  const details = () => {
+    if (userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0) return "BUILDING_PLAN_SCRUTINY";
+    if (userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0) return "BPA_STAKEHOLDER_REGISTRATION";
+    else return "BUILDING_PLAN_SCRUTINY"
+  }
+  const [selectedType, setSelectedType] = useState(details());
   const [payload, setPayload] = useState({});
   const [searchData, setSearchData] = useState({});
 
+  useEffect(()=>{
+    if (location.pathname === "/digit-ui/citizen/obps/search/application" || location.pathname === "/digit-ui/employee/obps/search/application") {
+      Digit.SessionStorage.del("OBPS.INBOX")
+      Digit.SessionStorage.del("STAKEHOLDER.INBOX")
+    }
+  },[location.pathname])
+
   const Search = Digit.ComponentRegistryService.getComponent("OBPSSearchApplication");
 
+  const checkData = (data) => {
+    if (data?.applicationNo === "" && data?.fromDate === "" && data?.mobileNumber === "" && data?.serviceType === "" && data?.status === "" && data?.toDate === "") return false
+
+    return true
+
+  }
+
+  const [paramerror,setparamerror] = useState("")
+
   function onSubmit(_data) {
+    if (_data?.applicationType?.code === "BPA_STAKEHOLDER_REGISTRATION"){
+      const isSearchAllowed = checkData(_data)
+      if(!isSearchAllowed){
+        setparamerror("BPA_ADD_MORE_PARAM_STAKEHOLDER")
+      }
+    }
     setSearchData(_data);
     var fromDate = new Date(_data?.fromDate);
     fromDate?.setSeconds(fromDate?.getSeconds() - 19800);
     var toDate = new Date(_data?.toDate);
-    setSelectedType(_data?.applicationType?.code);
+    setSelectedType(_data?.applicationType?.code ? _data?.applicationType?.code : selectedType);
     toDate?.setSeconds(toDate?.getSeconds() + 86399 - 19800);
     const data = {
       ..._data,
@@ -32,14 +65,14 @@ const Search = ({ path }) => {
 
   let params = {};
   let filters = {};
-  let paramerror = "";
+  
 
+  
   if (
     (selectedType && selectedType.includes("STAKEHOLDER")) ||
     (Object.keys(payload).length > 0 && payload?.applicationType && payload?.applicationType.includes("STAKEHOLDER"))
   ) {
     if (Object.entries(payload).length <= 2 && Object.keys(payload).filter((ob) => ob === "applicationType").length == 0) {
-      paramerror = "BPA_ADD_MORE_PARAM_STAKEHOLDER";
     } else {
       let filters = payload;
       if (payload.applicationNo) {
@@ -47,7 +80,11 @@ const Search = ({ path }) => {
         payload.applicationNo = "";
       }
       if (payload && payload["applicationType"]) delete payload["applicationType"];
-      if (payload && payload["serviceType"]) delete payload["serviceType"];
+      if(payload && payload["serviceType"])
+      {
+        payload["tradeType"] = payload["serviceType"]
+        delete payload["serviceType"];
+      }
       params = { ...payload, tenantId: Digit.ULBService.getStateId() };
     }
   } else {
@@ -56,7 +93,7 @@ const Search = ({ path }) => {
         applicationType: "BUILDING_PLAN_SCRUTINY",
         serviceType: "NEW_CONSTRUCTION",
         ...(window.location.href.includes("/digit-ui/citizen") && {
-          mobileNumber: Digit.UserService.getUser().info.mobileNumber,
+          mobileNumber: Digit.UserService.getUser()?.info?.mobileNumber,
         }),
       };
 
@@ -69,7 +106,8 @@ const Search = ({ path }) => {
     payload,
     tenantId,
     filters,
-    params
+    params,
+    {enabled:paramerror===""}
   );
   return (
     <Search
@@ -81,6 +119,7 @@ const Search = ({ path }) => {
       Count={bpaData?.[0]?.Count}
       error={paramerror}
       data={!isBpaSearchLoading && isBpaSuccess && bpaData?.length > 0 ? bpaData : [{ display: "ES_COMMON_NO_DATA" }]}
+      setparamerror={setparamerror}
     />
   );
 };

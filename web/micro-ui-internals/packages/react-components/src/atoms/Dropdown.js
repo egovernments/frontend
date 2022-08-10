@@ -148,6 +148,12 @@ const Dropdown = (props) => {
     onSelect(filteredOption[ind]);
   }
 
+  if(props.isBPAREG && selectedOption)
+  {
+    let isSelectedSameAsOptions = props.option?.filter((ob) => ob?.code === selectedOption?.code)?.length > 0;
+    if(!isSelectedSameAsOptions) setSelectedOption(null)
+  }
+
   return (
     <div
       className={`${user_type === "employee" ? "employee-select-wrap" : "select-wrap"} ${props?.className ? props?.className : ""}`}
@@ -227,12 +233,9 @@ const Dropdown = (props) => {
                 );
               })}
             {filteredOption && filteredOption.length === 0 && (
-              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={() => onSelect({
-                "code": "NOOPTION",
-                "active": true,
-                "i18nKey": "CMN_NOOPTION",
-                "label": "No Options Available",
-              })}>
+              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={()=>{
+                
+              }}>
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>
             )}

@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { getVehicleType } from "../utils";
 import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError } from "@egovernments/digit-ui-react-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
+  let { id: applicationNumber } = useParams();
+  const userInfo = Digit.UserService.getUser();
+  const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
+    tenantId,
+    { applicationNos: applicationNumber, uuid: userInfo.uuid },
+    { staleTime: Infinity }
+  );
+  const { pathname } = useLocation();
+  const presentInModifyApplication = pathname.includes("modify");
 
   const [vehicle, setVehicle] = useState({ label: formData?.tripData?.vehicleCapacity });
   const [billError, setError] = useState(false);
@@ -24,13 +33,11 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         return curr.vehicles && curr.vehicles.length ? acc.concat(curr.vehicles) : acc;
       }, []);
 
-      const cpacityMenu = Array.from(new Set(allVehicles.map(a => a.capacity)))
-        .map(capacity => allVehicles.find(a => a.capacity === capacity))
+      const cpacityMenu = Array.from(new Set(allVehicles.map((a) => a.capacity))).map((capacity) => allVehicles.find((a) => a.capacity === capacity));
 
       setVehicleMenu(cpacityMenu);
     }
   }, [dsoData, vehicleData]);
-
 
   const inputs = [
     {
@@ -41,6 +48,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       validation: {
         isRequired: true,
         min: 1,
+        autoFocus: presentInModifyApplication,
       },
       default: formData?.tripData?.noOfTrips,
       disable: false,
@@ -88,7 +96,6 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   }
   useEffect(() => {
     (async () => {
-
       if (formData?.tripData?.vehicleType !== vehicle) {
         setVehicle({ label: formData?.tripData?.vehicleType?.capacity });
       }
@@ -136,7 +143,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           selected={vehicle}
           select={selectVehicle}
           t={t}
-          disable={formData?.tripData?.vehicleCapacity ? true : false}
+          disable={editScreen && applicationData?.applicationStatus != "CREATED" ? true : false}
         />
       </LabelFieldPair>
       {inputs?.map((input, index) => (

@@ -2,6 +2,7 @@ import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
+import useDocumentSearch from "./useDocumentSearch";
 import useClickOutside from "./useClickOutside";
 import {
   useFetchPayment,
@@ -48,6 +49,7 @@ import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
 import useVehicleSearch from "./fsm/useVehicleSearch";
 import useVehicleUpdate from "./fsm/useVehicleUpdate";
+import useVehicleTripCreate from "./fsm/useVehicleTripCreate";
 import useFSMInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
@@ -220,6 +222,7 @@ const fsm = {
   useConfig,
   useSlum,
   usePaymentHistory,
+  useVehicleTripCreate,
 };
 
 const pt = {
@@ -389,6 +392,7 @@ const Hooks = {
   useClearNotifications,
   useNotificationCount,
   useStore,
+  useDocumentSearch,
   useTenants,
   useInbox: useTLInbox,
   pgr,

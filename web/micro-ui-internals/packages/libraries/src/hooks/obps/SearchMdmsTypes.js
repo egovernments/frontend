@@ -69,6 +69,39 @@ const SearchMdmsTypes = {
       }
     ),
 
+    useBPAREGServiceTypes: (tenantId) =>
+    useQuery(
+      [tenantId, "BPAREG_MDMS_SERVICE_STATUS"],
+      () =>
+        MdmsService.getDataByCriteria(
+          tenantId,
+          {
+            details: {
+              tenantId: tenantId,
+              moduleDetails: [
+                {
+                  moduleName: "StakeholderRegistraition",
+                  masterDetails: [
+                    {
+                      name: "TradeTypetoRoleMapping",
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          "StakeholderRegistraition"
+        ),
+      {
+        select: (data) =>{
+          return [...data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map((type) => ({
+            code: type.tradeType?.split(".")[0],
+            i18nKey: `TRADELICENSE_TRADETYPE_${type.tradeType?.split(".")[0]}`,
+          }))]
+        },
+      }
+    ),
+
     useBPAServiceTypes: (tenantId) =>
      useQuery(
       [tenantId, "BPA_MDMS_SERVICE_STATUS"],
@@ -95,9 +128,13 @@ const SearchMdmsTypes = {
       {
         select: (data) =>{
         return [...data?.BPA?.BPAAppicationMapping?.filter(function (currentObject){
+          const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+          const userInfo = userInfos ? JSON.parse(userInfos) : {};
+          const userInformation = userInfo?.value?.info;
         let flag = 0;
         currentObject?.roles?.map((bpaRole) => {
-          const found = Digit.UserService.getUser()?.info?.roles.some(role => role?.code === bpaRole )
+          // const found = Digit.UserService.getUser()?.info?.roles.some(role => role?.code === bpaRole )
+          const found = userInformation?.roles.some(role => role?.code === bpaRole )
           if(found == true)
           flag = 1;
         })

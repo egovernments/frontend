@@ -111,6 +111,8 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     acc[i].accessory = value;
     setAccessory(value);
     setFeilds(acc);
+    acc[i].accessorycount = "";
+    acc[i].uom = "";
     acc[i].unit = null;
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
     setUnitOfMeasure(null);
@@ -145,15 +147,21 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   }
 
   const goNext = () => {
-    let data = formData.TradeDetails.Units;
+    let data = formData.TradeDetails;
     let formdata;
     sessionStorage.setItem("VisitedAccessoriesDetails", true);
     formdata = { ...data, accessories: fields };
     onSelect(config.key, formdata);
   };
 
-  const onSkip = () => onSelect();
+  function canMoveNext(){
+    if(!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || (fields?.[0]?.unit && !fields?.[0]?.uom) || AccCountError || AccUOMError)
+    return true
+    else 
+    return false
+  }
 
+  const onSkip = () => onSelect();
   return (
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline /> : null}
@@ -166,7 +174,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
           onSkip={onSkip}
           t={t}
           forcedError={t(AccCountError) || t(AccUOMError)}
-          isDisabled={!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || !fields?.[0]?.uom || AccCountError || AccUOMError}
+          isDisabled={canMoveNext()}
         >
           {fields.map((field, index) => {
             return (
@@ -182,7 +190,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     background: "#FAFAFA",
                   }}
                 >
-                  <CardLabel>{`${t("TL_ACCESSORY_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_ACCESSORY_LABEL")}*`}</CardLabel>
                   <LinkButton
                     label={
                       <div>
@@ -215,11 +223,12 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                       options={sortDropdownNames(accessories.length !== 0 ? accessories : getAccessoryCategoryDropDown(), "i18nKey", t)}
                       selectedOption={field.accessory}
                       onSelect={(e) => selectAccessory(index, e)}
+                      isPTFlow={true}
                     />
                   ) : (
                     <Loader />
                   )}
-                  <CardLabel>{`${t("TL_ACCESSORY_COUNT_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_ACCESSORY_COUNT_LABEL")}*`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}
@@ -255,7 +264,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
             title: t("PT_NAME_ERROR_MESSAGE"),
           })} */
                   />
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}*`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}

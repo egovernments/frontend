@@ -1,10 +1,11 @@
 import { BPAHomeIcon, BPAIcon, CitizenHomeCard, EDCRIcon, EmployeeModuleCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 const BPACitizenHomeScreen = ({ parentRoute }) => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData.code);
   const stateCode = Digit.ULBService.getStateId();
   const [stakeHolderRoles, setStakeholderRoles] = useState(false);
   const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(
@@ -15,6 +16,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
   const [bpaLinks, setBpaLinks] = useState([]);
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
+  const location = useLocation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BPA_HOME_CREATE", {});
   const { data: homePageUrlLinks, isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
   const [showToast, setShowToast] = useState(null);
@@ -67,6 +69,13 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     filters: { filterForm: {}, searchForm: {}, tableForm: { limit: 10, offset: 0 } },
   });
 
+  useEffect(()=>{
+    if (location.pathname === "/digit-ui/citizen/obps/home"){
+      Digit.SessionStorage.del("OBPS.INBOX")
+      Digit.SessionStorage.del("STAKEHOLDER.INBOX")
+    }
+  },[location.pathname])
+
   useEffect(() => {
     if (!bpaLoading) {
       const totalCountofBoth = bpaInboxData?.totalCount || 0;
@@ -82,10 +91,10 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
           roles.push(role);
         });
       });
-      const uniqueRoles = roles.filter((item, i, ar) => ar.indexOf(item) === i);
+      const uniqueRoles = roles?.filter((item, i, ar) => ar.indexOf(item) === i);
       let isRoute = false;
       uniqueRoles?.map((unRole) => {
-        if (userRoles.includes(unRole) && !isRoute) {
+        if (userRoles?.includes(unRole) && !isRoute) {
           isRoute = true;
         }
       });

@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 
 const OBPSEmployeeHomeCard = () => {
 
-    const [totalCount, setTotalCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
     const { t } = useTranslation();
     const location = useLocation()
   
