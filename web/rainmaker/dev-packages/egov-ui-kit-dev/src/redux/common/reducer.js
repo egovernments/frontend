@@ -92,6 +92,7 @@ const commonReducer = (state = intialState, action) => {
         error: true,
         errorMessage: action.error,
       };
+      debugger;
     case commonTypes.MDMS_FETCH_SUCCESS:
       let departmentsById = transformById(action.payload.MdmsRes["common-masters"].Department, "code");
       let designationsById = transformById(action.payload.MdmsRes["common-masters"].Designation, "code");
