@@ -231,7 +231,7 @@ class DateRange extends React.Component {
 
         classes={{ paper: classes.root }}
       >
-        <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#fe7a51' }}>
+        <DialogTitle style={{ fontFamily: 'Roboto', fontSize: '10px', color: '#F4C430' }}>
           {this.state.title}
         </DialogTitle>
         <DialogContent dividers>

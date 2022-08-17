@@ -9,7 +9,7 @@ const tabsStyles = theme => ({
     },
     indicator: {
         fontFamily: 'Roboto',
-        background: '#FE7A51'
+        background: '#F4C430'
     },
     tab: {
         fontFamily: 'Roboto',
