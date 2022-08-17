@@ -227,7 +227,7 @@ class EnhancedTable extends React.Component {
     // 	let value = "";
 
     let colorCode = Math.floor(Math.random() * Math.floor(2))
-    let insightColor = colorCode === 0 ? "#db534a" : "#2ba129";
+    let insightColor = colorCode === 0 ? "#F4C430" : "#2ba129";
     let insightIcon = colorCode === 0 ? Arrow_Downward : Arrow_Upward;
     let sign = colorCode === 0 ? '-' : '+';
     return (
@@ -271,7 +271,7 @@ class EnhancedTable extends React.Component {
                   if (value > 100)
                     value = 100;
 
-                  insightColor = "#db534a";
+                  insightColor = "#F4C430";
                   insightIcon = Arrow_Downward;
                   sign = '-';
 
@@ -290,7 +290,7 @@ class EnhancedTable extends React.Component {
                   if (value > 100)
                     value = 100;
                   if (value <= 0) {
-                    insightColor = "#db534a";
+                    insightColor = "#F4C430";
                     insightIcon = Arrow_Downward;
                     sign = '-';
                   } else {
