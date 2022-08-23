@@ -48,7 +48,9 @@ export const httpRequest = async (
 ) => {
   store.dispatch(toggleSpinner());
   let apiError = "Api Error";
-
+  headers = {
+    'X-Frame-Options': 'sameorigin'
+  }
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
       headers
