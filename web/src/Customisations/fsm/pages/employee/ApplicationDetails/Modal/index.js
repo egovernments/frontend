@@ -90,6 +90,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     { staleTime: Infinity }
   );
 
+  const { data: ReceivedPaymentTypeData, isLoading: receivedPaymentLoad } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "ReceivedPaymentType");
+
   const [dsoList, setDsoList] = useState([]);
   const [vehicleNoList, setVehicleNoList] = useState([]);
   const [config, setConfig] = useState({});
@@ -114,6 +116,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [pitDetail, setPitDetail] = useState();
   const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
   const [noOfTrips, setNoOfTrips] = useState(null);
+  const [receivedPaymentType, setReceivedPaymentType] = useState(null);
 
   const [defaultValues, setDefautValue] = useState({
     capacity: vehicle?.capacity,
@@ -203,6 +206,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   useEffect(() => {
     setFormValve(cancelReason ? true : false);
   }, [cancelReason]);
+
+  useEffect(() => {
+    if (!receivedPaymentLoad) {
+      setReceivedPaymentType(ReceivedPaymentTypeData);
+    }
+  }, [receivedPaymentLoad, ReceivedPaymentTypeData]);
 
   function selectDSO(dsoDetails) {
     setDSO(dsoDetails);
@@ -344,7 +353,16 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "COMPLETE":
       case "COMPLETED":
         setFormValve(true);
-        return setConfig(configCompleteApplication({ t, vehicle, vehicleCapacity: applicationData?.vehicleCapacity, noOfTrips: applicationData?.noOfTrips, applicationCreatedTime: applicationData?.auditDetails?.createdTime, action }));
+        return setConfig(configCompleteApplication({ 
+            t, 
+            vehicle, 
+            vehicleCapacity: applicationData?.vehicleCapacity, 
+            noOfTrips: applicationData?.noOfTrips, 
+            applicationCreatedTime: applicationData?.auditDetails?.createdTime,
+            receivedPaymentType, 
+            action 
+          })
+        );
       case "SUBMIT":
       case "FSM_SUBMIT":
         return window.history.push("/digit-ui/employee/fsm/modify-application/" + applicationData.applicationNumber);
