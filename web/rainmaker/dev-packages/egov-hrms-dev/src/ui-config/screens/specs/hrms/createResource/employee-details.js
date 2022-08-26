@@ -76,7 +76,7 @@ export const employeeDetails = getCommonCard({
       uiFramework: "custom-containers-local",
       moduleName: "egov-hrms",
       componentPath: "AutosuggestContainer",
-      jsonPath: "Employee[0].user.guardianrelation",
+      jsonPath: "Employee[0].user.guardianRelation",
       props: {
         className: "hr-generic-selectfield autocomplete-dropdown",
         data: [
@@ -99,7 +99,7 @@ export const employeeDetails = getCommonCard({
         required: true,
         isClearable: true,
         labelsFromLocalisation: true,
-        jsonPath: "Employee[0].user.guardianrelation"
+        jsonPath: "Employee[0].user.guardianRelation"
       },
       required: true,
       gridDefination: {

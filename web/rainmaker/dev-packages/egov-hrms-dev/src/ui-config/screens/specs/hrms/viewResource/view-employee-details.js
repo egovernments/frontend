@@ -114,7 +114,7 @@ export const getEmployeeDetailsView = (isReview = true) => {
           labelName: "Relationship",
           labelKey: "HR_RELATIONSHIP_LABEL",
         },
-        { jsonPath: "Employee[0].user.guardianrelation", callBack: checkValueForNA }
+        { jsonPath: "Employee[0].user.guardianRelation", callBack: checkValueForNA }
       ),
       reviewGender: getLabelWithValue(
         { labelName: "Gender", labelKey: "HR_GENDER_LABEL" },
