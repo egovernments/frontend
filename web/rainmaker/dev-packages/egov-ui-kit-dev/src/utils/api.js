@@ -23,6 +23,7 @@ const instance = axios.create({
   baseURL: window.location.origin,
   headers: {
     "Content-Type": "application/json",
+    'X-Frame-Options': 'sameorigin'
   },
 });
 
@@ -165,12 +166,13 @@ export const httpRequest = async (
 ) => {
   const tenantId = getTenantId() || commonConfig.tenantId;
   let apiError = "Api Error";
-
+  headers = {
+    'X-Frame-Options': 'sameorigin'
+  }
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
       headers,
     });
-
   if (!some(queryObject, ["key", "tenantId"]) && !ignoreTenantId) {
     queryObject &&
       queryObject.push({
