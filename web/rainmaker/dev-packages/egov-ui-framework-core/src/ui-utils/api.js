@@ -49,7 +49,8 @@ export const httpRequest = async (
   store.dispatch(toggleSpinner());
   let apiError = "Api Error";
   headers = {
-    'X-Frame-Options': 'sameorigin'
+    'X-Frame-Options': 'sameorigin',
+    'Cache-Control': "no-cache, no-store, no-transform, must-revalidate, max-age=0",
   }
   if (headers)
     instance.defaults = Object.assign(instance.defaults, {
@@ -100,6 +101,10 @@ export const httpRequest = async (
 
 export const loginRequest = async (username = null, password = null) => {
   let apiError = "Api Error";
+  headers = {
+    'X-Frame-Options': 'sameorigin',
+    'Cache-Control': "no-cache, no-store, no-transform, must-revalidate, max-age=0",
+  }
   try {
     // api call for login
     alert("Logged in");
@@ -114,6 +119,10 @@ export const loginRequest = async (username = null, password = null) => {
 
 export const logoutRequest = async () => {
   let apiError = "Api Error";
+  headers = {
+    'X-Frame-Options': 'sameorigin',
+    'Cache-Control': "no-cache, no-store, no-transform, must-revalidate, max-age=0",
+  }
   try {
     alert("Logged out");
     return;
