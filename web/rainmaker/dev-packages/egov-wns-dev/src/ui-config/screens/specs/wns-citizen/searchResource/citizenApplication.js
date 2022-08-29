@@ -53,13 +53,16 @@ const resetFields = (state, dispatch) => {
         )
     );
 };
+
 export const citizenApplication = getCommonCard({
+    
     subHeader: getCommonTitle({
         labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
     }),
     subParagraph: getCommonParagraph({
         labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
     }),
+
     cityPropertyAndMobNumContainer: getCommonContainer({
         city: {
             uiFramework: "custom-containers-local",
@@ -84,12 +87,7 @@ export const citizenApplication = getCommonCard({
             isClearable: true,
             labelsFromLocalisation: true,
             jsonPath: "searchScreen.tenantId",
-            sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-        },
-            required: true,
-            gridDefination: {
-                xs: 12,
-                sm: 12,
+            sourceJsonPath: "applyScreenMdmsData.tenant.waterSewerage",
                 md: 6
             },
         },

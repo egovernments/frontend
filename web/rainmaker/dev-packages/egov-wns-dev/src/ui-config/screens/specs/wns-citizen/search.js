@@ -82,7 +82,10 @@ export const getMdmsData = async (action, state, dispatch) => {
                         },
                         { 
                           name: "citymodule" 
-                        }
+                        },
+                        { 
+                            name: "waterSewerage" 
+                          }
                     ]
                 },
             ]
