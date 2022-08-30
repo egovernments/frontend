@@ -4,6 +4,7 @@ import { FsmBreadCrumb } from "./pages/employee";
 import SelectStreet from "./pageComponents/SelectStreet";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails/ApplicationDetails";
+import FstpOperations from "./pages/employee/FstpOperations";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -12,5 +13,6 @@ export const fsmComponents = {
   SelectStreet,
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMEmployeeApplicationDetails: EmployeeApplicationDetails,
+  FSMFstpOperations: FstpOperations,
 };
   
