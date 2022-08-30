@@ -1,7 +1,10 @@
 import React, { Fragment } from "react";
-import { BackButton, Card, AddNewIcon, InboxIcon, ViewReportIcon, CardText, CardHeader, ULBHomeCard } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+import { AddNewIcon } from "../../components/icons";
+import { InboxIcon } from "../../components/icons";
+import ULBHomeCard from "../../components/ULBHomeCard";
+var Digit = window.Digit;
 
 const FstpOperations = () => {
     const { t } = useTranslation();
