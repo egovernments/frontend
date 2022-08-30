@@ -17,11 +17,6 @@ const FstpOperations = () => {
             icon: <AddNewIcon />
         },
         {
-            name: "ES_FSM_VIEW_REPORTS_BUTTON",
-            locate: "/employee/report/fsm/FSMFSTPPlantWithVehicleLogReport",
-            icon: <ViewReportIcon />
-        },
-        {
             name: "ES_COMMON_INBOX",
             link: "/digit-ui/employee/fsm/fstp-inbox",
             icon: <InboxIcon />
