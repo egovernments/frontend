@@ -88,12 +88,12 @@ export const citizenApplication = getCommonCard({
             labelsFromLocalisation: true,
             jsonPath: "searchScreen.tenantId",
             sourceJsonPath: "applyScreenMdmsData.tenant.waterSewerage",
+            
+            },
             gridDefination: {
                 xs: 12,
-                sm: 12,
-                md: 6
-            },
-            },
+                sm: 4
+            }
         },
         propertyid: getTextField({
             label: {
