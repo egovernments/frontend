@@ -13,6 +13,6 @@ export const fsmComponents = {
   SelectStreet,
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMEmployeeApplicationDetails: EmployeeApplicationDetails,
-  FSMFstpOperations: FstpOperations,
+  FstpOperations: FstpOperations,
 };
   
