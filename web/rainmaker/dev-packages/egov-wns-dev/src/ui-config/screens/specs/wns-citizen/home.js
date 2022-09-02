@@ -100,7 +100,15 @@ const waterAndSewerageSearchAndResult = {
                     uiFramework: "custom-molecules-local",
                     moduleName: "egov-wns",
                     componentPath: "HowItWorks",
-                }
+                },
+                listCard4: {
+                    uiFramework: "custom-molecules-local",
+                    moduleName: "egov-wns",
+                    componentPath: "MyLink",
+                    props: {
+                        route: "my-WSLink"
+                    }
+                 },
             }
         },
         adhocDialog: {

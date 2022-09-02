@@ -1,7 +1,8 @@
 import {
     getCommonHeader,
     getLabel,
-    getBreak
+    getBreak,
+    getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { citizenApplication } from "./searchResource/citizenApplication";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -20,6 +21,7 @@ let enableButton = hasButton && hasButton === "false" ? false : true;
 const header = getCommonHeader({
     labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
+
 const waterAndSewerageSearchAndResult = {
     uiFramework: "material-ui",
     name: "search",

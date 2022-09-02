@@ -11,6 +11,9 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+const WSlink =() =>{
+    window.open("http://lgpunjab.gov.in/cms/apply-new-connection.php");
+}
 const resetFields = (state, dispatch) => {
     dispatch(
         handleField(
@@ -55,14 +58,47 @@ const resetFields = (state, dispatch) => {
 };
 
 export const citizenApplication = getCommonCard({
-    
-    subHeader: getCommonTitle({
-        labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
+    buttonn: getCommonContainer({
+        buttonContainer: getCommonContainer({
+            resetButton: {
+                componentPath: "Button",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12
+                },
+                props: {
+                    variant: "outlined",
+                    style: {
+                         color: "#28292991",
+                         width: "721px",
+                         border: "none",
+                         position: "fixed",
+                         left: "119px",
+                         top: "115px",
+                         "text-transform": "none",
+                    }
+                },
+                children: {
+                    buttonLabel: getLabel({
+                        labelKey: "Towns other than Fazilka can click here to apply new water sewerage connection"
+                    })
+                },
+                onClickDefination: {
+                    action: "condition",
+                    callBack: WSlink
+                }
+            },
+           
+        })
     }),
+    subHeader: getCommonTitle({
+        labelKey: "WS_SEARCH_CONNECTION_SUB_HEADERhhh"
+    }),
+    
     subParagraph: getCommonParagraph({
         labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
     }),
-
+    
     cityPropertyAndMobNumContainer: getCommonContainer({
         city: {
             uiFramework: "custom-containers-local",
