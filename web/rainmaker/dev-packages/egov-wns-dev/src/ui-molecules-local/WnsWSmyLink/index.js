@@ -134,7 +134,7 @@ charges.</p>
 </div>
       </div>
       <div className="row">
-      <div className="col-sm-4" style={{ padding: "15px 0px 30px 0px" }}>
+      <div className="col-sm-4 btnAplly" >
            <a
            className="btnWS"
             href={
@@ -155,7 +155,7 @@ charges.</p>
             />
           </a>
         </div>
-        <div className="col-sm-4" style={{ padding: "15px 0px 30px 0px" }}>
+        <div className="col-sm-4 btnAplly" >
            <a className="btnWS"
             href={
               "http://lgpunjab.gov.in/cms/pay-water-bill.php"
@@ -175,7 +175,7 @@ charges.</p>
             />
           </a>
         </div>
-        <div className="col-sm-4" style={{ padding: "15px 0px 30px 0px" }}>
+        <div className="col-sm-4 btnAplly" >
            <a className="btnWS"
             href={
               "http://lgpunjab.gov.in/cms/pay-sewerage-bill.php"
