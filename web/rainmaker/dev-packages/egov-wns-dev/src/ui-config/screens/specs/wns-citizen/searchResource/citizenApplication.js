@@ -92,7 +92,7 @@ export const citizenApplication = getCommonCard({
         })
     }),
     subHeader: getCommonTitle({
-        labelKey: "WS_SEARCH_CONNECTION_SUB_HEADERhhh"
+        labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
     }),
     
     subParagraph: getCommonParagraph({
