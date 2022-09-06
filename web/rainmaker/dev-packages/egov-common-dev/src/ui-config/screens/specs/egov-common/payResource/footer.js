@@ -44,21 +44,26 @@ const checkAmount = (totalAmount, customAmount, businessService) => {
     // console.log(dispatch("screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill"),"dispactchaa");
     // console.log(get(state, "screenConfiguration"),"dummy");
     // console.log(get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode"),"cdata");
-    // const getdate=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");
-    // debugger;
-    // const cd= getdate.split("PB-FN-");
-    // const appActualDate=cd[1].slice(0,10);
-    // console.log(appActualDate);
-    // const currentDate = new Date();
-    // const appDate = new Date(cd[1].slice(0,10));
-    // const diffTime = Math.abs(appDate - currentDate);
-    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    // console.log(diffTime + " milliseconds");
-    // console.log(diffDays + " days");
-    // if (diffDays>=5){
-    //   alert("You are not eligible for payment");
-    //   }
-    //   else{
+    const BusinessService=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
+    var diffDays;
+    if(BusinessService.toUpperCase() =="FIRENOC"){
+    var getdate=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");
+    debugger;
+    const cd= getdate.split("PB-FN-");
+    const appActualDate=cd[1].slice(0,10);
+    console.log(appActualDate);
+    const currentDate = new Date();
+    const appDate = new Date(cd[1].slice(0,10));
+    const diffTime = Math.abs(appDate - currentDate);
+     diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    console.log(diffTime + " milliseconds");
+    console.log(diffDays + " days");
+    }
+    if (diffDays>=5 && BusinessService.toUpperCase() =="FIRENOC"){
+      alert("You are not eligible for payment");
+      }
+   
+       else{
            
       const isAdvancePaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
       const tenantId = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].tenantId");
@@ -252,8 +257,10 @@ const checkAmount = (totalAmount, customAmount, businessService) => {
          */
       }
     
-    }
-   // };
+    
+    
+  }
+};
 export const download = async (receiptQueryString, mode = "download" ,configKey="consolidatedreceipt" , state) => {
   if(state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt"){
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject , "commonPayInfo");
