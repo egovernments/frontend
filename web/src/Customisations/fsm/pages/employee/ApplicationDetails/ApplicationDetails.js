@@ -19,10 +19,12 @@ import {
   Rating,
   ActionLinks,
   Header,
+  ImageViewer,
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
 import TLCaption from "../../../components/TLCaption";
+import { ViewImages } from "../../../components/ViewImages";
 
 import { useQueryClient } from "react-query";
 
@@ -41,6 +43,7 @@ const ApplicationDetails = (props) => {
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
+  const [imageZoom, setImageZoom] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber, {}, props.userType);
@@ -135,6 +138,14 @@ const ApplicationDetails = (props) => {
     });
     closeModal();
   };
+
+  function zoomImageWrapper(imageSource, index) {
+    setImageZoom(imageSource);
+  }
+
+  function onCloseImageZoom() {
+    setImageZoom(null);
+  }
 
   const getTimelineCaptions = (checkpoint) => {
     const __comment = checkpoint?.comment?.split("~");
@@ -235,6 +246,27 @@ const ApplicationDetails = (props) => {
                 </StatusTable>
               </React.Fragment>
             ))}
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN?.length && (
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_FSM_SUB_HEADING_CITIZEN_UPLOADS")}</CardSectionHeader>
+                <ViewImages
+                  fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN}
+                  tenantId={state}
+                  onClick={(source, index) => zoomImageWrapper(source, index)}
+                />
+              </>
+            )}
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO?.length && (
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_FSM_SUB_HEADING_DSO_UPLOADS")}</CardSectionHeader>
+                <ViewImages
+                  fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO}
+                  tenantId={tenantId}
+                  onClick={(source, index) => zoomImageWrapper(source, index)}
+                />
+              </>
+            )}
+            {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
 
             <BreakLine />
             {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
