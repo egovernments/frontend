@@ -6,6 +6,7 @@ import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails/ApplicationDetails";
 import FstpOperations from "./pages/employee/FstpOperations";
 import SelectTripData from "./pageComponents/SelectTripData";
+import { NewApplication } from "./pages/employee/NewApplication";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -16,5 +17,6 @@ export const fsmComponents = {
   FSMEmployeeApplicationDetails: EmployeeApplicationDetails,
   FstpOperations: FstpOperations,
   SelectTripData,
+  FSMNewApplicationEmp: NewApplication,
 };
   
