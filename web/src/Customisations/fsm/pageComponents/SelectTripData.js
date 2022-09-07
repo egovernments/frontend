@@ -112,7 +112,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         });
 
         const billSlab = billingDetails?.billingSlab?.length >= 0 && billingDetails?.billingSlab[0];
-        if (billSlab?.price) {
+        if (billSlab?.price !== null) {
           setValue({
             amountPerTrip: billSlab.price,
             amount: billSlab.price * formData.tripData.noOfTrips,
