@@ -416,13 +416,12 @@ const setSearchResponse = async (
       false
     );
   }
-  debugger;
+
   let NOCTypeDta= get(response,
     "FireNOCs[0].fireNOCDetails.fireNOCType",
       ""
     )
     const getdate=get(response, "FireNOCs[0].fireNOCDetails.applicationNumber");
-    debugger;
     const cd= getdate.split("PB-FN-");
     const appActualDate=cd[1].slice(0,10);
     console.log(appActualDate);

@@ -74,6 +74,26 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async (item,label) => {
+    const { dataPath, state } = this.props;
+    const getdate = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
+    );
+    const cd= getdate.split("PB-FN-");
+    const appActualDate=cd[1].slice(0,10);
+    console.log(appActualDate);
+    const currentDate = new Date();
+    const appDate = new Date(cd[1].slice(0,10));
+    const diffTime = Math.abs(appDate - currentDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    console.log(diffTime + " milliseconds");
+    console.log(diffDays + " days");
+    if (diffDays>=90){
+      alert("You are not eligible for Re-Submit ");
+      }
+    // console.log(data, "test1");
+    // alert("Test Re-Submit");
+    else{
     const { handleFieldChange, setRoute, dataPath,onDialogButtonClick  } = this.props;
     let employeeList = [],empList=[]; 
     if (item.buttonLabel === "ACTIVATE_CONNECTION") {
@@ -169,6 +189,7 @@ class Footer extends React.Component {
 
     if(label === "APPROVE"){
       this.setState({ data: item, employeeList });
+     
       onDialogButtonClick(label,false);
 
     }
@@ -177,6 +198,7 @@ class Footer extends React.Component {
 
     }
     // this.setState({ open: true, data: item, employeeList });
+  }
   };
 
   onClose = () => {
@@ -256,6 +278,7 @@ class Footer extends React.Component {
       contractData &&
       contractData.map(item => {
         const { buttonLabel, moduleName } = item;
+       
         return {
           labelName: { buttonLabel },
           labelKey: `WF_${appName.toUpperCase()}_${moduleName.toUpperCase()}_${buttonLabel}`,
