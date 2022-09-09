@@ -656,7 +656,7 @@ export const propertyLocationDetails = getCommonCard(
 
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].tenantId", action.value)
+              "FireNOCs[0].tenantId", props_value)
           );
 
           dispatch(
@@ -699,7 +699,7 @@ export const propertyLocationDetails = getCommonCard(
           set(
             state,
             "screenConfiguration.preparedFinalObject.FireNOCs[0].tenantId",
-            action.value
+            props_value
           );
         }
 
@@ -800,7 +800,7 @@ export const propertyLocationDetails = getCommonCard(
 
           dispatch(
             prepareFinalObject(
-              "FireNOCs[0].tenantId", action.value)
+              "FireNOCs[0].tenantId", fireStations[0].baseTenantId)
           );
 
           dispatch(
