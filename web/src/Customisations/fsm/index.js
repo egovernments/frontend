@@ -8,6 +8,7 @@ import FstpOperations from "./pages/employee/FstpOperations";
 import SelectTripData from "./pageComponents/SelectTripData";
 import { NewApplication } from "./pages/employee/NewApplication";
 import EditApplication from "./pages/employee/EditApplication";
+import FSMCard from "./components/FsmCard";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -20,5 +21,6 @@ export const fsmComponents = {
   SelectTripData,
   FSMNewApplicationEmp: NewApplication,
   FSMEditApplication: EditApplication,
+  FSMCard,
 };
   
