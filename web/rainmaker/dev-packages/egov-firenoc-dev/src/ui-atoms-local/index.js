@@ -47,7 +47,10 @@ const MyApplicationIcon = Loadable({
   loader: () => import("./Icons/MyApplicationIcon"),
   loading: () => <Loading />
 });
-
+const BreadCrumbs = Loadable({
+  loader: () => import("./BreadCrumbs"),
+  loading: () => <Loading />
+});
 export {
   TestAtoms,
   ApplicationNoContainer,
@@ -57,5 +60,6 @@ export {
   Asteric,
   MenuButton,
   FireNocIcon,
-  MyApplicationIcon
+  MyApplicationIcon,
+  BreadCrumbs
 };

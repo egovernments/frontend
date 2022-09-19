@@ -11,7 +11,10 @@ const RadioButtonsGroup = Loadable({
   loader: () => import("./RadioGroup"),
   loading: () => <Loading />
 });
-
+const Applications = Loadable({
+  loader: () => import("./Applications"),
+  loading: () => <Loading />
+});
 const Tooltip = Loadable({
   loader: () => import("./Tooltip"),
   loading: () => <Loading />
@@ -51,7 +54,18 @@ const HowItWorks = Loadable({
   loader: () => import("./HowItWorks"),
   loading: () => <Loading />
 });
-
+const NewConnection = Loadable({
+  loader: () => import("./NewConnection"),
+  loading: () => <Loading />
+});
+const FirenocApply = Loadable({
+  loader: () => import("./FirenocApply"),
+  loading: () => <Loading />
+});
+const FNFirenocApply = Loadable({
+  loader: () => import("./FNFirenocApply"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -62,5 +76,8 @@ export {
   MapLocator,
   FeesEstimateCard,
   DividerWithLabel,
-  HowItWorks
+  HowItWorks,
+  FirenocApply,
+  FNFirenocApply,
+  NewConnection
 };

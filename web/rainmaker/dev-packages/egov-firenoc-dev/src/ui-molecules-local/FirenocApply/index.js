@@ -17,10 +17,10 @@ const styles = theme => ({
   }
 });
 
-class HowItWorks extends React.Component {
+class FirenocApply extends React.Component {
 
   clickHandler = () => {
-    store.dispatch(setRoute("howItWorks"))
+    store.dispatch(setRoute("my-NOC"))
   }
 
   render() {
@@ -32,8 +32,8 @@ class HowItWorks extends React.Component {
             <ListItemText
               primary={
                 <LabelContainer
-                  labelKey="COMMON_HOW_IT_WORKS"
-                  labelName="How it works?"
+                  labelKey="How to apply & pay Fire NOC"
+                  labelName="How to apply & pay Fire NOC"
                   style={{
                     fontSize: 14,
                     color: "rgba(0, 0, 0, 0.8700000047683716)"
@@ -53,4 +53,4 @@ class HowItWorks extends React.Component {
   }
 }
 
-export default withStyles(styles)(HowItWorks);
+export default withStyles(styles)(FirenocApply);

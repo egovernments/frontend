@@ -7,33 +7,33 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardRightIcon from "@material-ui/icons/KeyboardArrowRight";
-import { getDomainLink } from "../../ui-utils/commons";
+import { Link } from "react-router-dom";
 import store from "ui-redux/store";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 const styles = theme => ({
   root: {
     margin: "2px 8px",
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   }
 });
 
-class HowItWorks extends React.Component {
+class MyFireLink extends React.Component {
 
   clickHandler = () => {
-    store.dispatch(setRoute("howItWorks"))
+    store.dispatch(setRoute("my-NOC"))
   }
 
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root} onClick={this.clickHandler}>
-        <List component="nav">
+      <div className={classes.root}>
+        <List component="nav" onClick={this.clickHandler}>
           <ListItem button>
             <ListItemText
               primary={
                 <LabelContainer
-                  labelKey="COMMON_HOW_IT_WORKS"
-                  labelName="How it works?"
+                  labelKey="How to apply & pay Fire NOC"
                   style={{
                     fontSize: 14,
                     color: "rgba(0, 0, 0, 0.8700000047683716)"
@@ -53,4 +53,4 @@ class HowItWorks extends React.Component {
   }
 }
 
-export default withStyles(styles)(HowItWorks);
+export default withStyles(styles)(MyFireLink);

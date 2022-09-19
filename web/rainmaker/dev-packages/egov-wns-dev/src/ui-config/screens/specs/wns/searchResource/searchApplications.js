@@ -22,7 +22,7 @@ export const searchApplications = getCommonCard({
     labelKey: "WS_SEARCH_APPLICATION_SUB_HEADER"
   }),
   subParagraph: getCommonParagraph({
-    labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "WS_HOME_SEARCH_RESULTS_DESCfffff"
   }),
   wnsApplicationSearch: getCommonContainer({
     consumerNo: getTextField({

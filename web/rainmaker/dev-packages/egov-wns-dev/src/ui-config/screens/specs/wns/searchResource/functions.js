@@ -8,6 +8,7 @@ import { httpRequest } from "../../../../../ui-utils";
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
+  debugger;
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
   let currentSearchTab = getCurrentTab === undefined ? "SEARCH_CONNECTION" : getCurrentTab;
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen.mobileNumber", {});
