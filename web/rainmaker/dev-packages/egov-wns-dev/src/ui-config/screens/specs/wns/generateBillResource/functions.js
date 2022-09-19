@@ -34,11 +34,11 @@ export const generateBillApiCall = async (state, dispatch) => {
 
 try {
   let transactionType=null;  
-if(generateBillScreenObject["transactionType"]=="WS_CONNECTION_TYPE_SEWERAGE")
+if(generateBillScreenObject["transactionType"]=="Sewerage")
 {
   transactionType = "SW";
 }
-else if(generateBillScreenObject["transactionType"]=="WS_CONNECTION_TYPE_WATER")
+else if(generateBillScreenObject["transactionType"]=="Water")
 {
   transactionType = "WS";
 }
@@ -146,11 +146,11 @@ export const searchBillApiCall = async (state, dispatch) => {
         searchBillScreenObject["mohallaData"].lastIndexOf("(") + 1, 
         searchBillScreenObject["mohallaData"].lastIndexOf(")")).trim();
  var transactionType;  
- if(searchBillScreenObject["transactionType"]=="WS_CONNECTION_TYPE_SEWERAGE")
+ if(searchBillScreenObject["transactionType"]=="Sewerage")
  {
    transactionType = "SW";
  }
- else if(searchBillScreenObject["transactionType"]=="WS_CONNECTION_TYPE_WATER")
+ else if(searchBillScreenObject["transactionType"]=="Water")
  {
    transactionType = "WS";
  }
