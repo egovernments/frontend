@@ -75,19 +75,23 @@ class Footer extends React.Component {
 
   openActionDialog = async (item,label) => {
     const { dataPath, state } = this.props;
+    let diffDays;
+    debugger;
     const getdate = get(
       state,
       "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicationNumber"
     );
+    if(getdate){
     const cd= getdate.split("PB-FN-");
     const appActualDate=cd[1].slice(0,10);
     console.log(appActualDate);
     const currentDate = new Date();
     const appDate = new Date(cd[1].slice(0,10));
     const diffTime = Math.abs(appDate - currentDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
     console.log(diffTime + " milliseconds");
     console.log(diffDays + " days");
+    }
     if (diffDays>=90){
       alert("You are not eligible for Re-Submit ");
       }
