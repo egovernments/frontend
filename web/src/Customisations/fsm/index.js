@@ -9,6 +9,7 @@ import SelectTripData from "./pageComponents/SelectTripData";
 import { NewApplication } from "./pages/employee/NewApplication";
 import EditApplication from "./pages/employee/EditApplication";
 import FSMCard from "./components/FsmCard";
+import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -22,5 +23,6 @@ export const fsmComponents = {
   FSMNewApplicationEmp: NewApplication,
   FSMEditApplication: EditApplication,
   FSMCard,
+  FSMFstpOperatorDetails: FstpOperatorDetails,
 };
   

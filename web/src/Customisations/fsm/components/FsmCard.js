@@ -138,9 +138,13 @@ const FSMCard = () => {
         
         links: [
           {
-            label: t("ES_COMMON_HOME"),
-            link: "/digit-ui/employee/fsm/fstp-operations",
+            label: t("ES_FSM_ADD_NEW_BUTTON"),
+            link: "/digit-ui/employee/fsm/fstp-add-vehicle",
           },
+          {
+            label: t("ES_COMMON_INBOX"),
+            link: "/digit-ui/employee/fsm/fstp-inbox",
+          }
         ],
       }
     : {
