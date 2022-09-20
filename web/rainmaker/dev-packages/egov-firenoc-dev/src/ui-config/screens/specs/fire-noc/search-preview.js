@@ -421,17 +421,19 @@ const setSearchResponse = async (
     "FireNOCs[0].fireNOCDetails.fireNOCType",
       ""
     )
+    let diffDays ;
     const getdate=get(response, "FireNOCs[0].fireNOCDetails.applicationNumber");
+    if(getdate){
     const cd= getdate.split("PB-FN-");
     const appActualDate=cd[1].slice(0,10);
     console.log(appActualDate);
     const currentDate = new Date();
     const appDate = new Date(cd[1].slice(0,10));
     const diffTime = Math.abs(appDate - currentDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
     console.log(diffTime + " milliseconds");
     console.log(diffDays + " days");
-   
+    }
       	  
     if(NOCTypeDta === "RENEWAL"){
       if (diffDays<=90){
