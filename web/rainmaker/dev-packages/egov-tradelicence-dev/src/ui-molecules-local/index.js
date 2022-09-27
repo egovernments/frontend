@@ -56,6 +56,20 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const NewConnection = Loadable({
+  loader: () => import("./NewConnection"),
+  loading: () => <Loading />
+});
+
+const TDTradeApply = Loadable({
+  loader: () => import("./TDTradeApply"),
+  loading: () => <Loading />
+});
+
+const TradeApply = Loadable({
+  loader: () => import("./TradeApply"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -66,5 +80,8 @@ export {
   MapLocator,
   FeesEstimateCard,
   HowItWorks,
-  ActionDialog
+  NewConnection,
+  ActionDialog,
+  TDTradeApply,
+  TradeApply
 };

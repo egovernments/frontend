@@ -76,8 +76,25 @@ const tradeLicenseSearchAndResult = {
         listCard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-tradelicence",
-          componentPath: "HowItWorks"
-        }
+          componentPath: "NewConnection",
+          props: {
+              items: {
+                  route: {
+                      screenKey: "home",
+                      jsonPath: "components.adhocDialog"
+                  }
+              }
+
+          }
+      },
+        listCard1: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "TradeApply",
+          props: {
+              route: "TDApply"
+          }
+      }
       }
     },
     // div: {

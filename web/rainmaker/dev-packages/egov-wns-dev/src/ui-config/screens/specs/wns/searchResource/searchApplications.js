@@ -9,7 +9,7 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall } from "./functions";
+import { searchApiCall, exceldatadownload } from "./functions";
 import { resetFieldsForApplication } from '../../utils';
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -227,6 +227,26 @@ export const searchApplications = getCommonCard({
         onClickDefination: {
           action: "condition",
           callBack: searchApiCall
+        }
+      },
+     excelButton: {
+        componentPath: "Button",
+        gridDefination: { xs: 12, sm: 6 },
+        props: {
+          variant: "contained",
+          style: {
+            color: "white",
+            margin: "8px",
+            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderRadius: "2px",
+            width: "220px",
+            height: "48px"
+          }
+        },
+        children: { buttonLabel: getLabel({ labelKey: "Excel Download" }) },
+        onClickDefination: {
+          action: "condition",
+          callBack: exceldatadownload
         }
       },
     })

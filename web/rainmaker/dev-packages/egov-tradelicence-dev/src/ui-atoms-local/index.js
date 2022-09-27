@@ -37,6 +37,11 @@ const Asteric = Loadable({
   loading: () => <Loading />
 });
 
+const BreadCrumbs = Loadable({
+  loader: () => import("./BreadCrumbs"),
+  loading: () => <Loading />
+});
+
 const MenuButton = Loadable({
   loader: () => import("./MenuButton"),
   loading: () => <Loading />
@@ -55,6 +60,7 @@ const TradeLicenseIcon = Loadable({
 export {
   TestAtoms,
   ApplicationNoContainer,
+  BreadCrumbs,
   licenceNoContainer,
   Checkbox,
   MapLocation,

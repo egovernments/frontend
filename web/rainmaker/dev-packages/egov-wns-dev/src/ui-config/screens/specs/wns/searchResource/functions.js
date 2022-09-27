@@ -5,10 +5,11 @@ import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerag
 import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
+import exportFromJSON from 'export-from-json' 
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
-  debugger;
+  
   let getCurrentTab = get(state.screenConfiguration.preparedFinalObject, "currentTab");
   let currentSearchTab = getCurrentTab === undefined ? "SEARCH_CONNECTION" : getCurrentTab;
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen.mobileNumber", {});
@@ -120,7 +121,7 @@ const renderSearchConnectionTable = async (state, dispatch) => {
                   waterNonMeteredDemandExipryDate = obj.demandExpiryDate;
                 }
               }); 
-          }
+          } 
           if (element.service === serviceConst.SEWERAGE && 
               payloadbillingPeriod && 
               payloadbillingPeriod.MdmsRes['sw-services-calculation'] && 
@@ -261,6 +262,7 @@ const renderSearchApplicationTable = async (state, dispatch) => {
       ];
       let Response = await getWorkFlowData(queryObj);*/
       for (let i = 0; i < combinedSearchResults.length; i++) {
+       
         let element = findAndReplace(combinedSearchResults[i], null, "NA");
         let appStatus;
         if (element.applicationNo !== "NA" && element.applicationNo !== undefined) {
@@ -357,7 +359,10 @@ const showConnectionResults = (connections, dispatch) => {
 const getApplicationType = (applicationType) => {
   return (applicationType)?applicationType.split("_").join(" "):applicationType;
 }
+
+let exceldata=[];
 const showApplicationResults = (connections, dispatch) => {
+ 
   let data = connections.map(item => ({
     ["WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL"]: item.connectionNo,
     ["WS_COMMON_TABLE_COL_APP_NO_LABEL"]: item.applicationNo,
@@ -369,10 +374,34 @@ const showApplicationResults = (connections, dispatch) => {
     ["WS_COMMON_TABLE_COL_SERVICE_LABEL"]: item.service,
     ["WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL"]: item.connectionType,
   }));
+  exceldata = data;
+  
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.data", data));
   dispatch(handleField("search", "components.div.children.searchApplicationResults", "props.rows",
     connections.length
   ));
   showHideApplicationTable(true, dispatch);
+  
+//  const exceldatadownload = (connections, dispatch) =>{
+// alert("test");
+//   }
+
 }
 
+export const exceldatadownload =() =>{
+  console.log(exceldata , "tdata");
+
+  const fileName = 'download'  
+  const exportType = 'excel'  
+ 
+  ExportToExcel = () => {  
+    exportFromJSON({ exceldata, fileName, exportType })  
+  }  
+  // filename='reports.xlsx'; 
+       
+  //       var ws = XLSX.utils.json_to_sheet(exceldata); 
+  //       var wb = XLSX.utils.book_new(); 
+  //       XLSX.utils.book_append_sheet(wb, ws, "People"); 
+  //       XLSX.writeFile(wb,filename); 
+  alert("test");
+}
