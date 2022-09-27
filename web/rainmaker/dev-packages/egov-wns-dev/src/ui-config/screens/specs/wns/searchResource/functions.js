@@ -5,7 +5,7 @@ import { fetchBill, findAndReplace, getSearchResults, getSearchResultsForSewerag
 import { validateFields } from "../../utils";
 import { convertDateToEpoch, convertEpochToDate, resetFieldsForApplication, resetFieldsForConnection } from "../../utils/index";
 import { httpRequest } from "../../../../../ui-utils";
-import exportFromJSON from 'export-from-json' 
+// import exportFromJSON from 'export-from-json' 
 export const searchApiCall = async (state, dispatch) => {
   showHideApplicationTable(false, dispatch);
   showHideConnectionTable(false, dispatch);
@@ -394,9 +394,9 @@ export const exceldatadownload =() =>{
   const fileName = 'download'  
   const exportType = 'excel'  
  
-  ExportToExcel = () => {  
-    exportFromJSON({ exceldata, fileName, exportType })  
-  }  
+  // ExportToExcel = () => {  
+  //   exportFromJSON({ exceldata, fileName, exportType })  
+  // }  
   // filename='reports.xlsx'; 
        
   //       var ws = XLSX.utils.json_to_sheet(exceldata); 
