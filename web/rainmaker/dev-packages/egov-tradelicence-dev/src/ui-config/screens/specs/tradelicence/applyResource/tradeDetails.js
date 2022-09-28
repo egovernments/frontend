@@ -1279,39 +1279,39 @@ export const tradeDetails = getCommonCard({
       jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.oldReceiptNumber"
      })
   ,
-  //   tradeRenewalYears:  {
-  //     ...getSelectField({
-  //     label: {
-  //       labelName: "Valid for No. of Years",
-  //       labelKey: "Valid for No. of Years"
-  //     },
-  //     placeholder: {
-  //       labelName: "Select Valid for No. of Years",
-  //       labelKey: "Select Valid for No. of Years"
-  //     },
-  //     props:{
-  //       className:"applicant-details-error"
-  //      //disabled:getQueryArg(window.location.href, "action") === "RESUBMIT" || getQueryArg(window.location.href, "action") === "edit" || getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-  //     }, 
-  //     data: [
-  //       {
-  //         code: "1"
-  //       },
-  //       {
-  //         code: "2"
-  //       },
-  //       {
-  //         code: "3"
-  //       }
-  //     ],
-  //     localePrefix: {
-  //       moduleName: "common-masters",
-  //       masterName: "STRUCTURETYPE"
-  //     },
-  //     required: true,
-  //     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.validityYears"
-  //   })
-  // }
+    tradeRenewalYears:  {
+      ...getSelectField({
+      label: {
+        labelName: "Valid for No. of Years",
+        labelKey: "Valid for No. of Years"
+      },
+      placeholder: {
+        labelName: "Select Valid for No. of Years",
+        labelKey: "Select Valid for No. of Years"
+      },
+      props:{
+        className:"applicant-details-error"
+       //disabled:getQueryArg(window.location.href, "action") === "RESUBMIT" || getQueryArg(window.location.href, "action") === "edit" || getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+      }, 
+      data: [
+        {
+          code: "1"
+        },
+        {
+          code: "2"
+        },
+        {
+          code: "3"
+        }
+      ],
+      localePrefix: {
+        moduleName: "common-masters",
+        masterName: "STRUCTURETYPE"
+      },
+      required: true,
+      jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.validityYears"
+    })
+  }
 },
   {style:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? {"cursor":"not-allowed"}:{}},
   ),
