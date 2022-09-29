@@ -309,7 +309,7 @@ export const CollectPayment = (props) => {
         onSubmit={onSubmit}
         formState={formState}
         defaultValues={getDefaultValues()}
-        isDisabled={bill?.totalAmount ? (isFsm ? !(bill.totalAmount >= 0) : !(bill.totalAmount > 0)) : true}
+        isDisabled={(bill?.totalAmount >= 0) ? (isFsm ? !(bill.totalAmount >= 0) : !(bill.totalAmount > 0)) : true}
         // isDisabled={BillDetailsFormConfig({ consumerCode }, t)[businessService] ? !}
         onFormValueChange={(setValue, formValue) => {
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {
