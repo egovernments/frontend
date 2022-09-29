@@ -46,8 +46,9 @@ class PropertTaxNotification extends Component {
         <div class="col-sm-12">
           <h5>FACILITIES AVAILABLE:</h5>
           <ol>
-            <li>Online tracking of the status of the application</li><li>Status update through SMS and Email</li>
-            <l1>Download & Print the submitted Application copy, Receipts & Sanction Order.</l1>
+            <li>Online tracking of the status of the application</li>
+            <li>Status update through SMS and Email</li>
+            <li>Download & Print the submitted Application copy, Receipts & Sanction Order.</li>
             <li>Payment of Water / Sewerage Bill though online/offline mode</li></ol></div></div>
     </div>
     );
