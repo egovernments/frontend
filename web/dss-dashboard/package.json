@@ -41,7 +41,7 @@
     "react-select": "^3.0.8",
     "react-to-pdf": "0.0.8",
     "reactstrap": "^8.1.1",
-    "recharts": "^1.8.3",
+    "recharts": "^2.1.14",
     "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
