@@ -125,7 +125,7 @@ class TDTradeApply extends Component {
       <div className="row">
         <div className="col-sm-12">
       <h4>DESCRIPTION:</h4>
-      <p>Fire NOC issued by the respective state fire service verifies that a building is resistant or unlikely to observe any fire related accidents. By meeting certain guidelines laid down by the fire department, an applicant can obtain NOC for his residential/ commercial building.</p>
+      <p>Trade license issued by the respective ULB's to gives permission to the applicant (person seeking to open a business) to commence a particular trade or business in a particular area/location.</p>
 <h5>Please use the bellow links to avail the services</h5>
 </div>
       </div>
@@ -134,7 +134,7 @@ class TDTradeApply extends Component {
            <a
            className="btnWS"
             href={
-              "https://firenoc.lgpunjab.gov.in/pgNewApp.aspx"
+              "https://enaksha.lgpunjab.gov.in/"
             }
             target="_blank"
             >
@@ -142,7 +142,7 @@ class TDTradeApply extends Component {
               label={
                 <Label
                   buttonLabel={true}
-                  label="Apply New Connection"
+                  label="Apply Trade license"
                   fontSize="12px"
                 />
               }
@@ -199,8 +199,8 @@ class TDTradeApply extends Component {
           <li>Online tracking of the status of the application</li>
 <li>Status update through SMS and Email</li>
 <l1>Download & Print the submitted Application copy, Receipts & Sanction Order.</l1>
-<li>Generation of Fire NOC Bill & notification through SMS and Email</li>
-<li>Payment of Fire NOC Bill though online/offline mode</li>
+<li>Generation of Trade License & notification through SMS and Email</li>
+<li>Payment of Trade Licens though online/offline mode</li>
          </ol>
         </div>
 
