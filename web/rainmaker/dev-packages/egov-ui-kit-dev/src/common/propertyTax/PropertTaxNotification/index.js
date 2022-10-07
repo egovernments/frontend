@@ -10,7 +10,7 @@ import "./index.css";
 class PropertTaxNotification extends Component {
   componentDidMount() {
     const { addBreadCrumbs, title } = this.props;
-    title && addBreadCrumbs({ title: title, path: window.location.pathname });
+    title && addBreadCrumbs({ title: "ONLINE BUILDING PLAN", path: window.location.pathname });
   }
   render() {
     const { urls, history } = this.props;
