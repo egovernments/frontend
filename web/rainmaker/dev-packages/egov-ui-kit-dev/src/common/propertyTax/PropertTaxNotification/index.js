@@ -24,7 +24,7 @@ class PropertTaxNotification extends Component {
             <div className="example-main-cont clearfix">
               <div className="col-sm-12 descriptionStyle">
 
-                <a href="https://enaksha.lgpunjab.gov.in/" target="_blank"><h2>ONLINE BUILDING PLAN</h2></a>
+                <a href="https://enaksha.lgpunjab.gov.in" target="_blank"><h2>ONLINE BUILDING PLAN</h2></a>
 
               </div>
 
