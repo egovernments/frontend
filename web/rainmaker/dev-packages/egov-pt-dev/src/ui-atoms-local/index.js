@@ -47,6 +47,11 @@ const FireNocIcon = Loadable({
   loading: () => <Loading />
 });
 
+const BreadCrumbs = Loadable({
+  loader: () => import("./BreadCrumbs"),
+  loading: () => <Loading />
+});
+
 const MyApplicationIcon = Loadable({
   loader: () => import("./Icons/MyApplicationIcon"),
   loading: () => <Loading />
@@ -59,14 +64,19 @@ const Button = Loadable({
   loader: () => import("./Button"),
   loading: () => <Loading />
 });
-
+const Icon = Loadable({
+  loader: () => import("./Icon"),
+  loading: () => <Loading />
+});
 export {
   TestAtoms,
   ApplicationNoContainer,
   Checkbox,
+  BreadCrumbs,
   MapLocation,
   AutoSuggest,
   Asteric,
+  Icon,
   MenuButton,
   FireNocIcon,
   MyApplicationIcon,

@@ -56,7 +56,14 @@ const HowItWorks = Loadable({
   loader: () => import("./HowItWorks"),
   loading: () => <Loading />
 });
-
+const MyLink = Loadable({
+  loader: () => import("./MyLink"),
+  loading: () => <Loading />
+});
+const WnsWSmyLink = Loadable({
+  loader: () => import("./WnsWSmyLink"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -68,5 +75,7 @@ export {
   FeesEstimateCard,
   DividerWithLabel,
   Table,
-  HowItWorks
+  HowItWorks,
+  MyLink,
+  WnsWSmyLink
 };

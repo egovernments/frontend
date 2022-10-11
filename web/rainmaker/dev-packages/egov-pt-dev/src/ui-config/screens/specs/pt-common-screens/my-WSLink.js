@@ -1,9 +1,9 @@
-import { fetchData } from "./TradeLink/TradeLink";
+//import { fetchData } from "./myApplicationDetails/myApplicationDetails";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 const header = getCommonHeader(
   {
-    labelKey: "How to apply & pay Trade License"
+    labelKey: "How to apply & pay WS"
     
   },
   {
@@ -17,9 +17,9 @@ const header = getCommonHeader(
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "TDApply",
+  name: "my-WSLink",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch);
+    //fetchData(action, state, dispatch);
     return action;
   },
   components: {
@@ -33,8 +33,8 @@ const screenConfig = {
         header: header,
         applicationsCard: {
           uiFramework: "custom-molecules-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "TDTradeApply",
+          moduleName: "egov-wns",
+          componentPath: "WnsWSmyLink",
         }
       }
     }
