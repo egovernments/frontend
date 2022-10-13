@@ -68,8 +68,8 @@ const getMdmsData = async (dispatch) => {
 };
 
 const header = getCommonHeader({
-  labelName: "Trade License",
-  labelKey: "TL_COMMON_TL",
+  labelName: "File Store",
+  labelKey: "File Store",
 });
 const tradeLicenseSearchAndResultss = {
   uiFramework: "material-ui",
@@ -109,58 +109,58 @@ const tradeLicenseSearchAndResultss = {
               },
               ...header,
             },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right",
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px",
-                },
-              },
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px",
-                    },
-                  },
-                },
-                buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
-                  labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON",
-                }),
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  showHideAdhocPopup(state, dispatch, "search");
-                  dispatch(
-                    prepareFinalObject("Licenses", [
-                      { licenseType: "PERMANENT" },
-                    ])
-                  );
-                  dispatch(prepareFinalObject("LicensesTemp", []));
-                },
-              },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                path: "tradelicence/apply",
-                roles: ["TL_CEMP"],
-              },
-            },
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right",
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px",
+            //     },
+            //   },
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px",
+            //         },
+            //       },
+            //     },
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW APPLICATION",
+            //       labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON",
+            //     }),
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       showHideAdhocPopup(state, dispatch, "search");
+            //       dispatch(
+            //         prepareFinalObject("Licenses", [
+            //           { licenseType: "PERMANENT" },
+            //         ])
+            //       );
+            //       dispatch(prepareFinalObject("LicensesTemp", []));
+            //     },
+            //   },
+            //   roleDefination: {
+            //     rolePath: "user-info.roles",
+            //     path: "tradelicence/apply",
+            //     roles: ["TL_CEMP"],
+            //   },
+            // },
           },
         },
         pendingApprovals,

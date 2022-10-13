@@ -7,7 +7,9 @@
     }
       
   }
-
+  button#material-ui-searchButton:hover {
+    background: #e56d48 !important;
+}
   .autocomplete-dropdown {
     min-width: 80%;
     position: absolute;
