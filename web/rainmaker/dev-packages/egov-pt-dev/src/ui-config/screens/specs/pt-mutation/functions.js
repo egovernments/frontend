@@ -373,11 +373,23 @@ const searchApiCall = async (state, dispatch, index) => {
 
       if(process.env.REACT_APP_NAME === "Citizen")
       responseProperties.Properties=responseProperties.Properties.length>0?responseProperties.Properties.filter(item=> item.status != "INACTIVE"):responseProperties.Properties;
+
       let response={};
       let Properties=[];
       let flag=1;
       queryObject.map(pp=>{
-      if(pp.key=="mobileNumber")
+      if (pp.key=="propertyIds")
+      {
+        if(responseProperties.Properties.length>1)
+        {
+        var i=responseProperties.Properties.length;
+        Properties.push(responseProperties.Properties[i-1]);
+        response={"Properties":Properties}; 
+      }
+      response=responseProperties;
+
+    }
+      else if(pp.key=="mobileNumber")
       {
         responseProperties.Properties.map(item => {
           flag=1;
@@ -393,6 +405,7 @@ const searchApiCall = async (state, dispatch, index) => {
         response={"Properties":Properties}; 
 
       }
+      
       else 
       response=responseProperties;
 

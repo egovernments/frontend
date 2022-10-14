@@ -191,6 +191,48 @@ else {
   alert("This operation is not allowed as Property is not ACTIVE.");
   }
 };
+
+onStatusChangePropertyClickToActive = async() => {
+  const { latestPropertyDetails, propertyId, tenantId, selPropertyDetails } = this.props;
+  const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
+  if (selPropertyDetails.status == "INACTIVE") {
+    selPropertyDetails.status="ACTIVE";
+      let payload = null;
+      let queryObject = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "propertyIds",
+          value: propertyId
+        }
+      ];
+      selPropertyDetails.creationReason="STATUS";
+      const workflow = {
+        "businessService": "PT.CREATE",
+        "action": "OPEN",
+        "moduleName": "PT"
+      }
+      selPropertyDetails.workflow = workflow
+      payload = await httpRequest(
+        "post",
+        "/property-services/property/_update",
+        "_update",
+        queryObject,
+        { Property: selPropertyDetails }
+  
+      );
+  if(payload.Properties.length >0) 
+  alert("Property is now in INWORKFLOW state. Please approve it!");
+  else 
+  alert("Some error occured!! please try again.")
+}
+
+else {
+alert("This operation is not allowed as Property is not already active.");
+}
+};
   getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
     let assessmentList = [];
     const { propertyDetails = [] } = selPropertyDetails;
@@ -369,13 +411,13 @@ else {
             toggleSnackbarAndSetText={this.props.toggleSnackbarAndSetText}
           />
         }
-        <div id="tax-wizard-buttons" className="wizard-footer col-sm-12" style={{ textAlign: "right" }}>
-          <div className="button-container col-4 property-info-access-btn" style={{ float: "right" }}>
+        <div id="tax-wizard-buttons" className="wizard-footer col-sm-16" style={{ textAlign: "right" }}>
+          <div className="button-container col-5 property-info-access-btn" style={{ float: "right" }}>
             <Button
                label={
                  <Label buttonLabel={true}
                 //  label={formWizardConstants[PROPERTY_FORM_PURPOSE.STATUS].parentButton} fontSize="16px"
-                  label={'Make Property Inactive'} fontSize="14px"
+                  label={'Make Property Inactive'} fontSize="11px"
                    color="#fe7a51" />
                }
                onClick={() => 
@@ -387,20 +429,40 @@ else {
                   if(window.confirm("Are you sure you want to make property Inactive?")){
                 this.onStatusChangePropertyClick()}
                 }}}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "2%" }}
+              labelStyle={{ letterSpacing: 0.5, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "0.5px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "20%", marginRight: "1%" }}
             />
             <Button
                label={
                  <Label buttonLabel={true}
-                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="14px"
+                   label={formWizardConstants[PROPERTY_FORM_PURPOSE.UPDATE].parentButton} fontSize="11px"
                    color="#fe7a51" />
                }
               onClick={() => this.onEditPropertyClick()}
-              labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-              buttonStyle={{ border: "1px solid #fe7a51" }}
-              style={{ lineHeight: "auto", minWidth: "25%", marginRight: "2%" }}
+              labelStyle={{ letterSpacing: 0.5, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "0.5px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "20%", marginRight: "1%" }}
+            />
+             <Button
+               label={
+                 <Label buttonLabel={true}
+                //  label={formWizardConstants[PROPERTY_FORM_PURPOSE.STATUS].parentButton} fontSize="16px"
+                  label={'Make Property active'} fontSize="11px"
+                   color="#fe7a51" />
+               }
+               onClick={() => 
+                { 
+                  if (process.env.REACT_APP_NAME == "Citizen") {
+                    alert("Action to activate property is not allowed for citizen");
+                  }
+                  else{
+                  if(window.confirm("Are you sure you want to make property active?")){
+                this.onStatusChangePropertyClickToActive()}
+                }}}
+              labelStyle={{ letterSpacing: 0.5, padding: 0, color: "#fe7a51" }}
+              buttonStyle={{ border: "0.5px solid #fe7a51" }}
+              style={{ lineHeight: "auto", minWidth: "20%", marginRight: "2%" }}
             />
             <Button
               onClick={() => this.onAssessPayClick()}
