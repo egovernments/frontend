@@ -24,12 +24,12 @@ export const fsApplication = getCommonCard(
     appTradeAndMobNumContainer: getCommonContainer({
       applicationNo: getTextField({
         label: {
-          labelName: "Application No.",
-          labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL",
+          labelName: "Receipt No.",
+          labelKey: "Receipt No",
         },
         placeholder: {
-          labelName: "Enter Application No.",
-          labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER",
+          labelName: "Enter Receipt No.",
+          labelKey: "Enter Receipt No",
         },
         gridDefination: {
           xs: 12,
@@ -43,12 +43,12 @@ export const fsApplication = getCommonCard(
 
       tradeLicenseNo: getTextField({
         label: {
-          labelName: "Trade License No.",
-          labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL",
+          labelName: "Property ID",
+          labelKey: "Property ID",
         },
         placeholder: {
-          labelName: "Enter Trade License No.",
-          labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER",
+          labelName: "Enter Property ID.",
+          labelKey: "Enter Property ID.",
         },
         gridDefination: {
           xs: 12,
