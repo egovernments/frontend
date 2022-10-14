@@ -66,20 +66,20 @@ const header = getCommonHeader({
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
-  // beforeInitScreen: (action, state, dispatch) => {
-  //   dispatch(prepareFinalObject("searchScreen", {}))
-  //   dispatch(unMountScreen("apply"));
-  //   dispatch(unMountScreen("search-preview"));
-  //   getMdmsData(dispatch);
-  //   const moduleDetails = [
-  //     {
-  //       moduleName: 'TradeLicense',
-  //       masterDetails: [{ name: 'Documents' }]
-  //     }
-  //   ];
-  //   getRequiredDocData(action, dispatch, moduleDetails, true);
-  //   return action;
-  // },
+  beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("searchScreen", {}))
+    dispatch(unMountScreen("apply"));
+    dispatch(unMountScreen("search-preview"));
+    getMdmsData(dispatch);
+    const moduleDetails = [
+      {
+        moduleName: 'TradeLicense',
+        masterDetails: [{ name: 'Documents' }]
+      }
+    ];
+    getRequiredDocData(action, dispatch, moduleDetails, true);
+    return action;
+  },
   components: {
     div: {
       uiFramework: "custom-atoms",
