@@ -55,12 +55,12 @@ const checkAmount = (totalAmount, customAmount, businessService) => {
     const currentDate = new Date();
     const appDate = new Date(cd[1].slice(0,10));
     const diffTime = Math.abs(appDate - currentDate);
-     diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
     console.log(diffTime + " milliseconds");
     console.log(diffDays + " days");
     }
     if (diffDays>=5 && BusinessService.toUpperCase() =="FIRENOC"){
-      alert("You are not eligible for payment");
+      alert("Re-submit application can be applied within 5 days of date of application.");
       }
    
        else{
