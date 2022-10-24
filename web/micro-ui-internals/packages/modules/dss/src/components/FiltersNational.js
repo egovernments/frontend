@@ -74,7 +74,7 @@ const Filters = ({
           <DateRange onFilterChange={handleFilterChange} values={value?.range} t={t} />
         </div>
       )}
-      <div className="filters-input">
+      {/* <div className="filters-input">
         <div className="mbsm">{t(isNational ? "ES_DSS_STATE" : "ES_DSS_DDR")}</div>
         <MultiSelectDropdown
           options={ulbTenants?.ddr && ulbTenants.ddr?.sort((x, y) => x?.ddrKey?.localeCompare(y?.ddrKey))?.map(ele=>({...ele,i18Key:`DSS_TB_${Digit.Utils.locale.getTransformedLocale(ele?.ddrKey)}`}))}
@@ -84,7 +84,7 @@ const Filters = ({
           defaultLabel={t(isNational ? "ES_DSS_ALL_STATE_SELECTED" : "ES_DSS_ALL_DDR_SELECTED")}
           defaultUnit={t(isNational ? "ES_DSS_STATE_SELECTED" : "ES_DSS_DDR_SELECTED")}
         />
-      </div>
+      </div> */}
 
       <div className="filters-input">
         <div className="mbsm">{t("ES_DSS_ULB")}</div>
