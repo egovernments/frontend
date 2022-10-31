@@ -6,6 +6,8 @@ import {
   convertDateToEpoch,
   getTextToLocalMapping
 } from "../../utils/index";
+import { edcrHttpRequest, httpRequest, wrapRequestBody } from "../../../../../ui-utils/api";
+//"../../../../ui-utils/api"
 import {
  enableFieldAndHideSpinner,disableFieldAndShowSpinner
 } from "egov-ui-framework/ui-utils/commons";
@@ -15,7 +17,29 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 //import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 export const filestoreid = async (state, dispatch) => {
-  alert("File Store id NULL");
+  debugger;
+  let searchScreenObject = get(
+    state.screenConfiguration.preparedFinalObject.searchScreen,
+    "applicationNumber",
+    {}
+  );
+  let tenant= getTenantId()
+  alert("File Store id NULL "+ searchScreenObject+"  "+tenant);
+
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "/collection-services/payments/_update",
+      "_update",
+      `receiptNumbers=${searchScreenObject}&tenantId=${tenant}`
+      
+    );
+  
+  } catch (e) {
+    console.log(e);
+  }
+
+
 }
 
 export const searchApiCall = async (state, dispatch) => {
