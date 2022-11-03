@@ -135,7 +135,7 @@ export const loadProvisionalNocData2 = async (state, dispatch) => {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
   console.log(diffTime + " milliseconds");
   console.log(diffDays + " days");
-  if (diffDays>=90){
+  if (diffDays>=455){
     alert("Renewal after 90 days from expiry date of Firenic is not allowed!!");
     }
     else{
