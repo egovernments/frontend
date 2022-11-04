@@ -120,32 +120,32 @@ const loadProvisionalNocData = async (state, dispatch) => {
 };
 
 export const loadProvisionalNocData2 = async (state, dispatch) => {
-  let fireDate = get(
-    state,
-    "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
-    ""
-  );
-  debugger;
-  const cd= fireDate.split("PB-FN-");
-  const appActualDate=cd[1].slice(0,10);
-  console.log(appActualDate);
-  const currentDate = new Date();
-  const appDate = new Date(cd[1].slice(0,10));
-  const diffTime = Math.abs(appDate - currentDate);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-  console.log(diffTime + " milliseconds");
-  console.log(diffDays + " days");
-  if (diffDays>=455){
-    alert("Renewal after 90 days from expiry date of Firenic is not allowed!!");
-    }
-    else{
+  // let fireDate = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
+  //   ""
+  // );
+  // debugger;
+  // const cd= fireDate.split("PB-FN-");
+  // const appActualDate=cd[1].slice(0,10);
+  // console.log(appActualDate);
+  // const currentDate = new Date();
+  // const appDate = new Date(cd[1].slice(0,10));
+  // const diffTime = Math.abs(appDate - currentDate);
+  // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+  // console.log(diffTime + " milliseconds");
+  // console.log(diffDays + " days");
+  // if (diffDays>=455){
+  //   alert("Renewal after 90 days from expiry date of Firenic is not allowed!!");
+  //   }
+  //  else{
   let oldfireNOCNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
     ""
   );
-  }
-
+ // }
+debugger;
   let response = await getSearchResults([
     { key: "FireNOCNumber", value: oldfireNOCNumber }
   ]);

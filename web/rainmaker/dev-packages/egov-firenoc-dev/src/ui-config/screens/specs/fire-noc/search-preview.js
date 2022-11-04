@@ -424,21 +424,21 @@ const setSearchResponse = async (
     debugger;
     let diffDays ;
     const getdate=get(response, "FireNOCs[0].fireNOCDetails.applicationNumber");
-    if(getdate){
-    const cd= getdate.split("PB-FN-");
-	  const currentDate = new Date();
-    const appActualDate=cd[1].slice(0,10);
-    let datef=(appActualDate.split("-"));
-    var applicationdate = new Date(parseInt(datef[0]),parseInt(datef[1])-1, datef[2]);
-	  const diffTime = Math.abs(currentDate - applicationdate);
-	  diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    let nintydayscondition = parseInt(diffDays)+90;
-    console.log(diffTime + " milliseconds");
-    console.log(nintydayscondition + " days");
-    }
+    // if(getdate){
+    // const cd= getdate.split("PB-FN-");
+	  // const currentDate = new Date();
+    // const appActualDate=cd[1].slice(0,10);
+    // let datef=(appActualDate.split("-"));
+    // var applicationdate = new Date(parseInt(datef[0]),parseInt(datef[1])-1, datef[2]);
+	  // const diffTime = Math.abs(currentDate - applicationdate);
+	  // diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // let nintydayscondition = parseInt(diffDays)+90;
+    // console.log(diffTime + " milliseconds");
+    // console.log(nintydayscondition + " days");
+    // }
       	  
     if(NOCTypeDta === "RENEWAL"){
-      if (diffDays <= 455){
+     // if (diffDays <= 455){
       dispatch(
         handleField(
           "search-preview",
@@ -447,10 +447,10 @@ const setSearchResponse = async (
           false
         )
       );
-    }
-    else{
+    // }
+    // else{
       alert("NOC expired on 01-01-2022, max allowed time to apply for renewal is 90 days after expiry");
-    }
+   // }
     }
     else{
       dispatch(
