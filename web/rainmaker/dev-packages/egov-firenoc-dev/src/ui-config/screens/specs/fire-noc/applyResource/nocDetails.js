@@ -120,6 +120,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
 };
 
 export const loadProvisionalNocData2 = async (state, dispatch) => {
+  debugger;
   // let fireDate = get(
   //   state,
   //   "screenConfiguration.preparedFinalObject.FireNOCs[0].oldFireNOCNumber",
@@ -179,6 +180,20 @@ debugger;
     "FireNOCs[0].fireNOCDetails.fireNOCType",
     []
   );
+  // my date
+  debugger;
+  let diffDays ;
+  let fireDate = response.FireNOCs[0].fireNOCDetails.issuedDate;
+  const currentDate = new Date();
+  const appDate = new Date(fireDate);
+  const diffTime = Math.abs(appDate - currentDate);
+  diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+  console.log(diffTime + " milliseconds");
+  console.log(diffDays + " days");
+   if (diffDays>=455){
+    alert("Renewal after 90 days from expiry date of Firenic is not allowed!!");
+    }
+  else{
   let oldnocNumber = get(
     state.screenConfiguration.preparedFinalObject,
     "FireNOCs[0].oldFireNOCNumber",
@@ -203,7 +218,7 @@ debugger;
       noOfBuildings
     )
   );
-
+  
   // Set noc type radiobutton to NEW
   // dispatch(
   //   handleField(
@@ -215,6 +230,7 @@ debugger;
   // );
 
   // Set provisional fire noc number
+ 
   dispatch(
     prepareFinalObject(
       "FireNOCs[0].oldFireNOCNumber",
@@ -225,6 +241,7 @@ debugger;
   // Set fire noc id to null
 if (getQueryArg(window.location.href, "action") != "edit") {
   dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
+}
 }
 };
 export const nocDetails = getCommonCard({
@@ -407,9 +424,11 @@ export const nocDetails = getCommonCard({
           color: "#FE7A51",
           onClickDefination: {
             action: "condition",
+            
             callBack: (state, dispatch, fieldInfo) => {
               loadProvisionalNocData2(state, dispatch);
-            }
+            },
+            
           }
         }
         // title: {
@@ -417,6 +436,8 @@ export const nocDetails = getCommonCard({
         //   key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
         // },
         // infoIcon: "info_circle"
+        // issues Date
+  
       })
     },
   })
