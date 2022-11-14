@@ -47,13 +47,14 @@ const checkAmount = (totalAmount, customAmount, businessService) => {
     const BusinessService=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
     var diffDays;
     if(BusinessService.toUpperCase() =="FIRENOC"){
-    var getdate=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");
+    var getdate=get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].auditDetails.createdTime");
     debugger;
-    const cd= getdate.split("PB-FN-");
-    const appActualDate=cd[1].slice(0,10);
-    console.log(appActualDate);
+    // const cd= getdate.split("PB-FN-");
+    // const appActualDate=cd[1].slice(0,10);
+    // console.log(appActualDate);
+
     const currentDate = new Date();
-    const appDate = new Date(cd[1].slice(0,10));
+    const appDate = new Date(getdate);
     const diffTime = Math.abs(appDate - currentDate);
     diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
     console.log(diffTime + " milliseconds");
