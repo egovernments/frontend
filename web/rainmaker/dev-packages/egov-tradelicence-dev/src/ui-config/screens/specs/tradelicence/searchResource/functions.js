@@ -16,6 +16,10 @@ import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 //import { LabelContainer } from "egov-ui-framework/ui-containers";
 
+export const ENAKSHA = async (state, dispatch) => {
+  window.open('https://enaksha.lgpunjab.gov.in/', '_blank');
+}
+
 export const filestoreid = async (state, dispatch) => {
   debugger;
   let searchScreenObject = get(
@@ -29,11 +33,9 @@ export const filestoreid = async (state, dispatch) => {
   try {
     let payload = null;
     payload = await httpRequest(
-      "/collection-services/payments/_update",
-      "_update",
-      `receiptNumbers=${searchScreenObject}&tenantId=${tenant}`
-      
-    );
+      `https://mseva-uat.lgpunjab.gov.in/collection-services/payments/_update?receiptNumbers=${searchScreenObject}&tenantId=${tenant}`
+       
+      );
   
   } catch (e) {
     console.log(e);
