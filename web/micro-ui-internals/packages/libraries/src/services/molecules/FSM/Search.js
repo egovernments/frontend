@@ -90,7 +90,7 @@ export const Search = {
         ? response.additionalDetails.tripAmount
         : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
     // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
-    const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b);
+    const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
 
     const employeeResponse = [
       {
@@ -171,7 +171,7 @@ export const Search = {
             title: "ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP",
             value: amountPerTrip,
           },
-          totalAmount
+          totalAmount === "N/A" 
             ? { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: totalAmount }
             : { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: response?.noOfTrips * amountPerTrip },
         ],
