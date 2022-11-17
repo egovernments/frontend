@@ -27,16 +27,33 @@ export const filestoreid = async (state, dispatch) => {
     "applicationNumber",
     {}
   );
-  let tenant= getTenantId()
+  let tenant= getTenantId();
   alert("File Store id NULL "+ searchScreenObject+"  "+tenant);
-
+  const queryObj = [
+    { key: "tenantId", tenant },
+    { key: "consumerCode", searchScreenObject }
+  ];
   try {
     let payload = null;
-    payload = await httpRequest(
-      `https://mseva-uat.lgpunjab.gov.in/collection-services/payments/_update?receiptNumbers=${searchScreenObject}&tenantId=${tenant}`
-       
-      );
-  
+
+    let response = await httpRequest(
+      "post",
+      "collection-services/payments/_update",
+       "",
+       queryObj
+    );
+  console.log(response);
+
+    // payload = "https://mseva-uat.lgpunjab.gov.in/collection-services/payments/_update?receiptNumbers="+searchScreenObject +"&"+"tenantId="+tenant ;
+    //  console.log(payload,"payload");
+    //  fetch (payload, {
+    //   headers: {
+    //   'content-type': 'application/json'
+    //   },
+    
+    // }).then((data)=>{
+    //   console.log(data);
+    // })
   } catch (e) {
     console.log(e);
   }
