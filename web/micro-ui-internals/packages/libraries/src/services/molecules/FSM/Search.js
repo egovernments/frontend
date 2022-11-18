@@ -172,8 +172,8 @@ export const Search = {
             value: amountPerTrip,
           },
           totalAmount === "N/A" 
-            ? { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: totalAmount }
-            : { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: response?.noOfTrips * amountPerTrip },
+            ? { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: response?.noOfTrips * amountPerTrip }
+            : { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: totalAmount },
         ],
       },
       {
