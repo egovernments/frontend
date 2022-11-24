@@ -123,7 +123,14 @@ const tradeSubTypeChange = (reqObj) => {
             ""
           )
         );
-
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items[${index}].item${index}.children.cardContent.children.tradeUnitCardContainer.children.inHas`,
+            "props.value",
+            ""
+          )
+        );
         dispatch(
           pFO(
             `Licenses[0].tradeLicenseDetail.tradeUnits[${index}].uom`,
@@ -169,7 +176,7 @@ const tradeUnitCard = {
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
-          labelName: "Trade Unit  ",
+          labelName: "Trade Unit22  ",
           labelKey: "TL_NEW_TRADE_DETAILS_TRADE_UNIT_HEADER"
         },
         {
@@ -388,6 +395,7 @@ const tradeUnitCard = {
               }
             },
             beforeFieldChange: (action, state, dispatch) => {
+            
               try {
                 let cardIndex = action.componentJsonpath
                   .split("items[")[1]
@@ -550,6 +558,34 @@ const tradeUnitCard = {
               } catch (e) {
                 console.log(e);
               }
+             },
+             afterFieldChange: (action, state, dispatch) => {
+              debugger;
+              let tradeUnitall= get(
+                  state,
+                  "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits",
+                  ""
+                );
+                let mdmstradeUnitall= get(
+                  state,
+                  "screenConfiguration.preparedFinalObject.applyScreenMdmsData.TradeLicense.MdmsTradeType",
+                  ""
+                );
+              for(let tunit of tradeUnitall){
+                for(let mdmstunit of mdmstradeUnitall){
+                 if(tunit.tradeType == mdmstunit.code){
+                  if(mdmstunit.ishazardous == true){
+                  dispatch(
+                    pFO(
+                      `Licenses[0].ishazardous`,
+                      "NEWTL.HAZ"
+                    )
+                  )
+                    }
+                  }
+                }
+              }
+              
             }
           },
           tradeUOM: getTextField({
@@ -560,7 +596,7 @@ const tradeUnitCard = {
             placeholder: {
               labelName: "UOM",
               labelKey: "TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER"
-            },
+            },            
             // required: true,
             props: {
               disabled: true
@@ -571,6 +607,7 @@ const tradeUnitCard = {
               sm: 4
             }
           }),
+         
           tradeUOMValue: getTextField({
             label: {
               labelName: "UOM Value",
@@ -1047,7 +1084,7 @@ export const tradeDetails = getCommonCard({
             )
           );
           // dispatch(pFO("Licenses[0].validFrom", null));
-          // dispatch(pFO("Licenses[0].validTo", null));
+           //dispatch(pFO("Licenses[0].validTo", null));
         }
       }
     },

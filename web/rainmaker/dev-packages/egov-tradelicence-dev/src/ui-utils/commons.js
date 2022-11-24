@@ -376,11 +376,11 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       convertDateToEpoch(queryObject[0].validFrom, "dayend")
     );
     set(queryObject[0], "wfDocuments", documents);
-    set(
-      queryObject[0],
-      "validTo",
-      convertDateToEpoch(queryObject[0].validTo, "dayend")
-    );
+    // set(
+    //   queryObject[0],
+    //   "validTo",
+    //   convertDateToEpoch(queryObject[0].validTo, "dayend")
+    // );
     if (queryObject[0] && queryObject[0].commencementDate) {
       queryObject[0].commencementDate = convertDateToEpoch(
         queryObject[0].commencementDate,
@@ -412,9 +412,15 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // set(queryObject[0], "financialYear", currentFinancialYr);
       setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
     }
-
+    debugger;
     set(queryObject[0], "tenantId", tenantId);
-    set(queryObject[0], "workflowCode", "NewTL");
+    if(queryObject[0].ishazardous && queryObject[0].ishazardous == "NEWTL.HAZ"){
+      set(queryObject[0], "workflowCode", "NEWTL.HAZ");
+    }
+    else{
+      set(queryObject[0], "workflowCode", "NewTL");
+    }
+    
     set(queryObject[0], "applicationType", "NEW");
     if (queryObject[0].applicationNumber) {
       //call update
