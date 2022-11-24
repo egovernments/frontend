@@ -412,7 +412,7 @@ import {
       required: true,
       jsonPath: "ReceiptTemp[0].instrument.transactionDateInput"
     }),
-    ddIFSC: getTextField({
+    ddIFSC: getTextField({ 
       label: {
         labelName: "IFSC",
         labelKey: "NOC_PAYMENT_IFSC_CODE_LABEL"
@@ -468,7 +468,7 @@ import {
   });
   
   export const demandDraft = getCommonContainer({
-    payeeDetails,
+    payeeDetails, 
     demandDraftDetails
   });
   
