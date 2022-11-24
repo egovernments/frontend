@@ -72,7 +72,7 @@ const getOwners = data => {
       ],
       [
         {
-          text: "Father/Husband's Name",
+          text: "Father/Mother/Husband's Name",
           border: [true, false, false, false]
         },
         {
