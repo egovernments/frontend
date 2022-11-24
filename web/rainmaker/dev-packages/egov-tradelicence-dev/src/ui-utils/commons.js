@@ -414,7 +414,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
     debugger;
     set(queryObject[0], "tenantId", tenantId);
-    if(queryObject[0].ishazardous && queryObject[0].ishazardous == "NEWTL.HAZ"){
+    if(queryObject[0].ishazardous == "NEWTL.HAZ"){
       set(queryObject[0], "workflowCode", "NEWTL.HAZ");
     }
     else{
