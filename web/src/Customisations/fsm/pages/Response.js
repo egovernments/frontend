@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { Card, Banner, CardText, SubmitBar, Loader, LinkButton } from "@egovernments/digit-ui-react-components";
+import {
+  Card,
+  Banner,
+  CardText,
+  SubmitBar,
+  Loader,
+  LinkButton,
+} from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -8,7 +15,11 @@ import { getVehicleType } from "../utils";
 var Digit = window.Digit || {};
 
 const GetMessage = (type, action, isSuccess, isEmployee, t) => {
-  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}`);
+  return t(
+    `${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${
+      action ? action : "CREATE"
+    }_${type}${isSuccess ? "" : "_ERROR"}`
+  );
 };
 
 const GetActionMessage = (action, isSuccess, isEmployee, t) => {
@@ -26,9 +37,19 @@ const DisplayText = (action, isSuccess, isEmployee, t) => {
 const BannerPicker = (props) => {
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      message={GetActionMessage(
+        props.data?.fsm?.[0].applicationStatus || props.action,
+        props.isSuccess,
+        props.isEmployee,
+        props.t
+      )}
       applicationNumber={props.data?.fsm?.[0].applicationNo}
-      info={GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      info={GetLabel(
+        props.data?.fsm?.[0].applicationStatus || props.action,
+        props.isSuccess,
+        props.isEmployee,
+        props.t
+      )}
       successful={props.isSuccess}
     />
   );
@@ -44,15 +65,23 @@ const Response = (props) => {
   const stateId = Digit.ULBService.getStateId();
   const { state } = props.location;
 
-  const mutation = state.key === "update" ? Digit.Hooks.fsm.useApplicationActions(tenantId) : Digit.Hooks.fsm.useDesludging(tenantId);
+  const mutation =
+    state.key === "update"
+      ? Digit.Hooks.fsm.useApplicationActions(tenantId)
+      : Digit.Hooks.fsm.useDesludging(tenantId);
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
-  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
-  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+  const [mutationHappened, setMutationHappened, clear] =
+    Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage(
+    "FSM_ERROR_DATA",
+    false
+  );
+  const [successData, setsuccessData, clearSuccessData] =
+    Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   const onError = (error, variables) => {
-    setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');
+    setErrorInfo(error?.response?.data?.Errors[0]?.code || "ERROR");
     setMutationHappened(true);
   };
   useEffect(() => {
@@ -60,21 +89,39 @@ const Response = (props) => {
   }, [mutation.data]);
   const localityCode = mutation?.data?.fsm?.[0].address?.locality?.code;
   const slumCode = mutation?.data?.fsm?.[0].address?.slumName;
-  const slum = Digit.Hooks.fsm.useSlum(mutation?.data?.fsm?.[0]?.tenantId, slumCode, localityCode, {
-    enabled: slumCode ? true : false,
-    retry: slumCode ? true : false,
-  });
-  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleType", { staleTime: Infinity });
+  const slum = Digit.Hooks.fsm.useSlum(
+    mutation?.data?.fsm?.[0]?.tenantId,
+    slumCode,
+    localityCode,
+    {
+      enabled: slumCode ? true : false,
+      retry: slumCode ? true : false,
+    }
+  );
+  const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(
+    stateId,
+    "Vehicle",
+    "VehicleType",
+    { staleTime: Infinity }
+  );
   const Data = mutation?.data || successData;
-  const vehicle = vehicleMenu?.find((vehicle) => Data?.fsm?.[0]?.vehicleType === vehicle?.code);
+  const vehicle = vehicleMenu?.find(
+    (vehicle) => Data?.fsm?.[0]?.vehicleType === vehicle?.code
+  );
   const pdfVehicleType = getVehicleType(vehicle, t);
 
   const handleDownloadPdf = () => {
     const { fsm } = mutation.data || successData;
     const [applicationDetails, ...rest] = fsm;
-    const tenantInfo = tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
+    const tenantInfo = tenants.find(
+      (tenant) => tenant.code === applicationDetails.tenantId
+    );
 
-    const data = getPDFData({ ...applicationDetails, slum, pdfVehicleType }, tenantInfo, t);
+    const data = getPDFData(
+      { ...applicationDetails, slum, pdfVehicleType },
+      tenantInfo,
+      t
+    );
     Digit.Utils.pdf.generate(data);
   };
 
@@ -85,64 +132,65 @@ const Response = (props) => {
       // window.history.replaceState({}, "FSM_CREATE_RESPONSE")
     };
     if (!mutationHappened && !errorInfo) {
-    if (state.key === "update") {
-      mutation.mutate(
-        {
-          fsm: state.applicationData,
-          workflow: {
-            action: state.action,
-            ...state.actionData,
+      if (state.key === "update") {
+        mutation.mutate(
+          {
+            fsm: state.applicationData,
+            workflow: {
+              action: state.action,
+              ...state.actionData,
+            },
           },
-        },
-        {
+          {
+            onError,
+            onSuccess,
+          }
+        );
+      } else {
+        mutation.mutate(state, {
           onError,
           onSuccess,
-        }
-      );
-    } else {
-      const formdata = {
-        fsm: {
-          ...state.fsm,
-          address: {
-            ...state.fsm.address,
-            street: state.fsm.address.street?.trim() || 'N/A',
-            doorNo: state.fsm.address.doorNo?.trim() || 'N/A',
-            landmark: state.fsm.address.landmark?.trim() || 'N/A',
-            // pincode: state.fsm.address.pincode || 'N/A',
-          },
-        },
-        workflow: null,
-      };
-
-      mutation.mutate(formdata, {
-        onError,
-        onSuccess,
-      });
+        });
+      }
     }
-  }
   }, []);
 
   if (mutation.isLoading || (mutation.isIdle && !mutationHappened)) {
     return <Loader />;
   }
   const isSuccess = !successData ? mutation?.isSuccess : true;
-    return (
+  return (
     <Card>
       <BannerPicker
         t={t}
         data={Data}
         action={state.action}
         isSuccess={isSuccess}
-        isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading}
+        isLoading={
+          (mutation.isIdle && !mutationHappened) || mutation?.isLoading
+        }
         isEmployee={props.parentRoute.includes("employee")}
       />
-      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t)}</CardText>
+      <CardText>
+        {DisplayText(
+          state.action,
+          isSuccess,
+          props.parentRoute.includes("employee"),
+          t
+        )}
+      </CardText>
       {isSuccess && (
         <LinkButton
           label={
             <div className="response-download-button">
               <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="#f47738"
+                >
                   <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
                 </svg>
               </span>
@@ -153,16 +201,27 @@ const Response = (props) => {
           onClick={handleDownloadPdf}
         />
       )}
-      <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
+      <Link
+        to={`${
+          props.parentRoute.includes("employee")
+            ? "/digit-ui/employee"
+            : "/digit-ui/citizen"
+        }`}
+      >
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
       {props.parentRoute.includes("employee") &&
-      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+      (state?.applicationData?.applicationNo ||
+        (isSuccess && Data?.fsm?.[0].applicationNo)) &&
       paymentAccess &&
-      isSuccess && state?.fsm?.paymentPreference === "PRE_PAY" ? (
+      isSuccess &&
+      state?.fsm?.paymentPreference === "PRE_PAY" ? (
         <div className="secondary-action">
           <Link
-            to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}
+            to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${
+              state?.applicationData?.applicationNo ||
+              Data?.fsm?.[0].applicationNo
+            }`}
           >
             <SubmitBar label={t("ES_COMMON_PAY")} />
           </Link>
