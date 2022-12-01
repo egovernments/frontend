@@ -24,7 +24,7 @@ import {
   getTradeTypeDropdownData
 } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
-
+debugger;
 export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
@@ -396,10 +396,21 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       ""
     );
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
-    const BSqueryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
-    ];
+    let BSqueryObject = [];
+    if(queryObject[0].workflowCode == "NEWTL.HAZ"){
+      BSqueryObject = [
+        { key: "tenantId", value: tenantId },
+        { key: "businessServices", value: "NEWTL.HAZ" }
+      ];
+      
+    }
+    else{
+      BSqueryObject = [
+        { key: "tenantId", value: tenantId },
+        { key: "businessServices", value: "NewTL" }
+      ];
+    }
+    
     disableField('apply',"components.div.children.footer.children.nextButton",dispatch);
     disableField('apply', "components.div.children.footer.children.payButton",dispatch);
    
@@ -522,7 +533,14 @@ set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwnersForRenewal(get(
 else {        
   set(queryObject[0], "tradeLicenseDetail.owners", checkValidOwners(get(queryObject[0], "tradeLicenseDetail.owners",[]),oldOwners));
 }
-
+console.log(state.screenConfiguration.preparedFinalObject.Licenses[0]);
+if(state.screenConfiguration.preparedFinalObject.Licenses[0].workflowCode == "NEWTL.HAZ"){
+  set(queryObject[0], "workflowCode", "NEWTL.HAZ");
+  
+}
+else{
+  set(queryObject[0], "workflowCode", "NewTL");
+}
         set(queryObject[0], "tradeLicenseDetail.adhocPenalty", null);
         set(queryObject[0], "tradeLicenseDetail.adhocExemption", null);
         updateResponse = await httpRequest("post", "/tl-services/v1/_update", "", [], {
@@ -530,17 +548,32 @@ else {
         })
       }
       //Renewal flow
-
+      debugger;
       let updatedApplicationNo = "";
       let updatedTenant = "";
       if (isEditRenewal && updateResponse && get(updateResponse, "Licenses[0]")) {
         updatedApplicationNo = get(updateResponse.Licenses[0], "applicationNumber");
         updatedTenant = get(updateResponse.Licenses[0], "tenantId");
         const workflowCode = get(updateResponse.Licenses[0], "workflowCode");
-        const bsQueryObject = [
-          { key: "tenantId", value: tenantId },
-          { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
-        ];
+        const wokload = get(updateResponse.Licenses[0], "workflowCode");
+        // const bsQueryObject = [
+        //   { key: "tenantId", value: tenantId },
+        //   { key: "businessServices", value: workflowCode ? workflowCode : "NewTL" }
+        // ];
+        let bsQueryObject = [];
+        if(wokload == "NEWTL.HAZ"){
+          bsQueryObject = [
+            { key: "tenantId", value: tenantId },
+            { key: "businessServices", value: "NEWTL.HAZ" }
+          ];
+          
+        }
+        else{
+          bsQueryObject = [
+            { key: "tenantId", value: tenantId },
+            { key: "businessServices", value: "NewTL" }
+          ];
+        }
         setBusinessServiceDataToLocalStorage(bsQueryObject, dispatch);
       } else {
         updatedApplicationNo = queryObject[0].applicationNumber;

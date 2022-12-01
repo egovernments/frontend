@@ -36,4 +36,5 @@ export const tradeReviewDetails = getCommonCard({
   reviewTradeDetails,
   reviewOwnerDetails,
   reviewDocumentDetails
+  
 });

@@ -26,15 +26,16 @@ const header = getCommonContainer({
     }
   }
 });
-
+debugger;
 const screenConfig = {
   uiFramework: "material-ui",
   name: "pay",
   beforeInitScreen: (action, state, dispatch) => {
+    debugger;
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "NewTL" }
+      { key: "businessServices", value: "NEWTL" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     fetchBill(action, state, dispatch);

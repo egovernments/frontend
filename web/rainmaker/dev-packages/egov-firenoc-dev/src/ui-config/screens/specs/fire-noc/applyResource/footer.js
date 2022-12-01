@@ -83,10 +83,6 @@ const moveToReview = (state, dispatch) => {
 
 const getMdmsData = async (state, dispatch) => {
   let tenantId = "pb";
-  // let tenantId = get(
-  //   state.screenConfiguration.preparedFinalObject,
-  //   "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-  // );
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -116,17 +112,18 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
     0
   );
-  // console.log(activeStep);
+   console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false;
   let isMultiownerSelected=false;
 
-  if (activeStep === 1) {
+   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
       state,
@@ -180,9 +177,9 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = true;
     }
   }
-
+  debugger;
   if (activeStep === 2) {
-    let isApplicantTypeCardValid = validateFields(
+     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
       dispatch
@@ -331,7 +328,7 @@ const callBackForNext = async (state, dispatch) => {
       }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
-  }
+   }
 };
 
 export const changeStep = (
@@ -522,7 +519,8 @@ export const footer = getCommonApplyFooter({
         uiFramework: "custom-atoms",
         componentPath: "Icon",
         props: {
-          iconName: "keyboard_arrow_right"
+          iconName: "keyboard_arrow_right",
+          
         }
       }
     },

@@ -98,16 +98,18 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   payload && dispatch(prepareFinalObject("LicensesTemp[0].oldOwners", [...payload.Licenses[0].tradeLicenseDetail.owners]));
 
   //set business service data
-
+debugger;
   const businessService = get(
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].workflowCode"
   );
+  debugger;
   const businessServiceQueryObject = [
     { key: "tenantId", value: tenantId },
     {
       key: "businessServices",
       value: businessService ? businessService : "NewTL"
+      //  value: businessService ?  businessService : (Licenses[0].isHazaradous && Licenses[0].isHazaradous==="true" ? "NewTL.HAZ" : "NewTL")
     }
   ];
 
