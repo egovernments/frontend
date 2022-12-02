@@ -236,7 +236,7 @@ const ApplicationDetails = (props) => {
                       <Row
                         key={t(value.title)}
                         label={t(value.title)}
-                        text={(typeof value.value === 'string' ? (value.value.includes(":") ? value.value : t(value.value)) : t(value.value))}
+                        text={t(value.value) || "N/A"}
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
                         className="border-none"
