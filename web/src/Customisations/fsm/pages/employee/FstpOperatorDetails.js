@@ -332,7 +332,9 @@ const FstpOperatorDetails = () => {
   const vehicleData = [
     {
       title: `${t("ES_INBOX_VEHICLE_NO")} *`,
-      value: vehicle?.vehicle?.registrationNumber || applicationNos,
+      value: vehicle?.vehicle?.registrationNumber || applicationNos || (
+        <TextInput onChange={(e) => onChangeVehicleNumber(e.target.value)} value={newVehicleNumber} />
+      ),
     },
     {
       title: `${t("ES_INBOX_DSO_NAME")} *`,
