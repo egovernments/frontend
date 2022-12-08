@@ -109,6 +109,19 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
+    function getCurrentURL () {
+      return window.location.href
+    }
+    
+    // Example
+    // const urlmseva = getCurrentURL();
+    // let urldata = urlmseva.split("https://mseva.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?");
+
+    // if(urlmseva){
+
+    // }
+    // alert(url);
+
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const applicationNo = queryValue

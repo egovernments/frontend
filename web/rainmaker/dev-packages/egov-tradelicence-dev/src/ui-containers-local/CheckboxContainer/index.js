@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 //import "./index.css";
 
 const styles = {
@@ -23,7 +24,7 @@ class CheckboxLabels extends React.Component {
     checkedG: true
   };
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     const { jsonPath, approveCheck } = this.props;
     this.setState({ [name]: event.target.checked }, () =>
       approveCheck(jsonPath, this.state.checkedG)
@@ -31,7 +32,19 @@ class CheckboxLabels extends React.Component {
   };
 
   render() {
-    const { classes, content } = this.props;
+    const { classes, content, label = {}, localizationLabels } = this.props;
+    let translatedLabel = "";
+    if (label && label.labelKey && Array.isArray(label.labelKey)) {
+      label.labelKey.forEach((key) => {
+        translatedLabel += getLocaleLabels(key, key, localizationLabels) + " ";
+      });
+    } else {
+      translatedLabel = getLocaleLabels(
+        label.labelName,
+        label.labelKey,
+        localizationLabels
+      );
+    }
 
     return (
       <FormGroup row>
@@ -48,7 +61,7 @@ class CheckboxLabels extends React.Component {
               }}
             />
           }
-          label={content}
+          label={translatedLabel}
         />
       </FormGroup>
     );
@@ -56,13 +69,14 @@ class CheckboxLabels extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  const { screenConfiguration } = state;
+  const { screenConfiguration, app } = state;
+  const { localizationLabels } = app;
   const { jsonPath } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
-  return { preparedFinalObject, jsonPath };
+  return { preparedFinalObject, jsonPath, localizationLabels };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch)  => {
   return {
     approveCheck: (jsonPath, value) => {
       dispatch(prepareFinalObject(jsonPath, value));
@@ -75,8 +89,9 @@ CheckboxLabels.propTypes = {
 };
 
 export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(CheckboxLabels)
+  // connect(
+  //   mapStateToProps,
+  //   mapDispatchToProps
+  // )(CheckboxLabels)
+  connect(mapStateToProps, mapDispatchToProps)(CheckboxLabels)
 );

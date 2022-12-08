@@ -5,14 +5,14 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import { getFeesEstimateCard, getDialogButton } from "../../utils";
-
+import { declarationSummary } from "./declarationDetails";
 import { getReviewTrade } from "./review-trade";
 import { getReviewOwner } from "./review-owner";
 import { getReviewDocuments } from "./review-documents";
 
 const estimate = getCommonGrayCard({
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "LicensesTemp[0].estimateCardData"
+    sourceJsonPath: "LicensesTemp[0].estimateCardData",
   })
 });
 
@@ -35,6 +35,7 @@ export const tradeReviewDetails = getCommonCard({
   ),
   reviewTradeDetails,
   reviewOwnerDetails,
-  reviewDocumentDetails
+  reviewDocumentDetails,
+  declarationSummary,
   
 });
