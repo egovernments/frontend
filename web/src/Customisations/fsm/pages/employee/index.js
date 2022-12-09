@@ -13,6 +13,7 @@ export const FsmBreadCrumb = ({ location }) => {
     const isSearch = location?.pathname?.includes("search");
     const [search, setSearch] = useState(false);
     const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"])
+    const isSwachhSathi = Digit.UserService.hasAccess(["FSM_SWACHH_SATHI"])
 
     useEffect(() => {
       if (!search) {
@@ -31,7 +32,7 @@ export const FsmBreadCrumb = ({ location }) => {
       {
         path: FSTPO ? "/digit-ui/employee/fsm/fstp-inbox" : "/digit-ui/employee/fsm/inbox",
         content: isInbox || isApplicationDetails || search ? t("ES_TITLE_INBOX") : "FSM",
-        show: isFsm,
+        show: isFsm && !isSwachhSathi,
       },
       {
         path: "/digit-ui/employee/fsm/search",

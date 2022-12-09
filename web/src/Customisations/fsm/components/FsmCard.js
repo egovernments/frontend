@@ -23,6 +23,7 @@ const FSMCard = () => {
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
   const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
+  const isSwachSathiEmployee = Digit.UserService.hasAccess("FSM_SWACHH_SATHI") || false;
 
   const [total, setTotal] = useState("-");
 
@@ -144,7 +145,23 @@ const FSMCard = () => {
           {
             label: t("ES_COMMON_INBOX"),
             link: "/digit-ui/employee/fsm/fstp-inbox",
-          }
+          },
+        ],
+      }
+    : isSwachSathiEmployee && FSM_CREATOR
+    ? {
+        Icon: <ShippingTruck />,
+        moduleName: t("ES_TITLE_FAECAL_SLUDGE_MGMT"),
+        links: [
+          {
+            count: total,
+            label: t("ES_TITILE_SEARCH_APPLICATION"),
+            link: `/digit-ui/employee/fsm/search`,
+          },
+          {
+            label: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
+            link: `/digit-ui/employee/fsm/new-application`,
+          },
         ],
       }
     : {
