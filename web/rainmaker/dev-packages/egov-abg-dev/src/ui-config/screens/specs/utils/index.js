@@ -2,11 +2,15 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getQueryArg, getTransformedLocalStorgaeLabels, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import {
+  getQueryArg,
+  getTransformedLocalStorgaeLabels,
+  getLocaleLabels,
+} from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
-  getCommonCaption
+  getCommonCaption,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -14,14 +18,14 @@ import { set } from "lodash";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 import commonConfig from "config/common.js";
 
-export const getCommonApplyFooter = children => {
+export const getCommonApplyFooter = (children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "apply-wizard-footer",
     },
-    children
+    children,
   };
 };
 
@@ -30,7 +34,7 @@ export const transformById = (payload, id) => {
     payload &&
     payload.reduce((result, item) => {
       result[item[id]] = {
-        ...item
+        ...item,
       };
 
       return result;
@@ -38,7 +42,7 @@ export const transformById = (payload, id) => {
   );
 };
 
-export const getMdmsData = async requestBody => {
+export const getMdmsData = async (requestBody) => {
   try {
     const response = await httpRequest(
       "post",
@@ -63,34 +67,58 @@ const getMdmsDataforCollection = async (businesService) => {
       MdmsCriteria: {
         tenantId: "pb",
         moduleDetails: [
-          { moduleName: "sw-services-calculation", masterDetails: [{ name: "Penalty" }] }]
-      }
+          {
+            moduleName: "sw-services-calculation",
+            masterDetails: [{ name: "Penalty" }],
+          },
+        ],
+      },
     };
-  }
-  else {
+  } else {
     mdmsBody = {
       MdmsCriteria: {
         tenantId: "pb",
         moduleDetails: [
-          { moduleName: "ws-services-calculation", masterDetails: [{ name: "Penalty" }] }]
-      }
+          {
+            moduleName: "ws-services-calculation",
+            masterDetails: [{ name: "Penalty" }],
+          },
+        ],
+      },
     };
   }
   try {
     let payload = null;
-    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
-    if (payload.MdmsRes['ws-services-calculation'] && payload.MdmsRes['ws-services-calculation'].Penalty !== undefined && payload.MdmsRes['ws-services-calculation'].Penalty.length > 0) {
-      return payload.MdmsRes['ws-services-calculation'].Penalty[0].rate;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    if (
+      payload.MdmsRes["ws-services-calculation"] &&
+      payload.MdmsRes["ws-services-calculation"].Penalty !== undefined &&
+      payload.MdmsRes["ws-services-calculation"].Penalty.length > 0
+    ) {
+      return payload.MdmsRes["ws-services-calculation"].Penalty[0].rate;
+    } else if (
+      payload.MdmsRes["sw-services-calculation"] &&
+      payload.MdmsRes["sw-services-calculation"].Penalty !== undefined &&
+      payload.MdmsRes["sw-services-calculation"].Penalty.length > 0
+    ) {
+      return payload.MdmsRes["sw-services-calculation"].Penalty[0].rate;
     }
-    else if (payload.MdmsRes['sw-services-calculation'] && payload.MdmsRes['sw-services-calculation'].Penalty !== undefined && payload.MdmsRes['sw-services-calculation'].Penalty.length > 0) {
-      return payload.MdmsRes['sw-services-calculation'].Penalty[0].rate;
-    }
-
-  } catch (e) { console.log(e); }
-
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-export const downloadMultipleBill = async (bills = [], configKey, businesService) => {
+export const downloadMultipleBill = async (
+  bills = [],
+  configKey,
+  businesService
+) => {
   let rate = await getMdmsDataforCollection(businesService);
 
   try {
@@ -102,37 +130,43 @@ export const downloadMultipleBill = async (bills = [], configKey, businesService
     };
     const queryStr = [
       { key: "key", value: configKey },
-      { key: "tenantId", value: commonConfig.tenantId }
-    ]
+      { key: "tenantId", value: commonConfig.tenantId },
+    ];
     var addDetail = null;
 
     addDetail = {
-      "penaltyRate": rate
-    }
-    bills = bills.filter(item => item.totalAmount > 0);
-    bills.map(item => {
-
+      penaltyRate: rate,
+    };
+    bills = bills.filter((item) => item.totalAmount > 0);
+    bills.map((item) => {
       item.additionalDetails = addDetail;
-    })
+    });
 
-    var actualBills = [], size = 40;
+    var actualBills = [],
+      size = 30;
     for (let i = 0; bills.length > 0; i++) {
       actualBills.push(bills.splice(0, size));
     }
-      for( let i = 0; i < actualBills.length; i++) {
-        await downloadPdfs(DOWNLOADRECEIPT, queryStr, actualBills[i])
-      }
+    for (let i = 0; i < actualBills.length; i++) {
+      await downloadPdfs(DOWNLOADRECEIPT, queryStr, actualBills[i]);
+    }
   } catch (error) {
     console.log(error);
-
   }
-
-}
+};
 
 export const downloadPdfs = async (DOWNLOADRECEIPT, queryStr, bills) => {
-  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
-}
+  const pfResponse = await httpRequest(
+    "post",
+    DOWNLOADRECEIPT.GET.URL,
+    DOWNLOADRECEIPT.GET.ACTION,
+    queryStr,
+    { Bill: bills },
+    { Accept: "application/pdf" },
+    { responseType: "arraybuffer" }
+  );
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], "download");
+};
 
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
   let translatedLabel = null;
@@ -174,7 +208,7 @@ export const validateFields = (
             value: get(
               state.screenConfiguration.preparedFinalObject,
               fields[variable].jsonPath
-            )
+            ),
           },
           dispatch,
           true
@@ -203,7 +237,7 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   }
 };
 
-export const getEpochForDate = date => {
+export const getEpochForDate = (date) => {
   const dateSplit = date.split("/");
   return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
 };
@@ -220,17 +254,17 @@ export const sortByEpoch = (data, order) => {
   }
 };
 
-export const ifUserRoleExists = role => {
+export const ifUserRoleExists = (role) => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
-  const roleCodes = roles ? roles.map(role => role.code) : [];
+  const roleCodes = roles ? roles.map((role) => role.code) : [];
   if (roleCodes.indexOf(role) > -1) {
     return true;
   } else return false;
 };
 
-export const convertEpochToDate = dateEpoch => {
-  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == '') {
+export const convertEpochToDate = (dateEpoch) => {
+  if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
   const dateFromApi = new Date(dateEpoch);
@@ -319,7 +353,7 @@ export const showHideAdhocPopup = (state, dispatch) => {
   );
 };
 
-export const getCommonGrayCard = children => {
+export const getCommonGrayCard = (children) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -333,18 +367,18 @@ export const getCommonGrayCard = children => {
               backgroundColor: "rgb(242, 242, 242)",
               boxShadow: "none",
               borderRadius: 0,
-              overflow: "visible"
-            }
-          })
+              overflow: "visible",
+            },
+          }),
         },
         gridDefination: {
-          xs: 12
-        }
-      }
+          xs: 12,
+        },
+      },
     },
     gridDefination: {
-      xs: 12
-    }
+      xs: 12,
+    },
   };
 };
 
@@ -354,30 +388,32 @@ export const getLabelOnlyValue = (value, props = {}) => {
     componentPath: "Div",
     gridDefination: {
       xs: 6,
-      sm: 4
+      sm: 4,
     },
     props: {
       style: {
-        marginBottom: "16px"
+        marginBottom: "16px",
       },
-      ...props
+      ...props,
     },
     children: {
-      value: getCommonCaption(value)
-    }
+      value: getCommonCaption(value),
+    },
   };
 };
 
-
 export const onActionClick = (rowData) => {
   switch (rowData[8]) {
-    case "PAY": return "";
-    case "DOWNLOAD RECEIPT": ""
-    case "GENERATE NEW RECEIPT": ""
+    case "PAY":
+      return "";
+    case "DOWNLOAD RECEIPT":
+      "";
+    case "GENERATE NEW RECEIPT":
+      "";
   }
-}
+};
 
-export const getTextToLocalMapping = label => {
+export const getTextToLocalMapping = (label) => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
     case "Bill No.":
@@ -476,11 +512,7 @@ export const getTextToLocalMapping = label => {
       );
     case "PAY":
     case "PARTIALLY PAID":
-      return getLocaleLabels(
-        "PAY",
-        "BILL_GENIE_PAY",
-        localisationLabels
-      );
+      return getLocaleLabels("PAY", "BILL_GENIE_PAY", localisationLabels);
     case "EXPIRED":
       return getLocaleLabels(
         "Expired",
@@ -528,10 +560,9 @@ export const getTextToLocalMapping = label => {
   }
 };
 
-
 export const setServiceCategory = (businessServiceData, dispatch) => {
   let nestedServiceData = {};
-  businessServiceData.forEach(item => {
+  businessServiceData.forEach((item) => {
     if (item.code && item.code.indexOf(".") > 0 && item.type == "Adhoc") {
       if (nestedServiceData[item.code.split(".")[0]]) {
         let child = get(
@@ -567,8 +598,7 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
           );
           set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
         }
-      }
-      else {
+      } else {
         set(nestedServiceData, `${item.code}`, item);
       }
     }
@@ -580,7 +610,7 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
     )
   );
   let serviceCategories = Object.values(nestedServiceData).filter(
-    item => item.code
+    (item) => item.code
   );
   dispatch(
     prepareFinalObject(
@@ -589,6 +619,6 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
     )
   );
 };
-export const checkValueForNA = value => {
-  return value == null || value == undefined || value == '' ? "NA" : value;
+export const checkValueForNA = (value) => {
+  return value == null || value == undefined || value == "" ? "NA" : value;
 };
