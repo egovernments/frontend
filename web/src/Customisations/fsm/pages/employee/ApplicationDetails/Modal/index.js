@@ -1,7 +1,7 @@
 import { Loader, Modal, FormComposer, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
-import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
+// import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
 
 import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication, configScheduleDso } from "../config";
 import { configRejectFstpo } from "../config/RejectFstpo";
@@ -111,8 +111,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [propertyMenu, setPropertyMenu] = useState([]);
   const [propertySubType, setPropertySubType] = useState(null);
   const [pitType, setPitType] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
-  const [fileStoreId, setFileStoreId] = useState();
+  // const [imageFile, setImageFile] = useState(null);
+  // const [fileStoreId, setFileStoreId] = useState();
   const [pitDetail, setPitDetail] = useState();
   const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
   const [noOfTrips, setNoOfTrips] = useState(null);
@@ -234,22 +234,21 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     setFstpoRejectionReason(reason);
   }
 
-  function getImage(e) {
-    setImageFile(e.target.files);
-  }
+  // function getImage(e) {
+  //   setImageFile(e.target.files);
+  // }
 
 
   function addCommentToWorkflow(state, workflow, data) {
     workflow.comments = data.comments ? state.code + "~" + data.comments : state.code;
   }
 
-  const handleUpload = (ids) => {
-    if (!fileStoreId || fileStoreId.length < 4) {
-      setFileStoreId(ids);
-    } else {
-    }
-    // Digit.SessionStorage.set("PGR_CREATE_IMAGES", ids);
-  };
+  // const handleUpload = (ids) => {
+  //   if (!fileStoreId || fileStoreId.length < 4) {
+  //     setFileStoreId(ids);
+  //   } else {
+  //   }
+  // };
 
   function submit(data) {
     const workflow = { action: action };
@@ -272,13 +271,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips
     if (data.paymentMode) applicationData.additionalDetails.receivedPayment = data.paymentMode.code;
     
-    if (fileStoreId) {
-      if (applicationData.pitDetail.additionalDetails && applicationData.pitDetail.additionalDetails.fileStoreId) {
-        applicationData.pitDetail.additionalDetails.fileStoreId = { ...applicationData.pitDetail.additionalDetails.fileStoreId, FSM_DSO: fileStoreId };
-      } else {
-        applicationData.pitDetail.additionalDetails = { fileStoreId: { FSM_DSO: fileStoreId } };
-      }
-    }
+    // if (fileStoreId) {
+    //   if (applicationData.pitDetail.additionalDetails && applicationData.pitDetail.additionalDetails.fileStoreId) {
+    //     applicationData.pitDetail.additionalDetails.fileStoreId = { ...applicationData.pitDetail.additionalDetails.fileStoreId, FSM_DSO: fileStoreId };
+    //   } else {
+    //     applicationData.pitDetail.additionalDetails = { fileStoreId: { FSM_DSO: fileStoreId } };
+    //   }
+    // }
     if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips);
     if (action === "REASSING") applicationData.vehicleId = null;
 
@@ -470,13 +469,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         defaultValues={defaultValues}
       >
       </FormComposer>
-      {action === "COMPLETED" ? <UploadPitPhoto
+      {/* {action === "COMPLETED" ? <UploadPitPhoto
         header=""
         tenantId={tenantId}
         cardText=""
         onPhotoChange={handleUpload}
         uploadedImages={null} /> : null
-      }
+      } */}
 
       {/* {toastError && <Toast {...toastError} />} */}
     </Modal>
