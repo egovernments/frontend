@@ -122,7 +122,7 @@ const DrillDown = ({ stateCode }) => {
   return (
     <FilterContext.Provider value={provided}>
       <Header>{t(title)}</Header>
-      {isNational ? (
+      {/* {isNational ? (
         <FiltersNational t={t} ulbTenants={nationalInfo} isNational={isNational} />
       ) : (
         <Filters
@@ -131,7 +131,7 @@ const DrillDown = ({ stateCode }) => {
           // showDenomination={false}
           isNational={nationalDB}
         />
-      )}
+      )} */}
       {filters?.filters?.tenantId?.length > 0 && (
         <div className="tag-container">
           {!showFilters &&
