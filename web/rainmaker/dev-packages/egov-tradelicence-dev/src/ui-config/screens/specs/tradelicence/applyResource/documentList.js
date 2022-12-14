@@ -1,3 +1,4 @@
+debugger;
 export const documentList = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-tradelicence",
@@ -32,6 +33,17 @@ export const documentList = {
       },
       {
         type : "OWNERPHOTO",
+        description: {
+          labelName: "Only .png and .jpeg 6MB max file size.",
+          labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"
+        },
+        formatProps :{
+          accept: "image/*, .png, .jpeg",
+        },        
+        maxFileSize: 3000
+      },
+      {
+        type : "OWNERSELF",
         description: {
           labelName: "Only .png and .jpeg 6MB max file size.",
           labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"

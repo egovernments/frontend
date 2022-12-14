@@ -256,7 +256,7 @@ class ReviewForm extends Component {
                     closeDialogue={() => this.closeCalculationDetails()}
                   />
                 )}
-                <p className="declaration-main-header">DECLARATION</p>
+                <p className="declaration-main-headertest">DECLARATION</p>
                 <SingleCheckbox
                   id="rcpt"
                   errorMessage={<Label label={termsError} />}

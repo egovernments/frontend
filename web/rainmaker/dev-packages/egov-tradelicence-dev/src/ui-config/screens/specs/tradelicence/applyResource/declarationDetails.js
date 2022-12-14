@@ -3,7 +3,7 @@ import {
     getCommonTitle,
     getCommonContainer,
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  
+  import { callisDecL } from "../applyResource/footer";
   const declarationDetails = getCommonContainer({
     checkbox: {
       uiFramework: "custom-containers-local",
@@ -51,6 +51,10 @@ import {
       },
       children: {
         body: declarationDetails,
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: callisDecL
       },
     },
   });

@@ -13,11 +13,16 @@ import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
 import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields,getCurrentFinancialYear} from "../../utils";
 import "./index.css";
+let isDecL;
+debugger;
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
   const tenantId = get(LicenseData, "tenantId");
   const financialYear = get(LicenseData, "financialYear");
+  //isDecL=  get(LicenseData, "isDeclared");
+ 
+  
   const purpose = "apply";
   const status = "success";
   dispatch(
@@ -75,6 +80,12 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
     }
   });
 };
+debugger;
+export const callisDecL = async (state, dispatch) => {
+  isDecL=  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "isDeclared");
+  alert("demo  "+isDecL);
+
+}
 
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
@@ -82,6 +93,7 @@ export const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
+  
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
@@ -257,7 +269,7 @@ export const callBackForNext = async (state, dispatch) => {
       "Licenses[0]",
       {}
     );
-
+   
     get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
       get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
         "."
@@ -551,6 +563,7 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: callBackForPrevious
     },
+   
     visible: false
   },
   nextButton: {
@@ -583,6 +596,7 @@ export const footer = getCommonApplyFooter({
       callBack: callBackForNext
     }
   },
+
   payButton: {
     componentPath: "Button",
     props: {
@@ -592,8 +606,10 @@ export const footer = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "45px",
-        borderRadius: "inherit"
-      }
+        borderRadius: "inherit",
+        display: "none",
+      },
+      
     },
     children: {
       submitButtonLabel: getLabel({
@@ -608,12 +624,14 @@ export const footer = getCommonApplyFooter({
         }
       }
     },
+    
     onClickDefination: {
       action: "condition",
       callBack: callBackForNext
     },
     visible: false
   }
+ 
 });
 
 
