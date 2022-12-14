@@ -13,7 +13,8 @@ import some from "lodash/some";
 import { applyTradeLicense, checkValidOwners, getNextFinancialYearForRenewal } from "../../../../../ui-utils/commons";
 import {createEstimateData,downloadCertificateForm, getButtonVisibility,getCommonApplyFooter,getDocList, setMultiOwnerForApply,setValidToFromVisibilityForApply,validateFields,getCurrentFinancialYear} from "../../utils";
 import "./index.css";
-
+let isDecL;
+debugger;
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
   const tenantId = get(LicenseData, "tenantId");
@@ -75,7 +76,12 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
     }
   });
 };
+debugger;
+export const callisDecL = async (state, dispatch) => {
+  isDecL=  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "isDeclared");
+  alert("demo  "+isDecL);
 
+}
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],

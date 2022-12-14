@@ -42,6 +42,17 @@ export const documentList = {
         maxFileSize: 3000
       },
       {
+        type : "OWNERSELF",
+        description: {
+          labelName: "Only .png and .jpeg 6MB max file size.",
+          labelKey: "TL_UPLOAD_IMAGE_RESTRICTIONS"
+        },
+        formatProps :{
+          accept: "image/*, .png, .jpeg",
+        },        
+        maxFileSize: 3000
+      },
+      {
         type : "OLDLICENCENO",
         description: {
           labelName: "Only .jpg and .pdf files. 6MB max file size.",
