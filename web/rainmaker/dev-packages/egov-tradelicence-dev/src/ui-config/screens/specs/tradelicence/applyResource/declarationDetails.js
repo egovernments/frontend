@@ -18,7 +18,7 @@ const declarationDetails = getCommonContainer({
       },
       jsonPath: "Licenses[0].isDeclared",
     },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
     type: "array",
   },
 });
@@ -29,7 +29,7 @@ export const declarationSummary = getCommonContainer({
     {
       labelName: "Declaration",
       labelKey: "TL_DECLARATION_TITLE",
-      visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
+       visible: process.env.REACT_APP_NAME === "Citizen" ? true : false,
     },
     {
       style: {

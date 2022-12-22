@@ -345,8 +345,8 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 3) {
     let  isDlcd = state.screenConfiguration.preparedFinalObject.Licenses[0].isDeclared;
-    if(isDlcd != true){
-    alert("test submit");
+    if(isDlcd != true && process.env.REACT_APP_NAME === "Citizen"){
+    alert("Please check Self_DECLARATION");
     }else{
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
