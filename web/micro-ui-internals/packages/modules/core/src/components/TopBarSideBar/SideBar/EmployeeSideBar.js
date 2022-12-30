@@ -30,7 +30,7 @@ const EmployeeSideBar = () => {
     else if(STADMIN)
       return "/employee/integration/dss/home";
     else
-      return "/employee";
+      return "/employee/";
   }
 
   const { t } = useTranslation();
