@@ -85,6 +85,12 @@ export const generatePdfFromDiv = (action, applicationNumber) => {
 
 // }
 export const callBackForNext = async (state, dispatch) => {
+  debugger;
+  let urloutside=window.location.href;
+  // let fetchdataurl=urloutside.split("https://mseva.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?");
+  let fetchdataurl=urloutside.split("http://localhost:3000/tradelicense-citizen/apply?");
+ let fetchdatavalues = fetchdataurl[1].split("&");
+  console.log(fetchdatavalues);
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
