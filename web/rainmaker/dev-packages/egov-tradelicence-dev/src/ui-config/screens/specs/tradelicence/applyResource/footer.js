@@ -93,6 +93,21 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
+    debugger;
+    if(process.env.REACT_APP_NAME == "Citizen"){
+      let urldatavalues = window.location.search;
+      // let bb = urldatavalues.split("https://mseva.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?");
+      let feachdataurl = urldatavalues.split("http://localhost:3000/tradelicense-citizen/apply?");
+      let shortdataurl = feachdataurl[0].split("&");
+      if(shortdataurl[1]){
+       let ChanNel = shortdataurl[1].split("channel=")[1].split(":");
+      dispatch(prepareFinalObject( "Licenses[0].CHANNEL",ChanNel[0] ,""));
+      dispatch(prepareFinalObject( "Licenses[0].IPIN",ChanNel[1] ,""));
+      dispatch(prepareFinalObject( "Licenses[0].APPID",ChanNel[2] ,""));
+      dispatch(prepareFinalObject( "Licenses[0].mobileNo",shortdataurl[4].split("mobileNo=")[1] ,""));
+      }
+      console.log(shortdataurl);
+        }
     const isTradeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
       state,
@@ -182,8 +197,9 @@ export const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
+    
     await getDocList(state, dispatch);
-
+   
     let isOwnerShipValid = validateFields(
       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
       state,
