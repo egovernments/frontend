@@ -96,8 +96,8 @@ export const callBackForNext = async (state, dispatch) => {
     debugger;
     if(process.env.REACT_APP_NAME == "Citizen"){
       let urldatavalues = window.location.search;
-      // let bb = urldatavalues.split("https://mseva.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?");
-      let feachdataurl = urldatavalues.split("http://localhost:3000/tradelicense-citizen/apply?");
+      let feachdataurl = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?");
+      // let feachdataurl = urldatavalues.split("http://localhost:3000/tradelicense-citizen/apply?");
       let shortdataurl = feachdataurl[0].split("&");
       if(shortdataurl[1]){
        let ChanNel = shortdataurl[1].split("channel=")[1].split(":");
