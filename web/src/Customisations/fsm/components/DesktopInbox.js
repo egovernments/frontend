@@ -14,9 +14,13 @@ const DesktopInbox = (props) => {
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
-    if (value === '-') return <span className="sla-cell-success">-</span>;
+    if (value === "-") return <span className="sla-cell-success">-</span>;
     if (isNaN(value)) return <span className="sla-cell-success">0</span>;
-    return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
+    return value < 0 ? (
+      <span className="sla-cell-error">{value}</span>
+    ) : (
+      <span className="sla-cell-success">{value}</span>
+    );
   };
 
   function goTo(id) {
@@ -34,7 +38,13 @@ const DesktopInbox = (props) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                  <Link
+                    to={
+                      `${props.parentRoute}/${
+                        DSO ? "dso-application-details" : "application-details"
+                      }/` + row.original["applicationNo"]
+                    }
+                  >
                     {row.original["applicationNo"]}
                   </Link>
                 </span>
@@ -56,7 +66,9 @@ const DesktopInbox = (props) => {
         {
           Header: t("ES_APPLICATION_DETAILS_PROPERTY_TYPE"),
           accessor: (row) => {
-            const key = t(`PROPERTYTYPE_MASTERS_${row.propertyUsage.split(".")[0]}`);
+            const key = t(
+              `PROPERTYTYPE_MASTERS_${row.propertyUsage.split(".")[0]}`
+            );
             return key;
           },
           disableSortBy: true,
@@ -71,7 +83,15 @@ const DesktopInbox = (props) => {
         },
         {
           Header: t("ES_INBOX_LOCALITY"),
-          accessor: (row) => GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.address.locality.code, row.tenantId))),
+          accessor: (row) =>
+            GetCell(
+              t(
+                Digit.Utils.locale.getRevenueLocalityCode(
+                  row.address.locality.code,
+                  row.tenantId
+                )
+              )
+            ),
           disableSortBy: true,
         },
         {
@@ -93,13 +113,18 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>
-                      {row.original["tripDetails"].map((i) =>
+                    <Link
+                      to={
+                        "/digit-ui/employee/fsm/fstp-operator-details/" +
+                        row.original["applicationNo"]
+                      }
+                    >
+                      {row.original["tripDetails"].map((i) => (
                         <div>
                           {i.referenceNo}
                           <br />
                         </div>
-                      )}
+                      ))}
                     </Link>
                   </span>
                 </div>
@@ -113,7 +138,14 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>{row.original["applicationNo"]}</Link>
+                    <Link
+                      to={
+                        "/digit-ui/employee/fsm/fstp-operator-details/" +
+                        row.original["applicationNo"]
+                      }
+                    >
+                      {row.original["applicationNo"]}
+                    </Link>
                   </span>
                 </div>
               );
@@ -144,7 +176,15 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={`${props.parentRoute}/${DSO ? "dso-application-details" : "application-details"}/` + row.original["applicationNo"]}>
+                    <Link
+                      to={
+                        `${props.parentRoute}/${
+                          DSO
+                            ? "dso-application-details"
+                            : "application-details"
+                        }/` + row.original["applicationNo"]
+                      }
+                    >
                       {row.original["applicationNo"]}
                     </Link>
                   </span>
@@ -158,14 +198,23 @@ const DesktopInbox = (props) => {
             accessor: "createdTime",
             Cell: ({ row }) => {
               return GetCell(
-                `${row.original.createdTime.getDate()}/${row.original.createdTime.getMonth() + 1}/${row.original.createdTime.getFullYear()}`
+                `${row.original.createdTime.getDate()}/${
+                  row.original.createdTime.getMonth() + 1
+                }/${row.original.createdTime.getFullYear()}`
               );
             },
           },
           {
             Header: t("ES_INBOX_LOCALITY"),
             Cell: ({ row }) => {
-              return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
+              return GetCell(
+                t(
+                  Digit.Utils.locale.getRevenueLocalityCode(
+                    row.original["locality"],
+                    row.original["tenantId"]
+                  )
+                )
+              );
             },
             // Cell: (row) => {
             //   return GetCell(t(`CS_COMMON_${row.row.original["status"]}`));
@@ -190,7 +239,10 @@ const DesktopInbox = (props) => {
   let result;
   if (props.isLoading) {
     result = <Loader />;
-  } else if ((props.isSearch && !props.shouldSearch) || props?.data?.table?.length === 0) {
+  } else if (
+    (props.isSearch && !props.shouldSearch) ||
+    props?.data?.table?.length === 0
+  ) {
     result = (
       <Card style={{ marginTop: 20 }}>
         {/* TODO Change localization key */}
@@ -215,7 +267,10 @@ const DesktopInbox = (props) => {
         getCellProps={(cellInfo) => {
           return {
             style: {
-              minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+              minWidth:
+                cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO")
+                  ? "240px"
+                  : "",
               padding: "20px 18px",
               fontSize: "16px",
               // borderTop: "1px solid grey",
@@ -242,20 +297,33 @@ const DesktopInbox = (props) => {
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
           <FSMLink parentRoute={props.parentRoute} />
-          <div style={{marginTop: "24px"}}>
-            <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+          <div style={{ marginTop: "24px" }}>
+            <Filter
+              searchParams={props.searchParams}
+              paginationParms={props.paginationParms}
+              applications={props.data}
+              onFilterChange={props.onFilterChange}
+              type="desktop"
+            />
           </div>
         </div>
       )}
       <div style={{ flex: 1, marginLeft: "24px" }}>
         <SearchApplication
           onSearch={props.onSearch}
+          onCreatedByMe={props.onCreatedByMe}
           type="desktop"
           searchFields={props.searchFields}
           isInboxPage={!props?.isSearch}
           searchParams={props.searchParams}
         />
-        <div className="result" style={{ marginLeft: FSTP ? "" : !props?.isSearch ? "24px" : "", flex: 1 }}>
+        <div
+          className="result"
+          style={{
+            marginLeft: FSTP ? "" : !props?.isSearch ? "24px" : "",
+            flex: 1,
+          }}
+        >
           {result}
         </div>
       </div>

@@ -11,10 +11,12 @@ import EditApplication from "./pages/employee/EditApplication";
 import FSMCard from "./components/FsmCard";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import SelectChannel from "./pageComponents/SelectChannel";
+import Inbox from "./pages/employee/Inbox";
 
 export const fsmComponents = {
   FSMResponse: Response,
   FSMFstpInbox: FstpInbox,
+  FSMEmpInbox: Inbox,
   FsmBreadCrumb: FsmBreadCrumb,
   SelectStreet,
   FSMCitizenApplicationDetails: ApplicationDetails,
