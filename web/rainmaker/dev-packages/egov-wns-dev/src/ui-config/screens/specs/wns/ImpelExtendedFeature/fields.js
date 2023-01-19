@@ -8,9 +8,9 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-import { getTenantId } from "../../utils/localStorageUtils";
+//import { getTenantId } from "../../utils/localStorageUtils";
 debugger;
-console.log(getTenantId());
+// console.log(getTenantId());
 export const WSledgerId = {
     ledgerId: getTextField({
         label: { labelKey: "WS_SERV_DETAIL_LEDGER_ID" },
@@ -154,7 +154,7 @@ othersFee : getTextField({
     sm: 6
   },
   required: false,
-  visible:  getTenantId() != pb.bassipathana ? true : false,
+ // visible:  getTenantId() != pb.bassipathana ? true : false,
   pattern: getPattern("Amount"),
   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
   jsonPath: "applyScreen.additionalDetails.othersFee"

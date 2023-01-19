@@ -15,7 +15,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 //import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 export const filestoreid = async (state, dispatch) => {
-  alert("File Store id NULL");
+  window.open('https://enaksha.lgpunjab.gov.in', '_blank');
 }
 
 export const searchApiCall = async (state, dispatch) => {
