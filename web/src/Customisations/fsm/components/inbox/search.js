@@ -1,13 +1,34 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError } from "@egovernments/digit-ui-react-components";
+import {
+  TextInput,
+  Label,
+  SubmitBar,
+  LinkLabel,
+  ActionBar,
+  CloseSvg,
+  DatePicker,
+  CardLabelError,
+} from "@egovernments/digit-ui-react-components";
 import DropdownStatus from "./DropdownStatus";
 import { useTranslation } from "react-i18next";
 var Digit = window.Digit || {};
-const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFields, searchParams, isInboxPage }) => {
-  const storedSearchParams = isInboxPage ? Digit.SessionStorage.get("fsm/inbox/searchParams") : Digit.SessionStorage.get("fsm/search/searchParams");
+const SearchApplication = ({
+  onSearch,
+  onCreatedByMe,
+  type,
+  onClose,
+  isFstpOperator,
+  searchFields,
+  searchParams,
+  isInboxPage,
+}) => {
+  const storedSearchParams = isInboxPage
+    ? Digit.SessionStorage.get("fsm/inbox/searchParams")
+    : Digit.SessionStorage.get("fsm/search/searchParams");
 
-  const { data: applicationStatuses, isFetched: areApplicationStatus } = Digit.Hooks.fsm.useApplicationStatus();
+  const { data: applicationStatuses, isFetched: areApplicationStatus } =
+    Digit.Hooks.fsm.useApplicationStatus();
 
   const { t } = useTranslation();
   const { register, handleSubmit, reset, watch, control } = useForm({
@@ -16,6 +37,7 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const [error, setError] = useState(false);
   const mobileView = window.innerWidth <= 640;
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
+  const swatchSathi = Digit.UserService.hasAccess("FSM_SWACHH_SATHI") || false;
   const watchSearch = watch(["applicationNos", "mobileNumber"]);
 
   const onSubmitInput = (data) => {
@@ -28,8 +50,18 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
     }
   };
 
+  const createdByMeSubmit = () => {
+    let params = {
+      mobileNumber: watchSearch.mobileNumber,
+    };
+    onCreatedByMe(params);
+  };
+
   function clearSearch() {
-    const resetValues = searchFields.reduce((acc, field) => ({ ...acc, [field?.name]: "" }), {});
+    const resetValues = searchFields.reduce(
+      (acc, field) => ({ ...acc, [field?.name]: "" }),
+      {}
+    );
     reset(resetValues);
     if (isInboxPage) {
       Digit.SessionStorage.del("fsm/inbox/searchParams");
@@ -42,7 +74,10 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const clearAll = (mobileView) => {
     const mobileViewStyles = mobileView ? { margin: 0 } : {};
     return (
-      <LinkLabel style={{ display: "inline", ...mobileViewStyles }} onClick={clearSearch}>
+      <LinkLabel
+        style={{ display: "inline", ...mobileViewStyles }}
+        onClick={clearSearch}
+      >
         {t("ES_COMMON_CLEAR_SEARCH")}
       </LinkLabel>
     );
@@ -51,8 +86,12 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   const searchValidation = (data) => {
     if (FSTP) return null;
 
-    watchSearch.applicationNos || watchSearch.mobileNumber ? setError(false) : setError(true);
-    return watchSearch.applicationNos || watchSearch.mobileNumber ? true : false;
+    watchSearch.applicationNos || watchSearch.mobileNumber
+      ? setError(false)
+      : setError(true);
+    return watchSearch.applicationNos || watchSearch.mobileNumber
+      ? true
+      : false;
   };
 
   const getFields = (input) => {
@@ -60,7 +99,9 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
       case "date":
         return (
           <Controller
-            render={(props) => <DatePicker date={props.value} onChange={props.onChange} />}
+            render={(props) => (
+              <DatePicker date={props.value} onChange={props.onChange} />
+            )}
             name={input.name}
             control={control}
             defaultValue={null}
@@ -100,31 +141,74 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
-        <div className="search-container" style={{ width: "auto", marginLeft: FSTP ? "" : isInboxPage ? "24px" : "revert" }}>
+        <div
+          className="search-container"
+          style={{
+            width: "auto",
+            marginLeft: FSTP ? "" : isInboxPage ? "24px" : "revert",
+          }}
+        >
           <div className="search-complaint-container">
             {(type === "mobile" || mobileView) && (
               <div className="complaint-header">
                 <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
-                <span style={{
-                  position: "absolute",
-                  top: "2%",
-                  right: "8px",
-                }} onClick={onClose}>
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "2%",
+                    right: "8px",
+                  }}
+                  onClick={onClose}
+                >
                   <CloseSvg />
                 </span>
               </div>
             )}
-            <div className={FSTP? "complaint-input-container for-pt for-search" : "complaint-input-container" } style={{ width: "100%" }}>
+            <div
+              className={
+                FSTP || swatchSathi
+                  ? "complaint-input-container for-pt for-search"
+                  : "complaint-input-container"
+              }
+              style={{ width: "100%" }}
+            >
               {searchFields?.map((input, index) => (
-                <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
+                <span
+                  key={index}
+                  className={index === 0 ? "complaint-input" : "mobile-input"}
+                >
                   <Label>{input.label}</Label>
                   {getFields(input)}{" "}
                 </span>
               ))}
-              {type === "desktop" && !mobileView && <SubmitBar className="submit-bar-search" label={t("ES_COMMON_SEARCH")} submit />}
+              {type === "desktop" && !mobileView && (
+                <SubmitBar
+                  className="submit-bar-search"
+                  label={t("ES_COMMON_SEARCH")}
+                  submit
+                />
+              )}
+              {type === "desktop" &&
+                !mobileView &&
+                swatchSathi &&
+                !isInboxPage && (
+                  <SubmitBar
+                    className="submit-bar-search"
+                    label={t("ES_COMMON_CREATED_BY_ME")}
+                    onSubmit={() => {
+                      createdByMeSubmit();
+                    }}
+                  />
+                )}
             </div>
-            {error ? <CardLabelError className="search-error-label">{t("ES_SEARCH_APPLICATION_ERROR")}</CardLabelError> : null}
-            {type === "desktop" && !mobileView && <span className="clear-search">{clearAll()}</span>}
+            {error ? (
+              <CardLabelError className="search-error-label">
+                {t("ES_SEARCH_APPLICATION_ERROR")}
+              </CardLabelError>
+            ) : null}
+            {type === "desktop" && !mobileView && (
+              <span className="clear-search">{clearAll()}</span>
+            )}
           </div>
         </div>
         {(type === "mobile" || mobileView) && (
@@ -132,7 +216,11 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
             <button className="clear-search" style={{ flex: 1 }}>
               {clearAll(mobileView)}
             </button>
-            <SubmitBar label={t("ES_COMMON_SEARCH")} style={{ flex: 1 }} submit={true} />
+            <SubmitBar
+              label={t("ES_COMMON_SEARCH")}
+              style={{ flex: 1 }}
+              submit={true}
+            />
           </ActionBar>
         )}
       </React.Fragment>
