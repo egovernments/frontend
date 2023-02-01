@@ -50,7 +50,7 @@ export const documentList = {
           labelKey: "TL_UPLOAD_IMAGE_OWNERSELF"
         },
         formatProps :{
-          accept: "image/*, .png, .jpeg",
+          accept : "image/*, .pdf, .png, .jpeg",
         },        
         maxFileSize: 3000
       },
