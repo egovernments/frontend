@@ -7,12 +7,11 @@
     <link rel="stylesheet" href="https://unpkg.com/@egovernments/digit-ui-css@1.5.7/dist/index.css"/>
     <!-- <link rel="stylesheet" href="https://unpkg.com/@egovernments/digit-ui-css/dist/index.css"/> -->
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="theme-color" content="#00bcd1"/>
+    <meta name="theme-color" content="#00BCD1"/>
     <title>SUJOG</title>
-    
     <script>
       var globalConfigs = (function () {
-      var stateTenantId = 'pg'
+      var stateTenantId = 'od'
       var gmaps_api_key = 'AIzaSyAQOd09-vjmk1sXFb_ZQYDz2nlfhXq7Wf8'
       var finEnv = 'uat'
       var centralInstanceEnabled = false;
@@ -20,8 +19,6 @@
       var footerLogoURL = 'https://s3.ap-south-1.amazonaws.com/egov-uat-assets/digit-footer.png'
       var digitHomeURL = 'https://www.digit.org/'
       var assetS3Bucket = 'pg-egov-assets';
-
-
       var getConfig = function (key) {
         if (key === 'STATE_LEVEL_TENANT_ID') {
           return stateTenantId;
@@ -45,8 +42,6 @@
           return "ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0";
         }
       };
-
-
       return {
         getConfig
       };
@@ -59,10 +54,8 @@
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
-
       You can add webfonts, meta tags, or analytics to this file.
       The build step will place the bundled scripts into the <body> tag.
-
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
