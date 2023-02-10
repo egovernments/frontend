@@ -89,8 +89,8 @@ export const tradeDocumentDetails = getCommonCard({
     },
     children: {
       buttonLabel: getLabel({
-        labelName: "Self Declaration Document",
-        labelKey: "Self Declaration Document"
+        labelName: "Download Self Declaration Document",
+        labelKey: "Download Self Declaration Document"
       })
     },
     onClickDefination: {

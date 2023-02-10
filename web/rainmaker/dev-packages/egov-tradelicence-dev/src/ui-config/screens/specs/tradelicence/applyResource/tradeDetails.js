@@ -1284,15 +1284,16 @@ export const tradeDetails = getCommonCard({
       pattern: getPattern("OperationalArea"),
       jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
     }),
+    /////
     tradeNoOfEmployee: getTextField({
       label: {
         labelName: "No. Of Employee",
         labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
       },
-      props:{
-        className:"applicant-details-error",
-        disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
-      },
+      // props:{
+      //   className:"applicant-details-error",
+      //   disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,
+      // },
       placeholder: {
         labelName: "Enter No. Of Employee",
         labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_PLACEHOLDER"
