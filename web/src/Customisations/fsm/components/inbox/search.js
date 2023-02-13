@@ -51,8 +51,11 @@ const SearchApplication = ({
   };
 
   const createdByMeSubmit = () => {
+    const user = Digit.UserService.getUser();
     let params = {
       mobileNumber: watchSearch.mobileNumber,
+      applicationNos: watchSearch.applicationNos,
+      createdby: user.info.uuid,
     };
     onCreatedByMe(params);
   };
