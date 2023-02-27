@@ -45,7 +45,13 @@ const getDisplayName = (name) => {
     case "pgr":
       return "Complaints";
     case "ws":
-      return "Water & Sewerage";    
+      return "Water & Sewerage"; 
+    case "mCollect":
+      return "mCollect";
+    case "noc":
+      return "Fire NOC";
+    case "finance":
+      return "Finance";
     default:
       return name;
   }
