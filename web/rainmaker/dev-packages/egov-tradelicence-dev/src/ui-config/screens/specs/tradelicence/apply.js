@@ -138,12 +138,13 @@ export const getMdmsData = async (action, state, dispatch) => {
      ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
      set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
     }else{
+      debugger;
      let financialYearData = get(
        payload,
        "MdmsRes.egf-master.FinancialYear",
        []
-    // ).filter(item => item.module === "TL"&& item.active === true);
-     ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
+     ).filter(item => item.module === "TL"&& item.active === true);
+    // ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
 
      set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
     }

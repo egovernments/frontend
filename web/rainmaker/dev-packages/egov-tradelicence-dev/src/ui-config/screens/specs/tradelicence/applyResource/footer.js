@@ -658,7 +658,7 @@ export const renewTradelicence = async (financialYear, state, dispatch) => {
   );
 
   const tenantId = get(licences[0], "tenantId");
-
+debugger;
   var nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
   if(licences[0].financialYear=='2019-20' || licences[0].financialYear=='2020-21'){
     nextFinancialYear=getCurrentFinancialYear();
