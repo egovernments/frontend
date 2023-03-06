@@ -131,11 +131,13 @@ export const getMdmsData = async (action, state, dispatch) => {
     }
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     if(getQueryArg(window.location.href, "action") === "EDITRENEWAL"){
+      debugger;
      let financialYearData = get(
        payload,
        "MdmsRes.egf-master.FinancialYear",
        []
-     ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
+     //).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
+     ).filter(item => item.module === "TL" && item.active === true);
      set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
     }else{
       debugger;
