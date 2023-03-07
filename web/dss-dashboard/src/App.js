@@ -119,6 +119,9 @@ let dataL = {
     DSS_PROPERTY_TAX_DASHBOARD: "Property Tax (SURE) Dashboard",
     DSS_TRADE_LICENSE_DASHBOARD: "Trade License (SURE) Dashboard",
     DSS_PGR_DASHBOARD: "PGR (SURE) Dashboard",
+    DSS_MCOLLECT:"MCollect",
+    DSS_FIRENOC_OVERVIEW: "Fire NOC",
+    
   },
 };
 

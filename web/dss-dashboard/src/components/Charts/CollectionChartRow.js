@@ -25,10 +25,11 @@ class CollectionChartRow extends React.Component {
 	}
 
 	callAPI() {
+		console.log(this.props.chartData,"this.props.chartData")
 		let code = this.props.chartData['id'] ? this.props.chartData['id'] : "";
 		if (code) {
 			let filters = _.cloneDeep(this.props.filters)
-			if(code == 'todaysCollection'  || code == 'wstodaysCollection'){			   
+			if(code == 'todaysCollection'  || code == 'wstodaysCollection' || code == 'mcTodaysCollection'|| code == 'nocTodaysCollection' ){			   
 	           filters['duration'] = {
 	            title: "TODAY",
                 startDate: (moment().startOf('day').unix()) * 1000,
