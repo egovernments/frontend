@@ -93,6 +93,21 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
+    debugger;
+    if(process.env.REACT_APP_NAME == "Citizen"){
+      let urldatavalues = window.location.search;
+      let feachdataurl = urldatavalues.split("https://mseva.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?");
+     // let feachdataurl = urldatavalues.split("http://localhost:3000/tradelicense-citizen/apply?");
+      let shortdataurl = feachdataurl[0].split("&");
+      if(shortdataurl[1]){
+       let ChanNel = shortdataurl[1].split("channel=")[1].split(":");
+       dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.CHANNEL",ChanNel[0] ,""));
+       dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.IPIN",ChanNel[1] ,""));
+       dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.APPID",ChanNel[2] ,""));
+       dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.mobileNo",shortdataurl[4].split("mobileNo=")[1] ,""));
+      }
+      console.log(shortdataurl);
+        }
     const isTradeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
       state,
@@ -344,10 +359,10 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
   if (activeStep === 3) {
-    let  isDlcd = state.screenConfiguration.preparedFinalObject.Licenses[0].isDeclared;
-    if(isDlcd != true && process.env.REACT_APP_NAME === "Citizen"){
-    alert("Please check Self_DECLARATION");
-    }else{
+    // let  isDlcd = state.screenConfiguration.preparedFinalObject.Licenses[0].isDeclared;
+    // if(isDlcd != true && process.env.REACT_APP_NAME === "Citizen"){
+    // alert("Please check Self_DECLARATION");
+    // }else{
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
@@ -359,7 +374,7 @@ export const callBackForNext = async (state, dispatch) => {
       else
         moveToSuccess(LicenseData, dispatch);
     }
-    }
+   // }
   }
   if (activeStep !== 3) {
     if (isFormValid) {
@@ -426,8 +441,8 @@ export const changeStep = (
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
 debugger;
- const isNextButtonVisible = activeStep < 3 ? true : false;
- const isPayButtonVisible = activeStep === 3 ? true : false;
+const isNextButtonVisible = activeStep < 3 ? true : false;
+const isPayButtonVisible = activeStep === 3 ? true : false;
  dispatch(prepareFinalObject("Licenses[0].isDeclared", 'false'));
  
   const actionDefination = [
@@ -643,7 +658,7 @@ export const renewTradelicence = async (financialYear, state, dispatch) => {
   const tenantId = get(licences[0], "tenantId");
 
   var nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
-  if(licences[0].financialYear=='2019-20' || licences[0].financialYear=='2020-21'){
+  if(licences[0].financialYear=='2019-20' || licences[0].financialYear=='2020-21' || licences[0].financialYear=='2021-22'){
     nextFinancialYear=getCurrentFinancialYear();
   }
   const wfCode = "DIRECTRENEWAL";
