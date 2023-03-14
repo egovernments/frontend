@@ -28,7 +28,7 @@ export const getTenantId = () => {
 //   return localStorage.getItem("storedModulesList");
 // };
 
-//SET methods
+// //SET methods
 // export const setUserInfo = (userInfo) => {
 //   localStorageSet("user-info", userInfo, null);
 // };

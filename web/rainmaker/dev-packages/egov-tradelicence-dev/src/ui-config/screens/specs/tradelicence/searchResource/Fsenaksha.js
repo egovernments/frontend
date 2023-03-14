@@ -9,40 +9,40 @@ import {
   getDateField,
   getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall, filestoreid } from "./functions";
+import { ENAKSHA } from "./functions";
 
-export const fsApplication = getCommonCard(
+export const Fsenaksha = getCommonCard(
   {
     subHeader: getCommonTitle({
-      labelName: "File Store",
-      labelKey: "File Store",
+      labelName: "ENAKSHA",
+      labelKey: "ENAKSHA",
     }),
     subParagraph: getCommonParagraph({
-      labelName: "Provide at least File Store ID",
-      labelKey: "Provide at least File Store ID",
+      labelName: "ENAKSHA",
+      labelKey: "ENAKSHA",
     }),
-    appTradeAndMobNumContainer: getCommonContainer({
-      applicationNo: getTextField({
-        label: {
-          labelName: "Receipt No.",
-          labelKey: "Receipt No",
-        },
-        placeholder: {
-          labelName: "Enter Receipt No.",
-          labelKey: "Enter Receipt No",
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 4,
-        },
-        required: false,
-        pattern: /^[a-zA-Z0-9-/]*$/i,
-        errorMessage: "ERR_INVALID_APPLICATION_NO",
-        jsonPath: "searchScreen.applicationNumber",
-      }),
+    // appTradeAndMobNumContainer: getCommonContainer({
+    //   applicationNo: getTextField({
+    //     label: {
+    //       labelName: "Receipt No.",
+    //       labelKey: "Receipt No",
+    //     },
+    //     placeholder: {
+    //       labelName: "Enter Receipt No.",
+    //       labelKey: "Enter Receipt No",
+    //     },
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 4,
+    //     },
+    //     required: false,
+    //     pattern: /^[a-zA-Z0-9-]*$/i,
+    //     errorMessage: "ERR_INVALID_APPLICATION_NO",
+    //     jsonPath: "searchScreen.applicationNumber",
+    //   }),
 
           
-    }),
+    // }),
    
 
     button: getCommonContainer({
@@ -61,7 +61,7 @@ export const fsApplication = getCommonCard(
           componentPath: "Button",
           gridDefination: {
             xs: 12,
-            sm: 4,
+            sm: 12,
           },
           props: {
             variant: "contained",
@@ -82,7 +82,7 @@ export const fsApplication = getCommonCard(
           },
           onClickDefination: {
             action: "condition",
-            callBack: filestoreid,
+            callBack: ENAKSHA,
           },
         },
         lastCont: {

@@ -24,6 +24,14 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.areaType",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
       "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
       "props.value",
       ""
@@ -87,7 +95,7 @@ export const NOCApplication = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: /^[a-zA-Z0-9-/]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.applicationNumber"
     }),
@@ -195,7 +203,8 @@ export const NOCApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
     }),
-    ...NOCareaTypeField,
+     ...NOCareaTypeField,
+    
   }),
 
   button: getCommonContainer({

@@ -1126,6 +1126,8 @@ const getStatementForDocType = docType => {
       return "TL_OWNERIDPROOF_NOTE";
     case "OWNERSHIPPROOF":
       return "TL_OWNERSHIPPROOF_NOTE";
+      case "OWNERSELF":
+        return "TL_OWNERSELF_NOTE";
     case "OWNERPHOTO":
       return "TL_OWNERPHOTO_NOTE";
     default:

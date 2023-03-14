@@ -444,7 +444,7 @@ alert("This operation is not allowed as Property is not already active.");
               buttonStyle={{ border: "0.5px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "20%", marginRight: "1%" }}
             />
-             <Button
+             {/* <Button
                label={
                  <Label buttonLabel={true}
                 //  label={formWizardConstants[PROPERTY_FORM_PURPOSE.STATUS].parentButton} fontSize="16px"
@@ -463,7 +463,7 @@ alert("This operation is not allowed as Property is not already active.");
               labelStyle={{ letterSpacing: 0.5, padding: 0, color: "#fe7a51" }}
               buttonStyle={{ border: "0.5px solid #fe7a51" }}
               style={{ lineHeight: "auto", minWidth: "20%", marginRight: "2%" }}
-            />
+            /> */}
             <Button
               onClick={() => this.onAssessPayClick()}
               label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.ASSESS].parentButton} fontSize="14px" />}
