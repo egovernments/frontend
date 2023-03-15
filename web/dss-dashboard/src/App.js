@@ -129,6 +129,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     localStorage.setItem("lang", JSON.stringify(dataL));
+    localStorage.setItem("tenant-id", "pb.punjab");
     this.changeTheName = this.changeTheName.bind(this);
     this.state = {
       language: "en",
