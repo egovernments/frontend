@@ -191,7 +191,7 @@ debugger;
   console.log(diffTime + " milliseconds");
   console.log(diffDays + " days");
    if (diffDays>=455){
-    alert("Renewal after 90 days from expiry date of Firenic is not allowed!!");
+    alert("Renewal after 90 days from expiry date of FireNOC is not allowed!!");
     }
   else{
   let oldnocNumber = get(

@@ -359,10 +359,10 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
   if (activeStep === 3) {
-    // let  isDlcd = state.screenConfiguration.preparedFinalObject.Licenses[0].isDeclared;
-    // if(isDlcd != true && process.env.REACT_APP_NAME === "Citizen"){
-    // alert("Please check Self_DECLARATION");
-    // }else{
+    let  isDlcd = state.screenConfiguration.preparedFinalObject.Licenses[0].isDeclared;
+    if(isDlcd != true && process.env.REACT_APP_NAME === "Citizen"){
+    alert("Please check the declaration box to proceed futher");
+    }else{
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
@@ -374,7 +374,7 @@ export const callBackForNext = async (state, dispatch) => {
       else
         moveToSuccess(LicenseData, dispatch);
     }
-   // }
+   }
   }
   if (activeStep !== 3) {
     if (isFormValid) {
