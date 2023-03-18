@@ -201,7 +201,7 @@ const FstpServiceRequest = () => {
         <span className="link" style={{ margin: "294px", padding: "2px" }}>
           <Link
             to={{
-              pathname: `/digit-ui/employee/fsm/fstp/new-vehicle-entry/`,
+              pathname: "/digit-ui/employee/fsm/fstp/new-vehicle-entry/",
             }}
           >
             {t("ES_FSM_FSTP_NEW_ENTRY")}

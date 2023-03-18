@@ -91,7 +91,6 @@ export const Search = {
         : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
     // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
     const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
-
     const employeeResponse = [
       {
         title: "ES_TITLE_APPLICATION_DETAILS",
@@ -105,7 +104,10 @@ export const Search = {
         values: [
           { title: "ES_APPLICATION_DETAILS_APPLICANT_NAME", value: response?.citizen?.name },
           { title: "ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO", value: response?.citizen?.mobileNumber },
-          { title: "ES_FSM_PAYMENT_PREFERENCE", value: `ES_ACTION_${response?.paymentPreference}` },
+          response?.paymentPreference && {
+            title: "ES_FSM_PAYMENT_PREFERENCE",
+            value: response?.paymentPreference ? `ES_ACTION_${response?.paymentPreference}` : "N/A",
+          },
         ],
       },
       {
@@ -138,9 +140,9 @@ export const Search = {
             child:
               response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
                 ? {
-                  element: "img",
-                  src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
-                }
+                    element: "img",
+                    src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
+                  }
                 : null,
           },
         ],
@@ -169,11 +171,13 @@ export const Search = {
           { title: "ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS", value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: "ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP",
-            value: amountPerTrip,
+            value: amountPerTrip === "N/A" ? "N/A" : "₹ " + amountPerTrip,
           },
-          totalAmount === "N/A" 
-            ? { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: response?.noOfTrips * amountPerTrip }
-            : { title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT", value: totalAmount },
+          {
+            title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
+            value: totalAmount === "N/A" ? (amountPerTrip === "N/A" ? "N/A" : "₹ " + response?.noOfTrips * amountPerTrip) : "₹ " + totalAmount,
+          },
+          { title: "ES_PAYMENT_DETAILS_ADV_AMOUNT", value: response?.advanceAmount === null ? "N/A" : "₹ " + response?.advanceAmount },
         ],
       },
       {
@@ -192,9 +196,9 @@ export const Search = {
     if (userType !== "CITIZEN" && userType !== "DSO") {
       employeeResponse.map((data) => {
         if (data.title === "ES_TITLE_APPLICANT_DETAILS" || data.title === "Applicant Details") {
-          data.values.push({ title: "COMMON_APPLICANT_GENDER", value: response?.citizen?.gender })
+          data.values.push({ title: "COMMON_APPLICANT_GENDER", value: response?.citizen?.gender });
         }
-      })
+      });
     }
 
     if (userType !== "CITIZEN")
@@ -202,10 +206,11 @@ export const Search = {
         tenantId: response.tenantId,
         applicationDetails: employeeResponse,
         additionalDetails: response?.additionalDetails,
+        totalAmount: totalAmount,
       };
 
     const citizenResp = employeeResponse.reduce((arr, curr) => {
-      return arr.concat(curr.values);
+      return arr.concat(curr.values.filter((i) => i !== null));
     }, []);
 
     const citizenResponse = citizenResp.map((detail) => {
@@ -244,12 +249,13 @@ export const Search = {
   },
 
   combineResponse: (vehicleTrip, vendorOwnerKey) => {
-    return vehicleTrip.map((trip) => {
-      if (vendorOwnerKey[trip.tripOwnerId]) {
-        return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
-      } else return {}
-    }).filter(e => e.tripOwnerId);
-
+    return vehicleTrip
+      .map((trip) => {
+        if (vendorOwnerKey[trip.tripOwnerId]) {
+          return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
+        } else return { ...trip };
+      })
+      .filter((e) => e.tripOwnerId);
   },
 
   applicationWithBillSlab: async (t, tenantId, applicationNos) => {

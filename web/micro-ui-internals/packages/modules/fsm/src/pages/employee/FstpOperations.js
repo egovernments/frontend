@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
 const FstpOperations = () => {
-    console.log("testing");
     const { t } = useTranslation();
     const state = Digit.ULBService.getStateId();
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -16,6 +15,12 @@ const FstpOperations = () => {
             name: "ES_FSM_ADD_NEW_BUTTON",
             link: "/digit-ui/employee/fsm/fstp-add-vehicle",
             icon: <AddNewIcon />
+        },
+        {
+            name: "ES_FSM_VIEW_REPORTS_BUTTON",
+            link: "/employee/report/fsm/FSMFSTPPlantWithVehicleLogReport",
+            hyperlink: true,
+            icon: <ViewReportIcon />
         },
         {
             name: "ES_COMMON_INBOX",
