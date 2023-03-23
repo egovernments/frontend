@@ -13,13 +13,24 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const stateId = Digit.ULBService.getStateId();
   // const { data: commonFields, isLoading } = useQuery('newConfig', () => fetch(`http://localhost:3002/commonFields`).then(res => res.json()))
   // const { data: postFields, isLoading: isTripConfigLoading } = useQuery('tripConfig', () => fetch(`http://localhost:3002/tripDetails`).then(res => res.json()))
-  const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "CommonFieldsConfig");
-  const { data: preFields, isLoading: isApplicantConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PreFieldsConfig");
-  const { data: postFields, isLoading: isTripConfigLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PostFieldsConfig");
+  const { data: commonFields, isLoading } = Digit.Hooks.fsm.useMDMS(
+    stateId,
+    "FSM",
+    "CommonFieldsConfig"
+  );
+  const { data: preFields, isLoading: isApplicantConfigLoading } =
+    Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PreFieldsConfig");
+  const { data: postFields, isLoading: isTripConfigLoading } =
+    Digit.Hooks.fsm.useMDMS(stateId, "FSM", "PostFieldsConfig");
 
-  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
-  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+  const [mutationHappened, setMutationHappened, clear] =
+    Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage(
+    "FSM_ERROR_DATA",
+    false
+  );
+  const [successData, setsuccessData, clearSuccessData] =
+    Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   useEffect(() => {
     setMutationHappened(false);
@@ -44,7 +55,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -54,13 +64,21 @@ export const NewApplication = ({ parentUrl, heading }) => {
       formData?.tripData?.amountPerTrip !== null
     ) {
       setSubmitValve(true);
-      const pitDetailValues = formData?.pitDetail ? Object.values(formData?.pitDetail).filter((value) => value > 0) : null;
+      const pitDetailValues = formData?.pitDetail
+        ? Object.values(formData?.pitDetail).filter((value) => value > 0)
+        : null;
       if (formData?.pitType) {
         if (pitDetailValues === null || pitDetailValues?.length === 0) {
           setSubmitValve(true);
-        } else if (isConventionalSpecticTank(formData?.pitType?.dimension) && pitDetailValues?.length >= 3) {
+        } else if (
+          isConventionalSpecticTank(formData?.pitType?.dimension) &&
+          pitDetailValues?.length >= 3
+        ) {
           setSubmitValve(true);
-        } else if (!isConventionalSpecticTank(formData?.pitType?.dimension) && pitDetailValues?.length >= 2) {
+        } else if (
+          !isConventionalSpecticTank(formData?.pitType?.dimension) &&
+          pitDetailValues?.length >= 2
+        ) {
           setSubmitValve(true);
         } else setSubmitValve(false);
       }
@@ -94,13 +112,20 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const gender = data.applicationData.applicantGender;
-    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : 'POST_PAY';
+    const paymentPreference =
+      amount === 0
+        ? null
+        : data?.paymentPreference
+        ? data?.paymentPreference
+        : null;
+    const advanceAmount =
+      amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
-          gender: gender
+          gender: gender,
         },
         tenantId: tenantId,
         sanitationtype: sanitationtype,
@@ -135,6 +160,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         noOfTrips,
         paymentPreference,
+        advanceAmount,
       },
       workflow: null,
     };
@@ -151,19 +177,21 @@ export const NewApplication = ({ parentUrl, heading }) => {
     return <Loader />;
   }
 
-  const configs = [...preFields, ...commonFields, ...postFields];
+  const configs = [...preFields, ...commonFields];
 
   return (
     <FormComposer
       heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={configs.filter((i) => !i.hideInEmployee).map((config) => {
-        return {
-          ...config,
-          body: config.body.filter((a) => !a.hideInEmployee),
-        };
-      })}
+      config={configs
+        .filter((i) => !i.hideInEmployee)
+        .map((config) => {
+          return {
+            ...config,
+            body: config.body.filter((a) => !a.hideInEmployee),
+          };
+        })}
       fieldStyle={{ marginRight: 0 }}
       onSubmit={onSubmit}
       defaultValues={defaultValues}

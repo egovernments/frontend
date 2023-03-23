@@ -5,6 +5,7 @@ import {
   ArrowRightInbox,
   ShippingTruck,
   EmployeeModuleCard,
+  AddNewIcon,
 } from "@egovernments/digit-ui-react-components";
 
 const Digit = window.Digit;
@@ -23,7 +24,8 @@ const FSMCard = () => {
   const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
   const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
   const isFSTPOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
-  const isSwachSathiEmployee = Digit.UserService.hasAccess("FSM_SWACHH_SATHI") || false;
+  const isSwachSathiEmployee =
+    Digit.UserService.hasAccess("FSM_SWACHH_SATHI") || false;
 
   const [total, setTotal] = useState("-");
 
@@ -114,7 +116,7 @@ const FSMCard = () => {
       {
         label: t("ES_COMMON_INBOX"),
         link: "/digit-ui/employee/fsm/fstp-inbox",
-      }
+      },
     ],
   };
 
@@ -132,11 +134,21 @@ const FSMCard = () => {
   //       ]
   //     : [];
 
+  const moduleForSomeFSMAdmin = FSM_ADMIN
+    ? [
+        {
+          link: "/digit-ui/employee/fsm/registry",
+          label: "ES_TITLE_FSM_REGISTRY",
+          icon: <AddNewIcon />,
+        },
+      ]
+    : [];
+
   const propsForModuleCard = isFSTPOperator
     ? {
         Icon: <ShippingTruck />,
         moduleName: t("ES_TITLE_VEHICLE_LOG"),
-        
+
         links: [
           {
             label: t("ES_FSM_ADD_NEW_BUTTON"),
@@ -187,10 +199,10 @@ const FSMCard = () => {
           {
             label: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
             link: `/digit-ui/employee/fsm/new-application`,
-          }
+          },
+          ...moduleForSomeFSMAdmin,
         ],
       };
-
   return <EmployeeModuleCard {...propsForModuleCard} FsmHideCount={true} />;
 };
 export default FSMCard;

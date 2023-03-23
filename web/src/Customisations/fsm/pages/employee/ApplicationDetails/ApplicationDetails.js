@@ -19,16 +19,16 @@ import {
   Rating,
   ActionLinks,
   Header,
-  // ImageViewer,
+  ImageViewer,
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
 import TLCaption from "../../../components/TLCaption";
-// import { ViewImages } from "../../../components/ViewImages";
 
 import { useQueryClient } from "react-query";
 
 import { Link, useHistory, useParams } from "react-router-dom";
+import { ViewImages } from "../../../components/ViewImages";
 var Digit = window.Digit;
 
 const ApplicationDetails = (props) => {
@@ -43,11 +43,26 @@ const ApplicationDetails = (props) => {
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
-  // const [imageZoom, setImageZoom] = useState(null);
+  const [imageZoom, setImageZoom] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
-  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber, {}, props.userType);
-  const { isLoading: isDataLoading, isSuccess, data: applicationData } = Digit.Hooks.fsm.useSearch(
+  const {
+    isLoading,
+    isError,
+    data: applicationDetails,
+    error,
+  } = Digit.Hooks.fsm.useApplicationDetail(
+    t,
+    tenantId,
+    applicationNumber,
+    {},
+    props.userType
+  );
+  const {
+    isLoading: isDataLoading,
+    isSuccess,
+    data: applicationData,
+  } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: applicationNumber },
     { staleTime: Infinity }
@@ -64,10 +79,21 @@ const ApplicationDetails = (props) => {
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: applicationDetails?.tenantId || tenantId,
     id: applicationNumber,
-    moduleCode: DSO || applicationData?.paymentPreference === "POST_PAY" ? "FSM_POST_PAY_SERVICE" : "FSM",
+    moduleCode:
+      applicationData?.paymentPreference === "POST_PAY"
+        ? "FSM_POST_PAY_SERVICE"
+        : applicationData?.advanceAmount === 0
+        ? "PAY_LATER_SERVICE"
+        : applicationData?.advanceAmount > 0
+        ? "FSM_ADVANCE_PAY_SERVICE"
+        : applicationData?.paymentPreference === null &&
+          applicationData?.additionalDetails?.tripAmount === 0 &&
+          applicationData?.advanceAmount === null
+        ? "FSM_ZERO_PAY_SERVICE"
+        : "FSM",
     role: DSO ? "FSM_DSO" : "FSM_EMPLOYEE",
     serviceData: applicationDetails,
-    getTripData: DSO ? false : true
+    getTripData: DSO ? false : true,
   });
 
   useEffect(() => {
@@ -98,20 +124,24 @@ const ApplicationDetails = (props) => {
       case "REJECT":
       case "DECLINE":
       case "REASSING":
+      case "UPDATE":
         return setShowModal(true);
       case "SUBMIT":
       case "FSM_SUBMIT":
       case !DSO && "SCHEDULE":
-        return history.push("/digit-ui/employee/fsm/modify-application/" + applicationNumber);
+        return history.push(
+          "/digit-ui/employee/fsm/modify-application/" + applicationNumber
+        );
       case "PAY":
       case "FSM_PAY":
       case "ADDITIONAL_PAY_REQUEST":
-        return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
+        return history.push(
+          `/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}?workflow=FSM`
+        );
       default:
         break;
     }
   }, [selectedAction]);
-
 
   const closeModal = () => {
     setSelectedAction(null);
@@ -139,13 +169,13 @@ const ApplicationDetails = (props) => {
     closeModal();
   };
 
-  // function zoomImageWrapper(imageSource, index) {
-  //   setImageZoom(imageSource);
-  // }
+  function zoomImageWrapper(imageSource, index) {
+    setImageZoom(imageSource);
+  }
 
-  // function onCloseImageZoom() {
-  //   setImageZoom(null);
-  // }
+  function onCloseImageZoom() {
+    setImageZoom(null);
+  }
 
   const getTimelineCaptions = (checkpoint) => {
     const __comment = checkpoint?.comment?.split("~");
@@ -161,8 +191,6 @@ const ApplicationDetails = (props) => {
       return <TLCaption data={caption} />;
     } else if (
       checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
-      checkpoint.status === "ASSING_DSO" ||
-      checkpoint.status === "PENDING_DSO_APPROVAL" ||
       checkpoint.status === "DSO_REJECTED" ||
       checkpoint.status === "CANCELED" ||
       checkpoint.status === "REJECTED"
@@ -178,25 +206,41 @@ const ApplicationDetails = (props) => {
       const caption = {
         name: checkpoint?.assigner,
         mobileNumber: checkpoint?.assigner?.mobileNumber,
-        date: `${t("CS_FSM_EXPECTED_DATE")} ${Digit.DateUtils.ConvertTimestampToDate(applicationData?.possibleServiceDate)}`,
+        date: `${t(
+          "CS_FSM_EXPECTED_DATE"
+        )} ${Digit.DateUtils.ConvertTimestampToDate(
+          applicationData?.possibleServiceDate
+        )}`,
       };
       return <TLCaption data={caption} />;
     } else if (checkpoint.status === "COMPLETED") {
       return (
         <div>
-          <Rating withText={true} text={t(`ES_FSM_YOU_RATED`)} currentRating={checkpoint.rating} />
+          <Rating
+            withText={true}
+            text={t(`ES_FSM_YOU_RATED`)}
+            currentRating={checkpoint.rating}
+          />
           <Link to={`/digit-ui/employee/fsm/rate-view/${applicationNumber}`}>
             <ActionLinks>{t("CS_FSM_RATE_VIEW")}</ActionLinks>
           </Link>
         </div>
       );
-    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" || checkpoint.status === "DISPOSED" || checkpoint.status === "DISPOSAL_IN_PROGRESS") {
+    } else if (
+      checkpoint.status === "WAITING_FOR_DISPOSAL" ||
+      checkpoint.status === "DISPOSAL_IN_PROGRESS" ||
+      checkpoint.status === "DISPOSED" ||
+      checkpoint.status === "CITIZEN_FEEDBACK_PENDING"
+    ) {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
-        mobileNumber: checkpoint?.assigner?.mobileNumber
+        mobileNumber: checkpoint?.assigner?.mobileNumber,
       };
-      if (checkpoint?.numberOfTrips) caption.comment= `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
+      if (checkpoint?.numberOfTrips)
+        caption.comment = `${t("NUMBER_OF_TRIPS")}: ${
+          checkpoint?.numberOfTrips
+        }`;
       return <TLCaption data={caption} />;
     }
   };
@@ -209,8 +253,10 @@ const ApplicationDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
-          {/* <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header> */}
-          <Card style={{ position: "relative" }}>
+          <Header style={{ marginBottom: "16px" }}>
+            {t("ES_TITLE_APPLICATION_DETAILS")}
+          </Header>
+          <Card className="fsm" style={{ position: "relative" }}>
             {/* {!DSO && (
               <LinkButton
                 label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
@@ -222,15 +268,24 @@ const ApplicationDetails = (props) => {
             )} */}
             {applicationDetails?.applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
-                {index === 0 ? (
-                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
-                ) : (
-                  <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>
+                {index === 0 ? null : ( // <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
+                  <CardSectionHeader
+                    style={{ marginBottom: "16px", marginTop: "32px" }}
+                  >
+                    {t(detail.title)}
+                  </CardSectionHeader>
                 )}
                 <StatusTable>
                   {detail?.values?.map((value, index) => {
+                    if (value === null) return;
                     if (value.map === true && value.value !== "N/A") {
-                      return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
+                      return (
+                        <Row
+                          key={t(value.title)}
+                          label={t(value.title)}
+                          text={<img src={t(value.value)} alt="" />}
+                        />
+                      );
                     }
                     return (
                       <Row
@@ -246,7 +301,7 @@ const ApplicationDetails = (props) => {
                 </StatusTable>
               </React.Fragment>
             ))}
-            {/* {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN
               ?.length && (
               <>
                 <CardSectionHeader
@@ -263,8 +318,8 @@ const ApplicationDetails = (props) => {
                   onClick={(source, index) => zoomImageWrapper(source, index)}
                 />
               </>
-            )} */}
-            {/* {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO
+            )}
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO
               ?.length && (
               <>
                 <CardSectionHeader
@@ -281,39 +336,56 @@ const ApplicationDetails = (props) => {
                   onClick={(source, index) => zoomImageWrapper(source, index)}
                 />
               </>
-            )} */}
-            {/* {imageZoom ? (
+            )}
+            {imageZoom ? (
               <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} />
-            ) : null} */}
+            ) : null}
 
             <BreakLine />
             {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
             {!workflowDetails?.isLoading && !isDataLoading && (
               <Fragment>
-                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>
+                <CardSectionHeader
+                  style={{ marginBottom: "16px", marginTop: "32px" }}
+                >
                   {t("ES_APPLICATION_DETAILS_APPLICATION_TIMELINE")}
                 </CardSectionHeader>
-                {workflowDetails?.data?.timeline && workflowDetails?.data?.timeline?.length === 1 ? (
+                {workflowDetails?.data?.timeline &&
+                workflowDetails?.data?.timeline?.length === 1 ? (
                   <CheckPoint
                     isCompleted={true}
-                    label={t("CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status)}
-                    customChild={getTimelineCaptions(workflowDetails?.data?.timeline[0])}
+                    label={t(
+                      "CS_COMMON_" + workflowDetails?.data?.timeline[0]?.status
+                    )}
+                    customChild={getTimelineCaptions(
+                      workflowDetails?.data?.timeline[0]
+                    )}
                   />
                 ) : (
                   <ConnectingCheckPoints>
                     {workflowDetails?.data?.timeline &&
-                      workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
-                        return (
-                          <React.Fragment key={index}>
-                            <CheckPoint
-                              keyValue={index}
-                              isCompleted={index === 0}
-                              label={t("CS_COMMON_FSM_" + checkpoint.status)}
-                              customChild={getTimelineCaptions(checkpoint)}
-                            />
-                          </React.Fragment>
-                        );
-                      })}
+                      workflowDetails?.data?.timeline.map(
+                        (checkpoint, index, arr) => {
+                          return (
+                            <React.Fragment key={index}>
+                              <CheckPoint
+                                keyValue={index}
+                                isCompleted={index === 0}
+                                label={t(
+                                  "CS_COMMON_FSM_" +
+                                    `${
+                                      checkpoint.performedAction === "UPDATE"
+                                        ? "UPDATE_"
+                                        : ""
+                                    }` +
+                                    checkpoint.status
+                                )}
+                                customChild={getTimelineCaptions(checkpoint)}
+                              />
+                            </React.Fragment>
+                          );
+                        }
+                      )}
                   </ConnectingCheckPoints>
                 )}
               </Fragment>
@@ -329,28 +401,52 @@ const ApplicationDetails = (props) => {
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
+              module={workflowDetails?.data?.applicationBusinessService}
             />
           ) : null}
           {showToast && (
             <Toast
               error={showToast.key === "error" ? true : false}
-              label={t(showToast.key === "success" ? `ES_FSM_${showToast.action}_UPDATE_SUCCESS` : showToast.action)}
+              label={t(
+                showToast.key === "success"
+                  ? `ES_FSM_${showToast.action}_UPDATE_SUCCESS`
+                  : showToast.action
+              )}
               onClose={closeToast}
             />
           )}
-          {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-            <ActionBar>
-              {displayMenu && workflowDetails?.data?.nextActions ? (
-                <Menu
-                  localeKeyPrefix={"ES_FSM"}
-                  options={workflowDetails?.data?.nextActions.map((action) => action.action)}
-                  t={t}
-                  onSelect={onActionSelect}
+          {!workflowDetails?.isLoading &&
+            workflowDetails?.data?.nextActions?.length === 1 && (
+              <ActionBar style={{ zIndex: "19" }}>
+                <SubmitBar
+                  label={t(
+                    `ES_FSM_${workflowDetails?.data?.nextActions[0].action}`
+                  )}
+                  onSubmit={() =>
+                    onActionSelect(workflowDetails?.data?.nextActions[0].action)
+                  }
                 />
-              ) : null}
-              <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-            </ActionBar>
-          )}
+              </ActionBar>
+            )}
+          {!workflowDetails?.isLoading &&
+            workflowDetails?.data?.nextActions?.length > 1 && (
+              <ActionBar style={{ zIndex: "19" }}>
+                {displayMenu && workflowDetails?.data?.nextActions ? (
+                  <Menu
+                    localeKeyPrefix={"ES_FSM"}
+                    options={workflowDetails?.data?.nextActions.map(
+                      (action) => action.action
+                    )}
+                    t={t}
+                    onSelect={onActionSelect}
+                  />
+                ) : null}
+                <SubmitBar
+                  label={t("ES_COMMON_TAKE_ACTION")}
+                  onSubmit={() => setDisplayMenu(!displayMenu)}
+                />
+              </ActionBar>
+            )}
         </React.Fragment>
       ) : (
         <Loader />

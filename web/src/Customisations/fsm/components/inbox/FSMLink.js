@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 var Digit = window.Digit || {};
+
 const FSMLink = ({ parentRoute, isMobile, data }) => {
   const { t } = useTranslation();
 
@@ -11,7 +12,7 @@ const FSMLink = ({ parentRoute, isMobile, data }) => {
     {
       text: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
       link: "/digit-ui/employee/fsm/new-application",
-      accessTo: ["FSM_CREATOR_EMP"],
+      roles: ["FSM_CREATOR_EMP"],
     },
     // { text: t("ES_TITLE_REPORTS"), link: "/employee" },
     {
@@ -22,23 +23,14 @@ const FSMLink = ({ parentRoute, isMobile, data }) => {
 
   const [links, setLinks] = useState([]);
 
-  const { roles } = Digit.UserService.getUser().info;
-
-  const hasAccess = (accessTo) => {
-    return roles.filter((role) => accessTo.includes(role.code)).length;
-  };
+  const { roles: userRoles } = Digit.UserService.getUser().info;
 
   useEffect(() => {
-    let linksToShow = [];
-    allLinks.forEach((link) => {
-      if (link.accessTo) {
-        if (hasAccess(link.accessTo)) {
-          linksToShow.push(link);
-        }
-      } else {
-        linksToShow.push(link);
-      }
-    });
+    let linksToShow = allLinks.filter(
+      ({ roles }) =>
+        roles?.some((e) => userRoles?.map(({ code }) => code).includes(e)) ||
+        !roles?.length
+    );
     setLinks(linksToShow);
   }, []);
 
@@ -50,7 +42,6 @@ const FSMLink = ({ parentRoute, isMobile, data }) => {
   //     setLinks(mobileLinks);
   //   }
   // }, []);
-
   const GetLogo = () => (
     <div className="header">
       <span className="logo">
@@ -65,13 +56,19 @@ const FSMLink = ({ parentRoute, isMobile, data }) => {
       <div className="complaint-links-container">
         {GetLogo()}
         <div className="body">
-          {links.map(({ link, text, hyperlink = false, accessTo = [] }, index) => {
-            return (
-              <span className="link" key={index}>
-                {hyperlink ? <a href={link}>{text}</a> : <Link to={link}>{text}</Link>}
-              </span>
-            );
-          })}
+          {links.map(
+            ({ link, text, hyperlink = false, accessTo = [] }, index) => {
+              return (
+                <span className="link" key={index}>
+                  {hyperlink ? (
+                    <a href={link}>{text}</a>
+                  ) : (
+                    <Link to={link}>{text}</Link>
+                  )}
+                </span>
+              );
+            }
+          )}
         </div>
       </div>
     </Card>
