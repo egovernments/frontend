@@ -9,7 +9,7 @@
     "micro-ui-internals/packages/modules/*"
   ],
   "dependencies": {
-    "@egovernments/digit-ui-css": "1.5.7",
+    "@egovernments/digit-ui-css": "1.5.8",
     "@egovernments/digit-ui-libraries": "1.6.1",
     "@egovernments/digit-ui-module-common": "1.6.1",
     "@egovernments/digit-ui-module-core": "1.6.0",

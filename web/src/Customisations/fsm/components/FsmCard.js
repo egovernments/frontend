@@ -138,7 +138,7 @@ const FSMCard = () => {
     ? [
         {
           link: "/digit-ui/employee/fsm/registry",
-          label: "ES_TITLE_FSM_REGISTRY",
+          label: t("ES_TITLE_FSM_REGISTRY"),
           icon: <AddNewIcon />,
         },
       ]
