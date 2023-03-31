@@ -1,5 +1,9 @@
 import React from "react";
-import { DatePicker, Dropdown, CardLabelError } from "@egovernments/digit-ui-react-components";
+import {
+  DatePicker,
+  Dropdown,
+  CardLabelError,
+} from "@egovernments/digit-ui-react-components";
 var Digit = window.Digit;
 
 function todayDate() {
@@ -20,10 +24,22 @@ function todayDate() {
 }
 
 function getFilteredDsoData(dsoData, vehicle, vehicleCapacity) {
-  return dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.capacity == vehicleCapacity));
+  return dsoData?.filter((e) =>
+    e.vehicles?.find((veh) => veh?.capacity == vehicleCapacity)
+  );
 }
 
-export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehicle, vehicleCapacity, selectVehicle, action }) => {
+export const configAssignDso = ({
+  t,
+  dsoData,
+  dso,
+  selectDSO,
+  vehicleMenu,
+  vehicle,
+  vehicleCapacity,
+  selectVehicle,
+  action,
+}) => {
   return {
     label: {
       heading: `ES_FSM_ACTION_TITLE_${action}`,
@@ -56,13 +72,17 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
             type: "dropdown",
             populators: (
               <React.Fragment>
-                {getFilteredDsoData(dsoData, vehicle, vehicleCapacity) && !getFilteredDsoData(dsoData, vehicle, vehicleCapacity).length ? (
-                  <CardLabelError>{t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}</CardLabelError>
+                {getFilteredDsoData(dsoData, vehicle, vehicleCapacity) &&
+                !getFilteredDsoData(dsoData, vehicle, vehicleCapacity)
+                  .length ? (
+                  <CardLabelError>
+                    {t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}
+                  </CardLabelError>
                 ) : null}
                 <Dropdown
                   option={getFilteredDsoData(dsoData, vehicle, vehicleCapacity)}
                   autoComplete="off"
-                  optionKey="displayName"
+                  optionKey="name"
                   id="dso"
                   selected={dso}
                   select={selectDSO}
@@ -106,7 +126,13 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
               },
               customProps: { min: Digit.Utils.date.getDate() },
               defaultValue: Digit.Utils.date.getDate(),
-              component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+              component: (props, customProps) => (
+                <DatePicker
+                  onChange={props.onChange}
+                  date={props.value}
+                  {...customProps}
+                />
+              ),
             },
           },
         ],

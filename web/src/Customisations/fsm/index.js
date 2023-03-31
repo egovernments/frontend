@@ -6,13 +6,12 @@ import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import EmployeeApplicationDetails from "./pages/employee/ApplicationDetails/ApplicationDetails";
 import FstpOperations from "./pages/employee/FstpOperations";
 import SelectTripData from "./pageComponents/SelectTripData";
-import { NewApplication } from "./pages/employee/NewApplication";
-import EditApplication from "./pages/employee/EditApplication";
 import FSMCard from "./components/FsmCard";
 import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import SelectChannel from "./pageComponents/SelectChannel";
 import Inbox from "./pages/employee/Inbox";
 import SelectTankSize from "./pageComponents/SelectTankSize";
+import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -24,10 +23,9 @@ export const fsmComponents = {
   FSMEmployeeApplicationDetails: EmployeeApplicationDetails,
   FstpOperations: FstpOperations,
   SelectTripData,
-  FSMNewApplicationEmp: NewApplication,
-  FSMEditApplication: EditApplication,
   FSMCard,
   FSMFstpOperatorDetails: FstpOperatorDetails,
   SelectChannel: SelectChannel,
   SelectTankSize,
+  FSMNewApplicationCitizen: NewApplicationCitizen,
 };

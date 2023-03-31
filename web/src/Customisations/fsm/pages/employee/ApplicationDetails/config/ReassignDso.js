@@ -1,9 +1,15 @@
 import React from "react";
-import { DatePicker, Dropdown, CardLabelError } from "@egovernments/digit-ui-react-components";
+import {
+  DatePicker,
+  Dropdown,
+  CardLabelError,
+} from "@egovernments/digit-ui-react-components";
 var Digit = window.Digit;
 
 function getFilteredDsoData(dsoData, vehicle, vehicleCapacity) {
-  return dsoData?.filter((e) => e.vehicles?.find((veh) => veh?.capacity == vehicleCapacity));
+  return dsoData?.filter((e) =>
+    e.vehicles?.find((veh) => veh?.capacity == vehicleCapacity)
+  );
 }
 
 export const configReassignDSO = ({
@@ -54,13 +60,16 @@ export const configReassignDSO = ({
           type: "dropdown",
           populators: (
             <React.Fragment>
-              {getFilteredDsoData(dsoData, vehicle, vehicleCapacity) && !getFilteredDsoData(dsoData, vehicle, vehicleCapacity).length ? (
-                <CardLabelError>{t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}</CardLabelError>
+              {getFilteredDsoData(dsoData, vehicle, vehicleCapacity) &&
+              !getFilteredDsoData(dsoData, vehicle, vehicleCapacity).length ? (
+                <CardLabelError>
+                  {t("ES_COMMON_NO_DSO_AVAILABLE_WITH_SUCH_VEHICLE")}
+                </CardLabelError>
               ) : null}
               <Dropdown
                 option={getFilteredDsoData(dsoData, vehicle, vehicleCapacity)}
                 autoComplete="off"
-                optionKey="displayName"
+                optionKey="name"
                 id="dso"
                 selected={dso}
                 select={selectDSO}
@@ -90,7 +99,13 @@ export const configReassignDSO = ({
             },
             customProps: { min: Digit.Utils.date.getDate() },
             defaultValue: Digit.Utils.date.getDate(),
-            component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+            component: (props, customProps) => (
+              <DatePicker
+                onChange={props.onChange}
+                date={props.value}
+                {...customProps}
+              />
+            ),
           },
         },
       ],

@@ -1,9 +1,19 @@
 import React from "react";
-import { DatePicker, RadioButtons } from "@egovernments/digit-ui-react-components";
+import {
+  DatePicker,
+  RadioButtons,
+} from "@egovernments/digit-ui-react-components";
 var Digit = window.Digit;
 
-export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTrips, receivedPaymentType, applicationCreatedTime = 0, action }) => ({
-
+export const configCompleteApplication = ({
+  t,
+  vehicle,
+  vehicleCapacity,
+  noOfTrips,
+  receivedPaymentType,
+  applicationCreatedTime = 0,
+  action,
+}) => ({
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
     submit: `CS_COMMON_${action}`,
@@ -26,20 +36,29 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
               min: Digit.Utils.date.getDate(applicationCreatedTime),
               max: Digit.Utils.date.getDate(),
             },
-            component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+            component: (props, customProps) => (
+              <DatePicker
+                onChange={props.onChange}
+                date={props.value}
+                {...customProps}
+              />
+            ),
           },
         },
         {
           label: t("ES_FSM_ACTION_WASTE_VOLUME_LABEL"),
           type: "number",
           isMandatory: true,
+          disable: true,
           populators: {
             name: "wasteCollected",
             validation: {
               required: true,
               validate: (value) => parseInt(value) <= parseInt(vehicleCapacity),
             },
-            error: `${t("ES_FSM_ACTION_INVALID_WASTE_VOLUME")} ${vehicleCapacity} ${t("CS_COMMON_LITRES")}`,
+            error: `${t(
+              "ES_FSM_ACTION_INVALID_WASTE_VOLUME"
+            )} ${vehicleCapacity} ${t("CS_COMMON_LITRES")}`,
           },
         },
         {
@@ -111,7 +130,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
             validation: {
               required: true,
             },
-            defaultValue: noOfTrips
+            defaultValue: noOfTrips,
             // defaultValue: customizationConfig && Object.keys(customizationConfig).length > 0 ? customizationConfig?.noOfTrips?.default : 1,
           },
           disable: true,
