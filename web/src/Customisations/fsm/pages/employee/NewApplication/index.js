@@ -120,6 +120,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
         : null;
     const advanceAmount =
       amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
+    const gramPanchayat = data?.address.gramPanchayat;
+    const village = data?.address.village;
     const formData = {
       fsm: {
         citizen: {
@@ -156,6 +158,16 @@ export const NewApplication = ({ parentUrl, heading }) => {
           geoLocation: {
             latitude: data?.address?.latitude,
             longitude: data?.address?.longitude,
+          },
+          additionalDetails: {
+            gramPanchayat: {
+              code: gramPanchayat?.code,
+              name: gramPanchayat?.name,
+            },
+            village: {
+              code: village?.code,
+              name: village?.name,
+            },
           },
         },
         noOfTrips,
