@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, { Fragment, useState, useEffect, useRef } from "react";
+import { useParams, useHistory, useLocation } from "react-router-dom";
+import TimePicker from "react-time-picker";
 import {
+  Dropdown,
   Header,
   MultiUploadWrapper,
   TextArea,
+  RadioButtons,
 } from "@egovernments/digit-ui-react-components";
 import {
   Card,
   CardLabel,
   CardLabelError,
+  DetailsCard,
   TextInput,
   ActionBar,
   SubmitBar,
@@ -16,6 +20,7 @@ import {
   Toast,
   StatusTable,
   Row,
+  LabelFieldPair,
   Menu,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
@@ -46,6 +51,22 @@ const FstpOperatorDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   let { id: applicationNos } = useParams();
+
+  const inputs = [
+    {
+      active: true,
+      code: "WITHIN_ULB_LIMITS",
+      i18nKey: "WITHIN_ULB_LIMITS",
+      name: "Witnin ULB Limits",
+    },
+    {
+      active: true,
+      code: "FROM_GRAM_PANCHAYAT",
+      i18nKey: "FROM_GRAM_PANCHAYAT",
+      name: "From Gram Panchayat",
+    },
+  ];
+
   const [filters, setFilters] = useState(
     applicationNos != undefined
       ? { applicationNos }
@@ -74,13 +95,24 @@ const FstpOperatorDetails = () => {
   const wasteRecievedRef = useRef();
   const tripStartTimeRef = useRef();
   const tripTimeRef = useRef();
+  const [fileStoreId, setFileStoreId] = useState();
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(Array);
-  const [newVehicleNumber, setNewVehicleNumber] = useState(null);
+  const [error, setError] = useState(null);
+  const [newVehicleNumber, setNewVehicleNumber] = useState(applicationNos);
   const [newLocality, setNewLocality] = useState(null);
   const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
-
+  const location = useLocation();
+  const [selectLocation, setSelectLocation] = useState(inputs[0]);
+  const [gramPanchayats, setGramPanchayats] = useState();
+  const [selectedGp, setSelectedGp] = useState();
+  const [villages, setVillages] = useState();
+  const [selectedVillage, setSelectedVillage] = useState();
+  const [selectedCity, setSelectedCity] = useState(
+    Digit.SessionStorage.get("Employee.tenantId") || null
+  );
+  console.log(selectedCity, "sssss");
   const onChangeVehicleNumber = (value) => {
     setNewVehicleNumber(value);
   };
@@ -110,6 +142,14 @@ const FstpOperatorDetails = () => {
   } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
     enabled: !!isVehicleSearchCompleted,
   });
+  var { data: fetchedGramPanchayats } = Digit.Hooks.useBoundaryLocalities(
+    selectedCity,
+    "gramPanchayats",
+    {
+      enabled: !!selectedCity,
+    },
+    t
+  );
 
   useEffect(() => {
     filterVehicle?.length == 0
@@ -119,9 +159,9 @@ const FstpOperatorDetails = () => {
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
-    id: window.location.pathname.includes("fstp-operator-details")
+    id: location.pathname.includes("fstp-operator-details")
       ? applicationNos
-      : "",
+      : null,
     moduleCode: "FSM_VEHICLE_TRIP",
     role: "FSM_EMP_FSTPO",
   });
@@ -258,6 +298,16 @@ const FstpOperatorDetails = () => {
   };
 
   const handleCreate = () => {
+    const re = new RegExp(
+      "^[A-Z]{2}\\s{1}[0-9]{2}\\s{0,1}[A-Z]{1,2}\\s{1}[0-9]{4}$"
+    );
+    if (!re.test(newVehicleNumber)) {
+      setShowToast({ key: "error", action: `ES_FSM_VEHICLE_FORMAT_TIP` });
+      setTimeout(() => {
+        closeToast();
+      }, 5000);
+      return;
+    }
     if (newDsoName === null || newDsoName?.trim()?.length === 0) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_DSO_NAME` });
       setTimeout(() => {
@@ -281,7 +331,7 @@ const FstpOperatorDetails = () => {
       return;
     }
 
-    if (wasteCollected === null || wasteCollected?.trim()?.length === 0) {
+    if (!wasteCollected || wasteCollected?.trim()?.length === 0) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE_AMOUNT` });
       setTimeout(() => {
         closeToast();
@@ -325,7 +375,7 @@ const FstpOperatorDetails = () => {
     temp.tripEndTime = timeStamp;
     temp.volumeCarried = wasteCollected;
     temp.additionalDetails = {
-      vehicleNumber: applicationNos,
+      vehicleNumber: newVehicleNumber || applicationNos,
       dsoName: newDsoName,
       locality: newLocality,
       fileStoreId: uploadedFile,
@@ -379,7 +429,7 @@ const FstpOperatorDetails = () => {
     setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
     setTimeout(() => {
       closeToast();
-      history.push(`/digit-ui/employee/fstp-inbox`);
+      history.push(`/digit-ui/employee/fsm/fstp-operations`);
     }, 5000);
   };
 
@@ -429,16 +479,6 @@ const FstpOperatorDetails = () => {
         />
       ),
     },
-    {
-      title: `${t("ES_INBOX_LOCALITY")} *`,
-      value: (tripDetails && tripDetails[0]?.address?.locality?.name) || (
-        <TextInput
-          //style={{ width: "40%" }}
-          onChange={(e) => onChangeLocality(e.target.value)}
-          value={newLocality}
-        />
-      ),
-    },
   ];
 
   const handleTimeChange = (value, cb) => {
@@ -471,6 +511,28 @@ const FstpOperatorDetails = () => {
     selectfile(newArr[newArr.length - 1]);
   };
 
+  function selectedValue(value) {
+    setSelectLocation(value);
+  }
+
+  function selectGramPanchayat(value) {
+    setSelectedGp(value);
+    const filteredVillages = fetchedGramPanchayats.filter(
+      (items) => items.code === value.code
+    )[0].children;
+    const localitiesWithLocalizationKeys = filteredVillages.map((obj) => ({
+      ...obj,
+      i18nkey: tenantId.replace(".", "_").toUpperCase() + "_" + obj.code,
+    }));
+    if (localitiesWithLocalizationKeys.length > 0) {
+      setVillages(localitiesWithLocalizationKeys);
+    }
+  }
+
+  function selectVillage(value) {
+    setSelectedVillage(value);
+  }
+
   return (
     <div>
       <Header styles={{ marginLeft: "16px" }}>
@@ -499,6 +561,145 @@ const FstpOperatorDetails = () => {
               labelStyle={{ fontWeight: "normal" }}
             />
           ))}
+          <div
+            style={
+              !isMobile &&
+              history.location.pathname.includes("new-vehicle-entry")
+                ? {
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingBottom: "8px",
+                    marginBottom: "8px",
+                  }
+                : {}
+            }
+          >
+            <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
+            <div
+              style={
+                !isMobile &&
+                history.location.pathname.includes("new-vehicle-entry")
+                  ? { width: "50%" }
+                  : {}
+              }
+            >
+              <RadioButtons
+                selectedOption={selectLocation}
+                onSelect={selectedValue}
+                style={
+                  !isMobile &&
+                  history.location.pathname.includes("new-vehicle-entry")
+                    ? { display: "flex", marginBottom: 0 }
+                    : {}
+                }
+                innerStyles={{ marginLeft: "10px" }}
+                options={inputs}
+                optionsKey="i18nKey"
+                // disabled={editScreen}
+              />
+            </div>
+          </div>
+          {selectLocation.code === "FROM_GRAM_PANCHAYAT" ? (
+            <div>
+              <Row
+                rowContainerStyle={
+                  isMobile &&
+                  history.location.pathname.includes("new-vehicle-entry")
+                    ? { display: "block" }
+                    : { justifyContent: "space-between" }
+                }
+                textStyle={
+                  isMobile &&
+                  history.location.pathname.includes("new-vehicle-entry")
+                    ? { width: "100%" }
+                    : {}
+                }
+                key={t("CS_GRAM_PANCHAYAT")}
+                label={`${t("CS_GRAM_PANCHAYAT")} * `}
+                text={
+                  tripDetails && tripDetails.length > 0 ? (
+                    tripDetails[0]?.address?.gramPanchayat?.name
+                  ) : (
+                    <Dropdown
+                      className="form-field"
+                      isMandatory
+                      selected={selectedGp}
+                      option={gramPanchayats}
+                      select={selectGramPanchayat}
+                      optionKey="i18nkey"
+                      style={{ width: "100%" }}
+                      t={t}
+                    />
+                  )
+                }
+                last={false}
+                labelStyle={{ fontWeight: "normal" }}
+              />
+              <Row
+                rowContainerStyle={
+                  isMobile &&
+                  history.location.pathname.includes("new-vehicle-entry")
+                    ? { display: "block" }
+                    : { justifyContent: "space-between" }
+                }
+                textStyle={
+                  isMobile &&
+                  history.location.pathname.includes("new-vehicle-entry")
+                    ? { width: "100%" }
+                    : {}
+                }
+                key={t("CS_VILLAGE_NAME")}
+                label={`${t("CS_VILLAGE_NAME")} * `}
+                text={
+                  tripDetails && tripDetails.length > 0 ? (
+                    tripDetails[0]?.address?.village?.name
+                  ) : (
+                    <Dropdown
+                      className="form-field"
+                      isMandatory
+                      selected={selectedVillage}
+                      option={villages}
+                      select={selectVillage}
+                      optionKey="i18nkey"
+                      style={{ width: "100%" }}
+                      t={t}
+                    />
+                  )
+                }
+                last={false}
+                labelStyle={{ fontWeight: "normal" }}
+              />
+            </div>
+          ) : (
+            <Row
+              rowContainerStyle={
+                isMobile &&
+                history.location.pathname.includes("new-vehicle-entry")
+                  ? { display: "block" }
+                  : { justifyContent: "space-between" }
+              }
+              textStyle={
+                isMobile &&
+                history.location.pathname.includes("new-vehicle-entry")
+                  ? { width: "100%" }
+                  : {}
+              }
+              key={t("ES_INBOX_LOCALITY")}
+              label={`${t("ES_INBOX_LOCALITY")} * `}
+              text={
+                tripDetails && tripDetails.length > 0 ? (
+                  tripDetails[0]?.address?.locality?.name
+                ) : (
+                  <TextInput
+                    onChange={(e) => onChangeLocality(e.target.value)}
+                    value={newLocality}
+                  />
+                )
+              }
+              last={false}
+              labelStyle={{ fontWeight: "normal" }}
+            />
+          )}
           <div ref={tripStartTimeRef}>
             <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
           </div>
@@ -570,7 +771,25 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-
+            {/* {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
+              <Row
+                key={t("ES_VEHICLE_TRIP_NO")}
+                label={`${t("ES_VEHICLE_TRIP_NO")} * `}
+                rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
+                textStyle={isMobile ? { width: "100%" } : {}}
+                labelStyle={{ fontWeight: "normal" }}
+                text={
+                  <div>
+                    <Dropdown
+                      disable
+                      selected={{ "name": `${currentTrip} of ${tripDetails[0]?.noOfTrips ? tripDetails[0]?.noOfTrips : 1}` }}
+                      t={t}
+                      optionKey="name"
+                      style={{ width: '100%' }} />
+                  </div>
+                }
+              >
+              </Row> : null} */}
             <div
               className={!isMobile && "row"}
               style={
@@ -625,7 +844,21 @@ const FstpOperatorDetails = () => {
             />
 
             {!workflowDetails?.isLoading &&
-              workflowDetails?.data?.nextActions?.length > 0 && (
+              workflowDetails?.data?.nextActions?.length > 0 &&
+              (workflowDetails?.data?.nextActions?.length === 1 ? (
+                <ActionBar>
+                  <SubmitBar
+                    label={t(
+                      `CS_ACTION_${workflowDetails?.data?.nextActions?.[0]?.action}`
+                    )}
+                    onSubmit={() =>
+                      onActionSelect(
+                        workflowDetails?.data?.nextActions?.[0]?.action
+                      )
+                    }
+                  />
+                </ActionBar>
+              ) : (
                 <ActionBar>
                   {displayMenu && workflowDetails?.data?.nextActions ? (
                     <Menu
@@ -642,7 +875,7 @@ const FstpOperatorDetails = () => {
                     onSubmit={() => setDisplayMenu(!displayMenu)}
                   />
                 </ActionBar>
-              )}
+              ))}
           </form>
           {showModal ? (
             <ActionModal
@@ -656,9 +889,53 @@ const FstpOperatorDetails = () => {
               actionData={workflowDetails?.data?.timeline}
             />
           ) : null}
+          {/* <LabelFieldPair>
+            <CardLabel>{t("ES_VEHICLE_WASTE_RECIEVED")}</CardLabel>
+            <div className="field-container">
+              <TextInput name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
+            </div>
+            {errors.wasteRecieved && <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>}
+          </LabelFieldPair>
+          <LabelFieldPair>
+            <CardLabel>{t("ES_COMMON_TIME")}</CardLabel>
+            <div>
+              <TimePicker
+                className="time-picker"
+                name="tripTime"
+                onChange={setTripTime}
+                value={tripTime}
+                locale="en-US"
+                format="hh:mm a"
+                clearIcon={null}
+              />
+            </div>
+          </LabelFieldPair> */}
         </StatusTable>
       </Card>
-
+      {/* <h2 style={{ fontWeight: "bold", fontSize: "16px", marginLeft: "8px", marginTop: "16px" }}>{t("ES_FSTP_OPERATOR_DETAILS_WASTE_GENERATORS")}</h2>
+      {isSearchLoading || isIdle ? (
+        <Loader />
+      ) : (
+        <Card>
+          <StatusTable>
+            {tripDetails?.map((trip, index) => {
+              return (
+                <>
+                  <Row key={index} label={t("CS_FILE_DESLUDGING_APPLICATION_NO")} text={trip.applicationNo} />
+                  <Row
+                    rowContainerStyle={{ justifyContent: "space-between" }}
+                    key={index}
+                    label={t("ES_INBOX_LOCALITY")}
+                    text={t(`${trip?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${trip?.address?.locality?.code}`)}
+                  />
+                  <Row key={index} label={t("ES_USAGE")} text={t(`PROPERTYTYPE_MASTERS_${trip.propertyUsage}`)} />
+                  <Row key={index} label={t("ES_WASTE_RECIEVED")} text={vehicle.tripDetails[index].volume} />
+                </>
+              );
+            })}
+          </StatusTable>
+        </Card>
+      )} */}
       {showToast && (
         <Toast
           error={showToast.key === "error" ? true : false}

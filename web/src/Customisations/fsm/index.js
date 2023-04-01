@@ -12,6 +12,7 @@ import SelectChannel from "./pageComponents/SelectChannel";
 import Inbox from "./pages/employee/Inbox";
 import SelectTankSize from "./pageComponents/SelectTankSize";
 import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
+import SelectAddress from "./pageComponents/SelectAddress";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -28,4 +29,5 @@ export const fsmComponents = {
   SelectChannel: SelectChannel,
   SelectTankSize,
   FSMNewApplicationCitizen: NewApplicationCitizen,
+  SelectAddress,
 };

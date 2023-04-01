@@ -94,6 +94,8 @@ const Response = ({ data, onSuccess }) => {
           doorNo,
           landmark,
           slum,
+          gramPanchayat,
+          village,
         } = address;
         setPaymentPreference(selectPaymentPreference?.code);
         const advanceAmount =
@@ -110,7 +112,16 @@ const Response = ({ data, onSuccess }) => {
             propertyUsage: subtype.code,
             address: {
               tenantId: city.code,
-              additionalDetails: null,
+              additionalDetails: {
+                gramPanchayat: {
+                  code: gramPanchayat?.code,
+                  name: gramPanchayat?.name,
+                },
+                village: {
+                  code: village?.code,
+                  name: village?.name,
+                },
+              },
               street: street?.trim(),
               doorNo: doorNo?.trim(),
               landmark: landmark?.trim(),
