@@ -51,7 +51,7 @@ const FstpOperatorDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   let { id: applicationNos } = useParams();
-
+  const isNew = history.location.pathname.includes("new") ? true : false;
   const inputs = [
     {
       active: true,
@@ -109,10 +109,11 @@ const FstpOperatorDetails = () => {
   const [selectedGp, setSelectedGp] = useState();
   const [villages, setVillages] = useState();
   const [selectedVillage, setSelectedVillage] = useState();
+  const [newGramPanchayat, setNewGramPanchayat] = useState();
+  const [newVillage, setNewVillage] = useState();
   const [selectedCity, setSelectedCity] = useState(
     Digit.SessionStorage.get("Employee.tenantId") || null
   );
-  console.log(selectedCity, "sssss");
   const onChangeVehicleNumber = (value) => {
     setNewVehicleNumber(value);
   };
@@ -150,6 +151,17 @@ const FstpOperatorDetails = () => {
     },
     t
   );
+
+  useEffect(() => {
+    if (fetchedGramPanchayats && fetchedGramPanchayats.length > 0) {
+      fetchedGramPanchayats.push({
+        code: "OTHER",
+        name: "Other",
+        i18nkey: tenantId.replace(".", "_").toUpperCase() + "_OTHER",
+      });
+      setGramPanchayats(fetchedGramPanchayats);
+    }
+  }, [fetchedGramPanchayats]);
 
   useEffect(() => {
     filterVehicle?.length == 0
@@ -315,7 +327,10 @@ const FstpOperatorDetails = () => {
       }, 2000);
       return;
     }
-    if (newLocality === null || newLocality?.trim()?.length === 0) {
+    if (
+      (selectLocation.code !== "FROM_GRAM_PANCHAYAT" && newLocality === null) ||
+      newLocality?.trim()?.length === 0
+    ) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_LOCALITY` });
       setTimeout(() => {
         closeToast();
@@ -358,7 +373,6 @@ const FstpOperatorDetails = () => {
     }
 
     setErrors({});
-
     let temp = {};
     const d = new Date();
     const timeStamp =
@@ -380,6 +394,10 @@ const FstpOperatorDetails = () => {
       locality: newLocality,
       fileStoreId: uploadedFile,
       comments: comments,
+      gramPanchayat: selectedGp,
+      village: selectedVillage,
+      newGramPanchayat: newGramPanchayat,
+      newVillage: newVillage,
     };
     temp.businessService = "FSM_VEHICLE_TRIP";
     temp.tripDetails = [
@@ -517,15 +535,22 @@ const FstpOperatorDetails = () => {
 
   function selectGramPanchayat(value) {
     setSelectedGp(value);
-    const filteredVillages = fetchedGramPanchayats.filter(
-      (items) => items.code === value.code
-    )[0].children;
-    const localitiesWithLocalizationKeys = filteredVillages.map((obj) => ({
-      ...obj,
-      i18nkey: tenantId.replace(".", "_").toUpperCase() + "_" + obj.code,
-    }));
-    if (localitiesWithLocalizationKeys.length > 0) {
-      setVillages(localitiesWithLocalizationKeys);
+    if (value.code !== "OTHER") {
+      const filteredVillages = gramPanchayats.filter(
+        (items) => items.code === value.code
+      )[0]?.children;
+      var localitiesWithLocalizationKeys = filteredVillages.map((obj) => ({
+        ...obj,
+        i18nkey: tenantId.replace(".", "_").toUpperCase() + "_" + obj.code,
+      }));
+      if (localitiesWithLocalizationKeys.length > 0) {
+        localitiesWithLocalizationKeys.push({
+          code: "OTHER",
+          name: "Other",
+          i18nkey: tenantId.replace(".", "_").toUpperCase() + "_OTHER",
+        });
+        setVillages(localitiesWithLocalizationKeys);
+      }
     }
   }
 
@@ -533,6 +558,13 @@ const FstpOperatorDetails = () => {
     setSelectedVillage(value);
   }
 
+  const onChangeGramPanchayat = (value) => {
+    setNewGramPanchayat(value);
+  };
+
+  const onChangeVillage = (value) => {
+    setNewVillage(value);
+  };
   return (
     <div>
       <Header styles={{ marginLeft: "16px" }}>
@@ -561,44 +593,46 @@ const FstpOperatorDetails = () => {
               labelStyle={{ fontWeight: "normal" }}
             />
           ))}
-          <div
-            style={
-              !isMobile &&
-              history.location.pathname.includes("new-vehicle-entry")
-                ? {
-                    display: "flex",
-                    justifyContent: "space-between",
-                    paddingBottom: "8px",
-                    marginBottom: "8px",
-                  }
-                : {}
-            }
-          >
-            <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
+          {isNew && (
             <div
               style={
                 !isMobile &&
                 history.location.pathname.includes("new-vehicle-entry")
-                  ? { width: "50%" }
+                  ? {
+                      display: "flex",
+                      justifyContent: "space-between",
+                      paddingBottom: "8px",
+                      marginBottom: "8px",
+                    }
                   : {}
               }
             >
-              <RadioButtons
-                selectedOption={selectLocation}
-                onSelect={selectedValue}
+              <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
+              <div
                 style={
                   !isMobile &&
                   history.location.pathname.includes("new-vehicle-entry")
-                    ? { display: "flex", marginBottom: 0 }
+                    ? { width: "50%" }
                     : {}
                 }
-                innerStyles={{ marginLeft: "10px" }}
-                options={inputs}
-                optionsKey="i18nKey"
-                // disabled={editScreen}
-              />
+              >
+                <RadioButtons
+                  selectedOption={selectLocation}
+                  onSelect={selectedValue}
+                  style={
+                    !isMobile &&
+                    history.location.pathname.includes("new-vehicle-entry")
+                      ? { display: "flex", marginBottom: 0 }
+                      : {}
+                  }
+                  innerStyles={{ marginLeft: "10px" }}
+                  options={inputs}
+                  optionsKey="i18nKey"
+                  // disabled={editScreen}
+                />
+              </div>
             </div>
-          </div>
+          )}
           {selectLocation.code === "FROM_GRAM_PANCHAYAT" ? (
             <div>
               <Row
@@ -635,40 +669,134 @@ const FstpOperatorDetails = () => {
                 last={false}
                 labelStyle={{ fontWeight: "normal" }}
               />
-              <Row
-                rowContainerStyle={
-                  isMobile &&
-                  history.location.pathname.includes("new-vehicle-entry")
-                    ? { display: "block" }
-                    : { justifyContent: "space-between" }
-                }
-                textStyle={
-                  isMobile &&
-                  history.location.pathname.includes("new-vehicle-entry")
-                    ? { width: "100%" }
-                    : {}
-                }
-                key={t("CS_VILLAGE_NAME")}
-                label={`${t("CS_VILLAGE_NAME")} * `}
-                text={
-                  tripDetails && tripDetails.length > 0 ? (
-                    tripDetails[0]?.address?.village?.name
-                  ) : (
-                    <Dropdown
-                      className="form-field"
-                      isMandatory
-                      selected={selectedVillage}
-                      option={villages}
-                      select={selectVillage}
-                      optionKey="i18nkey"
-                      style={{ width: "100%" }}
-                      t={t}
-                    />
-                  )
-                }
-                last={false}
-                labelStyle={{ fontWeight: "normal" }}
-              />
+              {selectedGp?.code === "OTHER" && (
+                <div>
+                  <Row
+                    rowContainerStyle={
+                      isMobile &&
+                      history.location.pathname.includes("new-vehicle-entry")
+                        ? { display: "block" }
+                        : { justifyContent: "space-between" }
+                    }
+                    textStyle={
+                      isMobile &&
+                      history.location.pathname.includes("new-vehicle-entry")
+                        ? { width: "100%" }
+                        : {}
+                    }
+                    key={t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")}
+                    label={`${t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")} * `}
+                    text={
+                      tripDetails && tripDetails.length > 0 ? (
+                        tripDetails[0]?.address?.locality?.name
+                      ) : (
+                        <TextInput
+                          onChange={(e) =>
+                            onChangeGramPanchayat(e.target.value)
+                          }
+                          value={newGramPanchayat}
+                        />
+                      )
+                    }
+                    last={false}
+                    labelStyle={{ fontWeight: "normal" }}
+                  />
+                  <Row
+                    rowContainerStyle={
+                      isMobile &&
+                      history.location.pathname.includes("new-vehicle-entry")
+                        ? { display: "block" }
+                        : { justifyContent: "space-between" }
+                    }
+                    textStyle={
+                      isMobile &&
+                      history.location.pathname.includes("new-vehicle-entry")
+                        ? { width: "100%" }
+                        : {}
+                    }
+                    key={t("ES_INBOX_PLEASE_SPECIFY_VILLAGE")}
+                    label={`${t("ES_INBOX_PLEASE_SPECIFY_VILLAGE")} * `}
+                    text={
+                      tripDetails && tripDetails.length > 0 ? (
+                        tripDetails[0]?.address?.locality?.name
+                      ) : (
+                        <TextInput
+                          onChange={(e) => onChangeVillage(e.target.value)}
+                          value={newVillage}
+                        />
+                      )
+                    }
+                    last={false}
+                    labelStyle={{ fontWeight: "normal" }}
+                  />
+                </div>
+              )}
+              {selectedGp?.code !== "OTHER" && (
+                <Row
+                  rowContainerStyle={
+                    isMobile &&
+                    history.location.pathname.includes("new-vehicle-entry")
+                      ? { display: "block" }
+                      : { justifyContent: "space-between" }
+                  }
+                  textStyle={
+                    isMobile &&
+                    history.location.pathname.includes("new-vehicle-entry")
+                      ? { width: "100%" }
+                      : {}
+                  }
+                  key={t("CS_VILLAGE_NAME")}
+                  label={`${t("CS_VILLAGE_NAME")} * `}
+                  text={
+                    tripDetails && tripDetails.length > 0 ? (
+                      tripDetails[0]?.address?.village?.name
+                    ) : (
+                      <Dropdown
+                        className="form-field"
+                        isMandatory
+                        selected={selectedVillage}
+                        option={villages}
+                        select={selectVillage}
+                        optionKey="i18nkey"
+                        style={{ width: "100%" }}
+                        t={t}
+                      />
+                    )
+                  }
+                  last={false}
+                  labelStyle={{ fontWeight: "normal" }}
+                />
+              )}
+              {selectedVillage?.code === "OTHER" && (
+                <Row
+                  rowContainerStyle={
+                    isMobile &&
+                    history.location.pathname.includes("new-vehicle-entry")
+                      ? { display: "block" }
+                      : { justifyContent: "space-between" }
+                  }
+                  textStyle={
+                    isMobile &&
+                    history.location.pathname.includes("new-vehicle-entry")
+                      ? { width: "100%" }
+                      : {}
+                  }
+                  key={t("ES_INBOX_PLEASE_SPECIFY_VILLAGE")}
+                  label={`${t("ES_INBOX_PLEASE_SPECIFY_VILLAGE")} * `}
+                  text={
+                    tripDetails && tripDetails.length > 0 ? (
+                      tripDetails[0]?.address?.locality?.name
+                    ) : (
+                      <TextInput
+                        onChange={(e) => onChangeVillage(e.target.value)}
+                        value={newVillage}
+                      />
+                    )
+                  }
+                  last={false}
+                  labelStyle={{ fontWeight: "normal" }}
+                />
+              )}
             </div>
           ) : (
             <Row
