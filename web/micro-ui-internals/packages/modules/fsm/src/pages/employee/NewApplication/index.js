@@ -45,7 +45,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     if (
       formData?.propertyType &&
       formData?.subtype &&
-      formData?.address?.locality?.code &&
+      (formData?.address?.locality?.code || formData.address.propertyLocation?.code === "FROM_GRAM_PANCHAYAT") &&
       formData?.tripData?.vehicleType &&
       formData?.channel &&
       (formData?.tripData?.amountPerTrip || formData?.tripData?.amountPerTrip === 0)
@@ -103,6 +103,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const gender = data.applicationData.applicantGender;
     const paymentPreference = amount === 0 ? null : data?.paymentPreference ? data?.paymentPreference : null;
     const advanceAmount = amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
+    const gramPanchayat = data?.address.gramPanchayat;
+    const village = data?.address.village;
 
     const formData = {
       fsm: {
@@ -133,12 +135,22 @@ export const NewApplication = ({ parentUrl, heading }) => {
           pincode,
           slumName: slum,
           locality: {
-            code: localityCode,
-            name: localityName,
+            code: localityCode ? localityCode : gramPanchayat?.code,
+            name: localityName ? localityName : gramPanchayat?.name,
           },
           geoLocation: {
             latitude: data?.address?.latitude,
             longitude: data?.address?.longitude,
+          },
+          additionalDetails: {
+            gramPanchayat: {
+              code: gramPanchayat?.code,
+              name: gramPanchayat?.name,
+            },
+            village: {
+              code: village?.code,
+              name: village?.name,
+            },
           },
         },
         noOfTrips,
