@@ -132,7 +132,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         formData?.subtype &&
         formData?.address &&
         formData?.tripData?.vehicleType?.capacity &&
-        formData.address.propertyLocation.code === "WITHIN_ULB_LIMITS"
+        formData.address.propertyLocation?.code === "WITHIN_ULB_LIMITS"
       ) {
         const capacity = formData?.tripData?.vehicleType.capacity;
         const { slum: slumDetails } = formData.address;
@@ -163,7 +163,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         }
       }
       if (
-        formData?.address?.propertyLocation.code === "FROM_GRAM_PANCHAYAT" &&
+        formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" &&
         formData.tripData.noOfTrips &&
         formData.tripData.amountPerTrip
       ) {

@@ -177,7 +177,12 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
   return (
     <React.Fragment>
       <Timeline currentStep={1} flow="APPLY" />
-      <FormStep config={config} onSelect={onSubmit} isDisabled={!selectedGp} t={t}>
+      <FormStep
+        config={config}
+        onSelect={onSubmit}
+        isDisabled={propertyLocation?.code === "WITHIN_ULB_LIMITS" ? !selectedLocality : !selectedGp}
+        t={t}
+      >
         {propertyLocation?.code === "WITHIN_ULB_LIMITS" ? (
           <LabelFieldPair>
             <CardLabel className="card-label-smaller">
