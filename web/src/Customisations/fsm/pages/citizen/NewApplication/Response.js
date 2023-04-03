@@ -22,9 +22,9 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage()}
-      applicationNumber={props.data?.fsm[0].applicationNo}
+      applicationNumber={props?.data?.fsm[0]?.applicationNo}
       info={props.t("CS_FILE_DESLUDGING_APPLICATION_NO")}
-      successful={props.isSuccess}
+      successful={props?.isSuccess}
     />
   );
 };
@@ -48,7 +48,6 @@ const Response = ({ data, onSuccess }) => {
   const [paymentPreference, setPaymentPreference] = useState(null);
   const [advancePay, setAdvancePay] = useState(null);
   const [zeroPay, setZeroPay] = useState(null);
-
   const Data = mutation?.data || successData;
   const localityCode = Data?.fsm?.[0].address?.locality?.code;
   const slumCode = Data?.fsm?.[0].address?.slumName;
@@ -129,8 +128,8 @@ const Response = ({ data, onSuccess }) => {
               city: city.name,
               pincode,
               locality: {
-                code: locality.code,
-                name: locality.name,
+                code: locality?.code ? locality.code : gramPanchayat?.code,
+                name: locality?.name ? locality?.name : gramPanchayat?.name,
               },
               geoLocation: {
                 latitude: geoLocation?.latitude,

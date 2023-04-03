@@ -82,7 +82,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       },
       default: formData?.tripData?.amountPerTrip,
       disable:
-        formData?.address?.propertyLocation.code === "FROM_GRAM_PANCHAYAT"
+        formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT"
           ? false
           : true,
       isMandatory: true,
