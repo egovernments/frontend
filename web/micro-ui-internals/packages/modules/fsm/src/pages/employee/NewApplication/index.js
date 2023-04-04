@@ -106,6 +106,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const gramPanchayat = data?.address.gramPanchayat;
     const village = data?.address.village;
     const propertyLocation = data?.address?.propertyLocation?.code;
+
     const formData = {
       fsm: {
         citizen: {
