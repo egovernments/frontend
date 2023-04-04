@@ -143,7 +143,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             longitude: data?.address?.longitude,
           },
           additionalDetails: {
-            boundaryType: propertyLocation === "FROM_GRAM_PANCHAYAT" ? "GP" : "Locality",
+            boundaryType: propertyLocation === "FROM_GRAM_PANCHAYAT" ? (village?.code ? "Village" : "GP") : "Locality",
             gramPanchayat: {
               code: gramPanchayat?.code,
               name: gramPanchayat?.name,

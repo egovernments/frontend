@@ -115,7 +115,9 @@ const Response = ({ data, onSuccess }) => {
               additionalDetails: {
                 boundaryType:
                   propertyLocation?.code === "FROM_GRAM_PANCHAYAT"
-                    ? "GP"
+                    ? village?.code
+                      ? "Village"
+                      : "GP"
                     : "Locality",
                 gramPanchayat: {
                   code: gramPanchayat?.code,
