@@ -194,7 +194,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
             <TextInput
               type={input.type}
               onChange={(e) =>
-                index === 1 &&
+                index === 0 &&
                 formData.address.propertyLocation?.code ===
                   "FROM_GRAM_PANCHAYAT"
                   ? setAmount(e.target.value)
