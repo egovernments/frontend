@@ -105,6 +105,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const advanceAmount = amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
     const gramPanchayat = data?.address.gramPanchayat;
     const village = data?.address.village;
+    const propertyLocation = data?.address?.propertyLocation?.code;
 
     const formData = {
       fsm: {
@@ -143,6 +144,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             longitude: data?.address?.longitude,
           },
           additionalDetails: {
+            boundaryType: propertyLocation === "FROM_GRAM_PANCHAYAT" ? (village?.code ? "Village" : "GP") : "Locality",
             gramPanchayat: {
               code: gramPanchayat?.code,
               name: gramPanchayat?.name,
