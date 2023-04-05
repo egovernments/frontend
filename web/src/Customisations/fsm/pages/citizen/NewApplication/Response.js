@@ -135,8 +135,16 @@ const Response = ({ data, onSuccess }) => {
               city: city.name,
               pincode,
               locality: {
-                code: locality?.code ? locality.code : gramPanchayat?.code,
-                name: locality?.name ? locality?.name : gramPanchayat?.name,
+                code: locality.code
+                  ? locality.code
+                  : village?.code
+                  ? village?.code
+                  : gramPanchayat?.code,
+                name: locality.name
+                  ? locality.name
+                  : village?.name
+                  ? village?.name
+                  : gramPanchayat?.name,
               },
               geoLocation: {
                 latitude: geoLocation?.latitude,

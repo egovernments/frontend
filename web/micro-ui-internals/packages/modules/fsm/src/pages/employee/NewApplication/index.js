@@ -136,8 +136,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
           pincode,
           slumName: slum,
           locality: {
-            code: localityCode ? localityCode : gramPanchayat?.code,
-            name: localityName ? localityName : gramPanchayat?.name,
+            code: localityCode ? localityCode : village?.code ? village?.code : gramPanchayat?.code,
+            name: localityName ? localityName : village?.name ? village?.name : gramPanchayat?.name,
           },
           geoLocation: {
             latitude: data?.address?.latitude,
