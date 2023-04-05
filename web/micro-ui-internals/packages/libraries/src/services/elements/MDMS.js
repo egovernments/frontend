@@ -143,9 +143,9 @@ const getBillsGenieKey = (tenantId, moduleCode) => ({
         masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
       },
       {
-      moduleName: "common-masters",
-      masterDetails: [{name: "uiCommonPay"}]
-      }
+        moduleName: "common-masters",
+        masterDetails: [{ name: "uiCommonPay" }],
+      },
     ],
   },
 });
@@ -213,6 +213,24 @@ const getApplicationChannelCriteria = (tenantId, moduleCode) => ({
         masterDetails: [
           {
             name: "ApplicationChannel",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getUrcConfigCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "UrcConfig",
             filter: null,
           },
         ],
@@ -639,32 +657,31 @@ const getGenderTypeList = (tenantId, moduleCode, type) => ({
 });
 
 const getMeterStatusTypeList = (tenantId) => ({
-    moduleDetails: [
-      {
-        moduleName: "ws-services-calculation",
-        masterDetails: [
-          {
-            name: "MeterStatus",
-            filter: `$.*.name`
-          },
-        ],
-      },
-    ],
-
+  moduleDetails: [
+    {
+      moduleName: "ws-services-calculation",
+      masterDetails: [
+        {
+          name: "MeterStatus",
+          filter: `$.*.name`,
+        },
+      ],
+    },
+  ],
 });
 
 const getBillingPeriodValidation = (tenantId) => ({
-    moduleDetails: [
-      {
-        moduleName: "ws-services-masters",
-        masterDetails: [
-          {
-            name: "billingPeriod",
-            filter: "*"
-          },
-        ],
-      },
-    ],
+  moduleDetails: [
+    {
+      moduleName: "ws-services-masters",
+      masterDetails: [
+        {
+          name: "billingPeriod",
+          filter: "*",
+        },
+      ],
+    },
+  ],
 });
 
 const getDssDashboardCriteria = (tenantId, moduleCode) => ({
@@ -916,53 +933,53 @@ const getWSTaxHeadMasterCritera = (tenantId, moduleCode, type) => ({
 });
 
 const getHowItWorksJSON = (tenantId) => ({
-      moduleDetails: [
-      {
-        moduleName: "common-masters",
-        masterDetails: [
-          {
-            name: "howItWorks",
-          },
-        ],
-      },
-    ],
+  moduleDetails: [
+    {
+      moduleName: "common-masters",
+      masterDetails: [
+        {
+          name: "howItWorks",
+        },
+      ],
+    },
+  ],
 });
 
 const getFAQsJSON = (tenantId) => ({
   moduleDetails: [
-  {
-    moduleName: "common-masters",
-    masterDetails: [
-      {
-        name: "faqs",
-      },
-    ],
-  },
-],
+    {
+      moduleName: "common-masters",
+      masterDetails: [
+        {
+          name: "faqs",
+        },
+      ],
+    },
+  ],
 });
 const getDSSFAQsJSON = (tenantId) => ({
   moduleDetails: [
-  {
-    moduleName: "dss-dashboard",
-    masterDetails: [
-      {
-        name: "FAQs",
-      },
-    ],
-  },
-],
+    {
+      moduleName: "dss-dashboard",
+      masterDetails: [
+        {
+          name: "FAQs",
+        },
+      ],
+    },
+  ],
 });
 const getDSSAboutJSON = (tenantId) => ({
   moduleDetails: [
-  {
-    moduleName: "dss-dashboard",
-    masterDetails: [
-      {
-        name: "About",
-      },
-    ],
-  },
-],
+    {
+      moduleName: "dss-dashboard",
+      masterDetails: [
+        {
+          name: "About",
+        },
+      ],
+    },
+  ],
 });
 
 const getStaticData = () => ({
@@ -998,6 +1015,8 @@ const GetApplicationChannel = (MdmsRes) =>
     i18nKey: `ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_${channel.code}`,
   }));
 
+const getUrcConfig = (MdmsRes) => MdmsRes["FSM"].UrcConfig;
+
 const GetPropertyType = (MdmsRes) =>
   MdmsRes["FSM"].PropertyType.filter((property) => property.active && !property.propertyType).map((item) => ({
     ...item,
@@ -1023,12 +1042,11 @@ const GetVehicleType = (MdmsRes) =>
     });
 
 const GetVehicleMakeModel = (MdmsRes) =>
-  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active)
-    .map((vehicleDetails) => {
-      return {
-        ...vehicleDetails,
-        i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
-      };
+  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active).map((vehicleDetails) => {
+    return {
+      ...vehicleDetails,
+      i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
+    };
   });
 
 const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
@@ -1401,6 +1419,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetTripNumber(MdmsRes);
     case "ReceivedPaymentType":
       return GetReceivedPaymentType(MdmsRes);
+    case "UrcConfig":
+      return getUrcConfig(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -1515,6 +1535,9 @@ export const MdmsService = {
   },
   getApplicationChannel: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getApplicationChannelCriteria(tenantId, moduleCode), moduleCode);
+  },
+  getUrcConfig: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getUrcConfigCriteria(tenantId, moduleCode, type), moduleCode);
   },
   getPropertyType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getPropertyTypeCriteria(tenantId, moduleCode, type), moduleCode);
@@ -1721,11 +1744,11 @@ export const MdmsService = {
   getDSSFAQsJSONData: (tenantId) => {
     return MdmsService.call(tenantId, getDSSFAQsJSON(tenantId));
   },
-  
+
   getDSSAboutJSONData: (tenantId) => {
     return MdmsService.call(tenantId, getDSSAboutJSON(tenantId));
   },
   getStaticDataJSON: (tenantId) => {
     return MdmsService.call(tenantId, getStaticData());
-  }
+  },
 };

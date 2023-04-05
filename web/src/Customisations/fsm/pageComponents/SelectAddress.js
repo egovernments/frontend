@@ -8,13 +8,15 @@ import {
   RadioOrSelect,
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
+import { useLocation } from "react-router-dom";
 
 const Digit = window.Digit;
 
 const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
-
+  const location = useLocation();
+  const isNewVendor = location.pathname.includes("new-vendor");
   const inputs = [
     {
       active: true,
@@ -44,6 +46,21 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       Digit.SessionStorage.get("fsm.file.address.city") ||
       null
   );
+  const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
+    selectedCity?.code,
+    "revenue",
+    {
+      enabled: !!selectedCity,
+    },
+    t
+  );
+  const { data: urcConfig } = Digit.Hooks.fsm.useMDMS(
+    tenantId,
+    "FSM",
+    "UrcConfig"
+  );
+  const isUrcEnable =
+    urcConfig && urcConfig.length > 0 && urcConfig[0].URCEnable;
   const [selectLocation, setSelectLocation] = useState(inputs[0]);
   const [localities, setLocalities] = useState();
   const [selectedLocality, setSelectedLocality] = useState();
@@ -66,7 +83,38 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         });
       }
     }
-  }, [selectedCity, selectLocation]);
+    if ((!isUrcEnable || isNewVendor) && selectedCity && fetchedLocalities) {
+      let __localityList = fetchedLocalities;
+      let filteredLocalityList = [];
+
+      if (formData?.address?.locality) {
+        setSelectedLocality(formData.address.locality);
+      }
+
+      if (formData?.address?.pincode) {
+        filteredLocalityList = __localityList.filter((obj) =>
+          obj.pincode?.find((item) => item == formData.address.pincode)
+        );
+        if (!formData?.address?.locality) setSelectedLocality();
+      }
+
+      if (userType === "employee") {
+        onSelect(config.key, { ...formData[config.key], city: selectedCity });
+      }
+      setLocalities(() =>
+        filteredLocalityList.length > 0 ? filteredLocalityList : __localityList
+      );
+      if (filteredLocalityList.length === 1) {
+        setSelectedLocality(filteredLocalityList[0]);
+        if (userType === "employee") {
+          onSelect(config.key, {
+            ...formData[config.key],
+            locality: filteredLocalityList[0],
+          });
+        }
+      }
+    }
+  }, [selectedCity, selectLocation, fetchedLocalities]);
 
   function selectCity(city) {
     setSelectedLocality(null);
@@ -82,6 +130,13 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         ...formData[config.key],
         propertyLocation: value,
       });
+    }
+  }
+
+  function selectLocality(locality) {
+    setSelectedLocality(locality);
+    if (userType === "employee") {
+      onSelect(config.key, { ...formData[config.key], locality: locality });
     }
   }
 
@@ -111,20 +166,38 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
             t={t}
           />
         </LabelFieldPair>
-        <LabelFieldPair>
-          <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
-          <div className="field">
-            <RadioButtons
-              selectedOption={selectLocation}
-              onSelect={selectedValue}
-              style={{ display: "flex", marginBottom: 0 }}
-              innerStyles={{ marginLeft: "10px" }}
-              options={inputs}
-              optionsKey="i18nKey"
-              // disabled={editScreen}
+        {!isUrcEnable || isNewVendor ? (
+          <LabelFieldPair>
+            <CardLabel className="card-label-smaller">
+              {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}
+              {/* {config.isMandatory ? " * " : null} */}
+            </CardLabel>
+            <Dropdown
+              className="form-field"
+              isMandatory
+              selected={selectedLocality}
+              option={localities}
+              select={selectLocality}
+              optionKey="i18nkey"
+              t={t}
             />
-          </div>
-        </LabelFieldPair>
+          </LabelFieldPair>
+        ) : (
+          <LabelFieldPair>
+            <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
+            <div className="field">
+              <RadioButtons
+                selectedOption={selectLocation}
+                onSelect={selectedValue}
+                style={{ display: "flex", marginBottom: 0 }}
+                innerStyles={{ marginLeft: "10px" }}
+                options={inputs}
+                optionsKey="i18nKey"
+                // disabled={editScreen}
+              />
+            </div>
+          </LabelFieldPair>
+        )}
       </div>
     );
   }
