@@ -45,7 +45,13 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
                 let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
-                applyScreenObj.additionalDetails.waterSubUsageType = applyScreenObj.additionalDetails.waterSubUsageType ? applyScreenObj.additionalDetails.waterSubUsageType : "NA";
+                console.log(applyScreenObj,"applyScreenObj")
+                // applyScreenObj.additionalDetails.waterSubUsageType = applyScreenObj && applyScreenObj.additionalDetails && applyScreenObj.additionalDetails.waterSubUsageType ? applyScreenObj.additionalDetails.waterSubUsageType : "NA";
+                if (!(applyScreenObj && applyScreenObj.additionalDetails && applyScreenObj.additionalDetails.waterSubUsageType)){
+                    applyScreenObj.additionalDetails = {
+                        waterSubUsageType: "NA"
+                    }
+                }
                 dispatch(prepareFinalObject("applyScreen", applyScreenObj));
                 if (getQueryArg(window.location.href, "action") === "edit") {
                     dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObj));
@@ -163,7 +169,7 @@ export const getSearchResults = async (queryObject, filter = false) => {
         }
         let currentTime = new Date().getTime();
         if (filter) {
-            response.WaterConnection = response.WaterConnection.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.WaterConnection = response.WaterConnection.filter(app => app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
             response.WaterConnection = response.WaterConnection.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
 
@@ -1301,6 +1307,7 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
             { key: "connectionNumber", value: connectionNo }
         ];
         const data = await getSearchResults(queryObject)
+        console.log(data,"getMdmsDataForAutopopulated");
         let res = findAndReplace(data, null, "NA")
         let connectionType = res.WaterConnection[0].connectionType
         let mdmsBody = {
@@ -1336,10 +1343,8 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
             })
             dispatch(prepareFinalObject("billingCycle", billingCycle));
         } catch (e) {
-            console.log(e);
         }
     } catch (e) {
-        console.log(e);
     }
 }
 
@@ -1448,7 +1453,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     }
 }
 
-export const createMeterReading = async (dispatch, body) => {
+export const createMeterReading = async (dispatch, body) => {debugger
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
