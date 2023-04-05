@@ -7,6 +7,8 @@ import Timeline from "../components/TLTimelineInFSM";
 const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData, formState }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
+  const { data: urcConfig } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "UrcConfig");
+  const isUrcEnable = urcConfig && urcConfig.length > 0 && urcConfig[0].URCEnable;
   const { pincode, city, propertyLocation } = formData?.address || "";
   const cities =
     userType === "employee"
@@ -155,21 +157,23 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
             </LabelFieldPair>
           </div>
         ) : (
-          <LabelFieldPair>
-            <CardLabel className="card-label-smaller">
-              {t("CS_CREATECOMPLAINT_MOHALLA")}
-              {config.isMandatory ? " * " : null}
-            </CardLabel>
-            <Dropdown
-              className="form-field"
-              isMandatory
-              selected={selectedLocality}
-              option={fetchedLocalities}
-              select={selectLocality}
-              optionKey="i18nkey"
-              t={t}
-            />
-          </LabelFieldPair>
+          isUrcEnable && (
+            <LabelFieldPair>
+              <CardLabel className="card-label-smaller">
+                {t("CS_CREATECOMPLAINT_MOHALLA")}
+                {config.isMandatory ? " * " : null}
+              </CardLabel>
+              <Dropdown
+                className="form-field"
+                isMandatory
+                selected={selectedLocality}
+                option={fetchedLocalities}
+                select={selectLocality}
+                optionKey="i18nkey"
+                t={t}
+              />
+            </LabelFieldPair>
+          )
         )}
       </div>
     );

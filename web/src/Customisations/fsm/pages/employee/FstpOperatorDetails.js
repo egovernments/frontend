@@ -52,6 +52,13 @@ const FstpOperatorDetails = () => {
   const state = Digit.ULBService.getStateId();
   let { id: applicationNos } = useParams();
   const isNew = history.location.pathname.includes("new") ? true : false;
+  const { data: urcConfig } = Digit.Hooks.fsm.useMDMS(
+    tenantId,
+    "FSM",
+    "UrcConfig"
+  );
+  const isUrcEnable =
+    urcConfig && urcConfig.length > 0 && urcConfig[0].URCEnable;
   const inputs = [
     {
       active: true,
@@ -398,6 +405,12 @@ const FstpOperatorDetails = () => {
       village: selectedVillage,
       newGramPanchayat: newGramPanchayat,
       newVillage: newVillage,
+      boundaryType:
+        selectLocation.code === "FROM_GRAM_PANCHAYAT"
+          ? selectedVillage?.code
+            ? "Village"
+            : "GP"
+          : "Locality",
     };
     temp.businessService = "FSM_VEHICLE_TRIP";
     temp.tripDetails = [
@@ -593,7 +606,7 @@ const FstpOperatorDetails = () => {
               labelStyle={{ fontWeight: "normal" }}
             />
           ))}
-          {isNew && (
+          {isNew && isUrcEnable && (
             <div
               style={
                 !isMobile &&
