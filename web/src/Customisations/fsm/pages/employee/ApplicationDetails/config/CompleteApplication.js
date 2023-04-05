@@ -10,7 +10,6 @@ export const configCompleteApplication = ({
   vehicle,
   vehicleCapacity,
   noOfTrips,
-  receivedPaymentType,
   applicationCreatedTime = 0,
   action,
 }) => ({

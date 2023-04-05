@@ -3,7 +3,7 @@ import { DatePicker } from "@egovernments/digit-ui-react-components";
 import { RadioButtons } from "@egovernments/digit-ui-react-components";
 
 
-export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTrips, applicationCreatedTime = 0, receivedPaymentType, action, module }) => ({
+export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTrips, applicationCreatedTime = 0, action, module }) => ({
 
   label: {
     heading: `ES_FSM_ACTION_TITLE_${action}`,
