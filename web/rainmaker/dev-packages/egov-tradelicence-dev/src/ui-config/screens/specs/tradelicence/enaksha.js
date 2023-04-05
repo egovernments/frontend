@@ -1,3 +1,4 @@
+
 import {
   getBreak,
   getCommonHeader,
@@ -19,7 +20,7 @@ import "./index.css";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 // import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
-import { Fsenaksha } from "./searchResource/Fsenaksha";
+import { Obps } from "./searchResource/Obps";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -68,8 +69,8 @@ const getMdmsData = async (dispatch) => {
 };
 
 const header = getCommonHeader({
-  labelName: "ENAKSHA",
-  labelKey: "ENAKSHA",
+  labelName: "Online Building Plan",
+  labelKey: "Online Building Plan",
 });
 const tradeLicenseSearchAndResultss = {
   uiFramework: "material-ui",
@@ -96,11 +97,11 @@ const tradeLicenseSearchAndResultss = {
               },
               ...header,
             },
-            
+           
           },
         },
         pendingApprovals,
-        Fsenaksha,
+        Obps,
         breakAfterSearch: getBreak(),
         searchResults,
       },

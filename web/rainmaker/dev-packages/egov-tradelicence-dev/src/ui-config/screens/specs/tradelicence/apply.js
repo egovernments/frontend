@@ -1,5 +1,5 @@
 import commonConfig from "config/common.js";
-import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject, getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -14,6 +14,7 @@ import { tradeDetails } from "./applyResource/tradeDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
+import { selfdeclarationdoc } from "./searchResource/functions"
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
@@ -67,10 +68,41 @@ export const tradeDocumentDetails = getCommonCard({
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
     labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
   }),
+  button: getCommonContainer({
+  searchButton: {
+    componentPath: "Button",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+      // align: "center"
+    },
+    props: {
+      variant: "contained",
+      style: {
+        color: "white",
+        margin: "8px",
+        backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+        borderRadius: "2px",
+        width: "220px",
+        height: "48px"
+      }
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelName: "Download Self Declaration Document",
+        labelKey: "Download Self Declaration Document"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: selfdeclarationdoc
+    }
+  },}),
   documentList
 });
 
 export const getMdmsData = async (action, state, dispatch) => {
+  debugger;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
@@ -135,15 +167,16 @@ export const getMdmsData = async (action, state, dispatch) => {
        payload,
        "MdmsRes.egf-master.FinancialYear",
        []
-     ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
+   //  ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
+   ).filter(item => item.module === "TL"&& item.active === true);
      set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
     }else{
      let financialYearData = get(
        payload,
        "MdmsRes.egf-master.FinancialYear",
        []
-    // ).filter(item => item.module === "TL"&& item.active === true);
-     ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
+     ).filter(item => item.module === "TL"&& item.active === true);
+   //  ).filter(item => item.module === "TL"&& item.active === true && item.code === getCurrentFinancialYear());
 
      set(payload, "MdmsRes.egf-master.FinancialYear",financialYearData);
     }

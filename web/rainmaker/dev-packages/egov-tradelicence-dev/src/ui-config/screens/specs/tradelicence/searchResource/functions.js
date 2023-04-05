@@ -60,7 +60,9 @@ export const filestoreid = async (state, dispatch) => {
 
 
 }
-
+export const selfdeclarationdoc = async () => {
+  window.open('https://pmidc-firenoc-documents.s3.amazonaws.com/SELFDECLARATION.pdf', '_blank');
+};
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
