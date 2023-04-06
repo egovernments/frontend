@@ -103,9 +103,6 @@ const ActionModal = ({
   const client = useQueryClient();
   const stateCode = Digit.ULBService.getStateId();
 
-  const { data: ReceivedPaymentTypeData, isLoading: receivedPaymentLoad } =
-    Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "ReceivedPaymentType");
-
   const {
     data: vehicleList,
     isLoading: isVehicleData,
@@ -175,7 +172,6 @@ const ActionModal = ({
   const [pitDetail, setPitDetail] = useState();
   const [fstpoRejectionReason, setFstpoRejectionReason] = useState();
   const [noOfTrips, setNoOfTrips] = useState(null);
-  const [receivedPaymentType, setReceivedPaymentType] = useState(null);
 
   const [defaultValues, setDefautValue] = useState({
     capacity: vehicle?.capacity,
@@ -185,12 +181,6 @@ const ActionModal = ({
     pitType: applicationData?.sanitationtype,
     pitDetail: applicationData?.pitDetail,
   });
-
-  useEffect(() => {
-    if (!receivedPaymentLoad) {
-      setReceivedPaymentType(ReceivedPaymentTypeData);
-    }
-  }, [receivedPaymentLoad, ReceivedPaymentTypeData]);
 
   useEffect(() => {
     if (isSuccess && isVehicleDataLoaded && applicationData) {
@@ -357,8 +347,6 @@ const ActionModal = ({
     if (data.subtype && typeof data.subtype === "string")
       applicationData.propertyUsage = data.subtype;
     if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips;
-    if (data.paymentMode)
-      applicationData.additionalDetails.receivedPayment = data.paymentMode.code;
 
     if (fileStoreId) {
       if (
@@ -480,7 +468,6 @@ const ActionModal = ({
             vehicleCapacity: applicationData?.vehicleCapacity,
             noOfTrips: applicationData?.noOfTrips,
             applicationCreatedTime: applicationData?.auditDetails?.createdTime,
-            receivedPaymentType: ReceivedPaymentTypeData,
             action,
             module,
           })
