@@ -166,10 +166,11 @@ export const getSearchResults = async (queryObject, filter = false) => {
         if (response.WaterConnection && response.WaterConnection.length == 0) {
             return response;
         }
-        // let currentTime = new Date().getTime();
+        let currentTime = new Date().getTime();
         if (filter) {
-            response.WaterConnection = response.WaterConnection.filter(app => app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
-            response.WaterConnection = response.WaterConnection.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
+            
+            response.WaterConnection = response.WaterConnection.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.WaterConnection = response.WaterConnection.sort((row1, row2) =>  row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
 
         let result = findAndReplace(response, null, "NA");
