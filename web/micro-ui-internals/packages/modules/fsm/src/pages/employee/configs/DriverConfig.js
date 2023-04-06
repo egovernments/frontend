@@ -97,24 +97,24 @@ const DriverConfig = (t, disabled = false) => {
             className: "payment-form-text-input-correction",
           },
         },
-        {
-          label: "ES_FSM_REGISTRY_DRIVER_PHONE",
-          isMandatory: true,
-          type: "mobileNumber",
-          key: "phone",
-          disable: disabled,
-          populators: {
-            name: "phone",
-            validation: {
-              required: true,
-              pattern: /^[6-9]\d{9}$/,
-            },
-            error: t("FSM_REGISTRY_INVALID_PHONE"),
-            defaultValue: "",
-            className: "payment-form-text-input-correction",
-            labelStyle: { border: "1px solid black", borderRight: "none" },
-          },
-        },
+        // {
+        //   label: "ES_FSM_REGISTRY_DRIVER_PHONE",
+        //   isMandatory: true,
+        //   type: "mobileNumber",
+        //   key: "phone",
+        //   disable: disabled,
+        //   populators: {
+        //     name: "phone",
+        //     validation: {
+        //       required: true,
+        //       pattern: /^[6-9]\d{9}$/,
+        //     },
+        //     error: t("FSM_REGISTRY_INVALID_PHONE"),
+        //     defaultValue: "",
+        //     className: "payment-form-text-input-correction",
+        //     labelStyle: { border: "1px solid black", borderRight: "none" },
+        //   },
+        // },
       ],
     },
   ];
