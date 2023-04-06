@@ -135,12 +135,12 @@ const Response = ({ data, onSuccess }) => {
               city: city.name,
               pincode,
               locality: {
-                code: locality.code
+                code: locality?.code
                   ? locality.code
                   : village?.code
                   ? village?.code
                   : gramPanchayat?.code,
-                name: locality.name
+                name: locality?.name
                   ? locality.name
                   : village?.name
                   ? village?.name
@@ -196,7 +196,6 @@ const Response = ({ data, onSuccess }) => {
     Digit.Utils.pdf.generate(data);
   };
   const isSuccess = !successData ? mutation?.isSuccess : true;
-
   return mutation.isLoading || (mutation.isIdle && !mutationHappened) ? (
     <Loader />
   ) : (
