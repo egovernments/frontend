@@ -45,7 +45,6 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
                 let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
-                console.log(applyScreenObj,"applyScreenObj")
                 // applyScreenObj.additionalDetails.waterSubUsageType = applyScreenObj && applyScreenObj.additionalDetails && applyScreenObj.additionalDetails.waterSubUsageType ? applyScreenObj.additionalDetails.waterSubUsageType : "NA";
                 if (!(applyScreenObj && applyScreenObj.additionalDetails && applyScreenObj.additionalDetails.waterSubUsageType)){
                     applyScreenObj.additionalDetails = {
@@ -1307,7 +1306,6 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
             { key: "connectionNumber", value: connectionNo }
         ];
         const data = await getSearchResults(queryObject)
-        console.log(data,"getMdmsDataForAutopopulated");
         let res = findAndReplace(data, null, "NA")
         let connectionType = res.WaterConnection[0].connectionType
         let mdmsBody = {
@@ -1453,7 +1451,7 @@ export const getPastPaymentsForSewerage = async (dispatch) => {
     }
 }
 
-export const createMeterReading = async (dispatch, body) => {debugger
+export const createMeterReading = async (dispatch, body) => {
     dispatch(toggleSpinner());
     try {
         const response = await httpRequest(
@@ -1837,7 +1835,6 @@ export const downloadBill = async(receiptQueryString, mode) => {
 
                 payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
                 httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {
-                    console.log(payloadbillingPeriod);
                     let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;
                     const service = (payloadReceiptDetails.Bill && payloadReceiptDetails.Bill.length > 0 && payloadReceiptDetails.Bill[0].businessService) ? payloadReceiptDetails.Bill[0].businessService : 'WS';
                     if (service === 'WS' &&
