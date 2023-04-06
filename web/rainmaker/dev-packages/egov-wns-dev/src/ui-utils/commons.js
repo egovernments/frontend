@@ -45,7 +45,12 @@ export const pushTheDocsUploadedToRedux = async (state, dispatch) => {
                 await setDocuments(docs, "applyScreen.documents", "DocumentsData", dispatch, "WS");
                 let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
                 let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
-              //  applyScreenObj.additionalDetails.waterSubUsageType = applyScreenObj.additionalDetails.waterSubUsageType ? applyScreenObj.additionalDetails.waterSubUsageType : "NA";
+                // applyScreenObj.additionalDetails.waterSubUsageType = applyScreenObj && applyScreenObj.additionalDetails && applyScreenObj.additionalDetails.waterSubUsageType ? applyScreenObj.additionalDetails.waterSubUsageType : "NA";
+                if (!(applyScreenObj && applyScreenObj.additionalDetails && applyScreenObj.additionalDetails.waterSubUsageType)){
+                    applyScreenObj.additionalDetails = {
+                        waterSubUsageType: "NA"
+                    }
+                }
                 dispatch(prepareFinalObject("applyScreen", applyScreenObj));
                 if (getQueryArg(window.location.href, "action") === "edit") {
                     dispatch(prepareFinalObject("WaterConnection[0]", applyScreenObj));
@@ -161,9 +166,9 @@ export const getSearchResults = async (queryObject, filter = false) => {
         if (response.WaterConnection && response.WaterConnection.length == 0) {
             return response;
         }
-        let currentTime = new Date().getTime();
+        // let currentTime = new Date().getTime();
         if (filter) {
-            response.WaterConnection = response.WaterConnection.filter(app => currentTime > app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
+            response.WaterConnection = response.WaterConnection.filter(app => app.dateEffectiveFrom && (app.applicationStatus == 'APPROVED' || app.applicationStatus == 'CONNECTION_ACTIVATED'));
             response.WaterConnection = response.WaterConnection.sort((row1, row2) => row2.auditDetails.createdTime - row1.auditDetails.createdTime);
         }
 
@@ -1336,10 +1341,8 @@ export const getMdmsDataForAutopopulated = async (dispatch) => {
             })
             dispatch(prepareFinalObject("billingCycle", billingCycle));
         } catch (e) {
-            console.log(e);
         }
     } catch (e) {
-        console.log(e);
     }
 }
 
@@ -1832,7 +1835,6 @@ export const downloadBill = async(receiptQueryString, mode) => {
 
                 payloadReceiptDetails.Bill[0].billDetails.sort((a, b) => b.toPeriod - a.toPeriod);
                 httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], requestBody).then((payloadbillingPeriod) => {
-                    console.log(payloadbillingPeriod);
                     let waterMeteredDemandExipryDate = 0, waterNonMeteredDemandExipryDate = 0, sewerageNonMeteredDemandExpiryDate = 0;
                     const service = (payloadReceiptDetails.Bill && payloadReceiptDetails.Bill.length > 0 && payloadReceiptDetails.Bill[0].businessService) ? payloadReceiptDetails.Bill[0].businessService : 'WS';
                     if (service === 'WS' &&
