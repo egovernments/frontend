@@ -769,7 +769,8 @@ export const downloadReceiptpt = (receiptQueryString) => {
             let fromDate=convertEpochToDate(element.fromPeriod).split("/")[2];
             assessmentYear=assessmentYear==""?fromDate+"-"+toDate+"(Rs."+element.amountPaid+")":assessmentYear+","+fromDate+"-"+toDate+"(Rs."+element.amountPaid+")";
          assessmentYearForReceipt=fromDate+"-"+toDate;
-       
+         rebate=0;
+         rebateT=0;
     element.billAccountDetails.map(ele => {
     if(ele.taxHeadCode == "PT_TAX")
     {tax=ele.adjustedAmount;
@@ -849,7 +850,8 @@ export const downloadReceiptpt = (receiptQueryString) => {
           assessmentYear=assessmentYear==""?fromDate+"-"+toDate:assessmentYear+","+fromDate+"-"+toDate; 
           assessmentYearForReceipt=fromDate+"-"+toDate;
           payloadReceiptDetails.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(ele => {
-             
+            rebate=0;
+            rebateT=0;
             if(ele.taxHeadCode == "PT_TAX")
             {tax=ele.adjustedAmount;
               taxT=ele.amount}
@@ -936,7 +938,8 @@ export const downloadReceiptpt = (receiptQueryString) => {
         getFileUrlFromAPI(oldFileStoreId).then((fileRes) => {
           if(fileRes&&fileRes[oldFileStoreId]){
             var win = window.open(fileRes[oldFileStoreId], '_blank');
-            win.focus();}
+            win.focus();
+          }
             else{
               
               download(payloadReceiptDetails.Payments,receiptQueryString[1].value.split('.')[0],businessModule)
