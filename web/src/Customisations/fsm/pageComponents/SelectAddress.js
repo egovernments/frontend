@@ -15,6 +15,9 @@ const Digit = window.Digit;
 const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
+  if (userType !== "employee") {
+    tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  }
   const location = useLocation();
   const isNewVendor = location.pathname.includes("new-vendor");
   const inputs = [
@@ -218,15 +221,19 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
           onSelect={selectCity}
           t={t}
         />
-        <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
-        <RadioOrSelect
-          isMandatory={config.isMandatory}
-          options={inputs}
-          selectedOption={selectLocation}
-          optionKey="i18nKey"
-          onSelect={selectedValue}
-          t={t}
-        />
+        {isUrcEnable && (
+          <>
+            <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
+            <RadioOrSelect
+              isMandatory={config.isMandatory}
+              options={inputs}
+              selectedOption={selectLocation}
+              optionKey="i18nKey"
+              onSelect={selectedValue}
+              t={t}
+            />
+          </>
+        )}
       </FormStep>
     </React.Fragment>
   );
