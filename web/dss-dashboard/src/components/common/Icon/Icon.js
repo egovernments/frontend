@@ -4,6 +4,9 @@ import DashBoardIcon from '../../../images/dashboards.svg'
 import ComplaintsIcon from '../../../images/complaints.svg'
 import TradeIcon from '../../../images/trade-license.svg'
 import WaterSewerage from '../../../images/water_sewerage.svg'
+import FireNOC from '../../../images/fire-noc.svg'
+import MCollect from '../../../images/mcollect.svg'
+import Finance from '../../../images/finance.svg'
 import Style from './Styles'
 import { withStyles } from '@material-ui/core/styles';
 
@@ -34,6 +37,15 @@ class Icon extends React.Component {
             case 'water sewerage':
             case 'dss_water_sewerage':
                 return <SVG src={WaterSewerage} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'mcollect':
+            case 'dss_mcollect':
+                return <SVG src={MCollect} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'fire noc':
+            case 'dss_firenoc_overview':
+                return <SVG src={FireNOC} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
+            case 'finance':
+            case 'dss_finance':
+                return <SVG src={Finance} fill="white" className={classes.icon} style={{ width: '40px', height: '40px' }}></SVG>
             default:
                 return <div></div>
 

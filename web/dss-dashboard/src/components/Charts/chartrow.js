@@ -18,7 +18,7 @@ class ChartRow extends Component {
 		let { classes, rowData, displayName, filters, page,Gfilter,row } = this.props;		
 		if(isMobile){	
 			return (		
-				<div className="container-fluid" style={{ padding: '0px', margin: '0px' }}>
+				<div className="container-fluid" style={{ padding: '0px', margin: '0px', maxWidth: "98vw" }}>
 					{
 						displayName &&
 						<div className={classes.tab}><div className={classes.header}>{strings[rowData.name]}</div></div>
@@ -28,7 +28,7 @@ class ChartRow extends Component {
 			);
 		}else{
 			return (
-				<div className="container-fluid" style={{ padding: '0px', margin: '0px' }}>
+				<div className="container-fluid" style={{ padding: '0px', margin: '0px', maxWidth: "98vw" }}>
 					{
 						displayName &&
 						<div className={classes.tab}><div className={classes.header}>{strings[rowData.name]}</div></div>
