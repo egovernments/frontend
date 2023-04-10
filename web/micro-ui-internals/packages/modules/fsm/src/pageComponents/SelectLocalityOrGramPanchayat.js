@@ -141,10 +141,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
               />
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel className="card-label-smaller">
-                {t("CS_VILLAGE_NAME")}
-                {config.isMandatory ? " * " : null}
-              </CardLabel>
+              <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
               <Dropdown
                 className="form-field"
                 isMandatory
@@ -221,10 +218,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
               />
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel className="card-label-smaller">
-                {`${t("CS_VILLAGE_NAME")} *`}
-                {/* {config.isMandatory ? " * " : null} */}
-              </CardLabel>
+              <CardLabel className="card-label-smaller">{`${t("CS_VILLAGE_NAME")}`}</CardLabel>
               <Dropdown
                 className="form-field"
                 isMandatory

@@ -14,6 +14,7 @@ import SelectTankSize from "./pageComponents/SelectTankSize";
 import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectTrips from "./pageComponents/SelectTrips";
+import AdvanceCollection from "./pageComponents/AdvanceCollection";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -32,4 +33,5 @@ export const fsmComponents = {
   FSMNewApplicationCitizen: NewApplicationCitizen,
   SelectAddress,
   SelectTrips,
+  AdvanceCollection,
 };

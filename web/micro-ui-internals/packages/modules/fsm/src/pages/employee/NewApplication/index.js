@@ -45,7 +45,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     if (
       formData?.propertyType &&
       formData?.subtype &&
-      (formData?.address?.locality?.code || formData.address.propertyLocation?.code === "FROM_GRAM_PANCHAYAT") &&
+      (formData?.address?.locality?.code ||
+        (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && formData?.address?.gramPanchayat?.code)) &&
       formData?.tripData?.vehicleType &&
       formData?.channel &&
       (formData?.tripData?.amountPerTrip || formData?.tripData?.amountPerTrip === 0)

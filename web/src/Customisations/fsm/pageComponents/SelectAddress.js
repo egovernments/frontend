@@ -67,6 +67,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const [selectLocation, setSelectLocation] = useState(inputs[0]);
   const [localities, setLocalities] = useState();
   const [selectedLocality, setSelectedLocality] = useState();
+  const [selectedLocation, setSelectedLocation] = useState();
 
   useEffect(() => {
     if (cities) {
@@ -128,6 +129,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
 
   function selectedValue(value) {
     setSelectLocation(value);
+    Digit.SessionStorage.set("locationType", value);
     if (userType === "employee") {
       onSelect(config.key, {
         ...formData[config.key],
@@ -146,7 +148,9 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   function onSubmit() {
     onSelect(config.key, {
       city: selectedCity,
-      propertyLocation: selectLocation,
+      propertyLocation: Digit.SessionStorage.get("locationType")
+        ? Digit.SessionStorage.get("locationType")
+        : selectLocation,
     });
   }
 
@@ -213,6 +217,23 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         t={t}
         isDisabled={selectLocation ? false : true}
       >
+        {isUrcEnable && (
+          <>
+            <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
+            <RadioOrSelect
+              isMandatory={config.isMandatory}
+              options={inputs}
+              selectedOption={
+                Digit.SessionStorage.get("locationType")
+                  ? Digit.SessionStorage.get("locationType")
+                  : selectLocation
+              }
+              optionKey="i18nKey"
+              onSelect={selectedValue}
+              t={t}
+            />
+          </>
+        )}
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
         <RadioOrSelect
           options={cities}
@@ -221,19 +242,6 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
           onSelect={selectCity}
           t={t}
         />
-        {isUrcEnable && (
-          <>
-            <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
-            <RadioOrSelect
-              isMandatory={config.isMandatory}
-              options={inputs}
-              selectedOption={selectLocation}
-              optionKey="i18nKey"
-              onSelect={selectedValue}
-              t={t}
-            />
-          </>
-        )}
       </FormStep>
     </React.Fragment>
   );
