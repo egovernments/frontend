@@ -113,7 +113,7 @@ const FstpOperatorDetails = () => {
   const location = useLocation();
   const [selectLocation, setSelectLocation] = useState(inputs[0]);
   const [gramPanchayats, setGramPanchayats] = useState();
-  const [selectedGp, setSelectedGp] = useState();
+  const [selectedGp, setSelectedGp] = useState(null);
   const [villages, setVillages] = useState();
   const [selectedVillage, setSelectedVillage] = useState();
   const [newGramPanchayat, setNewGramPanchayat] = useState();
@@ -339,6 +339,13 @@ const FstpOperatorDetails = () => {
       newLocality?.trim()?.length === 0
     ) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_LOCALITY` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
+    if (selectedGp === null) {
+      setShowToast({ key: "error", action: `ES_FSTP_SELECT_GRAMPANCHAYAT` });
       setTimeout(() => {
         closeToast();
       }, 2000);
@@ -728,7 +735,7 @@ const FstpOperatorDetails = () => {
                         : {}
                     }
                     key={t("ES_INBOX_PLEASE_SPECIFY_VILLAGE")}
-                    label={`${t("ES_INBOX_PLEASE_SPECIFY_VILLAGE")} * `}
+                    label={`${t("ES_INBOX_PLEASE_SPECIFY_VILLAGE")}`}
                     text={
                       tripDetails && tripDetails.length > 0 ? (
                         tripDetails[0]?.address?.locality?.name
@@ -759,7 +766,7 @@ const FstpOperatorDetails = () => {
                       : {}
                   }
                   key={t("CS_VILLAGE_NAME")}
-                  label={`${t("CS_VILLAGE_NAME")} * `}
+                  label={`${t("CS_VILLAGE_NAME")}`}
                   text={
                     tripDetails && tripDetails.length > 0 ? (
                       tripDetails[0]?.address?.village?.name
