@@ -66,7 +66,7 @@ const Response = (props) => {
   const { state } = props.location;
 
   const mutation =
-    state.key === "update"
+    state?.key === "update"
       ? Digit.Hooks.fsm.useApplicationActions(tenantId)
       : Digit.Hooks.fsm.useDesludging(tenantId);
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
@@ -129,10 +129,10 @@ const Response = (props) => {
     const onSuccess = () => {
       queryClient.clear();
       setMutationHappened(true);
-      // window.history.replaceState({}, "FSM_CREATE_RESPONSE")
+      window.history.replaceState({}, "FSM_CREATE_RESPONSE");
     };
     if (!mutationHappened && !errorInfo) {
-      if (state.key === "update") {
+      if (state?.key === "update") {
         mutation.mutate(
           {
             fsm: state.applicationData,
