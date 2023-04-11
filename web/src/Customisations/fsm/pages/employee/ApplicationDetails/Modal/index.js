@@ -379,6 +379,8 @@ const ActionModal = ({
   }
   useEffect(() => {
     switch (action) {
+      case "SCHEDULE":
+      case "ES_FSM_SCHEDULE":
       case "UPDATE":
         setFormValve(true);
         return setConfig(
@@ -516,22 +518,22 @@ const ActionModal = ({
             action,
           })
         );
-      case "SCHEDULE":
-      case "ES_FSM_SCHEDULE":
-        setFormValve(true);
-        return setConfig(
-          configScheduleDso({
-            t,
-            rejectMenu: Reason?.DeclineReason,
-            setReason: setDeclineReason,
-            reason: declineReason,
-            applicationCreatedTime: applicationData?.auditDetails?.createdTime,
-            vehicle,
-            vehicleCapacity: applicationData?.vehicleCapacity,
-            action,
-            noOfTrips: applicationData?.noOfTrips,
-          })
-        );
+      // case "SCHEDULE":
+      // case "ES_FSM_SCHEDULE":
+      //   setFormValve(true);
+      //   return setConfig(
+      //     configScheduleDso({
+      //       t,
+      //       rejectMenu: Reason?.DeclineReason,
+      //       setReason: setDeclineReason,
+      //       reason: declineReason,
+      //       applicationCreatedTime: applicationData?.auditDetails?.createdTime,
+      //       vehicle,
+      //       vehicleCapacity: applicationData?.vehicleCapacity,
+      //       action,
+      //       noOfTrips: applicationData?.noOfTrips,
+      //     })
+      //   );
 
       case "PAY":
       case "ADDITIONAL_PAY_REQUEST":
