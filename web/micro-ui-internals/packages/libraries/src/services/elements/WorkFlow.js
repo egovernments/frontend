@@ -262,7 +262,8 @@ export const WorkflowService = {
         }
 
       // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
-        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : actionRolePair;
+      // HIDING PAYMENT OPTION FOR DSO
+      const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : location.pathname.includes("dso") ? actionRolePair.filter((i)=> i.action !== "PAY") : actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")
