@@ -15,6 +15,8 @@ import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectTrips from "./pageComponents/SelectTrips";
 import AdvanceCollection from "./pageComponents/AdvanceCollection";
+import SelectSlumName from './pageComponents/SelectSlumName'
+import CheckSlum from './pageComponents/CheckSlum'
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -34,4 +36,6 @@ export const fsmComponents = {
   SelectAddress,
   SelectTrips,
   AdvanceCollection,
+  SelectSlumName,
+  CheckSlum
 };
