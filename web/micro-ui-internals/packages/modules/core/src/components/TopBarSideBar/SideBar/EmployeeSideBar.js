@@ -37,7 +37,7 @@ const EmployeeSideBar = () => {
   return (
     <div className="sidebar">
       <Link to="/digit-ui/employee">
-        <div className="actions active" style={{marginTop: "20px"}}>
+        <div className="actions active" style={{marginTop: "20px", width: "55px"}}>
           <ToolTipWrapper
             child={
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -51,7 +51,7 @@ const EmployeeSideBar = () => {
         </div>
       </Link>
       <a href={getRedirectionUrl()}>
-        <div className="actions" style={{marginTop: "20px"}}>
+        <div className="actions" style={{marginTop: "20px", width: "55px"}}>
           <ToolTipWrapper
             child={
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
