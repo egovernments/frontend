@@ -84,10 +84,11 @@ export const Search = {
 
     const vehicleMake = _vehicle?.i18nKey;
     const vehicleCapacity = _vehicle?.capacity;
-
+    var amountPerTrip = "";
+    var totalAmount = "";
     if (additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP") {
-      var amountPerTrip = response?.additionalDetails && response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount : "N/A";
-      var totalAmount = response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount * response?.noOfTrips : "N/A";
+      amountPerTrip = response?.additionalDetails && response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount : "N/A";
+      totalAmount = response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount * response?.noOfTrips : "N/A";
     } else {
       const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
       amountPerTrip =
