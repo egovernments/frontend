@@ -31,6 +31,11 @@ const getApplicationVehicleType = (application, t) => {
   return application?.pdfVehicleType ? application?.pdfVehicleType : "N/A";
 };
 
+const getApplicationVehicleCapacity = (vehicleCapacity) => {
+  if (!vehicleCapacity) return "N/A";
+  return vehicleCapacity;
+};
+
 const getAmountPerTrip = (amountPerTrip) => {
   if (!amountPerTrip) return "N/A";
   return amountPerTrip !== 0 ? `₹ ${amountPerTrip}` : "N/A";
@@ -134,13 +139,40 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
-            value:
-              t(
-                `${application?.tenantId
-                  ?.toUpperCase()
-                  .split(".")
-                  .join("_")}_REVENUE_${application?.address?.locality?.code}`
-              ) || "N/A",
+            value: application?.address?.locality?.code
+              ? t(
+                  `${application?.tenantId
+                    ?.toUpperCase()
+                    .split(".")
+                    .join("_")}_REVENUE_${application?.address?.locality?.code}`
+                )
+              : "N/A",
+          },
+          {
+            title: t("CS_GRAM_PANCHAYAT"),
+            value: application?.address?.additionalDetails?.gramPanchayat?.code
+              ? t(
+                  `${application?.tenantId
+                    ?.toUpperCase()
+                    .split(".")
+                    .join("_")}_REVENUE_${
+                    application?.address?.additionalDetails?.gramPanchayat?.code
+                  }`
+                )
+              : "N/A",
+          },
+          {
+            title: t("CS_VILLAGE_NAME"),
+            value: application?.address?.additionalDetails?.village?.code
+              ? t(
+                  `${application?.tenantId
+                    ?.toUpperCase()
+                    .split(".")
+                    .join("_")}_REVENUE_${
+                    application?.address?.additionalDetails?.village?.code
+                  }`
+                )
+              : "N/A",
           },
           {
             title: t("CS_APPLICATION_DETAILS_SLUM_NAME"),
@@ -192,7 +224,7 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("ES_FSM_ACTION_VEHICLE_TYPE"),
-            value: getApplicationVehicleType(application, t),
+            value: getApplicationVehicleCapacity(application?.vehicleCapacity),
           },
           {
             title: t("CS_APPLICATION_DETAILS_TRIPS"),

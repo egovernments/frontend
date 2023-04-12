@@ -176,7 +176,8 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const getTotal = () => (bill?.totalAmount ? bill?.totalAmount : 0);
   const getTotalFSM = () => (application?.totalAmount ? application?.totalAmount : 0);
   const getAdvanceAmount = () => (applicationData?.advanceAmount ? applicationData?.advanceAmount : 0);
-  const dueAmountTobePaid = () => (bill?.totalAmount ? bill?.totalAmount : 0);
+  const dueAmountTobePaid = () =>
+    application?.totalAmount ? application?.totalAmount - applicationData?.advanceAmount : bill?.totalAmount ? bill?.totalAmount : 0;
   const getAmountPerTrip = () => (application?.additionalDetails?.tripAmount ? application?.additionalDetails?.tripAmount : 0);
 
   const arrears =
@@ -355,7 +356,11 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
             textStyle={{ textAlign: "left" }}
             text={"₹ " + Number(getAmountPerTrip()).toFixed(2)}
           />
-          <Row label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")} textStyle={{ textAlign: "left" }} text={!applicationData?.paymentPreference ? "₹ " + Number(getTotalFSM()).toFixed(2) : "₹ " + Number(bill?.totalAmount).toFixed(2)} />
+          <Row
+            label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")}
+            textStyle={{ textAlign: "left" }}
+            text={!applicationData?.paymentPreference ? "₹ " + Number(getTotalFSM()).toFixed(2) : "₹ " + Number(bill?.totalAmount).toFixed(2)}
+          />
           {!applicationData?.paymentPreference &&
             (getAdvanceAmountPaid ? (
               <Row

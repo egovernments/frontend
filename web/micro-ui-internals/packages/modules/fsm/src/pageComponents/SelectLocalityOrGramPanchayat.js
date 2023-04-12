@@ -1,4 +1,4 @@
-import { CardLabel, Dropdown, FormStep, LabelFieldPair } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -20,8 +20,9 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
   const [localities, setLocalities] = useState();
   const [gramPanchayats, setGramPanchayats] = useState();
   const [selectedGp, setSelectedGp] = useState();
-  const [villages, setVillages] = useState();
+  const [villages, setVillages] = useState([]);
   const [selectedVillage, setSelectedVillage] = useState();
+  const [newVillage, setNewVillage] = useState();
 
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || Digit.SessionStorage.get("fsm.file.address.city") || null);
   useEffect(() => {
@@ -113,9 +114,16 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
     }
   }
 
+  const onChangeVillage = (value) => {
+    setNewVillage(value);
+    if (userType === "employee") {
+      onSelect(config.key, { ...formData[config.key], village: value });
+    }
+  };
+
   function onSubmit() {
     if (propertyLocation?.code === "FROM_GRAM_PANCHAYAT") {
-      onSelect(config.key, { gramPanchayat: selectedGp, village: selectedVillage });
+      onSelect(config.key, { gramPanchayat: selectedGp, village: selectedVillage ? selectedVillage : newVillage });
     } else {
       onSelect(config.key, { locality: selectedLocality });
     }
@@ -140,18 +148,28 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 t={t}
               />
             </LabelFieldPair>
-            <LabelFieldPair>
-              <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
-              <Dropdown
-                className="form-field"
-                isMandatory
-                selected={selectedVillage}
-                option={villages}
-                select={selectVillage}
-                optionKey="i18nkey"
-                t={t}
-              />
-            </LabelFieldPair>
+            {villages.length > 0 && (
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
+                <Dropdown
+                  className="form-field"
+                  isMandatory
+                  selected={selectedVillage}
+                  option={villages}
+                  select={selectVillage}
+                  optionKey="i18nkey"
+                  t={t}
+                />
+              </LabelFieldPair>
+            )}
+            {villages.length === 0 && (
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
+                <div className="field">
+                  <TextInput id="village" key="village" value={newVillage} onChange={(e) => onChangeVillage(e.target.value)} />
+                </div>
+              </LabelFieldPair>
+            )}
           </div>
         ) : (
           isUrcEnable && (
@@ -217,18 +235,28 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 t={t}
               />
             </LabelFieldPair>
-            <LabelFieldPair>
-              <CardLabel className="card-label-smaller">{`${t("CS_VILLAGE_NAME")}`}</CardLabel>
-              <Dropdown
-                className="form-field"
-                isMandatory
-                selected={selectedVillage}
-                option={villages}
-                select={selectVillage}
-                optionKey="i18nkey"
-                t={t}
-              />
-            </LabelFieldPair>
+            {villages.length > 0 && (
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
+                <Dropdown
+                  className="form-field"
+                  isMandatory
+                  selected={selectedVillage}
+                  option={villages}
+                  select={selectVillage}
+                  optionKey="i18nkey"
+                  t={t}
+                />
+              </LabelFieldPair>
+            )}
+            {villages.length === 0 && (
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
+                <div className="field">
+                  <TextInput id="village" key="village" value={newVillage} onChange={(e) => onChangeVillage(e.target.value)} />
+                </div>
+              </LabelFieldPair>
+            )}
           </div>
         )}
       </FormStep>

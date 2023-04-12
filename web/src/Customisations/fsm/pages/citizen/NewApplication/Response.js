@@ -124,8 +124,8 @@ const Response = ({ data, onSuccess }) => {
                   name: gramPanchayat?.name,
                 },
                 village: {
-                  code: village?.code,
-                  name: village?.name,
+                  code: village?.code ? village?.code : "",
+                  name: village?.name ? village?.name : village,
                 },
               },
               street: street?.trim(),

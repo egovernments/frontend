@@ -48,6 +48,7 @@ export const Search = {
     let dsoDetails = {};
     let vehicle = {};
     const response = await Search.application(tenantId, filter);
+    const additionalDetails = response?.address?.additionalDetails;
     let receivedPayment = response?.additionalDetails?.receivedPayment;
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
@@ -84,13 +85,18 @@ export const Search = {
     const vehicleMake = _vehicle?.i18nKey;
     const vehicleCapacity = _vehicle?.capacity;
 
-    const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
-    const amountPerTrip =
-      response?.additionalDetails && response?.additionalDetails.tripAmount
-        ? response.additionalDetails.tripAmount
-        : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
-    // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
-    const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
+    if (additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP") {
+      var amountPerTrip = response?.additionalDetails && response?.additionalDetails.tripAmount;
+      var totalAmount = response?.additionalDetails.tripAmount * response?.noOfTrips;
+    } else {
+      const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
+      const amountPerTrip =
+        response?.additionalDetails && response?.additionalDetails.tripAmount
+          ? response.additionalDetails.tripAmount
+          : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
+      // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
+      const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
+    }
     const employeeResponse = [
       {
         title: "ES_TITLE_APPLICATION_DETAILS",
@@ -122,7 +128,21 @@ export const Search = {
         values: [
           {
             title: "ES_APPLICATION_DETAILS_LOCATION_LOCALITY",
-            value: `${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`,
+            value: response?.address?.locality?.code
+              ? t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`)
+              : "N/A",
+          },
+          {
+            title: t("CS_GRAM_PANCHAYAT"),
+            value: additionalDetails?.gramPanchayat?.code
+              ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.gramPanchayat?.code}`)
+              : "N/A",
+          },
+          {
+            title: t("CS_VILLAGE_NAME"),
+            value: additionalDetails?.village?.code
+              ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.village?.code}`)
+              : "N/A",
           },
           { title: "ES_APPLICATION_DETAILS_LOCATION_CITY", value: response?.address?.city },
           { title: "ES_APPLICATION_DETAILS_LOCATION_PINCODE", value: response?.address?.pincode },
