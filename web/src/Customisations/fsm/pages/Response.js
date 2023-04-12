@@ -164,7 +164,7 @@ const Response = (props) => {
       <BannerPicker
         t={t}
         data={Data}
-        action={state.action}
+        action={state?.action}
         isSuccess={isSuccess}
         isLoading={
           (mutation.isIdle && !mutationHappened) || mutation?.isLoading
@@ -173,7 +173,7 @@ const Response = (props) => {
       />
       <CardText>
         {DisplayText(
-          state.action,
+          state?.action,
           isSuccess,
           props.parentRoute.includes("employee"),
           t
