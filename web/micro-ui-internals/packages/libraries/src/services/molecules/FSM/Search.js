@@ -90,7 +90,7 @@ export const Search = {
       var totalAmount = response?.additionalDetails.tripAmount * response?.noOfTrips;
     } else {
       const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
-      const amountPerTrip =
+      amountPerTrip =
         response?.additionalDetails && response?.additionalDetails.tripAmount
           ? response.additionalDetails.tripAmount
           : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
