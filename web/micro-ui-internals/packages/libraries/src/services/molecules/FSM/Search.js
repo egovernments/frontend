@@ -86,7 +86,7 @@ export const Search = {
     const vehicleCapacity = _vehicle?.capacity;
 
     if (additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP") {
-      var amountPerTrip = response?.additionalDetails && response?.additionalDetails.tripAmount;
+      var amountPerTrip = response?.additionalDetails && response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount : "N/A";
       var totalAmount = response?.additionalDetails.tripAmount * response?.noOfTrips;
     } else {
       const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
@@ -95,7 +95,7 @@ export const Search = {
           ? response.additionalDetails.tripAmount
           : demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount || "N/A";
       // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
-      const totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
+      totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
     }
     const employeeResponse = [
       {
