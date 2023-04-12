@@ -653,7 +653,15 @@ const FstpOperatorDetails = () => {
               </div>
             </div>
           )}
-          {selectLocation.code === "FROM_GRAM_PANCHAYAT" ? (
+          {selectLocation.code === "FROM_GRAM_PANCHAYAT" ||
+          (tripDetails &&
+            tripDetails.length > 0 &&
+            tripDetails[0]?.address?.additionalDetails?.boundaryType ===
+              "Village") ||
+          (tripDetails &&
+            tripDetails.length > 0 &&
+            tripDetails[0]?.address?.additionalDetails?.boundaryType ===
+              "GP") ? (
             <div>
               <Row
                 rowContainerStyle={
@@ -672,7 +680,8 @@ const FstpOperatorDetails = () => {
                 label={`${t("CS_GRAM_PANCHAYAT")} * `}
                 text={
                   tripDetails && tripDetails.length > 0 ? (
-                    tripDetails[0]?.address?.gramPanchayat?.name
+                    tripDetails[0]?.address?.additionalDetails?.gramPanchayat
+                      ?.name
                   ) : (
                     <Dropdown
                       className="form-field"
@@ -769,7 +778,7 @@ const FstpOperatorDetails = () => {
                   label={`${t("CS_VILLAGE_NAME")}`}
                   text={
                     tripDetails && tripDetails.length > 0 ? (
-                      tripDetails[0]?.address?.village?.name
+                      tripDetails[0]?.address?.additionalDetails?.village?.name
                     ) : (
                       <Dropdown
                         className="form-field"
