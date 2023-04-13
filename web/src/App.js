@@ -5,11 +5,11 @@ import {
   PGRReducers,
 } from "@egovernments/digit-ui-module-pgr";
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
-import {
-  PTModule,
-  PTLinks,
-  PTComponents,
-} from "@egovernments/digit-ui-module-pt";
+// import {
+//   PTModule,
+//   PTLinks,
+//   PTComponents,
+// } from "@egovernments/digit-ui-module-pt";
 // import { MCollectModule, MCollectLinks, initMCollectComponents } from "@egovernments/digit-ui-module-mcollect";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import {
@@ -54,9 +54,9 @@ window.Digit.ComponentRegistryService.setupRegistry({
 
   PaymentModule,
   PaymentLinks,
-  PTModule,
-  PTLinks,
-  ...PTComponents,
+  // PTModule,
+  // PTLinks,
+  // ...PTComponents,
   // MCollectLinks,
   // MCollectModule,
   // HRMSModule,

@@ -82,7 +82,6 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
 
   if (slumDataLoading) return <Loader />;
 
-  console.log("EMPL", formData);
   return userType === "employee" ? (
     formData?.address?.propertyLocation !== "FROM_GRAM_PANCHAYAT" && (
       <LabelFieldPair>

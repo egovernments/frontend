@@ -18,7 +18,6 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   }
 
   useEffect(() => {
-    console.log("formData",formData);
     if (formData?.address?.propertyLocation === "FROM_GRAM_PANCHAYAT") onSkip();
   }, [formData]);
   return (
