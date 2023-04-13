@@ -1,8 +1,7 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
 const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitationMenu }) => {
@@ -22,7 +21,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     clearSuccessData();
     clearError();
   }, []);
-  const defaultValues = {
+  var defaultValues = {
     channel: channelMenu.filter((channel) => channel.code === applicationData.source)[0],
     applicationData: {
       applicantName: applicationData.citizen.name,
@@ -52,20 +51,37 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     pitType: sanitationMenu.filter((type) => type.code === applicationData.sanitationtype)[0],
     pitDetail: applicationData.pitDetail,
     paymentPreference: applicationData.paymentPreference,
-    advancepaymentPreference: { advanceAmount: applicationData?.advanceAmount },
   };
 
+  if (
+    (applicationData && applicationData?.address?.additionalDetails?.boundaryType === "Village") ||
+    applicationData?.address?.additionalDetails?.boundaryType === "GP"
+  ) {
+    defaultValues.address = {
+      propertyLocation: {
+        active: true,
+        code: "FROM_GRAM_PANCHAYAT",
+        i18nKey: "FROM_GRAM_PANCHAYAT",
+        name: "From Gram Panchayat",
+      },
+      additionalDetails: {
+        boundaryType: applicationData?.address?.additionalDetails?.boundaryType,
+        gramPanchayat: applicationData?.address?.additionalDetails?.gramPanchayat,
+        village: applicationData?.address?.additionalDetails?.village,
+      },
+    };
+  }
   const onFormValueChange = (setValue, formData) => {
     if (
       formData?.propertyType &&
       formData?.subtype &&
-      formData?.address?.locality?.code &&
+      (formData?.address?.locality?.code ||
+        (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && formData?.address?.additionalDetails?.gramPanchayat?.code)) &&
       formData?.tripData?.vehicleType &&
       (formData?.tripData?.amountPerTrip || formData?.tripData?.amountPerTrip === 0)
     ) {
       setSubmitValve(true);
       const pitDetailValues = formData?.pitDetail ? Object.values(formData?.pitDetail).filter((value) => value > 0) : null;
-      let min = Digit.SessionStorage.get("advance_amount");
       if (formData?.pitType) {
         if (pitDetailValues === null || pitDetailValues?.length === 0) {
           setSubmitValve(true);
@@ -74,12 +90,6 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         } else if (!isConventionalSpecticTank(formData?.pitType?.dimension) && pitDetailValues?.length >= 2) {
           setSubmitValve(true);
         } else setSubmitValve(false);
-      }
-      if (formData?.tripData?.amountPerTrip !== 0 && (formData?.advancepaymentPreference?.advanceAmount > formData?.tripData?.amount || formData?.advancepaymentPreference?.advanceAmount < min)) {
-        setSubmitValve(false);
-      }
-      if (applicationData?.advanceAmount > 0 && formData?.advancepaymentPreference?.advanceAmount <= 0) {
-        setSubmitValve(false);
       }
     } else {
       setSubmitValve(false);
@@ -111,8 +121,11 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const propertyUsage = data?.subtype;
-    const advanceAmount = amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
     const { height, length, width, diameter } = pitDimension;
+    const advanceAmount = amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
+    const gramPanchayat = data?.address?.additionalDetails?.gramPanchayat;
+    const village = data?.address?.additionalDetails?.village;
+    const propertyLocation = data?.address?.propertyLocation?.code;
 
     const formData = {
       ...applicationData,
@@ -144,13 +157,24 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         slumName: slum,
         locality: {
           ...applicationData.address.locality,
-          code: localityCode,
-          name: localityName,
+          code: localityCode ? localityCode : village?.code ? village?.code : gramPanchayat?.code,
+          name: localityName ? localityName : village?.name ? village?.name : gramPanchayat?.name,
         },
         geoLocation: {
           ...applicationData.address.geoLocation,
           latitude: data?.address?.latitude ? data?.address?.latitude : applicationData.address.geoLocation.latitude,
           longitude: data?.address?.longitude ? data?.address?.longitude : applicationData.address.geoLocation.longitude,
+        },
+        additionalDetails: {
+          boundaryType: propertyLocation === "FROM_GRAM_PANCHAYAT" ? (village?.code ? "Village" : "GP") : "Locality",
+          gramPanchayat: {
+            code: gramPanchayat?.code,
+            name: gramPanchayat?.name,
+          },
+          village: {
+            code: village?.code ? village?.code : "",
+            name: village?.name ? village?.name : village,
+          },
         },
       },
       advanceAmount,
@@ -177,30 +201,23 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
   const configs = [...preFields, ...commonFields];
 
   return (
-    <>
-      <div style={{ marginLeft: "15px" }}>
-        <Header>{t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}</Header>
-      </div>
-      <FormComposer
-        isDisabled={!canSubmit}
-        label={applicationData?.applicationStatus != "CREATED" ? t("ES_FSM_APPLICATION_SCHEDULE") : t("ES_FSM_APPLICATION_UPDATE")}
-        config={configs
-          .filter((i) => !i.hideInEmployee)
-          .map((config) => {
-            return {
-              ...config,
-              body: config.body.filter((a) => !a.hideInEmployee),
-            };
-          })}
-        fieldStyle={{ marginRight: 0 }}
-        formCardStyle={true}
-        onSubmit={onSubmit}
-        defaultValues={defaultValues}
-        onFormValueChange={onFormValueChange}
-        noBreakLine={true}
-        fms_inline
-      />
-    </>
+    <FormComposer
+      heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
+      isDisabled={!canSubmit}
+      label={applicationData?.applicationStatus != "CREATED" ? t("ES_FSM_APPLICATION_SCHEDULE") : t("ES_FSM_APPLICATION_UPDATE")}
+      config={configs
+        .filter((i) => !i.hideInEmployee)
+        .map((config) => {
+          return {
+            ...config,
+            body: config.body.filter((a) => !a.hideInEmployee),
+          };
+        })}
+      fieldStyle={{ marginRight: 0 }}
+      onSubmit={onSubmit}
+      defaultValues={defaultValues}
+      onFormValueChange={onFormValueChange}
+    />
   );
 };
 
