@@ -1,8 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError } from "@egovernments/digit-ui-react-components";
+import {
+  LabelFieldPair,
+  CardLabel,
+  TextInput,
+  Dropdown,
+  Loader,
+  CardLabelError,
+} from "@egovernments/digit-ui-react-components";
 import { useParams, useLocation } from "react-router-dom";
 
-const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFieldStyle }) => {
+const Digit = window.Digit;
+
+const AdvanceCollection = ({
+  t,
+  config,
+  onSelect,
+  formData,
+  userType,
+  FSMTextFieldStyle,
+}) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { pathname: url } = useLocation();
@@ -10,7 +26,12 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
   const userInfo = Digit.UserService.getUser();
   const [TotalAmount, setTotalAmount] = useState();
   const [AdvanceAmount, setAdvanceAmounts] = useState();
-  const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
+  const {
+    isLoading: applicationLoading,
+    isError,
+    data: applicationData,
+    error,
+  } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: applicationNumber, uuid: userInfo.uuid },
     { staleTime: Infinity }
@@ -21,11 +42,17 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
   });
   const [billError, setError] = useState(false);
 
-  const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", {
-    staleTime: Infinity,
-  });
+  const { isLoading: isVehicleMenuLoading, data: vehicleData } =
+    Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", {
+      staleTime: Infinity,
+    });
 
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, {
+  const {
+    data: dsoData,
+    isLoading: isDsoLoading,
+    isSuccess: isDsoSuccess,
+    error: dsoError,
+  } = Digit.Hooks.fsm.useDsoSearch(tenantId, {
     limit: -1,
     status: "ACTIVE",
   });
@@ -70,25 +97,35 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
         const capacity = formData?.tripData?.vehicleType.capacity;
         const { slum: slumDetails } = formData.address;
         const slum = slumDetails ? "YES" : "NO";
-        const billingDetails = await Digit.FSMService.billingSlabSearch(tenantId, {
-          propertyType: formData?.subtype,
-          capacity,
-          slum,
-        });
+        const billingDetails = await Digit.FSMService.billingSlabSearch(
+          tenantId,
+          {
+            propertyType: formData?.subtype,
+            capacity,
+            slum,
+          }
+        );
 
-        const billSlab = billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
+        const billSlab =
+          billingDetails?.billingSlab?.length && billingDetails?.billingSlab[0];
 
         if (billSlab?.price || billSlab?.price === 0) {
           const totaltripAmount = billSlab.price * formData.tripData.noOfTrips;
 
-          const { advanceAmount: advanceBalanceAmount } = await Digit.FSMService.advanceBalanceCalculate(tenantId, {
-            totalTripAmount: totaltripAmount,
-          });
+          const { advanceAmount: advanceBalanceAmount } =
+            await Digit.FSMService.advanceBalanceCalculate(tenantId, {
+              totalTripAmount: totaltripAmount,
+            });
           Digit.SessionStorage.set("total_amount", totaltripAmount);
           Digit.SessionStorage.set("advance_amount", advanceBalanceAmount);
           setTotalAmount(totaltripAmount);
           setAdvanceAmounts(advanceBalanceAmount);
-          if (!url.includes("modify") || (url.includes("modify") && advanceBalanceAmount > formData?.advancepaymentPreference?.advanceAmount)) {
+          if (
+            !url.includes("modify") ||
+            (url.includes("modify") &&
+              advanceBalanceAmount >
+                formData?.advancepaymentPreference?.advanceAmount)
+          ) {
             setValue({
               advanceAmount: advanceBalanceAmount,
             });
@@ -102,21 +139,38 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
         }
       }
     })();
-  }, [formData?.propertyType, formData?.subtype, formData?.address?.slum, formData?.tripData?.vehicleType?.capacity, formData?.tripData?.noOfTrips]);
+  }, [
+    formData?.propertyType,
+    formData?.subtype,
+    formData?.address?.slum,
+    formData?.tripData?.vehicleType?.capacity,
+    formData?.tripData?.noOfTrips,
+  ]);
 
   useEffect(() => {
     (async () => {
-      if (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && formData.tripData.noOfTrips && formData.tripData.amountPerTrip) {
-        const totaltripAmount = formData.tripData.amountPerTrip * formData.tripData.noOfTrips;
+      if (
+        formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" &&
+        formData.tripData.noOfTrips &&
+        formData.tripData.amountPerTrip
+      ) {
+        const totaltripAmount =
+          formData.tripData.amountPerTrip * formData.tripData.noOfTrips;
 
-        const { advanceAmount: advanceBalanceAmount } = await Digit.FSMService.advanceBalanceCalculate(tenantId, {
-          totalTripAmount: totaltripAmount,
-        });
+        const { advanceAmount: advanceBalanceAmount } =
+          await Digit.FSMService.advanceBalanceCalculate(tenantId, {
+            totalTripAmount: totaltripAmount,
+          });
         Digit.SessionStorage.set("total_amount", totaltripAmount);
         Digit.SessionStorage.set("advance_amount", advanceBalanceAmount);
         setTotalAmount(totaltripAmount);
         setAdvanceAmounts(advanceBalanceAmount);
-        if (!url.includes("modify") || (url.includes("modify") && advanceBalanceAmount > formData?.advancepaymentPreference?.advanceAmount)) {
+        if (
+          !url.includes("modify") ||
+          (url.includes("modify") &&
+            advanceBalanceAmount >
+              formData?.advancepaymentPreference?.advanceAmount)
+        ) {
           setValue({
             advanceAmount: advanceBalanceAmount,
           });
@@ -133,7 +187,10 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
     <div>
       {formData?.tripData?.amountPerTrip !== 0 &&
         inputs?.map((input, index) => {
-          let currentValue = formData && formData[config.key] && formData[config.key][input.name];
+          let currentValue =
+            formData &&
+            formData[config.key] &&
+            formData[config.key][input.name];
 
           return (
             <React.Fragment key={index}>
@@ -145,7 +202,10 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
                 <div className="field">
                   <TextInput
                     disabled={
-                      (url.includes("modify") && formData?.advancepaymentPreference?.advanceAmount === 0) || AdvanceAmount === TotalAmount
+                      (url.includes("modify") &&
+                        formData?.advancepaymentPreference?.advanceAmount ===
+                          0) ||
+                      AdvanceAmount === TotalAmount
                         ? true
                         : false
                     }
@@ -153,7 +213,13 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
                     key={input.name}
                     style={FSMTextFieldStyle}
                     onChange={(e) => setAdvanceAmount(e.target.value)}
-                    value={input.default ? input.default : formData && formData[config.key] ? formData[config.key][input.name] : null}
+                    value={
+                      input.default
+                        ? input.default
+                        : formData && formData[config.key]
+                        ? formData[config.key][input.name]
+                        : null
+                    }
                     {...input.validation}
                   />
                   {currentValue > TotalAmount && (

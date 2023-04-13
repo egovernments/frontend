@@ -22,9 +22,9 @@ const BannerPicker = (props) => {
   return (
     <Banner
       message={GetActionMessage()}
-      applicationNumber={props.data?.fsm[0].applicationNo}
+      applicationNumber={props?.data?.fsm[0]?.applicationNo}
       info={props.t("CS_FILE_DESLUDGING_APPLICATION_NO")}
-      successful={props.isSuccess}
+      successful={props?.isSuccess}
     />
   );
 };
@@ -48,7 +48,6 @@ const Response = ({ data, onSuccess }) => {
   const [paymentPreference, setPaymentPreference] = useState(null);
   const [advancePay, setAdvancePay] = useState(null);
   const [zeroPay, setZeroPay] = useState(null);
-
   const Data = mutation?.data || successData;
   const localityCode = Data?.fsm?.[0].address?.locality?.code;
   const slumCode = Data?.fsm?.[0].address?.slumName;
@@ -94,6 +93,9 @@ const Response = ({ data, onSuccess }) => {
           doorNo,
           landmark,
           slum,
+          gramPanchayat,
+          village,
+          propertyLocation,
         } = address;
         setPaymentPreference(selectPaymentPreference?.code);
         const advanceAmount =
@@ -110,7 +112,22 @@ const Response = ({ data, onSuccess }) => {
             propertyUsage: subtype.code,
             address: {
               tenantId: city.code,
-              additionalDetails: null,
+              additionalDetails: {
+                boundaryType:
+                  propertyLocation?.code === "FROM_GRAM_PANCHAYAT"
+                    ? village?.code
+                      ? "Village"
+                      : "GP"
+                    : "Locality",
+                gramPanchayat: {
+                  code: gramPanchayat?.code,
+                  name: gramPanchayat?.name,
+                },
+                village: {
+                  code: village?.code ? village?.code : "",
+                  name: village?.name ? village?.name : village,
+                },
+              },
               street: street?.trim(),
               doorNo: doorNo?.trim(),
               landmark: landmark?.trim(),
@@ -118,8 +135,16 @@ const Response = ({ data, onSuccess }) => {
               city: city.name,
               pincode,
               locality: {
-                code: locality.code,
-                name: locality.name,
+                code: locality?.code
+                  ? locality.code
+                  : village?.code
+                  ? village?.code
+                  : gramPanchayat?.code,
+                name: locality?.name
+                  ? locality.name
+                  : village?.name
+                  ? village?.name
+                  : gramPanchayat?.name,
               },
               geoLocation: {
                 latitude: geoLocation?.latitude,
@@ -171,7 +196,6 @@ const Response = ({ data, onSuccess }) => {
     Digit.Utils.pdf.generate(data);
   };
   const isSuccess = !successData ? mutation?.isSuccess : true;
-
   return mutation.isLoading || (mutation.isIdle && !mutationHappened) ? (
     <Loader />
   ) : (

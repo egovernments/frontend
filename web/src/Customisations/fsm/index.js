@@ -12,6 +12,11 @@ import SelectChannel from "./pageComponents/SelectChannel";
 import Inbox from "./pages/employee/Inbox";
 import SelectTankSize from "./pageComponents/SelectTankSize";
 import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
+import SelectAddress from "./pageComponents/SelectAddress";
+import SelectTrips from "./pageComponents/SelectTrips";
+import AdvanceCollection from "./pageComponents/AdvanceCollection";
+import SelectSlumName from './pageComponents/SelectSlumName'
+import CheckSlum from './pageComponents/CheckSlum'
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -28,4 +33,9 @@ export const fsmComponents = {
   SelectChannel: SelectChannel,
   SelectTankSize,
   FSMNewApplicationCitizen: NewApplicationCitizen,
+  SelectAddress,
+  SelectTrips,
+  AdvanceCollection,
+  SelectSlumName,
+  CheckSlum
 };

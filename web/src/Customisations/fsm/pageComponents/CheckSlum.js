@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 
+const Digit = window?.Digit;
 const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -18,7 +19,7 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   }
 
   useEffect(() => {
-    if (formData?.address?.propertyLocation === "FROM_GRAM_PANCHAYAT") onSkip();
+    if (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT") onSkip();
   }, [formData]);
   return (
     <React.Fragment>

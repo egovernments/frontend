@@ -15,7 +15,6 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
   const [disable, setDisable] = useState(true);
   const [images, setImages] = useState(formData?.pitDetail?.images || null);
   const [size, setSize] = useState();
-  debugger;
   useEffect(() => {
     if (!formData?.pitType && userType !== "employee") {
       onSelect(config.key, {}, true);

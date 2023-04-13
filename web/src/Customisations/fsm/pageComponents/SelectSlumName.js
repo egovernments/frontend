@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { CardLabel, LabelFieldPair, Dropdown, FormStep, Loader } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 
+const Digit = window?.Digit;
+
 const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -12,7 +14,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   const [slumMenu, setSlumMenu] = useState();
 
   useEffect(() => {
-    if (userType !== "employee" && formData?.address?.slumArea?.code === false) onSelect(config.key, { slumData: null, slum: null }, true);
+    if (userType !== "employee" && formData?.address?.slumArea?.code !== true) onSelect(config.key, { slumData: null, slum: null }, true);
   }, [formData?.address?.slumArea]);
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   if (slumDataLoading) return <Loader />;
 
   return userType === "employee" ? (
-    formData?.address?.propertyLocation !== "FROM_GRAM_PANCHAYAT" && (
+    formData?.address?.propertyLocation?.code !== "FROM_GRAM_PANCHAYAT" && (
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">{t("ES_NEW_APPLICATION_SLUM_NAME")}</CardLabel>
         <Dropdown t={t} option={slumMenu} className="form-field" optionKey="i18nKey" id="slum" selected={slum} select={selectSlum} />
