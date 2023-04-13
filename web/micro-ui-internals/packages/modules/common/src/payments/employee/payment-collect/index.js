@@ -86,7 +86,7 @@ export const CollectPayment = (props) => {
       applicationData?.address?.additionalDetails?.boundaryType === "GP" ||
       applicationData?.address?.additionalDetails?.boundaryType === "Village"
     ) {
-      bill.totalAmount = Number(applicationData?.additionalDetails?.tripAmount) * applicationData?.noOfTrips - applicationData?.advanceAmount;
+      bill.totalAmount = Number(applicationData?.additionalDetails?.tripAmount) * applicationData?.noOfTrips;
     } else {
       bill.totalAmount = Math.round(bill.totalAmount);
     }

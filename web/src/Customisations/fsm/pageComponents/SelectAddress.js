@@ -64,7 +64,11 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   );
   const isUrcEnable =
     urcConfig && urcConfig.length > 0 && urcConfig[0].URCEnable;
-  const [selectLocation, setSelectLocation] = useState(inputs[0]);
+  const [selectLocation, setSelectLocation] = useState(() =>
+    Digit.SessionStorage.get("locationType")
+      ? Digit.SessionStorage.get("locationType")
+      : inputs[0]
+  );
   const [localities, setLocalities] = useState();
   const [selectedLocality, setSelectedLocality] = useState();
   const [selectedLocation, setSelectedLocation] = useState();
