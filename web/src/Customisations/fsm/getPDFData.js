@@ -53,11 +53,8 @@ const getAdvanceAmount = (advanceAmount) => {
 
 const getPDFData = (application, tenantInfo, t) => {
   const { address, additionalDetails } = application;
-
   const amountPerTrip =
-    application?.amountPerTrip ||
-    additionalDetails?.tripAmount ||
-    JSON.parse(address?.additionalDetails)?.tripAmount;
+    application?.amountPerTrip || additionalDetails?.tripAmount || "N/A";
   const totalAmount =
     application?.totalAmount || amountPerTrip * application?.noOfTrips;
   const advanceAmountDue = application?.advanceAmount;

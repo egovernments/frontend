@@ -19,9 +19,13 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
   const [selectedLocality, setSelectedLocality] = useState();
   const [localities, setLocalities] = useState();
   const [gramPanchayats, setGramPanchayats] = useState();
-  const [selectedGp, setSelectedGp] = useState();
+  const [selectedGp, setSelectedGp] = useState(() =>
+    formData?.address?.additionalDetails?.gramPanchayat ? formData?.address?.additionalDetails?.gramPanchayat : {}
+  );
   const [villages, setVillages] = useState([]);
-  const [selectedVillage, setSelectedVillage] = useState();
+  const [selectedVillage, setSelectedVillage] = useState(() =>
+    formData?.address?.additionalDetails?.village ? formData?.address?.additionalDetails?.village : {}
+  );
   const [newVillage, setNewVillage] = useState();
 
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || Digit.SessionStorage.get("fsm.file.address.city") || null);
@@ -68,7 +72,10 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       if (filteredLocalityList.length === 1) {
         setSelectedLocality(filteredLocalityList[0]);
         if (userType === "employee") {
-          onSelect(config.key, { ...formData[config.key], locality: filteredLocalityList[0] });
+          onSelect(config.key, {
+            ...formData[config.key],
+            locality: filteredLocalityList[0],
+          });
         }
       }
     }
@@ -79,8 +86,22 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       if (fetchedGramPanchayats && fetchedGramPanchayats.length > 0) {
         setGramPanchayats(fetchedGramPanchayats);
       }
+      if (formData?.address?.additionalDetails?.gramPanchayat.code) {
+        const filteredGramPanchayat = fetchedGramPanchayats.filter(
+          (obj) => obj.code === formData?.address?.additionalDetails?.gramPanchayat?.code
+        )[0];
+        setSelectedGp(filteredGramPanchayat);
+        var villageUnderGp = filteredGramPanchayat?.children.filter((obj) => obj.code === formData?.address?.additionalDetails?.village?.code);
+        if (villageUnderGp.length > 0) {
+          villageUnderGp[0].i18nkey = tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + villageUnderGp[0].code;
+          setSelectedVillage(villageUnderGp[0]);
+          setVillages(villageUnderGp);
+        } else {
+          setNewVillage(formData?.address?.additionalDetails?.village);
+        }
+      }
     }
-  }, [fetchedGramPanchayats]);
+  }, [fetchedGramPanchayats, formData]);
   if (userType !== "employee" && propertyLocation?.code === "FROM_GRAM_PANCHAYAT") {
     config.texts.cardText = "CS_FILE_APPLICATION_PROPERTY_LOCATION_GRAM_PANCHAYAT_TEXT";
   }
@@ -97,7 +118,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
     const filteredVillages = fetchedGramPanchayats.filter((items) => items.code === value.code)[0].children;
     const localitiesWithLocalizationKeys = filteredVillages.map((obj) => ({
       ...obj,
-      i18nkey: tenantId.replace(".", "_").toUpperCase() + "_" + obj.code,
+      i18nkey: tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + obj.code,
     }));
     if (localitiesWithLocalizationKeys.length > 0) {
       setVillages(localitiesWithLocalizationKeys);
@@ -123,7 +144,10 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
 
   function onSubmit() {
     if (propertyLocation?.code === "FROM_GRAM_PANCHAYAT") {
-      onSelect(config.key, { gramPanchayat: selectedGp, village: selectedVillage ? selectedVillage : newVillage });
+      onSelect(config.key, {
+        gramPanchayat: selectedGp,
+        village: selectedVillage ? selectedVillage : newVillage,
+      });
     } else {
       onSelect(config.key, { locality: selectedLocality });
     }
@@ -252,9 +276,14 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
             {villages.length === 0 && (
               <LabelFieldPair>
                 <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
-                <div className="field">
-                  <TextInput id="village" key="village" value={newVillage} onChange={(e) => onChangeVillage(e.target.value)} />
-                </div>
+                <TextInput
+                  style={{ width: "86%" }}
+                  type="text"
+                  id="village"
+                  key="village"
+                  value={newVillage}
+                  onChange={(e) => onChangeVillage(e.target.value)}
+                />
               </LabelFieldPair>
             )}
           </div>

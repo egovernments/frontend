@@ -67,11 +67,12 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const [selectLocation, setSelectLocation] = useState(() =>
     Digit.SessionStorage.get("locationType")
       ? Digit.SessionStorage.get("locationType")
+      : formData?.address?.propertyLocation
+      ? formData?.address?.propertyLocation
       : inputs[0]
   );
   const [localities, setLocalities] = useState();
   const [selectedLocality, setSelectedLocality] = useState();
-  const [selectedLocation, setSelectedLocation] = useState();
 
   useEffect(() => {
     if (cities) {
