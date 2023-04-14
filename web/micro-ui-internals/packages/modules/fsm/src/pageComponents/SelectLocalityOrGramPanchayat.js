@@ -79,7 +79,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
         }
       }
     }
-  }, [selectedCity, fetchedLocalities, formData]);
+  }, [selectedCity, fetchedLocalities]);
 
   useEffect(() => {
     if (fetchedGramPanchayats) {
@@ -101,7 +101,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
         }
       }
     }
-  }, [fetchedGramPanchayats, formData]);
+  }, [fetchedGramPanchayats, formData?.address?.additionalDetails?.gramPanchayat.code]);
   if (userType !== "employee" && propertyLocation?.code === "FROM_GRAM_PANCHAYAT") {
     config.texts.cardText = "CS_FILE_APPLICATION_PROPERTY_LOCATION_GRAM_PANCHAYAT_TEXT";
   }
