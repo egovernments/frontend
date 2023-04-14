@@ -167,9 +167,9 @@ const Response = ({ data, onSuccess }) => {
               : "",
             additionalDetails: {
               totalAmount: amount,
-              tripAmount: amountPerTrip,
+              tripAmount: JSON.stringify(amountPerTrip),
             },
-            advanceAmount,
+            advanceAmount: JSON.stringify(advanceAmount),
           },
           workflow: null,
         };
