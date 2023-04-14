@@ -169,7 +169,10 @@ const Response = ({ data, onSuccess }) => {
               totalAmount: amount,
               tripAmount: JSON.stringify(amountPerTrip),
             },
-            advanceAmount: JSON.stringify(advanceAmount),
+            advanceAmount:
+              typeof advanceAmount === "number"
+                ? JSON.stringify(advanceAmount)
+                : advanceAmount,
           },
           workflow: null,
         };
