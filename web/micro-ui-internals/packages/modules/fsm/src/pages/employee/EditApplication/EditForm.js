@@ -133,7 +133,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       source: applicationChannel.code,
       additionalDetails: {
         ...applicationData.additionalDetails,
-        tripAmount: amount,
+        tripAmount: JSON.stringify(amount),
       },
       propertyUsage,
       vehicleType: data.tripData.vehicleType.type,
@@ -177,7 +177,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
           },
         },
       },
-      advanceAmount,
+      advanceAmount: JSON.stringify(advanceAmount),
     };
 
     delete formData["responseInfo"];
