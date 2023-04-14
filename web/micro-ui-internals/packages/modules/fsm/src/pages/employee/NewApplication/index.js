@@ -119,7 +119,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         sanitationtype: sanitationtype,
         source: applicationChannel.code,
         additionalDetails: {
-          tripAmount: amount,
+          tripAmount: JSON.stringify(amount),
         },
         propertyUsage: data?.subtype,
         vehicleCapacity: data?.tripData?.vehicleType?.capacity,
@@ -158,7 +158,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         noOfTrips,
         paymentPreference,
-        advanceAmount,
+        advanceAmount: JSON.stringify(advanceAmount),
       },
       workflow: null,
     };
