@@ -51,6 +51,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     pitType: sanitationMenu.filter((type) => type.code === applicationData.sanitationtype)[0],
     pitDetail: applicationData.pitDetail,
     paymentPreference: applicationData.paymentPreference,
+    advanceAmount: applicationData.advanceAmount,
   };
 
   if (
@@ -177,7 +178,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
           },
         },
       },
-      advanceAmount: JSON.stringify(advanceAmount),
+      advanceAmount: typeof advanceAmount === "number" ? JSON.stringify(advanceAmount) : advanceAmount,
     };
 
     delete formData["responseInfo"];

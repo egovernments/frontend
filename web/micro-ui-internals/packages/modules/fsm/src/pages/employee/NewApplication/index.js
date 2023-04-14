@@ -158,7 +158,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         noOfTrips,
         paymentPreference,
-        advanceAmount: JSON.stringify(advanceAmount),
+        advanceAmount: typeof advanceAmount === "number" ? JSON.stringify(advanceAmount) : advanceAmount,
       },
       workflow: null,
     };
