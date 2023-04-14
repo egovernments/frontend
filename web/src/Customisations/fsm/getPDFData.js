@@ -136,7 +136,7 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
-            value: application?.address?.locality?.code
+            value: application?.address?.additionalDetails?.boundaryType === "Locality" && application?.address?.locality?.code
               ? t(
                   `${application?.tenantId
                     ?.toUpperCase()
@@ -147,7 +147,7 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_GRAM_PANCHAYAT"),
-            value: application?.address?.additionalDetails?.gramPanchayat?.code
+            value: application?.address?.additionalDetails?.boundaryType === "Village" && application?.address?.additionalDetails?.gramPanchayat?.code
               ? t(
                   `${application?.tenantId
                     ?.toUpperCase()
