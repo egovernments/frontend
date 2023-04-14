@@ -147,7 +147,7 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_GRAM_PANCHAYAT"),
-            value: application?.address?.additionalDetails?.boundaryType === "Village" && application?.address?.additionalDetails?.gramPanchayat?.code
+            value: (application?.address?.additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP") && application?.address?.additionalDetails?.gramPanchayat?.code
               ? t(
                   `${application?.tenantId
                     ?.toUpperCase()

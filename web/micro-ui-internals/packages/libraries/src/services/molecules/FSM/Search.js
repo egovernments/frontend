@@ -133,13 +133,13 @@ export const Search = {
               ? t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`)
               : "N/A",
           } : null,
-          additionalDetails?.boundaryType === "Village" ? {
+          additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP" ? {
             title: t("CS_GRAM_PANCHAYAT"),
             value: additionalDetails?.gramPanchayat?.code
               ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.gramPanchayat?.code}`)
               : "N/A",
           } : null,
-          additionalDetails?.boundaryType === "Village" ? {
+          additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP" ? {
             title: t("CS_VILLAGE_NAME"),
             value: additionalDetails?.village?.code
               ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.village?.code}`)
