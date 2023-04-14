@@ -49,9 +49,6 @@ export const SuccessfulPayment = (props) => {
     }
   }, [selectedAction]);
   let ACTIONS = ["GO_TO_HOME"];
-  if (FSM_EDITOR) {
-    ACTIONS = [...ACTIONS, "ASSIGN_TO_DSO"];
-  }
 
   const checkFSMResponse = businessService?.includes("FSM");
   const getMessage = () => t("ES_PAYMENT_COLLECTED");

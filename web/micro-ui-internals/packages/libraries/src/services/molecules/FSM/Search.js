@@ -127,24 +127,24 @@ export const Search = {
       {
         title: "ES_APPLICATION_DETAILS_LOCATION_DETAILS",
         values: [
-          {
+          additionalDetails?.boundaryType === "Locality" ? {
             title: "ES_APPLICATION_DETAILS_LOCATION_LOCALITY",
             value: response?.address?.locality?.code
               ? t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`)
               : "N/A",
-          },
-          {
+          } : null,
+          additionalDetails?.boundaryType === "Village" ? {
             title: t("CS_GRAM_PANCHAYAT"),
             value: additionalDetails?.gramPanchayat?.code
               ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.gramPanchayat?.code}`)
               : "N/A",
-          },
-          {
+          } : null,
+          additionalDetails?.boundaryType === "Village" ? {
             title: t("CS_VILLAGE_NAME"),
             value: additionalDetails?.village?.code
               ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.village?.code}`)
               : "N/A",
-          },
+          } : null,
           { title: "ES_APPLICATION_DETAILS_LOCATION_CITY", value: response?.address?.city },
           { title: "ES_APPLICATION_DETAILS_LOCATION_PINCODE", value: response?.address?.pincode },
           { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street },
