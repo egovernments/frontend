@@ -152,7 +152,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
             },
             village: {
               code: village?.code ? village?.code : "",
-              name: village?.name ? village?.name : village,
+              name: village?.name ? village?.name : "village",
             },
           },
         },

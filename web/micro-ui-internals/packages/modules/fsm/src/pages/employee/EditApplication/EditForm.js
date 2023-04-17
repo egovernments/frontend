@@ -184,7 +184,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
           },
           village: {
             code: village?.code ? village?.code : "",
-            name: village?.name ? village?.name : village,
+            name: village?.name ? village?.name : "",
           },
         },
       },
