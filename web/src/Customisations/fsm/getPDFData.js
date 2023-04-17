@@ -38,7 +38,7 @@ const getApplicationVehicleCapacity = (vehicleCapacity) => {
 
 const getAmountPerTrip = (amountPerTrip) => {
   if (!amountPerTrip) return "N/A";
-  return amountPerTrip !== 0 || amountPerTrip !== null
+  return amountPerTrip !== 0 || amountPerTrip !== "null"
     ? `₹ ${amountPerTrip}`
     : "N/A";
 };
