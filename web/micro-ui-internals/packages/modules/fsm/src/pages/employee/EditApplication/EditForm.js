@@ -126,7 +126,13 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const localityName = data?.address?.locality?.name;
     const propertyUsage = data?.subtype;
     const { height, length, width, diameter } = pitDimension;
-    const advanceAmount = amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
+    const advanceAmount =
+      amount === 0
+        ? null
+        : data?.advancepaymentPreference?.advanceAmount
+        ? data?.advancepaymentPreference?.advanceAmount
+        : applicationData.advanceAmount;
+    const totalAmount = amount * noOfTrips;
     const gramPanchayat = data?.address?.additionalDetails?.gramPanchayat;
     const village = data?.address?.additionalDetails?.village;
     const propertyLocation = data?.address?.propertyLocation?.code;
@@ -138,6 +144,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       additionalDetails: {
         ...applicationData.additionalDetails,
         tripAmount: typeof amount === "number" ? JSON.stringify(amount) : amount,
+        totalAmount: typeof totalAmount === "number" ? JSON.stringify(totalAmount) : totalAmount,
       },
       propertyUsage,
       vehicleType: data.tripData.vehicleType.type,
