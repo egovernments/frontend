@@ -127,24 +127,30 @@ export const Search = {
       {
         title: "ES_APPLICATION_DETAILS_LOCATION_DETAILS",
         values: [
-          additionalDetails?.boundaryType === "Locality" ? {
-            title: "ES_APPLICATION_DETAILS_LOCATION_LOCALITY",
-            value: response?.address?.locality?.code
-              ? t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`)
-              : "N/A",
-          } : null,
-          additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP" ? {
-            title: t("CS_GRAM_PANCHAYAT"),
-            value: additionalDetails?.gramPanchayat?.code
-              ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.gramPanchayat?.code}`)
-              : "N/A",
-          } : null,
-          additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP" ? {
-            title: t("CS_VILLAGE_NAME"),
-            value: additionalDetails?.village?.code
-              ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.village?.code}`)
-              : "N/A",
-          } : null,
+          additionalDetails?.boundaryType === "Locality"
+            ? {
+                title: "ES_APPLICATION_DETAILS_LOCATION_LOCALITY",
+                value: response?.address?.locality?.code
+                  ? t(`${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`)
+                  : "N/A",
+              }
+            : null,
+          additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP"
+            ? {
+                title: t("CS_GRAM_PANCHAYAT"),
+                value: additionalDetails?.gramPanchayat?.code
+                  ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.gramPanchayat?.code}`)
+                  : "N/A",
+              }
+            : null,
+          additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP"
+            ? {
+                title: t("CS_VILLAGE_NAME"),
+                value: additionalDetails?.village?.code
+                  ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.village?.code}`)
+                  : "N/A",
+              }
+            : null,
           { title: "ES_APPLICATION_DETAILS_LOCATION_CITY", value: response?.address?.city },
           { title: "ES_APPLICATION_DETAILS_LOCATION_PINCODE", value: response?.address?.pincode },
           { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street },
@@ -192,11 +198,16 @@ export const Search = {
           { title: "ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS", value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: "ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP",
-            value: amountPerTrip === "N/A" ? "N/A" : "₹ " + amountPerTrip,
+            value: amountPerTrip === "N/A" || amountPerTrip === null ? "N/A" : "₹ " + amountPerTrip,
           },
           {
             title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
-            value: totalAmount === "N/A" ? (amountPerTrip === "N/A" ? "N/A" : "₹ " + response?.noOfTrips * amountPerTrip) : "₹ " + totalAmount,
+            value:
+              totalAmount === "N/A"
+                ? amountPerTrip === "N/A" || amountPerTrip === null
+                  ? "N/A"
+                  : "₹ " + response?.noOfTrips * amountPerTrip
+                : "₹ " + totalAmount,
           },
           { title: "ES_PAYMENT_DETAILS_ADV_AMOUNT", value: response?.advanceAmount === null ? "N/A" : "₹ " + response?.advanceAmount },
         ],

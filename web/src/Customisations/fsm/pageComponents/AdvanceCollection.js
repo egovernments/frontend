@@ -167,7 +167,8 @@ const AdvanceCollection = ({
         setAdvanceAmounts(advanceBalanceAmount);
         if (
           !url.includes("modify") ||
-          (url.includes("modify") &&
+          url.includes("modify") ||
+          (formData?.advancepaymentPreference?.advanceAmount > 0 &&
             advanceBalanceAmount >
               formData?.advancepaymentPreference?.advanceAmount)
         ) {
