@@ -97,7 +97,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
           setSelectedVillage(villageUnderGp[0]);
           setVillages(villageUnderGp);
         } else {
-          setNewVillage(formData?.address?.additionalDetails?.village);
+          setNewVillage(typeof formData?.address?.additionalDetails?.village === "string" ? formData?.address?.additionalDetails?.village : "");
         }
       }
     }

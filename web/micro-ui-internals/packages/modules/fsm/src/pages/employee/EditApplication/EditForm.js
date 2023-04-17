@@ -30,8 +30,11 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     },
     tripData: {
       noOfTrips: applicationData.noOfTrips,
-      amountPerTrip: applicationData.additionalDetails.tripAmount,
-      amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
+      amountPerTrip: applicationData.additionalDetails.tripAmount !== "null" ? applicationData.additionalDetails.tripAmount : "",
+      amount:
+        applicationData.additionalDetails.tripAmount !== "null"
+          ? applicationData.noOfTrips * applicationData.additionalDetails.tripAmount
+          : undefined,
       vehicleType: { capacity: applicationData?.vehicleCapacity },
       vehicleCapacity: applicationData?.vehicleCapacity,
     },
@@ -134,7 +137,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       source: applicationChannel.code,
       additionalDetails: {
         ...applicationData.additionalDetails,
-        tripAmount: JSON.stringify(amount),
+        tripAmount: typeof amount === "number" ? JSON.stringify(amount) : amount,
       },
       propertyUsage,
       vehicleType: data.tripData.vehicleType.type,

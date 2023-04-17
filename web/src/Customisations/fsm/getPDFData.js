@@ -38,7 +38,9 @@ const getApplicationVehicleCapacity = (vehicleCapacity) => {
 
 const getAmountPerTrip = (amountPerTrip) => {
   if (!amountPerTrip) return "N/A";
-  return amountPerTrip !== 0 ? `₹ ${amountPerTrip}` : "N/A";
+  return amountPerTrip !== 0 || amountPerTrip !== null
+    ? `₹ ${amountPerTrip}`
+    : "N/A";
 };
 
 const getTotalAmount = (totalAmount) => {
@@ -136,27 +138,36 @@ const getPDFData = (application, tenantInfo, t) => {
           },
           {
             title: t("CS_APPLICATION_DETAILS_MOHALLA"),
-            value: application?.address?.additionalDetails?.boundaryType === "Locality" && application?.address?.locality?.code
-              ? t(
-                  `${application?.tenantId
-                    ?.toUpperCase()
-                    .split(".")
-                    .join("_")}_REVENUE_${application?.address?.locality?.code}`
-                )
-              : "N/A",
+            value:
+              application?.address?.additionalDetails?.boundaryType ===
+                "Locality" && application?.address?.locality?.code
+                ? t(
+                    `${application?.tenantId
+                      ?.toUpperCase()
+                      .split(".")
+                      .join("_")}_REVENUE_${
+                      application?.address?.locality?.code
+                    }`
+                  )
+                : "N/A",
           },
           {
             title: t("CS_GRAM_PANCHAYAT"),
-            value: (application?.address?.additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP") && application?.address?.additionalDetails?.gramPanchayat?.code
-              ? t(
-                  `${application?.tenantId
-                    ?.toUpperCase()
-                    .split(".")
-                    .join("_")}_REVENUE_${
-                    application?.address?.additionalDetails?.gramPanchayat?.code
-                  }`
-                )
-              : "N/A",
+            value:
+              (application?.address?.additionalDetails?.boundaryType ===
+                "Village" ||
+                additionalDetails?.boundaryType === "GP") &&
+              application?.address?.additionalDetails?.gramPanchayat?.code
+                ? t(
+                    `${application?.tenantId
+                      ?.toUpperCase()
+                      .split(".")
+                      .join("_")}_REVENUE_${
+                      application?.address?.additionalDetails?.gramPanchayat
+                        ?.code
+                    }`
+                  )
+                : "N/A",
           },
           {
             title: t("CS_VILLAGE_NAME"),

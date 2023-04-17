@@ -119,7 +119,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         sanitationtype: sanitationtype,
         source: applicationChannel.code,
         additionalDetails: {
-          tripAmount: JSON.stringify(amount),
+          tripAmount: typeof amount === "number" ? JSON.stringify(amount) : amount,
         },
         propertyUsage: data?.subtype,
         vehicleCapacity: data?.tripData?.vehicleType?.capacity,
