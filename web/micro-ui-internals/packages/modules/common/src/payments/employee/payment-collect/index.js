@@ -83,8 +83,9 @@ export const CollectPayment = (props) => {
 
   const onSubmit = async (data) => {
     if (
-      applicationData?.address?.additionalDetails?.boundaryType === "GP" ||
-      (applicationData?.address?.additionalDetails?.boundaryType === "Village" && applicationData?.applicationStatus !== "DSO_INPROGRESS")
+      (applicationData?.address?.additionalDetails?.boundaryType === "GP" ||
+        applicationData?.address?.additionalDetails?.boundaryType === "Village") &&
+      applicationData?.applicationStatus !== "DSO_INPROGRESS"
     ) {
       bill.totalAmount = Number(applicationData?.additionalDetails?.tripAmount) * applicationData?.noOfTrips;
     } else {
