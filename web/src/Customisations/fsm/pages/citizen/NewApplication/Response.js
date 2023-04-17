@@ -125,7 +125,7 @@ const Response = ({ data, onSuccess }) => {
                 },
                 village: {
                   code: village?.code ? village?.code : "",
-                  name: village?.name ? village?.name : village,
+                  name: village?.name ? village?.name : "",
                 },
               },
               street: street?.trim(),
