@@ -198,13 +198,13 @@ export const Search = {
           { title: "ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS", value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: "ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP",
-            value: amountPerTrip === "N/A" || amountPerTrip === null ? "N/A" : "₹ " + amountPerTrip,
+            value: amountPerTrip === "N/A" || amountPerTrip === "null" ? "N/A" : "₹ " + amountPerTrip,
           },
           {
             title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
             value:
               totalAmount === "N/A"
-                ? amountPerTrip === "N/A" || amountPerTrip === null
+                ? amountPerTrip === "N/A" || amountPerTrip === "null"
                   ? "N/A"
                   : "₹ " + response?.noOfTrips * amountPerTrip
                 : "₹ " + totalAmount,
