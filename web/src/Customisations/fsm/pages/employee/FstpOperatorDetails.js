@@ -344,7 +344,7 @@ const FstpOperatorDetails = () => {
       }, 2000);
       return;
     }
-    if (selectedGp === null) {
+    if (selectLocation.code === "FROM_GRAM_PANCHAYAT" && selectedGp === null) {
       setShowToast({ key: "error", action: `ES_FSTP_SELECT_GRAMPANCHAYAT` });
       setTimeout(() => {
         closeToast();
@@ -778,7 +778,13 @@ const FstpOperatorDetails = () => {
                   label={`${t("CS_VILLAGE_NAME")}`}
                   text={
                     tripDetails && tripDetails.length > 0 ? (
-                      tripDetails[0]?.address?.additionalDetails?.village?.name
+                      tripDetails[0]?.address?.additionalDetails?.village
+                        ?.name ? (
+                        tripDetails[0]?.address?.additionalDetails?.village
+                          ?.name
+                      ) : (
+                        "N/A"
+                      )
                     ) : (
                       <Dropdown
                         className="form-field"
