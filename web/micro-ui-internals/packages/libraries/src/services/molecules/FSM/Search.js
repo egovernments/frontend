@@ -203,7 +203,7 @@ export const Search = {
           {
             title: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
             value:
-              totalAmount === "N/A"
+              totalAmount === "N/A" || totalAmount === NaN
                 ? amountPerTrip === "N/A" || amountPerTrip === "null"
                   ? "N/A"
                   : "₹ " + response?.noOfTrips * amountPerTrip
