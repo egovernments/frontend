@@ -22,21 +22,24 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
   }, []);
 
   useEffect(() => {
-    const pitDetailValues = size
-      ? Object.values(size).filter((value) => value > 0)
-      : null;
-    if (
-      isConventionalSpecticTank(tankDimension) &&
-      pitDetailValues?.length >= 3
-    ) {
-      setDisable(false);
-    } else if (
-      !isConventionalSpecticTank(tankDimension) &&
-      pitDetailValues?.length >= 2
-    ) {
-      setDisable(false);
+    if (isConventionalSpecticTank(tankDimension)) {
+      setSize({
+        ...formData?.pitDetail,
+        diameter: 0,
+        ...(formData?.pitDetail?.length === 0 && { height: 0 }),
+      });
     } else {
-      setDisable(true);
+      setSize({
+        ...formData?.pitDetail,
+        length: 0,
+        width: 0,
+        ...(formData?.pitDetail?.diameter === 0 && { height: 0 }),
+      });
+    }
+  }, [tankDimension]);
+  useEffect(() => {
+    if (size && size?.length) {
+      setDisable(false);
     }
   }, [size]);
   const handleChange = (event) => {

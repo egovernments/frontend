@@ -117,9 +117,11 @@ const CheckPage = ({ onSubmit, value }) => {
             label={t("CS_CHECK_ADDRESS")}
             text={`${
               address?.doorNo?.trim() ? `${address?.doorNo?.trim()}, ` : ""
-            } ${
-              address?.street?.trim() ? `${address?.street?.trim()}, ` : ""
-            }${t(address?.locality?.i18nkey)}, ${t(address?.city.code)}`}
+            } ${address?.street?.trim() ? `${address?.street?.trim()}, ` : ""}${
+              address?.locality
+                ? t(address?.locality?.i18nkey)
+                : address?.gramPanchayat?.i18nkey
+            }, ${t(address?.city.code)}`}
             actionButton={
               <ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/pincode" />
             }
