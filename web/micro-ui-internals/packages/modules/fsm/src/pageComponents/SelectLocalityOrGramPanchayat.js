@@ -7,6 +7,9 @@ import Timeline from "../components/TLTimelineInFSM";
 const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData, formState }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
+  if (userType !== "employee") {
+    tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  }
   const { data: urcConfig } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "UrcConfig");
   const isUrcEnable = urcConfig && urcConfig.length > 0 && urcConfig[0].URCEnable;
   const { pincode, city, propertyLocation } = formData?.address || "";

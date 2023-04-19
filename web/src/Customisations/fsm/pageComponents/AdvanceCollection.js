@@ -166,6 +166,13 @@ const AdvanceCollection = ({
         setTotalAmount(totaltripAmount);
         setAdvanceAmounts(advanceBalanceAmount);
         if (
+          formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" &&
+          url.includes("modify")
+        ) {
+          setValue({
+            advanceAmount: 0,
+          });
+        } else if (
           !url.includes("modify") ||
           url.includes("modify") ||
           (formData?.advancepaymentPreference?.advanceAmount > 0 &&
@@ -235,18 +242,19 @@ const AdvanceCollection = ({
                       {t("FSM_ADVANCE_AMOUNT_MAX")}
                     </CardLabelError>
                   )}
-                  {currentValue < AdvanceAmount && (
-                    <CardLabelError
-                      style={{
-                        width: "100%",
-                        marginTop: "-15px",
-                        fontSize: "14px",
-                        marginBottom: "0px",
-                      }}
-                    >
-                      {t("FSM_ADVANCE_AMOUNT_MIN")}
-                    </CardLabelError>
-                  )}
+                  {!url.includes("modify-application") &&
+                    currentValue < AdvanceAmount && (
+                      <CardLabelError
+                        style={{
+                          width: "100%",
+                          marginTop: "-15px",
+                          fontSize: "14px",
+                          marginBottom: "0px",
+                        }}
+                      >
+                        {t("FSM_ADVANCE_AMOUNT_MIN")}
+                      </CardLabelError>
+                    )}
                   {url.includes("modify-application") &&
                     Number(AdvanceAmount) === 0 &&
                     applicationData?.advanceAmount > 0 &&
