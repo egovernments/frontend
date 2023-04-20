@@ -176,10 +176,8 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const getTotal = () => (bill?.totalAmount ? bill?.totalAmount : 0);
   const getTotalFSM = () => (application?.totalAmount ? application?.totalAmount : 0);
   const getAdvanceAmount = () => (applicationData?.advanceAmount ? applicationData?.advanceAmount : 0);
-  const dueAmountTobePaid = () =>
-    application?.totalAmount ? application?.totalAmount - applicationData?.advanceAmount : bill?.totalAmount ? bill?.totalAmount : 0;
+  const dueAmountTobePaid = () => bill?.totalAmount;
   const getAmountPerTrip = () => (application?.additionalDetails?.tripAmount ? application?.additionalDetails?.tripAmount : 0);
-
   const arrears =
     bill?.billDetails
       ?.sort((a, b) => b.fromPeriod - a.fromPeriod)
