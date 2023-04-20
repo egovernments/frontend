@@ -449,7 +449,7 @@ const setSearchResponse = async (
       );
     // }
     // else{
-      alert("NOC expired on 01-01-2022, max allowed time to apply for renewal is 90 days after expiry");
+      // alert("NOC expired on 01-01-2023, max allowed time to apply for renewal is 90 days after expiry");
    // }
     }
     else{
