@@ -125,6 +125,18 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
         t={t}
       >
         <KeyNote keyValue={t("ADV_TOTAL_AMOUNT") + " (₹)"} note={formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" ? "N/A" : max} />
+        {formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && (
+          <CardLabelError
+            style={{
+              width: "100%",
+              marginTop: "-15px",
+              fontSize: "14px",
+              marginBottom: "0px",
+            }}
+          >
+            {t("FSM_TOTAL_AMOUNT_NOTE")}
+          </CardLabelError>
+        )}
         <KeyNote keyValue={t("FSM_ADV_MIN_PAY") + " (₹)"} note={min} />
         {inputs?.map((input, index) => {
           return (
