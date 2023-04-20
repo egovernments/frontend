@@ -85,7 +85,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
   useEffect(() => {
     if (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT")
       onSkip();
-  }, [formData]);
+  }, [formData?.address?.propertyLocation?.code]);
 
   function selectSlum(value) {
     setSlum(value);
