@@ -14,11 +14,18 @@ import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 var Digit = window.Digit || {};
 
-const GetMessage = (type, action, isSuccess, isEmployee, t) => {
+const GetMessage = (type, action, isSuccess, isEmployee, t, data) => {
+  const zeroPricing =
+    data?.additionalDetails?.tripAmount === 0 ||
+    data?.additionalDetails?.tripAmount === null ||
+    false;
+  const advanceZero = data?.advanceAmount === 0 || false;
   return t(
     `${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${
       action ? action : "CREATE"
-    }_${type}${isSuccess ? "" : "_ERROR"}`
+    }_${type}${isSuccess ? "" : "_ERROR"}${
+      action ? "" : advanceZero ? "_POST_PAY" : zeroPricing ? "_ZERO_PAY" : ""
+    }`
   );
 };
 
@@ -30,12 +37,14 @@ const GetLabel = (action, isSuccess, isEmployee, t) => {
   return GetMessage("LABEL", action, isSuccess, isEmployee, t);
 };
 
-const DisplayText = (action, isSuccess, isEmployee, t) => {
-  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t);
+const DisplayText = (action, isSuccess, isEmployee, t, data) => {
+  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t, data);
 };
 
 const BannerPicker = (props) => {
-  let actionMessage = props?.action ? props.action : "CREATE";
+  let actionMessage = props?.action
+    ? props.action
+    : props.data?.fsm?.[0].applicationStatus;
   let labelMessage = GetLabel(
     props.data?.fsm?.[0].applicationStatus || props.action,
     props.isSuccess,
