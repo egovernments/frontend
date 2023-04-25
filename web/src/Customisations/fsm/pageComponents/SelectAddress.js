@@ -136,10 +136,23 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     setSelectLocation(value);
     Digit.SessionStorage.set("locationType", value);
     if (userType === "employee") {
-      onSelect(config.key, {
-        ...formData[config.key],
-        propertyLocation: value,
-      });
+      if (value.code === "FROM_GRAM_PANCHAYAT") {
+        onSelect("tripData", {
+          ...formData["tripData"],
+          amountPerTrip: "",
+          amount: "",
+        });
+        onSelect(config.key, {
+          ...formData[config.key],
+          propertyLocation: value,
+          pincode: null,
+        });
+      } else {
+        onSelect(config.key, {
+          ...formData[config.key],
+          propertyLocation: value,
+        });
+      }
     }
   }
 
