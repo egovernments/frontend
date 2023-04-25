@@ -58,11 +58,13 @@ const VendorDetails = (props) => {
   const [drivers, setDrivers] = useState([]);
   const [selectedOption, setSelectedOption] = useState({});
 
-  const { data: dsoData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError, refetch: refetchDso } = Digit.Hooks.fsm.useDsoSearch(
-    tenantId,
-    { ids: dsoId },
-    { staleTime: Infinity }
-  );
+  const {
+    data: dsoData,
+    isLoading: isLoading,
+    isSuccess: isDsoSuccess,
+    error: dsoError,
+    refetch: refetchDso,
+  } = Digit.Hooks.fsm.useDsoSearch(tenantId, { ids: dsoId }, { staleTime: Infinity });
 
   const {
     data: vehicleData,
@@ -136,7 +138,7 @@ const VendorDetails = (props) => {
 
   const closeModal = () => {
     setSelectedAction(null);
-    setSelectedOption({})
+    setSelectedOption({});
     setShowModal(false);
   };
 
@@ -299,7 +301,7 @@ const VendorDetails = (props) => {
               {dsoData?.[0]?.employeeResponse?.map((detail, index) => (
                 <React.Fragment key={index}>
                   {index > 0 && <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>}
-                  <div style={!isMobile ? { marginLeft: "-15px" } : {}}>
+                  <div style={!isMobile ? {} : {}}>
                     <StatusTable>
                       {detail?.values?.map((value, index) => {
                         return (
@@ -310,6 +312,7 @@ const VendorDetails = (props) => {
                             last={index === detail?.values?.length - 1}
                             caption={value.caption}
                             className={`border-none ${!isMobile ? "vendor-details-row" : ""}`}
+                            style={{ marginleft: "15px" }}
                           />
                         );
                       })}
