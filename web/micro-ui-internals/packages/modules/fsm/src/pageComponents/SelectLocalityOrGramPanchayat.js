@@ -129,6 +129,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
     if (userType === "employee") {
       onSelect(config.key, { ...formData[config.key], gramPanchayat: value });
     }
+    Digit.SessionStorage.del("locationType");
   }
 
   function selectVillage(value) {
