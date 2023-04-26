@@ -1,13 +1,13 @@
 import { useQuery, useQueryClient } from "react-query";
 
-const useWorkflowDetails = ({ tenantId, id, moduleCode, role = "CITIZEN", serviceData = {}, getStaleData,  getTripData = false,config }) => {
+const useWorkflowDetails = ({ tenantId, id, moduleCode, role = "CITIZEN", serviceData = {}, getStaleData, getTripData = false, config }) => {
   const queryClient = useQueryClient();
 
   const staleDataConfig = { staleTime: Infinity };
 
   const { isLoading, error, isError, data } = useQuery(
     ["workFlowDetails", tenantId, id, moduleCode, role, config],
-    () => Digit.WorkflowService.getDetailsById({ tenantId, id, moduleCode, role, getTripData }),
+    () => Digit.WorkflowService.getDetailsById({ tenantId, id, moduleCode, role, getTripData, serviceData }),
     getStaleData ? { ...staleDataConfig, ...config } : config
   );
 
