@@ -86,11 +86,11 @@ export const Search = {
     const vehicleCapacity = _vehicle?.capacity;
     var amountPerTrip = "";
     var totalAmount = "";
+    const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
     if (additionalDetails?.boundaryType === "Village" || additionalDetails?.boundaryType === "GP") {
       amountPerTrip = response?.additionalDetails && response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount : "N/A";
       totalAmount = response?.additionalDetails?.tripAmount ? response?.additionalDetails?.tripAmount * response?.noOfTrips : "N/A";
     } else {
-      const demandDetails = await PaymentService.demandSearch(tenantId, applicationNos, "FSM.TRIP_CHARGES");
       amountPerTrip =
         response?.additionalDetails && response?.additionalDetails?.tripAmount
           ? response?.additionalDetails?.tripAmount
@@ -98,6 +98,9 @@ export const Search = {
       // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
       totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
     }
+    const isFullPaymentDone =
+      demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount === demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount;
+
     const employeeResponse = [
       {
         title: "ES_TITLE_APPLICATION_DETAILS",
@@ -238,6 +241,7 @@ export const Search = {
         applicationDetails: employeeResponse,
         additionalDetails: response?.additionalDetails,
         totalAmount: totalAmount,
+        isFullPaymentDone: isFullPaymentDone,
       };
 
     const citizenResp = employeeResponse.reduce((arr, curr) => {
