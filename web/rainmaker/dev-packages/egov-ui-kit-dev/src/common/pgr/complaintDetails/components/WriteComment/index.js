@@ -39,7 +39,7 @@ const WriteComment = ({ form, handleFieldChange, submitForm, userImage, currents
         {...fields.comment}
         hintText={<Label label="CS_COMMON_COMMENTS_PLACEHOLDER2" />}
         style={textFieldStyle}
-        onChange={(e, value) => handleFieldChange("comment", value)}
+        onChange={(e, value) => handleFieldChange("comment", value.replace(/[^\w\s]/gi,""))}
         className="write-complaint-chat-field"
         fullWidth={true}
         multiLine={true}
