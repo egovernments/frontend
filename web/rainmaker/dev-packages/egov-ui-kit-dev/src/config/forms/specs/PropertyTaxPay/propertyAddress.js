@@ -142,37 +142,37 @@ const formConfig = {
       // toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
-    YearcreationProperty: {
-      id: "YearcreationProperty",
-      type: "AutocompleteDropdown",
-      className: "pt-old-pid-text-field",
-      // iconRedirectionURL: getTenantId()=='pb.amritsar'? "https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=8b678d4d5020448499054bf346843ea9": getTenantId()=='pb.hoshiarpur'?"https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=9bc1b255320a49c590dd17d4d258e054": "https://gis.punjab.gov.in",
-      jsonPath: "Properties[0].additionalDetails.yearConstruction",
-      floatingLabelText: "Year of creation of Property",
-      hintText: "Select",
-      numcols: 6,
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    // YearcreationProperty: {
+    //   id: "YearcreationProperty",
+    //   type: "AutocompleteDropdown",
+    //   className: "pt-old-pid-text-field",
+    //   // iconRedirectionURL: getTenantId()=='pb.amritsar'? "https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=8b678d4d5020448499054bf346843ea9": getTenantId()=='pb.hoshiarpur'?"https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=9bc1b255320a49c590dd17d4d258e054": "https://gis.punjab.gov.in",
+    //   jsonPath: "Properties[0].additionalDetails.yearConstruction",
+    //   floatingLabelText: "Year of creation of Property",
+    //   hintText: "Select",
+    //   numcols: 6,
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 6
+    //   },
+    //   errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
+    //   errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
      
-      formName: "propertyAddress",
-      dropDownData: floorDropDownData,
-      updateDependentFields: ({ formKey, field, dispatch }) => {
-        if (field.value && field.value.length > 0) {
-          const mohalla = field.dropDownData.find((option) => {
-            return option.value === field.value;
-          });
-          dispatch(prepareFormData("Properties[0].additionalDetails.yearConstruction", mohalla.code));
-        }
-      },
-      // toolTip: true,
-      //pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
-      // toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
-      maxLength: 64,
-    },
+    //   formName: "propertyAddress",
+    //   dropDownData: floorDropDownData,
+    //   updateDependentFields: ({ formKey, field, dispatch }) => {
+    //     if (field.value && field.value.length > 0) {
+    //       const mohalla = field.dropDownData.find((option) => {
+    //         return option.value === field.value;
+    //       });
+    //       dispatch(prepareFormData("Properties[0].additionalDetails.yearConstruction", mohalla.code));
+    //     }
+    //   },
+    //   // toolTip: true,
+    //   //pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
+    //   // toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
+    //   maxLength: 64,
+    // },
   },
   afterInitForm: (action, store, dispatch) => {
     try {

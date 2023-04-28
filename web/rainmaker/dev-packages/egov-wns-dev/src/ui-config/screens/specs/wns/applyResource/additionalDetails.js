@@ -453,7 +453,8 @@ export const additionDetails = getCommonCard({
           style: {
             // display: "none"
             // width: 
-          }
+          },
+          disabled: true,
         },
         children: {
           multipleApplicantInfo: {
@@ -470,6 +471,7 @@ export const additionDetails = getCommonCard({
               sourceJsonPath: "applyScreen.roadCuttingInfo",
               prefixSourceJsonPath: "children.cardContent.children.roadDetails.children"
             },
+            disabled: true,
             type: "array"
           }
         }
