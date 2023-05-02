@@ -21,7 +21,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortParams, setSortParams] = useState([
-    { id: "createdTime", desc: false },
+    { id: "createdTime", desc: true },
   ]);
 
   const searchParamsKey = isInbox
