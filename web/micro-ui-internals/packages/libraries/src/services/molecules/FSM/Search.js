@@ -160,21 +160,6 @@ export const Search = {
           { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo },
           { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_LANDMARK_LABEL", value: response?.address?.landmark },
           { title: "CS_FILE_APPLICATION_PROPERTY_LOCATION_SLUM_LABEL", value: slumName },
-          {
-            title: "ES_APPLICATION_DETAILS_LOCATION_GEOLOCATION",
-            value:
-              response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
-                ? Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude)
-                : "N/A",
-            map: true,
-            child:
-              response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
-                ? {
-                    element: "img",
-                    src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
-                  }
-                : null,
-          },
         ],
       },
       {
