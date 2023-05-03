@@ -38,7 +38,7 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
     }
   }, [tankDimension]);
   useEffect(() => {
-    if (size && size?.length) {
+    if (size && (size?.length || size?.diameter)) {
       setDisable(false);
     }
   }, [size]);
