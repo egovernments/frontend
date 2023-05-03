@@ -60,7 +60,6 @@ const getPDFData = (application, tenantInfo, t) => {
   const totalAmount =
     application?.totalAmount || amountPerTrip * application?.noOfTrips;
   const advanceAmountDue = application?.advanceAmount;
-
   return {
     t: t,
     tenantId: tenantInfo?.code,
@@ -156,7 +155,8 @@ const getPDFData = (application, tenantInfo, t) => {
             value:
               (application?.address?.additionalDetails?.boundaryType ===
                 "Village" ||
-                additionalDetails?.boundaryType === "GP") &&
+                application?.address?.additionalDetails?.boundaryType ===
+                  "GP") &&
               application?.address?.additionalDetails?.gramPanchayat?.code
                 ? t(
                     `${application?.tenantId
