@@ -114,7 +114,7 @@ const FstpOperatorDetails = () => {
   const [selectLocation, setSelectLocation] = useState(inputs[0]);
   const [gramPanchayats, setGramPanchayats] = useState();
   const [selectedGp, setSelectedGp] = useState(null);
-  const [villages, setVillages] = useState();
+  const [villages, setVillages] = useState([]);
   const [selectedVillage, setSelectedVillage] = useState();
   const [newGramPanchayat, setNewGramPanchayat] = useState();
   const [newVillage, setNewVillage] = useState();
@@ -785,7 +785,7 @@ const FstpOperatorDetails = () => {
                       ) : (
                         "N/A"
                       )
-                    ) : (
+                    ) : villages.length > 0 ? (
                       <Dropdown
                         className="form-field"
                         isMandatory
@@ -795,6 +795,11 @@ const FstpOperatorDetails = () => {
                         optionKey="i18nkey"
                         style={{ width: "100%" }}
                         t={t}
+                      />
+                    ) : (
+                      <TextInput
+                        onChange={(e) => onChangeVillage(e.target.value)}
+                        value={newVillage}
                       />
                     )
                   }
