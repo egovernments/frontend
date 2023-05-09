@@ -98,8 +98,14 @@ export const Search = {
       // const totalAmount = response?.noOfTrips === 0 || amountPerTrip === "N/A" ? "N/A" : response?.noOfTrips * Number(amountPerTrip);
       totalAmount = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.taxAmount)?.reduce((a, b) => a + b) || "N/A";
     }
+    var balancePaid = demandDetails?.Demands[0]?.demandDetails?.map((detail) => detail?.collectionAmount)?.reduce((a, b) => a + b) || "N/A";
+    balancePaid = balancePaid - response?.advanceAmount;
     const isFullPaymentDone =
       demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount === demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount;
+    const isPaymentDone =
+      demandDetails?.Demands[0]?.demandDetails.length > 1
+        ? demandDetails?.Demands[0]?.demandDetails[1]?.collectionAmount > 0
+        : demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount > 0;
 
     const employeeResponse = [
       {
@@ -183,6 +189,11 @@ export const Search = {
           //   title: t("ES_NEW_APPLICATION_DISTANCE_FROM_ROAD"),
           //   value: response?.pitDetail?.distanceFromRoad,
           // },
+        ],
+      },
+      {
+        title: "ES_APPLICATION_DETAILS_TRIPS_AND_AMOUNT_DETAILS",
+        values: [
           { title: "ES_APPLICATION_DETAILS_PAYMENT_NO_OF_TRIPS", value: response?.noOfTrips === 0 ? "N/A" : response?.noOfTrips },
           {
             title: "ES_APPLICATION_DETAILS_AMOUNT_PER_TRIP",
@@ -197,7 +208,11 @@ export const Search = {
                   : "₹ " + response?.noOfTrips * amountPerTrip
                 : "₹ " + totalAmount,
           },
-          { title: "ES_PAYMENT_DETAILS_ADV_AMOUNT", value: response?.advanceAmount === null ? "N/A" : "₹ " + response?.advanceAmount },
+          { title: "ES_PAYMENT_DETAILS_ADV_AMOUNT_PAID", value: !isPaymentDone ? "N/A" : "₹ " + response?.advanceAmount },
+          {
+            title: "ES_PAYMENT_DETAILS_BLS_AMOUNT_PAID",
+            value: !isPaymentDone ? "N/A" : "₹ " + balancePaid,
+          },
         ],
       },
       {

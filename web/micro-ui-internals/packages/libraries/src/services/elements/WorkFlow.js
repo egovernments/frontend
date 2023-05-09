@@ -1,6 +1,7 @@
 import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
+import { PaymentService } from "./Payment";
 
 const getThumbnails = async (ids, tenantId, documents = []) => {
   tenantId = window.location.href.includes("/obps/") || window.location.href.includes("/pt/") ? Digit.ULBService.getStateId() : tenantId;
@@ -173,6 +174,9 @@ export const WorkflowService = {
         },
       ];
 
+      const demandDetails = await PaymentService.demandSearch(tenantId, id, "FSM.TRIP_CHARGES");
+      const isPaymentCompleted = demandDetails.Demands[0].isPaymentCompleted;
+
       const actionRolePair = nextActions?.map((action) => ({
         action: action?.action,
         roles: action.state?.actions?.map((action) => action.roles).join(","),
@@ -301,14 +305,17 @@ export const WorkflowService = {
         const tempCheckStatus = timeline.map((i) => i.status)[0];
         // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
         // HIDING PAYMENT OPTION FOR DSO AND WHEN APPLICATION IS NOT IN PAYMENT STATUS
-        const nextActions = location.pathname.includes("new-vehicle-entry")
+        const nextAction = location.pathname.includes("new-vehicle-entry")
           ? action_newVehicle
           : location.pathname.includes("dso")
           ? actionRolePair.filter((i) => i.action !== "PAY")
-          : (tempCheckStatus.includes("WAITING_FOR_DISPOSAL") || tempCheckStatus.includes("PENDING_APPL_FEE_PAYMENT")) &&
-            !serviceData.isFullPaymentDone
-          ? actionRolePair
-          : actionRolePair.filter((i) => i.action !== "PAY");
+          : (tempCheckStatus.includes("WAITING_FOR_DISPOSAL") || tempCheckStatus.includes("PENDING_APPL_FEE_PAYMENT")) && !isPaymentCompleted
+          ? actionRolePair.filter((i) => i.action !== "COMPLETED")
+          : tempCheckStatus.includes("DSO_INPROGRESS")
+          ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "PAY")
+          : actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL");
+
+        const nextActions = nextAction.filter((i) => i.action !== "SENDBACK").filter((x) => x.action !== "REASSING");
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter((e) => e?.status === "PENDINGFORASSIGNMENT");
           const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1);

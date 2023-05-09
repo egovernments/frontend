@@ -31,12 +31,9 @@ export const configCompleteApplication = ({
               required: true,
             },
             defaultValue: Digit.Utils.date.getDate(),
-            customProps: {
-              min: Digit.Utils.date.getDate(applicationCreatedTime),
-              max: Digit.Utils.date.getDate(),
-            },
             component: (props, customProps) => (
               <DatePicker
+                disabled={true}
                 onChange={props.onChange}
                 date={props.value}
                 {...customProps}
