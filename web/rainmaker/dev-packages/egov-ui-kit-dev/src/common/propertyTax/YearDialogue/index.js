@@ -7,12 +7,32 @@ import { reset_property_reset } from "egov-ui-kit/redux/properties/actions";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
+import { httpRequest } from "../../../utils/api";
+//import { httpRequest } from "../../../../ui-utils/api";
 import { connect } from "react-redux";
 import RadioButtonForm from "./components/RadioButtonForm";
 import "./index.css";
+var localitymatch=[];
+const getUserDataFromUuid = async (state, dispatch) => {
+  let request = {searchCriteria:{tenantId:"pb.testing"}};
+  try {
+    const response = await httpRequest(
+      "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
+      "_get", 
+       [], 
+      request);
+    if(response){      
+      localitymatch.push(response.data);
+    } 
+    
+   } catch (error) {
+     console.log("functions-js getUserDataFromUuid error",error);
+   }
+ };
+ console.log("GetTenantConfig", localitymatch);
 
-
-
+  getUserDataFromUuid();
+//dev-packages\egov-pt-dev\src\ui-config\screens\specs\pt-mutation\functions
 // const getYearList = () => {
 //   let today = new Date();
 //   let month = today.getMonth() + 1;
@@ -108,6 +128,7 @@ class YearDialog extends Component {
                 label={<Label label="PT_OK" buttonLabel={true} color="black" />}
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
+                  // arraycontainsturtles = (myarr.indexOf("turtles") > -1);
                   if (this.state.selectedYear !== '') {
                     this.resetForm()
                     history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
