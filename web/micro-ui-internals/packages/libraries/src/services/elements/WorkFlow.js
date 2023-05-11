@@ -121,6 +121,7 @@ export const WorkflowService = {
   },
 
   getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData, serviceData }) => {
+    var isPaymentCompleted = false;
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
     const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
@@ -174,8 +175,10 @@ export const WorkflowService = {
         },
       ];
 
-      const demandDetails = await PaymentService.demandSearch(tenantId, id, "FSM.TRIP_CHARGES");
-      const isPaymentCompleted = demandDetails.Demands[0].isPaymentCompleted;
+      if (window.location.href.includes("application-details")) {
+        const demandDetails = await PaymentService.demandSearch(tenantId, id, "FSM.TRIP_CHARGES");
+        isPaymentCompleted = demandDetails?.Demands[0]?.isPaymentCompleted;
+      }
 
       const actionRolePair = nextActions?.map((action) => ({
         action: action?.action,

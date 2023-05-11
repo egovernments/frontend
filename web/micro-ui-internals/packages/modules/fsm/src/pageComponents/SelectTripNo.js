@@ -5,8 +5,14 @@ const SelectTripNo = ({ config, formData, t, onSelect, userType }) => {
   const state = Digit.ULBService.getStateId();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
+  const selectedCity = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
   const { data: tripNumberData, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "TripNumber");
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, {
+  const {
+    data: dsoData,
+    isLoading: isDsoLoading,
+    isSuccess: isDsoSuccess,
+    error: dsoError,
+  } = Digit.Hooks.fsm.useDsoSearch(selectedCity, {
     limit: -1,
     status: "ACTIVE",
   });

@@ -495,17 +495,6 @@ const ActionModal = ({
         );
       case "REJECT":
       case "SENDBACK":
-        // rejectionReason
-        setFormValve(rejectionReason ? true : false);
-        return setConfig(
-          configRejectApplication({
-            t,
-            rejectMenu: Reason?.RejectionReason,
-            setReason: setRejectionReason,
-            reason: rejectionReason,
-            action,
-          })
-        );
       case "CANCEL":
         ///cancellreason
         setFormValve(cancelReason ? true : false);
