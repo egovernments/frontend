@@ -254,48 +254,10 @@ const FstpOperatorDetails = () => {
       });
       return;
     }
-    if (tripStartTime === null) {
-      setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
-      tripStartTimeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      return;
-    }
-
-    if (tripTime === null) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      return;
-    }
-
-    if (tripStartTime === tripTime || tripStartTime > tripTime) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      return;
-    }
 
     setErrors({});
 
-    const d = new Date();
-    const timeStamp =
-      Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) /
-      1000;
-    const tripStartTimestamp =
-      Date.parse(
-        new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)
-      ) / 1000;
     const tripDetail = { tripNo: currentTrip };
-    vehicle.tripStartTime = tripStartTimestamp;
-    vehicle.fstpEntryTime = tripStartTimestamp;
-    vehicle.tripEndTime = timeStamp;
-    vehicle.fstpExitTime = timeStamp;
     vehicle.volumeCarried = wasteCollected;
     vehicle.tripDetails[0].additionalDetails = tripDetail;
     vehicle.additionalDetails = {
@@ -351,14 +313,6 @@ const FstpOperatorDetails = () => {
       }, 2000);
       return;
     }
-    if (tripStartTime === null) {
-      setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
-      tripStartTimeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      return;
-    }
 
     if (!wasteCollected || wasteCollected?.trim()?.length === 0) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE_AMOUNT` });
@@ -368,39 +322,12 @@ const FstpOperatorDetails = () => {
       return;
     }
 
-    if (tripTime === null) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      return;
-    }
-
-    if (tripStartTime === tripTime || tripStartTime > tripTime) {
-      setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-      return;
-    }
-
     setErrors({});
     let temp = {};
-    const d = new Date();
-    const timeStamp =
-      Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) /
-      1000;
-    const tripStartTimestamp =
-      Date.parse(
-        new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)
-      ) / 1000;
+
     const tripDetail = { tripNo: 1 };
     temp.tenantId = tenantId;
     temp.status = "ACTIVE";
-    temp.tripStartTime = tripStartTimestamp;
-    temp.tripEndTime = timeStamp;
     temp.volumeCarried = wasteCollected;
     temp.additionalDetails = {
       vehicleNumber: newVehicleNumber || applicationNos,
@@ -868,30 +795,7 @@ const FstpOperatorDetails = () => {
               labelStyle={{ fontWeight: "normal" }}
             />
           )}
-          <div ref={tripStartTimeRef}>
-            <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
-          </div>
           <form>
-            <Row
-              key={t("ES_VEHICLE_IN_TIME")}
-              label={`${t("ES_VEHICLE_IN_TIME")} * `}
-              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
-              textStyle={isMobile ? { width: "100%" } : {}}
-              rowContainerStyle={
-                isMobile
-                  ? { display: "block" }
-                  : { justifyContent: "space-between" }
-              }
-              text={
-                <div>
-                  <CustomTimePicker
-                    name="tripStartTime"
-                    onChange={(val) => handleTimeChange(val, setTripStartTime)}
-                    value={tripStartTime}
-                  />
-                </div>
-              }
-            />
             <div ref={wasteRecievedRef}>
               <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
             </div>
@@ -914,29 +818,6 @@ const FstpOperatorDetails = () => {
                 isMobile
                   ? { display: "block" }
                   : { justifyContent: "space-between" }
-              }
-            />
-            <div ref={tripTimeRef}>
-              <CardLabelError>{t(errors.tripTime)}</CardLabelError>
-            </div>
-            <Row
-              key={t("ES_VEHICLE_OUT_TIME")}
-              label={`${t("ES_VEHICLE_OUT_TIME")} * `}
-              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
-              textStyle={isMobile ? { width: "100%" } : {}}
-              rowContainerStyle={
-                isMobile
-                  ? { display: "block" }
-                  : { justifyContent: "space-between" }
-              }
-              text={
-                <div>
-                  <CustomTimePicker
-                    name="tripTime"
-                    onChange={(val) => handleTimeChange(val, setTripTime)}
-                    value={tripTime}
-                  />
-                </div>
               }
             />
             {/* {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
