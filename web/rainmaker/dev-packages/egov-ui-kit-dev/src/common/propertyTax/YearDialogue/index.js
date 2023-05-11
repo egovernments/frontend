@@ -8,42 +8,28 @@ import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { httpRequest } from "../../../utils/api";
-//import { httpRequest } from "../../../../ui-utils/api";
 import { connect } from "react-redux";
 import RadioButtonForm from "./components/RadioButtonForm";
 import "./index.css";
-var localitymatch=[];
+
 const getUserDataFromUuid = async (state, dispatch) => {
-  let request = {searchCriteria:{tenantId:"pb.testing"}};
+  let request = { searchCriteria: { tenantId: "pb.testing" } };
   try {
     const response = await httpRequest(
       "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
-      "_get", 
-       [], 
+      "_get",
+      [],
       request);
-    if(response){      
-      localitymatch.push(response.data);
-    } 
-    
-   } catch (error) {
-     console.log("functions-js getUserDataFromUuid error",error);
-   }
- };
- console.log("GetTenantConfig", localitymatch);
-
-  getUserDataFromUuid();
-//dev-packages\egov-pt-dev\src\ui-config\screens\specs\pt-mutation\functions
-// const getYearList = () => {
-//   let today = new Date();
-//   let month = today.getMonth() + 1;
-//   let yearRange = [];
-//   var counter = 0;
-//   if (month <= 3) {
-//     return getLastFiveYear(yearRange, today.getFullYear() - 1, counter);
-//   } else {
-//     return getLastFiveYear(yearRange, today.getFullYear(), counter);
-//   }
-// };
+    if (response) {
+      const data = response.data.find(obj => {
+        return obj.locality == localityCode;
+      });
+      return Promise.resolve(data ? true : false);
+    }
+  } catch (error) {
+    console.log("functions-js getUserDataFromUuid error", error);
+  }
+};
 
 // const getLastFiveYear = (yearRange, currentYear, counter) => {
 //   if (counter < 5) {
@@ -127,9 +113,11 @@ class YearDialog extends Component {
               <Button
                 label={<Label label="PT_OK" buttonLabel={true} color="black" />}
                 labelColor="#fe7a51"
-                buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
+                buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={async () => {
                   // arraycontainsturtles = (myarr.indexOf("turtles") > -1);
-                  if (this.state.selectedYear !== '') {
+                  const isLocMatch = await getUserDataFromUuid();
+                  console.log("isLocMatch", isLocMatch);
+                  if ( isLocMatch && this.state.selectedYear !== '') {
                     this.resetForm()
                     history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
                   }
@@ -150,11 +138,13 @@ class YearDialog extends Component {
   }
 }
 
+var localityCode = null;
 const mapStateToProps = (state) => {
+  localityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].address.locality.code;
   const { common, form } = state;
   const { generalMDMSDataById } = common;
   const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
-  const getYearList = FinancialYear?Object.keys(FinancialYear).sort().reverse():null;
+  const getYearList = FinancialYear ? Object.keys(FinancialYear).sort().reverse() : null;
   return { getYearList, form };
 };
 
