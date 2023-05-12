@@ -116,13 +116,24 @@ class YearDialog extends Component {
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={async () => {
                   // arraycontainsturtles = (myarr.indexOf("turtles") > -1);
                   const isLocMatch = await getUserDataFromUuid();
-                  console.log("isLocMatch", isLocMatch);
-                  if ( isLocMatch && this.state.selectedYear !== '') {
-                    this.resetForm()
-                    history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
-                  }
-                  else {
-                    alert('Please Select a Financial Year!');
+                  console.log("isLocMatch", isLocMatch, surveyIdcode, tenantIdcode);
+                  if(tenantIdcode == "pb.jalandhar"){
+                    if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != '') {
+                      this.resetForm()
+                      history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
+                    }
+                    else {
+                      alert('Please Select a Financial Year and Enter Survey Id');
+                    }
+                  } else{
+                    // without jalandhar
+                    if (this.state.selectedYear !== '') {
+                      this.resetForm()
+                      history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
+                    }
+                    else {
+                      alert('Please Select a Financial Year!');
+                    }
                   }
                 }}></Button>
             </div>
@@ -139,8 +150,12 @@ class YearDialog extends Component {
 }
 
 var localityCode = null;
+var surveyIdcode = null;
+var tenantIdcode = null;
 const mapStateToProps = (state) => {
   localityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].address.locality.code;
+  surveyIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].surveyId;
+  tenantIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].tenantId;
   const { common, form } = state;
   const { generalMDMSDataById } = common;
   const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
