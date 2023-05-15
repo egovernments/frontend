@@ -280,7 +280,7 @@ const FstpOperatorDetails = () => {
 
   const handleCreate = () => {
     const re = new RegExp(
-      "[A-Z]{2}\\s{0,1}[0-9]{2}\\s{0,1}[A-Z]{1,2}\\s{0,1}[0-9]{4}"
+      "[A-Z]{2}\\s{0,1}[0-9]{2}\\s{0,1}[A-Z]{0,2}\\s{0,1}[0-9]{4}"
     );
     if (!re.test(newVehicleNumber)) {
       setShowToast({ key: "error", action: `ES_FSM_VEHICLE_FORMAT_TIP` });
