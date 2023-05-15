@@ -56,7 +56,7 @@ const AddVehicle = ({ parentUrl, heading }) => {
     const registrationNumber = data?.registrationNumber;
     const vehicleType = data?.vehicle?.type?.code;
     const vehicleModal = data?.vehicle?.modal?.code;
-    const tankCapacity = data?.vehicle?.capacity;
+    const tankCapacity = data?.vehicle?.tankCapacity;
     const pollutionCert = new Date(`${data?.pollutionCert}`).getTime();
     const insurance = new Date(`${data?.insurance}`).getTime();
     const roadTax = new Date(`${data?.roadTax}`).getTime();

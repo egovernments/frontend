@@ -10,14 +10,15 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
   const [selectedModal, setSelectedModal] = useState({});
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState({});
-  const [selectedCapacity, setSelectedCapacity] = useState("");
-
+  const [selectedCapacity, setSelectedCapacity] = useState();
   useEffect(() => {
     if (vehicleData) {
       const vehicleModal = vehicleData.filter((vehicle) => vehicle.code === (formData?.vehicle?.modal?.code || formData?.vehicle?.modal));
       const vehicleType = vehicleData.filter((vehicle) => vehicle.code === (formData?.vehicle?.type?.code || formData?.vehicle?.type));
+      const vehicleCapacity = formData?.vehicle?.tankCapacity;
       setSelectedModal(...vehicleModal);
       setSelectedType(...vehicleType);
+      setSelectedCapacity(vehicleCapacity);
     }
   }, [formData?.vehicle, vehicleData]);
 
@@ -54,7 +55,7 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
 
   const handleVehicleType = (e) => {
     setSelectedCapacity(e.target.value);
-    onSelect(config.key, { ...formData[config.key], capacity: e.target.value });
+    onSelect(config.key, { ...formData[config.key], tankCapacity: e.target.value });
   };
 
   return (
@@ -87,7 +88,14 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
           {t("ES_FSM_REGISTRY_VEHICLE_CAPACITY")}
           {config.isMandatory ? " * " : null}
         </CardLabel>
-        <TextInput className="" name={"capacity"} textInputStyle={{ width: "50%" }} value={selectedCapacity} onChange={handleVehicleType} />
+        <TextInput
+          className=""
+          name={"capacity"}
+          textInputStyle={{ width: "50%" }}
+          value={selectedCapacity}
+          pattern="[1-9]{1}[0-9]{3,4}"
+          onChange={handleVehicleType}
+        />
       </LabelFieldPair>
     </div>
   );

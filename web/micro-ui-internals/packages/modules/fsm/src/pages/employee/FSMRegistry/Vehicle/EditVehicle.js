@@ -19,15 +19,20 @@ const EditVehicle = ({ parentUrl, heading }) => {
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
-  const { data: vehicleData, isLoading: vehicleDataLoading, isSuccess: isVehicleSuccess, error: vehicleError } = Digit.Hooks.fsm.useVehicleDetails(
-    tenantId,
-    { registrationNumber: dsoId },
-    { staleTime: Infinity }
-  );
+  const {
+    data: vehicleData,
+    isLoading: vehicleDataLoading,
+    isSuccess: isVehicleSuccess,
+    error: vehicleError,
+  } = Digit.Hooks.fsm.useVehicleDetails(tenantId, { registrationNumber: dsoId }, { staleTime: Infinity });
 
-  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useUpdateVehicle(
-    tenantId
-  );
+  const {
+    isLoading: isLoading,
+    isError: vendorCreateError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.fsm.useUpdateVehicle(tenantId);
 
   useEffect(() => {
     setMutationHappened(false);
@@ -86,7 +91,7 @@ const EditVehicle = ({ parentUrl, heading }) => {
   const onSubmit = (data) => {
     const vehicleType = data?.vehicle?.type?.code || data?.vehicle?.type;
     const vehicleModal = data?.vehicle?.modal?.code || data?.vehicle?.modal;
-    const tankCapacity = data?.vehicle?.type?.capacity || data?.vehicle?.tankCapacity;
+    const tankCapacity = data?.vehicle?.tankCapacity || data?.vehicle?.tankCapacity;
     const pollutionCert = new Date(`${data?.pollutionCert}`).getTime();
     const insurance = new Date(`${data?.insurance}`).getTime();
     const roadTax = new Date(`${data?.roadTax}`).getTime();
