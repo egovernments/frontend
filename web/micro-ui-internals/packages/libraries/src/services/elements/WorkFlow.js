@@ -313,7 +313,9 @@ export const WorkflowService = {
           : location.pathname.includes("dso")
           ? actionRolePair.filter((i) => i.action !== "PAY")
           : (tempCheckStatus.includes("WAITING_FOR_DISPOSAL") || tempCheckStatus.includes("PENDING_APPL_FEE_PAYMENT")) && !isPaymentCompleted
-          ? actionRolePair.filter((i) => i.action !== "COMPLETED")
+          ? moduleCode === "PAY_LATER_SERVICE"
+            ? actionRolePair.filter((i) => i.action !== "PAY")
+            : actionRolePair.filter((i) => i.action !== "COMPLETED")
           : tempCheckStatus.includes("DSO_INPROGRESS")
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "PAY")
           : actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL");
