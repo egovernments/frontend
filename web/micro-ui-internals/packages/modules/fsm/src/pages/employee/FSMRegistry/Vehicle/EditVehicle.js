@@ -19,20 +19,15 @@ const EditVehicle = ({ parentUrl, heading }) => {
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
-  const {
-    data: vehicleData,
-    isLoading: vehicleDataLoading,
-    isSuccess: isVehicleSuccess,
-    error: vehicleError,
-  } = Digit.Hooks.fsm.useVehicleDetails(tenantId, { registrationNumber: dsoId }, { staleTime: Infinity });
+  const { data: vehicleData, isLoading: vehicleDataLoading, isSuccess: isVehicleSuccess, error: vehicleError } = Digit.Hooks.fsm.useVehicleDetails(
+    tenantId,
+    { registrationNumber: dsoId },
+    { staleTime: Infinity }
+  );
 
-  const {
-    isLoading: isLoading,
-    isError: vendorCreateError,
-    data: updateResponse,
-    error: updateError,
-    mutate,
-  } = Digit.Hooks.fsm.useUpdateVehicle(tenantId);
+  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useUpdateVehicle(
+    tenantId
+  );
 
   useEffect(() => {
     setMutationHappened(false);
@@ -77,7 +72,14 @@ const EditVehicle = ({ parentUrl, heading }) => {
   const Config = VehicleConfig(t, true);
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.registrationNumber && formData?.ownerName && formData?.phone && formData?.vehicle?.modal && formData?.vehicle?.type) {
+    if (
+      formData?.registrationNumber &&
+      formData?.ownerName &&
+      formData?.phone &&
+      formData?.vehicle?.modal &&
+      formData?.vehicle?.type &&
+      formData?.vehicle?.tankCapacity
+    ) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
