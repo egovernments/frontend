@@ -113,11 +113,19 @@ const SelectTrips = ({
       }
 
       if (
+        formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" &&
+        formData.tripData.noOfTrips &&
+        formData.tripData.amountPerTrip
+      ) {
+        setValue({
+          amount: formData.tripData.amountPerTrip * formData.tripData.noOfTrips,
+        });
+      } else if (
         formData?.propertyType &&
         formData?.subtype &&
         formData?.address &&
         formData?.tripData?.vehicleType?.capacity &&
-        formData?.address?.propertyLocation?.code === "WITHIN_ULB_LIMITS"
+        formData?.address?.locality?.code
       ) {
         const capacity = formData?.tripData?.vehicleType.capacity;
         const { slum: slumDetails } = formData.address;
@@ -146,14 +154,6 @@ const SelectTrips = ({
           });
           setError(true);
         }
-      } else if (
-        formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" &&
-        formData.tripData.noOfTrips &&
-        formData.tripData.amountPerTrip
-      ) {
-        setValue({
-          amount: formData.tripData.amountPerTrip * formData.tripData.noOfTrips,
-        });
       }
     })();
   }, [
