@@ -2,6 +2,7 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 import { PaymentService } from "./Payment";
+import { FSMService } from "./FSM";
 
 const getThumbnails = async (ids, tenantId, documents = []) => {
   tenantId = window.location.href.includes("/obps/") || window.location.href.includes("/pt/") ? Digit.ULBService.getStateId() : tenantId;
@@ -122,6 +123,11 @@ export const WorkflowService = {
 
   getDetailsById: async ({ tenantId, id, moduleCode, role, getTripData, serviceData }) => {
     var isPaymentCompleted = false;
+    var isTripAmountAvailable = false;
+    const filters = { id };
+    const response = await FSMService.search(tenantId, { ...filters });
+    if (Number(response.fsm[0].additionalDetails.tripAmount) === 0) isTripAmountAvailable = true;
+    console.log(isTripAmountAvailable, "isTripAmountAvailable");
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
     const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
@@ -313,7 +319,7 @@ export const WorkflowService = {
           : location.pathname.includes("dso")
           ? actionRolePair.filter((i) => i.action !== "PAY")
           : (tempCheckStatus.includes("WAITING_FOR_DISPOSAL") || tempCheckStatus.includes("PENDING_APPL_FEE_PAYMENT")) && !isPaymentCompleted
-          ? moduleCode === "PAY_LATER_SERVICE"
+          ? isTripAmountAvailable
             ? actionRolePair.filter((i) => i.action !== "PAY")
             : actionRolePair.filter((i) => i.action !== "COMPLETED")
           : tempCheckStatus.includes("DSO_INPROGRESS")
