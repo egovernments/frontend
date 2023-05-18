@@ -1,4 +1,4 @@
-import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { pincode, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
@@ -7,9 +7,12 @@ import get from "lodash/get";
 import { getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from '../../../common'
+import { httpRequest } from "egov-ui-kit/utils/api";
+
 
 // const Search = <Icon action="action" name="home" color="#30588c" />;
-
+let surevyidreu= false;
+var tenantIdcode =getTenantId();
 let floorDropDownData = [];
 
    floorDropDownData.push({ label:"2013-14", value: "2013-14" },{ label:"2014-15", value: "2014-15" },{ label:"2015-16", value: "2015-16" },{ label:"2016-17", value: "2016-17" },{ label:"2017-18", value: "2017-18" },{ label:"2018-19", value: "2018-19" },
@@ -74,7 +77,73 @@ const formConfig = {
     ...houseNumber,
     ...colony,
     ...street,
-    ...mohalla,
+    mohalla: {
+      id: "mohalla",
+      jsonPath: "Properties[0].address.locality.code",
+      type: "AutocompleteDropdown",
+      floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      fullWidth: true,
+      toolTip: true,
+      localePrefix: true,
+      toolTipMessage: "PT_MOHALLA_TOOLTIP_MESSAGE",
+      labelsFromLocalisation: true,
+      beforeFieldChange: ({ action, dispatch, state }) =>{
+      
+
+      setTimeout(async() => {
+        alert("test my mohala");
+        console.log("aaaa");
+        console.log("mystate",state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code);
+        let localityCode = state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code;
+        let request = { searchCriteria: { tenantId: tenantIdcode}};
+        try {
+          const response = await httpRequest(
+            "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
+            "_get",
+            [],
+            request);
+          if (response) {
+            debugger;
+            const data = response.data.find(obj => {
+              return obj.locality == localityCode;
+            });
+            surevyidreu = data ? true : false;
+          }
+        } catch (error) {
+          console.log("functions-js getUserDataFromUuid error", error);
+        }
+      }, "1000");
+      
+      },
+      //toolTipMessage: "Name of the area in which your property is located",
+      boundary: true,
+      numcols: 6,
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      errorMessage: "PT_PROPERTY_DETAILS_MOHALLA_ERRORMSG",
+      dataFetchConfig: {
+        url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+        action: "",
+        queryParams: [],
+        requestBody: {},
+        isDependent: true,
+        hierarchyType: "REVENUE",
+      },
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      required: true,
+      formName: "propertyAddress",
+      updateDependentFields: ({ formKey, field, dispatch }) => {
+        if (field.value && field.value.length > 0) {
+          const mohalla = field.dropDownData.find((option) => {
+            return option.value === field.value;
+          });
+          dispatch(prepareFormData("Properties[0].address.locality.area", mohalla.area));
+        }
+      },
+    },
     ...pincode,
     oldPID: {
       id: "oldpid",
@@ -105,6 +174,7 @@ const formConfig = {
       numcols: 6,
       errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      required: surevyidreu,
       // toolTip: true,
       //pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       // toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
