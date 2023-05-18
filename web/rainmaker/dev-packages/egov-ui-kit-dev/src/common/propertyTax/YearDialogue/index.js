@@ -10,10 +10,13 @@ import React, { Component } from "react";
 import { httpRequest } from "../../../utils/api";
 import { connect } from "react-redux";
 import RadioButtonForm from "./components/RadioButtonForm";
+import { getTenantId, getUserInfo } from "../../../utils/localStorageUtils";
+//"egov-ui-kit/utils/localStorageUtils"
 import "./index.css";
-
+var tenantIdcode =getTenantId();
 const getUserDataFromUuid = async (state, dispatch) => {
-  let request = { searchCriteria: { tenantId: "pb.testing" } };
+  debugger;
+  let request = { searchCriteria: { tenantId: tenantIdcode} };
   try {
     const response = await httpRequest(
       "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
@@ -117,7 +120,7 @@ class YearDialog extends Component {
                   // arraycontainsturtles = (myarr.indexOf("turtles") > -1);
                   const isLocMatch = await getUserDataFromUuid();
                   console.log("isLocMatch", isLocMatch, surveyIdcode, tenantIdcode);
-                  if(tenantIdcode == "pb.jalandhar"){
+                  if(tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing"){
                     if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != '') {
                       this.resetForm()
                       history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
@@ -151,11 +154,10 @@ class YearDialog extends Component {
 
 var localityCode = null;
 var surveyIdcode = null;
-var tenantIdcode = null;
+
 const mapStateToProps = (state) => {
   localityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].address.locality.code;
   surveyIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].surveyId;
-  tenantIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].tenantId;
   const { common, form } = state;
   const { generalMDMSDataById } = common;
   const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
