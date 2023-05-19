@@ -79,7 +79,7 @@ const propertyDetails = {
             labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_SUBTYPE_LABEL"
           },
           {
-            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageType",
+            jsonPath: "FireNOCs[0].fireNOCDetails.buildings[0].usageSubType",
             localePrefix: {
               moduleName: "firenoc",
               masterName: "BuildingType"
