@@ -92,7 +92,7 @@ const formConfig = {
       
 
       setTimeout(async() => {
-       if(tenantIdcode == "pb.jalandhar"){
+       if(tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing"){
         let localityCode = state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code;
         let request = { searchCriteria: { tenantId: tenantIdcode}};
         try {
