@@ -72,14 +72,7 @@ const EditVehicle = ({ parentUrl, heading }) => {
   const Config = VehicleConfig(t, true);
 
   const onFormValueChange = (setValue, formData) => {
-    if (
-      formData?.registrationNumber &&
-      formData?.ownerName &&
-      formData?.phone &&
-      formData?.vehicle?.modal &&
-      formData?.vehicle?.type &&
-      formData?.vehicle?.tankCapacity
-    ) {
+    if (formData?.registrationNumber && formData?.ownerName && formData?.phone && formData?.vehicle?.modal && formData?.vehicle?.type) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -93,7 +86,7 @@ const EditVehicle = ({ parentUrl, heading }) => {
   const onSubmit = (data) => {
     const vehicleType = data?.vehicle?.type?.code || data?.vehicle?.type;
     const vehicleModal = data?.vehicle?.modal?.code || data?.vehicle?.modal;
-    const tankCapacity = data?.vehicle?.tankCapacity || data?.vehicle?.tankCapacity;
+    const tankCapacity = data?.vehicle?.type?.capacity || data?.vehicle?.tankCapacity;
     const pollutionCert = data?.pollutionCert > 0 || data?.pollutionCert.length > 0 ? new Date(`${data?.pollutionCert}`).getTime() : null;
     const insurance = data?.insurance > 0 || data?.insurance.length > 0 ? new Date(`${data?.insurance}`).getTime() : null;
     const roadTax = data?.roadTax > 0 || data?.roadTax.length > 0 ? new Date(`${data?.roadTax}`).getTime() : null;
