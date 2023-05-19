@@ -92,9 +92,7 @@ const formConfig = {
       
 
       setTimeout(async() => {
-        alert("test my mohala");
-        console.log("aaaa");
-        console.log("mystate",state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code);
+       if(tenantIdcode == "pb.jalandhar"){
         let localityCode = state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code;
         let request = { searchCriteria: { tenantId: tenantIdcode}};
         try {
@@ -104,7 +102,6 @@ const formConfig = {
             [],
             request);
           if (response) {
-            debugger;
             const data = response.data.find(obj => {
               return obj.locality == localityCode;
             });
@@ -113,6 +110,7 @@ const formConfig = {
         } catch (error) {
           console.log("functions-js getUserDataFromUuid error", error);
         }
+      }
       }, "1000");
       
       },
