@@ -1,5 +1,5 @@
-import { pincode, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
-import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
+import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { handleFieldChange, setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
@@ -11,13 +11,12 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 
 
 // const Search = <Icon action="action" name="home" color="#30588c" />;
-let surevyidreu= false;
-var tenantIdcode =getTenantId();
+var tenantIdcode = getTenantId();
 let floorDropDownData = [];
 
-   floorDropDownData.push({ label:"2013-14", value: "2013-14" },{ label:"2014-15", value: "2014-15" },{ label:"2015-16", value: "2015-16" },{ label:"2016-17", value: "2016-17" },{ label:"2017-18", value: "2017-18" },{ label:"2018-19", value: "2018-19" },
-  { label:"2019-20", value: "2019-20" },{ label:"2020-21", value: "2020-21" },
-  { label:"2021-22", value: "2021-22" },{ label:"2022-23", value: "2022-23" }, { label:"2023-24", value: "2023-24"});
+floorDropDownData.push({ label: "2013-14", value: "2013-14" }, { label: "2014-15", value: "2014-15" }, { label: "2015-16", value: "2015-16" }, { label: "2016-17", value: "2016-17" }, { label: "2017-18", value: "2017-18" }, { label: "2018-19", value: "2018-19" },
+  { label: "2019-20", value: "2019-20" }, { label: "2020-21", value: "2020-21" },
+  { label: "2021-22", value: "2021-22" }, { label: "2022-23", value: "2022-23" }, { label: "2023-24", value: "2023-24" });
 
 
 const formConfig = {
@@ -57,14 +56,11 @@ const formConfig = {
         dataPath: ["MdmsRes.tenant.tenants"],
         dependants: [
           {
-            fieldKey: "mohalla",  
+            fieldKey: "mohalla",
           },
         ],
       },
-      updateDependentFields: ({ formKey, field, dispatch, state }) => {
-        dispatch(prepareFormData("Properties[0].tenantId", field.value));
-        // dispatch(setFieldProperty("propertyAddress", "mohalla", "value", ""));
-      },
+
       beforeFieldChange: ({ action, dispatch, state }) => {
         if (get(state, "common.prepareFormData.PropertiesTemp[0].address.city") !== action.value) {
           const moduleValue = action.value;
@@ -77,6 +73,7 @@ const formConfig = {
     ...houseNumber,
     ...colony,
     ...street,
+    ///...mohalla,
     mohalla: {
       id: "mohalla",
       jsonPath: "Properties[0].address.locality.code",
@@ -88,32 +85,6 @@ const formConfig = {
       localePrefix: true,
       toolTipMessage: "PT_MOHALLA_TOOLTIP_MESSAGE",
       labelsFromLocalisation: true,
-      beforeFieldChange: ({ action, dispatch, state }) =>{
-      
-
-      setTimeout(async() => {
-       if(tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing"){
-        let localityCode = state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code;
-        let request = { searchCriteria: { tenantId: tenantIdcode}};
-        try {
-          const response = await httpRequest(
-            "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
-            "_get",
-            [],
-            request);
-          if (response) {
-            const data = response.data.find(obj => {
-              return obj.locality == localityCode;
-            });
-            surevyidreu = data ? true : false;
-          }
-        } catch (error) {
-          console.log("functions-js getUserDataFromUuid error", error);
-        }
-      }
-      }, "1000");
-      
-      },
       //toolTipMessage: "Name of the area in which your property is located",
       boundary: true,
       numcols: 6,
@@ -133,13 +104,32 @@ const formConfig = {
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       required: true,
       formName: "propertyAddress",
-      updateDependentFields: ({ formKey, field, dispatch }) => {
-        if (field.value && field.value.length > 0) {
-          const mohalla = field.dropDownData.find((option) => {
-            return option.value === field.value;
-          });
-          dispatch(prepareFormData("Properties[0].address.locality.area", mohalla.area));
-        }
+      updateDependentFields: async ({ formKey, field, dispatch, state }) => {
+        
+        setTimeout(async () => {
+          let localityCode = await state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code;
+              if (tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing") {
+                
+                let request = { searchCriteria: { tenantId: tenantIdcode } };
+                try {
+                  const response = await httpRequest(
+                    "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
+                    "_get",
+                    [],
+                    request);
+                  if (response) {
+                    const data = response.data.find(obj => {
+                      return obj.locality == localityCode;
+                    });
+                    dispatch(setFieldProperty(formKey, "UID", "required", data ? true : false));
+                  }
+                } catch (error) {
+                  console.log("functions-js getUserDataFromUuid error", error);
+                }
+              }
+            }, "100");
+              
+        
       },
     },
     ...pincode,
@@ -159,26 +149,26 @@ const formConfig = {
       pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i,
       //toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
-    },    
+    },
     UID: {
       id: "UID",
       type: "textFieldIcon",
       className: "pt-old-pid-text-field",
       text: "Search",
-      iconRedirectionURL: getTenantId()=='pb.amritsar'? "https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=8b678d4d5020448499054bf346843ea9": getTenantId()=='pb.hoshiarpur'?"https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=9bc1b255320a49c590dd17d4d258e054": "https://gis.punjab.gov.in",
+      iconRedirectionURL: getTenantId() == 'pb.amritsar' ? "https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=8b678d4d5020448499054bf346843ea9" : getTenantId() == 'pb.hoshiarpur' ? "https://arcserver.punjab.gov.in/portal/apps/webappviewer/index.html?id=9bc1b255320a49c590dd17d4d258e054" : "https://gis.punjab.gov.in",
       jsonPath: "Properties[0].surveyId",
       floatingLabelText: "Survey Id/UID",
       hintText: "Enter Survey Id/UID",
       numcols: 6,
       errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      required: surevyidreu,
+      required: false,
       // toolTip: true,
       //pattern: /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,64}$/i,
       // toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
-    
+
     YearcreationProperty: {
       id: "YearcreationProperty",
       type: "AutocompleteDropdown",
@@ -194,7 +184,7 @@ const formConfig = {
       },
       errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-     
+
       formName: "propertyAddress",
       dropDownData: floorDropDownData,
       updateDependentFields: ({ formKey, field, dispatch }) => {
@@ -210,7 +200,7 @@ const formConfig = {
       // toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
-    
+
   },
   afterInitForm: (action, store, dispatch) => {
     let tenantId = getTenantId();
@@ -231,14 +221,14 @@ const formConfig = {
         })
         let cityName = tenantId;
         if (tenantInfo && tenantInfo.city && tenantInfo.city.name)
-            cityName = tenantInfo.city.name;
+          cityName = tenantInfo.city.name;
 
-        let surveyId=get(state.screenConfiguration.preparedFinalObject,"Properties[0].surveyId");
-        let year=get(state.screenConfiguration.preparedFinalObject,"Properties[0].additionalDetails.yearConstruction");
+        let surveyId = get(state.screenConfiguration.preparedFinalObject, "Properties[0].surveyId");
+        let year = get(state.screenConfiguration.preparedFinalObject, "Properties[0].additionalDetails.yearConstruction");
         dispatch(handleFieldChange("propertyAddress", "YearcreationProperty", year));
-        if(surveyId)
-        dispatch(handleFieldChange("propertyAddress", "UID", surveyId));
-        
+        if (surveyId)
+          dispatch(handleFieldChange("propertyAddress", "UID", surveyId));
+
         dispatch(handleFieldChange("propertyAddress", "city", tenantId));
         dispatch(prepareFormData("Properties[0].address.city", cityName));
       }
