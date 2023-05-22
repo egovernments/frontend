@@ -115,7 +115,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
         </CardLabel>
         <Dropdown
           t={t}
-          option={slumMenu}
+          option={slumMenu?.sort((a, b) => a.name.localeCompare(b.name))}
           className="form-field"
           optionKey="i18nKey"
           id="slum"
@@ -130,7 +130,7 @@ const SelectSlumName = ({ config, onSelect, t, userType, formData }) => {
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
         <Dropdown
           t={t}
-          option={slumMenu}
+          option={slumMenu?.sort((a, b) => a.name.localeCompare(b.name))}
           optionKey="i18nKey"
           id="i18nKey"
           selected={slum}
