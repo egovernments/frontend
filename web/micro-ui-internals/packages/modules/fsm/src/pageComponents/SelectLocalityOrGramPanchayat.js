@@ -170,7 +170,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 className="form-field"
                 isMandatory
                 selected={selectedGp}
-                option={gramPanchayats}
+                option={gramPanchayats?.sort((a, b) => a.name.localeCompare(b.name))}
                 select={selectGramPanchayat}
                 optionKey="i18nkey"
                 t={t}
@@ -183,7 +183,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                   className="form-field"
                   isMandatory
                   selected={selectedVillage}
-                  option={villages}
+                  option={villages?.sort((a, b) => a.name.localeCompare(b.name))}
                   select={selectVillage}
                   optionKey="i18nkey"
                   t={t}
@@ -210,7 +210,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 className="form-field"
                 isMandatory
                 selected={selectedLocality}
-                option={fetchedLocalities}
+                option={fetchedLocalities?.sort((a, b) => a.name.localeCompare(b.name))}
                 select={selectLocality}
                 optionKey="i18nkey"
                 t={t}
@@ -240,7 +240,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
               className="form-field"
               isMandatory
               selected={selectedLocality}
-              option={fetchedLocalities}
+              option={fetchedLocalities?.sort((a, b) => a.name.localeCompare(b.name))}
               select={selectLocality}
               optionKey="i18nkey"
               t={t}
@@ -257,7 +257,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 className="form-field"
                 isMandatory
                 selected={selectedGp}
-                option={gramPanchayats}
+                option={gramPanchayats?.sort((a, b) => a.name.localeCompare(b.name))}
                 select={selectGramPanchayat}
                 optionKey="i18nkey"
                 t={t}
@@ -270,7 +270,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                   className="form-field"
                   isMandatory
                   selected={selectedVillage}
-                  option={villages}
+                  option={villages?.sort((a, b) => a.name.localeCompare(b.name))}
                   select={selectVillage}
                   optionKey="i18nkey"
                   t={t}
