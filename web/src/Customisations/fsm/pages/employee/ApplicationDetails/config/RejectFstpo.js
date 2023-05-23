@@ -1,7 +1,13 @@
 import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
-export const configRejectFstpo = ({ t, rejectMenu, selectReason, reason, action }) => {
+export const configRejectFstpo = ({
+  t,
+  rejectMenu,
+  selectReason,
+  reason,
+  action,
+}) => {
   return {
     label: {
       heading: `ES_FSM_ACTION_TITLE_${action}`,
@@ -17,7 +23,9 @@ export const configRejectFstpo = ({ t, rejectMenu, selectReason, reason, action 
             type: "dropdown",
             populators: (
               <Dropdown
-                option={rejectMenu}
+                option={rejectMenu?.sort((a, b) =>
+                  a.name.localeCompare(b.name)
+                )}
                 autoComplete="off"
                 optionKey="i18nKey"
                 id="Reason"
@@ -27,17 +35,19 @@ export const configRejectFstpo = ({ t, rejectMenu, selectReason, reason, action 
               />
             ),
           },
-          reason?.code === "OTHERS" ? {
-            label: t("Comments"),
-            isMandatory: true,
-            type: "text",
-            populators: {
-              name: "comments",
-              validation: {
-                required: true,
-              },
-            }
-          } : {}
+          reason?.code === "OTHERS"
+            ? {
+                label: t("Comments"),
+                isMandatory: true,
+                type: "text",
+                populators: {
+                  name: "comments",
+                  validation: {
+                    required: true,
+                  },
+                },
+              }
+            : {},
         ],
       },
     ],
