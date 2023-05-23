@@ -186,7 +186,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
             isMandatory
             selected={cities?.length === 1 ? cities[0] : selectedCity}
             disable={cities?.length === 1}
-            option={cities}
+            option={cities?.sort((a, b) => a.name.localeCompare(b.name))}
             select={selectCity}
             optionKey="code"
             t={t}
@@ -202,7 +202,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
               className="form-field"
               isMandatory
               selected={selectedLocality}
-              option={localities}
+              option={localities?.sort((a, b) => a.name.localeCompare(b.name))}
               select={selectLocality}
               optionKey="i18nkey"
               t={t}
@@ -255,7 +255,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         )}
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
         <RadioOrSelect
-          options={cities}
+          options={cities?.sort((a, b) => a.name.localeCompare(b.name))}
           selectedOption={selectedCity}
           optionKey="i18nKey"
           onSelect={selectCity}

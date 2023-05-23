@@ -65,7 +65,7 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
           isMandatory
           selected={selectedModal}
           disable={false}
-          option={modals}
+          option={modals?.sort((a, b) => a.name.localeCompare(b.name))}
           select={selectModal}
           optionKey="name"
           t={t}
@@ -76,7 +76,15 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
           {t("ES_FSM_REGISTRY_VEHICLE_TYPE")}
           {config.isMandatory ? " * " : null}
         </CardLabel>
-        <Dropdown className="form-field" isMandatory selected={selectedType} option={types} select={selectType} optionKey="name" t={t} />
+        <Dropdown
+          className="form-field"
+          isMandatory
+          selected={selectedType}
+          option={types?.sort((a, b) => a.name.localeCompare(b.name))}
+          select={selectType}
+          optionKey="name"
+          t={t}
+        />
       </LabelFieldPair>
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">
