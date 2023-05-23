@@ -1,7 +1,13 @@
 import React from "react";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
 
-export const configRejectApplication = ({ t, rejectMenu, setReason, reason, action }) => {
+export const configRejectApplication = ({
+  t,
+  rejectMenu,
+  setReason,
+  reason,
+  action,
+}) => {
   return {
     label: {
       heading: `ES_FSM_ACTION_TITLE_${action}`,
@@ -14,7 +20,18 @@ export const configRejectApplication = ({ t, rejectMenu, setReason, reason, acti
           {
             label: t(`ES_FSM_ACTION_${action.toUpperCase()}_REASON`),
             type: "dropdown",
-            populators: <Dropdown t={t} option={rejectMenu} id="reason" optionKey="i18nKey" selected={reason} select={setReason} />,
+            populators: (
+              <Dropdown
+                t={t}
+                option={rejectMenu?.sort((a, b) =>
+                  a.name.localeCompare(b.name)
+                )}
+                id="reason"
+                optionKey="i18nKey"
+                selected={reason}
+                select={setReason}
+              />
+            ),
             isMandatory: true,
           },
           {
