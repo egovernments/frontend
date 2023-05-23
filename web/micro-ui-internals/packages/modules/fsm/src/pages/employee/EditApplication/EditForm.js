@@ -133,8 +133,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         ? data?.advancepaymentPreference?.advanceAmount
         : applicationData.advanceAmount;
     const totalAmount = amount * noOfTrips;
-    const gramPanchayat = data?.address?.additionalDetails?.gramPanchayat;
-    const village = data?.address?.additionalDetails?.village;
+    const gramPanchayat = data?.address?.gramPanchayat;
+    const village = data?.address?.village;
     const propertyLocation = data?.address?.propertyLocation?.code;
 
     const formData = {
