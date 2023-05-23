@@ -144,16 +144,12 @@ const AdvanceCollection = ({ t, config, onSelect, formData, userType, FSMTextFie
                 </CardLabel>
                 <div className="field">
                   <TextInput
-                    disabled={
-                      (url.includes("modify") && formData?.advancepaymentPreference?.advanceAmount === 0) || AdvanceAmount === TotalAmount
-                        ? true
-                        : false
-                    }
+                    disabled={url.includes("modify") ? true : false}
                     type={input.type}
                     key={input.name}
                     style={FSMTextFieldStyle}
                     onChange={(e) => setAdvanceAmount(e.target.value)}
-                    value={input.default ? input.default : formData && formData[config.key] ? formData[config.key][input.name] : null}
+                    value={input.default ? input.default : formData && formData[config.key] ? formData[config.key][input.name] : 0}
                     {...input.validation}
                   />
                   {currentValue > TotalAmount && (
