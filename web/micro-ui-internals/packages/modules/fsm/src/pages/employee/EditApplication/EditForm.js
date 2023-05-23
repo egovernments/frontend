@@ -80,7 +80,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       formData?.propertyType &&
       formData?.subtype &&
       (formData?.address?.locality?.code ||
-        (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && formData?.address?.additionalDetails?.gramPanchayat?.code)) &&
+        (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && formData?.address?.gramPanchayat?.code)) &&
       formData?.tripData?.vehicleType &&
       (formData?.tripData?.amountPerTrip || formData?.tripData?.amountPerTrip === 0)
     ) {
