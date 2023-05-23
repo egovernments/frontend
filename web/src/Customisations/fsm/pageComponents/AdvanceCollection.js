@@ -209,14 +209,7 @@ const AdvanceCollection = ({
                 </CardLabel>
                 <div className="field">
                   <TextInput
-                    disabled={
-                      (url.includes("modify") &&
-                        formData?.advancepaymentPreference?.advanceAmount ===
-                          0) ||
-                      AdvanceAmount === TotalAmount
-                        ? true
-                        : false
-                    }
+                    disabled={url.includes("modify") ? true : false}
                     type={input.type}
                     key={input.name}
                     style={FSMTextFieldStyle}
@@ -226,7 +219,7 @@ const AdvanceCollection = ({
                         ? input.default
                         : formData && formData[config.key]
                         ? formData[config.key][input.name]
-                        : null
+                        : 0
                     }
                     {...input.validation}
                   />
