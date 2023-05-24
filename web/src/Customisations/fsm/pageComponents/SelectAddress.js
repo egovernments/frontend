@@ -20,6 +20,8 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   }
   const location = useLocation();
   const isNewVendor = location.pathname.includes("new-vendor");
+  const isEditVendor = location.pathname.includes("modify-vendor");
+
   const inputs = [
     {
       active: true,
@@ -92,7 +94,11 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         });
       }
     }
-    if ((!isUrcEnable || isNewVendor) && selectedCity && fetchedLocalities) {
+    if (
+      (!isUrcEnable || isNewVendor || isEditVendor) &&
+      selectedCity &&
+      fetchedLocalities
+    ) {
       let __localityList = fetchedLocalities;
       let filteredLocalityList = [];
 
@@ -192,7 +198,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
             t={t}
           />
         </LabelFieldPair>
-        {!isUrcEnable || isNewVendor ? (
+        {!isUrcEnable || isNewVendor || isEditVendor ? (
           <LabelFieldPair>
             <CardLabel className="card-label-smaller">
               {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}

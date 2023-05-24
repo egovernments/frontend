@@ -19,7 +19,7 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
       setSelectedType(...vehicleType);
       setSelectedCapacity(formData?.vehicle?.tankCapacity);
     }
-  }, [formData?.vehicle, vehicleData]);
+  }, [vehicleData]);
 
   useEffect(() => {
     if (selectedModal?.code && selectedModal?.code !== formData?.vehicle?.modal) {
@@ -36,6 +36,8 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
   useEffect(() => {
     if (vehicleData) {
       const vehicleModals = vehicleData.filter((vehicle) => vehicle.make === undefined);
+      const types = vehicleData.filter((vehicle) => vehicle.make === formData.vehicle.modal);
+      setTypes(types);
       setModals(vehicleModals);
     }
   }, [vehicleData]);
