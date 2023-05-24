@@ -69,7 +69,9 @@ const AdvanceCollection = ({
         title: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
       },
 
-      default: formData?.advanceAmount,
+      default: formData?.advanceAmount
+        ? formData.advanceAmount
+        : applicationData.advanceAmount,
       isMandatory: true,
     },
   ];
