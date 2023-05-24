@@ -70,8 +70,8 @@ const AdvanceCollection = ({
       },
 
       default: formData?.advanceAmount
-        ? formData.advanceAmount
-        : applicationData.advanceAmount,
+        ? formData?.advanceAmount
+        : applicationData?.advanceAmount,
       isMandatory: true,
     },
   ];
@@ -250,7 +250,7 @@ const AdvanceCollection = ({
                         {t("FSM_ADVANCE_AMOUNT_MIN")}
                       </CardLabelError>
                     )}
-                  {url.includes("modify-application") &&
+                  {/* {url.includes("modify-application") &&
                     Number(AdvanceAmount) === 0 &&
                     applicationData?.advanceAmount > 0 &&
                     Number(currentValue) === 0 && (
@@ -264,7 +264,7 @@ const AdvanceCollection = ({
                       >
                         {t("FSM_ADVANCE_AMOUNT_NOT_ZERO")}
                       </CardLabelError>
-                    )}
+                    )} */}
                 </div>
               </LabelFieldPair>
             </React.Fragment>
