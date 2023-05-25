@@ -80,7 +80,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       formData?.propertyType &&
       formData?.subtype &&
       (formData?.address?.locality?.code ||
-        (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" && formData?.address?.gramPanchayat?.code)) &&
+        (formData?.address?.propertyLocation?.code === "FROM_GRAM_PANCHAYAT" &&
+          (formData?.address?.gramPanchayat?.code || formData?.address?.additionalDetails?.gramPanchayat?.code))) &&
       formData?.tripData?.vehicleType &&
       (formData?.tripData?.amountPerTrip || formData?.tripData?.amountPerTrip === 0)
     ) {
@@ -133,8 +134,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         ? data?.advancepaymentPreference?.advanceAmount
         : applicationData.advanceAmount;
     const totalAmount = amount * noOfTrips;
-    const gramPanchayat = data?.address?.gramPanchayat;
-    const village = data?.address?.village;
+    const gramPanchayat = data?.address?.gramPanchayat || data?.address?.additionalDetails?.gramPanchayat;
+    const village = data?.address?.village || data?.address?.additionalDetails?.village;
     const propertyLocation = data?.address?.propertyLocation?.code;
 
     const formData = {
