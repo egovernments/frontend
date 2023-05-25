@@ -19,15 +19,20 @@ const EditVehicle = ({ parentUrl, heading }) => {
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
-  const { data: vehicleData, isLoading: vehicleDataLoading, isSuccess: isVehicleSuccess, error: vehicleError } = Digit.Hooks.fsm.useVehicleDetails(
-    tenantId,
-    { registrationNumber: dsoId },
-    { staleTime: Infinity }
-  );
+  const {
+    data: vehicleData,
+    isLoading: vehicleDataLoading,
+    isSuccess: isVehicleSuccess,
+    error: vehicleError,
+  } = Digit.Hooks.fsm.useVehicleDetails(tenantId, { registrationNumber: dsoId }, { staleTime: Infinity });
 
-  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useUpdateVehicle(
-    tenantId
-  );
+  const {
+    isLoading: isLoading,
+    isError: vendorCreateError,
+    data: updateResponse,
+    error: updateError,
+    mutate,
+  } = Digit.Hooks.fsm.useUpdateVehicle(tenantId);
 
   useEffect(() => {
     setMutationHappened(false);
@@ -87,10 +92,10 @@ const EditVehicle = ({ parentUrl, heading }) => {
     const vehicleType = data?.vehicle?.type?.code || data?.vehicle?.type;
     const vehicleModal = data?.vehicle?.modal?.code || data?.vehicle?.modal;
     const tankCapacity = data?.vehicle?.type?.capacity || data?.vehicle?.tankCapacity;
-    const pollutionCert = data?.pollutionCert > 0 || data?.pollutionCert.length > 0 ? new Date(`${data?.pollutionCert}`).getTime() : null;
-    const insurance = data?.insurance > 0 || data?.insurance.length > 0 ? new Date(`${data?.insurance}`).getTime() : null;
-    const roadTax = data?.roadTax > 0 || data?.roadTax.length > 0 ? new Date(`${data?.roadTax}`).getTime() : null;
-    const fitnessValidity = data?.fitnessValidity > 0 || data?.fitnessValidity.length > 0 ? new Date(`${data?.fitnessValidity}`).getTime() : null;
+    const pollutionCert = data?.pollutionCert > 0 || data?.pollutionCert?.length > 0 ? new Date(`${data?.pollutionCert}`).getTime() : null;
+    const insurance = data?.insurance > 0 || data?.insurance?.length > 0 ? new Date(`${data?.insurance}`).getTime() : null;
+    const roadTax = data?.roadTax > 0 || data?.roadTax?.length > 0 ? new Date(`${data?.roadTax}`).getTime() : null;
+    const fitnessValidity = data?.fitnessValidity > 0 || data?.fitnessValidity?.length > 0 ? new Date(`${data?.fitnessValidity}`).getTime() : null;
     const additionalDetails = data?.additionalDetails;
     const formData = {
       vehicle: {

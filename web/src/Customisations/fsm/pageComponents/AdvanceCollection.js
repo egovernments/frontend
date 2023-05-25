@@ -71,7 +71,7 @@ const AdvanceCollection = ({
 
       default: url.includes("modify")
         ? applicationData?.advanceAmount
-        : formData.advanceAmount,
+        : formData?.advanceAmount,
       isMandatory: true,
     },
   ];
