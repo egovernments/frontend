@@ -69,13 +69,12 @@ const AdvanceCollection = ({
         title: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
       },
 
-      default: formData?.advanceAmount
-        ? formData?.advanceAmount
-        : applicationData?.advanceAmount,
+      default: url.includes("modify")
+        ? applicationData?.advanceAmount
+        : formData.advanceAmount,
       isMandatory: true,
     },
   ];
-
   function setValue(object) {
     onSelect(config.key, { ...formData[config.key], ...object });
   }
