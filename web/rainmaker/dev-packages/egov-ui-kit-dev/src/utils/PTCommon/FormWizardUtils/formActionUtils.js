@@ -8,6 +8,7 @@ import { getBusinessServiceNextAction } from "egov-ui-kit/utils/PTCommon/FormWiz
 import { getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import { get } from "lodash";
 import store from "ui-redux/store";
+import { getTenantId } from "../../localStorageUtils";
 import { getPurpose, PROPERTY_FORM_PURPOSE } from "./formUtils";
 
 export const assessProperty = async (action, props) => {
@@ -114,15 +115,18 @@ export const createProperty = async (Properties, action, props, isModify, prepar
         return;
     }
     const propertyPayload = createPropertyPayload(Properties, documentsUploadRedux);
+    debugger;
     if(process.env.REACT_APP_NAME === "Citizen"){
-        const propertyPayloadTenant1 = propertyPayload.address.city;
-        const propertyPayloadTenantt = propertyPayloadTenant1.toLowerCase(); 
-        const propertyPayloadTenanta = propertyPayloadTenantt.substr(0, propertyPayloadTenantt.indexOf(" ")) ? propertyPayloadTenantt.substr(0, propertyPayloadTenantt.indexOf(" ")):propertyPayloadTenantt ;
+        let propertyPayloadTenant = propertyPayload.address.city;
+        let propertyPayloadTenantt = propertyPayloadTenant.toLowerCase(); 
+        let propertyPayloadTenanta = propertyPayloadTenantt.substr(0, propertyPayloadTenantt.indexOf(" ")) ? propertyPayloadTenantt.substr(0, propertyPayloadTenantt.indexOf(" ")):propertyPayloadTenantt ;
         propertyPayload.tenantId =  "pb."+propertyPayloadTenanta;
     }else{
-        const propertyPayloadTenant1 = propertyPayload.tenantId;
-        const propertyPayloadTenantt = propertyPayloadTenant1.toLowerCase();
-        propertyPayload.tenantId =     propertyPayloadTenantt;
+        //let propertyPayloadTenant = propertyPayload.tenantId;
+        let propertyPayloadTenant = getTenantId();
+       // let propertyPayloadTenantt = propertyPayloadTenant.toLowerCase();
+        //propertyPayload.tenantId = "pb."+propertyPayloadTenantt;
+        propertyPayload.tenantId = propertyPayloadTenant;
     }
   if(getQueryValue(search, "purpose") == 'update'){
     propertyPayload.owners=get(newProperties[0],'owners',get(propertyPayload,'owners',[]))

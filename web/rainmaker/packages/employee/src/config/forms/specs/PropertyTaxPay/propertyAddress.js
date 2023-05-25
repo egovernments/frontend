@@ -1,4 +1,4 @@
-import { pincode, mohalla, street, colony, houseNumber, dummy } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
+import { pincode, mohalla ,street, colony, houseNumber } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import { handleFieldChange, setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
@@ -69,11 +69,10 @@ const formConfig = {
         return action;
       },
     },
-    ...dummy,
     ...houseNumber,
     ...colony,
     ...street,
-    ///...mohalla,
+   // ...mohalla,
     mohalla: {
       id: "mohalla",
       jsonPath: "Properties[0].address.locality.code",
@@ -105,7 +104,12 @@ const formConfig = {
       required: true,
       formName: "propertyAddress",
       updateDependentFields: async ({ formKey, field, dispatch, state }) => {
-        
+        if (field.value && field.value.length > 0) {
+          const mohalla = field.dropDownData.find((option) => {
+            return option.value === field.value;
+          });
+          dispatch(prepareFormData("Properties[0].address.locality.area", mohalla.area));
+        }
         setTimeout(async () => {
           let localityCode = await state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code;
               if (tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing") {
