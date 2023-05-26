@@ -13,7 +13,7 @@ import RadioButtonForm from "./components/RadioButtonForm";
 import { getTenantId, getUserInfo } from "../../../utils/localStorageUtils";
 //"egov-ui-kit/utils/localStorageUtils"
 import "./index.css";
-var tenantIdcode =getTenantId();
+var tenantIdcode = getTenantId();
 // const getUserDataFromUuid = async (state, dispatch) => {
 //   debugger;
 //   let request = { searchCriteria: { tenantId: tenantIdcode} };
@@ -118,26 +118,26 @@ class YearDialog extends Component {
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={async () => {
                   // arraycontainsturtles = (myarr.indexOf("turtles") > -1);
-                  const isLocMatch = await getUserDataFromUuid();
+                 // const isLocMatch = await getUserDataFromUuid();
                   console.log("isLocMatch", isLocMatch, surveyIdcode, tenantIdcode);
                   // if(tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing"){
-                    // if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != '') {
-                    //   this.resetForm()
-                    //   history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
-                    // }
-                    // else {
-                    //   alert('Please Select a Financial Year and Enter Survey Id');
-                    // }
-                 // } else{
-                    // without jalandhar
-                    if (this.state.selectedYear !== '') {
-                      this.resetForm()
-                      history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
-                    }
-                    else {
-                      alert('Please Select a Financial Year!');
-                    }
-                 // }
+                  // if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != '') {
+                  //   this.resetForm()
+                  //   history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
+                  // }
+                  // else {
+                  //   alert('Please Select a Financial Year and Enter Survey Id');
+                  // }
+                  // } else{
+                  // without jalandhar
+                  if (this.state.selectedYear !== '') {
+                    this.resetForm()
+                    history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
+                  }
+                  else {
+                    alert('Please Select a Financial Year!');
+                  }
+                  // }
                 }}></Button>
             </div>
           </div>,
