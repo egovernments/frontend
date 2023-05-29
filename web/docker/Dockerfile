@@ -15,12 +15,9 @@ RUN cd web && yarn install
 RUN cd web && ls -lah
 RUN cd web && yarn build
 
-#FROM nginx:mainline-alpine
-FROM odhub/nginx-unprivileged
-ENV WORK_DIR=/var/web/digit-ui
+FROM nginx:mainline-alpine
 
-#RUN mkdir -p ${WORK_DIR}
-WORKDIR /var/web/digit-ui
+RUN mkdir -p ${WORK_DIR}
 
 COPY --from=build /app/web/build ${WORK_DIR}/
 COPY --from=build /app/web/docker/nginx.conf /etc/nginx/conf.d/default.conf
