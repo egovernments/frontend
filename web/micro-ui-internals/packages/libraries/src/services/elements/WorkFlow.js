@@ -135,8 +135,8 @@ export const WorkflowService = {
     const businessServiceResponse = (await Digit.WorkflowService.init(tenantId, moduleCodeData))?.BusinessServices[0]?.states;
     if (workflow && workflow.ProcessInstances) {
       const processInstances = workflow.ProcessInstances;
-      const nextStates = processInstances[0]?.nextActions.map((action) => ({ action: action?.action, nextState: processInstances[0]?.state.uuid }));
-      const nextActions = nextStates.map((id) => ({
+      const nextStates = processInstances[0]?.nextActions?.map((action) => ({ action: action?.action, nextState: processInstances[0]?.state.uuid }));
+      const nextActions = nextStates?.map((id) => ({
         action: id.action,
         state: businessServiceResponse?.find((state) => state.uuid === id.nextState),
       }));
@@ -354,7 +354,6 @@ export const WorkflowService = {
           timeline.push({
             status: "CREATED",
           });
-
         const details = {
           timeline,
           nextActions,
@@ -362,6 +361,10 @@ export const WorkflowService = {
           applicationBusinessService: workflow?.ProcessInstances?.[0]?.businessService,
           processInstances: applicationProcessInstance,
         };
+        return details;
+      } else if (processInstances.length === 0 && location.pathname.includes("new-vehicle-entry")) {
+        const nextActions = location.pathname.includes("new-vehicle-entry") && action_newVehicle;
+        const details = { nextActions };
         return details;
       }
     } else {
