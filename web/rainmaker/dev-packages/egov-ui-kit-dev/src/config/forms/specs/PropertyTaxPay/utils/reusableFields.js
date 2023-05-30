@@ -8,7 +8,9 @@ import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
-import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../../utils/api";
+//PMIDC/frontend/web/rainmaker/packages/lib/egov-ui-kit/utils/api
+import { localStorageSet, localStorageGet, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 
 let floorDropDownData = [];
@@ -22,8 +24,8 @@ for (var i = 1; i <= 12; i++) {
   monthsDropDownData.push({ label: i.toString(), value: i });
 }
 let usageForDueMonthsData = [];
-  usageForDueMonthsData.push({ label: "UNOCCUPIED", value: "UNOCCUPIED" });
-  usageForDueMonthsData.push({ label: "SELFOCCUPIED", value: "SELFOCCUPIED" });
+usageForDueMonthsData.push({ label: "UNOCCUPIED", value: "UNOCCUPIED" });
+usageForDueMonthsData.push({ label: "SELFOCCUPIED", value: "SELFOCCUPIED" });
 
 export const plotSize = {
   plotSize: {
@@ -57,7 +59,7 @@ export const floorCount = {
     floatingLabelText: "PT_FORM2_NUMBER_OF_FLOORS",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     toolTip: true,
-    defaultSort:false,
+    defaultSort: false,
     fullWidth: true,
     toolTipMessage: "PT_NUMBER_OF_FLOORS_TOOLTIP_MESSAGE",
     required: true,
@@ -83,8 +85,8 @@ export const floorCount = {
               dispatch(removeForm(variable));
             }
           }
-          let units=get(state,'form.prepareFormData.Properties[0].propertyDetails[0].units',[])
-          units=units&&units.filter(unit=>unit&&unit.floorNo&&unit.floorNo!="undefined"&&unit.floorNo!=i)
+          let units = get(state, 'form.prepareFormData.Properties[0].propertyDetails[0].units', [])
+          units = units && units.filter(unit => unit && unit.floorNo && unit.floorNo != "undefined" && unit.floorNo != i)
           dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, units));
         }
       }
@@ -139,14 +141,14 @@ export const occupancy = {
     formName: "plotDetails",
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
-      const dependentFields1 = ["annualRent","noOfMonths","usageForDueMonths"];
+      const dependentFields1 = ["annualRent", "noOfMonths", "usageForDueMonths"];
       switch (value) {
         case "RENTED":
           setDependentFields(dependentFields1, dispatch, formKey, false);
           break;
         case "PG":
           setDependentFields(dependentFields1, dispatch, formKey, false);
-          break;  
+          break;
         default:
           setDependentFields(dependentFields1, dispatch, formKey, true);
           break;
@@ -222,7 +224,7 @@ export const noOfMonths = {
     floatingLabelText: "Months on Rent",
     hintText: "Enter Number of Months",
     //toolTip: true,
-    defaultSort:false,
+    defaultSort: false,
     //fullWidth: true,
     dropDownData: [],//toolTipMessage: "PT_NUMBER_OF_FLOORS_TOOLTIP_MESSAGE",
     required: true,
@@ -244,7 +246,7 @@ export const usageForDueMonths = {
     floatingLabelText: "Usage for Pending Months",
     hintText: "Usage for Pending Months",
     //toolTip: true,
-    defaultSort:false,
+    defaultSort: false,
     //fullWidth: true,
     dropDownData: [],//toolTipMessage: "PT_NUMBER_OF_FLOORS_TOOLTIP_MESSAGE",
     required: true,
@@ -282,7 +284,7 @@ export const floorName = {
       xs: 12,
       sm: 4
     },
-    defaultSort:false,
+    defaultSort: false,
     errorMessage: "",
     required: true,
     jsonPath: "Properties[0].propertyDetails[0].units[0].floorNo",
@@ -324,8 +326,8 @@ export const beforeInitForm = {
       }
       // Adding formName prop to each field item to display required Error message.
       let fieldsArray = Object.keys(form.fields);
-      if(fieldsArray && fieldsArray.length > 0){
-        fieldsArray.map(key=>{
+      if (fieldsArray && fieldsArray.length > 0) {
+        fieldsArray.map(key => {
           form.fields[key].formName = form.name;
         });
       }
@@ -654,13 +656,36 @@ export const mohalla = {
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     required: true,
     formName: "propertyAddress",
-    updateDependentFields: ({ formKey, field, dispatch }) => {
+    updateDependentFields: ({ formKey, field, dispatch, state }) => {
       if (field.value && field.value.length > 0) {
         const mohalla = field.dropDownData.find((option) => {
           return option.value === field.value;
         });
         dispatch(prepareFormData("Properties[0].address.locality.area", mohalla.area));
       }
+      setTimeout(async () => {
+        var tenantIdcode = await state.screenConfiguration.preparedFinalObject.PropertiesTemp[0].address.city;
+        let localityCode = await state.screenConfiguration.preparedFinalObject.Properties[0].address.locality.code;
+        if (tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing") {
+          let request = { searchCriteria: { tenantId: tenantIdcode } };
+          try {
+            const response = await httpRequest(
+              "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
+              "_get",
+              [],
+              request);
+            if (response) {
+              const data = response.data.find(obj => {
+                return obj.locality == localityCode;
+              });
+              dispatch(setFieldProperty(formKey, "UID", "required", data ? true : false));
+            }
+          } catch (error) {
+            console.log("functions-js getUserDataFromUuid error", error);
+          }
+        }
+
+      }, "100");
     },
   },
 };
