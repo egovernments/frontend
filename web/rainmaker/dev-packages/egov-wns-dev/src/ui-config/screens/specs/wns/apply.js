@@ -1,11 +1,7 @@
 import commonConfig from "config/common.js";
 import {
   getBreak, getCommonCard,
-  getCommonContainer, getCommonHeader,
-
-
-
-  getCommonParagraph, getCommonTitle, getStepperObject
+  getCommonContainer, getCommonHeader, getCommonParagraph, getCommonTitle, getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, unMountScreen } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";

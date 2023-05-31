@@ -190,7 +190,8 @@ export const WSMeterMakes = {
       sm: 6
     },
     required: true,
-    pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+    //pattern: /^[0-9]\d{0,9}(\.\d{1,3})?%?$/,
+    pattern: /^[a-zA-Z0-9_.-]*$/,
     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
     jsonPath: "applyScreen.additionalDetails.meterMake"
   }),
