@@ -13,6 +13,18 @@ import { httpRequest } from "../../../utils/api";
 import "./index.css";
 import { getTenantId, getUserInfo } from "../../../utils/localStorageUtils";
 //"egov-ui-kit/utils/localStorageUtils"
+var localityCode = null;
+var surveyIdcode = null;
+const mapStateToProps = (state) => {
+  debugger;
+  localityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].address.locality.code;
+  surveyIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].surveyId;
+  const { common, form } = state;
+  const { generalMDMSDataById } = common;
+  const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
+  const getYearList = FinancialYear?Object.keys(FinancialYear).sort().reverse():null;
+  return { getYearList, form };
+};
 var tenantIdcode =getTenantId();
 const getUserDataFromUuid = async (state, dispatch) => {
   debugger;
@@ -161,18 +173,9 @@ class YearDialog extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { common, form } = state;
-  const { generalMDMSDataById } = common;
-  const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
-  const getYearList = FinancialYear?Object.keys(FinancialYear).sort().reverse():null;
-  return { getYearList, form };
-};
-var localityCode = null;
-var surveyIdcode = null;
+
 const mapDispatchToProps = (state, dispatch) => {
-  localityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].address.locality.code;
-  surveyIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].surveyId;
+  
   return {
     fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
     removeForm: (formkey) => dispatch(removeForm(formkey)),
