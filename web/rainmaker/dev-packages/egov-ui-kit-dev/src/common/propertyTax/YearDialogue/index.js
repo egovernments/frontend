@@ -9,10 +9,30 @@ import Label from "egov-ui-kit/utils/translationNode";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import RadioButtonForm from "./components/RadioButtonForm";
+import { httpRequest } from "../../../utils/api";
 import "./index.css";
-
-
-
+import { getTenantId, getUserInfo } from "../../../utils/localStorageUtils";
+//"egov-ui-kit/utils/localStorageUtils"
+var tenantIdcode =getTenantId();
+const getUserDataFromUuid = async (state, dispatch) => {
+  debugger;
+  let request = { searchCriteria: { tenantId: tenantIdcode} };
+  try {
+    const response = await httpRequest(
+      "/egov-searcher/rainmaker-pt-gissearch/GetTenantConfig/_get",
+      "_get",
+      [],
+      request);
+    if (response) {
+      const data = response.data.find(obj => {
+        return obj.locality == localityCode;
+      });
+      return Promise.resolve(data ? true : false);
+    }
+  } catch (error) {
+    console.log("functions-js getUserDataFromUuid error", error);
+  }
+};
 // const getYearList = () => {
 //   let today = new Date();
 //   let month = today.getMonth() + 1;
@@ -107,7 +127,18 @@ class YearDialog extends Component {
               <Button
                 label={<Label label="PT_OK" buttonLabel={true} color="black" />}
                 labelColor="#fe7a51"
-                buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
+                buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={ async() => {
+                  const isLocMatch = await getUserDataFromUuid();
+                  console.log("isLocMatch", isLocMatch, surveyIdcode, tenantIdcode);
+                  if(tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing"){
+                    if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != '') {
+                      this.resetForm()
+                      history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
+                    }
+                    else {
+                      alert('Please Select a Financial Year and Enter Survey Id');
+                    }
+                  } else{
                   if (this.state.selectedYear !== '') {
                     this.resetForm()
                     history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
@@ -115,6 +146,7 @@ class YearDialog extends Component {
                   else {
                     alert('Please Select a Financial Year!');
                   }
+                }
                 }}></Button>
             </div>
           </div>,
@@ -136,8 +168,11 @@ const mapStateToProps = (state) => {
   const getYearList = FinancialYear?Object.keys(FinancialYear).sort().reverse():null;
   return { getYearList, form };
 };
-
-const mapDispatchToProps = (dispatch) => {
+var localityCode = null;
+var surveyIdcode = null;
+const mapDispatchToProps = (state, dispatch) => {
+  localityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].address.locality.code;
+  surveyIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].surveyId;
   return {
     fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
     removeForm: (formkey) => dispatch(removeForm(formkey)),
