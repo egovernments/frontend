@@ -34,13 +34,19 @@ export const configRejectApplication = ({
             ),
             isMandatory: true,
           },
-          {
-            label: t("ES_FSM_ACTION_COMMENTS"),
-            type: "textarea",
-            populators: {
-              name: "comments",
-            },
-          },
+          reason?.code === "OTHERS"
+            ? {
+                label: t("ES_FSM_ACTION_COMMENTS"),
+                isMandatory: true,
+                type: "text",
+                populators: {
+                  name: "comments",
+                  validation: {
+                    required: true,
+                  },
+                },
+              }
+            : {},
         ],
       },
     ],

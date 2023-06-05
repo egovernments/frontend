@@ -490,6 +490,7 @@ const ActionModal = ({
             setTrips: setNoOfTrips,
             trips: applicationData?.noOfTrips,
             setReason: setDeclineReason,
+            reason: declineReason,
             action,
           })
         );
@@ -555,6 +556,8 @@ const ActionModal = ({
     vehicleNoList,
     Reason,
     fstpoRejectionReason,
+    cancelReason,
+    declineReason,
   ]);
 
   const hiddenFileInput = React.useRef(null);

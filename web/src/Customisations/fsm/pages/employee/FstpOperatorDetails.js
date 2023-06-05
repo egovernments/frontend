@@ -282,6 +282,8 @@ const FstpOperatorDetails = () => {
     const re = new RegExp(
       "[A-Z]{2}\\s{0,1}[0-9]{2}\\s{0,1}[A-Z]{0,2}\\s{0,1}[0-9]{4}"
     );
+    const dsoName = new RegExp(/^[A-Za-z0-9 ]*$/);
+    const locality = new RegExp(/^[A-Za-z0-9 ]*$/);
     if (!re.test(newVehicleNumber)) {
       setShowToast({ key: "error", action: `ES_FSM_VEHICLE_FORMAT_TIP` });
       setTimeout(() => {
@@ -289,7 +291,11 @@ const FstpOperatorDetails = () => {
       }, 5000);
       return;
     }
-    if (newDsoName === null || newDsoName?.trim()?.length === 0) {
+    if (
+      newDsoName === null ||
+      newDsoName?.trim()?.length === 0 ||
+      !dsoName.test(newDsoName)
+    ) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_DSO_NAME` });
       setTimeout(() => {
         closeToast();
@@ -298,7 +304,8 @@ const FstpOperatorDetails = () => {
     }
     if (
       (selectLocation.code !== "FROM_GRAM_PANCHAYAT" && newLocality === null) ||
-      newLocality?.trim()?.length === 0
+      newLocality?.trim()?.length === 0 ||
+      !locality.test(newLocality)
     ) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_LOCALITY` });
       setTimeout(() => {
