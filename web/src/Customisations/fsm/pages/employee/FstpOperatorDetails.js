@@ -59,7 +59,7 @@ const FstpOperatorDetails = () => {
   );
   const isUrcEnable =
     urcConfig && urcConfig.length > 0 && urcConfig[0].URCEnable;
-  const inputs = [
+  let inputs = [
     {
       active: true,
       code: "WITHIN_ULB_LIMITS",
@@ -71,6 +71,12 @@ const FstpOperatorDetails = () => {
       code: "FROM_GRAM_PANCHAYAT",
       i18nKey: "FROM_GRAM_PANCHAYAT",
       name: "From Gram Panchayat",
+    },
+    {
+      active: true,
+      code: "FROM_OTHER_ULB",
+      i18nKey: "FROM_OTHER_ULB",
+      name: "From Other/Outside ULBs",
     },
   ];
 
@@ -347,11 +353,12 @@ const FstpOperatorDetails = () => {
       newGramPanchayat: newGramPanchayat,
       newVillage: newVillage,
       boundaryType:
-        selectLocation.code === "FROM_GRAM_PANCHAYAT"
+        selectLocation?.code === "FROM_GRAM_PANCHAYAT"
           ? selectedVillage?.code
             ? "Village"
             : "GP"
           : "Locality",
+      propertyLocation: selectLocation?.code,
     };
     temp.businessService = "FSM_VEHICLE_TRIP";
     temp.tripDetails = [
@@ -576,7 +583,7 @@ const FstpOperatorDetails = () => {
                   style={
                     !isMobile &&
                     history.location.pathname.includes("new-vehicle-entry")
-                      ? { display: "flex", marginBottom: 0 }
+                      ? { marginBottom: 0 }
                       : {}
                   }
                   innerStyles={{ marginLeft: "10px" }}
