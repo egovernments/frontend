@@ -15,9 +15,13 @@ import { getTenantId, getUserInfo } from "../../../utils/localStorageUtils";
 //"egov-ui-kit/utils/localStorageUtils"
 var localityCode = null;
 var surveyIdcode = null;
+var editlocalityCode = null;
 const mapStateToProps = (state) => {
   debugger;
   localityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].address.locality.code;
+editlocalityCode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].surveyId
+;
+
   surveyIdcode = state.screenConfiguration.preparedFinalObject.propertiesAudit[0].surveyId;
   const { common, form } = state;
   const { generalMDMSDataById } = common;
@@ -147,6 +151,10 @@ class YearDialog extends Component {
                    
                  if(isLocMatch){
                     if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != null) {
+                      this.resetForm()
+                      history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
+                    }
+                    else if(this.state.selectedYear !== '' && editlocalityCode != null){
                       this.resetForm()
                       history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
                     }
