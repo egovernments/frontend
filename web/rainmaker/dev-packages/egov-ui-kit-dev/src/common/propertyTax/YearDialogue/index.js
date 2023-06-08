@@ -26,6 +26,7 @@ const mapStateToProps = (state) => {
   return { getYearList, form };
 };
 var tenantIdcode =getTenantId();
+var isLocMatch ;
 const getUserDataFromUuid = async (state, dispatch) => {
   debugger;
   let request = { searchCriteria: { tenantId: tenantIdcode} };
@@ -39,7 +40,7 @@ const getUserDataFromUuid = async (state, dispatch) => {
       const data = response.data.find(obj => {
         return obj.locality == localityCode;
       });
-      return Promise.resolve(data ? true : false);
+      isLocMatch = data ? true : false;
     }
   } catch (error) {
     console.log("functions-js getUserDataFromUuid error", error);
@@ -140,10 +141,12 @@ class YearDialog extends Component {
                 label={<Label label="PT_OK" buttonLabel={true} color="black" />}
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={ async() => {
-                  const isLocMatch = await getUserDataFromUuid();
-                  console.log("isLocMatch", isLocMatch, surveyIdcode, tenantIdcode);
                   if(tenantIdcode == "pb.jalandhar" || tenantIdcode == "pb.testing"){
-                    if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != '') {
+                    await getUserDataFromUuid();
+                  }
+                   
+                 if(isLocMatch){
+                    if ( isLocMatch && this.state.selectedYear !== '' && surveyIdcode != null) {
                       this.resetForm()
                       history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form`);
                     }
@@ -174,7 +177,7 @@ class YearDialog extends Component {
 }
 
 
-const mapDispatchToProps = (state, dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   
   return {
     fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
