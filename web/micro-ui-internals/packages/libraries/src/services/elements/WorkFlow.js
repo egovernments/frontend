@@ -309,11 +309,13 @@ export const WorkflowService = {
             }
           } catch (err) {}
         }
-
+        console.log(actionRolePair, "actionRolePair");
         // TAKING OUT CURRENT APPL STATUS
         const tempCheckStatus = timeline.map((i) => i.status)[0];
         // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
         // HIDING PAYMENT OPTION FOR DSO AND WHEN APPLICATION IS NOT IN PAYMENT STATUS
+        console.log(tempCheckStatus, "tempCheckStatus");
+
         const nextAction = location.pathname.includes("new-vehicle-entry")
           ? action_newVehicle
           : location.pathname.includes("dso")
@@ -324,6 +326,8 @@ export const WorkflowService = {
             : actionRolePair.filter((i) => i.action !== "COMPLETED")
           : tempCheckStatus.includes("DSO_INPROGRESS")
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "PAY")
+          : tempCheckStatus.includes("DISPOSED") && !isPaymentCompleted
+          ? actionRolePair.filter((i) => i.action !== "COMPLETED")
           : actionRolePair.filter((i) => i.action !== "PAY");
 
         const nextActions =
