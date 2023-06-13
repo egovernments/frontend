@@ -324,7 +324,7 @@ export const WorkflowService = {
           : tempCheckStatus.includes("DSO_INPROGRESS")
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "PAY")
           : tempCheckStatus.includes("DISPOSED") && !isPaymentCompleted
-          ? actionRolePair.filter((i) => i.action !== "COMPLETED")
+          ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "CANCEL")
           : tempCheckStatus.includes("DISPOSED") && isPaymentCompleted
           ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
           : actionRolePair.filter((i) => i.action !== "PAY");
