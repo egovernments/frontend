@@ -30,6 +30,8 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
     formData?.address?.additionalDetails?.village ? formData?.address?.additionalDetails?.village : {}
   );
   const [newVillage, setNewVillage] = useState();
+  const [newGp, setNewGp] = useState();
+  const [newLocality, setNewLocality] = useState();
 
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || Digit.SessionStorage.get("fsm.file.address.city") || null);
   useEffect(() => {
@@ -119,11 +121,11 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
   function selectGramPanchayat(value) {
     setSelectedGp(value);
     const filteredVillages = fetchedGramPanchayats.filter((items) => items.code === value.code)[0].children;
-    const localitiesWithLocalizationKeys = filteredVillages.map((obj) => ({
+    const localitiesWithLocalizationKeys = filteredVillages?.map((obj) => ({
       ...obj,
       i18nkey: tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + obj.code,
     }));
-    if (localitiesWithLocalizationKeys.length > 0) {
+    if (localitiesWithLocalizationKeys?.length > 0) {
       setVillages(localitiesWithLocalizationKeys);
     }
     if (userType === "employee") {
@@ -145,15 +147,27 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       onSelect(config.key, { ...formData[config.key], village: value });
     }
   };
-
+  const onNewGpChange = (value) => {
+    setNewGp(value);
+    if (userType === "employee") {
+      onSelect(config.key, { ...formData[config.key], newGp: value });
+    }
+  };
+  const onNewLocality = (value) => {
+    setNewLocality(value);
+    if (userType === "employee") {
+      onSelect(config.key, { ...formData[config.key], newLocality: value });
+    }
+  };
   function onSubmit() {
     if (propertyLocation?.code === "FROM_GRAM_PANCHAYAT") {
       onSelect(config.key, {
         gramPanchayat: selectedGp,
         village: selectedVillage ? selectedVillage : newVillage,
+        newGramPanchayat: newGp,
       });
     } else {
-      onSelect(config.key, { locality: selectedLocality });
+      onSelect(config.key, { locality: selectedLocality, newLocality: newLocality });
     }
   }
   if (userType === "employee") {
@@ -176,6 +190,14 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 t={t}
               />
             </LabelFieldPair>
+            {selectedGp?.name === "Other" && (
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")}</CardLabel>
+                <div className="field">
+                  <TextInput id="newGp" key="newGp" value={newGp} onChange={(e) => onNewGpChange(e.target.value)} />
+                </div>
+              </LabelFieldPair>
+            )}
             {villages.length > 0 && (
               <LabelFieldPair>
                 <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
@@ -201,21 +223,31 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
           </div>
         ) : (
           isUrcEnable && (
-            <LabelFieldPair>
-              <CardLabel className="card-label-smaller">
-                {t("CS_CREATECOMPLAINT_MOHALLA")}
-                {config.isMandatory ? " * " : null}
-              </CardLabel>
-              <Dropdown
-                className="form-field"
-                isMandatory
-                selected={selectedLocality}
-                option={fetchedLocalities?.sort((a, b) => a.name.localeCompare(b.name))}
-                select={selectLocality}
-                optionKey="i18nkey"
-                t={t}
-              />
-            </LabelFieldPair>
+            <div>
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">
+                  {t("CS_CREATECOMPLAINT_MOHALLA")}
+                  {config.isMandatory ? " * " : null}
+                </CardLabel>
+                <Dropdown
+                  className="form-field"
+                  isMandatory
+                  selected={selectedLocality}
+                  option={fetchedLocalities?.sort((a, b) => a.name.localeCompare(b.name))}
+                  select={selectLocality}
+                  optionKey="i18nkey"
+                  t={t}
+                />
+              </LabelFieldPair>
+              {formData?.address?.locality?.name === "Other" && (
+                <LabelFieldPair>
+                  <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")}</CardLabel>
+                  <div className="field">
+                    <TextInput id="newLocality" key="newLocality" value={newLocality} onChange={(e) => onNewLocality(e.target.value)} />
+                  </div>
+                </LabelFieldPair>
+              )}
+            </div>
           )
         )}
       </div>
@@ -231,21 +263,31 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
         t={t}
       >
         {propertyLocation?.code === "WITHIN_ULB_LIMITS" ? (
-          <LabelFieldPair>
-            <CardLabel className="card-label-smaller">
-              {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}
-              {/* {config.isMandatory ? " * " : null} */}
-            </CardLabel>
-            <Dropdown
-              className="form-field"
-              isMandatory
-              selected={selectedLocality}
-              option={fetchedLocalities?.sort((a, b) => a.name.localeCompare(b.name))}
-              select={selectLocality}
-              optionKey="i18nkey"
-              t={t}
-            />
-          </LabelFieldPair>
+          <div>
+            <LabelFieldPair>
+              <CardLabel className="card-label-smaller">
+                {`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}
+                {/* {config.isMandatory ? " * " : null} */}
+              </CardLabel>
+              <Dropdown
+                className="form-field"
+                isMandatory
+                selected={selectedLocality}
+                option={fetchedLocalities?.sort((a, b) => a.name.localeCompare(b.name))}
+                select={selectLocality}
+                optionKey="i18nkey"
+                t={t}
+              />
+            </LabelFieldPair>
+            {formData?.address?.locality?.name === "Other" && (
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")}</CardLabel>
+                <div className="field">
+                  <TextInput id="newLocality" key="newLocality" value={newLocality} onChange={(e) => onNewLocality(e.target.value)} />
+                </div>
+              </LabelFieldPair>
+            )}
+          </div>
         ) : (
           <div>
             <LabelFieldPair>
@@ -263,6 +305,14 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 t={t}
               />
             </LabelFieldPair>
+            {selectedGp?.name === "Other" && (
+              <LabelFieldPair>
+                <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")}</CardLabel>
+                <div className="field">
+                  <TextInput id="newGp" key="newGp" value={newGp} onChange={(e) => onNewGpChange(e.target.value)} />
+                </div>
+              </LabelFieldPair>
+            )}
             {villages.length > 0 && (
               <LabelFieldPair>
                 <CardLabel className="card-label-smaller">{t("CS_VILLAGE_NAME")}</CardLabel>
