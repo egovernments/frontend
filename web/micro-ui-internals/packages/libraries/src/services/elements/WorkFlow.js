@@ -127,7 +127,6 @@ export const WorkflowService = {
     const filters = { id };
     const response = await FSMService.search(tenantId, { ...filters });
     if (Number(response.fsm[0].additionalDetails.tripAmount) === 0) isTripAmountAvailable = true;
-    console.log(isTripAmountAvailable, "isTripAmountAvailable");
     const workflow = await Digit.WorkflowService.getByBusinessId(tenantId, id);
     const applicationProcessInstance = cloneDeep(workflow?.ProcessInstances);
     const getLocationDetails = window.location.href.includes("/obps/") || window.location.href.includes("noc/inbox");
@@ -309,12 +308,10 @@ export const WorkflowService = {
             }
           } catch (err) {}
         }
-        console.log(actionRolePair, "actionRolePair");
         // TAKING OUT CURRENT APPL STATUS
         const tempCheckStatus = timeline.map((i) => i.status)[0];
         // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
         // HIDING PAYMENT OPTION FOR DSO AND WHEN APPLICATION IS NOT IN PAYMENT STATUS
-        console.log(tempCheckStatus, "tempCheckStatus");
 
         const nextAction = location.pathname.includes("new-vehicle-entry")
           ? action_newVehicle
@@ -328,6 +325,8 @@ export const WorkflowService = {
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "PAY")
           : tempCheckStatus.includes("DISPOSED") && !isPaymentCompleted
           ? actionRolePair.filter((i) => i.action !== "COMPLETED")
+          : tempCheckStatus.includes("DISPOSED") && isPaymentCompleted
+          ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
           : actionRolePair.filter((i) => i.action !== "PAY");
 
         const nextActions =
