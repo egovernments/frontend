@@ -25,8 +25,10 @@ import set from 'lodash/set';
 import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
 import { isModifyMode } from "../../../../../ui-utils/commons";
 import {WSledgerId,WSBillingAmount,WSbillingType,WScompositionFee,WSMeterMakes,WSunitUsageType,WSsubUsageType} from "../ImpelExtendedFeature/fields";
+import { setFieldProperty } from "../../../../../../../../packages/employee/src/redux/store/actions";
+//egov-ui-kit/redux/form/actions
 let isMode = isModifyMode();
-
+  //dispatch(setFieldProperty(formKey, "multipleApplicantInfo", "disabled", true ));
 const getPlumberRadioButton = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-wns",
@@ -87,6 +89,15 @@ const waterSubSourceChange = (reqObj) => {
   }
 }
 export const commonRoadCuttingChargeInformation = () => {
+  let urldatavalues = window.location.search;
+  // let urlaa ="http://localhost:3006/wns/apply?applicationNumber=SW_AP/603/2022-23/020602&tenantId=pb.fazilka&action=edit";
+
+let bb = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/wns/apply?");
+
+let cc = bb[1].split("&");
+
+console.log(cc[0]);
+  if(cc[0]){
   return getCommonGrayCard({
     roadDetails: getCommonContainer({
       roadType: {
@@ -129,6 +140,7 @@ export const commonRoadCuttingChargeInformation = () => {
       })
     })
   })
+}
 }
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
@@ -434,10 +446,12 @@ export const additionDetails = getCommonCard({
     })
   }),
   roadCuttingChargeContainer: getCommonGrayCard({
+    
+          
     header: getCommonSubHeader(
       {
         labelName: "Road Cutting Charge",
-        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILSjgjgjfn"
       },
       {
         style: {
@@ -454,7 +468,7 @@ export const additionDetails = getCommonCard({
             // display: "none"
             // width: 
           },
-          disabled: true,
+          
         },
         children: {
           multipleApplicantInfo: {
@@ -463,6 +477,7 @@ export const additionDetails = getCommonCard({
             props: {
               scheama: commonRoadCuttingChargeInformation(),
               items: [],
+              
               addItemLabel: {
                 labelName: "Add Road Type",
                 labelKey: "WS_ADD_ROAD_TYPE_LABEL"
@@ -471,7 +486,6 @@ export const additionDetails = getCommonCard({
               sourceJsonPath: "applyScreen.roadCuttingInfo",
               prefixSourceJsonPath: "children.cardContent.children.roadDetails.children"
             },
-            disabled: true,
             type: "array"
           }
         }
