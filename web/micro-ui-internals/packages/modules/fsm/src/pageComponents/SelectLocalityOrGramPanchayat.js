@@ -282,9 +282,14 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
             {formData?.address?.locality?.name === "Other" && (
               <LabelFieldPair>
                 <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")}</CardLabel>
-                <div className="field">
-                  <TextInput id="newLocality" key="newLocality" value={newLocality} onChange={(e) => onNewLocality(e.target.value)} />
-                </div>
+                <TextInput
+                  style={{ width: "86%" }}
+                  type="text"
+                  id="newLocality"
+                  key="newLocality"
+                  value={newLocality}
+                  onChange={(e) => onNewLocality(e.target.value)}
+                />
               </LabelFieldPair>
             )}
           </div>
@@ -308,9 +313,14 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
             {selectedGp?.name === "Other" && (
               <LabelFieldPair>
                 <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")}</CardLabel>
-                <div className="field">
-                  <TextInput id="newGp" key="newGp" value={newGp} onChange={(e) => onNewGpChange(e.target.value)} />
-                </div>
+                <TextInput
+                  style={{ width: "86%" }}
+                  type="text"
+                  id="newGp"
+                  key="newGp"
+                  value={newGp}
+                  onChange={(e) => onNewGpChange(e.target.value)}
+                />
               </LabelFieldPair>
             )}
             {villages.length > 0 && (

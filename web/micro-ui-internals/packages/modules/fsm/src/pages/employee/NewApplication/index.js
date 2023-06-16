@@ -107,7 +107,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const gramPanchayat = data?.address.gramPanchayat;
     const village = data?.address.village;
     const propertyLocation = data?.address?.propertyLocation?.code;
-
+    const newLocality = data?.address?.newLocality;
+    const newGp = data?.address?.newGp;
     const formData = {
       fsm: {
         citizen: {
@@ -150,10 +151,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
               code: gramPanchayat?.code,
               name: gramPanchayat?.name,
             },
-            village: {
-              code: village?.code ? village?.code : "",
-              name: village?.name ? village?.name : "",
-            },
+            village: village?.code
+              ? {
+                  code: village?.code ? village?.code : "",
+                  name: village?.name ? village?.name : "",
+                }
+              : village,
+            newLocality: newLocality,
+            newGramPanchayat: newGp,
           },
         },
         noOfTrips,

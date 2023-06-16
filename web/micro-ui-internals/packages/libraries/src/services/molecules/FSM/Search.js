@@ -157,6 +157,8 @@ export const Search = {
                 title: t("CS_VILLAGE_NAME"),
                 value: additionalDetails?.village?.code
                   ? t(`${response?.tenantId?.toUpperCase().split(".").join("_")}_REVENUE_${additionalDetails?.village?.code}`)
+                  : additionalDetails?.village
+                  ? additionalDetails?.village
                   : "N/A",
               }
             : null,
