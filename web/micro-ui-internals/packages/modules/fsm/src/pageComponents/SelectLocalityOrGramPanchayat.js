@@ -167,7 +167,10 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
         newGramPanchayat: newGp,
       });
     } else {
-      onSelect(config.key, { locality: selectedLocality, newLocality: newLocality });
+      onSelect(config.key, {
+        locality: selectedLocality,
+        newLocality: newLocality,
+      });
     }
   }
   if (userType === "employee") {
@@ -279,7 +282,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
                 t={t}
               />
             </LabelFieldPair>
-            {formData?.address?.locality?.name === "Other" && (
+            {selectedLocality?.name === "Other" && (
               <LabelFieldPair>
                 <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")}</CardLabel>
                 <TextInput

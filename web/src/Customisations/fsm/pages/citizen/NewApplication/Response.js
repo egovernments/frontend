@@ -173,7 +173,10 @@ const Response = ({ data, onSuccess }) => {
               : "",
             additionalDetails: {
               totalAmount: amount,
-              tripAmount: JSON.stringify(amountPerTrip),
+              tripAmount:
+                typeof amountPerTrip === "number"
+                  ? JSON.stringify(amountPerTrip)
+                  : amountPerTrip,
             },
             advanceAmount:
               typeof advanceAmount === "number"
