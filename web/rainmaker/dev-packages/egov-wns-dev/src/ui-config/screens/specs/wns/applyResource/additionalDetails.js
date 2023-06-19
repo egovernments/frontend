@@ -89,11 +89,10 @@ const waterSubSourceChange = (reqObj) => {
   }
 }
 export const commonRoadCuttingChargeInformation = () => {
-  let urldatavalues = window.location.search;
+  let urldatavalues = window.location.href;
   // let urlaa ="http://localhost:3006/wns/apply?applicationNumber=SW_AP/603/2022-23/020602&tenantId=pb.fazilka&action=edit";
-
-let bb = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/wns/apply?");
-
+  let bb = urldatavalues.split("http://localhost:3006/wns/apply?");
+//let bb = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/wns/apply?");
 let cc = bb[1].split("&");
 
 console.log(cc[0]);
