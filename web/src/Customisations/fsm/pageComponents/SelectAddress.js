@@ -49,7 +49,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     () =>
       formData?.address?.city ||
       Digit.SessionStorage.get("fsm.file.address.city") ||
-      null
+      Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")
   );
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
     selectedCity?.code,
@@ -262,7 +262,8 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
         <RadioOrSelect
           options={cities?.sort((a, b) => a.name.localeCompare(b.name))}
-          selectedOption={selectedCity}
+          selectedOption={cities?.length === 1 ? cities[0] : selectedCity}
+          disabled={selectedCity?.code ? true : false}
           optionKey="i18nKey"
           onSelect={selectCity}
           t={t}

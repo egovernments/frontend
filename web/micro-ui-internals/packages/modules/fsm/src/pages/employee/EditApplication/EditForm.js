@@ -72,6 +72,21 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         boundaryType: applicationData?.address?.additionalDetails?.boundaryType,
         gramPanchayat: applicationData?.address?.additionalDetails?.gramPanchayat,
         village: applicationData?.address?.additionalDetails?.village,
+        newGp: applicationData?.address?.additionalDetails?.newGramPanchayat,
+      },
+    };
+  } else if (applicationData && applicationData?.address?.additionalDetails?.boundaryType === "Locality") {
+    defaultValues.address = {
+      ...defaultValues.address,
+      propertyLocation: {
+        active: true,
+        code: "WITHIN_ULB_LIMITS",
+        i18nKey: "WITHIN_ULB_LIMITS",
+        name: "Witnin ULB Limits",
+      },
+      additionalDetails: {
+        boundaryType: applicationData?.address?.additionalDetails?.boundaryType,
+        newLocality: applicationData?.address?.additionalDetails?.newLocality,
       },
     };
   }
@@ -137,6 +152,9 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     const gramPanchayat = data?.address?.gramPanchayat || data?.address?.additionalDetails?.gramPanchayat;
     const village = data?.address?.village || data?.address?.additionalDetails?.village;
     const propertyLocation = data?.address?.propertyLocation?.code;
+    const newGp = data?.address?.newGp || data?.address?.additionalDetails?.newGramPanchayat;
+    const newVillage = data?.address?.newVillage || data?.address?.additionalDetails?.village;
+    const newLocality = data?.address?.newLocality || data?.address?.additionalDetails?.newLocality;
 
     const formData = {
       ...applicationData,
@@ -183,10 +201,14 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
             code: gramPanchayat?.code,
             name: gramPanchayat?.name,
           },
-          village: {
-            code: village?.code ? village?.code : "",
-            name: village?.name ? village?.name : "",
-          },
+          village: village?.code
+            ? {
+                code: village?.code ? village?.code : "",
+                code: village?.code ? village?.code : "",
+              }
+            : newVillage,
+          newGramPanchayat: newGp,
+          newLocality: newLocality,
         },
       },
       advanceAmount: typeof advanceAmount === "number" ? JSON.stringify(advanceAmount) : advanceAmount,

@@ -97,7 +97,8 @@ const Response = ({ data, onSuccess }) => {
           village,
           propertyLocation,
           newLocality,
-          newGp,
+          newGramPanchayat,
+          newVillage,
         } = address;
         setPaymentPreference(selectPaymentPreference?.code);
         const advanceAmount =
@@ -130,9 +131,9 @@ const Response = ({ data, onSuccess }) => {
                       code: village?.code ? village?.code : "",
                       name: village?.name ? village?.name : "",
                     }
-                  : village,
+                  : newVillage,
                 newLocality: newLocality,
-                newGramPanchayat: newGp,
+                newGramPanchayat: newGramPanchayat,
               },
               street: street?.trim(),
               doorNo: doorNo?.trim(),

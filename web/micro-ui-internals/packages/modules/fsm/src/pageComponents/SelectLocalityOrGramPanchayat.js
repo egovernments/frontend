@@ -66,6 +66,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
 
       if (formData?.address?.locality) {
         setSelectedLocality(formData.address.locality);
+        setNewLocality(formData?.address?.additionalDetails?.newLocality);
       }
 
       if (formData?.address?.pincode) {
@@ -96,6 +97,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
           (obj) => obj.code === formData?.address?.additionalDetails?.gramPanchayat?.code
         )[0];
         setSelectedGp(filteredGramPanchayat);
+        setNewGp(formData?.address?.additionalDetails?.newGp);
         var villageUnderGp = filteredGramPanchayat?.children.filter((obj) => obj.code === formData?.address?.additionalDetails?.village?.code);
         if (villageUnderGp.length > 0) {
           villageUnderGp[0].i18nkey = tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + villageUnderGp[0].code;
@@ -144,7 +146,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
   const onChangeVillage = (value) => {
     setNewVillage(value);
     if (userType === "employee") {
-      onSelect(config.key, { ...formData[config.key], village: value });
+      onSelect(config.key, { ...formData[config.key], newVillage: value });
     }
   };
   const onNewGpChange = (value) => {
@@ -163,8 +165,9 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
     if (propertyLocation?.code === "FROM_GRAM_PANCHAYAT") {
       onSelect(config.key, {
         gramPanchayat: selectedGp,
-        village: selectedVillage ? selectedVillage : newVillage,
+        village: selectedVillage,
         newGramPanchayat: newGp,
+        newVillage: newVillage,
       });
     } else {
       onSelect(config.key, {

@@ -109,6 +109,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const propertyLocation = data?.address?.propertyLocation?.code;
     const newLocality = data?.address?.newLocality;
     const newGp = data?.address?.newGp;
+    const newVillage = data?.address?.newVillage;
     const formData = {
       fsm: {
         citizen: {
@@ -156,7 +157,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
                   code: village?.code ? village?.code : "",
                   name: village?.name ? village?.name : "",
                 }
-              : village,
+              : newVillage,
             newLocality: newLocality,
             newGramPanchayat: newGp,
           },
