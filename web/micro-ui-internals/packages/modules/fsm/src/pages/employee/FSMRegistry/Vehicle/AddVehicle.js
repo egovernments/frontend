@@ -45,7 +45,7 @@ const AddVehicle = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.registrationNumber && formData?.ownerName && formData?.vehicle?.modal && formData?.vehicle?.type) {
+    if (formData?.registrationNumber && formData?.ownerName && formData?.phone && formData?.vehicle?.modal && formData?.vehicle?.type) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);

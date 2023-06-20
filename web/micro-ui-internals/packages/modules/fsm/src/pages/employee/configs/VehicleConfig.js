@@ -101,6 +101,7 @@ const VehicleConfig = (t, disabled = false) => {
         },
         {
           label: "ES_FSM_REGISTRY_NEW_VEHICLE_OWNER_PHONE",
+          isMandatory: true,
           type: "mobileNumber",
           key: "phone",
           disable: disabled,
