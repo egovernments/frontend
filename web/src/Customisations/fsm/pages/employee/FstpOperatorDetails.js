@@ -167,11 +167,6 @@ const FstpOperatorDetails = () => {
 
   useEffect(() => {
     if (fetchedGramPanchayats && fetchedGramPanchayats.length > 0) {
-      fetchedGramPanchayats.push({
-        code: "OTHER",
-        name: "Other",
-        i18nkey: tenantId.replace(".", "_").toUpperCase() + "_OTHER",
-      });
       setGramPanchayats(fetchedGramPanchayats);
     }
   }, [fetchedGramPanchayats]);
@@ -263,7 +258,12 @@ const FstpOperatorDetails = () => {
 
     setErrors({});
 
+    const d = new Date();
+    const timeStamp =
+      Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) /
+      1000;
     const tripDetail = { tripNo: currentTrip };
+    vehicle.tripEndTime = timeStamp;
     vehicle.volumeCarried = wasteCollected;
     vehicle.tripDetails[0].additionalDetails = tripDetail;
     vehicle.additionalDetails = {
@@ -337,10 +337,14 @@ const FstpOperatorDetails = () => {
 
     setErrors({});
     let temp = {};
-
+    const d = new Date();
+    const timeStamp =
+      Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) /
+      1000;
     const tripDetail = { tripNo: 1 };
     temp.tenantId = tenantId;
     temp.status = "ACTIVE";
+    temp.tripEndTime = timeStamp;
     temp.volumeCarried = wasteCollected;
     temp.additionalDetails = {
       vehicleNumber: newVehicleNumber || applicationNos,
@@ -496,7 +500,7 @@ const FstpOperatorDetails = () => {
 
   function selectGramPanchayat(value) {
     setSelectedGp(value);
-    if (value.code !== "OTHER") {
+    if (value.name !== "Other") {
       const filteredVillages = gramPanchayats.filter(
         (items) => items.code === value.code
       )[0]?.children;
@@ -639,7 +643,7 @@ const FstpOperatorDetails = () => {
                 last={false}
                 labelStyle={{ fontWeight: "normal" }}
               />
-              {selectedGp?.code === "OTHER" && (
+              {selectedGp?.name === "Other" && (
                 <div>
                   <Row
                     rowContainerStyle={
@@ -701,7 +705,7 @@ const FstpOperatorDetails = () => {
                   />
                 </div>
               )}
-              {selectedGp?.code !== "OTHER" && (
+              {selectedGp?.name !== "Other" && (
                 <Row
                   rowContainerStyle={
                     isMobile &&
