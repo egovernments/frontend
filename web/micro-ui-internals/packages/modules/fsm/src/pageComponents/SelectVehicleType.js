@@ -36,7 +36,7 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
   useEffect(() => {
     if (vehicleData) {
       const vehicleModals = vehicleData.filter((vehicle) => vehicle.make === undefined);
-      const types = vehicleData.filter((vehicle) => vehicle?.make === formData?.vehicle?.modal || formData?.vehicle?.modal?.code);
+      const types = vehicleData.filter((vehicle) => formData?.vehicle?.modal != undefined && vehicle?.make === formData?.vehicle?.modal?.code);
       setTypes(types);
       setModals(vehicleModals);
     }
