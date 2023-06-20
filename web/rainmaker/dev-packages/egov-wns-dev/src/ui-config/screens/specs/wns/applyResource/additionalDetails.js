@@ -93,7 +93,7 @@ export const commonRoadCuttingChargeInformation = () => {
   //let urldatavalues= new URLSearchParams(urldatavaluesone.search);
   // let urlaa ="http://localhost:3006/wns/apply?applicationNumber=SW_AP/603/2022-23/020602&tenantId=pb.fazilka&action=edit";
   //let bb = urldatavalues.split("http://localhost:3006/wns/apply");
-let bb = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/wns/apply");
+let bb = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/employee/wns/apply");
 //  bb[1].split("&");
 let roadcut = bb[1].split("&");
  if(roadcut[0]){
