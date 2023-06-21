@@ -93,6 +93,7 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
       } else {
         setAdvanceAmount(0);
         Digit.SessionStorage.set("advance_amount", 0);
+        Digit.SessionStorage.set("amount_per_trip", null);
       }
     })();
   }, [

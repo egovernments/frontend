@@ -265,7 +265,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       <FormStep
         config={config}
         onSelect={onSubmit}
-        isDisabled={propertyLocation?.code === "WITHIN_ULB_LIMITS" ? !selectedLocality : !selectedGp}
+        isDisabled={propertyLocation?.code === "WITHIN_ULB_LIMITS" ? !selectedLocality : Object.keys(selectedGp).length <= 0}
         t={t}
       >
         {propertyLocation?.code === "WITHIN_ULB_LIMITS" ? (
