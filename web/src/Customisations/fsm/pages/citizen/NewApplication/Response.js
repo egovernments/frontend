@@ -102,7 +102,11 @@ const Response = ({ data, onSuccess }) => {
         } = address;
         setPaymentPreference(selectPaymentPreference?.code);
         const advanceAmount =
-          amount === 0 ? null : selectPaymentPreference?.advanceAmount;
+          amount === 0
+            ? null
+            : selectPaymentPreference?.advanceAmount === null
+            ? 0
+            : selectPaymentPreference?.advanceAmount;
         amount === 0 ? setZeroPay(true) : setZeroPay(false);
         advanceAmount === 0 ? setAdvancePay(true) : setAdvancePay(false);
         const formdata = {

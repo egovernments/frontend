@@ -103,7 +103,8 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const localityName = data?.address?.locality?.name;
     const gender = data.applicationData.applicantGender;
     const paymentPreference = amount === 0 ? null : data?.paymentPreference ? data?.paymentPreference : null;
-    const advanceAmount = amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
+    const advanceAmount =
+      amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount === null ? 0 : data?.advancepaymentPreference?.advanceAmount;
     const gramPanchayat = data?.address.gramPanchayat;
     const village = data?.address.village;
     const propertyLocation = data?.address?.propertyLocation?.code;
