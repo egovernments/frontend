@@ -15,7 +15,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
   const { pincode, city, propertyLocation } = formData?.address || "";
   const cities =
     userType === "employee"
-      ? allCities.filter((city) => city.code === tenantId)
+      ? allCities.filter((city) => city?.code === tenantId)
       : pincode
       ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
       : allCities;
@@ -92,15 +92,15 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
       if (fetchedGramPanchayats && fetchedGramPanchayats.length > 0) {
         setGramPanchayats(fetchedGramPanchayats);
       }
-      if (formData?.address?.additionalDetails?.gramPanchayat.code) {
+      if (formData?.address?.additionalDetails?.gramPanchayat?.code) {
         const filteredGramPanchayat = fetchedGramPanchayats.filter(
-          (obj) => obj.code === formData?.address?.additionalDetails?.gramPanchayat?.code
+          (obj) => obj?.code === formData?.address?.additionalDetails?.gramPanchayat?.code
         )[0];
         setSelectedGp(filteredGramPanchayat);
         setNewGp(formData?.address?.additionalDetails?.newGp);
-        var villageUnderGp = filteredGramPanchayat?.children.filter((obj) => obj.code === formData?.address?.additionalDetails?.village?.code);
+        var villageUnderGp = filteredGramPanchayat?.children.filter((obj) => obj?.code === formData?.address?.additionalDetails?.village?.code);
         if (villageUnderGp.length > 0) {
-          villageUnderGp[0].i18nkey = tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + villageUnderGp[0].code;
+          villageUnderGp[0].i18nkey = tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + villageUnderGp[0]?.code;
           setSelectedVillage(villageUnderGp[0]);
           setVillages(villageUnderGp);
         } else {
@@ -108,7 +108,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
         }
       }
     }
-  }, [fetchedGramPanchayats, formData?.address?.additionalDetails?.gramPanchayat.code]);
+  }, [fetchedGramPanchayats, formData?.address?.additionalDetails?.gramPanchayat?.code]);
   if (userType !== "employee" && propertyLocation?.code === "FROM_GRAM_PANCHAYAT") {
     config.texts.cardText = "CS_FILE_APPLICATION_PROPERTY_LOCATION_GRAM_PANCHAYAT_TEXT";
   }
@@ -122,10 +122,10 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
 
   function selectGramPanchayat(value) {
     setSelectedGp(value);
-    const filteredVillages = fetchedGramPanchayats.filter((items) => items.code === value.code)[0].children;
+    const filteredVillages = fetchedGramPanchayats.filter((items) => items?.code === value?.code)[0].children;
     const localitiesWithLocalizationKeys = filteredVillages?.map((obj) => ({
       ...obj,
-      i18nkey: tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + obj.code,
+      i18nkey: tenantId.replace(".", "_").toUpperCase() + "_REVENUE_" + obj?.code,
     }));
     if (localitiesWithLocalizationKeys?.length > 0) {
       setVillages(localitiesWithLocalizationKeys);
