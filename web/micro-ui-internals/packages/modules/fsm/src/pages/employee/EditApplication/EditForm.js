@@ -44,7 +44,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       pincode: applicationData.address.pincode,
       locality: {
         ...applicationData.address.locality,
-        i18nkey: `${applicationData.tenantId.toUpperCase().split(".").join("_")}_REVENUE_${applicationData.address.locality.code}`,
+        i18nkey: `${applicationData.tenantId.toUpperCase().split(".").join("_")}_REVENUE_${applicationData?.address?.locality?.code}`,
       },
       slum: applicationData.address.slumName,
       street: applicationData.address.street,
@@ -62,6 +62,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
     applicationData?.address?.additionalDetails?.boundaryType === "GP"
   ) {
     defaultValues.address = {
+      ...defaultValues.address,
       propertyLocation: {
         active: true,
         code: "FROM_GRAM_PANCHAYAT",
