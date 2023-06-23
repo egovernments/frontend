@@ -125,7 +125,7 @@ const SelectTrips = ({
         formData?.subtype &&
         formData?.address &&
         formData?.tripData?.vehicleType?.capacity &&
-        formData?.address?.locality?.code
+        formData?.address?.propertyLocation?.code === "WITHIN_ULB_LIMITS"
       ) {
         const capacity = formData?.tripData?.vehicleType.capacity;
         const { slum: slumDetails } = formData.address;
