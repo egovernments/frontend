@@ -146,16 +146,18 @@ const Response = ({ data, onSuccess }) => {
               city: city.name,
               pincode,
               locality: {
-                code: locality?.code
-                  ? locality.code
-                  : village?.code
-                  ? village?.code
-                  : gramPanchayat?.code,
-                name: locality?.name
-                  ? locality.name
-                  : village?.name
-                  ? village?.name
-                  : gramPanchayat?.name,
+                code:
+                  propertyLocation?.code === "WITHIN_ULB_LIMITS"
+                    ? locality?.code
+                    : village?.code
+                    ? village?.code
+                    : gramPanchayat?.code,
+                name:
+                  propertyLocation?.code === "WITHIN_ULB_LIMITS"
+                    ? locality?.name
+                    : village?.name
+                    ? village?.name
+                    : gramPanchayat?.name,
               },
               geoLocation: {
                 latitude: geoLocation?.latitude,

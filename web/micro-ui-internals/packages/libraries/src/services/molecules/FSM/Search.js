@@ -104,7 +104,7 @@ export const Search = {
       demandDetails?.Demands[0]?.demandDetails[0]?.taxAmount === demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount;
     const isPaymentDone =
       demandDetails?.Demands[0]?.demandDetails.length > 1
-        ? demandDetails?.Demands[0]?.demandDetails[1]?.collectionAmount > 0
+        ? demandDetails?.Demands[0]?.demandDetails[demandDetails?.Demands[0]?.demandDetails.length - 1]?.collectionAmount > 0
         : demandDetails?.Demands[0]?.demandDetails[0]?.collectionAmount > 0;
 
     const employeeResponse = [
