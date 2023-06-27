@@ -32,7 +32,6 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
   const [newVillage, setNewVillage] = useState();
   const [newGp, setNewGp] = useState();
   const [newLocality, setNewLocality] = useState();
-
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || Digit.SessionStorage.get("fsm.file.address.city") || null);
   useEffect(() => {
     if (cities) {
@@ -198,7 +197,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
             </LabelFieldPair>
             {selectedGp?.name === "Other" && (
               <LabelFieldPair>
-                <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")}</CardLabel>
+                <CardLabel className="card-label-smaller">{`${t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")} *`}</CardLabel>
                 <div className="field">
                   <TextInput id="newGp" key="newGp" value={newGp} onChange={(e) => onNewGpChange(e.target.value)} />
                 </div>
@@ -247,7 +246,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
               </LabelFieldPair>
               {formData?.address?.locality?.name === "Other" && (
                 <LabelFieldPair>
-                  <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")}</CardLabel>
+                  <CardLabel className="card-label-smaller">{`${t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")} *`}</CardLabel>
                   <div className="field">
                     <TextInput id="newLocality" key="newLocality" value={newLocality} onChange={(e) => onNewLocality(e.target.value)} />
                   </div>
@@ -287,7 +286,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
             </LabelFieldPair>
             {selectedLocality?.name === "Other" && (
               <LabelFieldPair>
-                <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")}</CardLabel>
+                <CardLabel className="card-label-smaller">{`${t("ES_INBOX_PLEASE_SPECIFY_LOCALITY")} *`}</CardLabel>
                 <TextInput
                   style={{ width: "86%" }}
                   type="text"
@@ -318,7 +317,7 @@ const SelectLocalityOrGramPanchayat = ({ t, config, onSelect, userType, formData
             </LabelFieldPair>
             {selectedGp?.name === "Other" && (
               <LabelFieldPair>
-                <CardLabel className="card-label-smaller">{t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")}</CardLabel>
+                <CardLabel className="card-label-smaller">{`${t("ES_INBOX_PLEASE_SPECIFY_GRAM_PANCHAYAT")} *`}</CardLabel>
                 <TextInput
                   style={{ width: "86%" }}
                   type="text"
