@@ -188,8 +188,8 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
         slumName: slum,
         locality: {
           ...applicationData.address.locality,
-          code: localityCode ? localityCode : village?.code ? village?.code : gramPanchayat?.code,
-          name: localityName ? localityName : village?.name ? village?.name : gramPanchayat?.name,
+          code: propertyLocation === "FROM_GRAM_PANCHAYAT" ? gramPanchayat?.code : localityCode,
+          name: propertyLocation === "FROM_GRAM_PANCHAYAT" ? gramPanchayat?.name : localityName,
         },
         geoLocation: {
           ...applicationData.address.geoLocation,

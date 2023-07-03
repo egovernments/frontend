@@ -151,8 +151,6 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         onSelect(config.key, {
           ...formData[config.key],
           propertyLocation: value,
-          pincode: null,
-          locality: null,
         });
       } else {
         onSelect(config.key, {
