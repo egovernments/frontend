@@ -557,8 +557,6 @@ const FstpOperatorDetails = () => {
     setSelectedLocality(locality);
   }
 
-  console.log(selectLocation, "selectLocation"),
-    console.log(tripDetails, "tripDetails");
   return (
     <div>
       <Header styles={{ marginLeft: "16px" }}>
