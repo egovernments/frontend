@@ -93,7 +93,7 @@ const CheckPage = ({ onSubmit, value }) => {
           {selectGender && (
             <Row
               label={t("ES_FSM_ACTION_GENDER_TYPE")}
-              text={t(selectGender.i18nKey)}
+              text={t(selectGender?.i18nKey)}
               actionButton={
                 <ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/select-gender" />
               }
@@ -101,14 +101,14 @@ const CheckPage = ({ onSubmit, value }) => {
           )}
           <Row
             label={t("CS_CHECK_PROPERTY_TYPE")}
-            text={t(propertyType.i18nKey)}
+            text={t(propertyType?.i18nKey)}
             actionButton={
               <ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-type" />
             }
           />
           <Row
             label={t("CS_CHECK_PROPERTY_SUB_TYPE")}
-            text={t(subtype.i18nKey)}
+            text={t(subtype?.i18nKey)}
             actionButton={
               <ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/property-subtype" />
             }
@@ -118,7 +118,7 @@ const CheckPage = ({ onSubmit, value }) => {
             text={`${
               address?.doorNo?.trim() ? `${address?.doorNo?.trim()}, ` : ""
             } ${address?.street?.trim() ? `${address?.street?.trim()}, ` : ""}${
-              address?.locality
+              address?.propertyLocation?.code === "WITHIN_ULB_LIMITS"
                 ? t(address?.locality?.i18nkey)
                 : address?.gramPanchayat?.i18nkey
             }, ${t(address?.city.code)}`}
