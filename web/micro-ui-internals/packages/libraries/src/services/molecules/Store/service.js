@@ -56,8 +56,8 @@ export const StoreService = {
   },
   digitInitData: async (stateCode, enabledModules) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
-    const stateInfo = MdmsRes["common-masters"]?.StateInfo?.[0]||{};
-    const uiHomePage = MdmsRes["common-masters"]?.uiHomePage?.[0]||{};
+    const stateInfo = MdmsRes["common-masters"]?.StateInfo?.[0] || {};
+    const uiHomePage = MdmsRes["common-masters"]?.uiHomePage?.[0] || {};
     const localities = {};
     const revenue_localities = {};
     const initData = {
@@ -71,11 +71,13 @@ export const StoreService = {
         bannerUrl: stateInfo.bannerUrl,
       },
       localizationModules: stateInfo.localizationModules,
-      modules: MdmsRes?.tenant?.citymodule.filter((module) => module?.active).filter((module) => enabledModules?.includes(module?.code))?.sort((x,y)=>x?.order-y?.order),
-      uiHomePage: uiHomePage
+      modules: MdmsRes?.tenant?.citymodule
+        .filter((module) => module?.active)
+        .filter((module) => enabledModules?.includes(module?.code))
+        ?.sort((x, y) => x?.order - y?.order),
+      uiHomePage: uiHomePage,
     };
 
-  
     initData.selectedLanguage = Digit.SessionStorage.get("locale") || initData.languages[0].value;
 
     ApiCacheService.saveSetting(MdmsRes["DIGIT-UI"]?.ApiCachingSettings);
@@ -84,16 +86,15 @@ export const StoreService = {
       .map((module) => module.tenants)
       .flat()
       .reduce((unique, ele) => (unique.find((item) => item.code === ele.code) ? unique : [...unique, ele]), []);
-    initData.tenants = MdmsRes?.tenant?.tenants
-         .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
-      // .filter((item) => !!moduleTenants.find((mt) => mt.code === item.code))
-      // .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
+    initData.tenants = MdmsRes?.tenant?.tenants.map((tenant) => ({
+      i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`,
+      ...tenant,
+    }));
+    // .filter((item) => !!moduleTenants.find((mt) => mt.code === item.code))
+    // .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
 
     await LocalizationService.getLocale({
-      modules: [
-        `rainmaker-common`,
-        `rainmaker-${stateCode.toLowerCase()}`,
-      ],
+      modules: [`rainmaker-common`, `rainmaker-${stateCode.toLowerCase()}`],
       locale: initData.selectedLanguage,
       tenantId: stateCode,
     });
@@ -107,7 +108,10 @@ export const StoreService = {
   },
   defaultData: async (stateCode, moduleCode, language) => {
     let moduleCodes = [];
-    if(typeof moduleCode !== "string") moduleCode.forEach(code => { moduleCodes.push(`rainmaker-${code.toLowerCase()}`) });
+    if (typeof moduleCode !== "string")
+      moduleCode?.forEach((code) => {
+        moduleCodes.push(`rainmaker-${code.toLowerCase()}`);
+      });
     const LocalePromise = LocalizationService.getLocale({
       modules: typeof moduleCode == "string" ? [`rainmaker-${moduleCode.toLowerCase()}`] : moduleCodes,
       locale: language,
