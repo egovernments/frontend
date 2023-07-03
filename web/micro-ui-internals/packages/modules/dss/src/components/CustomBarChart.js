@@ -77,14 +77,14 @@ const CustomBarChart = ({
     const dd = response?.responseData?.data?.map((bar) => {
       let plotValue = bar?.plots?.[0].value || 0;
       return {
-        name: t(bar?.plots?.[0].name),
-        value: formatValue(plotValue, bar?.plots?.[0].symbol),
+        name: t(bar?.plots?.[0]?.name),
+        value: formatValue(plotValue, bar?.plots?.[0]?.symbol),
         // value: Digit.Utils.dss.formatter(plotValue, bar?.plots?.[0].symbol),
       };
     });
-    let newMax = Math.max(...dd.map((e) => Number(e.value)));
+    let newMax = Math.max(dd && dd?.map((e) => Number(e?.value)));
     let newObj = {};
-    let newReturn = dd.map((ele) => {
+    let newReturn = dd?.map((ele) => {
       newObj[ele.name] = ele.value;
       return { ...ele, value: (Number(ele.value) / newMax) * 100 };
     });
