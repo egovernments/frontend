@@ -114,18 +114,25 @@ const getMdmsData = async (state, dispatch) => {
     console.log(e);
   }
 };
-
+let activeStep = 0;
 const callBackForNext = async (state, dispatch) => {
-  let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.div.children.stepper.props.activeStep",
-    0
-  );
+  debugger;
+   
   // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = false;
   let isMultiownerSelected=false;
-
+  console.log("ttt   ",state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCNumber)
+ 
+  if(!state.screenConfiguration.preparedFinalObject.FireNOCs[0].auditDetails){
+    alert("testing dump");
+    // activeStep = get(
+    //   state.screenConfiguration.screenConfig["apply"],
+    //   "components.div.children.stepper.props.activeStep",
+    //   0
+    // );
+  }
+  else{
   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
@@ -179,9 +186,10 @@ const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
       hasFieldToaster = true;
     }
-  }
-
-  if (activeStep === 2) {
+  
+  
+}
+else if (activeStep === 2) {
     let isApplicantTypeCardValid = validateFields(
       "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
       state,
@@ -259,7 +267,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 3) {
+  else if (activeStep === 3) {
     if (getQueryArg(window.location.href, "action") === "edit") {
       //EDIT FLOW
       const businessId = getQueryArg(
@@ -283,7 +291,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep !== 3) {
+  else if (activeStep !== 3) {
     if (isFormValid) {
       let responseStatus = "success";
       if (activeStep === 1) {
@@ -332,6 +340,10 @@ const callBackForNext = async (state, dispatch) => {
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
+  else{
+    alert("dump two");
+  }
+}
 };
 
 export const changeStep = (
@@ -340,11 +352,11 @@ export const changeStep = (
   mode = "next",
   defaultActiveStep = -1
 ) => {
-  let activeStep = get(
-    state.screenConfiguration.screenConfig["apply"],
-    "components.div.children.stepper.props.activeStep",
-    0
-  );
+  // let activeStep = get(
+  //   state.screenConfiguration.screenConfig["apply"],
+  //   "components.div.children.stepper.props.activeStep",
+  //   0
+  // );
   if (defaultActiveStep === -1) {
     // if (activeStep === 2 && mode === "next") {
     //   const isDocsUploaded = get(
