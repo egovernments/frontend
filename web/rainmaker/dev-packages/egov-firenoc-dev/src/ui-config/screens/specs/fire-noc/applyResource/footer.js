@@ -125,7 +125,7 @@ const callBackForNext = async (state, dispatch) => {
   console.log("ttt   ",state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCNumber)
  
   if(!state.screenConfiguration.preparedFinalObject.FireNOCs[0].auditDetails){
-    alert("testing dump");
+    alert("NOC number not found or is not eligible for Renewal");
     // activeStep = get(
     //   state.screenConfiguration.screenConfig["apply"],
     //   "components.div.children.stepper.props.activeStep",
@@ -341,7 +341,7 @@ else if (activeStep === 2) {
     }
   }
   else{
-    alert("dump two");
+    alert("NOC number not found");
   }
 }
 };
