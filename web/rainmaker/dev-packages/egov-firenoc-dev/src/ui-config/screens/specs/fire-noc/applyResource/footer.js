@@ -123,8 +123,7 @@ const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = false;
   let isMultiownerSelected=false;
   console.log("ttt   ",state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCNumber)
- if(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType
-  ){
+ if(state.screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.fireNOCType == "RENEWAL"){
     if(!state.screenConfiguration.preparedFinalObject.FireNOCs[0].auditDetails){
       alert("NOC number not found or is not eligible for Renewal");
       // activeStep = get(
@@ -403,7 +402,7 @@ const callBackForNext = async (state, dispatch) => {
     
     
   }
-  else if (activeStep === 2) {
+   if (activeStep === 2) {
       let isApplicantTypeCardValid = validateFields(
         "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantTypeSelection.children",
         state,
@@ -481,7 +480,7 @@ const callBackForNext = async (state, dispatch) => {
       }
     }
   
-    else if (activeStep === 3) {
+   if (activeStep === 3) {
       if (getQueryArg(window.location.href, "action") === "edit") {
         //EDIT FLOW
         const businessId = getQueryArg(
@@ -505,7 +504,7 @@ const callBackForNext = async (state, dispatch) => {
       }
     }
   
-    else if (activeStep !== 3) {
+     if (activeStep !== 3) {
       if (isFormValid) {
         let responseStatus = "success";
         if (activeStep === 1) {
