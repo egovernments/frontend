@@ -95,18 +95,18 @@ export const callBackForNext = async (state, dispatch) => {
   if (activeStep === 0) {
     debugger;
     // if(process.env.REACT_APP_NAME == "Citizen"){
-    // //   let urldatavalues = window.location.search;
+    //   let urldatavalues = window.location.search;
     // //   let feachdataurl = urldatavalues.split("https://mseva.lgpunjab.gov.in/citizen/tradelicense-citizen/apply?");
     // //  let feachdataurl = urldatavalues.split("http://localhost:3000/tradelicense-citizen/apply?");
-    // //   let shortdataurl = feachdataurl[0].split("&");
-    // //   if(shortdataurl[1]){
-    // //    let ChanNel = shortdataurl[1].split("channel=")[1].split(":");
-    // //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.CHANNEL",ChanNel[0] ,""));
-    // //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.IPIN",ChanNel[1] ,""));
-    // //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.APPID",ChanNel[2] ,""));
-    // //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.mobileNo",shortdataurl[4].split("mobileNo=")[1] ,""));
-    // //   }
-    // //   console.log(shortdataurl);
+    //   let shortdataurl = feachdataurl[0].split("&");
+    //   if(shortdataurl[1]){
+    //    let ChanNel = shortdataurl[1].split("channel=")[1].split(":");
+    //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.CHANNEL",ChanNel[0] ,""));
+    //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.IPIN",ChanNel[1] ,""));
+    //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.APPID",ChanNel[2] ,""));
+    //    dispatch(prepareFinalObject( "Licenses[0].tradeLicenseDetail.additionalDetail.mobileNo",shortdataurl[4].split("mobileNo=")[1] ,""));
+    //   }
+    //   console.log(shortdataurl);
     //      }
     const isTradeDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
