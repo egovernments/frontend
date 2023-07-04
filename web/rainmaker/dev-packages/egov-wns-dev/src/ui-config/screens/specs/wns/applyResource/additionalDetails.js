@@ -12,7 +12,7 @@ import {
   getCommonGrayCard,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-//   import { searchApiCall } from "./functions";
+// import { roadcuthidevb } from "./functions";
 import commonConfig from "config/common.js";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -20,14 +20,20 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getHeaderSideText } from "../../utils";
 import get from 'lodash/get';
+//import { handleFieldChange, setFieldProperty } from "../../../../../../../../dev-packages/egov-ui-kit-dev/src/redux/form/actions";
+//../../../../../../../egov-ui-kit-dev/src/redux/form/actions
+
+//dev-packages\egov-ui-kit-dev\src\redux\form
 import { httpRequest } from '../../../../../ui-utils/index';
 import set from 'lodash/set';
 import { getTodaysDateInYMD, getQueryArg, getObjectKeys, getObjectValues } from 'egov-ui-framework/ui-utils/commons';
 import { isModifyMode } from "../../../../../ui-utils/commons";
 import {WSledgerId,WSBillingAmount,WSbillingType,WScompositionFee,WSMeterMakes,WSunitUsageType,WSsubUsageType} from "../ImpelExtendedFeature/fields";
-import { setFieldProperty } from "../../../../../../../../packages/employee/src/redux/store/actions";
+//import { setFieldProperty } from "../../../../../../../../packages/employee/src/redux/store/actions";
 //egov-ui-kit/redux/form/actions
 let isMode = isModifyMode();
+//roadcuthidevb();
+//dispatch(setFieldProperty(formKey, "roadCuttingChargeContainer", "required", data ? true : false));
   //dispatch(setFieldProperty(formKey, "multipleApplicantInfo", "disabled", true ));
 const getPlumberRadioButton = {
   uiFramework: "custom-containers-local",
@@ -89,14 +95,14 @@ const waterSubSourceChange = (reqObj) => {
   }
 }
 export const commonRoadCuttingChargeInformation = () => {
-  let urldatavalues = window.location.href;
-  //let urldatavalues= new URLSearchParams(urldatavaluesone.search);
-  // let urlaa ="http://localhost:3006/wns/apply?applicationNumber=SW_AP/603/2022-23/020602&tenantId=pb.fazilka&action=edit";
-  //let bb = urldatavalues.split("http://localhost:3006/wns/apply");
-let bb = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/employee/wns/apply");
-//  bb[1].split("&");
-let roadcut = bb[1].split("&");
- if(roadcut[0]){
+//   let urldatavalues = window.location.href;
+//   //let urldatavalues= new URLSearchParams(urldatavaluesone.search);
+//   // let urlaa ="http://localhost:3006/wns/apply?applicationNumber=SW_AP/603/2022-23/020602&tenantId=pb.fazilka&action=edit";
+//   //let bb = urldatavalues.split("http://localhost:3006/wns/apply");
+// let bb = urldatavalues.split("https://mseva-uat.lgpunjab.gov.in/employee/wns/apply");
+// //  bb[1].split("&");
+// let roadcut = bb[1].split("&");
+//  if(roadcut[0]){
   return getCommonGrayCard({
     roadDetails: getCommonContainer({
       roadType: {
@@ -140,7 +146,7 @@ let roadcut = bb[1].split("&");
     })
   })
 }
-}
+//}
 export const additionDetails = getCommonCard({
   header: getCommonHeader({
     labelKey: "WS_COMMON_ADDN_DETAILS_HEADER"
@@ -445,12 +451,11 @@ export const additionDetails = getCommonCard({
     })
   }),
   roadCuttingChargeContainer: getCommonGrayCard({
-    
-          
+             
     header: getCommonSubHeader(
       {
         labelName: "Road Cutting Charge",
-        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILSjgjgjfn"
+        labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
       },
       {
         style: {
@@ -467,8 +472,8 @@ export const additionDetails = getCommonCard({
             // display: "none"
             // width: 
           },
-          
-        },
+          },
+        
         children: {
           multipleApplicantInfo: {
             uiFramework: "custom-containers",
@@ -476,7 +481,6 @@ export const additionDetails = getCommonCard({
             props: {
               scheama: commonRoadCuttingChargeInformation(),
               items: [],
-              
               addItemLabel: {
                 labelName: "Add Road Type",
                 labelKey: "WS_ADD_ROAD_TYPE_LABEL"
