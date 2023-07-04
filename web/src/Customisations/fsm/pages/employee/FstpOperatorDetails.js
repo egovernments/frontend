@@ -129,7 +129,9 @@ const FstpOperatorDetails = () => {
   const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
   const location = useLocation();
-  const [selectLocation, setSelectLocation] = useState(inputs[0]);
+  const [selectLocation, setSelectLocation] = useState(
+    isNew ? inputs[0] : null
+  );
   const [gramPanchayats, setGramPanchayats] = useState();
   const [selectedGp, setSelectedGp] = useState(null);
   const [villages, setVillages] = useState([]);
@@ -328,9 +330,9 @@ const FstpOperatorDetails = () => {
       return;
     }
     if (
-      (selectLocation.code !== "FROM_GRAM_PANCHAYAT" &&
+      (selectLocation?.code !== "FROM_GRAM_PANCHAYAT" &&
         (selectedLocality?.name === "Other" ||
-          selectLocation.code === "FROM_OTHER_ULB") &&
+          selectLocation?.code === "FROM_OTHER_ULB") &&
         newLocality === null) ||
       newLocality?.trim()?.length === 0 ||
       !locality.test(newLocality)
@@ -341,7 +343,7 @@ const FstpOperatorDetails = () => {
       }, 2000);
       return;
     }
-    if (selectLocation.code === "FROM_GRAM_PANCHAYAT" && selectedGp === null) {
+    if (selectLocation?.code === "FROM_GRAM_PANCHAYAT" && selectedGp === null) {
       setShowToast({ key: "error", action: `ES_FSTP_SELECT_GRAMPANCHAYAT` });
       setTimeout(() => {
         closeToast();
@@ -556,7 +558,6 @@ const FstpOperatorDetails = () => {
   function selectLocality(locality) {
     setSelectedLocality(locality);
   }
-
   return (
     <div>
       <Header styles={{ marginLeft: "16px" }}>
@@ -625,7 +626,15 @@ const FstpOperatorDetails = () => {
               </div>
             </div>
           )}
-          {selectLocation.code === "FROM_GRAM_PANCHAYAT" && (
+          {(selectLocation?.code === "FROM_GRAM_PANCHAYAT" ||
+            (tripDetails &&
+              tripDetails.length > 0 &&
+              tripDetails[0]?.address?.additionalDetails?.boundaryType ===
+                "Village") ||
+            (tripDetails &&
+              tripDetails.length > 0 &&
+              tripDetails[0]?.address?.additionalDetails?.boundaryType ===
+                "GP")) && (
             <div>
               <Row
                 rowContainerStyle={
@@ -803,7 +812,11 @@ const FstpOperatorDetails = () => {
               )}
             </div>
           )}
-          {selectLocation.code === "WITHIN_ULB_LIMITS" && (
+          {(selectLocation?.code === "WITHIN_ULB_LIMITS" ||
+            (tripDetails &&
+              tripDetails.length > 0 &&
+              tripDetails[0]?.address?.additionalDetails?.boundaryType ===
+                "Locality")) && (
             <div>
               <Row
                 rowContainerStyle={
@@ -873,7 +886,7 @@ const FstpOperatorDetails = () => {
               )}
             </div>
           )}
-          {selectLocation.code === "FROM_OTHER_ULB" && (
+          {selectLocation?.code === "FROM_OTHER_ULB" && (
             <div>
               <Row
                 rowContainerStyle={
