@@ -312,7 +312,6 @@ export const WorkflowService = {
         const tempCheckStatus = timeline.map((i) => i.status)[0];
         // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
         // HIDING PAYMENT OPTION FOR DSO AND WHEN APPLICATION IS NOT IN PAYMENT STATUS
-
         const nextAction = location.pathname.includes("new-vehicle-entry")
           ? action_newVehicle
           : location.pathname.includes("dso")
@@ -323,12 +322,13 @@ export const WorkflowService = {
             : actionRolePair.filter((i) => i.action !== "COMPLETED")
           : tempCheckStatus.includes("DSO_INPROGRESS")
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "PAY")
-          : tempCheckStatus.includes("DISPOSED") && !isPaymentCompleted
+          : tempCheckStatus.includes("DISPOSED") && isPaymentCompleted != undefined && !isPaymentCompleted
           ? actionRolePair.filter((i) => i.action !== "COMPLETED").filter((x) => x.action !== "CANCEL")
-          : tempCheckStatus.includes("DISPOSED") && isPaymentCompleted
+          : tempCheckStatus.includes("DISPOSED") && isPaymentCompleted != undefined && isPaymentCompleted
+          ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
+          : tempCheckStatus.includes("DISPOSED") && isTripAmountAvailable
           ? actionRolePair.filter((i) => i.action !== "PAY").filter((x) => x.action !== "CANCEL")
           : actionRolePair.filter((i) => i.action !== "PAY");
-
         const nextActions =
           tempCheckStatus.includes("WAITING_FOR_DISPOSAL") && isPaymentCompleted
             ? nextAction
