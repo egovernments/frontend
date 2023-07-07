@@ -41,9 +41,9 @@ const AmountToBePaid = getCommonGrayCard({
             state,
             "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]"
           );
-          if (payload && payload.totalAmount && action.value === "full_amount") {
+         // if (payload && payload.totalAmount && action.value === "full_amount") {
             dispatchHandleField(dispatch, "props.value", payload.totalAmount);
-          }
+         // }
         } catch (e) {
           console.log(e);
         }
