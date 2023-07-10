@@ -373,7 +373,7 @@ const FstpOperatorDetails = () => {
     temp.additionalDetails = {
       vehicleNumber: newVehicleNumber || applicationNos,
       dsoName: newDsoName,
-      locality: selectedLocality,
+      locality: selectedLocality?.name,
       fileStoreId: uploadedFile,
       comments: comments,
       gramPanchayat: selectedGp,
