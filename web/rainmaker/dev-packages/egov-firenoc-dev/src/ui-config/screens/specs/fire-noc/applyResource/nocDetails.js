@@ -166,7 +166,9 @@ debugger;
       );
     }
   }
-  
+  if (response.FireNOCs.length > 0) {
+   alert("Data has been successfully Searched.");
+  }
   let isLegacy = false;
   if (!get(response, "FireNOCs", []).length) {
 
@@ -183,7 +185,8 @@ debugger;
   // my date
   debugger;
   let diffDays ;
-  let fireDate = response.FireNOCs[0].fireNOCDetails.issuedDate;
+  let firenoclength = response.FireNOCs.length - 1;
+  let fireDate = response.FireNOCs[firenoclength].fireNOCDetails.issuedDate;
   const currentDate = new Date();
   const appDate = new Date(fireDate);
   const diffTime = Math.abs(appDate - currentDate);
