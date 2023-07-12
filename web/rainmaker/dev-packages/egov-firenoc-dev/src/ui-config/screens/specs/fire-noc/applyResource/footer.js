@@ -340,9 +340,7 @@ const callBackForNext = async (state, dispatch) => {
           dispatch(toggleSnackbar(true, errorMessage, "warning"));
         }
       }
-      else {
-        alert("NOC number not found");
-      }
+      
     }
   } else {
 
