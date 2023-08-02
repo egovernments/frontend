@@ -1,11 +1,14 @@
+//import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getBreak,
   getCommonCard,
   getCommonContainer,
   getCommonTitle,
+  getCommonParagraph,
   getTextField,
   getPattern,
-  getSelectField
+  getSelectField,
+  convertDateToEpoch
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -187,13 +190,15 @@ debugger;
   let diffDays ;
   let firenoclength = response.FireNOCs.length - 1;
   let fireDate = response.FireNOCs[firenoclength].fireNOCDetails.issuedDate;
-  const currentDate = new Date();
-  const appDate = new Date(fireDate);
-  const diffTime = Math.abs(appDate - currentDate);
+  let currentDate = new Date();
+  let appDate = new Date(fireDate);
+  //const appDate = convertDateToEpoch(fireDate);
+
+  let diffTime = Math.abs(appDate - currentDate);
   diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
   console.log(diffTime + " milliseconds");
   console.log(diffDays + " days");
-   if (diffDays>=455){
+   if (diffDays>=820){
     alert("Renewal after 90 days from expiry date of FireNOC is not allowed!!");
     }
   else{
@@ -259,6 +264,11 @@ export const nocDetails = getCommonCard({
       }
     }
   ),
+  subParagraph: getCommonParagraph({
+    labelName: "After filling the old Firenoc number please click search icon that is next to the filled NoC number",
+   //labelKey: "PT_HOME_SEARCH_RESULTS_DESC"
+    labelKey: "After filling the old Firenoc number please click search icon that is next to the filled NoC number"
+  }),
   break: getBreak(),
   nocDetailsContainer: getCommonContainer({
       nocSelect: {
@@ -280,10 +290,10 @@ export const nocDetails = getCommonCard({
               code: "PROVISIONAL",
               label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
             },
-            {
-              code: "RENEWAL",
-              label: "NOC_TYPE_RENEWAL_RADIOBUTTON"
-            },
+            // {
+            //   code: "RENEWAL",
+            //   label: "NOC_TYPE_RENEWAL_RADIOBUTTON"
+            // },
           ],
           jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
           //required: true
@@ -313,24 +323,24 @@ export const nocDetails = getCommonCard({
             );
   
           }
-          else if (action.value === "RENEWAL") {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
-                "visible",
-                true
-              )
-            );
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-                "visible",
-                false
-              )
-            );
-          }
+          // else if (action.value === "RENEWAL") {
+          //   dispatch(
+          //     handleField(
+          //       "apply",
+          //       "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
+          //       "visible",
+          //       true
+          //     )
+          //   );
+          //   dispatch(
+          //     handleField(
+          //       "apply",
+          //       "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
+          //       "visible",
+          //       false
+          //     )
+          //   );
+          // }
   
           else {
             dispatch(
