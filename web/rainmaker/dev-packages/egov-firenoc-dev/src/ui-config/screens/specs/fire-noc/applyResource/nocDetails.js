@@ -290,10 +290,10 @@ export const nocDetails = getCommonCard({
               code: "PROVISIONAL",
               label: "NOC_TYPE_PROVISIONAL_RADIOBUTTON"
             },
-            // {
-            //   code: "RENEWAL",
-            //   label: "NOC_TYPE_RENEWAL_RADIOBUTTON"
-            // },
+            {
+              code: "RENEWAL",
+              label: "NOC_TYPE_RENEWAL_RADIOBUTTON"
+            },
           ],
           jsonPath: "FireNOCs[0].fireNOCDetails.fireNOCType",
           //required: true
@@ -323,24 +323,24 @@ export const nocDetails = getCommonCard({
             );
   
           }
-          // else if (action.value === "RENEWAL") {
-          //   dispatch(
-          //     handleField(
-          //       "apply",
-          //       "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
-          //       "visible",
-          //       true
-          //     )
-          //   );
-          //   dispatch(
-          //     handleField(
-          //       "apply",
-          //       "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-          //       "visible",
-          //       false
-          //     )
-          //   );
-          // }
+          else if (action.value === "RENEWAL") {
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.oldFIRENocNumber",
+                "visible",
+                true
+              )
+            );
+            dispatch(
+              handleField(
+                "apply",
+                "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
+                "visible",
+                false
+              )
+            );
+          }
   
           else {
             dispatch(
