@@ -1,12 +1,8 @@
 import React from 'react';
 import './App.css';
 import { Grid } from '@material-ui/core';
-import LandingPage from './components/LandingPage';
 import Header from './components/Header';
-import Slider from './components/Slider'
-import Cards from './components/Cards';
 import Faqs from './components/Faqs';
-import Message from './components/Message';
 import Footer from './components/Footer';
 import Testimonials from './components/Testimonials';
 import digitLogo from "./img/digit-footer.png";
