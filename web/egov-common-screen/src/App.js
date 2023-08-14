@@ -5,7 +5,7 @@ import Header from './components/Header';
 import Faqs from './components/Faqs';
 import Footer from './components/Footer';
 import Testimonials from './components/Testimonials';
-import digitLogo from "./img/digit-footer.png";
+
 
 
 
