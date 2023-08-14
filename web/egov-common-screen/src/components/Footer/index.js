@@ -19,6 +19,7 @@ import twitter from "../../img/twitter.png";
 import chrome from "../../img/chrome.png";
 import edge from "../../img/edge.png";
 import mozilla from "../../img/mozilla.png";
+import wz from "../../img/w3c.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,11 +84,11 @@ export default function CenteredGrid() {
                 </p>
                 <p className={classes.paragraph} >
                 Call Us:<br />
-                +91 (0135) 2741541<br />             
+                1800 1800 0172<br />             
                 </p>
                 <p className={classes.paragraph} >
                 Email Us:<br />
-                < a href="mailto:egovdolg@gmail.com">egovdolg@gmail.com</a>
+                < a href="mailto:pgrs.lg@punjab.gov.in">pgrs.lg@punjab.gov.in</a>
                 <br />  
                 <a href="https://www.facebook.com/pmidc1/" target='_blank'>                
                 <img src={facebook}   style={{width: "6%", marginRight: "6%"}}   /></a>
@@ -107,14 +108,6 @@ export default function CenteredGrid() {
                 target="_blank"
               >
                 Local Government Punjab
-              </a><br />
-              <a
-                href="https://lgpunjab.gov.in/"
-                id ="flink"
-                //className={classes.block}
-                target="_blank"
-              >
-                Urban Development Directorate
               </a><br />
               <a
                 href="https://pmidc.punjab.gov.in/"
@@ -190,7 +183,7 @@ export default function CenteredGrid() {
                 target="_blank"
                 id ="flink"
               >
-              About UDD
+              About mSewa
               </a><br />
               
               <a
@@ -230,7 +223,7 @@ export default function CenteredGrid() {
         <p>© {currentyear} PMIDC, GOVERNMENT OF PUNJAB. All Rights Reserved by PMIDC</p>
         </div>
         <div className="col-sm-12 col-md-6">
-       
+        <p>Last updated on : 2023-08-10 | This site is best viewed in Mozilla Firefox and Google Chrome <img src={wz} className="wz"/></p>
         </div>
         </div>
         </div>
