@@ -18,6 +18,16 @@ function App() {
    <div>
    <Header />
    <Testimonials />
+   <center ><p  style ={{  fontFamily: "Roboto",
+  fontStyle: "normal",
+  fontWeight: "500",
+  fontSize: "36px",
+  lineHeight: "42px",
+  textAlign: "center",
+  color:"rgba(0, 0, 0, 0.87)",
+  marginLeft: "10%",
+  marginRight: "10%"
+  }}>Frequently Asked Questions</p></center >
    <Faqs />
    {/* <Slider /> */}
    </div>
