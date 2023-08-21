@@ -594,7 +594,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     process.env.REACT_APP_NAME === "Citizen"
       ? set(payload[0], "fireNOCDetails.channel", "CITIZEN")
       : set(payload[0], "fireNOCDetails.channel", "COUNTER");
-    set(payload[0], "fireNOCDetails.financialYear", "2023-24");
+    set(payload[0], "fireNOCDetails.financialYear", "2019-20");
 
     // Set Dates to Epoch
     let owners = get(payload[0], "fireNOCDetails.applicantDetails.owners", []);
