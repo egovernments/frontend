@@ -421,7 +421,6 @@ const setSearchResponse = async (
     "FireNOCs[0].fireNOCDetails.fireNOCType",
       ""
     )
-    debugger;
     let diffDays ;
     const getdate=get(response, "FireNOCs[0].fireNOCDetails.applicationNumber");
     // if(getdate){
@@ -481,6 +480,7 @@ const setSearchResponse = async (
       printCont
     )
   }
+set(state,"screenConfiguration.preparedFinalObject.AmountPaid",0);
 generateBill(state, dispatch, applicationNumber, tenantId, status);
 };
 
